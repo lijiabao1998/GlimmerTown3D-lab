@@ -8,8 +8,10 @@
     "dev": "vite",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
+    "unit": "node tools/unit.mjs",
     "smoke": "node tools/smoke.mjs",
-    "shoot": "node tools/shoot.mjs"
+    "shoot": "node tools/shoot.mjs",
+    "extract": "node tools/lab-extract.mjs"
   },
   "dependencies": {
     "three": "^0.186.1"

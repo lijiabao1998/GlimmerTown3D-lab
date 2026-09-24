@@ -1,6 +1,9 @@
 // 煙霧測試：無頭 Chrome 開建置後的單檔頁面，逐條驗卡面的驗收（可斷言的事實，不是「看起來對」）。
+// D003 起預設是 2D 城市模式；300 年示範（D001／D002）改用 ?mode=history 開。
 // 用法：npm run build && node tools/smoke.mjs      退出碼 0＝綠燈、1＝紅燈
-import { withBrowser } from './cdp.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { withBrowser, ROOT } from './cdp.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const t0 = Date.now();
@@ -12,7 +15,7 @@ const blankCheck = `(()=>{const c=document.querySelector('canvas'),k=document.cr
 console.log('\n=== 微光小鎮 3D 煙霧測試 ===');
 await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // D001：WebGL、決定性、只增不改、三個年份的數字
-  await open('clean=1');
+  await open('mode=history&clean=1');
   const g = await page.evaluate('({webgl2: __gt.webgl2, check: __gt.selfcheck(), stats: __gt.stats, hash: __gt.hash, format: __gt.format, info: __gt.renderInfo()})');
   log(g.webgl2, 'WebGL2 可用');
   log(g.hash === HASH, '事件雜湊沒變（生成規則沒被順手改掉）', `${g.hash}，格式 v${g.format}`);
@@ -63,7 +66,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
 
   // D002：手機尺寸、有介面。履歷卡捲到最近的事時，標題與關閉鈕不能被捲走（曾整張卡一起捲）
   await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
-  await open('year=300&at=26,21&zoom=3.4');
+  await open('mode=history&year=300&at=26,21&zoom=3.4');
   await page.evaluate('__gt.openLot(26, 21)');
   // 判準是「最近發生的那一件看得見」，不是「清單有捲動」：字型不同（雲端沒中文字型）時清單可能一頁放得下、根本不必捲（D002 雲端首跑因此誤紅）
   const head = await page.evaluate(`(()=>{const b=document.querySelector('#bio'),ol=b.querySelector('ol'),h=b.querySelector('h2'),x=b.querySelector('.x');
@@ -75,7 +78,46 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
 
   // 對照用畫風 B、C 仍要畫得出來（業主定案 A，B／C 保留給之後的對照圖）
-  for (const style of ['B', 'C']) { await open(`clean=1&style=${style}&year=80`); const v = await page.evaluate(blankCheck); log(v > 150, `對照畫風 ${style} 仍畫得出來`, `變異量 ${v}`); }
+  for (const style of ['B', 'C']) { await open(`mode=history&clean=1&style=${style}&year=80`); const v = await page.evaluate(blankCheck); log(v > 150, `對照畫風 ${style} 仍畫得出來`, `變異量 ${v}`); }
+  // ===== D003：2D 實驗線的城市（預設模式）=====
+  const expectOf = id => JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/${id}.json`), 'utf8')).expect;
+  for (const id of ['seed516', 'ai120']) {
+    await open(`sample=${id}&clean=1`);
+    const c = await page.evaluate('({mode: __gt.mode, stats: __gt.stats(), owners: __gt.owners(), n: __gt.buildingCount(), issues: __gt.issues(), hist: __gt.history(), t: __gt.timing(), info: __gt.renderInfo()})');
+    const exp = expectOf(id), same = JSON.stringify(c.stats) === JSON.stringify(exp);
+    log(c.mode === 'city' && same, `D003 ${id}：瀏覽器解碼對帳與實驗線逐項相等`, same ? `建築 ${c.stats.buildings}、${Object.keys(c.stats.kinds).length} 種` : '有差異（node tools/unit.mjs 看細節）');
+    log(c.owners === c.n && c.n === exp.buildings, `D003 ${id}：場景畫出的建築數＝城市建築數`, `${c.owners}／${c.n}`);
+    log(c.hist.length === 1 && c.hist[0].t === 'import', `D003 ${id}：匯入記成世界歷史第一筆事件`, `${c.hist[0].t} 第 ${c.hist[0].day} 天 v${c.hist[0].gameVer}`);
+    const v = await page.evaluate(blankCheck);
+    log(v > 150, `D003 ${id}：畫面非空白`, `變異量 ${v}`);
+    log(c.t.total < 1500, `D003 ${id}：解碼＋建城市＋建場景 < 1,500 ms`, `${c.t.total.toFixed(0)} ms（解碼 ${c.t.decode.toFixed(1)}、城市 ${c.t.city.toFixed(1)}、場景 ${c.t.scene.toFixed(0)}）；繪製 ${c.info.calls} 次、${c.info.triangles} 個三角形`);
+    const big = await page.evaluate('__gt.bigOne()');
+    const p = await page.evaluate(`__gt.pickTest(${big})`);
+    const card = p && p.got ? await page.evaluate(`__gt.openTile(${p.got.x}, ${p.got.z})`) : null;
+    log(!!p?.got && p.got.x === p.want[0] && p.got.z === p.want[1] && p.got.id === p.want[2] && !!card && card.title.startsWith(p.name),
+      `D003 ${id}：點最大的那棟建築，點到的是它，卡片名稱正確`, JSON.stringify({ want: p?.want, got: p?.got, title: card?.title }));
+    log(!!card && card.rows.some(r => /約第 .+ 天蓋起/.test(r)), `D003 ${id}：地塊卡顯示「約第 N 天蓋起」`, card?.rows[0]);
+  }
+  // 壞碼：不崩、講得出原因，而且不動目前的城市
+  const bad = await page.evaluate(`(()=>{const n0=__gt.buildingCount();const cs=['','not a code!!',btoa('hello'),'A'.repeat(2000004)];
+    const r=cs.map(c=>__gt.loadCode(c));return {ok:r.every(x=>!x.ok&&x.error),errs:r.map(x=>x.error),kept:__gt.buildingCount()===n0};})()`);
+  log(bad.ok && bad.kept, 'D003 壞碼 4 種都回傳原因、目前的城市不變', bad.errs.join('｜'));
+  // 只在需要時才重畫（城市模式）
+  { const f1 = await page.evaluate('__gt.frames()'); await new Promise(r => setTimeout(r, 1000)); const f2 = await page.evaluate('__gt.frames()');
+    await page.evaluate('__gt.spin(0.3)'); await new Promise(r => setTimeout(r, 300)); const f3 = await page.evaluate('__gt.frames()');
+    log(f2 - f1 <= 1 && f3 > f2, 'D003 城市模式：靜止不重畫、轉鏡頭會畫', `靜止 1 秒 ${f2 - f1} 幀、轉動後 ${f3 - f2} 幀`); }
+  // 手機直式：有介面、點一棟看卡片，卡片在畫面內、標題與關閉鈕在卡內
+  await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+  await open('sample=seed516');
+  const mob = await page.evaluate(`(()=>{const id=__gt.bigOne(),p=__gt.pickTest(id);const t=__gt.openTile(p.want[0],p.want[1]);const b=document.querySelector('#bio').getBoundingClientRect(),h=document.querySelector('#bio h2').getBoundingClientRect(),x=document.querySelector('#bio .x').getBoundingClientRect();
+    return {title:t.title,inView:b.top>=0&&b.bottom<=innerHeight&&b.left>=0&&b.right<=innerWidth,titleIn:h.top>=b.top&&h.bottom<=b.bottom,closeIn:x.top>=b.top&&x.right<=b.right+1,
+      buttons:[...document.querySelectorAll('#picks button')].map(e=>e.textContent)};})()`);
+  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 4, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；四顆切換鈕都在', JSON.stringify(mob));
+  await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+  // 零外部素材：整輪煙霧測試的所有網路請求都只連本機
+  const ext = page.requests.filter(u => !/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u));
+  log(ext.length === 0, '零外部請求：所有網路請求都只連 127.0.0.1', ext.length ? ext.slice(0, 5).join(' ') : `共 ${page.requests.length} 個請求`);
+
   log(page.errors.length === 0, 'console 零錯誤', page.errors.length ? '\n     ' + page.errors.slice(0, 8).join('\n     ') : 0);
 });
 

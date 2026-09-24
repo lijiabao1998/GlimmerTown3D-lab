@@ -1,4 +1,4 @@
-# 每次推送：型別檢查 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
+# 每次推送：型別檢查 → Node 端守衛 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
 # main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
 name: ci
 
@@ -28,6 +28,8 @@ jobs:
       - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
+      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材）
+        run: npm run unit
       - run: npm run build
       - name: 煙霧測試
         run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}

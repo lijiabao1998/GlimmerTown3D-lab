@@ -20,7 +20,7 @@ const CANDIDATES = [
 ].filter(Boolean);
 
 function serve(dir, port) {
-  const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.json': 'application/json' };
+  const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.json': 'application/json' };
   return new Promise((resolve, reject) => {
     const srv = http.createServer((req, res) => {
       const rel = decodeURIComponent((req.url || '/').split('?')[0]).replace(/^\/+/, '') || 'index.html';
@@ -40,10 +40,11 @@ async function connect(wsUrl) {
   const ws = new WebSocket(wsUrl);
   await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
   let id = 0;
-  const pending = new Map(), errors = [];
+  const pending = new Map(), errors = [], requests = [];
   ws.onmessage = ev => {
     const m = JSON.parse(ev.data);
     if (m.id && pending.has(m.id)) { const { res, rej } = pending.get(m.id); pending.delete(m.id); m.error ? rej(new Error(m.error.message)) : res(m.result); return; }
+    if (m.method === 'Network.requestWillBeSent') requests.push(m.params.request.url);
     if (m.method === 'Runtime.exceptionThrown') errors.push('exception: ' + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text).slice(0, 300));
     if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') errors.push('console.error: ' + m.params.args.map(a => a.value ?? a.description ?? '').join(' ').slice(0, 300));
     if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error' && !/favicon/.test(m.params.entry.url || '')) errors.push('log: ' + m.params.entry.text.slice(0, 300));
@@ -54,14 +55,18 @@ async function connect(wsUrl) {
     if (r.exceptionDetails) throw new Error('evaluate: ' + (r.exceptionDetails.exception?.description || r.exceptionDetails.text));
     return r.result.value;
   };
-  return { send, evaluate, errors, close: () => ws.close() };
+  return { send, evaluate, errors, requests, close: () => ws.close() };
 }
 
 // 開一個頁面工作階段：fn({ open, page })；open(query) 導航到 dist/index.html?query 並等 __gt.ready
+// 選項：root＝要伺服的目錄（預設 dist/；D003 抽取工具拿來開 2D 實驗線）、entry＝入口檔、
+//       preload＝頁面任何腳本之前先執行的 JS、ready＝等到它為真才算載入完、readyMs＝最多等多久。
+// page.requests 記下所有網路請求的網址（D003「零外部素材」守衛）。
 export async function withBrowser(opt, fn) {
   const port = opt.port || 8311, w = opt.width || 1280, h = opt.height || 800;
-  const dist = path.join(ROOT, 'dist');
-  if (!fs.existsSync(path.join(dist, 'index.html'))) throw new Error('找不到 dist/index.html，先跑 npm run build');
+  const dist = opt.root ? path.resolve(opt.root) : path.join(ROOT, 'dist'), entry = opt.entry || 'index.html';
+  const ready = opt.ready || '!!(window.__gt && window.__gt.ready)', readyMs = opt.readyMs || 30000;
+  if (!fs.existsSync(path.join(dist, entry))) throw new Error(opt.root ? `找不到 ${path.join(dist, entry)}` : '找不到 dist/index.html，先跑 npm run build');
   const chromePath = CANDIDATES.find(p => fs.existsSync(p));
   if (!chromePath) throw new Error('找不到 Chrome，可設 CHROME_PATH');
   const srv = await serve(dist, port);
@@ -69,7 +74,8 @@ export async function withBrowser(opt, fn) {
   const devPort = port + 1000;
   const chrome = spawn(chromePath, [
     '--headless=new', `--remote-debugging-port=${devPort}`, `--user-data-dir=${profile}`, `--window-size=${w},${h}`,
-    '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist',
+    // gl:false＝只用 CPU 畫 2D canvas（實驗線全是 2D canvas、大量 getImageData；走 SwiftShader 開機要 6 分鐘，CPU 約 20 秒）
+    ...(opt.gl === false ? ['--disable-gpu'] : ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']),
     '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio',
     ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
     'about:blank',
@@ -83,11 +89,12 @@ export async function withBrowser(opt, fn) {
     }
     if (!wsUrl) throw new Error('Chrome 沒有起來');
     page = await connect(wsUrl);
-    await page.send('Runtime.enable'); await page.send('Log.enable'); await page.send('Page.enable');
+    await page.send('Runtime.enable'); await page.send('Log.enable'); await page.send('Page.enable'); await page.send('Network.enable');
     await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    if (opt.preload) await page.send('Page.addScriptToEvaluateOnNewDocument', { source: opt.preload });
     const open = async query => {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:${port}/index.html?${query}` });
-      for (let i = 0; i < 200; i++) { await sleep(150); if (await page.evaluate('!!(window.__gt && window.__gt.ready)').catch(() => false)) break; }
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${port}/${entry}?${query}` });
+      for (let i = 0, t0 = Date.now(); Date.now() - t0 < readyMs; i++) { await sleep(150); if (await page.evaluate(ready).catch(() => false)) break; }
       await sleep(opt.settle ?? 900);   // 讓第一幀以上畫完（陰影貼圖、後製）
     };
     return await fn({ open, page });

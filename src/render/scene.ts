@@ -8,8 +8,8 @@ import { windowTexture, groundTexture, toonRamp, PLAIN_UV } from './textures.ts'
 
 type V3 = [number, number, number];
 
-// 非索引幾何累積器：面的繞向依給定法線自動校正，不用手算
-class Geo {
+// 非索引幾何累積器：面的繞向依給定法線自動校正，不用手算（D003 的城市場景也用它）
+export class Geo {
   pos: number[] = []; nor: number[] = []; uv: number[] = []; col: number[] = [];
   owner = 0; owners: number[] = [];   // 每個三角形屬於哪棟建築（0＝無），點擊時用 faceIndex 反查
   private tri(a: V3, b: V3, c: V3, n: V3, ua: [number, number], ub: [number, number], uc: [number, number], col: THREE.Color) {
