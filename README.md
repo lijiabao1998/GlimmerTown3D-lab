@@ -14,13 +14,19 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前狀態：D001 視覺承諾
+## 目前狀態：D002 歷史看得見
 
-同一座城的三個時間：第 0 年／第 80 年／第 300 年（左到右），三種候選畫風：A 像素風 3D／B 平滑低面數／C 卡通描邊（上到下）。
+**線上版**（手機可以直接開，可旋轉、縮放、播放時間軸、點任何一格看它的歷史）：<https://lijiabao1998.github.io/GlimmerTown3D-lab/>
 
-![D001 近景對照](docs/img/D001-compare-near.png)
+同一座城 300 年（畫風已定案 A 像素風 3D）：第 0、15、30、45、60 年（上排），第 80、130、180、240、300 年（下排）。
 
-線上版（手機可旋轉縮放）：<https://lijiabao1998.github.io/GlimmerTown3D-lab/>
+![D002 時間軸](docs/img/D002-timeline.png)
+
+點一格看它的履歷（手機）：左是第 300 年，右是第 60 年，灰色代表還沒發生。
+
+![D002 地塊履歷](docs/img/D002-lot-history-mobile.png)
+
+D001 的三種畫風對照：[`docs/img/D001-compare-near.png`](docs/img/D001-compare-near.png)
 
 ## 本機開發
 

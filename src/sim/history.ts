@@ -20,6 +20,7 @@ export type Ev =
   | { y: number; t: 'overgrow'; x: number; z: number };
 
 export interface World {
+  format: number;
   seed: number;
   size: number;
   end: number;
@@ -45,6 +46,8 @@ export interface CityState {
   blds: Bld[];
 }
 
+// 歷史格式版本：事件的欄位或意義一改就升號，舊存檔要能讀（CLAUDE.md 規則 4）
+export const HISTORY_FORMAT = 1;
 export const GROW_END = 80;   // 0→80 成長（一生），80→300 衰亡（考古）
 export const END = 300;
 export const eraOf = (y: number): Era => (y < 25 ? 'old' : y < 55 ? 'mid' : 'new');
@@ -237,7 +240,43 @@ export function generateWorld(seed: number, N = 48, end = END): World {
     }
   }
 
-  return { seed, size: N, end, water, riverX, center: [cx0, cz0], events };
+  return { format: HISTORY_FORMAT, seed, size: N, end, water, riverX, center: [cx0, cz0], events };
+}
+
+// ---- 地塊履歷：一格 300 年來發生過的事（考古與一生的最小形態）。只回結構，文字由介面組 ----
+export type LotEntry =
+  | { y: number; t: 'road' | 'bridge' | 'park' | 'overgrow' | 'tree' | 'clear' }
+  | { y: number; t: 'build'; id: number; kind: Kind; era: Era; lv: number; replaces: boolean }
+  | { y: number; t: 'upgrade'; id: number; kind: Kind; lv: number }
+  | { y: number; t: 'demolish' | 'abandon' | 'roofless' | 'collapse'; id: number; kind: Kind };
+
+export function lotHistory(w: World, x: number, z: number): LotEntry[] {
+  const out: LotEntry[] = [], here = new Map<number, Kind>(), marks = new Map<number, { roofless: boolean; collapse: boolean }>();
+  let demolishedAt = -1;
+  const at = (ex: number, ez: number) => ex === x && ez === z;
+  for (const e of w.events) {
+    switch (e.t) {
+      case 'road': if (at(e.x, e.z)) out.push({ y: e.y, t: w.water[z * w.size + x] ? 'bridge' : 'road' }); break;
+      case 'park': case 'overgrow': case 'tree': case 'clear': if (at(e.x, e.z)) out.push({ y: e.y, t: e.t }); break;
+      case 'build':
+        if (x >= e.x && x < e.x + e.w && z >= e.z && z < e.z + e.d) {
+          here.set(e.id, e.kind); marks.set(e.id, { roofless: false, collapse: false });
+          out.push({ y: e.y, t: 'build', id: e.id, kind: e.kind, era: e.era, lv: e.lv, replaces: demolishedAt === e.y });
+        }
+        break;
+      case 'upgrade': { const k = here.get(e.id); if (k) out.push({ y: e.y, t: 'upgrade', id: e.id, kind: k, lv: e.lv }); break; }
+      case 'demolish': { const k = here.get(e.id); if (k) { out.push({ y: e.y, t: 'demolish', id: e.id, kind: k }); demolishedAt = e.y; } break; }
+      case 'abandon': { const k = here.get(e.id); if (k) out.push({ y: e.y, t: 'abandon', id: e.id, kind: k }); break; }
+      case 'decay': {
+        const k = here.get(e.id), m = marks.get(e.id);
+        if (!k || !m) break;
+        if (!m.roofless && e.dmg >= 0.3) { m.roofless = true; out.push({ y: e.y, t: 'roofless', id: e.id, kind: k }); }
+        if (!m.collapse && e.dmg >= 1) { m.collapse = true; out.push({ y: e.y, t: 'collapse', id: e.id, kind: k }); }
+        break;
+      }
+    }
+  }
+  return out;
 }
 
 export function stateAt(w: World, year: number): CityState {

@@ -4,18 +4,42 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d1226">
-  <title>微光小鎮 3D・D001</title>
+  <title>微光小鎮 3D</title>
   <style>
     html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1226; }
     canvas { display: block; touch-action: none; image-rendering: pixelated; }
-    #ui { position: fixed; left: 12px; top: 12px; right: 12px; max-width: 560px; color: #eef1f7;
-      font: 14px/1.45 system-ui, "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif; pointer-events: none; }
-    #ui h1 { margin: 0 0 8px; font-size: 16px; font-weight: 700; text-shadow: 0 1px 3px #000a; }
-    #ui .row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
-    #ui button { pointer-events: auto; border: 1px solid #ffffff33; background: #1c2440cc; color: #eef1f7;
-      border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
-    #ui button.on { background: #e8b74a; color: #1c1a14; border-color: #e8b74a; font-weight: 700; }
-    #ui .meta { margin: 2px 0 0; font-size: 12px; color: #d6dbe6; text-shadow: 0 1px 2px #000c; }
+    body { color: #eef1f7; font: 14px/1.45 system-ui, "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif; }
+    button { border: 1px solid #ffffff33; background: #1c2440d9; color: #eef1f7; border-radius: 8px; padding: 6px 10px; font: inherit; cursor: pointer; }
+    button.on { background: #e8b74a; color: #1c1a14; border-color: #e8b74a; font-weight: 700; }
+    .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    #top { position: fixed; left: 12px; top: 10px; right: 12px; pointer-events: none; text-shadow: 0 1px 3px #000c; }
+    #top h1 { margin: 0; font-size: 15px; }
+    #top .meta { margin: 2px 0 6px; font-size: 12px; color: #d6dbe6; }
+    #top button { pointer-events: auto; }
+    #timeline { position: fixed; left: 0; right: 0; bottom: 0; padding: 8px 12px calc(10px + env(safe-area-inset-bottom));
+      background: linear-gradient(#0d122600, #0d1226e6 30%); }
+    #timeline input { width: 100%; margin: 6px 0; accent-color: #e8b74a; }
+    #play { width: 40px; font-size: 16px; padding: 4px 0; }
+    #ylabel { font-weight: 700; font-size: 15px; min-width: 9em; }
+    .hint { color: #aab3c6; font-size: 12px; margin-left: auto; }
+    .chips button { font-size: 12px; padding: 4px 8px; }
+    /* 標題與關閉鈕固定，只有清單捲動（捲到最近發生的事時不會把標題捲走） */
+    #bio { position: fixed; right: 12px; top: 64px; width: min(340px, calc(100vw - 24px)); max-height: calc(100vh - 200px);
+      display: flex; flex-direction: column; overflow: hidden;
+      background: #141a30f2; border: 1px solid #ffffff26; border-radius: 12px; padding: 12px 14px; box-shadow: 0 10px 30px #0008; }
+    #bio[hidden] { display: none; }
+    #bio ol { overflow: auto; min-height: 0; flex: 1; }
+    #bio h2 { margin: 0 24px 2px 0; font-size: 16px; }
+    #bio .sub { margin: 0 0 8px; color: #aab3c6; font-size: 12px; }
+    #bio ol { margin: 0; padding-left: 0; list-style: none; }
+    #bio li { padding: 5px 0; border-top: 1px solid #ffffff14; }
+    #bio li b { display: inline-block; min-width: 5.5em; color: #e8b74a; font-weight: 600; }
+    #bio li.future { opacity: .38; }
+    #bio .x { position: absolute; right: 8px; top: 8px; padding: 2px 8px; }
+    @media (max-width: 640px) {
+      .hint { display: none; }
+      #bio { left: 12px; right: 12px; top: auto; bottom: 120px; width: auto; max-height: 45vh; }
+    }
   </style>
 </head>
 <body>

@@ -11,6 +11,7 @@ type V3 = [number, number, number];
 // 非索引幾何累積器：面的繞向依給定法線自動校正，不用手算
 class Geo {
   pos: number[] = []; nor: number[] = []; uv: number[] = []; col: number[] = [];
+  owner = 0; owners: number[] = [];   // 每個三角形屬於哪棟建築（0＝無），點擊時用 faceIndex 反查
   private tri(a: V3, b: V3, c: V3, n: V3, ua: [number, number], ub: [number, number], uc: [number, number], col: THREE.Color) {
     const e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], e2 = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
     const cx = e1[1] * e2[2] - e1[2] * e2[1], cy = e1[2] * e2[0] - e1[0] * e2[2], cz = e1[0] * e2[1] - e1[1] * e2[0];
@@ -18,6 +19,7 @@ class Geo {
     for (const [p, u] of [[a, ua], [b, ub], [c, uc]] as [V3, [number, number]][]) {
       this.pos.push(...p); this.nor.push(...n); this.uv.push(...u); this.col.push(col.r, col.g, col.b);
     }
+    this.owners.push(this.owner);
   }
   // 四邊形 a-b-c-d（順序沿邊），uv 對應四角
   quad(a: V3, b: V3, c: V3, d: V3, n: V3, col: THREE.Color, uvs: [number, number][] = [PLAIN_UV, PLAIN_UV, PLAIN_UV, PLAIN_UV]) {
@@ -81,6 +83,7 @@ class Geo {
       this.pos.push(p.getX(i) + cx, p.getY(i) + y0 + h / 2, p.getZ(i) + cz);
       this.nor.push(n.getX(i), n.getY(i), n.getZ(i));
       this.uv.push(...PLAIN_UV); this.col.push(col.r, col.g, col.b);
+      if (i % 3 === 2) this.owners.push(this.owner);
     }
     g.dispose();
   }
@@ -111,10 +114,19 @@ function palette(b: Bld) {
   return { wall, roof };
 }
 
-export interface Built { scene: THREE.Scene; center: THREE.Vector3; size: number; dispose(): void; }
+// 點擊結果：id＝建築（0＝空地），x／z＝要查履歷的那一格
+export interface Hit { id: number; x: number; z: number }
+export interface Built {
+  scene: THREE.Scene; center: THREE.Vector3; size: number;
+  pick(ray: THREE.Raycaster): Hit | null;
+  rubbleSpots(): { id: number; x: number; y: number; z: number }[];   // 給煙霧測試：瓦礫實例的位置
+  timing: Record<string, number>;   // 建場景各段耗時（毫秒），追效能用
+  dispose(): void;
+}
 
 export function buildScene(s: CityState, style: Style): Built {
   const N = s.size, scene = new THREE.Scene();
+  const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const n = performance.now(); T[k] = n - tp; tp = n; };
   scene.background = new THREE.Color().setHSL(0.58, 0.35, 0.82, THREE.SRGBColorSpace);
   const disposables: { dispose(): void }[] = [];
   const ramp = style.toon ? toonRamp() : null;
@@ -132,9 +144,12 @@ export function buildScene(s: CityState, style: Style): Built {
   scene.add(ground);
 
   // 建築：牆（帶窗）與其他（屋頂、塔、瓦礫）分兩個網格
+  mark('ground');
   const W = new Geo(), O = new Geo();
-  const rubble: [number, number, number, number][] = [];
+  const rubble: [number, number, number, number][] = [], rubbleOwner: number[] = [];
+  const byId = new Map(s.blds.map(b => [b.id, b]));
   for (const b of s.blds) {
+    W.owner = O.owner = b.id;
     const { wall, roof } = palette(b);
     const m = 0.1, x0 = b.x + m, z0 = b.z + m, x1 = b.x + b.w - m, z1 = b.z + b.d - m;
     const keep = 1 - b.dmg * 0.72, roofless = b.dmg >= 0.3;
@@ -142,6 +157,7 @@ export function buildScene(s: CityState, style: Style): Built {
       for (let k = 0; k < 5 + b.w * b.d * 2; k++) {
         const hx = hash2(b.id, k, 1), hz = hash2(b.id, k, 2);
         rubble.push([b.x + 0.15 + hx * (b.w - 0.3), b.z + 0.15 + hz * (b.d - 0.3), 0.08 + hash2(b.id, k, 3) * 0.12, hash2(b.id, k, 4)]);
+        rubbleOwner.push(b.id);
       }
       continue;
     }
@@ -191,12 +207,18 @@ export function buildScene(s: CityState, style: Style): Built {
     }
   }
 
+  mark('geo');
+  W.owner = O.owner = 0;
   const texW = windowTexture(); disposables.push(texW);
   const wallsMesh = new THREE.Mesh(W.geometry(), mat({ map: texW, vertexColors: true }));
   const otherMesh = new THREE.Mesh(O.geometry(), mat({ vertexColors: true }));
+  const owners = new Map<THREE.Object3D, Int32Array>([[wallsMesh, Int32Array.from(W.owners)], [otherMesh, Int32Array.from(O.owners)]]);
   for (const m of [wallsMesh, otherMesh]) { m.castShadow = m.receiveShadow = true; disposables.push(m.geometry); scene.add(m); }
+  const pickables: THREE.Object3D[] = [wallsMesh, otherMesh, ground];
 
+  mark('mesh');
   // 瓦礫
+  let rubbleMesh: THREE.InstancedMesh | null = null;
   if (rubble.length) {
     const rg = new THREE.BoxGeometry(0.2, 1, 0.16); disposables.push(rg);
     const rm = new THREE.InstancedMesh(rg, mat({ color: 0xffffff }), rubble.length);
@@ -206,8 +228,10 @@ export function buildScene(s: CityState, style: Style): Built {
       rm.setMatrixAt(i, q.matrix); rm.setColorAt(i, c.setHSL(0.08, 0.12, 0.38 + t * 0.2, THREE.SRGBColorSpace));
     });
     rm.castShadow = rm.receiveShadow = true; scene.add(rm);
+    rubbleMesh = rm; pickables.push(rm);
   }
 
+  mark('rubble');
   // 樹：樹冠＋樹幹；廢墟年代偏深綠
   if (s.trees.length) {
     const cg = new THREE.IcosahedronGeometry(0.3, 0), tg = new THREE.CylinderGeometry(0.045, 0.06, 0.28, 5);
@@ -225,6 +249,7 @@ export function buildScene(s: CityState, style: Style): Built {
     for (const m of [crowns, trunks]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); }
   }
 
+  mark('trees');
   // 車：只在城市還活著的年份出現，決定性撒在路上
   if (s.year <= 100) {
     const cars: [number, number, boolean, number][] = [];
@@ -248,6 +273,7 @@ export function buildScene(s: CityState, style: Style): Built {
     }
   }
 
+  mark('cars');
   // 光：從畫面左上方來。正交鏡頭放在 (+x,+y,+z) 看向城心時，畫面左＝世界 (-1,0,+1)；+z 面在左、+x 面在右
   const center = new THREE.Vector3(N / 2, 0, N / 2);
   scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x6b5a44, style.toon ? 1.1 : 1.35));
@@ -262,5 +288,23 @@ export function buildScene(s: CityState, style: Style): Built {
   if (style.softShadow) sun.shadow.radius = 3;
   scene.add(sun, sun.target);
 
-  return { scene, center, size: N, dispose: () => { for (const d of disposables) d.dispose(); } };
+  mark('lights');
+  // 點擊：樹和車不擋（射線穿過去）；打到建築／瓦礫就回那棟建築的起始格，打到地面就回那一格
+  const pick = (ray: THREE.Raycaster): Hit | null => {
+    for (const h of ray.intersectObjects(pickables, false)) {
+      let id = 0;
+      if (h.object === rubbleMesh && h.instanceId != null) id = rubbleOwner[h.instanceId];
+      else if (owners.has(h.object) && h.faceIndex != null) id = owners.get(h.object)![h.faceIndex];
+      const b = id ? byId.get(id) : undefined;
+      if (b) return { id, x: b.x, z: b.z };
+      if (h.object === ground) {
+        const x = Math.floor(h.point.x), z = Math.floor(h.point.z);
+        if (x >= 0 && z >= 0 && x < N && z < N) return { id: 0, x, z };
+      }
+    }
+    return null;
+  };
+  const rubbleSpots = () => rubble.map(([x, z, h], i) => ({ id: rubbleOwner[i], x, y: h / 2, z }));
+
+  return { scene, center, size: N, pick, rubbleSpots, timing: T, dispose: () => { for (const d of disposables) d.dispose(); } };
 }
