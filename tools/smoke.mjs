@@ -65,10 +65,13 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
   await open('year=300&at=26,21&zoom=3.4');
   await page.evaluate('__gt.openLot(26, 21)');
+  // 判準是「最近發生的那一件看得見」，不是「清單有捲動」：字型不同（雲端沒中文字型）時清單可能一頁放得下、根本不必捲（D002 雲端首跑因此誤紅）
   const head = await page.evaluate(`(()=>{const b=document.querySelector('#bio'),ol=b.querySelector('ol'),h=b.querySelector('h2'),x=b.querySelector('.x');
-    const r=b.getBoundingClientRect();return {cardTop:Math.round(r.top),titleTop:Math.round(h.getBoundingClientRect().top),closeTop:Math.round(x.getBoundingClientRect().top),cardScroll:b.scrollTop,listScroll:ol.scrollTop};})()`);
-  log(head.cardScroll === 0 && head.titleTop >= head.cardTop && head.closeTop >= head.cardTop && head.listScroll > 0,
-    '手機上履歷卡：清單自己捲到最近的事，標題與關閉鈕留在原位', JSON.stringify(head));
+    const past=ol.querySelectorAll('li:not(.future)'),li=past[past.length-1],a=li.getBoundingClientRect(),o=ol.getBoundingClientRect(),r=b.getBoundingClientRect();
+    return {cardTop:Math.round(r.top),titleTop:Math.round(h.getBoundingClientRect().top),closeTop:Math.round(x.getBoundingClientRect().top),cardScroll:b.scrollTop,
+      listScroll:ol.scrollTop,overflow:ol.scrollHeight>ol.clientHeight+1,latestVisible:a.top>=o.top-1&&a.bottom<=o.bottom+1};})()`);
+  log(head.cardScroll === 0 && head.titleTop >= head.cardTop && head.closeTop >= head.cardTop && head.latestVisible,
+    '手機上履歷卡：最近發生的事看得見，標題與關閉鈕留在原位', JSON.stringify(head));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
 
   // 對照用畫風 B、C 仍要畫得出來（業主定案 A，B／C 保留給之後的對照圖）
