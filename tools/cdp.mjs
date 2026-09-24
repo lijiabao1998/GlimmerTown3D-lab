@@ -70,25 +70,52 @@ export async function withBrowser(opt, fn) {
   const chromePath = CANDIDATES.find(p => fs.existsSync(p));
   if (!chromePath) throw new Error('找不到 Chrome，可設 CHROME_PATH');
   const srv = await serve(dist, port);
-  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'gt3d-chrome-'));
-  const devPort = port + 1000;
-  const chrome = spawn(chromePath, [
-    '--headless=new', `--remote-debugging-port=${devPort}`, `--user-data-dir=${profile}`, `--window-size=${w},${h}`,
-    // gl:false＝只用 CPU 畫 2D canvas（實驗線全是 2D canvas、大量 getImageData；走 SwiftShader 開機要 6 分鐘，CPU 約 20 秒）
-    ...(opt.gl === false ? ['--disable-gpu'] : ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']),
-    '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio',
-    ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
-    'about:blank',
-  ], { stdio: 'ignore' });
-  let page = null;
-  try {
+  // Chrome 冷啟動：D003 雲端首跑（run 36052184509）等了 15 秒還沒起來就放棄，同一台 runner 下一步拍樣張時 Chrome 起來花了二十多秒。
+  // 做法沿用 2D 實驗線 T627（lijiabao1998/GlimmerTown-lab d23c18d，docs/T627-chrome-cold-start.md）：
+  // 上限拉長（預設 60 秒）；Chrome 行程已經結束就立刻報錯、不空等；保留 stderr 尾巴；第一次起不來換新 profile 與埠重開一次。
+  const waitMs = opt.chromeWaitMs ?? 60000;
+  const launch = (devPort, profile) => {
+    const chrome = spawn(chromePath, [
+      '--headless=new', `--remote-debugging-port=${devPort}`, `--user-data-dir=${profile}`, `--window-size=${w},${h}`,
+      // gl:false＝只用 CPU 畫 2D canvas（實驗線全是 2D canvas、大量 getImageData；走 SwiftShader 開機要 6 分鐘，CPU 約 20 秒）
+      ...(opt.gl === false ? ['--disable-gpu'] : ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']),
+      '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio',
+      ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
+      'about:blank',
+    ], { stdio: ['ignore', 'ignore', 'pipe'] });
+    const st = { chrome, exit: null, tail: '' };
+    chrome.stderr.on('data', d => { st.tail = (st.tail + d).slice(-2048); });   // 持續讀掉，管線不會塞住
+    chrome.on('exit', code => { st.exit = code ?? 'signal'; });
+    chrome.on('error', e => { st.exit = 'spawn-error: ' + e.message; });
+    return st;
+  };
+  const attempt = async (n) => {
+    const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'gt3d-chrome-')), devPort = port + 1000 + n, t0 = Date.now();
+    const st = launch(devPort, profile);
     let wsUrl = null;
-    for (let i = 0; i < 100 && !wsUrl; i++) {
+    while (!wsUrl && st.exit === null && Date.now() - t0 < waitMs) {
       await sleep(150);
       try { const list = await (await fetch(`http://127.0.0.1:${devPort}/json/list`)).json(); wsUrl = list.find(t => t.type === 'page')?.webSocketDebuggerUrl; } catch {}
     }
-    if (!wsUrl) throw new Error('Chrome 沒有起來');
+    const why = wsUrl ? null : st.exit !== null ? `Chrome 結束了（結束碼 ${st.exit}）` : `等了 ${waitMs / 1000} 秒 Chrome 還沒起來`;
+    return { st, profile, wsUrl, ms: Date.now() - t0, why };
+  };
+  const cleanup = a => { try { a.st.chrome.kill(); } catch {} setTimeout(() => { try { fs.rmSync(a.profile, { recursive: true, force: true }); } catch {} }, 800); };
+  let run = await attempt(0), tries = 1;
+  if (!run.wsUrl) {
+    const first = run;
+    cleanup(first);
+    run = await attempt(1); tries = 2;
+    if (!run.wsUrl) {
+      cleanup(run); srv.close();
+      throw new Error(`Chrome 沒有起來（重開一次也失敗）：第 1 次 ${first.why}；第 2 次 ${run.why}` + (run.st.tail ? `\n  stderr 尾巴：${run.st.tail.trim().slice(-600)}` : ''));
+    }
+  }
+  const { wsUrl } = run;
+  let page = null;
+  try {
     page = await connect(wsUrl);
+    page.chrome = { ms: run.ms, tries };   // Chrome 可連線花了多久、第幾次成功（印在煙霧測試開頭，之後在 Actions 紀錄看得到冷啟動時間）
     await page.send('Runtime.enable'); await page.send('Log.enable'); await page.send('Page.enable'); await page.send('Network.enable');
     await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 1, mobile: false });
     if (opt.preload) await page.send('Page.addScriptToEvaluateOnNewDocument', { source: opt.preload });
@@ -100,8 +127,7 @@ export async function withBrowser(opt, fn) {
     return await fn({ open, page });
   } finally {
     try { page?.close(); } catch {}
-    try { chrome.kill(); } catch {}
+    cleanup(run);
     srv.close();
-    setTimeout(() => { try { fs.rmSync(profile, { recursive: true, force: true }); } catch {} }, 800);
   }
 }

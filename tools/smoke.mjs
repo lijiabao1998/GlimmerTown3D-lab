@@ -14,6 +14,7 @@ const blankCheck = `(()=>{const c=document.querySelector('canvas'),k=document.cr
 
 console.log('\n=== 微光小鎮 3D 煙霧測試 ===');
 await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
+  console.log(`  （Chrome 可連線 ${page.chrome.ms} ms，第 ${page.chrome.tries} 次啟動）`);
   // D001：WebGL、決定性、只增不改、三個年份的數字
   await open('mode=history&clean=1');
   const g = await page.evaluate('({webgl2: __gt.webgl2, check: __gt.selfcheck(), stats: __gt.stats, hash: __gt.hash, format: __gt.format, info: __gt.renderInfo()})');
