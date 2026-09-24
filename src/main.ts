@@ -8,6 +8,8 @@ import { Pipeline } from './render/post.ts';
 import { STYLES, type Style } from './render/styles.ts';
 
 const q = new URLSearchParams(location.search);
+// 預設種子 5162026 搬自 2D 實驗線（lijiabao1998/GlimmerTown-lab 的 gallery.js／probe-civic.js 用 metroArtSeedWorld516(5162026) 拍樣張）。
+// 只借了這個數字：本線的世界生成與 2D 無關，同一個種子在兩條線長出的城市不同。
 const seed = Number(q.get('seed') ?? 5162026) >>> 0;
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
 let year = clamp(Math.round(Number(q.get('year') ?? GROW_END)) || 0, 0, END);
