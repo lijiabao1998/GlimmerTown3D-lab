@@ -1,13 +1,17 @@
 // 2D 城市模式（D003）：把 2D 實驗線的分享碼解碼成城市，畫成 3D。預設開種子城。
 // 網址參數：?mode=city（預設）&sample=seed516|ai120 &style=A|B|C（對照用）&at=x,z|center &zoom= &clean=1（拍照，藏介面）
+//           &blocks=a|b|c（D004 住商工街區三檔，業主挑；不帶＝D003 現況）
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityFromLab, cityStats, buildingAt, type City } from './sim/city.ts';
-import { buildCityScene, tileTop, type BuiltCity } from './render/cityScene.ts';
+import { buildCityScene, tileTop, type BuiltCity, type BlockRender } from './render/cityScene.ts';
 import { Pipeline } from './render/post.ts';
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
+import { ARCHE } from './content/arche.ts';
+import { gridOf, labPartition, partRow, drawPlan, BLOCK_MODES, type BlockMode, type DrawBlock } from './content/blocks.ts';
+import { recipe, type Recipe } from './content/recipes.ts';
 import seed516 from './content/samples/seed516.code.txt?raw';
 import ai120 from './content/samples/ai120.code.txt?raw';
 
@@ -23,6 +27,22 @@ export function startCity() {
   const clean = q.get('clean') === '1';
   const style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
   let sampleId = SAMPLES[q.get('sample') ?? ''] ? q.get('sample')! : 'seed516';
+  const bq = (q.get('blocks') ?? '').toLowerCase();
+  let blockMode: BlockMode | null = bq in BLOCK_MODES ? bq as BlockMode : null;
+  // 配方只跟 (k, lv, 寬, 高, v) 有關：同一組只算一次
+  const recipes = new Map<string, Recipe>();
+  const recipeOf = (b: DrawBlock) => {
+    const key = `${b.k}_${b.lv}_${b.w}_${b.h}_${b.v}`;
+    let r = recipes.get(key);
+    if (!r) { r = recipe(ARCHE, b.k, b.lv, b.w, b.h, b.v); recipes.set(key, r); }
+    return r;
+  };
+  let plan: DrawBlock[] | null = null;
+  const blockRenderFor = (c: City): BlockRender | undefined => {
+    if (!blockMode) { plan = null; return undefined; }
+    plan = drawPlan(gridOf(c), ARCHE, blockMode);
+    return { mode: blockMode, plan, recipe: recipeOf };
+  };
 
   const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -73,15 +93,31 @@ export function startCity() {
     if (!r.ok) return r;
     const c = cityFromLab(r.save, KINDS, code);
     const t2 = performance.now();
-    const b = buildCityScene(c, KINDS, style);
+    const br = blockRenderFor(c);
+    const tp = performance.now();
+    const b = buildCityScene(c, KINDS, style, br);
     const t3 = performance.now();
     built?.dispose();
     city = c; built = b; label = name;
-    Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
+    Object.assign(timing, { decode: t1 - t0, city: t2 - t1, plan: tp - t2, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
     syncUi();
     return { ok: true };
+  }
+  // D004：換街區檔位，只重建場景（鏡頭不動）
+  function setBlocks(m: BlockMode | null) {
+    if (!city) return;
+    blockMode = m;
+    const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br), t1 = performance.now();
+    built?.dispose();
+    built = b;
+    Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
+    const u = new URL(location.href);
+    if (m) u.searchParams.set('blocks', m); else u.searchParams.delete('blocks');
+    history.replaceState(null, '', u);
+    closeCard();
+    syncUi();
   }
 
   function frame() {
@@ -97,7 +133,7 @@ export function startCity() {
   const ui = document.createElement('div');
   ui.innerHTML = `
     <div id="top"><h1>微光小鎮 3D・2D 實驗線的城市</h1><p class="meta"></p>
-      <div class="row" id="picks"></div></div>
+      <div class="row" id="picks"></div><div class="row chips" id="blk" style="margin-top:6px"></div></div>
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol></div>
     <div id="dlg" hidden><div class="card"><h2>貼上 2D 實驗線的分享碼</h2>
       <p class="sub">在 2D 實驗線匯出的整串分享碼（可以帶 GVX1: 前綴）。只在這一頁看，不會寫回任何存檔。</p>
@@ -114,6 +150,12 @@ export function startCity() {
   paste.onclick = () => { err.textContent = ''; dlg.hidden = false; ta.focus(); }; picks.appendChild(paste);
   const toHist = document.createElement('button'); toHist.textContent = '⏳ 300 年示範';
   toHist.onclick = () => { location.search = '?mode=history'; }; picks.appendChild(toHist);
+  // D004 住商工街區三檔（業主挑）：現況＝D003
+  const blk = $('#blk');
+  for (const [m, name] of [['', 'D003 現況'], ...Object.entries(BLOCK_MODES).map(([k, v]) => [k, `${k.toUpperCase()} ${v}`])]) {
+    const b = document.createElement('button'); b.textContent = name; b.dataset.m = m;
+    b.onclick = () => setBlocks((m || null) as BlockMode | null); blk.appendChild(b);
+  }
   $<HTMLButtonElement>('#dlgNo').onclick = () => { dlg.hidden = true; };
   $<HTMLButtonElement>('#dlgOk').onclick = () => {
     const r = load(ta.value, '貼上的城市');
@@ -126,7 +168,14 @@ export function startCity() {
     const kinds = new Set(city.buildings.map(b => b.k)).size;
     metaEl.textContent = `${label}「${city.name}」・實驗線 v${city.gameVer}・第 ${city.day.toLocaleString()} 天・建築 ${city.buildings.length}（${kinds} 種）・${city.n}×${city.n}`;
     picks.querySelectorAll('button').forEach(b => b.classList.toggle('on', (b as HTMLElement).dataset.s === sampleId));
+    blk.querySelectorAll('button').forEach(b => b.classList.toggle('on', (b as HTMLElement).dataset.m === (blockMode ?? '')));
   }
+  // 這一格在目前檔位屬於哪個街區（plan 的索引；-1＝沒畫）
+  const blockOfCell = (i: number) => {
+    if (!plan || !built) return -1;
+    const drawn = new Set(built.blocksDrawn());
+    return plan.findIndex((b, bi) => drawn.has(bi) && b.cells.includes(i));
+  };
 
   // ---- 點一格：有建築就看建築，沒有就看這一格是什麼 ----
   const marker = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 0.04, 1)), new THREE.LineBasicMaterial({ color: 0xffd34d }));
@@ -142,6 +191,13 @@ export function startCity() {
       $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${b.abandoned ? '・已遭遺棄' : ''}`;
       rows.push(`<b>約第 ${Math.max(0, b.builtDay).toLocaleString()} 天</b>蓋起（由 2D 存檔的 age=${b.age} 推算，只是估計）`);
       if (!KINDS.known(b.k)) rows.push('<b>注意</b>本線的種類表沒有這一種，用預設量體畫');
+      if (plan && blockMode && b.k >= 1 && b.k <= 3) {
+        const bi = blockOfCell(i);
+        if (bi >= 0) {
+          const bk = plan[bi], r = recipeOf(bk);
+          rows.push(`<b>街區 ${bk.w}×${bk.h}</b>${blockMode.toUpperCase()} 檔・原型 ${r.arche}${r.path === 'core' ? '' : `（${r.path} 立面）`}・起點 (${bk.x}, ${bk.z})・畫法用起點的 ${bk.lv} 級`);
+        } else rows.push(`<b>這一格沒畫</b>實驗線的切分沒有街區蓋到這格（D0），或被旁邊的大街區吸收（T555）`);
+      }
       rows.push(`<b>第 ${c.day.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`);
     } else {
       title = `${ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
@@ -151,8 +207,9 @@ export function startCity() {
     }
     $('#bio h2').textContent = title;
     $('#bio ol').innerHTML = rows.map(r => `<li>${r}</li>`).join('');
-    const s = b ? b.size : 1, x0 = b ? b.x : x, z0 = b ? b.z : z;
-    marker.scale.set(s, 1, s); marker.position.set(x0 + s / 2, Math.max(0, tileTop(c, z0 * c.n + x0)) + 0.03, z0 + s / 2);
+    const bi = b ? blockOfCell(i) : -1, bk = bi >= 0 ? plan![bi] : null;   // D004：點到街區就框整個街區
+    const sx = bk ? bk.w : b ? b.size : 1, sz = bk ? bk.h : b ? b.size : 1, x0 = bk ? bk.x : b ? b.x : x, z0 = bk ? bk.z : b ? b.z : z;
+    marker.scale.set(sx, 1, sz); marker.position.set(x0 + sx / 2, Math.max(0, tileTop(c, z0 * c.n + x0)) + 0.03, z0 + sz / 2);
     built.scene.add(marker);
     bio.hidden = false;
     invalidate();
@@ -209,6 +266,41 @@ export function startCity() {
     bigOne: () => [...city!.buildings].sort((a, b) => b.size - a.size || KINDS.height(b.k, b.lv, b.v) - KINDS.height(a.k, a.lv, a.v) || a.id - b.id)[0].id,
     idOfKind: (k: number) => city!.buildings.find(b => b.k === k)?.id ?? null,
     frames: () => frames,
+    // ---- D004 ----
+    blockMode: () => blockMode,
+    setBlocks: (m: string | null) => { setBlocks(m && m in BLOCK_MODES ? m as BlockMode : null); return blockMode; },
+    partition: () => labPartition(gridOf(city!), ARCHE).map(partRow),        // 瀏覽器裡跑同一份切分（煙霧測試拿去跟黃金樣本比）
+    blockInfo: () => plan && built ? { mode: blockMode, n: city!.n, drawn: built.blocksDrawn(),
+      plan: plan.map(b => [b.x, b.z, b.w, b.h, b.k, b.lv, b.v, b.from === 'fill' ? 1 : 0]) } : null,
+    // 點街區中心（主體頂面）：要點到這個街區裡的建築、建築卡打得開。挑多格街區（A 檔全是 1×1 就挑 1×1），面積大到小、均勻取 count 個（決定性）。
+    // 判定用正上方俯視點：斜視角下街區中心可能被前面較高的建築擋住，那時點到前面那棟才是對的（D004 首跑 20 個裡擋掉 1–4 個）；
+    // 俯視時射線直直落在街區中心，驗的正是「點到街區 → 回到街區裡那一格的建築」。斜視角直接點中幾個另外回報（oblique）。
+    blockPickTest(count: number) {
+      if (!plan || !built || !city) return null;
+      const c = city, drawn = built.blocksDrawn(), multi = drawn.filter(bi => plan![bi].w * plan![bi].h > 1);
+      const pool = (multi.length ? multi : drawn).sort((a, b) => plan![b].w * plan![b].h - plan![a].w * plan![a].h || a - b);
+      const pickN = pool.length <= count ? pool : Array.from({ length: count }, (_, j) => pool[Math.floor(j * pool.length / count)]);
+      const hitsBlock = (bi: number, h: ReturnType<typeof pickAt>) => !!h && h.id > 0 && plan![bi].cells.includes(h.z * c.n + h.x) && h.id === c.occ[h.z * c.n + h.x];
+      let oblique = 0;
+      for (const bi of pickN) { const [sx, sy] = screenOf(built.blockAnchor(bi)!); if (hitsBlock(bi, pickAt(sx, sy))) oblique++; }
+      const saved = { pos: cam.position.clone(), up: cam.up.clone(), zoom: cam.zoom, target: controls.target.clone() };
+      const bad: string[] = [];
+      try {
+        for (const bi of pickN) {
+          const bk = plan[bi], a = built.blockAnchor(bi)!;
+          cam.up.set(0, 0, -1); cam.position.set(a.x, a.y + c.n, a.z); cam.zoom = 1; cam.lookAt(a.x, 0, a.z);
+          cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+          const [sx, sy] = screenOf(a), h = pickAt(sx, sy), ok = hitsBlock(bi, h);
+          const card = ok ? showTile(h!.x, h!.z) : null, b = ok ? c.buildings[h!.id - 1] : null;
+          if (!ok || !card || !b || !card.title.startsWith(KINDS.name(b.k))) bad.push(`${bk.w}×${bk.h}@${bk.x},${bk.z}→${JSON.stringify(h)}`);
+        }
+      } finally {
+        cam.up.copy(saved.up); cam.position.copy(saved.pos); cam.zoom = saved.zoom; cam.lookAt(saved.target); controls.target.copy(saved.target);
+        cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+        closeCard();
+      }
+      return { pool: pool.length, tested: pickN.length, multi: multi.length > 0, oblique, bad };
+    },
     spin: (rad: number) => { controls.rotateLeft?.(rad); invalidate(); },
     renderInfo: () => ({ ...pipe.sceneInfo, rt: pipe.size }),
   };

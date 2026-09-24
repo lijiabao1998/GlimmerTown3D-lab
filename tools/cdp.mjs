@@ -19,11 +19,13 @@ const CANDIDATES = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ].filter(Boolean);
 
-function serve(dir, port) {
+// overlay＝{ 路徑: 內容 }：只在記憶體裡的檔案，蓋過同名檔（D004 抽取用：實驗線副本插一行出口，原檔不動、也不寫進任何目錄）
+function serve(dir, port, overlay = {}) {
   const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.json': 'application/json' };
   return new Promise((resolve, reject) => {
     const srv = http.createServer((req, res) => {
       const rel = decodeURIComponent((req.url || '/').split('?')[0]).replace(/^\/+/, '') || 'index.html';
+      if (rel in overlay) { res.writeHead(200, { 'Content-Type': MIME[path.extname(rel)] || 'application/octet-stream' }).end(overlay[rel]); return; }
       const file = path.join(dir, rel);
       if (!file.startsWith(dir)) { res.writeHead(403).end(); return; }
       fs.readFile(file, (err, buf) => {
@@ -59,17 +61,18 @@ async function connect(wsUrl) {
 }
 
 // 開一個頁面工作階段：fn({ open, page })；open(query) 導航到 dist/index.html?query 並等 __gt.ready
-// 選項：root＝要伺服的目錄（預設 dist/；D003 抽取工具拿來開 2D 實驗線）、entry＝入口檔、
+// 選項：root＝要伺服的目錄（預設 dist/；D003 抽取工具拿來開 2D 實驗線）、entry＝入口檔、overlay＝只在記憶體的檔案、
 //       preload＝頁面任何腳本之前先執行的 JS、ready＝等到它為真才算載入完、readyMs＝最多等多久。
 // page.requests 記下所有網路請求的網址（D003「零外部素材」守衛）。
 export async function withBrowser(opt, fn) {
   const port = opt.port || 8311, w = opt.width || 1280, h = opt.height || 800;
   const dist = opt.root ? path.resolve(opt.root) : path.join(ROOT, 'dist'), entry = opt.entry || 'index.html';
   const ready = opt.ready || '!!(window.__gt && window.__gt.ready)', readyMs = opt.readyMs || 30000;
-  if (!fs.existsSync(path.join(dist, entry))) throw new Error(opt.root ? `找不到 ${path.join(dist, entry)}` : '找不到 dist/index.html，先跑 npm run build');
+  const overlay = opt.overlay || {};
+  if (!(entry in overlay) && !fs.existsSync(path.join(dist, entry))) throw new Error(opt.root ? `找不到 ${path.join(dist, entry)}` : '找不到 dist/index.html，先跑 npm run build');
   const chromePath = CANDIDATES.find(p => fs.existsSync(p));
   if (!chromePath) throw new Error('找不到 Chrome，可設 CHROME_PATH');
-  const srv = await serve(dist, port);
+  const srv = await serve(dist, port, overlay);
   // Chrome 冷啟動：D003 雲端首跑（run 36052184509）等了 15 秒還沒起來就放棄，同一台 runner 下一步拍樣張時 Chrome 起來花了二十多秒。
   // 做法沿用 2D 實驗線 T627（lijiabao1998/GlimmerTown-lab d23c18d，docs/T627-chrome-cold-start.md）：
   // 上限拉長（預設 60 秒）；Chrome 行程已經結束就立刻報錯、不空等；保留 stderr 尾巴；第一次起不來換新 profile 與埠重開一次。

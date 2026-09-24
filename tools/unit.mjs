@@ -7,6 +7,8 @@ import { decodeLabCode, encodeLabCode, rleEncode, rleDecode, MAX_CODE } from '..
 import { cityFromLab, cityStats } from '../src/sim/city.ts';
 import { kindTableFrom, NO_SPRITE_HEIGHT } from '../src/content/kindTable.ts';
 import { mulberry32 } from '../src/sim/rng.ts';
+import { gridOf, labPartition, partRow, partitionStats, drawPlan } from '../src/content/blocks.ts';
+import { recipe, labCalls, PAL_KEYS } from '../src/content/recipes.ts';
 
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
@@ -95,6 +97,101 @@ for (const id of ['seed516', 'ai120']) {
   log(!!c && c.n === 108 && sizes === '1,2,5,1' && c.issues.unknownKinds.join() === '999', '108×108 能匯入；體育場 2×2、高鐵站 5×5；未知種類 999 照樣匯入並計數', r.ok ? `n=${c.n}、佔地 ${sizes}、未知 ${c.issues.unknownKinds}` : r.error);
 }
 
+// ===== D004：原型表、超街區切分、量體，跟實驗線逐項對拍（CLAUDE.md 規則 8）=====
+const arche = JSON.parse(read('src/content/lab-arche.json'));
+{
+  const A = arche.arche, n = Object.values(A).flat().length;
+  log(arche.source.runtimeDeepEqual === true && arche.source.commit === data.source.commit && Object.keys(A).length === 9 && n === 44,
+    'D004 原型表：抽自實驗線 ARCHE568，靜態字面量＝執行期（抽取時深度比對）、出處與內容表同一個 commit', `${Object.keys(A).length} 組、${n} 個原型、${arche.source.commit.slice(0, 7)}`);
+}
+const partGold = {}, cities = {};
+for (const id of ['seed516', 'ai120']) {
+  const code = read(`src/content/samples/${id}.code.txt`);
+  cities[id] = cityFromLab(decodeLabCode(code).save, K, code);
+  partGold[id] = JSON.parse(read(`src/content/samples/d004-partition-${id}.json`));
+}
+// 逐格比切分：回傳差幾格（兩座城合計）與前幾筆
+const partDiff = (faults = {}) => {
+  const out = [];
+  for (const id of ['seed516', 'ai120']) {
+    const g = new Map(partGold[id].cells.map(r => [r[0], JSON.stringify(r)]));
+    const mine = labPartition(gridOf(cities[id]), arche.arche, faults).map(partRow);
+    if (mine.length !== g.size) out.push(`${id} 住商工格數 ${mine.length}≠${g.size}`);
+    for (const r of mine) if (g.get(r[0]) !== JSON.stringify(r)) out.push(`${id} 格 ${r[0]}：3D ${JSON.stringify(r.slice(1))} ≠ 實驗線 ${g.get(r[0])}`);
+  }
+  return out;
+};
+// B 檔畫的街區（起點、寬高、k、繪製用 lv／v）要等於實驗線畫的：起點且（多格或沒被吸收），lv／v 取起點那格（61581）
+const drawDiff = (faults = {}) => {
+  const out = [];
+  for (const id of ['seed516', 'ai120']) {
+    const n = partGold[id].n, want = partGold[id].cells.filter(r => r[1] && (r[2] * r[3] > 1 || !r[9])).map(r => [r[0] % n, (r[0] / n) | 0, r[2], r[3], r[4], r[7], r[8]]);
+    const got = drawPlan(gridOf(cities[id]), arche.arche, 'b', faults).map(b => [b.x, b.z, b.w, b.h, b.k, b.lv, b.v]);
+    const W = new Set(want.map(r => r.join())), G = new Set(got.map(r => r.join()));
+    for (const r of W) if (!G.has(r)) out.push(`${id} 少畫 ${r}`);
+    for (const r of G) if (!W.has(r)) out.push(`${id} 多畫 ${r}`);
+  }
+  return out;
+};
+{
+  const d = partDiff();
+  log(d.length === 0, 'D004 切分對拍：兩座樣本城逐格（起點、寬、高、k、lv、v、起點那格 lv／v、是否被吸收）＝實驗線 rciBlockOrigin547＋rciAbsorbed555', d.length ? `${d.length} 格不同：${d.slice(0, 3).join('；')}` : '0 差異');
+  for (const id of ['seed516', 'ai120']) {
+    const s = partitionStats(labPartition(gridOf(cities[id]), arche.arche), cities[id].n), g = partGold[id].stats;
+    log(JSON.stringify(s) === JSON.stringify(g) && s.overlap === 0, `D004 ${id} 切分統計＝實驗線、重疊 0`,
+      `街區 ${s.blocks}（多格 ${s.multi}）；住商工 ${s.rci} 格＝多格 ${s.cells.inMulti}＋單格 ${s.cells.single}＋吸收 ${s.cells.absorbed}＋D0 ${s.cells.d0}；重疊 ${s.overlap}`
+      + (JSON.stringify(s) === JSON.stringify(g) ? '' : `；實驗線 ${JSON.stringify(g)}`));
+  }
+  const dd = drawDiff();
+  log(dd.length === 0, 'D004 B 檔要畫的街區＝實驗線畫的（起點、寬高、k、起點那格的 lv／v）', dd.length ? `${dd.length} 筆：${dd.slice(0, 3).join('；')}` : '0 差異');
+  // A、C 兩檔：每一格住商工剛好屬於一個街區，沒有空格也沒有重疊；A 全是 1×1
+  for (const id of ['seed516', 'ai120']) {
+    const c = cities[id], grid = gridOf(c), rci = labPartition(grid, arche.arche).length;
+    for (const mode of ['a', 'c']) {
+      const plan = drawPlan(grid, arche.arche, mode), cnt = new Map();
+      for (const b of plan) for (const i of b.cells) cnt.set(i, (cnt.get(i) || 0) + 1);
+      const over = [...cnt.values()].filter(v => v > 1).length, ok = cnt.size === rci && over === 0 && (mode !== 'a' || plan.every(b => b.w * b.h === 1));
+      log(ok, `D004 ${id} ${mode.toUpperCase()} 檔：住商工 ${rci} 格每格剛好屬於一個街區`, `街區 ${plan.length}、蓋到 ${cnt.size} 格、重疊 ${over}` + (mode === 'c' ? `、補切 ${plan.filter(b => b.from === 'fill').length}` : ''));
+    }
+  }
+}
+// 量體：1,728 組逐項比
+const massGold = JSON.parse(read('src/content/samples/d004-massing.json'));
+const MASS_FIELDS = ['原型名', '路徑', '坡頂旗標', '牆高', '主體與第二量體的框', '第二量體高', '鋸齒', '內縮（女兒牆、上層量體）', '一戶一尖', '調色盤'];
+const massDiff = (faults = {}) => {
+  const out = [];
+  for (const r of massGold.rows) {
+    const [k, lv, bw, bh, v] = r[0].split('_').map(Number), q = recipe(arche.arche, k, lv, bw, bh, v, faults), L = labCalls(q);
+    const mine = [q.arche, q.path, q.pitch, q.wallPx, L.sub, L.mass, L.saw, L.shr, L.pp, PAL_KEYS.map(p => q.pal[p])];
+    const bad = mine.map((m, j) => JSON.stringify(m) === JSON.stringify(r[j + 1]) ? null : `${MASS_FIELDS[j]} 3D ${JSON.stringify(m)} ≠ 實驗線 ${JSON.stringify(r[j + 1])}`).filter(Boolean);
+    if (bad.length) out.push(`${r[0]}：${bad.join('；')}`);
+  }
+  return out;
+};
+{
+  const d = massDiff(), paths = massGold.byPath;
+  log(massGold.rows.length === 1728 && massGold.source.commit === data.source.commit && d.length === 0,
+    'D004 量體對拍：1,728 組（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）原型、路徑、坡頂、牆高、框（位元相等）、第二量體、屋頂分支、七色＝實驗線',
+    d.length ? `${d.length} 組不同：${d.slice(0, 2).join('｜')}` : `0 差異；路徑 ${Object.entries(paths).map(([p, n]) => `${p} ${n}`).join('、')}`);
+}
+// 守衛有效：注入錯誤，對應的守衛要變紅（卡面驗收 4）
+{
+  const inj = [
+    ['聯排進深 1→2', () => partDiff({ terraceDeep1: 2 })],
+    ['拿掉「villa 不併」', () => partDiff({ noVillaRule: true })],
+    ['拿掉掃描序認領', () => partDiff({ noScanClaim: true })],
+    ['T582 門檻 6→7', () => massDiff({ parcelMin: 7 })],
+    ['T582 門檻 6→4', () => massDiff({ parcelMin: 4 })],
+    ['T602 裙樓上限 0.40→0.45', () => massDiff({ podiumCap: .45 })],
+    ['繪製改用街區的 maxLv', () => drawDiff({ drawMaxLv: true })],
+  ].map(([name, f]) => [name, f().length]);
+  log(inj.every(([, n]) => n > 0), `D004 注入 ${inj.length} 種錯誤，對應守衛都變紅`, inj.map(([name, n]) => `${name}→${n} 筆差異`).join('、'));
+  // 卡面原本寫的「T582 門檻 6→5」是等價突變：街區寬高都在 1–4（blockMax602），面積只有 1,2,3,4,6,8,9,12,16，沒有 5；
+  // 所以 ≥5 跟 ≥6 在實驗線、在本線都分不出來，守衛不可能變紅。這裡改成斷言「它確實等價」，另用 6→7、6→4 驗守衛（D004 施工紀錄）
+  const areas = new Set(); for (let w = 1; w <= 4; w++) for (let h = 1; h <= 4; h++) areas.add(w * h);
+  log(!areas.has(5) && massDiff({ parcelMin: 5 }).length === 0, 'D004「T582 門檻 6→5」是等價突變（面積沒有 5），改用 6→7、6→4 驗', `面積 ${[...areas].sort((a, b) => a - b).join(',')}`);
+}
+
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
   const bad = [];
@@ -106,6 +203,11 @@ for (const id of ['seed516', 'ai120']) {
     });
   }
   log(bad.length === 0, '模擬層與解碼器不碰 three／DOM／Math.random／現實時間', bad.join(' ') || 'src/sim、src/io 全乾淨');
+  // D004 驗收 9：內容層（切分、配方、種類表）也不碰 three 與 DOM
+  const badC = [];
+  for (const f of fs.readdirSync(path.join(ROOT, 'src/content')).filter(f => f.endsWith('.ts')))
+    read(`src/content/${f}`).split('\n').forEach((l, i) => { if (/from ['"]three|\bdocument\.|\bwindow\.|\bHTMLElement\b|Math\.random/.test(l.replace(/\/\/.*$/, ''))) badC.push(`src/content/${f}:${i + 1}`); });
+  log(badC.length === 0, '內容層 src/content/*.ts 不 import three、不碰 DOM', badC.join(' ') || 'src/content 全乾淨');
 }
 
 // ---- 零外部素材（規則 7）：src 裡沒有圖片、字型、模型、音效檔；程式與 index.html 不引用外部網址 ----

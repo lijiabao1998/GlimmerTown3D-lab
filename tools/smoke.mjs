@@ -115,6 +115,55 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       buttons:[...document.querySelectorAll('#picks button')].map(e=>e.textContent)};})()`);
   log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 4, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；四顆切換鈕都在', JSON.stringify(mob));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+  // ===== D004：住商工街區三檔（?blocks=a|b|c）=====
+  const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
+  for (const id of ['seed516', 'ai120']) {
+    const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n, [bt, bc] = D003_BASE[id];
+    await open(`sample=${id}&clean=1`);
+    const d = await page.evaluate('({info: __gt.renderInfo(), owners: __gt.owners(), n: __gt.buildingCount(), mode: __gt.blockMode(), part: __gt.partition()})');
+    log(d.mode === null && d.info.triangles === bt && d.info.calls === bc && d.owners === d.n, `D004 ${id} 不帶 blocks＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同`,
+      `${d.info.triangles.toLocaleString()} 三角形（基線 ${bt.toLocaleString()}）、${d.info.calls} 次（基線 ${bc}）、畫到 ${d.owners}／${d.n}`);
+    const pd = d.part.filter((r, j) => JSON.stringify(r) !== JSON.stringify(G.cells[j])).length + Math.abs(d.part.length - G.cells.length);
+    log(pd === 0, `D004 ${id} 切分對拍（瀏覽器裡跑同一份 blocks.ts）：逐格＝實驗線`, `${d.part.length} 格、差 ${pd}`);
+    // 實驗線畫的格：起點且（多格或沒被吸收）的街區蓋到的格
+    const rci = new Set(G.cells.map(r => r[0])), labDrawn = new Set(), absorbed = new Set(G.cells.filter(r => r[1] && r[2] * r[3] === 1 && r[9]).map(r => r[0]));
+    for (const r of G.cells) if (r[1] && (r[2] * r[3] > 1 || !r[9])) for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) labDrawn.add(r[0] + dy * n + dx);
+    for (const m of ['a', 'b', 'c']) {
+      await open(`sample=${id}&clean=1&blocks=${m}`);
+      const s = await page.evaluate('({info: __gt.renderInfo(), owners: __gt.owners(), n: __gt.buildingCount(), bi: __gt.blockInfo(), t: __gt.timing(), mode: __gt.blockMode()})');
+      const v = await page.evaluate(blankCheck);
+      const cnt = new Map();
+      for (const bi of s.bi.drawn) { const p = s.bi.plan[bi]; for (let dz = 0; dz < p[3]; dz++) for (let dx = 0; dx < p[2]; dx++) { const c = (p[1] + dz) * n + p[0] + dx; cnt.set(c, (cnt.get(c) || 0) + 1); } }
+      const covered = [...cnt.keys()], over = [...cnt.values()].filter(x => x > 1).length, stray = covered.filter(c => !rci.has(c)).length;
+      const nonRciOk = s.owners === (s.n - rci.size) + covered.length;   // 非住商工全數畫到：畫到的建築數＝非住商工全部＋街區蓋到的住商工格
+      const allDrawn = s.bi.drawn.length === s.bi.plan.length;
+      let ok, detail;
+      if (m === 'a') { ok = s.owners === s.n && s.bi.plan.every(p => p[2] * p[3] === 1) && cnt.size === rci.size && over === 0; detail = `畫到 ${s.owners}／${s.n} 棟、街區 ${s.bi.plan.length} 個全是 1×1`; }
+      else if (m === 'b') {
+        const missing = [...labDrawn].filter(c => !cnt.has(c)).length, extra = covered.filter(c => !labDrawn.has(c)).length;
+        const undrawn = [...rci].filter(c => !cnt.has(c)), undrawnAbs = undrawn.filter(c => absorbed.has(c)).length;
+        ok = missing === 0 && extra === 0 && over === 0 && undrawnAbs === G.stats.cells.absorbed && undrawn.length - undrawnAbs === G.stats.cells.d0;
+        detail = `畫的格＝實驗線 ${labDrawn.size} 格（少 ${missing}、多 ${extra}）；沒畫：吸收 ${undrawnAbs}（樣本 ${G.stats.cells.absorbed}）、D0 ${undrawn.length - undrawnAbs}（樣本 ${G.stats.cells.d0}）`;
+      } else { ok = cnt.size === rci.size && over === 0 && stray === 0; detail = `住商工 ${rci.size} 格全蓋到（${cnt.size}）、重疊 ${over}、補切 ${s.bi.plan.filter(p => p[7]).length} 塊`; }
+      log(s.mode === m && ok && allDrawn && nonRciOk && over === 0 && stray === 0 && v > 150, `D004 ${id} ${m.toUpperCase()} 檔畫得出來、該畫的格都畫到、非住商工全數畫到`,
+        `${detail}；非住商工 ${s.n - rci.size} 棟全畫 ${nonRciOk}；變異量 ${v}`);
+      const tri = s.info.triangles, lim = Math.floor(bt * 1.5);
+      log(tri <= lim && s.info.calls <= 18, `D004 ${id} ${m.toUpperCase()} 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18`,
+        `${tri.toLocaleString()}（上限 ${lim.toLocaleString()}，${(tri / bt).toFixed(2)} 倍）、${s.info.calls} 次；建場景 ${s.t.scene.toFixed(0)} ms（其中切分 ${s.t.plan.toFixed(1)} ms）`);
+      const pk = await page.evaluate('__gt.blockPickTest(20)');
+      log(pk.bad.length === 0 && pk.tested === Math.min(20, pk.pool) && (m === 'a' || pk.multi), `D004 ${id} ${m.toUpperCase()} 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開`,
+        (pk.bad.length ? `${pk.bad.length}／${pk.tested} 不對：${pk.bad.slice(0, 3).join('；')}` : `${pk.tested} 個${m === 'a' ? '（A 檔全是 1×1）' : '多格街區'}全對（候選 ${pk.pool}）`)
+        + `；斜視角直接點中 ${pk.oblique}／${pk.tested}（其餘被前面較高的建築擋住，點到的是前面那棟）`);
+    }
+  }
+  // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動
+  await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+  await open('sample=seed516&at=36,36&zoom=2.4');
+  const sw = await page.evaluate(`(()=>{const bs=[...document.querySelectorAll('#blk button')],inView=bs.every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});
+    const on0=bs.find(b=>b.classList.contains('on'))?.textContent;bs[2].click();return {n:bs.length,inView,on0,on1:bs.find(b=>b.classList.contains('on'))?.textContent,mode:__gt.blockMode(),url:location.search};})()`);
+  log(sw.n === 4 && sw.inView && /D003/.test(sw.on0) && /^B/.test(sw.on1) && sw.mode === 'b' && /blocks=b/.test(sw.url), 'D004 手機直式：四顆街區切換鈕都在畫面內，點 B 就換檔、網址跟著改', JSON.stringify(sw));
+  await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+
   // 零外部素材：整輪煙霧測試的所有網路請求都只連本機
   const ext = page.requests.filter(u => !/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u));
   log(ext.length === 0, '零外部請求：所有網路請求都只連 127.0.0.1', ext.length ? ext.slice(0, 5).join(' ') : `共 ${page.requests.length} 個請求`);

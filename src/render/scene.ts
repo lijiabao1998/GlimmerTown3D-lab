@@ -56,10 +56,10 @@ export class Geo {
     }
     if (top) this.quad([x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1], [0, 1, 0], top);
   }
-  // 山牆屋頂：屋脊沿長邊；兩端山牆三角用牆色
-  gable(x0: number, z0: number, x1: number, z1: number, yb: number, rise: number, roof: THREE.Color, wall: THREE.Color) {
+  // 山牆屋頂：屋脊沿長邊（D004 起可用 along 指定 'x'／'z'）；兩端山牆三角用牆色
+  gable(x0: number, z0: number, x1: number, z1: number, yb: number, rise: number, roof: THREE.Color, wall: THREE.Color, along?: 'x' | 'z') {
     const oh = 0.05, cx = (x0 + x1) / 2, cz = (z0 + z1) / 2, yr = yb + rise;
-    if (x1 - x0 >= z1 - z0) {
+    if (along ? along === 'x' : x1 - x0 >= z1 - z0) {
       this.slope([x0 - oh, yb, z1 + oh], [x1 + oh, yb, z1 + oh], [x1 + oh, yr, cz], [x0 - oh, yr, cz], [0, 1, 1], roof);
       this.slope([x0 - oh, yb, z0 - oh], [x1 + oh, yb, z0 - oh], [x1 + oh, yr, cz], [x0 - oh, yr, cz], [0, 1, -1], roof);
       this.triangle([x1, yb, z0], [x1, yb, z1], [x1, yr, cz], [1, 0, 0], wall);
@@ -69,6 +69,34 @@ export class Geo {
       this.slope([x0 - oh, yb, z0 - oh], [x0 - oh, yb, z1 + oh], [cx, yr, z1 + oh], [cx, yr, z0 - oh], [-1, 1, 0], roof);
       this.triangle([x0, yb, z1], [x1, yb, z1], [cx, yr, z1], [0, 0, 1], wall);
       this.triangle([x1, yb, z0], [x0, yb, z0], [cx, yr, z0], [0, 0, -1], wall);
+    }
+  }
+  // 四坡屋頂（D004）：屋脊沿 x，兩端各收半個進深（45°）；太短就收成尖頂
+  hip(x0: number, z0: number, x1: number, z1: number, yb: number, rise: number, roof: THREE.Color) {
+    const cz = (z0 + z1) / 2, yr = yb + rise, t = Math.min((z1 - z0) / 2, (x1 - x0) / 2);
+    const r0: V3 = [x0 + t, yr, cz], r1: V3 = [x1 - t, yr, cz];
+    this.slope([x0, yb, z1], [x1, yb, z1], r1, r0, [0, 1, 1], roof);
+    this.slope([x0, yb, z0], [x1, yb, z0], r1, r0, [0, 1, -1], roof);
+    this.triangle([x0, yb, z0], [x0, yb, z1], r0, [-1, 0.5, 0], roof);
+    this.triangle([x1, yb, z0], [x1, yb, z1], r1, [1, 0.5, 0], roof);
+  }
+  // 鋸齒屋頂（D004，實驗線 sawtoothRoof608）：沿 x（alongX）或沿 z 排 n 齒；每齒一片斜面往前升高，前緣是直立的採光面
+  saw(x0: number, z0: number, x1: number, z1: number, yb: number, rise: number, n: number, alongX: boolean, roof: THREE.Color, glass: THREE.Color) {
+    const yr = yb + rise;
+    for (let i = 0; i < n; i++) {
+      if (alongX) {
+        const a0 = x0 + (x1 - x0) * i / n, a1 = x0 + (x1 - x0) * (i + 1) / n;
+        this.slope([a0, yb, z0], [a0, yb, z1], [a1, yr, z1], [a1, yr, z0], [-1, 1, 0], roof);
+        this.quad([a1, yb, z0], [a1, yb, z1], [a1, yr, z1], [a1, yr, z0], [1, 0, 0], glass);
+        this.triangle([a0, yb, z1], [a1, yb, z1], [a1, yr, z1], [0, 0, 1], roof);
+        this.triangle([a0, yb, z0], [a1, yb, z0], [a1, yr, z0], [0, 0, -1], roof);
+      } else {
+        const a0 = z0 + (z1 - z0) * i / n, a1 = z0 + (z1 - z0) * (i + 1) / n;
+        this.slope([x0, yb, a0], [x1, yb, a0], [x1, yr, a1], [x0, yr, a1], [0, 1, -1], roof);
+        this.quad([x0, yb, a1], [x1, yb, a1], [x1, yr, a1], [x0, yr, a1], [0, 0, 1], glass);
+        this.triangle([x1, yb, a0], [x1, yb, a1], [x1, yr, a1], [1, 0, 0], roof);
+        this.triangle([x0, yb, a0], [x0, yb, a1], [x0, yr, a1], [-1, 0, 0], roof);
+      }
     }
   }
   pyramid(cx: number, cz: number, h: number, yb: number, rise: number, col: THREE.Color) {

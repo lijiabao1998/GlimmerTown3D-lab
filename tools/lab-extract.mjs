@@ -1,20 +1,26 @@
-// 從 2D 實驗線抽出本線要用的資料（D003）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
-// 用法：node tools/lab-extract.mjs --lab=../GlimmerTown-lab [--days=120]
-// 產出：
+// 從 2D 實驗線抽出本線要用的資料（D003、D004）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
+// 用法：node tools/lab-extract.mjs --lab=../GlimmerTown-lab [--days=120] [--part=all|d003|d004]
+// 產出（D003）：
 //   src/content/lab-kinds.json        186 種建築：名稱、分類、佔地、每級高度（量精靈圖）、出處行號
 //   src/content/samples/<id>.code.txt 樣本分享碼（只留本線會讀的欄位；實驗線自己也能匯入）
 //   src/content/samples/<id>.json     對帳數字：同一個碼匯入實驗線之後，實驗線執行期當場量到的
 //   scratch/lab/<id>_2d.png           實驗線的 2D 畫面（拍對照樣張用，不進版本庫）
+// 產出（D004，只讀 D003 的樣本碼，不重做 D003 的檔）：
+//   src/content/lab-arche.json                    原型表 ARCHE568（靜態抽出，並跟執行期深度比對）
+//   src/content/samples/d004-partition-<id>.json  兩座樣本城逐格的超街區切分（rciBlockOrigin547＋rciAbsorbed555）
+//   src/content/samples/d004-massing.json         1,728 組量體（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）
+//   scratch/lab/d004_<id>_<視角>_2d.png            匯入樣本碼、v 還原成存檔值之後的實驗線 2D 畫面（D004 五格對照的第一格，不進版本庫）
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { execFileSync } from 'node:child_process';
 import { withBrowser, ROOT, sleep } from './cdp.mjs';
-import { encodeLabCode, rleDecode, RLE_FIELDS, TILE_LAYERS } from '../src/io/labcode.ts';
+import { encodeLabCode, decodeLabCode, rleDecode, RLE_FIELDS, TILE_LAYERS } from '../src/io/labcode.ts';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const LAB = path.resolve(arg('lab', process.env.LAB_DIR || path.join(ROOT, '..', 'GlimmerTown-lab')));
 const DAYS = Number(arg('days', 120));
+const PART = arg('part', 'all'), PARTS = new Set(PART === 'all' ? ['d003', 'd004'] : [PART]);
 const OUT = path.join(ROOT, 'src/content'), SAMPLES = path.join(OUT, 'samples'), SHOTS = path.join(ROOT, 'scratch/lab');
 fs.mkdirSync(SAMPLES, { recursive: true }); fs.mkdirSync(SHOTS, { recursive: true });
 
@@ -85,122 +91,249 @@ function strip(raw) {
   return o;
 }
 
-const out = { kinds: null, samples: [] };
-const t0 = Date.now();
-await withBrowser({ root: LAB, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD, ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
-  const ev = e => page.evaluate(e);
-  await open('');
-  // 進一座沙盒新城，等精靈烘好（同實驗線 harness.js 217–241 的流程）
-  await ev(`(()=>{const b=[...document.querySelectorAll('#start button')].find(x=>/開拓新城市/.test(x.textContent||''));if(b)b.click();return !!b;})()`);
-  await sleep(1500);
-  await ev(`(()=>{const T=t=>[...document.querySelectorAll('#startOverlay456 button, #startOverlay456 .mapBtn456')].find(b=>new RegExp(t).test((b.textContent||'').trim()));const d=T('沙盒');if(d)d.click();const m=T('^72×72');if(m)m.click();const g=T('建立城市');if(g)g.click();return 1;})()`);
-  for (const t1 = Date.now(); Date.now() - t1 < 240000;) { if (await ev('(window.__t519Roof|0)>0')) break; await sleep(500); }
-  await sleep(2500);
-  console.log(`實驗線開好（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+if (PARTS.has('d003')) {
+  const out = { kinds: null, samples: [] };
+  const t0 = Date.now();
+  await withBrowser({ root: LAB, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD, ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+    const ev = e => page.evaluate(e);
+    await open('');
+    // 進一座沙盒新城，等精靈烘好（同實驗線 harness.js 217–241 的流程）
+    await ev(`(()=>{const b=[...document.querySelectorAll('#start button')].find(x=>/開拓新城市/.test(x.textContent||''));if(b)b.click();return !!b;})()`);
+    await sleep(1500);
+    await ev(`(()=>{const T=t=>[...document.querySelectorAll('#startOverlay456 button, #startOverlay456 .mapBtn456')].find(b=>new RegExp(t).test((b.textContent||'').trim()));const d=T('沙盒');if(d)d.click();const m=T('^72×72');if(m)m.click();const g=T('建立城市');if(g)g.click();return 1;})()`);
+    for (const t1 = Date.now(); Date.now() - t1 < 240000;) { if (await ev('(window.__t519Roof|0)>0')) break; await sleep(500); }
+    await sleep(2500);
+    console.log(`實驗線開好（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 
-  // 2a. 分類：實驗線執行期的 kcatOf（GV.kcat345）逐種讀出，跟靜態 KCB 對照
-  const kcat = await ev(`(()=>{const o={};for(const k of ${J(kinds)})o[k]=GV.kcat345(k).cat;return o;})()`);
+    // 2a. 分類：實驗線執行期的 kcatOf（GV.kcat345）逐種讀出，跟靜態 KCB 對照
+    const kcat = await ev(`(()=>{const o={};for(const k of ${J(kinds)})o[k]=GV.kcat345(k).cat;return o;})()`);
 
-  // 2b. 精靈高度。SPR.bld 每張是 {img,night,ax,ay,w,h,sc?}；錨點 (ax,ay) 畫在佔地最前一格的下尖角（實驗線 61595–61601），
-  //     有 sc 的圖所有尺寸乘 sc（61587–61589），「掉了 sc 的 144×224」當 0.5（70971）。
-  //     逐欄比：每一欄最上面的不透明像素，比佔地菱形在那一欄的上緣高出多少；取所有欄的最大值當量體高（顯示像素）。
-  //     只比菱形後尖角會低估「縮在地塊中央」的建築（圍欄、鋪面先碰到後尖角）；逐欄取最大，對填滿地塊的量體是精確值，對縮在中央的是下界。
-  // 住商工（k1–3）另外量「街區精靈」：T547 起實驗線畫住商工用的是 getBlockSprite547（GV.block559.get，72808），
-  // 不是 SPR.bld；後者是舊圖集，住宅 3 級中位數 6.7 格，實際畫出來的街區精靈只有 1.8 格。這裡量單格街區 (1×1) 的每級每變體。
-  const grab = `const s=S[key],c=s&&s.img;if(!c||!c.width)continue;
-      const w=c.width,h=c.height,d=c.getContext('2d').getImageData(0,0,w,h).data,col=new Array(w).fill(-1);let bot=-1;
-      for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>40){if(col[x]<0)col[x]=y;bot=y;}
-      o[key]={iw:w,ih:h,w:s.w,h:s.h,ax:s.ax,ay:s.ay,sc:s.sc,col,bot};`;
-  const sprites = await ev(`(()=>{const S=GV.art574.SPR().bld,o={};
-    for(const key of Object.keys(S)){const m=/^(\\d+)_(\\d+)_(\\d+)$/.exec(key);if(!m)continue;${grab}}
-    return o;})()`);
-  const blocks = await ev(`(()=>{const B=(GV.block559||GV.art574.block559).get,S={},o={};
-    for(const k of [1,2,3])for(const lv of [1,2,3])for(let v=0;v<12;v++)S[k+'_'+lv+'_'+v]=B(k,lv,1,1,v);
-    for(const key of Object.keys(S)){${grab}}
-    return o;})()`);
-  console.log(`精靈 ${Object.keys(sprites).length} 張、住商工街區精靈 ${Object.keys(blocks).length} 張`);
-  for (const key of Object.keys(sprites)) if (/^[123]_/.test(key)) delete sprites[key];
-  Object.assign(sprites, blocks);
+    // 2b. 精靈高度。SPR.bld 每張是 {img,night,ax,ay,w,h,sc?}；錨點 (ax,ay) 畫在佔地最前一格的下尖角（實驗線 61595–61601），
+    //     有 sc 的圖所有尺寸乘 sc（61587–61589），「掉了 sc 的 144×224」當 0.5（70971）。
+    //     逐欄比：每一欄最上面的不透明像素，比佔地菱形在那一欄的上緣高出多少；取所有欄的最大值當量體高（顯示像素）。
+    //     只比菱形後尖角會低估「縮在地塊中央」的建築（圍欄、鋪面先碰到後尖角）；逐欄取最大，對填滿地塊的量體是精確值，對縮在中央的是下界。
+    // 住商工（k1–3）另外量「街區精靈」：T547 起實驗線畫住商工用的是 getBlockSprite547（GV.block559.get，72808），
+    // 不是 SPR.bld；後者是舊圖集，住宅 3 級中位數 6.7 格，實際畫出來的街區精靈只有 1.8 格。這裡量單格街區 (1×1) 的每級每變體。
+    const grab = `const s=S[key],c=s&&s.img;if(!c||!c.width)continue;
+        const w=c.width,h=c.height,d=c.getContext('2d').getImageData(0,0,w,h).data,col=new Array(w).fill(-1);let bot=-1;
+        for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+3]>40){if(col[x]<0)col[x]=y;bot=y;}
+        o[key]={iw:w,ih:h,w:s.w,h:s.h,ax:s.ax,ay:s.ay,sc:s.sc,col,bot};`;
+    const sprites = await ev(`(()=>{const S=GV.art574.SPR().bld,o={};
+      for(const key of Object.keys(S)){const m=/^(\\d+)_(\\d+)_(\\d+)$/.exec(key);if(!m)continue;${grab}}
+      return o;})()`);
+    const blocks = await ev(`(()=>{const B=(GV.block559||GV.art574.block559).get,S={},o={};
+      for(const k of [1,2,3])for(const lv of [1,2,3])for(let v=0;v<12;v++)S[k+'_'+lv+'_'+v]=B(k,lv,1,1,v);
+      for(const key of Object.keys(S)){${grab}}
+      return o;})()`);
+    console.log(`精靈 ${Object.keys(sprites).length} 張、住商工街區精靈 ${Object.keys(blocks).length} 張`);
+    for (const key of Object.keys(sprites)) if (/^[123]_/.test(key)) delete sprites[key];
+    Object.assign(sprites, blocks);
 
-  const size = k => (MSZ.obj[k] || 1);
-  const perKind = {}, perVar = {}, below = [];
-  for (const [key, s] of Object.entries(sprites)) {
-    const [k, lv] = key.split('_').map(Number);
-    if (s.bot < 0) continue;
-    const sz = k === 9 ? 2 : size(k);
-    const sc = s.sc || (s.w === 144 && s.h === 224 && s.ax === 72 && s.ay === 220 ? 0.5 : 1);
-    const W = 32 * sz, Hh = 16 * sz, cy = s.ay * sc - Hh;   // 佔地菱形：中心 (ax, cy)、半寬 W、半高 Hh（顯示像素）
-    let hpx = 0;
-    for (let x = 0; x < s.col.length; x++) {
-      if (s.col[x] < 0) continue;
-      const dx = Math.abs(x * sc - s.ax * sc);
-      if (dx > W) continue;
-      hpx = Math.max(hpx, cy - Hh * (1 - dx / W) - s.col[x] * sc);
+    const size = k => (MSZ.obj[k] || 1);
+    const perKind = {}, perVar = {}, below = [];
+    for (const [key, s] of Object.entries(sprites)) {
+      const [k, lv] = key.split('_').map(Number);
+      if (s.bot < 0) continue;
+      const sz = k === 9 ? 2 : size(k);
+      const sc = s.sc || (s.w === 144 && s.h === 224 && s.ax === 72 && s.ay === 220 ? 0.5 : 1);
+      const W = 32 * sz, Hh = 16 * sz, cy = s.ay * sc - Hh;   // 佔地菱形：中心 (ax, cy)、半寬 W、半高 Hh（顯示像素）
+      let hpx = 0;
+      for (let x = 0; x < s.col.length; x++) {
+        if (s.col[x] < 0) continue;
+        const dx = Math.abs(x * sc - s.ax * sc);
+        if (dx > W) continue;
+        hpx = Math.max(hpx, cy - Hh * (1 - dx / W) - s.col[x] * sc);
+      }
+      below.push((s.bot - s.ay) * sc);   // 錨點以下還有多少不透明像素（落影之類）：只記錄，當檢查
+      ((perKind[k] ||= {})[lv] ||= []).push(hpx);
+      ((perVar[k] ||= {})[lv] ||= {})[key.split('_')[2]] = +(Math.max(0, hpx) / 39.2).toFixed(2);
     }
-    below.push((s.bot - s.ay) * sc);   // 錨點以下還有多少不透明像素（落影之類）：只記錄，當檢查
-    ((perKind[k] ||= {})[lv] ||= []).push(hpx);
-    ((perVar[k] ||= {})[lv] ||= {})[key.split('_')[2]] = +(Math.max(0, hpx) / 39.2).toFixed(2);
-  }
-  below.sort((a, b) => a - b);
-  console.log(`錨點以下的不透明像素：中位數 ${below[below.length >> 1]}、P95 ${below[Math.floor(below.length * 0.95)]}、最大 ${below.at(-1)}（顯示像素）`);
-  const med = a => { const s = [...a].sort((x, y) => x - y); return s[s.length >> 1]; };
-  out.kinds = kinds.map(k => {
-    const lvls = perKind[k] ? Object.keys(perKind[k]).map(Number).sort((a, b) => a - b) : [];
-    const h = {}, hMax = {}, variants = {};
-    for (const lv of lvls) { const a = perKind[k][lv]; h[lv] = +(Math.max(0, med(a)) / 39.2).toFixed(2); hMax[lv] = +(Math.max(0, ...a) / 39.2).toFixed(2); variants[lv] = a.length; }
-    // hv：逐變體的高度（住商工每級 12 個變體，高矮差很多；存檔的 v 就是變體編號）
-    return { k, name: KNAME.obj[k], cat: kcat[k], catStatic: KCB.obj[k] ?? null, size: k === 9 ? 2 : size(k), h, hMax, hv: perVar[k] || {}, variants, sprites: lvls.length > 0 };
+    below.sort((a, b) => a - b);
+    console.log(`錨點以下的不透明像素：中位數 ${below[below.length >> 1]}、P95 ${below[Math.floor(below.length * 0.95)]}、最大 ${below.at(-1)}（顯示像素）`);
+    const med = a => { const s = [...a].sort((x, y) => x - y); return s[s.length >> 1]; };
+    out.kinds = kinds.map(k => {
+      const lvls = perKind[k] ? Object.keys(perKind[k]).map(Number).sort((a, b) => a - b) : [];
+      const h = {}, hMax = {}, variants = {};
+      for (const lv of lvls) { const a = perKind[k][lv]; h[lv] = +(Math.max(0, med(a)) / 39.2).toFixed(2); hMax[lv] = +(Math.max(0, ...a) / 39.2).toFixed(2); variants[lv] = a.length; }
+      // hv：逐變體的高度（住商工每級 12 個變體，高矮差很多；存檔的 v 就是變體編號）
+      return { k, name: KNAME.obj[k], cat: kcat[k], catStatic: KCB.obj[k] ?? null, size: k === 9 ? 2 : size(k), h, hMax, hv: perVar[k] || {}, variants, sprites: lvls.length > 0 };
+    });
+    const catMismatch = out.kinds.filter(x => x.catStatic !== null && x.catStatic !== x.cat).map(x => x.k);
+    console.log(`分類：執行期與靜態 KCB 不一致 ${catMismatch.length} 種${catMismatch.length ? '：' + catMismatch.join(',') : ''}；沒有精靈的種類 ${out.kinds.filter(x => !x.sprites).length}`);
+
+    // 2c. 樣本城：產生 → 存檔 → 瘦身成分享碼 → 用實驗線自己的匯入讀回來 → 當場量對帳數字 → 拍 2D 畫面
+    async function sample(id, label, make, views) {
+      await ev(make);
+      await sleep(1200);
+      // 2D 樣張：匯出之前、原城的樣子，用實驗線樣張頁（gallery.js）的視角與白天相位 0.5；只拍遊戲畫布，不含介面
+      for (const v of views) {
+        const shot = await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
+          GV.lookAt(${v.at[0]},${v.at[1]});GV.art574.zoom574(${v.z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`);
+        fs.writeFileSync(path.join(SHOTS, `${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
+      }
+      await ev('GV.save()');
+      const raw = await ev('GV.rawSave()');
+      const before = await ev(MEASURE);
+      const slim = strip(raw);
+      const code = encodeLabCode(slim, { deflate: true });
+      const imported = await ev(`GV.importCode(${J(code)})`);
+      if (!imported) throw new Error(`${id}：實驗線拒絕匯入瘦身後的碼`);
+      await sleep(800);
+      const after = await ev(MEASURE);
+      const same = J({ ...before, roots: before.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) }) === J({ ...after, roots: after.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) });
+      fs.writeFileSync(path.join(SAMPLES, `${id}.code.txt`), code);
+      const meta = {
+        id, label, source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, how: make },
+        codeChars: code.length, rawChars: raw.length, keptFields: Object.keys(slim),
+        expect: { ...after, roots: after.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) },
+        roundTripSameAsBefore: same,
+      };
+      fs.writeFileSync(path.join(SAMPLES, `${id}.json`), JSON.stringify(meta));
+      out.samples.push({ id, buildings: after.buildings, kinds: Object.keys(after.kinds).length, codeChars: code.length, rawChars: raw.length, same });
+      console.log(`${id}：建築 ${after.buildings}（${Object.keys(after.kinds).length} 種）、碼 ${code.length.toLocaleString()} 字元（原存檔 ${raw.length.toLocaleString()}）、實驗線讀回一致 ${same}`);
+    }
+    // 視角＝實驗線樣張頁的「中景・白天」(z .75, 36,36) 與「遠景・白天」(z .45, 22,44)；3D 對應縮放＝3.42×z（D003 卡）
+    const MID = { name: 'mid', z: 0.75, at: [36, 36] }, FAR = { name: 'far', z: 0.45, at: [22, 44] };
+    await sample('seed516', '種子城（實驗線樣張頁的 metroArtSeedWorld516(5162026)）', 'GV.metroArtSeedWorld516(5162026)', [MID, FAR]);
+    await sample(`ai${DAYS}`, `AI 城 ${DAYS} 天（新城 5162026、AI 市長）`, `(()=>{GV.setMapSize(72);GV.newWorldSeeded(5162026);GV.ai(true);for(let d=0;d<${DAYS};d+=30)GV.step(Math.min(30,${DAYS}-d));GV.ai(false);return GV.N();})()`, [MID]);
+    if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
   });
-  const catMismatch = out.kinds.filter(x => x.catStatic !== null && x.catStatic !== x.cat).map(x => x.k);
-  console.log(`分類：執行期與靜態 KCB 不一致 ${catMismatch.length} 種${catMismatch.length ? '：' + catMismatch.join(',') : ''}；沒有精靈的種類 ${out.kinds.filter(x => !x.sprites).length}`);
 
-  // 2c. 樣本城：產生 → 存檔 → 瘦身成分享碼 → 用實驗線自己的匯入讀回來 → 當場量對帳數字 → 拍 2D 畫面
-  async function sample(id, label, make, views) {
-    await ev(make);
-    await sleep(1200);
-    // 2D 樣張：匯出之前、原城的樣子，用實驗線樣張頁（gallery.js）的視角與白天相位 0.5；只拍遊戲畫布，不含介面
-    for (const v of views) {
-      const shot = await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
-        GV.lookAt(${v.at[0]},${v.at[1]});GV.art574.zoom574(${v.z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`);
-      fs.writeFileSync(path.join(SHOTS, `${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
+  const content = {
+    source: {
+      repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs',
+      where: { KNAME: KNAME.where, KCB: KCB.where, KCAT: KCAT.where, MSZ: MSZ.where },
+      heightRule: '逐欄量：精靈每一欄最上面的不透明像素比佔地菱形上緣高出多少，取最大值，÷39.2 換成格（D003 卡「高度換算的理由」）；h＝每級各變體中位數、hv＝逐變體。'
+        + '住商工（k1–3）量實際畫的單格街區精靈 getBlockSprite547(k,lv,1,1,v)，其餘量 SPR.bld',
+    },
+    cats: Object.fromEntries(Object.entries(KCAT.obj).map(([c, v]) => [c, { name: v.nm, color: v.c }])),
+    kinds: out.kinds,
+  };
+  fs.writeFileSync(path.join(OUT, 'lab-kinds.json'), JSON.stringify(content, null, 1));
+  console.log(`\n寫出 src/content/lab-kinds.json（${out.kinds.length} 種）與 ${out.samples.length} 個樣本；共 ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+}
+
+// ===== D004：原型表、超街區切分、量體（卡 docs/D004-building-recipes.md）=====
+// 實驗線主程式整段包在 (()=>{'use strict'; … })() 裡（index.html 37214–72931 @d23c18d），切分與量體的函式都不在 window 上，
+// GV 只匯出其中兩個（GV.block559.make＝makeBlockSprite547、.origin＝rciBlockOrigin547）。所以這段開的是記憶體裡的副本：
+// 在那段 IIFE 收尾前插一行只讀出口 window.__d004——讀原型表、呼叫 rciAbsorbed555、暫時包住 subPara568 等函式記下參數。
+// 不呼叫 hook 就什麼都沒包，行為跟原檔一樣；原檔不動、副本不落地（cdp.mjs overlay）。出處照記原檔的 commit，另記插入點行號。
+if (PARTS.has('d004')) {
+  const t0 = Date.now();
+  const where = name => { const m = new RegExp(`\\bfunction ${name}\\(|\\bconst ${name}\\s*=`).exec(html); if (!m) throw new Error(`實驗線找不到 ${name}`); return lineOf(m.index); };
+  const FN = ['rciMergeable547', 'rciBlockOrigin547', 'blockMax602', 'rciGrow633', 'buildPart633', 'rciAbsorbed555', 'shrinkPara547', 'ridgeAxis554', 'paraPt559',
+    'ARCHE568', 'arche568', 'arNameVilla600', 'speciesPal601', 'subPara568', 'massBox568', 'sawRise608', 'makeBlockSprite547', 'metroPalette516', 'shade', 'facadeFor577'];
+  const lines = Object.fromEntries(FN.map(f => [f, where(f)]));
+  const ARCHE = table('ARCHE568');
+  const mark = html.indexOf('Object.assign(window.GV,{art574:');
+  const endRe = /\n\s*\}\)\(\);\s*\n<\/script>/g; endRe.lastIndex = mark;
+  const em = mark < 0 ? null : endRe.exec(html);
+  if (!em) throw new Error('找不到實驗線主程式 IIFE 的收尾');
+  const HOOKS = ['subPara568', 'massBox568', 'sawRise608', 'shrinkPara547', 'pitchPara547', 'speciesPal601'];
+  const INJECT = `\n;window.__d004={ARCHE568:()=>ARCHE568,arche568,rciAbsorbed555,rciBlockOrigin547,tiles:()=>tiles,`
+    + `hook(n,w){const T={${HOOKS.map(h => `${h}:[()=>${h},f=>{${h}=f;}]`).join(',')}};const[g,s]=T[n];const o=g();s(w(o));return()=>s(o);}};`;
+  const injectedAt = lineOf(em.index) + 1;
+  const copy = html.slice(0, em.index) + INJECT + html.slice(em.index);
+  const deq = (a, b) => a === b || (!!a && !!b && typeof a === 'object' && typeof b === 'object' && Array.isArray(a) === Array.isArray(b)
+    && Object.keys(a).length === Object.keys(b).length && Object.keys(a).every(k => Object.hasOwn(b, k) && deq(a[k], b[k])));
+  const source = { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs --part=d004', lines,
+    how: `執行期：原檔 index.html 在第 ${injectedAt} 行（主程式 IIFE 收尾前）插一行只讀出口 window.__d004 的記憶體副本；插入內容記在 inject`, inject: INJECT.trim() };
+  const ROOTS = e => ({ ...e, roots: e.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) });
+
+  await withBrowser({ root: LAB, entry: 'd004.html', overlay: { 'd004.html': copy }, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD,
+    ready: '!!window.__bootDone453&&!!window.__d004', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+    const ev = e => page.evaluate(e);
+    await open('');
+    await ev(`(()=>{const b=[...document.querySelectorAll('#start button')].find(x=>/開拓新城市/.test(x.textContent||''));if(b)b.click();return !!b;})()`);
+    await sleep(1500);
+    await ev(`(()=>{const T=t=>[...document.querySelectorAll('#startOverlay456 button, #startOverlay456 .mapBtn456')].find(b=>new RegExp(t).test((b.textContent||'').trim()));const d=T('沙盒');if(d)d.click();const m=T('^72×72');if(m)m.click();const g=T('建立城市');if(g)g.click();return 1;})()`);
+    for (const t1 = Date.now(); Date.now() - t1 < 240000;) { if (await ev('(window.__t519Roof|0)>0')) break; await sleep(500); }
+    await sleep(2500);
+    console.log(`D004：實驗線副本開好（${((Date.now() - t0) / 1000).toFixed(0)}s；出口插在第 ${injectedAt} 行）`);
+
+    // 1. 原型表：靜態抽出的字面量跟執行期的 ARCHE568 深度相等才寫
+    const rt = await ev('JSON.parse(JSON.stringify(__d004.ARCHE568()))');
+    if (!deq(rt, ARCHE.obj)) throw new Error('ARCHE568：靜態抽出的表跟執行期不相等');
+    fs.writeFileSync(path.join(OUT, 'lab-arche.json'), JSON.stringify({ source: { ...source, where: ARCHE.where, runtimeDeepEqual: true }, arche: ARCHE.obj }, null, 1));
+    console.log(`原型表：${Object.keys(rt).length} 組、${Object.values(rt).flat().length} 個原型，靜態＝執行期`);
+
+    // 2. 切分：匯入 D003 的樣本碼，逐格讀實驗線的 rciBlockOrigin547＋rciAbsorbed555；前後各量一次城市，確定比的是同一座城
+    // 實驗線讀檔後有一段惰性遷移 ensureVariety531（66845，T531）：住商工的 v 依當下的密度與地價（pickV406 53185）重挑一次。
+    // 匯入時地價、交通這些執行期場都歸零，重挑出來的 v 跟存檔不同（D004 首跑：種子城 924 格大多被改）。
+    // 存檔的 v＝匯出前實驗線畫面上的 v（D003 的 2D 對照圖拍的就是那時候），3D 讀的也是存檔，所以這裡把 v 還原成存檔值再切；
+    // 被改了幾格照記（stats.vRepicked531），這是實驗線自己的行為，不是本線的差異。
+    const PARTITION = VS => `(()=>{const N=GV.N(),D=window.__d004,T=D.tiles(),VS=${J(VS)};let rep=0;
+      for(const[i,v]of VS){const b=T[i].bld;if(!b||b.ref||b.k<1||b.k>3)throw new Error('格 '+i+' 不是住商工');if((b.v|0)!==v){rep++;b.v=v;}}
+      const cells=[];
+      for(let y=0;y<N;y++)for(let x=0;x<N;x++){const b=GV.tile(x,y).bld;if(!b||b.ref||b.k<1||b.k>3)continue;
+        const o=D.rciBlockOrigin547(x,y),ab=D.rciAbsorbed555(x,y)?1:0;
+        cells.push(o?[y*N+x,1,o.w,o.h,o.k,o.lv,o.v,b.lv||1,b.v||0,ab]:[y*N+x,0,0,0,0,0,0,b.lv||1,b.v||0,ab]);}
+      return {n:N,cells,rep};})()`;
+    for (const id of ['seed516', 'ai120']) {
+      const code = fs.readFileSync(path.join(SAMPLES, `${id}.code.txt`), 'utf8'), meta = JSON.parse(fs.readFileSync(path.join(SAMPLES, `${id}.json`), 'utf8'));
+      if (meta.source.commit !== commit) throw new Error(`${id}：樣本碼出自 ${meta.source.commit.slice(0, 7)}，實驗線是 ${commit.slice(0, 7)}`);
+      // 匯入跟暫停放在同一次同步呼叫裡：中間不會插進任何模擬日（實驗線匯入後照常跑，D004 首跑量到每棟 age 多了 1）
+      if (!(await ev(`(()=>{const ok=GV.importCode(${J(code)});GV.setSpeed(0);return ok;})()`))) throw new Error(`${id}：實驗線拒絕匯入`);
+      await sleep(800);
+      const dec = decodeLabCode(code);
+      if (!dec.ok) throw new Error(`${id}：本線解不開樣本碼`);
+      const VS = dec.save.bl.filter(r => r[1] >= 1 && r[1] <= 3).map(r => [r[0], r[3] | 0]);
+      const m0 = ROOTS(await ev(MEASURE)), p = await ev(PARTITION(VS)), m1 = ROOTS(await ev(MEASURE));
+      if (!deq(m0, meta.expect) || !deq(m1, meta.expect)) {
+        const d = (a, b, p = '') => deq(a, b) ? [] : a && b && typeof a === 'object' && typeof b === 'object' ? [...new Set([...Object.keys(a), ...Object.keys(b)])].flatMap(k => d(a[k], b[k], p + '.' + k)) : [`${p}: ${J(a)} ≠ ${J(b)}`];
+        throw new Error(`${id}：匯入後的城市跟樣本的對帳數字不同，不能拿來比切分：${[...d(m0, meta.expect), ...d(m1, meta.expect)].slice(0, 8).join('；')}`);
+      }
+      // 統計的格式跟 src/content/blocks.ts partitionStats 一樣（單元守衛直接比）：住商工格分四類——畫在多格街區、單格、被吸收的 1×1、D0 沒有任何街區蓋到
+      const c = p.cells, org = c.filter(r => r[1]), multi = org.filter(r => r[2] * r[3] > 1), cover = new Map();
+      for (const r of org) for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) { const q = r[0] + dy * p.n + dx; cover.set(q, (cover.get(q) || 0) + 1); }
+      const stats = { rci: c.length, blocks: org.length, multi: multi.length,
+        cells: { inMulti: multi.reduce((a, r) => a + r[2] * r[3], 0), single: org.filter(r => r[2] * r[3] === 1 && !r[9]).length, absorbed: org.filter(r => r[2] * r[3] === 1 && r[9]).length, d0: c.filter(r => !cover.has(r[0])).length },
+        overlap: [...cover.values()].filter(v => v > 1).length };
+      const extra = { maxLvDiffers: multi.filter(r => r[5] !== r[7] || r[6] !== r[8]).length, vRepicked531: p.rep };
+      fs.writeFileSync(path.join(SAMPLES, `d004-partition-${id}.json`), JSON.stringify({ id, source,
+        fields: '[格索引 y*N+x, 是不是起點, 街區寬, 街區高, k, 街區 lv（區內最高）, 街區 v, 起點那格 lv, 起點那格 v, rciAbsorbed555]；非起點的寬高 k lv v 記 0',
+        stats, extra, n: p.n, cells: c }));
+      // 2D 對照圖（D004 五格對照的第一格）：就是這座剛切完的城（v 已還原成存檔值），視角同 D003（實驗線樣張頁的中景／遠景、白天）。
+      // 匯入後、暫停中，實驗線的供電狀態還沒重算，畫面上會有停電閃電圖示；不推進模擬日去消掉它（推了城市就不是同一座），圖說寫明
+      // 遠景用 z .5 不用 D003 的 .45：實驗線 z<.5 是 lodMini（60363），建築整個不畫、只剩路網，D004 首拍就是一片空城
+      const views = id === 'seed516' ? [{ name: 'mid', z: 0.75, at: [36, 36] }, { name: 'far', z: 0.5, at: [22, 44] }] : [{ name: 'mid', z: 0.75, at: [36, 36] }];
+      for (const v of views) {
+        // 換視角後先畫一次、等一下再畫一次才拍（讓換縮放後的快取重建完）
+        await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
+          GV.lookAt(${v.at[0]},${v.at[1]});GV.art574.zoom574(${v.z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();return 1;})()`);
+        await sleep(1500);
+        const shot = await ev(`(()=>{GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`);
+        fs.writeFileSync(path.join(SHOTS, `d004_${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
+      }
+      console.log(`${id}：住商工 ${stats.rci} 格、街區 ${stats.blocks}（多格 ${stats.multi}）；格：多格 ${stats.cells.inMulti}、單格 ${stats.cells.single}、吸收 ${stats.cells.absorbed}、D0 ${stats.cells.d0}、重疊 ${stats.overlap}；`
+        + `多格街區最高等級≠起點 ${extra.maxLvDiffers}；T531 匯入後重挑的 v ${extra.vRepicked531} 格（已還原成存檔值）`);
     }
-    await ev('GV.save()');
-    const raw = await ev('GV.rawSave()');
-    const before = await ev(MEASURE);
-    const slim = strip(raw);
-    const code = encodeLabCode(slim, { deflate: true });
-    const imported = await ev(`GV.importCode(${J(code)})`);
-    if (!imported) throw new Error(`${id}：實驗線拒絕匯入瘦身後的碼`);
-    await sleep(800);
-    const after = await ev(MEASURE);
-    const same = J({ ...before, roots: before.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) }) === J({ ...after, roots: after.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) });
-    fs.writeFileSync(path.join(SAMPLES, `${id}.code.txt`), code);
-    const meta = {
-      id, label, source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, how: make },
-      codeChars: code.length, rawChars: raw.length, keptFields: Object.keys(slim),
-      expect: { ...after, roots: after.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) },
-      roundTripSameAsBefore: same,
-    };
-    fs.writeFileSync(path.join(SAMPLES, `${id}.json`), JSON.stringify(meta));
-    out.samples.push({ id, buildings: after.buildings, kinds: Object.keys(after.kinds).length, codeChars: code.length, rawChars: raw.length, same });
-    console.log(`${id}：建築 ${after.buildings}（${Object.keys(after.kinds).length} 種）、碼 ${code.length.toLocaleString()} 字元（原存檔 ${raw.length.toLocaleString()}）、實驗線讀回一致 ${same}`);
-  }
-  // 視角＝實驗線樣張頁的「中景・白天」(z .75, 36,36) 與「遠景・白天」(z .45, 22,44)；3D 對應縮放＝3.42×z（D003 卡）
-  const MID = { name: 'mid', z: 0.75, at: [36, 36] }, FAR = { name: 'far', z: 0.45, at: [22, 44] };
-  await sample('seed516', '種子城（實驗線樣張頁的 metroArtSeedWorld516(5162026)）', 'GV.metroArtSeedWorld516(5162026)', [MID, FAR]);
-  await sample(`ai${DAYS}`, `AI 城 ${DAYS} 天（新城 5162026、AI 市長）`, `(()=>{GV.setMapSize(72);GV.newWorldSeeded(5162026);GV.ai(true);for(let d=0;d<${DAYS};d+=30)GV.step(Math.min(30,${DAYS}-d));GV.ai(false);return GV.N();})()`, [MID]);
-  if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
-});
 
-const content = {
-  source: {
-    repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs',
-    where: { KNAME: KNAME.where, KCB: KCB.where, KCAT: KCAT.where, MSZ: MSZ.where },
-    heightRule: '逐欄量：精靈每一欄最上面的不透明像素比佔地菱形上緣高出多少，取最大值，÷39.2 換成格（D003 卡「高度換算的理由」）；h＝每級各變體中位數、hv＝逐變體。'
-      + '住商工（k1–3）量實際畫的單格街區精靈 getBlockSprite547(k,lv,1,1,v)，其餘量 SPR.bld',
-  },
-  cats: Object.fromEntries(Object.entries(KCAT.obj).map(([c, v]) => [c, { name: v.nm, color: v.c }])),
-  kinds: out.kinds,
-};
-fs.writeFileSync(path.join(OUT, 'lab-kinds.json'), JSON.stringify(content, null, 1));
-console.log(`\n寫出 src/content/lab-kinds.json（${out.kinds.length} 種）與 ${out.samples.length} 個樣本；共 ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+    // 3. 量體：GV.block559.make（makeBlockSprite547，不經快取）逐組呼叫；包住的函式記下參數，__t547 讀路徑、坡頂、牆高
+    const rows = [];
+    for (const k of [1, 2, 3]) {
+      const part = await ev(`(()=>{const D=window.__d004,out=[];let L=null;
+        const un=[D.hook('subPara568',o=>function(C,b){if(L)L.sub.push([...b]);return o(C,b);}),
+          D.hook('massBox568',o=>function(g,ng,C,h,...r){if(L)L.mass.push(h);return o(g,ng,C,h,...r);}),
+          D.hook('sawRise608',o=>function(C,n,ax,cap){const r=o(C,n,ax,cap);if(L)L.saw.push([n,ax,cap===undefined?null:cap,r]);return r;}),
+          D.hook('shrinkPara547',o=>function(C,t){if(L)L.shr.push(t);return o(C,t);}),
+          D.hook('pitchPara547',o=>function(g,C,rise,a,b,c,ax){if(L)L.pp.push([rise,ax|0]);return o(g,C,rise,a,b,c,ax);}),
+          D.hook('speciesPal601',o=>function(p,ar,k){const r=o(p,ar,k);if(L&&!L.pal)L.pal=[r.light,r.mid,r.dark,r.accent,r.roof,r.glass,r.lit];return r;})];
+        try{for(let lv=1;lv<=3;lv++)for(let bw=1;bw<=4;bw++)for(let bh=1;bh<=4;bh++)for(let v=0;v<12;v++){
+          L={sub:[],mass:[],saw:[],shr:[],pp:[],pal:null};const sp=GV.block559.make(${k},lv,bw,bh,v),t=sp.__t547,a=D.arche568(${k},lv,v),sty=String(t.sty);
+          out.push([${k}+'_'+lv+'_'+bw+'_'+bh+'_'+v,a?a.n:null,sty.indexOf('f577:')===0?sty.slice(5):'core',!!t.pitch,t.wall.h,L.sub,L.mass,L.saw,L.shr,L.pp,L.pal]);}}
+        finally{L=null;un.forEach(f=>f());}
+        return out;})()`);
+      rows.push(...part);
+      console.log(`量體 k${k}：${part.length} 組（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+    }
+    const byPath = {};
+    for (const r of rows) byPath[r[2]] = (byPath[r[2]] || 0) + 1;
+    fs.writeFileSync(path.join(SAMPLES, 'd004-massing.json'), '{"source":' + J(source)
+      + ',\n"fields":' + J('[k_lv_寬_高_v, 原型名, 路徑（core 或立面名）, __t547.pitch, 牆高 px, subPara568 收到的框（依序：主體、第二量體）, massBox568 收到的高, sawRise608 [n, axis, cap, 回傳], shrinkPara547 收到的內縮, pitchPara547 [rise, axis], speciesPal601 回傳的七色 [light, mid, dark, accent, roof, glass, lit]]；只記核心路徑呼叫到的（立面繪製器經 GV.art574 拿的是原函式，不會記到）')
+      + ',\n"byPath":' + J(byPath) + ',\n"rows":[\n' + rows.map(r => J(r)).join(',\n') + '\n]}\n');
+    console.log(`量體：${rows.length} 組；路徑 ${J(byPath)}`);
+    if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
+  });
+  console.log(`D004 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+}

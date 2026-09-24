@@ -28,7 +28,7 @@ jobs:
       - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
-      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材）
+      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
         run: npm run unit
       - run: npm run build
       - name: 煙霧測試
