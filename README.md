@@ -14,4 +14,20 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-目前狀態：剛開線，D001（視覺承諾與工具鏈）施工中。
+## 目前狀態：D001 視覺承諾
+
+同一座城的三個時間：第 0 年／第 80 年／第 300 年（左到右），三種候選畫風：A 像素風 3D／B 平滑低面數／C 卡通描邊（上到下）。
+
+![D001 近景對照](docs/img/D001-compare-near.png)
+
+線上版（手機可旋轉縮放）：<https://lijiabao1998.github.io/GlimmerTown3D-lab/>
+
+## 本機開發
+
+```bash
+npm install
+npm run dev        # 開發伺服器 http://localhost:8301
+npm run build      # 輸出單一 dist/index.html
+npm run smoke      # 無頭 Chrome 煙霧測試（先 build）
+npm run shoot      # 拍樣張到 scratch/D001/
+```

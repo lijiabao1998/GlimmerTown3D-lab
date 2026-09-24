@@ -1,0 +1,100 @@
+// 無頭 Chrome 骨架（零依賴；Node 22+ 內建 WebSocket）：靜態伺服 dist/ → 開 Chrome → CDP。
+// WebGL 走 SwiftShader 軟體渲染，所以雲端（GitHub Actions，沒有 GPU）也能跑。做法沿用 2D 實驗線 harness.js。
+import http from 'node:http';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawn } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+
+export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+export const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+const CANDIDATES = [
+  process.env.CHROME_PATH,
+  'C:/Program Files/Google/Chrome/Application/chrome.exe',
+  'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+  '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+].filter(Boolean);
+
+function serve(dir, port) {
+  const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.png': 'image/png', '.json': 'application/json' };
+  return new Promise((resolve, reject) => {
+    const srv = http.createServer((req, res) => {
+      const rel = decodeURIComponent((req.url || '/').split('?')[0]).replace(/^\/+/, '') || 'index.html';
+      const file = path.join(dir, rel);
+      if (!file.startsWith(dir)) { res.writeHead(403).end(); return; }
+      fs.readFile(file, (err, buf) => {
+        if (err) { res.writeHead(404).end(); return; }
+        res.writeHead(200, { 'Content-Type': MIME[path.extname(file)] || 'application/octet-stream' }).end(buf);
+      });
+    });
+    srv.on('error', reject);
+    srv.listen(port, '127.0.0.1', () => resolve(srv));
+  });
+}
+
+async function connect(wsUrl) {
+  const ws = new WebSocket(wsUrl);
+  await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
+  let id = 0;
+  const pending = new Map(), errors = [];
+  ws.onmessage = ev => {
+    const m = JSON.parse(ev.data);
+    if (m.id && pending.has(m.id)) { const { res, rej } = pending.get(m.id); pending.delete(m.id); m.error ? rej(new Error(m.error.message)) : res(m.result); return; }
+    if (m.method === 'Runtime.exceptionThrown') errors.push('exception: ' + (m.params.exceptionDetails.exception?.description || m.params.exceptionDetails.text).slice(0, 300));
+    if (m.method === 'Runtime.consoleAPICalled' && m.params.type === 'error') errors.push('console.error: ' + m.params.args.map(a => a.value ?? a.description ?? '').join(' ').slice(0, 300));
+    if (m.method === 'Log.entryAdded' && m.params.entry.level === 'error' && !/favicon/.test(m.params.entry.url || '')) errors.push('log: ' + m.params.entry.text.slice(0, 300));
+  };
+  const send = (method, params = {}) => new Promise((res, rej) => { const i = ++id; pending.set(i, { res, rej }); ws.send(JSON.stringify({ id: i, method, params })); });
+  const evaluate = async expr => {
+    const r = await send('Runtime.evaluate', { expression: expr, returnByValue: true, awaitPromise: true });
+    if (r.exceptionDetails) throw new Error('evaluate: ' + (r.exceptionDetails.exception?.description || r.exceptionDetails.text));
+    return r.result.value;
+  };
+  return { send, evaluate, errors, close: () => ws.close() };
+}
+
+// 開一個頁面工作階段：fn({ open, page })；open(query) 導航到 dist/index.html?query 並等 __gt.ready
+export async function withBrowser(opt, fn) {
+  const port = opt.port || 8311, w = opt.width || 1280, h = opt.height || 800;
+  const dist = path.join(ROOT, 'dist');
+  if (!fs.existsSync(path.join(dist, 'index.html'))) throw new Error('找不到 dist/index.html，先跑 npm run build');
+  const chromePath = CANDIDATES.find(p => fs.existsSync(p));
+  if (!chromePath) throw new Error('找不到 Chrome，可設 CHROME_PATH');
+  const srv = await serve(dist, port);
+  const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'gt3d-chrome-'));
+  const devPort = port + 1000;
+  const chrome = spawn(chromePath, [
+    '--headless=new', `--remote-debugging-port=${devPort}`, `--user-data-dir=${profile}`, `--window-size=${w},${h}`,
+    '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist',
+    '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio',
+    ...(process.platform === 'linux' ? ['--no-sandbox'] : []),
+    'about:blank',
+  ], { stdio: 'ignore' });
+  let page = null;
+  try {
+    let wsUrl = null;
+    for (let i = 0; i < 100 && !wsUrl; i++) {
+      await sleep(150);
+      try { const list = await (await fetch(`http://127.0.0.1:${devPort}/json/list`)).json(); wsUrl = list.find(t => t.type === 'page')?.webSocketDebuggerUrl; } catch {}
+    }
+    if (!wsUrl) throw new Error('Chrome 沒有起來');
+    page = await connect(wsUrl);
+    await page.send('Runtime.enable'); await page.send('Log.enable'); await page.send('Page.enable');
+    await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    const open = async query => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${port}/index.html?${query}` });
+      for (let i = 0; i < 200; i++) { await sleep(150); if (await page.evaluate('!!(window.__gt && window.__gt.ready)').catch(() => false)) break; }
+      await sleep(opt.settle ?? 900);   // 讓第一幀以上畫完（陰影貼圖、後製）
+    };
+    return await fn({ open, page });
+  } finally {
+    try { page?.close(); } catch {}
+    try { chrome.kill(); } catch {}
+    srv.close();
+    setTimeout(() => { try { fs.rmSync(profile, { recursive: true, force: true }); } catch {} }, 800);
+  }
+}

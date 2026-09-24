@@ -1,0 +1,62 @@
+# 每次推送：型別檢查 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
+# main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
+name: ci
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    paths-ignore: ['**.md', 'docs/**']
+  pull_request:
+    paths-ignore: ['**.md', 'docs/**']
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: 煙霧測試
+        run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - name: 拍樣張（三畫風×三年份×兩個距離）
+        if: always()
+        run: node tools/shoot.mjs --out=scratch/shots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: smoke-${{ github.sha }}
+          path: |
+            smoke-run.txt
+            scratch/shots/*.png
+          if-no-files-found: warn
+          retention-days: 14
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: dist
+
+  pages:
+    needs: smoke
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
