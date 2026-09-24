@@ -26,11 +26,24 @@
 5. **手機優先。** 效能預算以中階 Android 手機為準；桌機跑得動不算數。
 6. **每一輪的流程**：出卡（`docs/Dxxx-標題.md`，驗收條件寫在動手之前）→ 施工 → 守衛（可斷言的事實，不是「看起來對」）→ 煙霧測試綠燈 → commit → push → `LOG.md` 記一列。**「沒做成的事」不准空著，也不准美化。**
 
-## 遠端（單一寫入者）
+## 版本一致：本機 ⇄ 雲端（單一寫入者；跟兩條 2D 線同一套）
 
-- **開工前**：`git fetch origin`，再看 `git status -sb`。
-  - behind：`git pull --ff-only` 之後再動工。
+本機和雲端看不到對方，唯一的交會點是 GitHub 上的 `origin/main`。所以「版本一致」的定義是：**開工時自己的 HEAD＝`origin/main`，收工時 `origin/main`＝自己的 HEAD。**
+
+- **開工**（本機或雲端都一樣，寫任何檔案之前）：
+
+  ```bash
+  git fetch origin
+  git status -sb
+  git rev-parse --short HEAD origin/main
+  ```
+
+  - 兩個 hash 相同、工作樹乾淨：開工。
+  - behind：`git pull --ff-only`，再核一次。
   - 分岔（同時 ahead 又 behind）：停手、寫日誌、等業主。不准 merge 別人的歷史，更不准 `--force`。
-  - 有不是自己留下的未提交檔案：先原樣凍結成一個 commit 再審，不要順手刪或混進自己的提交。
-- **收工時**：綠燈 commit 之後立刻 `git push`（本地 `main` 對應遠端 `main`）。
-- 雲端 session 和業主本機不能同時施工。開工時 fetch 到新提交，就代表有人在寫。
+  - 有不是自己留下的未提交檔案：先原樣凍結成一個 commit 再審，不要順手刪，也不要混進自己的提交。
+- **收工**：綠燈 commit 之後 `git push`，再 `git fetch` 核一次，HEAD＝`origin/main` 才算收工。
+- **換邊施工**（本機換雲端，或雲端換本機）：離開的那一方要先收工到「HEAD＝`origin/main`、工作樹乾淨」。雲端看不到本機的硬碟，沒推上去的東西，對雲端來說就不存在。雲端開工前，如果業主說本機還有東西沒推，先等本機推完。
+- **同一時間只准一方施工。** 開工時 fetch 到新提交，就代表剛有人在寫。
+
+**雲端 session 對照**：本地路徑 `C:\dev\GlimmerTown3D-lab` 在雲端不存在，等於「本倉庫根目錄」。推送一律推到 `origin main`，只准快進；session 另外指定了分支，就一併推。
