@@ -1,0 +1,6 @@
+# 文字檔一律 LF（Windows 上施工也一樣）；圖片等二進位不動
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.glb binary

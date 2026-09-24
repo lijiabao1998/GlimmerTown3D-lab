@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.smoke-profile*/
+*.log
+# 施工中的對照圖與探針輸出（定稿圖在卡面寫路徑，另行收入）
+scratch/
