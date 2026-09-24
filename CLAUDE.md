@@ -35,7 +35,7 @@
   ```bash
   git fetch origin
   git status -sb
-  git rev-parse --short HEAD origin/main
+  git rev-parse HEAD origin/main      # 印出兩行，兩行相同才算一致
   ```
 
   - 兩個 hash 相同、工作樹乾淨：開工。
