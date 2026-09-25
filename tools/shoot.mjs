@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|all] [--seed=5162026] [--out=scratch/shots]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|all] [--seed=5162026] [--out=scratch/shots]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -194,6 +194,48 @@ if (want('d005')) {
       await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d005_${name}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=1&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       await save(page, `D005-${name.replace('_', '-')}-compare`);
+    }
+  });
+}
+
+// D006：地面與明暗對照——實驗線 2D、D005、D006 的明暗 a／b／c／d（d 是預設）。D005 要先把 f9e5add 建置到 scratch/d005-dist/（沒有就留白）
+const D006 = [
+  ['mid', 'sample=seed516&at=36,36&zoom=2.57', 'd004_seed516_mid_2d.png', '種子城・中景'],
+  ['res', 'sample=seed516&at=8.5,8.5&zoom=5.13', 'd005_seed516_res_2d.png', '種子城・住宅區特寫'],
+  ['ai', 'sample=ai120&at=32.5,32.5&zoom=5.13', 'd005_ai120_res_2d.png', 'AI 城・住宅區特寫'],
+];
+const TONE_CAP = { a: 'D006 明暗 a（D005 的光）', b: 'D006 明暗 b（背光面壓暗、天光減弱）', c: 'D006 明暗 c（b＋太陽加強）', d: 'D006 明暗 d（只壓暗背光面）＝預設' };
+if (want('d006')) {
+  const old = path.join(ROOT, 'scratch/d005-dist'), hasOld = fs.existsSync(path.join(old, 'index.html'));
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    for (const [name, q] of D006) for (const t of ['a', 'b', 'c', 'd']) { await open(`${q}&clean=1&tone=${t}`); await save(page, `d006_${name}_${t}`); }
+    errors += page.errors.length;
+  });
+  if (hasOld) await withBrowser({ root: old, width: 1280, height: 800 }, async ({ open, page }) => { for (const [name, q] of D006) { await open(`${q}&clean=1`); await save(page, `d006_${name}_d005`); } });
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=seed516&at=30,30&zoom=2.2');
+    await save(page, 'D006-mobile');
+    errors += page.errors.length;
+  });
+  const lab = path.join(ROOT, 'scratch/lab');
+  for (const [name, , two, label] of D006) {
+    const has2d = fs.existsSync(path.join(lab, two));
+    if (has2d) fs.copyFileSync(path.join(lab, two), path.join(out, `d006_${name}_2d.png`));
+    const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption>${src ? `<img src="${src}">` : '<div class="none">（沒有這一格的圖）</div>'}</figure>`;
+    fs.writeFileSync(path.join(out, `d006_${name}_compare.html`), `<!doctype html><meta charset="utf-8"><style>
+      body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}
+      .g{display:grid;grid-template-columns:repeat(3,800px);gap:10px;padding:8px 12px 12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}
+      img,.none{display:block;width:800px;height:500px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+      <h1>D006 地面與明暗・${label}（畫面中央 800×500，1:1）</h1><p class="s">地面色取自實驗線畫面的逐色統計；明暗四檔只差光，幾何完全相同。2D 的停電閃電理由同 D004。</p>
+      <div class="g">${cell(has2d ? `d006_${name}_2d.png` : '', '2D 實驗線 v13.43')}${cell(hasOld ? `d006_${name}_d005.png` : '', 'D005（改之前）')}
+      ${['a', 'b', 'c', 'd'].map(t => cell(`d006_${name}_${t}.png`, TONE_CAP[t])).join('')}</div>`);
+  }
+  await withBrowser({ root: out, entry: `d006_${D006[0][0]}_compare.html`, width: 2444, height: 1150, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    for (const [name] of D006) {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d006_${name}_compare.html` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      await save(page, `D006-${name}-compare`);
     }
   });
 }

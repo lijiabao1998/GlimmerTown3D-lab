@@ -68,8 +68,9 @@ export function groundTexture(s: CityState, S = 4): THREE.DataTexture {
 }
 
 // 三階色塊受光用的漸層貼圖
-export function toonRamp(): THREE.DataTexture {
-  const t = new THREE.DataTexture(new Uint8Array([90, 90, 90, 255, 175, 175, 175, 255, 255, 255, 255, 255]), 3, 1, THREE.RGBAFormat);
+// 三階（暗、中、亮）；不給參數＝D001 定的 90／175／255（300 年示範用）
+export function toonRamp(lv: [number, number, number] = [90, 175, 255]): THREE.DataTexture {
+  const t = new THREE.DataTexture(new Uint8Array([lv[0], lv[0], lv[0], 255, lv[1], lv[1], lv[1], 255, lv[2], lv[2], lv[2], 255]), 3, 1, THREE.RGBAFormat);
   t.magFilter = t.minFilter = THREE.NearestFilter;
   t.generateMipmaps = false;
   t.needsUpdate = true;

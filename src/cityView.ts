@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityFromLab, cityStats, buildingAt, type City } from './sim/city.ts';
-import { buildCityScene, tileTop, type BuiltCity, type BlockRender } from './render/cityScene.ts';
+import { buildCityScene, tileTop, TONES, type BuiltCity, type BlockRender, type Tone } from './render/cityScene.ts';
 import { Pipeline } from './render/post.ts';
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
@@ -30,6 +30,7 @@ export function startCity() {
   const clean = q.get('clean') === '1';
   const style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
   let sampleId = SAMPLES[q.get('sample') ?? ''] ? q.get('sample')! : 'seed516';
+  const tone: Tone = (q.get('tone') ?? 'd') in TONES ? (q.get('tone') ?? 'd') as Tone : 'd';   // D006 立面明暗：預設 d（只壓暗背光面），?tone=a|b|c 對照用
   // D005：預設 B（照實驗線；理由見 docs/D005-rci-art.md），?blocks=off 回 D003 現況
   const bq = (q.get('blocks') ?? 'b').toLowerCase();
   let blockMode: BlockMode | null = bq in BLOCK_MODES ? bq as BlockMode : bq === 'off' ? null : 'b';
@@ -106,7 +107,7 @@ export function startCity() {
     const t2 = performance.now();
     const br = blockRenderFor(c);
     const tp = performance.now();
-    const b = buildCityScene(c, KINDS, style, br);
+    const b = buildCityScene(c, KINDS, style, br, tone);
     const t3 = performance.now();
     built?.dispose();
     city = c; built = b; label = name;
@@ -120,7 +121,7 @@ export function startCity() {
   function setBlocks(m: BlockMode | null) {
     if (!city) return;
     blockMode = m;
-    const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br), t1 = performance.now();
+    const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br, tone), t1 = performance.now();
     built?.dispose();
     built = b;
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
@@ -294,6 +295,11 @@ export function startCity() {
     groundAt: (x: number, z: number) => built!.groundAt(x, z),
     wallStyles: () => built!.wallStyles(),
     meshStats: () => built!.meshStats(),
+    // D006：地面貼圖（RGB，base64）與城市圖層，給煙霧測試在 Node 端逐像素驗
+    groundData: () => { const g = built!.groundData(), rgb = new Uint8Array(g.W * g.W * 3); for (let i = 0, j = 0; i < g.rgba.length; i += 4, j += 3) { rgb[j] = g.rgba[i]; rgb[j + 1] = g.rgba[i + 1]; rgb[j + 2] = g.rgba[i + 2]; }
+      let bin = ''; for (let i = 0; i < rgb.length; i += 0x8000) bin += String.fromCharCode(...rgb.subarray(i, i + 0x8000)); return { S: g.S, W: g.W, rgb: btoa(bin) }; },
+    layers: () => { const c = city!, a = (x: ArrayLike<number>) => Array.from(x); return { n: c.n, road: a(c.road), rclass: a(c.rclass), ter: a(c.ter), el: a(c.el), zone: a(c.zone), rail: a(c.rail), dock: a(c.dock), tram: a(c.tram), occ: a(c.occ) }; },
+    tone: () => tone,
     atlasCheck: () => { const w = windowTexture(), a = windowAtlas(), r = atlasCell0MatchesD003(w, a); w.dispose(); a.dispose(); return r; },
     // ---- D004 ----
     blockMode: () => blockMode,

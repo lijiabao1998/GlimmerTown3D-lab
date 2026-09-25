@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { withBrowser, ROOT } from './cdp.mjs';
+import { GROUND } from '../src/render/ground.ts';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const t0 = Date.now();
@@ -162,8 +163,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     log(ac.same, 'D005 窗磚圖集第 0 格＝D003 窗磚（逐像素）', `不同 ${ac.diff} 個像素`);
   }
   const ARCHE = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-arche.json'), 'utf8')).arche;
-  const LOTC = { 1: [0x6f8a58, 0x7d9a62, 0x628050], 2: [0x87888c, 0x919296, 0x7c7d81], 3: [0x6d675d, 0x777166, 0x635d54], 4: [0x54833f, 0x659950, 0x48733a] };
-  const isGrass = (r, g, b) => (r >= 0x6c && r <= 0x78 && g >= 0x97 && g <= 0xa4 && b >= 0x49 && b <= 0x52) || (r === 0x8f && g === 0xb8 && b === 0x62);
+  // D006 起地面色族集中在 src/render/ground.ts（草坪＝草色族＋草皮格線）
+  const LOTC = GROUND.lot, lawnSet = new Set([...GROUND.grass, GROUND.grassLine]);
+  const isGrass = (r, g, b) => lawnSet.has((r << 16) | (g << 8) | b);
   for (const id of ['seed516', 'ai120']) {
     const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n;
     // 預期地坪：實驗線畫的街區（起點且多格或沒被吸收）蓋到的格＝它的 k（villa＝4）；其餘住商工格（D0、被吸收）＝5 草坪
@@ -202,6 +204,55 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       const t = await page.evaluate('({art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles()})');
       log(JSON.stringify(t.art) === JSON.stringify(t.tot) && t.ws.style0Windowed === 0, `D005 ${id} ${m.toUpperCase()} 檔點綴全畫出來、窗型正確`, `道具 ${t.art.props}、屋頂設備 ${t.art.kits}、雨遮 ${t.art.awnings}、門 ${t.art.doors}、裝卸口 ${t.art.docks}`);
     }
+  }
+
+  // ===== D006：地面色（取自實驗線）、草皮格線、人行道、車道線；幾何不變；300 年示範不變 =====
+  {
+    await open('mode=history&clean=1');
+    const hi = await page.evaluate('__gt.renderInfo()');
+    log(hi.triangles === 48794 && hi.calls === 11, 'D006 300 年示範不動：三角形、draw call 跟 D005 前相同', `${hi.triangles} 個、${hi.calls} 次`);
+  }
+  const D005_TRI = { seed516: 57176, ai120: 58772 };   // D005 定稿時預設 B 的三角形（D006 不改幾何）
+  for (const id of ['seed516', 'ai120']) {
+    await open(`sample=${id}&clean=1`);
+    const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone()})');
+    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006 ${id} 幾何不變（預設 B 的三角形、draw call 同 D005）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
+    const rgb = Buffer.from(G.rgb, 'base64'), n = L.n, S = G.S, W = G.W;
+    const px = (x, z, u, v) => { const i = ((z * S + v) * W + x * S + u) * 3; return (rgb[i] << 16) | (rgb[i + 1] << 8) | rgb[i + 2]; };
+    const isRoad = (x, z) => x >= 0 && z >= 0 && x < n && z < n && L.road[z * n + x] > 0;
+    const grassSet = new Set([...GROUND.grass, ...GROUND.grassHigh, GROUND.grassLine]), waterSet = new Set([...GROUND.water, GROUND.waterHi]), sandSet = new Set(GROUND.sand);
+    const inner = new Set([...GROUND.asphalt, ...GROUND.highway, GROUND.laneWhite, GROUND.laneYellow]), lanes = new Set([GROUND.laneWhite, GROUND.laneYellow]);
+    const bad = { grass: 0, water: 0, sand: 0, roadIn: 0, roadEdge: 0 }, cnt = { grass: 0, water: 0, sand: 0, road: 0, straight: 0, laned: 0, cross: 0, crossLane: 0 };
+    for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+      const i = z * n + x, r = L.road[i];
+      if (r) {
+        cnt.road++;
+        const rN = isRoad(x, z - 1), rS = isRoad(x, z + 1), rW = isRoad(x - 1, z), rE = isRoad(x + 1, z), hw = r === 3 || r === 4;
+        const edgeCol = hw ? GROUND.hwEdge : r === 2 ? GROUND.rail : GROUND.sidewalk;
+        let lanePx = 0;
+        for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) {
+          const c = px(x, z, u, v);
+          if (L.tram[i] && (u === 1 || u === S - 2)) continue;
+          const outer = (!rN && v === 0) || (!rS && v === S - 1) || (!rW && u === 0) || (!rE && u === S - 1);
+          if (outer) { if (c !== edgeCol) bad.roadEdge++; } else if (!inner.has(c)) bad.roadIn++;
+          if (!outer && lanes.has(c)) lanePx++;
+        }
+        const straight = (rN && rS && !rW && !rE) || (rW && rE && !rN && !rS), deg = rN + rS + rW + rE;
+        if (straight) { cnt.straight++; if (lanePx) cnt.laned++; }
+        if (deg >= 3) { cnt.cross++; if (lanePx) cnt.crossLane++; }
+        continue;
+      }
+      if (L.occ[i] || L.rail[i] || L.dock[i] || L.tram[i]) continue;
+      const cls = L.ter[i] === 0 ? 'water' : L.ter[i] === 1 ? 'sand' : L.zone[i] ? null : 'grass';
+      if (!cls) continue;
+      cnt[cls]++;
+      const set = cls === 'water' ? waterSet : cls === 'sand' ? sandSet : grassSet;
+      for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) if (!set.has(px(x, z, u, v))) { bad[cls]++; break; }
+    }
+    log(W <= 1024 && S === 8 && bad.grass + bad.water + bad.sand === 0, `D006 ${id} 地面色：草、水、沙每格都在實驗線色族裡；貼圖 ≤1,024`,
+      `貼圖 ${W}×${W}（每格 ${S}）；草 ${cnt.grass}、水 ${cnt.water}、沙 ${cnt.sand} 格，不對 ${bad.grass}／${bad.water}／${bad.sand}`);
+    log(bad.roadEdge === 0 && bad.roadIn === 0 && cnt.laned === cnt.straight && cnt.straight > 0 && cnt.crossLane === 0, `D006 ${id} 道路：面向非道路的邊全是人行道／護欄／黃邊，直路都有車道線，路口不畫`,
+      `路 ${cnt.road} 格、直路 ${cnt.straight}（有車道線 ${cnt.laned}）、路口 ${cnt.cross}（畫了車道線 ${cnt.crossLane}）；邊色不對 ${bad.roadEdge} 像素、路面色不對 ${bad.roadIn}`);
   }
 
   // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動

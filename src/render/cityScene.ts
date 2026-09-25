@@ -12,6 +12,7 @@ import type { Recipe } from '../content/recipes.ts';
 import type { Dressing } from '../content/dressing.ts';
 import { drawBlock, emptyCounts, type ArtCounts, type YardTree } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
+import { paintGround, groundCellPx } from './ground.ts';
 
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
@@ -27,7 +28,8 @@ export interface BuiltCity {
   artCounts(): ArtCounts;                            // D005：實際畫出的點綴件數（守衛：要等於擺放計畫）
   groundAt(x: number, z: number): number[];          // D005：地面貼圖那一格的 S×S 個像素 RGB（守衛：地坪色、非住商工格不變）
   wallStyles(): { blockTris: number; windowed: number; style0Windowed: number };
-  meshStats(): { name: string; tris: number; shadow: boolean }[];   // 每個網格的三角形數（實例網格乘實例數）、投不投影子：手機預算用   // D005：街區牆面三角形裡，有窗的都不是圖集第 0 格
+  meshStats(): { name: string; tris: number; shadow: boolean }[];
+  groundData(): { S: number; W: number; rgba: Uint8Array };        // D006：整張地面貼圖（守衛逐像素驗色族、人行道、車道線）   // 每個網格的三角形數（實例網格乘實例數）、投不投影子：手機預算用   // D005：街區牆面三角形裡，有窗的都不是圖集第 0 格
   timing: Record<string, number>;
   dispose(): void;
 }
@@ -38,10 +40,6 @@ const BASE_Y = -0.45;             // 地圖邊緣底座的底
 
 const C = (h: number, s: number, l: number) => new THREE.Color().setHSL(h / 360, s, l, THREE.SRGBColorSpace);
 const hex = (s: string) => new THREE.Color(s);
-const mix = (a: number, b: number, t: number) => {
-  const ch = (sh: number) => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t);
-  return (ch(16) << 16) | (ch(8) << 8) | ch(0);
-};
 
 // 每格的地面高度：橋面跟地面齊平；水面略低；高地抬高
 export function tileTop(c: City, i: number): number {
@@ -51,44 +49,9 @@ export function tileTop(c: City, i: number): number {
   return c.el[i] ? EL_H : 0;
 }
 
-// 地面貼圖：每格 S×S 像素；資料第 r 列＝世界 z＝r/S（UV 直接用 x/n、z/n，不翻轉）
-// D005 地坪：lots[i]＝0 照 D003；1–3 住商工街區地坪（lotFill570：住宅深草、商業灰鋪面、工業碎石＋兩色雜點）；4 villa 庭院（villaYard559）；5 草坪（B 檔的 D0 與被吸收的格）
-const LOT: Record<number, [number, number, number]> = { 1: [0x6f8a58, 0x7d9a62, 0x628050], 2: [0x87888c, 0x919296, 0x7c7d81], 3: [0x6d675d, 0x777166, 0x635d54], 4: [0x54833f, 0x659950, 0x48733a] };
+// 地面貼圖：每格 S×S 像素；逐像素顏色在 ground.ts（D006：顏色取自實驗線、草皮格線、人行道、車道線）
 function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array): THREE.DataTexture {
-  const n = c.n, W = n * S, data = new Uint8Array(W * W * 4);
-  const put = (px: number, py: number, col: number) => { const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
-  const ZONE = [0, 0x9fd28a, 0x8fb4e0, 0xe0c27a];
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
-    const i = z * n + x, r = c.road[i], b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null, cat = b ? look.cat(b.k) : '';
-    for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) {
-      const h = hash2(x * S + u, z * S + v, 7), edge = u === 0 || v === 0 || u === S - 1 || v === S - 1, mid = u === (S >> 1) || v === (S >> 1);
-      let col: number;
-      if (r === 1) col = c.rclass[i] >= 4 ? (edge ? 0x86837c : mid && h < 0.5 ? 0xcfc9a8 : 0x55534f) : (edge ? 0x8a8780 : 0x6b6a66);
-      else if (r === 2) col = edge ? 0xa9a59a : 0x6b6a66;                         // 橋面：柏油＋淺色護欄（實驗線的橋也是灰色路面）
-      else if (r === 3) col = edge ? 0xc9a646 : 0x4d4c49;                         // 高速：黃邊線
-      else if (r === 4) col = edge ? 0xc9a646 : 0x5c5048;                         // 高速橋
-      else if (c.rail[i]) col = (u === 1 || u === S - 2) ? 0x3a3a3a : v % 2 ? 0x7a5a3c : 0x6a6258;
-      else if (c.dock[i]) col = v % 2 ? 0x8a6a48 : 0x7a5c3e;
-      // 建築用地：住商工是草坪（實驗線的街區精靈底下是草坪，量體縮在中間）、綠地更綠、農田條紋，其他設施是鋪面
-      else if (lots && lots[i]) {
-        if (lots[i] === 5) { col = mix(0x78a452, 0x6c9749, h); if (h > 0.93) col = 0x8fb862; }
-        else { const L = LOT[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; }
-      }
-      else if (b) col = cat === 'G' ? mix(0x86bd5c, 0x9bcc6a, h) : cat === 'F' ? (v % 2 ? 0xb9c95a : 0x9fb24a)
-        : (cat === 'R' || cat === 'C' || cat === 'I') ? (edge ? mix(0x9aa08c, 0x8f9582, h) : mix(0x7fb356, 0x74a64d, h)) : mix(0xc9c3b5, 0xb8b1a2, h);
-      else if (c.ter[i] === 0) col = h < 0.07 ? 0x7fb4d8 : mix(0x3f78a8, 0x356a98, h);
-      else if (c.ter[i] === 1) col = mix(0xd8c690, 0xcdb983, h);
-      else {
-        col = mix(0x78a452, 0x6c9749, h);
-        if (h > 0.93) col = 0x8fb862;
-        const zn = c.zone[i];
-        if (zn) col = mix(col, ZONE[zn], edge ? 0.45 : 0.22);   // 劃了區還沒蓋：淡淡帶一點分區色，邊框深一點（實驗線也只是淡淡的）
-      }
-      if (c.tram[i] && (u === 1 || u === S - 2)) col = 0x2e2e2e;
-      put(x * S + u, z * S + v, col);
-    }
-  }
-  const t = new THREE.DataTexture(data, W, W, THREE.RGBAFormat);
+  const W = c.n * S, t = new THREE.DataTexture(paintGround(c, k => look.cat(k), S, lots), W, W, THREE.RGBAFormat);
   t.magFilter = t.minFilter = THREE.NearestFilter;
   t.generateMipmaps = false;
   t.colorSpace = THREE.SRGBColorSpace;
@@ -114,12 +77,21 @@ function wallColor(b: CityBuilding, cat: string, H: number): THREE.Color {
   return col;
 }
 
-export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender): BuiltCity {
+// D006 立面明暗（只給 2D 城市模式；300 年示範有自己的場景）：a＝D005 現況；b＝背光面壓暗（三階中間階 175→120、天光 1.1→0.9）；c＝b 再把太陽 2.2→2.6；d＝只壓暗背光面
+export type Tone = 'a' | 'b' | 'c' | 'd';
+export const TONES: Record<Tone, { ramp: [number, number, number]; hemi: number; sun: number }> = {
+  a: { ramp: [90, 175, 255], hemi: 1.1, sun: 2.2 },
+  b: { ramp: [90, 120, 255], hemi: 0.9, sun: 2.2 },
+  c: { ramp: [90, 120, 255], hemi: 0.9, sun: 2.6 },
+  d: { ramp: [80, 125, 255], hemi: 1.1, sun: 2.2 },   // 施工中加的第四檔：只壓暗背光面，受光面與天光同 a（c 的太陽太強，米白牆被削成粉紅）
+};
+export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a'): BuiltCity {
+  const TN = TONES[tone];
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
   scene.background = new THREE.Color().setHSL(0.58, 0.35, 0.82, THREE.SRGBColorSpace);
   const disposables: { dispose(): void }[] = [];
-  const ramp = style.toon ? toonRamp() : null;
+  const ramp = style.toon ? toonRamp(TN.ramp) : null;
   if (ramp) disposables.push(ramp);
   const mat = (opts: { map?: THREE.Texture; vertexColors?: boolean; color?: THREE.ColorRepresentation }) => {
     const m = style.toon ? new THREE.MeshToonMaterial({ ...opts, gradientMap: ramp! }) : new THREE.MeshStandardMaterial({ ...opts, roughness: 0.92, metalness: 0 });
@@ -127,7 +99,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   };
 
   // ---- 地面：每格一片頂面（貼圖），高低差處補直立的岸／崖面，地圖四周補一圈底座 ----
-  const S = Math.max(1, Math.min(4, Math.floor(2048 / n)));
+  const S = groundCellPx(n);   // D006：每格 8 像素（地圖 ≤128 格），貼圖邊長 ≤1,024
   // D005：街區蓋到的格依 k 鋪地坪（villa 是庭院）；沒畫到的住商工格（B 檔的 D0、被吸收）是草坪
   let lots: Uint8Array | undefined;
   if (blocks) {
@@ -289,8 +261,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
 
   // ---- 光：從畫面左上方來（同 D002）----
   const center = new THREE.Vector3(n / 2, 0, n / 2);
-  scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x6b5a44, style.toon ? 1.1 : 1.35));
-  const sun = new THREE.DirectionalLight(0xfff4e0, style.toon ? 2.2 : 2.4);
+  scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x6b5a44, style.toon ? TN.hemi : 1.35));
+  const sun = new THREE.DirectionalLight(0xfff4e0, style.toon ? TN.sun : 2.4);
   sun.position.copy(center).add(new THREE.Vector3(-0.35, 1.25, 1.0).multiplyScalar(n));
   sun.target.position.copy(center);
   sun.castShadow = true;
@@ -331,6 +303,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     blockAnchor: i => blockAnchors[i]?.clone() ?? null,
     artCounts: () => ({ ...counts }),
     wallStyles: () => ({ ...ws }),
+    groundData: () => ({ S, W: n * S, rgba: gtex.image.data as Uint8Array }),
     meshStats: () => {
       const names = new Map<THREE.Object3D, string>([[ground, 'ground'], [cliffMesh, 'cliff'], [wallsMesh, 'walls'], [otherMesh, 'other'], ...(dressMesh ? [[dressMesh, 'dress'] as [THREE.Object3D, string]] : [])]);
       const out: { name: string; tris: number; shadow: boolean }[] = [];
