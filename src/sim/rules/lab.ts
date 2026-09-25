@@ -16,6 +16,7 @@ export interface Tile {
   t?: number; road?: number | boolean; hw?: number | boolean; rp?: boolean; rc?: number;
   zone?: number; bld?: Bld | null; ruin?: number | boolean; office?: number | boolean;
   lv475?: number | boolean; ud475?: number | boolean;   // 手工配電線（架空／地下），也能帶電（T475）
+  hv471?: number | boolean; ug471?: number | boolean;   // 高壓線（T471）：連到發電端的 k148 可啟動配電路網
 }
 export interface World { N: number; tiles: Tile[] }
 export const idx = (w: World, x: number, y: number) => y * w.N + x;                         // 39731

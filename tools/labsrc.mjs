@@ -5,12 +5,17 @@ import crypto from 'node:crypto';
 
 export function labSource(text) {
   const lines = text.split('\n');
-  const sha = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 16);
+  const sha = s => crypto.createHash('sha256').update(s).digest('hex');
   const lineOf = pos => text.slice(0, pos).split('\n').length;
   const onlyOne = (re, what) => {
     const hits = [...text.matchAll(re)];
     if (hits.length !== 1) throw new Error(`${what}：找到 ${hits.length} 處（要剛好 1 處）`);
     return hits[0].index;
+  };
+  const anchor = (value, what) => {
+    const pos = text.indexOf(value);
+    if (pos < 0 || text.indexOf(value, pos + 1) >= 0) throw new Error(`${what}：錨點「${value.slice(0, 40)}」要剛好出現 1 次`);
+    return pos;
   };
   // 從 pos（指向 '{'）起配對到對應的 '}'，回傳 '}' 之後的位置
   function matchBrace(pos) {
@@ -38,9 +43,9 @@ export function labSource(text) {
     }
   }
   const pieces = [];
-  const record = (kind, name, start, end) => {
+  const record = (kind, name, start, end, anchors) => {
     const src = text.slice(start, end);
-    pieces.push({ kind, name, line: lineOf(start), endLine: lineOf(end - 1), sha: sha(src) });
+    pieces.push({ kind, name, anchors, line: lineOf(start), endLine: lineOf(end - 1), sha: sha(src) });
     return src;
   };
   return {
@@ -49,36 +54,32 @@ export function labSource(text) {
     fn(name) {
       const pos = onlyOne(new RegExp(`^[ \\t]*function ${name}\\(`, 'gm'), `function ${name}`);
       const start = text.indexOf('function', pos), brace = text.indexOf('{', text.indexOf(')', start));
-      return record('fn', name, start, matchBrace(brace));
+      return record('fn', name, start, matchBrace(brace), { start: `function ${name}(`, closure: 'balanced-brace' });
     },
     // const／let NAME=…; 單行宣告（整行）
     decl(name) {
       const pos = onlyOne(new RegExp(`^[ \\t]*(?:const|let) ${name}\\s*=`, 'gm'), `宣告 ${name}`);
       const end = text.indexOf('\n', pos);
-      return record('decl', name, pos, end);
+      return record('decl', name, pos, end, { start: text.slice(pos, text.indexOf('=', pos) + 1).trimStart() });
     },
-    // 從含 startAnchor 的那一行開頭，到含 endAnchor 的那一行結尾（endAnchor 在 startAnchor 之後第一次出現）
+    // 從含 startAnchor 的那一行開頭，到含 endAnchor 的那一行結尾；兩個錨點都必須全檔唯一
     span(name, startAnchor, endAnchor) {
-      const a = text.indexOf(startAnchor);
-      if (a < 0 || text.indexOf(startAnchor, a + 1) >= 0) throw new Error(`${name}：起點錨點「${startAnchor}」要剛好出現 1 次`);
-      const b = text.indexOf(endAnchor, a);
-      if (b < 0) throw new Error(`${name}：終點錨點「${endAnchor}」找不到`);
+      const a = anchor(startAnchor, `${name} 起點`), b = anchor(endAnchor, `${name} 終點`);
+      if (b < a) throw new Error(`${name}：終點錨點在起點之前`);
       const start = text.lastIndexOf('\n', a) + 1, end = text.indexOf('\n', b);
-      return record('span', name, start, end < 0 ? text.length : end);
+      return record('span', name, start, end < 0 ? text.length : end, { start: startAnchor, end: endAnchor });
     },
     // 同上，但終點錨點那一行不含（停在它前一行的行尾）
     spanUntil(name, startAnchor, endAnchor) {
-      const a = text.indexOf(startAnchor);
-      if (a < 0 || text.indexOf(startAnchor, a + 1) >= 0) throw new Error(`${name}：起點錨點「${startAnchor.slice(0, 40)}」要剛好出現 1 次`);
-      const b = text.indexOf(endAnchor, a);
-      if (b < 0) throw new Error(`${name}：終點錨點「${endAnchor.slice(0, 40)}」找不到`);
+      const a = anchor(startAnchor, `${name} 起點`), b = anchor(endAnchor, `${name} 終點`);
+      if (b < a) throw new Error(`${name}：終點錨點在起點之前`);
       const start = text.lastIndexOf('\n', a) + 1, end = text.lastIndexOf('\n', b);
-      return record('span', name, start, end);
+      return record('span', name, start, end, { start: startAnchor, end: endAnchor });
     },
     // 整行原文剛好出現一次（實驗線同名宣告有好幾處時，用整行認出主程式那一個）
     exact(name, lineText) {
-      const pos = onlyOne(new RegExp('^' + lineText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gm'), `整行 ${name}`);
-      return record('exact', name, pos, text.indexOf('\n', pos));
+      const pos = onlyOne(new RegExp('^' + lineText.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'gm'), `整行 ${name}`);
+      return record('exact', name, pos, text.indexOf('\n', pos), { start: lineText });
     },
     lines,
   };

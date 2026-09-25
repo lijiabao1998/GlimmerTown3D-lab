@@ -1,5 +1,5 @@
-// 從 2D 實驗線抽出本線要用的資料（D003、D004）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
-// 用法：node tools/lab-extract.mjs --lab=../GlimmerTown-lab [--days=120] [--part=all|d003|d004|d007]
+// 從 2D 實驗線抽出本線要用的資料（D003、D004、D007、D009）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
+// 用法：node tools/lab-extract.mjs --lab=scratch/lab-src [--days=120] [--part=all|d003|d004|d007|d009]
 // 產出（D003）：
 //   src/content/lab-kinds.json        186 種建築：名稱、分類、佔地、每級高度（量精靈圖）、出處行號
 //   src/content/samples/<id>.code.txt 樣本分享碼（只留本線會讀的欄位；實驗線自己也能匯入）
@@ -10,6 +10,7 @@
 //   src/content/samples/d004-partition-<id>.json  兩座樣本城逐格的超街區切分（rciBlockOrigin547＋rciAbsorbed555）
 //   src/content/samples/d004-massing.json         1,728 組量體（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）
 //   scratch/lab/d004_<id>_<視角>_2d.png            匯入樣本碼、v 還原成存檔值之後的實驗線 2D 畫面（D004 五格對照的第一格，不進版本庫）
+// 產出（D009）：src/content/samples/d009-live.json：執行期變體排名、24 張道路／電源與住宅供電實跑樣本。
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -28,6 +29,8 @@ const html = fs.readFileSync(path.join(LAB, 'index.html'), 'utf8');
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
 const dirty = execFileSync('git', ['-C', LAB, 'status', '--porcelain', '--', 'index.html']).toString().trim();
 if (dirty) throw new Error('實驗線 index.html 有未提交的修改；出處必須是某個 commit，先別抽');
+const PINNED_D009_COMMIT = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
+if (PARTS.has('d009') && commit !== PINNED_D009_COMMIT) throw new Error(`D009 實驗線版本錯誤：要求 ${PINNED_D009_COMMIT}，目前 ${commit}`);
 const ver = /const GAME_VER='([^']+)'/.exec(html)[1], anchor = /const GAME_ANCHOR='([^']+)'/.exec(html)[1];
 const lineOf = off => html.slice(0, off).split('\n').length;
 console.log(`實驗線 ${commit.slice(0, 7)} v${ver} ${anchor}`);
@@ -439,16 +442,21 @@ if (PARTS.has('d007')) {
 if (PARTS.has('d009')) {
   const t0 = Date.now();
   const { mulberry32 } = await import('../src/sim/rng.ts');
-  const mark = html.indexOf('Object.assign(window.GV,{art574:');
-  const endRe = /\n\s*\}\)\(\);\s*\n<\/script>/g; endRe.lastIndex = mark;
-  const em = mark < 0 ? null : endRe.exec(html);
-  if (!em) throw new Error('找不到實驗線主程式 IIFE 的收尾');
-  const INJECT = `\n;window.__d009={VRANK406:()=>VRANK406,tiles:()=>tiles,computePower};`;
+  const exportAnchor = 'Object.assign(window.GV,{art574:';
+  const mark = html.indexOf(exportAnchor);
+  if (mark < 0 || html.indexOf(exportAnchor, mark + 1) >= 0) throw new Error('實驗線 GV 出口錨點要剛好出現 1 次');
+  const scriptEnd = html.indexOf('</script>', mark);
+  if (scriptEnd < 0) throw new Error('找不到實驗線主程式 script 的收尾');
+  const endRe = /\n\s*\}\)\(\);\s*\n<\/script>/g;
+  const closes = [...html.slice(mark, scriptEnd + '</script>'.length).matchAll(endRe)];
+  if (closes.length !== 1) throw new Error(`實驗線主程式 IIFE 收尾找到 ${closes.length} 處（要剛好 1 處）`);
+  const em = { index: mark + closes[0].index };
+  const INJECT = `\n;window.__d009={VRANK406:()=>VRANK406,tiles:()=>tiles,computePower,step:()=>tick(),day:()=>day};`;
   const injectedAt = lineOf(em.index) + 1;
   const copy = html.slice(0, em.index) + INJECT + html.slice(em.index);
   const source = { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs --part=d009',
-    how: `執行期：原檔 index.html 在第 ${injectedAt} 行（主程式 IIFE 收尾前）插一行只讀出口 window.__d009 的記憶體副本`, inject: INJECT.trim() };
-  const LAYOUTS = 24;
+    how: `執行期：原檔 index.html 在第 ${injectedAt} 行（主程式 IIFE 收尾前）插入測試出口 window.__d009 的記憶體副本；只在沙盒新城呼叫原版 tick()`, inject: INJECT.trim() };
+  const TRIAL = process.argv.includes('--trial'), LAYOUTS = TRIAL ? 1 : 24;
   await withBrowser({ root: LAB, entry: 'd009.html', overlay: { 'd009.html': copy }, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD,
     ready: '!!window.__bootDone453&&!!window.__d009', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
     const ev = e => page.evaluate(e);
@@ -474,17 +482,33 @@ if (PARTS.has('d009')) {
         for(const [t,x,y] of ${J(plan)}){if(GV.place(t,x,y))ok++;}
         const OFF=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[2,0],[0,2],[-3,0],[0,-3],[-3,-1],[1,-3]];let srcOk=0;
         for(const [t,x,y] of ${J(srcs)})for(const [dx,dy] of OFF)if(GV.place(t,x+dx,y+dy)){srcOk++;break;}
-        const cap=__d009.computePower(),T=__d009.tiles(),N=GV.N(),o={N,cap,road:[],hw:[],rp:[],bk:[],blv:[],bsz:[],bref:[],lv475:[],ud475:[]};
+        const capBefore=__d009.computePower(),T=__d009.tiles(),N=GV.N(),roots=[],chosen=new Set();
+        const nearby=(on)=>{const a=[];for(let i=0;i<N*N;i++){if(!T[i].road||!!T[i].rp!==on)continue;const x=i%N,y=(i/N)|0;
+          for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){const xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=N||yy>=N)continue;
+            const j=yy*N+xx,t=T[j];if(!t.road&&!t.bld&&t.t!==0&&!chosen.has(j))a.push(j);}}return a;};
+        for(const on of [true,false]){const a=nearby(on),stride=Math.max(1,Math.floor(a.length/4));for(let p=0;p<a.length&&roots.length<(on?4:8);p+=stride){
+          const i=a[p];if(chosen.has(i))continue;const h=GV.testInjectResident534(i%N,(i/N)|0);if(h){chosen.add(i);roots.push(i);}}}
+        if(!roots.length)throw new Error('D009 執行期沒有可注入的 RCI 格');
+        const topology=()=>JSON.stringify(T.map(t=>[t.road?1:0,t.hw?1:0,t.lv475?1:0,t.ud475?1:0,t.hv471?1:0,t.ug471?1:0,
+          t.bld?t.bld.k:0,t.bld?(t.bld.lv||0):0,t.bld?(t.bld.sz||0):0,t.bld&&t.bld.ref?1:0]));
+        const topologyBefore=topology(),order=T.flatMap((t,i)=>t.bld?[i]:[]);
+        window.__legacyPower450=true;GV.setSeason(0);const seasonBefore=GV.season().idx,dayBefore=__d009.day();__d009.step();const dayAfter=__d009.day();
+        if(dayAfter!==dayBefore+1)throw new Error('D009 原版 tick 未前進一天');
+        const topologyUnchanged=topology()===topologyBefore,season=GV.season().idx,cap=__d009.computePower();
+        if(!topologyUnchanged||cap!==capBefore||season!==seasonBefore)throw new Error('D009 tick 改變供電拓樸、容量或季節：'+JSON.stringify({topologyUnchanged,capBefore,cap,seasonBefore,season}));
+        const o={N,cap,capBefore,season,dayBefore,dayAfter,topologyUnchanged,order,rci:[],road:[],hw:[],rp:[],bk:[],blv:[],bsz:[],bref:[],lv475:[],ud475:[]};
+        for(const i of roots){const b=T[i].bld;if(!b||b.k!==1||typeof b.pw!=='boolean')throw new Error('D009 RCI 在 tick 後消失或缺帶電狀態：'+i);o.rci.push([i,b.pw?1:0]);}
         for(let i=0;i<N*N;i++){const t=T[i],b=t.bld;o.road.push(t.road?1:0);o.hw.push(t.hw?1:0);o.rp.push(t.rp?1:0);o.bk.push(b?b.k:0);o.blv.push(b?(b.lv||0):0);o.bsz.push(b&&b.sz?b.sz:0);o.bref.push(b&&b.ref?1:0);o.lv475.push(t.lv475?1:0);o.ud475.push(t.ud475?1:0);}
         o.placed=ok;o.planned=${plan.length};o.srcPlaced=srcOk;o.srcPlanned=${srcs.length};return o;})()`);
       const roads = res.road.reduce((a, v) => a + v, 0), rp = res.rp.reduce((a, v) => a + v, 0), nb = res.bk.filter((k, i) => k && !res.bref[i]).length;
       const on = a => a.flatMap((v, i) => v ? [i] : []);   // 逐格 0/1 → 格索引清單（稀疏存）
-      layouts.push({ N: res.N, cap: res.cap, roads: on(res.road), hw: on(res.hw), rp: on(res.rp), lv475: on(res.lv475), ud475: on(res.ud475),
+      layouts.push({ N: res.N, cap: res.cap, capBefore: res.capBefore, season: res.season, dayBefore: res.dayBefore, dayAfter: res.dayAfter,
+        topologyUnchanged: res.topologyUnchanged, order: res.order, rci: res.rci, roads: on(res.road), hw: on(res.hw), rp: on(res.rp), lv475: on(res.lv475), ud475: on(res.ud475),
         blds: res.bk.flatMap((k, i) => k ? [[i, k, res.blv[i], res.bsz[i], res.bref[i]]] : []) });
-      console.log(`佈局 ${L}：路 ${res.placed}／${res.planned}、電源 ${res.srcPlaced}／${res.srcPlanned}；路 ${roads} 格、帶電 ${rp}；建築 ${nb} 棟；容量 ${res.cap}`);
+      console.log(`佈局 ${L}：路 ${res.placed}／${res.planned}、電源 ${res.srcPlaced}／${res.srcPlanned}；路 ${roads} 格、帶電 ${rp}；建築 ${nb} 棟、RCI ${res.rci.length}（通電 ${res.rci.filter(x=>x[1]).length}）；容量 ${res.cap}`);
     }
-    fs.writeFileSync(path.join(SAMPLES, 'd009-live.json'), JSON.stringify({ source, vrank,
-      power: { how: '每張 GV.newWorldSeeded(7700+L)、GV.place 蓋路與電源（計畫由 mulberry32(90900+L) 產生）、__d009.computePower() 後讀回；欄位是格索引清單：路、高速、帶電、架空線、地下線；blds＝[格, k, 等級, sz, ref]', layouts } }));
+    if (!TRIAL) fs.writeFileSync(path.join(SAMPLES, 'd009-live.json'), JSON.stringify({ source, vrank,
+      power: { how: '每張 GV.newWorldSeeded(7700+L)、GV.place 蓋路與電源（計畫由 mulberry32(90900+L) 產生）；GV.testInjectResident534 放住宅，__legacyPower450 後呼叫原版 tick()，再讀每格帶電與住宅 pw；欄位是格索引清單：路、高速、帶電、架空線、地下線；blds＝[格, k, 等級, sz, ref]，rci＝[格, pw 0/1]', layouts } }));
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
   });
   console.log(`D009 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);

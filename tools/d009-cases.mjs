@@ -6,7 +6,7 @@ import { mulberry32 } from '../src/sim/rng.ts';
 import { JOB_KEYS } from '../src/sim/rules/jobs.ts';
 
 export const D009_SEED = 20260925;
-export const COUNTS = { F1: 2000, F2: 2000, F3: 2000, F4: 2000, F5: 300, F6: 300, F7: 2000, F8: 2000, F9: 200, F10: 50, F11: 200 };
+export const COUNTS = { F1: 2000, F2: 2000, F3: 2000, F4: 2000, F5: 300, F6: 2000, F7: 2000, F8: 2000, F9: 200, F10: 2000, F11: 204 };
 
 export function canon(v) {
   if (v === undefined) return '~u';
@@ -67,6 +67,7 @@ export function genWorld(g, N = g.int(6, 16)) {
   return { N, tiles, fields };
 }
 export const tickIndex = w => ({ tickBld: w.tiles.flatMap((t, i) => t.bld ? [i] : []), tickZone: w.tiles.flatMap((t, i) => t.zone ? [i] : []) });
+const barePowerWorld = N => ({ N, tiles: Array.from({ length: N * N }, () => ({ bld: null })), fields: {} });
 
 // ---- 各公式的案例（第 k 個案例由 D009_SEED 與公式、序號決定）----
 const sub = (name, k) => (D009_SEED ^ (name.charCodeAt(1) * 7919 + k * 104729)) >>> 0;
@@ -106,8 +107,44 @@ export const cases = {
     const counts = Object.fromEntries(JOB_KEYS.map(n => [n, ch(.7) ? 0 : int(0, 20) + (n === 'jobsC' && ch(.3) ? .5 : 0)]));
     return { b, occ: ch(.3) ? null : { low: f(.2, 1.1), mid: ch(.1) ? NaN : f(.2, 1.1), high: f(.2, 1.1), social: f(.2, 1.1) }, office: ch(.2), counts }; },
   F9: k => { const g = gen(sub('F9', k)); return { w: genWorld(g), picks: Array.from({ length: 40 }, () => [g.int(1, 3), g.int(1, 3), g.int(0, 11)]) }; },
-  F10: k => { const g = gen(sub('F10', k)); return { weather: g.int(0, 2), wxT: g.int(1, 8), day0: g.int(1, 720), days: 400, seed: g.int(1, 1e9) }; },
-  F11: k => { const g = gen(sub('F11', k)), snake = g.ch(.3), w = genWorld(g, snake ? g.int(30, 40) : g.int(8, 24)), { ch, pick, int } = g;
+  F10: k => { const g = gen(sub('F10', k)); return { weather: g.int(0, 2), wxT: g.int(1, 8), day0: g.int(1, 720), days: 20, seed: g.int(1, 1e9) }; },
+  F11: k => { if (k === 200) {
+      // 定向邊界案例：第一格路的 rem=90，單一路徑最末端 rem=0；90→89 必須少亮一格，並讓兩格外的住宅失電。
+      const w = barePowerWorld(96), { N, tiles } = w;
+      for (let x = 1; x <= 91; x++) tiles[N + x] = { road: 1, rc: 1, bld: null };
+      tiles[N] = { bld: { k: 5, lv: 1, v: 0, age: 0 } };
+      tiles[N + 93] = { bld: { k: 1, lv: 1, v: 0, age: 0, pw: false } };
+      return { w, season: 0, ecoReg: false, legacySubstation: false };
+    }
+    if (k === 201) {
+      // k128 在 90 跳的邊界接力：末端路只靠變電所重新取得配電餘裕。
+      const w = barePowerWorld(100), { N, tiles } = w;
+      for (let x = 1; x <= 91; x++) tiles[N + x] = { road: 1, rc: 1, bld: null };
+      for (let x = 93; x <= 98; x++) tiles[N + x] = { road: 1, rc: 1, bld: null };
+      tiles[N] = { bld: { k: 5, lv: 1, v: 0, age: 0 } };
+      tiles[N + 92] = { bld: { k: 128, lv: 1, v: 0, age: 0 } };
+      tiles[3 * N + 98] = { bld: { k: 1, lv: 1, v: 0, age: 0, pw: false } };
+      return { w, season: 0, ecoReg: false, legacySubstation: false };
+    }
+    if (k === 202) {
+      // 高壓線接通的 k148 由 HV 元件拿到上游來源，從遠端道路啟網。
+      const w = barePowerWorld(24), { N, tiles } = w;
+      tiles[3 * N + 3] = { bld: { k: 5, lv: 1, v: 0, age: 0 } };
+      for (let x = 4; x <= 10; x++) tiles[3 * N + x] = { hv471: 1, bld: null };
+      tiles[3 * N + 11] = { bld: { k: 148, lv: 1, v: 0, age: 0 } };
+      for (let x = 12; x <= 20; x++) tiles[3 * N + x] = { road: 1, rc: 1, bld: null };
+      return { w, season: 0, ecoReg: false, legacySubstation: false };
+    }
+    if (k === 203) {
+      // 實驗線舊版變電所回退：即使不連源，也把變電所旁道路預先當成種子。
+      const w = barePowerWorld(24), { N, tiles } = w;
+      tiles[N] = { bld: { k: 5, lv: 1, v: 0, age: 0 } };
+      tiles[N + 1] = { road: 1, rc: 1, bld: null };
+      tiles[N + 16] = { bld: { k: 128, lv: 1, v: 0, age: 0 } };
+      for (let x = 17; x <= 21; x++) tiles[N + x] = { road: 1, rc: 1, bld: null };
+      return { w, season: 0, ecoReg: false, legacySubstation: true };
+    }
+    const g = gen(sub('F11', k)), snake = g.ch(.3), w = genWorld(g, snake ? g.int(30, 40) : g.int(8, 24)), { ch, pick, int } = g;
     if (snake) {   // 蛇形長路（幾百格）＋起點旁一座燃煤電廠：帶電距離 90 格的上限要真的碰得到
       const N = w.N; let turn = 0;
       for (let y = 1; y < N - 1; y += 3) { for (let x = 1; x < N - 1; x++) w.tiles[y * N + x] = { road: 1, rc: 1, bld: null };
@@ -118,5 +155,16 @@ export const cases = {
     for (let i = 0; i < w.tiles.length; i++) { const t = w.tiles[i]; if (!t.road && !t.bld && ch(.02)) t.lv475 = 1; if (!t.road && !t.bld && ch(.01)) t.ud475 = 1; }
     const nSrc = int(0, 4);
     for (let s = 0; s < nSrc; s++) { const i = int(0, w.tiles.length - 1), t = w.tiles[i]; if (t.road) continue; t.bld = { k: pick([5, 5, 5, 58, 60, 62, 25, 26, 150]), lv: int(1, 3), v: 0, age: 0 }; if (t.bld.k === 58 && ch(.7)) t.bld.sz = 3; }
-    return { w, season: int(0, 3), ecoReg: ch(.3) }; },
+    const roads = w.tiles.flatMap((t, i) => t.road ? [i] : []), dirs = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+    for (let s = 0, nSub = int(1, 4); s < nSub && roads.length; s++) {
+      const r = pick(roads), x = r % w.N, y = (r / w.N) | 0, start = int(0, 3);
+      for (let d = 0; d < 4; d++) {
+        const [dx, dy] = dirs[(start + d) % 4], nx = x + dx, ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= w.N || ny >= w.N) continue;
+        const t = w.tiles[ny * w.N + nx]; if (t.road || t.bld) continue;
+        t.bld = { k: pick([128, 148, 161, 162]), lv: 1, v: 0, age: 0 };
+        break;
+      }
+    }
+    return { w, season: int(0, 3), ecoReg: ch(.3), legacySubstation: ch(.2) }; },
 };

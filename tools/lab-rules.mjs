@@ -6,16 +6,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import crypto from 'node:crypto';
+import { gzipSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { labSource } from './labsrc.mjs';
-import { cases, COUNTS, D009_SEED, hashOf, tickIndex } from './d009-cases.mjs';
-import { mulberry32 } from '../src/sim/rng.ts';
+import { cases, canon, COUNTS, D009_SEED, hashOf, tickIndex } from './d009-cases.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1')), '..');
 const LAB = path.resolve(arg('lab', path.join(ROOT, 'scratch/lab-src')));
 const html = fs.readFileSync(path.join(LAB, 'index.html'), 'utf8');
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
+const PINNED_D009_COMMIT = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
+if (commit !== PINNED_D009_COMMIT) throw new Error(`D009 實驗線版本錯誤：要求 ${PINNED_D009_COMMIT}，目前 ${commit}`);
 if (execFileSync('git', ['-C', LAB, 'status', '--porcelain', '--', 'index.html']).toString().trim()) throw new Error('實驗線 index.html 有未提交的修改');
 const live = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/samples/d009-live.json'), 'utf8'));
 if (live.source.commit !== commit) throw new Error(`d009-live.json 抽自 ${live.source.commit.slice(0, 7)}，實驗線現在是 ${commit.slice(0, 7)}`);
@@ -38,6 +41,7 @@ for (const f of ['mulberry32', 'streetHash', 'hashLocal479', 'urbanDens406', 'ge
   'laborMarket481', 'economyDemands481', 'housingRciDemand488', 'housingDensityForSpawn488', 'housingUpgradeMul488', 'residentCapacity488', 'residentPopulation488',
   'residentEligible488', 'housingBand488', 'housingOccupancy488', 'powerCapacity450', 'isPowerSource450', 'powerFrontageRoads450', 'powerCarrier475', 'computePower',
   'ensurePower444', 'isPowerStarter444', 'hvEnergizedSubstations471']) P[f] = L.fn(f);
+const labMulberry32 = vm.runInNewContext(`(${P.mulberry32})`);
 const S = {   // tick() 的行內算式
   F1: L.span('F1 舊式需求', '  const workers=pop*.6;', 'const legacyI481=clamp((jobsC*.8-jobsI)/40'),
   F4: L.span('F4 移民潮與人口學係數', '  if(immWave>0){immWave--;}', 'const demoMul=clamp(1+(cityHappy-.62)*.55'),
@@ -59,10 +63,19 @@ function env(pieces, stubs = {}) {
 }
 const fn = (ctx, params, body, ret) => vm.runInContext(`(function(${params}){${body}\n;return ${ret};})`, ctx);
 // 實驗線的 R／ri 換成記錄呼叫順序的版本（ri 不透過 R 記錄，免得一次 ri 記兩筆；抽到的值同實驗線 ri=n=>Math.floor(R()*n)）
-function rngStub(seed) { const g = mulberry32(seed), log = []; return { log, R: () => { log.push(['R']); return g(); }, ri: n => { log.push(['ri', n]); return Math.floor(g() * n); } }; }
+function rngStub(seed) { const g = labMulberry32(seed), log = []; return { log, R: () => { log.push(['R']); return g(); }, ri: n => { log.push(['ri', n]); return Math.floor(g() * n); } }; }
 const worldGlobals = (ctx, w) => { ctx.N = w.N; ctx.tiles = w.tiles; Object.assign(ctx, w.fields); };
-const out = {};
-const run = (name, f) => { const hs = []; for (let k = 0; k < COUNTS[name]; k++) hs.push(hashOf(f(cases[name](k), k))); out[name] = hs; };
+const out = {}, exactOutputs = {};
+const run = (name, f) => {
+  const hs = [], exact = [];
+  for (let k = 0; k < COUNTS[name]; k++) {
+    const value = f(cases[name](k), k);
+    hs.push(hashOf(value));
+    exact.push(canon(value));
+  }
+  out[name] = hs;
+  exactOutputs[name] = gzipSync(Buffer.from(JSON.stringify(exact)), { level: 9, mtime: 0 }).toString('base64');
+};
 
 // F1 舊式需求
 { const ctx = env(['clamp', 'tq'], { tech343: { done: [] } });
@@ -135,16 +148,22 @@ const gridPieces = ['clamp', 'T', 'idx', 'inMap', 'streetHash', 'hashLocal479', 
   { assetAvailability493: () => 1, powerLegacy450: () => true });
   const capF = fn(ctx, 'sea', S.F11a, '[powerNom450,cap]');
   const pwF = vm.runInContext(`(function(order,cap){let powered=0;for(const i88 of order){const x=i88%N,y=(i88/N)|0;const t=tiles[i88];const b=t.bld;if(!b||b.ref)continue;if(!b||(b.k>3&&b.k!==127))continue;const si442=idx(x,y);\n${S.F11b}\n}return powered;})`, ctx);
-  run('F11', c => { worldGlobals(ctx, c.w); ctx.pol = c.ecoReg ? { ecoReg: true } : null; ctx.window = {};
+  run('F11', c => { worldGlobals(ctx, c.w); ctx.pol = c.ecoReg ? { ecoReg: true } : null; ctx.window = c.legacySubstation ? { __legacySubstation444: true } : {};
     const [nom, cap] = capF(c.season), { tickBld } = tickIndex(c.w), powered = pwF(tickBld, cap);
     return { nom, cap, rp: c.w.tiles.flatMap((t, i) => t.rp ? [i] : []), pw: tickBld.map(i => c.w.tiles[i].bld.pw), powered }; }); }
 // 亂數產生器：實驗線 mulberry32 前 10,000 個值
-const mulHash = hashOf([1, 516, 2026, 0xdeadbeef].map(s => { const g = vm.runInContext(`(${P.mulberry32})`, vm.createContext({}))(s); return Array.from({ length: 10000 }, () => g()); }));
+const rngSeeds = [1, 516, 2026, 0xdeadbeef];
+const mulOutputs = rngSeeds.map(s => { const g = labMulberry32(s); return Array.from({ length: 10000 }, () => g()); });
+const mulHash = hashOf(mulOutputs);
 
 const sample = Object.fromEntries(Object.keys(COUNTS).map(n => [n, out[n].length]));
 fs.writeFileSync(path.join(ROOT, 'src/content/samples/d009-formulas.json'), JSON.stringify({
   source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: 'tools/lab-rules.mjs',
-    how: '實驗線 index.html 摘出的原始碼片段在 Node vm 裡求值；案例由 tools/d009-cases.mjs（D009_SEED）產生；每個案例的輸出過 canon() 取 sha256 前 16 字',
+    how: '實驗線 index.html 摘出的原始碼片段在 Node vm 裡求值；案例由 tools/d009-cases.mjs（D009_SEED）產生；每個案例的輸出用 canon() 保留數值的 Object.is 語義，gzip 壓縮後存 exact.outputs；另存 sha256 前 16 字供定位',
+    casesSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'tools/d009-cases.mjs'))).digest('hex'),
     pieces: L.pieces },
-  seed: D009_SEED, counts: sample, mulberry32: mulHash, hashes: out }, null, 0));
+  seed: D009_SEED, counts: sample, mulberry32: mulHash, hashes: out,
+  exact: { codec: 'gzip+base64+json-canon-array', outputs: exactOutputs,
+    mulberry32: { seeds: rngSeeds, countPerSeed: 10000,
+      values: gzipSync(Buffer.from(JSON.stringify(mulOutputs.map(row => row.map(canon)))), { level: 9, mtime: 0 }).toString('base64') } } }, null, 0));
 console.log(`D009 公式樣本：${Object.entries(sample).map(([k, v]) => `${k} ${v}`).join('、')}；片段 ${L.pieces.length} 段；${((Date.now() - t0) / 1000).toFixed(1)}s`);

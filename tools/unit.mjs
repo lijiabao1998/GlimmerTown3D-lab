@@ -2,6 +2,11 @@
 // 模擬層 import 寫明 .ts，Node 22.18+ 可以直接跑（型別剝除）。
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
+import { gunzipSync } from 'node:zlib';
+import { stripTypeScriptTypes } from 'node:module';
+import vm from 'node:vm';
+import { createScanner, SyntaxKind } from 'typescript/unstable/ast';
 import { ROOT } from './cdp.mjs';
 import { decodeLabCode, encodeLabCode, rleEncode, rleDecode, MAX_CODE } from '../src/io/labcode.ts';
 import { cityFromLab, cityStats } from '../src/sim/city.ts';
@@ -12,6 +17,17 @@ import { recipe, labCalls, PAL_KEYS, kitCount } from '../src/content/recipes.ts'
 import { dressing, PROP_CAPS, solidBoxes, inBox } from '../src/content/dressing.ts';
 import { KIND_SHAPES } from '../src/content/kindShapes.ts';
 import { facadePlan, trimPlan } from '../src/content/facades.ts';
+import { cases as d009Cases, COUNTS as D009_COUNTS, D009_SEED, canon as d009Canon, tickIndex } from './d009-cases.mjs';
+import * as d009LabHelpers from '../src/sim/rules/lab.ts';
+import { labRng } from '../src/sim/rules/lab.ts';
+import { legacyDemand, laborMarket481, economyDemands481, housingRciDemand488, immigration, demoMul as demographicMultiplier } from '../src/sim/rules/demand.ts';
+import { spawnStep, upgradeStep } from '../src/sim/rules/growth.ts';
+import { residentialHappy } from '../src/sim/rules/happy.ts';
+import { residentCapacity488, residentPopulation488, rciJobs, nominalJobs } from '../src/sim/rules/jobs.ts';
+import { landStaticAt, judgeWealth, pickV406 } from '../src/sim/rules/land.ts';
+import { countNear, getMaxRoadClass, hasRoadNear, urbanDens406 } from '../src/sim/rules/grid.ts';
+import { season as d009Season, inWinter as d009Winter, weatherStep } from '../src/sim/rules/weather.ts';
+import { computePower, powerCap, assignPower } from '../src/sim/rules/power.ts';
 
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
@@ -289,17 +305,251 @@ const massDiff = (faults = {}) => {
     `${new Set(all.map(k => KIND_SHAPES[k]?.type)).size} 種類型、${all.filter(k => KIND_SHAPES[k]?.type === 'landmark').length} 個地標；缺 ${noShape.join(',') || 0}、類型錯 ${badType.join(',') || 0}、地標／遊樂錯 ${badWhich.join(',') || 0}`);
 }
 
+// ===== D009：實驗線原始碼求值的完整輸出（canon 保留 Object.is 的 -0／NaN／undefined）=====
+const D009_LAB_COMMIT = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
+const d009Gold = JSON.parse(read('src/content/samples/d009-formulas.json'));
+const d009Live = JSON.parse(read('src/content/samples/d009-live.json'));
+const d009Fns = {
+  legacyDemand, laborMarket481, economyDemands481, housingRciDemand488, immigration, demographicMultiplier,
+  spawnStep, upgradeStep, residentialHappy, residentCapacity488, residentPopulation488, rciJobs, nominalJobs,
+  landStaticAt, judgeWealth, pickV406, countNear, getMaxRoadClass, hasRoadNear, urbanDens406,
+  d009Season, d009Winter, weatherStep, computePower, powerCap, assignPower,
+};
+const d009Buildings = (w, keys) => w.tiles.map(t => t.bld ? keys.map(k => t.bld[k]) : null);
+function d009Result(name, c, f = d009Fns) {
+  if (name === 'F1') {
+    const q = f.legacyDemand(c);
+    return [q.workers, q.jobSurplus, q.happyAdj, q.legacyR481, q.czone, q.legacyC481, q.legacyI481];
+  }
+  if (name === 'F2') return f.laborMarket481(c.p, c.j, c.ent, c.day);
+  if (name === 'F3') {
+    const q = f.economyDemands481(c.lr, c.lc, c.li, c.labor, c.econ);
+    return [q.r, q.c, q.i];
+  }
+  if (name === 'F4') {
+    const wave = f.immigration(c.immWave, c.pop, c.day, c.cityHappy, c.demR).immWave;
+    return [f.housingRciDemand488(c.legacy, c.housing), wave, f.demographicMultiplier(c.cityHappy, wave, c.mob === null ? 0 : c.mob)];
+  }
+  if (name === 'F5' || name === 'F6') {
+    const { tickBld, tickZone } = tickIndex(c.w), rng = labRng(c.seed, true);
+    const g = { w: c.w, f: c.w.fields, vrank: d009Live.vrank, rng, dem: c.dem, cityHappy: c.cityHappy, demoMul: c.demoMul,
+      tech: c.tech || [], tickZone, tickBld, sewNeed: c.sewNeed, sewOk: c.sewOk };
+    if (name === 'F5') {
+      const { cands } = f.spawnStep(g);
+      return { cands, tickBld, blds: d009Buildings(c.w, ['k', 'lv', 'v', 'age', 'pw', 'h', 'den', 'we']), log: rng.log };
+    }
+    f.upgradeStep(g);
+    return { blds: d009Buildings(c.w, ['k', 'lv', 'v', 'age', 'den', 'we']), log: rng.log };
+  }
+  if (name === 'F7') {
+    const q = f.residentialHappy(c);
+    return [q.h, q.parts];
+  }
+  if (name === 'F8') {
+    const jobs = c.b && c.b.lv ? f.rciJobs(c.b, c.office) : null;
+    return [f.residentCapacity488(c.b), f.residentPopulation488(c.b, band => c.occ?.[band]),
+      jobs === null ? null : c.b.k === 2 ? [jobs, 0] : [0, jobs], f.nominalJobs(c.counts)];
+  }
+  if (name === 'F9') {
+    const { w } = c, N = w.N, out = [];
+    for (let i = 0; i < N * N; i++) {
+      const x = i % N, y = (i / N) | 0, [pk, plv, pfb] = c.picks[i % c.picks.length];
+      out.push([f.landStaticAt(w, w.fields, x, y), f.judgeWealth(w, w.fields, x, y), f.getMaxRoadClass(w, x, y), f.getMaxRoadClass(w, x, y, 3),
+        f.hasRoadNear(w, x, y, 2), f.hasRoadNear(w, x, y, 2, true), f.hasRoadNear(w, x, y, 2, true, true), f.hasRoadNear(w, x, y, 2, false, true),
+        f.urbanDens406(w, x, y), f.pickV406(w, w.fields, d009Live.vrank, pk, plv, x, y, pfb),
+        f.countNear(w, x, y, 4, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime)]);
+    }
+    return out;
+  }
+  if (name === 'F10') {
+    const rng = labRng(c.seed, true), out = [];
+    let s = { weather: c.weather, wxT: c.wxT };
+    for (let d = 0; d < c.days; d++) {
+      const day = c.day0 + d, v = f.weatherStep(s, day, rng);
+      out.push([v.weather, v.wxT, v.rainbow, v.lightning, f.d009Season(day), f.d009Winter(day)]);
+      s = v;
+    }
+    return { o: out, log: rng.log };
+  }
+  if (name === 'F11') {
+    const { w } = c, p = f.computePower(w, c.ecoReg, c.legacySubstation), cap = f.powerCap(p.cap, c.season), { tickBld } = tickIndex(w);
+    const powered = f.assignPower(w, tickBld, cap);
+    return { nom: p.cap, cap, rp: w.tiles.flatMap((t, i) => t.rp ? [i] : []), pw: tickBld.map(i => w.tiles[i].bld.pw), powered };
+  }
+  throw new Error(`未知 D009 公式 ${name}`);
+}
+const d009Exact = {};
+let d009MetaOk = d009Gold.seed === D009_SEED && d009Gold.source.commit === D009_LAB_COMMIT && d009Live.source.commit === D009_LAB_COMMIT
+  && Array.isArray(d009Gold.source.pieces)
+  && d009Gold.source.pieces.length >= 20 && d009Gold.source.pieces.every(p => p.name && p.line > 0 && /^[0-9a-f]{64}$/.test(p.sha)
+    && typeof p.anchors?.start === 'string' && p.anchors.start.length > 0
+    && (p.kind !== 'span' || typeof p.anchors.end === 'string' && p.anchors.end.length > 0)
+    && (p.kind !== 'fn' || p.anchors.closure === 'balanced-brace'))
+  && d009Gold.source.casesSha256 === crypto.createHash('sha256').update(read('tools/d009-cases.mjs')).digest('hex')
+  && d009Gold.exact?.codec === 'gzip+base64+json-canon-array';
+for (const [name, count] of Object.entries(D009_COUNTS)) {
+  d009MetaOk &&= d009Gold.counts[name] === count && count >= (['F5', 'F9', 'F11'].includes(name) ? 200 : 2000);
+  const packed = d009Gold.exact?.outputs?.[name];
+  try { d009Exact[name] = JSON.parse(gunzipSync(Buffer.from(packed, 'base64')).toString('utf8')); }
+  catch { d009Exact[name] = []; }
+  d009MetaOk &&= d009Exact[name].length === count;
+}
+log(d009MetaOk, 'D009 黃金樣本：實驗線 commit、原碼錨點與雜湊、案例數、完整 canonical 輸出',
+  `${d009Gold.source.commit?.slice(0, 7)}；${d009Gold.source.pieces?.length} 段；${Object.entries(d009Gold.counts).map(([k, v]) => `${k} ${v}`).join('、')}`);
+const d009Mismatches = {};
+for (const [name, count] of Object.entries(D009_COUNTS)) {
+  const bad = [], want = d009Exact[name];
+  for (let k = 0; k < count; k++) {
+    try {
+      const observed = d009Canon(d009Result(name, d009Cases[name](k)));
+      const expected = want[k];
+      if (observed !== expected) bad.push(`${k}: ${observed.slice(0, 100)} ≠ ${String(expected).slice(0, 100)}`);
+    } catch (e) { bad.push(`${k}: ${e.stack || e}`); }
+  }
+  d009Mismatches[name] = bad;
+  log(bad.length === 0 && want.length === count, `D009 ${name} 逐案例完整輸出與實驗線 Object.is 等價${['F5', 'F6', 'F10'].includes(name) ? '（含 R／ri 呼叫序列）' : ''}`,
+    bad.length ? `${bad.length}/${count} 差異：${bad.slice(0, 2).join('｜')}` : `${count} 組相等`);
+}
+{
+  const golden = d009Gold.exact?.mulberry32, seeds = [1, 516, 2026, 0xdeadbeef], bad = [];
+  let want = [];
+  try { want = JSON.parse(gunzipSync(Buffer.from(golden.values, 'base64')).toString('utf8')); } catch { /* 缺樣本會紅燈 */ }
+  for (let si = 0; si < seeds.length; si++) {
+    const r = mulberry32(seeds[si]);
+    for (let i = 0; i < 10000; i++) if (d009Canon(r()) !== want[si]?.[i]) { bad.push(`${si}:${i}`); break; }
+  }
+  log(d009Canon(golden?.seeds) === d009Canon(seeds) && golden?.countPerSeed === 10000 && want.length === 4 && bad.length === 0,
+    'D009 mulberry32 四種種子各前 10,000 個值逐個 Object.is 等價', bad.join('、') || `種子 ${seeds.join(',')}`);
+}
+{
+  const layouts = d009Live.power.layouts, bad = [];
+  let liveOn = 0, liveOff = 0, liveWithCapacity = 0;
+  for (let n = 0; n < layouts.length; n++) {
+    const a = layouts[n], w = { N: a.N, tiles: Array.from({ length: a.N * a.N }, () => ({ bld: null })) };
+    for (const i of a.roads) w.tiles[i].road = 1;
+    for (const i of a.hw) w.tiles[i].hw = 1;
+    for (const i of a.lv475) w.tiles[i].lv475 = 1;
+    for (const i of a.ud475) w.tiles[i].ud475 = 1;
+    for (const [i, k, lv, sz, ref] of a.blds) w.tiles[i].bld = { k, lv, ...(sz ? { sz } : {}), ...(ref ? { ref: [0, 0] } : {}) };
+    const localOrder = tickIndex(w).tickBld;
+    if (!Array.isArray(a.order) || d009Canon(a.order) !== d009Canon(localOrder) || d009Canon(a.order) !== d009Canon(a.blds.map(row => row[0]))
+      || d009Canon(a.order) !== d009Canon([...a.order].sort((x, y) => x - y))) bad.push(`${n}: 建築掃描順序與實驗線不一致`);
+    if (!Number.isInteger(a.dayBefore) || !Number.isInteger(a.dayAfter) || a.dayAfter !== a.dayBefore + 1
+      || a.topologyUnchanged !== true || a.capBefore !== a.cap) bad.push(`${n}: tick 前後天數／拓樸／名目容量存證不一致`);
+    if (a.cap > 0) liveWithCapacity++;
+    const p = computePower(w), rp = w.tiles.flatMap((t, i) => t.rp ? [i] : []);
+    if (p.cap !== a.cap || d009Canon(rp) !== d009Canon(a.rp)) bad.push(`${n}: cap ${p.cap}/${a.cap}, rp ${rp.length}/${a.rp.length}`);
+    if (!Number.isInteger(a.season) || a.season < 0 || a.season > 3 || !Array.isArray(a.rci) || a.rci.length < 1) { bad.push(`${n}: 缺實跑 RCI pw／季節`); continue; }
+    assignPower(w, localOrder, powerCap(p.cap, a.season));
+    for (const [i, pw] of a.rci) {
+      if (!localOrder.includes(i) || ![0, 1].includes(pw)) bad.push(`${n}: 住宅 ${i} 的索引／pw 樣本無效`);
+      if (pw) liveOn++; else liveOff++;
+      if (Number(!!w.tiles[i]?.bld?.pw) !== pw) bad.push(`${n}: 建築 ${i} pw ${Number(!!w.tiles[i]?.bld?.pw)}/${pw}`);
+    }
+  }
+  log(layouts.length === 24 && liveWithCapacity >= 20 && liveOn > 0 && liveOff > 0 && bad.length === 0,
+    'D009 實驗線 GV.place／tick 實跑供電：容量、逐格帶電路與住宅通電相等；前後拓樸、時間、掃描順序存證一致',
+    bad.length ? bad.slice(0, 8).join('；') : `${layouts.length} 張（有容量 ${liveWithCapacity}）、${layouts.reduce((n, a) => n + a.rp.length, 0)} 個帶電道路格、住宅有電 ${liveOn}／沒電 ${liveOff}`);
+}
+// 真正改一個原始碼常數／比較符號，再用同一份黃金樣本對拍；每條公式的守衛都必須轉紅。
+{
+  const mutants = [
+    ['F1', 'demand.ts', 'legacyDemand', 'jobSurplus * .7 + happyAdj * .3', 'jobSurplus * .8 + happyAdj * .3'],
+    ['F2', 'demand.ts', 'laborMarket481', 'Math.round(p * .60)', 'Math.round(p * .61)'],
+    ['F3', 'demand.ts', 'economyDemands481', 'legacyC * .18 + ppSig * .34', 'legacyC * .19 + ppSig * .34'],
+    ['F4', 'demand.ts', 'housingRciDemand488', 'legacy * .42 + housing.aggregateDemand * .58', 'legacy * .43 + housing.aggregateDemand * .58'],
+    ['F5', 'growth.ts', 'spawnStep', '.10 * (1 + dem[z] * .6 * hf)', '.11 * (1 + dem[z] * .6 * hf)'],
+    ['F6', 'growth.ts', 'upgradeStep', 'b.age > 14 && dem[b.k]', 'b.age > 13 && dem[b.k]'],
+    ['F7', 'happy.ts', 'residentialHappy', '    .62,', '    .63,'],
+    ['F8', 'jobs.ts', 'residentCapacity488', 'SOCIAL_HOUSING_POP = 76', 'SOCIAL_HOUSING_POP = 77'],
+    ['F9', 'land.ts', 'landStaticAt', '128 + svc * 8 + land * 8', '129 + svc * 8 + land * 8'],
+    ['F10', 'weather.ts', 'weatherStep', 'rng.R() < .12', 'rng.R() < .22'],
+    ['F11', 'power.ts', 'computePower', 'POWER_HOPS444 = 90', 'POWER_HOPS444 = 89'],
+    ['F11', 'power.ts', 'computePower', 'seedAround(si, POWER_HOPS444)', 'seedAround(si, 0)'],
+  ];
+  const detected = [], missed = [];
+  for (const [name, file, fn, from, to] of mutants) {
+    try {
+      const source = read(`src/sim/rules/${file}`);
+      if (source.split(from).length !== 2) throw new Error(`突變錨點不是唯一：${from}`);
+      let js = stripTypeScriptTypes(source.replace(from, to));
+      js = js.replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
+      const ctx = vm.createContext({ ...d009LabHelpers, ...d009Fns, season: d009Season, inWinter: d009Winter });
+      vm.runInContext(`${js}\n;globalThis.__mutated = ${fn};`, ctx, { filename: `mutant:${file}` });
+      let first = -1;
+      for (let k = 0; k < D009_COUNTS[name]; k++) {
+        const got = d009Canon(d009Result(name, d009Cases[name](k), { ...d009Fns, [fn]: ctx.__mutated }));
+        if (got !== d009Exact[name][k]) { first = k; break; }
+      }
+      if (first < 0) missed.push(`${name} ${from}→${to} 未抓到`);
+      else detected.push(`${name} 第 ${first} 組`);
+    } catch (e) { missed.push(`${name}: ${e.message}`); }
+  }
+  log(detected.length === mutants.length, 'D009 F1–F11 原碼單點突變（含 F11 接力）都使對應守衛轉紅',
+    missed.length ? missed.join('；') : detected.join('、'));
+}
+
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
   const bad = [];
-  for (const dir of ['src/sim', 'src/io']) for (const f of fs.readdirSync(path.join(ROOT, dir))) {
-    const lines = read(`${dir}/${f}`).split('\n');
-    lines.forEach((l, i) => {
-      const code = l.replace(/\/\/.*$/, '');
-      if (/from ['"]three|\bdocument\.|\bwindow\.|Math\.random|Date\.now|new Date|performance\.now/.test(code)) bad.push(`${dir}/${f}:${i + 1}`);
-    });
-  }
+  // TypeScript 詞法掃描器會跳過註解，字串只拿來檢查模組名稱；樣板字串的 ${} 另行重掃，避免漏掉其中的程式碼。
+  const purityViolations = source => {
+    const scanner = createScanner(true, undefined, source), tokens = [], templateDepth = [];
+    while (true) {
+      let k = scanner.scan();
+      if (k === SyntaxKind.EndOfFile) break;
+      if (k === SyntaxKind.TemplateHead) templateDepth.push(0);
+      else if (k === SyntaxKind.OpenBraceToken && templateDepth.length) templateDepth[templateDepth.length - 1]++;
+      else if (k === SyntaxKind.CloseBraceToken && templateDepth.length) {
+        const top = templateDepth.length - 1;
+        if (templateDepth[top]) templateDepth[top]--;
+        else { k = scanner.reScanTemplateToken(false); if (k === SyntaxKind.TemplateTail) templateDepth.pop(); }
+      }
+      tokens.push({ k, text: scanner.getTokenText(), value: scanner.getTokenValue(), pos: scanner.getTokenStart() });
+    }
+    const violations = [], at = (t, why) => violations.push(`${source.slice(0, t.pos).split('\n').length}:${why}`);
+    const specIsRender = spec => /(^three(?:\/|$)|(^|\/)render(?:\/|$))/.test(spec);
+    const moduleToken = t => t?.k === SyntaxKind.StringLiteral || t?.k === SyntaxKind.NoSubstitutionTemplateLiteral;
+    const moduleValue = t => t.k === SyntaxKind.StringLiteral ? t.value : t.text.slice(1, -1);
+    const dot = t => t?.k === SyntaxKind.DotToken || t?.k === SyntaxKind.QuestionDotToken;
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i], a = tokens[i + 1], b = tokens[i + 2];
+      if (t.k === SyntaxKind.ImportKeyword) {
+        if (a?.k === SyntaxKind.OpenParenToken) {
+          if (moduleToken(b) && specIsRender(moduleValue(b))) at(t, `dynamic import ${moduleValue(b)}`);
+        } else if (moduleToken(a)) { if (specIsRender(moduleValue(a))) at(t, `import ${moduleValue(a)}`); }
+        else {
+          for (let j = i + 1; j < tokens.length && j < i + 80 && tokens[j].k !== SyntaxKind.SemicolonToken; j++) {
+            if (tokens[j].k === SyntaxKind.FromKeyword && moduleToken(tokens[j + 1])) { if (specIsRender(moduleValue(tokens[j + 1]))) at(t, `import ${moduleValue(tokens[j + 1])}`); break; }
+          }
+        }
+      }
+      if (t.k === SyntaxKind.ExportKeyword) {
+        for (let j = i + 1; j < tokens.length && j < i + 80 && tokens[j].k !== SyntaxKind.SemicolonToken; j++) {
+          if (tokens[j].k === SyntaxKind.FromKeyword && moduleToken(tokens[j + 1])) { if (specIsRender(moduleValue(tokens[j + 1]))) at(t, `export from ${moduleValue(tokens[j + 1])}`); break; }
+        }
+      }
+      if (t.text === 'require' && a?.k === SyntaxKind.OpenParenToken && moduleToken(b) && specIsRender(moduleValue(b))) at(t, `require ${moduleValue(b)}`);
+      if (['document', 'window', 'HTMLElement', 'localStorage', 'sessionStorage'].includes(t.text) && t.k === SyntaxKind.Identifier) at(t, t.text);
+      if (t.text === 'globalThis' && a?.k === SyntaxKind.OpenBracketToken && moduleToken(b) && ['document', 'window', 'HTMLElement', 'localStorage', 'sessionStorage'].includes(moduleValue(b))) at(t, `globalThis[${moduleValue(b)}]`);
+      if (t.text === 'Math' && ((dot(a) && b?.text === 'random') || (a?.k === SyntaxKind.OpenBracketToken && moduleToken(b) && moduleValue(b) === 'random'))) at(t, 'Math.random');
+      if (t.text === 'Date' && ((dot(a) && b?.text === 'now') || (a?.k === SyntaxKind.OpenBracketToken && moduleToken(b) && moduleValue(b) === 'now') || a?.k === SyntaxKind.OpenParenToken || tokens[i - 1]?.k === SyntaxKind.NewKeyword)) at(t, 'Date／Date.now');
+      if (t.text === 'performance' && ((dot(a) && ['now', 'timeOrigin'].includes(b?.text)) || (a?.k === SyntaxKind.OpenBracketToken && moduleToken(b) && ['now', 'timeOrigin'].includes(moduleValue(b))))) at(t, 'performance.now');
+    }
+    return violations;
+  };
+  const check = dir => { for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
+    const p = `${dir}/${e.name}`;
+    if (e.isDirectory()) { check(p); continue; }
+    if (!e.isFile() || !/\.(ts|js|mjs)$/.test(e.name)) continue;
+    bad.push(...purityViolations(read(p)).map(v => `${p}:${v}`));
+  } };
+  for (const dir of ['src/sim', 'src/io']) check(dir);
   log(bad.length === 0, '模擬層與解碼器不碰 three／DOM／Math.random／現實時間', bad.join(' ') || 'src/sim、src/io 全乾淨');
+  const forbidden = ["import 'three'", "import x from 'three'", "await import('three')", "require('three')", 'window.alert(1)', 'globalThis.document.title', "globalThis['window']", 'Math.random()', "Math['random']()", 'Date.now()', 'new Date()', 'new Date', 'performance.now()', 'const q = `x ${1} and ${window.innerWidth}`'];
+  const harmless = ["// Math.random() and import 'three'", "const s = 'window and Date.now()'", 'const q = `document ${1} and Math.random`'];
+  log(forbidden.every(s => purityViolations(s).length > 0) && harmless.every(s => purityViolations(s).length === 0),
+    '純度掃描辨識 bare／dynamic import、DOM、亂數、現實時間；註解與字串不誤報');
   // D004 驗收 9：內容層（切分、配方、種類表）也不碰 three 與 DOM
   const badC = [];
   for (const f of fs.readdirSync(path.join(ROOT, 'src/content')).filter(f => f.endsWith('.ts')))
