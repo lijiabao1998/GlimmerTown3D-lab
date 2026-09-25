@@ -6,14 +6,17 @@ import type { City, CityBuilding } from '../sim/city.ts';
 import { hash2 } from '../sim/rng.ts';
 import type { Style } from './styles.ts';
 import { Geo } from './scene.ts';
-import { windowTexture, toonRamp } from './textures.ts';
+import { windowTexture, toonRamp, PLAIN_UV } from './textures.ts';
 import type { BlockMode, DrawBlock } from '../content/blocks.ts';
-import { PX_PER_CELL, TERRA, shade, type Recipe } from '../content/recipes.ts';
+import type { Recipe } from '../content/recipes.ts';
+import type { Dressing } from '../content/dressing.ts';
+import { drawBlock, emptyCounts, type ArtCounts, type YardTree } from './blockArt.ts';
+import { windowAtlas, patchWindowMaterial } from './windows.ts';
 
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
 // D004：住商工改用街區配方畫（?blocks=a|b|c）。plan＝要畫的街區（src/content/blocks.ts），recipe＝每個街區的配方（src/content/recipes.ts）
-export interface BlockRender { mode: BlockMode; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe }
+export interface BlockRender { mode: BlockMode; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing }
 export interface BuiltCity {
   scene: THREE.Scene;
   pick(ray: THREE.Raycaster): CityHit | null;
@@ -21,6 +24,10 @@ export interface BuiltCity {
   anchorOf(id: number): THREE.Vector3 | null;        // 建築量體的中心（測點擊用）
   blocksDrawn(): number[];                           // D004：幾何裡真的有三角形的街區（plan 的索引）
   blockAnchor(i: number): THREE.Vector3 | null;      // D004：街區主體量體的中心（測點擊用）
+  artCounts(): ArtCounts;                            // D005：實際畫出的點綴件數（守衛：要等於擺放計畫）
+  groundAt(x: number, z: number): number[];          // D005：地面貼圖那一格的 S×S 個像素 RGB（守衛：地坪色、非住商工格不變）
+  wallStyles(): { blockTris: number; windowed: number; style0Windowed: number };
+  meshStats(): { name: string; tris: number; shadow: boolean }[];   // 每個網格的三角形數（實例網格乘實例數）、投不投影子：手機預算用   // D005：街區牆面三角形裡，有窗的都不是圖集第 0 格
   timing: Record<string, number>;
   dispose(): void;
 }
@@ -45,7 +52,9 @@ export function tileTop(c: City, i: number): number {
 }
 
 // 地面貼圖：每格 S×S 像素；資料第 r 列＝世界 z＝r/S（UV 直接用 x/n、z/n，不翻轉）
-function groundTexture(c: City, look: KindLook, S: number): THREE.DataTexture {
+// D005 地坪：lots[i]＝0 照 D003；1–3 住商工街區地坪（lotFill570：住宅深草、商業灰鋪面、工業碎石＋兩色雜點）；4 villa 庭院（villaYard559）；5 草坪（B 檔的 D0 與被吸收的格）
+const LOT: Record<number, [number, number, number]> = { 1: [0x6f8a58, 0x7d9a62, 0x628050], 2: [0x87888c, 0x919296, 0x7c7d81], 3: [0x6d675d, 0x777166, 0x635d54], 4: [0x54833f, 0x659950, 0x48733a] };
+function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array): THREE.DataTexture {
   const n = c.n, W = n * S, data = new Uint8Array(W * W * 4);
   const put = (px: number, py: number, col: number) => { const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
   const ZONE = [0, 0x9fd28a, 0x8fb4e0, 0xe0c27a];
@@ -61,6 +70,10 @@ function groundTexture(c: City, look: KindLook, S: number): THREE.DataTexture {
       else if (c.rail[i]) col = (u === 1 || u === S - 2) ? 0x3a3a3a : v % 2 ? 0x7a5a3c : 0x6a6258;
       else if (c.dock[i]) col = v % 2 ? 0x8a6a48 : 0x7a5c3e;
       // 建築用地：住商工是草坪（實驗線的街區精靈底下是草坪，量體縮在中間）、綠地更綠、農田條紋，其他設施是鋪面
+      else if (lots && lots[i]) {
+        if (lots[i] === 5) { col = mix(0x78a452, 0x6c9749, h); if (h > 0.93) col = 0x8fb862; }
+        else { const L = LOT[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; }
+      }
       else if (b) col = cat === 'G' ? mix(0x86bd5c, 0x9bcc6a, h) : cat === 'F' ? (v % 2 ? 0xb9c95a : 0x9fb24a)
         : (cat === 'R' || cat === 'C' || cat === 'I') ? (edge ? mix(0x9aa08c, 0x8f9582, h) : mix(0x7fb356, 0x74a64d, h)) : mix(0xc9c3b5, 0xb8b1a2, h);
       else if (c.ter[i] === 0) col = h < 0.07 ? 0x7fb4d8 : mix(0x3f78a8, 0x356a98, h);
@@ -101,38 +114,6 @@ function wallColor(b: CityBuilding, cat: string, H: number): THREE.Color {
   return col;
 }
 
-// ---- D004：一個住商工街區照配方畫 ----
-// 框 [u0,u1,v0,v1] 的 u 沿 x、v 沿 z（v＝1 是正面，朝鏡頭）；像素 ÷39.2＝格。牆用受光面的顏色（light），背光面交給 3D 打光。
-// 立面細節、窗型、夜景不畫（卡面「不改什麼」）；窗子沿用 D003 的窗貼圖。
-function drawBlock(Wg: Geo, Og: Geo, bk: DrawBlock, r: Recipe, y0: number) {
-  const P = (px: number) => px / PX_PER_CELL, X = (u: number) => bk.x + u * bk.w, Z = (v: number) => bk.z + v * bk.h;
-  const col = (s: string) => hex(s), wall = col(r.pal.light), b = r.box, yw = y0 + P(r.wallPx);
-  const x0 = X(b[0]), x1 = X(b[1]), z0 = Z(b[2]), z1 = Z(b[3]), win = { floorH: 0.3 };
-  const rf = r.roof, rise = P(rf.risePx);
-  if (r.ex) Wg.box(X(r.ex.box[0]), Z(r.ex.box[2]), X(r.ex.box[1]), Z(r.ex.box[3]), y0, y0 + P(r.ex.hPx), wall, col(shade(r.pal.dark, 10)), win);
-  const flatTop = rf.kind === 'flat' || rf.kind === 'parapet';
-  Wg.box(x0, z0, x1, z1, y0, yw, wall, flatTop ? col(rf.color) : null, win);
-  if (rf.kind === 'parapet') {                                   // 女兒牆：屋頂板往內收 7%（shrinkPara547 .07）再墊高 4px
-    const du = (x1 - x0) * .035, dv = (z1 - z0) * .035;
-    Og.box(x0 + du, z0 + dv, x1 - du, z1 - dv, yw, yw + rise, col(shade(r.pal.light, -10)), col(shade(r.pal.dark, 14)), null);
-  } else if (rf.kind === 'gables') {                              // 一戶一尖：沿 x 分戶，每戶一個朝正面的山牆
-    const dx = (x1 - x0) / rf.units;
-    for (let i = 0; i < rf.units; i++) Og.gable(x0 + i * dx, z0, x0 + (i + 1) * dx, z1, yw, rise, col(TERRA[(i + r.v) % TERRA.length]), wall, 'z');
-  } else if (rf.kind === 'gable') Og.gable(x0, z0, x1, z1, yw, rise, col(rf.color), wall, rf.axis ? 'x' : 'z');
-  else if (rf.kind === 'hip') Og.hip(x0, z0, x1, z1, yw, rise, col(rf.color));
-  else if (rf.kind === 'saw') Og.saw(x0, z0, x1, z1, yw, rise, rf.units, rf.axis === 0, col(shade(rf.color, 10)), col(r.pal.glass));
-  if (r.upper) {
-    const u = r.upper.box, top = r.k === 2 ? shade(r.pal.dark, 18) : shade(r.pal.roof, r.lv === 1 ? 8 : -6);
-    Wg.box(X(u[0]), Z(u[2]), X(u[1]), Z(u[3]), yw, yw + P(r.upper.hPx), wall, col(top), win);
-  }
-  for (const s of r.stacks) {
-    const sx = X(s.u), sz = Z(s.v), base = s.tall ? yw : r.upper ? yw + P(r.upper.hPx) : yw, h = P(s.hPx);
-    if (s.tall) Og.cylinder(sx, sz, s.r, s.r * 0.8, base, h, col('#4b5158'), 6);
-    else Og.box(sx - s.r, sz - s.r, sx + s.r, sz + s.r, base, base + h, col(r.k === 1 ? shade(r.pal.dark, -6) : '#4b5158'), col('#3a3a3a'), null);
-  }
-  return new THREE.Vector3((x0 + x1) / 2, yw, (z0 + z1) / 2);   // 主體頂面的中心（從上往下點街區的中間）
-}
-
 export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender): BuiltCity {
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
@@ -147,7 +128,14 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
 
   // ---- 地面：每格一片頂面（貼圖），高低差處補直立的岸／崖面，地圖四周補一圈底座 ----
   const S = Math.max(1, Math.min(4, Math.floor(2048 / n)));
-  const gtex = groundTexture(c, look, S); disposables.push(gtex);
+  // D005：街區蓋到的格依 k 鋪地坪（villa 是庭院）；沒畫到的住商工格（B 檔的 D0、被吸收）是草坪
+  let lots: Uint8Array | undefined;
+  if (blocks) {
+    lots = new Uint8Array(nn);
+    for (let i = 0; i < nn; i++) { const b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null; if (b && b.k >= 1 && b.k <= 3) lots[i] = 5; }
+    for (const bk of blocks.plan) { const lot = blocks.recipe(bk).villa ? 4 : bk.k; for (const i of bk.cells) lots[i] = lot; }
+  }
+  const gtex = groundTexture(c, look, S, lots); disposables.push(gtex);
   const top = new Float32Array(nn);
   for (let i = 0; i < nn; i++) top[i] = tileTop(c, i);
   const gp: number[] = [], guv: number[] = [];
@@ -181,7 +169,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   mark('ground');
 
   // ---- 建築量體 ----
-  const Wg = new Geo(), Og = new Geo();
+  const Wg = new Geo({ ext: !!blocks }), Og = new Geo(), Dg = new Geo();
   const anchors = new Map<number, THREE.Vector3>();
   const RCI = new Set(['R', 'C', 'I']);
   for (const b of c.buildings) {
@@ -219,12 +207,12 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     anchors.set(b.id, new THREE.Vector3(cx, (y0 + yTop) / 2, cz));
   }
   // D004 街區：三角形的 owner 記成 −(街區索引＋1)，點擊時再換回點到的那一格
-  const blockAnchors: (THREE.Vector3 | null)[] = [];
+  const blockAnchors: (THREE.Vector3 | null)[] = [], yard: YardTree[] = [], counts = emptyCounts();
   if (blocks) blocks.plan.forEach((bk, bi) => {
-    Wg.owner = Og.owner = -(bi + 1);
+    Wg.owner = Og.owner = Dg.owner = -(bi + 1);
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
-    blockAnchors[bi] = drawBlock(Wg, Og, bk, blocks.recipe(bk), y0);
+    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts);
   });
   Wg.owner = Og.owner = 0;
   // 高架路：路面抬高、每兩格一根橋墩
@@ -235,11 +223,24 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     Og.box(x, z, x + 1, z + 1, y, y + 0.08, C(0, 0, 0.62), C(0, 0, 0.36), null);
     if ((x + z) % 2 === 0) Og.box(x + 0.44, z + 0.44, x + 0.56, z + 0.56, Math.max(0, top[i]), y, C(0, 0, 0.6), null, null);
   }
-  const texW = windowTexture(); disposables.push(texW);
-  const wallsMesh = new THREE.Mesh(Wg.geometry(), mat({ map: texW, vertexColors: true }));
+  // D005：街區模式的牆用窗磚圖集（第 0 格＝D003 窗磚，非住商工畫面不變）；D003 模式照舊用單張窗磚
+  const texW = blocks ? windowAtlas() : windowTexture(); disposables.push(texW);
+  const wallMat = mat({ map: texW, vertexColors: true });
+  if (blocks) patchWindowMaterial(wallMat);
+  const wallsMesh = new THREE.Mesh(Wg.geometry(), wallMat);
+  const ws = { blockTris: 0, windowed: 0, style0Windowed: 0 };
+  if (blocks) for (let t = 0; t < Wg.owners.length; t++) {
+    if (Wg.owners[t] >= 0) continue;
+    ws.blockTris++;
+    const plain = [0, 1, 2].every(j => Wg.uv[(t * 3 + j) * 2] === PLAIN_UV[0] && Wg.uv[(t * 3 + j) * 2 + 1] === PLAIN_UV[1]);
+    if (!plain) { ws.windowed++; if (Wg.wst[t * 3] === 0) ws.style0Windowed++; }
+  }
   const otherMesh = new THREE.Mesh(Og.geometry(), mat({ vertexColors: true }));
   const owners = new Map<THREE.Object3D, Int32Array>([[wallsMesh, Int32Array.from(Wg.owners)], [otherMesh, Int32Array.from(Og.owners)]]);
   for (const m of [wallsMesh, otherMesh]) { m.castShadow = m.receiveShadow = true; disposables.push(m.geometry); scene.add(m); }
+  // D005 點綴：不投影子（收影子），單獨一個網格；沒有街區時不建（D003 模式的 draw call 不變）
+  const dressMesh = Dg.owners.length ? new THREE.Mesh(Dg.geometry(), mat({ vertexColors: true })) : null;
+  if (dressMesh) { dressMesh.receiveShadow = true; owners.set(dressMesh, Int32Array.from(Dg.owners)); disposables.push(dressMesh.geometry); scene.add(dressMesh); }
   const drawn = new Set<number>(), drawnBlocks = new Set<number>();
   for (const a of owners.values()) for (const id of a) if (id > 0) drawn.add(id); else if (id < 0) drawnBlocks.add(-id - 1);
   if (blocks) for (const bi of drawnBlocks) for (const i of blocks.plan[bi].cells) if (c.occ[i]) drawn.add(c.occ[i]);
@@ -250,7 +251,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   for (let i = 0; i < nn; i++) if (c.tree[i] && !c.occ[i] && !c.road[i] && c.ter[i] !== 0 && !c.rail[i]) spots.push([i % n, (i / n) | 0, c.tree[i], top[i]]);
   if (spots.length) {
     const round = spots.filter(s => s[2] % 2 === 1), cone = spots.filter(s => s[2] % 2 === 0);
-    const tg = new THREE.CylinderGeometry(0.045, 0.06, 0.28, 5), rg = new THREE.IcosahedronGeometry(0.3, 0), cg = new THREE.ConeGeometry(0.28, 0.7, 6);
+    // D005：街區模式的樹幹不帶上下蓋（下蓋朝地、上蓋藏在樹冠裡，畫面逐像素相同），省一半樹幹三角形；D003 模式照舊
+    const tg = new THREE.CylinderGeometry(0.045, 0.06, 0.28, 5, 1, !!blocks), rg = new THREE.IcosahedronGeometry(0.3, 0), cg = new THREE.ConeGeometry(0.28, 0.7, 6);
     disposables.push(tg, rg, cg);
     const trunks = new THREE.InstancedMesh(tg, mat({ color: 0x6b4f35 }), spots.length);
     const crownsR = new THREE.InstancedMesh(rg, mat({ color: 0xffffff }), Math.max(1, round.length));
@@ -265,8 +267,23 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       const h = hash2(x, z, 16) + sp * 0.07;
       mesh.setColorAt(k, col.setHSL((coneShape ? 0.33 : 0.27) + (h % 1) * 0.06, 0.45, (coneShape ? 0.28 : 0.36) + (h % 1) * 0.1, THREE.SRGBColorSpace));
     });
-    place(round, crownsR, false); place(cone, crownsC, true);
+    place(round, crownsR, false);
+    place(cone, crownsC, true);
     for (const m of [trunks, crownsR, crownsC]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); }
+  }
+  // D005 前庭的樹（villa、住宅地坪）：八面體樹冠＋三稜樹幹，14 個三角形（野樹 40 個），不投影子
+  if (yard.length) {
+    const ytg = new THREE.CylinderGeometry(0.03, 0.04, 0.24, 3, 1, true), ycg = new THREE.OctahedronGeometry(0.26, 0);
+    disposables.push(ytg, ycg);
+    const yt = new THREE.InstancedMesh(ytg, mat({ color: 0x6b4f35 }), yard.length), yc = new THREE.InstancedMesh(ycg, mat({ color: 0xffffff }), yard.length);
+    const q = new THREE.Object3D(), col = new THREE.Color();
+    yard.forEach((t, j) => {
+      const hx = Math.round(t.x * 64), hz = Math.round(t.z * 64), sc = t.s * (0.9 + hash2(hx, hz, 13) * 0.2);
+      q.position.set(t.x, t.y + 0.12 * sc, t.z); q.rotation.set(0, 0, 0); q.scale.set(sc, sc, sc); q.updateMatrix(); yt.setMatrixAt(j, q.matrix);
+      q.position.y = t.y + 0.4 * sc; q.rotation.set(0, hash2(hx, hz, 15) * 3, 0); q.scale.set(sc, sc * 1.15, sc); q.updateMatrix(); yc.setMatrixAt(j, q.matrix);
+      yc.setColorAt(j, col.setHSL(0.29 + hash2(hx, hz, 16) * 0.05, 0.42, 0.3 + hash2(hx, hz, 17) * 0.08, THREE.SRGBColorSpace));
+    });
+    for (const m of [yt, yc]) { m.receiveShadow = true; scene.add(m); }
   }
   mark('trees');
 
@@ -288,7 +305,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
 
   // 點擊：打到建築就回那棟（格子取根格）；打到地面回那一格。樹不擋
   const byId = new Map(c.buildings.map(b => [b.id, b]));
-  const pickables: THREE.Object3D[] = [wallsMesh, otherMesh, ground];
+  const pickables: THREE.Object3D[] = [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : []), ground];
   const pick = (ray: THREE.Raycaster): CityHit | null => {
     for (const h of ray.intersectObjects(pickables, false)) {
       const id = owners.has(h.object) && h.faceIndex != null ? owners.get(h.object)![h.faceIndex] : 0;
@@ -312,6 +329,20 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     anchorOf: id => anchors.get(id)?.clone() ?? null,
     blocksDrawn: () => [...drawnBlocks].sort((a, b) => a - b),
     blockAnchor: i => blockAnchors[i]?.clone() ?? null,
+    artCounts: () => ({ ...counts }),
+    wallStyles: () => ({ ...ws }),
+    meshStats: () => {
+      const names = new Map<THREE.Object3D, string>([[ground, 'ground'], [cliffMesh, 'cliff'], [wallsMesh, 'walls'], [otherMesh, 'other'], ...(dressMesh ? [[dressMesh, 'dress'] as [THREE.Object3D, string]] : [])]);
+      const out: { name: string; tris: number; shadow: boolean }[] = [];
+      scene.traverse(o => {
+        const m = o as THREE.Mesh;
+        if (!m.isMesh) return;
+        const g = m.geometry, per = (g.index ? g.index.count : g.attributes.position.count) / 3, inst = (m as THREE.InstancedMesh).isInstancedMesh ? (m as THREE.InstancedMesh).count : 1;
+        out.push({ name: names.get(m) ?? ((m as THREE.InstancedMesh).isInstancedMesh ? 'inst' + per : 'mesh'), tris: per * inst, shadow: m.castShadow });
+      });
+      return out;
+    },
+    groundAt: (x, z) => { const d = gtex.image.data as Uint8Array, W = n * S, o: number[] = []; for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) { const i = ((z * S + v) * W + x * S + u) * 4; o.push(d[i], d[i + 1], d[i + 2]); } return o; },
     dispose: () => { for (const d of disposables) d.dispose(); },
   };
 }

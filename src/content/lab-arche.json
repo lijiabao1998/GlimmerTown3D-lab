@@ -28,7 +28,7 @@
    "facadeFor577": 70736
   },
   "how": "執行期：原檔 index.html 在第 72931 行（主程式 IIFE 收尾前）插一行只讀出口 window.__d004 的記憶體副本；插入內容記在 inject",
-  "inject": ";window.__d004={ARCHE568:()=>ARCHE568,arche568,rciAbsorbed555,rciBlockOrigin547,tiles:()=>tiles,hook(n,w){const T={subPara568:[()=>subPara568,f=>{subPara568=f;}],massBox568:[()=>massBox568,f=>{massBox568=f;}],sawRise608:[()=>sawRise608,f=>{sawRise608=f;}],shrinkPara547:[()=>shrinkPara547,f=>{shrinkPara547=f;}],pitchPara547:[()=>pitchPara547,f=>{pitchPara547=f;}],speciesPal601:[()=>speciesPal601,f=>{speciesPal601=f;}]};const[g,s]=T[n];const o=g();s(w(o));return()=>s(o);}};",
+  "inject": ";window.__d004={ARCHE568:()=>ARCHE568,arche568,rciAbsorbed555,rciBlockOrigin547,tiles:()=>tiles,hook(n,w){const T={subPara568:[()=>subPara568,f=>{subPara568=f;}],massBox568:[()=>massBox568,f=>{massBox568=f;}],sawRise608:[()=>sawRise608,f=>{sawRise608=f;}],shrinkPara547:[()=>shrinkPara547,f=>{shrinkPara547=f;}],pitchPara547:[()=>pitchPara547,f=>{pitchPara547=f;}],speciesPal601:[()=>speciesPal601,f=>{speciesPal601=f;}],roofKit559:[()=>roofKit559,f=>{roofKit559=f;}]};const[g,s]=T[n];const o=g();s(w(o));return()=>s(o);}};",
   "where": [
    70657
   ],

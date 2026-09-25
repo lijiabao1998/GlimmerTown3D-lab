@@ -83,7 +83,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ===== D003：2D 實驗線的城市（預設模式）=====
   const expectOf = id => JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/${id}.json`), 'utf8')).expect;
   for (const id of ['seed516', 'ai120']) {
-    await open(`sample=${id}&clean=1`);
+    await open(`sample=${id}&clean=1&blocks=off`);   // D005 起預設是 B；D003 的守衛驗 D003 本身
     const c = await page.evaluate('({mode: __gt.mode, stats: __gt.stats(), owners: __gt.owners(), n: __gt.buildingCount(), issues: __gt.issues(), hist: __gt.history(), t: __gt.timing(), info: __gt.renderInfo()})');
     const exp = expectOf(id), same = JSON.stringify(c.stats) === JSON.stringify(exp);
     log(c.mode === 'city' && same, `D003 ${id}：瀏覽器解碼對帳與實驗線逐項相等`, same ? `建築 ${c.stats.buildings}、${Object.keys(c.stats.kinds).length} 種` : '有差異（node tools/unit.mjs 看細節）');
@@ -119,9 +119,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
   for (const id of ['seed516', 'ai120']) {
     const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n, [bt, bc] = D003_BASE[id];
-    await open(`sample=${id}&clean=1`);
+    await open(`sample=${id}&clean=1&blocks=off`);
     const d = await page.evaluate('({info: __gt.renderInfo(), owners: __gt.owners(), n: __gt.buildingCount(), mode: __gt.blockMode(), part: __gt.partition()})');
-    log(d.mode === null && d.info.triangles === bt && d.info.calls === bc && d.owners === d.n, `D004 ${id} 不帶 blocks＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同`,
+    log(d.mode === null && d.info.triangles === bt && d.info.calls === bc && d.owners === d.n, `D004 ${id} ?blocks=off＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同`,
       `${d.info.triangles.toLocaleString()} 三角形（基線 ${bt.toLocaleString()}）、${d.info.calls} 次（基線 ${bc}）、畫到 ${d.owners}／${d.n}`);
     const pd = d.part.filter((r, j) => JSON.stringify(r) !== JSON.stringify(G.cells[j])).length + Math.abs(d.part.length - G.cells.length);
     log(pd === 0, `D004 ${id} 切分對拍（瀏覽器裡跑同一份 blocks.ts）：逐格＝實驗線`, `${d.part.length} 格、差 ${pd}`);
@@ -156,12 +156,62 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
         + `；斜視角直接點中 ${pk.oblique}／${pk.tested}（其餘被前面較高的建築擋住，點到的是前面那棟）`);
     }
   }
+  // ===== D005：預設 B、地坪、窗磚圖集、點綴 =====
+  {
+    const ac = await page.evaluate('__gt.atlasCheck()');
+    log(ac.same, 'D005 窗磚圖集第 0 格＝D003 窗磚（逐像素）', `不同 ${ac.diff} 個像素`);
+  }
+  const ARCHE = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-arche.json'), 'utf8')).arche;
+  const LOTC = { 1: [0x6f8a58, 0x7d9a62, 0x628050], 2: [0x87888c, 0x919296, 0x7c7d81], 3: [0x6d675d, 0x777166, 0x635d54], 4: [0x54833f, 0x659950, 0x48733a] };
+  const isGrass = (r, g, b) => (r >= 0x6c && r <= 0x78 && g >= 0x97 && g <= 0xa4 && b >= 0x49 && b <= 0x52) || (r === 0x8f && g === 0xb8 && b === 0x62);
+  for (const id of ['seed516', 'ai120']) {
+    const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n;
+    // 預期地坪：實驗線畫的街區（起點且多格或沒被吸收）蓋到的格＝它的 k（villa＝4）；其餘住商工格（D0、被吸收）＝5 草坪
+    const lot = new Map(G.cells.map(r => [r[0], 5]));
+    for (const r of G.cells) if (r[1] && (r[2] * r[3] > 1 || !r[9])) {
+      const L = ARCHE['1_1'], villa = r[4] === 1 && r[7] === 1 && r[2] * r[3] <= 4 && L[Math.abs(r[8]) % L.length].n === 'villa';
+      for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) lot.set(r[0] + dy * n + dx, villa ? 4 : r[4]);
+    }
+    const nonRci = `(()=>{const n=${n},rci=new Set(${JSON.stringify([...lot.keys()])}),o=[];for(let z=0;z<n;z++)for(let x=0;x<n;x++){if(!rci.has(z*n+x))o.push(__gt.groundAt(x,z).join(','));}return o.join('|');})()`;
+    await open(`sample=${id}&clean=1&blocks=off`);
+    const offGround = await page.evaluate(nonRci);
+    await open(`sample=${id}&clean=1`);
+    const s = await page.evaluate(`({mode: __gt.blockMode(), owners: __gt.owners(), n: __gt.buildingCount(), art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles(),
+      rci: ${JSON.stringify([...lot.keys()])}.map(i=>[i, __gt.groundAt(i%${n},(i/${n})|0)])})`);
+    const want = s.n - G.stats.cells.d0 - G.stats.cells.absorbed;
+    log(s.mode === 'b' && s.owners === want, `D005 ${id} 不帶參數＝B（照實驗線）`, `畫到 ${s.owners}／${s.n} 棟（沒畫的＝D0 ${G.stats.cells.d0}＋被吸收 ${G.stats.cells.absorbed}）`);
+    const sameNon = (await page.evaluate(nonRci)) === offGround;
+    const badLot = s.rci.filter(([i, px]) => {
+      const cls = lot.get(i);
+      for (let j = 0; j < px.length; j += 3) {
+        const [r, g, b] = [px[j], px[j + 1], px[j + 2]], hx = (r << 16) | (g << 8) | b;
+        if (hx === 0x2e2e2e) continue;   // 路面電車軌
+        if (cls === 5 ? !isGrass(r, g, b) : !LOTC[cls].includes(hx)) return true;
+      }
+      return false;
+    });
+    const cnt = c => [...lot.values()].filter(v => v === c).length;
+    log(sameNon && badLot.length === 0, `D005 ${id} 地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪；非住商工格跟 D003 逐像素相同`,
+      `住宅 ${cnt(1)}、商業 ${cnt(2)}、工業 ${cnt(3)}、villa ${cnt(4)}、草坪 ${cnt(5)} 格；不對 ${badLot.length} 格${badLot.length ? '（' + badLot.slice(0, 3).map(x => x[0]).join(',') + '）' : ''}；非住商工 ${sameNon ? '相同' : '不同'}`);
+    log(JSON.stringify(s.art) === JSON.stringify(s.tot) && s.art.props > 0 && s.art.kits > 0, `D005 ${id} 點綴全畫出來（場景件數＝擺放計畫，逐項）`, JSON.stringify(s.art));
+    log(s.ws.blockTris > 0 && s.ws.windowed > 0 && s.ws.style0Windowed === 0, `D005 ${id} 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚）`, `街區牆面三角形 ${s.ws.blockTris}、有窗 ${s.ws.windowed}、用第 0 格 ${s.ws.style0Windowed}`);
+    const dp = await page.evaluate('__gt.dressPickTest(20)');
+    log(dp.bad.length === 0 && dp.props > 0 && dp.kits > 0, `D005 ${id} 點前庭道具、屋頂設備（正上方）：回到該街區的建築`, dp.bad.length ? dp.bad.slice(0, 3).join('；') : `道具 ${dp.props}、設備 ${dp.kits} 件全對`);
+    for (const m of ['a', 'c']) {
+      await open(`sample=${id}&clean=1&blocks=${m}`);
+      const t = await page.evaluate('({art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles()})');
+      log(JSON.stringify(t.art) === JSON.stringify(t.tot) && t.ws.style0Windowed === 0, `D005 ${id} ${m.toUpperCase()} 檔點綴全畫出來、窗型正確`, `道具 ${t.art.props}、屋頂設備 ${t.art.kits}、雨遮 ${t.art.awnings}、門 ${t.art.doors}、裝卸口 ${t.art.docks}`);
+    }
+  }
+
   // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動
   await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
   await open('sample=seed516&at=36,36&zoom=2.4');
   const sw = await page.evaluate(`(()=>{const bs=[...document.querySelectorAll('#blk button')],inView=bs.every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});
-    const on0=bs.find(b=>b.classList.contains('on'))?.textContent;bs[2].click();return {n:bs.length,inView,on0,on1:bs.find(b=>b.classList.contains('on'))?.textContent,mode:__gt.blockMode(),url:location.search};})()`);
-  log(sw.n === 4 && sw.inView && /D003/.test(sw.on0) && /^B/.test(sw.on1) && sw.mode === 'b' && /blocks=b/.test(sw.url), 'D004 手機直式：四顆街區切換鈕都在畫面內，點 B 就換檔、網址跟著改', JSON.stringify(sw));
+    const on=()=>bs.find(b=>b.classList.contains('on'))?.textContent,on0=on(),m0=__gt.blockMode();bs[3].click();const on1=on(),m1=__gt.blockMode(),url1=location.search;bs[0].click();
+    return {n:bs.length,inView,on0,m0,on1,m1,url1,on2:on(),m2:__gt.blockMode(),url2:location.search};})()`);
+  log(sw.n === 4 && sw.inView && /^B/.test(sw.on0) && sw.m0 === 'b' && /^C/.test(sw.on1) && sw.m1 === 'c' && /blocks=c/.test(sw.url1) && /D003/.test(sw.on2) && sw.m2 === null && /blocks=off/.test(sw.url2),
+    'D004／D005 手機直式：四顆街區切換鈕都在畫面內；預設 B，點 C、點 D003 都換檔、網址跟著改', JSON.stringify(sw));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
 
   // 零外部素材：整輪煙霧測試的所有網路請求都只連本機

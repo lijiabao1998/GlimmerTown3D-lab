@@ -229,7 +229,7 @@ if (PARTS.has('d004')) {
   const endRe = /\n\s*\}\)\(\);\s*\n<\/script>/g; endRe.lastIndex = mark;
   const em = mark < 0 ? null : endRe.exec(html);
   if (!em) throw new Error('找不到實驗線主程式 IIFE 的收尾');
-  const HOOKS = ['subPara568', 'massBox568', 'sawRise608', 'shrinkPara547', 'pitchPara547', 'speciesPal601'];
+  const HOOKS = ['subPara568', 'massBox568', 'sawRise608', 'shrinkPara547', 'pitchPara547', 'speciesPal601', 'roofKit559'];   // roofKit559：D005 加
   const INJECT = `\n;window.__d004={ARCHE568:()=>ARCHE568,arche568,rciAbsorbed555,rciBlockOrigin547,tiles:()=>tiles,`
     + `hook(n,w){const T={${HOOKS.map(h => `${h}:[()=>${h},f=>{${h}=f;}]`).join(',')}};const[g,s]=T[n];const o=g();s(w(o));return()=>s(o);}};`;
   const injectedAt = lineOf(em.index) + 1;
@@ -297,14 +297,16 @@ if (PARTS.has('d004')) {
       // 2D 對照圖（D004 五格對照的第一格）：就是這座剛切完的城（v 已還原成存檔值），視角同 D003（實驗線樣張頁的中景／遠景、白天）。
       // 匯入後、暫停中，實驗線的供電狀態還沒重算，畫面上會有停電閃電圖示；不推進模擬日去消掉它（推了城市就不是同一座），圖說寫明
       // 遠景用 z .5 不用 D003 的 .45：實驗線 z<.5 是 lodMini（60363），建築整個不畫、只剩路網，D004 首拍就是一片空城
-      const views = id === 'seed516' ? [{ name: 'mid', z: 0.75, at: [36, 36] }, { name: 'far', z: 0.5, at: [22, 44] }] : [{ name: 'mid', z: 0.75, at: [36, 36] }];
+      // D005 另加街區特寫（z 1.5）：種子城住宅區、市中心、工業區，AI 城住宅區；檔名前綴 d005_
+      const views = (id === 'seed516' ? [{ name: 'mid', z: 0.75, at: [36, 36] }, { name: 'far', z: 0.5, at: [22, 44] }] : [{ name: 'mid', z: 0.75, at: [36, 36] }])
+        .concat((id === 'seed516' ? [['res', 9, 9], ['down', 24, 12], ['ind', 41, 12]] : [['res', 33, 33]]).map(([name, x, y]) => ({ name, z: 1.5, at: [x, y], d005: true })));
       for (const v of views) {
         // 換視角後先畫一次、等一下再畫一次才拍（讓換縮放後的快取重建完）
         await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
           GV.lookAt(${v.at[0]},${v.at[1]});GV.art574.zoom574(${v.z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();return 1;})()`);
         await sleep(1500);
         const shot = await ev(`(()=>{GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`);
-        fs.writeFileSync(path.join(SHOTS, `d004_${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
+        fs.writeFileSync(path.join(SHOTS, `${v.d005 ? 'd005' : 'd004'}_${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
       }
       console.log(`${id}：住商工 ${stats.rci} 格、街區 ${stats.blocks}（多格 ${stats.multi}）；格：多格 ${stats.cells.inMulti}、單格 ${stats.cells.single}、吸收 ${stats.cells.absorbed}、D0 ${stats.cells.d0}、重疊 ${stats.overlap}；`
         + `多格街區最高等級≠起點 ${extra.maxLvDiffers}；T531 匯入後重挑的 v ${extra.vRepicked531} 格（已還原成存檔值）`);
@@ -319,10 +321,11 @@ if (PARTS.has('d004')) {
           D.hook('sawRise608',o=>function(C,n,ax,cap){const r=o(C,n,ax,cap);if(L)L.saw.push([n,ax,cap===undefined?null:cap,r]);return r;}),
           D.hook('shrinkPara547',o=>function(C,t){if(L)L.shr.push(t);return o(C,t);}),
           D.hook('pitchPara547',o=>function(g,C,rise,a,b,c,ax){if(L)L.pp.push([rise,ax|0]);return o(g,C,rise,a,b,c,ax);}),
-          D.hook('speciesPal601',o=>function(p,ar,k){const r=o(p,ar,k);if(L&&!L.pal)L.pal=[r.light,r.mid,r.dark,r.accent,r.roof,r.glass,r.lit];return r;})];
+          D.hook('speciesPal601',o=>function(p,ar,k){const r=o(p,ar,k);if(L&&!L.pal)L.pal=[r.light,r.mid,r.dark,r.accent,r.roof,r.glass,r.lit];return r;}),
+          D.hook('roofKit559',o=>function(g,ng,C,rk,k,pal,area){if(L)L.kit.push(area);return o(g,ng,C,rk,k,pal,area);})];
         try{for(let lv=1;lv<=3;lv++)for(let bw=1;bw<=4;bw++)for(let bh=1;bh<=4;bh++)for(let v=0;v<12;v++){
-          L={sub:[],mass:[],saw:[],shr:[],pp:[],pal:null};const sp=GV.block559.make(${k},lv,bw,bh,v),t=sp.__t547,a=D.arche568(${k},lv,v),sty=String(t.sty);
-          out.push([${k}+'_'+lv+'_'+bw+'_'+bh+'_'+v,a?a.n:null,sty.indexOf('f577:')===0?sty.slice(5):'core',!!t.pitch,t.wall.h,L.sub,L.mass,L.saw,L.shr,L.pp,L.pal]);}}
+          L={sub:[],mass:[],saw:[],shr:[],pp:[],pal:null,kit:[]};const sp=GV.block559.make(${k},lv,bw,bh,v),t=sp.__t547,a=D.arche568(${k},lv,v),sty=String(t.sty);
+          out.push([${k}+'_'+lv+'_'+bw+'_'+bh+'_'+v,a?a.n:null,sty.indexOf('f577:')===0?sty.slice(5):'core',!!t.pitch,t.wall.h,L.sub,L.mass,L.saw,L.shr,L.pp,L.pal,L.kit.sort((a,b)=>a-b)]);}}
         finally{L=null;un.forEach(f=>f());}
         return out;})()`);
       rows.push(...part);
@@ -331,7 +334,7 @@ if (PARTS.has('d004')) {
     const byPath = {};
     for (const r of rows) byPath[r[2]] = (byPath[r[2]] || 0) + 1;
     fs.writeFileSync(path.join(SAMPLES, 'd004-massing.json'), '{"source":' + J(source)
-      + ',\n"fields":' + J('[k_lv_寬_高_v, 原型名, 路徑（core 或立面名）, __t547.pitch, 牆高 px, subPara568 收到的框（依序：主體、第二量體）, massBox568 收到的高, sawRise608 [n, axis, cap, 回傳], shrinkPara547 收到的內縮, pitchPara547 [rise, axis], speciesPal601 回傳的七色 [light, mid, dark, accent, roof, glass, lit]]；只記核心路徑呼叫到的（立面繪製器經 GV.art574 拿的是原函式，不會記到）')
+      + ',\n"fields":' + J('[k_lv_寬_高_v, 原型名, 路徑（core 或立面名）, __t547.pitch, 牆高 px, subPara568 收到的框（依序：主體、第二量體）, massBox568 收到的高, sawRise608 [n, axis, cap, 回傳], shrinkPara547 收到的內縮, pitchPara547 [rise, axis], speciesPal601 回傳的七色 [light, mid, dark, accent, roof, glass, lit], roofKit559 收到的 area（由小到大；D005 加）]；只記核心路徑呼叫到的（立面繪製器經 GV.art574 拿的是原函式，不會記到）')
       + ',\n"byPath":' + J(byPath) + ',\n"rows":[\n' + rows.map(r => J(r)).join(',\n') + '\n]}\n');
     console.log(`量體：${rows.length} 組；路徑 ${J(byPath)}`);
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));

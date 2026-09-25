@@ -8,7 +8,7 @@ export type ArcheTable = Record<string, ArcheRow[]>;
 export interface Palette { light: string; mid: string; dark: string; accent: string; roof: string; glass: string; lit: string }
 
 // 注入錯誤（只給 tools/unit.mjs 驗「守衛真的會紅」用；正式畫面一律不帶）
-export interface RecipeFaults { parcelMin?: number; podiumCap?: number }
+export interface RecipeFaults { parcelMin?: number; podiumCap?: number; flatKit?: number; indKit?: number }
 
 export const PX_PER_CELL = 39.2;   // 實驗線精靈像素 → 格（D003 卡「高度換算的理由」）
 
@@ -86,6 +86,10 @@ export interface Roof {
 export interface Recipe {
   k: number; lv: number; w: number; h: number; v: number;
   arche: string | null;
+  win: string;             // 原型的窗型（arch／punch／grid／ribbon／shop；缺就是 grid，同 71392）
+  winRowPx: number;        // 原型的窗列間距（wd[1]，像素；缺就是 4）
+  lotFill: boolean;        // 地坪要不要鋪（lotFill570 的條件：看的是 T582／T602 改動前的原型框，71277）
+  lotBox: number[];        // lotFill570 收到的框（同上，改動前；前庭道具避開它）
   path: string;            // 'core'＝核心繪製；其餘是英美立面繪製器的名字（T577）
   pitch: boolean;          // 實驗線 __t547.pitch（核心路徑＝有沒有 ridge 物件：商業平頂也是 true，照抄）
   villa: boolean; split582: boolean; podium602: boolean;
@@ -95,8 +99,11 @@ export interface Recipe {
   roof: Roof;
   upper: { box: number[]; hPx: number } | null;    // 上層量體（核心路徑、≥4 格的非住宅）
   stacks: { u: number; v: number; hPx: number; r: number; tall: boolean }[];   // 煙囪（框內座標；實驗線 chim608 等只取位置與大概高度）
+  // 屋頂設備（D005，roofKit559 70588）：放在哪一片屋頂、area（件數＝clamp(round(area×0.9), 2, 9)）
+  kits: { on: 'main' | 'deck' | 'upper' | 'ex'; area: number }[];
   pal: Palette;
 }
+export const kitCount = (area: number) => Math.max(2, Math.min(9, Math.round(area * .9)));
 
 // 立面繪製器自己回報的坡頂旗標（T577；facade_uk1／uk2／us1 的 draw() 回傳值，73114–74660）
 const FACADE_PITCH: Record<string, (lv: number) => boolean> = {
@@ -113,6 +120,7 @@ export function recipe(t: ArcheTable, k: number, lv: number, bw: number, bh: num
   let pitchH = lv === 1 ? 14 + pitchSpan * 4 : lv === 2 ? 18 + pitchSpan * 5 : 22 + pitchSpan * 6;
   if (k === 2) pitchH = 8; else if (k === 1) pitchH = Math.max(12, 8 + span * 3);   // T556 類型學
   let ar = archeOf(t, k, lv, v);
+  const ar0 = ar;
   if (ar) wallH = Math.max(8, Math.round(wallH * ar.hm));                           // T601
   const pal = speciesPal(metroPalette(k, v, 1, lv), ar, k);
   const villa = k === 1 && lv === 1 && bw * bh <= 4 && isVilla(t, k, lv, v);         // villaYard559
@@ -134,7 +142,8 @@ export function recipe(t: ArcheTable, k: number, lv: number, bw: number, bh: num
   const flat = !!(ar && ar.flat);
   const bayRow604 = k === 1 && Math.min(bw, bh) >= 2 && !flat;   // T604：進深 ≥2 的住宅一戶一尖，不交給立面
   const path = ar && ar.fs && FACADE_PITCH[ar.fs] && !bayRow604 ? ar.fs : 'core';
-  const stacks: Recipe['stacks'] = [];
+  const stacks: Recipe['stacks'] = [], kits: Recipe['kits'] = [];
+  if (ex) kits.push({ on: 'ex', area: 2 });                          // massBox568 自己的屋頂（70787），立面路徑也會畫
   let roof: Roof, upper: Recipe['upper'] = null, pitch: boolean;
   if (path !== 'core') {
     // 立面細節不搬（卡面「不改什麼」）：只照它回報的坡頂畫外形。坡高用立面繪製器的量級（約 6–12px，73037／73136／73578），屋脊順正面（沿 x）
@@ -160,6 +169,11 @@ export function recipe(t: ArcheTable, k: number, lv: number, bw: number, bh: num
       const du = (box[1] - box[0]) * .16, dv = (box[3] - box[2]) * .16;
       upper = { box: [box[0] + du, box[1] - du, box[2] + dv, box[3] - dv], hPx: stepH };
     }
+    // 屋頂設備的 area，式子照各呼叫點（T593：密度隨 lv 提升）
+    if (flat) kits.push({ on: 'main', area: Math.max(2, bw * bh * (f.flatKit ?? .8)) * (1 + (lv - 1) * .35) });   // 71339
+    else if (k === 2 && !(bw * bh >= 4)) kits.push({ on: 'deck', area: bw * bh * (1 + (lv - 1) * .35) });         // 71373（實驗線先畫設備、再蓋女兒牆頂板，大多被蓋掉；3D 放在頂板上）
+    else if (k === 3 && bw * bh >= 4) kits.push({ on: 'main', area: Math.max(2, bw * bh * (f.indKit ?? .6)) });  // 71379
+    if (upper) kits.push({ on: 'upper', area: k === 2 ? Math.max(2, bw * bh * .7) : Math.max(1, bw * bh * .5) });  // 71427／71430
     if (k === 3) {
       const tall = !!ar && (ar.n === 'stack' || ar.n === 'chimneyHall');
       if (tall) stacks.push({ u: box[0] + (box[1] - box[0]) * .62, v: box[3] + (box[2] - box[3]) * .62, hPx: 50, r: .09, tall: true });   // roof.W→E 的 62%
@@ -168,7 +182,9 @@ export function recipe(t: ArcheTable, k: number, lv: number, bw: number, bh: num
   }
   return {
     k, lv, w: bw, h: bh, v, arche: ar ? ar.n : null, path, pitch, villa, split582, podium602,
-    wallPx: wallH, stepPx: stepH, pitchPx: pitchH, box, ex, roof, upper, stacks, pal,
+    win: ar0?.win ?? 'grid', winRowPx: ar0?.wd ? ar0.wd[1] : 4,
+    lotFill: !villa && !!ar0 && !lotFull(ar0.box) && !(ar0.ex && lotFull(ar0.ex.box)), lotBox: ar0 ? ar0.box : [0, 1, 0, 1],
+    wallPx: wallH, stepPx: stepH, pitchPx: pitchH, box, ex, roof, upper, stacks, kits, pal,
   };
 }
 
@@ -183,5 +199,6 @@ export function labCalls(r: Recipe) {
     if (r.roof.kind === 'saw') saw.push([2, r.roof.axis, r.arche === 'warehouse' ? 8 : 14, r.roof.risePx]);
     if (r.upper) shr.push(.32);
   }
-  return { sub, mass, saw, shr, pp };
+  const kit = r.kits.map(q => q.area).sort((a, b) => a - b);   // roofKit559 收到的 area（D005）
+  return { sub, mass, saw, shr, pp, kit };
 }

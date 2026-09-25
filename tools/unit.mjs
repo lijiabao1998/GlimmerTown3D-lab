@@ -8,7 +8,8 @@ import { cityFromLab, cityStats } from '../src/sim/city.ts';
 import { kindTableFrom, NO_SPRITE_HEIGHT } from '../src/content/kindTable.ts';
 import { mulberry32 } from '../src/sim/rng.ts';
 import { gridOf, labPartition, partRow, partitionStats, drawPlan } from '../src/content/blocks.ts';
-import { recipe, labCalls, PAL_KEYS } from '../src/content/recipes.ts';
+import { recipe, labCalls, PAL_KEYS, kitCount } from '../src/content/recipes.ts';
+import { dressing, PROP_CAPS, solidBoxes, inBox } from '../src/content/dressing.ts';
 
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
@@ -157,12 +158,12 @@ const drawDiff = (faults = {}) => {
 }
 // 量體：1,728 組逐項比
 const massGold = JSON.parse(read('src/content/samples/d004-massing.json'));
-const MASS_FIELDS = ['原型名', '路徑', '坡頂旗標', '牆高', '主體與第二量體的框', '第二量體高', '鋸齒', '內縮（女兒牆、上層量體）', '一戶一尖', '調色盤'];
+const MASS_FIELDS = ['原型名', '路徑', '坡頂旗標', '牆高', '主體與第二量體的框', '第二量體高', '鋸齒', '內縮（女兒牆、上層量體）', '一戶一尖', '調色盤', '屋頂設備 area（D005）'];
 const massDiff = (faults = {}) => {
   const out = [];
   for (const r of massGold.rows) {
     const [k, lv, bw, bh, v] = r[0].split('_').map(Number), q = recipe(arche.arche, k, lv, bw, bh, v, faults), L = labCalls(q);
-    const mine = [q.arche, q.path, q.pitch, q.wallPx, L.sub, L.mass, L.saw, L.shr, L.pp, PAL_KEYS.map(p => q.pal[p])];
+    const mine = [q.arche, q.path, q.pitch, q.wallPx, L.sub, L.mass, L.saw, L.shr, L.pp, PAL_KEYS.map(p => q.pal[p]), L.kit];
     const bad = mine.map((m, j) => JSON.stringify(m) === JSON.stringify(r[j + 1]) ? null : `${MASS_FIELDS[j]} 3D ${JSON.stringify(m)} ≠ 實驗線 ${JSON.stringify(r[j + 1])}`).filter(Boolean);
     if (bad.length) out.push(`${r[0]}：${bad.join('；')}`);
   }
@@ -171,7 +172,7 @@ const massDiff = (faults = {}) => {
 {
   const d = massDiff(), paths = massGold.byPath;
   log(massGold.rows.length === 1728 && massGold.source.commit === data.source.commit && d.length === 0,
-    'D004 量體對拍：1,728 組（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）原型、路徑、坡頂、牆高、框（位元相等）、第二量體、屋頂分支、七色＝實驗線',
+    'D004 量體對拍：1,728 組（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）原型、路徑、坡頂、牆高、框（位元相等）、第二量體、屋頂分支、七色、屋頂設備 area（D005）＝實驗線',
     d.length ? `${d.length} 組不同：${d.slice(0, 2).join('｜')}` : `0 差異；路徑 ${Object.entries(paths).map(([p, n]) => `${p} ${n}`).join('、')}`);
 }
 // 守衛有效：注入錯誤，對應的守衛要變紅（卡面驗收 4）
@@ -184,12 +185,41 @@ const massDiff = (faults = {}) => {
     ['T582 門檻 6→4', () => massDiff({ parcelMin: 4 })],
     ['T602 裙樓上限 0.40→0.45', () => massDiff({ podiumCap: .45 })],
     ['繪製改用街區的 maxLv', () => drawDiff({ drawMaxLv: true })],
+    ['D005 平頂屋頂設備係數 0.8→0.9', () => massDiff({ flatKit: .9 })],
+    ['D005 工業 ≥4 格屋頂設備係數 0.6→0.5', () => massDiff({ indKit: .5 })],
   ].map(([name, f]) => [name, f().length]);
   log(inj.every(([, n]) => n > 0), `D004 注入 ${inj.length} 種錯誤，對應守衛都變紅`, inj.map(([name, n]) => `${name}→${n} 筆差異`).join('、'));
   // 卡面原本寫的「T582 門檻 6→5」是等價突變：街區寬高都在 1–4（blockMax602），面積只有 1,2,3,4,6,8,9,12,16，沒有 5；
   // 所以 ≥5 跟 ≥6 在實驗線、在本線都分不出來，守衛不可能變紅。這裡改成斷言「它確實等價」，另用 6→7、6→4 驗守衛（D004 施工紀錄）
   const areas = new Set(); for (let w = 1; w <= 4; w++) for (let h = 1; h <= 4; h++) areas.add(w * h);
   log(!areas.has(5) && massDiff({ parcelMin: 5 }).length === 0, 'D004「T582 門檻 6→5」是等價突變（面積沒有 5），改用 6→7、6→4 驗', `面積 ${[...areas].sort((a, b) => a - b).join(',')}`);
+}
+
+// ===== D005：街區點綴的擺放計畫（1,728 組配方全跑）=====
+{
+  const bad = [], tot = { props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0 };
+  for (const r0 of massGold.rows) {
+    const [k, lv, bw, bh, v] = r0[0].split('_').map(Number), r = recipe(arche.arche, k, lv, bw, bh, v), d = dressing(r), d2 = dressing(r);
+    const core = r.path === 'core', nBay = Math.max(2, Math.min(8, Math.max(bw, bh))), why = [];
+    if (JSON.stringify(d) !== JSON.stringify(d2)) why.push('同一組配方兩次擺得不一樣');
+    for (const p of d.props) {
+      if (!(p.u >= 0 && p.u <= 1 && p.v >= 0 && p.v <= 1)) why.push(`道具 ${p.kind} 出了地界 (${p.u.toFixed(2)},${p.v.toFixed(2)})`);
+      if (!r.villa && solidBoxes(r).some(b => inBox(b, p.u, p.v))) why.push(`道具 ${p.kind} 插進量體`);
+    }
+    if (r.villa) { if (d.props.length !== 6 || d.edges.length !== 4) why.push(`villa 道具 ${d.props.length}／圍籬 ${d.edges.length}（應為 6／4）`); }
+    else for (const [kind, cap] of PROP_CAPS[k]) { const c = d.props.filter(p => p.kind === kind).length; if (c > cap) why.push(`${kind} ${c} 件超過上限 ${cap}`); }
+    if (!r.lotFill && !r.villa && d.props.length) why.push('原型佔滿地界卻放了前庭道具');
+    const kitWant = r.kits.reduce((a, q) => a + kitCount(q.area), 0);
+    if (d.kits.length !== kitWant) why.push(`屋頂設備 ${d.kits.length}≠${kitWant}`);
+    if (d.kits.some(q => q.u < .18 || q.u > .82 || q.v < .18 || q.v > .82)) why.push('屋頂設備落在屋頂 18%–82% 之外');
+    if (d.awnings.length !== (core && k === 2 ? nBay : 0)) why.push(`雨遮 ${d.awnings.length}`);
+    if (d.doors.length !== (core && k === 1 ? nBay : 0)) why.push(`門 ${d.doors.length}`);
+    if ((d.dock !== null) !== (core && k === 3)) why.push('裝卸口');
+    if (why.length) bad.push(`${r0[0]}：${why.join('、')}`);
+    tot.props += d.props.length; tot.edges += d.edges.length; tot.kits += d.kits.length; tot.awnings += d.awnings.length; tot.doors += d.doors.length; tot.docks += d.dock === null ? 0 : 1;
+  }
+  log(bad.length === 0, 'D005 點綴擺放計畫：1,728 組都在地界內、不插進量體、件數照實驗線的上限與公式、同一組配方擺法固定',
+    bad.length ? `${bad.length} 組不對：${bad.slice(0, 2).join('｜')}` : Object.entries(tot).map(([a, b]) => `${a} ${b}`).join('、'));
 }
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----

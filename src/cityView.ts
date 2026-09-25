@@ -1,6 +1,6 @@
 // 2D 城市模式（D003）：把 2D 實驗線的分享碼解碼成城市，畫成 3D。預設開種子城。
 // 網址參數：?mode=city（預設）&sample=seed516|ai120 &style=A|B|C（對照用）&at=x,z|center &zoom= &clean=1（拍照，藏介面）
-//           &blocks=a|b|c（D004 住商工街區三檔，業主挑；不帶＝D003 現況）
+//           &blocks=a|b|c|off（D004 住商工街區三檔；D005 起不帶＝B 照實驗線，off＝D003 現況）
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
@@ -12,6 +12,9 @@ import { KINDS } from './content/kinds.ts';
 import { ARCHE } from './content/arche.ts';
 import { gridOf, labPartition, partRow, drawPlan, BLOCK_MODES, type BlockMode, type DrawBlock } from './content/blocks.ts';
 import { recipe, type Recipe } from './content/recipes.ts';
+import { dressing, type Dressing } from './content/dressing.ts';
+import { windowTexture } from './render/textures.ts';
+import { windowAtlas, atlasCell0MatchesD003 } from './render/windows.ts';
 import seed516 from './content/samples/seed516.code.txt?raw';
 import ai120 from './content/samples/ai120.code.txt?raw';
 
@@ -27,8 +30,9 @@ export function startCity() {
   const clean = q.get('clean') === '1';
   const style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
   let sampleId = SAMPLES[q.get('sample') ?? ''] ? q.get('sample')! : 'seed516';
-  const bq = (q.get('blocks') ?? '').toLowerCase();
-  let blockMode: BlockMode | null = bq in BLOCK_MODES ? bq as BlockMode : null;
+  // D005：預設 B（照實驗線；理由見 docs/D005-rci-art.md），?blocks=off 回 D003 現況
+  const bq = (q.get('blocks') ?? 'b').toLowerCase();
+  let blockMode: BlockMode | null = bq in BLOCK_MODES ? bq as BlockMode : bq === 'off' ? null : 'b';
   // 配方只跟 (k, lv, 寬, 高, v) 有關：同一組只算一次
   const recipes = new Map<string, Recipe>();
   const recipeOf = (b: DrawBlock) => {
@@ -37,11 +41,18 @@ export function startCity() {
     if (!r) { r = recipe(ARCHE, b.k, b.lv, b.w, b.h, b.v); recipes.set(key, r); }
     return r;
   };
+  const dressings = new Map<string, Dressing>();
+  const dressOf = (b: DrawBlock) => {
+    const key = `${b.k}_${b.lv}_${b.w}_${b.h}_${b.v}`;
+    let d = dressings.get(key);
+    if (!d) { d = dressing(recipeOf(b)); dressings.set(key, d); }
+    return d;
+  };
   let plan: DrawBlock[] | null = null;
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
-    return { mode: blockMode, plan, recipe: recipeOf };
+    return { mode: blockMode, plan, recipe: recipeOf, dress: dressOf };
   };
 
   const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
@@ -114,7 +125,7 @@ export function startCity() {
     built = b;
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
     const u = new URL(location.href);
-    if (m) u.searchParams.set('blocks', m); else u.searchParams.delete('blocks');
+    if (m && m !== 'b') u.searchParams.set('blocks', m); else if (m) u.searchParams.delete('blocks'); else u.searchParams.set('blocks', 'off');
     history.replaceState(null, '', u);
     closeCard();
     syncUi();
@@ -266,6 +277,24 @@ export function startCity() {
     bigOne: () => [...city!.buildings].sort((a, b) => b.size - a.size || KINDS.height(b.k, b.lv, b.v) - KINDS.height(a.k, a.lv, a.v) || a.id - b.id)[0].id,
     idOfKind: (k: number) => city!.buildings.find(b => b.k === k)?.id ?? null,
     frames: () => frames,
+    // ---- D005 ----
+    artCounts: () => built!.artCounts(),
+    // 擺放計畫的合計（畫出來的街區）：要等於 artCounts（每一件都真的畫了）
+    dressTotals: () => {
+      const t = { props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0, shopBands: 0, plainBands: 0 };
+      if (!plan || !built) return t;
+      for (const bi of built.blocksDrawn()) {
+        const d = dressOf(plan[bi]);
+        t.props += d.props.length; t.edges += d.edges.length; t.kits += d.kits.length; t.awnings += d.awnings.length;
+        t.doors += d.doors.length; t.docks += d.dock === null ? 0 : 1; t.shopBands += d.shopPx > 0 ? 1 : 0;
+        t.plainBands += d.dock === null ? 0 : 1;   // 工業核心街區（有裝卸口的）牆下 45% 不開窗
+      }
+      return t;
+    },
+    groundAt: (x: number, z: number) => built!.groundAt(x, z),
+    wallStyles: () => built!.wallStyles(),
+    meshStats: () => built!.meshStats(),
+    atlasCheck: () => { const w = windowTexture(), a = windowAtlas(), r = atlasCell0MatchesD003(w, a); w.dispose(); a.dispose(); return r; },
     // ---- D004 ----
     blockMode: () => blockMode,
     setBlocks: (m: string | null) => { setBlocks(m && m in BLOCK_MODES ? m as BlockMode : null); return blockMode; },
@@ -300,6 +329,40 @@ export function startCity() {
         closeCard();
       }
       return { pool: pool.length, tested: pickN.length, multi: multi.length > 0, oblique, bad };
+    },
+    // D005：從正上方點前庭道具與屋頂設備（樹不擋點擊、不算），要回到那個街區裡的建築。每個有道具／設備的街區各點一件，最多 count 個街區
+    dressPickTest(count: number) {
+      if (!plan || !built || !city) return null;
+      const c = city, bad: string[] = [], tested = { props: 0, kits: 0 };
+      const saved = { pos: cam.position.clone(), up: cam.up.clone(), zoom: cam.zoom, target: controls.target.clone() };
+      const topDown = (x: number, z: number) => {
+        cam.up.set(0, 0, -1); cam.position.set(x, c.n, z); cam.zoom = 1; cam.lookAt(x, 0, z); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+        const [sx, sy] = screenOf(new THREE.Vector3(x, 0, z)); return pickAt(sx, sy);
+      };
+      try {
+        for (const bi of built.blocksDrawn()) {
+          if (tested.props >= count && tested.kits >= count) break;
+          const bk = plan[bi], r = recipeOf(bk), d = dressOf(bk);
+          const X = (u: number) => bk.x + u * bk.w, Z = (v: number) => bk.z + v * bk.h;
+          const targets: [string, number, number][] = [];
+          const p = d.props.find(q => q.kind !== 'tree' && q.kind !== 'drive');
+          if (p && tested.props < count) { targets.push(['道具 ' + p.kind, X(p.u), Z(p.v)]); tested.props++; }
+          const k = d.kits[0];
+          if (k && tested.kits < count) {
+            const du = (r.box[1] - r.box[0]) * .035, dv = (r.box[3] - r.box[2]) * .035;
+            const rb = k.on === 'ex' ? r.ex!.box : k.on === 'upper' ? r.upper!.box : k.on === 'deck' ? [r.box[0] + du, r.box[1] - du, r.box[2] + dv, r.box[3] - dv] : r.box;
+            targets.push(['設備 ' + k.kind, X(rb[0] + (rb[1] - rb[0]) * k.u), Z(rb[2] + (rb[3] - rb[2]) * k.v)]); tested.kits++;
+          }
+          for (const [what, x, z] of targets) {
+            const h = topDown(x, z), ok = !!h && h.block === bi && h.id > 0 && bk.cells.includes(h.z * c.n + h.x) && h.id === c.occ[h.z * c.n + h.x];
+            if (!ok) bad.push(`${what}@${x.toFixed(2)},${z.toFixed(2)}（街區 ${bk.x},${bk.z}）→${JSON.stringify(h)}`);
+          }
+        }
+      } finally {
+        cam.up.copy(saved.up); cam.position.copy(saved.pos); cam.zoom = saved.zoom; cam.lookAt(saved.target); controls.target.copy(saved.target);
+        cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+      }
+      return { ...tested, bad };
     },
     spin: (rad: number) => { controls.rotateLeft?.(rad); invalidate(); },
     renderInfo: () => ({ ...pipe.sceneInfo, rt: pipe.size }),

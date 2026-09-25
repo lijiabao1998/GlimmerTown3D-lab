@@ -12,6 +12,15 @@ type V3 = [number, number, number];
 export class Geo {
   pos: number[] = []; nor: number[] = []; uv: number[] = []; col: number[] = [];
   owner = 0; owners: number[] = [];   // 每個三角形屬於哪棟建築（0＝無），點擊時用 faceIndex 反查
+  // D005 窗樣式：ext＝true 才多記兩個頂點屬性（wStyle＝窗磚圖集第幾格、wGlass＝玻璃色）；300 年示範不開，幾何逐位不變
+  // band：牆腳色帶的高（以窗磚的 V 計）；>0＝店面帶（D005 商業一樓）、<0＝不開窗（工業牆下 45%）、0＝沒有。只寫在牆面，頂面一律 0
+  ext = false; style = 0; band = 0; glass: THREE.Color | null = null; wst: number[] = []; wgl: number[] = []; wbd: number[] = [];
+  constructor(opt: { ext?: boolean } = {}) { this.ext = !!opt.ext; }
+  private pushExt(n: number) {
+    if (!this.ext) return;
+    const g = this.glass;
+    for (let i = 0; i < n; i++) { this.wst.push(this.style); this.wbd.push(this.band); this.wgl.push(g ? g.r : 0, g ? g.g : 0, g ? g.b : 0); }
+  }
   private tri(a: V3, b: V3, c: V3, n: V3, ua: [number, number], ub: [number, number], uc: [number, number], col: THREE.Color) {
     const e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], e2 = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
     const cx = e1[1] * e2[2] - e1[2] * e2[1], cy = e1[2] * e2[0] - e1[0] * e2[2], cz = e1[0] * e2[1] - e1[1] * e2[0];
@@ -19,6 +28,7 @@ export class Geo {
     for (const [p, u] of [[a, ua], [b, ub], [c, uc]] as [V3, [number, number]][]) {
       this.pos.push(...p); this.nor.push(...n); this.uv.push(...u); this.col.push(col.r, col.g, col.b);
     }
+    this.pushExt(3);
     this.owners.push(this.owner);
   }
   // 四邊形 a-b-c-d（順序沿邊），uv 對應四角
@@ -41,7 +51,10 @@ export class Geo {
     this.quad(a, b, c, d, [n.x, n.y, n.z], col);
   }
   // 直立箱：四面牆（可帶窗 UV）＋頂面
-  box(x0: number, z0: number, x1: number, z1: number, y0: number, y1: number, wall: THREE.Color, top: THREE.Color | null, win: { floorH: number } | null) {
+  box(x0: number, z0: number, x1: number, z1: number, y0: number, y1: number, wall: THREE.Color, top: THREE.Color | null, win: { floorH: number; style?: number; glass?: THREE.Color; perCell?: number; bandH?: number; bandShop?: boolean } | null) {
+    const st0 = this.style, gl0 = this.glass;
+    if (win && win.style !== undefined) { this.style = win.style; this.glass = win.glass ?? null; }
+    if (win && win.bandH) this.band = (win.bandShop ? 1 : -1) * win.bandH / win.floorH;
     const faces: [V3, V3, V3, V3, V3, number][] = [
       [[x1, y0, z0], [x1, y0, z1], [x1, y1, z1], [x1, y1, z0], [1, 0, 0], z1 - z0],
       [[x0, y0, z1], [x0, y0, z0], [x0, y1, z0], [x0, y1, z1], [-1, 0, 0], z1 - z0],
@@ -50,11 +63,13 @@ export class Geo {
     ];
     for (const [a, b, c, d, n, wlen] of faces) {
       if (win) {
-        const U = Math.max(1, Math.round(wlen * 2)), Vv = (y1 - y0) / win.floorH;
+        const U = Math.max(1, Math.round(wlen * (win.perCell ?? 2))), Vv = (y1 - y0) / win.floorH;
         this.quad(a, b, c, d, n, wall, [[0, 0], [U, 0], [U, Vv], [0, Vv]]);
       } else this.quad(a, b, c, d, n, wall);
     }
+    this.band = 0;
     if (top) this.quad([x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1], [0, 1, 0], top);
+    this.style = st0; this.glass = gl0;
   }
   // 山牆屋頂：屋脊沿長邊（D004 起可用 along 指定 'x'／'z'）；兩端山牆三角用牆色
   gable(x0: number, z0: number, x1: number, z1: number, yb: number, rise: number, roof: THREE.Color, wall: THREE.Color, along?: 'x' | 'z') {
@@ -111,7 +126,7 @@ export class Geo {
       this.pos.push(p.getX(i) + cx, p.getY(i) + y0 + h / 2, p.getZ(i) + cz);
       this.nor.push(n.getX(i), n.getY(i), n.getZ(i));
       this.uv.push(...PLAIN_UV); this.col.push(col.r, col.g, col.b);
-      if (i % 3 === 2) this.owners.push(this.owner);
+      if (i % 3 === 2) { this.owners.push(this.owner); this.pushExt(3); }
     }
     g.dispose();
   }
@@ -121,6 +136,11 @@ export class Geo {
     g.setAttribute('normal', new THREE.Float32BufferAttribute(this.nor, 3));
     g.setAttribute('uv', new THREE.Float32BufferAttribute(this.uv, 2));
     g.setAttribute('color', new THREE.Float32BufferAttribute(this.col, 3));
+    if (this.ext) {
+      g.setAttribute('wStyle', new THREE.Float32BufferAttribute(this.wst, 1));
+      g.setAttribute('wGlass', new THREE.Float32BufferAttribute(this.wgl, 3));
+      g.setAttribute('wBand', new THREE.Float32BufferAttribute(this.wbd, 1));
+    }
     return g;
   }
 }
