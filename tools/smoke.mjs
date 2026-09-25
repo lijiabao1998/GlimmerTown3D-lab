@@ -114,7 +114,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   const mob = await page.evaluate(`(()=>{const id=__gt.bigOne(),p=__gt.pickTest(id);const t=__gt.openTile(p.want[0],p.want[1]);const b=document.querySelector('#bio').getBoundingClientRect(),h=document.querySelector('#bio h2').getBoundingClientRect(),x=document.querySelector('#bio .x').getBoundingClientRect();
     return {title:t.title,inView:b.top>=0&&b.bottom<=innerHeight&&b.left>=0&&b.right<=innerWidth,titleIn:h.top>=b.top&&h.bottom<=b.bottom,closeIn:x.top>=b.top&&x.right<=b.right+1,
       buttons:[...document.querySelectorAll('#picks button')].map(e=>e.textContent)};})()`);
-  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 4, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；四顆切換鈕都在', JSON.stringify(mob));
+  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 5, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；五顆切換鈕都在（D007 多了「全種類」）', JSON.stringify(mob));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
   // ===== D004：住商工街區三檔（?blocks=a|b|c）=====
   const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
@@ -174,7 +174,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       const L = ARCHE['1_1'], villa = r[4] === 1 && r[7] === 1 && r[2] * r[3] <= 4 && L[Math.abs(r[8]) % L.length].n === 'villa';
       for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) lot.set(r[0] + dy * n + dx, villa ? 4 : r[4]);
     }
-    const nonRci = `(()=>{const n=${n},rci=new Set(${JSON.stringify([...lot.keys()])}),o=[];for(let z=0;z<n;z++)for(let x=0;x<n;x++){if(!rci.has(z*n+x))o.push(__gt.groundAt(x,z).join(','));}return o.join('|');})()`;
+    const nonRci = `(()=>{const n=${n},rci=new Set(${JSON.stringify([...lot.keys()])}),occ=__gt.layers().occ,o=[];for(let z=0;z<n;z++)for(let x=0;x<n;x++){if(!rci.has(z*n+x)&&!occ[z*n+x])o.push(__gt.groundAt(x,z).join(','));}return o.join('|');})()`;
     await open(`sample=${id}&clean=1&blocks=off`);
     const offGround = await page.evaluate(nonRci);
     await open(`sample=${id}&clean=1`);
@@ -193,7 +193,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       return false;
     });
     const cnt = c => [...lot.values()].filter(v => v === c).length;
-    log(sameNon && badLot.length === 0, `D005 ${id} 地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪；非住商工格跟 D003 逐像素相同`,
+    log(sameNon && badLot.length === 0, `D005 ${id} 地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）`,
       `住宅 ${cnt(1)}、商業 ${cnt(2)}、工業 ${cnt(3)}、villa ${cnt(4)}、草坪 ${cnt(5)} 格；不對 ${badLot.length} 格${badLot.length ? '（' + badLot.slice(0, 3).map(x => x[0]).join(',') + '）' : ''}；非住商工 ${sameNon ? '相同' : '不同'}`);
     log(JSON.stringify(s.art) === JSON.stringify(s.tot) && s.art.props > 0 && s.art.kits > 0, `D005 ${id} 點綴全畫出來（場景件數＝擺放計畫，逐項）`, JSON.stringify(s.art));
     log(s.ws.blockTris > 0 && s.ws.windowed > 0 && s.ws.style0Windowed === 0, `D005 ${id} 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚）`, `街區牆面三角形 ${s.ws.blockTris}、有窗 ${s.ws.windowed}、用第 0 格 ${s.ws.style0Windowed}`);
@@ -212,11 +212,12 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     const hi = await page.evaluate('__gt.renderInfo()');
     log(hi.triangles === 48794 && hi.calls === 11, 'D006 300 年示範不動：三角形、draw call 跟 D005 前相同', `${hi.triangles} 個、${hi.calls} 次`);
   }
-  const D005_TRI = { seed516: 57176, ai120: 58772 };   // D005 定稿時預設 B 的三角形（D006 不改幾何）
+  // 預設 B 的三角形釘：D006 驗「色調不改幾何」時釘的是 D005 的值（57,176／58,772）；D007 故意改了非住商工的幾何，釘改成 D007 定稿的值
+  const D005_TRI = { seed516: 59910, ai120: 64606 };
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone()})');
-    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006 ${id} 幾何不變（預設 B 的三角形、draw call 同 D005）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
+    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006／D007 ${id} 幾何釘住（預設 B 的三角形、draw call 同最近一張卡定稿的值）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
     const rgb = Buffer.from(G.rgb, 'base64'), n = L.n, S = G.S, W = G.W;
     const px = (x, z, u, v) => { const i = ((z * S + v) * W + x * S + u) * 3; return (rgb[i] << 16) | (rgb[i + 1] << 8) | rgb[i + 2]; };
     const isRoad = (x, z) => x >= 0 && z >= 0 && x < n && z < n && L.road[z * n + x] > 0;
@@ -253,6 +254,54 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       `貼圖 ${W}×${W}（每格 ${S}）；草 ${cnt.grass}、水 ${cnt.water}、沙 ${cnt.sand} 格，不對 ${bad.grass}／${bad.water}／${bad.sand}`);
     log(bad.roadEdge === 0 && bad.roadIn === 0 && cnt.laned === cnt.straight && cnt.straight > 0 && cnt.crossLane === 0, `D006 ${id} 道路：面向非道路的邊全是人行道／護欄／黃邊，直路都有車道線，路口不畫`,
       `路 ${cnt.road} 格、直路 ${cnt.straight}（有車道線 ${cnt.laned}）、路口 ${cnt.cross}（畫了車道線 ${cnt.crossLane}）；邊色不對 ${bad.roadEdge} 像素、路面色不對 ${bad.roadIn}`);
+  }
+
+  // ===== D007：非住商工造型（樣張城＋兩座樣本城）=====
+  {
+    const LK = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-looks.json'), 'utf8')).looks;
+    const { KIND_SHAPES } = await import('../src/content/kindShapes.ts');
+    const BLD = new Set(['tower', 'hall', 'classic', 'brick', 'hospital', 'church', 'station', 'plant', 'campus', 'house', 'hotel', 'prison', 'airport', 'dam', 'watertower']);
+    const mixc = (a, b, t) => { const ch = sh => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t); return (ch(16) << 16) | (ch(8) << 8) | ch(0); };
+    for (const id of ['gallery', 'seed516', 'ai120']) {
+      await open(`sample=${id}&clean=1`);
+      const B = await page.evaluate('__gt.ownerBoxes()'), L = await page.evaluate('__gt.buildingList()'), U = await page.evaluate('__gt.kindColorsUsed()');
+      const HT = await page.evaluate(`(()=>{const o={};for(const [id,k,,,,lv,v] of __gt.buildingList())o[id]=__gt.heightOf(k,lv,v);return o;})()`);
+      const civ = L.filter(r => r[1] > 3), out = [], hbad = [], cbad = [];
+      for (const [bid, k, x, z, s, lv, , y0] of civ) {
+        const b = B[bid], H = HT[bid], top = b ? b[5] - y0 : 0;   // 扣掉地面高（高地 +0.4）
+        if (!b) { out.push(`k${k} 沒有三角形`); continue; }
+        const over = Math.max(x - b[1], z - b[3], b[4] - (x + s), b[6] - (z + s));
+        if (over > 0.1) out.push(`k${k}@${x},${z} 出界 ${over.toFixed(2)}`);
+        if (H >= 0.35 ? (top / H < 0.7 || top / H > 1.3) : top > 0.45) hbad.push(`k${k} 高 ${top.toFixed(2)}／實驗線 ${H}`);
+        const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`];
+        if (look) {
+          const used = new Set(U[bid] || []), need = c => !c || used.has(c.toLowerCase()), any = [look.wallL, look.roof, look.accent, look.wallR].filter(Boolean);
+          const ok = BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
+          if (!ok) cbad.push(`k${k}`);
+        }
+      }
+      log(out.length === 0, `D007 ${id} 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）`, out.length ? out.slice(0, 4).join('；') : `${civ.length} 棟`);
+      log(hbad.length === 0, `D007 ${id} 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格`, hbad.length ? hbad.slice(0, 4).join('；') : `${civ.length} 棟全對`);
+      log(cbad.length === 0, `D007 ${id} 顏色：模型用上實驗線精靈讀出的色（建築類受光牆＋屋頂，設施類至少一色）`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
+      // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）
+      const Gd = await page.evaluate('__gt.groundData()'), rgb = Buffer.from(Gd.rgb, 'base64'), S = Gd.S, W = Gd.W, lay = await page.evaluate('__gt.layers()');
+      let plateCells = 0, plateBad = 0;
+      for (const [bid, k, x, z, s, lv] of civ) {
+        const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`], pc = parseInt((look?.plate ?? '#c9c3b5').slice(1), 16), ok = new Set([pc, mixc(pc, 0, .08), mixc(pc, 0xffffff, .08), GROUND.tram]);
+        for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) {
+          const cx = x + dx, cz = z + dz; if (cx >= lay.n || cz >= lay.n || lay.road[cz * lay.n + cx] || lay.rail[cz * lay.n + cx] || lay.dock[cz * lay.n + cx]) continue;
+          plateCells++;
+          let bad = false;
+          for (let v = 0; v < S && !bad; v++) for (let u = 0; u < S; u++) { const i = ((cz * S + v) * W + cx * S + u) * 3; if (!ok.has((rgb[i] << 16) | (rgb[i + 1] << 8) | rgb[i + 2])) { bad = true; break; } }
+          if (bad) plateBad++;
+        }
+      }
+      log(plateBad === 0 && plateCells > 0, `D007 ${id} 地坪：非住商工建築的格子鋪該種的實驗線地坪色`, `${plateCells} 格、不對 ${plateBad}`);
+      if (id === 'gallery') {
+        const pk = await page.evaluate(`(()=>{const bad=[];let n=0;for(const [id,k,x,z,s] of __gt.buildingList()){if(k<=3)continue;n++;const h=__gt.pickTopDown(x+s/2,z+s/2);if(!h||h.id!==id)bad.push('k'+k+'→'+JSON.stringify(h));}return {n,bad};})()`);
+        log(pk.bad.length === 0, 'D007 樣張城：從正上方點每一棟的中心，都回到那一棟', pk.bad.length ? `${pk.bad.length}／${pk.n} 不對：${pk.bad.slice(0, 4).join('；')}` : `${pk.n} 棟全對`);
+      }
+    }
   }
 
   // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動

@@ -5,7 +5,9 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityFromLab, cityStats, buildingAt, type City } from './sim/city.ts';
-import { buildCityScene, tileTop, TONES, type BuiltCity, type BlockRender, type Tone } from './render/cityScene.ts';
+import { buildCityScene, tileTop, TONES, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
+import { LOOKS } from './content/looks.ts';
+import { shapeOf, kindColors } from './content/kindShapes.ts';
 import { Pipeline } from './render/post.ts';
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
@@ -17,11 +19,13 @@ import { windowTexture } from './render/textures.ts';
 import { windowAtlas, atlasCell0MatchesD003 } from './render/windows.ts';
 import seed516 from './content/samples/seed516.code.txt?raw';
 import ai120 from './content/samples/ai120.code.txt?raw';
+import gallery from './content/samples/gallery.code.txt?raw';
 
 // 兩個樣本碼都是 tools/lab-extract.mjs 從 2D 實驗線 d23c18d（v13.43）產生的，出處與對帳數字在 src/content/samples/*.json
 const SAMPLES: Record<string, { label: string; code: string }> = {
   seed516: { label: '種子城', code: seed516 },
   ai120: { label: 'AI 城 120 天', code: ai120 },
+  gallery: { label: '全種類', code: gallery },   // D007：住商工以外 183 種各一棟（實驗線自己匯入讀回過）
 };
 const TER = ['水面', '沙地', '草地'], ROAD = ['', '道路', '橋', '高速公路', '高速公路橋'], ZONE = ['', '住宅區', '商業區', '工業區'];
 
@@ -50,6 +54,8 @@ export function startCity() {
     return d;
   };
   let plan: DrawBlock[] | null = null;
+  // D007：非住商工照造型表畫（街區模式才用）
+  const civic: CivicRender = { shape: shapeOf, colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
@@ -107,7 +113,7 @@ export function startCity() {
     const t2 = performance.now();
     const br = blockRenderFor(c);
     const tp = performance.now();
-    const b = buildCityScene(c, KINDS, style, br, tone);
+    const b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined);
     const t3 = performance.now();
     built?.dispose();
     city = c; built = b; label = name;
@@ -121,7 +127,7 @@ export function startCity() {
   function setBlocks(m: BlockMode | null) {
     if (!city) return;
     blockMode = m;
-    const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br, tone), t1 = performance.now();
+    const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined), t1 = performance.now();
     built?.dispose();
     built = b;
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
@@ -295,6 +301,20 @@ export function startCity() {
     groundAt: (x: number, z: number) => built!.groundAt(x, z),
     wallStyles: () => built!.wallStyles(),
     meshStats: () => built!.meshStats(),
+    ownerBoxes: () => built!.ownerBoxes(),
+    kindColorsUsed: () => built!.kindColorsUsed(),
+    // D007：從正上方點地圖上一點（格座標），回報點到的建築（不動目前的鏡頭）
+    pickTopDown(x: number, z: number) {
+      const saved = { pos: cam.position.clone(), up: cam.up.clone(), zoom: cam.zoom, target: controls.target.clone() };
+      try {
+        cam.up.set(0, 0, -1); cam.position.set(x, city!.n, z); cam.zoom = 1; cam.lookAt(x, 0, z); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+        const [sx, sy] = screenOf(new THREE.Vector3(x, 0, z)); return pickAt(sx, sy);
+      } finally { cam.up.copy(saved.up); cam.position.copy(saved.pos); cam.zoom = saved.zoom; cam.lookAt(saved.target); controls.target.copy(saved.target); cam.updateProjectionMatrix(); cam.updateMatrixWorld(); }
+    },
+    kindColorsOf: (k: number, lv: number) => civic.colors(k, lv),
+    // [id, k, x, z, 佔地, lv, v, 地面高]；地面高＝佔地裡最高的格頂（高地 +0.4），高度守衛要扣掉
+    buildingList: () => city!.buildings.map(b => { let y0 = 0; for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < city!.n && b.z + dz < city!.n) y0 = Math.max(y0, tileTop(city!, (b.z + dz) * city!.n + b.x + dx)); return [b.id, b.k, b.x, b.z, b.size, b.lv, b.v, y0]; }),
+    heightOf: (k: number, lv: number, v: number) => KINDS.height(k, lv, v),
     // D006：地面貼圖（RGB，base64）與城市圖層，給煙霧測試在 Node 端逐像素驗
     groundData: () => { const g = built!.groundData(), rgb = new Uint8Array(g.W * g.W * 3); for (let i = 0, j = 0; i < g.rgba.length; i += 4, j += 3) { rgb[j] = g.rgba[i]; rgb[j + 1] = g.rgba[i + 1]; rgb[j + 2] = g.rgba[i + 2]; }
       let bin = ''; for (let i = 0; i < rgb.length; i += 0x8000) bin += String.fromCharCode(...rgb.subarray(i, i + 0x8000)); return { S: g.S, W: g.W, rgb: btoa(bin) }; },
@@ -371,6 +391,16 @@ export function startCity() {
       return { ...tested, bad };
     },
     spin: (rad: number) => { controls.rotateLeft?.(rad); invalidate(); },
+    // D007 逐種對照：鏡頭對準某一棟（佔地中心），縮放照給的值，當場畫一幀；回傳建築半高那一點在螢幕上的位置（對照小圖以它為中心裁）
+    focusBuilding(id: number, zoom: number) {
+      const b = city!.buildings[id - 1], a = built!.anchorOf(id);
+      if (!b || !a) return null;
+      const n = city!.n, target = new THREE.Vector3(b.x + b.size / 2, 0, b.z + b.size / 2), D = n * 1.6;
+      cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
+      cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+      needsRender = true; frame();
+      return screenOf(a);
+    },
     renderInfo: () => ({ ...pipe.sceneInfo, rt: pipe.size }),
   };
 }

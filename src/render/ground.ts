@@ -34,7 +34,8 @@ const pick = (list: number[], h: number) => list[Math.min(list.length - 1, Math.
 export const groundCellPx = (n: number) => Math.max(1, Math.min(8, Math.floor(1024 / n)));
 
 // 回傳 RGBA 陣列（第 r 列＝世界 z＝r/S）；cat(k)＝建築分類；lots＝D005 的街區地坪（沒有就是 D003 模式）
-export function paintGround(c: GroundCity, cat: (k: number) => string, S: number, lots?: Uint8Array): Uint8Array {
+// plates＝D007 非住商工建築的地坪色（實驗線精靈圖的地坪，−1＝照舊）
+export function paintGround(c: GroundCity, cat: (k: number) => string, S: number, lots?: Uint8Array, plates?: Int32Array): Uint8Array {
   const n = c.n, W = n * S, data = new Uint8Array(W * W * 4);
   const put = (px: number, py: number, col: number) => { const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
   const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
@@ -66,7 +67,8 @@ export function paintGround(c: GroundCity, cat: (k: number) => string, S: number
         if (lots[i] === 5) col = (u === 0 || v === 0) ? GROUND.grassLine : pick(GROUND.grass, h);
         else { const L = GROUND.lot[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; }
       }
-      // 其他設施用地：綠地更綠、農田條紋、住商工（D003 模式）是草坪、其餘是鋪面（D007 再改）
+      else if (plates && plates[i] >= 0) { const pc = plates[i]; col = h < 0.08 ? mix(pc, 0x000000, 0.08) : h > 0.92 ? mix(pc, 0xffffff, 0.08) : pc; }
+      // 其他設施用地（D003 模式）：綠地更綠、農田條紋、住商工是草坪、其餘是鋪面
       else if (b) col = ct === 'G' ? mix(0x86bd5c, 0x9bcc6a, h) : ct === 'F' ? (v % 2 ? 0xb9c95a : 0x9fb24a)
         : (ct === 'R' || ct === 'C' || ct === 'I') ? (edge ? mix(0x9aa08c, 0x8f9582, h) : mix(0x7fb356, 0x74a64d, h)) : mix(0xc9c3b5, 0xb8b1a2, h);
       else if (c.ter[i] === 0) col = h < 0.07 ? GROUND.waterHi : pick(GROUND.water, h);

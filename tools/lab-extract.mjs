@@ -1,5 +1,5 @@
 // 從 2D 實驗線抽出本線要用的資料（D003、D004）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
-// 用法：node tools/lab-extract.mjs --lab=../GlimmerTown-lab [--days=120] [--part=all|d003|d004]
+// 用法：node tools/lab-extract.mjs --lab=../GlimmerTown-lab [--days=120] [--part=all|d003|d004|d007]
 // 產出（D003）：
 //   src/content/lab-kinds.json        186 種建築：名稱、分類、佔地、每級高度（量精靈圖）、出處行號
 //   src/content/samples/<id>.code.txt 樣本分享碼（只留本線會讀的欄位；實驗線自己也能匯入）
@@ -20,7 +20,7 @@ import { encodeLabCode, decodeLabCode, rleDecode, RLE_FIELDS, TILE_LAYERS } from
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const LAB = path.resolve(arg('lab', process.env.LAB_DIR || path.join(ROOT, '..', 'GlimmerTown-lab')));
 const DAYS = Number(arg('days', 120));
-const PART = arg('part', 'all'), PARTS = new Set(PART === 'all' ? ['d003', 'd004'] : [PART]);
+const PART = arg('part', 'all'), PARTS = new Set(PART === 'all' ? ['d003', 'd004', 'd007'] : [PART]);
 const OUT = path.join(ROOT, 'src/content'), SAMPLES = path.join(OUT, 'samples'), SHOTS = path.join(ROOT, 'scratch/lab');
 fs.mkdirSync(SAMPLES, { recursive: true }); fs.mkdirSync(SHOTS, { recursive: true });
 
@@ -67,6 +67,14 @@ console.log(`KNAME ${kinds.length} 種（${kinds[0]}–${kinds.at(-1)}），KCB 
 // ---- 2. 無頭執行實驗線 ----
 const PRELOAD = "try{localStorage.setItem('glimmerville.v1.slot','3')}catch(e){}";   // 實驗線 harness.js：載入前必設槽 3，不碰業主存檔
 const J = s => JSON.stringify(s);
+// 開實驗線、進一座沙盒新城、等精靈烘好（同實驗線 harness.js 217–241 的流程）；D004、D007 共用
+async function bootLab(ev) {
+  await ev(`(()=>{const b=[...document.querySelectorAll('#start button')].find(x=>/開拓新城市/.test(x.textContent||''));if(b)b.click();return !!b;})()`);
+  await sleep(1500);
+  await ev(`(()=>{const T=t=>[...document.querySelectorAll('#startOverlay456 button, #startOverlay456 .mapBtn456')].find(b=>new RegExp(t).test((b.textContent||'').trim()));const d=T('沙盒');if(d)d.click();const m=T('^72×72');if(m)m.click();const g=T('建立城市');if(g)g.click();return 1;})()`);
+  for (const t1 = Date.now(); Date.now() - t1 < 240000;) { if (await ev('(window.__t519Roof|0)>0')) break; await sleep(500); }
+  await sleep(2500);
+}
 // 實驗線執行期的對帳數字：直接讀 tiles（經 GV.tile 深拷貝），跟存檔怎麼寫無關
 const MEASURE = `(()=>{const N=GV.N(),c={n:N,ter:[0,0,0,0],road:[0,0,0,0,0],zone:[0,0,0,0],trees:0,el:0,rail:0,tram:0,dock:0,abandoned:0};
   const roots=[],refs=new Map();
@@ -244,11 +252,7 @@ if (PARTS.has('d004')) {
     ready: '!!window.__bootDone453&&!!window.__d004', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
     const ev = e => page.evaluate(e);
     await open('');
-    await ev(`(()=>{const b=[...document.querySelectorAll('#start button')].find(x=>/開拓新城市/.test(x.textContent||''));if(b)b.click();return !!b;})()`);
-    await sleep(1500);
-    await ev(`(()=>{const T=t=>[...document.querySelectorAll('#startOverlay456 button, #startOverlay456 .mapBtn456')].find(b=>new RegExp(t).test((b.textContent||'').trim()));const d=T('沙盒');if(d)d.click();const m=T('^72×72');if(m)m.click();const g=T('建立城市');if(g)g.click();return 1;})()`);
-    for (const t1 = Date.now(); Date.now() - t1 < 240000;) { if (await ev('(window.__t519Roof|0)>0')) break; await sleep(500); }
-    await sleep(2500);
+    await bootLab(ev);
     console.log(`D004：實驗線副本開好（${((Date.now() - t0) / 1000).toFixed(0)}s；出口插在第 ${injectedAt} 行）`);
 
     // 1. 原型表：靜態抽出的字面量跟執行期的 ARCHE568 深度相等才寫
@@ -340,4 +344,87 @@ if (PARTS.has('d004')) {
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
   });
   console.log(`D004 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+}
+
+// ===== D007：非住商工的顏色（讀精靈圖）、全種類樣張城（實驗線自己匯入讀回）、逐種 2D 小圖（卡 docs/D007-civic-buildings.md）=====
+if (PARTS.has('d007')) {
+  const t0 = Date.now();
+  const { galleryLayout, GALLERY_N, galleryZoom } = await import('../src/content/gallery.ts');
+  const { cityFromLab, cityStats } = await import('../src/sim/city.ts');
+  const { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const kindsData = JSON.parse(fs.readFileSync(path.join(OUT, 'lab-kinds.json'), 'utf8')), KT = kindTableFrom(kindsData);
+  const place = galleryLayout(kindsData.kinds.map(r => ({ k: r.k, size: r.size, cat: r.cat })));
+  // 樣張城的存檔：拿種子城的樣本碼當樣板（實驗線 load() 會讀的欄位都在），清掉逐格圖層、拿掉跟位置綁在一起的模組狀態，只擺樣張建築
+  const rawOf = code => { const o = JSON.parse(Buffer.from(code.replace(/^GVX1:/, ''), 'base64').toString('utf8')); if (o.z === 1) { for (const f of RLE_FIELDS) if (typeof o[f] === 'string') o[f] = rleDecode(o[f]); delete o.z; } return o; };
+  const g = rawOf(fs.readFileSync(path.join(SAMPLES, 'seed516.code.txt'), 'utf8')), N = GALLERY_N, nn = N * N;
+  for (const f of RLE_FIELDS) if (typeof g[f] === 'string') g[f] = '0'.repeat(nn);
+  g.ter = '2'.repeat(nn);
+  for (const f of ['bus_rt', 'riot', 'plague', 'sc', 'rk', 'sup', 'aim', 'aiR', 'gds', 'sb', 'cev', 'mln', 'sf', 'rdep', 'df', 'ach', 'ln', 'pol', 'region']) delete g[f];
+  // age 400：age 小的實驗線會畫成工地（T635 施工中），D007 首跑樣張全是工地
+  g.bl = place.map(p => p.k === 9 ? [p.z * N + p.x, 9, 1, 0, 400, 2] : [p.z * N + p.x, p.k, 1, 0, 400]);
+  g.nm = '全種類樣張城'; g.cam = { x: 0, y: 0, z: 1 };
+  const code = encodeLabCode(g, { deflate: true });
+  const dec = decodeLabCode(code);
+  if (!dec.ok) throw new Error('樣張城：本線解不開自己編的碼');
+  const mine = cityStats(cityFromLab(dec.save, KT, code));
+  const shots = path.join(SHOTS, 'gallery'); fs.mkdirSync(shots, { recursive: true });
+
+  await withBrowser({ root: LAB, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD, ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+    const ev = e => page.evaluate(e);
+    await open('');
+    await bootLab(ev);
+    console.log(`D007：實驗線開好（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+    // 1. 顏色：逐種、逐級讀 v0 精靈。畫布座標：錨點 (ax,ay) 在佔地菱形的下尖角；有 sc 的圖畫布是 2 倍，菱形也跟著放大
+    const kinds = kindsData.kinds.filter(r => r.k > 3 && r.sprites).map(r => r.k);
+    const looks = await ev(`(()=>{const S=GV.art574.SPR().bld,out={},MS=${J(Object.fromEntries(kindsData.kinds.map(r => [r.k, r.size])))};
+      const hex=(r,g,b)=>'#'+((r<<16)|(g<<8)|b).toString(16).padStart(6,'0');
+      const mode=m=>{let best=null,bn=0;for(const[k,n]of m)if(n>bn){best=k;bn=n;}return best;};
+      const sum=m=>[...m.values()].reduce((a,b)=>a+b,0);
+      for(const k of ${J(kinds)})for(let lv=1;lv<=3;lv++){const s=S[k+'_'+lv+'_0'];if(!s||!s.img||!s.img.width)continue;
+        const c=s.img,w=c.width,h=c.height,d=c.getContext('2d').getImageData(0,0,w,h).data,q=1/(s.sc||(s.w===144&&s.h===224&&s.ax===72&&s.ay===220?0.5:1));
+        const sz=k===9?2:(MS[k]||1),hw=32*sz*q,hh=16*sz*q,ax=s.ax,cy=s.ay-hh;
+        const plate=new Map(),roof=new Map(),wl=new Map(),wr=new Map(),acc=new Map(),add=(m,key)=>m.set(key,(m.get(key)||0)+1);
+        for(let x=0;x<w;x++){let top=-1;for(let y=0;y<h;y++)if(d[(y*w+x)*4+3]>200){top=y;break;}if(top<0)continue;
+          const t=Math.abs(x-ax)/hw;if(t>1)continue;const gTop=cy-hh*(1-t),gBot=cy+hh*(1-t),span=Math.max(1,gTop-top);
+          for(let y=top;y<h;y++){const i=(y*w+x)*4;if(d[i+3]<=200)continue;const r=d[i],g2=d[i+1],b=d[i+2],L=.3*r+.59*g2+.11*b;if(L<40)continue;
+            const key=hex(r,g2,b);
+            if(y>=gTop&&y<=gBot){if(y>cy&&Math.abs(y-gBot)<=4*q)add(plate,key);continue;}
+            if(y<gTop){if(y<top+.3*span)add(roof,key);else add(x<ax?wl:wr,key);
+              const mx=Math.max(r,g2,b),mn=Math.min(r,g2,b);if(mx>90&&(mx-mn)/mx>.45)add(acc,key);}}}
+        const R=mode(roof),WL=mode(wl),WR=mode(wr),A=[...acc.entries()].filter(([cc])=>cc!==R&&cc!==WL&&cc!==WR).sort((a,b)=>b[1]-a[1])[0];
+        out[k+'_'+lv]={plate:mode(plate),roof:R,wallL:WL,wallR:WR,accent:A?A[0]:null,px:{plate:sum(plate),roof:sum(roof),wall:sum(wl)+sum(wr)}};}
+      return out;})()`);
+    fs.writeFileSync(path.join(OUT, 'lab-looks.json'), JSON.stringify({ source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs --part=d007',
+      how: 'SPR.bld[k_lv_0] 精靈圖逐像素：地坪＝佔地菱形前緣 4 像素內最常見的色；屋頂＝每欄地面以上那一段的最上 30%；受光牆／背光牆＝錨點左／右、屋頂以下；點綴＝飽和度 >45% 的最常見色（排除屋頂與牆的色）；都排除亮度 <40 的描邊' },
+      looks }, null, 1));
+    console.log(`顏色：${Object.keys(looks).length} 份（${new Set(Object.keys(looks).map(k => k.split('_')[0])).size} 種）`);
+
+    // 2. 樣張城：實驗線匯入讀回，對帳數字要跟本線解碼逐項相等
+    if (!(await ev(`(()=>{const ok=GV.importCode(${J(code)});GV.setSpeed(0);return ok;})()`))) throw new Error('實驗線拒絕匯入樣張城');
+    await sleep(800);
+    const after = await ev(MEASURE), expect = { ...after, roots: after.roots.map(r => [r.i, r.k, r.lv, r.age, r.size2]) };
+    const same = JSON.stringify(expect) === JSON.stringify(mine);
+    fs.writeFileSync(path.join(SAMPLES, 'gallery.code.txt'), code);
+    fs.writeFileSync(path.join(SAMPLES, 'gallery.json'), JSON.stringify({ id: 'gallery', label: '全種類樣張城（D007）',
+      source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, how: 'src/content/gallery.ts 的擺法，以種子城樣本碼為樣板編成；實驗線 GV.importCode 讀回後量對帳數字' },
+      codeChars: code.length, expect, sameAsThisLine: same, place }));
+    console.log(`樣張城：${place.length} 棟、碼 ${code.length.toLocaleString()} 字元；實驗線讀回的對帳數字＝本線解碼：${same}`);
+    if (!same) {
+      const d = (a, b, p = '') => JSON.stringify(a) === JSON.stringify(b) ? [] : a && b && typeof a === 'object' && typeof b === 'object' ? [...new Set([...Object.keys(a), ...Object.keys(b)])].flatMap(k => d(a[k], b[k], p + '.' + k)) : [`${p}: 實驗線 ${J(a)} ≠ 本線 ${J(b)}`];
+      throw new Error('樣張城：實驗線讀回的對帳數字跟本線解碼不同：' + d(expect, mine).slice(0, 6).join('；'));
+    }
+
+    // 3. 逐種 2D 小圖：對準佔地中心、依大小與高度挑縮放，取以建築半高為中心的 300×300
+    for (const p of place) {
+      const h = KT.height(p.k, 1, 0), z = galleryZoom(p.size, h), cx = p.x + p.size / 2, cz = p.z + p.size / 2, lx = Math.floor(cx), lz = Math.floor(cz);
+      const url = await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
+        GV.lookAt(${lx},${lz});GV.art574.zoom574(${z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();
+        const c=document.getElementById('game'),W=c.width,H=c.height,sx=W/2+((${cx}-${cz})-(${lx}-${lz}))*32*${z},sy=H/2+((${cx}+${cz})-(${lx}+${lz}))*16*${z}-${h}*39.2*${z}/2;
+        const o=document.createElement('canvas');o.width=o.height=300;o.getContext('2d').drawImage(c,sx-150,sy-150,300,300,0,0,300,300);return o.toDataURL('image/png');})()`);
+      fs.writeFileSync(path.join(shots, `k${p.k}.png`), Buffer.from(url.split(',')[1], 'base64'));
+    }
+    console.log(`逐種 2D 小圖 ${place.length} 張（scratch/lab/gallery/）`);
+    if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
+  });
+  console.log(`D007 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 }

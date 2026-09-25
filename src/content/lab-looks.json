@@ -1,0 +1,2124 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "version": "13.43",
+  "anchor": "T638",
+  "tool": "tools/lab-extract.mjs --part=d007",
+  "how": "SPR.bld[k_lv_0] 精靈圖逐像素：地坪＝佔地菱形前緣 4 像素內最常見的色；屋頂＝每欄地面以上那一段的最上 30%；受光牆／背光牆＝錨點左／右、屋頂以下；點綴＝飽和度 >45% 的最常見色（排除屋頂與牆的色）；都排除亮度 <40 的描邊"
+ },
+ "looks": {
+  "6_1": {
+   "plate": "#615d56",
+   "roof": "#454b55",
+   "wallL": "#b0503c",
+   "wallR": "#454b55",
+   "accent": "#9c4533",
+   "px": {
+    "plate": 206,
+    "roof": 432,
+    "wall": 900
+   }
+  },
+  "7_1": {
+   "plate": "#58786a",
+   "roof": "#4c535e",
+   "wallL": "#4c535e",
+   "wallR": "#6f7784",
+   "accent": "#7a3829",
+   "px": {
+    "plate": 169,
+    "roof": 338,
+    "wall": 809
+   }
+  },
+  "8_1": {
+   "plate": "#574b45",
+   "roof": "#343433",
+   "wallL": "#403426",
+   "wallR": "#405f6d",
+   "accent": "#8b8a3e",
+   "px": {
+    "plate": 182,
+    "roof": 330,
+    "wall": 597
+   }
+  },
+  "9_1": {
+   "plate": "#69717a",
+   "roof": "#2c3a57",
+   "wallL": "#7d8491",
+   "wallR": "#949daa",
+   "accent": "#33548b",
+   "px": {
+    "plate": 257,
+    "roof": 817,
+    "wall": 1727
+   }
+  },
+  "14_1": {
+   "plate": "#78a256",
+   "roof": "#7aa996",
+   "wallL": "#f3eddc",
+   "wallR": "#7aa996",
+   "accent": "#304b62",
+   "px": {
+    "plate": 167,
+    "roof": 399,
+    "wall": 824
+   }
+  },
+  "15_1": {
+   "plate": "#615d56",
+   "roof": "#74b39a",
+   "wallL": "#5d6570",
+   "wallR": "#454b55",
+   "accent": "#b0503c",
+   "px": {
+    "plate": 201,
+    "roof": 437,
+    "wall": 1107
+   }
+  },
+  "16_1": {
+   "plate": "#717571",
+   "roof": "#c0c0bf",
+   "wallL": "#4c584c",
+   "wallR": "#4c584c",
+   "accent": null,
+   "px": {
+    "plate": 184,
+    "roof": 85,
+    "wall": 162
+   }
+  },
+  "17_1": {
+   "plate": "#615e58",
+   "roof": "#66717b",
+   "wallL": "#4b545d",
+   "wallR": "#66717b",
+   "accent": "#7c3b2c",
+   "px": {
+    "plate": 226,
+    "roof": 240,
+    "wall": 504
+   }
+  },
+  "18_1": {
+   "plate": "#a04a36",
+   "roof": "#a57400",
+   "wallL": "#8fa0aa",
+   "wallR": "#a57400",
+   "accent": "#e3b23c",
+   "px": {
+    "plate": 179,
+    "roof": 176,
+    "wall": 544
+   }
+  },
+  "19_1": {
+   "plate": "#71a050",
+   "roof": "#a9c98a",
+   "wallL": "#b9c0c4",
+   "wallR": "#6a7277",
+   "accent": "#4f7f35",
+   "px": {
+    "plate": 1043,
+    "roof": 261,
+    "wall": 239
+   }
+  },
+  "20_1": {
+   "plate": "#4e5545",
+   "roof": "#2c333a",
+   "wallL": "#6c7378",
+   "wallR": "#3f7040",
+   "accent": "#98cf6c",
+   "px": {
+    "plate": 475,
+    "roof": 95,
+    "wall": 92
+   }
+  },
+  "21_1": {
+   "plate": "#cbc7bd",
+   "roof": "#dfe4e7",
+   "wallL": "#dfe4e7",
+   "wallR": "#dfe4e7",
+   "accent": "#2f8a55",
+   "px": {
+    "plate": 225,
+    "roof": 119,
+    "wall": 184
+   }
+  },
+  "22_1": {
+   "plate": "#785d3c",
+   "roof": "#4d5660",
+   "wallL": "#6d7884",
+   "wallR": "#4d5660",
+   "accent": "#834a36",
+   "px": {
+    "plate": 530,
+    "roof": 279,
+    "wall": 534
+   }
+  },
+  "23_1": {
+   "plate": "#8c897f",
+   "roof": "#2c333a",
+   "wallL": "#6f9e48",
+   "wallR": "#606c78",
+   "accent": "#62933f",
+   "px": {
+    "plate": 433,
+    "roof": 357,
+    "wall": 761
+   }
+  },
+  "24_1": {
+   "plate": "#79756c",
+   "roof": "#f6eed6",
+   "wallL": "#b0a067",
+   "wallR": "#b0a067",
+   "accent": "#af9d5e",
+   "px": {
+    "plate": 451,
+    "roof": 157,
+    "wall": 239
+   }
+  },
+  "25_1": {
+   "plate": "#7a8a68",
+   "roof": "#292e3d",
+   "wallL": "#869674",
+   "wallR": "#1e3a58",
+   "accent": "#4a7aa0",
+   "px": {
+    "plate": 510,
+    "roof": 138,
+    "wall": 193
+   }
+  },
+  "26_1": {
+   "plate": "#829074",
+   "roof": "#dee2e4",
+   "wallL": "#404452",
+   "wallR": "#e3e7ea",
+   "accent": "#d55554",
+   "px": {
+    "plate": 193,
+    "roof": 263,
+    "wall": 219
+   }
+  },
+  "27_1": {
+   "plate": "#5e6260",
+   "roof": "#454a58",
+   "wallL": "#d45854",
+   "wallR": "#636d60",
+   "accent": "#54a7c5",
+   "px": {
+    "plate": 224,
+    "roof": 113,
+    "wall": 199
+   }
+  },
+  "28_1": {
+   "plate": "#615d56",
+   "roof": "#9aa0a3",
+   "wallL": "#5f8cab",
+   "wallR": "#c3c8ca",
+   "accent": "#486d86",
+   "px": {
+    "plate": 207,
+    "roof": 278,
+    "wall": 619
+   }
+  },
+  "29_1": {
+   "plate": "#666055",
+   "roof": "#464b5a",
+   "wallL": null,
+   "wallR": "#6c6354",
+   "accent": null,
+   "px": {
+    "plate": 213,
+    "roof": 72,
+    "wall": 93
+   }
+  },
+  "30_1": {
+   "plate": "#615d56",
+   "roof": "#cf2e26",
+   "wallL": "#cf2e26",
+   "wallR": "#eef0ef",
+   "accent": "#9f231d",
+   "px": {
+    "plate": 203,
+    "roof": 525,
+    "wall": 1152
+   }
+  },
+  "31_1": {
+   "plate": "#777768",
+   "roof": "#cbcbb4",
+   "wallL": null,
+   "wallR": null,
+   "accent": null,
+   "px": {
+    "plate": 465,
+    "roof": 96,
+    "wall": 0
+   }
+  },
+  "32_1": {
+   "plate": "#34393e",
+   "roof": "#444b56",
+   "wallL": "#444b56",
+   "wallR": "#803e2d",
+   "accent": "#b65b41",
+   "px": {
+    "plate": 607,
+    "roof": 1335,
+    "wall": 3198
+   }
+  },
+  "33_1": {
+   "plate": "#85898c",
+   "roof": "#c45a42",
+   "wallL": "#fddcb8",
+   "wallR": "#77443c",
+   "accent": "#d46a52",
+   "px": {
+    "plate": 499,
+    "roof": 1750,
+    "wall": 4392
+   }
+  },
+  "34_1": {
+   "plate": "#85898c",
+   "roof": "#3d5a78",
+   "wallL": "#98bcd8",
+   "wallR": "#263b55",
+   "accent": "#324761",
+   "px": {
+    "plate": 414,
+    "roof": 1835,
+    "wall": 4669
+   }
+  },
+  "35_1": {
+   "plate": "#78a256",
+   "roof": "#8d9196",
+   "wallL": "#e7ddc6",
+   "wallR": "#aa9e83",
+   "accent": "#34506a",
+   "px": {
+    "plate": 395,
+    "roof": 809,
+    "wall": 1793
+   }
+  },
+  "36_1": {
+   "plate": "#54713c",
+   "roof": "#4c8571",
+   "wallL": "#6aa38c",
+   "wallR": "#a79a7e",
+   "accent": "#dcb54c",
+   "px": {
+    "plate": 395,
+    "roof": 1004,
+    "wall": 2220
+   }
+  },
+  "37_1": {
+   "plate": "#d9d5cb",
+   "roof": "#9dbfd9",
+   "wallL": "#eef3f6",
+   "wallR": "#bccad3",
+   "accent": "#2f6fae",
+   "px": {
+    "plate": 439,
+    "roof": 764,
+    "wall": 1674
+   }
+  },
+  "38_1": {
+   "plate": "#34463c",
+   "roof": "#2c333a",
+   "wallL": "#5e9644",
+   "wallR": "#b4583c",
+   "accent": "#a64a2e",
+   "px": {
+    "plate": 735,
+    "roof": 480,
+    "wall": 997
+   }
+  },
+  "39_1": {
+   "plate": "#3a4a5a",
+   "roof": "#d8402f",
+   "wallL": "#91979d",
+   "wallR": "#5e9644",
+   "accent": "#6c1b13",
+   "px": {
+    "plate": 755,
+    "roof": 777,
+    "wall": 1311
+   }
+  },
+  "40_1": {
+   "plate": "#cfcac0",
+   "roof": "#7a746a",
+   "wallL": "#bba886",
+   "wallR": "#bba886",
+   "accent": "#b8322c",
+   "px": {
+    "plate": 222,
+    "roof": 634,
+    "wall": 1406
+   }
+  },
+  "41_1": {
+   "plate": "#78a256",
+   "roof": "#9aa09f",
+   "wallL": "#f5efdf",
+   "wallR": "#9aa09f",
+   "accent": "#46698a",
+   "px": {
+    "plate": 405,
+    "roof": 911,
+    "wall": 2061
+   }
+  },
+  "42_1": {
+   "plate": "#78a256",
+   "roof": "#bab6ad",
+   "wallL": "#e2dfd6",
+   "wallR": "#a8a49b",
+   "accent": "#34506a",
+   "px": {
+    "plate": 396,
+    "roof": 865,
+    "wall": 1964
+   }
+  },
+  "43_1": {
+   "plate": "#78a256",
+   "roof": "#8d9396",
+   "wallL": "#8d9396",
+   "wallR": "#8d9396",
+   "accent": "#34506a",
+   "px": {
+    "plate": 388,
+    "roof": 783,
+    "wall": 1794
+   }
+  },
+  "44_1": {
+   "plate": "#cbc7bd",
+   "roof": "#e8eef2",
+   "wallL": "#939da4",
+   "wallR": "#939da4",
+   "accent": "#2f6f9a",
+   "px": {
+    "plate": 736,
+    "roof": 1117,
+    "wall": 2310
+   }
+  },
+  "45_1": {
+   "plate": "#6d7477",
+   "roof": "#dce2e3",
+   "wallL": "#bdc5c8",
+   "wallR": "#bdc5c8",
+   "accent": null,
+   "px": {
+    "plate": 432,
+    "roof": 176,
+    "wall": 93
+   }
+  },
+  "46_1": {
+   "plate": "#909293",
+   "roof": "#8897a6",
+   "wallL": "#8998a7",
+   "wallR": "#8897a6",
+   "accent": null,
+   "px": {
+    "plate": 183,
+    "roof": 212,
+    "wall": 515
+   }
+  },
+  "47_1": {
+   "plate": "#615e58",
+   "roof": "#2c333a",
+   "wallL": "#3f7040",
+   "wallR": "#eef1ea",
+   "accent": "#6fa247",
+   "px": {
+    "plate": 756,
+    "roof": 475,
+    "wall": 886
+   }
+  },
+  "48_1": {
+   "plate": "#89867f",
+   "roof": "#aeb2b3",
+   "wallL": "#aba69b",
+   "wallR": "#eceae4",
+   "accent": "#4c7391",
+   "px": {
+    "plate": 652,
+    "roof": 1988,
+    "wall": 4540
+   }
+  },
+  "49_1": {
+   "plate": "#423a35",
+   "roof": "#413932",
+   "wallL": "#3d3530",
+   "wallR": "#312b26",
+   "accent": null,
+   "px": {
+    "plate": 178,
+    "roof": 184,
+    "wall": 348
+   }
+  },
+  "50_1": {
+   "plate": "#514637",
+   "roof": "#8a6a3f",
+   "wallL": "#9f7f51",
+   "wallR": "#574536",
+   "accent": "#9a7c50",
+   "px": {
+    "plate": 184,
+    "roof": 222,
+    "wall": 322
+   }
+  },
+  "51_1": {
+   "plate": "#888d93",
+   "roof": "#e2e7ed",
+   "wallL": "#89acd1",
+   "wallR": "#b3b7ba",
+   "accent": "#be4141",
+   "px": {
+    "plate": 674,
+    "roof": 252,
+    "wall": 294
+   }
+  },
+  "53_1": {
+   "plate": "#7e8b57",
+   "roof": "#bece84",
+   "wallL": null,
+   "wallR": null,
+   "accent": null,
+   "px": {
+    "plate": 1318,
+    "roof": 240,
+    "wall": 0
+   }
+  },
+  "54_1": {
+   "plate": "#6c7267",
+   "roof": "#2e333b",
+   "wallL": "#385137",
+   "wallR": "#e4e6e0",
+   "accent": null,
+   "px": {
+    "plate": 707,
+    "roof": 382,
+    "wall": 902
+   }
+  },
+  "55_1": {
+   "plate": "#615e58",
+   "roof": "#2c333a",
+   "wallL": "#6d7880",
+   "wallR": "#99a7a9",
+   "accent": "#4f7f35",
+   "px": {
+    "plate": 775,
+    "roof": 626,
+    "wall": 1266
+   }
+  },
+  "56_1": {
+   "plate": "#615e58",
+   "roof": "#e9ecee",
+   "wallL": "#26456d",
+   "wallR": "#26456d",
+   "accent": "#223e62",
+   "px": {
+    "plate": 661,
+    "roof": 882,
+    "wall": 1848
+   }
+  },
+  "57_1": {
+   "plate": "#76716a",
+   "roof": "#fff5e1",
+   "wallL": "#c9c0ac",
+   "wallR": null,
+   "accent": null,
+   "px": {
+    "plate": 729,
+    "roof": 147,
+    "wall": 16
+   }
+  },
+  "58_1": {
+   "plate": "#817e79",
+   "roof": "#ebede6",
+   "wallL": "#d6d8d0",
+   "wallR": "#d9d6cb",
+   "accent": "#c0412e",
+   "px": {
+    "plate": 748,
+    "roof": 367,
+    "wall": 1261
+   }
+  },
+  "59_1": {
+   "plate": "#71796f",
+   "roof": "#3c73b3",
+   "wallL": "#bbbec5",
+   "wallR": "#b5b8bf",
+   "accent": "#3e75b5",
+   "px": {
+    "plate": 462,
+    "roof": 1540,
+    "wall": 3141
+   }
+  },
+  "60_1": {
+   "plate": "#726c64",
+   "roof": "#262a2c",
+   "wallL": "#b6bcc3",
+   "wallR": "#8db59f",
+   "accent": "#cf4d3d",
+   "px": {
+    "plate": 127,
+    "roof": 103,
+    "wall": 460
+   }
+  },
+  "61_1": {
+   "plate": "#bdb9ae",
+   "roof": "#8d9092",
+   "wallL": "#8b9092",
+   "wallR": "#b0a999",
+   "accent": "#b35a43",
+   "px": {
+    "plate": 659,
+    "roof": 863,
+    "wall": 1728
+   }
+  },
+  "62_1": {
+   "plate": "#2e3235",
+   "roof": "#4b5157",
+   "wallL": "#4a5056",
+   "wallR": "#494f55",
+   "accent": "#c44d43",
+   "px": {
+    "plate": 430,
+    "roof": 922,
+    "wall": 3029
+   }
+  },
+  "63_1": {
+   "plate": "#6a7658",
+   "roof": "#b8d9e4",
+   "wallL": "#b8d9e4",
+   "wallR": "#b4d5e0",
+   "accent": "#539a45",
+   "px": {
+    "plate": 490,
+    "roof": 263,
+    "wall": 435
+   }
+  },
+  "64_1": {
+   "plate": "#706b66",
+   "roof": "#999eab",
+   "wallL": "#8c919e",
+   "wallR": "#898f9c",
+   "accent": "#3972bb",
+   "px": {
+    "plate": 476,
+    "roof": 508,
+    "wall": 1074
+   }
+  },
+  "65_1": {
+   "plate": "#c7c3b8",
+   "roof": "#a3aaaf",
+   "wallL": "#a3aaaf",
+   "wallR": "#a3aaaf",
+   "accent": "#2f5a86",
+   "px": {
+    "plate": 963,
+    "roof": 739,
+    "wall": 1748
+   }
+  },
+  "66_1": {
+   "plate": "#88827a",
+   "roof": "#cfc7b7",
+   "wallL": "#cfc7b7",
+   "wallR": "#9faab6",
+   "accent": "#a1503e",
+   "px": {
+    "plate": 484,
+    "roof": 269,
+    "wall": 569
+   }
+  },
+  "67_1": {
+   "plate": "#737067",
+   "roof": "#d8d0c0",
+   "wallL": "#d7cfbf",
+   "wallR": "#b0a891",
+   "accent": "#ce5545",
+   "px": {
+    "plate": 120,
+    "roof": 396,
+    "wall": 1141
+   }
+  },
+  "68_1": {
+   "plate": "#73706a",
+   "roof": "#dbd9d3",
+   "wallL": "#e5e5de",
+   "wallR": "#bdbdb7",
+   "accent": "#d0ae65",
+   "px": {
+    "plate": 499,
+    "roof": 1216,
+    "wall": 2296
+   }
+  },
+  "69_1": {
+   "plate": "#737067",
+   "roof": "#fce6a2",
+   "wallL": "#dcd5bd",
+   "wallR": "#ebe3cc",
+   "accent": "#bf3727",
+   "px": {
+    "plate": 197,
+    "roof": 443,
+    "wall": 1325
+   }
+  },
+  "70_1": {
+   "plate": "#737067",
+   "roof": "#dfd4bc",
+   "wallL": "#c6beae",
+   "wallR": "#9f9788",
+   "accent": "#5b4d32",
+   "px": {
+    "plate": 123,
+    "roof": 390,
+    "wall": 1242
+   }
+  },
+  "71_1": {
+   "plate": "#7e7871",
+   "roof": "#443e33",
+   "wallL": "#c5b697",
+   "wallR": "#81aedb",
+   "accent": "#7abbeb",
+   "px": {
+    "plate": 180,
+    "roof": 98,
+    "wall": 236
+   }
+  },
+  "72_1": {
+   "plate": "#79756c",
+   "roof": "#606e61",
+   "wallL": "#b6a788",
+   "wallR": "#606e61",
+   "accent": "#cbaa3d",
+   "px": {
+    "plate": 131,
+    "roof": 187,
+    "wall": 412
+   }
+  },
+  "73_1": {
+   "plate": "#9c9a90",
+   "roof": "#898d94",
+   "wallL": "#ebe9dd",
+   "wallR": "#898d94",
+   "accent": null,
+   "px": {
+    "plate": 233,
+    "roof": 116,
+    "wall": 51
+   }
+  },
+  "74_1": {
+   "plate": "#8d7961",
+   "roof": null,
+   "wallL": null,
+   "wallR": null,
+   "accent": null,
+   "px": {
+    "plate": 113,
+    "roof": 0,
+    "wall": 0
+   }
+  },
+  "75_1": {
+   "plate": "#89847d",
+   "roof": "#c3b8a4",
+   "wallL": "#9b9387",
+   "wallR": "#aea797",
+   "accent": "#e2b761",
+   "px": {
+    "plate": 107,
+    "roof": 266,
+    "wall": 407
+   }
+  },
+  "76_1": {
+   "plate": "#79756c",
+   "roof": "#5e4f3f",
+   "wallL": "#897357",
+   "wallR": "#8a7b5c",
+   "accent": "#fa6aa9",
+   "px": {
+    "plate": 196,
+    "roof": 402,
+    "wall": 406
+   }
+  },
+  "77_1": {
+   "plate": "#747268",
+   "roof": "#4a4238",
+   "wallL": "#bfb8ac",
+   "wallR": "#8e877c",
+   "accent": null,
+   "px": {
+    "plate": 174,
+    "roof": 169,
+    "wall": 368
+   }
+  },
+  "78_1": {
+   "plate": "#2a3125",
+   "roof": "#9ee185",
+   "wallL": "#5b8a50",
+   "wallR": "#45743a",
+   "accent": "#7dbd67",
+   "px": {
+    "plate": 131,
+    "roof": 327,
+    "wall": 762
+   }
+  },
+  "79_1": {
+   "plate": "#63422e",
+   "roof": "#463a2c",
+   "wallL": "#7c4f31",
+   "wallR": "#9d3a2b",
+   "accent": "#7b4f32",
+   "px": {
+    "plate": 129,
+    "roof": 170,
+    "wall": 373
+   }
+  },
+  "80_1": {
+   "plate": "#372925",
+   "roof": "#f6f6f5",
+   "wallL": "#f5f5f5",
+   "wallR": "#f5f5f4",
+   "accent": "#dd504f",
+   "px": {
+    "plate": 173,
+    "roof": 289,
+    "wall": 152
+   }
+  },
+  "81_1": {
+   "plate": "#747964",
+   "roof": "#8c5f40",
+   "wallL": "#e4cda6",
+   "wallR": "#e1cba6",
+   "accent": "#8c5e3f",
+   "px": {
+    "plate": 227,
+    "roof": 464,
+    "wall": 1093
+   }
+  },
+  "82_1": {
+   "plate": "#89857b",
+   "roof": "#939ca8",
+   "wallL": "#d2d8e0",
+   "wallR": "#b9c1cd",
+   "accent": "#d4b454",
+   "px": {
+    "plate": 499,
+    "roof": 1367,
+    "wall": 3727
+   }
+  },
+  "83_1": {
+   "plate": "#a29983",
+   "roof": "#b86f50",
+   "wallL": "#ece2cd",
+   "wallR": "#d0c3a8",
+   "accent": "#ba7153",
+   "px": {
+    "plate": 771,
+    "roof": 2866,
+    "wall": 6337
+   }
+  },
+  "84_1": {
+   "plate": "#f4f1e8",
+   "roof": "#d65a3c",
+   "wallL": "#d65a3c",
+   "wallR": "#d65a3c",
+   "accent": "#b2432c",
+   "px": {
+    "plate": 222,
+    "roof": 263,
+    "wall": 584
+   }
+  },
+  "85_1": {
+   "plate": "#747964",
+   "roof": "#436d4a",
+   "wallL": "#d6c29f",
+   "wallR": "#d4c09e",
+   "accent": "#5c412c",
+   "px": {
+    "plate": 227,
+    "roof": 357,
+    "wall": 846
+   }
+  },
+  "86_1": {
+   "plate": "#747168",
+   "roof": "#8a92a0",
+   "wallL": "#c6c9d0",
+   "wallR": "#a6acb7",
+   "accent": "#d8b433",
+   "px": {
+    "plate": 227,
+    "roof": 432,
+    "wall": 964
+   }
+  },
+  "87_1": {
+   "plate": "#79a854",
+   "roof": "#b04a30",
+   "wallL": "#c85a3c",
+   "wallR": "#b04a30",
+   "accent": "#a8452c",
+   "px": {
+    "plate": 480,
+    "roof": 382,
+    "wall": 812
+   }
+  },
+  "88_1": {
+   "plate": "#6e634f",
+   "roof": "#8b6c46",
+   "wallL": "#8b6c46",
+   "wallR": "#987b55",
+   "accent": "#8a6c46",
+   "px": {
+    "plate": 230,
+    "roof": 343,
+    "wall": 611
+   }
+  },
+  "89_1": {
+   "plate": "#747168",
+   "roof": "#d85242",
+   "wallL": "#ebebe5",
+   "wallR": "#3a3a40",
+   "accent": "#d74f3f",
+   "px": {
+    "plate": 227,
+    "roof": 293,
+    "wall": 682
+   }
+  },
+  "90_1": {
+   "plate": "#8c826e",
+   "roof": "#d3bf9e",
+   "wallL": "#54574b",
+   "wallR": "#d1be9d",
+   "accent": "#da8a3f",
+   "px": {
+    "plate": 499,
+    "roof": 514,
+    "wall": 746
+   }
+  },
+  "91_1": {
+   "plate": "#817662",
+   "roof": "#6c6c73",
+   "wallL": "#c88a4f",
+   "wallR": "#c2884f",
+   "accent": "#5e9fe3",
+   "px": {
+    "plate": 499,
+    "roof": 657,
+    "wall": 1383
+   }
+  },
+  "92_1": {
+   "plate": "#5e8350",
+   "roof": "#e5d9bb",
+   "wallL": "#8b6c46",
+   "wallR": "#cf4d3f",
+   "accent": "#8a6d48",
+   "px": {
+    "plate": 227,
+    "roof": 315,
+    "wall": 317
+   }
+  },
+  "93_1": {
+   "plate": "#757d86",
+   "roof": "#8998a3",
+   "wallL": "#cce4ec",
+   "wallR": "#b4d5e2",
+   "accent": "#8b6c46",
+   "px": {
+    "plate": 227,
+    "roof": 268,
+    "wall": 546
+   }
+  },
+  "94_1": {
+   "plate": "#76767e",
+   "roof": "#5d5d66",
+   "wallL": "#b2b2b9",
+   "wallR": "#b7b7bf",
+   "accent": "#cd833d",
+   "px": {
+    "plate": 227,
+    "roof": 153,
+    "wall": 215
+   }
+  },
+  "95_1": {
+   "plate": "#78a255",
+   "roof": "#5b7a4f",
+   "wallL": "#787063",
+   "wallR": "#3e2b1b",
+   "accent": "#5c4027",
+   "px": {
+    "plate": 175,
+    "roof": 697,
+    "wall": 978
+   }
+  },
+  "96_1": {
+   "plate": "#899296",
+   "roof": "#596974",
+   "wallL": "#d5cdbd",
+   "wallR": "#54bed2",
+   "accent": "#54bfd3",
+   "px": {
+    "plate": 227,
+    "roof": 273,
+    "wall": 495
+   }
+  },
+  "97_1": {
+   "plate": "#6d787a",
+   "roof": "#65776a",
+   "wallL": "#5f6f62",
+   "wallR": "#a4875f",
+   "accent": "#6295e9",
+   "px": {
+    "plate": 227,
+    "roof": 123,
+    "wall": 202
+   }
+  },
+  "98_1": {
+   "plate": "#747964",
+   "roof": "#c56c5c",
+   "wallL": "#ebd5a6",
+   "wallR": "#ead4a6",
+   "accent": "#c86f5f",
+   "px": {
+    "plate": 227,
+    "roof": 494,
+    "wall": 1038
+   }
+  },
+  "99_1": {
+   "plate": "#7f856c",
+   "roof": "#f3efe7",
+   "wallL": "#f1ede5",
+   "wallR": "#f0ece4",
+   "accent": "#d6b131",
+   "px": {
+    "plate": 227,
+    "roof": 440,
+    "wall": 1057
+   }
+  },
+  "100_1": {
+   "plate": "#817268",
+   "roof": "#c3c5cb",
+   "wallL": "#a05d4a",
+   "wallR": "#874e3e",
+   "accent": "#9f5c49",
+   "px": {
+    "plate": 501,
+    "roof": 1174,
+    "wall": 2531
+   }
+  },
+  "101_1": {
+   "plate": "#8b9498",
+   "roof": "#ffffff",
+   "wallL": "#54c1d5",
+   "wallR": "#da7c40",
+   "accent": "#df5958",
+   "px": {
+    "plate": 499,
+    "roof": 461,
+    "wall": 520
+   }
+  },
+  "102_1": {
+   "plate": "#6f6d69",
+   "roof": "#68717c",
+   "wallL": "#f2efe6",
+   "wallR": "#823a2c",
+   "accent": "#b0503c",
+   "px": {
+    "plate": 203,
+    "roof": 431,
+    "wall": 1036
+   }
+  },
+  "103_1": {
+   "plate": "#767369",
+   "roof": "#d7dbe1",
+   "wallL": "#c5c9d0",
+   "wallR": "#a7abb6",
+   "accent": null,
+   "px": {
+    "plate": 227,
+    "roof": 516,
+    "wall": 450
+   }
+  },
+  "104_1": {
+   "plate": "#6e764f",
+   "roof": "#987b54",
+   "wallL": "#293422",
+   "wallR": "#987b55",
+   "accent": "#7b5f3f",
+   "px": {
+    "plate": 227,
+    "roof": 306,
+    "wall": 572
+   }
+  },
+  "105_1": {
+   "plate": "#81858a",
+   "roof": "#8a5148",
+   "wallL": "#fdeddb",
+   "wallR": "#8a5148",
+   "accent": "#b8884a",
+   "px": {
+    "plate": 771,
+    "roof": 4795,
+    "wall": 11634
+   }
+  },
+  "106_1": {
+   "plate": "#81858a",
+   "roof": "#3d5a78",
+   "wallL": "#98bcd8",
+   "wallR": "#263b55",
+   "accent": "#324761",
+   "px": {
+    "plate": 686,
+    "roof": 3026,
+    "wall": 7255
+   }
+  },
+  "107_1": {
+   "plate": "#757774",
+   "roof": "#8a8c86",
+   "wallL": "#c5c7c1",
+   "wallR": "#c3c5bf",
+   "accent": "#5e432e",
+   "px": {
+    "plate": 227,
+    "roof": 466,
+    "wall": 922
+   }
+  },
+  "108_1": {
+   "plate": "#58786a",
+   "roof": "#8e9396",
+   "wallL": "#a4957b",
+   "wallR": "#ece2cc",
+   "accent": "#37536b",
+   "px": {
+    "plate": 402,
+    "roof": 796,
+    "wall": 1752
+   }
+  },
+  "109_1": {
+   "plate": "#6f7572",
+   "roof": "#b5c9cf",
+   "wallL": "#b7cad0",
+   "wallR": "#b5c9cf",
+   "accent": "#314c6a",
+   "px": {
+    "plate": 771,
+    "roof": 2802,
+    "wall": 5699
+   }
+  },
+  "110_1": {
+   "plate": "#817560",
+   "roof": "#c3c5cb",
+   "wallL": "#5f9edf",
+   "wallR": "#6c6a70",
+   "accent": "#5d9cde",
+   "px": {
+    "plate": 499,
+    "roof": 934,
+    "wall": 1476
+   }
+  },
+  "111_1": {
+   "plate": "#717951",
+   "roof": "#7a7e85",
+   "wallL": "#8c8c93",
+   "wallR": "#b5b9c0",
+   "accent": "#367d44",
+   "px": {
+    "plate": 499,
+    "roof": 812,
+    "wall": 2104
+   }
+  },
+  "112_1": {
+   "plate": "#577c49",
+   "roof": "#c6ffa3",
+   "wallL": "#5a9f59",
+   "wallR": "#437b43",
+   "accent": "#437b42",
+   "px": {
+    "plate": 771,
+    "roof": 286,
+    "wall": 508
+   }
+  },
+  "113_1": {
+   "plate": "#7aa75a",
+   "roof": "#6b5a52",
+   "wallL": "#444b56",
+   "wallR": "#6b5a52",
+   "accent": "#763627",
+   "px": {
+    "plate": 901,
+    "roof": 1358,
+    "wall": 3483
+   }
+  },
+  "114_1": {
+   "plate": "#71a050",
+   "roof": "#aab2b7",
+   "wallL": "#a9c98a",
+   "wallR": "#a7a39b",
+   "accent": "#2f6aa8",
+   "px": {
+    "plate": 1303,
+    "roof": 562,
+    "wall": 1157
+   }
+  },
+  "115_1": {
+   "plate": "#7c786d",
+   "roof": "#e4e0d6",
+   "wallL": "#e4e0d6",
+   "wallR": "#e3dfd5",
+   "accent": "#dd5656",
+   "px": {
+    "plate": 771,
+    "roof": 1613,
+    "wall": 3765
+   }
+  },
+  "116_1": {
+   "plate": "#6a6e74",
+   "roof": "#2c303d",
+   "wallL": "#767a80",
+   "wallR": "#767a80",
+   "accent": null,
+   "px": {
+    "plate": 504,
+    "roof": 96,
+    "wall": 96
+   }
+  },
+  "117_1": {
+   "plate": "#757066",
+   "roof": "#c6c8cd",
+   "wallL": "#8c8a90",
+   "wallR": "#d4a852",
+   "accent": "#d5a951",
+   "px": {
+    "plate": 227,
+    "roof": 308,
+    "wall": 471
+   }
+  },
+  "118_1": {
+   "plate": "#7b7560",
+   "roof": "#989c89",
+   "wallL": "#c4c6b9",
+   "wallR": "#dadccf",
+   "accent": "#efaa5a",
+   "px": {
+    "plate": 499,
+    "roof": 1156,
+    "wall": 2402
+   }
+  },
+  "119_1": {
+   "plate": "#5e584c",
+   "roof": "#9ba3a9",
+   "wallL": "#e8e5db",
+   "wallR": "#e6e3d9",
+   "accent": null,
+   "px": {
+    "plate": 499,
+    "roof": 1107,
+    "wall": 2167
+   }
+  },
+  "120_1": {
+   "plate": "#6e7664",
+   "roof": "#d3bf9e",
+   "wallL": "#4590a7",
+   "wallR": "#d2bf9e",
+   "accent": "#63aec3",
+   "px": {
+    "plate": 227,
+    "roof": 307,
+    "wall": 607
+   }
+  },
+  "121_1": {
+   "plate": "#9e7f44",
+   "roof": "#4e585e",
+   "wallL": "#72787e",
+   "wallR": "#4d575d",
+   "accent": "#774233",
+   "px": {
+    "plate": 3015,
+    "roof": 6664,
+    "wall": 15708
+   }
+  },
+  "122_1": {
+   "plate": "#77746e",
+   "roof": "#df6e55",
+   "wallL": "#515a61",
+   "wallR": "#4b5158",
+   "accent": null,
+   "px": {
+    "plate": 779,
+    "roof": 476,
+    "wall": 1059
+   }
+  },
+  "123_1": {
+   "plate": "#77746e",
+   "roof": "#4b5158",
+   "wallL": "#83807a",
+   "wallR": "#4b5158",
+   "accent": "#61a8c7",
+   "px": {
+    "plate": 772,
+    "roof": 309,
+    "wall": 793
+   }
+  },
+  "124_1": {
+   "plate": "#626c5d",
+   "roof": "#2c4154",
+   "wallL": "#2c4154",
+   "wallR": "#2d4154",
+   "accent": "#a75446",
+   "px": {
+    "plate": 903,
+    "roof": 1904,
+    "wall": 3609
+   }
+  },
+  "125_1": {
+   "plate": "#626c5d",
+   "roof": "#306159",
+   "wallL": "#294f63",
+   "wallR": "#2b5064",
+   "accent": "#2a5064",
+   "px": {
+    "plate": 903,
+    "roof": 1361,
+    "wall": 4265
+   }
+  },
+  "126_1": {
+   "plate": "#626c5d",
+   "roof": "#d75245",
+   "wallL": "#d6bb71",
+   "wallR": "#ceb570",
+   "accent": "#d6bb72",
+   "px": {
+    "plate": 903,
+    "roof": 1505,
+    "wall": 3212
+   }
+  },
+  "127_1": {
+   "plate": "#656f5f",
+   "roof": "#d5c8ab",
+   "wallL": "#d4c6a9",
+   "wallR": "#c9bea6",
+   "accent": "#ba6a4e",
+   "px": {
+    "plate": 1959,
+    "roof": 5158,
+    "wall": 10457
+   }
+  },
+  "128_1": {
+   "plate": "#626c5d",
+   "roof": "#b7c7c7",
+   "wallL": "#8a9c9f",
+   "wallR": "#505d64",
+   "accent": "#d5a54d",
+   "px": {
+    "plate": 907,
+    "roof": 1082,
+    "wall": 4110
+   }
+  },
+  "129_1": {
+   "plate": "#48626e",
+   "roof": "#d6dcdb",
+   "wallL": "#94a5a8",
+   "wallR": "#94a5a8",
+   "accent": "#3686a5",
+   "px": {
+    "plate": 499,
+    "roof": 5389,
+    "wall": 12959
+   }
+  },
+  "130_1": {
+   "plate": "#a6a296",
+   "roof": null,
+   "wallL": null,
+   "wallR": null,
+   "accent": null,
+   "px": {
+    "plate": 408,
+    "roof": 0,
+    "wall": 0
+   }
+  },
+  "131_1": {
+   "plate": "#4b5661",
+   "roof": "#6f8593",
+   "wallL": "#6c8292",
+   "wallR": "#6a8090",
+   "accent": "#d09946",
+   "px": {
+    "plate": 1959,
+    "roof": 5120,
+    "wall": 10659
+   }
+  },
+  "132_1": {
+   "plate": "#516b50",
+   "roof": "#699e65",
+   "wallL": "#699e65",
+   "wallR": "#679b64",
+   "accent": "#447fa1",
+   "px": {
+    "plate": 1959,
+    "roof": 4413,
+    "wall": 8418
+   }
+  },
+  "133_1": {
+   "plate": "#4b5661",
+   "roof": "#b0c2c4",
+   "wallL": "#5c6e74",
+   "wallR": "#5b727d",
+   "accent": "#d4b150",
+   "px": {
+    "plate": 1959,
+    "roof": 3301,
+    "wall": 5013
+   }
+  },
+  "134_1": {
+   "plate": "#679457",
+   "roof": "#3e7241",
+   "wallL": "#3d7240",
+   "wallR": "#3e7241",
+   "accent": "#3e7141",
+   "px": {
+    "plate": 1046,
+    "roof": 530,
+    "wall": 777
+   }
+  },
+  "135_1": {
+   "plate": "#9da28f",
+   "roof": "#f0f2f2",
+   "wallL": "#eff1f1",
+   "wallR": "#c2cace",
+   "accent": "#d44f4a",
+   "px": {
+    "plate": 1333,
+    "roof": 1371,
+    "wall": 2640
+   }
+  },
+  "136_1": {
+   "plate": "#8c9979",
+   "roof": "#8c6889",
+   "wallL": "#417846",
+   "wallR": "#6a6073",
+   "accent": "#765a40",
+   "px": {
+    "plate": 1344,
+    "roof": 1593,
+    "wall": 2972
+   }
+  },
+  "137_1": {
+   "plate": "#88927f",
+   "roof": "#756959",
+   "wallL": "#e3ddd0",
+   "wallR": "#bcb5a5",
+   "accent": "#437a48",
+   "px": {
+    "plate": 1596,
+    "roof": 4760,
+    "wall": 9098
+   }
+  },
+  "138_1": {
+   "plate": "#829283",
+   "roof": "#5d6f7b",
+   "wallL": "#d7dfe2",
+   "wallR": "#b7c4ca",
+   "accent": "#466f89",
+   "px": {
+    "plate": 1587,
+    "roof": 3900,
+    "wall": 7442
+   }
+  },
+  "139_1": {
+   "plate": "#8b877e",
+   "roof": "#dfe3e6",
+   "wallL": "#c9d0d5",
+   "wallR": "#9aa3a7",
+   "accent": "#8b5a3a",
+   "px": {
+    "plate": 1307,
+    "roof": 999,
+    "wall": 2335
+   }
+  },
+  "140_1": {
+   "plate": "#53504a",
+   "roof": "#a8b0b5",
+   "wallL": "#d6dadc",
+   "wallR": "#c6cdd1",
+   "accent": "#d26949",
+   "px": {
+    "plate": 771,
+    "roof": 1753,
+    "wall": 4010
+   }
+  },
+  "141_1": {
+   "plate": "#868379",
+   "roof": "#666d72",
+   "wallL": "#d3d5d2",
+   "wallR": "#d2d4d2",
+   "accent": "#ce6d4c",
+   "px": {
+    "plate": 227,
+    "roof": 363,
+    "wall": 659
+   }
+  },
+  "142_1": {
+   "plate": "#53504a",
+   "roof": "#775f48",
+   "wallL": "#d6cfbf",
+   "wallR": "#9aa4aa",
+   "accent": "#cb6f4a",
+   "px": {
+    "plate": 489,
+    "roof": 752,
+    "wall": 1469
+   }
+  },
+  "143_1": {
+   "plate": "#7a8a68",
+   "roof": "#283040",
+   "wallL": "#1e3a58",
+   "wallR": "#1e3a58",
+   "accent": "#4a7aa0",
+   "px": {
+    "plate": 1107,
+    "roof": 381,
+    "wall": 548
+   }
+  },
+  "144_1": {
+   "plate": "#4c8aa3",
+   "roof": "#363b4d",
+   "wallL": "#393e50",
+   "wallR": "#383d4f",
+   "accent": "#6fb4cb",
+   "px": {
+    "plate": 1045,
+    "roof": 1102,
+    "wall": 2287
+   }
+  },
+  "145_1": {
+   "plate": "#53504a",
+   "roof": "#d4d8da",
+   "wallL": "#d9dfe1",
+   "wallR": "#d4d8da",
+   "accent": "#cab150",
+   "px": {
+    "plate": 491,
+    "roof": 618,
+    "wall": 1355
+   }
+  },
+  "146_1": {
+   "plate": "#aaa69b",
+   "roof": "#7a858b",
+   "wallL": "#292f36",
+   "wallR": "#7a858b",
+   "accent": "#8b5a3a",
+   "px": {
+    "plate": 496,
+    "roof": 209,
+    "wall": 354
+   }
+  },
+  "147_1": {
+   "plate": "#53504a",
+   "roof": "#7cbece",
+   "wallL": "#549eb7",
+   "wallR": "#519cb5",
+   "accent": "#529cb5",
+   "px": {
+    "plate": 768,
+    "roof": 2632,
+    "wall": 2056
+   }
+  },
+  "148_1": {
+   "plate": "#aaa69b",
+   "roof": "#ffffff",
+   "wallL": "#434b50",
+   "wallR": "#a9aeb1",
+   "accent": "#c4845a",
+   "px": {
+    "plate": 489,
+    "roof": 494,
+    "wall": 1032
+   }
+  },
+  "149_1": {
+   "plate": "#7da457",
+   "roof": "#8a9297",
+   "wallL": "#5d86a4",
+   "wallR": "#3c5c75",
+   "accent": "#5f9444",
+   "px": {
+    "plate": 778,
+    "roof": 1208,
+    "wall": 2964
+   }
+  },
+  "150_1": {
+   "plate": "#aaa69b",
+   "roof": "#2c333a",
+   "wallL": "#8e969a",
+   "wallR": "#dfe3e5",
+   "accent": null,
+   "px": {
+    "plate": 497,
+    "roof": 214,
+    "wall": 436
+   }
+  },
+  "151_1": {
+   "plate": "#425f29",
+   "roof": "#5a7f9e",
+   "wallL": "#5a7f9e",
+   "wallR": "#785b18",
+   "accent": "#c89a2a",
+   "px": {
+    "plate": 468,
+    "roof": 289,
+    "wall": 464
+   }
+  },
+  "152_1": {
+   "plate": "#78a255",
+   "roof": "#2c333a",
+   "wallL": "#dde5e0",
+   "wallR": "#dde5e0",
+   "accent": "#5f8f3f",
+   "px": {
+    "plate": 494,
+    "roof": 314,
+    "wall": 549
+   }
+  },
+  "153_1": {
+   "plate": "#76a058",
+   "roof": "#2c333a",
+   "wallL": "#8b969c",
+   "wallR": "#8a959b",
+   "accent": "#4b6f8a",
+   "px": {
+    "plate": 772,
+    "roof": 430,
+    "wall": 966
+   }
+  },
+  "154_1": {
+   "plate": "#76a058",
+   "roof": "#8e979c",
+   "wallL": "#8e979c",
+   "wallR": "#8e979c",
+   "accent": "#3b7036",
+   "px": {
+    "plate": 1044,
+    "roof": 258,
+    "wall": 190
+   }
+  },
+  "155_1": {
+   "plate": "#aaa69b",
+   "roof": "#2c333a",
+   "wallL": "#e4ddcc",
+   "wallR": "#b8ae9b",
+   "accent": "#2f6fb0",
+   "px": {
+    "plate": 224,
+    "roof": 166,
+    "wall": 327
+   }
+  },
+  "156_1": {
+   "plate": "#78a255",
+   "roof": "#90b86c",
+   "wallL": "#3f7040",
+   "wallR": "#a29a86",
+   "accent": "#4f7f35",
+   "px": {
+    "plate": 1043,
+    "roof": 434,
+    "wall": 773
+   }
+  },
+  "157_1": {
+   "plate": "#aaa69b",
+   "roof": "#2c333a",
+   "wallL": "#e3e8ea",
+   "wallR": "#cfc7a8",
+   "accent": "#3f6ea6",
+   "px": {
+    "plate": 223,
+    "roof": 147,
+    "wall": 312
+   }
+  },
+  "158_1": {
+   "plate": "#78a255",
+   "roof": "#2c333a",
+   "wallL": "#5f8f3f",
+   "wallR": "#9aa5ab",
+   "accent": "#86b457",
+   "px": {
+    "plate": 742,
+    "roof": 770,
+    "wall": 1646
+   }
+  },
+  "159_1": {
+   "plate": "#78a255",
+   "roof": "#90b86c",
+   "wallL": "#90b86c",
+   "wallR": "#4f7f35",
+   "accent": "#5c7c38",
+   "px": {
+    "plate": 1043,
+    "roof": 267,
+    "wall": 297
+   }
+  },
+  "160_1": {
+   "plate": "#78a255",
+   "roof": "#90b86c",
+   "wallL": "#90b86c",
+   "wallR": "#3f7040",
+   "accent": "#3f7443",
+   "px": {
+    "plate": 1036,
+    "roof": 327,
+    "wall": 557
+   }
+  },
+  "161_1": {
+   "plate": "#aaa69b",
+   "roof": "#2c333a",
+   "wallL": "#292f36",
+   "wallR": "#5f6d72",
+   "accent": "#a86f4a",
+   "px": {
+    "plate": 227,
+    "roof": 176,
+    "wall": 328
+   }
+  },
+  "162_1": {
+   "plate": "#aaa69b",
+   "roof": "#9d998f",
+   "wallL": "#8f8b83",
+   "wallR": "#8f8b83",
+   "accent": null,
+   "px": {
+    "plate": 227,
+    "roof": 116,
+    "wall": 192
+   }
+  },
+  "163_1": {
+   "plate": "#79a256",
+   "roof": "#2c333a",
+   "wallL": "#c6c2b8",
+   "wallR": "#7f898e",
+   "accent": "#35668f",
+   "px": {
+    "plate": 223,
+    "roof": 96,
+    "wall": 152
+   }
+  },
+  "164_1": {
+   "plate": "#6f9152",
+   "roof": "#9e998f",
+   "wallL": "#948f86",
+   "wallR": "#b0aa9e",
+   "accent": "#4f7f41",
+   "px": {
+    "plate": 501,
+    "roof": 603,
+    "wall": 1306
+   }
+  },
+  "165_1": {
+   "plate": "#8b877e",
+   "roof": "#646f75",
+   "wallL": "#8d989e",
+   "wallR": "#646f75",
+   "accent": "#6fa247",
+   "px": {
+    "plate": 1057,
+    "roof": 582,
+    "wall": 1327
+   }
+  },
+  "166_1": {
+   "plate": "#8b877e",
+   "roof": "#8d8d88",
+   "wallL": "#8d8d88",
+   "wallR": "#8d8d88",
+   "accent": "#47729e",
+   "px": {
+    "plate": 994,
+    "roof": 1137,
+    "wall": 1688
+   }
+  },
+  "167_1": {
+   "plate": "#615e58",
+   "roof": "#2c333a",
+   "wallL": "#c3c5c1",
+   "wallR": "#c3c5c1",
+   "accent": "#3e6c96",
+   "px": {
+    "plate": 743,
+    "roof": 699,
+    "wall": 1449
+   }
+  },
+  "168_1": {
+   "plate": "#615e58",
+   "roof": "#d8dcdd",
+   "wallL": "#d8dcdd",
+   "wallR": "#d8dcdd",
+   "accent": "#5c8cae",
+   "px": {
+    "plate": 459,
+    "roof": 629,
+    "wall": 1354
+   }
+  },
+  "169_1": {
+   "plate": "#615e58",
+   "roof": "#8f989d",
+   "wallL": "#e5e1d6",
+   "wallR": "#c3beb2",
+   "accent": "#d0392c",
+   "px": {
+    "plate": 482,
+    "roof": 1213,
+    "wall": 2586
+   }
+  },
+  "170_1": {
+   "plate": "#615e58",
+   "roof": "#2c333a",
+   "wallL": "#a6acaa",
+   "wallR": "#a6acaa",
+   "accent": "#4f7f35",
+   "px": {
+    "plate": 748,
+    "roof": 682,
+    "wall": 1394
+   }
+  },
+  "171_1": {
+   "plate": "#615e58",
+   "roof": "#fbfbf8",
+   "wallL": "#8c98a0",
+   "wallR": "#dfe1dd",
+   "accent": "#f1cd52",
+   "px": {
+    "plate": 760,
+    "roof": 768,
+    "wall": 1782
+   }
+  },
+  "172_1": {
+   "plate": "#615e58",
+   "roof": "#e2b23a",
+   "wallL": "#e2b23a",
+   "wallR": "#e2b23a",
+   "accent": "#faca52",
+   "px": {
+    "plate": 487,
+    "roof": 627,
+    "wall": 1014
+   }
+  },
+  "173_1": {
+   "plate": "#a9a497",
+   "roof": "#dcdad2",
+   "wallL": "#b9c0c4",
+   "wallR": "#6b5a4c",
+   "accent": "#0f4178",
+   "px": {
+    "plate": 901,
+    "roof": 625,
+    "wall": 1559
+   }
+  },
+  "174_1": {
+   "plate": "#6f6d69",
+   "roof": "#9a1d10",
+   "wallL": "#9a1d10",
+   "wallR": "#9a1d10",
+   "accent": "#d05346",
+   "px": {
+    "plate": 1135,
+    "roof": 2090,
+    "wall": 5199
+   }
+  },
+  "175_1": {
+   "plate": "#736f6a",
+   "roof": "#f5f2eb",
+   "wallL": "#8c93a2",
+   "wallR": "#8a91a0",
+   "accent": "#c7a751",
+   "px": {
+    "plate": 476,
+    "roof": 675,
+    "wall": 1343
+   }
+  },
+  "176_1": {
+   "plate": "#736f6a",
+   "roof": "#fbfbfa",
+   "wallL": "#8c93a2",
+   "wallR": "#8a91a0",
+   "accent": "#52b6bb",
+   "px": {
+    "plate": 476,
+    "roof": 676,
+    "wall": 1349
+   }
+  },
+  "177_1": {
+   "plate": "#767269",
+   "roof": "#6c93cf",
+   "wallL": "#fef5db",
+   "wallR": "#614535",
+   "accent": "#614534",
+   "px": {
+    "plate": 736,
+    "roof": 848,
+    "wall": 1144
+   }
+  },
+  "178_1": {
+   "plate": "#767269",
+   "roof": "#c175cf",
+   "wallL": "#fef5db",
+   "wallR": "#614535",
+   "accent": "#614534",
+   "px": {
+    "plate": 736,
+    "roof": 850,
+    "wall": 1147
+   }
+  },
+  "179_1": {
+   "plate": "#8e846d",
+   "roof": "#332c22",
+   "wallL": "#e3dbc4",
+   "wallR": "#9e6d4a",
+   "accent": "#894f37",
+   "px": {
+    "plate": 203,
+    "roof": 327,
+    "wall": 485
+   }
+  },
+  "180_1": {
+   "plate": "#6f8459",
+   "roof": "#eee2c9",
+   "wallL": "#eee2c9",
+   "wallR": "#ede1c8",
+   "accent": "#d45143",
+   "px": {
+    "plate": 186,
+    "roof": 452,
+    "wall": 684
+   }
+  },
+  "181_1": {
+   "plate": "#a6a49c",
+   "roof": "#e8e4d8",
+   "wallL": "#e3dfd5",
+   "wallR": "#e7e3d7",
+   "accent": "#4f8db0",
+   "px": {
+    "plate": 207,
+    "roof": 373,
+    "wall": 829
+   }
+  },
+  "182_1": {
+   "plate": "#7d6d57",
+   "roof": "#d4524c",
+   "wallL": "#958468",
+   "wallR": "#bb7bd6",
+   "accent": "#d5534d",
+   "px": {
+    "plate": 226,
+    "roof": 88,
+    "wall": 112
+   }
+  },
+  "183_1": {
+   "plate": "#40698c",
+   "roof": "#ffffff",
+   "wallL": "#e3ddcc",
+   "wallR": "#a79f8a",
+   "accent": null,
+   "px": {
+    "plate": 218,
+    "roof": 142,
+    "wall": 193
+   }
+  },
+  "184_1": {
+   "plate": "#986142",
+   "roof": "#393227",
+   "wallL": "#db4e3f",
+   "wallR": "#885d3b",
+   "accent": "#9c6b43",
+   "px": {
+    "plate": 194,
+    "roof": 99,
+    "wall": 154
+   }
+  },
+  "185_1": {
+   "plate": "#796146",
+   "roof": "#61705a",
+   "wallL": "#5d6c57",
+   "wallR": "#89898e",
+   "accent": "#c0533c",
+   "px": {
+    "plate": 196,
+    "roof": 348,
+    "wall": 311
+   }
+  },
+  "186_1": {
+   "plate": "#4f6c48",
+   "roof": "#8a6b4a",
+   "wallL": "#ade696",
+   "wallR": "#795d3f",
+   "accent": "#7a5d3f",
+   "px": {
+    "plate": 212,
+    "roof": 114,
+    "wall": 103
+   }
+  }
+ }
+}

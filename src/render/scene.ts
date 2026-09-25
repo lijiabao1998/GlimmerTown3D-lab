@@ -130,6 +130,18 @@ export class Geo {
     }
     g.dispose();
   }
+  // 任意 three 幾何（非索引化後）套矩陣加進來：球、半球、圓環、旋轉的箱、旋轉體……（D007）。矩陣不能鏡射（行列式要 > 0，不然面會反）
+  addGeometry(g: THREE.BufferGeometry, m: THREE.Matrix4, col: THREE.Color) {
+    const ng = g.index ? g.toNonIndexed() : g;
+    const p = ng.attributes.position, n = ng.attributes.normal, nm = new THREE.Matrix3().getNormalMatrix(m), v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      v.fromBufferAttribute(p, i).applyMatrix4(m); this.pos.push(v.x, v.y, v.z);
+      v.fromBufferAttribute(n, i).applyMatrix3(nm).normalize(); this.nor.push(v.x, v.y, v.z);
+      this.uv.push(...PLAIN_UV); this.col.push(col.r, col.g, col.b);
+      if (i % 3 === 2) { this.owners.push(this.owner); this.pushExt(3); }
+    }
+    if (ng !== g) ng.dispose();
+  }
   geometry(): THREE.BufferGeometry {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(this.pos, 3));

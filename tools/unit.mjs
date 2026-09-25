@@ -10,6 +10,7 @@ import { mulberry32 } from '../src/sim/rng.ts';
 import { gridOf, labPartition, partRow, partitionStats, drawPlan } from '../src/content/blocks.ts';
 import { recipe, labCalls, PAL_KEYS, kitCount } from '../src/content/recipes.ts';
 import { dressing, PROP_CAPS, solidBoxes, inBox } from '../src/content/dressing.ts';
+import { KIND_SHAPES } from '../src/content/kindShapes.ts';
 
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
@@ -220,6 +221,27 @@ const massDiff = (faults = {}) => {
   }
   log(bad.length === 0, 'D005 點綴擺放計畫：1,728 組都在地界內、不插進量體、件數照實驗線的上限與公式、同一組配方擺法固定',
     bad.length ? `${bad.length} 組不對：${bad.slice(0, 2).join('｜')}` : Object.entries(tot).map(([a, b]) => `${a} ${b}`).join('、'));
+}
+
+// ===== D007：非住商工的顏色、全種類樣張城、造型表 =====
+{
+  const LK = JSON.parse(read('src/content/lab-looks.json')), hex = c => c === null || /^#[0-9a-f]{6}$/.test(c);
+  const withSpr = data.kinds.filter(r => r.k > 3 && r.sprites), miss = withSpr.filter(r => !LK.looks[`${r.k}_1`]).map(r => r.k);
+  const badHex = Object.entries(LK.looks).filter(([, l]) => ![l.plate, l.roof, l.wallL, l.wallR, l.accent].every(hex)).map(([k]) => k);
+  log(LK.source.commit === data.source.commit && miss.length === 0 && badHex.length === 0,
+    'D007 顏色：有精靈的非住商工每一種都有實驗線讀出的五色、格式正確、出處同一個 commit', `${withSpr.length} 種；缺 ${miss.join(',') || 0}；格式錯 ${badHex.join(',') || 0}`);
+  const G = JSON.parse(read('src/content/samples/gallery.json')), gcode = read('src/content/samples/gallery.code.txt'), gr = decodeLabCode(gcode);
+  const gc = gr.ok ? cityFromLab(gr.save, K, gcode) : null, gs = gc ? cityStats(gc) : null;
+  const ks = G.place.map(p => p.k).sort((a, b) => a - b), all = data.kinds.filter(r => r.k > 3).map(r => r.k);
+  log(!!gc && G.sameAsThisLine === true && JSON.stringify(gs) === JSON.stringify(G.expect) && JSON.stringify(ks) === JSON.stringify(all)
+    && gc.issues.overlap === 0 && gc.issues.outOfMap === 0 && gc.issues.unknownKinds.length === 0,
+    'D007 全種類樣張城：183 種各一棟、沒有重疊出界；實驗線匯入讀回的對帳數字＝本線解碼', gc ? `${gc.buildings.length} 棟、${new Set(ks).size} 種` : '解不開');
+  const { BUILDER_TYPES, LANDMARK_KINDS } = await import('../src/render/kindArt.ts');
+  const RIDES = ['ferris', 'carousel', 'balloon', 'coaster', 'waterpark', 'dolphin', 'zoo', 'aquarium'];
+  const noShape = all.filter(k => !KIND_SHAPES[k]), badType = all.filter(k => KIND_SHAPES[k] && !BUILDER_TYPES.includes(KIND_SHAPES[k].type));
+  const badWhich = all.filter(k => { const s = KIND_SHAPES[k]; return s && ((s.type === 'landmark' && !LANDMARK_KINDS.includes(String(s.p?.which))) || (s.type === 'ride' && !RIDES.includes(String(s.p?.which)))); });
+  log(noShape.length + badType.length + badWhich.length === 0, 'D007 造型表：183 種都有造型、類型都有畫法（沒有落到預設盒子）',
+    `${new Set(all.map(k => KIND_SHAPES[k]?.type)).size} 種類型、${all.filter(k => KIND_SHAPES[k]?.type === 'landmark').length} 個地標；缺 ${noShape.join(',') || 0}、類型錯 ${badType.join(',') || 0}、地標／遊樂錯 ${badWhich.join(',') || 0}`);
 }
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----

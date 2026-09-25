@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|all] [--seed=5162026] [--out=scratch/shots]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|all] [--seed=5162026] [--out=scratch/shots]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -236,6 +236,64 @@ if (want('d006')) {
       await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d006_${name}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       await save(page, `D006-${name}-compare`);
+    }
+  });
+}
+
+// D007：逐種對照——全種類樣張城每一棟，實驗線 2D（tools/lab-extract.mjs --part=d007 拍的 scratch/lab/gallery/k*.png）｜3D，
+// 同一個中心（佔地中心、建築半高）、同一個縮放（3D＝3.42×實驗線 z）。依分類拼成幾張型錄
+if (want('d007')) {
+  const { galleryZoom } = await import('../src/content/gallery.ts');
+  const G = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/samples/gallery.json'), 'utf8'));
+  const KD = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')), byK = Object.fromEntries(KD.kinds.map(r => [r.k, r]));
+  const heightOf = (k) => { const r = byK[k]; if (!r || !r.sprites) return { 4: 0.08, 5: 1.6, 10: 1.8, 11: 1.0, 12: 1.8, 13: 0.8, 52: 0.6 }[k] ?? 1; return r.h[1] ?? Object.values(r.h)[0] ?? 1; };
+  const thumbs = path.join(out, 'd007'); fs.mkdirSync(thumbs, { recursive: true });
+  await withBrowser({ width: 900, height: 700 }, async ({ open, page }) => {
+    await open('sample=gallery&clean=1');
+    for (const p of G.place) {
+      const bid = await page.evaluate(`(()=>{const L=__gt.layers();return L.occ[${p.z}*L.n+${p.x}];})()`);
+      const z = galleryZoom(p.size, heightOf(p.k)) * 3.42;
+      const at = await page.evaluate(`__gt.focusBuilding(${bid}, ${z})`);
+      await new Promise(r => setTimeout(r, 60));
+      const shot = await page.send('Page.captureScreenshot', { format: 'png', clip: { x: at[0] - 150, y: at[1] - 150, width: 300, height: 300, scale: 1 } });
+      fs.writeFileSync(path.join(thumbs, `k${p.k}.png`), Buffer.from(shot.data, 'base64'));
+    }
+    errors += page.errors.length;
+    if (page.errors.length) console.log('console 錯誤：\n  ' + page.errors.join('\n  '));
+  });
+  const lab2d = path.join(ROOT, 'scratch/lab/gallery');
+  if (fs.existsSync(lab2d)) for (const f of fs.readdirSync(lab2d).filter(f => /^k\d+\.png$/.test(f))) fs.copyFileSync(path.join(lab2d, f), path.join(thumbs, '2d_' + f));   // 2D 小圖要先跑 lab-extract --part=d007（CI 沒有實驗線，就只有 3D）
+  const CATS = [['R', '住宅'], ['C', '商業'], ['I', '工業'], ['S', '市政治安'], ['D', '教育'], ['H', '醫療'], ['E', '能源'], ['W', '環衛'], ['T', '交通'], ['A', '文化觀光'], ['G', '綠地'], ['F', '農業']];
+  const sheets = [['RCI', ['R', 'C', 'I']], ['SDH', ['S', 'D', 'H']], ['E', ['E']], ['WT', ['W', 'T']], ['A1', ['A']], ['GF', ['G', 'F']]];
+  for (const [name, cats] of sheets) {
+    let list = G.place.filter(p => cats.includes(p.cat));
+    if (name === 'A1') { fs.writeFileSync(path.join(thumbs, `sheet_A2.json`), JSON.stringify(list.slice(24).map(p => p.k))); list = list.slice(0, 24); }
+    const make = (nm, arr) => fs.writeFileSync(path.join(thumbs, `sheet_${nm}.html`), `<!doctype html><meta charset="utf-8"><style>
+      body{margin:0;background:#0d1226;color:#eef1f7;font:13px system-ui,"Noto Sans CJK TC",sans-serif;width:2440px}h1{font-size:16px;margin:8px 10px}
+      .g{display:flex;flex-wrap:wrap;gap:8px;padding:0 10px 10px}.c{width:396px;background:#161d36;border-radius:6px;padding:4px}.c div{display:flex;gap:4px}img{width:194px;height:194px;display:block}
+      .c p{margin:2px 2px 4px;font-weight:600}</style><h1>D007 非住商工逐種對照（每格左：實驗線 2D；右：3D）・${cats.map(c => CATS.find(x => x[0] === c)[1]).join('、')}</h1>
+      <div class="g">${arr.map(p => `<div class="c"><p>k${p.k} ${byK[p.k].name}（${p.size}×${p.size}）</p><div><img src="2d_k${p.k}.png"><img src="k${p.k}.png"></div></div>`).join('')}</div>`);
+    make(name, list);
+    if (name === 'A1') make('A2', G.place.filter(p => p.cat === 'A').slice(24));
+  }
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {            // 手機直式：全種類樣張城、點一棟看卡
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=gallery&at=9,39&zoom=2.2');   // 貨櫃碼頭 (1,31) 5×5，鏡頭往前挪讓它落在卡片上方
+    await page.evaluate(`(()=>{const b=__gt.buildingList().find(r=>r[1]===174);return __gt.openTile(b[2],b[3]);})()`);
+    await new Promise(r => setTimeout(r, 400));
+    await save(page, 'D007-mobile');
+    errors += page.errors.length;
+  });
+  const names = sheets.map(s => s[0]).concat(['A2']);
+  await withBrowser({ root: thumbs, entry: `sheet_${names[0]}.html`, width: 2440, height: 1300, ready: '[...document.images].every(i=>i.complete)', settle: 300 }, async ({ page }) => {
+    for (const nm of names) {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/sheet_${nm}.html` });
+      await new Promise(r => setTimeout(r, 1500));
+      const h = await page.evaluate('document.body.scrollHeight');
+      // 型錄是 183 對小圖，存 PNG 一張 2–3 MB；改存 JPEG（品質 88，一張 0.5 MB 上下），版本庫才不會一輪長 15 MB
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88, captureBeyondViewport: true, clip: { x: 0, y: 0, width: 2440, height: h, scale: 1 } });
+      fs.writeFileSync(path.join(out, `D007-kinds-${nm}.jpg`), Buffer.from(shot.data, 'base64'));
+      console.log('OK', `D007-kinds-${nm}.jpg`);
     }
   });
 }
