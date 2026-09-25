@@ -212,12 +212,13 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     const hi = await page.evaluate('__gt.renderInfo()');
     log(hi.triangles === 48794 && hi.calls === 11, 'D006 300 年示範不動：三角形、draw call 跟 D005 前相同', `${hi.triangles} 個、${hi.calls} 次`);
   }
-  // 預設 B 的三角形釘：D006 驗「色調不改幾何」時釘的是 D005 的值（57,176／58,772）；D007 故意改了非住商工的幾何，釘改成 D007 定稿的值
-  const D005_TRI = { seed516: 59910, ai120: 64606 };
+  // 預設 B 的三角形釘：D006 驗「色調不改幾何」時釘的是 D005 的值（57,176／58,772）；D007 故意改了非住商工的幾何，釘改成 D007 定稿的值（59,910／64,606）；
+  // D008 故意在 B、C 檔加了英美立面與飾條，釘再改成 D008 定稿的值
+  const D005_TRI = { seed516: 69598, ai120: 67396 };
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone()})');
-    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006／D007 ${id} 幾何釘住（預設 B 的三角形、draw call 同最近一張卡定稿的值）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
+    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006～D008 ${id} 幾何釘住（預設 B 的三角形、draw call 同最近一張卡定稿的值）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
     const rgb = Buffer.from(G.rgb, 'base64'), n = L.n, S = G.S, W = G.W;
     const px = (x, z, u, v) => { const i = ((z * S + v) * W + x * S + u) * 3; return (rgb[i] << 16) | (rgb[i + 1] << 8) | rgb[i + 2]; };
     const isRoad = (x, z) => x >= 0 && z >= 0 && x < n && z < n && L.road[z * n + x] > 0;
@@ -300,6 +301,30 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       if (id === 'gallery') {
         const pk = await page.evaluate(`(()=>{const bad=[];let n=0;for(const [id,k,x,z,s] of __gt.buildingList()){if(k<=3)continue;n++;const h=__gt.pickTopDown(x+s/2,z+s/2);if(!h||h.id!==id)bad.push('k'+k+'→'+JSON.stringify(h));}return {n,bad};})()`);
         log(pk.bad.length === 0, 'D007 樣張城：從正上方點每一棟的中心，都回到那一棟', pk.bad.length ? `${pk.bad.length}／${pk.n} 不對：${pk.bad.slice(0, 4).join('；')}` : `${pk.n} 棟全對`);
+      }
+    }
+  }
+
+  // ===== D008：英美立面逐戶造型與飾條（只在 B、C 檔）=====
+  {
+    const D007_A = { seed516: 118728, ai120: 78324 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // A 檔＝D007 定稿；預算基線＝D003
+    for (const id of ['seed516', 'ai120']) {
+      await open(`sample=${id}&clean=1&blocks=a`);
+      const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');
+      log(a.i.triangles === D007_A[id] && a.i.calls === 15 && a.fb.length === 0 && a.art.units + a.art.rows + a.art.parts + a.art.trims === 0,
+        `D008 ${id} A 檔不變：三角形、draw call＝D007 定稿，沒有立面、飾條`, `${a.i.triangles.toLocaleString()}（D007 ${D007_A[id].toLocaleString()}）／${a.i.calls} 次、立面街區 ${a.fb.length}`);
+      for (const m of ['b', 'c']) {
+        await open(`sample=${id}&clean=1&blocks=${m}`);
+        const d = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts(), tot: __gt.dressTotals(), pk: __gt.facadePickTest(40)})');
+        const M = m.toUpperCase(), paths = new Set(d.fb.map(b => b.path)), trims = d.fb.filter(b => b.trim).length;
+        log(JSON.stringify(d.art) === JSON.stringify(d.tot) && d.art.units > 0 && d.art.parts > 0 && d.art.trims > 0 && trims > 0,
+          `D008 ${id} ${M} 檔畫出來＝計畫：戶數、排數、小件（逐種）、帶與飾條圈都跟計畫相同`,
+          `立面街區 ${d.fb.length - trims}（${[...paths].filter(q => q !== 'core').join('、')}）、飾條街區 ${trims}；戶 ${d.art.units}、排 ${d.art.rows}、小件 ${d.art.parts}（${Object.entries(d.art.partKinds).map(([q, n]) => q + ' ' + n).join('、')}）、帶＋飾條 ${d.art.trims}`);
+        const lim = Math.floor(D003_TRI[id] * 1.5);
+        log(d.i.triangles <= lim && d.i.calls <= 18, `D008 ${id} ${M} 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18`,
+          `${d.i.triangles.toLocaleString()}（上限 ${lim.toLocaleString()}，${(d.i.triangles / D003_TRI[id]).toFixed(2)} 倍）、${d.i.calls} 次`);
+        log(d.pk && d.pk.bad.length === 0 && d.pk.tested > 0, `D008 ${id} ${M} 檔從正上方點正面突出的凸窗、門廊、石階：回到那個街區裡的建築`,
+          d.pk ? (d.pk.bad.length ? `${d.pk.bad.length}／${d.pk.tested} 不對：${d.pk.bad.slice(0, 3).join('；')}` : `${d.pk.tested} 個全對（${Object.entries(d.pk.kinds).map(([q, n]) => q + ' ' + n).join('、')}）`) : '沒有結果');
       }
     }
   }

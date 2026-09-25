@@ -10,6 +10,7 @@ import { windowTexture, toonRamp, PLAIN_UV } from './textures.ts';
 import type { BlockMode, DrawBlock } from '../content/blocks.ts';
 import type { Recipe } from '../content/recipes.ts';
 import type { Dressing } from '../content/dressing.ts';
+import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, emptyCounts, type ArtCounts, type YardTree } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
 import { paintGround, groundCellPx } from './ground.ts';
@@ -19,7 +20,8 @@ import type { Shape, KindColors } from '../content/kindShapes.ts';
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
 // D004：住商工改用街區配方畫（?blocks=a|b|c）。plan＝要畫的街區（src/content/blocks.ts），recipe＝每個街區的配方（src/content/recipes.ts）
-export interface BlockRender { mode: BlockMode; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing }
+export interface BlockRender { mode: BlockMode; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+  detail: boolean; facade(b: DrawBlock): FacadePlan | null; trim(b: DrawBlock): TrimPlan | null }   // D008：detail＝B、C 兩檔才畫英美立面逐戶造型與飾條
 // D007：非住商工照造型表畫（街區模式才有；?blocks=off 仍是 D003 的量體佔位）
 export interface CivicRender { colors(k: number, lv: number): KindColors; shape(k: number): Shape | null }
 export interface BuiltCity {
@@ -214,7 +216,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     Wg.owner = Og.owner = Dg.owner = -(bi + 1);
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
-    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts);
+    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts, blocks.detail ? blocks.facade(bk) : null, blocks.detail ? blocks.trim(bk) : null);
   });
   Wg.owner = Og.owner = Dg.owner = 0;
   // 高架路：路面抬高、每兩格一根橋墩
@@ -340,7 +342,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     anchorOf: id => anchors.get(id)?.clone() ?? null,
     blocksDrawn: () => [...drawnBlocks].sort((a, b) => a - b),
     blockAnchor: i => blockAnchors[i]?.clone() ?? null,
-    artCounts: () => ({ ...counts }),
+    artCounts: () => ({ ...counts, partKinds: sortKeys(counts.partKinds) }),
     wallStyles: () => ({ ...ws }),
     groundData: () => ({ S, W: n * S, rgba: gtex.image.data as Uint8Array }),
     ownerBoxes: () => boxes,
@@ -360,3 +362,5 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     dispose: () => { for (const d of disposables) d.dispose(); },
   };
 }
+
+export const sortKeys = (o: Record<string, number>) => Object.fromEntries(Object.entries(o).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0));

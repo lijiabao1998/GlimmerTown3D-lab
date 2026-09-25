@@ -8,7 +8,7 @@ export type ArcheTable = Record<string, ArcheRow[]>;
 export interface Palette { light: string; mid: string; dark: string; accent: string; roof: string; glass: string; lit: string }
 
 // 注入錯誤（只給 tools/unit.mjs 驗「守衛真的會紅」用；正式畫面一律不帶）
-export interface RecipeFaults { parcelMin?: number; podiumCap?: number; flatKit?: number; indKit?: number }
+export interface RecipeFaults { parcelMin?: number; podiumCap?: number; flatKit?: number; indKit?: number; styNoBw?: boolean }
 
 export const PX_PER_CELL = 39.2;   // 實驗線精靈像素 → 格（D003 卡「高度換算的理由」）
 
@@ -101,6 +101,8 @@ export interface Recipe {
   stacks: { u: number; v: number; hPx: number; r: number; tall: boolean }[];   // 煙囪（框內座標；實驗線 chim608 等只取位置與大概高度）
   // 屋頂設備（D005，roofKit559 70588）：放在哪一片屋頂、area（件數＝clamp(round(area×0.9), 2, 9)）
   kits: { on: 'main' | 'deck' | 'upper' | 'ex'; area: number }[];
+  sty: number | null;        // 核心路徑的 sty565＝(v＋k＋寬) mod 3（71459）；立面路徑 null（D008）
+  trim: 'stone' | 'brick' | 'modern' | null;   // 飾條（classicTrim565／modernTrim565 的選法，71460 起；D008）
   pal: Palette;
 }
 export const kitCount = (area: number) => Math.max(2, Math.min(9, Math.round(area * .9)));
@@ -180,8 +182,15 @@ export function recipe(t: ArcheTable, k: number, lv: number, bw: number, bh: num
       stacks.push({ u: (box[0] + box[1]) / 2 + .1 / bw, v: (box[2] + box[3]) / 2, hPx: upper ? 30 : 24, r: .05, tall: false });
     }
   }
+  // 飾條（D008）：核心路徑才有；villa、工業不畫；原型名含 modern→現代、含 town／stone→石；其餘看 sty565：1 石、2 商業現代／其他磚
+  const sty = path === 'core' ? (f.styNoBw ? (v + k) % 3 : (v + k + bw) % 3) : null;
+  let trim: Recipe['trim'] = null;
+  if (path === 'core' && !villa && k !== 3) {
+    const nm = ar ? ar.n : '';
+    trim = nm.indexOf('modern') >= 0 ? 'modern' : (nm.indexOf('town') >= 0 || nm.indexOf('stone') >= 0) ? 'stone' : sty === 1 ? 'stone' : sty === 2 ? (k === 2 ? 'modern' : 'brick') : null;
+  }
   return {
-    k, lv, w: bw, h: bh, v, arche: ar ? ar.n : null, path, pitch, villa, split582, podium602,
+    k, lv, w: bw, h: bh, v, arche: ar ? ar.n : null, path, pitch, villa, split582, podium602, sty, trim,
     win: ar0?.win ?? 'grid', winRowPx: ar0?.wd ? ar0.wd[1] : 4,
     lotFill: !villa && !!ar0 && !lotFull(ar0.box) && !(ar0.ex && lotFull(ar0.ex.box)), lotBox: ar0 ? ar0.box : [0, 1, 0, 1],
     wallPx: wallH, stepPx: stepH, pitchPx: pitchH, box, ex, roof, upper, stacks, kits, pal,

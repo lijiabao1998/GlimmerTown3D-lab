@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|all] [--seed=5162026] [--out=scratch/shots]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|all] [--seed=5162026] [--out=scratch/shots]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -294,6 +294,56 @@ if (want('d007')) {
       const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88, captureBeyondViewport: true, clip: { x: 0, y: 0, width: 2440, height: h, scale: 1 } });
       fs.writeFileSync(path.join(out, `D007-kinds-${nm}.jpg`), Buffer.from(shot.data, 'base64'));
       console.log('OK', `D007-kinds-${nm}.jpg`);
+    }
+  });
+}
+
+// D008：立面最密的三處特寫（實驗線 2D｜D007｜D008｜D008 放大兩倍），2×2 拼一張；手機直式點一個立面街區。
+// 2D 由 tools/lab-extract.mjs --part=d004 拍在 scratch/lab/d008_*（以 6 格內的立面街區數挑點）；D007 要先把 8999376 建置到 scratch/d007-dist/（沒有就留白）
+const D008 = [
+  ['seed_fa', 'seed516', 'fa', 7, 14, '種子城・連棟與半獨立屋'], ['seed_fb', 'seed516', 'fb', 8, 30, '種子城・維多利亞排屋、大宅、高街'], ['ai_fa', 'ai120', 'fa', 30, 42, 'AI 城 120 天・連棟屋'],
+];
+if (want('d008')) {
+  const Z = 1.5, q = (id, x, y, k = 1) => `sample=${id}&at=${x - 0.5},${y - 0.5}&zoom=${(3.42 * Z * k).toFixed(3)}&clean=1`;
+  const old = path.join(ROOT, 'scratch/d007-dist'), hasOld = fs.existsSync(path.join(old, 'index.html'));
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    for (const [name, id, , x, y] of D008) { await open(q(id, x, y)); await save(page, `d008_${name}_now`); await open(q(id, x, y, 2)); await save(page, `d008_${name}_x2`); }
+    errors += page.errors.length;
+  });
+  if (hasOld) await withBrowser({ root: old, width: 1280, height: 800 }, async ({ open, page }) => {
+    for (const [name, id, , x, y] of D008) { await open(q(id, x, y)); await save(page, `d008_${name}_d007`); }
+  });
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {            // 手機直式：連棟與半獨立屋一帶，點離中心最近的立面街區看卡
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=seed516&at=7,12&zoom=3.4');
+    await page.evaluate(`(()=>{const b=__gt.facadeBlocks().filter(b=>b.path!=='core').sort((a,c)=>Math.hypot(a.x-7,a.z-14)-Math.hypot(c.x-7,c.z-14))[0];return __gt.openTile(b.x,b.z);})()`);
+    await new Promise(r => setTimeout(r, 400));
+    await save(page, 'D008-mobile');
+    errors += page.errors.length;
+  });
+  const lab = path.join(ROOT, 'scratch/lab');
+  for (const [name, id, lname, , , label] of D008) {
+    const two = path.join(lab, `d008_${id}_${lname}_2d.png`), has2d = fs.existsSync(two);
+    if (has2d) fs.copyFileSync(two, path.join(out, `d008_${name}_2d.png`));
+    const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption>${src ? `<img src="${src}">` : '<div class="none">（沒有這一格的圖）</div>'}</figure>`;
+    fs.writeFileSync(path.join(out, `d008_${name}_compare.html`), `<!doctype html><meta charset="utf-8"><style>
+      body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}
+      .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}figcaption small{font-weight:400;color:#aab3c5;margin-left:8px}
+      img,.none{display:block;width:800px;height:500px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+      <h1>D008 英美立面・${label}（畫面中央 800×500，1:1）</h1><p class="s">2D 的停電閃電理由同 D004（匯入後暫停、供電還沒重算）。</p>
+      <div class="g">${cell(has2d ? `d008_${name}_2d.png` : '', '2D 實驗線 v13.43')}
+      ${cell(hasOld ? `d008_${name}_d007.png` : '', 'D007（改之前）<small>立面街區只有一個量體加屋頂</small>')}
+      ${cell(`d008_${name}_now.png`, 'D008 的 B（現在的預設）<small>逐戶牆色、凸窗、煙囪、門廊、石階；深街區背靠背多排；核心飾條</small>')}
+      ${cell(`d008_${name}_x2.png`, 'D008 放大兩倍<small>同一個中心</small>')}</div>`);
+  }
+  await withBrowser({ root: out, entry: `d008_${D008[0][0]}_compare.html`, width: 1644, height: 1130, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    for (const [name] of D008) {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d008_${name}_compare.html` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=3&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      // 對照圖存 JPEG（品質 88）：四格 PNG 一張 3 MB 上下
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88 });
+      fs.writeFileSync(path.join(out, `D008-${name.replace('_', '-')}-compare.jpg`), Buffer.from(shot.data, 'base64'));
+      console.log('OK', `D008-${name.replace('_', '-')}-compare.jpg`);
     }
   });
 }

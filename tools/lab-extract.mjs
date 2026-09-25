@@ -302,15 +302,17 @@ if (PARTS.has('d004')) {
       // 匯入後、暫停中，實驗線的供電狀態還沒重算，畫面上會有停電閃電圖示；不推進模擬日去消掉它（推了城市就不是同一座），圖說寫明
       // 遠景用 z .5 不用 D003 的 .45：實驗線 z<.5 是 lodMini（60363），建築整個不畫、只剩路網，D004 首拍就是一片空城
       // D005 另加街區特寫（z 1.5）：種子城住宅區、市中心、工業區，AI 城住宅區；檔名前綴 d005_
+      // D008 另加立面最密的三處特寫（z 1.5；以 6 格內的立面街區數挑）：種子城 (7,14)、(8,30)，AI 城 (30,42)；檔名前綴 d008_
       const views = (id === 'seed516' ? [{ name: 'mid', z: 0.75, at: [36, 36] }, { name: 'far', z: 0.5, at: [22, 44] }] : [{ name: 'mid', z: 0.75, at: [36, 36] }])
-        .concat((id === 'seed516' ? [['res', 9, 9], ['down', 24, 12], ['ind', 41, 12]] : [['res', 33, 33]]).map(([name, x, y]) => ({ name, z: 1.5, at: [x, y], d005: true })));
+        .concat((id === 'seed516' ? [['res', 9, 9], ['down', 24, 12], ['ind', 41, 12]] : [['res', 33, 33]]).map(([name, x, y]) => ({ name, z: 1.5, at: [x, y], pre: 'd005' })))
+        .concat((id === 'seed516' ? [['fa', 7, 14], ['fb', 8, 30]] : [['fa', 30, 42]]).map(([name, x, y]) => ({ name, z: 1.5, at: [x, y], pre: 'd008' })));
       for (const v of views) {
         // 換視角後先畫一次、等一下再畫一次才拍（讓換縮放後的快取重建完）
         await ev(`(()=>{const st=document.getElementById('start');if(st)st.style.display='none';const ov=document.getElementById('startOverlay456');if(ov){ov.classList.remove('show');ov.style.display='none';}
           GV.lookAt(${v.at[0]},${v.at[1]});GV.art574.zoom574(${v.z});GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();return 1;})()`);
         await sleep(1500);
         const shot = await ev(`(()=>{GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`);
-        fs.writeFileSync(path.join(SHOTS, `${v.d005 ? 'd005' : 'd004'}_${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
+        fs.writeFileSync(path.join(SHOTS, `${v.pre || 'd004'}_${id}_${v.name}_2d.png`), Buffer.from(shot.split(',')[1], 'base64'));
       }
       console.log(`${id}：住商工 ${stats.rci} 格、街區 ${stats.blocks}（多格 ${stats.multi}）；格：多格 ${stats.cells.inMulti}、單格 ${stats.cells.single}、吸收 ${stats.cells.absorbed}、D0 ${stats.cells.d0}、重疊 ${stats.overlap}；`
         + `多格街區最高等級≠起點 ${extra.maxLvDiffers}；T531 匯入後重挑的 v ${extra.vRepicked531} 格（已還原成存檔值）`);
@@ -329,7 +331,7 @@ if (PARTS.has('d004')) {
           D.hook('roofKit559',o=>function(g,ng,C,rk,k,pal,area){if(L)L.kit.push(area);return o(g,ng,C,rk,k,pal,area);})];
         try{for(let lv=1;lv<=3;lv++)for(let bw=1;bw<=4;bw++)for(let bh=1;bh<=4;bh++)for(let v=0;v<12;v++){
           L={sub:[],mass:[],saw:[],shr:[],pp:[],pal:null,kit:[]};const sp=GV.block559.make(${k},lv,bw,bh,v),t=sp.__t547,a=D.arche568(${k},lv,v),sty=String(t.sty);
-          out.push([${k}+'_'+lv+'_'+bw+'_'+bh+'_'+v,a?a.n:null,sty.indexOf('f577:')===0?sty.slice(5):'core',!!t.pitch,t.wall.h,L.sub,L.mass,L.saw,L.shr,L.pp,L.pal,L.kit.sort((a,b)=>a-b)]);}}
+          out.push([${k}+'_'+lv+'_'+bw+'_'+bh+'_'+v,a?a.n:null,sty.indexOf('f577:')===0?sty.slice(5):'core',!!t.pitch,t.wall.h,L.sub,L.mass,L.saw,L.shr,L.pp,L.pal,L.kit.sort((a,b)=>a-b),typeof t.sty==='number'?t.sty:null]);}}
         finally{L=null;un.forEach(f=>f());}
         return out;})()`);
       rows.push(...part);
@@ -338,7 +340,7 @@ if (PARTS.has('d004')) {
     const byPath = {};
     for (const r of rows) byPath[r[2]] = (byPath[r[2]] || 0) + 1;
     fs.writeFileSync(path.join(SAMPLES, 'd004-massing.json'), '{"source":' + J(source)
-      + ',\n"fields":' + J('[k_lv_寬_高_v, 原型名, 路徑（core 或立面名）, __t547.pitch, 牆高 px, subPara568 收到的框（依序：主體、第二量體）, massBox568 收到的高, sawRise608 [n, axis, cap, 回傳], shrinkPara547 收到的內縮, pitchPara547 [rise, axis], speciesPal601 回傳的七色 [light, mid, dark, accent, roof, glass, lit], roofKit559 收到的 area（由小到大；D005 加）]；只記核心路徑呼叫到的（立面繪製器經 GV.art574 拿的是原函式，不會記到）')
+      + ',\n"fields":' + J('[k_lv_寬_高_v, 原型名, 路徑（core 或立面名）, __t547.pitch, 牆高 px, subPara568 收到的框（依序：主體、第二量體）, massBox568 收到的高, sawRise608 [n, axis, cap, 回傳], shrinkPara547 收到的內縮, pitchPara547 [rise, axis], speciesPal601 回傳的七色 [light, mid, dark, accent, roof, glass, lit], roofKit559 收到的 area（由小到大；D005 加）, 核心路徑的 __t547.sty＝sty565（立面路徑記 null；D008 加）]；只記核心路徑呼叫到的（立面繪製器經 GV.art574 拿的是原函式，不會記到）')
       + ',\n"byPath":' + J(byPath) + ',\n"rows":[\n' + rows.map(r => J(r)).join(',\n') + '\n]}\n');
     console.log(`量體：${rows.length} 組；路徑 ${J(byPath)}`);
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));

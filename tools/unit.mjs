@@ -11,6 +11,7 @@ import { gridOf, labPartition, partRow, partitionStats, drawPlan } from '../src/
 import { recipe, labCalls, PAL_KEYS, kitCount } from '../src/content/recipes.ts';
 import { dressing, PROP_CAPS, solidBoxes, inBox } from '../src/content/dressing.ts';
 import { KIND_SHAPES } from '../src/content/kindShapes.ts';
+import { facadePlan, trimPlan } from '../src/content/facades.ts';
 
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
@@ -159,12 +160,12 @@ const drawDiff = (faults = {}) => {
 }
 // 量體：1,728 組逐項比
 const massGold = JSON.parse(read('src/content/samples/d004-massing.json'));
-const MASS_FIELDS = ['原型名', '路徑', '坡頂旗標', '牆高', '主體與第二量體的框', '第二量體高', '鋸齒', '內縮（女兒牆、上層量體）', '一戶一尖', '調色盤', '屋頂設備 area（D005）'];
+const MASS_FIELDS = ['原型名', '路徑', '坡頂旗標', '牆高', '主體與第二量體的框', '第二量體高', '鋸齒', '內縮（女兒牆、上層量體）', '一戶一尖', '調色盤', '屋頂設備 area（D005）', 'sty565（D008）'];
 const massDiff = (faults = {}) => {
   const out = [];
   for (const r of massGold.rows) {
     const [k, lv, bw, bh, v] = r[0].split('_').map(Number), q = recipe(arche.arche, k, lv, bw, bh, v, faults), L = labCalls(q);
-    const mine = [q.arche, q.path, q.pitch, q.wallPx, L.sub, L.mass, L.saw, L.shr, L.pp, PAL_KEYS.map(p => q.pal[p]), L.kit];
+    const mine = [q.arche, q.path, q.pitch, q.wallPx, L.sub, L.mass, L.saw, L.shr, L.pp, PAL_KEYS.map(p => q.pal[p]), L.kit, q.sty];
     const bad = mine.map((m, j) => JSON.stringify(m) === JSON.stringify(r[j + 1]) ? null : `${MASS_FIELDS[j]} 3D ${JSON.stringify(m)} ≠ 實驗線 ${JSON.stringify(r[j + 1])}`).filter(Boolean);
     if (bad.length) out.push(`${r[0]}：${bad.join('；')}`);
   }
@@ -173,7 +174,7 @@ const massDiff = (faults = {}) => {
 {
   const d = massDiff(), paths = massGold.byPath;
   log(massGold.rows.length === 1728 && massGold.source.commit === data.source.commit && d.length === 0,
-    'D004 量體對拍：1,728 組（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）原型、路徑、坡頂、牆高、框（位元相等）、第二量體、屋頂分支、七色、屋頂設備 area（D005）＝實驗線',
+    'D004 量體對拍：1,728 組（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）原型、路徑、坡頂、牆高、框（位元相等）、第二量體、屋頂分支、七色、屋頂設備 area（D005）、sty565（D008）＝實驗線',
     d.length ? `${d.length} 組不同：${d.slice(0, 2).join('｜')}` : `0 差異；路徑 ${Object.entries(paths).map(([p, n]) => `${p} ${n}`).join('、')}`);
 }
 // 守衛有效：注入錯誤，對應的守衛要變紅（卡面驗收 4）
@@ -188,6 +189,7 @@ const massDiff = (faults = {}) => {
     ['繪製改用街區的 maxLv', () => drawDiff({ drawMaxLv: true })],
     ['D005 平頂屋頂設備係數 0.8→0.9', () => massDiff({ flatKit: .9 })],
     ['D005 工業 ≥4 格屋頂設備係數 0.6→0.5', () => massDiff({ indKit: .5 })],
+    ['D008 sty565 改用 (v＋k) mod 3', () => massDiff({ styNoBw: true })],
   ].map(([name, f]) => [name, f().length]);
   log(inj.every(([, n]) => n > 0), `D004 注入 ${inj.length} 種錯誤，對應守衛都變紅`, inj.map(([name, n]) => `${name}→${n} 筆差異`).join('、'));
   // 卡面原本寫的「T582 門檻 6→5」是等價突變：街區寬高都在 1–4（blockMax602），面積只有 1,2,3,4,6,8,9,12,16，沒有 5；
@@ -221,6 +223,49 @@ const massDiff = (faults = {}) => {
   }
   log(bad.length === 0, 'D005 點綴擺放計畫：1,728 組都在地界內、不插進量體、件數照實驗線的上限與公式、同一組配方擺法固定',
     bad.length ? `${bad.length} 組不對：${bad.slice(0, 2).join('｜')}` : Object.entries(tot).map(([a, b]) => `${a} ${b}`).join('、'));
+}
+
+// ===== D008：英美立面逐戶計畫、核心飾條（1,728 組配方全跑）=====
+{
+  const bad = [], tot = { facade: 0, units: 0, rows: 0, parts: 0, trim: 0, rings: 0 }, byPath = {}, EPS = 1e-9;
+  const FRONT = new Set(['bay', 'bay2', 'porch', 'stoop', 'pier', 'escape', 'canopy', 'sign']);   // 貼正面的小件
+  for (const r0 of massGold.rows) {
+    const [k, lv, bw, bh, v] = r0[0].split('_').map(Number), r = recipe(arche.arche, k, lv, bw, bh, v), f = facadePlan(r), t = trimPlan(r), why = [];
+    if (JSON.stringify(f) !== JSON.stringify(facadePlan(r)) || JSON.stringify(t) !== JSON.stringify(trimPlan(r))) why.push('同一組配方兩次不一樣');
+    if ((f === null) !== (r.path === 'core')) why.push(`路徑 ${r.path} 立面計畫 ${f ? '有' : '無'}`);
+    if ((t === null) !== (r.trim === null) || (t && t.kind !== r.trim)) why.push(`飾條 ${r.trim}→${t && t.kind}`);
+    if (f) {
+      const U = f.units, lot = u => r.box[0] + u * (r.box[1] - r.box[0]);   // 主體框分數 → 地界分數
+      if (U.length < 1) why.push('戶數 0');
+      if (Math.abs(U[0].u0) > EPS || Math.abs(U[U.length - 1].u1 - 1) > EPS) why.push(`戶沒從 0 蓋到 1（${U[0].u0}–${U[U.length - 1].u1}）`);
+      let gaps = 0;
+      U.forEach((u, i) => {
+        if (!(u.u1 - u.u0 > EPS)) why.push(`第 ${i} 戶寬 ≤0`);
+        if (i) { const d = u.u0 - U[i - 1].u1; if (Math.abs(d) <= EPS) return; if (f.gap > 0 && Math.abs(d - f.gap) <= EPS) { gaps++; return; } why.push(`第 ${i - 1}、${i} 戶${d < 0 ? '重疊' : '中間空'} ${d.toFixed(4)}`); }
+      });
+      const cover = U.reduce((a, u) => a + u.u1 - u.u0, 0) + gaps * f.gap;
+      if (Math.abs(cover - 1) > 1e-6) why.push(`戶＋車道縫合計 ${cover.toFixed(6)}≠1`);
+      if (f.rows.length < 1 || Math.abs(f.rows[0].v0) > EPS || Math.abs(f.rows[f.rows.length - 1].v1 - 1) > EPS || f.rows.some((q, i) => i && Math.abs(q.v0 - f.rows[i - 1].v1) > EPS)) why.push('排沒有剛好蓋滿深度');
+      if ((f.roof === 'gable' || f.roof === 'hip-pairs') && f.rows.some(q => q.risePx <= 0)) why.push('坡頂的坡高 ≤0');
+      for (const q of f.parts) {
+        if (!(lot(q.u - q.w / 2) >= -EPS && lot(q.u + q.w / 2) <= 1 + EPS && q.w > 0)) why.push(`${q.kind} 出了地界（u ${q.u.toFixed(3)} 寬 ${q.w.toFixed(3)}）`);
+        if (!U.some(u => q.u >= u.u0 - EPS && q.u <= u.u1 + EPS)) why.push(`${q.kind} 落在車道縫裡`);
+        if (q.row !== undefined && !(q.row >= 0 && q.row < f.rows.length)) why.push(`${q.kind} 排號 ${q.row}`);
+        if (FRONT.has(q.kind) && q.row !== undefined) why.push(`${q.kind} 是正面小件卻掛在屋脊上`);
+      }
+      tot.facade++; tot.units += U.length; tot.rows += f.rows.length; tot.parts += f.parts.length;
+      byPath[r.path] = (byPath[r.path] || 0) + 1;
+    }
+    if (t) {
+      tot.trim++; tot.rings += t.rings.length;
+      const want = t.kind === 'modern' ? ['lobby', 'coping'] : ['base', ...(r.wallPx > 14 ? ['belt'] : []), 'cornice', 'quoin'];
+      if (t.rings.map(q => q.ring).join() !== want.join()) why.push(`飾條圈 ${t.rings.map(q => q.ring).join()}（應為 ${want.join()}）`);
+      if (t.rings.some(q => !/^#[0-9a-f]{6}$/.test(q.color))) why.push('飾條色不是 #rrggbb');
+    }
+    if (why.length) bad.push(`${r0[0]}：${why.join('、')}`);
+  }
+  log(bad.length === 0 && tot.facade > 0 && tot.trim > 0, 'D008 立面逐戶計畫與飾條：1,728 組立面路徑都有計畫、戶 ≥1、戶與戶不重疊且加上車道縫剛好蓋滿正面、排蓋滿深度、小件不出地界不落在縫裡、飾條圈照選法、同一組配方固定',
+    bad.length ? `${bad.length} 組不對：${bad.slice(0, 2).join('｜')}` : `${Object.entries(tot).map(([a, b]) => `${a} ${b}`).join('、')}；${Object.entries(byPath).map(([a, b]) => `${a} ${b}`).join('、')}`);
 }
 
 // ===== D007：非住商工的顏色、全種類樣張城、造型表 =====

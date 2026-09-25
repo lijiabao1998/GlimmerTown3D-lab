@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityFromLab, cityStats, buildingAt, type City } from './sim/city.ts';
-import { buildCityScene, tileTop, TONES, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
+import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
 import { LOOKS } from './content/looks.ts';
 import { shapeOf, kindColors } from './content/kindShapes.ts';
 import { Pipeline } from './render/post.ts';
@@ -15,6 +15,7 @@ import { ARCHE } from './content/arche.ts';
 import { gridOf, labPartition, partRow, drawPlan, BLOCK_MODES, type BlockMode, type DrawBlock } from './content/blocks.ts';
 import { recipe, type Recipe } from './content/recipes.ts';
 import { dressing, type Dressing } from './content/dressing.ts';
+import { facadePlan, trimPlan, type FacadePlan, type TrimPlan } from './content/facades.ts';
 import { windowTexture } from './render/textures.ts';
 import { windowAtlas, atlasCell0MatchesD003 } from './render/windows.ts';
 import seed516 from './content/samples/seed516.code.txt?raw';
@@ -53,13 +54,16 @@ export function startCity() {
     if (!d) { d = dressing(recipeOf(b)); dressings.set(key, d); }
     return d;
   };
+  const facades = new Map<string, FacadePlan | null>(), trims = new Map<string, TrimPlan | null>(), keyOf = (b: DrawBlock) => `${b.k}_${b.lv}_${b.w}_${b.h}_${b.v}`;
+  const facadeOf = (b: DrawBlock) => { const k = keyOf(b); if (!facades.has(k)) facades.set(k, facadePlan(recipeOf(b))); return facades.get(k)!; };
+  const trimOf = (b: DrawBlock) => { const k = keyOf(b); if (!trims.has(k)) trims.set(k, trimPlan(recipeOf(b))); return trims.get(k)!; };
   let plan: DrawBlock[] | null = null;
   // D007：非住商工照造型表畫（街區模式才用）
   const civic: CivicRender = { shape: shapeOf, colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
-    return { mode: blockMode, plan, recipe: recipeOf, dress: dressOf };
+    return { mode: blockMode, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
   };
 
   const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
@@ -288,15 +292,20 @@ export function startCity() {
     artCounts: () => built!.artCounts(),
     // 擺放計畫的合計（畫出來的街區）：要等於 artCounts（每一件都真的畫了）
     dressTotals: () => {
-      const t = { props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0, shopBands: 0, plainBands: 0 };
+      const t = { props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0, shopBands: 0, plainBands: 0, units: 0, rows: 0, parts: 0, trims: 0, partKinds: {} as Record<string, number> };
       if (!plan || !built) return t;
       for (const bi of built.blocksDrawn()) {
         const d = dressOf(plan[bi]);
         t.props += d.props.length; t.edges += d.edges.length; t.kits += d.kits.length; t.awnings += d.awnings.length;
         t.doors += d.doors.length; t.docks += d.dock === null ? 0 : 1; t.shopBands += d.shopPx > 0 ? 1 : 0;
         t.plainBands += d.dock === null ? 0 : 1;   // 工業核心街區（有裝卸口的）牆下 45% 不開窗
+        if (blockMode !== 'a') {                     // D008：逐戶單元、小件、帶（立面）＋飾條環（核心）
+          const f = facadeOf(plan[bi]), tp = trimOf(plan[bi]);
+          if (f) { t.units += f.units.length; t.rows += f.rows.length; t.parts += f.parts.length; t.trims += f.bands.length; for (const q of f.parts) t.partKinds[q.kind] = (t.partKinds[q.kind] ?? 0) + 1; }
+          else if (tp) t.trims += tp.rings.length;
+        }
       }
-      return t;
+      return { ...t, partKinds: sortKeys(t.partKinds) };
     },
     groundAt: (x: number, z: number) => built!.groundAt(x, z),
     wallStyles: () => built!.wallStyles(),
@@ -390,6 +399,36 @@ export function startCity() {
       }
       return { ...tested, bad };
     },
+    // D008：畫了英美立面或飾條的街區（B、C 檔）；A 檔回空陣列
+    facadeBlocks: () => !plan || !built || blockMode === 'a' ? [] : built.blocksDrawn().flatMap(bi => {
+      const bk = plan![bi], r = recipeOf(bk), f = facadeOf(bk), t = trimOf(bk);
+      return f || t ? [{ bi, x: bk.x, z: bk.z, w: bk.w, h: bk.h, path: r.path, trim: t ? t.kind : null, units: f ? f.units.length : 0, parts: f ? f.parts.map(q => q.kind) : [] }] : [];
+    }),
+    // D008：從正上方點正面突出的小件（凸窗、兩層凸窗、門廊、石階），要回到那個街區裡的建築。每個街區各點一件，最多 count 個
+    facadePickTest(count: number) {
+      if (!plan || !built || !city || blockMode === 'a') return null;
+      const c = city, bad: string[] = [], kinds: Record<string, number> = {};
+      const saved = { pos: cam.position.clone(), up: cam.up.clone(), zoom: cam.zoom, target: controls.target.clone() };
+      let tested = 0;
+      try {
+        for (const bi of built.blocksDrawn()) {
+          if (tested >= count) break;
+          const bk = plan[bi], f = facadeOf(bk);
+          const p = f && f.parts.find(q => q.kind === 'bay' || q.kind === 'bay2' || q.kind === 'porch' || q.kind === 'stoop');
+          if (!f || !p) continue;
+          const r = recipeOf(bk), x = bk.x + (r.box[0] + p.u * (r.box[1] - r.box[0])) * bk.w, z = bk.z + r.box[3] * bk.h + .035;   // 正面（主體框 +z）外 0.035 格
+          cam.up.set(0, 0, -1); cam.position.set(x, c.n, z); cam.zoom = 1; cam.lookAt(x, 0, z); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+          const [sx, sy] = screenOf(new THREE.Vector3(x, 0, z)), h = pickAt(sx, sy);
+          const ok = !!h && h.block === bi && h.id > 0 && bk.cells.includes(h.z * c.n + h.x) && h.id === c.occ[h.z * c.n + h.x];
+          if (!ok) bad.push(`${p.kind}@${x.toFixed(2)},${z.toFixed(2)}（街區 ${bk.x},${bk.z}）→${JSON.stringify(h)}`);
+          kinds[p.kind] = (kinds[p.kind] ?? 0) + 1; tested++;
+        }
+      } finally {
+        cam.up.copy(saved.up); cam.position.copy(saved.pos); cam.zoom = saved.zoom; cam.lookAt(saved.target); controls.target.copy(saved.target);
+        cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+      }
+      return { tested, kinds, bad };
+    },
     spin: (rad: number) => { controls.rotateLeft?.(rad); invalidate(); },
     // D007 逐種對照：鏡頭對準某一棟（佔地中心），縮放照給的值，當場畫一幀；回傳建築半高那一點在螢幕上的位置（對照小圖以它為中心裁）
     focusBuilding(id: number, zoom: number) {
@@ -397,6 +436,18 @@ export function startCity() {
       if (!b || !a) return null;
       const n = city!.n, target = new THREE.Vector3(b.x + b.size / 2, 0, b.z + b.size / 2), D = n * 1.6;
       cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
+      cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+      needsRender = true; frame();
+      return screenOf(a);
+    },
+    // D008 逐型對照：鏡頭對準某個街區（佔地中心），同 focusBuilding；回傳街區錨點（主體頂面中心）在螢幕上的位置
+    // clip：只留目標前方 clip 格以內（把鏡頭前面擋住的高樓切掉，檢查立面用；不給就還原近平面）
+    focusBlock(bi: number, zoom: number, clip = 0) {
+      const bk = plan?.[bi], a = built?.blockAnchor(bi);
+      if (!bk || !a) return null;
+      const n = city!.n, target = new THREE.Vector3(bk.x + bk.w / 2, 0, bk.z + bk.h / 2), D = n * 1.6;
+      cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
+      cam.near = clip > 0 ? cam.position.distanceTo(target) - clip : 0.1;
       cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
       needsRender = true; frame();
       return screenOf(a);
