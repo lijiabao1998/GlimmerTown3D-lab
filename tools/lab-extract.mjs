@@ -430,3 +430,62 @@ if (PARTS.has('d007')) {
   });
   console.log(`D007 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 }
+
+// ---- D009：生長核心公式的執行期資料 ----
+// 1. VRANK406（住商工變體由矮到高的排名）是實驗線開機時依精靈圖高度排出來的，原始碼裡沒有字面量，只能從執行期讀。
+// 2. 供電實跑：每張隨機佈局開一張新圖（GV.newWorldSeeded），用 GV.place 蓋路（五種等級）與電源（燃煤、核電 3×3、地熱、太陽能、風力），
+//    實驗線自己的 computePower 算完後讀回每一格的路、電源與帶電狀態。本線 src/sim/rules/power.ts 在單元守衛裡吃同一份佈局，逐格比。
+// 出口插法同 D004（記憶體副本，原檔不動）。
+if (PARTS.has('d009')) {
+  const t0 = Date.now();
+  const { mulberry32 } = await import('../src/sim/rng.ts');
+  const mark = html.indexOf('Object.assign(window.GV,{art574:');
+  const endRe = /\n\s*\}\)\(\);\s*\n<\/script>/g; endRe.lastIndex = mark;
+  const em = mark < 0 ? null : endRe.exec(html);
+  if (!em) throw new Error('找不到實驗線主程式 IIFE 的收尾');
+  const INJECT = `\n;window.__d009={VRANK406:()=>VRANK406,tiles:()=>tiles,computePower};`;
+  const injectedAt = lineOf(em.index) + 1;
+  const copy = html.slice(0, em.index) + INJECT + html.slice(em.index);
+  const source = { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs --part=d009',
+    how: `執行期：原檔 index.html 在第 ${injectedAt} 行（主程式 IIFE 收尾前）插一行只讀出口 window.__d009 的記憶體副本`, inject: INJECT.trim() };
+  const LAYOUTS = 24;
+  await withBrowser({ root: LAB, entry: 'd009.html', overlay: { 'd009.html': copy }, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD,
+    ready: '!!window.__bootDone453&&!!window.__d009', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+    const ev = e => page.evaluate(e);
+    await open('');
+    await bootLab(ev);
+    console.log(`D009：實驗線副本開好（${((Date.now() - t0) / 1000).toFixed(0)}s；出口插在第 ${injectedAt} 行）`);
+    const vrank = await ev('JSON.parse(JSON.stringify(__d009.VRANK406()))');
+    console.log(`VRANK406：${Object.keys(vrank).length} 組（${Object.keys(vrank).slice(0, 6).join('、')}…）`);
+    const layouts = [];
+    for (let L = 0; L < LAYOUTS; L++) {
+      const R = mulberry32(90900 + L), ri = n => Math.floor(R() * n);
+      const plan = [];   // [工具, x, y]
+      const ROADS = ['road', 'road', 'road', 'coll', 'art', 'alley', 'hwy'];
+      const nLines = 4 + ri(8);
+      for (let s = 0; s < nLines; s++) {
+        let x = 6 + ri(60), y = 6 + ri(60); const len = 6 + ri(40), tool = ROADS[ri(ROADS.length)];
+        for (let k = 0; k < len; k++) { plan.push([tool, x, y]); if (R() < .15) { if (R() < .5) x += R() < .5 ? 1 : -1; else y += R() < .5 ? 1 : -1; } else if (s % 2) x++; else y++; }
+      }
+      const SRC = ['plant', 'plant', 'plant', 'nuclear', 'geo', 'solar', 'wind'];
+            const srcs = [];   // [工具, 貼著哪一格路]；實驗線那邊依序試四周的位置，蓋成一個就停（電源落在路上或水上會失敗）
+      for (let s = 0; s < 1 + ri(4); s++) { const [, x, y] = plan[ri(plan.length)]; srcs.push([SRC[ri(SRC.length)], x, y]); }
+      const res = await ev(`(()=>{GV.newWorldSeeded(${7700 + L});GV.setSpeed(0);GV.addMoney(1e9);let ok=0;
+        for(const [t,x,y] of ${J(plan)}){if(GV.place(t,x,y))ok++;}
+        const OFF=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[2,0],[0,2],[-3,0],[0,-3],[-3,-1],[1,-3]];let srcOk=0;
+        for(const [t,x,y] of ${J(srcs)})for(const [dx,dy] of OFF)if(GV.place(t,x+dx,y+dy)){srcOk++;break;}
+        const cap=__d009.computePower(),T=__d009.tiles(),N=GV.N(),o={N,cap,road:[],hw:[],rp:[],bk:[],blv:[],bsz:[],bref:[],lv475:[],ud475:[]};
+        for(let i=0;i<N*N;i++){const t=T[i],b=t.bld;o.road.push(t.road?1:0);o.hw.push(t.hw?1:0);o.rp.push(t.rp?1:0);o.bk.push(b?b.k:0);o.blv.push(b?(b.lv||0):0);o.bsz.push(b&&b.sz?b.sz:0);o.bref.push(b&&b.ref?1:0);o.lv475.push(t.lv475?1:0);o.ud475.push(t.ud475?1:0);}
+        o.placed=ok;o.planned=${plan.length};o.srcPlaced=srcOk;o.srcPlanned=${srcs.length};return o;})()`);
+      const roads = res.road.reduce((a, v) => a + v, 0), rp = res.rp.reduce((a, v) => a + v, 0), nb = res.bk.filter((k, i) => k && !res.bref[i]).length;
+      const on = a => a.flatMap((v, i) => v ? [i] : []);   // 逐格 0/1 → 格索引清單（稀疏存）
+      layouts.push({ N: res.N, cap: res.cap, roads: on(res.road), hw: on(res.hw), rp: on(res.rp), lv475: on(res.lv475), ud475: on(res.ud475),
+        blds: res.bk.flatMap((k, i) => k ? [[i, k, res.blv[i], res.bsz[i], res.bref[i]]] : []) });
+      console.log(`佈局 ${L}：路 ${res.placed}／${res.planned}、電源 ${res.srcPlaced}／${res.srcPlanned}；路 ${roads} 格、帶電 ${rp}；建築 ${nb} 棟；容量 ${res.cap}`);
+    }
+    fs.writeFileSync(path.join(SAMPLES, 'd009-live.json'), JSON.stringify({ source, vrank,
+      power: { how: '每張 GV.newWorldSeeded(7700+L)、GV.place 蓋路與電源（計畫由 mulberry32(90900+L) 產生）、__d009.computePower() 後讀回；欄位是格索引清單：路、高速、帶電、架空線、地下線；blds＝[格, k, 等級, sz, ref]', layouts } }));
+    if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
+  });
+  console.log(`D009 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+}
