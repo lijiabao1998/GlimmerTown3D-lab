@@ -30,6 +30,12 @@ export interface LabSave {
   nm: string;                // 城市名稱
   layers: Partial<Record<TileLayer, string>>;   // ter 一定有；其餘缺就當全 0
   bl: LabBuildingRow[];
+  // D011 資金相關（實驗線 load 66923–66987 的還原規則；缺欄位的預設照實驗線）
+  df: number;                // 難度：0–3，缺或不合法＝1 標準（66987）；3＝沙盒（蓋東西免費、不結算）
+  star: number;              // bestStar：缺＝0
+  msIdx: number;             // 人口里程碑進度：缺＝0
+  ln: [number, number] | null;   // 貸款 [remain, daily]：缺＝null
+  raw: Record<string, unknown>;  // 展開 RLE 後的整份存檔 JSON（D011 存檔拿它當樣板，只覆寫本線知道的欄位；本線的附加欄位 d3 也在這裡）
 }
 
 export type DecodeResult = { ok: true; save: LabSave; jsonBytes: number } | { ok: false; error: string };
@@ -144,6 +150,11 @@ export function decodeLabCode(input: string): DecodeResult {
       day: typeof d.day === 'number' ? d.day : 0,
       money: typeof d.money === 'number' ? d.money : 0,
       nm: typeof d.nm === 'string' ? d.nm : '',
+      df: typeof d.df === 'number' && d.df >= 0 && d.df <= 3 ? +d.df : 1,
+      star: typeof d.star === 'number' ? d.star : 0,
+      msIdx: typeof d.msIdx === 'number' ? d.msIdx : 0,
+      ln: Array.isArray(d.ln) && d.ln.length >= 2 && d.ln.every(x => typeof x === 'number') ? [d.ln[0], d.ln[1]] : null,
+      raw: d,
     },
   };
 }

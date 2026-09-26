@@ -286,7 +286,7 @@ export function startCity() {
       title = `${KINDS.name(b.k)}（${b.x}, ${b.z}）`;
       $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${b.abandoned ? '・已遭遺棄' : ''}`;
       // D010：逐日模擬記下的生長、升級；匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
-      const evs = c.history.filter((e): e is GrowEvent => e.t !== 'import' && e.x === b.x && e.z === b.z);
+      const evs = c.history.filter((e): e is GrowEvent => (e.t === 'grow' || e.t === 'upgrade') && e.x === b.x && e.z === b.z);
       if (!evs.some(e => e.t === 'grow')) rows.push(`<b>約第 ${Math.max(0, b.builtDay).toLocaleString()} 天</b>蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`);
       for (const e of evs) rows.push(e.t === 'grow' ? `<b>第 ${e.day} 天</b>長出來（逐日模擬，${e.lv} 級）` : `<b>第 ${e.day} 天</b>升到 ${e.lv} 級`);
       if (!KINDS.known(b.k)) rows.push('<b>注意</b>本線的種類表沒有這一種，用預設量體畫');

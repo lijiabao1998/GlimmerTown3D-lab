@@ -7,7 +7,8 @@ import type { LabSave } from '../io/labcode.ts';
 import { fnv1a } from './rng.ts';
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
-export const CITY_FORMAT = 2;
+// 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
+export const CITY_FORMAT = 3;
 
 export interface KindTable {
   size(k: number): number;      // 佔地邊長（格）
@@ -20,12 +21,21 @@ export interface CityBuilding {
   x: number; z: number; size: number;
   abandoned: boolean;
   builtDay: number;             // 估計：匯入時的 day − age
+  goneDay?: number;             // D011：拆掉（或當天復原掉）的那一天；墓碑保留編號，不從清單刪（id 就是索引）
 }
 
 export interface ImportEvent { day: number; t: 'import'; source: string; gameVer: string; seed: number; codeHash: string; buildings: number }
 // 逐日模擬（D010）：住商工長出來（lv 1）、升一級；x、z 是根格，v 是當下挑的變體。只增不改（規則 4）
 export interface GrowEvent { day: number; t: 'grow' | 'upgrade'; x: number; z: number; k: number; lv: number; v: number }
-export type CityEvent = ImportEvent | GrowEvent;
+// 玩家施工（D011）：一格一筆，陣列順序就是發生順序（同一天的施工在那天的生長之後）。cost＝這一格實際扣的錢（沙盒 0）；g＝同一筆手勢的編號
+export interface RoadEvent { day: number; t: 'road'; x: number; z: number; rc: number; cost: number; g: number }
+export interface ZoneEvent { day: number; t: 'zone'; x: number; z: number; zone: number; cost: number; g: number }
+export interface PlaceEvent { day: number; t: 'place'; x: number; z: number; k: number; lv: number; v: number; id: number; cost: number; g: number }
+export interface DozeEvent { day: number; t: 'doze'; x: number; z: number; layer: 'bld' | 'road' | 'zone' | 'tree'; k?: number; id?: number; cost: number; g: number }
+// 復原（D011）：把第 g 筆手勢碰過的格子整格還原、退回花的錢（實驗線 T460 undo 66594）；只能在同一天
+export interface UndoEvent { day: number; t: 'undo'; g: number; refund: number }
+export type EditEvent = RoadEvent | ZoneEvent | PlaceEvent | DozeEvent | UndoEvent;
+export type CityEvent = ImportEvent | GrowEvent | EditEvent;
 
 export interface City {
   format: number;
@@ -90,8 +100,9 @@ export function cityFromLab(save: LabSave, kinds: KindTable, code: string): City
 // 對帳數字：格式跟 tools/lab-extract.mjs 在實驗線執行期量的 expect 完全一樣，才能逐項比
 export function cityStats(c: City) {
   const nn = c.n * c.n;
+  const live = c.buildings.filter(b => b.goneDay === undefined);   // D011：墓碑不算（實驗線沒有拆掉的建築這回事）
   const s = { n: c.n, ter: [0, 0, 0, 0], road: [0, 0, 0, 0, 0], zone: [0, 0, 0, 0], trees: 0, el: 0, rail: 0, tram: 0, dock: 0, abandoned: 0,
-    kinds: {} as Record<string, number>, buildings: c.buildings.length, roots: [] as number[][] };
+    kinds: {} as Record<string, number>, buildings: live.length, roots: [] as number[][] };
   for (let i = 0; i < nn; i++) {
     s.ter[c.ter[i]]++; s.road[c.road[i]]++; s.zone[c.zone[i]]++;
     if (c.tree[i]) s.trees++; if (c.el[i]) s.el++; if (c.rail[i]) s.rail++; if (c.tram[i]) s.tram++; if (c.dock[i]) s.dock++;
@@ -99,7 +110,7 @@ export function cityStats(c: City) {
   // 根格照格索引排序（實驗線是逐格掃描，順序就是格索引）；佔地格數＝實際落在地圖裡、沒被別棟先佔的格
   const cells = new Map<number, number>();
   for (let i = 0; i < nn; i++) if (c.occ[i]) cells.set(c.occ[i], (cells.get(c.occ[i]) || 0) + 1);
-  for (const b of [...c.buildings].sort((a, b) => (a.z * c.n + a.x) - (b.z * c.n + b.x))) {
+  for (const b of [...live].sort((a, b) => (a.z * c.n + a.x) - (b.z * c.n + b.x))) {
     s.kinds[b.k] = (s.kinds[b.k] || 0) + 1;
     if (b.abandoned) s.abandoned++;
     s.roots.push([b.z * c.n + b.x, b.k, b.lv, b.age, cells.get(b.id) || 0]);
@@ -109,3 +120,9 @@ export function cityStats(c: City) {
 
 export const buildingAt = (c: City, x: number, z: number): CityBuilding | null =>
   x < 0 || z < 0 || x >= c.n || z >= c.n ? null : c.buildings[c.occ[z * c.n + x] - 1] ?? null;
+
+// 還在的建築（D011 起有墓碑：拆掉的留在清單裡、occ 已清空）
+export const liveBuildings = (c: City) => c.buildings.filter(b => b.goneDay === undefined);
+
+// 路圖層的編碼（實驗線 save 66716）：0 無、1 路、2 橋、3 高速、4 高速橋
+export const roadCode = (road: unknown, hw: unknown, bridge: unknown) => road ? (hw ? (bridge ? 4 : 3) : (bridge ? 2 : 1)) : 0;

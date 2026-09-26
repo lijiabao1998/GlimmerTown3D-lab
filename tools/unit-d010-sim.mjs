@@ -75,7 +75,7 @@ export async function d010SimGuards(log) {
     log(a.length === b.length && bad.length === 0 && J(Array.from(rp.occ)) === J(Array.from(A.s.city.occ)), `歷史重播：匯入＋${events.length} 筆生長／升級事件重播出的建築清單＝模擬結束時（逐欄：id、種類、等級、變體、屋齡、位置、佔地、廢棄、蓋起日）`,
       bad.slice(0, 3).join('；') || `${a.length} 棟逐欄相同、occ 相同`);
     const r = decodeLabCode(code), c1 = cityFromLab(r.save, KT, code), old = replayCity(code, c1.history.slice(0, 1), KT);
-    log(J(cityStats(old)) === J(cityStats(c1)) && J(old.buildings) === J(c1.buildings) && CITY_FORMAT === 2, '歷史格式 2；只有匯入事件的舊格式（格式 1）照讀，重播＝原城', `格式 ${CITY_FORMAT}`);
+    log(J(cityStats(old)) === J(cityStats(c1)) && J(old.buildings) === J(c1.buildings) && CITY_FORMAT === 3, '歷史格式 3（D011 起；D010 是 2）；只有匯入事件的舊格式（格式 1）照讀，重播＝原城', `格式 ${CITY_FORMAT}`);
     const order = events.every((e, i) => i === 0 || e.day >= events[i - 1].day);
     const ups = events.filter(e => e.t === 'upgrade');
     log(order && ups.every(e => e.lv >= 2 && e.lv <= 3), '事件只增不改：日子不倒退；升級都是升到 2、3 級', `生長 ${events.length - ups.length}、升級 ${ups.length}`);

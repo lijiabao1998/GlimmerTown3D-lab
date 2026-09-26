@@ -120,7 +120,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   if (civic) {
     plates = new Int32Array(nn).fill(-1);
     for (const b of c.buildings) {
-      if (b.k <= 3 || !civic.shape(b.k)) continue;
+      if (b.goneDay !== undefined || b.k <= 3 || !civic.shape(b.k)) continue;   // D011：拆掉的（墓碑）不畫
       const pc = parseInt(civic.colors(b.k, b.lv).plate.slice(1), 16);
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
@@ -166,6 +166,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   const RCI = new Set(['R', 'C', 'I']);
   for (const b of c.buildings) {
     const cat = look.cat(b.k), s = b.size, root = Math.min(nn - 1, b.z * n + b.x);
+    if (b.goneDay !== undefined) continue;                     // D011：拆掉的（墓碑）不畫
     if (b.x + s > n || b.z + s > n) continue;                  // 出界的建築不畫（城市模型已計數）
     if (blocks && b.k >= 1 && b.k <= 3) continue;               // D004：住商工交給街區配方（下面）
     const shape = civic && b.k > 3 ? civic.shape(b.k) : null;
