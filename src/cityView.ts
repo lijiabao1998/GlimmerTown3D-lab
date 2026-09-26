@@ -177,14 +177,19 @@ export function startCity() {
     if (sim) warmEdit();
     return { ok: true, replayed: !!L?.replayed };
   }
-  // 載入後趁空閒把預覽的程式路徑先跑一遍（純計算、結果丟掉）：第一次拖曳的第一次更新不再因為程式還沒熱起來而頓一下
-  // （CPU 降速 6 倍下量過：冷的第一次 17.7 ms，之後每次 ≤ 6.2 ms；預算 16 ms）
+  // 載入後趁空閒把拖曳預覽的整條路先跑一遍（算格子、預覽實例、格頂高度、投影、總價標籤；結果丟掉，不畫）：
+  // 第一次拖曳的第一次更新不再因為程式還沒熱起來而頓一下（CPU 降速 6 倍下量過：只熱規則那一段時，第一次仍有 15–24 ms，之後 ≤ 10 ms；預算 16 ms）
   function warmEdit() {
     const run = () => {
-      if (!sim || !city) return;
-      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]);
-      for (const t of ['road', 'zr', 'plant', 'doze']) previewOp(sim, { k: gestureOf(t), tool: t, x0: x, z0: z, x1: x + 3, z1: z + 1 });
-      bui.showCost(0, 0, '$0', false); bui.hideCost();
+      if (!sim || !city || stroke) return;                                 // 已經在拖了就不動
+      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, t = performance.now();
+      for (const w of ['road', 'zr', 'plant', 'doze'] as const) {
+        tool = w;
+        stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: w !== 'plant' };
+        updatePreview();
+      }
+      stroke = null; lastPreview = null; tool = t0; preview.clear(); bui.hideCost(); invalidate();
+      timing.warm = performance.now() - t; delete timing.preview;
     };
     const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
     if (ric) ric(run); else setTimeout(run, 300);

@@ -159,7 +159,11 @@ export function createBuildUi(on: BuildUiEvents) {
   chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
-  let playShown: boolean | null = null, roadKey = '', dockTop = -1;
+  let playShown: boolean | null = null, roadKey = '', dockTop = innerHeight;
+  // 下方整塊的上緣：排版之後才量（ResizeObserver 在排版後、畫之前呼叫，讀位置不會逼瀏覽器多排一次）；拖曳中只讀這個數
+  const measureDock = () => { dockTop = dock.getBoundingClientRect().top; };
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(dock);
+  addEventListener('resize', () => requestAnimationFrame(measureDock));
   return {
     root, style,
     setHud(h: HudState) {
@@ -211,16 +215,15 @@ export function createBuildUi(on: BuildUiEvents) {
     },
     // 總價標籤掛在手指那一格上方；靠近畫面邊緣時往內收，整個標籤留在畫面裡，也不壓到下方整塊（審查：之前被工具列蓋住）。
     // 寬度用字數估（全形約 13 px、其他約 8 px，加左右留白），不讀 offsetWidth：拖曳中每次更新都讀會逼瀏覽器同步排版（預算 16 ms）；
-    // 下方整塊的上緣每一筆拖曳只在第一次顯示時量一次（還沒寫任何東西之前量，不會逼排版）
+    // 下方整塊的上緣也不在這裡量（見 measureDock）
     showCost(x: number, y: number, text: string, bad: boolean) {
-      if (dockTop < 0) dockTop = dock.hidden ? innerHeight : dock.getBoundingClientRect().top;
       costTag.hidden = false; setText(costTag, text); costTag.classList.toggle('bad', bad);
       let w = 20; for (const ch of text) w += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
       const h = 26, m = 8;
       costTag.style.left = Math.max(m + w / 2, Math.min(innerWidth - m - w / 2, x)) + 'px';
       costTag.style.top = Math.max(m + h * 1.5, Math.min(innerHeight - m, dockTop - 4 + h / 2, y)) + 'px';
     },
-    hideCost() { costTag.hidden = true; dockTop = -1; },
+    hideCost() { costTag.hidden = true; },
     setMenu(sections: MenuSection[]) {
       menuBody.replaceChildren();
       for (const s of sections) {

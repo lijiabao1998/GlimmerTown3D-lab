@@ -18,7 +18,7 @@ import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
-import { countNear, getMaxRoadClass } from './rules/grid.ts';
+import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
 import { judgeWealth, landStaticAt } from './rules/land.ts';
 import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, neutralUpkeepIn, roadUpkeep, scoreCounts, settleDay, OTHER_INCOME_KEYS, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
@@ -151,7 +151,13 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55015 死亡前置、55046 每日計數歸零：疾病、死亡沒搬（第 2 類，實驗線照跑），本線沒有生病、死亡
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
   let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
-  const covAt = (i: number) => { const c: Record<string, number> = {}; for (const k in g.COV) c[k] = g.COV[k][i]; return c; };
+  // 這一格各服務的覆蓋（HappyIn.c）：一天建一個鍵齊全的物件，每棟只覆寫值（residentialHappy 讀完就丟、不留參照）。
+  // 以前每棟新建一個約 60 個鍵的物件，佔推進一天三成的時間（D011 效能；鍵與值都跟以前一樣）
+  const covKeys = Object.keys(g.COV), covArrs = covKeys.map(k => g.COV[k]), cov: Record<string, number> = {};
+  for (const k of covKeys) cov[k] = 0;
+  const covAt = (i: number) => { for (let j = 0; j < covKeys.length; j++) cov[covKeys[j]] = covArrs[j][i]; return cov; };
+  // 半徑 3 的工業、半徑 4 的犯罪（countNear 52934）：主迴圈裡建築的種類與犯罪旗標不變，先做累加表（結果同逐格數，守衛核對）
+  const indNear = nearCounter(w, tt => tt.bld && tt.bld.k === 3), crimeNear = nearCounter(w, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime);
   for (const i of tickBld) {                                              // 55050／55150 主迴圈
     const t = w.tiles[i], b = t.bld;
     if (!b || b.ref) continue;
@@ -163,8 +169,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
       const hp = residentialHappy({                                       // 55164–55236（F7）
         c: covAt(i), POL: g.POL[i], NOISE: g.NOISE[i], commutePenalty: g.commutePenalty[i],
         we: b.we, k: b.k, lv: b.lv, pw: b.pw, sick: b.sick, death: b.death,
-        ind: countNear(w, x, y, 3, tt => tt.bld && tt.bld.k === 3),
-        crime: countNear(w, x, y, 4, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime),
+        ind: indNear(x, y, 3),
+        crime: crimeNear(x, y, 4),
         rc: getMaxRoadClass(w, x, y, 1), jam: 0,
         drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: false, sewNeed, sewOk: !sewNeed,
         weather: s.weather.weather, day: s.day, nightCity: { ready: false, happinessDelta: 0 }, housingPen: 0,

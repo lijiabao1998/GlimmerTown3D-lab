@@ -46,9 +46,13 @@ export function powerFrontageRoads450(w: World, rootIdx: number) {
 
 // 52505：高壓線連通元件若同時貼到發電端與 k148 開關站，該站可直接成為配電起點。
 function hvEnergizedSubstations471(w: World) {
-  const n = w.N * w.N, comp = new Int32Array(n).fill(-1), q = new Int32Array(n), out = new Set<number>();
+  const n = w.N * w.N, out = new Set<number>();
+  let first = 0;
+  while (first < n && !w.tiles[first].hv471 && !w.tiles[first].ug471) first++;
+  if (first === n) return out;                                            // 沒有高壓線（本線目前蓋不出來）：不配置整張陣列（D011 效能；結果相同）
+  const comp = new Int32Array(n).fill(-1), q = new Int32Array(n);
   let cid = 0;
-  for (let i = 0; i < n; i++) {
+  for (let i = first; i < n; i++) {
     const t = w.tiles[i]; if ((!t.hv471 && !t.ug471) || comp[i] >= 0) continue;
     let head = 0, tail = 0; q[tail++] = i; comp[i] = cid;
     while (head < tail) {
