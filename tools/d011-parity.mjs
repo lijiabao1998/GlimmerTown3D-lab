@@ -113,7 +113,7 @@ for (const seed of SEEDS) {
     r.measureB = measureRows(r.measureB);
     if (seed !== SEEDS[0]) for (const o of [...r.A, ...r.B]) o.changed = o.changed.length;   // 逐格明細只留第一個種子（其餘留格數與雜湊）
     lab.runs[seed] = r;
-    if (page.errors.length) (lab.consoleErrors ??= {})[seed] = page.errors.slice(0, 5);
+    if (page.errors.length) console.log(`  實驗線 console 錯誤（僅記錄，同 D010：overlay 頁面固有的 manifest／service worker 404）：${page.errors.slice(0, 3).join(' | ')}`);
     console.log(`種子 ${seed}：${((Date.now() - t) / 1000).toFixed(1)}s；第 1 天 ${J(r.day1)}；B 段後 $${r.snapB.money}`);
   });
 }
