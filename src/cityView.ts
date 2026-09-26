@@ -9,7 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityFromLab, cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
-import { loadCode, saveCode } from './io/save.ts';
+import { loadCode, saveCode, SAVE_LIMIT } from './io/save.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
@@ -54,9 +54,11 @@ export function startCity() {
   const q = new URLSearchParams(location.search);
   const clean = q.get('clean') === '1';
   const style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
-  // D011：網址指定就照指定；沒指定時有存檔開「我的城」、沒有就開新城
+  // D011：網址指定就照指定；沒指定時有存檔開「我的城」、沒有就開新城。
+  // 網址指定新城、又已經有我的城：跟選單一樣先問（審查：之前網址這條路不問就蓋掉我的城）；不要就開我的城
   const qs = q.get('sample') ?? '';
   let sampleId = SAMPLES[qs] || (qs === 'mine' && readSave()) ? qs : readSave() ? 'mine' : 'newcity';
+  if (qs === 'newcity' && readSave() && !confirm('開新城會蓋掉目前的「我的城」，要繼續嗎？')) sampleId = 'mine';
   const tone: Tone = (q.get('tone') ?? 'd') in TONES ? (q.get('tone') ?? 'd') as Tone : 'd';   // D006 立面明暗：預設 d（只壓暗背光面），?tone=a|b|c 對照用
   // D005：預設 B（照實驗線；理由見 docs/D005-rci-art.md），?blocks=off 回 D003 現況
   const bq = (q.get('blocks') ?? 'b').toLowerCase();
@@ -107,11 +109,14 @@ export function startCity() {
   let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, rebuilds = 0;
   // D011 建造：存檔樣板（讀進來那份存檔 JSON）、起始碼、目前的工具、路的等級、最近一天的回報、存檔
   let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', lastRep: DayReport | null = null, daysSinceSave = 0;
-  let loadNote = '';
+  let loadNote = '', loadDay = -1;
+  // 這座城要不要自動存檔：載入時就決定、跟著這座城走（我的城、新城存；起步城是沙盒、其他只能看）。
+  // 審查阻斷：之前存檔時才拿 sampleId 判斷，換城時 sampleId 已經是新城的、sim 還是舊城的，舊城被存進我的城
+  let autosave = false, saveErr = '';
   const preview = new Preview();
   const timing: Record<string, number> = {};
   const invalidate = () => { needsRender = true; };
-  const autosaves = () => !!sim && (sampleId === 'mine' || sampleId === 'newcity');   // 起步城是沙盒：可以蓋、不存檔
+  const autosaves = () => !!sim && autosave;
 
   // 斜 45° 正交鏡頭、仰角 30°（同 300 年示範，也等於 2D 實驗線的 2:1 斜俯視，見 D003 卡）
   function frameCamera(n: number, first: boolean) {
@@ -138,21 +143,20 @@ export function startCity() {
   addEventListener('resize', resize);
 
   // 匯入一個碼：解碼 → 城市 → 場景。失敗就回傳原因，不動目前的城市
-  // simulate：逐日模擬、可以蓋（D011：走 src/io/save.ts 的讀檔，帶 d3 的碼會把本線的歷史接回來）
-  function load(code: string, name: string, first = false, simulate = false): { ok: true } | { ok: false; error: string } {
+  // simulate：逐日模擬、可以蓋（D011：走 src/io/save.ts 的讀檔，帶 d3 的碼會把本線的歷史接回來）；saves：這座城自動存檔。
+  // 舊城要存的話由呼叫端在呼叫之前存（它還用得到舊城的身分）；這裡只停下播放、不存檔
+  function load(code: string, name: string, first = false, simulate = false, saves = false): { ok: true; replayed: boolean } | { ok: false; error: string } {
     const t0 = performance.now();
     const r = decodeLabCode(code);
     const t1 = performance.now();
     if (!r.ok) return r;
-    dirtyScene = false;                                                   // 舊城的場景馬上要丟掉，不必先重建
-    setPlaying(false);
+    const L = simulate ? loadCode(code, KINDS, VRANK) : null;             // 先算好再動目前的城：讀不成就什麼都不改
+    if (L && !L.ok) return L;
+    playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
-    sim = null; lastRep = null; loadNote = '';
-    if (simulate) {                                                       // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
-      const L = loadCode(code, KINDS, VRANK);
-      if (!L.ok) return L;
-      sim = L.sim; template = L.template; startCode = L.start; loadNote = L.note;
-    }
+    // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
+    sim = L ? L.sim : null; template = L ? L.template : {}; startCode = L ? L.start : ''; loadNote = L ? L.note : ''; lastRep = null;
+    autosave = saves && !!sim; saveErr = ''; loadDay = sim ? sim.day : -1;
     const c = sim ? sim.city : cityFromLab(r.save, KINDS, code);
     daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; rebuilds = 0; simAcc = 0;
     const t2 = performance.now();
@@ -167,9 +171,10 @@ export function startCity() {
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, plan: tp - t2, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
+    dlg.hidden = true;                                                    // 換了城，分享碼對話框不留在新城上
     syncUi();
     if (sim) warmEdit();
-    return { ok: true };
+    return { ok: true, replayed: !!L?.replayed };
   }
   // 載入後趁空閒把預覽的程式路徑先跑一遍（純計算、結果丟掉）：第一次拖曳的第一次更新不再因為程式還沒熱起來而頓一下
   // （CPU 降速 6 倍下量過：冷的第一次 17.7 ms，之後每次 ≤ 6.2 ms；預算 16 ms）
@@ -183,13 +188,17 @@ export function startCity() {
     const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
     if (ric) ric(run); else setTimeout(run, 300);
   }
-  function openSample(id: string, first = false) {
+  // 換城：舊城先用它自己的身分存一次（審查阻斷的修法），再讀新城；已經在我的城又選我的城＝存一次就好（重讀會丟掉今天的復原）
+  function openSample(id: string, first = false, saves = id === 'mine' || id === 'newcity') {
+    if (!first) {
+      if (id === 'mine' && sampleId === 'mine' && sim) { saveNow(); return { ok: true as const, replayed: true }; }
+      saveNow();
+    }
     const code = id === 'mine' ? readSave() : SAMPLES[id]?.code;
     if (!code) return { ok: false as const, error: '沒有這座城' };
-    const prev = sampleId;
+    const r = load(code, id === 'mine' ? '我的城' : SAMPLES[id].label, first, SIM_SAMPLES.has(id), saves);
+    if (!r.ok) return r;
     sampleId = id;
-    const r = load(code, id === 'mine' ? '我的城' : SAMPLES[id].label, first, SIM_SAMPLES.has(id));
-    if (!r.ok) { sampleId = prev; return r; }
     if (id === 'newcity') saveNow();                                      // 新城一開就是「我的城」
     return r;
   }
@@ -239,12 +248,24 @@ export function startCity() {
     if (!playing) saveNow();
     syncSim();
   }
-  // D011 自動存檔（實驗線分享碼格式＋附加欄位 d3，src/io/save.ts）；只有「我的城」存，起步城是沙盒
+  // D011 自動存檔（實驗線分享碼格式＋附加欄位 d3，src/io/save.ts）；只有「我的城」存，起步城是沙盒。
+  // 存不成要講（審查：之前靜靜失敗，玩家以為存了）：超過分享碼上限（寫進去也讀不回來，所以不寫）、瀏覽器空間滿了或不給存。
+  // 原因變了才跳一次通知；狀態列另有一直掛著的「未存檔」標記，存成了就拿掉
   function saveNow() {
     if (!autosaves() || !sim) return false;
     daysSinceSave = 0;
-    try { localStorage.setItem(SAVE_KEY, saveCode(sim, template, startCode)); if (sampleId === 'newcity') sampleId = 'mine'; return true; }
-    catch { return false; }
+    const code = saveCode(sim, template, startCode);
+    let why = '';
+    if (code.length > SAVE_LIMIT) why = `存檔 ${code.length.toLocaleString()} 字元，超過分享碼上限 ${SAVE_LIMIT.toLocaleString()}`;
+    else try { localStorage.setItem(SAVE_KEY, code); } catch (e) { why = (e as Error)?.name === 'QuotaExceededError' ? '瀏覽器的儲存空間滿了' : '瀏覽器不讓這個網頁存資料'; }
+    if (why) {
+      if (why !== saveErr) bui.toast(`⚠️ 沒辦法自動存檔：${why}。請從 ☰ 匯出分享碼備份`, 'bad');
+      saveErr = why; syncUi();
+      return false;
+    }
+    if (saveErr) { saveErr = ''; bui.toast('已恢復自動存檔', 'good'); syncUi(); }
+    if (sampleId === 'newcity') sampleId = 'mine';
+    return true;
   }
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveNow(); });
   // 推進（播放中才動）與作畫分開：測試出口、對焦只作畫，不會順手多推天數
@@ -282,11 +303,11 @@ export function startCity() {
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
   let dlgMode: 'paste' | 'export' = 'paste', lastCode = '';
-  function openDlg(mode: 'paste' | 'export', text = '') {
+  function openDlg(mode: 'paste' | 'export', text = '', note = '') {
     dlgMode = mode;
     $('#dlgTitle').textContent = mode === 'paste' ? '貼上分享碼' : '匯出分享碼';
-    $('#dlgSub').textContent = mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
-      : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。';
+    $('#dlgSub').textContent = note || (mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
+      : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。');
     ta.value = text; ta.readOnly = mode === 'export'; dlgOk.textContent = mode === 'paste' ? '匯入' : '複製'; err.textContent = '';
     dlg.hidden = false;
     if (mode === 'export') ta.select(); else ta.focus();
@@ -298,11 +319,11 @@ export function startCity() {
     if (!r.ok) { err.textContent = r.error; return; }
     const mine = !!r.save.raw.d3;                                         // 本線匯出、帶歷史的碼：接著蓋，存成我的城
     if (mine && readSave() && !confirm('貼上的城會蓋掉目前的「我的城」，要繼續嗎？')) return;
-    const prev = sampleId;
+    saveNow();                                                            // 舊城先用它自己的身分存（同 openSample）
+    const res = load(code, mine ? '我的城' : '貼上的城市', false, mine, mine);
+    if (!res.ok) { err.textContent = res.error; return; }
     sampleId = mine ? 'mine' : '';
-    const res = load(code, mine ? '我的城' : '貼上的城市', false, mine);
-    if (!res.ok) { sampleId = prev; err.textContent = res.error; return; }
-    if (mine) saveNow();
+    if (mine) { saveNow(); if (!res.replayed) bui.toast(loadNote, 'bad'); }   // 歷史接不回來：講原因（歷史從這張碼重新起算）
     dlg.hidden = true; ta.value = '';
   };
   $<HTMLButtonElement>('#bio .x').onclick = () => closeCard();
@@ -326,7 +347,11 @@ export function startCity() {
   }
   function onMenu(id: string) {
     if (id.startsWith('city:')) menuCity(id.slice(5));
-    else if (id === 'export') openDlg('export', sim ? saveCode(sim, template, startCode) : lastCode);
+    else if (id === 'export') {
+      const full = sim ? saveCode(sim, template, startCode) : lastCode;
+      if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
+      else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+    }
     else if (id === 'paste') openDlg('paste');
     else if (id.startsWith('blocks:')) setBlocks(id.slice(7) as BlockMode);
     else if (id === 'history') location.search = '?mode=history';
@@ -341,11 +366,14 @@ export function startCity() {
     if (!city) return;
     const c = city, live = liveBuildings(c), kinds = new Set(live.map(b => b.k)).size, pw = sim ? powerStatus(sim) : null;
     const k = sim ? simCounts(sim) : null;
+    // 讀檔後、過第一天之前，人口與幸福還沒算（實驗線 load 也不重算，模擬照它；審查：之前狀態列直接顯示 0）：有住宅就先顯示「—」
+    const pending = !!sim && sim.day === loadDay && k![1][0] > 0;
     bui.setHud({
       name: `${label}${label === c.name ? '' : `「${c.name}」`}`,
-      sub: sim ? `第 ${sim.day.toLocaleString()} 天・住 ${k![1][0]}／商 ${k![2][0]}／工 ${k![3][0]}（二級 ${k![1][2] + k![2][2] + k![3][2]}）・幸福 ${sim.cityHappy.toFixed(2)}`
+      sub: sim ? `第 ${sim.day.toLocaleString()} 天・住 ${k![1][0]}／商 ${k![2][0]}／工 ${k![3][0]}（二級 ${k![1][2] + k![2][2] + k![3][2]}）・幸福 ${pending ? '—' : sim.cityHappy.toFixed(2)}`
         : `實驗線 v${c.gameVer}・第 ${c.day.toLocaleString()} 天・建築 ${live.length}（${kinds} 種）・${c.n}×${c.n}`,
-      money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? sim.pop : null, power: pw ? [pw.powered + pw.unpowered, pw.cap] : null,
+      money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? (pending ? '—' : sim.pop) : null,
+      power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '',
     });
     syncDock();
   }
@@ -450,9 +478,13 @@ export function startCity() {
     syncUi();
     return r;
   }
+  // 鍵盤：對話框或選單開著時，Esc 只關它、其他鍵不作用（審查：之前選單後面照樣換工具、播放，Esc 關不掉對話框）
   addEventListener('keydown', e => {
-    if (clean || !dlg.hidden || (e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
-    if (e.key === 'Escape') setTool(null);
+    if (clean) return;
+    if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
+    if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
+    if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
     else if (e.key === ' ' && sim) { e.preventDefault(); setPlaying(!playing); }
     else if (/^[1-7]$/.test(e.key) && sim) setTool(TOOLS[+e.key - 1].id);
@@ -472,16 +504,18 @@ export function startCity() {
   function lotEvents(c: City, x: number, z: number) {
     return c.history.filter((e): e is Exclude<CityEvent, ImportEvent | UndoEvent> => e.t !== 'import' && e.t !== 'undo' && e.x === x && e.z === z);
   }
-  function lotRow(c: City, e: Exclude<CityEvent, ImportEvent | UndoEvent>) {
-    const undone = 'g' in e && c.history.some(u => u.t === 'undo' && u.g === e.g), tail = undone ? '（當天復原）' : '', d = `<b>第 ${e.day.toLocaleString()} 天</b>`;
+  // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
+  type Row = [string, string];
+  function lotRow(c: City, e: Exclude<CityEvent, ImportEvent | UndoEvent>): Row {
+    const undone = 'g' in e && c.history.some(u => u.t === 'undo' && u.g === e.g), tail = undone ? '（當天復原）' : '', d = `第 ${e.day.toLocaleString()} 天`;
     const RCN = ['', '小巷', '支路', '次幹道', '主幹道', '快速路'];
     switch (e.t) {
-      case 'grow': return `${d}長出來（逐日模擬，${e.lv} 級）`;
-      case 'upgrade': return `${d}升到 ${e.lv} 級`;
-      case 'road': return `${d}鋪了${RCN[e.rc] ?? '路'}${e.cost ? `（$${e.cost}）` : ''}${tail}`;
-      case 'zone': return `${d}劃成${ZONE[e.zone]}${e.cost ? `（$${e.cost}）` : ''}${tail}`;
-      case 'place': return `${d}蓋了${KINDS.name(e.k)}${e.cost ? `（$${e.cost}）` : ''}${tail}`;
-      case 'doze': return `${d}${e.layer === 'bld' ? '拆掉' + KINDS.name(e.k ?? 0) : e.layer === 'road' ? '拆掉道路' : e.layer === 'zone' ? '取消分區' : '砍掉樹'}${tail}`;
+      case 'grow': return [d, `長出來（逐日模擬，${e.lv} 級）`];
+      case 'upgrade': return [d, `升到 ${e.lv} 級`];
+      case 'road': return [d, `鋪了${RCN[e.rc] ?? '路'}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
+      case 'zone': return [d, `劃成${ZONE[e.zone]}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
+      case 'place': return [d, `蓋了${KINDS.name(e.k)}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
+      case 'doze': return [d, `${e.layer === 'bld' ? '拆掉' + KINDS.name(e.k ?? 0) : e.layer === 'road' ? '拆掉道路' : e.layer === 'zone' ? '取消分區' : '砍掉樹'}${tail}`];
     }
   }
   function showTile(x: number, z: number) {
@@ -489,7 +523,7 @@ export function startCity() {
     cardAt = [x, z];
     const c = city, i = z * c.n + x, b = buildingAt(c, x, z);
     const imp = c.history.find((e): e is ImportEvent => e.t === 'import'), impDay = imp ? imp.day : c.day;   // 匯入那天（c.day 會跟著逐日模擬走）
-    const rows: string[] = [];
+    const rows: Row[] = [];
     let title: string;
     if (b) {
       const cat = KINDS.cat(b.k);
@@ -498,26 +532,26 @@ export function startCity() {
       // D010：逐日模擬記下的生長、升級；D011：這一塊地上的施工（劃區、鋪路、蓋、拆）照發生順序一起列。
       // 匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
       const evs = lotEvents(c, b.x, b.z);
-      if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push(`<b>約第 ${Math.max(0, b.builtDay).toLocaleString()} 天</b>蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`);
+      if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
-      if (!KINDS.known(b.k)) rows.push('<b>注意</b>本線的種類表沒有這一種，用預設量體畫');
+      if (!KINDS.known(b.k)) rows.push(['注意', '本線的種類表沒有這一種，用預設量體畫']);
       if (plan && blockMode && b.k >= 1 && b.k <= 3) {
         const bi = blockOfCell(i);
         if (bi >= 0) {
           const bk = plan[bi], r = recipeOf(bk);
-          rows.push(`<b>街區 ${bk.w}×${bk.h}</b>${blockMode.toUpperCase()} 檔・原型 ${r.arche}${r.path === 'core' ? '' : `（${r.path} 立面）`}・起點 (${bk.x}, ${bk.z})・畫法用起點的 ${bk.lv} 級`);
-        } else rows.push(`<b>這一格沒畫</b>實驗線的切分沒有街區蓋到這格（D0），或被旁邊的大街區吸收（T555）`);
+          rows.push([`街區 ${bk.w}×${bk.h}`, `${blockMode.toUpperCase()} 檔・原型 ${r.arche}${r.path === 'core' ? '' : `（${r.path} 立面）`}・起點 (${bk.x}, ${bk.z})・畫法用起點的 ${bk.lv} 級`]);
+        } else rows.push(['這一格沒畫', '實驗線的切分沒有街區蓋到這格（D0），或被旁邊的大街區吸收（T555）']);
       }
-      rows.push(`<b>第 ${impDay.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`);
+      rows.push([`第 ${impDay.toLocaleString()} 天`, `從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`]);
     } else {
       title = `${ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
       const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + '（還沒蓋）' : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : ''].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
       for (const e of lotEvents(c, x, z)) rows.push(lotRow(c, e));      // D011：這一格的施工與拆掉的建築
-      rows.push(`<b>第 ${impDay.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D`);
+      rows.push([`第 ${impDay.toLocaleString()} 天`, `從 2D 實驗線 v${c.gameVer} 匯入 3D`]);
     }
     $('#bio h2').textContent = title;
-    $('#bio ol').innerHTML = rows.map(r => `<li>${r}</li>`).join('');
+    $('#bio ol').replaceChildren(...rows.map(([h, t]) => { const li = document.createElement('li'), bb = document.createElement('b'); bb.textContent = h; li.append(bb, t); return li; }));
     const bi = b ? blockOfCell(i) : -1, bk = bi >= 0 ? plan![bi] : null;   // D004：點到街區就框整個街區
     const sx = bk ? bk.w : b ? b.size : 1, sz = bk ? bk.h : b ? b.size : 1, x0 = bk ? bk.x : b ? b.x : x, z0 = bk ? bk.z : b ? b.z : z;
     marker.scale.set(sx, 1, sz); marker.position.set(x0 + sx / 2, Math.max(0, tileTop(c, z0 * c.n + x0)) + 0.03, z0 + sz / 2);
@@ -556,25 +590,33 @@ export function startCity() {
   }
   let down: { x: number; y: number; t: number } | null = null;
   const canvas = renderer.domElement;
+  // 畫布上按著的指標（實驗線 pointers，62783–62799）：每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
+  // 只剩一根也不再蓋，全部放開之後的下一筆才是新的施工（審查：之前第一指落在地圖外、或抬起一指再放回去，照樣蓋了一條路）
+  const ptrs = new Set<number>();
+  const lift = (id: number) => { ptrs.delete(id); };
   canvas.addEventListener('pointerdown', e => {
+    ptrs.add(e.pointerId);
+    try { canvas.setPointerCapture(e.pointerId); } catch { /* 沒有也行：放開另由 window 收 */ }
+    if (ptrs.size > 1) { down = null; if (stroke) cancelStroke(); return; }
     down = { x: e.clientX, y: e.clientY, t: performance.now() };
     if (!tool || !sim) return;
-    if (stroke) { cancelStroke(); return; }                                // 第二根手指：交給鏡頭（兩指縮放、平移）
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     const t = tileAt(e.clientX, e.clientY);
     if (!t) return;
     stroke = { pid: e.pointerId, a: t, b: t, x: e.clientX, y: e.clientY, moved: false };
-    try { canvas.setPointerCapture(e.pointerId); } catch { /* 沒有也行 */ }
     updatePreview();
   });
   canvas.addEventListener('pointermove', e => {
     if (!stroke || e.pointerId !== stroke.pid) return;
-    if (Math.hypot(e.clientX - stroke.x, e.clientY - stroke.y) > 8) stroke.moved = true;
+    if (!stroke.moved && Math.hypot(e.clientX - stroke.x, e.clientY - stroke.y) > 8) stroke.moved = true;
+    const k = opOf(stroke).k;
+    if (k === 'tap') { if (stroke.moved && lastPreview) updatePreview(); return; }   // 點的工具：拖了就取消（實驗線 T436）
+    if (k === 'line' && !stroke.moved) return;                            // 路：手指動超過 8 px 才跟著拉（實驗線 62884–62885），沒超過放開就是點一格（62918）；框選照實驗線立刻跟
     const t = tileAt(e.clientX, e.clientY);
     if (t && (t[0] !== stroke.b[0] || t[1] !== stroke.b[1])) { stroke.b = t; updatePreview(); }
-    else if (opOf(stroke).k === 'tap' && stroke.moved && lastPreview) updatePreview();
   });
   canvas.addEventListener('pointerup', e => {
+    lift(e.pointerId);
     if (stroke && e.pointerId === stroke.pid) { const s0 = stroke; stroke = null; down = null; commitStroke(s0); return; }
     if (!down || tool) { down = null; return; }
     const tap = Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6 && performance.now() - down.t < 400;
@@ -583,12 +625,24 @@ export function startCity() {
     const h = pickAt(e.clientX, e.clientY);
     if (h) showTile(h.x, h.z);
   });
-  canvas.addEventListener('pointercancel', e => { if (stroke && e.pointerId === stroke.pid) cancelStroke(); });   // 實驗線取消時照蓋（62934），本線不照搬：取消就是取消
+  canvas.addEventListener('pointercancel', e => { lift(e.pointerId); if (stroke && e.pointerId === stroke.pid) cancelStroke(); });   // 實驗線取消時照蓋（62934），本線不照搬：取消就是取消
+  for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => lift(e.pointerId));   // 萬一沒抓住：在畫布外放開也要收掉
 
   const resumed = sampleId === 'mine';                                   // 開頁時就有存檔：接著上次的城（第一次開新城不提示）
-  const first = openSample(sampleId, true);
-  if (!first.ok) throw new Error('樣本碼解不開：' + first.error);
-  if (loadNote && !clean && resumed) bui.toast(loadNote.startsWith('歷史') ? '已接著上次的城繼續' : loadNote);
+  let first = openSample(sampleId, true), bootNote = '';
+  if (!first.ok && resumed) {
+    // 我的城讀不出來：不在這裡丟例外（審查：之前整頁停在例外、存檔也救不回來）。原檔原樣另存一份再開新城；備份存不下就不自動存，免得蓋掉原檔
+    const bad = readSave() ?? '';
+    let kept = false;
+    try { localStorage.setItem(SAVE_KEY + '.bad', bad); kept = true; } catch { /* 空間不夠或不給存 */ }
+    bootNote = `「我的城」存檔讀不出來（${first.error}）` + (kept ? `；原檔另存在 ${SAVE_KEY}.bad，先開一座新城` : '；備份存不下，這座新城先不自動存，免得蓋掉原檔');
+    first = openSample('newcity', true, kept);
+  }
+  if (!first.ok) throw new Error('樣本碼解不開：' + first.error);        // 內建的樣本碼解不開＝建置壞了
+  if (!clean) {
+    if (bootNote) bui.toast(bootNote, 'bad');
+    else if (resumed) bui.toast(first.replayed ? '已接著上次的城繼續' : loadNote, first.replayed ? '' : 'bad');   // 歷史接不回來要講原因（審查：之前一律說接著繼續）
+  }
 
   // ---- 給煙霧測試與拍照工具的出口（純讀取；D011 的施工出口走跟手勢同一條路）----
   (window as unknown as { __gt: unknown }).__gt = {
@@ -603,8 +657,8 @@ export function startCity() {
     buildingCount: () => liveBuildings(city!).length,
     kinds: () => ({ count: KINDS.data.kinds.length, source: KINDS.data.source.commit }),
     tryCode: (code: string) => { const r = decodeLabCode(code); return r.ok ? { ok: true, n: r.save.n, buildings: r.save.bl.length } : r; },
-    loadCode: (code: string) => load(code, '貼上的城市'),
-    loadSample: (id: string) => { sampleId = id; return load(SAMPLES[id].code, SAMPLES[id].label, false, SIM_SAMPLES.has(id)); },
+    loadCode: (code: string) => { saveNow(); const r = load(code, '貼上的城市'); if (r.ok) sampleId = ''; return r; },
+    loadSample: (id: string) => { saveNow(); const r = load(SAMPLES[id].code, SAMPLES[id].label, false, SIM_SAMPLES.has(id), id === 'newcity'); if (r.ok) sampleId = id; return r; },
     // ---- D010 逐日模擬 ----
     sim: () => sim ? { day: sim.day, seed: sim.seed, pop: sim.pop, jobs: sim.jobs, happy: sim.cityHappy, dem: [sim.dem[1], sim.dem[2], sim.dem[3]], rci: simCounts(sim), hash: simHash(sim),
       events: sim.city.history.length, rebuilds, playing, speed: SPEEDS[speed], buildings: liveBuildings(sim.city).length,
@@ -616,7 +670,7 @@ export function startCity() {
     // 重建一次場景（不推天數），回傳這次重建的耗時（ms）
     simRebuild() { rebuildScene(); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
     // ---- D011 建造 ----
-    ui: () => ({ tool, roadTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves() }),
+    ui: () => ({ tool, roadTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     tool: (t: ToolId | null, rc?: string) => { if (rc) roadTool = rc; setTool(t); return tool; },
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
     preview: (op: EditOp) => sim ? previewOp(sim, op) : null,

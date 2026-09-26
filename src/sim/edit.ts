@@ -83,8 +83,11 @@ export function commitOp(s: Sim, op: EditOp, now: number): EditResult {
 }
 
 // 本線的逐格地價標記（day.ts Sim.stale）：施工改了覆蓋、污染的那一帶要標「待重算」。
-// 範圍取實驗線 doPlace 自己標的髒框半徑 20（51627），涵蓋本卡工具的蓋印半徑（警察 10、電廠污染 6、樹 2；守衛核對）。
-// 多標只是隔天多算幾格（輸入沒變的格算出來一樣），少標才會錯，所以取碰過的格的外框再往外 20。
+// 為什麼要標：本線的「整張重算」只算 stale 格（實驗線真的整張算），這個省時做法成立的條件是「不是 stale 的格，地價基準都等於現算的值」。
+// 目前實驗線 doPlace 的 markLandDirty（51627）會把當天的「整張」換成框（實驗線的 bug，照抄），框一定蓋得到施工改過的格，
+// 所以現在少了這個標記也看不出差別（審查確認過）；實驗線哪天修掉那個 bug、本線跟著修時，就全靠這裡。
+// 守衛直接核對上面那個條件（tools/unit-d011-edit.mjs：每一筆施工後、每一天開頭逐格驗），不靠框。
+// 範圍取實驗線 doPlace 自己標的髒框半徑 20，涵蓋本卡工具的蓋印半徑（警察 10、電廠污染 6、樹 2）；多標只是隔天多算幾格，少標才會錯。
 export const EDIT_STALE_R = 20;
 function markStaleAround(s: Sim, txn: Txn) {
   if (!txn.snaps.length) return;

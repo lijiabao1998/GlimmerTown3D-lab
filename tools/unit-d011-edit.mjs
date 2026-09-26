@@ -229,9 +229,9 @@ export async function d011EditGuards(log) {
       if (ti >= 0) bad.push(`第 ${ti} 格：${J(T(s.w.tiles[ti]))} ≠ ${J(T(q.w.tiles[ti]))}`);
       const m = syncMismatch(q); if (m) bad.push('讀回的城不同步：' + m);
     }
-    log(!bad.length && raw.d3?.f === CITY_FORMAT && raw.money === Math.round(s.money) && raw.df === s.diff && !Object.keys(raw).some(k => k.startsWith('glimmerville')),
-      '存檔（實驗線分享碼格式＋附加欄位 d3）再讀檔：逐格、建築（含墓碑）、資金取整、天數、難度、里程碑、星等、歷史、手勢編號都相同，歷史重播成功',
-      bad.slice(0, 3).join('；') || `碼 ${code2.length} 字、d3 格式 ${raw.d3?.f}、歷史 ${raw.d3?.h.length} 筆、$${raw.money}`);
+    log(!bad.length && raw.d3?.f === CITY_FORMAT && raw.d3?.hv === 2 && raw.d3.r?.length === s.city.history.length && raw.money === Math.round(s.money) && raw.df === s.diff,
+      '存檔（實驗線分享碼格式＋附加欄位 d3，歷史存法 hv 2）再讀檔：逐格、建築（含墓碑）、資金取整、天數、難度、里程碑、星等、歷史、手勢編號都相同，歷史重播成功',
+      bad.slice(0, 3).join('；') || `碼 ${code2.length} 字、d3 格式 ${raw.d3?.f}、hv ${raw.d3?.hv}、歷史 ${raw.d3?.r?.length} 筆、$${raw.money}`);
     if (L2.ok && L3.ok) {
       for (let d = 0; d < 30; d++) { stepDay(L2.sim); stepDay(L3.sim); }
       const h2 = simHash(L2.sim), h3 = simHash(L3.sim);
@@ -244,7 +244,7 @@ export async function d011EditGuards(log) {
         '讀檔後接著蓋：手勢編號接續，再存再讀照樣重播', L4.ok ? `g ${r.g}、${L4.note}` : L4.error);
     }
     // 歷史對不上（被改過）→ 退回只用存檔，講得出原因；沒有 d3 的一般分享碼 → 從這張碼開始記
-    const o = { ...raw }; delete o.z; o.d3 = { ...raw.d3, h: raw.d3.h.filter((e, i) => !(i > 0 && e.t === 'place')) };
+    const o = { ...raw }; delete o.z; o.d3 = { f: raw.d3.f, s: raw.d3.s, g: raw.d3.g, h: s.city.history.filter((e, i) => !(i > 0 && e.t === 'place')) };   // 舊存法 hv 1（事件物件）
     const L5 = loadCode(encodeLabCode(o, { deflate: true }), KT, vrank);
     const L6 = loadCode(read('src/content/samples/starter.code.txt'), KT, vrank);
     log(L5.ok && !L5.replayed && /對不上|失敗/.test(L5.note) && L6.ok && !L6.replayed && L6.sim.city.history.length === 1,
