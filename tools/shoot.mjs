@@ -398,8 +398,9 @@ if (want('d011')) {
   const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
   const code = R('src/content/samples/newcity.code.txt').trim(), ops = opsOf(code), X = ops.site.x0, Z = ops.site.z0;
   const fresh = async (open, page, q) => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await open(q); };
-  const js = o => o.k === 'money' ? `__gt.simMoney(${o.v})` : o.k === 'undo' ? '__gt.undo()' : `__gt.edit(${JSON.stringify(o)})`;
-  const toOp = (o, found) => o.k === 'money' || o.k === 'undo' ? o : o.at ? { k: o.k, tool: o.tool, x0: found[0], z0: found[1], x1: found[0], z1: found[1] }
+  // 劇本一筆 → 瀏覽器（tools/d011-ops.mjs 的操作）：資金、亂數對齊（兩邊 mulberry32(v)）、復原走測試出口；施工走 __gt.edit（跟手勢同一條路）。單格拆除是 x0＝x1、z0＝z1 的框
+  const js = o => o.k === 'money' ? `__gt.simMoney(${o.v})` : o.k === 'seed' ? `__gt.simSeed(${o.v})` : o.k === 'undo' ? '__gt.undo()' : `__gt.edit(${JSON.stringify(o)})`;
+  const toOp = (o, found) => o.k === 'money' || o.k === 'seed' || o.k === 'undo' ? o : o.at ? { k: o.k, tool: o.tool, x0: found[0], z0: found[1], x1: found[0], z1: found[1] }
     : o.k === 'tap' ? { k: 'tap', tool: o.tool, x0: o.x, z0: o.z, x1: o.x, z1: o.z } : { k: o.k, tool: o.tool, x0: o.x0, z0: o.z0, x1: o.x1, z1: o.z1 };
   // 1) 3D 照對拍那一串做，拍第 0、30、60、120 天；結束時的雜湊要等於 Node 跑的
   const P = parity3d(codeWithSeed(code, 5162026), KT, vrank, 120), found = P.B.find(o => o.k === 'pick').found;
@@ -424,7 +425,7 @@ if (want('d011')) {
   const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
   fs.writeFileSync(path.join(out, 'd011_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
     .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:800px;height:500px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
-    <h1>D011 建造 MVP：同一個起點（新城碼、種子 5162026）、同一串操作</h1><p class="s">開跑前一批（鋪路、升級、劃區、電廠、警察局、橋、拆除、復原，30 筆）→ 推進一天 → 一批（拆、重劃、復原，9 筆）→ 之後只推進。左：2D 實驗線 v13.43（d23c18d），回退設定、用它自己的手勢函式；右：3D。第 0 天＝第一批做完、還沒推進。畫面中央 800×500，1:1。</p>
+    <h1>D011 建造 MVP：同一個起點（新城碼、種子 5162026）、同一串操作</h1><p class="s">開跑前一批（鋪路、升級、劃區、電廠、警察局、橋、快速路橋、拆除、復原，${ops.A.length} 筆）→ 推進一天 → 一批（亂數對齊、拆、警察局、重劃、復原，${ops.B.length} 筆）→ 之後只推進。左：2D 實驗線 v13.43（d23c18d），回退設定、用它自己的手勢函式；右：3D。第 0 天＝第一批做完、還沒推進。畫面中央 800×500，1:1。</p>
     <div class="g">${cells.map(([d, has]) => cell(has ? `d011_day${d}_2d.png` : '', `第 ${d} 天・2D 實驗線`) + cell(`d011_day${d}_3d.png`, `第 ${d} 天・3D`)).join('')}</div>`);
   // 2) 介面前後：起步城、手機直式與桌機
   const before = arg('before', '');
@@ -461,7 +462,11 @@ if (want('d011')) {
       if (kind === 'days') { await page.evaluate(`__gt.simStep(${arg})`); const s = await page.evaluate('__gt.sim()'); if (arg > 1) await shot(`d011_build_${++seg}`, `第 ${s.day - 1} 天・人口 ${s.pop}・$${Math.round(s.money).toLocaleString()}`); continue; }
       const b = batch++;
       for (const o of arg) {
-        if (o.k === 'pick') { const r = await page.evaluate(`(()=>{const L=__gt.layers(),n=L.n,[x0,z0,x1,z1]=${JSON.stringify(o.rect)};for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){const id=L.occ[z*n+x];if(id){const b=__gt.buildingList().find(r=>r[0]===id);if(b&&b[1]===${+o.what.slice(1)}&&b[2]===x&&b[3]===z)return [x,z];}}return null;})()`); picks[o.as] = r; continue; }
+        if (o.k === 'pick') {   // 框裡照格索引順序第一棟根格：what＝'kN'（那一種）或 'rci'（住商工任一種），同 tools/d011-ops.mjs PICK_SRC
+          const kOk = o.what === 'rci' ? 'b[1]>=1&&b[1]<=3' : `b[1]===${+o.what.slice(1)}`;
+          const r = await page.evaluate(`(()=>{const L=__gt.layers(),n=L.n,[x0,z0,x1,z1]=${JSON.stringify(o.rect)};for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){const id=L.occ[z*n+x];if(id){const b=__gt.buildingList().find(r=>r[0]===id);if(b&&(${kOk})&&b[2]===x&&b[3]===z)return [x,z];}}return null;})()`);
+          picks[o.as] = r; continue;
+        }
         await page.evaluate(js(toOp(o, o.at ? picks[o.at] : null)));
       }
       if (b === 0 || b === 2) { const s = await page.evaluate('__gt.sim()'); await shot(`d011_build_${++seg}`, `${b ? `第 ${s.day - 1} 天擴建後` : '第一批施工後'}・$${Math.round(s.money).toLocaleString()}`); }
