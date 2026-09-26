@@ -37,6 +37,14 @@ const BLANK = `(()=>{const c=document.querySelector('canvas'),k=document.createE
   for(let i=0;i<d.length;i+=4){const v=(d[i]+d[i+1]+d[i+2])/3;s+=v;s2+=v*v;n++;}const m=s/n;return +(s2/n-m*m).toFixed(1);})()`;
 // 意外的 alert／confirm／prompt：丟例外（記成頁面錯誤，那一段的「console 零錯誤」轉紅），不讓沒人按的對話框卡住頁面；要測 confirm 的地方自己換掉它
 const DIALOG_GUARD = `for (const k of ['alert', 'confirm', 'prompt']) window[k] = m => { throw new Error('D011 煙霧：意外的 ' + k + '：' + m); };`;
+// 頁面收到的最近 40 筆 pointer／click 事件（window 捕獲階段；__gtEv），點按鈕的檢查紅燈時印出來當證據：分得出「觸控沒送進頁面」和「收到了卻沒有 click」。
+// 起因：a01d92a 的雲端那一輪點「住」工具鈕沒換到工具；靠這份紀錄查到是後者（見 release 的註解）
+const TAP_PROBE = `window.__gtEv = [];
+for (const t of ['pointerdown', 'pointerup', 'pointercancel', 'click']) addEventListener(t, e => {
+  const g = e.target, b = g && g.closest ? g.closest('button') : null;
+  window.__gtEv.push(Math.round(performance.now()) + ' ' + t + ' ' + (b ? 'button:' + (b.dataset.t || b.dataset.r || b.id || '?') : g && g.tagName ? g.tagName + (g.id ? '#' + g.id : '') : '?'));
+  if (window.__gtEv.length > 40) window.__gtEv.shift();
+}, true);`;
 // 一次 evaluate 最多等多久：頁面卡住時那一段記紅燈，整支測試不會永遠等下去
 const timed = (p, ms, what) => { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error(`等了 ${ms / 1000} 秒沒有回應：${what.slice(0, 80)}`)), ms); })]).finally(() => clearTimeout(t)); };
 // 存檔碼 → 天數、資金、難度、歷史筆數（Node 端解）
@@ -53,13 +61,19 @@ async function pageSession(page, open0, { W = 412, H = 860, mobile = true } = {}
   const open = async q => { await open0(q); if (mobile) await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 }); };
   await page.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile });
   if (mobile) await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
-  await page.send('Page.addScriptToEvaluateOnNewDocument', { source: DIALOG_GUARD });
+  await page.send('Page.addScriptToEvaluateOnNewDocument', { source: DIALOG_GUARD + '\n' + TAP_PROBE });
   const ev = (e, ms = 240000) => timed(page.evaluate(e), ms, e);
   // 觸控點 [x, y] 或 [x, y, 手指編號]（沒給＝陣列位置）。實測 CDP 的語意：touchStart 列出所有按著的指，新的編號＝放下；touchMove 列出要動的指
   // （少列一指只是那一指不動，不會放開它）；touchEnd 列出的指＝放開那幾指，列空的＝全部放開
   const touch = (type, pts) => page.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(([x, y, id], k) => ({ x, y, id: id ?? k })) });
-  const drag = async (a, b, steps = 8, each, down) => { await touch('touchStart', [a]); await down?.(); for (let k = 1; k <= steps; k++) { await touch('touchMove', [[a[0] + (b[0] - a[0]) * k / steps, a[1] + (b[1] - a[1]) * k / steps]]); await sleep(20); await each?.(); } };
-  const release = async () => { await touch('touchEnd', []); await sleep(150); };
+  // 等頁面畫過 n 幀：鏡頭的阻尼每幀補一次（看幀數，不看牆鐘時間）；pointermove 是對齊畫面幀才送進頁面的連續事件，畫過一幀它就處理完了
+  const frames = n => ev(`new Promise(r => { let k = 0; const f = () => ++k >= ${n} ? r(k) : requestAnimationFrame(f); requestAnimationFrame(f); })`);
+  // 拖完先等 2 幀：之前最後一次移動之後只等 20 ms 就讀預覽，機器忙時那一幀還沒到，讀到的是前一格（Chrome 154 三個平行 18 輪中 1 輪：預覽 11 格 $165、實扣 12 格 $180）
+  const drag = async (a, b, steps = 8, each, down) => { await touch('touchStart', [a]); await down?.(); for (let k = 1; k <= steps; k++) { await touch('touchMove', [[a[0] + (b[0] - a[0]) * k / steps, a[1] + (b[1] - a[1]) * k / steps]]); await sleep(20); await each?.(); } await frames(2); };
+  // 放開：手指先停住 150 ms 再抬起（真人拉到終點也會停一下）。手指還在動就抬起，瀏覽器當成甩動；甩動還在進行時的下一下點擊，
+  // 頁面只收到 pointerdown／pointerup、沒有 click（實測 Google Chrome 154、CDP 觸控注入：放開後 50–150 ms 點工具鈕，8 次掉 2 次；停住再放 24 次全有；
+  // Chromium 141 沒有這個行為）。a01d92a 的雲端那一輪，點「住」工具鈕就是這樣掉的（見 D011 卡「施工中遇到」）
+  const release = async () => { await sleep(150); await touch('touchEnd', []); await sleep(150); };
   const tapAt = async ([x, y]) => { await touch('touchStart', [[x, y]]); await sleep(30); await touch('touchEnd', []); await sleep(200); };   // 真的點一下（synthesizeTapGesture 受實際視窗大小限制，手機版下方的鈕會超界）
   const center = sel => ev(`(()=>{const e=document.querySelector(${J(sel)});if(!e)return null;const b=e.getBoundingClientRect();return [b.left+b.width/2,b.top+b.height/2];})()`);
   const rectOf = sel => ev(`(()=>{const e=document.querySelector(${J(sel)});if(!e)return null;const b=e.getBoundingClientRect();return {l:b.left,t:b.top,r:b.right,b:b.bottom,w:b.width,h:b.height,hidden:!!e.closest('[hidden]')};})()`);
@@ -91,7 +105,7 @@ async function pageSession(page, open0, { W = 412, H = 860, mobile = true } = {}
   const freshStart = async () => { await open('sample=seed516&clean=1'); await ev('__gt.clearSave()'); await open(''); };
   const waitFor = async (f, ms = 4000) => { for (const t0 = Date.now(); Date.now() - t0 < ms; await sleep(50)) if (await f()) return true; return false; };
 
-  return { W, H, ev, touch, drag, release, tapAt, tapBtn, center, rectOf, hit, toasts, click, clickBtn, key, cell, sim, onScreen, code, script, X, Z, visibleRun, findBox, freshStart, waitFor, open };
+  return { W, H, ev, touch, drag, release, tapAt, tapBtn, center, rectOf, hit, toasts, click, clickBtn, key, cell, sim, onScreen, code, script, X, Z, visibleRun, findBox, freshStart, waitFor, open, frames };
 }
 
 // 空的陸地（沒有路、分區、建築、樹）
@@ -113,7 +127,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     });
   };
 
-  await run('build', '建造流程與存檔', async ({ W, H, ev, touch, drag, release, tapAt, tapBtn, cell, sim, X, Z, visibleRun, findBox, freshStart, open }) => {
+  await run('build', '建造流程與存檔', async ({ W, H, ev, touch, drag, release, tapAt, tapBtn, cell, sim, X, Z, visibleRun, findBox, freshStart, open, frames }) => {
   // ---- 開局：沒有存檔 → 新城（df 1、$3000、第 1 天、暫停），一開就是「我的城」 ----
   await freshStart();
   const s0 = await sim(), ui0 = await ev('__gt.ui()');
@@ -154,15 +168,17 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   }
 
   // ---- 選著工具時，兩指捏合會縮放、兩指拖會平移，都不會蓋東西 ----
+  // 放開之後等 90 幀再量：鏡頭有阻尼（three.js 預設每幀補上剩下的 5%），之前固定等 500 ms，機器忙、幀數少時只補到六七成，
+  // 平移量到 0.45–0.61 格、門檻 0.5（本機 25 次有 5 次低於門檻）；90 幀補到 1−0.95⁹⁰≈99%
   {
     const c0 = await ev('__gt.cam()'), s0 = await sim(), cx = W / 2, cy = H / 2 - 80;
     await touch('touchStart', [[cx - 40, cy], [cx + 40, cy]]);
     for (let k = 1; k <= 8; k++) { await touch('touchMove', [[cx - 40 - k * 12, cy], [cx + 40 + k * 12, cy]]); await sleep(20); }
-    await touch('touchEnd', []); await sleep(500);
+    await touch('touchEnd', []); await frames(90);
     const c1 = await ev('__gt.cam()');
     await touch('touchStart', [[cx - 40, cy], [cx + 40, cy]]);
     for (let k = 1; k <= 8; k++) { await touch('touchMove', [[cx - 40 + k * 10, cy + k * 8], [cx + 40 + k * 10, cy + k * 8]]); await sleep(20); }
-    await touch('touchEnd', []); await sleep(500);
+    await touch('touchEnd', []); await frames(90);
     const c2 = await ev('__gt.cam()'), s2 = await sim();
     const moved = Math.hypot(c2.target[0] - c1.target[0], c2.target[2] - c1.target[2]);
     log(c1.zoom > c0.zoom * 1.1 && moved > 0.5 && s2.money === s0.money && s2.events === s0.events && (await ev('__gt.ui()')).tool === 'road',
@@ -204,8 +220,11 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   }
 
   // ---- 框選分區：錢不夠整塊不蓋（實驗線 commitRect 62996 原句「資金不足」）；夠就逐格蓋、扣預覽總價 ----
+  // 先確認點「住」真的換到工具（a01d92a 雲端那一輪沒換到，接著拖出來的是快速路：4×4 格 $840＝L 形 7 格 × $120）；沒換到就印出頁面收到的事件
   {
+    await ev('window.__gtEv.length = 0');
     await tapBtn('.tool[data-t="zr"]');
+    const toolNow = (await ev('__gt.ui()')).tool, evZ = toolNow === 'zr' ? [] : await ev('window.__gtEv');
     const s0 = await sim();
     const side = Math.ceil(Math.sqrt(s0.money / 8 + 1)), big = await findBox(side, side, free), zones0 = (await ev('__gt.layers()')).zone.filter(Boolean).length;
     await drag(big[0][1], big.at(-1)[1]);
@@ -217,8 +236,10 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     const pv2 = (await ev('__gt.stroke()'))?.preview;
     await release();
     const s2 = await sim(), zones2 = (await ev('__gt.layers()')).zone.filter(Boolean).length;
-    log(big.length === side * side && !!pv && pv.total > s0.money && s1.money === s0.money && zones1 === zones0 && /資金不足/.test(toast) && !!pv2 && pv2.count === 3 && s2.money === s0.money - pv2.total && zones2 === zones0 + 3,
-      'D011 框選分區：總價超過資金整塊不蓋（實驗線原句「資金不足」）；夠就逐格蓋、扣的錢＝預覽總價', `${side}×${side} 格 $${pv?.total} > $${s0.money}：沒蓋（${toast.split('|').find(t => /資金不足/.test(t)) ?? '沒有提示'}）；3 格 $${pv2?.total}：蓋了`);
+    log(toolNow === 'zr' && big.length === side * side && !!pv && pv.total > s0.money && s1.money === s0.money && zones1 === zones0 && /資金不足/.test(toast) && !!pv2 && pv2.count === 3 && s2.money === s0.money - pv2.total && zones2 === zones0 + 3,
+      'D011 框選分區：總價超過資金整塊不蓋（實驗線原句「資金不足」）；夠就逐格蓋、扣的錢＝預覽總價',
+      (toolNow === 'zr' ? '' : `點「住」之後工具是 ${toolNow}，沒換到；頁面收到的事件：${evZ.length ? evZ.join('｜') : '沒有'}；`)
+      + `${side}×${side} 格 $${pv?.total} > $${s0.money}：${zones1 === zones0 ? '沒蓋' : `蓋了 ${zones1 - zones0} 格`}（${toast.split('|').find(t => /資金不足/.test(t)) ?? '沒有提示'}）；3 格 $${pv2?.total}：${zones2 - zones1 === 3 ? '蓋了' : `分區多了 ${zones2 - zones1} 格`}`);
     await ev('__gt.tool(null)');
   }
 
@@ -511,7 +532,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     }
   }, { settle: 300 });
 
-  await run('touch', '觸控與版面', async ({ W, H, ev, touch, release, tapAt, tapBtn, center, rectOf, hit, toasts, sim, findBox, open, waitFor, X, Z }, page) => {
+  await run('touch', '觸控與版面', async ({ W, H, ev, touch, release, tapAt, tapBtn, center, rectOf, hit, toasts, sim, findBox, open, waitFor, frames, X, Z }, page) => {
     // 整段只開一次頁（有兩指手勢，之後換頁觸控就送不進去，見 pageSession）。新城預設對準起步城那塊平地時，下方工具列底下是河；
     // 鏡頭改對準河北邊的陸地（?at=26,18：412×860 整個畫面底下都是陸地），介面底下每一點都蓋得了電廠，「介面不穿透」才量得到東西
     const URL0 = 'at=26,18';
@@ -606,7 +627,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
           const m=[(a[0]+b[0])/2,(a[1]+b[1])/2],d=Math.hypot(b[0]-a[0],b[1]-a[1]),u=[(b[0]-a[0])/d,(b[1]-a[1])/d],p0=[m[0]-u[0]*3,m[1]-u[1]*3],p1=[m[0]+u[0]*3,m[1]+u[1]*3];
           const t0=__gt.tileAt(...p0),t1=__gt.tileAt(...p1);if(t0&&t1&&t0[0]===x&&t0[1]===z&&t1[0]===x+1&&t1[1]===z)return {a:[x,z],b:[x+1,z],p0,p1,px:Math.hypot(p1[0]-p0[0],p1[1]-p0[1])};}
         return null;})()`);
-      const wiggle = async (e, mid) => { const n0 = (await sim()).events; await touch('touchStart', [e.p0]); await sleep(30); await touch('touchMove', [e.p1]); await sleep(60); const m = await mid?.(); await touch('touchEnd', []); await sleep(250); return { m, evs: (await ev('__gt.history()')).slice(n0).map(q => [q.t, q.x, q.z]) }; };
+      const wiggle = async (e, mid) => { const n0 = (await sim()).events; await touch('touchStart', [e.p0]); await sleep(30); await touch('touchMove', [e.p1]); await sleep(60); await frames(2); const m = await mid?.(); await touch('touchEnd', []); await sleep(250); return { m, evs: (await ev('__gt.history()')).slice(n0).map(q => [q.t, q.x, q.z]) }; };
       await ev(`__gt.tool('road','road')`);
       const e1 = await pair([]), r1 = e1 ? await wiggle(e1) : null;
       await ev(`__gt.tool('zr')`);
@@ -626,7 +647,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
           const p=__gt.cellScreen(x,z);if(p[0]>80&&p[0]<${W - 80}&&p[1]>${dock.t - 90}&&p[1]<${dock.t - 30}&&(!best||Math.abs(p[0]-${W / 2})<Math.abs(best.p[0]-${W / 2})))best={t:[x,z],p};}return best;})()`);
       const look = `(()=>{const t=document.getElementById('costTag'),r=t.getBoundingClientRect(),d=document.getElementById('dock').getBoundingClientRect(),s=__gt.stroke();
         return {hidden:t.hidden,text:t.textContent,bad:t.classList.contains('bad'),l:r.left,t:r.top,r:r.right,b:r.bottom,dockTop:d.top,finger:s?__gt.cellScreen(...s.b):null,inV:r.top>=0&&r.bottom<=innerHeight&&r.left>=0&&r.right<=innerWidth};})()`;
-      const dragDown = async p => { await touch('touchStart', [p]); for (let k = 1; k <= 8; k++) { await touch('touchMove', [[p[0], p[1] + (H - 40 - p[1]) * k / 8]]); await sleep(30); } await sleep(80); const m = await ev(look); await release(); return m; };
+      const dragDown = async p => { await touch('touchStart', [p]); for (let k = 1; k <= 8; k++) { await touch('touchMove', [[p[0], p[1] + (H - 40 - p[1]) * k / 8]]); await sleep(30); } await sleep(80); await frames(2); const m = await ev(look); await release(); return m; };
       const m1 = start ? await dragDown(start.p) : null;
       await ev('__gt.simMoney(10)');
       const m2 = start ? await dragDown([start.p[0] + 60, start.p[1]]) : null;
