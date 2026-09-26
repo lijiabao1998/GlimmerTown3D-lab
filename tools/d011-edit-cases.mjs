@@ -184,7 +184,12 @@ export function tamperCases(raw, hist, n) {
         [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）等級 0`, put(hv, k, 'rc', 0), say(k, 'rc')],
         [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）等級 9`, put(hv, k, 'rc', 9), say(k, 'rc')],
         [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 0`, put(hv, z, 'zone', 0), say(z, 'zone')],
-        [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 7`, put(hv, z, 'zone', 7), say(z, 'zone')]);
+        [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 7`, put(hv, z, 'zone', 7), say(z, 'zone')],
+        // 剛好出界的那一個值（範圍的邊界差一：x＞n 當成 x≥n、路等級放到 6、分區放到 4 都要紅）
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）x＝n`, put(hv, k, 'x', n), say(k, '座標')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）z＝n`, put(hv, k, 'z', n), say(k, '座標')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）等級 6`, put(hv, k, 'rc', 6), say(k, 'rc')],
+        [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 4`, put(hv, z, 'zone', 4), say(z, 'zone')]);
     }
   }
   return [

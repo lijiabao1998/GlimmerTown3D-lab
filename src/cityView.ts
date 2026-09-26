@@ -165,7 +165,7 @@ export function startCity() {
     const tp = performance.now();
     const b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined);
     const t3 = performance.now();
-    built?.dispose();
+    retire(built);
     city = c; built = b; label = name; lastCode = code;
     built.scene.add(preview.mesh);
     delete timing.rebuild;
@@ -213,7 +213,7 @@ export function startCity() {
     if (!city) return;
     blockMode = m;
     const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined), t1 = performance.now();
-    built?.dispose();
+    retire(built);
     built = b;
     built.scene.add(preview.mesh);
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
@@ -228,7 +228,7 @@ export function startCity() {
   function rebuildScene() {
     if (!city) return;
     const t0 = performance.now(), br = blockRenderFor(city), tp = performance.now(), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined), t1 = performance.now();
-    built?.dispose();
+    retire(built);
     built = b;
     built.scene.add(preview.mesh);                                       // D011：施工預覽跟著搬到新場景
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0, rebuild: t1 - t0 }, b.timing);
@@ -284,12 +284,17 @@ export function startCity() {
       if (steps) { if (dirtyScene && daysSinceBuild >= REBUILD_DAYS) rebuildScene(); syncUi(); }
     }
   }
+  // 換下來的場景等新場景畫完第一幀才丟：材質的著色器程式由新場景接手（three.js 依參數共用程式），不必刪掉再重新編譯、同步等 GPU。
+  // 以前重建一次就刪 5 個程式再重編（D011 第二輪煙霧量到：SwiftShader 上佔播放中主執行緒時間的 87%）
+  let retired: BuiltCity[] = [];
+  const retire = (b: BuiltCity | null) => { if (b) retired.push(b); };
   function draw() {
     if (controls.update()) needsRender = true;
     if (!needsRender || !built) return;
     needsRender = false;
     frames++;
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
+    if (retired.length) { for (const b of retired) b.dispose(); retired = []; }
   }
   renderer.setAnimationLoop(() => { advance(); draw(); });
 
