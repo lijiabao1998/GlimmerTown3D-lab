@@ -4,11 +4,14 @@
 // 施工中不量的：pw／rp／h／wa（執行期欄位；實驗線放電廠、鋪路、拆除後立刻重算帶電道路，本線每天開頭才算）。
 // 供電另外量：預建城推進一天之後，推進前就在的住商工每一棟有沒有電（PW_SRC；那一天兩邊都照容量與帶電道路重新分配過）。
 // 推進一天的亂數：兩邊都記每一次抽取的呼叫行號（實驗線＝index.html 行號；本線＝src 行號，SITE_MAP 對到實驗線那一行）。
+import vm from 'node:vm';
 import { decodeLabCode } from '../src/io/labcode.ts';
 import { loadCode, saveCode } from '../src/io/save.ts';
 import { stepDay, simCounts } from '../src/sim/day.ts';
 import { fieldsOf } from '../src/sim/rules/fields.ts';
 import { pickV406 } from '../src/sim/rules/land.ts';
+import { weatherStep } from '../src/sim/rules/weather.ts';
+import { mulberry32 } from '../src/sim/rng.ts';
 import { d011Ops, prebuiltOps, run3d, PICK_SRC, DEFAULT_GAP } from './d011-ops.mjs';
 import { OTHER_INCOME_KEYS, IMPORT_KEYS } from '../src/sim/rules/money.ts';
 
@@ -80,13 +83,55 @@ export const EXTRA_SRC = `((tiles,COV)=>{const c=(f,i)=>!!(COV[f]&&COV[f][i]>0);
   return {fire,crime,disease};})`;
 export const labExtraRolls = new Function(`return ${EXTRA_SRC}`)();
 // 本線 src 裡抽亂數的每一行 → 實驗線 tick() 對應的那一行（index.html @ d23c18d）：天氣 54965–54975（src/sim/rules/weather.ts 13–23）、
-// 生長洗牌 55605／擲骰 55618／變體 55622（growth.ts 31／44／48–49）、升級擲骰 55648／變體 55649（growth.ts 81／83）。src 改了行號這張表要跟著改（對不到就紅）
+// 生長洗牌 55605／擲骰 55618／變體 55622（growth.ts 31／44／48–49）、升級擲骰 55648／變體 55649（growth.ts 81／83）。src 改了行號這張表要跟著改（對不到就紅）。
+// 哪幾行真的對拍到：新城第 1 天、預建城推進那一天兩邊都沒抽天氣（這兩天天氣都沒換態、也不是暴雨），新城第 1 天推進前沒有住商工所以也沒抽升級——
+// 天氣那 7 行另外用 weatherSites 對拍（實驗線原文在 vm 裡跑）；升級那 2 行只在預建城推進那一天抽到，那一天的生長與升級只量不判
 export const SITE_MAP = { 'weather.ts:13': 54965, 'weather.ts:15': 54967, 'weather.ts:16': 54968, 'weather.ts:17': 54969, 'weather.ts:19': 54971, 'weather.ts:20': 54972, 'weather.ts:23': 54975,
   'growth.ts:31': 55605, 'growth.ts:44': 55618, 'growth.ts:48': 55622, 'growth.ts:49': 55622, 'growth.ts:81': 55648, 'growth.ts:83': 55649 };
-// 生長擲骰之前的行（天氣、洗牌）：抽幾次只看推進前的格子與天氣，跟當天的幸福、需求無關
+// 守衛講到哪一行時用的名字
+export const LINE_NAMES = { 54965: '天氣', 54967: '天氣', 54968: '天氣', 54969: '天氣', 54971: '天氣', 54972: '天氣', 54975: '天氣',
+  55605: '生長洗牌', 55618: '生長擲骰', 55622: '變體', 55648: '升級擲骰', 55649: '升級變體', 55772: '起火擲骰', 55817: '犯罪擲骰', 55850: '生病擲骰' };
+// 生長擲骰之前的行（天氣、洗牌）：抽幾次只看推進前的格子與天氣，跟當天的幸福、需求無關（預建城推進那一天只比這幾行；天氣那幾行那一天兩邊都 0 次）
 export const PRE_GROWTH_LINES = [54965, 54967, 54968, 54969, 54971, 54972, 54975, 55605];
 // 本線記下的呼叫位置 → 實驗線行號的逐行次數；對不到的位置記在 '?檔名:行'（守衛會紅）
 export const labSitesOf = sites3d => { const o = {}; for (const [k, v] of Object.entries(sites3d)) { const l = SITE_MAP[k] ?? `?${k}`; o[l] = (o[l] || 0) + v; } return o; };
+// 一次抽取的呼叫位置：堆疊裡第一個 src/sim 的檔名:行（跳過亂數本身 lab.ts）；harness 與 weatherSites 共用，SITE_MAP 的鍵就是這個格式
+export const siteOf = stack => { const m = /src\/sim\/(?:rules\/)?(?!lab\.ts)([\w]+\.ts):(\d+):\d+/.exec(stack); return m ? `${m[1]}:${m[2]}` : '?'; };
+
+// 實驗線 tick() 的天氣那一段（index.html 54964–54975 @d23c18d）與它讀的 inWinter（38119），原文一字不改（照抄，只為了在 vm 裡跑）。
+// 全文的 sha256 要等於 D009 樣本（d009-formulas.json）記的「F10 天氣」、「inWinter」片段——那是 tools/lab-rules.mjs 從實驗線原檔摘的，守衛先核
+export const LAB_WEATHER = { line: 54964, src: [
+  '  if(--wxT<=0){',
+  '    if(weather===0){if(R()<.12){weather=1;wxT=3+ri(6);}else wxT=3+ri(5);}',
+  '    else if(weather===1){',
+  '      if(R()<.20){weather=2;wxT=1+ri(2);}',
+  '      else if(R()<.35){weather=0;wxT=4+ri(6);if(!inWinter())rainbowT=9;} // T248：雨→晴且非冬＝彩虹',
+  '      else wxT=2+ri(3);',
+  '    }else{',
+  '      if(R()<.35){weather=0;wxT=4+ri(6);if(!inWinter())rainbowT=9;} // T248：暴雨→晴且非冬＝彩虹',
+  '      else{weather=1;wxT=2+ri(4);}',
+  '    }',
+  '  }',
+  '  if(weather===2&&!inWinter()&&R()<.25){flashT=.4;sThunder();} // 冬季不觸發閃電（T18）'].join('\n') };
+export const LAB_INWINTER = { line: 38119, src: 'const inWinter=()=>((day-1)%360)>=300; // 冬季（T18）：每年第 300-360 天；由 day 導出，不進存檔' };
+// 天氣的呼叫位置對拍（SITE_MAP 天氣那 7 行）：回傳一個函式，給一組起點 c＝{weather, wxT, day0, days, seed}（D009 F10 的案例）
+//   實驗線：上面的原文在 vm 裡跑（lineOffset 讓堆疊行號＝原檔行號），R／ri 同 tools/lab-rules.mjs 的 rngStub，每一次抽取記原文那一行；
+//   本線：weatherStep，每一次抽取記 siteOf（同 harness）。兩邊同一個 mulberry32(seed)。回傳兩串呼叫位置與每天的 [天氣, wxT, 彩虹, 閃電]
+export function weatherSites() {
+  const ctx = vm.createContext({ weather: 0, wxT: 0, day: 1, rainbowT: 0, flashT: 0, sThunder: () => {} });
+  vm.runInContext(`function __wx(){\n${LAB_WEATHER.src}\n}\n${LAB_INWINTER.src}`, ctx, { filename: 'd011-lab-weather.js', lineOffset: LAB_WEATHER.line - 2 });
+  const at = () => { const m = /d011-lab-weather\.js:(\d+):\d+/.exec(new Error().stack); return m ? +m[1] : 0; };
+  return c => {
+    const lab = [], mine = [], labOut = [], mineOut = [], g = mulberry32(c.seed), g2 = mulberry32(c.seed);
+    ctx.R = () => { lab.push(at()); return g(); }; ctx.ri = n => { lab.push(at()); return Math.floor(g() * n); };
+    ctx.weather = c.weather; ctx.wxT = c.wxT;
+    for (let d = 0; d < c.days; d++) { ctx.day = c.day0 + d; ctx.rainbowT = 0; ctx.flashT = 0; ctx.__wx(); labOut.push([ctx.weather, ctx.wxT, ctx.rainbowT === 9, ctx.flashT === .4]); }
+    const rng = { R: () => { mine.push(siteOf(new Error().stack)); return g2(); }, ri: n => { mine.push(siteOf(new Error().stack)); return Math.floor(g2() * n); } };
+    let s = { weather: c.weather, wxT: c.wxT };
+    for (let d = 0; d < c.days; d++) { s = weatherStep(s, c.day0 + d, rng); mineOut.push([s.weather, s.wxT, s.rainbow, s.lightning]); }
+    return { lab, mine, labOut, mineOut };
+  };
+}
 
 // 結算探針讀的實驗線 tick() 區域變數（56053 之前，同一層作用域）：收入與維護費的每一項輸入。讀不到的（不在作用域）就不記
 export const PROBE_NAMES = ['income', 'upkeep', 'taxR', 'taxC', 'taxI', 'civicMul', 'goodsMul284', 'commerceSalesMul481', 'industrialMarketMul481', 'indSupplyMul', 'fuelTaxMul', 'steelTaxMul',
@@ -147,8 +192,8 @@ export function prebuiltOf(code) { const { S, lay } = layersOf(code); return pre
 // 本線一座城的量具：亂數抽取計數（{k:'seed'} 換掉 s.rng 的 R、ri 之後重新包）、拆除確認的時鐘（每筆 gap，預設 10 秒）、快照、一段操作逐筆記
 function harness(s) {
   const h = { draws: 0, clock: 0, picks: {}, cap: null };
-  // 推進一天時另記每一次抽取的呼叫位置（堆疊裡第一個 src/sim 的檔名:行，跳過亂數本身 lab.ts）
-  const site = () => { const m = /src\/sim\/(?:rules\/)?(?!lab\.ts)([\w]+\.ts):(\d+):\d+/.exec(new Error().stack); const k = m ? `${m[1]}:${m[2]}` : '?'; h.cap[k] = (h.cap[k] || 0) + 1; };
+  // 推進一天時另記每一次抽取的呼叫位置（siteOf：堆疊裡第一個 src/sim 的檔名:行，跳過亂數本身 lab.ts）
+  const site = () => { const k = siteOf(new Error().stack); h.cap[k] = (h.cap[k] || 0) + 1; };
   const count = () => { const R0 = s.rng.R, ri0 = s.rng.ri; s.rng.R = () => { h.draws++; if (h.cap) site(); return R0.call(s.rng); }; s.rng.ri = n => { h.draws++; if (h.cap) site(); return ri0.call(s.rng, n); }; };
   count();
   h.snap = () => snapOf(s.w.tiles, s.g.COV, s.g.POL, s.g.POLBASE, s.g.POLTREE, s.g.LANDBASE, s.g.LAND, s.landDirty, s.landBox);
@@ -244,4 +289,100 @@ export function class2Of(p) {
       transitDepotUpkeep501: p.transitDepotUpkeep501 ?? 0, metroCost: p.metroCost ?? 0, railOpsCost463: p.railOpsCost463 ?? 0, svcFleet: p.svcFleet, imports: pick(IMPORT_KEYS),
       busOpsCost468: p.busOpsCost468 ?? 0, nightOpsCost487: p.nightOpsCost487 ?? 0 },
   };
+}
+
+// ---- 欄位形狀：守衛比到的每一個錄製欄位都要在、型別對 ----
+// 重錄漏掉一欄時兩邊都是 undefined，J(undefined)===J(undefined) 照樣「相等」、守衛照樣綠（例：parity3d 與兩份樣本都拿掉 snap1）。
+// 所以逐項比之前先核形狀，三份各核一次：kind＝'lab'（d011-lab.json）、'3d'（d011-3d.json）、'live'（這次 parity3d／prebuilt3d 重算的 { runs, prebuilt }）。
+// 形狀照錄製的寫法（tools/d011-parity.mjs RUN／PRE／READBACK、上面的 parity3d／prebuilt3d）：樣本檔只有第一個種子留逐格明細（其餘種子 A、B 段的 changed 是格數），
+// 推進第 1 天那一列 day 欄＝2、之後第 i 列＝i＋3。實驗線錄了但守衛不比的欄（diff、star、msIdx、nets、預建城的 pwBefore、happyAgg）不核。
+// 回傳問題清單：欄位路徑（同一個問題出現在好幾個種子只列一次、附種子）
+const isHex = v => typeof v === 'string' && /^[0-9a-f]{1,8}$/.test(v), isNum = v => typeof v === 'number' && Number.isFinite(v);
+const isCnt = v => Number.isInteger(v) && v >= 0, isObj = v => v !== null && typeof v === 'object' && !Array.isArray(v), isStr = v => typeof v === 'string' && v.length > 0;
+const isCells = v => Array.isArray(v) && v.every(e => Array.isArray(e) && e.length === 2 && isCnt(e[0]) && Array.isArray(e[1]) && e[1].length === PROJ_FIELDS.length && e[1].every(Number.isInteger));
+const rowOk = (v, day) => Array.isArray(v) && v.length === ROW_FIELDS.length && v.every(isNum) && v[0] === day;
+// 一筆操作紀錄第一個不對的欄（null＝都對）
+const recOff = (r, o, counts) => {
+  if (!isObj(r)) return '';
+  if (r.k !== o.k) return '.k';
+  for (const [f, ok] of [['money', isNum], ['draws', isCnt], ['tileHash', isHex], ['fieldHash', isHex], ['land', isStr]]) if (!ok(r[f])) return `.${f}`;
+  if (!(isCells(r.changed) || (counts && isCnt(r.changed)))) return '.changed';
+  if (o.k === 'pick' && !(r.found === null || (Array.isArray(r.found) && r.found.length === 2 && r.found.every(isCnt)))) return '.found';
+  return null;
+};
+export function shapeOff(kind, S, { seeds, days, ops, P }) {
+  const J = JSON.stringify, hits = new Map(), lab = kind === 'lab', live = kind === 'live';
+  const put = (msg, seed) => { if (!hits.has(msg)) hits.set(msg, []); if (seed !== undefined) hits.get(msg).push(seed); };
+  if (!live) {
+    if (!(Array.isArray(S.seeds) && S.seeds.length && S.seeds.every(Number.isInteger)) || J(S.seeds) !== J(seeds)) put('seeds');
+    if (!(Number.isInteger(S.days) && S.days >= 2) || S.days !== days) put('days');
+    if (J(S.fields) !== J(ROW_FIELDS)) put('fields（要＝ROW_FIELDS）');
+    if (lab && !(/^[0-9a-f]{40}$/.test(S.source?.commit ?? '') && isStr(S.source?.version))) put('source.commit／version');
+  }
+  for (const seed of seeds) {
+    const bad = p => put(p, seed), need = (p, ok) => { if (!ok) bad(p); };
+    const head = (p, x, money) => need(p, isObj(x) && isHex(x.tileHash) && isHex(x.fieldHash) && isStr(x.land) && (!money || isNum(x.money)));
+    const batch = (p, xs, list, counts) => {
+      if (!Array.isArray(xs)) return bad(p);
+      if (xs.length !== list.length) return bad(`${p}（${xs.length} 筆，劇本 ${list.length} 筆）`);
+      for (let i = 0; i < xs.length; i++) { const e = recOff(xs[i], list[i], counts); if (e !== null) return bad(`${p}[${i}]${e}`); }
+    };
+    const sites = (p, v) => need(p, isObj(v) && Object.keys(v).length > 0 && Object.values(v).every(n => Number.isInteger(n) && n > 0));
+    const extra = (p, v) => need(p, isObj(v) && ['fire', 'crime', 'disease'].every(k => isCnt(v[k])));
+    const measure = (p, v) => need(p, isObj(v) && isCnt(v.n) && isCnt(v.buildings) && isObj(v.kinds) && Array.isArray(v.roots) && v.roots.every(r => Array.isArray(r) && r.length === 5));
+    const settle = (p, v) => need(p, isObj(v) && isNum(v.income) && isNum(v.upkeep));
+    const pairs = (p, v, ok) => need(p, Array.isArray(v) && v.length > 0 && v.every(e => Array.isArray(e) && e.length === 2 && isCnt(e[0]) && ok(e[1])));
+    // 新城
+    const r = S.runs?.[seed];
+    if (!isObj(r)) bad('runs');
+    else {
+      for (const k of ['snap0', 'snapA', 'snapB']) head(`runs.${k}`, r[k], true);
+      head('runs.snap1', r.snap1, false);                                    // 推進第 1 天之後不比資金（第 2 類）
+      const counts = !live && seed !== seeds[0];
+      batch('runs.A', r.A, ops.A, counts); batch('runs.B', r.B, ops.B, counts);
+      need('runs.tick1Draws', isCnt(r.tick1Draws)); sites('runs.tick1Sites', r.tick1Sites); need('runs.tick1Land', isCnt(r.tick1Land)); extra('runs.tick1Extra', r.tick1Extra);
+      need('runs.day1', rowOk(r.day1, 2));
+      need('runs.codeB', isStr(r.codeB));
+      if (!Array.isArray(r.rows)) bad('runs.rows');
+      else if (r.rows.length !== days - 1) bad(`runs.rows（${r.rows.length} 列，應該 ${days - 1} 列）`);
+      else { const i = r.rows.findIndex((x, j) => !rowOk(x, j + 3)); if (i >= 0) bad(`runs.rows[${i}]`); }
+      if (lab) {
+        need('runs.probe1', isObj(r.probe1) && isNum(r.probe1.income) && isNum(r.probe1.upkeep));
+        measure('runs.measureB', r.measureB);
+        need('runs.rcB', isObj(r.rcB) && Object.keys(r.rcB).length > 0 && Object.values(r.rcB).every(isCnt));
+      } else { need('runs.hwyBridge', isCnt(r.hwyBridge)); settle('runs.settle1', r.settle1); }
+    }
+    // 預建城
+    const q = S.prebuilt?.[seed];
+    if (!isObj(q)) bad('prebuilt');
+    else {
+      need('prebuilt.mig', isCnt(q.mig));
+      head('prebuilt.snap0', q.snap0, true); head('prebuilt.snapOps', q.snapOps, true); head('prebuilt.post', q.post, false);
+      batch('prebuilt.ops', q.ops, P.ops, false);
+      need('prebuilt.tickDraws', isCnt(q.tickDraws)); sites('prebuilt.tickSites', q.tickSites); need('prebuilt.tickLand', isCnt(q.tickLand)); extra('prebuilt.tickExtra', q.tickExtra);
+      need('prebuilt.day1', rowOk(q.day1, 2));
+      need('prebuilt.postChanged', isCells(q.postChanged));
+      need('prebuilt.inv', isObj(q.inv) && isHex(q.inv.tileInv) && isHex(q.inv.fieldInv));
+      pairs('prebuilt.pw', q.pw, v => v === 0 || v === 1); pairs('prebuilt.hs', q.hs, isNum);
+      if (lab) need('prebuilt.probe', isObj(q.probe) && ['garbage', 'garbCap', 'garbPen409', 'garbFar409', 'foodCoreNeed482', 'foodSupplyRate482'].every(k => isNum(q.probe[k])));
+      else {
+        head('prebuilt.load', q.load, true); settle('prebuilt.settle', q.settle);
+        need('prebuilt.pwBefore', Array.isArray(q.pwBefore) && q.pwBefore.length > 0 && q.pwBefore.every(isCnt));
+      }
+    }
+    // 本線 → 實驗線讀回（只有實驗線樣本有）
+    if (lab) {
+      const b = S.readback?.[seed];
+      if (!isObj(b)) bad('readback');
+      else {
+        for (const w of ['withD3', 'plain']) {
+          const x = b[w];
+          need(`readback.${w}`, isObj(x) && typeof x.ok === 'boolean' && isObj(x.rc) && isNum(x.money) && ['diff', 'star', 'msIdx', 'day'].every(k => isCnt(x[k])));
+          measure(`readback.${w}.measure`, x?.measure);
+        }
+        for (const h of ['codeHash', 'plainHash']) need(`readback.${h}`, /^[0-9a-f]{8}$/.test(b[h] ?? ''));
+      }
+    }
+  }
+  return [...hits].map(([msg, ss]) => !ss.length ? msg : ss.length === seeds.length ? `${msg}（${ss.length} 個種子都是）` : `${msg}（種子 ${ss.join('、')}）`);
 }

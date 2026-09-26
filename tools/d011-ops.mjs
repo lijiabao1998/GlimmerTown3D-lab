@@ -73,21 +73,21 @@ export function d011Ops(n, ter, el, tre) {
     { k: 'rect', tool: 'zi', x0: X + 11, z0: Z + 6, x1: X + 19, z1: Z + 9 },
     { k: 'rect', tool: 'zr', x0: X + 1, z0: Z + 6, x1: X + 9, z1: Z + 9 },
     { k: 'rect', tool: 'zc', x0: X + 1, z0: Z + 1, x1: X + 2, z1: Z + 2 },             // 住→商：改劃免費
-    { k: 'rect', tool: 'zc', x0: X + 1, z0: Z + 1, x1: X + 2, z1: Z + 2, nop: 1 },     // 同類重劃：不動
-    { k: 'rect', tool: 'zr', x0: X + 1, z0: Z + 4, x1: X + 3, z1: Z + 6, nop: 1 },     // 跨過主街：路上那幾格拒絕、兩側已是住宅區不動
+    { k: 'rect', tool: 'zc', x0: X + 1, z0: Z + 1, x1: X + 2, z1: Z + 2, nop: 1, why: '已經是這一區' },     // 同類重劃：不動
+    { k: 'rect', tool: 'zr', x0: X + 1, z0: Z + 4, x1: X + 3, z1: Z + 6, nop: 1, why: '已經是這一區' },     // 跨過主街：路上那幾格拒絕、兩側已是住宅區不動
     { k: 'tap', tool: 'plant', x: X + 20, z: Z + 6 },                                  // 電廠貼著主街尾
     { k: 'tap', tool: 'police', x: X, z: Z + 6 },                                      // 警察局（抽一次亂數）
-    { k: 'tap', tool: 'police', x: X, z: Z + 6, nop: 1 },                              // 同一格再放：有建築擋住
-    { k: 'tap', tool: 'plant', x: water[0], z: water[1], nop: 1 },                     // 水上：只能蓋在陸地上
+    { k: 'tap', tool: 'police', x: X, z: Z + 6, nop: 1, why: '已有建築' },                              // 同一格再放：有建築擋住
+    { k: 'tap', tool: 'plant', x: water[0], z: water[1], nop: 1, why: '只能蓋在陸地上' },                     // 水上：只能蓋在陸地上
     doze1(tree[0], tree[1]),                                                           // 砍樹 $2（單格拆除＝框）
-    { ...doze1(tree[0], tree[1]), nop: 1 },                                            // 再砍一次：這裡沒東西
+    { ...doze1(tree[0], tree[1]), nop: 1, why: '這裡沒東西' },                                            // 再砍一次：這裡沒東西
     bridge,                                                                            // 過河：橋 +60／格
     { k: 'money', v: 40 },
     { k: 'line', tool: 'road', x0: X, z0: Z + 20, x1: X + 6, z1: Z + 20 },             // 錢只夠兩格：蓋前段
     { k: 'money', v: 100 },
-    { k: 'rect', tool: 'zi', x0: X + 11, z0: Z + 11, x1: X + 14, z1: Z + 14, nop: 1 }, // 16 格 × 8 > 100：整塊不蓋
+    { k: 'rect', tool: 'zi', x0: X + 11, z0: Z + 11, x1: X + 14, z1: Z + 14, nop: 1, why: '資金不足！需要 $128' }, // 16 格 × 8 > 100：整塊不蓋
     { k: 'money', v: 549 },
-    { k: 'tap', tool: 'plant', x: X + 20, z: Z + 4, nop: 1 },                          // 差一塊：拒絕
+    { k: 'tap', tool: 'plant', x: X + 20, z: Z + 4, nop: 1, why: '錢不夠' },                          // 差一塊：拒絕
     { k: 'money', v: 550 },
     { k: 'tap', tool: 'plant', x: X + 20, z: Z + 4 },                                  // 剛好：蓋
     { k: 'money', v: 3000 },
@@ -135,11 +135,11 @@ export function prebuiltOps(n, bl, rd, rcl) {
   const ops = [
     { k: 'money', v: 3000 },
     doze1(...ref),                                                                     // 體育場的附屬格（右下角）：整棟 2×2 拆掉、撤 stadium 覆蓋（51779–51796）
-    { ...doze1(...a2), nop: 1 },                                                       // 二級：第一次只預備（62985–62988）
+    { ...doze1(...a2), nop: 1, why: '拆除待確認' },                                                       // 二級：第一次只預備（62985–62988）
     doze1(...a2, 1000),                                                                // 1 秒後同一格再按：拆
-    { ...doze1(...a3), nop: 1 },                                                       // 三級：預備
-    { ...doze1(...a3, 3001), nop: 1 },                                                 // 過了 3 秒：重新預備，不拆
-    { ...doze1(...a3, 3000), nop: 1 },                                                 // 剛好 3 秒：還是重新預備（要 < 3000）
+    { ...doze1(...a3), nop: 1, why: '拆除待確認' },                                                       // 三級：預備
+    { ...doze1(...a3, 3001), nop: 1, why: '拆除待確認' },                                                 // 過了 3 秒：重新預備，不拆
+    { ...doze1(...a3, 3000), nop: 1, why: '拆除待確認' },                                                 // 剛好 3 秒：還是重新預備（要 < 3000）
     doze1(...a3, 2999),                                                                // 3 秒內：拆
     { k: 'rect', tool: 'doze', x0: pr[0], z0: pr[1], x1: pr[0] + 1, z1: pr[1] },        // 框選一級＋二級：一級拆、二級略過（62983 多格分支）
     { k: 'undo' },                                                                     // 復原框選拆除

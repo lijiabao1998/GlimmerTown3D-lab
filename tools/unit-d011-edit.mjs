@@ -2,24 +2,29 @@
 // 規則本身（canPlace／placeCost／doPlace／commitRect……、稅與維護費）另有黃金樣本守衛（unit-d011-build.mjs、unit-d011-money.mjs）；
 // 這裡驗的是本線自己接的線：帳對不對、城市模型跟格子同不同步、歷史能不能重播、存檔讀回來是不是同一座城（驗收 5、6，驗收 7 的 Node 半邊）。
 // 守衛那一跑（runScript 的 deep）每一筆操作之後、每一天前後另驗：地價基準的不變式（每一格要嘛標了待重算、要嘛＝現算）、
-// 照實驗線另抄的地價那一步（每一天）、歷史重播＝模擬（每一筆、每一天）、存檔再讀檔（每一段結尾、頭 3 天）。
-// 劇本第 E 段、預建城的拆除、釘住結果的操作、存檔取整、竄改的歷史：tools/d011-edit-cases.mjs
+// 照實驗線另抄的地價那一步（每一天；有框的那一天框外的待重算照實驗線留著）、歷史重播＝模擬（每一筆、每一天）、存檔再讀檔（每一段結尾、頭 3 天）。
+// 另驗：地價不變式的量法自己量得到違反、復原堆疊上限、貸款存讀檔、nop 的理由、nearCounter＝countNear。
+// 劇本第 E 段、預建城的拆除、釘住結果的操作、存檔取整、竄改的歷史、復原上限、地價框外：tools/d011-edit-cases.mjs
 import fs from 'node:fs';
 import path from 'node:path';
+import vm from 'node:vm';
+import { stripTypeScriptTypes } from 'node:module';
+import { pathToFileURL } from 'node:url';
 import { performance } from 'node:perf_hooks';
 import { ROOT } from './cdp.mjs';
 import { decodeLabCode, encodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import { roadCode, cityFromLab, cityStats, CITY_FORMAT } from '../src/sim/city.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
-import { stepDay, simHash, simFromSave } from '../src/sim/day.ts';
+import { stepDay, simHash, simFromSave, markStale } from '../src/sim/day.ts';
 import { commitOp, undoOp, previewOp, canUndo, EDIT_STALE_R } from '../src/sim/edit.ts';
 import { replayCity } from '../src/sim/replay.ts';
 import { saveCode, loadCode } from '../src/io/save.ts';
-import { fieldsOf } from '../src/sim/rules/fields.ts';
+import { fieldsOf, COVR, POL_SRC } from '../src/sim/rules/fields.ts';
 import { landStaticAt } from '../src/sim/rules/land.ts';
+import { countNear, nearCounter } from '../src/sim/rules/grid.ts';
 import { roadDraftTiles, UNDO_MAX } from '../src/sim/rules/build.ts';
 import * as OPS from './d011-ops.mjs';
-import { segE, prebuiltCase, pinCase, MONEY_ROUND, tamperCases, rcTamper } from './d011-edit-cases.mjs';
+import { segE, prebuiltCase, pinCase, MONEY_ROUND, tamperCases, rcTamper, undoCapCase, boxCase } from './d011-edit-cases.mjs';
 
 const { d011Ops, run3d } = OPS;
 const GAP = OPS.DEFAULT_GAP ?? 10000;   // 操作沒寫 gap：跟上一筆隔 10 秒（契約同 tools/d011-ops.mjs；拆除確認不會跨筆生效）
@@ -44,7 +49,7 @@ export function scriptOf(code) {
     { k: 'rect', tool: 'zi', x0: X + 11, z0: Z + 16, x1: X + 19, z1: Z + 19 },
     { k: 'rect', tool: 'zr', x0: X + 1, z0: Z + 16, x1: X + 9, z1: Z + 19 },
     { k: 'line', tool: 'art', x0: X, z0: Z + 5, x1: X + 20, z1: Z + 5 },              // 主街升主幹道：付差價
-    { k: 'line', tool: 'alley', x0: X, z0: Z + 5, x1: X + 3, z1: Z + 5, nop: 1 },     // 降級：拒絕
+    { k: 'line', tool: 'alley', x0: X, z0: Z + 5, x1: X + 3, z1: Z + 5, nop: 1, why: '已為同級或更高級道路' },   // 降級：拒絕（51270）
     { k: 'line', tool: 'road', x0: X + 20, z0: Z + 10, x1: tree2[0], z1: tree2[1] },  // 往第二棵樹拉過去：樹上 +2
     { k: 'tap', tool: 'police', x: X + 20, z: Z + 16 },
     { k: 'rect', tool: 'doze', x0: X + 1, z0: Z + 1, x1: X + 9, z1: Z + 4 },          // 框選拆除：一級照拆、二級以上略過
@@ -120,6 +125,53 @@ export function labLandStep(s) {
   }
   return out;
 }
+// 標了待重算、卻在實驗線地價框外面的格（有框的那一天照實驗線只算框，這些格留到隔天：實驗線的 bug，照抄）
+export function staleOutsideBox(s) {
+  const N = s.w.N, out = [];
+  if (!s.landBox) return out;
+  const [x0, y0, x1, y1] = s.landBox;
+  for (let i = 0; i < N * N; i++) if (s.stale[i]) { const x = i % N, y = (i / N) | 0; if (x < x0 || x > x1 || y < y0 || y > y1) out.push(i); }
+  return out;
+}
+
+// ---- 鄰域計數：nearCounter（src/sim/rules/grid.ts，c736ecd 起 tick 的半徑 3 工業、半徑 4 犯罪用它）＝countNear（52934）----
+// 每一格 × 半徑 {0,1,2,3,4,5,9} 逐一比，旗標五種：tick 的兩種、常常是真的（路）、圖中央那一列的中間才第一次是真（累加表從半路才配置）、只有第 0 格是真。
+// 回傳第一個不同的地方（null＝全部相同）與各旗標是真的格數
+export const NEAR_R = [0, 1, 2, 3, 4, 5, 9];
+export function nearMismatch(w) {
+  const N = w.N, t0 = w.tiles[0], mid = (N >> 1) * N + (N >> 1) + 3, late = new Set(w.tiles.filter((t, i) => i === mid || (i > mid && (t.road || t.zone))));
+  const preds = [
+    ['工業（tick 半徑 3）', t => t.bld && t.bld.k === 3], ['住商工犯罪（tick 半徑 4）', t => t.bld && t.bld.k <= 3 && t.bld.crime], ['路', t => t.road],
+    [`第 ${mid} 格起的路或分區`, t => late.has(t)], ['只有第 0 格', t => t === t0],
+  ];
+  const on = {};
+  for (const [name, p] of preds) {
+    const f = nearCounter(w, p);
+    on[name] = w.tiles.filter(p).length;
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) for (const r of NEAR_R) {
+      const a = f(x, y, r), b = countNear(w, x, y, r, p);
+      if (a !== b) return { bad: `${name}：(${x},${y}) 半徑 ${r} nearCounter ${a} ≠ countNear ${b}`, on };
+    }
+  }
+  return { bad: null, on };
+}
+// src/sim/day.ts 在記憶體裡另載一份、換掉它 import 的幾個名字（不改 src；tools/unit-d011-build.mjs 載 build.ts 的突變也是這個做法）。
+// 名字照 day.ts 自己的 import 逐一從同一批模組拿（同一個網址＝同一份模組），swap 覆寫其中幾個；回傳那一份的 stepDay
+export async function stepDayWith(swap) {
+  const file = path.join(ROOT, 'src/sim/day.ts'), src = fs.readFileSync(file, 'utf8'), ctx = {};
+  for (const [, names, from] of src.matchAll(/^import \{([^}]*)\} from '([^']+)';$/gm)) {
+    const ns = await import(new URL(from, pathToFileURL(file)).href);
+    for (const k of names.split(',').map(q => q.trim()).filter(q => q && !q.startsWith('type '))) {
+      if (!(k in ns)) throw new Error(`${from} 沒有匯出 ${k}`);
+      ctx[k] = ns[k];
+    }
+  }
+  for (const k of Object.keys(swap)) if (!(k in ctx)) throw new Error(`day.ts 沒有 import ${k}`);
+  Object.assign(ctx, swap);
+  const js = stripTypeScriptTypes(src).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
+  vm.runInContext(`${js}\n;globalThis.__m = { stepDay };`, vm.createContext(ctx), { filename: 'variant:day.ts' });
+  return ctx.__m.stepDay;
+}
 
 // ---- 重播與存讀檔（驗收 5）----
 const BLD = b => [b.id, b.k, b.lv, b.v, b.age, b.x, b.z, b.size, b.abandoned, b.builtDay, b.goneDay ?? -1];
@@ -141,18 +193,20 @@ export function replayDiff(s, start, KT) {
 // 路圖層照實驗線 save 另抄一份（index.html 66717 @d23c18d：0 無 1 路 2 橋 3 高速 4 高速橋），不經 roadCode
 const labRd = t => t.road ? (t.hw ? (t.bridge ? 4 : 3) : (t.bridge ? 2 : 1)) : 0;
 const TILE = t => [t.t, t.road, t.hw, t.bridge, t.road ? t.rc : 0, t.zone || 0, t.tree || 0, t.bld ? [t.bld.k, t.bld.lv, t.bld.v, t.bld.age, t.bld.ref ?? 0, t.bld.k === 1 ? [t.bld.den ?? 3, t.bld.we ?? 1] : 0, +(t.bld.fire || 0)] : 0];
-// 存檔再讀檔：存的路圖層、資金（實驗線 66747 money:Math.round(money)）、難度、天數照實驗線；讀回來一定要重播成功（src/io/save.ts mismatch 為 null）、
-// 逐格（路、快速路、橋、等級、分區、樹、建築）、建築清單（含墓碑）、歷史、資金、天數、難度、里程碑、星等、手勢編號都相同，讀回的城也同步
+// 存檔再讀檔：存的路圖層、資金（實驗線 66747 money:Math.round(money)）、難度、天數、貸款（66749 ln:loan?[loan.remain,loan.daily]:null）照實驗線；
+// 讀回來一定要重播成功（src/io/save.ts mismatch 為 null）、逐格（路、快速路、橋、等級、分區、樹、建築）、建築清單（含墓碑）、歷史、資金、天數、難度、
+// 里程碑、星等、手勢編號、貸款（實驗線 load 66924 loan=d.ln?{remain:d.ln[0],daily:d.ln[1]}:null）都相同，讀回的城也同步
 export function roundTrip(s, L, KT, vrank) {
   const code = saveCode(s, L.template, L.start), d = decodeLabCode(code);
   if (!d.ok) return { bad: '存檔解不開：' + d.error };
   const raw = d.save.raw, rd = d.save.layers.rd ?? '', n = s.w.N, q = loadCode(code, KT, vrank), out = { code, raw, q, bad: null }, fail = why => ({ ...out, bad: why });
   for (let i = 0; i < n * n; i++) if (rd.charCodeAt(i) - 48 !== labRd(s.w.tiles[i])) return fail(`存檔的路圖層第 ${i} 格「${rd[i]}」≠ 實驗線寫法 ${labRd(s.w.tiles[i])}`);
-  if (raw.money !== Math.round(s.money) || raw.df !== s.diff || raw.day !== s.day) return fail(`存檔的資金／難度／天數 ${J([raw.money, raw.df, raw.day])} ≠ ${J([Math.round(s.money), s.diff, s.day])}`);
+  const ln = s.loan ? [s.loan.remain, s.loan.daily] : null;
+  if (raw.money !== Math.round(s.money) || raw.df !== s.diff || raw.day !== s.day || J(raw.ln) !== J(ln)) return fail(`存檔的資金／難度／天數／貸款 ${J([raw.money, raw.df, raw.day, raw.ln])} ≠ ${J([Math.round(s.money), s.diff, s.day, ln])}`);
   if (!q.ok) return fail('讀不回來：' + q.error);
   if (!q.replayed) return fail('沒有重播：' + q.note);
-  const p = q.sim, a = [p.money, p.day, p.diff, p.msIdx, p.bestStar, p.stroke], b = [raw.money, s.day, s.diff, s.msIdx, s.bestStar, s.stroke];
-  if (J(a) !== J(b)) return fail(`資金／天數／難度／里程碑／星等／手勢編號：讀回 ${J(a)} ≠ ${J(b)}`);
+  const p = q.sim, a = [p.money, p.day, p.diff, p.msIdx, p.bestStar, p.stroke, p.loan], b = [raw.money, s.day, s.diff, s.msIdx, s.bestStar, s.stroke, s.loan];
+  if (J(a) !== J(b)) return fail(`資金／天數／難度／里程碑／星等／手勢編號／貸款：讀回 ${J(a)} ≠ ${J(b)}`);
   if (J(p.city.history) !== J(s.city.history)) return fail('歷史不同');
   const c = cityDiff(s.city, p.city, '讀回'); if (c) return fail(c);
   const ti = s.w.tiles.findIndex((t, i) => J(TILE(t)) !== J(TILE(p.w.tiles[i])));
@@ -163,9 +217,10 @@ export function roundTrip(s, L, KT, vrank) {
 
 // ---- 跑劇本 ----
 // 每一筆操作與每一天：帳（資金逐位）、同步、歷史只增不改；預覽＝實際（錢夠、又不是單格拆二級以上的第一次按：蓋成的格數＝預覽能蓋的、扣的錢＝預覽總價，一筆都不跳過）；
-// 錢不夠（框、點整筆不蓋，線只蓋得出前段）；復原把那一筆放的建築變墓碑、拆掉的回來、全額退錢；釘住的操作逐項比（script.pins）。
+// 錢不夠（框、點整筆不蓋，線只蓋得出前段）；復原把那一筆放的建築變墓碑、拆掉的回來、全額退錢；釘住的操作逐項比（script.pins）；nop 的施工回報的理由＝劇本寫的 why。
 // stepOpts 給地價雙胞胎用；onStep(s, o, r)：每一筆操作（o）、每一天（o＝null、r＝當天的報告）之後叫一次（瀏覽器重演、截圖用）。
-// opts.deep：另外逐筆、逐日驗地價不變式、照實驗線另抄的地價那一步、重播＝模擬、存讀檔往返（慢，給守衛那一跑）。
+// opts.deep：另外逐筆、逐日驗地價不變式、照實驗線另抄的地價那一步（有框的那一天，框外標著待重算的格推進完還是待重算）、重播＝模擬、存讀檔往返（慢，給守衛那一跑）。
+// opts.step：推進一天用的函式（預設 src/sim/day.ts stepDay；守衛用 stepDayWith 換掉一個名字的那一份來比）
 // 回傳 bad（帳、同步、預覽、復原、釘住）、land、replay、trip 分開報；tally＝發生過什麼（涵蓋面）；n＝深查次數
 export function runScript(code, KT, vrank, script, stepOpts = {}, onStep, opts = {}) {
   const L = loadCode(code, KT, vrank);
@@ -207,15 +262,20 @@ export function runScript(code, KT, vrank, script, stepOpts = {}, onStep, opts =
   for (const [seg, [kind, arg]] of script.entries()) {
     if (kind === 'days') {
       for (let d = 0; d < arg; d++) {
-        let exp = null;
+        let exp = null, outBox = [];
         const how = s.landDirty ? (s.landBox ? '框' : '整張') : '不用算';
-        if (deep) { landCheck(`第 ${s.day} 天推進前`); exp = labLandStep(s); }
+        if (deep) {
+          landCheck(`第 ${s.day} 天推進前`); exp = labLandStep(s);
+          // 有框的那一天，框外還標著待重算的格（例如前一天長出的工業）：照實驗線那一天不算（D011 卡第 8 節，bug 照抄），推進完還是待重算、地價基準不動
+          if (s.landDirty) { outBox = staleOutsideBox(s); if (outBox.length) hit('框外還有待重算（照抄實驗線 bug）'); }
+        }
         for (const t of stack) for (const e of t.events) if (persists(e)) hit(`跨日留著：${evKind(e)}`);
         stack.length = 0;                                                // 過了一天：之前的施工不能再復原（day.ts s.txns 清空）
-        const m0 = s.money, t = performance.now(), rep = stepDay(s, stepOpts), ms = performance.now() - t;
-        // 當天的帳：結算（56053，沙盒不入帳）→ 里程碑 → 星等獎金 → 紓困，依序加，要逐位等於模擬的資金
+        const m0 = s.money, t = performance.now(), rep = (opts.step ?? stepDay)(s, stepOpts), ms = performance.now() - t;
+        // 當天的帳：結算（56053，沙盒不入帳）→ 貸款還款（56079）→ 里程碑 → 星等獎金 → 紓困，依序加減，要逐位等於模擬的資金
         let m = m0; const st = rep.settle;
         if (s.diff !== 3) m += st.income - st.upkeep;
+        if (st.loanPaid !== undefined) { m -= st.loanPaid; hit('貸款還款'); if (!s.loan) hit('貸款還清'); }
         if (st.milestone) { m += st.milestone.reward; hit('里程碑'); }
         if (st.star) { m += st.star.bonus; hit('星等獎金'); }
         if (st.bailout) { m += st.bailout; hit('紓困'); }
@@ -223,10 +283,12 @@ export function runScript(code, KT, vrank, script, stepOpts = {}, onStep, opts =
         if (canUndo(s)) bad.push(`第 ${s.day} 天：過了一天還能復原`);
         if (deep) {
           const k = exp.findIndex((v, i) => v !== s.g.LANDBASE[i]);
-          if (k >= 0) land.push(`第 ${s.day} 天：地價基準第 ${k} 格 ${s.g.LANDBASE[k]} ≠ 照實驗線 54996–55001 另算的 ${exp[k]}（推進前：${how}）`);
+          if (k >= 0) land.push(`第 ${s.day} 天：地價基準第 ${k} 格 ${s.g.LANDBASE[k]} ≠ 照實驗線 54996–55001 另算的 ${exp[k]}（推進前：${how}${outBox.length ? `，框外待重算 ${outBox.length} 格` : ''}）`);
           else hit(`地價另算相同：${how}`);
+          const gone = outBox.find(i => !s.stale[i]);
+          if (gone !== undefined) land.push(`第 ${s.day} 天：框外第 ${gone} 格推進前標了待重算，推進完沒了（實驗線有框的那一天只算框，54996–55001）`);
         }
-        days.push({ day: s.day, ms, land: Buffer.from(s.g.LANDBASE).toString('base64'), money: s.money, pop: s.pop, settle: st });
+        days.push({ day: s.day, ms, land: Buffer.from(s.g.LANDBASE).toString('base64'), money: s.money, pop: s.pop, settle: st, loan: s.loan && [s.loan.remain, s.loan.daily], outBox: outBox.length });
         check(`第 ${s.day} 天`);
         if (deep && days.length <= 3) { roundTripAt(`第 ${s.day} 天`); cnt.dayTrips++; }
         onStep?.(s, null, rep);
@@ -311,6 +373,13 @@ export function runScript(code, KT, vrank, script, stepOpts = {}, onStep, opts =
       }
       // 劇本註明 nop 的（拒絕、同類重劃、拆除只預備）什麼都不能改；沒註明的施工與復原一定要改到東西（契約同 tools/d011-ops.mjs：劇本不會默默空跑）
       if (!['money', 'seed', 'pick'].includes(o.k) && (ev.length > 0 || !Object.is(s.money, m0)) === !!o.nop) bad.push(`${where}：${o.nop ? '註明不改卻改了' : '什麼都沒改到（劇本空跑）'}`);
+      // nop 的施工要寫理由（why），回報的理由要是這一句（拆除只預備＝「拆除待確認」，同涵蓋面的記法）：不是為了別的理由剛好也沒改到東西
+      if (op && (o.nop || o.why !== undefined)) {
+        const said = r.reason ?? (r.armed ? '拆除待確認' : undefined);
+        if (o.why === undefined) bad.push(`${where}：註明 nop 卻沒寫理由（why）`);
+        else if (said !== o.why) bad.push(`${where}：理由 ${J(said)}（劇本寫 ${J(o.why)}）`);
+        else hit('nop 理由相同');
+      }
       pinCheck(o, r, pv, ev, where);
       check(where);
       if (deep && tripNow) { roundTripAt(`${where}（復原放置之後）`); cnt.undoTrips++; }
@@ -368,17 +437,34 @@ async function guards(log) {
   const script = scriptOf(code);
 
   // 驗收 5：劇本跑兩次雜湊相同、換種子不同（A 是深查的那一跑、B 不深查：深查不能動到模擬）；每一筆的帳、同步、歷史只增不改
+  // B 那一跑順便量 nearCounter＝countNear：每一段施工做完（下一次推進的 tick 就從這個狀態建累加表）逐格比，結束時再比一次（只讀，不動模擬）
   const t0 = performance.now(), A = runScript(code, KT, vrank, script, {}, undefined, { deep: true }), tA = performance.now() - t0;
-  const B = runScript(code, KT, vrank, script);
+  const segEnd = new Set(script.filter(([k]) => k === 'ops').map(([, a]) => a.at(-1))), near = [];
+  const B = runScript(code, KT, vrank, script, {}, (s, o) => { if (o && segEnd.has(o)) near.push([`劇本城第 ${s.day} 天施工完`, nearMismatch(s.w)]); });
+  near.push([`劇本城第 ${B.s.day} 天`, nearMismatch(B.s.w)]);
   const hA = hashOf(A.s), hB = hashOf(B.s), hC = hashOf(runScript(codeWithSeed(code, 777), KT, vrank, script).s);
   log(!!hA && !!hC && hA === hB && hA !== hC, `決定性：新城＋五段施工＋120 天，兩次雜湊相同（一次帶深查、一次不帶）、換種子不同`, `${hA}＝${hB}；種子 777：${hC}`);
   log(A.bad.length === 0 && B.bad.length === 0,
-    '每一筆施工：扣的錢＝事件造價逐筆減（逐位）、回報的花費相同；錢夠就「蓋成的格數＝預覽、扣款＝預覽總價」（不跳過）、錢不夠框與點不蓋、線只蓋前段；復原：放的建築變墓碑（根格表、occ、格子都清掉）、拆的回來、全額退錢；E 段釘住的結果逐項相同；每一天：資金＝結算＋里程碑＋星等＋紓困逐筆加；城市模型與格子逐格同步；歷史只增不改；過一天不能復原',
+    '每一筆施工：扣的錢＝事件造價逐筆減（逐位）、回報的花費相同；錢夠就「蓋成的格數＝預覽、扣款＝預覽總價」（不跳過）、錢不夠框與點不蓋、線只蓋前段；nop 的施工回報的理由＝劇本寫的 why；復原：放的建築變墓碑（根格表、occ、格子都清掉）、拆的回來、全額退錢；E 段釘住的結果逐項相同；每一天：資金＝結算－貸款還款＋里程碑＋星等＋紓困逐筆加減；城市模型與格子逐格同步；歷史只增不改；過一天不能復原',
     [...A.bad, ...B.bad].slice(0, 3).join('；') || `${A.s.city.history.length - 1} 筆事件、${A.days.length} 天、資金 ${A.s.money.toFixed(3)}、人口 ${A.s.pop}、釘住 ${A.tally['釘住'] ?? 0} 筆`);
   // 驗收 6：地價（本線的逐格標記＋實驗線的框）
   log(!A.land.length && A.tally['地價另算相同：框'] > 0 && A.tally['地價另算相同：整張'] > 0,
     `地價：劇本每一筆操作之後、每一天推進前後，每一格要嘛標了待重算、要嘛地價基準＝現算（不看實驗線的框，施工標記半徑 ${EDIT_STALE_R}）；每一天推進完的 LANDBASE 逐位元組＝照實驗線 54996–55001 另抄的那一步（有框只算框、沒框整張）`,
     A.land.slice(0, 2).join('；') || `逐格驗 ${A.n.land} 次；另算 ${A.days.length} 天（${['框', '整張', '不用算'].map(k => `${k} ${A.tally['地價另算相同：' + k] ?? 0}`).join('、')}）`);
+  // 地價不變式的量法（landStale）自己要量得到違反：它恆回 −1 的話上面那一條永遠綠，拿掉施工的逐格標記（edit.ts markStaleAround）也看不出來。
+  // 新城讀檔後（rebuildCov 整張算過）量不到；蓋一座警察局（覆蓋改了、施工標了待重算）量不到；把待重算清掉就一定量到一格，而且在警察局的覆蓋框裡；
+  // 只把那一框（半徑 COVR.police）標回待重算，又量不到（違反的格都在那一框裡）
+  {
+    const L = loadCode(code, KT, vrank), s = L.sim, N = s.w.N, px = script.site.x0 + 10, pz = script.site.z0 + 10, R = COVR.police;
+    const fresh = landStale(s), r = commitOp(s, { k: 'tap', tool: 'police', x0: px, z0: pz, x1: px, z1: pz }, 0), marked = landStale(s);
+    s.stale.fill(0);
+    const i = landStale(s), ix = i % N, iz = (i / N) | 0, now = i >= 0 ? asByte(landStaticAt(s.w, fieldsOf(s.g), ix, iz)) : null;
+    markStale(s, px, pz, R);
+    const back = landStale(s);
+    log(fresh === -1 && r.placed === 1 && marked === -1 && i >= 0 && Math.abs(ix - px) <= R && Math.abs(iz - pz) <= R && s.g.LANDBASE[i] !== now && back === -1,
+      `地價不變式的量法自己先驗（landStale 量得到違反）：新城讀檔後量不到；蓋警察局（覆蓋半徑 ${R}）之後施工標了待重算，量不到；把待重算清掉就量到一格、在警察局的覆蓋框裡、地價基準真的≠現算；只把那一框標回待重算又量不到`,
+      `讀檔後 ${fresh}、蓋完 ${marked}、清掉標記 ${i >= 0 ? `第 ${i} 格 (${ix},${iz})：地價基準 ${s.g.LANDBASE[i]}、現算 ${now}` : i}、標回那一框 ${back}；警察局 (${px},${pz}) 蓋了 ${r.placed} 格`);
+  }
   log(!A.replay.length && A.n.replay > A.days.length,
     '歷史重播（每一筆操作之後、每一天之後）：匯入那張碼＋到目前的全部事件重播出的城＝模擬，逐棟逐欄（含墓碑、屋齡、蓋起日）與路、等級、分區、樹、occ',
     A.replay.slice(0, 2).join('；') || `${A.n.replay} 次都相同`);
@@ -405,18 +491,90 @@ async function guards(log) {
       allBad(BO).slice(0, 2).join('；') || `讀檔後 bailoutDay ${L0.ok && L0.sim.bailoutDay}；第 ${d1?.day} 天淨額 ${st?.net}、紓困 ${st?.bailout}、$${d1?.money}；第 ${d2?.day} 天紓困 ${d2?.settle.bailout ?? 0}、$${d2?.money}`);
   }
 
-  // 涵蓋面：每一種都真的發生過（主劇本、預建城、釘住、紓困合起來；新加的都在清單上，不會悄悄不發生）
+  // 復原堆疊的上限（實驗線 closeUndo 62731：超過 40 筆丟最舊的；src/sim/edit.ts commitOp → pushTxn）：新城同一天 45 筆單格施工（造價各不同），復原 41 次（帶深查）
+  const UC = undoCapCase(script.site.x0, script.site.z0, UNDO_MAX), spends = [], refunds = [], depth = {};
+  const U = runScript(code, KT, vrank, UC, {}, (s, o, r) => {
+    if (!o) return;
+    if (o.k === 'undo') { if (r.ok) refunds.push(r.refund); depth.end = s.txns.length; }
+    else if (o.k !== 'money') { spends.push(r.spent); depth.top = s.txns.length; }
+  }, { deep: true });
+  {
+    const N = U.s.w.N, rcOf = { alley: 1, road: 2, coll: 3, art: 4, hwy: 5 }, znOf = { zr: 1, zc: 2, zi: 3 }, tileAt = ([x, z]) => U.s.w.tiles[z * N + x];
+    const kept = UC.kept.filter(c => { const t = tileAt(c); return !(c[2] in znOf ? t.zone === znOf[c[2]] : t.road && t.rc === rcOf[c[2]]); }), gone = UC.cells.slice(5).filter(c => { const t = tileAt(c); return t.road || t.zone; });
+    log(!allBad(U).length && depth.top === UNDO_MAX && depth.end === 0 && U.tally['復原'] === UNDO_MAX && U.tally['復原（沒東西）'] === 1 && spends.length === UNDO_MAX + 5 && spends.every(v => v > 0)
+      && J(refunds) === J(spends.slice(5).reverse()) && !kept.length && !gone.length,
+      `復原堆疊上限 ${UNDO_MAX}（實驗線 62731，多了丟最舊的）：新城同一天 ${UNDO_MAX + 5} 筆單格施工（五級路、三種分區輪流）之後堆疊只有 ${UNDO_MAX} 筆；復原 ${UNDO_MAX + 1} 次：前 ${UNDO_MAX} 次由新到舊，每次退的錢＝那一筆花的，第 ${UNDO_MAX + 1} 次沒東西可復原、什麼都不改；最舊的 5 筆推進一天後還在（${UC.kept.map(c => c[2]).join('、')}）、其餘都拆回原狀；每一筆之後帳、同步、地價、重播、存讀檔都對`,
+      allBad(U).slice(0, 3).join('；') || (kept.length || gone.length ? `該留的沒留 ${J(kept)}、該拆的還在 ${J(gone.slice(0, 3))}` : `施工後堆疊 ${depth.top} 筆、復原完 ${depth.end} 筆；花 ${spends.join(',')}；退（新到舊）${refunds.join(',')}`));
+  }
+
+  // 貸款（實驗線 save 66749 ln:loan?[loan.remain,loan.daily]:null；load 66924 loan=d.ln?{remain:d.ln[0],daily:d.ln[1]}:null；
+  // tick 56079 結算之後 money-=loan.daily、--loan.remain<=0 就還清：remain 是還剩幾天，不是錢）。公式本身另有黃金樣本（unit-d011-money.mjs）；這裡驗存讀檔與推進接得對。
+  // 新城設一筆剩 3 天、每天 $120（65786 一般貸款的日還款）的貸款存檔：存的 ln、讀回的 loan 照實驗線；讀回來推進 4 天（帶深查，頭 3 天每天存讀檔貸款照樣）
+  const LNL = loadCode(code, KT, vrank); LNL.sim.loan = { remain: 3, daily: 120 };
+  const LNC = saveCode(LNL.sim, LNL.template, LNL.start), LN = runScript(LNC, KT, vrank, [['days', 4]], {}, undefined, { deep: true });
+  {
+    const ln = decodeLabCode(LNC).save.raw.ln, q = loadCode(LNC, KT, vrank);
+    const paid = LN.days.map(d => d.settle.loanPaid ?? 0), left = LN.days.map(d => d.loan);
+    log(J(ln) === '[3,120]' && q.ok && q.replayed && J(q.sim.loan) === '{"remain":3,"daily":120}' && !allBad(LN).length && J(paid) === '[120,120,120,0]' && J(left) === '[[2,120],[1,120],null,null]'
+      && LN.tally['貸款還款'] === 3 && LN.tally['貸款還清'] === 1 && LN.n.dayTrips === 3,
+      '貸款存讀檔：存檔 ln＝[剩幾天, 日還款]（實驗線 66749）、讀回 loan 相同（66924）；推進時結算之後扣日還款、剩的天數減 1、減到 0 就還清（56079），資金照結算→還款→里程碑→星等→紓困逐位對帳；頭 3 天每天存讀檔，貸款照樣',
+      allBad(LN).slice(0, 2).join('；') || `存 ln ${J(ln)}、讀回 ${q.ok ? J(q.sim.loan) : q.error}；每天還 ${paid.join('、')}；剩 ${left.map(v => J(v)).join('、')}`);
+  }
+
+  // 地價框外還有待重算（實驗線的 bug 照抄的那一面，D011 卡第 8 節）：劇本 A 段 → 1 天 → B 段 → 1 天 → 遠處劃一格住宅區（tools/d011-edit-cases.mjs boxCase）→ 1 天。
+  // 最後那一天是「有框」的一天、框外還標著前一天長出的工業留下的待重算：照實驗線那一天只算框（runScript 深查：推進完的 LANDBASE＝照抄的那一步、框外的格推進完還是待重算）。
+  // 本線要是順手修掉這個 bug（有框也整張算待重算的格），這一條就紅
+  const S0 = decodeLabCode(code).save, lay0 = k => Uint8Array.from(S0.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
+  const BXC = boxCase(S0.n, lay0('ter'), lay0('tre'), script.site.x0, script.site.z0, POL_SRC[3].r);
+  const BX = runScript(code, KT, vrank, [script[0], ['days', 1], script[2], ['days', 1], ['ops', [BXC.op]], ['days', 1]], {}, undefined, { deep: true });
+  {
+    const d = BX.days.at(-1);
+    log(!allBad(BX).length && BX.tally['框外還有待重算（照抄實驗線 bug）'] === 1 && d.outBox > 0 && BX.days.slice(0, -1).every(q => !q.outBox),
+      `地價框外還有待重算（照抄實驗線 bug）：劇本 A 段、推進 1 天、B 段、推進 1 天、在 (${BXC.op.x0},${BXC.op.z0}) 劃一格住宅區（框 ${J(BXC.box)} 碰不到起步城），第 ${d.day - 1} 天推進時框外還有前一天工業標的待重算：照實驗線 54996–55001 那一天只算框，推進完 LANDBASE 逐位元組＝照抄的那一步、框外的格還是待重算（隔天才算）；每一筆、每一天的帳、同步、地價不變式、重播、存讀檔都對`,
+      allBad(BX).slice(0, 2).join('；') || `框外待重算 ${d.outBox} 格；${tallyText(Object.fromEntries(Object.entries(BX.tally).filter(([k]) => k.startsWith('地價') || k.startsWith('框外'))))}`);
+  }
+
+  // 預建城的對拍劇本（tools/d011-ops.mjs prebuiltOps，實驗線錨點那一份：點附屬格、單格拆除確認與逾時、框選混級再復原、拆小巷接支路那一格）在本線逐筆深查
+  const PSV = decodeLabCode(pcode).save, layP = k => Array.from(PSV.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
+  const PO = OPS.prebuiltOps(PSV.n, PSV.bl, layP('rd'), layP('rcl'));
+  const PP = runScript(pcode, KT, vrank, [['ops', PO.ops], ['days', 1]], {}, undefined, { deep: true });
+  log(!allBad(PP).length && PP.tally['復原'] === 1 && PP.tally['拒絕：拆除待確認'] === 4 && PP.tally['框選略過二級以上'] === 1,
+    '預建城的對拍劇本（prebuiltOps）在本線逐筆深查：點附屬格拆整棟、單格拆二級與三級的確認（1 秒、3001 毫秒、剛好 3000 毫秒、2999 毫秒）、框選一級＋二級再復原、拆小巷接支路那一格，推進一天；帳、同步、地價、重播、存讀檔都對',
+    allBad(PP).slice(0, 3).join('；') || tallyText(PP.tally));
+  // nop 的施工回報的理由＝劇本寫的 why（不是別的理由剛好也沒改到東西）
+  {
+    const nopOps = sc => sc.filter(([k]) => k === 'ops').flatMap(([, a]) => a.filter(o => o.nop && o.k !== 'undo'));
+    const want = [script, PS, QS, [['ops', PO.ops]]].map(nopOps), got = [A, P, Q, PP].map(X => X.tally['nop 理由相同'] ?? 0);
+    log(want.every((w, k) => w.length > 0 && w.length === got[k]) && want.flat().every(o => typeof o.why === 'string'),
+      '註明 nop 的施工（拒絕、同類重劃、拆除只預備）都寫了理由 why，回報的理由逐筆相同（主劇本 A、C 段、預建城拆除、釘住、預建城對拍劇本）',
+      `${got.join('＋')} 筆相同（要 ${want.map(w => w.length).join('＋')}）：${[...new Set(want.flat().map(o => o.why))].join('／')}`);
+  }
+
+  // nearCounter（src/sim/rules/grid.ts，c736ecd 起 tick 的半徑 3 工業、半徑 4 犯罪改用它）＝countNear（52934）：劇本城每一段施工做完與結束時（B 那一跑）、預建城讀檔後與拆除後。
+  // 整個 tick 也比：day.ts 在記憶體裡另載一份、nearCounter 換成逐格 countNear（c736ecd 以前的算法），劇本城 120 天逐日的地價基準、資金、人口與結束雜湊＝本來的（A 那一跑）
+  {
+    near.push(['預建城讀檔後', nearMismatch(loadCode(pcode, KT, vrank).sim.w)], [`預建城拆除後第 ${P.s.day} 天`, nearMismatch(P.s.w)]);
+    const wrong = near.filter(([, q]) => q.bad), ind = near.map(([, q]) => q.on['工業（tick 半徑 3）']);
+    const CN = runScript(code, KT, vrank, script, {}, undefined, { step: await stepDayWith({ nearCounter: (w, flag) => (x, y, r) => countNear(w, x, y, r, flag) }) });
+    const dd = A.days.findIndex((d, i) => { const q = CN.days[i]; return !q || d.land !== q.land || !Object.is(d.money, q.money) || d.pop !== q.pop; }), hCN = hashOf(CN.s);
+    log(!wrong.length && near.length === script.filter(([k]) => k === 'ops').length + 3 && Math.max(...ind) > 0 && dd < 0 && CN.days.length === A.days.length && !!hCN && hCN === hA,
+      `nearCounter＝countNear：${near.length} 個狀態（劇本城每一段施工做完、第 121 天；預建城讀檔後、拆除後）逐格 × 半徑 ${NEAR_R.join('／')}，旗標五種（tick 的工業、犯罪；路；圖中央那一列的中間才第一次是真；只有第 0 格）都是同一個整數；整個 tick 換回逐格 countNear（day.ts 在記憶體裡另載一份，不改 src），劇本城 ${A.days.length} 天逐日地價基準、資金、人口與結束雜湊都相同（另有回歸錨點 d010-3d.json、d011-3d.json，c736ecd 之前錄的）`,
+      wrong.map(([w, q]) => `${w}：${q.bad}`).slice(0, 2).join('；') || (dd >= 0 ? `換回 countNear 的 tick 第 ${A.days[dd].day} 天不同` : hCN !== hA ? `換回 countNear 的 tick 結束雜湊 ${hCN} ≠ ${hA}` : `工業格 ${ind.join('／')}；路格 ${near.map(([, q]) => q.on['路']).join('／')}；雜湊 ${hCN}＝${hA}`));
+  }
+
+  // 涵蓋面：每一種都真的發生過（主劇本、預建城、釘住、紓困、復原上限、貸款、地價框外、預建城對拍劇本合起來；新加的都在清單上，不會悄悄不發生）
   {
     const all = {};
-    for (const t of [A.tally, P.tally, Q.tally, BO.tally]) for (const [k, v] of Object.entries(t)) all[k] = (all[k] || 0) + v;
+    for (const t of [A.tally, P.tally, Q.tally, BO.tally, U.tally, LN.tally, BX.tally, PP.tally]) for (const [k, v] of Object.entries(t)) all[k] = (all[k] || 0) + v;
     const need = ['road', '橋', '快速路橋', 'zone', '改劃免費', 'place k5', 'place k11', 'doze bld', 'doze road', 'doze zone', 'doze tree', '復原', '錢不夠蓋前段', '框選整塊不蓋', '升級付差價', '蓋在樹上',
       '扣款＝預覽總價', 'pick 找到', '設定亂數', '框選略過二級以上', '拆除待確認', '復原放置 k5', '復原放置 k11', 'place k5 蓋在分區上', 'place k11 蓋在分區上', 'road 蓋在分區上', 'zone 蓋在樹上',
-      '跨日留著：doze road', '跨日留著：doze zone', '跨日留著：place', '跨日留著：road', '存讀檔往返', '地價另算相同：框', '地價另算相同：整張', '紓困',
+      '跨日留著：doze road', '跨日留著：doze zone', '跨日留著：doze bld', '跨日留著：doze tree', '跨日留著：place', '跨日留著：road', '跨日留著：zone', '存讀檔往返', '地價另算相同：框', '地價另算相同：整張', '紓困',
       '警察局蓋在分區上', '復原警察局', '電廠蓋在分區上', '復原電廠', '路穿過分區', '拆分區留著', '拆路留著', '分區劃在樹上', '快速路過河留著',
-      '點附屬格拆整棟', '3 秒內再按：拆', '滿 3 秒：重新待確認', '框選一級＋二級：只拆一級', '同一區再劃：已經是這一區', '錢剛好：點', '差一塊：點', '差一塊：框', '錢剛好：框'];
+      '點附屬格拆整棟', '3 秒內再按：拆', '滿 3 秒：重新待確認', '框選一級＋二級：只拆一級', '同一區再劃：已經是這一區', '錢剛好：點', '差一塊：點', '差一塊：框', '錢剛好：框',
+      '復原（沒東西）', '貸款還款', '貸款還清', '框外還有待重算（照抄實驗線 bug）', 'nop 理由相同'];
     const miss = need.filter(k => !all[k]), refusals = Object.keys(all).filter(k => k.startsWith('拒絕'));
     log(miss.length === 0 && refusals.length >= 4 && (A.tally['釘住'] ?? 0) === script.pins.size,
-      '劇本涵蓋：鋪路、橋、快速路橋、升級付差價、劃區、改劃免費、分區劃在樹上、電廠與警察局（蓋在分區上、復原）、路穿過分區、拆建築／路／分區／樹（拆路、拆分區留著跨日）、框選略過二級、單格拆除確認與逾時、點附屬格拆整棟、復原、錢不夠蓋前段、框選整塊不蓋、錢剛好與差一塊、同一區再劃、亂數對齊、紓困、地價框與整張、存讀檔往返、多種拒絕',
+      '劇本涵蓋：鋪路、橋、快速路橋、升級付差價、劃區、改劃免費、分區劃在樹上、電廠與警察局（蓋在分區上、復原）、路穿過分區、拆建築／路／分區／樹（拆建築、路、分區、樹都有留著跨日的）、框選略過二級、單格拆除確認與逾時、點附屬格拆整棟、復原（含超過上限沒東西可復原）、錢不夠蓋前段、框選整塊不蓋、錢剛好與差一塊、同一區再劃、亂數對齊、紓困、貸款還款與還清、地價框與整張（含框外還有待重算的那一天）、存讀檔往返、多種拒絕（理由逐筆對）',
       miss.length ? '沒發生：' + miss.join('、') : tallyText(all));
   }
 
@@ -484,7 +642,7 @@ async function guards(log) {
       const u = usable(Lx);
       return u ? `${name}：${u}` : null;
     }).filter(Boolean);
-    log(!res.length, `竄改過的 d3（${cases.length} 種：hv 1 事件物件、hv 2 緊湊列；日子是 HTML、座標超出地圖、不認得的拆除圖層、列比種類長、不認得的種類、不認得的 hv）都被驗型別擋下、講出哪一項不對，退回只用存檔，城照樣能推進、施工、再存再讀；多出來的欄位照讀但不帶進城市`,
+    log(!res.length, `竄改過的 d3（${cases.length} 種：hv 1 事件物件、hv 2 緊湊列；日子是 HTML、座標超出地圖、不認得的拆除圖層、列比種類長、不認得的種類、不認得的 hv；超出範圍的座標 −1、日子 −1、路等級 0／9、分區 0／7 各放在留到最後的與之後被蓋過的那一筆，要講出第幾筆的哪一項）都被驗型別擋下、講出哪一項不對，退回只用存檔，城照樣能推進、施工、再存再讀；多出來的欄位照讀但不帶進城市`,
       res.slice(0, 3).join('；') || cases.map(c => c[0]).join('、'));
     const L6 = loadCode(read('src/content/samples/starter.code.txt'), KT, vrank);
     log(L6.ok && !L6.replayed && L6.sim.city.history.length === 1 && /沒有本線的歷史/.test(L6.note), '讀檔：沒有 d3 的一般分享碼從這張碼開始記', L6.ok ? L6.note : L6.error);

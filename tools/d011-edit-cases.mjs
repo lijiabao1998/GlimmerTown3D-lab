@@ -2,7 +2,7 @@
 // 存檔的資金取整、竄改過的歷史。這裡只產生資料，不跑模擬；座標都由開局的地形推出來（決定性，不用亂數），地形不合就丟例外（劇本不成立，不猜）。
 // 釘住（pins）：Map（操作物件 → 要的結果）。欄位對 runScript 的結果（placed、spent、armed、skipped、reason、refund、events）
 // 與預覽（count、total、affordable、pvReason）逐項比；check(s, r, pv, ev) 另驗事實，回傳錯誤字串或 null；tag 是涵蓋面的記號（守衛要求每一個都真的發生過）。
-// 劇本裡的操作只用 tools/d011-ops.mjs 契約裡的種類（劇本也在瀏覽器重演）；gap（毫秒）、nop（照設計什麼都不改）同契約。
+// 劇本裡的操作只用 tools/d011-ops.mjs 契約裡的種類（劇本也在瀏覽器重演）；gap（毫秒）、nop（照設計什麼都不改）、why（nop 的理由）同契約。
 import { roadDraftTiles, COST } from '../src/sim/rules/build.ts';
 
 const J = JSON.stringify;
@@ -86,11 +86,12 @@ export function prebuiltCase(save) {
   if (!zn2) throw new Error('D011 預建城案例：那棟二級底下沒有分區（量不到「拆建築分區留著」）');
   const one = (x, z, gap) => ({ k: 'rect', tool: 'doze', x0: x, z0: z, x1: x, z1: z, ...(gap !== undefined ? { gap } : {}) });
   const bldAt = (s, x, z) => s.w.tiles[z * n + x].bld;
+  const arm = { nop: 1, why: '拆除待確認' };
   const ops = [
     { k: 'money', v: 3000 },
     one(ax, az),
-    { ...one(x2, z2), nop: 1 }, one(x2, z2, 2999),
-    { ...one(x3, z3), nop: 1 }, { ...one(x3, z3, 3000), nop: 1 },
+    { ...one(x2, z2), ...arm }, one(x2, z2, 2999),
+    { ...one(x3, z3), ...arm }, { ...one(x3, z3, 3000), ...arm },
     { k: 'rect', tool: 'doze', x0: px, z0: pz, x1: px + 1, z1: pz },
   ];
   const [, stad, arm2, go2, arm3, re3, mix] = ops;
@@ -119,13 +120,13 @@ export function pinCase(X, Z) {
   const ops = [
     { k: 'money', v: 3000 },
     { k: 'rect', tool: 'zr', x0: x, z0: z, x1: x + 1, z1: z + 1 },                     // 劃 4 格
-    { k: 'rect', tool: 'zr', x0: x, z0: z, x1: x + 1, z1: z + 1, nop: 1 },             // 同一區再劃：不動、不收錢（51664）
+    { k: 'rect', tool: 'zr', x0: x, z0: z, x1: x + 1, z1: z + 1, nop: 1, why: '已經是這一區' },   // 同一區再劃：不動、不收錢（51664）
     { k: 'money', v: COST.plant },
     { k: 'tap', tool: 'plant', x: x + 4, z },                                          // 錢剛好：蓋（51631 是 cost>money 才拒絕）
     { k: 'money', v: COST.police - 1 },
-    { k: 'tap', tool: 'police', x: x + 6, z, nop: 1 },                                 // 差一塊：不蓋
+    { k: 'tap', tool: 'police', x: x + 6, z, nop: 1, why: '錢不夠' },                  // 差一塊：不蓋
     { k: 'money', v: 4 * COST.zone - 1 },
-    { k: 'rect', tool: 'zc', x0: x, z0: z + 3, x1: x + 1, z1: z + 4, nop: 1 },         // 框選 4 格總價比資金多一塊：整塊不蓋（62996）
+    { k: 'rect', tool: 'zc', x0: x, z0: z + 3, x1: x + 1, z1: z + 4, nop: 1, why: `資金不足！需要 $${4 * COST.zone}` },   // 框選 4 格總價比資金多一塊：整塊不蓋（62996）
     { k: 'money', v: 4 * COST.zone },
     { k: 'rect', tool: 'zc', x0: x, z0: z + 3, x1: x + 1, z1: z + 4 },                 // 剛好：蓋
   ];
@@ -149,6 +150,9 @@ export const MONEY_ROUND = [[1234.4, 1234], [1234.5, 1235], [1234.6, 1235], [-10
 // ---- 竄改過的 d3（分享碼是別人也能改的輸入，src/io/save.ts eventOf／unpackHistory／checkHistory）----
 // 每一種都要被驗型別擋下（replayed＝false）、講得出是哪一項不對，城照樣能用。want＝null：照讀，但多出來的欄位不能帶進城市。
 // hist：存檔當時的歷史（跟 d3.r 一筆對一列）；n：地圖邊長
+// 範圍（eventOf）：座標 0…n−1、日子 ≥ 0、路等級 1–5、分區 1–3。超出範圍的每一種各放在兩筆上，want 寫死「第幾筆的哪一項」：
+//   留到最後的那一筆（之後沒有事件碰那一格、手勢沒被復原）——範圍要是放寬，重播出來會跟存檔對不上（講的是「對不上」，不是這一項）；
+//   之後被同一種事件蓋過去的那一筆——範圍要是放寬，重播出來照樣對得上（竟然重播成功）。兩種都只能靠驗範圍擋下
 export function tamperCases(raw, hist, n) {
   const road = hist.findIndex((e, k) => k > 0 && e.t === 'road'), doze = hist.findIndex(e => e.t === 'doze');
   if (road < 0 || doze < 0) throw new Error('D011 竄改案例：歷史裡沒有鋪路或拆除');
@@ -156,6 +160,33 @@ export function tamperCases(raw, hist, n) {
   const h1 = () => ({ f: raw.d3.f, s: raw.d3.s, g: raw.d3.g, h: JSON.parse(J(hist)) });     // 舊存法 hv 1：事件物件（沒有 hv 欄位）
   const h2 = () => JSON.parse(J(raw.d3));                                                    // hv 2：緊湊列 [種類碼, 日子差, 欄位…]
   const with1 = f => () => { const d = h1(); f(d.h); return d; }, with2 = f => () => { const d = h2(); f(d.r); return d; };
+  // 留到最後（over＝false）、之後被同一種事件蓋過（over＝true）的那一筆：歷史順序第一筆、手勢沒被復原
+  const undone = (k, e) => hist.some((q, j) => j > k && q.t === 'undo' && q.g === e.g);
+  const later = (k, e, t) => hist.some((q, j) => j > k && (!t || q.t === t) && q.x === e.x && q.z === e.z);
+  const pick = (t, over) => {
+    const k = hist.findIndex((e, k) => k > 0 && e.t === t && !undone(k, e) && (over ? later(k, e, t) : !later(k, e)));
+    if (k < 0) throw new Error(`D011 竄改案例：歷史裡沒有${over ? '之後被蓋過' : '留到最後'}的 ${t}`);
+    return k;
+  };
+  const F2 = { x: 2, z: 3, rc: 4, zone: 4 };                                                 // hv 2 的路列 [3,dDay,x,z,rc,cost,dG]、分區列 [4,dDay,x,z,zone,cost,dG]
+  const put = (hv, k, f, v) => hv === 1 ? with1(h => { h[k][f] = v; }) : with2(r => { r[k][F2[f]] = v; });
+  // 日子 −1：hv 1 直接改；hv 2 存的是差值，這一列的差改成讓它落在 −1，下一列補回去（之後每一筆的日子都不變，只有這一筆不對）
+  const neg = (hv, k) => hv === 1 ? with1(h => { h[k].day = -1; }) : with2(r => { const d = hist[k].day; r[k][1] -= d + 1; if (r[k + 1]) r[k + 1][1] += d + 1; });
+  const say = (k, what) => new RegExp(`歷史第 ${k + 1} 筆的${what}不對`);
+  const ranged = [];
+  for (const hv of [1, 2]) {
+    for (const over of [false, true]) {
+      const k = pick('road', over), z = pick('zone', over), tag = over ? '之後被蓋過' : '留到最後';
+      ranged.push(
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）x＝−1`, put(hv, k, 'x', -1), say(k, '座標')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）z＝−1`, put(hv, k, 'z', -1), say(k, '座標')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）日子＝−1`, neg(hv, k), say(k, '日子')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）等級 0`, put(hv, k, 'rc', 0), say(k, 'rc')],
+        [`hv${hv} 第 ${k + 1} 筆鋪路（${tag}）等級 9`, put(hv, k, 'rc', 9), say(k, 'rc')],
+        [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 0`, put(hv, z, 'zone', 0), say(z, 'zone')],
+        [`hv${hv} 第 ${z + 1} 筆劃區（${tag}）分區 7`, put(hv, z, 'zone', 7), say(z, 'zone')]);
+    }
+  }
   return [
     ['hv1 日子是一段 HTML', with1(h => { h[road].day = XSS; }), /日子不對/],
     ['hv1 x＝n＋5', with1(h => { h[road].x = n + 5; }), /座標不對/],
@@ -171,6 +202,7 @@ export function tamperCases(raw, hist, n) {
     ['hv2 列比種類長', with2(r => { r[road].push(0); }), /種類不對/],
     ['hv2 不認得的種類碼', with2(r => { r[road][0] = 99; }), /種類不對/],
     ['hv2 hv＝3', () => ({ ...h2(), hv: 3 }), /不認得的歷史存法 hv=3/],
+    ...ranged,
   ];
 }
 
@@ -184,4 +216,35 @@ export function rcTamper(raw, hist, tiles, n) {
   if (row[0] !== 3 || row[2] !== e.x || row[3] !== e.z || row[4] !== 2) throw new Error(`D011 竄改案例：第 ${k + 1} 列 ${J(row)} 不是那一筆路`);
   row[4] = 4;
   return { d3, i: e.z * n + e.x, row: k };
+}
+
+// ---- 復原堆疊的上限（實驗線 closeUndo 62731：推進 undoStack 後超過 40 筆就丟最舊的；本線 src/sim/edit.ts commitOp → pushTxn）----
+// 新城第 1 天、同一天做 max＋5 筆單格施工（路五級、分區三種輪流：造價各不同），接著復原 max＋1 次：
+// 前 max 次由新到舊一筆一筆退（退的錢＝那一筆花的），最後一次沒東西可復原（最舊的 5 筆已經被擠出堆疊，nop）；推進一天，最舊的 5 筆跨日留著。
+// 格子：起步城那塊平地（src/content/starter.ts）從 Z＋1 那一排起、每排 15 格（新城是空地，都蓋得成）。kept：最舊的 5 筆（x、z、工具）
+export function undoCapCase(X, Z, max) {
+  const TOOLS = ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'zc', 'zi'], ops = [{ k: 'money', v: 3000 }], cells = [];
+  for (let j = 0; j < max + 5; j++) {
+    const x = X + j % 15, z = Z + 1 + Math.floor(j / 15), tool = TOOLS[j % TOOLS.length];
+    if (z > Z + 20) throw new Error('D011 復原上限案例：格子排出起步城那塊平地了');
+    ops.push(tool[0] === 'z' ? { k: 'rect', tool, x0: x, z0: z, x1: x, z1: z } : { k: 'line', tool, x0: x, z0: z, x1: x, z1: z });
+    cells.push([x, z, tool]);
+  }
+  for (let j = 0; j <= max; j++) ops.push(j < max ? { k: 'undo' } : { k: 'undo', nop: 1 });
+  return Object.assign([['ops', ops], ['days', 1]], { cells, kept: cells.slice(0, 5) });
+}
+
+// ---- 地價框外還有待重算（實驗線的 bug 照抄的那一面，D011 卡第 8 節；src/sim/day.ts 那一步照 54996–55001）----
+// 劇本 A 段 → 推進 1 天 → B 段 → 推進 1 天（這一天長出的工業把污染半徑那一框標成待重算，55624）→ 在遠離起步城的一格劃住宅區：
+// doPlace 的 markLandDirty（51627，半徑 20）把隔天的「整張」換成這一格的框，框碰不到起步城 → 隔天推進時框外還有待重算的格，
+// 照實驗線那一天只算框（框外的留到再隔天）。本線要是「順手修掉」這個 bug（整張算待重算的格），推進完的 LANDBASE 就跟照抄的那一步不同。
+// 那一格：格索引順序第一格「陸地、沒有樹、半徑 20 的框碰不到起步城外擴 pr 格（工業污染半徑 POL_SRC[3].r）」
+export function boxCase(n, ter, tre, X, Z, pr) {
+  const R = 20;
+  for (let i = 0; i < n * n; i++) {
+    const x = i % n, z = (i / n) | 0;
+    if (ter[i] === 0 || tre[i] || (x + R >= X - pr && x - R <= X + 20 + pr && z + R >= Z - pr && z - R <= Z + 20 + pr)) continue;
+    return { op: { k: 'rect', tool: 'zr', x0: x, z0: z, x1: x, z1: z }, box: [Math.max(0, x - R), Math.max(0, z - R), Math.min(n - 1, x + R), Math.min(n - 1, z + R)] };
+  }
+  throw new Error('D011 地價框案例：找不到框碰不到起步城的空地');
 }

@@ -9,7 +9,7 @@ import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_DAYS } from '../src/content/starter.ts';
 import { simHash } from '../src/sim/day.ts';
 import { runStarter } from './unit-d010-sim.mjs';
-import { d011Smoke } from './smoke-d011.mjs';
+import { d011Smoke, d011SkipNote } from './smoke-d011.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const t0 = Date.now();
@@ -412,6 +412,8 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
 
 // ===== D011：建造 MVP（tools/smoke-d011.mjs：真的觸控事件、手機版面、存檔、預算、劇本城重演；自己開三個 Chrome）=====
 await d011Smoke(withBrowser, log, blankCheck);
+// D011_SMOKE_ONLY（突變測試用）只跑了 D011 的幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
+if (d011SkipNote()) console.log(d011SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

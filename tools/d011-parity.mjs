@@ -11,6 +11,7 @@
 //   亂數：R 包一層計數；推進第 1 天（兩座城）時另記每一次抽取的呼叫堆疊，取最內層的實驗線行號（跳過 ri 37223 與出口自己；副本在出口之前的行號＝原檔）。
 // 另開一頁：把本線 B 段之後匯出的碼（帶 d3）與拿掉 d3 的同一張碼各匯入實驗線，讀回對帳數字、道路等級、資金、難度、星等、里程碑。
 // 注入只在記憶體副本（cdp overlay），實驗線原檔不動；存檔槽固定 3（preloadOf），不碰業主的存檔。
+// 寫樣本之前先核形狀（shapeOff，跟守衛同一個）：守衛比到的欄有缺就丟例外、不寫，舊樣本留著。
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -21,7 +22,7 @@ import { fnv1a } from '../src/sim/rng.ts';
 import { STARTER_SEEDS } from '../src/content/starter.ts';
 import { CONFIGS, preloadOf, injectLab } from './lab-configs.mjs';
 import { DEFAULT_GAP } from './d011-ops.mjs';
-import { SNAP_SRC, PICK_SRC, POWERED_SRC, PW_SRC, DIFF_SRC, LANDDIFF_SRC, INV_SRC, HS_SRC, EXTRA_SRC, PROBE_SRC, MEASURE_SRC, RC_SRC, ROW_FIELDS, r6, opsOf, prebuiltOf, parity3d, prebuilt3d, measureRows } from './d011-parity-lib.mjs';
+import { SNAP_SRC, PICK_SRC, POWERED_SRC, PW_SRC, DIFF_SRC, LANDDIFF_SRC, INV_SRC, HS_SRC, EXTRA_SRC, PROBE_SRC, MEASURE_SRC, RC_SRC, ROW_FIELDS, r6, opsOf, prebuiltOf, parity3d, prebuilt3d, measureRows, shapeOff } from './d011-parity-lib.mjs';
 
 const arg = k => process.argv.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
 const LAB = path.resolve(arg('lab') ?? '../lijiabao1998/glimmertown-lab'), DAYS = +(arg('days') ?? 120), NSEEDS = +(arg('seeds') ?? 8);
@@ -182,6 +183,9 @@ for (const seed of SEEDS) {
   threeD.prebuilt[seed] = p;
 }
 lab.seconds = Math.round((Date.now() - t0) / 1000);
+// 寫之前先核形狀（跟守衛同一個 shapeOff）：錄到的欄位不齊就不寫，舊樣本留著（漏掉的欄在守衛裡兩邊都是 undefined，逐項比會「相等」）
+const shapeBad = [['d011-lab.json', shapeOff('lab', lab, { seeds: SEEDS, days: DAYS, ops, P })], ['d011-3d.json', shapeOff('3d', threeD, { seeds: SEEDS, days: DAYS, ops, P })]].filter(([, o]) => o.length);
+if (shapeBad.length) throw new Error(`錄到的欄位不齊，不寫樣本：${shapeBad.map(([f, o]) => `${f} ${o.slice(0, 6).join('、')}`).join('；')}`);
 fs.writeFileSync(path.join(OUT, 'd011-lab.json'), J(lab));
 fs.writeFileSync(path.join(OUT, 'd011-3d.json'), J(threeD));
 console.log(`寫出 d011-lab.json、d011-3d.json（${lab.seconds}s，實驗線 ${commit.slice(0, 7)} v${version}）`);

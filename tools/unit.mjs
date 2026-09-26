@@ -489,26 +489,29 @@ for (const [name, count] of Object.entries(D009_COUNTS)) {
     missed.length ? missed.join('；') : detected.join('、'));
 }
 
+// 分檔的守衛各包一層：載入或執行時丟例外，就記一條 NG（錯誤訊息＋丟出來的那一行），接著跑後面的守衛（純度、零外部素材）。
+// 不包的話一支守衛丟例外，整套帶著堆疊停掉、後面的守衛都沒跑，紅燈也列不出名字。那一支在例外之前已經記下的結果照留
+const guard = async (file, fn) => {
+  try {
+    const m = await import(file);
+    if (typeof m[fn] !== 'function') throw new Error(`${file} 沒有匯出 ${fn}`);
+    await m[fn](log);
+  } catch (e) {
+    const at = /(?:tools|src)\/[\w./-]+:\d+/.exec(String(e?.stack ?? ''))?.[0];
+    log(false, `${fn}（${file}）丟例外，這一支在例外之後的檢查沒跑`, `${String(e?.message ?? e).replace(/\s*\n\s*/g, ' ')}${at ? `（${at}）` : ''}`);
+  }
+};
+
 // ---- D010：服務覆蓋、污染、地價、教育場照實驗線原始碼對拍（tools/unit-d010-fields.mjs）；起步城逐日模擬（tools/unit-d010-sim.mjs）----
-{
-  const { d010FieldGuards } = await import('./unit-d010-fields.mjs');
-  await d010FieldGuards(log);
-  const { d010SimGuards } = await import('./unit-d010-sim.mjs');
-  await d010SimGuards(log);
-}
+await guard('./unit-d010-fields.mjs', 'd010FieldGuards');
+await guard('./unit-d010-sim.mjs', 'd010SimGuards');
 
 // ---- D011：建造規則黃金樣本（unit-d011-build.mjs）、資金公式黃金樣本（unit-d011-money.mjs）、施工整合層（unit-d011-edit.mjs：
 //      開局碼、帳、同步、重播、存讀檔、地價狀態機、沙盒、推進一天耗時）、實驗線實跑錨點與分享碼互通（unit-d011-parity.mjs）----
-{
-  const { d011BuildGuards } = await import('./unit-d011-build.mjs');
-  await d011BuildGuards(log);
-  const { d011MoneyGuards } = await import('./unit-d011-money.mjs');
-  await d011MoneyGuards(log);
-  const { d011EditGuards } = await import('./unit-d011-edit.mjs');
-  await d011EditGuards(log);
-  const { d011ParityGuards } = await import('./unit-d011-parity.mjs');
-  await d011ParityGuards(log);
-}
+await guard('./unit-d011-build.mjs', 'd011BuildGuards');
+await guard('./unit-d011-money.mjs', 'd011MoneyGuards');
+await guard('./unit-d011-edit.mjs', 'd011EditGuards');
+await guard('./unit-d011-parity.mjs', 'd011ParityGuards');
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
