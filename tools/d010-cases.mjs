@@ -1,7 +1,8 @@
 // D010 服務覆蓋／污染／地價／教育場對拍的隨機輸入（實驗線那邊 tools/lab-fields.mjs 與本線 tools/unit-d010-fields.mjs 共用）。
 // 同一個種子產生同一批案例；每次呼叫 cases(k) 都回新的物件，兩邊各自產生、互不共用。
-// 每個案例＝一張隨機小圖（N 6–16）＋服務預算＋教育輸入＋一串增量蓋印／撤印（20–60 步，在 rebuildCov 之後跑）。
-// 輸出一律過 snapshot()（Uint8Array → 非零格的 [間隔,值] 攤平成一列）再 canon()，兩邊比字串。
+// 每個案例＝一張隨機小圖（N 6–16）＋服務預算＋教育輸入＋一串增量蓋印／撤印（20–60 步，在 rebuildCov 之後跑）
+// ＋第二次全量重建的輸入 rebuild2（換預算、可能換教育輸入、改幾格地圖；在已經有資料的場上重建＝實驗線 setSvcBudget 52968／復原／讀檔）。
+// 輸出一律過 snapshot()（每張陣列記型別與長度，值寫成非零格的 [間隔,值] 攤平成一列）再 canon()，兩邊比字串。
 import crypto from 'node:crypto';
 import { mulberry32 } from '../src/sim/rng.ts';
 import { canon } from './d009-cases.mjs';
@@ -171,11 +172,34 @@ const make = {
 };
 const BUDGET_KINDS = [11, 52, 43, 6, 30, 61, 12, 13, 28, 48, 135, 7, 32, 14, 41, 45, 138];
 
+// 第二次全量重建（在增量操作＋地價髒重建之後、場裡已有資料時跑）：新預算（專挑 .5／1.5 與 .5 進位邊界）、
+// 一半案例換教育輸入（實驗線切營養午餐由 polToggle 觸發 rebuildCov，53131 註）、0–12 格地圖修改（拆建築含污染源、蓋新建築、樹／rdec／公車站切換）。
+// 用獨立的種子（家族名＋「#rebuild2」），不動上面原本案例的亂數序列。
+function rebuild2Of(g, N, tiles) {
+  const one = () => g.ch(.25) ? g.pick([0.5, 1.5]) : g.ch(.35) ? g.pick(BUDGET_EDGE) : g.ch(.2) ? 1 : (50 + g.int(0, 100)) / 100;
+  const budget = { police: one(), fire: one(), health: one(), edu: one() };
+  const edu = g.ch(.5) ? eduOf(g) : null;   // null＝沿用第一次的教育輸入
+  const edits = [], n = g.ch(.2) ? 0 : g.int(1, 12);
+  for (let s = 0; s < n; s++) {
+    const i = g.int(0, N * N - 1), u = g.R();
+    if (u < .35 && tiles[i].bld) edits.push([i, 'bld', null]);                                // 拆（含污染源、體育場根格／附屬格）
+    else if (u < .6) { const b = bld(g, randomKind(g)); if (b.k <= 3 && g.ch(.3)) b.crime = 1; edits.push([i, 'bld', b]); }
+    else edits.push([i, g.pick(['tree', 'rdec', 'bus']), g.ch(.5) ? 0 : g.int(1, 6)]);
+  }
+  return { budget, edu, edits };
+}
+// 地圖修改照 [格號, 欄位, 值] 寫進 tiles（兩邊各自的 tiles 物件，同一串修改；建築物件複製一份，不共用）
+export function applyEdits(tiles, edits) { for (const [i, key, v] of edits) tiles[i][key] = v && typeof v === 'object' ? { ...v } : v; }
+
 // 第 k 個案例（0 ≤ k < D010_COUNT）
 export function cases(k) {
   let base = 0;
   for (const [name, count] of FAMILIES) {
-    if (k < base + count) { const j = k - base, c = make[name](gen(seedOf(name, j)), j); c.family = name; c.j = j; return c; }
+    if (k < base + count) {
+      const j = k - base, c = make[name](gen(seedOf(name, j)), j); c.family = name; c.j = j;
+      c.rebuild2 = rebuild2Of(gen(seedOf(name + '#rebuild2', j)), c.N, c.tiles);
+      return c;
+    }
     base += count;
   }
   throw new Error(`D010 案例 ${k} 超出 ${D010_COUNT}`);
@@ -197,12 +221,24 @@ export function applyOps(ops, fns) {
     else throw new Error(`未知操作 ${o[0]}`);
   }
 }
-// 逐格狀態：60 個覆蓋場＋POLBASE／POLTREE／POL／LANDBASE／LAND／EDU，每一張都寫成非零格的 [間隔,值,間隔,值,…]：
-// 間隔＝跟上一個非零格之間跳過幾個 0（第一個從 -1 算起），格號 i＝前一個 i＋1＋間隔。無損；比直接寫格號小三倍（gzip 後）
+// 逐格狀態：60 個覆蓋場＋POLBASE／POLTREE／POL／LANDBASE／LAND／EDU 的值，寫成非零格的 [間隔,值,間隔,值,…]：
+// 間隔＝跟上一個非零格之間跳過幾個 0（第一個從 -1 算起），格號 i＝前一個 i＋1＋間隔（比直接寫格號小三倍，gzip 後）。
+// 這個編碼只在長度已知時才無損，所以 shapes 另記每一張的型別與長度（「Uint8Array*100」），連同 landStaticAt 等讀的輸入場
+// NOISE／METRO_TOD467B／ACCESS468／commutePenalty（值是案例給的、這裡不改，只核型別與長度）：配錯大小、配錯型別都對不上。
+// shapes 依 covKeys 再 SHAPE_ONLY 前面那串的順序，相鄰相同的合成 [型別*長度, 張數]。
+export const VALUE_GRIDS = ['POLBASE', 'POLTREE', 'POL', 'LANDBASE', 'LAND', 'EDU'];
+const SHAPE_ONLY = ['NOISE', 'METRO_TOD467B', 'ACCESS468', 'commutePenalty'];
 const sparse = a => { const o = []; let p = -1; for (let i = 0; i < a.length; i++) if (a[i] !== 0) { o.push(i - p - 1, a[i]); p = i; } return o; };
+const shape = a => a ? `${Object.prototype.toString.call(a).slice(8, -1)}*${a.length}` : String(a);   // Symbol.toStringTag：跨 vm 領域也認得型別
 export function snapshot(s) {
-  const COV = {};
-  for (const f of Object.keys(s.COV)) COV[f] = sparse(s.COV[f]);
-  return { COV, covKeys: Object.keys(s.COV), POLBASE: sparse(s.POLBASE), POLTREE: sparse(s.POLTREE), POL: sparse(s.POL), LANDBASE: sparse(s.LANDBASE), LAND: sparse(s.LAND), EDU: sparse(s.EDU) };
+  const covKeys = Object.keys(s.COV), out = { covKeys, COV: {} }, shapes = [];
+  for (const f of covKeys) out.COV[f] = sparse(s.COV[f]);
+  for (const n of VALUE_GRIDS) out[n] = sparse(s[n]);
+  for (const a of [...covKeys.map(f => s.COV[f]), ...VALUE_GRIDS.map(n => s[n]), ...SHAPE_ONLY.map(n => s[n])]) {
+    const t = shape(a), last = shapes[shapes.length - 1];
+    if (last && last[0] === t) last[1]++; else shapes.push([t, 1]);
+  }
+  out.shapes = shapes;
+  return out;
 }
 export const hashOf = v => crypto.createHash('sha256').update(canon(v)).digest('hex').slice(0, 16);

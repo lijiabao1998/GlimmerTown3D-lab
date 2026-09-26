@@ -22,8 +22,9 @@ export const SVC_BUDGET_CAT: Record<string, 'police' | 'fire' | 'health' | 'edu'
   hospital: 'health', clinic: 'health', ambulance: 'health', megahosp: 'health', medcamp: 'health',
   school: 'edu', university: 'edu', library: 'edu', grandlib: 'edu', institute: 'edu', researchcamp: 'edu',
 };
+// 52966：let svcBudget={police:1,fire:1,health:1,edu:1} 的形狀（四類，鍵同 SVC_BUDGET_CAT 的值）
 export interface SvcBudget { police: number; fire: number; health: number; edu: number }
-// 52966：預設全 1（存檔欄位 sb，缺省 1）；實驗線 setSvcBudget（52968）夾在 .5–1.5、toFixed(2)
+// 52966：預設全 1（存檔欄位 sb，缺省 1）；實驗線 setSvcBudget（52968–52971）夾在 .5–1.5、toFixed(2)，改完立刻 rebuildCov
 export const SVC_BUDGET_DEFAULT: SvcBudget = { police: 1, fire: 1, health: 1, edu: 1 };
 
 // 52962：種類 → 覆蓋場
@@ -48,7 +49,8 @@ export const POL_SRC: Record<number, { r: number; p: number }> = {
 };
 Object.assign(POL_SRC, { 140: { r: 6, p: 22 }, 141: { r: 3, p: 12 }, 142: { r: 4, p: 15 }, 170: { r: 4, p: 18 }, 171: { r: 4, p: 14 }, 173: { r: 5, p: 18 }, 174: { r: 6, p: 20 } });   // 52992（T471 等）
 
-// 實驗線的全域場（52960 COV、52990 POL／POLBASE／POLTREE、53020 NOISE、53066 LAND／LANDBASE、53127 EDU 等），配置見 allocGrids（56931）
+// 實驗線的全域場：52960 COV、52990 POL／POLBASE／POLTREE、53020 NOISE、53066 LAND／LANDBASE、53127 EDU、56927 commutePenalty（Float32Array）、
+// 56267 METRO_TOD467B、39671 ACCESS468；依 N 重配見 allocGrids（56931）
 export interface Grids {
   N: number; COV: Record<string, Uint8Array>; POL: Uint8Array; POLBASE: Uint8Array; POLTREE: Uint8Array;
   LANDBASE: Uint8Array; LAND: Uint8Array; EDU: Uint8Array; NOISE: Uint8Array; commutePenalty: Float32Array; METRO_TOD467B: Uint8Array; ACCESS468: Uint8Array;
@@ -99,7 +101,7 @@ export function stampPolTree(g: Grids, x: number, y: number, sign: number): void
 
 // 53128：教育權重
 const EDU_W_SCHOOL = 50, EDU_W_UNI = 90, EDU_W_LIB = 35;
-// 教育場的外部輸入：科技（tech343.done）、城市特化（spec386）、營養午餐政策（pol.schoolLunch）
+// eduStaticAt 讀的三個實驗線全域：科技 tech343.done（tq，38549）、城市特化 spec386（sq，37851）、營養午餐 pol&&pol.schoolLunch（53131）
 export interface EduCtx { tech: readonly string[]; spec: string | null; schoolLunch: boolean }
 // 53129：學校／大學／圖書館／高中／大學城／研究園區覆蓋各自加分，乘科技與特化係數後四捨五入、封頂 255
 export function eduStaticAt(g: Grids, x: number, y: number, e: EduCtx): number {
@@ -110,7 +112,8 @@ export function eduStaticAt(g: Grids, x: number, y: number, e: EduCtx): number {
   return Math.min(255, Math.round(v * tq(e.tech, 'C1', 1.05, 1) * tq(e.tech, 'C4a', 1.15, 1) * tq(e.tech, 'C4b', 1.08, 1) * tq(e.tech, 'D7', 1.10, 1) * sq('edu', 1.08, 1)));
 }
 
-// D009 公式讀的場（landStaticAt、judgeWealth、住宅幸福……）：同一批陣列的視圖，不複製
+// D009 公式讀的場（landStaticAt、judgeWealth、住宅幸福……）：同一批陣列的視圖，不複製。
+// 各鍵＝實驗線的全域：COV 52960、POL 52990、NOISE 53020、LAND 53066、EDU 53127、commutePenalty 56927、METRO_TOD467B 56267、ACCESS468 39671
 export function fieldsOf(g: Grids): Fields {
   return { COV: g.COV, LAND: g.LAND, POL: g.POL, NOISE: g.NOISE, EDU: g.EDU, commutePenalty: g.commutePenalty, METRO_TOD467B: g.METRO_TOD467B, ACCESS468: g.ACCESS468 };
 }

@@ -72,8 +72,8 @@ if (DIAG || SHOTS) {
   if (mark < 0 || html.indexOf(exportAnchor, mark + 1) >= 0) throw new Error('實驗線 GV 出口錨點要剛好出現 1 次');
   const scriptEnd = html.indexOf('</script>', mark), closes = [...html.slice(mark, scriptEnd + 9).matchAll(/\n\s*\}\)\(\);\s*\n<\/script>/g)];
   if (closes.length !== 1) throw new Error('實驗線主程式 IIFE 收尾要剛好 1 處');
-  const at = mark + closes[0].index, INJECT = '\n;window.__d010={happyAgg:()=>JSON.parse(JSON.stringify(happyAgg)),demWhy:()=>JSON.parse(JSON.stringify(demWhy)),happy:()=>cityHappy,eco:()=>({ready:economy481.ready,pp:economy481.ready?economy481.consumption.purchasingPower:null,retail:economy481.ready?economy481.commerce.utilization:null}),noFlash:()=>{flashT=0;}};';
-  const copy = html.slice(0, at) + INJECT + html.slice(at), cfg = CONFIGS.fallback, want = [1, 2, 10, 30, 60, 120];
+  const at = mark + closes[0].index, INJECT = '\n;window.__d010={happyAgg:()=>JSON.parse(JSON.stringify(happyAgg)),demWhy:()=>JSON.parse(JSON.stringify(demWhy)),happy:()=>cityHappy,eco:()=>({ready:economy481.ready,pp:economy481.ready?economy481.consumption.purchasingPower:null,retail:economy481.ready?economy481.commerce.utilization:null}),noFlash:()=>{flashT=0;},land:()=>({dirty:landDirty,box:landBox?[landBox.x0,landBox.y0,landBox.x1,landBox.y1]:null})};';
+  const copy = html.slice(0, at) + INJECT + html.slice(at), cfg = CONFIGS[arg('config', 'fallback')], want = [1, 2, 10, 30, 60, 120];
   if (SHOTS) {
     // --shots：實驗線第 0、30、60、120 天的 2D 畫面（回退設定、第一個種子）。拍之前把閃電計時 flashT 歸零（純畫面、不進存檔；第 120 天剛好暴雨打閃電，畫面整片白）。
     // 用同一份副本、同一個跑法重跑一次；逐日數字要跟正式對照（原檔、沒有出口）那一列逐項相同，證明插出口沒改到模擬。
@@ -94,14 +94,15 @@ if (DIAG || SHOTS) {
   await withBrowser({ root: LAB, entry: 'd010.html', overlay: { 'd010.html': copy }, port: 8411, width: 1280, height: 800, gl: false, preload: preloadOf(cfg), ready: '!!window.__bootDone453&&!!window.__d010', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
     await open('');
     const r = await page.evaluate(`(()=>{GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${J(codeWithSeed(code, SEEDS[0]))}))throw new Error('import');GV.setSpeed(0);GV.ai(false);
-      const rows=[];for(let d=1;d<=${DAYS};d++){GV.step(1);if(${J(want)}.includes(d)){const a=__d010.happyAgg(),sum=a.reduce((s,p)=>s+p.val,0);
-        rows.push({day:d,happy:__d010.happy(),aggSum:sum,terms:a.filter(p=>Math.abs(p.val)>1e-4).map(p=>[p.name,+p.val.toFixed(4)]),eco:__d010.eco(),why:__d010.demWhy(),dem:GV.stats().dem});}}return rows;})()`);
-    for (const x of r) {
+      const rows=[],land={full:0,box:0,clean:0,boxes:[]};for(let d=1;d<=${DAYS};d++){GV.step(1);const L=__d010.land();if(L.dirty&&!L.box)land.full++;else if(L.dirty){land.box++;if(land.boxes.length<5)land.boxes.push([d,L.box]);}else land.clean++;if(${J(want)}.includes(d)){const a=__d010.happyAgg(),sum=a.reduce((s,p)=>s+p.val,0);
+        rows.push({day:d,happy:__d010.happy(),aggSum:sum,terms:a.filter(p=>Math.abs(p.val)>1e-4).map(p=>[p.name,+p.val.toFixed(4)]),eco:__d010.eco(),why:__d010.demWhy(),dem:GV.stats().dem});}}return {rows,land};})()`);
+    console.log('每天結束時的地價髒狀態（明天開頭依此重算）：' + J(r.land));
+    for (const x of r.rows) {
       console.log(`第 ${x.day} 天：城市幸福 ${x.happy.toFixed(3)}（幸福組成平均總和 ${x.aggSum.toFixed(3)}，差 ${(x.happy - x.aggSum).toFixed(3)} 是組成之後才扣的垃圾／糧食／夾值）；經濟 ${J(x.eco)}；需求 ${J(x.dem)}`);
       console.log('  組成（非零）：' + x.terms.map(([n, v]) => n + ' ' + v).join('、'));
     }
     fs.mkdirSync(path.join(ROOT, 'scratch/lab'), { recursive: true });
-    fs.writeFileSync(path.join(ROOT, 'scratch/lab/d010-diag.json'), J({ commit, inject: INJECT.trim(), rows: r }));
+    fs.writeFileSync(path.join(ROOT, 'scratch/lab/d010-diag.json'), J({ commit, inject: INJECT.trim(), ...r }));
   });
   process.exit(0);
 }
