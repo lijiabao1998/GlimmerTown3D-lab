@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { withBrowser, ROOT } from './cdp.mjs';
+const PORT = +(process.env.GT_PORT ?? 0) || 8311;   // 跟 withBrowser 同一個埠（tools/cdp.mjs）
 import { codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { simHash } from '../src/sim/day.ts';
@@ -88,7 +89,7 @@ if (want('d003')) {
     }
     await withBrowser({ root: out, entry: `${pairs[0][0]}_pair.html`, width: 2594, height: 880, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
       for (const [name] of pairs) {
-        await page.send('Page.navigate', { url: `http://127.0.0.1:8311/${name}_pair.html` });
+        await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${name}_pair.html` });
         for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length===2&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
         await save(page, `${name}_compare`);
       }
@@ -146,7 +147,7 @@ if (want('d004')) {
   }
   await withBrowser({ root: out, entry: `d004_${D004[0][0]}_compare.html`, width: 2444, height: 1150, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
     for (const [view] of D004) {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d004_${view}_compare.html` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d004_${view}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       await save(page, `D004-${view.replace('_', '-')}-compare`);
     }
@@ -196,7 +197,7 @@ if (want('d005')) {
   }
   await withBrowser({ root: out, entry: `d005_${D005[0][0]}_compare.html`, width: 2444, height: 620, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
     for (const [name] of D005) {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d005_${name}_compare.html` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d005_${name}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=1&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       await save(page, `D005-${name.replace('_', '-')}-compare`);
     }
@@ -238,7 +239,7 @@ if (want('d006')) {
   }
   await withBrowser({ root: out, entry: `d006_${D006[0][0]}_compare.html`, width: 2444, height: 1150, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
     for (const [name] of D006) {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d006_${name}_compare.html` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d006_${name}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       await save(page, `D006-${name}-compare`);
     }
@@ -292,7 +293,7 @@ if (want('d007')) {
   const names = sheets.map(s => s[0]).concat(['A2']);
   await withBrowser({ root: thumbs, entry: `sheet_${names[0]}.html`, width: 2440, height: 1300, ready: '[...document.images].every(i=>i.complete)', settle: 300 }, async ({ page }) => {
     for (const nm of names) {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/sheet_${nm}.html` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/sheet_${nm}.html` });
       await new Promise(r => setTimeout(r, 1500));
       const h = await page.evaluate('document.body.scrollHeight');
       // 型錄是 183 對小圖，存 PNG 一張 2–3 MB；改存 JPEG（品質 88，一張 0.5 MB 上下），版本庫才不會一輪長 15 MB
@@ -343,7 +344,7 @@ if (want('d008')) {
   }
   await withBrowser({ root: out, entry: `d008_${D008[0][0]}_compare.html`, width: 1644, height: 1130, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
     for (const [name] of D008) {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/d008_${name}_compare.html` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d008_${name}_compare.html` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=3&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       // 對照圖存 JPEG（品質 88）：四格 PNG 一張 3 MB 上下
       const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88 });
@@ -381,7 +382,7 @@ if (want('d010')) {
     <h1>D010 起步城逐日模擬：同一個起點、同一個種子（5162026）</h1><p class="s">左：2D 實驗線 v13.43（d23c18d），上層系統用它自己的開關關成回退值；右：3D（D009 公式照 tick() 順序接線）。畫面中央 800×500，1:1。</p>
     <div class="g">${cells.map(([d, has]) => cell(has ? `d010_day${d}_2d.png` : '', `第 ${d} 天・2D 實驗線`) + cell(`d010_day${d}_3d.png`, `第 ${d} 天・3D`)).join('')}</div>`);
   await withBrowser({ root: out, entry: 'd010_compare.html', width: 1644, height: 2200, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
-    await page.send('Page.navigate', { url: 'http://127.0.0.1:8311/d010_compare.html' });
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d010_compare.html` });
     for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
     fs.writeFileSync(path.join(out, 'D010-compare.jpg'), Buffer.from(shot.data, 'base64'));
@@ -477,7 +478,7 @@ if (want('d011')) {
     <div class="g">${frames.map(([f, c]) => `<figure><figcaption>${c}</figcaption><img src="${f}.png"></figure>`).join('')}</div>`);
   for (const [page0, file, w, h] of [['d011_compare.html', 'D011-compare.jpg', 1644, 2240], ['d011_ui.html', 'D011-ui-compare.jpg', 1316, 1500], ['d011_build.html', 'D011-build-mobile.jpg', 990, 1500]]) {
     await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/${page0}` });
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       // 視窗高度設成內容的高度再拍（視窗比內容高時，無頭 Chrome 會在下方再畫一次上面的內容；scrollHeight 在內容比視窗矮時回報視窗高，所以量格線的底邊）
       const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);

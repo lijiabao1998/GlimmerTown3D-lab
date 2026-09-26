@@ -11,6 +11,7 @@ import { cityFromLab, cityStats, buildingAt, liveBuildings, type City, type City
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { loadCode, saveCode, SAVE_LIMIT } from './io/save.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { labRng } from './sim/rules/lab.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
@@ -677,6 +678,8 @@ export function startCity() {
     undo: () => doUndo(),
     // 對拍劇本的「資金設定」（兩邊設成同一個數，把建造規則跟每日結算分開；實驗線那邊是注入的 setMoney）：只給守衛與拍照用，介面沒有這個鈕
     simMoney: (v: number) => { if (!sim) return null; sim.money = v; syncUi(); return sim.money; },
+    // 對拍劇本的「亂數對齊」：兩邊的全域亂數都換成 mulberry32(v)（實驗線第 1 天比本線多抽 6 次（第 2 類系統），B 段要比會抽亂數的施工就先對齊）；只給守衛與拍照用
+    simSeed: (v: number) => { if (!sim) return null; const g = labRng(v); sim.rng.R = g.R; sim.rng.ri = g.ri; return true; },
     cellScreen: (x: number, z: number) => { const n = city!.n; return screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city!, z * n + x)), z + .5)); },
     tileAt: (sx: number, sy: number) => tileAt(sx, sy),
     cam: () => ({ pos: cam.position.toArray(), target: controls.target.toArray(), zoom: cam.zoom }),

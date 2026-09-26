@@ -65,7 +65,7 @@ async function connect(wsUrl) {
 //       preload＝頁面任何腳本之前先執行的 JS、ready＝等到它為真才算載入完、readyMs＝最多等多久。
 // page.requests 記下所有網路請求的網址（D003「零外部素材」守衛）。
 export async function withBrowser(opt, fn) {
-  const port = opt.port || 8311, w = opt.width || 1280, h = opt.height || 800;
+  const port = opt.port || +(process.env.GT_PORT ?? 0) || 8311, w = opt.width || 1280, h = opt.height || 800;   // GT_PORT：同一台機器同時跑兩支工具時錯開埠
   const dist = opt.root ? path.resolve(opt.root) : path.join(ROOT, 'dist'), entry = opt.entry || 'index.html';
   const ready = opt.ready || '!!(window.__gt && window.__gt.ready)', readyMs = opt.readyMs || 30000;
   const overlay = opt.overlay || {};
