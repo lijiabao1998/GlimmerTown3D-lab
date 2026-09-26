@@ -168,7 +168,20 @@ export function startCity() {
     frameCamera(c.n, first);
     closeCard();
     syncUi();
+    if (sim) warmEdit();
     return { ok: true };
+  }
+  // 載入後趁空閒把預覽的程式路徑先跑一遍（純計算、結果丟掉）：第一次拖曳的第一次更新不再因為程式還沒熱起來而頓一下
+  // （CPU 降速 6 倍下量過：冷的第一次 17.7 ms，之後每次 ≤ 6.2 ms；預算 16 ms）
+  function warmEdit() {
+    const run = () => {
+      if (!sim || !city) return;
+      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]);
+      for (const t of ['road', 'zr', 'plant', 'doze']) previewOp(sim, { k: gestureOf(t), tool: t, x0: x, z0: z, x1: x + 3, z1: z + 1 });
+      bui.showCost(0, 0, '$0', false); bui.hideCost();
+    };
+    const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
+    if (ric) ric(run); else setTimeout(run, 300);
   }
   function openSample(id: string, first = false) {
     const code = id === 'mine' ? readSave() : SAMPLES[id]?.code;

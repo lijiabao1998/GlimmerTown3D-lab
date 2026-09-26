@@ -175,10 +175,12 @@ export function createBuildUi(on: BuildUiEvents) {
       while (toasts.childElementCount > 3) toasts.firstElementChild!.remove();
       setTimeout(() => { t.style.opacity = '0'; }, 2200); setTimeout(() => t.remove(), 2700);
     },
-    // 總價標籤掛在手指那一格上方；靠近畫面邊緣時往內收，整個標籤留在畫面裡
+    // 總價標籤掛在手指那一格上方；靠近畫面邊緣時往內收，整個標籤留在畫面裡。
+    // 寬度用字數估（全形約 13 px、其他約 8 px，加左右留白），不讀 offsetWidth：拖曳中每次更新都讀會逼瀏覽器同步排版（預算 16 ms）
     showCost(x: number, y: number, text: string, bad: boolean) {
       costTag.hidden = false; costTag.textContent = text; costTag.classList.toggle('bad', bad);
-      const w = costTag.offsetWidth, h = costTag.offsetHeight, m = 8;
+      let w = 20; for (const ch of text) w += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
+      const h = 26, m = 8;
       costTag.style.left = Math.max(m + w / 2, Math.min(innerWidth - m - w / 2, x)) + 'px';
       costTag.style.top = Math.max(m + h * 1.5, Math.min(innerHeight - m, y)) + 'px';
     },
