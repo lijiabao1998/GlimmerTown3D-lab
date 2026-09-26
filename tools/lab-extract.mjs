@@ -1,5 +1,5 @@
-// 從 2D 實驗線抽出本線要用的資料（D003、D004、D007、D009）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
-// 用法：node tools/lab-extract.mjs --lab=scratch/lab-src [--days=120] [--part=all|d003|d004|d007|d009|d010]
+// 從 2D 實驗線抽出本線要用的資料（D003、D004、D007、D009、D010、D011）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
+// 用法：node tools/lab-extract.mjs --lab=scratch/lab-src [--days=120] [--part=all|d003|d004|d007|d009|d010|d011]（all＝d003、d004、d007）
 // 產出（D003）：
 //   src/content/lab-kinds.json        186 種建築：名稱、分類、佔地、每級高度（量精靈圖）、出處行號
 //   src/content/samples/<id>.code.txt 樣本分享碼（只留本線會讀的欄位；實驗線自己也能匯入）
@@ -12,6 +12,8 @@
 //   scratch/lab/d004_<id>_<視角>_2d.png            匯入樣本碼、v 還原成存檔值之後的實驗線 2D 畫面（D004 五格對照的第一格，不進版本庫）
 // 產出（D009）：src/content/samples/d009-live.json：執行期變體排名、24 張道路／電源與住宅供電實跑樣本。
 // 產出（D010）：src/content/samples/starter.code.txt／starter.json：起步城分享碼與實驗線讀回的對帳數字（含逐格道路等級）。
+// 產出（D011）：src/content/samples/newcity.code.txt／newcity.json（新城）、d011-prebuilt.code.txt／d011-prebuilt.json（預建城）：
+//   起點碼與實驗線讀回的對帳數字（含逐格道路等級、住宅 den／we、資金、天數、難度、星等、里程碑）；附加欄位 d3 不影響實驗線讀回。
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -484,6 +486,191 @@ if (PARTS.has('d010')) {
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
   });
   console.log(`D010 起步城碼完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+}
+
+// ---- D011：新城、預建城的起點碼（卡 docs/D011-build-mvp.md「開局」與驗收 4）----
+// 新城：同 D010，以種子城樣本碼為樣板，只留地形（ter、el、tre），其餘逐格圖層清空、什麼都不擺；拿掉的模組狀態同 D010，
+//   另拿掉歷史曲線 hi、通知日誌 nl（樣板瘦身時已經拿掉，照刪）。標準難度 df 1、資金 $3000（DIFF_MONEY[1]，39435；newWorld 51110 給的也是這個數）、
+//   第 1 天、種子沿用樣板的 5162026、星等 0、里程碑 0、城名「新城」；相機對準起步城那塊平地（src/content/starter.ts）的中心
+//   （實驗線 camLookWorld 58844：cam.x＝(x−y)×32、cam.y＝(x+y)×16；z 1 同 D010）。
+// 預建城（對拍的拆除劇本用，tools/d011-ops.mjs prebuiltOps）：新城加一小片擺好的鎮，位置同起步城那塊平地——
+//   2 級路兩條（十字）、1 級小巷一條；住商工分區；住商工 1／2／3 級都有，都在同類分區上、貼著路；幾棟住宅帶非預設的密度 den、財富 we；
+//   燃煤電廠 k5 貼路（變體 (x*7+y*13)%3，doPlace 51672）；警察局 k11（變體 0）；體育場 k9 2×2（第 6 位是 sz，load 66900–66905）；
+//   路邊幾格留樹（這塊平地本來沒有樹，是擺上去的）。建築列照實驗線 save 的寫法（66731–66744：den≠3 才寫第 7 位、we≠1 才寫第 8 位、
+//   第 6 位火災補 0；體育場第 6 位寫 sz），讀檔的補值照 load 66906–66911（缺 den＝3、缺 we＝1）。age 都 ≥9（實驗線 age <9 畫成工地或逐層升起，61785）。
+// 對帳（同 D010）：每個碼開一個全新頁面，GV.setMapSize(72)、GV.newWorldSeeded(777)、GV.importCode、GV.setSpeed(0) 之後讀：
+//   MEASURE、逐格道路等級、住宅的 den／we／火災、資金（GV.devMoney516B 原值與 GV.stats 取整）、天數、難度（GV.diff 與 GV.devDiff516B）；
+//   bestStar、msIdx、seed、townName 沒有 GV 出口：照 D010 --diag 開記憶體副本，在主程式 IIFE 收尾前插一行只讀出口 window.__d011code（原檔不動、副本不落地）。
+//   原檔另外開一次（新城、預建城各一頁），GV 讀得到的數字要跟副本逐項相同，證明插出口沒改到匯入。
+//   本線：decodeLabCode → cityFromLab＋cityStats；資金、天數、難度、星等、里程碑、種子、城名取解碼後的存檔欄位（src/io/labcode.ts，照 load 66876–66987 的還原規則）；
+//   住宅 den／we／火災照 load 66907–66909 的補值（src/sim/day.ts simFromSave 用的是同一條）。
+// 附加欄位 d3（驗收 4 的前提）：兩個碼各在 JSON 頂層多一個 d3 重新編碼，實驗線讀回的數字要跟沒有 d3 時逐項相同。
+// 任何一項不同就丟錯、不寫檔。埠用 8431／8433（其他工具用 8311、8411、8421；同時跑也不會連錯 Chrome）。
+if (PARTS.has('d011')) {
+  const t0 = Date.now();
+  if (commit !== PINNED_D009_COMMIT) throw new Error(`D011 實驗線版本錯誤：要求 ${PINNED_D009_COMMIT}（卡面行號都指這一版），目前 ${commit}`);
+  const { starterLayout } = await import('../src/content/starter.ts');
+  const { cityFromLab, cityStats } = await import('../src/sim/city.ts');
+  const { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(OUT, 'lab-kinds.json'), 'utf8')));
+  const rawOf = code => { const o = JSON.parse(Buffer.from(code.replace(/^GVX1:/, ''), 'base64').toString('utf8')); if (o.z === 1) { for (const f of RLE_FIELDS) if (typeof o[f] === 'string') o[f] = rleDecode(o[f]); delete o.z; } return o; };
+  const g = rawOf(fs.readFileSync(path.join(SAMPLES, 'seed516.code.txt'), 'utf8')), N = g.n, nn = N * N, SEED = 5162026;
+  if (g.seed !== SEED) throw new Error(`新城：種子城樣板的種子是 ${g.seed}，不是 ${SEED}`);
+  const ter = Uint8Array.from(g.ter, c => c.charCodeAt(0) - 48), el = Uint8Array.from(g.el || '0'.repeat(nn), c => c.charCodeAt(0) - 48);
+  const lay = starterLayout(N, ter, el), X = lay.x0, Z = lay.z0, [cx, cz] = lay.center;
+
+  // 1. 新城
+  for (const f of RLE_FIELDS) if (typeof g[f] === 'string' && !['ter', 'el', 'tre'].includes(f)) g[f] = '0'.repeat(nn);
+  for (const f of ['bus_rt', 'riot', 'plague', 'sc', 'rk', 'sup', 'aim', 'aiR', 'gds', 'sb', 'cev', 'mln', 'sf', 'rdep', 'ach', 'ln', 'pol', 'region', 'hi', 'nl']) delete g[f];
+  const cam = { x: Math.round((cx - cz) * 32), y: Math.round((cx + cz) * 16), z: 1 };
+  const SPEC = { money: 3000, day: 1, df: 1, star: 0, msIdx: 0, seed: SEED };   // 卡面「開局」：新城、預建城都是這組
+  Object.assign(g, { df: SPEC.df, money: SPEC.money, day: SPEC.day, star: SPEC.star, msIdx: SPEC.msIdx, nm: '新城', cam, bl: [] });
+
+  // 2. 預建城：座標是相對平地左上角 (x0,z0) 的 dx、dz
+  const PRE = {
+    road: [[2, 6, 18, 6], [10, 1, 10, 12]],                  // 2 級路 [dx0,dz0,dx1,dz1]：主街（東西向）、橫街（南北向），十字交在 (10,6)
+    alley: [[3, 9, 9, 9]],                                   // 1 級小巷：東端接橫街 (10,9)
+    zone: [[1, 2, 4, 9, 5], [2, 11, 4, 17, 5], [3, 11, 7, 17, 8], [1, 3, 10, 8, 10]],   // [分區, dx0,dz0,dx1,dz1]：主街北側住、商，南側工；小巷南側住
+    bld: [                                                   // [dx, dz, k, lv, v, age, 第 6 位起]；電廠的 v（null）照 doPlace 的公式算
+      [2, 5, 1, 1, 0, 15],              // 住宅 1 級：den 3、we 1（預設，列只有 5 位）
+      [3, 5, 1, 1, 4, 18, 0, 1, 0],     // 住宅 1 級：den 1、we 0
+      [4, 5, 1, 2, 7, 40, 0, 4],        // 住宅 2 級：den 4
+      [5, 5, 1, 3, 10, 90, 0, 5, 2],    // 住宅 3 級：den 5、we 2
+      [6, 5, 1, 2, 2, 55, 0, 3, 2],     // 住宅 2 級：we 2（den 3 照 save 寫佔位）
+      [4, 10, 1, 1, 5, 12, 0, 2],       // 住宅 1 級、貼小巷：den 2
+      [11, 5, 2, 1, 1, 20], [12, 5, 2, 2, 6, 45], [13, 5, 2, 3, 9, 100],    // 商業 1、2、3 級
+      [11, 7, 3, 1, 3, 25], [12, 7, 3, 2, 8, 50], [13, 7, 3, 3, 11, 110],   // 工業 1、2、3 級
+      [18, 7, 5, 1, null, 40],          // 燃煤電廠：主街東端南側
+      [9, 7, 11, 1, 0, 30],             // 警察局：主街與橫街的西南角
+      [11, 10, 9, 1, 0, 60, 2],         // 體育場 2×2（第 6 位 sz 2）：西邊貼橫街
+    ],
+    tree: [[1, 6, 3], [19, 6, 6], [10, 0, 9], [10, 13, 12], [2, 9, 1]],   // [dx, dz, 樹種]：主街、橫街、小巷端點外的那一格
+  };
+  const at = (dx, dz) => (Z + dz) * N + X + dx;
+  const rd = g.rd.split(''), rcl = g.rcl.split(''), zn = g.zn.split(''), tre = g.tre.split(''), occ = new Map();
+  const fill = ([ax, az, bx, bz], f) => { for (let dz = az; dz <= bz; dz++) for (let dx = ax; dx <= bx; dx++) f(at(dx, dz)); };
+  for (const [s, rc] of [...PRE.road.map(s => [s, 2]), ...PRE.alley.map(s => [s, 1])]) fill(s, i => { rd[i] = '1'; rcl[i] = String(rc); tre[i] = '0'; });
+  for (const [z, ...s] of PRE.zone) fill(s, i => { zn[i] = String(z); tre[i] = '0'; });
+  const rows = PRE.bld.map(([dx, dz, k, lv, v, age, ...tail]) => [at(dx, dz), k, lv, v ?? ((X + dx) * 7 + (Z + dz) * 13) % 3, age, ...tail]).sort((a, b) => a[0] - b[0]);
+  const foot = r => { const s = r[1] === 9 ? (r[5] || 2) : KT.size(r[1]), x = r[0] % N, z = (r[0] / N) | 0, o = []; for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) o.push((z + dz) * N + x + dx); return o; };
+  for (const r of rows) for (const i of foot(r)) { if (occ.has(i)) throw new Error(`預建城：格 ${i} 有兩棟重疊`); occ.set(i, r); tre[i] = '0'; }
+  for (const [dx, dz, sp] of PRE.tree) tre[at(dx, dz)] = String.fromCharCode(48 + sp);
+  // 佈局自檢：動到的格子都在起步城平地上；路上沒有分區與建築；住商工在同類分區上、貼著路；其他建築不壓分區、至少一格貼路；樹不在路、分區、建築上，而且貼著路
+  const road = i => rd[i] !== '0', touch = i => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([ax, az]) => { const x = i % N + ax, z = ((i / N) | 0) + az; return x >= 0 && z >= 0 && x < N && z < N && road(z * N + x); });
+  const bad = [];
+  for (let i = 0; i < nn; i++) {
+    if (!road(i) && zn[i] === '0' && !occ.has(i) && tre[i] === g.tre[i]) continue;
+    const x = i % N, z = (i / N) | 0;
+    if (x < X || z < Z || x >= X + lay.size || z >= Z + lay.size || ter[i] !== 2 || el[i]) bad.push(`(${x},${z}) 不在起步城平地上`);
+    if (road(i) && (zn[i] !== '0' || occ.has(i))) bad.push(`(${x},${z}) 路上有分區或建築`);
+  }
+  for (const r of rows) {
+    const f = foot(r);
+    if (r[1] <= 3 ? zn[r[0]] !== String(r[1]) || !touch(r[0]) : f.some(i => zn[i] !== '0') || !f.some(touch)) bad.push(`(${r[0] % N},${(r[0] / N) | 0}) k${r[1]} 的分區或臨路不對`);
+  }
+  for (const [dx, dz] of PRE.tree) { const i = at(dx, dz); if (road(i) || zn[i] !== '0' || occ.has(i) || !touch(i)) bad.push(`(${X + dx},${Z + dz}) 樹的位置不對`); }
+  if (bad.length) throw new Error('預建城佈局：' + bad.join('；'));
+  const P = { ...g, rd: rd.join(''), rcl: rcl.join(''), zn: zn.join(''), tre: tre.join(''), nm: '預建城', cam: { ...cam }, bl: rows };
+
+  // 3. 編碼；另各做一份 JSON 頂層多一個 d3 的（其餘欄位、順序都不動，下面核對）
+  const D3 = { f: 3, h: [{ day: 1, t: 'import' }], g: 0 };
+  const jsonOf = code => JSON.parse(Buffer.from(code.replace(/^GVX1:/, ''), 'base64').toString('utf8'));
+  const CITIES = [{ id: 'newcity', label: '新城（D011）', save: g }, { id: 'd011-prebuilt', label: '預建城（D011，對拍的拆除劇本用）', save: P }];
+  for (const c of CITIES) {
+    c.code = encodeLabCode(c.save, { deflate: true });
+    c.codeD3 = encodeLabCode({ ...c.save, d3: D3 }, { deflate: true });
+    const a = jsonOf(c.code), b = jsonOf(c.codeD3), bd3 = b.d3;
+    delete b.d3;
+    if (J(bd3) !== J(D3) || J(a) !== J(b)) throw new Error(`${c.id}：加 d3 的碼除了 d3 之外應該跟原碼逐字相同`);
+  }
+
+  // 4. 本線解碼（cityStats 跟 MEASURE 同一個格式）
+  const mineOf = code => {
+    const dec = decodeLabCode(code);
+    if (!dec.ok) throw new Error('本線解不開自己編的碼：' + dec.error);
+    const s = dec.save, city = cityFromLab(s, KT, code), rc = {};
+    if (city.issues.overlap || city.issues.outOfMap || city.issues.unknownKinds.length) throw new Error('本線解碼有佔地問題：' + J(city.issues));
+    for (let i = 0; i < nn; i++) if (city.road[i]) rc[city.rclass[i]] = (rc[city.rclass[i]] || 0) + 1;
+    // 住宅 [格, den, we, 火災]：補值照 load 66907–66909
+    const houses = s.bl.filter(r => r[1] === 1).sort((a, b) => a[0] - b[0])
+      .map(r => [r[0], r.length >= 7 ? r[6] : 3, r.length >= 8 ? r[7] : 1, r.length >= 7 ? r[5] : (r.length === 6 ? r[5] : 0)]);
+    return { expect: cityStats(city), rc, houses, money: s.money, day: s.day, df: s.df, star: s.star, msIdx: s.msIdx, seed: s.seed, nm: s.nm };
+  };
+
+  // 5. 實驗線讀回：副本（插只讀出口）讀全部；原檔讀 GV 讀得到的那些
+  const exportAnchor = 'Object.assign(window.GV,{art574:', mark = html.indexOf(exportAnchor);
+  if (mark < 0 || html.indexOf(exportAnchor, mark + 1) >= 0) throw new Error('實驗線 GV 出口錨點要剛好出現 1 次');
+  const scriptEnd = html.indexOf('</script>', mark), closes = [...html.slice(mark, scriptEnd + 9).matchAll(/\n\s*\}\)\(\);\s*\n<\/script>/g)];
+  if (closes.length !== 1) throw new Error('實驗線主程式 IIFE 收尾要剛好 1 處');
+  const cut = mark + closes[0].index, INJECT = '\n;window.__d011code={bestStar:()=>bestStar,msIdx:()=>msIdx,seed:()=>seed,townName:()=>townName};';
+  const copy = html.slice(0, cut) + INJECT + html.slice(cut), injectedAt = lineOf(cut) + 1;
+  const READ = code => `(()=>{GV.setMapSize(${N});GV.newWorldSeeded(777);const ok=GV.importCode(${J(code)});GV.setSpeed(0);if(!ok)return null;
+    const n=GV.N(),m=${MEASURE},rc={},houses=[];
+    for(let y=0;y<n;y++)for(let x=0;x<n;x++){const t=GV.tile(x,y),b=t.bld;if(t.road)rc[t.rc]=(rc[t.rc]||0)+1;if(b&&!b.ref&&b.k===1)houses.push([y*n+x,b.den,b.we,b.fire]);}
+    const s=GV.stats(),E=window.__d011code;
+    return {m,rc,houses,money:GV.devMoney516B(),statsMoney:s.money,day:s.day,diff:GV.diff(),devDiff:GV.devDiff516B(),
+      bestStar:E?E.bestStar():null,msIdx:E?E.msIdx():null,seed:E?E.seed():null,townName:E?E.townName():null};})()`;
+  const labRun = async (opt, list) => {
+    const out = {};
+    await withBrowser({ root: LAB, width: 1280, height: 800, gl: false, preload: PRELOAD, readyMs: 240000, settle: 300, ...opt }, async ({ open, page }) => {
+      for (const [key, code] of list) {
+        const t1 = Date.now();
+        await open('');                                                   // 每個碼一個全新頁面
+        const r = await page.evaluate(READ(code));
+        if (!r) throw new Error(`${key}：實驗線拒絕匯入`);
+        out[key] = { ...r, m: { ...r.m, roots: r.m.roots.map(q => [q.i, q.k, q.lv, q.age, q.size2]) } };
+        console.log(`  ${opt.entry || 'index.html'}：${key} 讀回（${((Date.now() - t1) / 1000).toFixed(0)}s）`);
+      }
+      if (page.errors.length) console.log('  實驗線 console 錯誤（僅記錄）：\n    ' + page.errors.slice(0, 6).join('\n    '));
+    });
+    return out;
+  };
+  const inj = await labRun({ entry: 'd011.html', overlay: { 'd011.html': copy }, port: 8431, ready: '!!window.__bootDone453&&!!window.__d011code' },
+    CITIES.flatMap(c => [[c.id, c.code], [c.id + '+d3', c.codeD3]]));
+  const orig = await labRun({ port: 8433, ready: '!!window.__bootDone453' }, CITIES.map(c => [c.id, c.code]));
+
+  // 6. 逐項比：實驗線（副本）＝本線解碼＝卡面規格；副本＝原檔；加 d3＝沒加
+  const GVF = ['m', 'rc', 'houses', 'money', 'statsMoney', 'day', 'diff', 'devDiff'], ALL = [...GVF, 'bestStar', 'msIdx', 'seed', 'townName'];
+  const eq = (a, b) => typeof a === 'number' ? Object.is(a, b) : J(a) === J(b);
+  const differ = (a, b, keys) => keys.filter(k => !eq(a[k], b[k])).map(k => `${k}：${String(J(a[k])).slice(0, 200)} ≠ ${String(J(b[k])).slice(0, 200)}`);
+  const fails = [];
+  for (const c of CITIES) {
+    const L = inj[c.id], M = mineOf(c.code), O = orig[c.id], E3 = inj[c.id + '+d3'];
+    c.checks = {
+      sameAsThisLine: J(L.m) === J(M.expect), rcSameAsThisLine: J(L.rc) === J(M.rc), housesSameAsThisLine: J(L.houses) === J(M.houses),
+      moneySameAsThisLine: Object.is(L.money, M.money) && L.statsMoney === Math.round(M.money), daySameAsThisLine: L.day === M.day,
+      dfSameAsThisLine: L.diff === M.df && L.devDiff === M.df, starSameAsThisLine: L.bestStar === M.star, msIdxSameAsThisLine: L.msIdx === M.msIdx,
+      seedSameAsThisLine: L.seed === M.seed, nameSameAsThisLine: L.townName === M.nm,
+      asSpecified: Object.entries(SPEC).every(([k, v]) => M[k] === v) && M.nm === c.save.nm,
+      injectedCopySameAsOriginal: differ(L, O, GVF).length === 0,
+      extensionIgnored: differ(L, E3, ALL).length === 0,
+    };
+    c.lab = L; c.mine = M;
+    const no = Object.entries(c.checks).filter(([, v]) => !v).map(([k]) => k);
+    if (no.length) fails.push(`${c.id} 不符：${no.join('、')}；實驗線 vs 本線 ${J({ money: [L.money, M.money], day: [L.day, M.day], df: [L.diff, L.devDiff, M.df], star: [L.bestStar, M.star], msIdx: [L.msIdx, M.msIdx], seed: [L.seed, M.seed], nm: [L.townName, M.nm], rc: [L.rc, M.rc], kinds: [L.m.kinds, M.expect.kinds], zone: [L.m.zone, M.expect.zone], road: [L.m.road, M.expect.road], trees: [L.m.trees, M.expect.trees], houses: [L.houses, M.houses] })}`
+      + `；副本 vs 原檔 ${differ(L, O, GVF).join('；') || '同'}；加 d3 ${differ(L, E3, ALL).join('；') || '同'}`);
+  }
+  if (fails.length) throw new Error('D011 起點碼對帳不過，沒有寫檔：\n  ' + fails.join('\n  '));
+
+  // 7. 寫檔
+  const source = { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-extract.mjs --part=d011',
+    how: `種子城樣本碼當樣板，只留地形（ter、el、tre）；標準難度 df 1、資金 3000、第 1 天、種子 ${SEED}、星等 0、里程碑 0。實驗線每個碼開全新頁面 GV.setMapSize(${N})、GV.newWorldSeeded(777)、GV.importCode、GV.setSpeed(0) 後讀回；`
+      + `bestStar／msIdx／seed／townName 讀自原檔 index.html 第 ${injectedAt} 行（主程式 IIFE 收尾前）插入只讀出口的記憶體副本（插入內容記在 inject），其餘數字原檔與副本逐項相同`,
+    inject: INJECT.trim() };
+  for (const c of CITIES) {
+    const L = c.lab, base = { x0: X, z0: Z, size: lay.size, center: lay.center, cam };
+    const layout = c.save === P ? { ...base, road: PRE.road, alley: PRE.alley, zone: PRE.zone, trees: PRE.tree.map(([dx, dz, sp]) => [at(dx, dz), sp]), buildings: rows } : base;
+    fs.writeFileSync(path.join(SAMPLES, `${c.id}.code.txt`), c.code);
+    fs.writeFileSync(path.join(SAMPLES, `${c.id}.json`), JSON.stringify({ id: c.id, label: c.label, source, codeChars: c.code.length, layout,
+      expect: L.m, rc: L.rc, houses: L.houses, money: L.money, statsMoney: L.statsMoney, day: L.day, df: L.diff, star: L.bestStar, msIdx: L.msIdx, seed: L.seed, nm: L.townName,
+      ...c.checks, extension: { d3: D3, codeChars: c.codeD3.length } }));
+    const k = L.m.kinds;
+    console.log(`${c.label}：路 ${L.m.road[1]}（道路等級 ${J(L.rc)}）、分區 ${L.m.zone.slice(1).join('／')}、建築 ${L.m.buildings}（${Object.entries(k).map(([kk, n]) => `k${kk}×${n}`).join(' ') || '無'}）、樹 ${L.m.trees}；碼 ${c.code.length.toLocaleString()} 字元`);
+    console.log(`  實驗線讀回＝本線解碼：對帳 ${c.checks.sameAsThisLine}、道路等級 ${c.checks.rcSameAsThisLine}、住宅 den／we ${c.checks.housesSameAsThisLine}（${J(L.houses)}）；`
+      + `資金 ${L.money}（取整 ${L.statsMoney}）、第 ${L.day} 天、難度 ${L.diff}、星等 ${L.bestStar}、里程碑 ${L.msIdx}、種子 ${L.seed}、城名 ${L.townName}：${['money', 'day', 'df', 'star', 'msIdx', 'seed', 'name'].every(q => c.checks[q + 'SameAsThisLine'])}；`
+      + `合卡面 ${c.checks.asSpecified}；副本＝原檔 ${c.checks.injectedCopySameAsOriginal}；加 d3 讀回相同 ${c.checks.extensionIgnored}`);
+  }
+  console.log(`D011 起點碼完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 }
 
 // ---- D009：生長核心公式的執行期資料 ----

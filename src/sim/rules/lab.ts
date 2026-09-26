@@ -20,6 +20,11 @@ export interface Tile {
   tree?: number;                                        // 樹（變體號，0＝沒有；50974 plantTreeAt597）：rebuildCov 對鄰域污染 −2（53151）
   rdec?: number | boolean; bus?: number | boolean;      // 道路裝飾、公車站（51733、51737）：rebuildCov 蓋 rdec／bus 覆蓋場（53149–53150）
   bridge?: number | boolean;                            // 水上道路（51645）
+  // D011 建造規則（build.ts）會讀寫的其他圖層：拆除一次拆一層（51776–51818），canPlace 看有沒有東西可拆（51354）
+  deco?: number;                                        // 地面點綴（蘆葦等）：鋪路、劃區、蓋建築順手清掉（51645、51665、51672）
+  crater?: number | boolean; rail?: number | boolean; railBridge?: number | boolean; tram?: number | boolean; tramBridge?: number | boolean;
+  dock?: number | boolean; fly475?: number | boolean; ix475?: number; wm472?: number | boolean; sm472?: number | boolean; wp?: number | boolean;
+  oneway?: number | boolean; light?: number | boolean; busLane?: number | boolean; levee?: number | boolean; flood?: number | boolean;
 }
 export interface World { N: number; tiles: Tile[] }
 export const idx = (w: World, x: number, y: number) => y * w.N + x;                         // 39731

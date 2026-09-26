@@ -9,6 +9,7 @@ import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_DAYS } from '../src/content/starter.ts';
 import { simHash } from '../src/sim/day.ts';
 import { runStarter } from './unit-d010-sim.mjs';
+import { d011Smoke } from './smoke-d011.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const t0 = Date.now();
@@ -117,8 +118,10 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   await open('sample=seed516');
   const mob = await page.evaluate(`(()=>{const id=__gt.bigOne(),p=__gt.pickTest(id);const t=__gt.openTile(p.want[0],p.want[1]);const b=document.querySelector('#bio').getBoundingClientRect(),h=document.querySelector('#bio h2').getBoundingClientRect(),x=document.querySelector('#bio .x').getBoundingClientRect();
     return {title:t.title,inView:b.top>=0&&b.bottom<=innerHeight&&b.left>=0&&b.right<=innerWidth,titleIn:h.top>=b.top&&h.bottom<=b.bottom,closeIn:x.top>=b.top&&x.right<=b.right+1,
-      buttons:[...document.querySelectorAll('#picks button')].map(e=>e.textContent)};})()`);
-  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 6, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；六顆切換鈕都在（D007 多了「全種類」、D010 多了「起步城」）', JSON.stringify(mob));
+      menu:__gt.menuItems()};})()`);
+  const CITY_ITEMS = ['city:newcity', 'city:starter', 'city:seed516', 'city:ai120', 'city:gallery'];
+  log(mob.inView && mob.titleIn && mob.closeIn && CITY_ITEMS.every(c => mob.menu.includes(c)) && ['export', 'paste', 'history'].every(c => mob.menu.includes(c)),
+    'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；D011 起城市切換收進 ☰ 選單：新城、起步城、種子城、AI 城、全種類、分享碼、300 年示範都在', JSON.stringify(mob));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
   // ===== D004：住商工街區三檔（?blocks=a|b|c）=====
   const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
@@ -336,11 +339,16 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動
   await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
   await open('sample=seed516&at=36,36&zoom=2.4');
-  const sw = await page.evaluate(`(()=>{const bs=[...document.querySelectorAll('#blk button')],inView=bs.every(b=>{const r=b.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});
-    const on=()=>bs.find(b=>b.classList.contains('on'))?.textContent,on0=on(),m0=__gt.blockMode();bs[3].click();const on1=on(),m1=__gt.blockMode(),url1=location.search;bs[0].click();
-    return {n:bs.length,inView,on0,m0,on1,m1,url1,on2:on(),m2:__gt.blockMode(),url2:location.search};})()`);
-  log(sw.n === 4 && sw.inView && /^B/.test(sw.on0) && sw.m0 === 'b' && /^C/.test(sw.on1) && sw.m1 === 'c' && /blocks=c/.test(sw.url1) && /D003/.test(sw.on2) && sw.m2 === null && /blocks=off/.test(sw.url2),
-    'D004／D005 手機直式：四顆街區切換鈕都在畫面內；預設 B，點 C、點 D003 都換檔、網址跟著改', JSON.stringify(sw));
+  // D011：街區三檔收進 ☰ 選單（「D003 現況」鈕拿掉，D000 排定；?blocks=off 網址照留給守衛）
+  const sw = await page.evaluate(`(()=>{document.getElementById('menuBtn').click();const bs=[...document.querySelectorAll('#menu .item')].filter(b=>b.dataset.m.startsWith('blocks:')),
+      sheet=document.querySelector('#menu .sheet').getBoundingClientRect(),inView=sheet.left>=0&&sheet.right<=innerWidth&&sheet.bottom<=innerHeight+1;
+    const on=()=>bs.find(b=>b.classList.contains('on'))?.textContent,on0=on(),m0=__gt.blockMode();bs[2].click();const m1=__gt.blockMode(),url1=location.search,menuClosed=document.getElementById('menu').hidden;
+    document.getElementById('menuBtn').click();const on1=[...document.querySelectorAll('#menu .item.on')].map(b=>b.dataset.m);document.getElementById('menuX').click();
+    return {n:bs.length,labels:bs.map(b=>b.textContent),inView,on0,m0,m1,url1,menuClosed,on1,d003:[...document.querySelectorAll('button')].some(b=>/D003/.test(b.textContent))};})()`);
+  log(sw.n === 3 && sw.inView && /^B/.test(sw.on0) && sw.m0 === 'b' && sw.m1 === 'c' && /blocks=c/.test(sw.url1) && sw.menuClosed && sw.on1.includes('blocks:c') && !sw.d003,
+    'D004／D005 手機直式：☰ 選單在畫面內，街區 A／B／C 三檔；預設 B，點 C 換檔、網址跟著改；面板上沒有「D003 現況」', JSON.stringify(sw));
+  await open('sample=seed516&blocks=off&clean=1');
+  log(await page.evaluate('__gt.blockMode()') === null, 'D011：「D003 現況」只剩網址 ?blocks=off（守衛用）', 'blockMode null');
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
 
   // ---- D010 起步城逐日模擬 ----
@@ -389,9 +397,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
     await open('sample=starter');
     const mb = await page.evaluate(`(()=>{const inV=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;};
-      const bar=document.getElementById('timeline'),play=document.getElementById('play'),sp=[...document.querySelectorAll('#spd button')];
-      return {bar:!bar.hidden,play:inV(play),speeds:sp.length,speedsIn:sp.every(inV),label:document.getElementById('ylabel').textContent,picks:document.querySelectorAll('#picks button').length};})()`);
-    log(mb.bar && mb.play && mb.speeds === 3 && mb.speedsIn && /第 1 天/.test(mb.label) && mb.picks === 6, 'D010 手機直式：播放列、播放鈕、三檔速度都在畫面內；顯示第幾天', JSON.stringify(mb));
+      const dock=document.getElementById('dock'),play=document.getElementById('play'),sp=[...document.querySelectorAll('#spd button')];
+      return {dock:!dock.hidden,play:inV(play),speeds:sp.length,speedsIn:sp.every(inV),label:document.getElementById('dayLbl').textContent};})()`);
+    log(mb.dock && mb.play && mb.speeds === 3 && mb.speedsIn && /第 1 天/.test(mb.label), 'D010 手機直式：播放鈕、三檔速度都在畫面內；顯示第幾天（D011 起在下方工具列）', JSON.stringify(mb));
     await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
   }
 
@@ -401,6 +409,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
 
   log(page.errors.length === 0, 'console 零錯誤', page.errors.length ? '\n     ' + page.errors.slice(0, 8).join('\n     ') : 0);
 });
+
+// ===== D011：建造 MVP（tools/smoke-d011.mjs：真的觸控事件、手機版面、存檔、預算、劇本城重演；自己開三個 Chrome）=====
+await d011Smoke(withBrowser, log, blankCheck);
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

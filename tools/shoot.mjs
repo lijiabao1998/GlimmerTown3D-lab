@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|all] [--seed=5162026] [--out=scratch/shots]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -8,6 +8,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { withBrowser, ROOT } from './cdp.mjs';
+import { codeWithSeed } from '../src/io/labcode.ts';
+import { kindTableFrom } from '../src/content/kindTable.ts';
+import { simHash } from '../src/sim/day.ts';
+import { opsOf, parity3d } from './d011-parity-lib.mjs';
+import { scriptOf, runScript } from './unit-d011-edit.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const seed = arg('seed', '5162026'), set = arg('set', 'all'), out = path.resolve(ROOT, arg('out', 'scratch/shots'));
@@ -382,6 +387,107 @@ if (want('d010')) {
     fs.writeFileSync(path.join(out, 'D010-compare.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK', 'D010-compare.jpg');
   });
+}
+
+// ---- D011 建造 MVP ----
+//   D011-compare.jpg：對拍那一串操作（tools/d011-ops.mjs A、推進一天、B），2D 實驗線與 3D 在經過第 0、30、60、120 天的畫面（2D 那一欄先跑 tools/d011-parity.mjs --shots）
+//   D011-ui-compare.jpg：介面前後（--before＝D010 版建出的 dist；起步城、手機直式與桌機）
+//   D011-build-mobile.jpg：手機上從空地到第 120 天（Node 守衛那一份劇本，同一串操作、資金設定照做）
+if (want('d011')) {
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
+  const code = R('src/content/samples/newcity.code.txt').trim(), ops = opsOf(code), X = ops.site.x0, Z = ops.site.z0;
+  const fresh = async (open, page, q) => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await open(q); };
+  const js = o => o.k === 'money' ? `__gt.simMoney(${o.v})` : o.k === 'undo' ? '__gt.undo()' : `__gt.edit(${JSON.stringify(o)})`;
+  const toOp = (o, found) => o.k === 'money' || o.k === 'undo' ? o : o.at ? { k: o.k, tool: o.tool, x0: found[0], z0: found[1], x1: found[0], z1: found[1] }
+    : o.k === 'tap' ? { k: 'tap', tool: o.tool, x0: o.x, z0: o.z, x1: o.x, z1: o.z } : { k: o.k, tool: o.tool, x0: o.x0, z0: o.z0, x1: o.x1, z1: o.z1 };
+  // 1) 3D 照對拍那一串做，拍第 0、30、60、120 天；結束時的雜湊要等於 Node 跑的
+  const P = parity3d(codeWithSeed(code, 5162026), KT, vrank, 120), found = P.B.find(o => o.k === 'pick').found;
+  const plan = [...ops.A.map(o => toOp(o)), 'shot0', 'step1', ...ops.B.filter(o => o.k !== 'pick').map(o => toOp(o, found))];
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await fresh(open, page, `at=${X + 10},${Z + 10}&zoom=2.565&clean=1`);
+    let at = 0;
+    for (const p of plan) {
+      if (p === 'shot0') { await new Promise(r => setTimeout(r, 300)); await save(page, 'd011_day0_3d'); }
+      else if (p === 'step1') { await page.evaluate('__gt.simStep(1)'); at = 1; }
+      else await page.evaluate(js(p));
+    }
+    for (const d of [30, 60, 120]) { await page.evaluate(`__gt.simStep(${d - at})`); at = d; await new Promise(r => setTimeout(r, 300)); await save(page, `d011_day${d}_3d`); }
+    const h = (await page.evaluate('__gt.sim()')).hash;
+    console.log(h === simHash(P.sim) ? 'OK' : 'NG', `3D 對照那一跑經過 120 天的雜湊 ${h}＝Node ${simHash(P.sim)}`);
+    if (h !== simHash(P.sim)) errors++;
+    errors += page.errors.length;
+  });
+  const lab = path.join(ROOT, 'scratch/lab'), DAYS = [0, 30, 60, 120];
+  const cells = DAYS.map(d => { const two = path.join(lab, `d011_day${d}_2d.png`), has = fs.existsSync(two); if (has) fs.copyFileSync(two, path.join(out, `d011_day${d}_2d.png`)); return [d, has]; });
+  const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption>${src ? `<img src="${src}">` : '<div class="none">（沒有這一格的圖：先跑 tools/d011-parity.mjs --shots）</div>'}</figure>`;
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  fs.writeFileSync(path.join(out, 'd011_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:800px;height:500px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D011 建造 MVP：同一個起點（新城碼、種子 5162026）、同一串操作</h1><p class="s">開跑前一批（鋪路、升級、劃區、電廠、警察局、橋、拆除、復原，30 筆）→ 推進一天 → 一批（拆、重劃、復原，9 筆）→ 之後只推進。左：2D 實驗線 v13.43（d23c18d），回退設定、用它自己的手勢函式；右：3D。第 0 天＝第一批做完、還沒推進。畫面中央 800×500，1:1。</p>
+    <div class="g">${cells.map(([d, has]) => cell(has ? `d011_day${d}_2d.png` : '', `第 ${d} 天・2D 實驗線`) + cell(`d011_day${d}_3d.png`, `第 ${d} 天・3D`)).join('')}</div>`);
+  // 2) 介面前後：起步城、手機直式與桌機
+  const before = arg('before', '');
+  const uiShots = async (root, tag) => {
+    await withBrowser({ ...(root ? { root } : {}), width: 412, height: 860 }, async ({ open, page }) => {
+      await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+      await open('sample=starter'); await new Promise(r => setTimeout(r, 400)); await save(page, `d011_ui_${tag}_mobile`);
+      errors += page.errors.length;
+    });
+    await withBrowser({ ...(root ? { root } : {}), width: 1280, height: 800 }, async ({ open, page }) => {
+      await open('sample=starter'); await new Promise(r => setTimeout(r, 400)); await save(page, `d011_ui_${tag}_desktop`);
+      errors += page.errors.length;
+    });
+  };
+  if (before) await uiShots(path.resolve(before), 'before');
+  await uiShots('', 'after');
+  const hasBefore = fs.existsSync(path.join(out, 'd011_ui_before_mobile.png'));
+  fs.writeFileSync(path.join(out, 'd011_ui.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:640px 640px;gap:12px;padding:8px 12px 12px;align-items:start;justify-items:center}img{display:block}.m{width:412px;height:860px}.d{width:640px;height:400px}</style>
+    <h1>D011 介面前後（起步城、第 1 天）</h1><p class="s">前：D010（面板＋按鈕列）；後：D011（上方狀態列＋☰ 選單，下方播放列與工具列，圖示由程式畫）。上排手機 412×860、下排桌機 1280×800 縮一半。</p>
+    <div class="g">${hasBefore ? '<figure><figcaption>前・手機</figcaption><img class="m" src="d011_ui_before_mobile.png"></figure>' : '<div></div>'}<figure><figcaption>後・手機</figcaption><img class="m" src="d011_ui_after_mobile.png"></figure>
+    ${hasBefore ? '<figure><figcaption>前・桌機</figcaption><img class="d" src="d011_ui_before_desktop.png"></figure>' : '<div></div>'}<figure><figcaption>後・桌機</figcaption><img class="d" src="d011_ui_after_desktop.png"></figure></div>`);
+  // 3) 手機上從空地到第 120 天：Node 守衛那一份劇本（scriptOf），資金設定照做；結束時的雜湊要等於 Node
+  const script = scriptOf(code), frames = [];
+  const N = runScript(code, KT, vrank, script);
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await fresh(open, page, '');
+    const shot = async (name, cap) => { await page.evaluate('__gt.tool(null)'); await new Promise(r => setTimeout(r, 350)); await save(page, name); frames.push([name, cap]); };
+    await shot('d011_build_0', '開局：新城，$3,000');
+    const picks = {};
+    let seg = 0, batch = 0;
+    for (const [kind, arg] of script) {
+      if (kind === 'days') { await page.evaluate(`__gt.simStep(${arg})`); const s = await page.evaluate('__gt.sim()'); if (arg > 1) await shot(`d011_build_${++seg}`, `第 ${s.day - 1} 天・人口 ${s.pop}・$${Math.round(s.money).toLocaleString()}`); continue; }
+      const b = batch++;
+      for (const o of arg) {
+        if (o.k === 'pick') { const r = await page.evaluate(`(()=>{const L=__gt.layers(),n=L.n,[x0,z0,x1,z1]=${JSON.stringify(o.rect)};for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){const id=L.occ[z*n+x];if(id){const b=__gt.buildingList().find(r=>r[0]===id);if(b&&b[1]===${+o.what.slice(1)}&&b[2]===x&&b[3]===z)return [x,z];}}return null;})()`); picks[o.as] = r; continue; }
+        await page.evaluate(js(toOp(o, o.at ? picks[o.at] : null)));
+      }
+      if (b === 0 || b === 2) { const s = await page.evaluate('__gt.sim()'); await shot(`d011_build_${++seg}`, `${b ? `第 ${s.day - 1} 天擴建後` : '第一批施工後'}・$${Math.round(s.money).toLocaleString()}`); }
+    }
+    const h = (await page.evaluate('__gt.sim()')).hash;
+    console.log(h === simHash(N.s) ? 'OK' : 'NG', `手機建造過程那一跑的雜湊 ${h}＝Node 劇本 ${simHash(N.s)}`);
+    if (h !== simHash(N.s)) errors++;
+    errors += page.errors.length;
+    await page.evaluate('__gt.clearSave()');
+  });
+  fs.writeFileSync(path.join(out, 'd011_build.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(3,309px);gap:12px;padding:8px 12px 12px}img{display:block;width:309px;height:645px}</style>
+    <h1>D011 手機上從空地到第 120 天</h1><p class="s">Node 守衛那一份劇本（tools/unit-d011-edit.mjs）：開跑前、第 1、30、60 天各一批施工（含拆除、復原），其餘自己長。412×860 縮 75%。</p>
+    <div class="g">${frames.map(([f, c]) => `<figure><figcaption>${c}</figcaption><img src="${f}.png"></figure>`).join('')}</div>`);
+  for (const [page0, file, w, h] of [['d011_compare.html', 'D011-compare.jpg', 1644, 2240], ['d011_ui.html', 'D011-ui-compare.jpg', 1316, 1500], ['d011_build.html', 'D011-build-mobile.jpg', 990, 1500]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:8311/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      // 視窗高度設成內容的高度再拍（視窗比內容高時，無頭 Chrome 會在下方再畫一次上面的內容；scrollHeight 在內容比視窗矮時回報視窗高，所以量格線的底邊）
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log('OK', file, `${w}×${ch}`);
+    });
+  }
 }
 
 if (errors) process.exitCode = 1;

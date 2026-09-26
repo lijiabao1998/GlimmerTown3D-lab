@@ -20,6 +20,7 @@ import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMark
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { countNear, getMaxRoadClass } from './rules/grid.ts';
 import { judgeWealth, landStaticAt } from './rules/land.ts';
+import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, neutralUpkeepIn, roadUpkeep, scoreCounts, settleDay, OTHER_INCOME_KEYS, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
 export interface Sim {
   city: City;                       // 給畫面與歷史用（建築清單、occ 跟 w 同步）
@@ -41,16 +42,23 @@ export interface Sim {
   money: number; diff: number; loan: { remain: number; daily: number } | null; msIdx: number; bestStar: number; bailoutDay: number;
   // 施工（D011，src/sim/edit.ts）：stroke＝下一筆手勢的編號（事件的 g）；txns＝同一天的交易（復原用，過一天清空）
   stroke: number; txns: unknown[];
+  dozeArm: { i: number; t: number } | null;   // 單格拆二級以上的建築：第一次只「預備」，3 秒內再拆一次才拆（實驗線 62983–62992）
 }
 
 export interface DayReport {
   day: number; pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
   dem: [number, number, number]; employed: number; workers: number; weather: number; cap: number; powered: number;
   grown: number; upgraded: number;
-  money: number; settle: SettleReport | null;   // D011：結算後的資金；沙盒（diff 3）不結算＝null
+  money: number; settle: SettleReport;          // D011：結算後的資金與當天的結算（沙盒照算，只是不入帳）
 }
 // 一天的結算（D011，src/sim/rules/money.ts）：收入、維護費、淨額，以及當天發生的里程碑、星等獎金、紓困
 export interface SettleReport { income: number; upkeep: number; net: number; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }
+// 第 2 類系統當天的值（經濟快照、貿易進口、城市活動、夜間城市……本線沒搬）。只給對拍用：把實驗線那一天探針讀出的值代進本線公式，
+// 收入、維護費、結算後資金要跟實驗線逐位相等（D011 驗收 3）。平常不傳＝乘數 1、沒有進口、沒有其他收入（D011 卡第 5 節）
+export interface Class2In {
+  mul?: Partial<TaxMul>; nightCommerceGold487?: number; other?: Partial<OtherIncome>; eventTax?: number | null;
+  upkeep?: Partial<Omit<UpkeepIn, 'roadUpkeep' | 'counts' | 'pop' | 'tech' | 'spec' | 'svcBudget'>>;
+}
 
 // ---- 讀檔（實驗線 load() 66863 起，只搬模擬會讀到的部分）----
 // 地面：路（rd 1–4 → road／hw／bridge，66879–66880）；無等級的路補 2（高速 5）（66896）；分區、樹。
@@ -94,7 +102,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
     money: save.money, diff: save.df, loan: save.ln ? { remain: save.ln[0], daily: save.ln[1] } : null, msIdx: save.msIdx, bestStar: save.star, bailoutDay: -999,
-    stroke: 1, txns: [],
+    stroke: 1, txns: [], dozeArm: null,
   };
 }
 
@@ -106,7 +114,7 @@ export function markStale(s: Sim, x: number, y: number, r: number) {
 
 // ---- 一天（tick() 54945–56192 的順序）----
 // fullLand：每天整張重算地價基準（實驗線的做法），給守衛比對「只重算變動那一框」的結果逐位相同
-export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
+export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } = {}): DayReport {
   const { w, g } = s, N = w.N, nn = N * N, f = fieldsOf(g);
   // 54948 buildTickIndex：有建築的格（含 ref）、分區格、商業分區格數，都升序
   const tickBld: number[] = [], tickZone: number[] = [];
@@ -202,7 +210,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
   }
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
   // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
-  const settle = settleToday(s, tickBld);                                 // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  const settle = settleToday(s, tickBld, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
@@ -211,9 +219,23 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
   };
 }
 
-// 一天的資金結算（D011）：等 src/sim/rules/money.ts 接上
-function settleToday(_s: Sim, _tickBld: number[]): SettleReport | null {
-  return null;
+// 一天的資金結算（D011，src/sim/rules/money.ts，逐項對拍）：55868–55968 收稅（照 tickBld 順序，當天新長的接在後面）、
+// 55969–56027 維護費、56028 城市活動、56053 結算、56079 貸款、56081 里程碑、56098–56131 星等、56142 紓困。
+// 第 2 類系統（經濟快照 T481／T482、城市活動 T299、夜間城市 T487、進口）沒搬：乘數 1、進口費 0、沒有城市活動（D011 卡第 5 節）。
+// 沙盒（diff 3）照算收支、只是不入帳（56053），里程碑與星等照給（實驗線也是）。
+function settleToday(s: Sim, tickBld: number[], c2?: Class2In): SettleReport {
+  const w = s.w, f = fieldsOf(s.g);
+  let chN = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (b && !b.ref && b.k === 42) chN++; }   // 55874 civicMul：市政廳數（第一個迴圈 55055 起數的）
+  const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });
+  // 55988、56025、56027 其他收入：D011 的城都是 0（對拍時照實驗線那天的值加）；56028 城市活動：沒搬（對拍時照實驗線那天的稅率）
+  const pre = c2?.other ? addOtherIncome(inc.income, { ...Object.fromEntries([...OTHER_INCOME_KEYS, 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487'].map(k => [k, 0])), ...c2.other } as OtherIncome) : inc.income;
+  const income = cityEventIncome(pre, c2?.eventTax ?? null);
+  const c = inc.counts;
+  const upkeep = dailyUpkeep({ ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec,
+    counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals } }), ...c2?.upkeep });   // 其他設施數（55055–55140）沒搬：D011 蓋不出來
+  const sc = scoreCounts(w, f, tickBld);
+  const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: 2 });   // 55260：沒有垃圾場，垃圾比例 2（0 分）
+  return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
 }
 
 // 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步

@@ -29,6 +29,7 @@ import { codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_SEEDS, STARTER_DAYS } from '../src/content/starter.ts';
 import { TRAJ_FIELDS, trajectory, r6 } from './unit-d010-sim.mjs';
+import { CONFIGS, preloadOf } from './lab-configs.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const LAB = path.resolve(arg('lab', process.env.LAB_DIR || path.join(ROOT, '..', 'GlimmerTown-lab')));
@@ -45,16 +46,7 @@ const J = JSON.stringify;
 // 逐日數字（兩邊同一組欄位、同一個順序）
 const FIELDS = TRAJ_FIELDS;
 
-// 實驗線有開關的上層系統（行號 @ d23c18d，見 D010 卡「回退值」一節）
-const FALLBACK_FLAGS = ['__legacyPower450', '__legacyPower471', '__noHousing488', '__noEnterprise489', '__noDevelopment512', '__noMobility509', '__noBalance510', '__noFinancialFeedback510',
-  '__noMobility491', '__noIncident493', '__legacyWater449', '__noGpn508', '__noBusinessCycle490', '__noCivicServices495', '__noJunction503', '__noSocial505',
-  '__noCapability506', '__noInnovation507', '__noFiscal515', '__noPolicy504'];
-const CONFIGS = {
-  default: { flags: ['__legacyPower450', '__legacyPower471'], disasters: true },
-  fallback: { flags: FALLBACK_FLAGS, disasters: false },
-};
-const preloadOf = c => "try{localStorage.setItem('glimmerville.v1.slot','3');" + (c.disasters ? "localStorage.removeItem('glimmerville.v1.ds')" : "localStorage.setItem('glimmerville.v1.ds','0')") + '}catch(e){};'
-  + c.flags.map(f => `window.${f}=true;`).join('');
+// 兩種設定、預載開關：tools/lab-configs.mjs（D011 抽出來共用，內容不變）
 
 const RUN = (seedCode, days, shotDays) => `(()=>{
   const rci=()=>{const C={1:[0,0,0,0],2:[0,0,0,0],3:[0,0,0,0]},N=GV.N();

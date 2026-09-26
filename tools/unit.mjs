@@ -497,6 +497,19 @@ for (const [name, count] of Object.entries(D009_COUNTS)) {
   await d010SimGuards(log);
 }
 
+// ---- D011：建造規則黃金樣本（unit-d011-build.mjs）、資金公式黃金樣本（unit-d011-money.mjs）、施工整合層（unit-d011-edit.mjs：
+//      開局碼、帳、同步、重播、存讀檔、地價狀態機、沙盒、推進一天耗時）、實驗線實跑錨點與分享碼互通（unit-d011-parity.mjs）----
+{
+  const { d011BuildGuards } = await import('./unit-d011-build.mjs');
+  await d011BuildGuards(log);
+  const { d011MoneyGuards } = await import('./unit-d011-money.mjs');
+  await d011MoneyGuards(log);
+  const { d011EditGuards } = await import('./unit-d011-edit.mjs');
+  await d011EditGuards(log);
+  const { d011ParityGuards } = await import('./unit-d011-parity.mjs');
+  await d011ParityGuards(log);
+}
+
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
   const bad = [];
