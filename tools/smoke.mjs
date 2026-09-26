@@ -5,6 +5,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { withBrowser, ROOT } from './cdp.mjs';
 import { GROUND } from '../src/render/ground.ts';
+import { kindTableFrom } from '../src/content/kindTable.ts';
+import { STARTER_DAYS } from '../src/content/starter.ts';
+import { simHash } from '../src/sim/day.ts';
+import { runStarter } from './unit-d010-sim.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const t0 = Date.now();
@@ -114,7 +118,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   const mob = await page.evaluate(`(()=>{const id=__gt.bigOne(),p=__gt.pickTest(id);const t=__gt.openTile(p.want[0],p.want[1]);const b=document.querySelector('#bio').getBoundingClientRect(),h=document.querySelector('#bio h2').getBoundingClientRect(),x=document.querySelector('#bio .x').getBoundingClientRect();
     return {title:t.title,inView:b.top>=0&&b.bottom<=innerHeight&&b.left>=0&&b.right<=innerWidth,titleIn:h.top>=b.top&&h.bottom<=b.bottom,closeIn:x.top>=b.top&&x.right<=b.right+1,
       buttons:[...document.querySelectorAll('#picks button')].map(e=>e.textContent)};})()`);
-  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 5, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；五顆切換鈕都在（D007 多了「全種類」）', JSON.stringify(mob));
+  log(mob.inView && mob.titleIn && mob.closeIn && mob.buttons.length === 6, 'D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；六顆切換鈕都在（D007 多了「全種類」、D010 多了「起步城」）', JSON.stringify(mob));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
   // ===== D004：住商工街區三檔（?blocks=a|b|c）=====
   const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
@@ -338,6 +342,43 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   log(sw.n === 4 && sw.inView && /^B/.test(sw.on0) && sw.m0 === 'b' && /^C/.test(sw.on1) && sw.m1 === 'c' && /blocks=c/.test(sw.url1) && /D003/.test(sw.on2) && sw.m2 === null && /blocks=off/.test(sw.url2),
     'D004／D005 手機直式：四顆街區切換鈕都在畫面內；預設 B，點 C、點 D003 都換檔、網址跟著改', JSON.stringify(sw));
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+
+  // ---- D010 起步城逐日模擬 ----
+  {
+    const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8');
+    const KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
+    const nodeHash = simHash(runStarter(R('src/content/samples/starter.code.txt'), KT, vrank).s);
+    await open('sample=starter&clean=1');
+    const s0 = await page.evaluate('__gt.sim()');
+    const f1 = await page.evaluate('__gt.frames()'); await new Promise(r => setTimeout(r, 1000)); const f2 = await page.evaluate('__gt.frames()');
+    log(!!s0 && s0.day === 1 && s0.buildings === 2 && s0.events === 1 && !s0.playing && f2 - f1 <= 1, 'D010 起步城：第 1 天、電廠與警察局 2 棟、歷史只有匯入一筆；載入時不自動播放、靜止不重畫',
+      s0 ? `第 ${s0.day} 天、${s0.buildings} 棟、${s0.events} 筆、播放 ${s0.playing}、靜止 1 秒 ${f2 - f1} 幀` : '沒有模擬');
+    const s1 = await page.evaluate(`__gt.simStep(${STARTER_DAYS})`);
+    log(s1 && s1.hash === nodeHash && s1.day === 1 + STARTER_DAYS, `D010 瀏覽器推 ${STARTER_DAYS} 天的狀態雜湊＝Node 跑的（同一份程式、同一個種子）`, s1 ? `瀏覽器 ${s1.hash}、Node ${nodeHash}；第 ${s1.day} 天 人口 ${s1.pop}、住商工 ${s1.rci[1][0]}／${s1.rci[2][0]}／${s1.rci[3][0]}` : '沒有結果');
+    const d = await page.evaluate('({i: __gt.renderInfo(), owners: __gt.owners(), drawn: __gt.blockInfo() ? __gt.blockInfo().drawn.length : 0, blank: ' + blankCheck + '})');
+    log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.drawn > 50 && d.blank > 150, `D010 手機預算：起步城第 ${1 + STARTER_DAYS} 天三角形 ≤ 118,884（D003 種子城基線 1.5 倍）、draw call ≤ 18；畫面非空白`,
+      `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；畫出 ${d.drawn} 個街區、${d.owners} 棟；變異數 ${d.blank}`);
+    await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
+    const ms = [];
+    try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild()')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
+    const med = [...ms].sort((a, b) => a - b)[1];
+    log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
+    await page.evaluate('__gt.loadSample("starter")');
+    await page.evaluate('__gt.simSpeed(2)');
+    const fA = await page.evaluate('(__gt.simPlay(true), __gt.frames())');
+    await new Promise(r => setTimeout(r, 1500));
+    const pl = await page.evaluate('(()=>{const a=__gt.sim(),f=__gt.frames();__gt.simPlay(false);const b=__gt.sim();return {day:a.day,f,rebuilds:b.rebuilds,playing:b.playing,speed:a.speed};})()');
+    log(pl.day >= 6 && pl.f > fA && pl.rebuilds >= 1 && !pl.playing && pl.speed === 10, 'D010 播放：10 天／秒播 1.5 秒會推進、畫面會畫、會重建；按暫停就停', JSON.stringify(pl));
+    const card = await page.evaluate('(()=>{__gt.simStep(20);const h=__gt.history().find(e=>e.t==="grow");if(!h)return null;return __gt.openTile(h.x,h.z);})()');
+    log(!!card && card.rows.some(r => /長出來（逐日模擬/.test(r)), 'D010 建築卡：逐日模擬長出來的建築，卡上列出它哪一天長出來', card ? card.rows.slice(0, 2).join('／') : '沒有卡片');
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=starter');
+    const mb = await page.evaluate(`(()=>{const inV=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;};
+      const bar=document.getElementById('timeline'),play=document.getElementById('play'),sp=[...document.querySelectorAll('#spd button')];
+      return {bar:!bar.hidden,play:inV(play),speeds:sp.length,speedsIn:sp.every(inV),label:document.getElementById('ylabel').textContent,picks:document.querySelectorAll('#picks button').length};})()`);
+    log(mb.bar && mb.play && mb.speeds === 3 && mb.speedsIn && /第 1 天/.test(mb.label) && mb.picks === 6, 'D010 手機直式：播放列、播放鈕、三檔速度都在畫面內；顯示第幾天', JSON.stringify(mb));
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+  }
 
   // 零外部素材：整輪煙霧測試的所有網路請求都只連本機
   const ext = page.requests.filter(u => !/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u));

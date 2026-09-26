@@ -282,7 +282,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     });
     place(round, crownsR, false);
     place(cone, crownsC, true);
-    for (const m of [trunks, crownsR, crownsC]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); }
+    for (const m of [trunks, crownsR, crownsC]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); disposables.push(m); }   // D010：實例網格的矩陣／顏色緩衝要自己釋放（逐日重建會一直換場景）
   }
   // D005 前庭的樹（villa、住宅地坪）：八面體樹冠＋三稜樹幹，14 個三角形（野樹 40 個），不投影子
   if (yard.length) {
@@ -296,7 +296,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       q.position.y = t.y + 0.4 * sc; q.rotation.set(0, hash2(hx, hz, 15) * 3, 0); q.scale.set(sc, sc * 1.15, sc); q.updateMatrix(); yc.setMatrixAt(j, q.matrix);
       yc.setColorAt(j, col.setHSL(0.29 + hash2(hx, hz, 16) * 0.05, 0.42, 0.3 + hash2(hx, hz, 17) * 0.08, THREE.SRGBColorSpace));
     });
-    for (const m of [yt, yc]) { m.receiveShadow = true; scene.add(m); }
+    for (const m of [yt, yc]) { m.receiveShadow = true; scene.add(m); disposables.push(m); }
   }
   mark('trees');
 
@@ -314,6 +314,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
   if (style.softShadow) sun.shadow.radius = 3;
   scene.add(sun, sun.target);
+  disposables.push({ dispose: () => sun.shadow.dispose() });   // D010：陰影貼圖的算繪目標也要釋放
   mark('lights');
 
   // 點擊：打到建築就回那棟（格子取根格）；打到地面回那一格。樹不擋

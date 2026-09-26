@@ -1,0 +1,88 @@
+// D010 Node 守衛：起步城碼對帳、逐日推進的決定性、只接線、歷史重播、推進一天的耗時。由 tools/unit.mjs 呼叫。
+import fs from 'node:fs';
+import path from 'node:path';
+import { performance } from 'node:perf_hooks';
+import { ROOT } from './cdp.mjs';
+import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
+import { cityFromLab, cityStats, CITY_FORMAT } from '../src/sim/city.ts';
+import { kindTableFrom } from '../src/content/kindTable.ts';
+import { starterLayout, STARTER_SEEDS, STARTER_DAYS } from '../src/content/starter.ts';
+import { simFromSave, stepDay, simHash } from '../src/sim/day.ts';
+import { replayCity } from '../src/sim/replay.ts';
+
+const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
+const J = JSON.stringify;
+
+export function starterSim(code, KT, vrank) {
+  const r = decodeLabCode(code);
+  if (!r.ok) throw new Error('起步城碼解不開：' + r.error);
+  return simFromSave(r.save, code, KT, vrank);
+}
+export function runStarter(code, KT, vrank, days = STARTER_DAYS, onDay, opts = {}) {
+  const s = starterSim(code, KT, vrank), ms = [];
+  for (let d = 0; d < days; d++) { const t = performance.now(); const rep = stepDay(s, opts); ms.push(performance.now() - t); onDay?.(rep, s); }
+  return { s, ms };
+}
+
+export async function d010SimGuards(log) {
+  const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json')));
+  const vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
+  const code = read('src/content/samples/starter.code.txt'), meta = JSON.parse(read('src/content/samples/starter.json'));
+
+  // 驗收 4：起步城碼對帳（實驗線讀回的數字＝本線解碼），另核道路等級、佈局、地形沿用種子城
+  {
+    const r = decodeLabCode(code), c = cityFromLab(r.save, KT, code), st = cityStats(c);
+    const rc = {}; for (let i = 0; i < c.n * c.n; i++) if (c.road[i]) rc[c.rclass[i]] = (rc[c.rclass[i]] || 0) + 1;
+    log(J(st) === J(meta.expect) && meta.sameAsThisLine === true, '起步城碼：實驗線 GV.importCode 讀回的對帳數字＝本線解碼', `路 ${st.road[1]}、分區 ${st.zone.slice(1).join('／')}、建築 ${st.buildings}`);
+    log(J(rc) === J(meta.rc) && meta.rcSameAsThisLine === true, '起步城碼：逐格道路等級兩邊相同（決定新住宅密度）', J(rc));
+    const seed = decodeLabCode(read('src/content/samples/seed516.code.txt')).save, L = r.save.layers, S = seed.layers;
+    const lay = starterLayout(r.save.n, Uint8Array.from(S.ter, ch => ch.charCodeAt(0) - 48), Uint8Array.from(S.el, ch => ch.charCodeAt(0) - 48));
+    const used = new Set([...lay.roads, ...lay.zones.map(z => z[0]), ...lay.buildings.map(b => b.i)]);
+    const treesOnUsed = [...used].filter(i => L.tre.charCodeAt(i) !== 48).length;
+    const treesElse = [...Array(r.save.n * r.save.n).keys()].filter(i => !used.has(i) && L.tre[i] !== S.tre[i]).length;
+    log(L.ter === S.ter && L.el === S.el && treesOnUsed === 0 && treesElse === 0 && J(lay.buildings) === J(meta.layout.buildings) && lay.roads.length === meta.layout.roads && lay.zones.length === meta.layout.zones,
+      '起步城：地形、高地沿用種子城；用到的格子沒有樹、其餘樹不動；佈局＝starter.ts', `(${lay.x0},${lay.z0}) ${lay.size}×${lay.size}、第 ${r.save.day} 天、種子 ${r.save.seed}`);
+  }
+
+  // 驗收 1：決定性（同種子兩次雜湊相同、不同種子不同）
+  const A = runStarter(code, KT, vrank), B = runStarter(code, KT, vrank), C = runStarter(codeWithSeed(code, STARTER_SEEDS[1]), KT, vrank);
+  const hA = simHash(A.s), hB = simHash(B.s), hC = simHash(C.s);
+  log(hA === hB && hA !== hC, `決定性：起步城 ${STARTER_DAYS} 天，同種子兩次雜湊相同、換種子不同`, `${hA}＝${hB}；種子 ${STARTER_SEEDS[1]}：${hC}`);
+  const F = runStarter(code, KT, vrank, STARTER_DAYS, undefined, { fullLand: true });
+  log(simHash(F.s) === hA, '地價基準只重算污染變了的那一框＝實驗線每天整張重算（結果逐位相同，雜湊含 LANDBASE）', simHash(F.s));
+  const grew = A.s.city.buildings.filter(b => b.k <= 3).length, events = A.s.city.history.slice(1);
+  log(grew > 20 && events.length >= grew, `起步城自己長起來（${STARTER_DAYS} 天）`, `住商工 ${grew} 棟、人口 ${A.s.pop}、事件 ${events.length} 筆`);
+
+  // 驗收 5：歷史重播＝模擬結束時的建築清單（逐欄）；只有匯入事件的舊格式照讀
+  {
+    const rp = replayCity(code, A.s.city.history, KT, A.s.day);
+    const F = b => [b.id, b.k, b.lv, b.v, b.age, b.x, b.z, b.size, b.abandoned, b.builtDay];
+    const a = A.s.city.buildings.map(F), b = rp.buildings.map(F);
+    const bad = a.map((row, i) => J(row) === J(b[i]) ? null : `#${i}: 模擬 ${J(row)} ≠ 重播 ${J(b[i])}`).filter(Boolean);
+    log(a.length === b.length && bad.length === 0 && J(Array.from(rp.occ)) === J(Array.from(A.s.city.occ)), `歷史重播：匯入＋${events.length} 筆生長／升級事件重播出的建築清單＝模擬結束時（逐欄：id、種類、等級、變體、屋齡、位置、佔地、廢棄、蓋起日）`,
+      bad.slice(0, 3).join('；') || `${a.length} 棟逐欄相同、occ 相同`);
+    const r = decodeLabCode(code), c1 = cityFromLab(r.save, KT, code), old = replayCity(code, c1.history.slice(0, 1), KT);
+    log(J(cityStats(old)) === J(cityStats(c1)) && J(old.buildings) === J(c1.buildings) && CITY_FORMAT === 2, '歷史格式 2；只有匯入事件的舊格式（格式 1）照讀，重播＝原城', `格式 ${CITY_FORMAT}`);
+    const order = events.every((e, i) => i === 0 || e.day >= events[i - 1].day);
+    const ups = events.filter(e => e.t === 'upgrade');
+    log(order && ups.every(e => e.lv >= 2 && e.lv <= 3), '事件只增不改：日子不倒退；升級都是升到 2、3 級', `生長 ${events.length - ups.length}、升級 ${ups.length}`);
+  }
+
+  // 驗收 2：只接線——day.ts 每一步都註明實驗線行號、依序出現；公式都從 src/sim/rules/ 來
+  {
+    const src = read('src/sim/day.ts');
+    const steps = ['54948', '54950', '54964', '54996', '55002', '55008', '55011', '55154', '55163', '55164', '55240', '55241', '55246', '55251', '55254', '55329', '55578', '55585', '55586', '55594', '55596', '55624', '55597', '55628', '55676'];
+    let at = src.indexOf('export function stepDay'), miss = [];
+    for (const s of steps) { const p = src.indexOf(s, at); if (p < 0) miss.push(s); else at = p; }
+    const rulesImports = [...src.matchAll(/import \{([^}]*)\} from '\.\/rules\/[a-z]+\.ts'/g)].flatMap(m => m[1].split(',').map(x => x.trim()).filter(x => x && !x.startsWith('type ')));
+    const unused = rulesImports.filter(fn => (src.match(new RegExp(`\\b${fn}\\b`, 'g')) || []).length < 2);
+    log(miss.length === 0 && unused.length === 0 && rulesImports.length >= 20, 'day.ts 只接線：每一步照 tick() 順序註明行號；公式都從 src/sim/rules/ import 並呼叫', miss.length ? '缺行號 ' + miss.join(',') : unused.length ? '沒用到 ' + unused.join(',') : `${steps.length} 個行號依序、${rulesImports.length} 個規則函式`);
+  }
+
+  // 驗收 8：推進一天（不含重建）在桌機上 ≤ 5 ms
+  {
+    const ms = [...A.ms, ...B.ms].sort((a, b) => a - b), mean = ms.reduce((a, b) => a + b, 0) / ms.length, p95 = ms[Math.floor(ms.length * .95)];
+    log(mean <= 5 && p95 <= 5, '推進一天（不含重建）≤ 5 ms', `平均 ${mean.toFixed(2)} ms、P95 ${p95.toFixed(2)} ms、最大 ${ms.at(-1).toFixed(2)} ms（${ms.length} 天）`);
+  }
+  return { hash: hA };
+}

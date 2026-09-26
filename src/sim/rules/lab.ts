@@ -17,6 +17,9 @@ export interface Tile {
   zone?: number; bld?: Bld | null; ruin?: number | boolean; office?: number | boolean;
   lv475?: number | boolean; ud475?: number | boolean;   // 手工配電線（架空／地下），也能帶電（T475）
   hv471?: number | boolean; ug471?: number | boolean;   // 高壓線（T471）：連到發電端的 k148 可啟動配電路網
+  tree?: number;                                        // 樹（變體號，0＝沒有；50974 plantTreeAt597）：rebuildCov 對鄰域污染 −2（53151）
+  rdec?: number | boolean; bus?: number | boolean;      // 道路裝飾、公車站（51733、51737）：rebuildCov 蓋 rdec／bus 覆蓋場（53149–53150）
+  bridge?: number | boolean;                            // 水上道路（51645）
 }
 export interface World { N: number; tiles: Tile[] }
 export const idx = (w: World, x: number, y: number) => y * w.N + x;                         // 39731

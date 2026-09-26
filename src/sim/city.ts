@@ -6,7 +6,8 @@
 import type { LabSave } from '../io/labcode.ts';
 import { fnv1a } from './rng.ts';
 
-export const CITY_FORMAT = 1;
+// 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
+export const CITY_FORMAT = 2;
 
 export interface KindTable {
   size(k: number): number;      // 佔地邊長（格）
@@ -21,7 +22,10 @@ export interface CityBuilding {
   builtDay: number;             // 估計：匯入時的 day − age
 }
 
-export interface CityEvent { day: number; t: 'import'; source: string; gameVer: string; seed: number; codeHash: string; buildings: number }
+export interface ImportEvent { day: number; t: 'import'; source: string; gameVer: string; seed: number; codeHash: string; buildings: number }
+// 逐日模擬（D010）：住商工長出來（lv 1）、升一級；x、z 是根格，v 是當下挑的變體。只增不改（規則 4）
+export interface GrowEvent { day: number; t: 'grow' | 'upgrade'; x: number; z: number; k: number; lv: number; v: number }
+export type CityEvent = ImportEvent | GrowEvent;
 
 export interface City {
   format: number;

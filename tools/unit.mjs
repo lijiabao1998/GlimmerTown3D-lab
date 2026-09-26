@@ -489,6 +489,14 @@ for (const [name, count] of Object.entries(D009_COUNTS)) {
     missed.length ? missed.join('；') : detected.join('、'));
 }
 
+// ---- D010：服務覆蓋、污染、地價、教育場照實驗線原始碼對拍（tools/unit-d010-fields.mjs）；起步城逐日模擬（tools/unit-d010-sim.mjs）----
+{
+  const { d010FieldGuards } = await import('./unit-d010-fields.mjs');
+  await d010FieldGuards(log);
+  const { d010SimGuards } = await import('./unit-d010-sim.mjs');
+  await d010SimGuards(log);
+}
+
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
   const bad = [];

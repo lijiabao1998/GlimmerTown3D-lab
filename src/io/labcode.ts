@@ -89,6 +89,15 @@ export function encodeLabCode(data: Record<string, unknown>, opts: { prefix?: bo
   return (opts.prefix ? SHARE_PREFIX : '') + base64FromUtf8(JSON.stringify(o));
 }
 
+// 換種子（D010 多種子對照）：只改存檔 JSON 的 seed 欄位，其餘（含 z:1 與 RLE 字串）原樣保留；前綴照原碼。
+// 實驗線讀檔用 mulberry32(seed^day) 重設亂數（index.html 66876），所以換 seed 就是換一條亂數流
+export function codeWithSeed(code: string, seed: number): string {
+  const c = code.replace(/\s+/g, ''), pre = c.startsWith(SHARE_PREFIX) ? SHARE_PREFIX : '';
+  const o = JSON.parse(utf8FromBase64(c.slice(pre.length)));
+  o.seed = seed | 0;
+  return pre + base64FromUtf8(JSON.stringify(o));
+}
+
 const isInt = (x: unknown): x is number => typeof x === 'number' && Number.isInteger(x);
 
 export function decodeLabCode(input: string): DecodeResult {

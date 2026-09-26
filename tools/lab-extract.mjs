@@ -1,5 +1,5 @@
 // 從 2D 實驗線抽出本線要用的資料（D003、D004、D007、D009）。只讀實驗線，不寫它的任何檔案；它的存檔槽固定用 3（實驗線 AUTORUN 邊界）。
-// 用法：node tools/lab-extract.mjs --lab=scratch/lab-src [--days=120] [--part=all|d003|d004|d007|d009]
+// 用法：node tools/lab-extract.mjs --lab=scratch/lab-src [--days=120] [--part=all|d003|d004|d007|d009|d010]
 // 產出（D003）：
 //   src/content/lab-kinds.json        186 種建築：名稱、分類、佔地、每級高度（量精靈圖）、出處行號
 //   src/content/samples/<id>.code.txt 樣本分享碼（只留本線會讀的欄位；實驗線自己也能匯入）
@@ -11,6 +11,7 @@
 //   src/content/samples/d004-massing.json         1,728 組量體（k1–3 × lv1–3 × 寬 1–4 × 高 1–4 × v0–11）
 //   scratch/lab/d004_<id>_<視角>_2d.png            匯入樣本碼、v 還原成存檔值之後的實驗線 2D 畫面（D004 五格對照的第一格，不進版本庫）
 // 產出（D009）：src/content/samples/d009-live.json：執行期變體排名、24 張道路／電源與住宅供電實跑樣本。
+// 產出（D010）：src/content/samples/starter.code.txt／starter.json：起步城分享碼與實驗線讀回的對帳數字（含逐格道路等級）。
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -432,6 +433,57 @@ if (PARTS.has('d007')) {
     if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
   });
   console.log(`D007 抽取完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
+}
+
+// ---- D010：起步城分享碼 ----
+// 以種子城樣本碼為樣板（實驗線 load() 會讀的欄位都在），只留地形（ter、el、tre），其餘逐格圖層清空；
+// 擺上 src/content/starter.ts 的起步城（2 級路、住商工三區、燃煤電廠、警察局），路、分區、建築那幾格的樹清掉（實驗線 doPlace 放路／分區／建築也會清）。
+// 第 1 天（同實驗線 newWorld 的起點；季節由 day 導出）、沙盒 df 3（不扣錢）、服務預算與模組狀態拿掉（實驗線讀檔補預設）。
+// 實驗線 GV.importCode 讀回後量對帳數字（同 D003／D007），另外逐格核對道路等級：本線 cityStats 不含 rc，而 rc 決定新住宅的密度。
+if (PARTS.has('d010')) {
+  const t0 = Date.now();
+  const { starterLayout, STARTER_RC } = await import('../src/content/starter.ts');
+  const { cityFromLab, cityStats } = await import('../src/sim/city.ts');
+  const { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(OUT, 'lab-kinds.json'), 'utf8')));
+  const rawOf = code => { const o = JSON.parse(Buffer.from(code.replace(/^GVX1:/, ''), 'base64').toString('utf8')); if (o.z === 1) { for (const f of RLE_FIELDS) if (typeof o[f] === 'string') o[f] = rleDecode(o[f]); delete o.z; } return o; };
+  const g = rawOf(fs.readFileSync(path.join(SAMPLES, 'seed516.code.txt'), 'utf8')), N = g.n, nn = N * N;
+  const ter = Uint8Array.from(g.ter, c => c.charCodeAt(0) - 48), el = Uint8Array.from(g.el || '0'.repeat(nn), c => c.charCodeAt(0) - 48);
+  const lay = starterLayout(N, ter, el);
+  for (const f of RLE_FIELDS) if (typeof g[f] === 'string' && !['ter', 'el', 'tre'].includes(f)) g[f] = '0'.repeat(nn);
+  const put = (s, i, ch) => s.slice(0, i) + ch + s.slice(i + 1);
+  let rd = g.rd, rcl = g.rcl, zn = g.zn, tre = g.tre;
+  for (const i of lay.roads) { rd = put(rd, i, '1'); rcl = put(rcl, i, String(STARTER_RC)); tre = put(tre, i, '0'); }
+  for (const [i, z] of lay.zones) { zn = put(zn, i, String(z)); tre = put(tre, i, '0'); }
+  for (const b of lay.buildings) tre = put(tre, b.i, '0');
+  Object.assign(g, { rd, rcl, zn, tre });
+  for (const f of ['bus_rt', 'riot', 'plague', 'sc', 'rk', 'sup', 'aim', 'aiR', 'gds', 'sb', 'cev', 'mln', 'sf', 'rdep', 'ach', 'ln', 'pol', 'region']) delete g[f];
+  g.df = 3; g.day = 1; g.nm = '起步城'; g.cam = { x: 0, y: 0, z: 1 };
+  g.bl = lay.buildings.map(b => [b.i, b.k, 1, b.v, 0]);
+  const code = encodeLabCode(g, { deflate: true });
+  const dec = decodeLabCode(code);
+  if (!dec.ok) throw new Error('起步城：本線解不開自己編的碼');
+  const city = cityFromLab(dec.save, KT, code), mine = cityStats(city);
+  const rcMine = {}; for (let i = 0; i < nn; i++) if (city.road[i]) rcMine[city.rclass[i]] = (rcMine[city.rclass[i]] || 0) + 1;
+  await withBrowser({ root: LAB, port: 8411, width: 1280, height: 800, gl: false, preload: PRELOAD, ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+    const ev = e => page.evaluate(e);
+    await open('');
+    // 匯入要求目前開著的地圖跟碼同尺寸：先開一張 72×72 新圖（不進遊戲，D010 對照也這樣跑）
+    const r = await ev(`(()=>{GV.setMapSize(${N});GV.newWorldSeeded(777);const ok=GV.importCode(${J(code)});GV.setSpeed(0);if(!ok)return null;
+      const m=${MEASURE};const rc={};for(let y=0;y<GV.N();y++)for(let x=0;x<GV.N();x++){const t=GV.tile(x,y);if(t.road)rc[t.rc]=(rc[t.rc]||0)+1;}return {m,rc};})()`);
+    if (!r) throw new Error('實驗線拒絕匯入起步城');
+    const expect = { ...r.m, roots: r.m.roots.map(q => [q.i, q.k, q.lv, q.age, q.size2]) };
+    const same = JSON.stringify(expect) === JSON.stringify(mine), rcSame = JSON.stringify(r.rc) === JSON.stringify(rcMine);
+    fs.writeFileSync(path.join(SAMPLES, 'starter.code.txt'), code);
+    fs.writeFileSync(path.join(SAMPLES, 'starter.json'), JSON.stringify({ id: 'starter', label: '起步城（D010）',
+      source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, how: '種子城樣本碼當樣板，只留地形（ter、el、tre），擺 src/content/starter.ts 的起步城；第 1 天、df 3；實驗線 GV.importCode 讀回後量對帳數字與逐格道路等級' },
+      codeChars: code.length, layout: { x0: lay.x0, z0: lay.z0, size: lay.size, center: lay.center, roads: lay.roads.length, zones: lay.zones.length, buildings: lay.buildings },
+      expect, rc: r.rc, sameAsThisLine: same, rcSameAsThisLine: rcSame }));
+    console.log(`起步城：路 ${lay.roads.length}、分區 ${lay.zones.length}、建築 ${lay.buildings.length}；碼 ${code.length.toLocaleString()} 字元；對帳相同 ${same}、道路等級相同 ${rcSame}（${J(r.rc)}）`);
+    if (!same || !rcSame) throw new Error('起步城：實驗線讀回的對帳數字跟本線解碼不同：' + J({ expect: expect.kinds, mine: mine.kinds, rcLab: r.rc, rcMine }));
+    if (page.errors.length) console.log('實驗線 console 錯誤（僅記錄）：\n  ' + page.errors.slice(0, 6).join('\n  '));
+  });
+  console.log(`D010 起步城碼完成（${((Date.now() - t0) / 1000).toFixed(0)}s）`);
 }
 
 // ---- D009：生長核心公式的執行期資料 ----

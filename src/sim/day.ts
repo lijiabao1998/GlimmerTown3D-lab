@@ -1,0 +1,220 @@
+// 逐日推進（D010）：把 D009 的生長核心公式（src/sim/rules/）照實驗線 tick() 的順序接起來。這裡只接線，不寫公式。
+// 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d，index.html 行號（每一步都註明；tick() 是 54945–56192）。
+// 上層系統一律接「實驗線自己沒就緒／不存在時」的回退值，名單與理由見 docs/D010-starter-city.md：
+//   經濟閉環、住房市場、企業、T471 分時調度（改走舊版供電 __legacyPower450）、通勤、噪音、事故、災害、火災、犯罪、疾病、
+//   水、污水處理廠、財政；另有卡上沒列、實驗線也沒開關的：城市活動 T299、垃圾清運、糧食供應、夜間城市、摩天樓合併。
+// 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
+import type { LabSave } from '../io/labcode.ts';
+import { cityFromLab, type City, type CityBuilding, type KindTable } from './city.ts';
+import { fnv1a } from './rng.ts';
+import { labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
+import { weatherStep, season, type WeatherState } from './rules/weather.ts';
+import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
+import { assignPower, computePower, powerCap } from './rules/power.ts';
+import { residentialHappy } from './rules/happy.ts';
+import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
+import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
+import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
+import { countNear, getMaxRoadClass } from './rules/grid.ts';
+import { judgeWealth, landStaticAt } from './rules/land.ts';
+
+export interface Sim {
+  city: City;                       // 給畫面與歷史用（建築清單、occ 跟 w 同步）
+  w: World;                         // 實驗線形狀的格子（規則直接讀寫）
+  g: Grids;                         // 覆蓋、污染、地價、教育等逐格場
+  rng: Rng; seed: number; day: number;
+  weather: WeatherState; vrank: Record<string, number[]>;
+  budget: SvcBudget; edu: EduCtx;
+  // 跨日的全域值（實驗線 tick() 讀昨天的、今天覆寫）
+  pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
+  dem: Record<number, number>; immWave: number; labor: Labor | null;
+  root: Map<number, CityBuilding>;  // 根格 → 城市建築（同步 lv、v、age）
+  kinds: KindTable;
+  // 地價基準要重算的範圍：'all'＝整張；[x0,y0,x1,y1]＝只有這一框；null＝輸入沒變（見 stepDay 54996）
+  landBox: 'all' | [number, number, number, number] | null;
+}
+
+export interface DayReport {
+  day: number; pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
+  dem: [number, number, number]; employed: number; workers: number; weather: number; cap: number; powered: number;
+  grown: number; upgraded: number;
+}
+
+// ---- 讀檔（實驗線 load() 66863 起，只搬模擬會讀到的部分）----
+// 地面：路（rd 1–4 → road／hw／bridge，66879–66880）；無等級的路補 2（高速 5）（66896）；分區、樹。
+// 建築：每筆 [i,k,lv,v,age,…]；住宅缺欄位補 den 3、we 1（66905 起）；一律 pw true、h .6；多格建築補 sz、h 1，ref 格指回根格（66900 起、FIX-J）。
+// 亂數：R＝mulberry32(seed^day)（66876），接著天氣重設 wxT＝3＋ri(5)（66931）——讀檔就抽掉一個亂數，這裡照抽。
+// 全域值：實驗線 load() 不重設 pop／jobs／cityHappy／dem，對照跑法會先開新圖（newWorld 51110：pop 0、jobs 0、cityHappy .6、dem {1:.5,2:0,3:0}、immWave 0）。
+export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, msz: (k: number) => number = k => kinds.size(k)): Sim {
+  const city = cityFromLab(save, kinds, code), n = save.n, nn = n * n;
+  const tiles: Tile[] = new Array(nn);
+  for (let i = 0; i < nn; i++) {
+    const rd = city.road[i], road = rd ? 1 : 0, hw = rd >= 3 ? 1 : 0;
+    let rc = city.rclass[i];
+    if (road && !rc) rc = hw ? 5 : 2;
+    tiles[i] = { t: city.ter[i], road, hw, bridge: rd === 2 || rd === 4 ? 1 : 0, rc, zone: city.zone[i], tree: city.tree[i], bld: null };
+  }
+  const root = new Map<number, CityBuilding>();
+  for (const r of save.bl) {
+    const [i, k, lv, v, age] = r, b = city.buildings[city.occ[i] - 1];
+    if (!b || b.z * n + b.x !== i) continue;                     // 重疊、出界的那筆城市模型已計數略過，這裡同樣不建
+    const sz = k === 9 ? (r[5] || 2) : msz(k);
+    const bld: Bld = k === 9 ? { k, lv: lv || 1, v, age, pw: true, h: 1, sz }           // 體育場：第 6 位是 sz（66900）
+      : k === 1 ? { k, lv, v, age, pw: true, h: .6, fire: r.length >= 7 ? r[5] : (r.length === 6 ? r[5] : 0), den: r.length >= 7 ? r[6] : 3, we: r.length >= 8 ? r[7] : 1 }
+      : { k, lv, v, age, pw: true, h: .6, fire: r[5] || 0 };
+    if (k !== 9 && sz > 1) { bld.sz = sz; bld.h = 1; }
+    tiles[i].bld = bld;
+    for (let dz = 0; dz < sz; dz++) for (let dx = 0; dx < sz; dx++) if (dx || dz) {
+      const x = b.x + dx, z = b.z + dz;
+      if (x < n && z < n) tiles[z * n + x].bld = { k, lv: 0, v: 0, age: 0, ref: [b.x, b.z] };
+    }
+    if (k <= 3 && b.abandoned) (bld as Bld & { abandoned?: number }).abandoned = 1;
+    root.set(i, b);
+  }
+  const w: World = { N: n, tiles };
+  const g = allocGrids(n), budget = { ...SVC_BUDGET_DEFAULT }, edu: EduCtx = { tech: [], spec: null, schoolLunch: false };
+  rebuildCov(w, g, budget, edu);                                 // 66940／66965
+  const rng = labRng(save.seed ^ save.day);
+  const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
+  return {
+    city, w, g, rng, seed: save.seed, day: save.day, weather, vrank, budget, edu,
+    pop: 0, jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null,
+    root, kinds, landBox: 'all',
+  };
+}
+
+// ---- 一天（tick() 54945–56192 的順序）----
+// fullLand：每天整張重算地價基準（實驗線的做法），給守衛比對「只重算變動那一框」的結果逐位相同
+export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
+  const { w, g } = s, N = w.N, nn = N * N, f = fieldsOf(g);
+  // 54948 buildTickIndex：有建築的格（含 ref）、分區格、商業分區格數，都升序
+  const tickBld: number[] = [], tickZone: number[] = [];
+  let czone = 0;
+  for (let i = 0; i < nn; i++) {
+    const t = w.tiles[i];
+    if (t.bld) tickBld.push(i);
+    if (t.zone) { tickZone.push(i); if (t.zone === 2) czone++; }
+  }
+  // 54949 噪音：沒搬（起步城的 k1／2／3／5／11 都不是噪音源，實驗線也是 0）
+  s.day++;                                                               // 54950
+  // 54952 事故 T493、54953 城市活動 T299：回退（沒有事故、沒有活動）
+  // 54956 乾旱只由災害設定；災害回退為關
+  const wx = weatherStep(s.weather, s.day, s.rng);                        // 54964–54975（F10，唯一在生長前抽亂數的一步）
+  s.weather = { weather: wx.weather, wxT: wx.wxT };
+  // 54991 通勤、54995 道路負載：回退（commutePenalty 0、roadLoad 0）
+  // 54996–55001：實驗線每天整張重算（55279 rebuildAccess468 每天把 landBox 設 null）。地價基準只取決於覆蓋、污染、噪音、
+  // 半徑 4 的犯罪（landStaticAt）；逐日模擬裡會變的只有「工業長出來」加的污染（55624，半徑 5），所以只重算那一框，結果逐位相同。
+  if (opts.fullLand || s.landBox === 'all') rebuildLandBase(w, g);
+  else if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) g.LANDBASE[y * N + x] = landStaticAt(w, f, x, y); }
+  s.landBox = null;
+  recomputeLandDynamic(g);                                                // 55002：沒有壅堵，LAND＝LANDBASE
+  // 55006 住房市場 T488：回退（沒就緒：入住率 1、住房懲罰 0、新住宅密度＝道路等級、升級係數 1）
+  const sea = season(s.day);
+  const nominal = computePower(w).cap, cap = powerCap(nominal, sea);   // 55008（F11，舊版供電）；55009 T471 調度略過
+  // 55010 水：舊版供水 wa＝pw && 附近有水設施 && 容量——起步城沒有水設施，一律 false；水壓／水質懲罰回退 0
+  const sewNeed = s.pop >= 500;                                           // 55011 sewerRequired442：昨天的人口 ≥500
+  const sewOkArr = new Uint8Array(nn);                                    // 沒有污水處理廠：需要時全城都不合格（兩種模式相同）
+  // 55015 死亡前置、55046 每日計數歸零：疾病回退，沒有死亡
+  const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
+  let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
+  const covAt = (i: number) => { const c: Record<string, number> = {}; for (const k in g.COV) c[k] = g.COV[k][i]; return c; };
+  for (const i of tickBld) {                                              // 55050／55150 主迴圈
+    const t = w.tiles[i], b = t.bld;
+    if (!b || b.ref) continue;
+    if (b.k > 3 && b.k !== 127) continue;
+    const x = i % N, y = (i / N) | 0;
+    b.wa = false;                                                         // 55157
+    if (b.k === 1 || b.k === 127) {
+      const residentPop = residentPopulation488(b, () => undefined);      // 55163：住房沒就緒＝入住率 1
+      const hp = residentialHappy({                                       // 55164–55236（F7）
+        c: covAt(i), POL: g.POL[i], NOISE: g.NOISE[i], commutePenalty: g.commutePenalty[i],
+        we: b.we, k: b.k, lv: b.lv, pw: b.pw, sick: b.sick, death: b.death,
+        ind: countNear(w, x, y, 3, tt => tt.bld && tt.bld.k === 3),
+        crime: countNear(w, x, y, 4, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime),
+        rc: getMaxRoadClass(w, x, y, 1), jam: 0,
+        drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: false, sewNeed, sewOk: !sewNeed,
+        weather: s.weather.weather, day: s.day, nightCity: { ready: false, happinessDelta: 0 }, housingPen: 0,
+        eventHappy: null, cookedReady: false, pol: null, rankIdx: 0, tvSignal: false, tech: s.edu.tech,
+      });
+      b.h = hp.h;
+      happySum += b.h; happyN++;                                          // 55239
+      if ((b.k === 127 ? b.pw && b.wa : b.pw) && !b.sick && !b.death) popN += residentPop;   // 55240
+    } else if (b.pw) {                                                    // 55241–55242（F8）
+      if (b.k === 2) jobsC += rciJobs(b, !!t.office); else jobsI += rciJobs(b, false);
+    }
+  }
+  // 55246–55250（F8）：名目就業＝商工＋各設施固定就業；設施計數（55055–55140）沒搬——起步城的電廠、警察局 lv1 都是 0
+  const jc = jobCounts(); jc.jobsC = jobsC; jc.jobsI = jobsI;
+  let pop = popN, jobs = nominalJobs(jc);
+  // 55251 企業 T489：回退（enterpriseRollback489 39560）＝四捨五入的名目值
+  jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
+  const cityHappy = happyN ? happySum / happyN : .6;                      // 55254
+  // 55256–55284 垃圾、55414 糧食：回退（沒有懲罰）；55426 災害：回退為關
+  const labor = laborMarket481(pop, jobs, null, s.day);                   // 55329（F2，企業沒就緒那一支）
+  const L = legacyDemand({ pop, jobs, cityHappy, czone, jobsC, jobsI, indSubsidy: false, tech: s.edu.tech });   // 55578–55584（F1）
+  const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, null);                          // 55585（F3，經濟沒就緒）
+  const dem = { 1: housingRciDemand488(E.r, null), 2: E.c, 3: E.i };      // 55586–55587（F4，住房沒就緒）
+  const im = immigration(s.immWave, pop, s.day, cityHappy, dem[1]);       // 55594–55595（F4）
+  const dMul = demoMul(cityHappy, im.immWave, 0);                         // 55596：交通層 T509、財政 T510 沒就緒＝0
+  s.pop = pop; s.jobs = jobs; s.jobsC = jobsC; s.jobsI = jobsI; s.cityHappy = cityHappy; s.dem = dem; s.immWave = im.immWave; s.labor = labor;
+  const ctx: GrowCtx = {
+    w, f, vrank: s.vrank, rng: s.rng, dem, cityHappy, demoMul: dMul, tech: s.edu.tech, tickZone, tickBld,
+    sewNeed, sewOk: sewOkArr, onIndustry: (x, y) => { stampPolSrc(g, x, y, 3, 1); markLand(s, x, y, POL_SRC[3].r); },   // 55624：工業一長出來就是污染源（同一天的 judgeWealth 就讀得到）
+  };
+  const { spawned } = spawnStep(ctx);                                     // 55597–55627（F5）
+  const ups = upgradeStep(ctx);                                           // 55628–55652（F6）
+  if (s.day % 30 === 0) {                                                 // 55676–55686：每 30 天住宅財富往判定值移一級（F9 judgeWealth）
+    for (const i of tickBld) {
+      const b = w.tiles[i].bld;
+      if (!b || b.k !== 1) continue;
+      const cur = b.we !== undefined ? b.we : 1, tgt = judgeWealth(w, f, i % N, (i / N) | 0);
+      if (tgt > cur) b.we = cur + 1; else if (tgt < cur) b.we = cur - 1;
+    }
+  }
+  // 55691 摩天樓合併（要有水）、55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：回退（不發生、不就緒）
+  syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
+  return {
+    day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
+    weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length,
+  };
+}
+
+// 污染變了的那一框，明天開頭重算地價基準
+function markLand(s: Sim, x: number, y: number, r: number) {
+  const N = s.w.N, b: [number, number, number, number] = [Math.max(0, x - r), Math.max(0, y - r), Math.min(N - 1, x + r), Math.min(N - 1, y + r)];
+  if (s.landBox === 'all') return;
+  s.landBox = s.landBox ? [Math.min(s.landBox[0], b[0]), Math.min(s.landBox[1], b[1]), Math.max(s.landBox[2], b[2]), Math.max(s.landBox[3], b[3])] : b;
+}
+
+// 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步
+function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: number; v: number }[]) {
+  const c = s.city, n = c.n;
+  for (const { i, b } of grown) {
+    const x = i % n, z = (i / n) | 0, size = s.kinds.size(b.k);
+    const cb: CityBuilding = { id: c.buildings.length + 1, k: b.k, lv: b.lv, v: b.v, age: b.age, x, z, size, abandoned: false, builtDay: s.day };
+    c.buildings.push(cb);
+    c.occ[i] = cb.id;
+    s.root.set(i, cb);
+    c.history.push({ day: s.day, t: 'grow', x, z, k: b.k, lv: b.lv, v: b.v });
+  }
+  for (const u of ups) {
+    const cb = s.root.get(u.i)!;
+    cb.lv = u.lv; cb.v = u.v;
+    c.history.push({ day: s.day, t: 'upgrade', x: cb.x, z: cb.z, k: cb.k, lv: u.lv, v: u.v });
+  }
+  for (const [i, cb] of s.root) { const b = s.w.tiles[i].bld; if (b) { cb.age = b.age; cb.lv = b.lv; cb.v = b.v; } }
+  c.day = s.day;
+}
+
+// 狀態雜湊（決定性守衛）：日子、全域值、天氣、每棟建築（位置、種類、等級、變體、屋齡、通電、幸福、財富、密度）、污染與地價基準
+export function simHash(s: Sim) {
+  const blds = s.city.buildings.map(b => [b.x, b.z, b.k, b.lv, b.v, b.age]);
+  const bl = [...s.root.keys()].map(i => { const b = s.w.tiles[i].bld!; return [i, b.pw ? 1 : 0, b.h, b.we ?? -1, b.den ?? -1]; });
+  return fnv1a(JSON.stringify([s.day, s.pop, s.jobs, s.jobsC, s.jobsI, s.cityHappy, s.dem, s.immWave, s.weather, blds, bl, Array.from(s.g.POL), Array.from(s.g.LANDBASE)]));
+}
+
+export function simCounts(s: Sim) {
+  const rci = { 1: [0, 0, 0, 0], 2: [0, 0, 0, 0], 3: [0, 0, 0, 0] } as Record<number, number[]>;
+  for (const b of s.city.buildings) if (b.k >= 1 && b.k <= 3) { rci[b.k][0]++; rci[b.k][b.lv]++; }
+  return rci;
+}

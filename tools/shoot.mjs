@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|all] [--seed=5162026] [--out=scratch/shots]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|all] [--seed=5162026] [--out=scratch/shots]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -345,6 +345,42 @@ if (want('d008')) {
       fs.writeFileSync(path.join(out, `D008-${name.replace('_', '-')}-compare.jpg`), Buffer.from(shot.data, 'base64'));
       console.log('OK', `D008-${name.replace('_', '-')}-compare.jpg`);
     }
+  });
+}
+
+// D010：起步城第 0、30、60、120 天（逐日模擬 seed 5162026，B 檔）｜實驗線同一天的 2D（回退設定、第一個種子，tools/lab-compare.mjs --shots 拍在 scratch/lab/）；手機直式一張。
+// 視角同實驗線 GV.lookAt(36,32)＋zoom .75（3D 縮放＝3.42×z，D003 卡）
+if (want('d010')) {
+  const DAYS = [0, 30, 60, 120], q = 'sample=starter&at=36,32&zoom=2.565&clean=1';
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await open(q);
+    let at = 0;
+    for (const d of DAYS) { if (d > at) { await page.evaluate(`__gt.simStep(${d - at})`); at = d; } await new Promise(r => setTimeout(r, 300)); await save(page, `d010_day${d}_3d`); }
+    errors += page.errors.length;
+  });
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=starter');
+    await page.evaluate('__gt.simStep(60)');
+    await new Promise(r => setTimeout(r, 400));
+    await save(page, 'D010-mobile');
+    errors += page.errors.length;
+  });
+  const lab = path.join(ROOT, 'scratch/lab');
+  const cells = DAYS.map(d => { const two = path.join(lab, `d010_day${d}_2d.png`), has = fs.existsSync(two); if (has) fs.copyFileSync(two, path.join(out, `d010_day${d}_2d.png`)); return [d, has]; });
+  const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption>${src ? `<img src="${src}">` : '<div class="none">（沒有這一格的圖：先跑 tools/lab-compare.mjs --shots）</div>'}</figure>`;
+  fs.writeFileSync(path.join(out, 'd010_compare.html'), `<!doctype html><meta charset="utf-8"><style>
+    body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}
+    .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}
+    img,.none{display:block;width:800px;height:500px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D010 起步城逐日模擬：同一個起點、同一個種子（5162026）</h1><p class="s">左：2D 實驗線 v13.43（d23c18d），上層系統用它自己的開關關成回退值；右：3D（D009 公式照 tick() 順序接線）。畫面中央 800×500，1:1。</p>
+    <div class="g">${cells.map(([d, has]) => cell(has ? `d010_day${d}_2d.png` : '', `第 ${d} 天・2D 實驗線`) + cell(`d010_day${d}_3d.png`, `第 ${d} 天・3D`)).join('')}</div>`);
+  await withBrowser({ root: out, entry: 'd010_compare.html', width: 1644, height: 2200, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: 'http://127.0.0.1:8311/d010_compare.html' });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>=4&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D010-compare.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK', 'D010-compare.jpg');
   });
 }
 
