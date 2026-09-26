@@ -1,15 +1,15 @@
 // 2D 城市模式（D003）：把 2D 實驗線的分享碼解碼成城市，畫成 3D。
 // D011 起是建造模式：預設開「我的城」（有存檔時）或新城；種子城、AI 城、全種類照舊只能看。
 // 網址參數：?mode=city（預設）&sample=mine|newcity|starter|seed516|ai120|gallery &style=A|B|C（對照用）&at=x,z|center &zoom= &clean=1（拍照，藏介面）
-//           &blocks=a|b|c|off（D004 住商工街區三檔；D005 起不帶＝B 照實驗線，off＝D003 現況，只留給守衛用、面板上沒有這一鈕）
+//           &blocks=a|b|c|off（D004 住商工街區三檔；D005–D011 不帶＝B 照實驗線，D012 起不帶＝C 補畫 D0；off＝D003 現況，只留給守衛用、面板上沒有這一鈕）
 //           &sample=starter（D010 起步城：逐日模擬；D011 起可以蓋，照實驗線沙盒規則免費、不存檔）
 //           &sample=newcity（D011 新城：種子城地形的空地、標準難度 $3,000；自動存成「我的城」）
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityFromLab, cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
-import { loadCode, saveCode, SAVE_LIMIT } from './io/save.ts';
+import { loadCode, saveCode, viewCode, SAVE_LIMIT } from './io/save.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng } from './sim/rules/lab.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
@@ -58,12 +58,16 @@ export function startCity() {
   // D011：網址指定就照指定；沒指定時有存檔開「我的城」、沒有就開新城。
   // 網址指定新城、又已經有我的城：跟選單一樣先問（審查：之前網址這條路不問就蓋掉我的城）；不要就開我的城
   const qs = q.get('sample') ?? '';
-  let sampleId = SAMPLES[qs] || (qs === 'mine' && readSave()) ? qs : readSave() ? 'mine' : 'newcity';
+  // 網址參數一律用 Object.hasOwn 查表（D012 研究：?blocks=constructor、?sample=constructor 會通過 in／[] 查到 Object 原型上的東西；sample 那一條開頁就丟例外）
+  const own = (o: object, k: string) => Object.hasOwn(o, k);
+  let sampleId = own(SAMPLES, qs) || (qs === 'mine' && readSave()) ? qs : readSave() ? 'mine' : 'newcity';
   if (qs === 'newcity' && readSave() && !confirm('開新城會蓋掉目前的「我的城」，要繼續嗎？')) sampleId = 'mine';
-  const tone: Tone = (q.get('tone') ?? 'd') in TONES ? (q.get('tone') ?? 'd') as Tone : 'd';   // D006 立面明暗：預設 d（只壓暗背光面），?tone=a|b|c 對照用
-  // D005：預設 B（照實驗線；理由見 docs/D005-rci-art.md），?blocks=off 回 D003 現況
-  const bq = (q.get('blocks') ?? 'b').toLowerCase();
-  let blockMode: BlockMode | null = bq in BLOCK_MODES ? bq as BlockMode : bq === 'off' ? null : 'b';
+  const tone: Tone = own(TONES, q.get('tone') ?? 'd') ? (q.get('tone') ?? 'd') as Tone : 'd';   // D006 立面明暗：預設 d（只壓暗背光面），?tone=a|b|c 對照用
+  // D012：預設 C（業主 2026-09-26「該畫的還是要畫吧」：D0 與被吸收的 1×1 也畫出來；D005 起原本是 B，理由見 docs/D005-rci-art.md、docs/D012-look-parity.md）。
+  // ?blocks=b 照實驗線的切分（D0 畫草坪），?blocks=off 回 D003 現況
+  const BLOCK_DEFAULT: BlockMode = 'c';
+  const bq = (q.get('blocks') ?? BLOCK_DEFAULT).toLowerCase();
+  let blockMode: BlockMode | null = own(BLOCK_MODES, bq) ? bq as BlockMode : bq === 'off' ? null : BLOCK_DEFAULT;
   // 配方只跟 (k, lv, 寬, 高, v) 有關：同一組只算一次
   const recipes = new Map<string, Recipe>();
   const recipeOf = (b: DrawBlock) => {
@@ -110,7 +114,7 @@ export function startCity() {
   let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, rebuilds = 0;
   // D011 建造：存檔樣板（讀進來那份存檔 JSON）、起始碼、目前的工具、路的等級、最近一天的回報、存檔
   let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', lastRep: DayReport | null = null, daysSinceSave = 0;
-  let loadNote = '', loadDay = -1;
+  let loadNote = '', loadDay = -1, restyled = 0;   // restyled：這一次讀檔照實驗線重挑外觀換了幾棟（D012）
   // 這座城要不要自動存檔：載入時就決定、跟著這座城走（我的城、新城存；起步城是沙盒、其他只能看）。
   // 審查阻斷：之前存檔時才拿 sampleId 判斷，換城時 sampleId 已經是新城的、sim 還是舊城的，舊城被存進我的城
   let autosave = false, saveErr = '';
@@ -153,12 +157,15 @@ export function startCity() {
     if (!r.ok) return r;
     const L = simulate ? loadCode(code, KINDS, VRANK) : null;             // 先算好再動目前的城：讀不成就什麼都不改
     if (L && !L.ok) return L;
+    const V = simulate ? null : viewCode(code, KINDS, VRANK);             // D012：只能看的城也照實驗線重挑外觀（要讀檔時的地價，所以也建一次格子與場）
+    if (V && !V.ok) return V;
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
     sim = L ? L.sim : null; template = L ? L.template : {}; startCode = L ? L.start : ''; loadNote = L ? L.note : ''; lastRep = null;
     autosave = saves && !!sim; saveErr = ''; loadDay = sim ? sim.day : -1;
-    const c = sim ? sim.city : cityFromLab(r.save, KINDS, code);
+    const c = sim ? sim.city : V!.city;
+    restyled = L ? L.restyled : V!.restyled;
     daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; rebuilds = 0; simAcc = 0;
     const t2 = performance.now();
     const br = blockRenderFor(c);
@@ -200,7 +207,7 @@ export function startCity() {
       if (id === 'mine' && sampleId === 'mine' && sim) { saveNow(); return { ok: true as const, replayed: true }; }
       saveNow();
     }
-    const code = id === 'mine' ? readSave() : SAMPLES[id]?.code;
+    const code = id === 'mine' ? readSave() : own(SAMPLES, id) ? SAMPLES[id].code : null;
     if (!code) return { ok: false as const, error: '沒有這座城' };
     const r = load(code, id === 'mine' ? '我的城' : SAMPLES[id].label, first, SIM_SAMPLES.has(id), saves);
     if (!r.ok) return r;
@@ -218,7 +225,7 @@ export function startCity() {
     built.scene.add(preview.mesh);
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
     const u = new URL(location.href);
-    if (m && m !== 'b') u.searchParams.set('blocks', m); else if (m) u.searchParams.delete('blocks'); else u.searchParams.set('blocks', 'off');
+    if (m && m !== BLOCK_DEFAULT) u.searchParams.set('blocks', m); else if (m) u.searchParams.delete('blocks'); else u.searchParams.set('blocks', 'off');
     history.replaceState(null, '', u);
     closeCard();
     syncUi();
@@ -511,13 +518,15 @@ export function startCity() {
   const marker = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 0.04, 1)), new THREE.LineBasicMaterial({ color: 0xffd34d }));
   let cardAt: [number, number] | null = null;   // 卡片開在哪一格（逐日重建後要重寫）
   function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
-  // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）
+  // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）。
+  // D012：讀檔時照實驗線重挑外觀（restyle）不列——那是讀檔的視覺遷移，不是城裡發生的事；歷史照記
+  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent>;
   function lotEvents(c: City, x: number, z: number) {
-    return c.history.filter((e): e is Exclude<CityEvent, ImportEvent | UndoEvent> => e.t !== 'import' && e.t !== 'undo' && e.x === x && e.z === z);
+    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.x === x && e.z === z);
   }
   // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
   type Row = [string, string];
-  function lotRow(c: City, e: Exclude<CityEvent, ImportEvent | UndoEvent>): Row {
+  function lotRow(c: City, e: LotEvent): Row {
     const undone = 'g' in e && c.history.some(u => u.t === 'undo' && u.g === e.g), tail = undone ? '（當天復原）' : '', d = `第 ${e.day.toLocaleString()} 天`;
     const RCN = ['', '小巷', '支路', '次幹道', '主幹道', '快速路'];
     switch (e.t) {
@@ -702,6 +711,7 @@ export function startCity() {
     menuItems: () => menuSections().flatMap(s => s.items.map(i => i.id)),
     menu: (id: string) => onMenu(id),
     loadNote: () => loadNote,
+    restyled: () => restyled,   // D012：這一次讀檔重挑外觀換了幾棟
     // 投影一棟建築量體的中心到螢幕，再模擬點擊：回報點到的格子與建築
     pickTest(id: number) {
       const b = city!.buildings[id - 1], a = built!.anchorOf(id);
@@ -761,7 +771,7 @@ export function startCity() {
     atlasCheck: () => { const w = windowTexture(), a = windowAtlas(), r = atlasCell0MatchesD003(w, a); w.dispose(); a.dispose(); return r; },
     // ---- D004 ----
     blockMode: () => blockMode,
-    setBlocks: (m: string | null) => { setBlocks(m && m in BLOCK_MODES ? m as BlockMode : null); return blockMode; },
+    setBlocks: (m: string | null) => { setBlocks(m && own(BLOCK_MODES, m) ? m as BlockMode : null); return blockMode; },
     partition: () => labPartition(gridOf(city!), ARCHE).map(partRow),        // 瀏覽器裡跑同一份切分（煙霧測試拿去跟黃金樣本比）
     blockInfo: () => plan && built ? { mode: blockMode, n: city!.n, drawn: built.blocksDrawn(),
       plan: plan.map(b => [b.x, b.z, b.w, b.h, b.k, b.lv, b.v, b.from === 'fill' ? 1 : 0]) } : null,

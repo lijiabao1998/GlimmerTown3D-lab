@@ -11,10 +11,11 @@
 // 再跟存檔裡的格子、建築逐項核對，對不上就退回只用存檔（歷史從這張碼重新起算），並回報原因。
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
-import { decodeLabCode, encodeLabCode, MAX_CODE } from './labcode.ts';
+import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
 import { CITY_FORMAT, cityStats, roadCode, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, type Sim } from '../sim/day.ts';
+import { restyle531 } from '../sim/restyle.ts';
 
 export const HISTORY_VER = 2;
 // 存檔的長度上限＝分享碼的上限（實驗線 importShareCode 64904 與本線 decodeLabCode 都是 2,000,000 字元）：超過就讀不回來，也貼不進實驗線
@@ -24,9 +25,10 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // ---- 歷史的緊湊列（hv 2）----
 // 種類碼照事件出現的先後編；拆除的圖層碼 0 建築、1 路、2 分區、3 樹。
 // 列的欄位：import [0,dDay,source,gameVer,seed,codeHash,buildings]；grow／upgrade [1|2,dDay,x,z,k,lv,v]；road [3,dDay,x,z,rc,cost,dG]；
-// zone [4,dDay,x,z,zone,cost,dG]；place [5,dDay,x,z,k,lv,v,id,cost,dG]；doze [6,dDay,x,z,layer,cost,dG(,k,id)]；undo [7,dDay,dG,refund]。
+// zone [4,dDay,x,z,zone,cost,dG]；place [5,dDay,x,z,k,lv,v,id,cost,dG]；doze [6,dDay,x,z,layer,cost,dG(,k,id)]；undo [7,dDay,dG,refund]；
+// restyle [8,dDay,x,z,v]（D012：城市格式 4）。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo'] as const;
+const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree'] as const;
 
 export function packHistory(h: readonly CityEvent[]): unknown[][] {
@@ -46,6 +48,8 @@ export function packHistory(h: readonly CityEvent[]): unknown[][] {
         out.push(row); g0 = e.g; break;
       }
       case 'undo': out.push([7, dd, e.g - g0, e.refund]); g0 = e.g; break;
+      case 'restyle': out.push([8, dd, e.x, e.z, e.v]); break;
+      default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);   // 漏寫一種，存檔會悄悄少一段歷史（D012 研究時發現沒有 default）
     }
   }
   return out;
@@ -78,13 +82,14 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
       return { day, t, x, z, layer: layer as typeof LAYERS[number], cost: num('cost'), g: int('g', 0, 2 ** 31) };
     }
     case 'undo': return { day, t, g: int('g', 0, 2 ** 31), refund: num('refund') };
+    case 'restyle': { const [x, z] = xz(); return { day, t, x, z, v: int('v', 0, 9999) }; }
     default: throw bad('種類');
   }
 }
 const ROW_FIELDS: Record<string, string[]> = {
   import: ['source', 'gameVer', 'seed', 'codeHash', 'buildings'], grow: ['x', 'z', 'k', 'lv', 'v'], upgrade: ['x', 'z', 'k', 'lv', 'v'],
   road: ['x', 'z', 'rc', 'cost', 'g'], zone: ['x', 'z', 'zone', 'cost', 'g'], place: ['x', 'z', 'k', 'lv', 'v', 'id', 'cost', 'g'],
-  doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'],
+  doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'],
 };
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
@@ -146,23 +151,40 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   return encodeLabCode(o, { deflate: true });
 }
 
+// restyled＝讀檔最後一步照實驗線重挑外觀換了幾棟（D012，每一棟也記成一筆 restyle 事件）
 export type LoadResult =
-  | { ok: true; sim: Sim; start: string; template: Record<string, unknown>; replayed: boolean; note: string }
+  | { ok: true; sim: Sim; start: string; template: Record<string, unknown>; replayed: boolean; note: string; restyled: number }
   | { ok: false; error: string };
 
-// 讀檔：一般的實驗線分享碼也吃（沒有 d3 就是一座新匯入的城，歷史從這張碼起算）
+// 讀檔：一般的實驗線分享碼也吃（沒有 d3 就是一座新匯入的城，歷史從這張碼起算）。
+// 最後一步照實驗線 load 的 ensureVariety531(true)（67035）重挑住商工的外觀（src/sim/restyle.ts）：接上歷史、退回只用存檔都挑——實驗線每次讀檔都挑
 export function loadCode(code: string, kinds: KindTable, vrank: Record<string, number[]>): LoadResult {
   const r = decodeLabCode(code);
   if (!r.ok) return r;
-  const sim = simFromSave(r.save, code, kinds, vrank);
-  const d3 = r.save.raw.d3 as Partial<D3Ext> | undefined, only = (why: string) => ({ ok: true as const, sim, start: code, template: r.save.raw, replayed: false, note: why });
+  const res = loadSim(r.save, code, kinds, vrank);
+  return { ...res, restyled: restyle531(res.sim) };
+}
+
+// 只能看的城（樣本城、沒有 d3 的分享碼、測試出口）：不重播歷史、不留模擬，但照樣重挑外觀——實驗線匯入任何碼都會挑，
+// 重挑要用讀檔時的地價，所以也建一次模擬的格子與場（simFromSave：72×72 只要幾毫秒）。歷史＝匯入＋重挑，只在記憶體
+export function viewCode(code: string, kinds: KindTable, vrank: Record<string, number[]>): { ok: true; city: City; restyled: number } | { ok: false; error: string } {
+  const r = decodeLabCode(code);
+  if (!r.ok) return r;
+  const sim = simFromSave(r.save, code, kinds, vrank), restyled = restyle531(sim);
+  return { ok: true, city: sim.city, restyled };
+}
+
+function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>) {
+  const sim = simFromSave(save, code, kinds, vrank);
+  const d3 = save.raw.d3 as Partial<D3Ext> | undefined, only = (why: string) => ({ ok: true as const, sim, start: code, template: save.raw, replayed: false, note: why });
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
   if (d3.hv !== undefined && d3.hv !== HISTORY_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
+  if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);   // 新版才有的事件種類：不猜（D012 起才檢查）
   let events: CityEvent[], c: City;
   try {
-    events = d3.hv === HISTORY_VER ? unpackHistory(d3.r, r.save.n) : checkHistory(d3.h, r.save.n);
-    c = replayCity(d3.s, events, kinds, r.save.day);
+    events = d3.hv === HISTORY_VER ? unpackHistory(d3.r, save.n) : checkHistory(d3.h, save.n);
+    c = replayCity(d3.s, events, kinds, save.day);
   } catch (e) { return only('歷史重播失敗，只用存檔：' + (e as Error).message); }
   const bad = mismatch(c, sim.city);
   if (bad) return only('歷史跟存檔對不上，只用存檔：' + bad);
@@ -173,7 +195,7 @@ export function loadCode(code: string, kinds: KindTable, vrank: Record<string, n
   for (const b of c.buildings) if (b.goneDay === undefined) sim.root.set(b.z * c.n + b.x, b);
   for (const [i, b] of sim.root) { const t = sim.w.tiles[i].bld; if (t) { b.age = t.age; b.lv = t.lv; b.v = t.v; } }
   sim.stroke = isInt(d3.g) && d3.g >= 1 ? d3.g : 1;
-  return { ok: true, sim, start: d3.s, template: r.save.raw, replayed: true, note: `歷史 ${events.length} 筆重播成功` };
+  return { ok: true as const, sim, start: d3.s, template: save.raw, replayed: true, note: `歷史 ${events.length} 筆重播成功` };
 }
 
 // 重播的城跟存檔的城要一樣：對帳數字、逐格路／等級／分區／樹／occ 對到的根格、每棟還在的建築（種類、等級、變體、屋齡、位置）

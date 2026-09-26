@@ -43,9 +43,9 @@ if (want('d001') || want('timeline')) await withBrowser({ width: 1280, height: 8
 
 if (want('bio')) await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
   await open(`mode=history&seed=${seed}&year=300&at=26,21&zoom=3.4`);
-  const n = await page.evaluate('__gt.openLot(26, 21)');
+  const lot = await page.evaluate('__gt.openLot(26, 21)');   // 回傳 {title, rows, future}（之前當成筆數印，印出 [object Object]）
   await new Promise(r => setTimeout(r, 400));
-  console.log(`   (26,21) 履歷 ${n} 筆`);
+  console.log(`   (26,21) 履歷 ${lot.rows.length} 筆（灰 ${lot.future}）`);
   await save(page, 'bio_mobile_y300');
   await page.evaluate('__gt.setYear(60)');
   await new Promise(r => setTimeout(r, 400));

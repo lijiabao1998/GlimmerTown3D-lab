@@ -8,7 +8,8 @@ import { fnv1a } from './rng.ts';
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
 // 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
-export const CITY_FORMAT = 3;
+// 格式 4（D012）：多了讀檔時照實驗線重挑外觀的事件 restyle（src/sim/restyle.ts）。格式 1–3 照讀；比 4 新的不猜（src/io/save.ts）
+export const CITY_FORMAT = 4;
 
 export interface KindTable {
   size(k: number): number;      // 佔地邊長（格）
@@ -35,7 +36,9 @@ export interface DozeEvent { day: number; t: 'doze'; x: number; z: number; layer
 // 復原（D011）：把第 g 筆手勢碰過的格子整格還原、退回花的錢（實驗線 T460 undo 66594）；只能在同一天
 export interface UndoEvent { day: number; t: 'undo'; g: number; refund: number }
 export type EditEvent = RoadEvent | ZoneEvent | PlaceEvent | DozeEvent | UndoEvent;
-export type CityEvent = ImportEvent | GrowEvent | EditEvent;
+// 讀檔時照實驗線重挑外觀（D012，T531）：一棟一筆、只記換了的；x、z 是根格，v 是新的變體。不是施工，不能復原
+export interface RestyleEvent { day: number; t: 'restyle'; x: number; z: number; v: number }
+export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent;
 
 export interface City {
   format: number;

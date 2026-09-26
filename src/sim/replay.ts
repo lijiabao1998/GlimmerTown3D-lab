@@ -1,6 +1,7 @@
 // 世界歷史重播（D010 起，規則 4）：從「匯入那張分享碼」加上逐筆事件，重建出城市（建築清單、路、分區、樹、occ）。
 // 格式 1（只有匯入一筆）重播出來就是 cityFromLab 的結果；格式 2 另外套用 grow／upgrade；格式 3（D011）再套用玩家施工：
 //   road／zone／place／doze 一格一筆，照實驗線 doPlace 的格子寫法（51641–51818）；undo 把第 g 筆手勢碰過的格子整格還原（T460 66594）。
+//   格式 4（D012）再套用 restyle：讀檔時照實驗線重挑的外觀變體（只換 v）。
 // 屋齡不存在事件裡，照實驗線的規則推（tick() 55628 起的升級迴圈對每棟非 ref 建築 age+1，新長的當天就會被加到；升級那天歸零）：
 //   匯入的：匯入時 age ＋（結束日 − 匯入日）；第 d 天長出、沒升級過：1 ＋（結束日 − d）；最後一次在第 u 天升級：結束日 − u；
 //   第 d 天玩家蓋的（在第 d 天的 tick 之後）：結束日 − d（doPlace 給 age 0，51672）；拆掉的：屋齡停在拆的那一天。
@@ -96,6 +97,12 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         for (const id of s.removed) { const b = c.buildings[id - 1]; delete b.goneDay; base.set(b.id, { age: b.age, from: e.day }); }
         for (const [j, [rd, rc, zn, tr, oc]] of s.tiles) { c.road[j] = rd; c.rclass[j] = rc; c.zone[j] = zn; c.tree[j] = tr; c.occ[j] = oc; }
         strokes.delete(e.g);
+        break;
+      }
+      case 'restyle': {   // D012：讀檔時照實驗線重挑外觀（T531）——只換 v，不動等級、屋齡
+        const b = c.buildings[c.occ[i] - 1];
+        if (!b || b.x !== e.x || b.z !== e.z || b.k < 1 || b.k > 3) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可以重挑外觀的住商工`);
+        b.v = e.v;
         break;
       }
       default: throw new Error('重播：不認得的事件 ' + JSON.stringify(e));
