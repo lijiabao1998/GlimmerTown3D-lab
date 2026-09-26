@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityFromLab, cityStats, buildingAt, type City, type GrowEvent } from './sim/city.ts';
+import { cityFromLab, cityStats, buildingAt, type City, type GrowEvent, type ImportEvent } from './sim/city.ts';
 import { simFromSave, stepDay, simHash, simCounts, type Sim } from './sim/day.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
 import { LOOKS } from './content/looks.ts';
@@ -124,6 +124,7 @@ export function startCity() {
     const r = decodeLabCode(code);
     const t1 = performance.now();
     if (!r.ok) return r;
+    dirtyScene = false;                                                   // 舊城的場景馬上要丟掉，不必先重建
     setPlaying(false);
     sim = simulate ? simFromSave(r.save, code, KINDS, VRANK) : null;   // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
     const c = sim ? sim.city : cityFromLab(r.save, KINDS, code);
@@ -135,6 +136,7 @@ export function startCity() {
     const t3 = performance.now();
     built?.dispose();
     city = c; built = b; label = name;
+    delete timing.rebuild;
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, plan: tp - t2, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
@@ -164,7 +166,7 @@ export function startCity() {
     built = b;
     Object.assign(timing, { plan: tp - t0, scene: t1 - t0, rebuild: t1 - t0 }, b.timing);
     rebuilds++; daysSinceBuild = 0; dirtyScene = false;
-    if (!bio.hidden) built.scene.add(marker);
+    if (!bio.hidden && cardAt) showTile(cardAt[0], cardAt[1]);          // 卡片開著：用新的城市與街區重寫一次（等級、街區、框都可能變了）
     invalidate();
   }
   function simDay() {
@@ -178,7 +180,8 @@ export function startCity() {
     if (!playing && dirtyScene) rebuildScene();
     syncSim();
   }
-  function frame() {
+  // 推進（播放中才動）與作畫分開：測試出口、對焦只作畫，不會順手多推天數
+  function advance() {
     if (sim && playing) {
       const t = performance.now(), dt = lastT ? Math.min(0.25, (t - lastT) / 1000) : 0;
       lastT = t; simAcc += dt * SPEEDS[speed];
@@ -186,13 +189,15 @@ export function startCity() {
       while (simAcc >= 1 && steps < 3) { simAcc -= 1; steps++; simDay(); }   // 一幀最多推 3 天，慢機器不會卡死
       if (steps) { if (dirtyScene && daysSinceBuild >= REBUILD_DAYS) rebuildScene(); syncUi(); }
     }
+  }
+  function draw() {
     if (controls.update()) needsRender = true;
     if (!needsRender || !built) return;
     needsRender = false;
     frames++;
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
   }
-  renderer.setAnimationLoop(frame);
+  renderer.setAnimationLoop(() => { advance(); draw(); });
 
   // ---- 介面 ----
   const ui = document.createElement('div');
@@ -267,19 +272,23 @@ export function startCity() {
 
   // ---- 點一格：有建築就看建築，沒有就看這一格是什麼 ----
   const marker = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 0.04, 1)), new THREE.LineBasicMaterial({ color: 0xffd34d }));
-  function closeCard() { bio.hidden = true; marker.removeFromParent(); invalidate(); }
+  let cardAt: [number, number] | null = null;   // 卡片開在哪一格（逐日重建後要重寫）
+  function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
   function showTile(x: number, z: number) {
     if (!city || !built) return null;
+    cardAt = [x, z];
     const c = city, i = z * c.n + x, b = buildingAt(c, x, z);
+    const imp = c.history.find((e): e is ImportEvent => e.t === 'import'), impDay = imp ? imp.day : c.day;   // 匯入那天（c.day 會跟著逐日模擬走）
     const rows: string[] = [];
     let title: string;
     if (b) {
       const cat = KINDS.cat(b.k);
       title = `${KINDS.name(b.k)}（${b.x}, ${b.z}）`;
       $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${b.abandoned ? '・已遭遺棄' : ''}`;
-      const evs = c.history.filter((e): e is GrowEvent => e.t !== 'import' && e.x === b.x && e.z === b.z);   // D010：逐日模擬記下的生長、升級
-      if (evs.length) for (const e of evs) rows.push(e.t === 'grow' ? `<b>第 ${e.day} 天</b>長出來（逐日模擬，${e.lv} 級）` : `<b>第 ${e.day} 天</b>升到 ${e.lv} 級`);
-      else rows.push(`<b>約第 ${Math.max(0, b.builtDay).toLocaleString()} 天</b>蓋起（由 2D 存檔的 age=${b.age} 推算，只是估計）`);
+      // D010：逐日模擬記下的生長、升級；匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
+      const evs = c.history.filter((e): e is GrowEvent => e.t !== 'import' && e.x === b.x && e.z === b.z);
+      if (!evs.some(e => e.t === 'grow')) rows.push(`<b>約第 ${Math.max(0, b.builtDay).toLocaleString()} 天</b>蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`);
+      for (const e of evs) rows.push(e.t === 'grow' ? `<b>第 ${e.day} 天</b>長出來（逐日模擬，${e.lv} 級）` : `<b>第 ${e.day} 天</b>升到 ${e.lv} 級`);
       if (!KINDS.known(b.k)) rows.push('<b>注意</b>本線的種類表沒有這一種，用預設量體畫');
       if (plan && blockMode && b.k >= 1 && b.k <= 3) {
         const bi = blockOfCell(i);
@@ -288,12 +297,12 @@ export function startCity() {
           rows.push(`<b>街區 ${bk.w}×${bk.h}</b>${blockMode.toUpperCase()} 檔・原型 ${r.arche}${r.path === 'core' ? '' : `（${r.path} 立面）`}・起點 (${bk.x}, ${bk.z})・畫法用起點的 ${bk.lv} 級`);
         } else rows.push(`<b>這一格沒畫</b>實驗線的切分沒有街區蓋到這格（D0），或被旁邊的大街區吸收（T555）`);
       }
-      rows.push(`<b>第 ${c.day.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`);
+      rows.push(`<b>第 ${impDay.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`);
     } else {
       title = `${ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
       const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + '（還沒蓋）' : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : ''].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
-      rows.push(`<b>第 ${c.day.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D`);
+      rows.push(`<b>第 ${impDay.toLocaleString()} 天</b>從 2D 實驗線 v${c.gameVer} 匯入 3D`);
     }
     $('#bio h2').textContent = title;
     $('#bio ol').innerHTML = rows.map(r => `<li>${r}</li>`).join('');
@@ -347,11 +356,11 @@ export function startCity() {
     sim: () => sim ? { day: sim.day, seed: sim.seed, pop: sim.pop, jobs: sim.jobs, happy: sim.cityHappy, dem: [sim.dem[1], sim.dem[2], sim.dem[3]], rci: simCounts(sim), hash: simHash(sim),
       events: sim.city.history.length, rebuilds, playing, speed: SPEEDS[speed], buildings: sim.city.buildings.length } : null,
     // 同步推 n 天、最後重建一次並當場畫一幀（守衛與拍照用）；回傳推完的狀態
-    simStep(n: number) { if (!sim) return null; for (let i = 0; i < n; i++) simDay(); if (dirtyScene) rebuildScene(); syncUi(); needsRender = true; frame(); return (window as unknown as { __gt: { sim(): unknown } }).__gt.sim(); },
+    simStep(n: number) { if (!sim) return null; for (let i = 0; i < n; i++) simDay(); if (dirtyScene) rebuildScene(); syncUi(); needsRender = true; draw(); lastT = 0; return (window as unknown as { __gt: { sim(): unknown } }).__gt.sim(); },
     simPlay: (on: boolean) => { setPlaying(on); return playing; },
     simSpeed: (k: number) => { speed = Math.max(0, Math.min(SPEEDS.length - 1, k | 0)); syncSim(); return SPEEDS[speed]; },
     // 重建一次場景（不推天數），回傳這次重建的耗時（ms）
-    simRebuild() { rebuildScene(); needsRender = true; frame(); return timing.rebuild; },
+    simRebuild() { rebuildScene(); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
     // 投影一棟建築量體的中心到螢幕，再模擬點擊：回報點到的格子與建築
     pickTest(id: number) {
       const b = city!.buildings[id - 1], a = built!.anchorOf(id);
@@ -361,6 +370,8 @@ export function startCity() {
       return { want: [b.x, b.z, id], got: h, name: KINDS.name(b.k) };
     },
     openTile: (x: number, z: number) => showTile(x, z),
+    // 目前卡片的樣子（clean=1 時介面沒掛進 document，測試從這裡讀）
+    card: () => ({ open: !bio.hidden, at: cardAt, title: $('#bio h2').textContent, sub: $('#bio .sub').textContent }),
     // 挑一棟當點擊測試的目標：佔地最大、同佔地取最高、再取編號最小（決定性）
     bigOne: () => [...city!.buildings].sort((a, b) => b.size - a.size || KINDS.height(b.k, b.lv, b.v) - KINDS.height(a.k, a.lv, a.v) || a.id - b.id)[0].id,
     idOfKind: (k: number) => city!.buildings.find(b => b.k === k)?.id ?? null,
@@ -514,7 +525,7 @@ export function startCity() {
       const n = city!.n, target = new THREE.Vector3(b.x + b.size / 2, 0, b.z + b.size / 2), D = n * 1.6;
       cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
       cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
-      needsRender = true; frame();
+      needsRender = true; draw();
       return screenOf(a);
     },
     // D008 逐型對照：鏡頭對準某個街區（佔地中心），同 focusBuilding；回傳街區錨點（主體頂面中心）在螢幕上的位置
@@ -526,7 +537,7 @@ export function startCity() {
       cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
       cam.near = clip > 0 ? cam.position.distanceTo(target) - clip : 0.1;
       cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
-      needsRender = true; frame();
+      needsRender = true; draw();
       return screenOf(a);
     },
     renderInfo: () => ({ ...pipe.sceneInfo, rt: pipe.size }),

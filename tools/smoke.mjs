@@ -371,6 +371,21 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     log(pl.day >= 6 && pl.f > fA && pl.rebuilds >= 1 && !pl.playing && pl.speed === 10, 'D010 播放：10 天／秒播 1.5 秒會推進、畫面會畫、會重建；按暫停就停', JSON.stringify(pl));
     const card = await page.evaluate('(()=>{__gt.simStep(20);const h=__gt.history().find(e=>e.t==="grow");if(!h)return null;return __gt.openTile(h.x,h.z);})()');
     log(!!card && card.rows.some(r => /長出來（逐日模擬/.test(r)), 'D010 建築卡：逐日模擬長出來的建築，卡上列出它哪一天長出來', card ? card.rows.slice(0, 2).join('／') : '沒有卡片');
+    // 審查修正：匯入的建築（電廠）在模擬推進後，卡上的匯入日＝歷史第一筆、存檔屋齡跟第 1 天看到的一樣（不跟著模擬長）
+    const imp = await page.evaluate(`(()=>{__gt.loadSample('starter');const id=__gt.idOfKind(5),b=__gt.buildingList().find(r=>r[0]===id);const a=__gt.openTile(b[2],b[3]).rows;
+      __gt.simStep(30);const c=__gt.openTile(b[2],b[3]).rows;return {a,c,d0:__gt.history()[0].day};})()`);
+    const impRow = rows => rows.find(r => /匯入 3D/.test(r)), ageRow = rows => rows.find(r => /age=/.test(r));
+    log(impRow(imp.a) === impRow(imp.c) && ageRow(imp.a) === ageRow(imp.c) && impRow(imp.c).includes(`第 ${imp.d0} 天`), 'D010 建築卡：模擬推進 30 天後，匯入建築的匯入日與存檔屋齡不變', `${impRow(imp.c)}／${ageRow(imp.c)}`);
+    // 卡片開著時逐日重建：卡片用新的城市重寫（等級跟著變）
+    const up = await page.evaluate(`(()=>{__gt.loadSample('starter');__gt.simStep(80);const e=__gt.history().filter(e=>e.t==='upgrade')[0];if(!e)return null;
+      __gt.loadSample('starter');let n=0;while(!__gt.history().some(h=>h.t==='grow'&&h.x===e.x&&h.z===e.z)&&n<200){__gt.simStep(1);n++;}
+      __gt.openTile(e.x,e.z);const before=__gt.card().sub;
+      while(!__gt.history().some(h=>h.t==='upgrade'&&h.x===e.x&&h.z===e.z)&&n<200){__gt.simStep(1);n++;}
+      const c=__gt.card();return {before,after:c.sub,open:c.open,at:[e.x,e.z],lv:e.lv};})()`);
+    log(!!up && up.open && /1 級/.test(up.before) && up.after.includes(`${up.lv} 級`), 'D010 建築卡：卡片開著時升級，逐日重建後卡上的等級跟著變', up ? `(${up.at}) ${up.before} → ${up.after}` : '120 天內沒有升級');
+    // 播放中切到別的城市：不會先替要丟掉的場景重建（計時裡沒有 rebuild）
+    const sw2 = await page.evaluate(`(()=>{__gt.loadSample('starter');__gt.simSpeed(2);__gt.simPlay(true);__gt.simStep(3);__gt.loadSample('seed516');const t=__gt.timing();return {rebuild:'rebuild' in t,sim:__gt.sim(),sample:__gt.sample};})()`);
+    log(!sw2.rebuild && sw2.sim === null && sw2.sample === 'seed516', 'D010 播放中切換城市：模擬停掉、不替丟掉的場景重建', JSON.stringify(sw2));
     await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
     await open('sample=starter');
     const mb = await page.evaluate(`(()=>{const inV=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;};

@@ -7,7 +7,7 @@ import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import { cityFromLab, cityStats, CITY_FORMAT } from '../src/sim/city.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { starterLayout, STARTER_SEEDS, STARTER_DAYS } from '../src/content/starter.ts';
-import { simFromSave, stepDay, simHash } from '../src/sim/day.ts';
+import { simFromSave, stepDay, simHash, simCounts } from '../src/sim/day.ts';
 import { replayCity } from '../src/sim/replay.ts';
 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -22,6 +22,19 @@ export function runStarter(code, KT, vrank, days = STARTER_DAYS, onDay, opts = {
   const s = starterSim(code, KT, vrank), ms = [];
   for (let d = 0; d < days; d++) { const t = performance.now(); const rep = stepDay(s, opts); ms.push(performance.now() - t); onDay?.(rep, s); }
   return { s, ms };
+}
+
+// 對照用的逐日數字（tools/lab-compare.mjs 的本線那一半、d010-3d.json、回歸守衛共用同一個定義）。
+// 勞動力兩欄照實驗線 truthSnapshot496（65888）在企業沒就緒時的算法：workers＝round(pop×.6)、employed＝min(workers, jobs)，
+// 兩邊才是同一個量（laborMarket481 的 workers 有 max(1,…)，那是餵需求公式用的，不拿來對照）。第 0 列＝讀檔後、還沒推進。
+export const TRAJ_FIELDS = ['day', 'pop', 'jobs', 'employed', 'workers', 'happy', 'demR', 'demC', 'demI', 'R', 'R1', 'R2', 'R3', 'C', 'C1', 'C2', 'C3', 'I', 'I1', 'I2', 'I3'];
+export const r6 = x => Math.round(x * 1e6) / 1e6;
+export function trajectory(code, KT, vrank, seed, days = STARTER_DAYS) {
+  const s = starterSim(codeWithSeed(code, seed), KT, vrank), rows = [];
+  const row = () => { const c = simCounts(s), w = Math.round(s.pop * .6); return [s.day, s.pop, s.jobs, Math.min(w, s.jobs), w, s.cityHappy, s.dem[1], s.dem[2], s.dem[3], ...c[1], ...c[2], ...c[3]].map(r6); };
+  rows.push(row());
+  for (let d = 0; d < days; d++) { stepDay(s); rows.push(row()); }
+  return rows;
 }
 
 export async function d010SimGuards(log) {
@@ -75,8 +88,37 @@ export async function d010SimGuards(log) {
     let at = src.indexOf('export function stepDay'), miss = [];
     for (const s of steps) { const p = src.indexOf(s, at); if (p < 0) miss.push(s); else at = p; }
     const rulesImports = [...src.matchAll(/import \{([^}]*)\} from '\.\/rules\/[a-z]+\.ts'/g)].flatMap(m => m[1].split(',').map(x => x.trim()).filter(x => x && !x.startsWith('type ')));
-    const unused = rulesImports.filter(fn => (src.match(new RegExp(`\\b${fn}\\b`, 'g')) || []).length < 2);
+    // 去掉註解與 import 行，剩下的程式碼裡每個規則函式都要真的被呼叫（name(）或當值傳進去（name 後面接 , ) } ; 或 .）——只在註解裡提到不算
+    const code = src.replace(/\/\*[\s\S]*?\*\//g, '').split('\n').filter(l => !/^import /.test(l)).map(l => l.replace(/\/\/.*$/, '')).join('\n');
+    const unused = rulesImports.filter(fn => !new RegExp(`\\b${fn}\\s*(\\(|[,)};.\\[])`).test(code));
     log(miss.length === 0 && unused.length === 0 && rulesImports.length >= 20, 'day.ts 只接線：每一步照 tick() 順序註明行號；公式都從 src/sim/rules/ import 並呼叫', miss.length ? '缺行號 ' + miss.join(',') : unused.length ? '沒用到 ' + unused.join(',') : `${steps.length} 個行號依序、${rulesImports.length} 個規則函式`);
+  }
+
+  // 回歸錨點：8 個種子 × 120 天的逐日數字＝存下的 d010-3d.json（卡面對照表就是它）。stepDay 行為一變就紅；刻意改動要重錄（tools/lab-compare.mjs）並更新卡面
+  const traj = {};
+  {
+    const ref = JSON.parse(read('src/content/samples/d010-3d.json')), bad = [];
+    if (J(ref.fields) !== J(TRAJ_FIELDS)) bad.push('欄位不同');
+    for (const seed of STARTER_SEEDS) {
+      const got = traj[seed] = trajectory(code, KT, vrank, seed, ref.days), want = ref.runs[seed];
+      const d = got.findIndex((row, i) => J(row) !== J(want?.[i]));
+      if (d >= 0) bad.push(`種子 ${seed} 第 ${d} 列：${J(got[d]).slice(0, 80)} ≠ ${J(want?.[d]).slice(0, 80)}`);
+    }
+    log(bad.length === 0, `回歸錨點：${STARTER_SEEDS.length} 個種子 × ${ref.days} 天逐日數字＝d010-3d.json（卡面對照表的本線數字）`, bad.slice(0, 2).join('；') || `${STARTER_SEEDS.length * (ref.days + 1)} 列相同`);
+  }
+
+  // 實驗線錨點（行為，不只看字）：實驗線回退設定第 1 天那一列（GV.step 一次之後）＝本線第 1 天，8 個種子逐欄相等。
+  // 第 1 天之後實驗線沒開關的系統（垃圾、糧食、通勤、經濟快照……）開始扣幸福、壓需求，兩邊分岔；分岔日照實列出（只記不判）
+  {
+    const lab = JSON.parse(read('src/content/samples/d010-lab.json')), runs = lab.configs.fallback.runs, bad = [], split = [];
+    if (J(lab.fields) !== J(TRAJ_FIELDS)) bad.push('欄位不同');
+    for (const seed of STARTER_SEEDS) {
+      const a = traj[seed][1], b = runs[seed]?.[1];
+      if (J(a) !== J(b)) bad.push(`種子 ${seed}：${TRAJ_FIELDS.filter((f, i) => a[i] !== b?.[i]).join(',')}`);
+      split.push(traj[seed].findIndex((row, i) => i > 0 && J(row) !== J(runs[seed]?.[i])));
+    }
+    log(bad.length === 0, `實驗線錨點：回退設定第 1 天＝本線第 1 天（${STARTER_SEEDS.length} 個種子 × ${TRAJ_FIELDS.length} 欄逐項相等，實驗線 ${lab.source.commit.slice(0, 7)}）`,
+      bad.slice(0, 2).join('；') || `第一個不同的天：${split.join('、')}`);
   }
 
   // 驗收 8：推進一天（不含重建）在桌機上 ≤ 5 ms。判的是一天的平均耗時；連跑三輪 120 天取平均最低的一輪（排除同機其他行程搶 CPU 的雜訊，

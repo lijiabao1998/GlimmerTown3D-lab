@@ -1,5 +1,5 @@
 // D010 跟實驗線對照：起步城 × 8 個種子 × 120 天，兩邊逐日記同一組數字（CLAUDE.md 規則 8：整城軌跡先求多種子統計；這張只量不判）。
-// 用法：CHROME_PATH=… node tools/lab-compare.mjs --lab=<實驗線目錄> [--days=120] [--seeds=8] [--shots]
+// 用法：CHROME_PATH=… node tools/lab-compare.mjs --lab=<實驗線目錄> [--days=120] [--seeds=8] [--shots] [--diag [--config=fallback|default]]
 // 產出：
 //   src/content/samples/d010-lab.json   實驗線兩種設定的逐日數字（記 commit）
 //   src/content/samples/d010-3d.json    本線的逐日數字
@@ -10,9 +10,17 @@
 //   - GV.setMapSize(72)＋GV.newWorldSeeded（重設 pop／jobs／cityHappy／dem 成新城的值）→ GV.importCode（換過 seed 的起步城碼）→ GV.setSpeed(0)、GV.ai(false)；
 //   - 之後只用 GV.step(1) 逐日推進；比較區間裡不讀檔（規則 8：實驗線讀檔會用 seed^day 重設亂數）。
 // 兩種設定：
-//   default：實驗線預設＋舊版供電 __legacyPower450（卡上寫的跑法）；
+//   default：實驗線預設＋舊版供電（__legacyPower450 讓 tick 用舊式通電；__legacyPower471 讓每天收尾的財政等呼叫端也走舊式分支 52776，
+//            只開 450 的話 T471 分時調度仍會把所有商工設成沒電，企業全數停擺、就業整段是 0——審查抓到，已補）。
+//            補了之後就業前 60 天有數，之後照樣掉到 0：那是真的限電，不是設定壞掉——舊式供電 b.pw＝near&&powered<cap（55155），
+//            一座燃煤電廠約供 75–78 棟，按索引（由北往南）分配；預設設定住宅一直長（種子 5162026 第 120 天 161 棟），北邊住宅先把容量用完，
+//            南排的工業區第 70 天起 27 棟全沒電；實驗線又沒有商業（經濟快照讓 demC 恆負），就業就歸 0。本線同一條規則、同一個種子，
+//            第 61 天工業也全沒電，但北邊的商業（第 2 排街區）通著電，所以就業還有；
+
 //   fallback：再用實驗線自己的開關，把有開關的上層系統關成「沒就緒／舊式」（跟本線接的回退值一致），災害關掉；
-//             沒有開關的（火災、犯罪、疾病、垃圾、糧食、夜間城市、經濟快照、城市活動）照跑——它們就是差距的來源。
+//             沒有開關的（經濟快照、通勤 T141、道路負載與壅堵 T129、垃圾、糧食、夜間城市、城市活動、火災、犯罪、廢棄、疾病、死亡）照跑——它們就是差距的來源。
+// 欄位定義見 tools/unit-d010-sim.mjs 的 TRAJ_FIELDS／trajectory（勞動力兩欄照實驗線 truthSnapshot496 的算法）。第 0 列是讀檔後的快照，
+// 兩邊不可比（實驗線讀檔的 T510 包裝 68519 會先算一次 pop／jobs），卡面只比第 30、60、120 天。
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -20,8 +28,7 @@ import { withBrowser, ROOT, sleep } from './cdp.mjs';
 import { codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_SEEDS, STARTER_DAYS } from '../src/content/starter.ts';
-import { runStarter } from './unit-d010-sim.mjs';
-import { simCounts } from '../src/sim/day.ts';
+import { TRAJ_FIELDS, trajectory, r6 } from './unit-d010-sim.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const LAB = path.resolve(arg('lab', process.env.LAB_DIR || path.join(ROOT, '..', 'GlimmerTown-lab')));
@@ -36,15 +43,14 @@ const code = read('src/content/samples/starter.code.txt'), meta = JSON.parse(rea
 const J = JSON.stringify;
 
 // 逐日數字（兩邊同一組欄位、同一個順序）
-export const FIELDS = ['day', 'pop', 'jobs', 'employed', 'workers', 'happy', 'demR', 'demC', 'demI', 'R', 'R1', 'R2', 'R3', 'C', 'C1', 'C2', 'C3', 'I', 'I1', 'I2', 'I3'];
-const r6 = x => Math.round(x * 1e6) / 1e6;
+const FIELDS = TRAJ_FIELDS;
 
 // 實驗線有開關的上層系統（行號 @ d23c18d，見 D010 卡「回退值」一節）
-const FALLBACK_FLAGS = ['__legacyPower450', '__noHousing488', '__noEnterprise489', '__noDevelopment512', '__noMobility509', '__noBalance510', '__noFinancialFeedback510',
+const FALLBACK_FLAGS = ['__legacyPower450', '__legacyPower471', '__noHousing488', '__noEnterprise489', '__noDevelopment512', '__noMobility509', '__noBalance510', '__noFinancialFeedback510',
   '__noMobility491', '__noIncident493', '__legacyWater449', '__noGpn508', '__noBusinessCycle490', '__noCivicServices495', '__noJunction503', '__noSocial505',
   '__noCapability506', '__noInnovation507', '__noFiscal515', '__noPolicy504'];
 const CONFIGS = {
-  default: { flags: ['__legacyPower450'], disasters: true },
+  default: { flags: ['__legacyPower450', '__legacyPower471'], disasters: true },
   fallback: { flags: FALLBACK_FLAGS, disasters: false },
 };
 const preloadOf = c => "try{localStorage.setItem('glimmerville.v1.slot','3');" + (c.disasters ? "localStorage.removeItem('glimmerville.v1.ds')" : "localStorage.setItem('glimmerville.v1.ds','0')") + '}catch(e){};'
@@ -73,7 +79,10 @@ if (DIAG || SHOTS) {
   const scriptEnd = html.indexOf('</script>', mark), closes = [...html.slice(mark, scriptEnd + 9).matchAll(/\n\s*\}\)\(\);\s*\n<\/script>/g)];
   if (closes.length !== 1) throw new Error('實驗線主程式 IIFE 收尾要剛好 1 處');
   const at = mark + closes[0].index, INJECT = '\n;window.__d010={happyAgg:()=>JSON.parse(JSON.stringify(happyAgg)),demWhy:()=>JSON.parse(JSON.stringify(demWhy)),happy:()=>cityHappy,eco:()=>({ready:economy481.ready,pp:economy481.ready?economy481.consumption.purchasingPower:null,retail:economy481.ready?economy481.commerce.utilization:null}),noFlash:()=>{flashT=0;},land:()=>({dirty:landDirty,box:landBox?[landBox.x0,landBox.y0,landBox.x1,landBox.y1]:null})};';
-  const copy = html.slice(0, at) + INJECT + html.slice(at), cfg = CONFIGS[arg('config', 'fallback')], want = [1, 2, 10, 30, 60, 120];
+  const cfgName = arg('config', 'fallback'), cfg = CONFIGS[cfgName];
+  if (!cfg) throw new Error('沒有這個設定：--config=' + cfgName);
+  if (SHOTS && cfgName !== 'fallback') throw new Error('--shots 只拍回退設定（對照圖的 2D 那一欄標的是回退設定）');
+  const copy = html.slice(0, at) + INJECT + html.slice(at), want = [1, 2, 10, 30, 60, 120];
   if (SHOTS) {
     // --shots：實驗線第 0、30、60、120 天的 2D 畫面（回退設定、第一個種子）。拍之前把閃電計時 flashT 歸零（純畫面、不進存檔；第 120 天剛好暴雨打閃電，畫面整片白）。
     // 用同一份副本、同一個跑法重跑一次；逐日數字要跟正式對照（原檔、沒有出口）那一列逐項相同，證明插出口沒改到模擬。
@@ -82,12 +91,12 @@ if (DIAG || SHOTS) {
       await open('');
       const RUNS = RUN(codeWithSeed(code, SEEDS[0]), DAYS, shotDays).replace('GV.lookAt(', '__d010.noFlash();GV.lookAt(');
       const r = await page.evaluate(RUNS);
+      const ref = JSON.parse(read('src/content/samples/d010-lab.json')).configs.fallback.runs[SEEDS[0]];
+      const same = !!ref && J(r.rows.map(row => row.map(r6))) === J(ref);
+      if (!same) throw new Error('拍照那一次跑出來的數字跟正式對照不同（插出口改到模擬了？或 d010-lab.json 是舊的）；沒有寫出樣張');
       fs.mkdirSync(path.join(ROOT, 'scratch/lab'), { recursive: true });
       for (const [d, url] of Object.entries(r.shots)) fs.writeFileSync(path.join(ROOT, `scratch/lab/d010_day${d}_2d.png`), Buffer.from(url.split(',')[1], 'base64'));
-      const ref = JSON.parse(read('src/content/samples/d010-lab.json')).configs.fallback.runs[SEEDS[0]];
-      const same = ref && J(r.rows.map(row => row.map(r6))) === J(ref);
       console.log(`實驗線 2D 樣張 ${Object.keys(r.shots).join('、')} 天（scratch/lab/d010_day*_2d.png）；這次的逐日數字＝正式對照那一列：${same}`);
-      if (!same) throw new Error('拍照那一次跑出來的數字跟正式對照不同（插出口改到模擬了？）');
     });
     if (!DIAG) process.exit(0);
   }
@@ -122,21 +131,18 @@ for (const [name, cfg] of Object.entries(CONFIGS)) {
       if (page.errors.length) { console.log('  實驗線 console 錯誤（僅記錄）：' + page.errors.slice(0, 3).join(' | ')); page.errors.length = 0; }
     }
   });
+  // 設定壞掉的警報：整組種子從第 10 天起就業都是 0（像只開 __legacyPower450 時那樣），就不是可以拿來對照的跑法
+  const ji = FIELDS.indexOf('jobs'), dead = Object.values(out.configs[name].runs).every(rows => rows.slice(10).every(row => row[ji] === 0));
+  if (dead) throw new Error(`實驗線 ${name} 設定：所有種子第 10 天起就業都是 0，設定有問題`);
 }
 fs.writeFileSync(path.join(ROOT, 'src/content/samples/d010-lab.json'), J(out));
 
 // 本線：同 8 個種子，同一組欄位（第 0 天＝匯入後、還沒推進）
 const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
-const mine = { source: { tool: 'tools/lab-compare.mjs', code: 'src/content/samples/starter.code.txt', sim: 'src/sim/day.ts' }, fields: FIELDS, days: DAYS, seeds: SEEDS, runs: {} };
+const mine = { source: { tool: 'tools/lab-compare.mjs', code: 'src/content/samples/starter.code.txt', sim: 'src/sim/day.ts', how: 'tools/unit-d010-sim.mjs trajectory()' }, fields: FIELDS, days: DAYS, seeds: SEEDS, runs: {} };
 for (const seed of SEEDS) {
-  const rows = [];
-  const row = (rep, s) => { const c = simCounts(s); return [s.day, s.pop, s.jobs, rep ? rep.employed : 0, rep ? rep.workers : 0, s.cityHappy, s.dem[1], s.dem[2], s.dem[3], ...c[1], ...c[2], ...c[3]].map(r6); };
-  const { s } = runStarter(codeWithSeed(code, seed), KT, vrank, 0);
-  rows.push(row(null, s));
-  const r = runStarter(codeWithSeed(code, seed), KT, vrank, DAYS, (rep, st) => rows.push(row(rep, st)));
-  mine.runs[seed] = rows;
-  const last = rows.at(-1);
-  console.log(`本線 種子 ${seed}：第 ${last[0]} 天 人口 ${last[1]}、就業 ${last[2]}、住商工 ${last[9]}／${last[13]}／${last[17]}、幸福 ${last[5].toFixed(3)}（${r.ms.reduce((a, b) => a + b, 0).toFixed(0)} ms）`);
+  const rows = mine.runs[seed] = trajectory(code, KT, vrank, seed, DAYS), last = rows.at(-1);
+  console.log(`本線 種子 ${seed}：第 ${last[0]} 天 人口 ${last[1]}、就業 ${last[2]}、住商工 ${last[9]}／${last[13]}／${last[17]}、幸福 ${last[5].toFixed(3)}`);
 }
 fs.writeFileSync(path.join(ROOT, 'src/content/samples/d010-3d.json'), J(mine));
 

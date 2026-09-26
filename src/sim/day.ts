@@ -1,8 +1,11 @@
 // 逐日推進（D010）：把 D009 的生長核心公式（src/sim/rules/）照實驗線 tick() 的順序接起來。這裡只接線，不寫公式。
 // 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d，index.html 行號（每一步都註明；tick() 是 54945–56192）。
-// 上層系統一律接「實驗線自己沒就緒／不存在時」的回退值，名單與理由見 docs/D010-starter-city.md：
-//   經濟閉環、住房市場、企業、T471 分時調度（改走舊版供電 __legacyPower450）、通勤、噪音、事故、災害、火災、犯罪、疾病、
-//   水、污水處理廠、財政；另有卡上沒列、實驗線也沒開關的：城市活動 T299、垃圾清運、糧食供應、夜間城市、摩天樓合併。
+// 沒搬的上層系統分三類（名單與理由見 docs/D010-starter-city.md「上層系統」一節）：
+//   1. 實驗線有開關：本線接它關掉時的回退值（對照的 fallback 設定也用實驗線自己的開關關掉）——住房市場 T488、企業 T489、
+//      T471 分時調度（舊版供電 __legacyPower450／__legacyPower471）、行動力 T491／T509、財政回饋 T510／T515、事故 T493、水（舊式 __legacyWater449）、災害。
+//   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒）、通勤 T141、道路負載與壅堵 T129、
+//      垃圾清運、糧食供應、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
+//   3. 起步城用不到：噪音（沒有噪音源）、污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
 import { cityFromLab, type City, type CityBuilding, type KindTable } from './city.ts';
@@ -97,24 +100,24 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
   }
   // 54949 噪音：沒搬（起步城的 k1／2／3／5／11 都不是噪音源，實驗線也是 0）
   s.day++;                                                               // 54950
-  // 54952 事故 T493、54953 城市活動 T299：回退（沒有事故、沒有活動）
-  // 54956 乾旱只由災害設定；災害回退為關
+  // 54952 事故 T493：關（第 1 類，沒有事故）；54953 城市活動 T299：沒搬（第 2 類，實驗線照跑、每 37 天可能一場）
+  // 54956 乾旱只由災害設定；災害關（第 1 類）
   const wx = weatherStep(s.weather, s.day, s.rng);                        // 54964–54975（F10，唯一在生長前抽亂數的一步）
   s.weather = { weather: wx.weather, wxT: wx.wxT };
-  // 54991 通勤、54995 道路負載：回退（commutePenalty 0、roadLoad 0）
+  // 54991 通勤（T141，每 4 天）、54995 道路負載（T129）：沒搬，實驗線沒有開關、照跑（第 2 類）；本線 commutePenalty、roadLoad 都是 0
   // 54996–55001：實驗線每天整張重算（55279 rebuildAccess468 每天把 landBox 設 null）。地價基準只取決於覆蓋、污染、噪音、
   // 半徑 4 的犯罪（landStaticAt）；逐日模擬裡會變的只有「工業長出來」加的污染（55624，半徑 5），所以只重算那一框，結果逐位相同。
   if (opts.fullLand || s.landBox === 'all') rebuildLandBase(w, g);
   else if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) g.LANDBASE[y * N + x] = landStaticAt(w, f, x, y); }
   s.landBox = null;
   recomputeLandDynamic(g);                                                // 55002：沒有壅堵，LAND＝LANDBASE
-  // 55006 住房市場 T488：回退（沒就緒：入住率 1、住房懲罰 0、新住宅密度＝道路等級、升級係數 1）
+  // 55006 住房市場 T488：關（第 1 類；沒就緒：入住率 1、住房懲罰 0、新住宅密度＝道路等級、升級係數 1）
   const sea = season(s.day);
   const nominal = computePower(w).cap, cap = powerCap(nominal, sea);   // 55008（F11，舊版供電）；55009 T471 調度略過
-  // 55010 水：舊版供水 wa＝pw && 附近有水設施 && 容量——起步城沒有水設施，一律 false；水壓／水質懲罰回退 0
+  // 55010 水：舊版供水 wa＝pw && 附近有水設施 && 容量——起步城沒有水設施，一律 false；水壓／水質懲罰走舊式＝0（第 1 類，__legacyWater449）
   const sewNeed = s.pop >= 500;                                           // 55011 sewerRequired442：昨天的人口 ≥500
   const sewOkArr = new Uint8Array(nn);                                    // 沒有污水處理廠：需要時全城都不合格（兩種模式相同）
-  // 55015 死亡前置、55046 每日計數歸零：疾病回退，沒有死亡
+  // 55015 死亡前置、55046 每日計數歸零：疾病、死亡沒搬（第 2 類，實驗線照跑），本線沒有生病、死亡
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
   let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
   const covAt = (i: number) => { const c: Record<string, number> = {}; for (const k in g.COV) c[k] = g.COV[k][i]; return c; };
@@ -146,10 +149,12 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
   // 55246–55250（F8）：名目就業＝商工＋各設施固定就業；設施計數（55055–55140）沒搬——起步城的電廠、警察局 lv1 都是 0
   const jc = jobCounts(); jc.jobsC = jobsC; jc.jobsI = jobsI;
   let pop = popN, jobs = nominalJobs(jc);
-  // 55251 企業 T489：回退（enterpriseRollback489 39560）＝四捨五入的名目值
+  // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
-  const cityHappy = happyN ? happySum / happyN : .6;                      // 55254
-  // 55256–55284 垃圾、55414 糧食：回退（沒有懲罰）；55426 災害：回退為關
+  let cityHappy = happyN ? happySum / happyN : .6;                        // 55254（住宅 k1 與社宅 k127）
+  // 55256–55277 垃圾清運：沒搬（第 2 類，實驗線照跑）
+  { let s1 = 0, n1 = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (!b || b.k !== 1) continue; s1 += b.h as number; n1++; } if (n1) cityHappy = s1 / n1; }   // 55282–55284：只用住宅 k1 重算
+  // 55414 糧食供應：沒搬（第 2 類）；55426 災害：關（第 1 類）
   const labor = laborMarket481(pop, jobs, null, s.day);                   // 55329（F2，企業沒就緒那一支）
   const L = legacyDemand({ pop, jobs, cityHappy, czone, jobsC, jobsI, indSubsidy: false, tech: s.edu.tech });   // 55578–55584（F1）
   const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, null);                          // 55585（F3，經濟沒就緒）
@@ -171,7 +176,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean } = {}): DayReport {
       if (tgt > cur) b.we = cur + 1; else if (tgt < cur) b.we = cur - 1;
     }
   }
-  // 55691 摩天樓合併（要有水）、55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：回退（不發生、不就緒）
+  // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
+  // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   return {
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
