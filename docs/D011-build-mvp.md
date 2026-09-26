@@ -474,9 +474,14 @@ src 的修正都由主線程自己改；代理只改自己那一組工具檔，�
    - 放開手指到畫出（6 倍降速，三次中位數）≤ 400 ms ✅：最後一輪 269、189、157 ms，中位數 189（修掉重編著色器之前約 290–330 ms）。
    - 拖曳中每次更新預覽（6 倍降速，判最大值）≤ 16 ms ✅：最後一輪最大 9.9 ms、P90 5.7；十幾輪的最大值落在 5.1–14.1 ms。
    - 推進一天（含結算）≤ 5 ms：照卡面（沒寫降速）與 D010 的量法 ✅——Node 1.24 ms、瀏覽器不降速 1.59 ms；**手機代理（6 倍降速）12.73 ms，沒達到**（「卡面更正」7、「沒做成的事」1）。
+     - 雲端上線那一輪同一項量到 4.51 ms，先前兩輪雲端是 9.81、11.25 ms。降速倍數是相對主機的：主機快，量出來就小。所以「6 倍降速」只是手機的粗略代理，不是手機的實際速度。
    - 劇本城第 121 天三角形 44,412（上限 118,884）、draw call 15（上限 18），拖曳預覽時多 1 ✅。
 9. **畫面** ✅：`docs/img/D011-ui-compare.jpg`（介面前後，手機與桌機）、`docs/img/D011-build-mobile.jpg`（手機上從空地到第 120 天）、`docs/img/D011-compare.jpg`（同一串操作，實驗線 2D 與 3D 第 0、30、60、120 天）。
-10. **上線**：（推上 `main` 之後填 Actions 與 Pages）
+10. **上線** ✅：
+    - `main` 從 `e5fe619`（本卡）快進到 `9f8124e`，15 個施工提交。
+    - [Actions run 36267368492](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36267368492)：smoke、Pages 都成功（雲端 Chrome 153.0.8010.52）。
+    - Pages deployment `6683536376` 指向 `9f8124e`、狀態 success。公開頁 <https://lijiabao1998.github.io/GlimmerTown3D-lab/> HTTP 200、921,052 位元組，跟本機建置逐位元組相同。
+    - 同一個提交在 session 分支那一輪（[run 36266952346](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36266952346)）也綠。前一輪 `a01d92a`（[run 36262912185](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36262912185)）是紅的，原因見「施工中遇到」最後三條。
 
 ### 沒做成的事
 
