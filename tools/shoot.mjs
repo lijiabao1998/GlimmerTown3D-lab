@@ -664,10 +664,10 @@ if (want('d014')) {
       await page.evaluate('__gt.simStep(1)');
     }
     // 風化（種子城 (24,24)）與近看小物（工業區 (44,30)）：拉近（實驗線縮放約 2.3），畫面中央 320×200 放大 2 倍
-    const clip2 = async name => { const s = await page.send('Page.captureScreenshot', { format: 'png', clip: { x: 480, y: 300, width: 320, height: 200, scale: 2 } }); fs.writeFileSync(path.join(out, name + '.png'), Buffer.from(s.data, 'base64')); console.log('OK', name); };
+    const clip2 = async (name, y = 300) => { const s = await page.send('Page.captureScreenshot', { format: 'png', clip: { x: 480, y, width: 320, height: 200, scale: 2 } }); fs.writeFileSync(path.join(out, name + '.png'), Buffer.from(s.data, 'base64')); console.log('OK', name); };
     await open('sample=seed516&clean=1');
     await page.evaluate(`__gt.view(${SPOT[0] + .5}, ${SPOT[1] + .5}, 8)`);
-    for (const a of [13, 120, 300]) { await page.evaluate(`__gt.conAgeShift(${-(a + 1)})`); await new Promise(r => setTimeout(r, 250)); await clip2(`d014_weather_${a}`); }
+    for (const a of [13, 120, 300]) { await page.evaluate(`__gt.conAgeShift(${-(a + 1)})`); await new Promise(r => setTimeout(r, 250)); await clip2(`d014_weather_${a}`, 420); }   // 往下對準大樓的牆（中央是屋頂）
     await page.evaluate('__gt.conAgeShift(null)');
     await page.evaluate(`__gt.view(${NEAR[0] + .5}, ${NEAR[1] + .5}, 8)`);
     for (const [tag, v] of [['off', false], ['on', true]]) { await page.evaluate(`__gt.forceNear(${v})`); await new Promise(r => setTimeout(r, 250)); await clip2(`d014_near_${tag}`); }
