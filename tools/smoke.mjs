@@ -9,9 +9,17 @@ import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_DAYS } from '../src/content/starter.ts';
 import { simHash } from '../src/sim/day.ts';
 import { runStarter } from './unit-d010-sim.mjs';
-import { d011Smoke, d011SkipNote } from './smoke-d011.mjs';
+import { labPartition, partRow, drawPlan } from '../src/content/blocks.ts';
+import { d011Smoke, d011SkipNote, rciCover, planRow, lotsOf, lotBad, villaOf, ARCHE } from './smoke-d011.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
+const J = JSON.stringify;
+// D012：讀檔照實驗線重挑外觀（T531）之後的黃金樣本（tools/d012-parity.mjs 在實驗線 @d23c18d 實跑錄的；tools/unit-d012.mjs 在 Node 對拍）：
+// rows＝每一棟住商工根格 [格索引, k, lv, 存檔的 v, 讀檔之後的 v, 地價]、mig＝實驗線這次讀檔重挑了幾棟、
+// part＝種子城、AI 城讀檔（不還原 v）之後實驗線自己算的逐格切分（欄位同 d004-partition-*.json；存檔 v 的那兩份留給 Node 的純函式對拍，tools/unit.mjs）
+const D12 = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/samples/d012-lab.json'), 'utf8')).cities;
+// 用實驗線讀檔之後的 v 建格子（只放住商工根格：切分只看同 k 的住商工，非住商工的格在切分裡跟空格一樣），給 Node 端算預期的切分與街區計畫
+const postGrid = g => { const m = new Map(g.rows.map(r => [r[0], { k: r[1], lv: r[2] || 1, v: r[4], ref: false }])); return { n: g.part.n, cell: i => m.get(i) ?? null }; };
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
 const blankCheck = `(()=>{const c=document.querySelector('canvas'),k=document.createElement('canvas');k.width=96;k.height=60;
@@ -91,12 +99,22 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ===== D003：2D 實驗線的城市（預設模式）=====
   const expectOf = id => JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/${id}.json`), 'utf8')).expect;
   for (const id of ['seed516', 'ai120']) {
-    await open(`sample=${id}&clean=1&blocks=off`);   // D005 起預設是 B；D003 的守衛驗 D003 本身
-    const c = await page.evaluate('({mode: __gt.mode, stats: __gt.stats(), owners: __gt.owners(), n: __gt.buildingCount(), issues: __gt.issues(), hist: __gt.history(), t: __gt.timing(), info: __gt.renderInfo()})');
+    await open(`sample=${id}&clean=1&blocks=off`);   // D005 起預設是 B、D012 起是 C；D003 的守衛驗 D003 本身
+    const c = await page.evaluate('({mode: __gt.mode, stats: __gt.stats(), owners: __gt.owners(), n: __gt.buildingCount(), issues: __gt.issues(), hist: __gt.history(), restyled: __gt.restyled(), list: __gt.buildingList(), t: __gt.timing(), info: __gt.renderInfo()})');
     const exp = expectOf(id), same = JSON.stringify(c.stats) === JSON.stringify(exp);
     log(c.mode === 'city' && same, `D003 ${id}：瀏覽器解碼對帳與實驗線逐項相等`, same ? `建築 ${c.stats.buildings}、${Object.keys(c.stats.kinds).length} 種` : '有差異（node tools/unit.mjs 看細節）');
     log(c.owners === c.n && c.n === exp.buildings, `D003 ${id}：場景畫出的建築數＝城市建築數`, `${c.owners}／${c.n}`);
-    log(c.hist.length === 1 && c.hist[0].t === 'import', `D003 ${id}：匯入記成世界歷史第一筆事件`, `${c.hist[0].t} 第 ${c.hist[0].day} 天 v${c.hist[0].gameVer}`);
+    // D012：只能看的城讀檔也照實驗線重挑外觀（src/io/save.ts viewCode → src/sim/restyle.ts），換了的每一棟記一筆 restyle（日子＝讀檔那天）。
+    // 歷史從「只有匯入一筆」（D003–D011）變成 [匯入, restyle × N]，N＝__gt.restyled()＝實驗線這次讀檔重挑的棟數（種子城 848、AI 城 132），逐棟＝實驗線換了的那幾棟
+    const g12 = D12[id], nn = g12.part.n, imp = c.hist[0], rs = c.hist.slice(1);
+    const wantRs = g12.rows.filter(r => r[3] !== r[4]).map(r => [r[0] % nn, (r[0] / nn) | 0, r[4]]);
+    log(imp?.t === 'import' && rs.every(e => e.t === 'restyle' && e.day === imp.day) && rs.length === c.restyled && c.restyled === g12.mig && J(rs.map(e => [e.x, e.z, e.v])) === J(wantRs),
+      `D003／D012 ${id}：匯入記成世界歷史第一筆事件；之後只有讀檔時照實驗線重挑外觀的 restyle（同一天），筆數＝__gt.restyled()＝實驗線重挑的棟數，逐棟（格、換成的 v）＝實驗線`,
+      `${imp?.t} 第 ${imp?.day} 天 v${imp?.gameVer}；restyle ${rs.length} 筆、__gt.restyled() ${c.restyled}、實驗線 ${g12.mig} 棟、逐棟${J(rs.map(e => [e.x, e.z, e.v])) === J(wantRs) ? '相同' : '不同'}`);
+    // 讀檔之後每一棟住商工的 v＝實驗線讀檔（ensureVariety531 重挑）之後的 v（D012 驗收 1 的瀏覽器半邊；Node 半邊 tools/unit-d012.mjs）
+    const vB = c.list.filter(r => r[1] >= 1 && r[1] <= 3).map(r => [r[3] * nn + r[2], r[1], r[5], r[6]]).sort((p, q) => p[0] - q[0]), vL = g12.rows.map(r => [r[0], r[1], r[2], r[4]]);
+    const vBad = vL.filter((r, j) => J(r) !== J(vB[j])).length + Math.abs(vB.length - vL.length);
+    log(vBad === 0, `D012 ${id}：讀檔之後每一棟住商工的 v＝實驗線讀檔之後的 v（逐棟，k、lv 也相同）`, `${vB.length} 棟（實驗線 ${vL.length}），不同 ${vBad}；讀檔時換了 ${g12.changed} 棟`);
     const v = await page.evaluate(blankCheck);
     log(v > 150, `D003 ${id}：畫面非空白`, `變異量 ${v}`);
     log(c.t.total < 1500, `D003 ${id}：解碼＋建城市＋建場景 < 1,500 ms`, `${c.t.total.toFixed(0)} ms（解碼 ${c.t.decode.toFixed(1)}、城市 ${c.t.city.toFixed(1)}、場景 ${c.t.scene.toFixed(0)}）；繪製 ${c.info.calls} 次、${c.info.triangles} 個三角形`);
@@ -128,13 +146,17 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ===== D004：住商工街區三檔（?blocks=a|b|c）=====
   const D003_BASE = { seed516: [79256, 12], ai120: [70910, 12] };   // 卡面驗收 7：D004 動工前量的 D003 基線（三角形、draw call）
   for (const id of ['seed516', 'ai120']) {
-    const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n, [bt, bc] = D003_BASE[id];
+    // D012：瀏覽器讀進來的城已經照實驗線重挑過 v，切分跟著 v 變（1 級住宅 v 0／5／10 是別墅、不併）：改跟「實驗線讀檔（不還原 v）之後自己算的切分」比
+    // （D012 黃金樣本 part；D0 種子城 370→360、AI 城 97→93，被吸收 10→7、2→5）。存檔 v 的舊黃金樣本 d004-partition-*.json 在瀏覽器裡已經餵不進去（讀檔一定重挑），
+    // 留給 Node 的純函式對拍（tools/unit.mjs）
+    const G = D12[id].part, n = G.n, [bt, bc] = D003_BASE[id];
     await open(`sample=${id}&clean=1&blocks=off`);
     const d = await page.evaluate('({info: __gt.renderInfo(), owners: __gt.owners(), n: __gt.buildingCount(), mode: __gt.blockMode(), part: __gt.partition()})');
     log(d.mode === null && d.info.triangles === bt && d.info.calls === bc && d.owners === d.n, `D004 ${id} ?blocks=off＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同`,
       `${d.info.triangles.toLocaleString()} 三角形（基線 ${bt.toLocaleString()}）、${d.info.calls} 次（基線 ${bc}）、畫到 ${d.owners}／${d.n}`);
     const pd = d.part.filter((r, j) => JSON.stringify(r) !== JSON.stringify(G.cells[j])).length + Math.abs(d.part.length - G.cells.length);
-    log(pd === 0, `D004 ${id} 切分對拍（瀏覽器裡跑同一份 blocks.ts）：逐格＝實驗線`, `${d.part.length} 格、差 ${pd}`);
+    log(pd === 0, `D004／D012 ${id} 切分對拍（瀏覽器裡跑同一份 blocks.ts，讀檔重挑之後的城）：逐格＝實驗線讀檔之後自己算的切分`,
+      `${d.part.length} 格、差 ${pd}（實驗線 D0 ${G.stats.cells.d0}、被吸收 ${G.stats.cells.absorbed}）`);
     // 實驗線畫的格：起點且（多格或沒被吸收）的街區蓋到的格
     const rci = new Set(G.cells.map(r => r[0])), labDrawn = new Set(), absorbed = new Set(G.cells.filter(r => r[1] && r[2] * r[3] === 1 && r[9]).map(r => r[0]));
     for (const r of G.cells) if (r[1] && (r[2] * r[3] > 1 || !r[9])) for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) labDrawn.add(r[0] + dy * n + dx);
@@ -157,62 +179,66 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       } else { ok = cnt.size === rci.size && over === 0 && stray === 0; detail = `住商工 ${rci.size} 格全蓋到（${cnt.size}）、重疊 ${over}、補切 ${s.bi.plan.filter(p => p[7]).length} 塊`; }
       log(s.mode === m && ok && allDrawn && nonRciOk && over === 0 && stray === 0 && v > 150, `D004 ${id} ${m.toUpperCase()} 檔畫得出來、該畫的格都畫到、非住商工全數畫到`,
         `${detail}；非住商工 ${s.n - rci.size} 棟全畫 ${nonRciOk}；變異量 ${v}`);
-      const tri = s.info.triangles, lim = Math.floor(bt * 1.5);
-      log(tri <= lim && s.info.calls <= 18, `D004 ${id} ${m.toUpperCase()} 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18`,
-        `${tri.toLocaleString()}（上限 ${lim.toLocaleString()}，${(tri / bt).toFixed(2)} 倍）、${s.info.calls} 次；建場景 ${s.t.scene.toFixed(0)} ms（其中切分 ${s.t.plan.toFixed(1)} ms）`);
+      // D012：A 檔（一格一棟，對照用）的三角形改成只量不判。讀檔照實驗線重挑 v 之後，種子城 A 檔 118,728 → 121,606，超過上限 118,884（D012 之前就是 1.50 倍、貼著上限）。
+      // A 檔的幾何另有 D008／D012 逐位釘（下面「A 檔沒有立面、飾條」那一項），再變就紅；draw call 照判。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡「要業主定的事」）
+      const tri = s.info.triangles, lim = Math.floor(bt * 1.5), triJudged = m !== 'a';
+      log((!triJudged || tri <= lim) && s.info.calls <= 18, `D004 ${id} ${m.toUpperCase()} 檔手機預算：${triJudged ? '三角形 ≤ D003 基線 1.5 倍' : '三角形只量不判（D012）'}、draw call ≤ 18`,
+        `${tri.toLocaleString()}（上限 ${lim.toLocaleString()}，${(tri / bt).toFixed(2)} 倍${tri > lim ? `，超過 ${(tri - lim).toLocaleString()}` : ''}）、${s.info.calls} 次；建場景 ${s.t.scene.toFixed(0)} ms（其中切分 ${s.t.plan.toFixed(1)} ms）`);
       const pk = await page.evaluate('__gt.blockPickTest(20)');
       log(pk.bad.length === 0 && pk.tested === Math.min(20, pk.pool) && (m === 'a' || pk.multi), `D004 ${id} ${m.toUpperCase()} 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開`,
         (pk.bad.length ? `${pk.bad.length}／${pk.tested} 不對：${pk.bad.slice(0, 3).join('；')}` : `${pk.tested} 個${m === 'a' ? '（A 檔全是 1×1）' : '多格街區'}全對（候選 ${pk.pool}）`)
         + `；斜視角直接點中 ${pk.oblique}／${pk.tested}（其餘被前面較高的建築擋住，點到的是前面那棟）`);
     }
   }
-  // ===== D005：預設 B、地坪、窗磚圖集、點綴 =====
+  // ===== D005：地坪、窗磚圖集、點綴；D012 起預設 C（D005–D011 預設 B，B 改從 ?blocks=b 驗）=====
   {
     const ac = await page.evaluate('__gt.atlasCheck()');
     log(ac.same, 'D005 窗磚圖集第 0 格＝D003 窗磚（逐像素）', `不同 ${ac.diff} 個像素`);
   }
-  const ARCHE = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-arche.json'), 'utf8')).arche;
-  // D006 起地面色族集中在 src/render/ground.ts（草坪＝草色族＋草皮格線）
-  const LOTC = GROUND.lot, lawnSet = new Set([...GROUND.grass, GROUND.grassLine]);
-  const isGrass = (r, g, b) => lawnSet.has((r << 16) | (g << 8) | b);
+  // D006 起地面色族集中在 src/render/ground.ts（草坪＝草色族＋草皮格線）；一格的像素判讀、villa 的判法、街區計畫 → 地坪見 tools/smoke-d011.mjs（lotBad、villaOf、lotsOf）
   for (const id of ['seed516', 'ai120']) {
-    const G = JSON.parse(fs.readFileSync(path.join(ROOT, `src/content/samples/d004-partition-${id}.json`), 'utf8')), n = G.n;
-    // 預期地坪：實驗線畫的街區（起點且多格或沒被吸收）蓋到的格＝它的 k（villa＝4）；其餘住商工格（D0、被吸收）＝5 草坪
-    const lot = new Map(G.cells.map(r => [r[0], 5]));
-    for (const r of G.cells) if (r[1] && (r[2] * r[3] > 1 || !r[9])) {
-      const L = ARCHE['1_1'], villa = r[4] === 1 && r[7] === 1 && r[2] * r[3] <= 4 && L[Math.abs(r[8]) % L.length].n === 'villa';
-      for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) lot.set(r[0] + dy * n + dx, villa ? 4 : r[4]);
-    }
-    const nonRci = `(()=>{const n=${n},rci=new Set(${JSON.stringify([...lot.keys()])}),occ=__gt.layers().occ,o=[];for(let z=0;z<n;z++)for(let x=0;x<n;x++){if(!rci.has(z*n+x)&&!occ[z*n+x])o.push(__gt.groundAt(x,z).join(','));}return o.join('|');})()`;
+    const g12 = D12[id], G = g12.part, n = G.n, rciCells = G.cells.map(r => r[0]);
+    // 預期全在 Node 算、不看瀏覽器：用實驗線讀檔之後的 v（D012 黃金樣本 rows）建格子，照同一份 blocks.ts 切。
+    // 本線切分要先＝實驗線讀檔之後自己算的（逐格），它的 C 檔街區計畫才拿來當預期；C 檔每一格住商工都有街區：依 k 上色、villa（看重挑之後的 v）是庭院，沒有草坪
+    const grid = postGrid(g12), nodePart = labPartition(grid, ARCHE).map(partRow), planC = drawPlan(grid, ARCHE, 'c').map(planRow), lotC = lotsOf(planC, n);
+    // B（照實驗線）：實驗線畫的街區（起點且多格或沒被吸收）蓋到的格＝它的 k（villa＝4，看起點那格的 lv、v）；其餘住商工格（D0、被吸收）＝5 草坪
+    const lotB = new Map(rciCells.map(i => [i, 5]));
+    for (const r of G.cells) if (r[1] && (r[2] * r[3] > 1 || !r[9])) for (let dy = 0; dy < r[3]; dy++) for (let dx = 0; dx < r[2]; dx++) lotB.set(r[0] + dy * n + dx, villaOf(r[4], r[7], r[2] * r[3], r[8]) ? 4 : r[4]);
+    const nonRci = `(()=>{const n=${n},rci=new Set(${J(rciCells)}),occ=__gt.layers().occ,o=[];for(let z=0;z<n;z++)for(let x=0;x<n;x++){if(!rci.has(z*n+x)&&!occ[z*n+x])o.push(__gt.groundAt(x,z).join(','));}return o.join('|');})()`;
+    const rciPx = `${J(rciCells)}.map(i=>[i, __gt.groundAt(i%${n},(i/${n})|0)])`;
+    const cnt = (lot, c) => [...lot.values()].filter(v => v === c).length;
     await open(`sample=${id}&clean=1&blocks=off`);
     const offGround = await page.evaluate(nonRci);
+    // ---- 不帶參數＝C ----
     await open(`sample=${id}&clean=1`);
-    const s = await page.evaluate(`({mode: __gt.blockMode(), owners: __gt.owners(), n: __gt.buildingCount(), art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles(),
-      rci: ${JSON.stringify([...lot.keys()])}.map(i=>[i, __gt.groundAt(i%${n},(i/${n})|0)])})`);
-    const want = s.n - G.stats.cells.d0 - G.stats.cells.absorbed;
-    log(s.mode === 'b' && s.owners === want, `D005 ${id} 不帶參數＝B（照實驗線）`, `畫到 ${s.owners}／${s.n} 棟（沒畫的＝D0 ${G.stats.cells.d0}＋被吸收 ${G.stats.cells.absorbed}）`);
+    const s = await page.evaluate(`({mode: __gt.blockMode(), owners: __gt.owners(), n: __gt.buildingCount(), bi: __gt.blockInfo(), art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles(), rci: ${rciPx}})`);
+    const partOk = J(nodePart) === J(G.cells), planOk = J(s.bi.plan) === J(planC), fills = planC.filter(p => p[7]).length;
+    log(s.mode === 'c' && s.owners === s.n && partOk && planOk && s.bi.drawn.length === planC.length,
+      `D005／D012 ${id} 不帶參數＝C（D012 起；D005–D011 是 B）：每一棟都畫到（沒有 D0 草坪、沒有被吸收的 1×1），街區計畫逐塊＝Node 用實驗線讀檔之後的 v 算的 C 檔`,
+      `畫到 ${s.owners}／${s.n} 棟；街區 ${s.bi.plan.length} 塊（實驗線切的 ${planC.length - fills}＋補切 D0 ${fills}）${planOk ? '＝' : '≠'} Node；本線切分${partOk ? '＝' : '≠'}實驗線讀檔之後的切分`);
     const sameNon = (await page.evaluate(nonRci)) === offGround;
-    const badLot = s.rci.filter(([i, px]) => {
-      const cls = lot.get(i);
-      for (let j = 0; j < px.length; j += 3) {
-        const [r, g, b] = [px[j], px[j + 1], px[j + 2]], hx = (r << 16) | (g << 8) | b;
-        if (hx === 0x2e2e2e) continue;   // 路面電車軌
-        if (cls === 5 ? !isGrass(r, g, b) : !LOTC[cls].includes(hx)) return true;
-      }
-      return false;
-    });
-    const cnt = c => [...lot.values()].filter(v => v === c).length;
-    log(sameNon && badLot.length === 0, `D005 ${id} 地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）`,
-      `住宅 ${cnt(1)}、商業 ${cnt(2)}、工業 ${cnt(3)}、villa ${cnt(4)}、草坪 ${cnt(5)} 格；不對 ${badLot.length} 格${badLot.length ? '（' + badLot.slice(0, 3).map(x => x[0]).join(',') + '）' : ''}；非住商工 ${sameNon ? '相同' : '不同'}`);
-    log(JSON.stringify(s.art) === JSON.stringify(s.tot) && s.art.props > 0 && s.art.kits > 0, `D005 ${id} 點綴全畫出來（場景件數＝擺放計畫，逐項）`, JSON.stringify(s.art));
-    log(s.ws.blockTris > 0 && s.ws.windowed > 0 && s.ws.style0Windowed === 0, `D005 ${id} 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚）`, `街區牆面三角形 ${s.ws.blockTris}、有窗 ${s.ws.windowed}、用第 0 格 ${s.ws.style0Windowed}`);
+    const badC = s.rci.filter(([i, px]) => lotBad(px, lotC.get(i) ?? 5));
+    log(sameNon && badC.length === 0 && lotC.size === rciCells.length && !cnt(lotC, 5),
+      `D005／D012 ${id} C 檔地坪：每一格住商工都依 k 上色、villa 是庭院（看讀檔重挑之後的 v），沒有草坪；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）`,
+      `住宅 ${cnt(lotC, 1)}、商業 ${cnt(lotC, 2)}、工業 ${cnt(lotC, 3)}、villa ${cnt(lotC, 4)}、草坪 ${cnt(lotC, 5)} 格；不對 ${badC.length} 格${badC.length ? '（' + badC.slice(0, 3).map(x => x[0]).join(',') + '）' : ''}；非住商工 ${sameNon ? '相同' : '不同'}`);
+    log(J(s.art) === J(s.tot) && s.art.props > 0 && s.art.kits > 0, `D005 ${id} 點綴全畫出來（場景件數＝擺放計畫，逐項；預設 C）`, J(s.art));
+    log(s.ws.blockTris > 0 && s.ws.windowed > 0 && s.ws.style0Windowed === 0, `D005 ${id} 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚；預設 C）`, `街區牆面三角形 ${s.ws.blockTris}、有窗 ${s.ws.windowed}、用第 0 格 ${s.ws.style0Windowed}`);
     const dp = await page.evaluate('__gt.dressPickTest(20)');
-    log(dp.bad.length === 0 && dp.props > 0 && dp.kits > 0, `D005 ${id} 點前庭道具、屋頂設備（正上方）：回到該街區的建築`, dp.bad.length ? dp.bad.slice(0, 3).join('；') : `道具 ${dp.props}、設備 ${dp.kits} 件全對`);
-    for (const m of ['a', 'c']) {
-      await open(`sample=${id}&clean=1&blocks=${m}`);
-      const t = await page.evaluate('({art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles()})');
-      log(JSON.stringify(t.art) === JSON.stringify(t.tot) && t.ws.style0Windowed === 0, `D005 ${id} ${m.toUpperCase()} 檔點綴全畫出來、窗型正確`, `道具 ${t.art.props}、屋頂設備 ${t.art.kits}、雨遮 ${t.art.awnings}、門 ${t.art.doors}、裝卸口 ${t.art.docks}`);
-    }
+    log(dp.bad.length === 0 && dp.props > 0 && dp.kits > 0, `D005 ${id} 點前庭道具、屋頂設備（正上方）：回到該街區的建築（預設 C）`, dp.bad.length ? dp.bad.slice(0, 3).join('；') : `道具 ${dp.props}、設備 ${dp.kits} 件全對`);
+    // ---- ?blocks=b 照樣是 B（照實驗線）：D0 與被吸收的 1×1 沒畫、畫草坪（比實驗線讀檔之後的切分）----
+    await open(`sample=${id}&clean=1&blocks=b`);
+    const sb = await page.evaluate(`({mode: __gt.blockMode(), owners: __gt.owners(), n: __gt.buildingCount(), art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles(), rci: ${rciPx}})`);
+    log(sb.mode === 'b' && sb.owners === sb.n - G.stats.cells.d0 - G.stats.cells.absorbed, `D005／D012 ${id} ?blocks=b＝B（照實驗線）：D0 與被吸收的沒畫`,
+      `畫到 ${sb.owners}／${sb.n} 棟（沒畫的＝實驗線讀檔之後的 D0 ${G.stats.cells.d0}＋被吸收 ${G.stats.cells.absorbed}）`);
+    const sameNonB = (await page.evaluate(nonRci)) === offGround;
+    const badB = sb.rci.filter(([i, px]) => lotBad(px, lotB.get(i)));
+    log(sameNonB && badB.length === 0 && cnt(lotB, 5) === G.stats.cells.d0 + G.stats.cells.absorbed,
+      `D005 ${id} B 檔地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪（D012 起比實驗線讀檔之後的切分）；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）`,
+      `住宅 ${cnt(lotB, 1)}、商業 ${cnt(lotB, 2)}、工業 ${cnt(lotB, 3)}、villa ${cnt(lotB, 4)}、草坪 ${cnt(lotB, 5)} 格；不對 ${badB.length} 格${badB.length ? '（' + badB.slice(0, 3).map(x => x[0]).join(',') + '）' : ''}；非住商工 ${sameNonB ? '相同' : '不同'}`);
+    log(J(sb.art) === J(sb.tot) && sb.ws.style0Windowed === 0, `D005 ${id} B 檔點綴全畫出來、窗型正確`, `道具 ${sb.art.props}、屋頂設備 ${sb.art.kits}、雨遮 ${sb.art.awnings}、門 ${sb.art.doors}、裝卸口 ${sb.art.docks}`);
+    await open(`sample=${id}&clean=1&blocks=a`);
+    const t = await page.evaluate('({art: __gt.artCounts(), tot: __gt.dressTotals(), ws: __gt.wallStyles()})');
+    log(J(t.art) === J(t.tot) && t.ws.style0Windowed === 0, `D005 ${id} A 檔點綴全畫出來、窗型正確`, `道具 ${t.art.props}、屋頂設備 ${t.art.kits}、雨遮 ${t.art.awnings}、門 ${t.art.doors}、裝卸口 ${t.art.docks}`);
   }
 
   // ===== D006：地面色（取自實驗線）、草皮格線、人行道、車道線；幾何不變；300 年示範不變 =====
@@ -221,13 +247,22 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     const hi = await page.evaluate('__gt.renderInfo()');
     log(hi.triangles === 48794 && hi.calls === 11, 'D006 300 年示範不動：三角形、draw call 跟 D005 前相同', `${hi.triangles} 個、${hi.calls} 次`);
   }
-  // 預設 B 的三角形釘：D006 驗「色調不改幾何」時釘的是 D005 的值（57,176／58,772）；D007 故意改了非住商工的幾何，釘改成 D007 定稿的值（59,910／64,606）；
-  // D008 故意在 B、C 檔加了英美立面與飾條，釘再改成 D008 定稿的值
-  const D005_TRI = { seed516: 69598, ai120: 67396 };
+  // 幾何釘（三角形、draw call）：D006 驗「色調不改幾何」時釘的是 D005 的值（預設 B：57,176／58,772）；D007 故意改了非住商工的幾何，釘改成 D007 定稿的值（59,910／64,606）；
+  // D008 故意在 B、C 檔加了英美立面與飾條，釘再改成 D008 定稿的值（69,598／67,396）。
+  // D012 兩件事一起改了釘：預設 B → C（D0 與被吸收的 1×1 也畫）；讀檔照實驗線重挑 v（原型跟著 v 換，切分也跟著 v 變：1 級住宅 v 0／5／10 是別墅、不併）。
+  // 釘改成 D012 量的值，預設 C 與 ?blocks=b 都釘：預設 C 種子城 94,002、AI 城 74,990（卡面研究時用存檔 v 量的 C 是 93,610／74,566）；
+  // ?blocks=b 71,690／68,028（D008 的 69,598／67,396 是存檔 v）。預設 C 另驗仍在手機預算內（≤ D003 基線 1.5 倍、draw call ≤ 18）
+  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 74990, b: 68028 } }, D012_CALLS = 15;
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
-    const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone()})');
-    log(info.i.triangles === D005_TRI[id] && info.i.calls === 15 && info.tone === 'd', `D006～D008 ${id} 幾何釘住（預設 B 的三角形、draw call 同最近一張卡定稿的值）、預設明暗 d`, `${info.i.triangles}／${info.i.calls} 次、明暗 ${info.tone}`);
+    const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone(), mode: __gt.blockMode()})');
+    await open(`sample=${id}&clean=1&blocks=b`);
+    const ib = await page.evaluate('({i: __gt.renderInfo(), mode: __gt.blockMode()})'), pin = D012_TRI[id], lim = Math.floor(D003_BASE[id][0] * 1.5);
+    log(info.mode === 'c' && info.i.triangles === pin.c && info.i.calls === D012_CALLS && info.tone === 'd' && info.i.triangles <= lim && info.i.calls <= 18
+      && ib.mode === 'b' && ib.i.triangles === pin.b && ib.i.calls === D012_CALLS,
+      `D006～D008／D012 ${id} 幾何釘住（預設 C、?blocks=b 的三角形與 draw call＝D012 定稿的值；預設 C 仍 ≤ D003 基線 1.5 倍、draw call ≤ 18）、預設明暗 d`,
+      `預設 ${String(info.mode).toUpperCase()} ${info.i.triangles.toLocaleString()}（釘 ${pin.c.toLocaleString()}，上限 ${lim.toLocaleString()}，${(info.i.triangles / D003_BASE[id][0]).toFixed(2)} 倍）／${info.i.calls} 次；`
+      + `B ${ib.i.triangles.toLocaleString()}（釘 ${pin.b.toLocaleString()}）／${ib.i.calls} 次；明暗 ${info.tone}`);
     const rgb = Buffer.from(G.rgb, 'base64'), n = L.n, S = G.S, W = G.W;
     const px = (x, z, u, v) => { const i = ((z * S + v) * W + x * S + u) * 3; return (rgb[i] << 16) | (rgb[i + 1] << 8) | rgb[i + 2]; };
     const isRoad = (x, z) => x >= 0 && z >= 0 && x < n && z < n && L.road[z * n + x] > 0;
@@ -316,12 +351,16 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
 
   // ===== D008：英美立面逐戶造型與飾條（只在 B、C 檔）=====
   {
-    const D007_A = { seed516: 118728, ai120: 78324 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // A 檔＝D007 定稿；預算基線＝D003
+    // A 檔釘：D008 定的是「A 檔跟 D007 定稿相同」（118,728／78,324，存檔 v）。D012 讀檔照實驗線重挑 v（種子城換 848 棟、AI 城 132 棟），
+    // A 檔一格一棟、每一棟照自己的 v 挑原型，幾何跟著換：釘改成 D012 量的值 121,606／78,424（沒有立面、飾條照舊）。
+    // 注意：種子城 A 檔 121,606 超過 D004 驗收 8 的手機預算（三檔都 ≤ D003 基線 1.5 倍＝118,884）。D004 那一項的 A 檔三角形改成只量不判、照印超過多少；
+    // 這裡的逐位釘照判，A 檔幾何再變就紅。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡）
+    const D012_A = { seed516: 121606, ai120: 78424 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003
     for (const id of ['seed516', 'ai120']) {
       await open(`sample=${id}&clean=1&blocks=a`);
       const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');
-      log(a.i.triangles === D007_A[id] && a.i.calls === 15 && a.fb.length === 0 && a.art.units + a.art.rows + a.art.parts + a.art.trims === 0,
-        `D008 ${id} A 檔不變：三角形、draw call＝D007 定稿，沒有立面、飾條`, `${a.i.triangles.toLocaleString()}（D007 ${D007_A[id].toLocaleString()}）／${a.i.calls} 次、立面街區 ${a.fb.length}`);
+      log(a.i.triangles === D012_A[id] && a.i.calls === 15 && a.fb.length === 0 && a.art.units + a.art.rows + a.art.parts + a.art.trims === 0,
+        `D008／D012 ${id} A 檔沒有立面、飾條；三角形、draw call＝D012 定稿（讀檔重挑 v 之後；D007 定稿是存檔 v）`, `${a.i.triangles.toLocaleString()}（釘 ${D012_A[id].toLocaleString()}）／${a.i.calls} 次、立面街區 ${a.fb.length}`);
       for (const m of ['b', 'c']) {
         await open(`sample=${id}&clean=1&blocks=${m}`);
         const d = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts(), tot: __gt.dressTotals(), pk: __gt.facadePickTest(40)})');
@@ -338,17 +377,22 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     }
   }
 
-  // 面板切換鈕（手機直式）：四顆都在畫面內；點 B 會換檔、網址跟著改、鏡頭不動
+  // 面板切換鈕（手機直式）：☰ 選單在畫面內；換檔、網址跟著改、鏡頭不動
   await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
   await open('sample=seed516&at=36,36&zoom=2.4');
-  // D011：街區三檔收進 ☰ 選單（「D003 現況」鈕拿掉，D000 排定；?blocks=off 網址照留給守衛）
-  const sw = await page.evaluate(`(()=>{document.getElementById('menuBtn').click();const bs=[...document.querySelectorAll('#menu .item')].filter(b=>b.dataset.m.startsWith('blocks:')),
-      sheet=document.querySelector('#menu .sheet').getBoundingClientRect(),inView=sheet.left>=0&&sheet.right<=innerWidth&&sheet.bottom<=innerHeight+1;
-    const on=()=>bs.find(b=>b.classList.contains('on'))?.textContent,on0=on(),m0=__gt.blockMode();bs[2].click();const m1=__gt.blockMode(),url1=location.search,menuClosed=document.getElementById('menu').hidden;
-    document.getElementById('menuBtn').click();const on1=[...document.querySelectorAll('#menu .item.on')].map(b=>b.dataset.m);document.getElementById('menuX').click();
-    return {n:bs.length,labels:bs.map(b=>b.textContent),inView,on0,m0,m1,url1,menuClosed,on1,d003:[...document.querySelectorAll('button')].some(b=>/D003/.test(b.textContent))};})()`);
-  log(sw.n === 3 && sw.inView && /^B/.test(sw.on0) && sw.m0 === 'b' && sw.m1 === 'c' && /blocks=c/.test(sw.url1) && sw.menuClosed && sw.on1.includes('blocks:c') && !sw.d003,
-    'D004／D005 手機直式：☰ 選單在畫面內，街區 A／B／C 三檔；預設 B，點 C 換檔、網址跟著改；面板上沒有「D003 現況」', JSON.stringify(sw));
+  // D011：街區三檔收進 ☰ 選單（「D003 現況」鈕拿掉，D000 排定；?blocks=off 網址照留給守衛）。
+  // D012 起預設 C：打開選單時 C 亮著；點 B 換檔、網址帶 blocks=b（B 亮著）；再點 C 回預設、網址拿掉 blocks（D005–D011 是預設 B、點 C 帶 blocks=c）
+  const sw = await page.evaluate(`(()=>{const items=()=>[...document.querySelectorAll('#menu .item')].filter(b=>b.dataset.m.startsWith('blocks:')),lit=()=>[...document.querySelectorAll('#menu .item.on')].map(b=>b.dataset.m);
+    const open=()=>document.getElementById('menuBtn').click(),hidden=()=>document.getElementById('menu').hidden,cam=()=>JSON.stringify(__gt.cam());
+    open();const bs=items(),sheet=document.querySelector('#menu .sheet').getBoundingClientRect(),inView=sheet.left>=0&&sheet.right<=innerWidth&&sheet.bottom<=innerHeight+1;
+    const on0=bs.find(b=>b.classList.contains('on'))?.textContent,m0=__gt.blockMode(),c0=cam();
+    bs.find(b=>b.dataset.m==='blocks:b').click();const m1=__gt.blockMode(),url1=location.search,menuClosed=hidden();
+    open();const on1=lit();items().find(b=>b.dataset.m==='blocks:c').click();const m2=__gt.blockMode(),url2=location.search,closed2=hidden();
+    open();const on2=lit();document.getElementById('menuX').click();
+    return {n:bs.length,labels:bs.map(b=>b.textContent),inView,on0,m0,m1,url1,menuClosed,on1,m2,url2,closed2,on2,camSame:cam()===c0,d003:[...document.querySelectorAll('button')].some(b=>/D003/.test(b.textContent))};})()`);
+  log(sw.n === 3 && sw.inView && /^C/.test(sw.on0) && sw.m0 === 'c' && sw.m1 === 'b' && /[?&]blocks=b\b/.test(sw.url1) && sw.menuClosed && sw.on1.includes('blocks:b') && !sw.on1.includes('blocks:c')
+      && sw.m2 === 'c' && !/blocks=/.test(sw.url2) && sw.closed2 && sw.on2.includes('blocks:c') && !sw.on2.includes('blocks:b') && sw.camSame && !sw.d003,
+    'D004／D005／D012 手機直式：☰ 選單在畫面內，街區 A／B／C 三檔；D012 起預設 C（選單上 C 亮著）；點 B 換檔、網址帶 blocks=b，再點 C 回預設、網址拿掉 blocks；鏡頭不動；面板上沒有「D003 現況」', JSON.stringify(sw));
   await open('sample=seed516&blocks=off&clean=1');
   log(await page.evaluate('__gt.blockMode()') === null, 'D011：「D003 現況」只剩網址 ?blocks=off（守衛用）', 'blockMode null');
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
@@ -359,20 +403,24 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     const KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
     const nodeHash = simHash(runStarter(R('src/content/samples/starter.code.txt'), KT, vrank).s);
     await open('sample=starter&clean=1');
-    const s0 = await page.evaluate('__gt.sim()');
+    const s0 = await page.evaluate('__gt.sim()'), rs0 = await page.evaluate('__gt.restyled()');
     const f1 = await page.evaluate('__gt.frames()'); await new Promise(r => setTimeout(r, 1000)); const f2 = await page.evaluate('__gt.frames()');
-    log(!!s0 && s0.day === 1 && s0.buildings === 2 && s0.events === 1 && !s0.playing && f2 - f1 <= 1, 'D010 起步城：第 1 天、電廠與警察局 2 棟、歷史只有匯入一筆；載入時不自動播放、靜止不重畫',
-      s0 ? `第 ${s0.day} 天、${s0.buildings} 棟、${s0.events} 筆、播放 ${s0.playing}、靜止 1 秒 ${f2 - f1} 幀` : '沒有模擬');
+    // D012：讀檔照實驗線重挑外觀，起步城第 1 天還沒有住商工，重挑 0 棟，歷史照舊只有匯入一筆
+    log(!!s0 && s0.day === 1 && s0.buildings === 2 && s0.events === 1 && rs0 === 0 && !s0.playing && f2 - f1 <= 1, 'D010 起步城：第 1 天、電廠與警察局 2 棟、歷史只有匯入一筆（讀檔重挑外觀 0 棟）；載入時不自動播放、靜止不重畫',
+      s0 ? `第 ${s0.day} 天、${s0.buildings} 棟、${s0.events} 筆、重挑 ${rs0} 棟、播放 ${s0.playing}、靜止 1 秒 ${f2 - f1} 幀` : '沒有模擬');
     const s1 = await page.evaluate(`__gt.simStep(${STARTER_DAYS})`);
     log(s1 && s1.hash === nodeHash && s1.day === 1 + STARTER_DAYS, `D010 瀏覽器推 ${STARTER_DAYS} 天的狀態雜湊＝Node 跑的（同一份程式、同一個種子）`, s1 ? `瀏覽器 ${s1.hash}、Node ${nodeHash}；第 ${s1.day} 天 人口 ${s1.pop}、住商工 ${s1.rci[1][0]}／${s1.rci[2][0]}／${s1.rci[3][0]}` : '沒有結果');
-    const d = await page.evaluate('({i: __gt.renderInfo(), owners: __gt.owners(), drawn: __gt.blockInfo() ? __gt.blockInfo().drawn.length : 0, blank: ' + blankCheck + '})');
-    log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.drawn > 50 && d.blank > 150, `D010 手機預算：起步城第 ${1 + STARTER_DAYS} 天三角形 ≤ 118,884（D003 種子城基線 1.5 倍）、draw call ≤ 18；畫面非空白`,
-      `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；畫出 ${d.drawn} 個街區、${d.owners} 棟；變異數 ${d.blank}`);
+    // D012 起預設 C（D010 卡量的是 B：第 121 天 46,972 個三角形）：另驗住商工每一格剛好一個街區畫（D012 驗收 5：沒畫 0 格、重疊 0）
+    const d = await page.evaluate('({i: __gt.renderInfo(), owners: __gt.owners(), mode: __gt.blockMode(), bi: __gt.blockInfo(), list: __gt.buildingList(), blank: ' + blankCheck + '})');
+    const cov = rciCover(d.bi, d.list);
+    log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.bi.drawn.length > 50 && d.blank > 150 && d.mode === 'c' && cov.ok,
+      `D010／D012 手機預算：起步城第 ${1 + STARTER_DAYS} 天（預設 C 檔）三角形 ≤ 118,884（D003 種子城基線 1.5 倍）、draw call ≤ 18；住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）；畫面非空白`,
+      `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）、畫到 ${d.owners} 棟；變異數 ${d.blank}`);
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     const ms = [];
     try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild()')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
     const med = [...ms].sort((a, b) => a - b)[1];
-    log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
+    log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D012 起是 C 檔）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
     await page.evaluate('__gt.loadSample("starter")');
     await page.evaluate('__gt.simSpeed(2)');
     const fA = await page.evaluate('(__gt.simPlay(true), __gt.frames())');
@@ -402,6 +450,44 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       const dock=document.getElementById('dock'),play=document.getElementById('play'),sp=[...document.querySelectorAll('#spd button')];
       return {dock:!dock.hidden,play:inV(play),speeds:sp.length,speedsIn:sp.every(inV),label:document.getElementById('dayLbl').textContent};})()`);
     log(mb.dock && mb.play && mb.speeds === 3 && mb.speedsIn && /第 1 天/.test(mb.label), 'D010 手機直式：播放鈕、三檔速度都在畫面內；顯示第幾天（D011 起在下方工具列）', JSON.stringify(mb));
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
+  }
+
+  // ===== D012：網址參數只認自己的鍵（src/cityView.ts、src/historyView.ts 查表改 Object.hasOwn）；?blocks=b 照樣是 B =====
+  // 研究時用 D012 之前的建置實測：?sample=constructor 查到 Object 的建構子當樣本、開頁丟例外停在載入；?blocks=constructor、__proto__ 通過 in 檢查，
+  // 檔位變成那個字串（選單上沒有對應的項目，建築卡寫「CONSTRUCTOR 檔」）；?tone=、?style=constructor 也會通過。改完之後照預設開、頁面沒有錯誤
+  {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    const e0 = page.errors.length;
+    // 開頁之後讀：ready、檔位、☰ 選單上亮著的街區項目、網址、樣本、明暗、模擬（天數、歷史筆數）、第一個畫出來的街區起點那一棟的建築卡「街區…檔」那一列、畫面非空白
+    const look = `(()=>{if(!(window.__gt&&__gt.ready))return {ready:false};const btn=document.getElementById('menuBtn');let lit=null;
+      if(btn){btn.click();lit=[...document.querySelectorAll('#menu .item.on')].map(b=>b.dataset.m).filter(m=>m.startsWith('blocks:'));document.getElementById('menuX').click();}
+      const bi=__gt.blockInfo(),p=bi&&bi.drawn.length?bi.plan[bi.drawn[0]]:null,card=p?__gt.openTile(p[0],p[1]):null,s=__gt.sim();
+      return {ready:true,mode:__gt.blockMode(),lit,url:location.search,sample:__gt.sample,tone:__gt.tone(),sim:s?{day:s.day,events:s.events}:null,
+        row:card?card.rows.find(r=>/^街區 /.test(r))??null:null,blank:${blankCheck}};})()`;
+    const R = {};
+    for (const q of ['blocks=constructor', 'blocks=__proto__', 'blocks=b', 'tone=constructor', 'style=constructor']) { await open(`sample=seed516&${q}`); R[q] = await page.evaluate(look); }
+    await page.evaluate('__gt.clearSave()');                              // ?sample=constructor：沒有存檔時照預設開新城（新城一開就存成我的城；之後這個 Chrome 不再讀城，存檔留著無妨）
+    await open('sample=constructor'); R['sample=constructor'] = await page.evaluate(look);
+    await open('mode=history&clean=1&style=constructor');
+    const H = await page.evaluate(`({ready: !!(window.__gt && __gt.ready), blank: ${blankCheck}})`);
+    const errs = page.errors.slice(e0), errTxt = errs.length ? `；頁面錯誤 ${errs.length}：${errs.slice(0, 2).join(' ｜ ')}` : '；頁面沒有錯誤';
+    const asC = r => r.ready && r.mode === 'c' && J(r.lit) === J(['blocks:c']) && /^街區 \d+×\d+C 檔/.test(r.row ?? '') && r.blank > 150;
+    const say = r => r.ready ? `檔位 ${r.mode}、選單亮 ${J(r.lit)}、網址「${r.url}」、卡片「${(r.row ?? '沒有').slice(0, 24)}」、變異量 ${r.blank}` : '頁面沒有 ready';
+    log(asC(R['blocks=constructor']) && asC(R['blocks=__proto__']) && errs.length === 0,
+      'D012 網址 ?blocks=constructor、?blocks=__proto__：照預設開 C 檔（選單上 C 亮著、建築卡寫「C 檔」），頁面沒有錯誤',
+      `constructor：${say(R['blocks=constructor'])}｜__proto__：${say(R['blocks=__proto__'])}${errTxt}`);
+    const sc = R['sample=constructor'];
+    log(sc.ready && sc.sample === 'mine' && sc.sim?.day === 1 && sc.sim.events === 1 && sc.mode === 'c' && errs.length === 0,
+      'D012 網址 ?sample=constructor：照預設開（沒有存檔＝新城，一開就是我的城），頁面沒有錯誤（D012 之前開頁就丟例外、停在載入）',
+      sc.ready ? `樣本 ${sc.sample}、第 ${sc.sim?.day} 天、${sc.sim?.events} 筆、檔位 ${sc.mode}${errTxt}` : '頁面沒有 ready' + errTxt);
+    const tc = R['tone=constructor'], st = R['style=constructor'];
+    log(tc.ready && tc.tone === 'd' && tc.blank > 150 && st.ready && st.blank > 150 && H.ready && H.blank > 150 && errs.length === 0,
+      'D012 網址 ?tone=constructor、?style=constructor（城市模式、300 年示範）：照預設開、畫得出來，頁面沒有錯誤',
+      `tone：明暗 ${tc.tone}、變異量 ${tc.blank}；style：變異量 ${st.blank}；300 年示範 style：${H.ready ? `變異量 ${H.blank}` : '頁面沒有 ready'}${errTxt}`);
+    const bb = R['blocks=b'];
+    log(bb.ready && bb.mode === 'b' && J(bb.lit) === J(['blocks:b']) && /[?&]blocks=b\b/.test(bb.url) && /^街區 \d+×\d+B 檔/.test(bb.row ?? '') && bb.blank > 150,
+      'D012 網址 ?blocks=b 照樣是 B（照實驗線）：選單上 B 亮著、網址留著 blocks=b、建築卡寫「B 檔」', say(bb));
     await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
   }
 

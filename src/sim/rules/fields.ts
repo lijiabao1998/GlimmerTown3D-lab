@@ -132,7 +132,9 @@ export function recomputeLandDynamic(g: Grids): void {
 
 // 53135–53157：全量重建（讀檔、新圖、復原後）。清零 → 掃全圖蓋印 → LANDBASE → LAND → EDU。
 // 實驗線同時清 landDirty／landBox（53154），這裡沒有髒標記，呼叫端自己決定何時 rebuildLandBase。
-export function rebuildCov(w: World, g: Grids, budget: SvcBudget, e: EduCtx): void {
+// landAt：只算這幾格的地價基準、不算教育場（D012：只能看的城讀檔時重挑外觀只讀住商工根格的地價。覆蓋、污染照樣整張蓋，
+// 所以這幾格的值跟整張算的逐位元組相同；其他格的地價、整張教育場沒算，這種場只能拿來重挑，不能推進。審查：實驗線 1000×1000 的圖整張算要約 0.8 秒）
+export function rebuildCov(w: World, g: Grids, budget: SvcBudget, e: EduCtx, landAt?: readonly number[]): void {
   if (w.N !== g.N) throw new Error(`rebuildCov：地圖 ${w.N} 與場 ${g.N} 尺寸不同`);
   const N = g.N;
   for (const f in g.COV) g.COV[f].fill(0);
@@ -153,6 +155,7 @@ export function rebuildCov(w: World, g: Grids, budget: SvcBudget, e: EduCtx): vo
     if (t.tree) stampPolTree(g, x, y, 1);
   }
   const f = fieldsOf(g);
+  if (landAt) { for (const j of landAt) g.LANDBASE[j] = landStaticAt(w, f, j % N, (j / N) | 0); recomputeLandDynamic(g); return; }   // 變數用 j：D010 突變守衛以 rebuildLandBase 那一行字面當錨點
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) g.LANDBASE[idx(w, x, y)] = landStaticAt(w, f, x, y);   // Uint8Array 存值＝截尾
   recomputeLandDynamic(g);
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) g.EDU[idx(w, x, y)] = eduStaticAt(g, x, y, e);

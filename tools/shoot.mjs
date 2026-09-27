@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -394,14 +394,19 @@ if (want('d010')) {
 //   D011-compare.jpg：對拍那一串操作（tools/d011-ops.mjs A、推進一天、B），2D 實驗線與 3D 在經過第 0、30、60、120 天的畫面（2D 那一欄先跑 tools/d011-parity.mjs --shots）
 //   D011-ui-compare.jpg：介面前後（--before＝D010 版建出的 dist；起步城、手機直式與桌機）
 //   D011-build-mobile.jpg：手機上從空地到第 120 天（Node 守衛那一份劇本，同一串操作、資金設定照做）
+// D011、D012 共用：乾淨開局（先到只能看的樣本城清存檔，再開指定網址）；劇本一筆 → 瀏覽器（tools/d011-ops.mjs 的操作）：資金、亂數對齊（兩邊 mulberry32(v)）、
+// 復原走測試出口；施工走 __gt.edit（跟手勢同一條路）。單格拆除是 x0＝x1、z0＝z1 的框
+const fresh = async (open, page, q) => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await open(q); };
+const js = o => o.k === 'money' ? `__gt.simMoney(${o.v})` : o.k === 'seed' ? `__gt.simSeed(${o.v})` : o.k === 'undo' ? '__gt.undo()' : `__gt.edit(${JSON.stringify(o)})`;
+const toOp = (o, found) => o.k === 'money' || o.k === 'seed' || o.k === 'undo' ? o : o.at ? { k: o.k, tool: o.tool, x0: found[0], z0: found[1], x1: found[0], z1: found[1] }
+  : o.k === 'tap' ? { k: 'tap', tool: o.tool, x0: o.x, z0: o.z, x1: o.x, z1: o.z } : { k: o.k, tool: o.tool, x0: o.x0, z0: o.z0, x1: o.x1, z1: o.z1 };
+// 框裡照格索引順序第一棟根格：what＝'kN'（那一種）或 'rci'（住商工任一種），同 tools/d011-ops.mjs PICK_SRC
+const pickJs = o => { const kOk = o.what === 'rci' ? 'b[1]>=1&&b[1]<=3' : `b[1]===${+o.what.slice(1)}`;
+  return `(()=>{const L=__gt.layers(),n=L.n,[x0,z0,x1,z1]=${JSON.stringify(o.rect)};for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){const id=L.occ[z*n+x];if(id){const b=__gt.buildingList().find(r=>r[0]===id);if(b&&(${kOk})&&b[2]===x&&b[3]===z)return [x,z];}}return null;})()`; };
+
 if (want('d011')) {
   const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
   const code = R('src/content/samples/newcity.code.txt').trim(), ops = opsOf(code), X = ops.site.x0, Z = ops.site.z0;
-  const fresh = async (open, page, q) => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await open(q); };
-  // 劇本一筆 → 瀏覽器（tools/d011-ops.mjs 的操作）：資金、亂數對齊（兩邊 mulberry32(v)）、復原走測試出口；施工走 __gt.edit（跟手勢同一條路）。單格拆除是 x0＝x1、z0＝z1 的框
-  const js = o => o.k === 'money' ? `__gt.simMoney(${o.v})` : o.k === 'seed' ? `__gt.simSeed(${o.v})` : o.k === 'undo' ? '__gt.undo()' : `__gt.edit(${JSON.stringify(o)})`;
-  const toOp = (o, found) => o.k === 'money' || o.k === 'seed' || o.k === 'undo' ? o : o.at ? { k: o.k, tool: o.tool, x0: found[0], z0: found[1], x1: found[0], z1: found[1] }
-    : o.k === 'tap' ? { k: 'tap', tool: o.tool, x0: o.x, z0: o.z, x1: o.x, z1: o.z } : { k: o.k, tool: o.tool, x0: o.x0, z0: o.z0, x1: o.x1, z1: o.z1 };
   // 1) 3D 照對拍那一串做，拍第 0、30、60、120 天；結束時的雜湊要等於 Node 跑的
   const P = parity3d(codeWithSeed(code, 5162026), KT, vrank, 120), found = P.B.find(o => o.k === 'pick').found;
   const plan = [...ops.A.map(o => toOp(o)), 'shot0', 'step1', ...ops.B.filter(o => o.k !== 'pick').map(o => toOp(o, found))];
@@ -462,11 +467,7 @@ if (want('d011')) {
       if (kind === 'days') { await page.evaluate(`__gt.simStep(${arg})`); const s = await page.evaluate('__gt.sim()'); if (arg > 1) await shot(`d011_build_${++seg}`, `第 ${s.day - 1} 天・人口 ${s.pop}・$${Math.round(s.money).toLocaleString()}`); continue; }
       const b = batch++;
       for (const o of arg) {
-        if (o.k === 'pick') {   // 框裡照格索引順序第一棟根格：what＝'kN'（那一種）或 'rci'（住商工任一種），同 tools/d011-ops.mjs PICK_SRC
-          const kOk = o.what === 'rci' ? 'b[1]>=1&&b[1]<=3' : `b[1]===${+o.what.slice(1)}`;
-          const r = await page.evaluate(`(()=>{const L=__gt.layers(),n=L.n,[x0,z0,x1,z1]=${JSON.stringify(o.rect)};for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++){const id=L.occ[z*n+x];if(id){const b=__gt.buildingList().find(r=>r[0]===id);if(b&&(${kOk})&&b[2]===x&&b[3]===z)return [x,z];}}return null;})()`);
-          picks[o.as] = r; continue;
-        }
+        if (o.k === 'pick') { picks[o.as] = await page.evaluate(pickJs(o)); continue; }
         await page.evaluate(js(toOp(o, o.at ? picks[o.at] : null)));
       }
       if (b === 0 || b === 2) { const s = await page.evaluate('__gt.sim()'); await shot(`d011_build_${++seg}`, `${b ? `第 ${s.day - 1} 天擴建後` : '第一批施工後'}・$${Math.round(s.money).toLocaleString()}`); }
@@ -487,6 +488,103 @@ if (want('d011')) {
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       // 視窗高度設成內容的高度再拍（視窗比內容高時，無頭 Chrome 會在下方再畫一次上面的內容；scrollHeight 在內容比視窗矮時回報視窗高，所以量格線的底邊）
       const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log('OK', file, `${w}×${ch}`);
+    });
+  }
+}
+
+// ---- D012 讀檔照實驗線重挑外觀；看不見的建築畫出來 ----
+//   D012-before-after.jpg：同一個畫面，前＝D012 之前的建置（--before，預設 scratch/d011-dist：線上 9f8124e 那一版，預設 B、讀檔不重挑），
+//     後＝現在（預設 C、讀檔照實驗線重挑）。種子城、AI 城住宅區特寫（左邊附實驗線讀檔之後的 2D：tools/d012-parity.mjs --shots 拍在 scratch/lab/d012_*），
+//     劇本城（Node 守衛那一份完整劇本）第 121 天、重新整理一次之後（手機）
+//   D012-compare.jpg：D011 那一組（對照那一跑，種子 5162026，不重新整理）第 0／30／60／120 天：2D 實驗線｜3D 預設 C｜3D B（照實驗線的切分）
+if (want('d012')) {
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
+  const code = R('src/content/samples/newcity.code.txt').trim(), ops = opsOf(code), X = ops.site.x0, Z = ops.site.z0;
+  const beforeDir = path.resolve(ROOT, arg('before', 'scratch/d011-dist')), hasBefore = fs.existsSync(path.join(beforeDir, 'index.html'));
+  if (!hasBefore) console.log(`（${path.relative(ROOT, beforeDir)} 沒有 D012 之前的建置，「前」那一欄留白：git worktree 取 052ec22 建置後放進去）`);
+  const VIEWS = [['seed', 'sample=seed516&at=8.5,8.5&zoom=5.13', '種子城・住宅區特寫'], ['ai', 'sample=ai120&at=32.5,32.5&zoom=5.13', 'AI 城・住宅區特寫']];
+  const notes = {};
+  // 1) 樣本城：前、後各開一次同一個網址（只能看的城，讀檔就是匯入）
+  for (const [tag, root] of [['before', hasBefore ? beforeDir : null], ['after', '']]) {
+    if (root === null) continue;
+    await withBrowser({ ...(root ? { root } : {}), width: 1280, height: 800 }, async ({ open, page }) => {
+      for (const [name, q] of VIEWS) {
+        await open(q + '&clean=1'); await new Promise(r => setTimeout(r, 300));
+        if (tag === 'after') notes[name] = await page.evaluate('({restyled: __gt.restyled(), mode: __gt.blockMode()})');
+        await save(page, `d012_${name}_${tag}`);
+      }
+      errors += page.errors.length;
+    });
+  }
+  // 2) 劇本城第 121 天：照 Node 守衛那一份劇本在頁面裡做完，重新整理一次（讀檔：後＝照實驗線重挑）再拍；兩邊的劇本結果雜湊都要等於 Node
+  const script = scriptOf(code), N = runScript(code, KT, vrank, script);
+  for (const [tag, root] of [['before', hasBefore ? beforeDir : null], ['after', '']]) {
+    if (root === null) continue;
+    await withBrowser({ ...(root ? { root } : {}), width: 412, height: 860 }, async ({ open, page }) => {
+      await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+      await fresh(open, page, '');
+      const picks = {};
+      for (const [kind, a] of script) {
+        if (kind === 'days') { await page.evaluate(`__gt.simStep(${a})`); continue; }
+        for (const o of a) { if (o.k === 'pick') picks[o.as] = await page.evaluate(pickJs(o)); else await page.evaluate(js(toOp(o, o.at ? picks[o.at] : null))); }
+      }
+      const h = (await page.evaluate('__gt.sim()')).hash;
+      console.log(h === simHash(N.s) ? 'OK' : 'NG', `D012 ${tag} 劇本城那一跑的雜湊 ${h}＝Node 劇本 ${simHash(N.s)}`);
+      if (h !== simHash(N.s)) errors++;
+      await page.evaluate('__gt.saveNow?.()');
+      await open('');                                                    // 重新整理：接著我的城（後：讀檔照實驗線重挑）
+      await page.evaluate('__gt.tool(null)'); await new Promise(r => setTimeout(r, 400));
+      if (tag === 'after') notes.script = await page.evaluate('({restyled: __gt.restyled(), mode: __gt.blockMode(), day: __gt.sim().day})');
+      await save(page, `d012_script_${tag}`);
+      await page.evaluate('__gt.clearSave()');
+      errors += page.errors.length;
+    });
+  }
+  // 3) 2D｜3D C｜3D B：D011 對照那一跑（不重新整理，所以沒有讀檔重挑；差別只在 D0 補不補畫）
+  const P = parity3d(codeWithSeed(code, 5162026), KT, vrank, 120), found = P.B.find(o => o.k === 'pick').found;
+  const plan = [...ops.A.map(o => toOp(o)), 'shot0', 'step1', ...ops.B.filter(o => o.k !== 'pick').map(o => toOp(o, found))];
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await fresh(open, page, `at=${X + 10},${Z + 10}&zoom=2.565&clean=1`);
+    const both = async d => { await new Promise(r => setTimeout(r, 300)); await save(page, `d012_day${d}_c`); await page.evaluate(`__gt.setBlocks('b')`); await new Promise(r => setTimeout(r, 300)); await save(page, `d012_day${d}_b`); await page.evaluate(`__gt.setBlocks('c')`); };
+    let at = 0;
+    for (const p of plan) {
+      if (p === 'shot0') await both(0);
+      else if (p === 'step1') { await page.evaluate('__gt.simStep(1)'); at = 1; }
+      else await page.evaluate(js(p));
+    }
+    for (const d of [30, 60, 120]) { await page.evaluate(`__gt.simStep(${d - at})`); at = d; await both(d); }
+    const h = (await page.evaluate('__gt.sim()')).hash;
+    console.log(h === simHash(P.sim) ? 'OK' : 'NG', `D012 對照那一跑經過 120 天的雜湊 ${h}＝Node ${simHash(P.sim)}`);
+    if (h !== simHash(P.sim)) errors++;
+    errors += page.errors.length;
+  });
+  // 拼圖
+  const lab = path.join(ROOT, 'scratch/lab'), copy2d = f => { const src = path.join(lab, f), has = fs.existsSync(src); if (has) fs.copyFileSync(src, path.join(out, f)); return has ? f : ''; };
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  const cell = (src, cap, cls = '') => `<figure><figcaption>${cap}</figcaption>${src ? `<img class="${cls}" src="${src}">` : `<div class="none ${cls}">（沒有這一格的圖）</div>`}</figure>`;
+  const nb = n => n ? `讀檔重挑 ${n.restyled} 棟・${String(n.mode).toUpperCase()} 檔` : '';
+  fs.writeFileSync(path.join(out, 'd012_ba.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(3,640px);gap:10px;padding:8px 12px 12px;align-items:start}img,.none{display:block;width:640px;height:400px;object-fit:none;object-position:50% 50%}
+    .none{background:#222a44;display:flex;align-items:center;justify-content:center}.m{width:412px;height:860px;object-fit:fill}</style>
+    <h1>D012 前後：讀檔照實驗線重挑外觀（T531）＋看不見的建築畫出來（預設 C）</h1>
+    <p class="s">前＝D012 之前（線上 9f8124e：預設 B，D0 與被吸收的 1×1 畫草坪；讀檔保留存檔的外觀）；後＝D012（預設 C；讀檔照實驗線重挑）。2D＝實驗線 d23c18d 讀同一張碼之後（它讀檔也會重挑）。樣本城畫面中央 640×400、1:1；劇本城是手機 412×860。</p>
+    <div class="g">${VIEWS.map(([n, , cap]) => cell(copy2d(`d012_${n}_2d.png`), `${cap}・2D 實驗線（讀檔之後）`) + cell(hasBefore ? `d012_${n}_before.png` : '', `${cap}・前`) + cell(`d012_${n}_after.png`, `${cap}・後（${nb(notes[n])}）`)).join('')}
+    <div></div>${cell(hasBefore ? 'd012_script_before.png' : '', '劇本城第 121 天・重新整理之後・前', 'm')}${cell('d012_script_after.png', `劇本城第 121 天・重新整理之後・後（${nb(notes.script)}）`, 'm')}</div>`);
+  const DAYS = [0, 30, 60, 120];
+  fs.writeFileSync(path.join(out, 'd012_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(3,640px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:640px;height:400px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D012：同一串操作（D011 對照那一跑，種子 5162026），2D 實驗線｜3D 預設 C｜3D B</h1><p class="s">不重新整理（沒有讀檔重挑）。3D 兩欄是同一座城，差別只在「沒被街區認領的格（D0）與被吸收的 1×1」補不補畫：B 照實驗線畫草坪，C 補成建築。2D 那一欄是實驗線自己跑同一串操作：兩邊整城軌跡第 2 天起分岔（D011「沒做成的事」2，本線長得比較多），所以 2D 與 3D 的棟數本來就不同。畫面中央 640×400、1:1。</p>
+    <div class="g">${DAYS.map(d => cell(copy2d(`d011_day${d}_2d.png`), `第 ${d} 天・2D 實驗線`) + cell(`d012_day${d}_c.png`, `第 ${d} 天・3D 預設 C`) + cell(`d012_day${d}_b.png`, `第 ${d} 天・3D B`)).join('')}</div>`);
+  for (const [page0, file, w, h] of [['d012_ba.html', 'D012-before-after.jpg', 1964, 2000], ['d012_compare.html', 'D012-compare.jpg', 1964, 2000]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);   // 同 D011：視窗設成內容高度再拍
       await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
       await new Promise(r => setTimeout(r, 300));
       const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });

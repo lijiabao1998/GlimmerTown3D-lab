@@ -16,7 +16,8 @@ export function startHistory() {
   const seed = Number(q.get('seed') ?? 5162026) >>> 0;
   const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
   let year = clamp(Math.round(Number(q.get('year') ?? GROW_END)) || 0, 0, END);
-  let style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
+  const sq = q.get('style') ?? 'A';
+  let style: Style = Object.hasOwn(STYLES, sq) ? STYLES[sq as Style['id']] : STYLES.A;   // D012 審查：?style=constructor 之前會拿到 Object 原型上的東西
   const clean = q.get('clean') === '1', showStyles = q.get('styles') === '1';
 
   const world = generateWorld(seed);

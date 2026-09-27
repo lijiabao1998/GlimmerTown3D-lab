@@ -31,8 +31,8 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
     b.age = s.age + (day - s.from); base.delete(b.id); b.goneDay = day;
     footprint(b, j => { if (c.occ[j] === b.id) c.occ[j] = 0; });
   };
-  for (const e of events.slice(1)) {
-    const i = e.t === 'undo' || e.t === 'import' ? -1 : e.z * n + e.x;
+  for (let k = 1; k < events.length; k++) {
+    const e = events[k], i = e.t === 'undo' || e.t === 'import' ? -1 : e.z * n + e.x;
     switch (e.t) {
       case 'import': throw new Error('重播：匯入事件只能是第一筆');
       case 'grow': {
@@ -101,7 +101,8 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
       }
       case 'restyle': {   // D012：讀檔時照實驗線重挑外觀（T531）——只換 v，不動等級、屋齡
         const b = c.buildings[c.occ[i] - 1];
-        if (!b || b.x !== e.x || b.z !== e.z || b.k < 1 || b.k > 3) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可以重挑外觀的住商工`);
+        // 同一次讀檔的重挑都是同一天，日子分不出是哪一筆：另外講出第幾筆（D012 審查）
+        if (!b || b.x !== e.x || b.z !== e.z || (b.k | 0) < 1 || (b.k | 0) > 3) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可以重挑外觀的住商工（歷史第 ${k + 1} 筆）`);
         b.v = e.v;
         break;
       }

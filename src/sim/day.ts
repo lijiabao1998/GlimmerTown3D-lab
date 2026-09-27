@@ -8,7 +8,7 @@
 //   3. 起步城用不到：噪音（沒有噪音源）、污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
-import { cityFromLab, type City, type CityBuilding, type KindTable } from './city.ts';
+import { cityFromLab, stadiumSize, type City, type CityBuilding, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 import { labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
@@ -65,7 +65,8 @@ export interface Class2In {
 // 建築：每筆 [i,k,lv,v,age,…]；住宅缺欄位補 den 3、we 1（66905 起）；一律 pw true、h .6；多格建築補 sz、h 1，ref 格指回根格（66900 起、FIX-J）。
 // 亂數：R＝mulberry32(seed^day)（66876），接著天氣重設 wxT＝3＋ri(5)（66931）——讀檔就抽掉一個亂數，這裡照抽。
 // 全域值：實驗線 load() 不重設 pop／jobs／cityHappy／dem，對照跑法會先開新圖（newWorld 51110：pop 0、jobs 0、cityHappy .6、dem {1:.5,2:0,3:0}、immWave 0）。
-export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, msz: (k: number) => number = k => kinds.size(k)): Sim {
+// forRestyle：只拿來讀檔重挑外觀（D012 只能看的城）——地價只算住商工根格（rebuildCov landAt），這個模擬不能拿來推進
+export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, msz: (k: number) => number = k => kinds.size(k), forRestyle = false): Sim {
   const city = cityFromLab(save, kinds, code), n = save.n, nn = n * n;
   const tiles: Tile[] = new Array(nn);
   for (let i = 0; i < nn; i++) {
@@ -78,7 +79,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   for (const r of save.bl) {
     const [i, k, lv, v, age] = r, b = city.buildings[city.occ[i] - 1];
     if (!b || b.z * n + b.x !== i) continue;                     // 重疊、出界的那筆城市模型已計數略過，這裡同樣不建
-    const sz = k === 9 ? (r[5] || 2) : msz(k);
+    const sz = k === 9 ? stadiumSize(r[5]) : msz(k);
     const bld: Bld = k === 9 ? { k, lv: lv || 1, v, age, pw: true, h: 1, sz }           // 體育場：第 6 位是 sz（66900）
       : k === 1 ? { k, lv, v, age, pw: true, h: .6, fire: r.length >= 7 ? r[5] : (r.length === 6 ? r[5] : 0), den: r.length >= 7 ? r[6] : 3, we: r.length >= 8 ? r[7] : 1 }
       : { k, lv, v, age, pw: true, h: .6, fire: r[5] || 0 };
@@ -93,7 +94,8 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   }
   const w: World = { N: n, tiles };
   const g = allocGrids(n), budget = { ...SVC_BUDGET_DEFAULT }, edu: EduCtx = { tech: [], spec: null, schoolLunch: false };
-  rebuildCov(w, g, budget, edu);                                 // 66940／66965
+  const landAt = forRestyle ? [...root.keys()].filter(i => { const k = (tiles[i].bld!.k | 0); return k >= 1 && k <= 3; }) : undefined;
+  rebuildCov(w, g, budget, edu, landAt);                         // 66940／66965
   const rng = labRng(save.seed ^ save.day);
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   return {

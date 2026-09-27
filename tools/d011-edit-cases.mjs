@@ -1,5 +1,5 @@
 // D011 施工整合守衛（tools/unit-d011-edit.mjs）的劇本與案例：劇本第 E 段、預建城的拆除劇本、釘住結果的操作（理由、格數、錢夠不夠）、
-// 存檔的資金取整、竄改過的歷史。這裡只產生資料，不跑模擬；座標都由開局的地形推出來（決定性，不用亂數），地形不合就丟例外（劇本不成立，不猜）。
+// 存檔的資金取整、竄改過的歷史（D012 起另有城市格式號、restyle 列）。這裡只產生資料，不跑模擬；座標都由開局的地形推出來（決定性，不用亂數），地形不合就丟例外（劇本不成立，不猜）。
 // 釘住（pins）：Map（操作物件 → 要的結果）。欄位對 runScript 的結果（placed、spent、armed、skipped、reason、refund、events）
 // 與預覽（count、total、affordable、pvReason）逐項比；check(s, r, pv, ev) 另驗事實，回傳錯誤字串或 null；tag 是涵蓋面的記號（守衛要求每一個都真的發生過）。
 // 劇本裡的操作只用 tools/d011-ops.mjs 契約裡的種類（劇本也在瀏覽器重演）；gap（毫秒）、nop（照設計什麼都不改）、why（nop 的理由）同契約。
@@ -148,14 +148,16 @@ export function pinCase(X, Z) {
 export const MONEY_ROUND = [[1234.4, 1234], [1234.5, 1235], [1234.6, 1235], [-10.4, -10], [-10.5, -10], [-10.6, -11]];
 
 // ---- 竄改過的 d3（分享碼是別人也能改的輸入，src/io/save.ts eventOf／unpackHistory／checkHistory）----
-// 每一種都要被驗型別擋下（replayed＝false）、講得出是哪一項不對，城照樣能用。want＝null：照讀，但多出來的欄位不能帶進城市。
-// hist：存檔當時的歷史（跟 d3.r 一筆對一列）；n：地圖邊長
+// 每一種都要被驗型別擋下（replayed＝false）、講得出是哪一項不對，城照樣能用。want＝null：照讀（＝同一份存檔正常讀回），但多出來的欄位不能帶進城市。
+// hist：存檔當時的歷史（跟 d3.r 一筆對一列；沒有 restyle——格式 3 的舊檔就是這樣）；n：地圖邊長
+// D012：城市格式 4。d3.f 比這一版新（5）不猜、退回只用存檔並講明（src/io/save.ts loadSim）；格式 3 的舊檔（hv 1、hv 2，沒有 restyle）照讀、讀回照樣重挑外觀
 // 範圍（eventOf）：座標 0…n−1、日子 ≥ 0、路等級 1–5、分區 1–3。超出範圍的每一種各放在兩筆上，want 寫死「第幾筆的哪一項」：
 //   留到最後的那一筆（之後沒有事件碰那一格、手勢沒被復原）——範圍要是放寬，重播出來會跟存檔對不上（講的是「對不上」，不是這一項）；
 //   之後被同一種事件蓋過去的那一筆——範圍要是放寬，重播出來照樣對得上（竟然重播成功）。兩種都只能靠驗範圍擋下
 export function tamperCases(raw, hist, n) {
   const road = hist.findIndex((e, k) => k > 0 && e.t === 'road'), doze = hist.findIndex(e => e.t === 'doze');
   if (road < 0 || doze < 0) throw new Error('D011 竄改案例：歷史裡沒有鋪路或拆除');
+  if (hist.some(e => e.t === 'restyle')) throw new Error('D012 竄改案例：這份歷史已經有 restyle，當不了格式 3 的舊檔');
   const XSS = '<img src=x onerror=alert(1)>';
   const h1 = () => ({ f: raw.d3.f, s: raw.d3.s, g: raw.d3.g, h: JSON.parse(J(hist)) });     // 舊存法 hv 1：事件物件（沒有 hv 欄位）
   const h2 = () => JSON.parse(J(raw.d3));                                                    // hv 2：緊湊列 [種類碼, 日子差, 欄位…]
@@ -204,11 +206,79 @@ export function tamperCases(raw, hist, n) {
     ['hv2 x＝n＋5', with2(r => { r[road][2] = n + 5; }), /座標不對/],
     ['hv2 x 是一段 HTML', with2(r => { r[road][2] = XSS; }), /座標不對/],
     ['hv2 不認得的拆除圖層', with2(r => { r[doze][4] = 9; }), /圖層不對/],
-    ['hv2 列比種類長', with2(r => { r[road].push(0); }), /種類不對/],
+    ['hv2 列比種類長', with2(r => { r[road].push(0); }), /欄位太多/],   // D012 審查起跟「種類不對」分開講
     ['hv2 不認得的種類碼', with2(r => { r[road][0] = 99; }), /種類不對/],
     ['hv2 hv＝3', () => ({ ...h2(), hv: 3 }), /不認得的歷史存法 hv=3/],
     ...ranged,
+    // D012：城市格式號（本線 CITY_FORMAT＝4）。比這一版新的不猜；格式 3 的舊檔照讀
+    ['hv1 城市格式 5（比這一版新）', () => ({ ...h1(), f: 5 }), /^城市格式 5 比這一版（4）新：只用存檔$/],
+    ['hv2 城市格式 5（比這一版新）', () => ({ ...h2(), f: 5 }), /^城市格式 5 比這一版（4）新：只用存檔$/],
+    ['hv1 城市格式 3 的舊檔（沒有 restyle）照讀', () => ({ ...h1(), f: 3 }), null],
+    ['hv2 城市格式 3 的舊檔（沒有 restyle）照讀', () => ({ ...h2(), f: 3 }), null],
   ];
+}
+
+// ---- 竄改過的 restyle 列（D012 起城市格式 4：讀檔照實驗線重挑外觀，一棟一筆 restyle，src/sim/restyle.ts）----
+// hv 2 列 [8, 日子差, x, z, v]；hv 1 事件物件 {day, t:'restyle', x, z, v}。
+// raw2：帶 restyle 的存檔（存讀檔往返第一次讀回的城再存一次：格子上已經是重挑過的 v，沒竄改的照讀、讀回重挑 0 棟）；
+// hist2：它的歷史（一筆對一列，restyle 都在最後）；tiles2：它的格子；n：地圖邊長。竄改放在第一筆 restyle（k0）或最後一筆（k1）上：
+//   驗型別（src/io/save.ts eventOf／unpackHistory：座標 0…n−1、v 0…9999 的整數、列不能比種類長＝「欄位太多」）擋下的，要講出第幾筆的哪一項；
+//   型別對、那一格卻沒有住商工根格的（路、空地、劃了區還沒長房子、非住商工的建築、拆掉的建築），由重播擋下，
+//   講出第幾天哪一格、第幾筆（src/sim/replay.ts「重播：第 d 天 (x,z) 沒有可以重挑外觀的住商工（歷史第 k 筆）」）。住商工都是 1×1（沒有附屬格），
+//   劇本城也沒有多格建築，「多格建築的附屬格」不另列（replay 對它同時看 k 與根格，非住商工的建築那一種已經量到 k）；
+//   移到另一棟沒被重挑的住商工：型別對、重播得出來，原來那一棟的 v 跟存檔對不上（src/io/save.ts mismatch）。
+// want＝null：照讀（hv 1 的 restyle 物件，沒竄改）。這座城沒有其中一種格子就丟例外（案例不成立，不猜）
+export function restyleTamperCases(raw2, hist2, n, tiles2) {
+  const rs = hist2.flatMap((e, k) => e.t === 'restyle' ? [k] : []);
+  if (rs.length < 2 || raw2.d3?.hv !== 2 || raw2.d3.r?.length !== hist2.length || rs.at(-1) !== hist2.length - 1)
+    throw new Error(`D012 竄改案例：存檔裡的 restyle 只有 ${rs.length} 筆，或不在歷史最後、歷史跟列對不起來`);
+  const k0 = rs[0], k1 = rs.at(-1), XSS = '<img src=x onerror=alert(1)>';
+  for (const k of [k0, k1]) {
+    const r = raw2.d3.r[k], e = hist2[k];
+    if (r[0] !== 8 || J(r.slice(2)) !== J([e.x, e.z, e.v])) throw new Error(`D012 竄改案例：第 ${k + 1} 列 ${J(r)} 不是那一筆 restyle ${J(e)}`);
+  }
+  const h1 = () => ({ f: raw2.d3.f, s: raw2.d3.s, g: raw2.d3.g, h: JSON.parse(J(hist2)) });   // hv 1：事件物件（沒有 hv 欄位）
+  const h2 = () => JSON.parse(J(raw2.d3));                                                      // hv 2：緊湊列
+  const with1 = f => () => { const d = h1(); f(d.h); return d; }, with2 = f => () => { const d = h2(); f(d.r); return d; };
+  const F2 = { x: 2, z: 3, v: 4 };                                                              // hv 2 的 restyle 列 [8, dDay, x, z, v]
+  const put = (hv, k, f, v) => hv === 1 ? with1(h => { h[k][f] = v; }) : with2(r => { r[k][F2[f]] = v; });
+  const move = (hv, k, [x, z]) => hv === 1 ? with1(h => { h[k].x = x; h[k].z = z; }) : with2(r => { r[k][2] = x; r[k][3] = z; });
+  const say = (k, what) => new RegExp(`^歷史重播失敗，只用存檔：歷史第 ${k + 1} 筆的${what}不對$`);
+  const none = (k, [x, z]) => new RegExp(`^歷史重播失敗，只用存檔：重播：第 ${hist2[k].day} 天 \\(${x},${z}\\) 沒有可以重挑外觀的住商工（歷史第 ${k + 1} 筆）$`);   // D012 審查：同一次讀檔的重挑都同一天，另外講第幾筆
+  // 那一格沒有住商工根格：格索引順序的第一格（拆掉的建築：歷史裡第一筆拆建築、那一格現在沒有建築的）
+  const xz = i => [i % n, (i / n) | 0], first = p => { const i = tiles2.findIndex(p); return i < 0 ? null : xz(i); };
+  const tomb = hist2.find(e => e.t === 'doze' && e.layer === 'bld' && !tiles2[e.z * n + e.x].bld);
+  const cells = [
+    ['路', first(t => t.road && !t.bld)],
+    ['空地', first(t => t.t !== 0 && !t.road && !t.bld && !t.zone && !t.tree)],
+    ['劃了區還沒長房子', first(t => t.zone && !t.road && !t.bld)],
+    ['非住商工的建築', first(t => t.bld && !t.bld.ref && t.bld.k > 3)],
+    ['拆掉的建築', tomb ? [tomb.x, tomb.z] : null],
+  ];
+  const lack = cells.filter(([, c]) => !c).map(([what]) => what);
+  if (lack.length) throw new Error(`D012 竄改案例：這座城找不到${lack.join('、')}`);
+  const restyled = new Set(rs.map(k => hist2[k].z * n + hist2[k].x));
+  const other = first((t, i) => t.bld && !t.bld.ref && t.bld.k >= 1 && t.bld.k <= 3 && !restyled.has(i));
+  if (!other) throw new Error('D012 竄改案例：找不到沒被重挑的住商工');
+  const out = [['hv1 restyle 物件（沒竄改）照讀', h1, null]];
+  for (const hv of [1, 2]) {
+    const a = `hv${hv} 第 ${k0 + 1} 筆 restyle`, b = `hv${hv} 第 ${k1 + 1} 筆 restyle`;
+    out.push(
+      [`${a} x＝−1`, put(hv, k0, 'x', -1), say(k0, '座標')],
+      [`${a} x＝n`, put(hv, k0, 'x', n), say(k0, '座標')],
+      [`${a} z＝−1`, put(hv, k0, 'z', -1), say(k0, '座標')],
+      [`${a} z＝n`, put(hv, k0, 'z', n), say(k0, '座標')],
+      [`${b} v＝−1`, put(hv, k1, 'v', -1), say(k1, 'v')],
+      [`${b} v＝10000`, put(hv, k1, 'v', 10000), say(k1, 'v')],
+      [`${b} v 是小數`, put(hv, k1, 'v', 2.5), say(k1, 'v')],
+      [`${b} v 是一段 HTML`, put(hv, k1, 'v', XSS), say(k1, 'v')],
+      [`${b} 沒有 v`, hv === 1 ? with1(h => { delete h[k1].v; }) : with2(r => { r[k1].length = 4; }), say(k1, 'v')],
+      ...(hv === 2 ? [[`${b} 列比種類長`, with2(r => { r[k1].push(0); }), new RegExp(`^歷史重播失敗，只用存檔：歷史第 ${k1 + 1} 筆的欄位太多（4 欄，restyle 最多 3 欄）$`)]] : []),
+      ...cells.map(([what, c]) => [`${a} 移到${what} (${c})`, move(hv, k0, c), none(k0, c)]),
+      [`${a} 移到另一棟沒被重挑的住商工 (${other})`, move(hv, k0, other), /^歷史跟存檔對不上，只用存檔：建築（種類、等級、變體、屋齡）不同$/],
+    );
+  }
+  return out;
 }
 
 // 格式對、重播得出來、卻跟存檔對不上：把一筆鋪路的等級 2 改成 4（hv 2 的路列 [3, 日子差, x, z, rc, cost, 手勢差]）。

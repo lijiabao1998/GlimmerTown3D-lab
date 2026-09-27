@@ -20,11 +20,14 @@ export function restyle531(s: Sim): number {
     const x = i % N, z = (i / N) | 0, v0 = b.v | 0;
     const v = pickV406(w, f, s.vrank, k, b.lv || 1, x, z, v0);
     if (v === v0) continue;                                              // 66857：沒換就不寫
-    const cb = s.root.get(i);
-    if (!cb) throw new Error(`重挑外觀：(${x},${z}) 的格子有建築、城市卻沒有`);   // simFromSave 與重播都保證兩邊同一批建築
-    b.v = v; cb.v = v;
-    s.city.history.push({ day: s.day, t: 'restyle', x, z, v });
+    b.v = v;                                                             // 格子照實驗線改
     changed++;
+    // 城市建築：正常只有一棟、就是這一格的根。手改的碼可能同一格有兩筆建築：格子留後一筆（同實驗線 load），城市留前一筆；
+    // 那時城市那一棟不是這一棟，不改它、也不記事件（D012 審查：之前會把住宅的新變體寫進同一格的學校）
+    const cb = s.root.get(i);
+    if (!cb || (cb.k | 0) !== k || cb.x !== x || cb.z !== z) continue;   // k 一律 |0，同上面與重播（審查：巨大的 k 值兩邊判斷不一致）
+    cb.v = v;
+    s.city.history.push({ day: s.day, t: 'restyle', x, z, v });
   }
   return changed;
 }

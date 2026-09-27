@@ -7,9 +7,7 @@
 import vm from 'node:vm';
 import { decodeLabCode } from '../src/io/labcode.ts';
 import { loadCode, saveCode } from '../src/io/save.ts';
-import { stepDay, simCounts } from '../src/sim/day.ts';
-import { fieldsOf } from '../src/sim/rules/fields.ts';
-import { pickV406 } from '../src/sim/rules/land.ts';
+import { stepDay, simCounts, simFromSave } from '../src/sim/day.ts';
 import { weatherStep } from '../src/sim/rules/weather.ts';
 import { mulberry32 } from '../src/sim/rng.ts';
 import { d011Ops, prebuiltOps, run3d, PICK_SRC, DEFAULT_GAP } from './d011-ops.mjs';
@@ -237,28 +235,19 @@ export function parity3d(code, KT, vrank, days, stepOpts = {}) {
   return out;
 }
 
-// 實驗線讀檔的最後一步是視覺遷移（load 67035 → ensureVariety531(true) 66848–66862，T531）：每一棟住商工（根格，格索引順序）的變體 v 用 pickV406 重挑
-// （讀的地價是讀檔 rebuildCov 剛算好的；不抽亂數）。本線讀檔（src/sim/day.ts simFromSave）沒有這一步、照存檔的 v，所以帶現成住商工的碼讀進來兩邊的 v 不同
-// （新城沒有建築，不受影響）。這是讀檔路徑的差、不是施工規則或推進的差：預建城對拍時本線這邊先照做一次（同一個 pickV406），守衛核對改了幾棟＝實驗線讀檔時改的棟數。回傳改了幾棟
-export function variety531(s) {
-  const w = s.w, f = fieldsOf(s.g), N = w.N;
-  let n = 0;
-  for (let i = 0; i < w.tiles.length; i++) {
-    const b = w.tiles[i].bld;
-    if (!b || b.ref || b.k < 1 || b.k > 3) continue;
-    const nv = pickV406(w, f, s.vrank, b.k, b.lv || 1, i % N, (i / N) | 0, b.v | 0);
-    if (nv !== (b.v | 0)) { b.v = nv; const cb = s.root.get(i); if (cb) cb.v = nv; n++; }
-  }
-  return n;
-}
-
-// 預建城的拆除劇本（prebuiltOps）＋推進一天：逐筆同 A、B 段；推進後的快照、每一棟住商工有沒有電、抽取數、推進改了哪些格
+// 預建城的拆除劇本（prebuiltOps）＋推進一天：逐筆同 A、B 段；推進後的快照、每一棟住商工有沒有電、抽取數、推進改了哪些格。
+// 讀檔的最後一步兩邊都是 T531 視覺遷移：實驗線 load 67035 → ensureVariety531(true)（66848–66862）；本線 loadCode 的最後一步 restyle531（src/sim/restyle.ts，D012 起）。
+// 每一棟住商工（根格，格索引順序）的變體 v 用 pickV406 重挑（讀的是讀檔時剛算好的地價；不抽亂數）。
+//   mig＝本線正式讀檔路徑回報的棟數（loadCode(...).restyled），守衛核對＝實驗線讀檔時 __t531mig 的增量；snap0＝重挑之後，守衛核對＝實驗線讀檔之後的 snap0。
+//   load＝重挑之前的樣子：同一張碼另建一個模擬、只跑 simFromSave、不重挑。loadCode 在重挑之前動到格子、場、資金的只有 simFromSave
+//   （接上 d3 歷史只換城市模型、根格對照表與手勢編號：src/io/save.ts loadSim），所以這就是重挑前那一刻；不是從重挑之後倒推。
+//   D011 時本線讀檔沒有這一步，這裡原本有一個照做的墊片 variety531；D012 拿掉，棟數改取 loadCode 的回報（D012 卡驗收 4）
 export function prebuilt3d(code, KT, vrank) {
   const L = loadCode(code, KT, vrank);
   if (!L.ok) throw new Error('本線讀不進預建城：' + L.error);
   const s = L.sim, P = prebuiltOf(code), h = harness(s);
-  const load = h.head(h.snap()), mig = variety531(s);                    // load＝遷移前（本線讀檔的樣子）
-  const out = { load, mig, snap0: h.head(h.snap()) };
+  const h0 = harness(simFromSave(decodeLabCode(code).save, code, KT, vrank));
+  const out = { load: h0.head(h0.snap()), mig: L.restyled, snap0: h.head(h.snap()) };
   out.ops = h.batch(P.ops);
   const a = h.snap();
   out.snapOps = h.head(a);

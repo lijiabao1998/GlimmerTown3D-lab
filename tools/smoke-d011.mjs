@@ -10,6 +10,8 @@
 //   switch   換城與存檔：換城不蓋錯存檔、不碰實驗線的 localStorage、自動存檔失敗、存檔讀不出來、網址開新城先問、歷史跟存檔對不上
 //   touch    觸控與版面：多指、路的點一下抖 6 px、框選立刻跟手、介面不穿透、總價標籤、整頁不縮放、狀態列資金、.sub、360×740
 //   desk     桌機 1280×800：播放中用滑鼠點播放鈕與路的等級、選單與對話框開著時的快捷鍵；分享碼裡的 HTML（存放型 XSS）
+// D012 起讀檔最後一步照實驗線重挑外觀（src/sim/restyle.ts，換了的每一棟記一筆 restyle）：讀檔前後比歷史，改成「讀檔前的歷史逐筆是前綴、多出來的全是 restyle」（grew）；
+// 劇本城另驗重新整理兩次（第一次重挑、第二次 0 棟）、建築卡不列 restyle、預設 C 每一格住商工都畫到、從 ☰ 選單切 B 實驗線的 D0 草坪回來（script 段）
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -17,7 +19,9 @@ import { ROOT, sleep } from './cdp.mjs';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { simHash } from '../src/sim/day.ts';
 import { decodeLabCode, encodeLabCode } from '../src/io/labcode.ts';
-import { unpackHistory } from '../src/io/save.ts';
+import { unpackHistory, loadCode, saveCode } from '../src/io/save.ts';
+import { gridOf, labPartition, drawPlan, partitionStats } from '../src/content/blocks.ts';
+import { GROUND } from '../src/render/ground.ts';
 import { fnv1a } from '../src/sim/rng.ts';
 import { runScript, scriptOf } from './unit-d011-edit.mjs';
 import { rcTamper } from './d011-edit-cases.mjs';
@@ -49,6 +53,45 @@ for (const t of ['pointerdown', 'pointerup', 'pointercancel', 'click']) addEvent
 const timed = (p, ms, what) => { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error(`等了 ${ms / 1000} 秒沒有回應：${what.slice(0, 80)}`)), ms); })]).finally(() => clearTimeout(t)); };
 // 存檔碼 → 天數、資金、難度、歷史筆數（Node 端解）
 const saveInfo = code => { const r = code ? decodeLabCode(code) : null; if (!r?.ok) return null; const d3 = r.save.raw.d3; return { day: r.save.day, money: r.save.money, df: r.save.df, events: d3?.r?.length ?? d3?.h?.length ?? 0 }; };
+
+// ---- D012 共用（tools/smoke.mjs 也用）----
+// 讀檔最後一步照實驗線重挑外觀（src/sim/restyle.ts，實驗線 load 的 ensureVariety531(true) 67035 @d23c18d），換了的每一棟記一筆 restyle（日子＝讀檔那天）。
+// 讀檔前後比歷史（before、after：__gt.history() 的陣列或 JSON 字串）：讀檔前的歷史要逐筆是讀回來的前綴、多出來的全是 restyle；
+// 前後只隔一次讀檔時另給 restyled（那次讀檔的 __gt.restyled()），多出來的筆數要相等。逐筆比內容（鍵排過序：記憶體裡的事件與重播出來的事件，欄位先後可能不同）
+const norm = e => J(Object.keys(e).sort().map(k => [k, e[k]]));
+export function grew(before, after, restyled) {
+  const a = typeof before === 'string' ? JSON.parse(before) : before, b = typeof after === 'string' ? JSON.parse(after) : after, add = b.slice(a.length);
+  const prefix = b.length >= a.length && a.every((e, k) => norm(e) === norm(b[k]));
+  return { ok: prefix && add.every(e => e.t === 'restyle') && (restyled === undefined || add.length === restyled), prefix, added: add.length, before: a.length, after: b.length };
+}
+// 住商工每一格剛好被一個畫出來的街區蓋到（D012 驗收 5「沒畫 0 格、重疊 0」）：bi＝__gt.blockInfo()、list＝__gt.buildingList()（[id, k, x, z, 佔地, lv, v, 地面高]）
+export function rciCover(bi, list) {
+  const n = bi.n, rci = new Set(), cnt = new Map();
+  for (const [, k, x, z, s] of list) if (k >= 1 && k <= 3) for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) rci.add((z + dz) * n + x + dx);
+  for (const d of bi.drawn) { const [x, z, w, h] = bi.plan[d]; for (let dz = 0; dz < h; dz++) for (let dx = 0; dx < w; dx++) { const c = (z + dz) * n + x + dx; cnt.set(c, (cnt.get(c) || 0) + 1); } }
+  const undrawn = [...rci].filter(c => !cnt.has(c)).length, over = [...cnt.values()].filter(v => v > 1).length, stray = [...cnt.keys()].filter(c => !rci.has(c)).length;
+  return { ok: rci.size > 0 && undrawn === 0 && over === 0 && stray === 0 && bi.drawn.length === bi.plan.length, rci: rci.size, undrawn, over, stray, blocks: bi.plan.length, fill: bi.plan.filter(p => p[7]).length };
+}
+// 街區計畫的一列（同 __gt.blockInfo().plan：[x, z, 寬, 高, k, lv, v, 補切]）
+export const planRow = b => [b.x, b.z, b.w, b.h, b.k, b.lv, b.v, b.from === 'fill' ? 1 : 0];
+// 街區計畫 → 每一格該鋪的地坪：1–3 依 k、4＝villa 庭院（同 src/content/recipes.ts villaYard559：1 級住宅、≤ 4 格、原型是 villa）；計畫沒蓋到的住商工格是 5 草坪
+export const ARCHE = JSON.parse(R('src/content/lab-arche.json')).arche;
+export const villaOf = (k, lv, area, v) => { const L = ARCHE['1_1']; return k === 1 && lv === 1 && area <= 4 && L[Math.abs(v) % L.length].n === 'villa'; };
+export function lotsOf(plan, n) {
+  const m = new Map();
+  for (const [x, z, w, h, k, lv, v] of plan) for (let dz = 0; dz < h; dz++) for (let dx = 0; dx < w; dx++) m.set((z + dz) * n + x + dx, villaOf(k, lv, w * h, v) ? 4 : k);
+  return m;
+}
+// 一格的地面像素（__gt.groundAt：S×S 個 RGB）有沒有不在 cls 那一族的（src/render/ground.ts：1–4 地坪各三色、5 草坪＝草色族＋草皮格線）；路面電車軌不算
+const LAWN = new Set([...GROUND.grass, GROUND.grassLine]);
+export function lotBad(px, cls) {
+  for (let j = 0; j < px.length; j += 3) {
+    const hx = (px[j] << 16) | (px[j + 1] << 8) | px[j + 2];
+    if (hx === GROUND.tram) continue;
+    if (cls === 5 ? !LAWN.has(hx) : !GROUND.lot[cls].includes(hx)) return true;
+  }
+  return false;
+}
 const KEYCODE = { ' ': ['Space', 32], Escape: ['Escape', 27], 3: ['Digit3', 51] };
 const mean = a => a.reduce((p, q) => p + q, 0) / a.length, pct = (a, q) => [...a].sort((x, y) => x - y)[Math.min(a.length - 1, Math.floor(a.length * q))];
 const f2 = v => v === undefined || Number.isNaN(v) ? '—' : v.toFixed(2);
@@ -129,10 +172,11 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
 
   await run('build', '建造流程與存檔', async ({ W, H, ev, touch, drag, release, tapAt, tapBtn, cell, sim, X, Z, visibleRun, findBox, freshStart, open, frames }) => {
   // ---- 開局：沒有存檔 → 新城（df 1、$3000、第 1 天、暫停），一開就是「我的城」 ----
+  // D012：讀檔照實驗線重挑外觀，新城還沒有住商工，重挑 0 棟，歷史照舊只有匯入一筆
   await freshStart();
-  const s0 = await sim(), ui0 = await ev('__gt.ui()');
-  log(!!s0 && s0.day === 1 && s0.money === 3000 && s0.diff === 1 && s0.events === 1 && !s0.playing && ui0.dock === 'build' && /^①/.test(ui0.coach ?? '') && ui0.saved && await ev('__gt.sample') === 'mine',
-    'D011 開局：沒有存檔時進新城（標準難度、$3000、第 1 天、暫停），立刻存成「我的城」；提示第一步「選路」', J({ ...s0, hash: undefined, power: undefined, rci: undefined, settle: undefined, coach: ui0.coach }));
+  const s0 = await sim(), ui0 = await ev('__gt.ui()'), rs0 = await ev('__gt.restyled()');
+  log(!!s0 && s0.day === 1 && s0.money === 3000 && s0.diff === 1 && s0.events === 1 && rs0 === 0 && !s0.playing && ui0.dock === 'build' && /^①/.test(ui0.coach ?? '') && ui0.saved && await ev('__gt.sample') === 'mine',
+    'D011 開局：沒有存檔時進新城（標準難度、$3000、第 1 天、暫停；歷史只有匯入一筆，讀檔重挑外觀 0 棟），立刻存成「我的城」；提示第一步「選路」', J({ ...s0, hash: undefined, power: undefined, rci: undefined, settle: undefined, coach: ui0.coach, restyled: rs0 }));
 
   // ---- 手機版面：狀態列、工具列、選單都在畫面內，按鈕 ≥ 44 px ----
   {
@@ -244,15 +288,17 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   }
 
   // ---- 存檔：重新整理之後「我的城」還在，內容相同；清掉存檔又回到新城 ----
+  // D012：讀檔最後一步照實驗線重挑外觀，歷史可能多幾筆 restyle——判「讀檔前的歷史逐筆是前綴、多出來的全是 restyle、筆數＝__gt.restyled()」（這座城還沒長住商工，現在多 0 筆）
   {
     const before = await ev('({h: JSON.stringify(__gt.history()), s: __gt.sim()})');
     await open('');
-    const after = await ev('({h: JSON.stringify(__gt.history()), s: __gt.sim(), sample: __gt.sample, note: __gt.loadNote()})');
+    const after = await ev('({h: JSON.stringify(__gt.history()), s: __gt.sim(), sample: __gt.sample, note: __gt.loadNote(), restyled: __gt.restyled()})');
     await freshStart();
-    const fresh = await sim();
-    log(after.sample === 'mine' && after.h === before.h && after.s.day === before.s.day && after.s.money === Math.round(before.s.money) && after.s.buildings === before.s.buildings && /重播成功/.test(after.note)
+    const fresh = await sim(), g = grew(before.h, after.h, after.restyled);
+    log(after.sample === 'mine' && g.ok && after.s.day === before.s.day && after.s.money === Math.round(before.s.money) && after.s.buildings === before.s.buildings && /重播成功/.test(after.note)
       && fresh.events === 1 && fresh.money === 3000,
-      'D011 存檔：重新整理後「我的城」還在（歷史逐筆相同、天數、建築、資金照實驗線取整），歷史重播成功；清掉存檔回到新城', `${JSON.parse(after.h).length} 筆、第 ${after.s.day} 天、$${after.s.money}；${after.note}`);
+      'D011 存檔：重新整理後「我的城」還在（讀檔前的歷史逐筆是讀回來的前綴、多出來的只有讀檔重挑外觀的 restyle〔D012〕；天數、建築、資金照實驗線取整），歷史重播成功；清掉存檔回到新城',
+      `${g.before} 筆 → ${g.after} 筆（restyle ${g.added}、__gt.restyled() ${after.restyled}${g.prefix ? '' : '；前綴不同'}）、第 ${after.s.day} 天、$${after.s.money}；${after.note}`);
   }
 
   });
@@ -298,7 +344,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   }
   });
 
-  await run('script', '劇本城', async ({ ev, freshStart, open, code, script }, page) => {
+  await run('script', '劇本城', async ({ ev, freshStart, open, code, script, tapBtn, waitFor }, page) => {
   // ---- 劇本城（Node 守衛那一份，資金設定拿掉）在瀏覽器重演 120 天：雜湊＝Node；三角形 ≤ 118,884、draw call ≤ 18 ----
   // 劇本逐筆記成瀏覽器要做的事（契約 tools/d011-ops.mjs）：施工記實際提交的那一筆（pick 找到的座標 Node 已經解好，r.op）、復原、
   // 亂數對齊（{k:'seed'} → __gt.simSeed，兩邊都換成 mulberry32(v)）、推進幾天（from＝從第幾天起推）
@@ -312,6 +358,17 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   });
   const cut = plan.findIndex(p => p.days && p.from >= 61);
   if (cut < 0) throw new Error('劇本沒有從第 61 天起推進的那一段：' + J(plan.filter(p => p.days)));
+  // D012：這一座城（瀏覽器重演的那一份，資金設定拿掉，跟 D012 黃金樣本的劇本城不是同一座）存檔再讀檔之後的樣子，Node 先算好
+  // （同一份 src：saveCode → loadCode，讀檔最後一步照實驗線重挑外觀；實驗線那一半由 tools/unit-d012.mjs 在黃金樣本的城上對拍）。
+  // 瀏覽器重新整理之後逐項要一樣：restyle 逐筆、每一棟住商工的 v、C 與 B 檔的街區計畫（B 檔沒蓋到的住商工格＝實驗線切分的 D0＋被吸收，畫草坪）
+  const L0 = loadCode(code, KT, vrank), LR = L0.ok ? loadCode(saveCode(N.s, L0.template, L0.start), KT, vrank) : L0;
+  if (!LR.ok || !LR.replayed) throw new Error('D012：劇本城在 Node 存檔再讀檔沒有接上歷史：' + (LR.ok ? LR.note : LR.error));
+  const nR = LR.sim.city.n, gR = gridOf(LR.sim.city);
+  const wantRs = LR.sim.city.history.filter(e => e.t === 'restyle').map(e => [e.day, e.x, e.z, e.v]);
+  const rciV = list => list.filter(r => r[1] >= 1 && r[1] <= 3).map(r => [r[3] * nR + r[2], r[1], r[5], r[6]]).sort((p, q) => p[0] - q[0]);   // [格, k, lv, v]
+  const wantV = LR.sim.city.buildings.filter(b => b.goneDay === undefined && b.k >= 1 && b.k <= 3).map(b => [b.z * nR + b.x, b.k, b.lv, b.v]).sort((p, q) => p[0] - q[0]);
+  const planRC = drawPlan(gR, ARCHE, 'c').map(planRow), planRB = drawPlan(gR, ARCHE, 'b').map(planRow);
+  const stR = partitionStats(labPartition(gR, ARCHE), nR), lotRC = lotsOf(planRC, nR), lotRB = lotsOf(planRB, nR);
   const DO = `p=>{if(p.op)__gt.edit(p.op);else if(p.undo)__gt.undo();else if(p.seed!==undefined)__gt.simSeed(p.seed);else __gt.simStep(p.days);}`;
   // 從新城重演到第 60 天（不降速），第 61–120 天在 CPU 降速 rate 倍下一天一天推。每一天記 [第幾天, __gt.simStep(1) 的耗時, 這一天重建場景的耗時（沒重建＝null）, 緊接著 __gt.simStep(0) 的耗時, 這一天有沒有自動存檔]。
   // simStep(0) 不推天數，只做 simStep(1) 推完天數之後的那一截（重整介面、畫一幀、算狀態雜湊）：兩者相減＝推進一天（含結算）本身。
@@ -333,10 +390,14 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   // 重演兩次，各自從新城起：先不降速（判卡面驗收 8 的 5 ms），再 CPU 降速 6 倍（只量不判，見下）；兩次的雜湊都要＝Node。後面幾項都接著降速那一次的城
   const days1 = await replay(1), hash1 = (await ev('__gt.sim()'))?.hash, days = await replay(6);
   const got = await ev(`(()=>{const s=__gt.sim();return {hash:s.hash,day:s.day,pop:s.pop,money:s.money,events:s.events};})()`);
-  const d = await ev('({i: __gt.renderInfo(), blank: ' + blankCheck + '})');
+  const d = await ev('({i: __gt.renderInfo(), mode: __gt.blockMode(), bi: __gt.blockInfo(), list: __gt.buildingList(), blank: ' + blankCheck + '})');
   log(got.hash === simHash(N.s) && got.day === N.s.day && hash1 === got.hash, `D011 劇本城在瀏覽器重演（${plan.filter(p => p.op).length} 筆施工、${plan.filter(p => p.undo).length} 筆復原、${plan.filter(p => p.seed !== undefined).length} 次亂數對齊、${N.s.day - 1} 天）：狀態雜湊＝Node 跑的（重演兩次：不降速、CPU 降速 6 倍，兩次都相同）`,
     `瀏覽器 ${got.hash}（不降速那一次 ${hash1}）、Node ${simHash(N.s)}；第 ${got.day} 天、人口 ${got.pop}、$${Math.round(got.money)}、事件 ${got.events}`);
-  log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.blank > 150, 'D011 手機預算：劇本城第 121 天三角形 ≤ 118,884、draw call ≤ 18；畫面非空白', `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；變異數 ${d.blank}`);
+  // D012 起預設 C（D011 量的是預設 B：44,412 個三角形）：另驗住商工每一格剛好一個街區畫（D012 驗收 5：沒畫 0 格、重疊 0）
+  const cov = rciCover(d.bi, d.list);
+  log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.blank > 150 && d.mode === 'c' && cov.ok,
+    'D011／D012 手機預算：劇本城第 121 天（預設 C 檔）三角形 ≤ 118,884、draw call ≤ 18；住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）；畫面非空白',
+    `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）；變異數 ${d.blank}`);
 
   // ---- 推進一天（卡面驗收 8：含結算 ≤ 5 ms）：劇本城第 61–120 天，量 simStep(1) − simStep(0)（見上）----
   // 重建場景的那幾天另扣 timing.rebuild，但丟掉舊場景、新場景第一次上傳 GPU 還算在裡面（偏高）；自動存檔那幾天多了存檔。
@@ -385,9 +446,72 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       `劇本城第 ${N.s.day} 天 ${p0.chip}（電廠 ${p0.plants} 座）→ ${short(p0) ? '加蓋' : '拆掉'} ${edits} 座：` + seq.map(q => `${q.chip}（${q.bad ? '紅' : '沒紅'}）「${q.coach ?? '沒有提示'}」`).join(' → ') + `；復原後 ${back.chip}`);
   }
 
-  // ---- 讀檔後、過第一天之前人口還沒算（實驗線 load 也不重算）：狀態列人口與幸福顯示「—」，推一天之後才是數字 ----
+  // ---- D012：讀檔照實驗線重挑外觀（src/sim/restyle.ts，T531）——劇本城重新整理兩次 ----
+  // 第一次：歷史＝讀檔前的歷史逐筆＋restyle，筆數＝__gt.restyled() > 0；restyle 逐筆、每一棟住商工的 v、C 檔的街區計畫都＝Node 存檔再讀檔算的（見上）；
+  //   預設 C 每一格住商工都畫到、在手機預算內；被重挑的每一棟，建築卡不列 restyle；從 ☰ 選單（真的點）切 B：實驗線的 D0 草坪回來，再切回 C；
+  //   重建一次場景（CPU 降速 6 倍）≤ 400 ms（同 D010 那一條預算，這裡量最大的一座建造中的城）。
+  // 第二次：重挑 0 棟、歷史逐筆不變、存檔碼逐字相同（實驗線讀檔、存檔、再讀一次也是 0 棟：D012 黃金樣本的 mig2）
   {
+    const RCI = `__gt.buildingList().filter(r=>r[1]>=1&&r[1]<=3)`;
+    // 那幾格的建築卡（openTile 的列），看完關掉
+    const cards = xz => ev(`(()=>{const o={};for(const [x,z] of ${J(xz)}){const c=__gt.openTile(x,z);o[x+','+z]=c?c.rows:null;}document.querySelector('#bio .x').click();return o;})()`);
+    const pre = await ev(`({h: JSON.stringify(__gt.history()), xz: ${RCI}.map(r=>[r[2],r[3]])})`);
+    const cards0 = await cards(pre.xz);
     await open('');                                                       // 重新讀我的城（劇本城：每一筆施工、復原都自動存了）
+    const look = `({h: JSON.stringify(__gt.history()), restyled: __gt.restyled(), save: __gt.save(), note: __gt.loadNote(), sample: __gt.sample, mode: __gt.blockMode(), url: location.search,
+      i: __gt.renderInfo(), bi: __gt.blockInfo(), list: __gt.buildingList(), owners: __gt.owners(), n: __gt.buildingCount()})`;
+    const a1 = await ev(look), g1 = grew(pre.h, a1.h, a1.restyled), add1 = JSON.parse(a1.h).slice(g1.before);
+    const rs1 = add1.map(e => [e.day, e.x, e.z, e.v]), v1 = rciV(a1.list);
+    log(a1.sample === 'mine' && /重播成功/.test(a1.note) && g1.ok && a1.restyled > 0 && J(rs1) === J(wantRs) && J(v1) === J(wantV),
+      'D012 劇本城重新整理（第一次讀檔）：照實驗線重挑外觀——歷史＝讀檔前的歷史逐筆＋restyle，筆數＝__gt.restyled() > 0；restyle 逐筆（日子、格、v）與每一棟住商工的 v＝Node 存檔再讀檔算的',
+      `歷史 ${g1.before} → ${g1.after} 筆（restyle ${g1.added}${g1.prefix ? '' : '；前綴不同'}）、__gt.restyled() ${a1.restyled}、Node ${wantRs.length} 筆${J(rs1) === J(wantRs) ? '逐筆相同' : '不同'}；`
+      + `住商工 ${v1.length} 棟的 v ${J(v1) === J(wantV) ? '＝' : '≠'} Node；「${a1.note}」`);
+    const cov1 = rciCover(a1.bi, a1.list);
+    log(a1.mode === 'c' && !/blocks=/.test(a1.url) && cov1.ok && J(a1.bi.plan) === J(planRC) && a1.owners === a1.n && a1.i.triangles <= 118884 && a1.i.calls <= 18,
+      'D012 劇本城讀檔重挑之後，預設 C（網址沒帶 blocks）：住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）、每一棟都畫到，街區計畫逐塊＝Node；手機預算：三角形 ≤ 118,884、draw call ≤ 18',
+      `${String(a1.mode).toUpperCase()} 檔 住商工 ${cov1.rci} 格、沒畫 ${cov1.undrawn}、重疊 ${cov1.over}、街區 ${cov1.blocks} 塊（補切 ${cov1.fill}）${J(a1.bi.plan) === J(planRC) ? '＝' : '≠'} Node；`
+      + `畫到 ${a1.owners}／${a1.n} 棟；${a1.i.triangles.toLocaleString()} 個三角形、${a1.i.calls} 次`);
+    // 建築卡（src/cityView.ts lotEvents）：被重挑的每一棟，卡片跟讀檔前逐列相同——只有街區那一列會變（v 換了原型，切分也可能跟著換）；沒有一列講重挑
+    const picked = add1.map(e => [e.x, e.z]), cards1 = picked.length ? await cards(picked) : {};
+    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r));
+    const cbad = picked.filter(([x, z]) => { const a = cards0[x + ',' + z], b = cards1[x + ',' + z]; return !a || !b || a.length !== b.length || J(strip(a)) !== J(strip(b)) || b.some(r => /restyle|重挑|外觀/.test(r)); });
+    const ex = picked.length ? cards1[picked[0].join(',')] : null;
+    log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型），沒有一列講重挑外觀',
+      `${picked.length} 棟，不對 ${cbad.length}${cbad.length ? '（' + cbad.slice(0, 3).map(q => `(${q})`).join('、') + '）' : ''}；例 (${picked[0] ?? '—'})：${ex ? ex.join('／') : '沒有卡片'}`);
+    // ☰ 選單（真的點）切 B、再切回 C：B 照實驗線的切分，實驗線沒畫的住商工格（D0＋被吸收）鋪草坪；C 每一格都依 k 上色
+    const pickMode = async m => {
+      if (!await tapBtn('#menuBtn') || !await waitFor(async () => !(await ev(`document.getElementById('menu').hidden`)), 2000)) return false;
+      const sel = `#menu .item[data-m="blocks:${m}"]`;
+      await ev(`document.querySelector(${J(sel)})?.scrollIntoView({block:'nearest'})`);
+      return await tapBtn(sel) && await waitFor(async () => await ev('__gt.blockMode()') === m && await ev(`document.getElementById('menu').hidden`), 4000);
+    };
+    const px = `${RCI}.map(r=>[r[3]*${nR}+r[2],__gt.groundAt(r[2],r[3])])`;
+    const okB = await pickMode('b');
+    const b1 = await ev(`({mode: __gt.blockMode(), url: location.search, bi: __gt.blockInfo(), owners: __gt.owners(), n: __gt.buildingCount(), px: ${px}})`);
+    const okC = await pickMode('c');
+    const c1 = await ev(`({mode: __gt.blockMode(), url: location.search, px: ${px}})`);
+    const lawns = [...lotRC.keys()].filter(i => !lotRB.has(i));
+    const badB = b1.px.filter(([i, p]) => lotBad(p, lotRB.get(i) ?? 5)), badC = c1.px.filter(([i, p]) => lotBad(p, lotRC.get(i) ?? 5));
+    log(okB && b1.mode === 'b' && /[?&]blocks=b\b/.test(b1.url) && J(b1.bi.plan) === J(planRB) && b1.bi.drawn.length === planRB.length && lawns.length > 0 && lawns.length === stR.cells.d0 + stR.cells.absorbed
+      && b1.owners === b1.n - lawns.length && badB.length === 0 && okC && c1.mode === 'c' && !/blocks=/.test(c1.url) && c1.px.length === lotRC.size && badC.length === 0,
+      'D012 劇本城從 ☰ 選單切 B（照實驗線）：網址帶 blocks=b，街區計畫＝Node 照實驗線切分算的，實驗線沒畫的住商工格（D0＋被吸收）又鋪回草坪、其他依 k 上色；再點 C：網址拿掉 blocks，每一格住商工都依 k 上色（villa 看重挑之後的 v），沒有草坪',
+      `B：網址「${b1.url}」、街區 ${b1.bi.plan.length} 塊${J(b1.bi.plan) === J(planRB) ? '＝' : '≠'} Node、草坪 ${lawns.length} 格（D0 ${stR.cells.d0}＋被吸收 ${stR.cells.absorbed}）、畫到 ${b1.owners}／${b1.n} 棟、地坪不對 ${badB.length} 格；`
+      + `C：網址「${c1.url}」、住商工 ${c1.px.length} 格、地坪不對 ${badC.length} 格${okB && okC ? '' : `；選單 B ${okB}、C ${okC}`}`);
+    await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
+    const rb = [];
+    try { for (let k = 0; k < 3; k++) rb.push(await ev('__gt.simRebuild()')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
+    const rmed = [...rb].sort((p, q) => p - q)[1];
+    log(rb.length === 3 && rmed <= 400, 'D012 手機預算：劇本城第 121 天讀檔重挑之後（C 檔）重建一次場景，CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；同 D010 起步城那一項）',
+      `${rb.map(x => x.toFixed(0)).join('、')} ms，中位數 ${rmed?.toFixed(0)}`);
+    await open('');                                                       // 第二次：離開上一頁時存了檔（visibilitychange），存檔裡已經是重挑過的 v
+    const a2 = await ev(look);
+    log(a2.sample === 'mine' && /重播成功/.test(a2.note) && a2.restyled === 0 && a2.h === a1.h && a2.save === a1.save && a2.mode === 'c',
+      'D012 劇本城再重新整理一次（第二次讀檔）：重挑 0 棟、歷史逐筆不變、存檔碼逐字相同（實驗線讀檔、存檔、再讀一次也是 0 棟）；網址沒帶 blocks＝預設 C',
+      `__gt.restyled() ${a2.restyled}；歷史 ${JSON.parse(a2.h).length} 筆${a2.h === a1.h ? '相同' : '不同'}；存檔碼 ${a2.save.length.toLocaleString()} 字元${a2.save === a1.save ? '逐字相同' : '不同'}；${String(a2.mode).toUpperCase()} 檔；「${a2.note}」`);
+  }
+
+  // ---- 讀檔後、過第一天之前人口還沒算（實驗線 load 也不重算）：狀態列人口與幸福顯示「—」，推一天之後才是數字（接著上面第二次讀檔，還沒推過天）----
+  {
     const hud = `({pop:document.querySelector('#stats [data-k=pop]').textContent,sub:document.getElementById('citySub').textContent,res:__gt.sim().rci[1][0],sample:__gt.sample})`;
     const a = await ev(hud);
     await ev('__gt.simStep(1)');
@@ -408,6 +532,8 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     const store0 = await store();
     await ev('__gt.clearSave()'); await open('');
     const saved = async () => saveInfo(await ev('__gt.saved()'));
+    // D012：每讀一次檔（換回我的城、重新整理）歷史可能多幾筆 restyle（讀檔照實驗線重挑外觀），比歷史用 grew（見檔頭）
+    const hist = () => ev('JSON.stringify(__gt.history())'), restyled = () => ev('__gt.restyled()');
     // 選單換城：真的點 ☰、再點那一項（src/ui/buildUi.ts 的按鈕 → onMenu）；等到頁面換成那座城
     const menuTo = async (id, want) => {
       if (!await tapBtn('#menuBtn') || !await waitFor(async () => !(await ev(`document.getElementById('menu').hidden`)), 2000)) return false;
@@ -415,43 +541,49 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     };
 
     // ---- 換城（審查阻斷）：我的城有還沒存的進度 → 選單 我的城→起步城→我的城→種子城 → 重新整理：存檔還是玩家的城，那 3 天也在 ----
+    // D012：換回我的城、重新整理各讀一次檔：歷史要是讀檔前的逐筆前綴、多出來的只有 restyle（筆數＝那一次的 __gt.restyled()）；
+    // 存檔＝離開我的城那一刻（換到種子城之前存的），所以存檔的筆數＝換回來時的歷史
     {
       await ev(`__gt.edit(${J({ k: 'line', tool: 'road', x0: X, z0: Z + 5, x1: X + 6, z1: Z + 5 })})`);   // 蓋一條路（自動存檔）
       await ev('__gt.simStep(3)');                                        // 再推 3 天：每 5 天才自動存，存檔落後 3 天
-      const m0 = await sim(), lag = await saved(), path = [];
+      const m0 = await sim(), h0 = await hist(), lag = await saved(), path = [];
       path.push(await menuTo('city:starter', 'starter'), await menuTo('city:mine', 'mine'));
-      const back = await sim();
+      const back = await sim(), hB = await hist(), rB = await restyled();
       path.push(await menuTo('city:seed516', 'seed516'));
       await open('');
-      const after = await sim(), sv = await saved(), ts = await toasts(), sample = await ev('__gt.sample');
-      log(lag?.day === m0.day - 3 && path.every(Boolean) && back.diff === 1 && back.day === m0.day && back.events === m0.events
-        && sample === 'mine' && after.diff === 1 && after.day === m0.day && after.events === m0.events && after.money === Math.round(m0.money)
-        && sv?.df === 1 && sv.day === m0.day && sv.events === m0.events && ts.includes('已接著上次的城繼續'),
-        'D011 換城（審查阻斷）：我的城有還沒存的 3 天，從選單 我的城→起步城→我的城→種子城、再重新整理：存檔還是玩家的城（df 1、歷史筆數、天數、資金），那 3 天也在；開頁提示「已接著上次的城繼續」',
-        `我的城第 ${m0.day} 天（存檔停在第 ${lag?.day} 天）、${m0.events} 筆、$${f2(m0.money)}；選單 ${path.map(Boolean).join('/')}；換回我的城第 ${back.day} 天、df ${back.diff}；重新整理：${sample} 第 ${after.day} 天、${after.events} 筆、$${after.money}、df ${after.diff}；「${ts.join('｜')}」`);
+      const after = await sim(), hA = await hist(), rA = await restyled(), sv = await saved(), ts = await toasts(), sample = await ev('__gt.sample');
+      const g1 = grew(h0, hB, rB), g2 = grew(hB, hA, rA);
+      log(lag?.day === m0.day - 3 && path.every(Boolean) && back.diff === 1 && back.day === m0.day && g1.ok
+        && sample === 'mine' && after.diff === 1 && after.day === m0.day && g2.ok && after.money === Math.round(m0.money)
+        && sv?.df === 1 && sv.day === m0.day && sv.events === back.events && ts.includes('已接著上次的城繼續'),
+        'D011 換城（審查阻斷）：我的城有還沒存的 3 天，從選單 我的城→起步城→我的城→種子城、再重新整理：存檔還是玩家的城（df 1、歷史、天數、資金），那 3 天也在（讀檔多出來的只有重挑外觀的 restyle，D012）；開頁提示「已接著上次的城繼續」',
+        `我的城第 ${m0.day} 天（存檔停在第 ${lag?.day} 天）、${m0.events} 筆、$${f2(m0.money)}；選單 ${path.map(Boolean).join('/')}；換回我的城第 ${back.day} 天、df ${back.diff}、${g1.after} 筆（restyle ${g1.added}${g1.prefix ? '' : '，前綴不同'}）；`
+        + `重新整理：${sample} 第 ${after.day} 天、${g2.after} 筆（restyle ${g2.added}${g2.prefix ? '' : '，前綴不同'}）、$${after.money}、df ${after.diff}、存檔 ${sv?.events} 筆；「${ts.join('｜')}」`);
     }
     // ---- 播放中換城：10 倍速播約 2 秒，等存檔落後至少 2 天，同一刻換到起步城（__gt.menu 走選單同一條路 onMenu），再換回來：天數不倒退 ----
+    // D012：換城那一刻的歷史一起記下來，換回來（讀一次檔）要是它的逐筆前綴、多出來的只有 restyle
     {
       await ev('__gt.simSpeed(2)'); await ev('__gt.simPlay(true)'); await sleep(2000);
       let at = null;
       for (const t0 = Date.now(); !at && Date.now() - t0 < 5000;) {
-        at = await ev(`(()=>{const s=__gt.sim(),sd=JSON.parse(atob(__gt.saved())).day;if(!s.playing||s.day-sd<2)return null;__gt.menu('city:starter');return {day:s.day,saved:sd,events:s.events,playing:s.playing,sample:__gt.sample};})()`);
+        at = await ev(`(()=>{const s=__gt.sim(),sd=JSON.parse(atob(__gt.saved())).day;if(!s.playing||s.day-sd<2)return null;const h=JSON.stringify(__gt.history());__gt.menu('city:starter');return {day:s.day,saved:sd,events:s.events,playing:s.playing,sample:__gt.sample,h};})()`);
         if (!at) await sleep(40);
       }
       await ev(`__gt.menu('city:mine')`);
-      const b = await sim(), sv = await saved();
-      log(!!at && at.sample === 'starter' && b.day === at.day && b.events === at.events && !b.playing && sv?.day === at.day,
-        'D011 播放中換城：10 倍速播著、存檔落後幾天時換到起步城再換回來，天數不倒退（換城前先用舊城自己的身分存）',
-        at ? `換城那一刻第 ${at.day} 天（存檔停在第 ${at.saved} 天）→ 換回來第 ${b.day} 天、存檔第 ${sv?.day} 天` : '5 秒內沒等到存檔落後 2 天以上的時刻');
+      const b = await sim(), sv = await saved(), g = at ? grew(at.h, await hist(), await restyled()) : null;
+      log(!!at && at.sample === 'starter' && b.day === at.day && g.ok && !b.playing && sv?.day === at.day,
+        'D011 播放中換城：10 倍速播著、存檔落後幾天時換到起步城再換回來，天數不倒退、歷史沒少（換城前先用舊城自己的身分存；讀檔多出來的只有 restyle，D012）',
+        at ? `換城那一刻第 ${at.day} 天（存檔停在第 ${at.saved} 天）、${at.events} 筆 → 換回來第 ${b.day} 天、${g.after} 筆（restyle ${g.added}${g.prefix ? '' : '，前綴不同'}）、存檔第 ${sv?.day} 天` : '5 秒內沒等到存檔落後 2 天以上的時刻');
     }
     // ---- 已經在我的城又選我的城：只存一次、不重讀（重讀會退回存檔那天）----
+    // 不重讀就不會重挑外觀：歷史要逐字相同（D012 前比的是筆數；重讀的話讀檔可能多 restyle，這裡正是要抓它）
     {
       await ev('__gt.simStep(3)');
-      const r0 = await sim(), s0 = await saved(), ok = await menuTo('city:mine', 'mine');
+      const r0 = await sim(), h0 = await hist(), s0 = await saved(), ok = await menuTo('city:mine', 'mine');
       await waitFor(async () => (await saved())?.day === r0.day);
-      const r1 = await sim(), s1 = await saved();
-      log(ok && s0?.day === r0.day - 3 && r1.day === r0.day && r1.events === r0.events && r1.money === r0.money && s1?.day === r0.day,
-        'D011 已經在我的城又從選單選我的城：天數、事件、資金都不倒退，存檔跟上', `第 ${r0.day} 天（存檔第 ${s0?.day} 天）→ 選了之後第 ${r1.day} 天、$${f2(r1.money)}、存檔第 ${s1?.day} 天`);
+      const r1 = await sim(), h1 = await hist(), s1 = await saved();
+      log(ok && s0?.day === r0.day - 3 && r1.day === r0.day && h1 === h0 && r1.money === r0.money && s1?.day === r0.day,
+        'D011 已經在我的城又從選單選我的城：不重讀——天數、資金不倒退，歷史逐字相同（沒有多 restyle），存檔跟上', `第 ${r0.day} 天（存檔第 ${s0?.day} 天）、${r0.events} 筆 → 選了之後第 ${r1.day} 天、${r1.events} 筆${h1 === h0 ? '（相同）' : '（不同）'}、$${f2(r1.money)}、存檔第 ${s1?.day} 天`);
     }
 
     // ---- 自動存檔失敗（審查：之前靜靜失敗）：瀏覽器空間滿了 → 通知、狀態列掛「⚠ 未存檔」、存檔不動；恢復後再蓋一筆 → 「已恢復自動存檔」、標記拿掉 ----
@@ -494,11 +626,12 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       let c = null, why = '';
       try {
         await open('');
-        c = await ev(`window.__gt&&__gt.ready?{sample:__gt.sample,bad:localStorage.getItem('gt3d.v1.save.bad'),toasts:[...document.querySelectorAll('.toast')].map(t=>t.textContent),s:__gt.sim(),saved:__gt.saved()}:null`);
+        c = await ev(`window.__gt&&__gt.ready?{sample:__gt.sample,bad:localStorage.getItem('gt3d.v1.save.bad'),toasts:[...document.querySelectorAll('.toast')].map(t=>t.textContent),s:__gt.sim(),saved:__gt.saved(),rs:__gt.restyled()}:null`);
         if (!c) why = '頁面一直沒有 ready（等了 30 秒，window.__gt 沒出來）';
       } catch (e) { why = '開頁或讀頁面時丟例外：' + String(e?.message ?? e).split('\n')[0].slice(0, 200); }
       const errs = page.errors.slice(e0), sv = saveInfo(c?.saved);
-      log(!!c && errs.length === 0 && c.sample === 'mine' && c.bad === 'not-a-code' && c.toasts.some(t => /讀不出來/.test(t) && /gt3d\.v1\.save\.bad/.test(t)) && c.s?.events === 1 && c.s.money === 3000 && c.s.day === 1 && sv?.events === 1 && sv.day === 1,
+      // 新城還沒有住商工：讀檔重挑外觀 0 棟（D012），歷史照舊只有匯入一筆
+      log(!!c && errs.length === 0 && c.sample === 'mine' && c.bad === 'not-a-code' && c.toasts.some(t => /讀不出來/.test(t) && /gt3d\.v1\.save\.bad/.test(t)) && c.s?.events === 1 && c.rs === 0 && c.s.money === 3000 && c.s.day === 1 && sv?.events === 1 && sv.day === 1,
         'D011 開頁時存檔讀不出來：頁面沒有例外；原檔原樣另存 gt3d.v1.save.bad、開一座新城（第 1 天、$3000）並存成我的城；提示「存檔讀不出來…」',
         (c ? `__gt.sample＝${c.sample}、.bad＝${J(c.bad)}、新城${c.s ? `第 ${c.s.day} 天 $${c.s.money} ${c.s.events} 筆` : '沒有模擬'}、存檔 ${sv ? `第 ${sv.day} 天 ${sv.events} 筆` : '讀不出來'}；「${c.toasts.join('｜')}」` : why)
         + `；頁面錯誤 +${errs.length}${errs.length ? '：' + errs.slice(0, 2).map(e => e.split('\n')[0]).join(' ｜ ') : ''}`);
@@ -514,13 +647,15 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
         const p = await page.send('Page.addScriptToEvaluateOnNewDocument', { source: `window.__asked=[];window.confirm=m=>{window.__asked.push(String(m));return ${answer};};` });
         await open('sample=newcity');
         await page.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: p.identifier });
-        return { before, ...(await ev('({asked:window.__asked,sample:__gt.sample,saved:__gt.saved(),s:__gt.sim()})')) };
+        return { before, ...(await ev('({asked:window.__asked,sample:__gt.sample,saved:__gt.saved(),s:__gt.sim(),h:__gt.history(),restyled:__gt.restyled()})')) };
       };
+      // D012：回答不要＝讀一次我的城：歷史要是存檔裡那份的逐筆前綴、多出來的只有 restyle（筆數＝__gt.restyled()）；存檔本身一個字都不能動（讀檔不存檔）
       const no = await ask(false), yes = await ask(true), b0 = saveInfo(no.before), ys = saveInfo(yes.saved);
-      log(no.asked?.length === 1 && /蓋掉/.test(no.asked[0]) && no.sample === 'mine' && no.saved === no.before && b0?.events > 1 && no.s.events === b0.events
+      const d0 = no.before ? decodeLabCode(no.before) : null, g = d0?.ok ? grew(unpackHistory(d0.save.raw.d3.r, d0.save.n), no.h, no.restyled) : null;
+      log(no.asked?.length === 1 && /蓋掉/.test(no.asked[0]) && no.sample === 'mine' && no.saved === no.before && b0?.events > 1 && !!g?.ok && g.before === b0.events && no.s.events === g.after
         && yes.asked?.length === 1 && yes.sample === 'mine' && yes.s.events === 1 && yes.s.money === 3000 && ys?.events === 1 && ys.money === 3000 && ys.day === 1,
-        'D011 網址 ?sample=newcity 而且已經有我的城：先問「會蓋掉目前的我的城」；回答不要＝開我的城、存檔一個字都沒動；回答要＝開新城、立刻存成我的城（1 筆、$3000）',
-        `不要：問了 ${no.asked?.length} 次、開 ${no.sample}（${no.s.events} 筆）、存檔${no.saved === no.before ? '沒動' : '變了'}；要：問了 ${yes.asked?.length} 次、開 ${yes.sample}、存檔 ${ys ? `${ys.events} 筆 $${ys.money}` : '讀不出來'}`);
+        'D011 網址 ?sample=newcity 而且已經有我的城：先問「會蓋掉目前的我的城」；回答不要＝開我的城（歷史＝存檔那份逐筆＋讀檔重挑外觀的 restyle，D012）、存檔一個字都沒動；回答要＝開新城、立刻存成我的城（1 筆、$3000）',
+        `不要：問了 ${no.asked?.length} 次、開 ${no.sample}（存檔 ${b0?.events} 筆 → ${no.s.events} 筆，restyle ${g?.added}${g && !g.prefix ? '，前綴不同' : ''}）、存檔${no.saved === no.before ? '沒動' : '變了'}；要：問了 ${yes.asked?.length} 次、開 ${yes.sample}、存檔 ${ys ? `${ys.events} 筆 $${ys.money}` : '讀不出來'}`);
     }
 
     // ---- localStorage 隔離（卡面第 7 節）：這一段蓋、存、重新整理、換城、存檔失敗、讀不出來都做過了——實驗線的兩個鍵逐字沒變，本線寫的鍵都是 gt3d. 開頭 ----
@@ -806,6 +941,9 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       const zone = { k: 'rect', tool: 'zr', x0: X + 1, z0: Z + 1, x1: X + 3, z1: Z + 1 };
       await ev(`__gt.edit(${J(zone)})`);
       const S = decodeLabCode(await ev('__gt.save()')).save, raw = S.raw, n = S.n, hist = unpackHistory(raw.d3.r, n), k = hist.findIndex(e => e.t === 'zone'), ze = hist[k];
+      // (b) 改的是 hv 2 第 k 列：unpackHistory 一列對一筆，第 k 筆就是第 k 列。D012 起歷史裡可能夾著讀檔重挑外觀的 restyle 列（種類碼 8），
+      // 另外核對那一列真的是劃區那一筆（種類碼 4、座標同那一筆），改的才是要改的那一列
+      const row = raw.d3.r[k], rowOk = k > 0 && raw.d3.r.length === hist.length && row?.[0] === 4 && row[2] === ze.x && row[3] === ze.z;
       const X1 = '<img id=pwn src=x onerror="window.__pwned=1">', X2 = '<img id=pwn2 src=x onerror="window.__pwned=2">';
       const base = () => { const o = JSON.parse(J(raw)); delete o.z; return o; };
       const a = base(); delete a.d3.hv; delete a.d3.r; a.d3.h = hist.map((e, i) => i === k ? { ...e, day: X1 } : e);
@@ -828,9 +966,10 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       const rs = [];
       for (const o of [a, b, c]) rs.push(await paste(o));
       const [ra, rb, rc] = rs, safe = r => r.focused && r.dlg && r.sample === 'mine' && !!r.card && !r.pwn && r.imgs === 0 && r.pwned === null;
-      log(rs.every(safe) && [ra, rb].every(r => r.note.startsWith('歷史重播失敗') && r.toasts.some(t => t.startsWith('歷史重播失敗'))) && /重播成功/.test(rc.note) && rc.rows.some(t => t.includes(`v${X2} 匯入`)),
+      log(rowOk && rs.every(safe) && [ra, rb].every(r => r.note.startsWith('歷史重播失敗') && r.toasts.some(t => t.startsWith('歷史重播失敗'))) && /重播成功/.test(rc.note) && rc.rows.some(t => t.includes(`v${X2} 匯入`)),
         'D011 分享碼裡的 HTML（存放型 XSS）：從對話框貼上三張動過手腳的碼、打開那一格的卡片，頁面上沒有注入的元素、onerror 沒跑；歷史欄位裡的 HTML（hv 1 的 day、hv 2 的數字欄）擋下、提示「歷史重播失敗…」；gameVer 的 HTML 歷史接得上、卡片當字照印',
-        rs.map((r, i) => `(${'abc'[i]}) ${r.sample}、注入元素 ${r.pwn ? '有' : '沒有'}、img ${r.imgs}、__pwned ${r.pwned}、「${r.note}」${i < 2 ? `、提示「${r.toasts.join('｜')}」` : `、卡片：${r.rows.find(t => t.includes('匯入')) ?? '沒有匯入那一列'}`}`).join('；'));
+        `hv 2 改第 ${k + 1} 列 ${J(row)}${rowOk ? '（是劃區那一筆）' : '（不是劃區那一筆！）'}；`
+        + rs.map((r, i) => `(${'abc'[i]}) ${r.sample}、注入元素 ${r.pwn ? '有' : '沒有'}、img ${r.imgs}、__pwned ${r.pwned}、「${r.note}」${i < 2 ? `、提示「${r.toasts.join('｜')}」` : `、卡片：${r.rows.find(t => t.includes('匯入')) ?? '沒有匯入那一列'}`}`).join('；'));
     }
   }, { W: 1280, H: 800, mobile: false });
 }

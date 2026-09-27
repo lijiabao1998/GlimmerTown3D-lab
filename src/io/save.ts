@@ -98,7 +98,8 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   rows.forEach((row, k) => {
     if (!Array.isArray(row) || !isInt(row[0]) || !isNum(row[1])) throw new Error(`歷史第 ${k + 1} 筆不是一列`);
     const t = T_CODE[row[0]], names = t ? ROW_FIELDS[t] : [];
-    if (!t || row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的種類不對`);
+    if (!t) throw new Error(`歷史第 ${k + 1} 筆的種類不對`);
+    if (row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
     const at = (name: string) => {
       const v = row[2 + names.indexOf(name)];
       if (name === 'g') return isInt(v) ? g0 + v : v;
@@ -166,11 +167,11 @@ export function loadCode(code: string, kinds: KindTable, vrank: Record<string, n
 }
 
 // 只能看的城（樣本城、沒有 d3 的分享碼、測試出口）：不重播歷史、不留模擬，但照樣重挑外觀——實驗線匯入任何碼都會挑，
-// 重挑要用讀檔時的地價，所以也建一次模擬的格子與場（simFromSave：72×72 只要幾毫秒）。歷史＝匯入＋重挑，只在記憶體
+// 重挑要用讀檔時的地價，所以也建一次模擬的格子與場（simFromSave，地價只算住商工根格；72×72 約 10 ms）。歷史＝匯入＋重挑，只在記憶體
 export function viewCode(code: string, kinds: KindTable, vrank: Record<string, number[]>): { ok: true; city: City; restyled: number } | { ok: false; error: string } {
   const r = decodeLabCode(code);
   if (!r.ok) return r;
-  const sim = simFromSave(r.save, code, kinds, vrank), restyled = restyle531(sim);
+  const sim = simFromSave(r.save, code, kinds, vrank, undefined, true), restyled = restyle531(sim);   // 地價只算住商工根格（審查：大圖整張算太慢）
   return { ok: true, city: sim.city, restyled };
 }
 
@@ -180,7 +181,9 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
   if (d3.hv !== undefined && d3.hv !== HISTORY_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
-  if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);   // 新版才有的事件種類：不猜（D012 起才檢查）
+  // 城市格式（D012 起才檢查）：比這一版新＝可能有這一版不認得的事件，不猜；不是 1..這一版的整數＝不認得（審查：之前只擋整數，"5"、4.5 照讀）。沒有 f 的照舊當舊檔
+  if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);
+  if (d3.f !== undefined && !(isInt(d3.f) && d3.f >= 1)) return only(`不認得的城市格式 f=${JSON.stringify(d3.f)}：只用存檔`);
   let events: CityEvent[], c: City;
   try {
     events = d3.hv === HISTORY_VER ? unpackHistory(d3.r, save.n) : checkHistory(d3.h, save.n);

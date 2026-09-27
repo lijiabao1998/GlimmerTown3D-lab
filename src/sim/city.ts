@@ -11,6 +11,10 @@ import { fnv1a } from './rng.ts';
 // 格式 4（D012）：多了讀檔時照實驗線重挑外觀的事件 restyle（src/sim/restyle.ts）。格式 1–3 照讀；比 4 新的不猜（src/io/save.ts）
 export const CITY_FORMAT = 4;
 
+// 體育場（k 9）的大小存在建築那筆的第 6 位（實驗線 load 66900），沒有就是 2。實驗線只會放 2×2（51728），
+// 手改的碼可能寫任何數：夾在 1–4（D012 審查：一串互相重疊的大體育場會讓讀檔配出 n³ 個附屬格，1000×1000 約要 50 秒）
+export const stadiumSize = (v: unknown) => { const s = typeof v === 'number' && Number.isFinite(v) ? Math.floor(v) : 0; return s ? Math.min(4, Math.max(1, s)) : 2; };
+
 export interface KindTable {
   size(k: number): number;      // 佔地邊長（格）
   known(k: number): boolean;    // 實驗線有沒有這個種類
@@ -80,7 +84,7 @@ export function cityFromLab(save: LabSave, kinds: KindTable, code: string): City
     const [i, k, lv, v, age] = r;
     const x = i % n, z = (i / n) | 0;
     if (!kinds.known(k)) unknown.add(k);
-    const size = k === 9 ? (r[5] || 2) : kinds.size(k);
+    const size = k === 9 ? stadiumSize(r[5]) : kinds.size(k);
     const b: CityBuilding = {
       id: c.buildings.length + 1, k, lv, v, age, x, z, size,
       abandoned: k <= 3 && !!ab && ab.charCodeAt(i) === 49,   // 實驗線只把住商工的 ab 還原成廢棄（load 66949）

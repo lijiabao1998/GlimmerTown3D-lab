@@ -54,7 +54,7 @@ const readSave = () => { try { return localStorage.getItem(SAVE_KEY); } catch { 
 export function startCity() {
   const q = new URLSearchParams(location.search);
   const clean = q.get('clean') === '1';
-  const style: Style = STYLES[(q.get('style') as Style['id']) ?? 'A'] ?? STYLES.A;
+  const sq = q.get('style') ?? 'A', style: Style = Object.hasOwn(STYLES, sq) ? STYLES[sq as Style['id']] : STYLES.A;   // D012 審查：?style=constructor 之前會拿到 Object 原型上的東西
   // D011：網址指定就照指定；沒指定時有存檔開「我的城」、沒有就開新城。
   // 網址指定新城、又已經有我的城：跟選單一樣先問（審查：之前網址這條路不問就蓋掉我的城）；不要就開我的城
   const qs = q.get('sample') ?? '';
@@ -267,10 +267,12 @@ export function startCity() {
   function saveNow() {
     if (!autosaves() || !sim) return false;
     daysSinceSave = 0;
-    const code = saveCode(sim, template, startCode);
-    let why = '';
-    if (code.length > SAVE_LIMIT) why = `存檔 ${code.length.toLocaleString()} 字元，超過分享碼上限 ${SAVE_LIMIT.toLocaleString()}`;
-    else try { localStorage.setItem(SAVE_KEY, code); } catch (e) { why = (e as Error)?.name === 'QuotaExceededError' ? '瀏覽器的儲存空間滿了' : '瀏覽器不讓這個網頁存資料'; }
+    let why = '', code = '';
+    // 產生存檔碼本身也可能丟例外（D012：packHistory 遇到不認得的事件種類改成丟例外，不再悄悄少一段歷史）：
+    // 接住、跟存不進去一樣講出來，不讓例外打斷施工或推進那一條路（D012 審查）
+    try { code = saveCode(sim, template, startCode); } catch (e) { why = '存檔碼產生失敗（' + ((e as Error)?.message ?? String(e)) + '）'; }
+    if (!why && code.length > SAVE_LIMIT) why = `存檔 ${code.length.toLocaleString()} 字元，超過分享碼上限 ${SAVE_LIMIT.toLocaleString()}`;
+    if (!why) try { localStorage.setItem(SAVE_KEY, code); } catch (e) { why = (e as Error)?.name === 'QuotaExceededError' ? '瀏覽器的儲存空間滿了' : '瀏覽器不讓這個網頁存資料'; }
     if (why) {
       if (why !== saveErr) bui.toast(`⚠️ 沒辦法自動存檔：${why}。請從 ☰ 匯出分享碼備份`, 'bad');
       saveErr = why; syncUi();
@@ -366,12 +368,13 @@ export function startCity() {
   function onMenu(id: string) {
     if (id.startsWith('city:')) menuCity(id.slice(5));
     else if (id === 'export') {
-      const full = sim ? saveCode(sim, template, startCode) : lastCode;
+      let full = lastCode;
+      if (sim) try { full = saveCode(sim, template, startCode); } catch (e) { bui.toast('⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e)), 'bad'); return; }   // 同 saveNow（D012 審查）
       if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
       else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
     }
     else if (id === 'paste') openDlg('paste');
-    else if (id.startsWith('blocks:')) setBlocks(id.slice(7) as BlockMode);
+    else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
   function menuCity(id: string) {
@@ -678,7 +681,7 @@ export function startCity() {
     kinds: () => ({ count: KINDS.data.kinds.length, source: KINDS.data.source.commit }),
     tryCode: (code: string) => { const r = decodeLabCode(code); return r.ok ? { ok: true, n: r.save.n, buildings: r.save.bl.length } : r; },
     loadCode: (code: string) => { saveNow(); const r = load(code, '貼上的城市'); if (r.ok) sampleId = ''; return r; },
-    loadSample: (id: string) => { saveNow(); const r = load(SAMPLES[id].code, SAMPLES[id].label, false, SIM_SAMPLES.has(id), id === 'newcity'); if (r.ok) sampleId = id; return r; },
+    loadSample: (id: string) => { if (!own(SAMPLES, id)) return { ok: false as const, error: '沒有這座城' }; saveNow(); const r = load(SAMPLES[id].code, SAMPLES[id].label, false, SIM_SAMPLES.has(id), id === 'newcity'); if (r.ok) sampleId = id; return r; },
     // ---- D010 逐日模擬 ----
     sim: () => sim ? { day: sim.day, seed: sim.seed, pop: sim.pop, jobs: sim.jobs, happy: sim.cityHappy, dem: [sim.dem[1], sim.dem[2], sim.dem[3]], rci: simCounts(sim), hash: simHash(sim),
       events: sim.city.history.length, rebuilds, playing, speed: SPEEDS[speed], buildings: liveBuildings(sim.city).length,

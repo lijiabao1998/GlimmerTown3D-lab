@@ -1,9 +1,10 @@
 // D011 驗收 3、4：實驗線實跑錨點與分享碼互通（離線工具，要無頭 Chrome；結果存成樣本，tools/unit-d011-parity.mjs 在 CI 上重算本線那一半逐項比）。
-// 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 node tools/d011-parity.mjs --lab=../lijiabao1998/glimmertown-lab [--days=120] [--seeds=8] [--code=起點碼 --out=輸出目錄（除錯用）]
+// 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 [GT_PORT=8711] node tools/d011-parity.mjs --lab=../lijiabao1998/glimmertown-lab [--days=120] [--seeds=8] [--code=起點碼 --out=輸出目錄（除錯用）]
 // 流程（每個種子兩頁新頁面、各開一個 Chrome，同 D010）：
 //   新城：GV.setMapSize(72)＋GV.newWorldSeeded(777)＋GV.importCode(新城碼換種子)＋GV.setSpeed(0)＋GV.ai(false)（回退設定：tools/lab-configs.mjs）；
 //     A 段（開跑前）→ GV.step(1)（推進後的快照 snap1）→ B 段 → GV.save()＋GV.rawSave() 匯出 → 之後每天 GV.step(1) 到第 days 天。
 //   預建城（d011-prebuilt.code.txt 換種子，同一套開法）：拆除劇本（tools/d011-ops.mjs prebuiltOps）→ GV.step(1) → 推進後的快照、每一棟住商工有沒有電。
+//     讀檔時兩邊都照 T531 重挑住商工的變體：實驗線記 __t531mig 的增量，本線記 loadCode 回報的 restyled（D012 起本線讀檔自己重挑，D011 的墊片 variety531 拿掉了）。
 //   手勢用實驗線自己的函式：拉線 commitRoadDraft436（62779）；框選與拆除 commitRect（62974。拆除確認讀 performance.now()（62985–62986）：那一次 commitRect 裡
 //   把 performance.now 換成劇本的時鐘，跟本線 commitOp 的 now 同一串數，同 tools/lab-build.mjs 的做法）；點 paintTo（62751，包在 openUndo／closeUndo 裡，
 //   同觸控點一下 62918）；復原 GV.undo（66594）；亂數對齊 R＝mulberry32(v)（37221–37222）。量法跟本線同一段原始碼（tools/d011-parity-lib.mjs）。
@@ -110,7 +111,8 @@ const t0 = Date.now(), lab = { source: { repo: 'lijiabao1998/GlimmerTown-lab', c
   config: 'fallback', days: DAYS, seeds: SEEDS, fields: ROW_FIELDS, runs: {}, prebuilt: {}, readback: {}, timing: {} };
 const threeD = { days: DAYS, seeds: SEEDS, fields: ROW_FIELDS, runs: {}, prebuilt: {} };
 const cfg = CONFIGS.fallback;
-const opt = { root: LAB, entry: 'd011.html', overlay: { 'd011.html': copy }, port: 8421, width: 1024, height: 700, gl: false, preload: preloadOf(cfg),
+// 埠：有 GT_PORT 就用它（同一台機器同時跑好幾支工具時錯開，同 tools/cdp.mjs withBrowser），沒有照舊 8421
+const opt = { root: LAB, entry: 'd011.html', overlay: { 'd011.html': copy }, port: +(process.env.GT_PORT ?? 0) || 8421, width: 1024, height: 700, gl: false, preload: preloadOf(cfg),
   ready: '!!window.__bootDone453&&!!window.__d011', readyMs: 240000, settle: 300 };
 const rowR6 = x => [...x.slice(0, 21).map(r6), ...x.slice(21)];
 

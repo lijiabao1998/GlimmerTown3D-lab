@@ -235,8 +235,12 @@ export async function d011ParityGuards(log, opts = {}) {
     for (const seed of seeds) {
       const m = pre[seed], L = labPre[seed];
       if (!L || !L.inv) { bad.push(`種子 ${seed}：樣本沒有預建城（重跑 tools/d011-parity.mjs）`); continue; }
-      // 讀檔：實驗線 load 最後重挑住商工的變體 v（T531，67035）；本線讀檔沒有這一步，對拍的本線這邊先照做（variety531），改的棟數要跟實驗線讀檔時一樣
+      // 讀檔：兩邊讀檔的最後一步都照 T531 重挑住商工的變體 v（實驗線 load 67035 → ensureVariety531(true)；本線 loadCode → restyle531，D012 起）。
+      // 本線的棟數取自正式讀檔路徑的回報（loadCode(...).restyled，不是工具另做一次），要 > 0、＝實驗線 __t531mig 的增量；重挑之後的快照 snap0＝實驗線（下面「開跑前」）。
+      // 重挑之前（load：同一張碼只跑 simFromSave）的格子要≠實驗線、其餘（場、地價髒狀態、資金）跟重挑之後相同：snap0 對得上靠的是重挑，而且重挑只改格子
       if (!(m.mig > 0) || m.mig !== L.mig) bad.push(`種子 ${seed}：讀檔時重挑變體 本線 ${m.mig} 棟 ≠ 實驗線 ${L.mig} 棟`);
+      if (m.load.tileHash === L.snap0.tileHash) bad.push(`種子 ${seed}：重挑之前的格子就已經＝實驗線讀檔之後（重挑沒有作用，snap0 相等證明不了重挑）`);
+      if (J({ ...m.load, tileHash: '' }) !== J({ ...m.snap0, tileHash: '' })) bad.push(`種子 ${seed}：讀檔重挑前後除了格子還有別的不同 ${J(m.load)} → ${J(m.snap0)}`);
       for (const [name, a, b] of [['開跑前', m.snap0, L.snap0], ['劇本後', m.snapOps, L.snapOps]]) if (J(a) !== J(b)) bad.push(`種子 ${seed} ${name}：本線 ${J(a)} ≠ 實驗線 ${J(b)}`);
       const d = batchDiff(m.ops, L.ops, true);
       if (d) bad.push(`種子 ${seed} 劇本${d}`);
@@ -265,9 +269,9 @@ export async function d011ParityGuards(log, opts = {}) {
       for (const l of EXTRA) (perX[l] ??= []).push(L.tickSites[l] ?? 0);
       fx.push(`${on}/${off}`);
     }
-    const s0 = pre[seeds[0]], wz = PRE_GROWTH_LINES.filter(l => l !== 55605 && per[l].every(v => !v) && perMine[l].every(v => !v)), wn = PRE_GROWTH_LINES.filter(l => l !== 55605 && !wz.includes(l));
-    log(bad.length === 0, `預建城拆除劇本（${seeds.length} 個種子，${P.ops.length} 筆，單格拆除都走框；讀檔時實驗線重挑住商工的變體（T531 視覺遷移，本線讀檔沒有這一步，對拍前本線照做、棟數相同））：點體育場附屬格整棟拆；二級 1 秒內再按才拆；三級過 3 秒、剛好 3 秒都重新預備，2.999 秒才拆；框選一級＋二級只拆一級；復原；拆小巷接支路那一格——每一筆兩邊逐項相等。推進一天之後比第 2 類系統起作用之前就定案的部分：推進前就在的住商工每一棟有沒有電、住商工以外的格子、覆蓋、地價 LANDBASE／LAND、生長洗牌 55605 的抽取次數（每個種子兩邊都 > 0）${wn.length ? `、${linesText(wn)} 的抽取次數` : ''}，都相等${wz.length ? `；${linesText(wz)} 也比了，但這一天兩邊都 0 次（0＝0），沒有對拍到（天氣見上面 SITE_MAP 那一條）` : ''}`,
-      bad.slice(0, 3).join('；') || `讀檔重挑變體 ${s0.mig} 棟；推進前就在的住商工有電／沒電 ${fx.join('、')}；實驗線逐行次數（各種子最少–最多）：${countsText([55605], per)}`);
+    const wz = PRE_GROWTH_LINES.filter(l => l !== 55605 && per[l].every(v => !v) && perMine[l].every(v => !v)), wn = PRE_GROWTH_LINES.filter(l => l !== 55605 && !wz.includes(l));
+    log(bad.length === 0, `預建城拆除劇本（${seeds.length} 個種子，${P.ops.length} 筆，單格拆除都走框；讀檔的最後一步兩邊都照 T531 重挑住商工的變體（實驗線 load → ensureVariety531；本線 loadCode → restyle531，D012 起），本線的棟數取自讀檔的回報、＝實驗線，重挑之後的快照＝實驗線，重挑之前只差在格子、不等）：點體育場附屬格整棟拆；二級 1 秒內再按才拆；三級過 3 秒、剛好 3 秒都重新預備，2.999 秒才拆；框選一級＋二級只拆一級；復原；拆小巷接支路那一格——每一筆兩邊逐項相等。推進一天之後比第 2 類系統起作用之前就定案的部分：推進前就在的住商工每一棟有沒有電、住商工以外的格子、覆蓋、地價 LANDBASE／LAND、生長洗牌 55605 的抽取次數（每個種子兩邊都 > 0）${wn.length ? `、${linesText(wn)} 的抽取次數` : ''}，都相等${wz.length ? `；${linesText(wz)} 也比了，但這一天兩邊都 0 次（0＝0），沒有對拍到（天氣見上面 SITE_MAP 那一條）` : ''}`,
+      bad.slice(0, 3).join('；') || `讀檔重挑變體（loadCode 回報，＝實驗線 __t531mig 增量）${seeds.map(s => pre[s].mig).join('、')} 棟；推進前就在的住商工有電／沒電 ${fx.join('、')}；實驗線逐行次數（各種子最少–最多）：${countsText([55605], per)}`);
     const xq = EXTRA.filter(l => !perX[l].some(v => v > 0)), xs = EXTRA.filter(l => !xq.includes(l));
     log(fact.length === 0, `錄製時的事實（預建城推進那一天；兩邊都是實驗線錄的值，CI 不重算）：實驗線逐行記的次數加總＝它記的總抽取數；${xs.length ? `${linesText(xs)} 的次數＝照實驗線自己推進後的格子與覆蓋算的棟數` : '多抽的三行一次都沒抽到'}${xq.length ? `；${linesText(xq)} 錄到 0 次、照格子算也是 0，這一天沒對拍到` : ''}（${seeds.length} 個種子）`,
       fact.slice(0, 2).join('；') || `實驗線逐行次數（各種子最少–最多）：${countsText(EXTRA, perX)}`);

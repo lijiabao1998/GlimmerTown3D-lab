@@ -512,6 +512,7 @@ await guard('./unit-d011-build.mjs', 'd011BuildGuards');
 await guard('./unit-d011-money.mjs', 'd011MoneyGuards');
 await guard('./unit-d011-edit.mjs', 'd011EditGuards');
 await guard('./unit-d011-parity.mjs', 'd011ParityGuards');
+await guard('./unit-d012.mjs', 'd012LookGuards');   // D012：讀檔照實驗線重挑外觀（T531）逐棟對拍、讀檔之後的切分、突變要轉紅（黃金樣本 d012-lab.json，tools/d012-parity.mjs 錄）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
