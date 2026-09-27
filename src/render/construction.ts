@@ -4,7 +4,7 @@
 // （屋齡可以超過 99，所以「沒有建築」另用一個位元，不拿屋齡當記號）
 import * as THREE from 'three';
 import type { City } from '../sim/city.ts';
-import { RISE_GLSL, CON_DAYS, TRANS, WX, GRIME, MOSS, EAVE, WEATHER_TT, WEATHER_MIN_AGE, sitePlan, onSite, districtMood, type SitePart } from '../content/construction.ts';
+import { RISE_GLSL, CON_DAYS, TRANS, WX, GRIME, MOSS, EAVE, WEATHER_TT, WEATHER_MIN_AGE, WEATHER_GAIN, WEATHER_PX, sitePlan, onSite, districtMood, type SitePart } from '../content/construction.ts';
 import { PX_PER_CELL } from '../content/recipes.ts';
 import type { GroundCache } from './ground.ts';
 
@@ -91,6 +91,7 @@ void conClip(vec4 cd){
   float cel = mod(floor(cd.a / 16.0), 2.0), ctt = cd.r + uDayFrac;
   if (cel > 0.5 && ctt < ${CON_DAYS.toFixed(1)}) { float rv = conRise(ctt); if (rv < 0.0 || vConY > cd.b + rv * (cd.g - cd.b) + 0.0005) discard; }
 }
+float conWA(float a){ return min(0.8, a * ${WEATHER_GAIN.toFixed(2)}); }   // 3D 增益（量化 12 階會吃掉淡的；src/content/construction.ts WEATHER_GAIN）
 vec3 conWeather(vec3 col, vec4 cd){
   if (vCon.z <= 0.0 || uDetail <= 0.0 || uNoClip > 0.5 || abs(vConN.y) > 0.5 || cd.a < 32.0 || cd.r < ${WEATHER_MIN_AGE.toFixed(1)}) return col;
   float tt = cd.r < 120.0 ? ${WEATHER_TT[1].toFixed(2)} : cd.r < 240.0 ? ${WEATHER_TT[2].toFixed(2)} : ${WEATHER_TT[3].toFixed(2)};
@@ -105,11 +106,11 @@ vec3 conWeather(vec3 col, vec4 cd){
     float L = clamp(floor(hpx * (0.20 + 0.38 * hh) * (0.6 + tt * 0.7) + 0.5), 2.0, max(2.0, hpx - 3.0)), a = (0.10 + tt * 0.16) * (0.7 + 0.3 * hh) * am;
     float d = below - 2.0, up = max(1.0, floor(L * 0.45 + 0.5)), wx = along - sx;
     vec3 wc = conWx(cat, mood);
-    if (wx >= 0.0 && wx < 1.0 / 32.0 && d >= 0.0 && d < L) col = mix(col, wc, (d < up ? a * 0.55 : a) * uDetail);
-    if (tt > 0.5 && hh < 0.2 && wx >= 1.0 / 32.0 && wx < 2.0 / 32.0 && d >= up && d < L - 2.0) col = mix(col, wc, a * 0.5 * uDetail);
+    if (wx >= 0.0 && wx < ${WEATHER_PX.toFixed(1)} / 32.0 && d >= 0.0 && d < L) col = mix(col, wc, conWA(d < up ? a * 0.55 : a) * uDetail);
+    if (tt > 0.5 && hh < 0.2 && wx >= ${WEATHER_PX.toFixed(1)} / 32.0 && wx < ${(2 * 2).toFixed(1)} / 32.0 && d >= up && d < L - 2.0) col = mix(col, wc, conWA(a * 0.5) * uDetail);
   }
-  if (above < (tt > 0.55 ? 2.0 : 1.0)) col = mix(col, (cat == 1.0 && mood == 2.0) ? ${f3(MOSS)} : ${f3(GRIME)}, (0.10 + tt * 0.15) * am * uDetail);
-  if (tt > 0.25 && below >= 1.0 && below < 2.0) col = mix(col, ${f3(EAVE)}, (0.05 + tt * 0.07) * am * uDetail);
+  if (above < (tt > 0.55 ? 2.0 : 1.0) * ${WEATHER_PX.toFixed(1)}) col = mix(col, (cat == 1.0 && mood == 2.0) ? ${f3(MOSS)} : ${f3(GRIME)}, conWA((0.10 + tt * 0.15) * am) * uDetail);
+  if (tt > 0.25 && below >= ${WEATHER_PX.toFixed(1)} && below < ${(2 * 2).toFixed(1)}) col = mix(col, ${f3(EAVE)}, conWA((0.05 + tt * 0.07) * am) * uDetail);
   return col;
 }
 `;

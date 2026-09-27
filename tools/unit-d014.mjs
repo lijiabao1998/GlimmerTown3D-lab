@@ -165,10 +165,12 @@ async function guards(log) {
     const wxSame = ['R', 'C', 'I'].every(k => J(labWx[k].map(toRgb)) === J(CN.WX[k]));
     const tier = [0, 13, 14, 119, 120, 239, 240, 500].map(CN.weatherTier), tierLab = [0, 13, 14, 119, 120, 239, 240, 500].map(a => a < 14 ? 0 : a < 120 ? 1 : a < 240 ? 2 : 3);
     const { CLIP_FRAG } = await import('../src/render/construction.ts');
-    const shaderHas = ['0.46 + tt * 0.36', '(0.20 + 0.38 * hh) * (0.6 + tt * 0.7)', '(0.10 + tt * 0.16) * (0.7 + 0.3 * hh) * am', '(front ? 8.0 : 11.0) / 32.0', 'L * 0.45', '(0.10 + tt * 0.15) * am', 'tt > 0.55 ? 2.0 : 1.0', '(0.05 + tt * 0.07) * am', 'cat == 1.0 && mood == 2.0', 'front ? 1.0 : 0.8', 'cd.r < 14.0', 'cd.r < 120.0 ? 0.30 : cd.r < 240.0 ? 0.60 : 0.95'].filter(s => !CLIP_FRAG.includes(s));
+    const shaderHas = ['0.46 + tt * 0.36', '(0.20 + 0.38 * hh) * (0.6 + tt * 0.7)', '(0.10 + tt * 0.16) * (0.7 + 0.3 * hh) * am', '(front ? 8.0 : 11.0) / 32.0', 'L * 0.45', '(0.10 + tt * 0.15) * am', 'tt > 0.55 ? 2.0 : 1.0', '(0.05 + tt * 0.07) * am', 'cat == 1.0 && mood == 2.0', 'front ? 1.0 : 0.8', 'cd.r < 14.0', 'cd.r < 120.0 ? 0.30 : cd.r < 240.0 ? 0.60 : 0.95',
+      // 本線的 3D 放大（卡面：雨漬寬 ×WEATHER_PX、透明度 ×WEATHER_GAIN 上限 .8；分級、密度、長度、顏色照實驗線）
+      `min(0.8, a * ${CN.WEATHER_GAIN.toFixed(2)})`, `wx < ${CN.WEATHER_PX.toFixed(1)} / 32.0`].filter(s => !CLIP_FRAG.includes(s));
     log(miss.length === 0 && wxSame && J(tier) === J(tierLab) && J(CN.WEATHER_TT) === J([0, .3, .6, .95]) && shaderHas.length === 0 && CN.WEATHER_MIN_ZOOM === .9 && CN.NEAR_MIN_ZOOM === 1.22,
       'D014 驗收 9：風化（T591 落牆 T606）——實驗線原文的分級（14／120／240 天）、強度 [0,.3,.6,.95]、密度、長度、透明度、受光面／側面、接地苔垢、簷下積灰、縮放門檻逐字出現；WX606 顏色、本線常數、著色器同一組；英美立面不疊（f577）',
-      [miss.length ? '原文沒有：' + miss.join('、') : '', wxSame ? '' : 'WX606 顏色不同', shaderHas.length ? '著色器沒有：' + shaderHas.join('、') : ''].filter(Boolean).join('｜') || `原文 ${need.length} 處、著色器 12 處、WX606 3×4 色`);
+      [miss.length ? '原文沒有：' + miss.join('、') : '', wxSame ? '' : 'WX606 顏色不同', shaderHas.length ? '著色器沒有：' + shaderHas.join('、') : ''].filter(Boolean).join('｜') || `原文 ${need.length} 處、著色器 14 處、WX606 3×4 色；3D 放大：寬 ×${CN.WEATHER_PX}、透明度 ×${CN.WEATHER_GAIN}（上限 .8）`);
   }
 
   // ---- 6. 工地網格：單位盒子每一個三角形都朝外（(b−a)×(c−a) 跟法線同向；D014 施工中首版五個面全繞反，從外面看到的是內面）；

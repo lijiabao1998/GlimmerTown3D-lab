@@ -789,6 +789,8 @@ export function startCity() {
     conBuildings: () => city ? city.buildings.map(b => ({ id: b.id, k: b.k, x: b.x, z: b.z, s: b.size, age: b.age, gone: b.goneDay !== undefined })) : [],
     groundCheck: () => built?.groundCheck() ?? null,
     forceNear: (v: boolean | null) => { nearOverride = v; needsRender = true; draw(); return v; },
+    // 暫停中直接設當天已過的比例（拍照用：不播放就能拍天與天之間；下一次 simStep 歸零）
+    setDayFrac: (f: number) => { simAcc = Math.max(0, Math.min(.999, f)); if (con) con.uni.uDayFrac.value = sim ? simAcc : 0; needsRender = true; draw(); return simAcc; },
     weatherInfo: () => built?.weatherInfo() ?? null,
     setVisT: (t: number) => { visT = t; if (con) con.uni.uTime.value = t; needsRender = true; draw(); return visT; },
     // 重建一次場景（不推天數），回傳這次重建的耗時（ms）
