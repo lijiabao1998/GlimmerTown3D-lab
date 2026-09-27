@@ -640,12 +640,17 @@ if (want('d014')) {
     fs.mkdirSync(labDir, { recursive: true });
     await withBrowser({ root: LAB, port: 8431, width: 1280, height: 800, gl: false, preload: preloadOf(CONFIGS.default), ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
       await open('');
-      const shot = `(x,y)=>{GV.lookAt(x,y);GV.art574.zoom574(2.3);GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();return document.getElementById('game').toDataURL('image/png');}`;
-      const r = await page.evaluate(`(()=>{const shot=${shot};GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${JSON.stringify(starter)}))throw new Error('import');GV.setSpeed(0);GV.ai(false);
-        const out=[];for(let d=0;d<=10;d++){const t=GV.tile(${SITE[0]},${SITE[1]});out.push([d,t&&t.bld?t.bld.age:null,shot(${SITE[0]}+.5,${SITE[1]}+.5)]);GV.step(1);}
-        GV.setMapSize(72);GV.newWorldSeeded(777);GV.importCode(${JSON.stringify(seed)});GV.setSpeed(0);GV.ai(false);const w=shot(${SPOT[0]}+.5,${SPOT[1]}+.5);return {out,w};})()`);
-      for (const [d, age, url] of r.out) { if (age === null || ages2d[age] !== undefined) continue; ages2d[age] = d; fs.writeFileSync(path.join(labDir, `d014_age${age}_2d.png`), Buffer.from(url.split(',')[1], 'base64')); }
-      fs.writeFileSync(path.join(labDir, 'd014_weather_2d.png'), Buffer.from(r.w.split(',')[1], 'base64'));
+      // 一張圖一次 evaluate（整批十幾張 PNG 塞進同一個回傳會卡住 CDP）
+      const shot = (x, y) => `(()=>{GV.lookAt(${x},${y});GV.art574.zoom574(2.3);GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`;
+      const png = url => Buffer.from(url.split(',')[1], 'base64');
+      await page.evaluate(`(()=>{GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${JSON.stringify(starter)}))throw new Error('import');GV.setSpeed(0);GV.ai(false);return 1;})()`);
+      for (let d = 0; d <= 10; d++) {
+        const age = await page.evaluate(`(()=>{const t=GV.tile(${SITE[0]},${SITE[1]});return t&&t.bld?t.bld.age:null;})()`);
+        if (age !== null && ages2d[age] === undefined) { ages2d[age] = d; fs.writeFileSync(path.join(labDir, `d014_age${age}_2d.png`), png(await page.evaluate(shot(SITE[0] + .5, SITE[1] + .5)))); }
+        await page.evaluate('GV.step(1)');
+      }
+      await page.evaluate(`(()=>{GV.setMapSize(72);GV.newWorldSeeded(777);GV.importCode(${JSON.stringify(seed)});GV.setSpeed(0);GV.ai(false);return 1;})()`);
+      fs.writeFileSync(path.join(labDir, 'd014_weather_2d.png'), png(await page.evaluate(shot(SPOT[0] + .5, SPOT[1] + .5))));
       console.log('實驗線 2D：警察局', Object.entries(ages2d).map(([a, d]) => `屋齡 ${a}（第 ${d} 次推進後）`).join('、'));
     });
   } else console.log(`（${path.relative(ROOT, LAB)} 沒有實驗線，2D 那一欄留白）`);
