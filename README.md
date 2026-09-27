@@ -14,7 +14,7 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前狀態：D011 可以自己蓋了——鋪路、劃區、供電，看它長
+## 目前狀態：D014 看得見的施工——房子一層一層蓋起來，老房子會舊
 
 業主 2026-09-25 定案：只參考 2D 實驗線、全力做建造、原始碼零外部素材、本倉庫定位是 Pre（看 [`docs/D003-lab-city-import.md`](docs/D003-lab-city-import.md)）。
 
@@ -39,6 +39,21 @@
   - 同一串操作在實驗線頁面上實跑（它自己的拉線、框選、復原函式）：8 個種子共 312 筆操作之後的資金、格子、各種場逐位相等；兩邊互相匯出的分享碼讀回來都一樣。
   - 第 2 天起兩邊還是會分岔，原因跟 D010 一樣：實驗線的經濟、垃圾、通勤等系統本線還沒搬。
   - 按鈕、手勢、畫面是本線自己設計的（業主：UI 可以更現代）。
+
+- [D014](docs/D014-construction-and-detail.md) 讓房子不再突然冒出來：照實驗線 T259 的 9 天工期。
+  - 第 0 天開挖（圍籬、深坑、挖掘機、傾卸車），第 1 天打地基（鋼筋、攪拌車），第 2–3 天鋼骨框架長高、塔吊上場。
+  - 第 4–8 天樓體一層一層長高，實驗線的露出比例 30／50／68／84／96%，外面搭鷹架、塔吊吊料到當下的樓板。
+  - 1 倍速下每一幀都在長；塔吊、挖掘機、攪拌車、工人只在播放時動。住商工自然升級時照實驗線重蓋一次。
+  - 近看有細節：牆面照屋齡風化（T591，14／120／240 天三級），拉近還有牆腳的花台、垃圾桶、冷氣機、工安斜紋、棧板、立管（T599）。
+  - 地面改成只重畫變動的格。
+
+施工 9 天，左 2D 實驗線、右 3D（D014，起步城的警察局）：
+
+![D014 施工 9 天 2D｜3D](docs/img/D014-construction.jpg)
+
+手機 1 倍速，從開挖到完工：
+
+![D014 手機施工過程](docs/img/D014-mobile.jpg)
 
 同一串操作，第 0、30、60、120 天，左 2D 實驗線、右 3D（D011）：
 
@@ -66,7 +81,7 @@
 npm install
 npm run dev        # 開發伺服器 http://localhost:8301
 npm run build      # 輸出單一 dist/index.html
-npm run unit       # Node 端守衛：解碼、內容對拍、D009 公式與供電實跑、D010 場對拍與逐日模擬、D011 建造與資金對拍、施工整合、實驗線實跑錨點、純度、零外部素材
+npm run unit       # Node 端守衛：解碼、內容對拍、D009 公式與供電實跑、D010 場對拍與逐日模擬、D011 建造與資金對拍、施工整合、實驗線實跑錨點、D014 施工分期與近看細節、純度、零外部素材
 npm run smoke      # 無頭 Chrome 煙霧測試（先 build）
 npm run shoot      # 拍樣張到 scratch/shots/（--set=d003 拍 2D 城市模式）
 npm run extract -- --lab=../GlimmerTown-lab   # 從 2D 實驗線重抽建築表與樣本碼（只讀實驗線）
@@ -74,4 +89,6 @@ node tools/lab-compare.mjs --lab=../GlimmerTown-lab   # D010：起步城兩邊�
 node tools/lab-build.mjs --lab=../GlimmerTown-lab     # D011：建造規則黃金樣本（實驗線原碼在 Node 裡跑，不用 Chrome）
 node tools/lab-money.mjs --lab=../GlimmerTown-lab     # D011：資金公式黃金樣本
 node tools/d011-parity.mjs --lab=../GlimmerTown-lab   # D011：同一串操作兩邊各跑 8 種子 × 120 天，重錄實跑錨點（要 Chrome；--shots 拍 2D 樣張）
+node tools/lab-d014.mjs --lab=../GlimmerTown-lab      # D014：施工分期、風化、近看小物的實驗線原文黃金樣本（不用 Chrome）
+node tools/shoot.mjs --set=d014 --lab=../GlimmerTown-lab   # D014：施工 9 天 2D｜3D、風化與近看小物、手機施工過程
 ```

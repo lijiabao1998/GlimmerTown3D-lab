@@ -37,10 +37,45 @@ export const groundCellPx = (n: number) => Math.max(1, Math.min(8, Math.floor(10
 // plates＝D007 非住商工建築的地坪色（實驗線精靈圖的地坪，−1＝照舊）
 export function paintGround(c: GroundCity, cat: (k: number) => string, S: number, lots?: Uint8Array, plates?: Int32Array): Uint8Array {
   const n = c.n, W = n * S, data = new Uint8Array(W * W * 4);
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) paintTile(c, cat, S, lots, plates, data, x, z);
+  return data;
+}
+
+// D014 增量重畫：每一格的輸入（路、等級、鐵路、碼頭、電車、地形、高地、分區、建築分類、地坪、非住商工地坪、四鄰有沒有路）壓成兩個整數；
+// 跟上一次一樣的格直接沿用上一次的像素，不一樣的才重畫（同一個 paintTile，結果跟整張重畫逐位元組相同，守衛核對）
+export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; data: Uint8Array }
+const CATCODE = (ct: string) => ct === '' ? 0 : ct === 'R' || ct === 'C' || ct === 'I' ? 1 : ct === 'G' ? 2 : ct === 'F' ? 3 : 4;
+export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array] {
+  const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n);
+  const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+    const i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
+    const nb = (isRoad(x, z - 1) ? 1 : 0) | (isRoad(x, z + 1) ? 2 : 0) | (isRoad(x - 1, z) ? 4 : 0) | (isRoad(x + 1, z) ? 8 : 0);
+    k1[i] = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
+      | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0);
+    k2[i] = plates ? plates[i] : -2;
+  }
+  return [k1, k2];
+}
+export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null): { cache: GroundCache; painted: number } {
+  const n = c.n, [k1, k2] = groundKeys(c, cat, lots, plates);
+  if (!prev || prev.n !== n || prev.S !== S) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, data }, painted: n * n }; }
+  const data = prev.data.slice();
+  let painted = 0;
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+    const i = z * n + x;
+    if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i]) continue;
+    paintTile(c, cat, S, lots, plates, data, x, z); painted++;
+  }
+  return { cache: { n, S, k1, k2, data }, painted };
+}
+
+function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, data: Uint8Array, x: number, z: number) {
+  const n = c.n, W = n * S;
   const put = (px: number, py: number, col: number) => { const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
   const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
   const mid = S >> 1;
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+  {
     const i = z * n + x, r = c.road[i], b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null, ct = b ? cat(b.k) : '';
     const rN = isRoad(x, z - 1), rS = isRoad(x, z + 1), rW = isRoad(x - 1, z), rE = isRoad(x + 1, z);
     const straightNS = rN && rS && !rW && !rE, straightEW = rW && rE && !rN && !rS;
@@ -82,5 +117,4 @@ export function paintGround(c: GroundCity, cat: (k: number) => string, S: number
       put(x * S + u, z * S + v, col);
     }
   }
-  return data;
 }

@@ -11,11 +11,13 @@ import type { BlockMode, DrawBlock } from '../content/blocks.ts';
 import type { Recipe } from '../content/recipes.ts';
 import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
-import { drawBlock, emptyCounts, type ArtCounts, type YardTree } from './blockArt.ts';
+import { drawBlock, drawNearJob, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
-import { paintGround, groundCellPx } from './ground.ts';
+import { paintGround, paintGroundInc, groundCellPx } from './ground.ts';
 import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
+import { nearGate, nearHb } from '../content/construction.ts';
+import { conAttr, patchClip, clipDepthMaterial, patchTree, patchSite, siteDepthMaterial, siteGeometry, type ConState, type SiteSpec } from './construction.ts';
 
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
@@ -39,6 +41,17 @@ export interface BuiltCity {
   kindColorsUsed(): Record<number, string[]>;           // D007：每棟建築（owner＞0）的三角形數與包圍盒 [tris, x0, y0, z0, x1, y1, z1]（守衛：不出界、高度）
   groundData(): { S: number; W: number; rgba: Uint8Array };        // D006：整張地面貼圖（守衛逐像素驗色族、人行道、車道線）   // 每個網格的三角形數（實例網格乘實例數）、投不投影子：手機預算用   // D005：街區牆面三角形裡，有窗的都不是圖集第 0 格
   timing: Record<string, number>;
+  // D014 施工：每格建築幾何的最高點、地基、牆頂（量自幾何）、每格屬於哪個街區（1 起；0＝不是街區）；前庭樹的格；工地網格
+  con: { top: Float32Array; base: Float32Array; wallTop: Float32Array; blockOf: Int32Array } | null;
+  setTreeAges(ageAt: (i: number) => number): void;
+  setSites(specs: SiteSpec[], ageAt: (i: number) => number, live: boolean): { tris: number; perSite: Map<number, string[]> } | null;
+  nearCounts(): { near: number; kinds: Record<string, number> };   // D014 近看小物畫了幾件（逐種）
+  setNear(on: boolean): void;                          // D014 近看小物：實驗線縮放 ≥ 1.22 才畫
+  nearMesh(): THREE.Mesh | null;
+  buildingMeshes(): THREE.Mesh[];                      // D014 守衛：牆、其他、點綴（探針只畫這三個）
+  groundCheck(): boolean;                              // D014 守衛：這一次的地面（增量）＝同一組輸入整張重畫
+  weatherInfo(): { core: number; facade: number };     // D014 守衛：會風化（帶牆頂）的牆三角形，核心路徑／英美立面街區各幾個
+  siteMesh(): THREE.Mesh | null;
   dispose(): void;
 }
 
@@ -58,8 +71,12 @@ export function tileTop(c: City, i: number): number {
 }
 
 // 地面貼圖：每格 S×S 像素；逐像素顏色在 ground.ts（D006：顏色取自實驗線、草皮格線、人行道、車道線）
-function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array, plates?: Int32Array): THREE.DataTexture {
-  const W = c.n * S, t = new THREE.DataTexture(paintGround(c, k => look.cat(k), S, lots, plates), W, W, THREE.RGBAFormat);
+// D014：有施工資料（城市模式）時走增量重畫：跟上一次重建一樣的格沿用像素（src/render/ground.ts paintGroundInc）
+function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array, plates?: Int32Array, con?: ConState, T?: Record<string, number>): THREE.DataTexture {
+  let px: Uint8Array;
+  if (con) { const r = paintGroundInc(c, k => look.cat(k), S, lots, plates, con.ground); con.ground = r.cache; px = r.cache.data; if (T) T.groundTiles = r.painted; }
+  else px = paintGround(c, k => look.cat(k), S, lots, plates);
+  const W = c.n * S, t = new THREE.DataTexture(px, W, W, THREE.RGBAFormat);
   t.magFilter = t.minFilter = THREE.NearestFilter;
   t.generateMipmaps = false;
   t.colorSpace = THREE.SRGBColorSpace;
@@ -93,7 +110,7 @@ export const TONES: Record<Tone, { ramp: [number, number, number]; hemi: number;
   c: { ramp: [90, 120, 255], hemi: 0.9, sun: 2.6 },
   d: { ramp: [80, 125, 255], hemi: 1.1, sun: 2.2 },   // 施工中加的第四檔：只壓暗背光面，受光面與天光同 a（c 的太陽太強，米白牆被削成粉紅）
 };
-export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender): BuiltCity {
+export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState): BuiltCity {
   const TN = TONES[tone];
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
@@ -125,41 +142,54 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
   }
-  const gtex = groundTexture(c, look, S, lots, plates); disposables.push(gtex);
+  const gtex = groundTexture(c, look, S, lots, plates, con, T); disposables.push(gtex);
+  mark('groundTex');
   const top = new Float32Array(nn);
   for (let i = 0; i < nn; i++) top[i] = tileTop(c, i);
-  const gp: number[] = [], guv: number[] = [];
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
-    const y = top[z * n + x], u0 = x / n, u1 = (x + 1) / n, v0 = z / n, v1 = (z + 1) / n;
-    gp.push(x, y, z, x, y, z + 1, x + 1, y, z + 1, x, y, z, x + 1, y, z + 1, x + 1, y, z);
-    guv.push(u0, v0, u0, v1, u1, v1, u0, v0, u1, v1, u1, v0);
+  // D014：地面、崖面的幾何只跟每格高度有關——高度沒變就沿用上一次建的（記在施工資料裡），重建時省下組這兩個網格的時間。
+  // 沒快取到（第一次、換城、鋪了橋）才重建；換下來的舊幾何交給這一次的場景，等這一次的場景也換下來才釋放（那時用舊幾何的場景早就丟了）
+  let gg: THREE.BufferGeometry, cliffG: THREE.BufferGeometry;
+  const tc = con?.terrain;
+  if (tc && tc.n === n && tc.top.length === nn && tc.top.every((v, i) => v === top[i])) { gg = tc.ground; cliffG = tc.cliff; T.terrainCached = 1; }
+  else {
+    const gp = new Float32Array(nn * 18), guv = new Float32Array(nn * 12), gn = new Float32Array(nn * 18);
+    for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+      const i = z * n + x, y = top[i], u0 = x / n, u1 = (x + 1) / n, v0 = z / n, v1 = (z + 1) / n;
+      gp.set([x, y, z, x, y, z + 1, x + 1, y, z + 1, x, y, z, x + 1, y, z + 1, x + 1, y, z], i * 18);
+      guv.set([u0, v0, u0, v1, u1, v1, u0, v0, u1, v1, u1, v0], i * 12);
+      for (let j = 0; j < 6; j++) gn[i * 18 + j * 3 + 1] = 1;
+    }
+    gg = new THREE.BufferGeometry();
+    gg.setAttribute('position', new THREE.BufferAttribute(gp, 3));
+    gg.setAttribute('uv', new THREE.BufferAttribute(guv, 2));
+    gg.setAttribute('normal', new THREE.BufferAttribute(gn, 3));
+    const cliff = new Geo();
+    const bank = C(35, 0.28, 0.42), rock = C(28, 0.2, 0.36), soil = C(30, 0.25, 0.3);
+    const side = (hi: number, lo: number, a: [number, number], b: [number, number], nrm: [number, number, number], col: THREE.Color) =>
+      cliff.quad([a[0], lo, a[1]], [b[0], lo, b[1]], [b[0], hi, b[1]], [a[0], hi, a[1]], nrm, col);
+    for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+      const y = top[z * n + x];
+      if (x + 1 < n) { const y2 = top[z * n + x + 1]; if (y !== y2) side(Math.max(y, y2), Math.min(y, y2), [x + 1, z], [x + 1, z + 1], [y > y2 ? 1 : -1, 0, 0], Math.max(y, y2) >= EL_H ? rock : bank); }
+      if (z + 1 < n) { const y2 = top[(z + 1) * n + x]; if (y !== y2) side(Math.max(y, y2), Math.min(y, y2), [x, z + 1], [x + 1, z + 1], [0, 0, y > y2 ? 1 : -1], Math.max(y, y2) >= EL_H ? rock : bank); }
+      if (x === 0) side(y, BASE_Y, [0, z], [0, z + 1], [-1, 0, 0], soil);
+      if (x === n - 1) side(y, BASE_Y, [n, z], [n, z + 1], [1, 0, 0], soil);
+      if (z === 0) side(y, BASE_Y, [x, 0], [x + 1, 0], [0, 0, -1], soil);
+      if (z === n - 1) side(y, BASE_Y, [x, n], [x + 1, n], [0, 0, 1], soil);
+    }
+    cliffG = cliff.geometry();
+    if (con) { if (tc) disposables.push(tc.ground, tc.cliff); con.terrain = { n, top: Float32Array.from(top), ground: gg, cliff: cliffG }; }
+    else disposables.push(gg, cliffG);
+    T.terrainCached = 0;
   }
-  const gg = new THREE.BufferGeometry();
-  gg.setAttribute('position', new THREE.Float32BufferAttribute(gp, 3));
-  gg.setAttribute('uv', new THREE.Float32BufferAttribute(guv, 2));
-  gg.setAttribute('normal', new THREE.Float32BufferAttribute(new Float32Array(gp.length).map((_, j) => (j % 3 === 1 ? 1 : 0)), 3));
   const ground = new THREE.Mesh(gg, mat({ map: gtex }));
-  ground.receiveShadow = true; disposables.push(gg); scene.add(ground);
-
-  const cliff = new Geo();
-  const bank = C(35, 0.28, 0.42), rock = C(28, 0.2, 0.36), soil = C(30, 0.25, 0.3);
-  const side = (hi: number, lo: number, a: [number, number], b: [number, number], nrm: [number, number, number], col: THREE.Color) =>
-    cliff.quad([a[0], lo, a[1]], [b[0], lo, b[1]], [b[0], hi, b[1]], [a[0], hi, a[1]], nrm, col);
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
-    const y = top[z * n + x];
-    if (x + 1 < n) { const y2 = top[z * n + x + 1]; if (y !== y2) side(Math.max(y, y2), Math.min(y, y2), [x + 1, z], [x + 1, z + 1], [y > y2 ? 1 : -1, 0, 0], Math.max(y, y2) >= EL_H ? rock : bank); }
-    if (z + 1 < n) { const y2 = top[(z + 1) * n + x]; if (y !== y2) side(Math.max(y, y2), Math.min(y, y2), [x, z + 1], [x + 1, z + 1], [0, 0, y > y2 ? 1 : -1], Math.max(y, y2) >= EL_H ? rock : bank); }
-    if (x === 0) side(y, BASE_Y, [0, z], [0, z + 1], [-1, 0, 0], soil);
-    if (x === n - 1) side(y, BASE_Y, [n, z], [n, z + 1], [1, 0, 0], soil);
-    if (z === 0) side(y, BASE_Y, [x, 0], [x + 1, 0], [0, 0, -1], soil);
-    if (z === n - 1) side(y, BASE_Y, [x, n], [x + 1, n], [0, 0, 1], soil);
-  }
-  const cliffMesh = new THREE.Mesh(cliff.geometry(), mat({ vertexColors: true }));
-  cliffMesh.receiveShadow = true; disposables.push(cliffMesh.geometry); scene.add(cliffMesh);
+  ground.receiveShadow = true; scene.add(ground);
+  mark('groundMesh');
+  const cliffMesh = new THREE.Mesh(cliffG, mat({ vertexColors: true }));
+  cliffMesh.receiveShadow = true; scene.add(cliffMesh);
   mark('ground');
 
   // ---- 建築量體 ----
-  const Wg = new Geo({ ext: !!blocks }), Og = new Geo(), Dg = new Geo();
+  const Wg = new Geo({ ext: !!blocks }), Og = new Geo(), Dg = new Geo(), nearJobs: NearJob[] = [];   // nearJobs：D014 近看小物（縮放夠近才畫）
   const kindUsed: Record<number, string[]> = {};   // D007：每棟非住商工用了哪些色（守衛）
   const yard: YardTree[] = [], treeOwners: [number, number, number][] = [];   // 前庭的樹（D005 街區、D007 非住商工共用）；treeOwners＝哪棟建築擁有哪一段樹（守衛用）
   const anchors = new Map<number, THREE.Vector3>();
@@ -212,12 +242,17 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     anchors.set(b.id, new THREE.Vector3(cx, (y0 + yTop) / 2, cz));
   }
   // D004 街區：三角形的 owner 記成 −(街區索引＋1)，點擊時再換回點到的那一格
-  const blockAnchors: (THREE.Vector3 | null)[] = [], counts = emptyCounts();
+  const blockAnchors: (THREE.Vector3 | null)[] = [], counts = emptyCounts(), weatherTris = { core: 0, facade: 0 };
   if (blocks) blocks.plan.forEach((bk, bi) => {
     Wg.owner = Og.owner = Dg.owner = -(bi + 1);
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
-    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts, blocks.detail ? blocks.facade(bk) : null, blocks.detail ? blocks.trim(bk) : null);
+    // D014 近看小物（58393）：街區起點那棟屋齡 ≥ 9、streetHash(x,y,60630)<.72 才畫；hb＝floor(streetHash(x,y,60631)*3)
+    const ob = con && c.occ[bk.z * n + bk.x] ? c.buildings[c.occ[bk.z * n + bk.x] - 1] : null, hb = ob && nearGate(bk.x, bk.z, ob.age) ? nearHb(bk.x, bk.z) : -1;
+    const fp = blocks.detail ? blocks.facade(bk) : null, t0 = Wg.tags.length;
+    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nearJobs : null, hb);
+    let tagged = 0; for (let t = t0; t < Wg.tags.length; t++) if (Wg.tags[t] > 0) tagged++;
+    if (fp) weatherTris.facade += tagged; else weatherTris.core += tagged;
   });
   Wg.owner = Og.owner = Dg.owner = 0;
   // 高架路：路面抬高、每兩格一根橋墩
@@ -228,6 +263,23 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     Og.box(x, z, x + 1, z + 1, y, y + 0.08, C(0, 0, 0.62), C(0, 0, 0.36), null);
     if ((x + z) % 2 === 0) Og.box(x + 0.44, z + 0.44, x + 0.56, z + 0.56, Math.max(0, top[i]), y, C(0, 0, 0.6), null, null);
   }
+  mark('bldGeo');
+  // D014 施工：每個頂點的 aCon（片段屬於哪一格、牆頂高），順便量每格的最高點與牆頂（量自幾何，工地的樓高、樓板線用）
+  let conOut: BuiltCity['con'] = null, nearRect: ((o: number) => number[] | null) | null = null;
+  const conAttrs: Float32Array[] = [];
+  if (con) {
+    const byIdR = new Map(c.buildings.map(b => [b.id, b]));
+    const rectOf = (o: number): number[] | null => {
+      if (o > 0) { const b = byIdR.get(o); return b ? [b.x, b.z, b.x + b.size, b.z + b.size] : null; }
+      const bk = blocks?.plan[-o - 1]; return bk ? [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h] : null;
+    };
+    const ctop = Float32Array.from(top), wallTop = new Float32Array(nn), blockOf = new Int32Array(nn);
+    for (const G of [Wg, Og, Dg]) conAttrs.push(conAttr(G.pos, G.nor, G.owners, G.tags, rectOf, n, ctop, wallTop));
+    if (blocks) blocks.plan.forEach((bk, bi) => { for (const i of bk.cells) blockOf[i] = bi + 1; });
+    conOut = { top: ctop, base: Float32Array.from(top), wallTop, blockOf };
+    nearRect = rectOf;
+  }
+  mark('conAttr');
   // D005：街區模式的牆用窗磚圖集（第 0 格＝D003 窗磚，非住商工畫面不變）；D003 模式照舊用單張窗磚
   const texW = blocks ? windowAtlas() : windowTexture(); disposables.push(texW);
   // D007：逐棟包圍盒（建幾何之前先從累積器算，之後就不用再讀 GPU 緩衝）
@@ -241,6 +293,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   for (const [id, a, z] of treeOwners) { const bb = boxes[id]; if (!bb) continue; for (let i = a; i < z; i++) { const t = yard[i], sc = t.s * 1.1, r = .26 * sc; bb[1] = Math.min(bb[1], t.x - r); bb[3] = Math.min(bb[3], t.z - r); bb[4] = Math.max(bb[4], t.x + r); bb[6] = Math.max(bb[6], t.z + r); bb[5] = Math.max(bb[5], t.y + .4 * sc + .26 * 1.15 * sc); } }
   const wallMat = mat({ map: texW, vertexColors: true });
   if (blocks) patchWindowMaterial(wallMat);
+  if (con) patchClip(wallMat, con.uni, true);
   const wallsMesh = new THREE.Mesh(Wg.geometry(), wallMat);
   const ws = { blockTris: 0, windowed: 0, style0Windowed: 0 };
   if (blocks) for (let t = 0; t < Wg.owners.length; t++) {
@@ -255,6 +308,27 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   // D005 點綴：不投影子（收影子），單獨一個網格；沒有街區時不建（D003 模式的 draw call 不變）
   const dressMesh = Dg.owners.length ? new THREE.Mesh(Dg.geometry(), mat({ vertexColors: true })) : null;
   if (dressMesh) { dressMesh.receiveShadow = true; owners.set(dressMesh, Int32Array.from(Dg.owners)); disposables.push(dressMesh.geometry); scene.add(dressMesh); }
+  // D014 近看小物：單獨一個網格、不投影子，縮放夠近才畫（setNear）
+  let nearM: THREE.Mesh | null = null;
+  const buildNear = () => {
+    if (nearM || !nearJobs.length || !con || !nearRect) return;
+    const t0 = performance.now(), Ng = new Geo();
+    for (const j of nearJobs) drawNearJob(Ng, j);
+    nearM = new THREE.Mesh(Ng.geometry(), mat({ vertexColors: true }));
+    nearM.geometry.setAttribute('aCon', new THREE.Float32BufferAttribute(conAttr(Ng.pos, Ng.nor, Ng.owners, Ng.tags, nearRect, n, new Float32Array(nn), new Float32Array(nn)), 3));   // 近看小物不算進最高點
+    patchClip(nearM.material as THREE.Material, con.uni, false);
+    nearM.receiveShadow = true; nearM.name = 'near'; disposables.push(nearM.geometry); scene.add(nearM);
+    T.near = performance.now() - t0;
+  };
+  // D014：三個建築網格都吃施工裁切；影子那趟用同一段裁切的深度材質
+  if (con) {
+    [wallsMesh, otherMesh, dressMesh].forEach((m, j) => {
+      if (!m) return;
+      m.geometry.setAttribute('aCon', new THREE.Float32BufferAttribute(conAttrs[j], 3));
+      if (m !== wallsMesh) patchClip(m.material as THREE.Material, con.uni, false);
+      if (m.castShadow) { const dm = clipDepthMaterial(con.uni); m.customDepthMaterial = dm; disposables.push(dm); }
+    });
+  }
   const drawn = new Set<number>(), drawnBlocks = new Set<number>();
   for (const a of owners.values()) for (const id of a) if (id > 0) drawn.add(id); else if (id < 0) drawnBlocks.add(-id - 1);
   if (blocks) for (const bi of drawnBlocks) for (const i of blocks.plan[bi].cells) if (c.occ[i]) drawn.add(c.occ[i]);
@@ -285,6 +359,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     place(cone, crownsC, true);
     for (const m of [trunks, crownsR, crownsC]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); disposables.push(m); }   // D010：實例網格的矩陣／顏色緩衝要自己釋放（逐日重建會一直換場景）
   }
+  let yardAges: { attr: THREE.InstancedBufferAttribute; tiles: number[] } | null = null;
   // D005 前庭的樹（villa、住宅地坪）：八面體樹冠＋三稜樹幹，14 個三角形（野樹 40 個），不投影子
   if (yard.length) {
     const ytg = new THREE.CylinderGeometry(0.03, 0.04, 0.24, 3, 1, true), ycg = new THREE.OctahedronGeometry(0.26, 0);
@@ -298,6 +373,11 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       yc.setColorAt(j, col.setHSL(0.29 + hash2(hx, hz, 16) * 0.05, 0.42, 0.3 + hash2(hx, hz, 17) * 0.08, THREE.SRGBColorSpace));
     });
     for (const m of [yt, yc]) { m.receiveShadow = true; scene.add(m); disposables.push(m); }
+    if (con) {   // D014：前庭的樹等完工才種（每棵一個實例屬性：它那一格的屋齡）
+      const at = new THREE.InstancedBufferAttribute(new Float32Array(yard.length).fill(99), 1);
+      for (const m of [yt, yc]) { m.geometry.setAttribute('aTreeT', at); patchTree(m.material as THREE.Material, con.uni); }
+      yardAges = { attr: at, tiles: yard.map(t => Math.min(n - 1, Math.max(0, Math.floor(t.z))) * n + Math.min(n - 1, Math.max(0, Math.floor(t.x)))) };
+    }
   }
   mark('trees');
 
@@ -318,6 +398,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   disposables.push({ dispose: () => sun.shadow.dispose() });   // D010：陰影貼圖的算繪目標也要釋放
   mark('lights');
 
+  let siteM: THREE.Mesh | null = null, siteMat: THREE.Material | null = null, siteDepth: THREE.MeshDepthMaterial | null = null;   // D014 工地網格（每天換）
   // 點擊：打到建築就回那棟（格子取根格）；打到地面回那一格。樹不擋
   const byId = new Map(c.buildings.map(b => [b.id, b]));
   const pickables: THREE.Object3D[] = [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : []), ground];
@@ -344,7 +425,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     anchorOf: id => anchors.get(id)?.clone() ?? null,
     blocksDrawn: () => [...drawnBlocks].sort((a, b) => a - b),
     blockAnchor: i => blockAnchors[i]?.clone() ?? null,
-    artCounts: () => ({ ...counts, partKinds: sortKeys(counts.partKinds) }),
+    artCounts: () => { const { near: _n, nearKinds: _k, ...rest } = counts; void _n; void _k; return { ...rest, partKinds: sortKeys(counts.partKinds) } as ArtCounts; },
+    nearCounts: () => ({ near: counts.near, kinds: sortKeys(counts.nearKinds) }),
     wallStyles: () => ({ ...ws }),
     groundData: () => ({ S, W: n * S, rgba: gtex.image.data as Uint8Array }),
     ownerBoxes: () => boxes,
@@ -355,13 +437,31 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       scene.traverse(o => {
         const m = o as THREE.Mesh;
         if (!m.isMesh) return;
-        const g = m.geometry, per = (g.index ? g.index.count : g.attributes.position.count) / 3, inst = (m as THREE.InstancedMesh).isInstancedMesh ? (m as THREE.InstancedMesh).count : 1;
-        out.push({ name: names.get(m) ?? ((m as THREE.InstancedMesh).isInstancedMesh ? 'inst' + per : 'mesh'), tris: per * inst, shadow: m.castShadow });
+        const g = m.geometry, per = (g.index ? g.index.count : g.attributes.position.count) / 3, inst = (m as THREE.InstancedMesh).isInstancedMesh ? (m as THREE.InstancedMesh).count : (g as THREE.InstancedBufferGeometry).isInstancedBufferGeometry ? (g as THREE.InstancedBufferGeometry).instanceCount : 1;
+        out.push({ name: names.get(m) ?? (m.name || ((m as THREE.InstancedMesh).isInstancedMesh ? 'inst' + per : 'mesh')), tris: per * inst, shadow: m.castShadow });
       });
       return out;
     },
+    con: conOut,
+    setTreeAges: ageAt => { if (!yardAges) return; const a = yardAges.attr.array as Float32Array; yardAges.tiles.forEach((i, j) => { a[j] = ageAt(i); }); yardAges.attr.needsUpdate = true; },
+    setSites: (specs, ageAt, live) => {
+      if (!con) return null;
+      if (siteM) { scene.remove(siteM); siteM.geometry.dispose(); siteM = null; }
+      if (!specs.length) return { tris: 0, perSite: new Map() };
+      const sg = siteGeometry(specs, ageAt, conOut!, n, live);
+      if (!siteMat) { siteMat = mat({ vertexColors: true }); patchSite(siteMat, con.uni); siteDepth = siteDepthMaterial(con.uni); disposables.push(siteDepth); }
+      siteM = new THREE.Mesh(sg.geometry, siteMat); siteM.castShadow = siteM.receiveShadow = true; siteM.customDepthMaterial = siteDepth!; siteM.name = 'site';
+      scene.add(siteM);
+      return { tris: sg.tris, perSite: sg.perSite };
+    },
+    siteMesh: () => siteM,
+    setNear: on => { if (on) buildNear(); if (nearM) nearM.visible = on; },
+    buildingMeshes: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])],
+    groundCheck: () => { const full = paintGround(c, k => look.cat(k), S, lots, plates), cur = gtex.image.data as Uint8Array; if (full.length !== cur.length) return false; for (let i = 0; i < full.length; i++) if (full[i] !== cur[i]) return false; return true; },
+    weatherInfo: () => ({ ...weatherTris }),
+    nearMesh: () => nearM,
     groundAt: (x, z) => { const d = gtex.image.data as Uint8Array, W = n * S, o: number[] = []; for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) { const i = ((z * S + v) * W + x * S + u) * 4; o.push(d[i], d[i + 1], d[i + 2]); } return o; },
-    dispose: () => { for (const d of disposables) d.dispose(); },
+    dispose: () => { if (siteM) siteM.geometry.dispose(); for (const d of disposables) d.dispose(); },
   };
 }
 

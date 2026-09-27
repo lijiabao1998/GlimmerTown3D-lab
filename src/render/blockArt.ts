@@ -4,13 +4,14 @@ import * as THREE from 'three';
 import type { Geo } from './scene.ts';
 import type { DrawBlock } from '../content/blocks.ts';
 import { PX_PER_CELL, TERRA, shade, type Recipe } from '../content/recipes.ts';
+import { nearPlan } from '../content/construction.ts';
 import type { Dressing, KitItem } from '../content/dressing.ts';
 import { WIN_STYLE } from './windows.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 
 export interface YardTree { x: number; z: number; y: number; s: number }
-export interface ArtCounts { props: number; edges: number; kits: number; awnings: number; doors: number; docks: number; shopBands: number; plainBands: number; units: number; rows: number; parts: number; trims: number; partKinds: Record<string, number> }
-export const emptyCounts = (): ArtCounts => ({ props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0, shopBands: 0, plainBands: 0, units: 0, rows: 0, parts: 0, trims: 0, partKinds: {} });
+export interface ArtCounts { props: number; edges: number; kits: number; awnings: number; doors: number; docks: number; shopBands: number; plainBands: number; units: number; rows: number; parts: number; trims: number; partKinds: Record<string, number>; near: number; nearKinds: Record<string, number> }
+export const emptyCounts = (): ArtCounts => ({ props: 0, edges: 0, kits: 0, awnings: 0, doors: 0, docks: 0, shopBands: 0, plainBands: 0, units: 0, rows: 0, parts: 0, trims: 0, partKinds: {}, near: 0, nearKinds: {} });
 
 const cache = new Map<string, THREE.Color>();
 const col = (s: string) => { let c = cache.get(s); if (!c) { c = new THREE.Color(s); cache.set(s, c); } return c; };
@@ -18,7 +19,9 @@ const P = (px: number) => px / PX_PER_CELL;
 
 // Wg＝有窗的牆、Og＝屋頂與量體細節（都投影子）；Dg＝點綴（前庭道具、屋頂設備、雨遮、門、裝卸口）：不投影子，手機上省一半三角形（影子那趟不畫它）
 // fp／tp：D008 英美立面逐戶計畫與核心路徑飾條（A 檔不帶，維持 D007 的樣子）
-export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d: Dressing, y0: number, trees: YardTree[], n: ArtCounts, fp: FacadePlan | null = null, tp: TrimPlan | null = null): THREE.Vector3 {
+// nearJobs：D014 近看小物先排隊、不畫（縮放夠近才由 drawNearJob 畫，平常重建省下這一段）；件數這裡先照計畫算好
+export interface NearJob { r: Recipe; x0: number; z0: number; x1: number; z1: number; y0: number; hb: number; owner: number }
+export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d: Dressing, y0: number, trees: YardTree[], n: ArtCounts, fp: FacadePlan | null = null, tp: TrimPlan | null = null, nearJobs: NearJob[] | null = null, hb = -1): THREE.Vector3 {
   const X = (u: number) => bk.x + u * bk.w, Z = (v: number) => bk.z + v * bk.h;
   const wall = col(r.pal.light), glass = col(r.pal.glass), b = r.box, yw = y0 + P(r.wallPx);
   const x0 = X(b[0]), x1 = X(b[1]), z0 = Z(b[2]), z1 = Z(b[3]);
@@ -35,7 +38,10 @@ export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d
   else if (core && r.k === 3) { band = { bandH: (yw - y0) * .45, bandShop: false }; n.plainBands++; }
   if (fp) drawFacade(Wg, Og, Dg, fp, r, x0, z0, x1, z1, y0, yw, rise, win, n);
   else {
+    Wg.tag = yw;                                                   // D014：核心路徑主體牆會風化（T606 只疊在核心路徑，英美立面不疊）；記牆頂高給著色器
     Wg.box(x0, z0, x1, z1, y0, yw, wall, topCol, band ? { ...win, ...band } : win);
+    Wg.tag = 0;
+    if (nearJobs && hb >= 0) { const job = { r, x0, z0, x1, z1, y0, hb, owner: Wg.owner }; nearJobs.push(job); for (const it of nearItems(job)) { n.near++; n.nearKinds[it.kind] = (n.nearKinds[it.kind] ?? 0) + 1; } }
     if (tp) drawTrim(Dg, tp, x0, z0, x1, z1, y0, yw, n);
     if (rf.kind === 'parapet') {                                   // 女兒牆：屋頂板往內收 7%（shrinkPara547 .07）再墊高 4px
       const du = (x1 - x0) * .035, dv = (z1 - z0) * .035;
@@ -204,3 +210,34 @@ function drawFacade(Wg: Geo, Og: Geo, Dg: Geo, f: FacadePlan, r: Recipe, x0: num
   }
 }
 const STONE_C = '#e0d8c4';
+
+// ---- D014 近看小物（實驗線 paintNear606 58356，T599 落到真的牆上）：受光面＝+z（主體正面 z1）、側面＝+x（x1）；
+// 沿面的像素 → 世界：一格邊長 32px（2:1 斜俯視的水平寬）；高度像素 → 世界：PX_PER_CELL。只在核心路徑（英美立面自帶花台，照實驗線不疊）
+const FACE_PX = 32;
+const nearItems = (j: NearJob) => {
+  const r = j.r, cat = r.k === 1 ? 'R' : r.k === 2 ? 'C' : 'I';
+  return nearPlan({ cat, v: r.v, bw: r.w, bh: r.h, hb: j.hb, lenL: Math.round(FACE_PX * (j.x1 - j.x0)), lenD: Math.round(FACE_PX * (j.z1 - j.z0)), wallH: r.wallPx });
+};
+export function drawNearJob(G: Geo, j: NearJob) {
+  const { x0, z1, x1, y0 } = j, items = nearItems(j);
+  G.owner = j.owner;
+  const H = (px: number) => px / PX_PER_CELL, U = (px: number) => px / FACE_PX, D = .035;
+  // 沿面 x 像素、寬 w、離牆腳 e、高 h 的一個小盒，突出牆面 dep
+  const put = (face: 'L' | 'D', x: number, w: number, e: number, h: number, dep: number, c: string, t: string) => {
+    if (face === 'L') { const a = x0 + U(x), b = a + U(w); G.box(a, z1, b, z1 + dep, y0 + H(e), y0 + H(e + h), col(c), col(t), null); }
+    else { const a = z1 - U(x), b = a - U(w); G.box(x1, b, x1 + dep, a, y0 + H(e), y0 + H(e + h), col(c), col(t), null); }
+  };
+  for (const it of items) {
+    switch (it.kind) {
+      case 'planter': put('L', it.x, 3, 0, 1, D, '#6a4a32', '#6a4a32'); put('L', it.x, 3, 1, 1, D * .8, '#3f7f43', '#5b9e55'); break;
+      case 'flower': put('L', it.x, 1, 2, 1, D * .5, '#c45a6a', '#d46a7a'); break;
+      case 'bin': put('L', it.x, 2, 0, 2, D, '#2f4a3a', '#3f6450'); break;
+      case 'sign': put('L', it.x, 2, 0, 3, D * .6, '#2b2f36', '#e8dcb0'); break;
+      case 'ac': put('D', it.x, 3, it.e, 2, .045, '#b7bec3', '#6c767d'); break;
+      case 'stripe': for (let x = it.x; x < it.x + it.w; x += 2) put('L', x, 2, 0, 2, .004, ((x >> 1) & 1) ? '#d7a93e' : '#2a2e31', ((x >> 1) & 1) ? '#d7a93e' : '#2a2e31'); break;
+      case 'pallet': put('L', it.x, 4, 0, 2, .07, '#9a7a4e', '#b4925e'); break;
+      case 'crate': put('L', it.x, 2, 2, 2, .05, '#6f8a9c', '#86a0b0'); break;
+      case 'pipe': put('D', it.x, 1, it.e, it.h, .02, '#5e6b6a', '#8a9695'); break;
+    }
+  }
+}

@@ -12,6 +12,7 @@ type V3 = [number, number, number];
 export class Geo {
   pos: number[] = []; nor: number[] = []; uv: number[] = []; col: number[] = [];
   owner = 0; owners: number[] = [];   // 每個三角形屬於哪棟建築（0＝無），點擊時用 faceIndex 反查
+  tag = 0; tags: number[] = [];       // D014：每個三角形的牆頂高（>0＝會風化的住商工核心路徑牆，著色器從這裡往下畫雨漬）；0＝不風化
   // D005 窗樣式：ext＝true 才多記兩個頂點屬性（wStyle＝窗磚圖集第幾格、wGlass＝玻璃色）；300 年示範不開，幾何逐位不變
   // band：牆腳色帶的高（以窗磚的 V 計）；>0＝店面帶（D005 商業一樓）、<0＝不開窗（工業牆下 45%）、0＝沒有。只寫在牆面，頂面一律 0
   ext = false; style = 0; band = 0; glass: THREE.Color | null = null; wst: number[] = []; wgl: number[] = []; wbd: number[] = [];
@@ -29,7 +30,7 @@ export class Geo {
       this.pos.push(...p); this.nor.push(...n); this.uv.push(...u); this.col.push(col.r, col.g, col.b);
     }
     this.pushExt(3);
-    this.owners.push(this.owner);
+    this.owners.push(this.owner); this.tags.push(this.tag);
   }
   // 四邊形 a-b-c-d（順序沿邊），uv 對應四角
   quad(a: V3, b: V3, c: V3, d: V3, n: V3, col: THREE.Color, uvs: [number, number][] = [PLAIN_UV, PLAIN_UV, PLAIN_UV, PLAIN_UV]) {
@@ -126,7 +127,7 @@ export class Geo {
       this.pos.push(p.getX(i) + cx, p.getY(i) + y0 + h / 2, p.getZ(i) + cz);
       this.nor.push(n.getX(i), n.getY(i), n.getZ(i));
       this.uv.push(...PLAIN_UV); this.col.push(col.r, col.g, col.b);
-      if (i % 3 === 2) { this.owners.push(this.owner); this.pushExt(3); }
+      if (i % 3 === 2) { this.owners.push(this.owner); this.tags.push(this.tag); this.pushExt(3); }
     }
     g.dispose();
   }
@@ -138,7 +139,7 @@ export class Geo {
       v.fromBufferAttribute(p, i).applyMatrix4(m); this.pos.push(v.x, v.y, v.z);
       v.fromBufferAttribute(n, i).applyMatrix3(nm).normalize(); this.nor.push(v.x, v.y, v.z);
       this.uv.push(...PLAIN_UV); this.col.push(col.r, col.g, col.b);
-      if (i % 3 === 2) { this.owners.push(this.owner); this.pushExt(3); }
+      if (i % 3 === 2) { this.owners.push(this.owner); this.tags.push(this.tag); this.pushExt(3); }
     }
     if (ng !== g) ng.dispose();
   }

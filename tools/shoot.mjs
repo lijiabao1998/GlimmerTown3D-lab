@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -620,6 +620,88 @@ if (want('d012')) {
       await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
       for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
       const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);   // 同 D011：視窗設成內容高度再拍
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log('OK', file, `${w}×${ch}`);
+    });
+  }
+}
+
+// D014：施工 9 天 2D｜3D（起步城的警察局，兩邊開局都是屋齡 0）、風化與近看小物、手機上一段施工。
+// 2D 要實驗線（--lab=../GlimmerTown-lab，d23c18d），拍到 scratch/lab/d014_*_2d.png；沒有就只拍 3D、2D 那一格留白
+if (want('d014')) {
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), LAB = path.resolve(ROOT, arg('lab', '../GlimmerTown-lab')), labDir = path.join(ROOT, 'scratch/lab');
+  const starter = R('src/content/samples/starter.code.txt').trim(), seed = R('src/content/samples/seed516.code.txt').trim(), SITE = [35, 31], SPOT = [44, 30];
+  const ages2d = {}, ages3d = {};
+  if (fs.existsSync(path.join(LAB, 'index.html'))) {
+    const { CONFIGS, preloadOf } = await import('./lab-configs.mjs');
+    fs.mkdirSync(labDir, { recursive: true });
+    await withBrowser({ root: LAB, port: 8431, width: 1280, height: 800, gl: false, preload: preloadOf(CONFIGS.default), ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+      await open('');
+      const shot = `(x,y)=>{GV.lookAt(x,y);GV.art574.zoom574(2.3);GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();return document.getElementById('game').toDataURL('image/png');}`;
+      const r = await page.evaluate(`(()=>{const shot=${shot};GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${JSON.stringify(starter)}))throw new Error('import');GV.setSpeed(0);GV.ai(false);
+        const out=[];for(let d=0;d<=10;d++){const t=GV.tile(${SITE[0]},${SITE[1]});out.push([d,t&&t.bld?t.bld.age:null,shot(${SITE[0]}+.5,${SITE[1]}+.5)]);GV.step(1);}
+        GV.setMapSize(72);GV.newWorldSeeded(777);GV.importCode(${JSON.stringify(seed)});GV.setSpeed(0);GV.ai(false);const w=shot(${SPOT[0]}+.5,${SPOT[1]}+.5);return {out,w};})()`);
+      for (const [d, age, url] of r.out) { if (age === null || ages2d[age] !== undefined) continue; ages2d[age] = d; fs.writeFileSync(path.join(labDir, `d014_age${age}_2d.png`), Buffer.from(url.split(',')[1], 'base64')); }
+      fs.writeFileSync(path.join(labDir, 'd014_weather_2d.png'), Buffer.from(r.w.split(',')[1], 'base64'));
+      console.log('實驗線 2D：警察局', Object.entries(ages2d).map(([a, d]) => `屋齡 ${a}（第 ${d} 次推進後）`).join('、'));
+    });
+  } else console.log(`（${path.relative(ROOT, LAB)} 沒有實驗線，2D 那一欄留白）`);
+  // 3D：同一座起步城、同一棟警察局，每天一張（當天比例 0＝整數天；動畫時間固定）
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await open('sample=starter&clean=1');
+    for (let d = 0; d <= 10; d++) {
+      const age = (await page.evaluate(`__gt.conBuildings().find(b=>b.x===${SITE[0]}&&b.z===${SITE[1]})`))?.age;
+      await page.evaluate(`(__gt.view(${SITE[0] + .5}, ${SITE[1] + .5}, 8), __gt.setVisT(2.2), 1)`); await new Promise(r => setTimeout(r, 250));
+      if (ages3d[age] === undefined) { ages3d[age] = d; await save(page, `d014_age${age}_3d`); }
+      await page.evaluate('__gt.simStep(1)');
+    }
+    // 風化與近看小物：種子城 (44,30) 拉近（實驗線縮放約 2.3）
+    await open('sample=seed516&clean=1');
+    await page.evaluate(`__gt.view(${SPOT[0] + .5}, ${SPOT[1] + .5}, 8)`);
+    for (const a of [13, 120, 300]) { await page.evaluate(`__gt.conAgeShift(${-(a + 1)})`); await new Promise(r => setTimeout(r, 250)); await save(page, `d014_weather_${a}`); }
+    await page.evaluate('__gt.conAgeShift(null)');
+    for (const [tag, v] of [['off', false], ['on', true]]) { await page.evaluate(`__gt.forceNear(${v})`); await new Promise(r => setTimeout(r, 250)); await save(page, `d014_near_${tag}`); }
+    errors += page.errors.length;
+  });
+  // 手機：1 倍速的一段施工（同一棟警察局；播放那條路一天切兩步）
+  const MOB = [];
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 1, mobile: true });
+    await open('sample=starter&clean=1');
+    await page.evaluate('(__gt.simPlay(true), __gt.simSpeed(0), 1)');
+    for (let k = 0; k <= 18; k++) {
+      const c = await page.evaluate(`(()=>{const c=__gt.conCheck();return c?c.sites.find(s=>__gt.conBuildings().find(b=>b.id===s.id&&b.x===${SITE[0]}&&b.z===${SITE[1]})):null})()`);
+      if (k % 3 === 0) { await page.evaluate(`(__gt.view(${SITE[0] + .5}, ${SITE[1] + .5}, 8), 1)`); await new Promise(r => setTimeout(r, 250)); await save(page, `d014_mob_${k}`); MOB.push([k, c ? c.t : 9]); }
+      await page.evaluate('__gt.advanceBy(0.5)');
+    }
+    await page.evaluate('__gt.simPlay(false)');
+    errors += page.errors.length;
+  });
+  // 拼圖
+  const copy2d = f => { const src = path.join(labDir, f), has = fs.existsSync(src); if (has) fs.copyFileSync(src, path.join(out, f)); return has ? f : ''; };
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  const cell = (src, cap, cls = '') => `<figure><figcaption>${cap}</figcaption>${src ? `<img class="${cls}" src="${src}">` : `<div class="none ${cls}">（沒有這一格的圖）</div>`}</figure>`;
+  const STAGE = ['開挖、挖掘機、傾卸車', '地基：鋼筋、攪拌車', '鋼骨半高、塔吊', '鋼骨全高、焊接火花', '樓體 30%、鷹架', '樓體 50%', '樓體 68%（塔吊最後一天）', '樓體 84%', '樓體 96%', '完工'];
+  fs.writeFileSync(path.join(out, 'd014_stages.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(4,640px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:640px;height:400px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D014 施工 9 天：起步城的警察局（35,31），2D 實驗線｜3D</h1><p class="s">兩邊都從起步城開局（屋齡 0），一天推一次；每一欄照屋齡對齊。2D＝實驗線 d23c18d（T259 分期、實驗線縮放 2.3）；3D＝本線（樓體由著色器照屋齡長高，工地是一個網格）。畫面中央 640×400、1:1。</p>
+    <div class="g">${Array.from({ length: 10 }, (_, a) => cell(copy2d(`d014_age${a}_2d.png`), `屋齡 ${a}・2D・${STAGE[a]}`) + cell(ages3d[a] !== undefined ? `d014_age${a}_3d.png` : '', `屋齡 ${a}・3D`)).join('')}</div>`);
+  fs.writeFileSync(path.join(out, 'd014_detail.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(3,640px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:640px;height:400px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D014 近看的細節：種子城 (44,30) 拉近</h1><p class="s">風化（T591／T606）：同一個畫面把屋齡（只改畫面）換成 13／120／300 天；13 天還沒到門檻，120 天一級、300 天三級：牆上的雨漬、接地苔垢、簷下積灰。近看小物（T599／T606）：實驗線縮放 ≥ 1.22 才畫。2D＝實驗線同一個地方（它自己的屋齡）。畫面中央 640×400、1:1。</p>
+    <div class="g">${cell(copy2d('d014_weather_2d.png'), '2D 實驗線（屋齡 18–59）')}${cell('d014_weather_13.png', '3D・屋齡 13（沒風化）')}${cell('d014_weather_120.png', '3D・屋齡 120')}${cell('d014_weather_300.png', '3D・屋齡 300')}${cell('d014_near_off.png', '3D・近看小物關')}${cell('d014_near_on.png', '3D・近看小物開')}</div>`);
+  fs.writeFileSync(path.join(out, 'd014_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(7,412px);gap:10px;padding:8px 12px 12px}img{display:block;width:412px;height:860px}</style>
+    <h1>D014 手機 1 倍速：警察局從開挖到完工</h1><p class="s">412×860，播放那條路每半天一步；t＝屋齡＋當天已過的比例（樓體每一幀都在長，不是一天跳一級）。</p>
+    <div class="g">${MOB.map(([k, t]) => cell(`d014_mob_${k}.png`, `t＝${t >= 9 ? '完工' : t.toFixed(1)}`)).join('')}</div>`);
+  for (const [page0, file, w, h] of [['d014_stages.html', 'D014-construction.jpg', 2614, 2400], ['d014_detail.html', 'D014-detail.jpg', 1964, 1000], ['d014_mobile.html', 'D014-mobile.jpg', 2990, 960]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
       await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
       await new Promise(r => setTimeout(r, 300));
       const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });

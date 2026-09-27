@@ -383,7 +383,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
         for(const p of ${J(plan.slice(cut))}){
           if(!p.days){f(p);rb=__gt.sim().rebuilds;continue;}
           for(let k=0;k<p.days;k++){const c0=sv(),t0=performance.now(),s=__gt.simStep(1),t1=performance.now(),r=s.rebuilds>rb?__gt.timing().rebuild:null,saved=sv()!==c0;rb=s.rebuilds;
-            const t2=performance.now();__gt.simStep(0);out.push([s.day-1,t1-t0,r,performance.now()-t2,saved]);}
+            const sy=r===null?__gt.timing().sites:0,t2=performance.now();__gt.simStep(0);out.push([s.day-1,t1-t0,r,performance.now()-t2,saved,sy]);}
         }
         return out;})()`);
     } finally { if (rate !== 1) await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
@@ -407,13 +407,18 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   // c736ecd 之後這台機器各輪平均 8–17 ms（同一輪不降速 1.5–2.2 ms），沒壓到 5 ms，是已知的缺口、記在卡面「沒做成的事」，Pages 上線不因它擋下；照列平均、有沒有超過 5 ms
   {
     const stat = ds => {
-      const plain = ds.filter(x => x[2] === null && !x[4]).map(x => x[1] - x[3]), all = ds.map(x => x[1] - (x[2] ?? 0) - x[3]), rb = ds.filter(x => x[2] !== null);
+      // D014：simStep(1) 沒重建的那天也同步一次工地（屋齡變了：施工資料、工地網格、前庭樹）——那是畫面的活，另扣（x[5]＝timing.sites），下面另判
+      const plain = ds.filter(x => x[2] === null && !x[4]).map(x => x[1] - x[3] - x[5]), all = ds.map(x => x[1] - (x[2] ?? 0) - x[3] - x[5]), rb = ds.filter(x => x[2] !== null);
       return { ok: ds.length === 60 && ds[0][0] === 61 && plain.length >= 10, m: mean(plain),
         txt: `${ds.length} 天（第 ${ds[0]?.[0]}–${ds.at(-1)?.[0]} 天）；沒有重建、沒有存檔的 ${plain.length} 天：平均 ${f2(mean(plain))}、中位數 ${f2(pct(plain, .5))}、P95 ${f2(pct(plain, .95))}、最大 ${f2(Math.max(...plain))} ms；`
           + `全部 60 天扣重建：平均 ${f2(mean(all))} ms（重建 ${rb.length} 天、重建平均 ${f2(mean(rb.map(x => x[2])))} ms；自動存檔 ${ds.filter(x => x[4]).length} 天）；`
           + `simStep(1) 原始耗時平均 ${f2(mean(ds.map(x => x[1])))} ms、simStep(0) 平均 ${f2(mean(ds.map(x => x[3])))} ms` };
     };
     const u = stat(days1), t = stat(days);
+    // D014：每天同步工地（沒重建的日子）：不降速判 ≤ 5 ms（跟推進一天同一個預算），6 倍降速只量
+    const syn = ds => ds.filter(x => x[2] === null).map(x => x[5]), s1 = syn(days1), s6 = syn(days);
+    log(s1.length >= 10 && mean(s1) <= 5, 'D014 每天同步工地（施工資料、工地網格、前庭樹；沒重建的日子）：劇本城第 61–120 天，不降速平均 ≤ 5 ms；6 倍降速只量',
+      `不降速 ${s1.length} 天：平均 ${f2(mean(s1))}、中位數 ${f2(pct(s1, .5))}、最大 ${f2(Math.max(...s1))} ms｜6 倍降速：平均 ${f2(mean(s6))}、最大 ${f2(Math.max(...s6))} ms`);
     log(u.ok && u.m <= 5, 'D011 驗收 8「推進一天（含結算）≤ 5 ms」，瀏覽器不降速（驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均',
       `平均 ${f2(u.m)} ms；${u.txt}｜同一套量法 CPU 降速 6 倍：平均 ${f2(t.m)} ms（只量不判，見下一項）`);
     // 這一項只在量不到（天數不對、沒有重建沒有存檔的日子不到 10 天）時記紅燈；數字多少都不判

@@ -11,6 +11,7 @@ import { simHash } from '../src/sim/day.ts';
 import { runStarter } from './unit-d010-sim.mjs';
 import { labPartition, partRow, drawPlan } from '../src/content/blocks.ts';
 import { d011Smoke, d011SkipNote, rciCover, planRow, lotsOf, lotBad, villaOf, ARCHE } from './smoke-d011.mjs';
+import { d014Smoke } from './smoke-d014.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -390,9 +391,10 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     open();const on1=lit();items().find(b=>b.dataset.m==='blocks:c').click();const m2=__gt.blockMode(),url2=location.search,closed2=hidden();
     open();const on2=lit();document.getElementById('menuX').click();
     return {n:bs.length,labels:bs.map(b=>b.textContent),inView,on0,m0,m1,url1,menuClosed,on1,m2,url2,closed2,on2,camSame:cam()===c0,d003:[...document.querySelectorAll('button')].some(b=>/D003/.test(b.textContent))};})()`);
-  log(sw.n === 3 && sw.inView && /^C/.test(sw.on0) && sw.m0 === 'c' && sw.m1 === 'b' && /[?&]blocks=b\b/.test(sw.url1) && sw.menuClosed && sw.on1.includes('blocks:b') && !sw.on1.includes('blocks:c')
+  // D014：A 檔超過手機預算，拿出選單（業主交給 Claude 定：D012「要業主定的事」1 的 (a)）；選單只剩 B、C，?blocks=a 照舊
+  log(sw.n === 2 && !sw.labels.some(l => /^A/.test(l)) && sw.inView && /^C/.test(sw.on0) && sw.m0 === 'c' && sw.m1 === 'b' && /[?&]blocks=b\b/.test(sw.url1) && sw.menuClosed && sw.on1.includes('blocks:b') && !sw.on1.includes('blocks:c')
       && sw.m2 === 'c' && !/blocks=/.test(sw.url2) && sw.closed2 && sw.on2.includes('blocks:c') && !sw.on2.includes('blocks:b') && sw.camSame && !sw.d003,
-    'D004／D005／D012 手機直式：☰ 選單在畫面內，街區 A／B／C 三檔；D012 起預設 C（選單上 C 亮著）；點 B 換檔、網址帶 blocks=b，再點 C 回預設、網址拿掉 blocks；鏡頭不動；面板上沒有「D003 現況」', JSON.stringify(sw));
+    'D004／D005／D012／D014 手機直式：☰ 選單在畫面內，街區 B／C 兩檔（D014 起沒有 A）；D012 起預設 C（選單上 C 亮著）；點 B 換檔、網址帶 blocks=b，再點 C 回預設、網址拿掉 blocks；鏡頭不動；面板上沒有「D003 現況」', JSON.stringify(sw));
   await open('sample=seed516&blocks=off&clean=1');
   log(await page.evaluate('__gt.blockMode()') === null, 'D011：「D003 現況」只剩網址 ?blocks=off（守衛用）', 'blockMode null');
   await page.send('Emulation.setDeviceMetricsOverride', { width: 960, height: 600, deviceScaleFactor: 1, mobile: false });
@@ -515,6 +517,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
 
 // ===== D011：建造 MVP（tools/smoke-d011.mjs：真的觸控事件、手機版面、存檔、預算、劇本城重演；自己開三個 Chrome）=====
 await d011Smoke(withBrowser, log, blankCheck);
+
+// ===== D014：看得見的施工、近看的細節（tools/smoke-d014.mjs：樓體照屋齡露出、工地跟著城市走、沒有突然冒出來、手機預算、風化與近看小物；自己開五個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY) await d014Smoke(withBrowser, log);
 // D011_SMOKE_ONLY（突變測試用）只跑了 D011 的幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 
