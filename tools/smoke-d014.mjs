@@ -124,14 +124,14 @@ export async function d014Smoke(withBrowser, log) {
     const grab = `(()=>{const c=document.querySelector('canvas'),k=document.createElement('canvas');k.width=c.width;k.height=c.height;const x=k.getContext('2d');x.drawImage(c,0,0);return x.getImageData(0,0,k.width,k.height).data;})()`;
     const cmp = `(a,b)=>{let d=0,dl=0;for(let i=0;i<a.length;i+=4){const la=a[i]+a[i+1]+a[i+2],lb=b[i]+b[i+1]+b[i+2];if(la!==lb){d++;dl+=lb-la;}}return {d,dl:d?dl/d:0};}`;
     const z13 = await ev('__gt.view(44, 30, 8)');
-    const w = await ev(`(()=>{const cmp=${cmp};__gt.conAgeShift(-14);const a=${grab};__gt.conAgeShift(-301);const b=${grab};__gt.noClip(true);const c=${grab};__gt.noClip(false);__gt.conAgeShift(-14);const a2=${grab};__gt.conAgeShift(null);
-      return {old:cmp(a,b),young:cmp(a2,c),det:__gt.con().detail};})()`);
+    const w = await ev(`(()=>{const cmp=${cmp};__gt.conAgeShift(-14);const a=${grab};__gt.conAgeShift(-301);const b=${grab};__gt.noClip(true);const c=${grab};__gt.noClip(false);__gt.conAgeShift(-14);const a2=${grab};__gt.conAgeShift(-15);const e=${grab};__gt.conAgeShift(null);
+      return {old:cmp(a,b),young:cmp(a2,c),edge:cmp(a2,e),det:__gt.con().detail};})()`);
     const zFar = await ev(`__gt.view(44, 30, ${(.85 / z13 * 8).toFixed(3)})`);
     const far = await ev(`(()=>{const cmp=${cmp};__gt.conAgeShift(-14);const a=${grab};__gt.conAgeShift(-301);const b=${grab};__gt.conAgeShift(null);return {...cmp(a,b),det:__gt.con().detail};})()`);
     const wi = await ev('__gt.weatherInfo()');
-    log(w.old.d > 1000 && w.old.dl < 0 && w.young.d === 0 && far.d === 0 && far.det === 0 && wi.core > 0 && wi.facade === 0,
-      'D014 驗收 9：風化——種子城拉近（實驗線縮放 ≥ .9）：屋齡 14→301 受光面、側面的牆變暗；屋齡 14（剛到門檻）＝整個關掉風化；縮放 < .9 不畫；英美立面街區沒有風化牆',
-      `縮放 ${f2(z13)}：14→301 ${w.old.d.toLocaleString()} 像素、平均亮度 ${f2(w.old.dl)}；14＝關掉 ${w.young.d === 0 ? '相同' : w.young.d + ' 像素不同'}；縮放 ${f2(zFar)}（< .9）14→301 ${far.d} 像素；風化牆三角形 核心 ${wi.core.toLocaleString()}、英美立面 ${wi.facade}`);
+    log(w.old.d > 1000 && w.old.dl < 0 && w.young.d === 0 && w.edge.d > 0 && far.d === 0 && far.det === 0 && wi.core > 0 && wi.facade === 0,
+      'D014 驗收 9：風化——種子城拉近（實驗線縮放 ≥ .9）：屋齡 13→300 受光面、側面的牆變暗；屋齡 13（差一天到門檻）＝整個關掉風化，屋齡 14 起就畫（門檻照實驗線 age>=14）；縮放 < .9 不畫；英美立面街區沒有風化牆（conAgeShift(-s) 把屋齡設成 s−1）',
+      `縮放 ${f2(z13)}：13→300 ${w.old.d.toLocaleString()} 像素、平均亮度 ${f2(w.old.dl)}；13＝關掉 ${w.young.d === 0 ? '相同' : w.young.d + ' 像素不同'}；13→14 ${w.edge.d.toLocaleString()} 像素；縮放 ${f2(zFar)}（< .9）13→300 ${far.d} 像素；風化牆三角形 核心 ${wi.core.toLocaleString()}、英美立面 ${wi.facade}`);
     const n1 = await ev(`(()=>{__gt.view(44,30,${(1.1 / z13 * 8).toFixed(3)});const a={z:__gt.con().labZoom,near:__gt.con().near};__gt.view(44,30,${(1.3 / z13 * 8).toFixed(3)});const b={z:__gt.con().labZoom,near:__gt.con().near};return {a,b,nc:__gt.nearCounts()};})()`);
     const kinds = Object.keys(n1.nc.kinds);
     log(!n1.a.near && n1.b.near && n1.nc.near > 0 && kinds.length === 9, 'D014 驗收 10：近看小物只在實驗線縮放 ≥ 1.22 時畫；種子城畫了、9 種都有（花台、花、垃圾桶、立牌、冷氣機、工安斜紋、棧板、貨箱、立管）',
