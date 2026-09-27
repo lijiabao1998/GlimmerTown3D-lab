@@ -356,7 +356,12 @@ T531 逐棟對拍（實驗線 `d23c18d` 實跑，每座城開新頁、匯入前�
      - 有建築的城、C 檔，放開手指到畫出比空城慢約 100 ms，中位數離預算剩不到 100 ms，單次已經碰到 400（「沒做成的事」12）。
    - B 檔：種子城畫到 578／945 棟，沒畫的是實驗線讀檔之後的 D0 360＋被吸收 7；AI 城 301／399；三角形 71,690／68,028。
 6. **對照圖** ✅：`docs/img/D012-before-after.jpg`、`docs/img/D012-compare.jpg`，選擇與理由見上面「對照圖」。
-7. **守衛與煙霧**：本機 ✅；雲端 CI、快進 `main`、Pages 上線 ⏳，推送之後在卡面收尾補（同 D011）。
+7. **守衛與煙霧、上線** ✅
+   - 本機：見上面這一節開頭。
+   - `main` 從 `5c384a8`（本卡）快進到 `af5a8d0`，4 個施工提交（`ebbfe52`、`1623a66`、`11bfaf9`、`af5a8d0`）。
+   - [Actions run 36308641875](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36308641875)（`main`、`af5a8d0`）：smoke 與 pages 兩個工作都成功。雲端 Chrome 153.0.8010.52，Node 守衛綠、煙霧 187 項 0 NG、拍樣張那一步的 D012 預算也綠。
+   - Pages 部署指向 `af5a8d0`，狀態 success。公開頁 <https://lijiabao1998.github.io/GlimmerTown3D-lab/> HTTP 200、923,009 位元組，跟本機建置逐位元組相同。
+   - 中間一輪紅：`main` 第一次快進到 `11bfaf9` 那一輪（[run 36306772672](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36306772672)），原因與修法見「施工中遇到」。那一輪沒部署，Pages 當時仍是 D011 那一版。同一個提交在 session 分支（[run 36306151927](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36306151927)）是綠的；修掉之後 session 分支那一輪（[run 36307815613](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36307815613)）也綠。
    - 重釘的釘子，逐一寫明原因：
      - 預設 B → C 的三角形：種子城 69,598 → 94,002，AI 城 67,396 → 74,990；B 另釘 71,690／68,028（`v` 重挑過）。
      - A 檔：118,728 → 121,606、78,324 → 78,424。
