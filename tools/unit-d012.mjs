@@ -278,6 +278,22 @@ async function guards(log) {
       bad.length ? bad.map(([id, r]) => `${id}：${r.bad.join('；')}`).join(' ｜ ')
         : rs.length > 1 && same ? `${rs.length} 座各：${facts[0]}` : rs.map(([id], j) => `${rs.length > 1 ? id.split('-').pop() + '：' : ''}${facts[j]}`).join('；'));
   }
+  // 讀檔時的地價（重挑讀的那一份）也逐格判：每一座城的每一棟住商工根格＝實驗線。上面各組只印不判；核對卡面時發現卡面把它寫成對拍結果，改成判的。
+  // 本線讀檔的地價用預設預算、沒有犯罪旗標與噪音（D012 卡「沒做成的事」2）：樣本城都相同，任意分享碼不保證；哪天加的樣本不同，就在這裡紅
+  {
+    const off = [];
+    let roots = 0;
+    for (const c of live) {
+      const r = results.get(c.id), g = G.cities[c.id];
+      if (!r || r.bad.length) { off.push(`${c.id}：沒有讀檔結果`); continue; }
+      const L = r.sim ? fieldsOf(r.sim.g).LAND : fieldsOf(simFromSave(decodeLabCode(c.code).save, c.code, KT, vrank).g).LAND;
+      const d = g.rows.filter(q => L[q[0]] !== q[5]);
+      roots += g.rows.length;
+      if (d.length) off.push(`${c.id}：${d.length} 格不同，例 格 ${d[0][0]} 本線 ${L[d[0][0]]}／實驗線 ${d[0][5]}`);
+    }
+    log(!off.length && roots > 0, 'D012 讀檔時的地價（重挑讀的那一份）：每一座城每一棟住商工根格＝實驗線讀檔時的 LAND（逐格）',
+      off.length ? off.slice(0, 4).join('；') : `${live.length} 座城、住商工根格 ${roots} 格全相同`);
+  }
   const trips = [...results].filter(([, r]) => r.trip);
   const tripBad = trips.filter(([id, r]) => r.trip.first !== G.cities[id].mig || r.trip.second !== 0 || !r.trip.same || !r.trip.replayed);
   const noTrip = cities.filter(c => !results.get(c.id)?.trip).map(c => c.id), s120 = results.get('script-120');
@@ -375,7 +391,7 @@ async function guards(log) {
     const best = f => { let t = Infinity, r; for (let k = 0; k < 3; k++) { const t0 = performance.now(); r = f(); t = Math.min(t, performance.now() - t0); } return [t, r]; };
     const big = mk(1000, []);
     const [tBig, rBig] = best(() => viewCode(big, KT, vrank));
-    log(rBig.ok && tBig < 1500, 'D012 大圖只能看的城讀檔：1000×1000 空圖 viewCode（含解碼）取三次最快 < 1,500 ms（審查量到改之前約 1 秒；舊路徑不算地價只要幾毫秒）',
+    log(rBig.ok && tBig < 1500, 'D012 大圖只能看的城讀檔：1000×1000 空圖 viewCode（含解碼）取三次最快 < 1,500 ms（審查量到改之前約 1 秒；舊路徑不算地價：解碼約 0.1 秒、建城市模型幾毫秒）',
       rBig.ok ? `${tBig.toFixed(0)} ms` : rBig.error);
     const N = 350, bl = []; for (let p = N - 1; p >= 0; p--) bl.push([p * N + p, 9, 1, 0, 0, N]);
     const vcode = mk(N, bl), lcode = mk(N, bl, { d3: 1 });
@@ -383,5 +399,32 @@ async function guards(log) {
     const sizes = rV.ok ? [...new Set(rV.city.buildings.map(b => b.size))] : [];
     log(rV.ok && rL.ok && tV < 1000 && tL < 1000 && sizes.every(s => s >= 1 && s <= 4), 'D012 手改的碼：350 座互相重疊、第 6 位寫 350 的體育場，讀檔不爆（體育場大小夾在 1–4，同 src/sim/city.ts stadiumSize）',
       `viewCode ${tV.toFixed(0)} ms、loadCode（帶 d3）${tL.toFixed(0)} ms（審查量到改之前 1,723／1,534 ms，500 座 6.5 秒）；體育場大小 ${sizes.join('、')}`);
+  }
+  // ---- D012 審查修的另外兩條（src/sim/restyle.ts、src/sim/replay.ts），核對卡面時發現沒有守衛，補上 ----
+  // 種子城一棟會被重挑的住商工（黃金樣本：存檔的 v ≠ 讀檔之後的 v），拿它改出兩張手改的碼：
+  // 4) 同一格兩筆建築：它前面插一筆同一格的公園（k 4、1×1、v 7）。城市模型留前一筆（公園）、格子留後一筆（住商工，同實驗線 load 後寫蓋前寫）：
+  //    格子照樣重挑（棟數＝實驗線），城市那一棟是公園，v 不能被改、不記事件（審查：之前住宅的新變體會寫進同一格的學校）
+  // 5) 它的 k 改成 2^32＋k（k|0 才是原本的 k）：重挑、重播都用 k|0，事件照記；存檔再讀接得上歷史、第二次 0 棟（審查：之前重挑算、重播不算，第二次讀檔重播失敗）
+  {
+    const raw0 = decodeLabCode(read('src/content/samples/seed516.code.txt').trim()).save.raw, n = raw0.n, gold = G.cities.seed516;
+    const [ci, ck, , , cv1] = gold.rows.find(r => r[3] !== r[4]), cx = ci % n, cz = (ci / n) | 0;
+    const reenc = raw => { const o = structuredClone(raw); delete o.z; return encodeLabCode(o, { deflate: true }); };
+    const two = structuredClone(raw0);
+    two.bl.splice(two.bl.findIndex(r => r[0] === ci), 0, [ci, 4, 1, 7, 0]);
+    const V2 = viewCode(reenc(two), KT, vrank), L2 = loadCode(reenc(two), KT, vrank);
+    const look = (r, c) => { if (!r.ok) return { err: r.error }; const b = c.buildings[c.occ[ci] - 1], ev = c.history.filter(e => e.t === 'restyle');
+      return { k: b?.k, v: b?.v, restyled: r.restyled, events: ev.length, here: ev.some(e => e.x === cx && e.z === cz) }; };
+    const a = look(V2, V2.city), b = L2.ok ? look(L2, L2.sim.city) : { err: L2.error }, tileV = L2.ok ? L2.sim.w.tiles[ci].bld?.v : null;
+    const okTwo = [a, b].every(o => o.k === 4 && o.v === 7 && o.restyled === gold.mig && o.events === gold.mig - 1 && !o.here) && tileV === cv1;
+    log(okTwo, 'D012 手改的碼：同一格兩筆建築（公園在前、會被重挑的住商工在後），格子照實驗線重挑（棟數＝實驗線），城市那一棟（公園）的 v 不動、不記事件',
+      `(${cx},${cz})：只能看 ${J(a)}；有模擬 ${J(b)}、格子的 v ${tileV}（實驗線讀檔之後 ${cv1}）；實驗線重挑 ${gold.mig} 棟`);
+    const big = structuredClone(raw0), bj = big.bl.findIndex(r => r[0] === ci);
+    big.bl[bj] = [...big.bl[bj]]; big.bl[bj][1] = 2 ** 32 + ck;
+    const B1 = loadCode(reenc(big), KT, vrank), B2 = B1.ok ? loadCode(saveCode(B1.sim, B1.template, B1.start), KT, vrank) : B1;
+    const ev1 = B1.ok ? B1.sim.city.history.filter(e => e.t === 'restyle') : [];
+    const okBig = B1.ok && B1.restyled === gold.mig && ev1.length === gold.mig && ev1.some(e => e.x === cx && e.z === cz && e.v === cv1)
+      && B2.ok && B2.replayed === true && B2.restyled === 0;
+    log(okBig, 'D012 手改的碼：k 是 2^32＋k（k|0 才是住商工），重挑與重播都用 k|0：事件照記，存檔再讀接得上歷史、第二次 0 棟',
+      `(${cx},${cz}) k ${2 ** 32 + ck}：第一次重挑 ${B1.restyled ?? '—'}、restyle ${ev1.length} 筆（實驗線 ${gold.mig}）；再讀：${B2.ok ? `接上歷史 ${B2.replayed}、重挑 ${B2.restyled}${B2.replayed ? '' : '，' + B2.note}` : B2.error}`);
   }
 }

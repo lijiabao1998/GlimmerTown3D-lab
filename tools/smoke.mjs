@@ -469,6 +469,21 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     for (const q of ['blocks=constructor', 'blocks=__proto__', 'blocks=b', 'tone=constructor', 'style=constructor']) { await open(`sample=seed516&${q}`); R[q] = await page.evaluate(look); }
     await page.evaluate('__gt.clearSave()');                              // ?sample=constructor：沒有存檔時照預設開新城（新城一開就存成我的城；之後這個 Chrome 不再讀城，存檔留著無妨）
     await open('sample=constructor'); R['sample=constructor'] = await page.evaluate(look);
+    // D012 審查修的另外兩條（核對卡面時發現沒有守衛，補上），接著在這座新城（我的城）裡做：
+    // 1) 測試出口也只認自己的鍵：__gt.loadSample('constructor') 回「沒有這座城」、不換城；__gt.menu('blocks:constructor'／'blocks:__proto__') 不換檔、網址不動
+    // 2) 產生存檔碼本身丟例外（歷史裡塞一筆不認得的事件，D012 起 packHistory 會丟）：自動存檔不寫、講原因；匯出不開對話框、講原因；拿掉之後恢復自動存檔
+    const e1 = page.errors.length;
+    const hk = await page.evaluate(`(()=>{const m0=__gt.blockMode(),u0=location.search,ls=__gt.loadSample('constructor');
+      __gt.menu('blocks:constructor');__gt.menu('blocks:__proto__');return {ls,sample:__gt.sample,m0,mode:__gt.blockMode(),sameUrl:location.search===u0};})()`).catch(e => ({ err: e.message }));
+    log(hk.ls?.ok === false && hk.ls.error === '沒有這座城' && hk.sample === 'mine' && hk.mode === hk.m0 && hk.sameUrl,
+      "D012 測試出口 __gt.loadSample('constructor')、__gt.menu('blocks:constructor'／'blocks:__proto__')：不認得就不動（審查：之前 in 檢查會放行）", J(hk));
+    const ex = await page.evaluate(`(()=>{const K='gt3d.v1.save',s0=localStorage.getItem(K),H=__gt.history(),last=()=>[...document.querySelectorAll('.toast')].map(t=>t.textContent).at(-1)??'';
+      H.push({day:H.at(-1).day,t:'bogus'});const r1=__gt.saveNow(),kept=localStorage.getItem(K)===s0,t1=last();
+      __gt.menu('export');const dlg=!document.getElementById('dlg').hidden,t2=last();
+      H.pop();const r2=__gt.saveNow(),t3=last();return {r1,kept,t1,dlg,t2,r2,t3,had:s0!==null};})()`).catch(async e => { await page.evaluate(`(()=>{const H=__gt.history();if(H.at(-1)?.t==='bogus')H.pop();})()`).catch(() => {}); return { err: e.message }; });
+    log(ex.had && ex.r1 === false && ex.kept && ex.t1.includes('沒辦法自動存檔：存檔碼產生失敗（存檔：不認得的事件 bogus）') && !ex.dlg
+      && ex.t2.startsWith('⚠️ 匯出失敗：存檔：不認得的事件 bogus') && ex.r2 === true && ex.t3.includes('已恢復自動存檔') && page.errors.length === e1,
+      'D012 產生存檔碼丟例外（歷史裡塞一筆不認得的事件）：自動存檔不寫、講原因，匯出不開對話框、講原因，頁面沒有錯誤；拿掉之後恢復自動存檔', J(ex) + `；頁面錯誤 ${page.errors.length - e1}`);
     await open('mode=history&clean=1&style=constructor');
     const H = await page.evaluate(`({ready: !!(window.__gt && __gt.ready), blank: ${blankCheck}})`);
     const errs = page.errors.slice(e0), errTxt = errs.length ? `；頁面錯誤 ${errs.length}：${errs.slice(0, 2).join(' ｜ ')}` : '；頁面沒有錯誤';

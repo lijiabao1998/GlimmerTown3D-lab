@@ -1,6 +1,6 @@
 // D012 驗收 1、2：實驗線讀檔重挑外觀（T531）逐棟對拍、讀檔之後的切分（離線工具，要無頭 Chrome；結果存成黃金樣本 src/content/samples/d012-lab.json，
 // tools/unit-d012.mjs 在 CI 上重算本線那一半逐項比）。
-// 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 GT_PORT=8701 node tools/d012-parity.mjs --lab=../lijiabao1998/glimmertown-lab [--one-page] [--out=輸出目錄（除錯用）] [--shots（只拍 2D 圖、不錄樣本）]
+// 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 GT_PORT=8701 node tools/d012-parity.mjs --lab=../lijiabao1998/glimmertown-lab [--one-page] [--out=輸出目錄（除錯用）] [--shots（只拍 2D 圖、不錄樣本）] [--fmt4（本線存的格式 4 碼給實驗線讀，只核對不錄）]
 // 流程：碼在 Node 產生（tools/unit-d012.mjs d012Cities：樣本碼、預建城 8 個種子、D011 劇本城經過 30／60／120 天存檔、D011 對照那一跑第 120 天存檔、lv 0 探針），
 // 同一個 Chrome，每座城重新載入一次實驗線（開新頁：新的文件與 JS 環境，載入後核對上一頁留的記號不在；--one-page：全部在同一頁，
 // 對照用——兩種跑法錄到的 cities 要逐位元組相同，證明頁面殘留的狀態除了噪音場都不影響），同一次同步呼叫裡：
@@ -134,6 +134,34 @@ if (process.argv.includes('--shots')) {
     }
   });
   process.exit(0);
+}
+
+// --fmt4：本線存的格式 4 碼給實驗線讀（規則 9「實驗線要能照樣讀」；核對卡面時發現：D011／D012 送實驗線的碼都沒有 restyle 列）。不錄樣本，只核對、印結果：
+// 每座城本線 loadCode（讀檔重挑、記 restyle）→ saveCode（d3 裡帶 [8,…] 列、bl 裡是重挑之後的 v）→ 實驗線開新頁 GV.importCode：
+// 讀得進來、天數與住商工（格、k、lv）＝碼、__t531mig 增量 0（碼裡的 v 已經是實驗線會挑的）、每一棟住商工的 v＝本線讀檔之後的 v；存檔再匯入第二次也是 0
+if (process.argv.includes('--fmt4')) {
+  const { loadCode, saveCode } = await import('../src/io/save.ts');
+  const bad = [];
+  let rows8 = 0, roots = 0;
+  await withBrowser(opt, async ({ open, page }) => {
+    for (const c of cities) {
+      const L = loadCode(c.code, KT, vrank);
+      if (!L.ok) { bad.push(`${c.id}：本線讀不進來（${L.error}）`); continue; }
+      const c4 = saveCode(L.sim, L.template, L.start), S = decodeLabCode(c4).save, n8 = (S.raw.d3?.r ?? []).filter(q => q[0] === 8).length;
+      const want = [];
+      L.sim.w.tiles.forEach((t, i) => { const b = t.bld; if (b && !b.ref && (b.k | 0) >= 1 && (b.k | 0) <= 3) want.push([i, b.k | 0, b.lv, b.v | 0]); });
+      await fresh(open, page);
+      const r = await page.evaluate(CITY(c4, S.n, false));
+      const off = !r.ok || !r.ok2 ? '實驗線拒絕匯入' : r.noise[0] ? `匯入前噪音場 ${r.noise[0]} 格不是 0` : r.n !== S.n || r.day !== S.day ? `n／天數不同（${r.n}／${r.day}）`
+        : r.mig !== 0 || r.mig2 !== 0 ? `重挑增量 ${r.mig}／${r.mig2}（應為 0）`
+        : r.rows.length !== want.length || r.rows.some((q, j) => q[0] !== want[j][0] || q[1] !== want[j][1] || q[2] !== want[j][2] || q[3] !== want[j][3]) ? `住商工或 v 跟本線不同（${r.rows.length}／${want.length} 棟）` : '';
+      rows8 += n8; roots += want.length;
+      if (off) bad.push(`${c.id}：${off}`);
+      console.log(`  ${off ? 'NG' : 'OK'} ${c.id}：碼 ${c4.length.toLocaleString()} 字元、restyle 列 ${n8}（本線讀檔重挑 ${L.restyled}）；實驗線讀進來住商工 ${r.rows?.length ?? '—'} 棟、重挑增量 ${r.mig ?? '—'}／第二次 ${r.mig2 ?? '—'}${off ? '；' + off : ''}`);
+    }
+  });
+  console.log(`${bad.length ? 'NG' : 'OK'} 格式 4 碼給實驗線讀：${cities.length} 座、restyle 列合計 ${rows8}、住商工 ${roots} 棟${bad.length ? '；' + bad.join('｜') : '，全部讀得進來、增量 0、v 全等'}`);
+  process.exit(bad.length ? 1 : 0);
 }
 
 await withBrowser(opt, async ({ open, page }) => {

@@ -1,6 +1,6 @@
 // 城市模型（D003）：從 2D 實驗線的存檔建出本線的城市。純邏輯，不碰 DOM 與 three（CLAUDE.md 規則 2），Node 可直接跑。
-// 佔地規則照實驗線 load（index.html:66922–66938 @d23c18d）：多格建築是以根格為左上角的 s×s 正方形，
-// s＝MSZ[k]；體育場 k=9 例外，s 取建築那筆的第 6 位（缺就是 2）。
+// 佔地規則照實驗線 load（index.html:66900–66912、67016–67026 @d23c18d）：多格建築是以根格為左上角的 s×s 正方形，
+// s＝MSZ[k]；體育場 k=9 例外，s 取建築那筆的第 6 位（缺就是 2；D012 起夾在 1–4，見 stadiumSize）。
 // 世界歷史（規則 4）：匯入記成第一筆事件；2D 存檔沒有歷史，只有每棟的 age（每個模擬日 +1，施工用鋼材會加速，實驗線 55632／55671），
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
@@ -50,7 +50,7 @@ export interface City {
   // 逐格圖層：索引 z*n+x（實驗線的 y 對到本線的 z）
   ter: Uint8Array;              // 0 水、1 沙、2 草（實驗線 genWorld）
   tree: Uint8Array;             // 樹種，0＝沒有
-  road: Uint8Array;             // 0 無、1 路、2 橋、3 高速、4 高速橋（實驗線 save 66716）
+  road: Uint8Array;             // 0 無、1 路、2 橋、3 高速、4 高速橋（實驗線 save 66717）
   rclass: Uint8Array;           // 道路等級
   zone: Uint8Array;             // 0 無、1 住、2 商、3 工
   el: Uint8Array;               // 高地
@@ -87,7 +87,7 @@ export function cityFromLab(save: LabSave, kinds: KindTable, code: string): City
     const size = k === 9 ? stadiumSize(r[5]) : kinds.size(k);
     const b: CityBuilding = {
       id: c.buildings.length + 1, k, lv, v, age, x, z, size,
-      abandoned: k <= 3 && !!ab && ab.charCodeAt(i) === 49,   // 實驗線只把住商工的 ab 還原成廢棄（load 66949）
+      abandoned: k <= 3 && !!ab && ab.charCodeAt(i) === 49,   // 實驗線只把住商工的 ab 還原成廢棄（load 66921）
       builtDay: save.day - age,
     };
     c.buildings.push(b);
@@ -131,5 +131,5 @@ export const buildingAt = (c: City, x: number, z: number): CityBuilding | null =
 // 還在的建築（D011 起有墓碑：拆掉的留在清單裡、occ 已清空）
 export const liveBuildings = (c: City) => c.buildings.filter(b => b.goneDay === undefined);
 
-// 路圖層的編碼（實驗線 save 66716）：0 無、1 路、2 橋、3 高速、4 高速橋
+// 路圖層的編碼（實驗線 save 66717）：0 無、1 路、2 橋、3 高速、4 高速橋
 export const roadCode = (road: unknown, hw: unknown, bridge: unknown) => road ? (hw ? (bridge ? 4 : 3) : (bridge ? 2 : 1)) : 0;
