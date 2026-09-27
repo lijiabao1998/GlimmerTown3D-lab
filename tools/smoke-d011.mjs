@@ -317,7 +317,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
 
   });
 
-  await run('budget', '手機預算', async ({ ev, touch, drag, sim, findBox, freshStart, waitFor }, page) => {
+  await run('budget', '手機預算', async ({ ev, touch, drag, sim, findBox, freshStart, waitFor, toasts }, page) => {
     await freshStart();
   // ---- 手機預算（CPU 降速 6 倍）：放開手指到畫出結果 ≤ 400 ms（三次取中位數）；拖曳中每次更新預覽 ≤ 16 ms（卡面驗收 8：「每次」，判最大值）----
   // 預覽只在手指那一格換了才重算（src/cityView.ts pointermove）：按下那一次、之後 __gt.stroke().b 每換一次各取一個樣本；沒重算的移動不取（timing 還是上一次的值，重複取會灌水）
@@ -327,6 +327,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     try {
       for (let k = 0; k < 3; k++) {
+        await waitFor(async () => (await toasts()).length === 0, 6000);   // D012：扣款通知接觸控、疊在畫面上方，散掉再拖（劇本城那一項在 main 那一輪 CI 被它吃掉一條，這裡同一個風險）
         const run = await findBox(8, 1, free), n0 = (await sim()).events;
         if (!run.length) break;
         let lastB = null;
@@ -344,7 +345,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   }
   });
 
-  await run('script', '劇本城', async ({ ev, freshStart, open, code, script, tapBtn, waitFor, touch, drag, findBox, sim }, page) => {
+  await run('script', '劇本城', async ({ ev, freshStart, open, code, script, tapBtn, waitFor, touch, drag, findBox, sim, toasts, hit }, page) => {
   // ---- 劇本城（Node 守衛那一份，資金設定拿掉）在瀏覽器重演 120 天：雜湊＝Node；三角形 ≤ 118,884、draw call ≤ 18 ----
   // 劇本逐筆記成瀏覽器要做的事（契約 tools/d011-ops.mjs）：施工記實際提交的那一筆（pick 找到的座標 Node 已經解好，r.op）、復原、
   // 亂數對齊（{k:'seed'} → __gt.simSeed，兩邊都換成 mulberry32(v)）、推進幾天（from＝從第幾天起推）
@@ -524,23 +525,27 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   // 接著上面（劇本城第 122 天、預設 C），量法同 budget 那一段：CPU 降速 6 倍，真的觸控拖三條 8 格的路；放開手指到畫出取三次中位數，預覽只取真的重算的那幾次、判最大值
   {
     await ev(`__gt.tool('road','road')`);
-    const commits = [], previews = [], med = a => [...a].sort((p, q) => p - q)[Math.floor(a.length / 2)];
+    const commits = [], previews = [], misses = [], med = a => [...a].sort((p, q) => p - q)[Math.floor(a.length / 2)];
     const at = await ev(`(()=>{const ids=new Set(__gt.buildingList().filter(b=>b[1]>=1&&b[1]<=3).map(b=>b[0]));let r=0;for(const id of __gt.layers().occ)if(ids.has(id))r++;return {mode:__gt.blockMode(),rci:r};})()`);
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     try {
       for (let k = 0; k < 3; k++) {
+        // 上一條路的扣款通知散掉再拖（通知接觸控、疊在畫面上方；main 那一輪 CI 第三條沒蓋成，只量到兩次）。等通知的時間不算進量的那一段
+        await waitFor(async () => (await toasts()).length === 0, 6000);
         const run = await findBox(8, 1, free), n0 = (await sim()).events;
-        if (!run.length) break;
+        if (!run.length) { misses.push(`第 ${k + 1} 條找不到 8 格空地`); break; }
         let lastB = null;
         const sample = async () => { const s = await ev('(()=>{const s=__gt.stroke();return s?{b:s.b,t:__gt.timing().preview}:null;})()'); if (s && J(s.b) !== J(lastB) && s.t !== undefined) { previews.push(s.t); lastB = s.b; } };
+        const at0 = await hit(run[0][1]);
         await drag(run[0][1], run.at(-1)[1], 10, sample, sample);
         await touch('touchEnd', []);
         if (await waitFor(async () => (await sim()).events > n0)) commits.push(await ev('__gt.timing().commit'));
+        else misses.push(`第 ${k + 1} 條沒蓋成：起點 (${run[0][0]}) 螢幕 ${run[0][1].map(v => v.toFixed(0))} 按到 ${at0}`);
       }
     } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
     log(at.mode === 'c' && at.rci > 0 && commits.length === 3 && med(commits) <= 400,
       'D012 手機預算：劇本城（C 檔、有住商工）放開手指到畫出結果，CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D011 那一項在空的新城量）',
-      `${String(at.mode).toUpperCase()} 檔、住商工 ${at.rci} 格；${commits.map(x => x.toFixed(0)).join('、')} ms${commits.length ? `，中位數 ${med(commits).toFixed(0)}` : ''}`);
+      `${String(at.mode).toUpperCase()} 檔、住商工 ${at.rci} 格；${commits.map(x => x.toFixed(0)).join('、')} ms${commits.length ? `，中位數 ${med(commits).toFixed(0)}` : ''}${misses.length ? '；' + misses.join('；') : ''}`);
     log(previews.length >= 10 && Math.max(...previews) <= 16, 'D012 手機預算：劇本城（C 檔）拖曳中每次更新預覽，CPU 降速 6 倍下 ≤ 16 ms（只取真的重算的那幾次，判最大值）',
       previews.length ? `${previews.length} 次：中位數 ${med(previews).toFixed(2)}、P90 ${pct(previews, .9).toFixed(2)}、最大 ${Math.max(...previews).toFixed(2)} ms` : '沒量到');
     await ev('__gt.tool(null)');
