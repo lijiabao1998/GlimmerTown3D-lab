@@ -149,7 +149,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   s.weather = { weather: wx.weather, wxT: wx.wxT };
   // 54991 通勤（T141，每 4 天）、54995 道路負載（T129）：沒搬，實驗線沒有開關、照跑（第 2 類）；本線 commutePenalty、roadLoad 都是 0
   // 54996–55001 地價基準髒重建：landDirty 時，有框只重算框裡，沒框整張（前一天 55279 設成整張；玩家施工把它換成框，見 Sim.landDirty）。
-  // 54997 rebuildNoise：本線沒有噪音源（D011 能蓋的路、分區、電廠 k5、警察局 k11 都不在 NOISE_SRC 53021），NOISE 一直是 0，不會觸發整張重算。
+  // 54997 rebuildNoise：沒搬，NOISE 一直是 0，不會觸發整張重算。本線蓋得出來的東西（D011 的路、分區、電廠 k5、警察局 k11，D016 的九種設施）都不在 NOISE_SRC 53021；
+  // 但讀進來的城可能有噪音源（體育場 k9 等 19 種），那時住宅幸福與地價跟實驗線不同（D016 卡「施工中遇到」1、「沒做成的事」1）。
   // 整張＝重算 stale 格（地價基準只取決於該格的覆蓋、污染、噪音與半徑 4 的犯罪（landStaticAt）；輸入沒變的格算出來一樣）；
   // opts.fullLand＝逐字照實驗線把整張算一遍（守衛的慢速版，結果要逐位相同）
   if (s.landDirty) {
