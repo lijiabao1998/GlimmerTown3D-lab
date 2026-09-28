@@ -180,7 +180,7 @@ export const KIND_SHAPES: Record<number, Shape> = {
   185: S('landmark', { which: 'deck' }),                                // 賞鯨台
   186: S('park', { glassdome: 1 }),                                     // 夜光花園
   // ---- 綠地 ----
-  4: S('park', { trees: 3, path: 1 }),                                  // 公園（實驗線沒有精靈）
+  4: S('park', { labPark: 1 }),                                         // 公園：照變體畫實驗線 SPR.park 的九種設計（D018；D007 註「實驗線沒有精靈」是錯的）
   47: S('park', { glassdome: 1, trees: 4 }),                            // 植物園
   92: S('park', { fence: 1, trees: 2 }),                                // 遛狗公園
   112: S('park', { pond: 1, trees: 6 }),                                // 中央公園

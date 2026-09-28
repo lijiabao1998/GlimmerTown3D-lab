@@ -11,6 +11,7 @@ import { WIN_STYLE } from './windows.ts';
 export interface KindCtx {
   W: Geo; O: Geo; D: Geo; trees: YardTree[];
   x0: number; z0: number; s: number; y0: number; H: number; k: number; C: KindColors;
+  v?: number;   // 變體（D018：公園照實驗線九種設計畫；其他種類不讀）
 }
 
 const cache = new Map<string, THREE.Color>();
@@ -95,6 +96,76 @@ const BOXES = ['#3f6f6a', '#8a4a3a', '#4a5f8a', '#c9a040', '#b4544a', '#5a8a4a']
 const WHITE = '#e6e6e0', STONE = '#e8e1d0', BRICK = '#a4533f', DARK = '#3a3f48', STEEL = '#8b9199', GLASS = '#6f9cc4', WATER = '#3f7ec0', RED = '#c8403a', ASPH = '#4e525b';
 
 type Builder = (p: Pen, o: Record<string, number | string | boolean>) => void;
+
+// ---- 公園（k4）九種（D018）：照實驗線精靈 SPR.park 的設計擺 3D 小件，顏色取原文色碼 ----
+// v0 石徑＋長椅＋花（40608–40631）、v1 石徑、v2 池塘（同上）、v3 噴泉廣場（44564）、v4 玫瑰園（44582）、v5 遊樂場（44600）、
+// v6 涼亭（46123）、v7 球場（46138）、v8 野餐區（46152）。花、玫瑰的位置實驗線是建精靈時抽亂數，這裡用固定的擺法（同一個變體每一座一樣）
+export const PARK = {
+  path: '#cbb98e', bench: '#8a5f38', flowers: ['#e8e070', '#e8907e', '#d9a8e8', '#f2f2f2'],
+  pond: '#4f93cf', pondIn: '#6fb0e0', pondHi: '#bfe4f5', pondRim: '#d9c689',
+  plaza: '#c9c2b0', plazaRim: '#a9a08c', basin: '#8f8a80', jet: '#eaf6fb', jetTop: '#ffffff',
+  hedge: '#3d7a3c', hedgeTop: '#4b8f45', roses: ['#e0537a', '#f2789a', '#f2f2f2', '#e8c85a'],
+  sand: '#e8d9a0', slidePost: '#e8b23e', slideTop: '#5aa0e8', chute: '#7fc0f2', rider: '#e05252', swingPost: '#9a8a7a', swingBar: '#7a6a5a', rope: '#5a4a3a', seat: '#e8b23e',
+  gazeboPad: '#cbb98e', gazeboPost: '#8a5f38', gazeboRoof: '#b5533e', gazeboTop: '#d9c689',
+  court: '#c47a3e', courtEdge: '#e0a35a', line: '#f2f2f2', hoopPost: '#7a5f38', board: '#e8e8e8',
+  table: '#8a5f38', seatWood: '#a5754a',
+} as const;
+function labPark(p: Pen, v: number) {
+  const P = PARK;
+  const stones = () => { for (let i = 0; i < 5; i++) p.flat(.1 + i * .17, .2 + i * .17, .58 + (i % 2) * .05, .66 + (i % 2) * .05, .006, P.path); };
+  const bench = (u: number, w: number) => { p.bit(u, u + w, .3, .36, .04, .06, P.bench); p.bit(u, u + w, .28, .3, .06, .12, P.bench); };
+  switch (((v % 9) + 9) % 9) {
+    case 0:   // 石徑、兩棵樹、長椅、花
+      stones(); p.tree(.2, .3, .55); p.tree(.8, .52, .55); bench(.52, .22);
+      for (let i = 0; i < 8; i++) { const u = .3 + (i * .37) % .4, w = .78 + (i * .53) % .12; p.flat(u, u + .04, w, w + .04, .012, P.flowers[i % 4]); }   // 花：貼地的小片（2 個三角形）
+      break;
+    case 1:   // 石徑、兩棵樹
+      stones(); p.tree(.2, .3, .55); p.tree(.8, .52, .55);
+      break;
+    case 2:   // 池塘：沙色池邊、水面、淺水、亮點；一棵樹
+      p.cyl(.52, .56, .34, 0, .012, P.pondRim, 10); p.cyl(.52, .56, .28, .012, .018, P.pond, 10); p.cyl(.5, .6, .16, .018, .02, P.pondIn, 8);
+      p.flat(.44, .52, .64, .67, .022, P.pondHi); p.tree(.18, .24, .55);
+      break;
+    case 3:   // 噴泉廣場：鋪石圓場、石池、水面、水柱；兩棵樹
+      p.cyl(.5, .5, .4, 0, .01, P.plaza, 10); p.cyl(.5, .5, .23, .01, .06, P.basin, 10); p.cyl(.5, .5, .19, .06, .064, P.pond, 10);
+      p.cyl(.5, .5, .1, .064, .066, P.pondHi, 6); p.cyl(.5, .5, .025, .066, .3, P.jet, 5); p.cyl(.5, .5, .012, .3, .36, P.jetTop, 4);
+      p.tree(.12, .16, .5); p.tree(.88, .4, .5);
+      break;
+    case 4:   // 玫瑰園：十字石徑、四塊綠籬、玫瑰
+      p.flat(.46, .54, .06, .94, .006, P.path); p.flat(.06, .94, .46, .54, .007, P.path);
+      for (const [u, w] of [[.12, .12], [.58, .12], [.12, .58], [.58, .58]]) {
+        p.bit(u, u + .3, w, w + .3, 0, .09, P.hedge, P.hedgeTop);
+        for (let i = 0; i < 4; i++) { const a = u + .04 + (i % 2) * .16, b = w + .05 + (i >> 1) * .15; p.flat(a, a + .06, b, b + .06, .094, P.roses[(i + (u > .5 ? 1 : 0) + (w > .5 ? 2 : 0)) % 4]); }   // 玫瑰：綠籬頂上的小片
+      }
+      break;
+    case 5:   // 遊樂場：沙坑、滑梯、彈簧椅、鞦韆架
+      p.flat(.12, .88, .18, .9, .006, P.sand);
+      p.pole(.2, .3, .012, 0, .34, P.slidePost); p.pole(.32, .3, .012, 0, .34, P.slidePost);
+      p.bit(.18, .34, .26, .36, .3, .34, P.slideTop);
+      for (let i = 0; i < 4; i++) p.bit(.2, .32, .36 + i * .08, .44 + i * .08, .24 - i * .07, .27 - i * .07, P.chute);   // 滑道：一階一階往前下
+      p.bit(.2, .26, .78, .84, 0, .08, P.rider); p.bit(.4, .46, .66, .72, 0, .08, P.rider);
+      p.pole(.62, .52, .01, 0, .34, P.swingPost); p.pole(.9, .52, .01, 0, .34, P.swingPost); p.bit(.6, .92, .51, .53, .33, .35, P.swingBar);
+      for (const u of [.7, .82]) { p.pole(u - .025, .52, .004, .1, .33, P.rope); p.pole(u + .025, .52, .004, .1, .33, P.rope); p.bit(u - .035, u + .035, .49, .55, .09, .11, P.seat); }
+      break;
+    case 6:   // 涼亭：石鋪地、木柱、紅瓦頂；兩棵樹
+      p.flat(.28, .72, .32, .76, .006, P.gazeboPad);
+      for (const [u, w] of [[.34, .38], [.66, .38], [.34, .7], [.66, .7]]) p.pole(u, w, .014, 0, .26, P.gazeboPost);
+      p.hip(.26, .74, .3, .78, .26, .14, P.gazeboRoof); p.pole(.5, .54, .02, .38, .42, P.gazeboTop);
+      p.tree(.12, .18, .5); p.tree(.88, .5, .5);
+      break;
+    case 7:   // 球場：橘紅球場、白線、兩個籃框；一棵樹
+      p.flat(.14, .86, .22, .82, .006, P.court);
+      p.flat(.14, .86, .22, .25, .008, P.courtEdge); p.flat(.14, .86, .8, .82, .008, P.line); p.flat(.49, .51, .22, .82, .009, P.line);
+      for (const u of [.2, .8]) { p.pole(u, .52, .012, 0, .26, P.hoopPost); p.bit(u - .05, u + .05, .5, .54, .22, .3, P.board); }
+      p.tree(.08, .1, .5);
+      break;
+    default:  // 8 野餐區：石徑、野餐桌（桌面＋兩條長椅）；三棵樹
+      stones();
+      p.bit(.3, .56, .4, .5, .08, .1, P.table); p.pole(.34, .45, .01, 0, .08, P.table); p.pole(.52, .45, .01, 0, .08, P.table);
+      p.bit(.28, .58, .33, .37, .04, .055, P.seatWood); p.bit(.28, .58, .53, .57, .04, .055, P.seatWood);
+      p.tree(.72, .28, .55); p.tree(.86, .62, .5); p.tree(.14, .4, .5);
+  }
+}
 
 const BUILDERS: Record<string, Builder> = {
   // ---- 高樓：裙樓＋逐段退縮的塔身＋尖頂（或飛碟餐廳、控制塔）----
@@ -424,6 +495,7 @@ const BUILDERS: Record<string, Builder> = {
   },
   // ---- 公園、廣場、濕地、露營 ----
   park(p, o) {
+    if (o.labPark) { labPark(p, p.a.v ?? 0); return; }
     const H = p.H, s = p.a.s, c = p.c;
     if (o.plaza) p.flat(.06, .94, .06, .94, .004, '#d8d0bc');
     if (o.path) { p.flat(.45, .55, .02, .98, .004, c.plate); p.flat(.02, .98, .45, .55, .005, '#d8d0bc'); }

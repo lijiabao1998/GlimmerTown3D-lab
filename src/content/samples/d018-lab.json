@@ -1,0 +1,48 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-parks.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "公園 v0–v2",
+   "anchors": {
+    "start": "/* ---------- 公園 3 變化 ---------- */",
+    "end": "SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});}"
+   },
+   "line": 40602,
+   "endLine": 40631,
+   "sha": "f91afa3c5719c4fce8de6c2f438c870cda3afaeb72717408bc21358bb6b4ef69"
+  },
+  {
+   "kind": "span",
+   "name": "公園 v3–v5",
+   "anchors": {
+    "start": "/* ---------- 公園新變體 3 種（噴泉廣場／玫瑰園／遊樂場） ---------- */",
+    "end": "/* ---------- 冬季公園新變體 3 種 ---------- */"
+   },
+   "line": 44563,
+   "endLine": 44665,
+   "sha": "74e0b5dfbeecf7c47cafdbfa41e25b6b2cb12c1a38e0f3d5a5f0812923a9086c"
+  },
+  {
+   "kind": "span",
+   "name": "公園 v6–v8",
+   "anchors": {
+    "start": "// 6) 公園新變體 3 種（涼亭 v6／球場 v7／野餐區 v8），SPR.park 6→9，SPR.parkW 同步尾端追加",
+    "end": "{ // 冬季公園 v6 積雪涼亭"
+   },
+   "line": 46122,
+   "endLine": 46163,
+   "sha": "9be6ddf9369caa4c728ebe650b014c0165b65a029a5760189a8f39e8fcc340e4"
+  }
+ ],
+ "text": {
+  "v012": "  /* ---------- 公園 3 變化 ---------- */\n  SPR.park=[];\n  const mt=(g,x,y)=>{g.fillStyle='#6b4a2f';g.fillRect(x,y+5,2,4);\n    g.fillStyle='#3d7a3c';g.fillRect(x-4,y-3,10,9);\n    g.fillStyle='#4b8f45';g.fillRect(x-3,y-4,8,7);\n    g.fillStyle='#63ad55';g.fillRect(x-2,y-3,4,4);};\n  for(let v=0;v<3;v++){const[c,g]=cv(64,56);\n    const ay=53;\n    dia(g,32,ay-32,32,'#82c163');\n    speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n    diaEdge(g,9,'#90cc72',32,ay-32,32);\n    diaEdge(g,6,'#74ad57',32,ay-32,32);\n    if(v===2){                                          // 池塘\n      dia(g,32,ay-26,12,'#4f93cf');\n      dia(g,32,ay-24,8,'#6fb0e0');\n      g.fillStyle='#bfe4f5';g.fillRect(30,ay-21,3,1);\n      diaEdge(g,15,'#d9c689',32,ay-26,12);\n      mt(g,14,ay-26);\n    }else{\n      g.fillStyle='#cbb98e';                            // 石徑\n      for(let i=0;i<5;i++)g.fillRect(12+i*8,ay-20+((i%2)*2),5,2);\n      mt(g,14,ay-28);mt(g,46,ay-24);\n      if(v===0){\n        g.fillStyle='#8a5f38';g.fillRect(38,ay-30,7,2);  // 長椅\n        g.fillRect(38,ay-28,1,2);g.fillRect(44,ay-28,1,2);\n        const fc=['#e8e070','#e8907e','#d9a8e8','#f2f2f2'];\n        for(let i=0;i<8;i++){g.fillStyle=fc[ri(4)];g.fillRect(20+ri(20),ay-14+ri(5),2,1);}\n      }\n    }\n    SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});}",
+  "v345": "  /* ---------- 公園新變體 3 種（噴泉廣場／玫瑰園／遊樂場） ---------- */\n  { // 公園 v3 噴泉廣場\n    const[c,g]=cv(64,56);const ay=53;\n    dia(g,32,ay-32,32,'#82c163');\n    speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n    diaEdge(g,9,'#90cc72',32,ay-32,32);\n    diaEdge(g,6,'#74ad57',32,ay-32,32);\n    dia(g,32,ay-20,20,'#c9c2b0');\n    speck(g,32,ay-20,20,['#b8b09c','#d4cdb9'],30,rand);\n    diaEdge(g,15,'#a9a08c',32,ay-20,20);\n    dia(g,32,ay-24,12,'#8f8a80');\n    dia(g,32,ay-25,10,'#4f93cf');\n    dia(g,32,ay-26,6,'#bfe4f5');\n    g.fillStyle='#eaf6fb';g.fillRect(30,ay-34,3,10);\n    g.fillStyle='#ffffff';g.fillRect(31,ay-36,1,3);\n    for(let i=0;i<6;i++){g.fillStyle='#dff3fa';g.fillRect(26+ri(12),ay-30+ri(8),1,1);}\n    mt(g,14,ay-26);mt(g,50,ay-24);\n    SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n  }\n  { // 公園 v4 玫瑰園\n    const[c,g]=cv(64,56);const ay=53;\n    dia(g,32,ay-32,32,'#82c163');\n    speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n    diaEdge(g,9,'#90cc72',32,ay-32,32);\n    diaEdge(g,6,'#74ad57',32,ay-32,32);\n    g.fillStyle='#cbb98e';\n    for(let i=0;i<3;i++)g.fillRect(29,ay-30+i*8,6,2);\n    g.fillStyle='#3d7a3c';\n    g.fillRect(14,ay-28,10,6);g.fillRect(40,ay-28,10,6);\n    g.fillRect(16,ay-18,10,6);g.fillRect(38,ay-18,10,6);\n    g.fillStyle='#4b8f45';\n    g.fillRect(15,ay-29,8,2);g.fillRect(41,ay-29,8,2);\n    g.fillRect(17,ay-19,8,2);g.fillRect(39,ay-19,8,2);\n    const pc=['#e0537a','#f2789a','#f2f2f2','#e8c85a'];\n    for(let i=0;i<14;i++){g.fillStyle=pc[ri(4)];g.fillRect(14+ri(38),ay-30+ri(20),2,1);}\n    SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n  }\n  { // 公園 v5 遊樂場（滑梯＋鞦韆）\n    const[c,g]=cv(64,56);const ay=53;\n    dia(g,32,ay-32,32,'#82c163');\n    speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n    diaEdge(g,9,'#90cc72',32,ay-32,32);\n    diaEdge(g,6,'#74ad57',32,ay-32,32);\n    dia(g,32,ay-20,16,'#e8d9a0');\n    speck(g,32,ay-20,16,['#dcc98a','#f0e4b0'],20,rand);\n    diaEdge(g,15,'#cdb87a',32,ay-20,16);\n    g.fillStyle='#e8b23e';g.fillRect(16,ay-40,3,18);\n    g.fillStyle='#d4a24c';g.fillRect(28,ay-40,3,10);\n    g.fillStyle='#5aa0e8';g.fillRect(17,ay-40,12,4);\n    g.fillStyle='#7fc0f2';for(let i=0;i<8;i++)g.fillRect(18+i,ay-36+Math.floor(i*.9),3,2);\n    g.fillStyle='#e05252';g.fillRect(16,ay-22,4,3);g.fillRect(28,ay-14,4,3);\n    g.fillStyle='#9a8a7a';g.fillRect(44,ay-38,2,20);g.fillRect(56,ay-38,2,20);\n    g.fillStyle='#7a6a5a';g.fillRect(44,ay-38,14,2);\n    g.fillStyle='#5a4a3a';g.fillRect(47,ay-36,1,14);g.fillRect(53,ay-36,1,14);\n    g.fillStyle='#e8b23e';g.fillRect(46,ay-22,3,2);g.fillRect(52,ay-22,3,2);\n    SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n  }\n  /* ---------- 冬季樹新變體 3 種（雪簷；樹幹不變） ---------- */\n  { // 冬季樹 v4 銀杏\n    const[c,g]=cv(40,48),[s,sg]=cv(40,48);\n    dia(g,20,36,10,'rgba(90,110,140,.20)');\n    sg.fillStyle='#6b4a2f';sg.fillRect(18,30,4,11);\n    sg.fillStyle='#57402a';sg.fillRect(20,30,2,11);\n    sg.fillStyle='#c9a227';sg.fillRect(10,8,20,16);sg.fillRect(8,12,24,10);\n    sg.fillStyle='#e0bb3c';sg.fillRect(12,6,16,8);sg.fillRect(13,7,14,13);\n    sg.fillStyle='#f2d75e';sg.fillRect(14,7,10,7);\n    sg.fillStyle='#eef4f8';sg.fillRect(10,8,20,5);sg.fillRect(12,6,16,3);sg.fillRect(8,12,24,2);\n    sg.fillStyle='#ffffff';sg.fillRect(10,13,20,1);sg.fillRect(8,14,24,1);\n    sg.fillStyle='#a9860f';sg.fillRect(10,22,20,2);sg.fillRect(12,24,16,1);\n    outlineSprite(s,24,40,28);\n    g.drawImage(s,0,0);\n    SPR.treeW.push({img:c,ax:20,ay:45,w:40,h:48});\n  }\n  { // 冬季樹 v5 楓紅\n    const[c,g]=cv(40,48),[s,sg]=cv(40,48);\n    dia(g,20,36,10,'rgba(90,110,140,.20)');\n    sg.fillStyle='#6b4a2f';sg.fillRect(18,30,4,11);\n    sg.fillStyle='#57402a';sg.fillRect(20,30,2,11);\n    sg.fillStyle='#8a2e1f';sg.fillRect(10,8,20,16);sg.fillRect(8,12,24,10);\n    sg.fillStyle='#b3402a';sg.fillRect(12,6,16,8);sg.fillRect(13,7,14,13);\n    sg.fillStyle='#d65b3c';sg.fillRect(14,7,10,7);\n    sg.fillStyle='#eef4f8';sg.fillRect(10,8,20,5);sg.fillRect(12,6,16,3);sg.fillRect(8,12,24,2);\n    sg.fillStyle='#ffffff';sg.fillRect(10,13,20,1);sg.fillRect(8,14,24,1);\n    sg.fillStyle='#5e2015';sg.fillRect(10,22,20,2);sg.fillRect(12,24,16,1);\n    outlineSprite(s,24,40,28);\n    g.drawImage(s,0,0);\n    SPR.treeW.push({img:c,ax:20,ay:45,w:40,h:48});\n  }\n  { // 冬季樹 v6 垂柳\n    const[c,g]=cv(40,48),[s,sg]=cv(40,48);\n    dia(g,20,36,10,'rgba(90,110,140,.20)');\n    sg.fillStyle='#6b4a2f';sg.fillRect(18,30,4,11);\n    sg.fillStyle='#57402a';sg.fillRect(20,30,2,11);\n    sg.fillStyle='#5c8a3e';sg.fillRect(11,7,18,13);sg.fillRect(9,11,22,8);\n    sg.fillStyle='#78a854';sg.fillRect(13,6,14,7);\n    sg.fillStyle='#eef4f8';sg.fillRect(11,7,18,4);sg.fillRect(13,6,14,2);sg.fillRect(9,11,22,2);\n    sg.fillStyle='#ffffff';sg.fillRect(13,10,14,1);\n    for(let i=0;i<7;i++){const fx=9+i*3;sg.fillRect(fx,16,1,10+((i%3)*4));}\n    sg.fillStyle='#4a7530';sg.fillRect(10,16,20,1);\n    outlineSprite(s,24,40,28);\n    g.drawImage(s,0,0);\n    SPR.treeW.push({img:c,ax:20,ay:45,w:40,h:48});\n  }",
+  "v678": "    // 6) 公園新變體 3 種（涼亭 v6／球場 v7／野餐區 v8），SPR.park 6→9，SPR.parkW 同步尾端追加\n    { // 公園 v6 涼亭公園\n      const[c,g]=cv(64,56);const ay=53;\n      dia(g,32,ay-32,32,'#82c163');\n      speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n      diaEdge(g,9,'#90cc72',32,ay-32,32);\n      diaEdge(g,6,'#74ad57',32,ay-32,32);\n      g.fillStyle='#cbb98e';g.fillRect(24,ay-24,16,10);\n      g.fillStyle='#8a5f38';g.fillRect(26,ay-30,2,8);g.fillRect(36,ay-30,2,8);\n      g.fillStyle='#8a5f38';g.fillRect(24,ay-33,16,2);\n      g.fillStyle='#b5533e';g.fillRect(22,ay-36,20,4);\n      g.fillStyle='#8f4030';g.fillRect(24,ay-38,16,3);\n      g.fillStyle='#d9c689';g.fillRect(29,ay-40,6,3);\n      mt(g,14,ay-26);mt(g,50,ay-24);\n      SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n    }\n    { // 公園 v7 球場公園\n      const[c,g]=cv(64,56);const ay=53;\n      dia(g,32,ay-32,32,'#82c163');\n      speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n      diaEdge(g,9,'#90cc72',32,ay-32,32);\n      diaEdge(g,6,'#74ad57',32,ay-32,32);\n      g.fillStyle='#c47a3e';g.fillRect(16,ay-30,32,16);\n      g.fillStyle='#e0a35a';g.fillRect(16,ay-30,32,2);\n      g.fillStyle='#f2f2f2';g.fillRect(16,ay-30,32,1);g.fillRect(16,ay-15,32,1);g.fillRect(31,ay-30,2,16);\n      g.fillStyle='#7a5f38';g.fillRect(20,ay-33,2,6);g.fillRect(42,ay-33,2,6);\n      g.fillStyle='#e8e8e8';g.fillRect(19,ay-33,4,2);g.fillRect(41,ay-33,4,2);\n      mt(g,10,ay-26);\n      SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n    }\n    { // 公園 v8 野餐區公園\n      const[c,g]=cv(64,56);const ay=53;\n      dia(g,32,ay-32,32,'#82c163');\n      speck(g,32,ay-32,32,['#6fae52','#95d276','#78b95c'],60,rand);\n      diaEdge(g,9,'#90cc72',32,ay-32,32);\n      diaEdge(g,6,'#74ad57',32,ay-32,32);\n      g.fillStyle='#cbb98e';for(let i=0;i<5;i++)g.fillRect(12+i*8,ay-20+((i%2)*2),5,2);\n      g.fillStyle='#8a5f38';g.fillRect(22,ay-24,10,2);g.fillRect(24,ay-22,1,3);g.fillRect(30,ay-22,1,3);\n      g.fillStyle='#a5754a';g.fillRect(20,ay-26,14,1);g.fillRect(20,ay-19,3,2);g.fillRect(31,ay-19,3,2);\n      mt(g,42,ay-28);mt(g,50,ay-20);mt(g,12,ay-24);\n      SPR.park.push({img:c,ax:32,ay:ay,w:64,h:56});\n    }"
+ }
+}

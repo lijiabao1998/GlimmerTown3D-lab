@@ -518,6 +518,7 @@ await guard('./unit-d015.mjs', 'd015Guards');     // D015：件的鍵夠不夠�
 await guard('./unit-d016-build.mjs', 'd016BuildGuards');   // D016：公共設施九支的建造規則黃金樣本（d016-build.json，tools/lab-build.mjs --set=d016）、原碼突變
 await guard('./unit-d016-parity.mjs', 'd016ParityGuards');   // D016：實驗線實跑錨點（d016-lab.json，tools/d016-parity.mjs 錄）、分享碼互通、歷史與存檔
 await guard('./unit-d017.mjs', 'd017Guards');   // D017：噪音場逐格＝實驗線原文（d017-noise.json，tools/lab-noise.mjs 摘）、原碼突變、接線、預建城體育場實跑（d017-lab.json）
+await guard('./unit-d018.mjs', 'd018Guards');   // D018：公園九種照實驗線 SPR.park（d018-lab.json，tools/lab-parks.mjs 摘）、只動了公園（d018-kinds-before.json）、預算
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

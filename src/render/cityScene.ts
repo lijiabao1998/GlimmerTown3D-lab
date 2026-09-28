@@ -235,7 +235,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) y0 = Math.max(y0, top[(b.z + dz) * n + b.x + dx]);
       specs.push({ key: civicKey(b, s, y0), owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
         const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
-        m.kindUsed = [...drawKind({ W, O, D, trees: m.yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, C: civic!.colors(b.k, b.lv) }, shape)];
+        m.kindUsed = [...drawKind({ W, O, D, trees: m.yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, v: b.v, C: civic!.colors(b.k, b.lv) }, shape)];   // v：D018 公園照變體畫（鍵裡本來就有 v）
         m.anchor = new THREE.Vector3(b.x + s / 2, y0 + H / 2, b.z + s / 2);
       } });
       continue;

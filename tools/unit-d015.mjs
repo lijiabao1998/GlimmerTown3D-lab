@@ -83,7 +83,7 @@ async function guards(log) {
     const shape = shapeOf(b.k); if (!shape) return null;
     const G = [new Geo({ ext: true }), new Geo(), new Geo()], trees = [];
     for (const g of G) g.owner = b.id;
-    const H = Math.max(0.12, KT.height(b.k, b.lv, b.v)), used = [...drawKind({ W: G[0], O: G[1], D: G[2], trees, x0: b.x, z0: b.z, s, y0, H, k: b.k, C: kindColors(LOOKS, b.k, b.lv, KT.catColor(KT.cat(b.k))) }, shape)];
+    const H = Math.max(0.12, KT.height(b.k, b.lv, b.v)), used = [...drawKind({ W: G[0], O: G[1], D: G[2], trees, x0: b.x, z0: b.z, s, y0, H, k: b.k, v: b.v, C: kindColors(LOOKS, b.k, b.lv, KT.catColor(KT.cat(b.k))) }, shape)];
     return geoHash(G, [trees, used, H]);
   };
   const others = [...new Set(civics.map(b => b.k))];
