@@ -17,10 +17,12 @@ import { drawKind } from '../src/render/kindArt.ts';
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 export const VARIANTS = 9;
 
+// 每個值先取到 1e-6 再雜湊：Node 22 與 24 的 Math.pow 最後一位不一樣（three 的 Color 轉線性色用它），逐位元雜湊在 CI（Node 24）上九成種類都對不上（D018 收尾那一輪的 CI 紅燈）
+const Q = 1e6;
 function geoHash(G, extra) {
   const h = crypto.createHash('sha1');
-  for (const g of G) for (const a of [g.pos, g.nor, g.uv, g.col, g.wst, g.wgl, g.wbd, g.tags]) { h.update(Buffer.from(Float64Array.from(a).buffer)); h.update('|'); }
-  h.update(JSON.stringify(extra));
+  for (const g of G) for (const a of [g.pos, g.nor, g.uv, g.col, g.wst, g.wgl, g.wbd, g.tags]) { h.update(Buffer.from(Float64Array.from(a, x => Math.round(x * Q)).buffer)); h.update('|'); }
+  h.update(JSON.stringify(extra, (k, v) => typeof v === 'number' && !Number.isInteger(v) ? Math.round(v * Q) : v));
   return h.digest('hex').slice(0, 16);
 }
 // 畫一棟（KindCtx 多給 v：D018 起公園照變體畫；其他種類不讀它）
