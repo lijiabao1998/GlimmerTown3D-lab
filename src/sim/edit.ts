@@ -26,8 +26,8 @@ const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
 // 介面的按鈕 → 實驗線的工具代號（規則 9：按鈕寫進資料的東西照實驗線）。路、公共設施是一組：按鈕下面那一排選的是哪一種
 export const labToolOf = (ui: string, roadTool: string, civicTool = 'police') => ui === 'road' ? roadTool : ui === 'civic' ? civicTool : ui;
-// 實驗線觸控的手勢（T436）：路是線、分區與拆除是框、建築是點
-export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) ? 'line' : (tool in ZONE_OF || tool === 'doze') ? 'rect' : 'tap';
+// 實驗線觸控的手勢（T436）：路是線、分區與拆除與公園是框（isRectTool 62750：zr／zc／zi／doze／park，另有 tree、fill 還沒搬）、其他建築是點
+export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) ? 'line' : (tool in ZONE_OF || tool === 'doze' || tool === 'park') ? 'rect' : 'tap';
 
 export interface EditOp { k: 'tap' | 'line' | 'rect'; tool: string; x0: number; z0: number; x1: number; z1: number }
 export interface OpPreview { cells: { x: number; z: number; ok: boolean; cost: number }[]; count: number; total: number; affordable: boolean; reason?: string }

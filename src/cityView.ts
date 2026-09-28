@@ -10,7 +10,7 @@ import { decodeLabCode } from './io/labcode.ts';
 import { cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { loadCode, saveCode, viewCode, SAVE_LIMIT } from './io/save.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng } from './sim/rules/lab.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
@@ -117,7 +117,7 @@ export function startCity() {
   // D010 逐日模擬
   let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, rebuilds = 0;
   // D011 建造：存檔樣板（讀進來那份存檔 JSON）、起始碼、目前的工具、路的等級、最近一天的回報、存檔
-  let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', lastRep: DayReport | null = null, daysSinceSave = 0;
+  let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', civicTool = 'police', lastRep: DayReport | null = null, daysSinceSave = 0;
   let loadNote = '', loadDay = -1, restyled = 0;   // restyled：這一次讀檔照實驗線重挑外觀換了幾棟（D012）
   // 這座城要不要自動存檔：載入時就決定、跟著這座城走（我的城、新城存；起步城是沙盒、其他只能看）。
   // 審查阻斷：之前存檔時才拿 sampleId 判斷，換城時 sampleId 已經是新城的、sim 還是舊城的，舊城被存進我的城
@@ -358,7 +358,7 @@ export function startCity() {
       <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>`;
   const bui = createBuildUi({
-    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); },
+    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
     menu: id => onMenu(id), menuOpen: () => bui.setMenu(menuSections()), startBuild: () => menuCity('newcity'),
   });
@@ -442,7 +442,7 @@ export function startCity() {
     syncDock();
   }
   function syncDock() {
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS, prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
   }
@@ -487,7 +487,7 @@ export function startCity() {
   let stroke: { pid: number; a: [number, number]; b: [number, number]; x: number; y: number; moved: boolean } | null = null;
   let lastPreview: ReturnType<typeof previewOp> | null = null;
   function opOf(s: NonNullable<typeof stroke>): EditOp {
-    const lt = labToolOf(tool!, roadTool), g = gestureOf(lt);
+    const lt = labToolOf(tool!, roadTool, civicTool), g = gestureOf(lt);
     return g === 'tap' ? { k: 'tap', tool: lt, x0: s.a[0], z0: s.a[1], x1: s.a[0], z1: s.a[1] } : { k: g, tool: lt, x0: s.a[0], z0: s.a[1], x1: s.b[0], z1: s.b[1] };
   }
   function updatePreview() {
@@ -813,8 +813,9 @@ export function startCity() {
       arenas: con.cache.arenas?.map(a => ({ cap: a.cap, used: a.used, live: a.live, holes: a.holes(), free: a.free.length })) ?? null } : null,
     glInfo: () => ({ programs: renderer.info.programs?.length ?? -1, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }),
     // ---- D011 建造 ----
-    ui: () => ({ tool, roadTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
-    tool: (t: ToolId | null, rc?: string) => { if (rc) roadTool = rc; setTool(t); return tool; },
+    ui: () => ({ tool, roadTool, civicTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
+    // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
+    tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') civicTool = rc; else roadTool = rc; } setTool(t); return tool; },
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
     preview: (op: EditOp) => sim ? previewOp(sim, op) : null,
     undo: () => doUndo(),

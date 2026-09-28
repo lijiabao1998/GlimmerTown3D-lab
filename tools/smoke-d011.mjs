@@ -46,7 +46,7 @@ const DIALOG_GUARD = `for (const k of ['alert', 'confirm', 'prompt']) window[k] 
 const TAP_PROBE = `window.__gtEv = [];
 for (const t of ['pointerdown', 'pointerup', 'pointercancel', 'click']) addEventListener(t, e => {
   const g = e.target, b = g && g.closest ? g.closest('button') : null;
-  window.__gtEv.push(Math.round(performance.now()) + ' ' + t + ' ' + (b ? 'button:' + (b.dataset.t || b.dataset.r || b.id || '?') : g && g.tagName ? g.tagName + (g.id ? '#' + g.id : '') : '?'));
+  window.__gtEv.push(Math.round(performance.now()) + ' ' + t + ' ' + (b ? 'button:' + (b.dataset.t || b.dataset.r || b.dataset.c || b.id || '?') : g && g.tagName ? g.tagName + (g.id ? '#' + g.id : '') : '?'));
   if (window.__gtEv.length > 40) window.__gtEv.shift();
 }, true);`;
 // 一次 evaluate 最多等多久：頁面卡住時那一段記紅燈，整支測試不會永遠等下去
@@ -100,7 +100,7 @@ const f2 = v => v === undefined || Number.isNaN(v) ? '—' : v.toFixed(2);
 // 觸控模擬的坑（D011 施工時遇到，頁面收不到任何 pointer／touch 事件，elementFromPoint 卻是畫布）：審查修正這一輪追到重現條件——
 // 兩指手勢之後換到「不同網址」的頁（舊頁進了上一頁快取，pagehide 的 persisted＝true），之後的觸控一律送不進新頁（兩指變成整頁縮放）；
 // 換到同一個網址（等於重新載入）、或換頁之前沒有兩指手勢，都沒事。所以每段各開一個 Chrome；有兩指手勢的段落，手勢之後只重新載入同一個網址
-async function pageSession(page, open0, { W = 412, H = 860, mobile = true } = {}) {
+export async function pageSession(page, open0, { W = 412, H = 860, mobile = true } = {}) {
   const open = async q => { await open0(q); if (mobile) await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 }); };
   await page.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: 1, mobile });
   if (mobile) await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
@@ -152,7 +152,7 @@ async function pageSession(page, open0, { W = 412, H = 860, mobile = true } = {}
 }
 
 // 空的陸地（沒有路、分區、建築、樹）
-const free = (i, L) => !L.road[i] && !L.zone[i] && !L.occ[i] && !L.tree[i] && L.ter[i] !== 0;
+export const free = (i, L) => !L.road[i] && !L.zone[i] && !L.occ[i] && !L.tree[i] && L.ter[i] !== 0;
 
 // 七段各開一個 Chrome（段落鍵見檔頭）。每段另查零外部請求、console 零錯誤；整段跑到一半丟例外也記紅燈，後面的段照跑。
 // opt：W、H、mobile（pageSession）；settle＝每次開頁後等幾毫秒（withBrowser 預設 900，讓第一幀畫完；不量畫面的段落可以短一點）
@@ -766,7 +766,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     {
       if (zoom.s0 !== 1) zoom.fix0 = await unzoom();
       zoom.s1 = await ev('visualViewport.scale');
-      const a = await center('.tool[data-t="zr"]'), b = await center('.tool[data-t="police"]');
+      const a = await center('.tool[data-t="zr"]'), b = await center('.tool[data-t="civic"]');
       zoom.t0 = await tool(); zoom.got = await pinch(a, b); zoom.t1 = await tool();
       if (zoom.got !== 1) zoom.fix = await unzoom();                         // 工具列真的放大了（紅燈）：先復原，後面幾項的觸控座標才對得上
     }

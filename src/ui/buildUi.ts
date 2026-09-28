@@ -5,7 +5,8 @@
 // 文字一律用 textContent 寫（選單的註記、城市名都可能來自分享碼）。
 import { ICONS, type IconName } from './icons.ts';
 
-export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'police' | 'doze';
+// civic＝公共設施一組（D016）：按下去跟「路」一樣跳出一排可選（警察局、派出所、消防局、醫院……），按鈕上的字跟著選到的那一種
+export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'civic' | 'doze';
 // 工具顏色：住商工跟地面的分區色一致（src/render/ground.ts GROUND.zone）
 export const TOOLS: { id: ToolId; label: string; name: string; color: string }[] = [
   { id: 'road', label: '路', name: '道路', color: '#c9ced8' },
@@ -13,18 +14,22 @@ export const TOOLS: { id: ToolId; label: string; name: string; color: string }[]
   { id: 'zc', label: '商', name: '商業區', color: '#8fb4e0' },
   { id: 'zi', label: '工', name: '工業區', color: '#e0c27a' },
   { id: 'plant', label: '電', name: '燃煤電廠', color: '#f5d451' },
-  { id: 'police', label: '警', name: '警察局', color: '#9cc0ff' },
+  { id: 'civic', label: '警', name: '公共設施', color: '#9cc0ff' },
   { id: 'doze', label: '拆', name: '拆除', color: '#ff8a7a' },
 ];
 
 // power：[要用電的住商工棟數, 電廠容量]。不用「有電棟數」：實驗線當天新長出來的房子一律帶電（55623），隔天才照容量分配，有電棟數會短暫超過容量
 // pop：'—'＝讀檔後還沒過第一天、人口還沒算；unsaved：自動存檔失敗的原因（空字串＝沒事）
 export interface HudState { name: string; sub: string; money: number | null; sandbox: boolean; day: number | null; pop: number | '—' | null; power: [number, number] | null; unsaved?: string }
-export interface DockState { mode: 'build' | 'view'; tool: ToolId | null; roadTool: string; roadTools: { id: string; name: string; cost: number }[]; prices: Partial<Record<ToolId, number>>; playing: boolean; speed: number; speeds: number[]; canUndo: boolean; sandbox: boolean }
+export interface DockState {
+  mode: 'build' | 'view'; tool: ToolId | null; roadTool: string; roadTools: { id: string; name: string; cost: number }[];
+  civicTool: string; civicTools: { id: string; name: string; short: string; cost: number }[];
+  prices: Partial<Record<ToolId, number>>; playing: boolean; speed: number; speeds: number[]; canUndo: boolean; sandbox: boolean;
+}
 export interface MenuItem { id: string; label: string; note?: string; icon?: IconName; on?: boolean }
 export interface MenuSection { title: string; items: MenuItem[] }
 export interface BuildUiEvents {
-  tool(t: ToolId | null): void; roadTool(id: string): void; play(): void; speed(k: number): void; undo(): void; menu(id: string): void; startBuild(): void;
+  tool(t: ToolId | null): void; roadTool(id: string): void; civicTool(id: string): void; play(): void; speed(k: number): void; undo(): void; menu(id: string): void; startBuild(): void;
   menuOpen(): void;   // 打開選單前（清單內容由呼叫端重填，例如我的城的天數與資金）
 }
 
@@ -66,11 +71,11 @@ const CSS = `
 .tool svg { width: 24px; height: 24px; color: var(--c); }
 .tool .price { font-size: 10px; color: #aab3c6; line-height: 1.1; }
 .tool.on { background: #2a3566; border-color: var(--c); box-shadow: inset 0 0 0 2px var(--c); }
-#roadSub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-#roadSub[hidden] { display: none; }
-#roadSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
-#roadSub button small { color: #aab3c6; font-size: 10.5px; }
-#roadSub button.on small { color: #3a2e10; }
+#roadSub, #civicSub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+#roadSub[hidden], #civicSub[hidden] { display: none; }
+#roadSub button, #civicSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
+#roadSub button small, #civicSub button small { color: #aab3c6; font-size: 10.5px; }
+#roadSub button.on small, #civicSub button.on small { color: #3a2e10; }
 .coach { align-self: center; max-width: min(560px, 100%); background: #141a30f2; border: 1px solid #e8b74a99; color: #ffe7b0; border-radius: 12px; padding: 7px 12px; font-size: 13px; text-align: center; }
 .coach[hidden] { display: none; }
 .viewNote { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; font-size: 13px; color: #d6dbe6; }
@@ -105,7 +110,7 @@ const CSS = `
 @media (min-width: 720px) {
   #menu .sheet { margin: 64px auto auto 10px; width: 380px; border-radius: 16px; border: 1px solid #ffffff26; }
   .tools { grid-template-columns: repeat(7, 64px); justify-content: center; }
-  #roadSub { grid-template-columns: repeat(5, 76px); justify-content: center; }
+  #roadSub, #civicSub { grid-template-columns: repeat(5, 76px); justify-content: center; }
   #dock { align-items: stretch; }
 }
 @media (max-width: 640px) { #bio { bottom: 168px !important; max-height: 40vh !important; } }
@@ -123,6 +128,7 @@ export function createBuildUi(on: BuildUiEvents) {
       <div class="coach" id="coach" hidden></div>
       <div class="viewNote" id="viewNote" hidden><span>這座城只能看。</span><button id="startBuild">${ICONS.build}開一座新城</button></div>
       <div id="roadSub" hidden></div>
+      <div id="civicSub" hidden></div>
       <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow"></span>
         <button class="icoBtn" id="undo" aria-label="復原">${ICONS.undo}</button></div>
       <div class="tools" id="tools"></div>
@@ -131,7 +137,7 @@ export function createBuildUi(on: BuildUiEvents) {
     <div id="menu" hidden><div class="sheet"><div class="head"><b>微光小鎮 3D</b><button class="icoBtn" id="menuX" aria-label="關閉">${ICONS.close}</button></div><div id="menuBody"></div></div></div>`;
   const style = document.createElement('style'); style.textContent = CSS;
   const $ = <T extends HTMLElement>(id: string) => root.querySelector('#' + id) as T;
-  const toolsEl = $('tools'), roadSub = $('roadSub'), spd = $('spd'), stats = $('stats'), menu = $('menu'), menuBody = $('menuBody'), costTag = $('costTag'), toasts = $('toasts'), dock = $('dock');
+  const toolsEl = $('tools'), roadSub = $('roadSub'), civicSub = $('civicSub'), spd = $('spd'), stats = $('stats'), menu = $('menu'), menuBody = $('menuBody'), costTag = $('costTag'), toasts = $('toasts'), dock = $('dock');
   const setText = (el: Element, s: string) => { if (el.textContent !== s) el.textContent = s; };
   for (const t of TOOLS) {
     const b = document.createElement('button');
@@ -159,7 +165,7 @@ export function createBuildUi(on: BuildUiEvents) {
   chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
-  let playShown: boolean | null = null, roadKey = '', dockTop = innerHeight;
+  let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight;
   // 下方整塊的上緣：排版之後才量（ResizeObserver 在排版後、畫之前呼叫，讀位置不會逼瀏覽器多排一次）；拖曳中只讀這個數
   const measureDock = () => { dockTop = dock.getBoundingClientRect().top; };
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(dock);
@@ -190,10 +196,12 @@ export function createBuildUi(on: BuildUiEvents) {
       }
       spd.querySelectorAll('button').forEach(b => b.classList.toggle('on', (b as HTMLElement).dataset.k === String(d.speed)));
       $<HTMLButtonElement>('undo').disabled = !d.canUndo;
+      const civ = d.civicTools.find(c => c.id === d.civicTool);
       toolsEl.querySelectorAll<HTMLElement>('.tool').forEach(b => {
-        const id = b.dataset.t as ToolId, p = id === 'road' ? d.roadTools.find(r => r.id === d.roadTool)?.cost : d.prices[id];
+        const id = b.dataset.t as ToolId, p = id === 'road' ? d.roadTools.find(r => r.id === d.roadTool)?.cost : id === 'civic' ? civ?.cost : d.prices[id];
         b.classList.toggle('on', d.tool === id);
         setText(b.querySelector('.price')!, d.sandbox ? '免費' : p !== undefined ? '$' + p : '');
+        if (id === 'civic' && civ) { setText(b.querySelector('span')!, civ.short); b.setAttribute('aria-label', `公共設施：${civ.name}`); }   // 組按鈕的字跟著選到的那一種
       });
       roadSub.hidden = d.tool !== 'road' || !build;
       const key = d.roadTools.map(r => `${r.id}:${r.name}:${r.cost}`).join() + (d.sandbox ? '|free' : '');
@@ -205,6 +213,17 @@ export function createBuildUi(on: BuildUiEvents) {
         }
       }
       roadSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.r === d.roadTool));
+      // 公共設施一組（D016）：十種，名稱與造價照實驗線；清單或沙盒變了才重建
+      civicSub.hidden = d.tool !== 'civic' || !build;
+      const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}`).join() + (d.sandbox ? '|free' : '');
+      if (ck !== civicKey) {
+        civicKey = ck; civicSub.replaceChildren();
+        for (const c of d.civicTools) {
+          const b = document.createElement('button'), sm = document.createElement('small'); b.dataset.c = c.id;
+          sm.textContent = d.sandbox ? '免費' : '$' + c.cost; b.append(c.name, sm); b.onclick = () => on.civicTool(c.id); civicSub.appendChild(b);
+        }
+      }
+      civicSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.c === d.civicTool));
     },
     setDay(text: string) { setText($('dayLbl'), text); },
     setCoach(text: string | null) { const c = $('coach'); c.hidden = !text; setText(c, text ?? ''); },

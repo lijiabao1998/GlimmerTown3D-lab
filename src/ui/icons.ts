@@ -9,6 +9,7 @@ export const ICONS = {
   zi: svg('<path d="M3 20V11l5 3.2V11l5 3.2V7h3V3h3v17z"/><path d="M7 17h1.5M11 17h1.5M15 17h1.5"/>'),
   plant: svg('<path d="M13 2 5 13.5h6L10 22l8-11.5h-6z"/>'),
   police: svg('<path d="M12 3 19.5 6v5.6c0 4.6-3.2 7.8-7.5 9.4-4.3-1.6-7.5-4.8-7.5-9.4V6z"/><path d="m12 8 1.2 2.5 2.8.3-2.1 1.8.6 2.7L12 14l-2.5 1.3.6-2.7L8 10.8l2.8-.3z" stroke-width="1.3"/>'),
+  civic: svg('<path d="M3.5 9 12 4l8.5 5"/><path d="M4 20h16M5.5 9h13"/><path d="M7 12v5.5M10.3 12v5.5M13.7 12v5.5M17 12v5.5"/>'),   // D016 公共設施（一組）
   doze: svg('<path d="M4 7h16"/><path d="M9.5 7V4h5v3"/><path d="M6 7l1.1 13h9.8L18 7"/><path d="M10 11v5.5M14 11v5.5"/>'),
   undo: svg('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
   play: svg('<path d="M7 4.5v15l12.5-7.5z"/>', true),

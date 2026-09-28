@@ -13,6 +13,7 @@ import { labPartition, partRow, drawPlan } from '../src/content/blocks.ts';
 import { d011Smoke, d011SkipNote, rciCover, planRow, lotsOf, lotBad, villaOf, ARCHE } from './smoke-d011.mjs';
 import { d014Smoke } from './smoke-d014.mjs';
 import { d015Smoke, d015SkipNote } from './smoke-d015.mjs';
+import { d016Smoke, d016SkipNote } from './smoke-d016.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -524,9 +525,12 @@ await d011Smoke(withBrowser, log, blankCheck);
 if (!process.env.D011_SMOKE_ONLY) await d014Smoke(withBrowser, log);
 // ===== D015：重建只換變動的部分（tools/smoke-d015.mjs：首次建＝黃金樣本、增量建＝整張重建、畫面逐像素相同、上傳量與時間；自己開四個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY) await d015Smoke(withBrowser, log);
+// ===== D016：公共設施九支（tools/smoke-d016.mjs：手機 360×740 的「公共設施」一組、真的觸控蓋設施、九種都畫得出來、施工、增量＝整張、手機預算；自己開兩個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d016Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
+if (d016SkipNote()) console.log(d016SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
