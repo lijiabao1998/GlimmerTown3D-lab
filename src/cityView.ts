@@ -35,6 +35,7 @@ import ai120 from './content/samples/ai120.code.txt?raw';
 import gallery from './content/samples/gallery.code.txt?raw';
 import starter from './content/samples/starter.code.txt?raw';
 import newcity from './content/samples/newcity.code.txt?raw';
+import { sceneDigest } from './render/digest.ts';
 import { vrank as VRANK } from './content/samples/d009-live.json';   // 實驗線執行期的變體排名（D009 抽出，commit 記在同一個檔）
 
 // 樣本碼都是 tools/lab-extract.mjs 從 2D 實驗線 d23c18d（v13.43）產生的，出處與對帳數字在 src/content/samples/*.json
@@ -794,7 +795,9 @@ export function startCity() {
     weatherInfo: () => built?.weatherInfo() ?? null,
     setVisT: (t: number) => { visT = t; if (con) con.uni.uTime.value = t; needsRender = true; draw(); return visT; },
     // 重建一次場景（不推天數），回傳這次重建的耗時（ms）
-    simRebuild() { rebuildScene(); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
+    simRebuild(_fresh?: boolean) { rebuildScene(); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
+    // D015 守衛：場景摘要（src/render/digest.ts）
+    sceneDigest: () => built ? sceneDigest(built) : null,
     // ---- D011 建造 ----
     ui: () => ({ tool, roadTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     tool: (t: ToolId | null, rc?: string) => { if (rc) roadTool = rc; setTool(t); return tool; },

@@ -49,6 +49,7 @@ export interface BuiltCity {
   setNear(on: boolean): void;                          // D014 近看小物：實驗線縮放 ≥ 1.22 才畫
   nearMesh(): THREE.Mesh | null;
   buildingMeshes(): THREE.Mesh[];                      // D014 守衛：牆、其他、點綴（探針只畫這三個）
+  pickOwners(): Int32Array[];                         // D015 守衛：牆、其他、點綴每個三角形的主人（點擊用的那一份）
   groundCheck(): boolean;                              // D014 守衛：這一次的地面（增量）＝同一組輸入整張重畫
   weatherInfo(): { core: number; facade: number };     // D014 守衛：會風化（帶牆頂）的牆三角形，核心路徑／英美立面街區各幾個
   siteMesh(): THREE.Mesh | null;
@@ -457,6 +458,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     siteMesh: () => siteM,
     setNear: on => { if (on) buildNear(); if (nearM) nearM.visible = on; },
     buildingMeshes: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])],
+    pickOwners: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])].map(m => owners.get(m)!),
     groundCheck: () => { const full = paintGround(c, k => look.cat(k), S, lots, plates), cur = gtex.image.data as Uint8Array; if (full.length !== cur.length) return false; for (let i = 0; i < full.length; i++) if (full[i] !== cur[i]) return false; return true; },
     weatherInfo: () => ({ ...weatherTris }),
     nearMesh: () => nearM,
