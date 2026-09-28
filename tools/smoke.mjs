@@ -309,7 +309,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ===== D007：非住商工造型（樣張城＋兩座樣本城）=====
   {
     const LK = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-looks.json'), 'utf8')).looks;
-    const { KIND_SHAPES } = await import('../src/content/kindShapes.ts');
+    const { KIND_SHAPES, PARK_GRASS } = await import('../src/content/kindShapes.ts');
     const BLD = new Set(['tower', 'hall', 'classic', 'brick', 'hospital', 'church', 'station', 'plant', 'campus', 'house', 'hotel', 'prison', 'airport', 'dam', 'watertower']);
     const mixc = (a, b, t) => { const ch = sh => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t); return (ch(16) << 16) | (ch(8) << 8) | ch(0); };
     for (const id of ['gallery', 'seed516', 'ai120']) {
@@ -333,11 +333,11 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       log(out.length === 0, `D007 ${id} 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）`, out.length ? out.slice(0, 4).join('；') : `${civ.length} 棟`);
       log(hbad.length === 0, `D007 ${id} 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格`, hbad.length ? hbad.slice(0, 4).join('；') : `${civ.length} 棟全對`);
       log(cbad.length === 0, `D007 ${id} 顏色：模型用上實驗線精靈讀出的色（建築類受光牆＋屋頂，設施類至少一色）`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
-      // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）
+      // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）。沒有抽到色的缺省沙色；公園（k4）D018 起是實驗線公園精靈的草地 #82c163（src/content/kindShapes.ts kindColors）
       const Gd = await page.evaluate('__gt.groundData()'), rgb = Buffer.from(Gd.rgb, 'base64'), S = Gd.S, W = Gd.W, lay = await page.evaluate('__gt.layers()');
       let plateCells = 0, plateBad = 0;
       for (const [bid, k, x, z, s, lv] of civ) {
-        const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`], pc = parseInt((look?.plate ?? '#c9c3b5').slice(1), 16), ok = new Set([pc, mixc(pc, 0, .08), mixc(pc, 0xffffff, .08), GROUND.tram]);
+        const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`], pc = parseInt((look?.plate ?? (k === 4 ? PARK_GRASS : '#c9c3b5')).slice(1), 16), ok = new Set([pc, mixc(pc, 0, .08), mixc(pc, 0xffffff, .08), GROUND.tram]);
         for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) {
           const cx = x + dx, cz = z + dz; if (cx >= lay.n || cz >= lay.n || lay.road[cz * lay.n + cx] || lay.rail[cz * lay.n + cx] || lay.dock[cz * lay.n + cx]) continue;
           plateCells++;
