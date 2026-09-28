@@ -7,6 +7,7 @@ import type { City } from '../sim/city.ts';
 import { RISE_GLSL, CON_DAYS, TRANS, WX, GRIME, MOSS, EAVE, WEATHER_TT, WEATHER_MIN_AGE, WEATHER_GAIN, WEATHER_PX, sitePlan, onSite, districtMood, type SitePart } from '../content/construction.ts';
 import { PX_PER_CELL } from '../content/recipes.ts';
 import type { GroundCache } from './ground.ts';
+import { SceneCache } from './pieces.ts';
 
 export const NO_AGE = 99;
 const CAT: Record<string, number> = { R: 1, C: 2, I: 3 };
@@ -17,6 +18,7 @@ export class ConState {
   top: Float32Array; base: Float32Array; wallTop: Float32Array;   // 目前場景的每格最高點、地基、牆頂（重建時更新）
   ground: GroundCache | null = null;                              // D014：地面增量重畫的上一次（src/render/ground.ts）
   terrain: { n: number; top: Float32Array; ground: THREE.BufferGeometry; cliff: THREE.BufferGeometry } | null = null;   // D014：地面、崖面幾何（高度沒變就沿用）
+  cache = new SceneCache();                                     // D015：建築幾何照件快取、三個建築網格常駐、地面貼圖常駐、野樹（src/render/pieces.ts）
   // uProbe、uNoClip：守衛用（只畫某一格的建築、整個關掉裁切與風化比對）；平常 (−1,−1)、0
   uni = { uConTex: { value: null as unknown as THREE.DataTexture }, uConN: { value: 1 }, uDayFrac: { value: 0 }, uTime: { value: 0 }, uDetail: { value: 0 }, uProbe: { value: new THREE.Vector2(-1, -1) }, uNoClip: { value: 0 } };
   constructor(n: number) {
@@ -44,13 +46,21 @@ export class ConState {
   ageAt(i: number) { return this.data[i * 4]; }
   has(i: number) { return this.data[i * 4 + 3] >= 32; }
   siteAge(i: number) { return (this.data[i * 4 + 3] & 16) ? this.data[i * 4] : NO_AGE; }   // 要施工的格才回屋齡（公園、沒有建築＝99）
-  dispose() { this.tex.dispose(); this.terrain?.ground.dispose(); this.terrain?.cliff.dispose(); this.terrain = null; }
+  dispose() { this.tex.dispose(); this.terrain?.ground.dispose(); this.terrain?.cliff.dispose(); this.terrain = null; this.cache.reset(''); }
 }
 
 // ---- 頂點的施工屬性 aCon＝(地界內的 x, 地界內的 z, 牆頂高)：片段屬於哪一格＝floor(xz)。沒有主人的三角形（高架路）＝(−1,−1,0) 不裁切 ----
 // 位置先往面內收一點（法線反方向），再夾進主人的地界：外挑的屋簷、落在地界線上的牆都算自己那一格。同時量每格的最高點
+const CON_E = .001, CON_IN = .01;
+// 一個頂點的 aCon（寫進 out），回傳它落在哪一格
+function conVertex(pos: ArrayLike<number>, nor: ArrayLike<number>, v: number, r: number[], n: number, out: Float32Array, tag: number): number {
+  let x = pos[v * 3] - nor[v * 3] * CON_IN, z = pos[v * 3 + 2] - nor[v * 3 + 2] * CON_IN;
+  x = x < r[0] + CON_E ? r[0] + CON_E : x > r[2] - CON_E ? r[2] - CON_E : x; z = z < r[1] + CON_E ? r[1] + CON_E : z > r[3] - CON_E ? r[3] - CON_E : z;
+  out[v * 3] = x; out[v * 3 + 1] = z; out[v * 3 + 2] = tag;
+  return Math.floor(z) * n + Math.floor(x);
+}
 export function conAttr(pos: number[], nor: number[], owners: number[], tags: number[], rectOf: (owner: number) => number[] | null, n: number, top: Float32Array, wallTop: Float32Array): Float32Array {
-  const nt = owners.length, out = new Float32Array(nt * 9), E = .001, IN = .01;
+  const nt = owners.length, out = new Float32Array(nt * 9);
   const cache = new Map<number, number[] | null>();
   let lastO = NaN, r: number[] | null = null;
   for (let t = 0; t < nt; t++) {
@@ -60,12 +70,24 @@ export function conAttr(pos: number[], nor: number[], owners: number[], tags: nu
     for (let j = 0; j < 3; j++) {
       const v = t * 3 + j;
       if (!r) { out[v * 3] = -1; out[v * 3 + 1] = -1; out[v * 3 + 2] = 0; continue; }
-      let x = pos[v * 3] - nor[v * 3] * IN, z = pos[v * 3 + 2] - nor[v * 3 + 2] * IN;
-      x = x < r[0] + E ? r[0] + E : x > r[2] - E ? r[2] - E : x; z = z < r[1] + E ? r[1] + E : z > r[3] - E ? r[3] - E : z;
-      const y = pos[v * 3 + 1], i = Math.floor(z) * n + Math.floor(x);
-      out[v * 3] = x; out[v * 3 + 1] = z; out[v * 3 + 2] = tag;
+      const i = conVertex(pos, nor, v, r, n, out, tag), y = pos[v * 3 + 1];
       if (y > top[i]) top[i] = y;
       if (tag > 0 && y > wallTop[i]) wallTop[i] = y;
+    }
+  }
+  return out;
+}
+// D015：一件（一個街區或一棟）的 aCon：地界 rect 固定（null＝沒有主人，不裁切）；每格最高點、牆頂的貢獻記在 touch（稀疏，不必每件一張 N×N）
+export function conAttrRect(pos: number[], nor: number[], tags: number[], rect: number[] | null, n: number, top: Map<number, number>, wall: Map<number, number>): Float32Array {
+  const nt = tags.length, out = new Float32Array(nt * 9);
+  for (let t = 0; t < nt; t++) {
+    const tag = tags[t] || 0;
+    for (let j = 0; j < 3; j++) {
+      const v = t * 3 + j;
+      if (!rect) { out[v * 3] = -1; out[v * 3 + 1] = -1; out[v * 3 + 2] = 0; continue; }
+      const i = conVertex(pos, nor, v, rect, n, out, tag), y = pos[v * 3 + 1];
+      const a = top.get(i); if (a === undefined || y > a) top.set(i, y);
+      if (tag > 0) { const w = wall.get(i) ?? 0; if (y > w) wall.set(i, y); }
     }
   }
   return out;

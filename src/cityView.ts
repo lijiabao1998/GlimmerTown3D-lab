@@ -127,8 +127,10 @@ export function startCity() {
   // D014 施工：一座城一份施工資料（屋齡、每格最高點）；builtDay＝目前場景是哪一天建的；visT＝動畫時間（只在播放時走）
   let con: ConState | null = null, builtDay = -1, visT = 0, siteInfo: { tris: number; perSite: Map<number, string[]> } = { tris: 0, perSite: new Map() };
   const conFor = (c: City) => { if (!con || con.n !== c.n) { con?.dispose(); con = new ConState(c.n); } return con; };
-  function makeScene(c: City): BuiltCity {
-    const br = blockRenderFor(c), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st);
+  // fresh＝從頭建（換城、換畫法檔；D015 清空快取）；平常逐日、施工之後只換變動的件
+  function makeScene(c: City, fresh: boolean): BuiltCity {
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh);
+    b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
     builtDay = c.day;
     if (b.con) st.setGeometry(b.con.top, b.con.base, b.con.wallTop);
     return b;
@@ -193,16 +195,15 @@ export function startCity() {
     restyled = L ? L.restyled : V!.restyled;
     daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; rebuilds = 0; simAcc = 0;
     const t2 = performance.now();
-    const tp = performance.now();
     visT = 0;
-    const b = makeScene(c);
+    const b = makeScene(c, true);
     const t3 = performance.now();
     retire(built);
     city = c; built = b; label = name; lastCode = code;
     built.scene.add(preview.mesh);
     syncCon();
     delete timing.rebuild;
-    Object.assign(timing, { decode: t1 - t0, city: t2 - t1, plan: tp - t2, scene: t3 - t2, total: t3 - t0 }, b.timing);
+    Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
     dlg.hidden = true;                                                    // 換了城，分享碼對話框不留在新城上
@@ -245,12 +246,12 @@ export function startCity() {
   function setBlocks(m: BlockMode | null) {
     if (!city) return;
     blockMode = m;
-    const t0 = performance.now(), tp = performance.now(), b = makeScene(city), t1 = performance.now();
+    const t0 = performance.now(), b = makeScene(city, true), t1 = performance.now();
     retire(built);
     built = b;
     built.scene.add(preview.mesh);
     syncCon();
-    Object.assign(timing, { plan: tp - t0, scene: t1 - t0 }, b.timing);
+    Object.assign(timing, { scene: t1 - t0 }, b.timing);
     const u = new URL(location.href);
     if (m && m !== BLOCK_DEFAULT) u.searchParams.set('blocks', m); else if (m) u.searchParams.delete('blocks'); else u.searchParams.set('blocks', 'off');
     history.replaceState(null, '', u);
@@ -259,14 +260,14 @@ export function startCity() {
   }
 
   // D010：逐日模擬的場景重建（鏡頭不動、建築卡的框留著）
-  function rebuildScene() {
+  function rebuildScene(fresh = false) {
     if (!city) return;
-    const t0 = performance.now(), tp = performance.now(), b = makeScene(city), t1 = performance.now();
+    const t0 = performance.now(), b = makeScene(city, fresh), t1 = performance.now();
     retire(built);
     built = b;
     built.scene.add(preview.mesh);                                       // D011：施工預覽跟著搬到新場景
     syncCon();
-    Object.assign(timing, { plan: tp - t0, scene: t1 - t0, rebuild: t1 - t0 }, b.timing);
+    Object.assign(timing, { scene: t1 - t0, rebuild: t1 - t0, rebuildAll: performance.now() - t0 }, b.timing);   // rebuildAll＝建場景＋同步工地（D015 判這一段）
     rebuilds++; daysSinceBuild = 0; dirtyScene = false;
     if (!bio.hidden && cardAt) showTile(cardAt[0], cardAt[1]);          // 卡片開著：用新的城市與街區重寫一次（等級、街區、框都可能變了）
     invalidate();
@@ -795,9 +796,22 @@ export function startCity() {
     weatherInfo: () => built?.weatherInfo() ?? null,
     setVisT: (t: number) => { visT = t; if (con) con.uni.uTime.value = t; needsRender = true; draw(); return visT; },
     // 重建一次場景（不推天數），回傳這次重建的耗時（ms）
-    simRebuild(_fresh?: boolean) { rebuildScene(); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
-    // D015 守衛：場景摘要（src/render/digest.ts）
-    sceneDigest: () => built ? sceneDigest(built) : null,
+    simRebuild(fresh?: boolean) { rebuildScene(!!fresh); needsRender = true; draw(); lastT = 0; return timing.rebuild; },
+    // ---- D015 ----
+    sceneDigest: () => built ? sceneDigest(built) : null,                // 場景摘要（src/render/digest.ts）
+    // 旁邊另建一份（自己的施工資料與快取，從頭建）取摘要就丟：增量建的場景要跟它一樣（前庭樹的屋齡照今天的）
+    freshDigest: () => {
+      if (!city || !con) return null;
+      const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true), live = con;
+      b.setTreeAges(i => live.siteAge(i));
+      b.scene.add(preview.mesh);                                          // 場景結構跟真的一樣（施工預覽也在場景裡），摘要完放回去
+      const d = sceneDigest(b); built?.scene.add(preview.mesh); b.dispose(); st.dispose();
+      return d;
+    },
+    // 上一次建場景：件數、重做幾件、上傳位元組（建築三個網格＋地面＋野樹）、放大幾次、搬了幾件、整份重排幾次、是不是從頭建；三個網格的容量、要畫的範圍、真的有東西的、空洞
+    sceneStats: () => con ? { ...con.cache.stats, cached: con.cache.pieces.size, rebuildAll: timing.rebuildAll ?? null,
+      arenas: con.cache.arenas?.map(a => ({ cap: a.cap, used: a.used, live: a.live, holes: a.holes(), free: a.free.length })) ?? null } : null,
+    glInfo: () => ({ programs: renderer.info.programs?.length ?? -1, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }),
     // ---- D011 建造 ----
     ui: () => ({ tool, roadTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     tool: (t: ToolId | null, rc?: string) => { if (rc) roadTool = rc; setTool(t); return tool; },

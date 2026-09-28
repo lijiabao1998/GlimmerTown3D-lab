@@ -11,13 +11,14 @@ import type { BlockMode, DrawBlock } from '../content/blocks.ts';
 import type { Recipe } from '../content/recipes.ts';
 import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
-import { drawBlock, drawNearJob, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
+import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
 import { paintGround, paintGroundInc, groundCellPx } from './ground.ts';
 import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { nearGate, nearHb } from '../content/construction.ts';
-import { conAttr, patchClip, clipDepthMaterial, patchTree, patchSite, siteDepthMaterial, siteGeometry, type ConState, type SiteSpec } from './construction.ts';
+import { conAttr, conAttrRect, patchClip, clipDepthMaterial, patchTree, patchSite, siteDepthMaterial, siteGeometry, type ConState, type SiteSpec } from './construction.ts';
+import { Arena, SceneCache, MAX_MOVES, HOLE_LIMIT, type Spec, type Part, type Piece, type PieceMeta } from './pieces.ts';
 
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
@@ -73,16 +74,38 @@ export function tileTop(c: City, i: number): number {
 
 // 地面貼圖：每格 S×S 像素；逐像素顏色在 ground.ts（D006：顏色取自實驗線、草皮格線、人行道、車道線）
 // D014：有施工資料（城市模式）時走增量重畫：跟上一次重建一樣的格沿用像素（src/render/ground.ts paintGroundInc）
+// D015：有施工資料時貼圖常駐（施工資料的快取），像素直接改在上一次那份上，只上傳變動的格（每格 S 列，一列一段）；變動超過一半就整張傳
 function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array, plates?: Int32Array, con?: ConState, T?: Record<string, number>): THREE.DataTexture {
-  let px: Uint8Array;
-  if (con) { const r = paintGroundInc(c, k => look.cat(k), S, lots, plates, con.ground); con.ground = r.cache; px = r.cache.data; if (T) T.groundTiles = r.painted; }
-  else px = paintGround(c, k => look.cat(k), S, lots, plates);
-  const W = c.n * S, t = new THREE.DataTexture(px, W, W, THREE.RGBAFormat);
-  t.magFilter = t.minFilter = THREE.NearestFilter;
-  t.generateMipmaps = false;
-  t.colorSpace = THREE.SRGBColorSpace;
-  t.needsUpdate = true;
+  const W = c.n * S;
+  const make = (px: Uint8Array) => {
+    const t = new THREE.DataTexture(px, W, W, THREE.RGBAFormat);
+    t.magFilter = t.minFilter = THREE.NearestFilter;
+    t.generateMipmaps = false;
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.needsUpdate = true;
+    return t;
+  };
+  if (!con) return make(paintGround(c, k => look.cat(k), S, lots, plates));
+  const r = paintGroundInc(c, k => look.cat(k), S, lots, plates, con.ground, true), sc = con.cache, px = r.cache.data;
+  con.ground = r.cache; if (T) T.groundTiles = r.painted;
+  let t = sc.groundTex;
+  if (!t || t.image.data !== px || t.image.width !== W) { t?.dispose(); t = make(px); sc.groundTex = t; sc.stats.groundUp = W * W * 4; }
+  else if (r.tiles && r.tiles.length) {
+    if (r.tiles.length * 2 > c.n * c.n) { t.clearUpdateRanges(); sc.stats.groundUp = W * W * 4; }
+    else {
+      for (const i of r.tiles) { const x = i % c.n, z = (i / c.n) | 0; for (let v = 0; v < S; v++) t.addUpdateRange(((z * S + v) * W + x * S) * 4, S * 4); }
+      sc.stats.groundUp = r.tiles.length * S * S * 4;
+    }
+    t.needsUpdate = true;
+  }
   return t;
+}
+// 點綴件數相加（D015：每件自己數，重建時照順序加總；近看小物另算）
+function addCounts(a: ArtCounts, b: ArtCounts) {
+  for (const k of Object.keys(b) as (keyof ArtCounts)[]) {
+    if (k === 'partKinds') { for (const [q, v] of Object.entries(b.partKinds)) a.partKinds[q] = (a.partKinds[q] ?? 0) + v; }
+    else if (k !== 'near' && k !== 'nearKinds') (a[k] as number) += b[k] as number;
+  }
 }
 
 // 牆色：依分類；住宅低樓層是紅磚、高樓偏米白；商業偏冷色玻璃；工業是金屬灰
@@ -111,10 +134,16 @@ export const TONES: Record<Tone, { ramp: [number, number, number]; hemi: number;
   c: { ramp: [90, 120, 255], hemi: 0.9, sun: 2.6 },
   d: { ramp: [80, 125, 255], hemi: 1.1, sun: 2.2 },   // 施工中加的第四檔：只壓暗背光面，受光面與天光同 a（c 的太陽太強，米白牆被削成粉紅）
 };
-export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState): BuiltCity {
+// fresh＝從頭建（換城、換畫法檔）：清空快取。平常（逐日、施工之後）只換變動的件
+export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState, fresh = false): BuiltCity {
   const TN = TONES[tone];
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
+  // D015 快取：一座城一份（施工資料裡）；畫法檔、地圖大小不同就從頭建
+  const sc = con ? con.cache : new SceneCache(), stats = sc.stats;
+  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}`;
+  Object.assign(stats, { pieces: 0, regen: 0, up: 0, upFull: 0, grown: 0, moved: 0, relayout: 0, fresh: false, groundUp: 0, groundFull: 0, treesKept: false });
+  if (fresh || sc.mode !== modeKey || !sc.arenas) { sc.reset(modeKey); stats.fresh = true; }
   scene.background = new THREE.Color().setHSL(0.58, 0.35, 0.82, THREE.SRGBColorSpace);
   const disposables: { dispose(): void }[] = [];
   const ramp = style.toon ? toonRamp(TN.ramp) : null;
@@ -143,7 +172,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
   }
-  const gtex = groundTexture(c, look, S, lots, plates, con, T); disposables.push(gtex);
+  const gtex = groundTexture(c, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
+  stats.up += stats.groundUp; stats.groundFull = n * S * n * S * 4;
   mark('groundTex');
   const top = new Float32Array(nn);
   for (let i = 0; i < nn; i++) top[i] = tileTop(c, i);
@@ -189,126 +219,215 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   cliffMesh.receiveShadow = true; scene.add(cliffMesh);
   mark('ground');
 
-  // ---- 建築量體 ----
-  const Wg = new Geo({ ext: !!blocks }), Og = new Geo(), Dg = new Geo(), nearJobs: NearJob[] = [];   // nearJobs：D014 近看小物（縮放夠近才畫）
-  const kindUsed: Record<number, string[]> = {};   // D007：每棟非住商工用了哪些色（守衛）
-  const yard: YardTree[] = [], treeOwners: [number, number, number][] = [];   // 前庭的樹（D005 街區、D007 非住商工共用）；treeOwners＝哪棟建築擁有哪一段樹（守衛用）
-  const anchors = new Map<number, THREE.Vector3>();
+  // ---- 建築量體（D015：照「件」快取——一個街區、一棟不走街區的建築、全部高架路合成一件；鍵＝決定它幾何的全部輸入。
+  // 牆、其他、點綴三個網格各一份常駐的頂點緩衝（src/render/pieces.ts），每件佔一段：換掉的段清成退化三角形，只上傳改到的那幾段）----
   const RCI = new Set(['R', 'C', 'I']);
+  interface PSpec { key: string; owner: number; block: number; rect: number[] | null; gen(W: Geo, O: Geo, D: Geo, m: PieceMeta): void }
+  const specs: PSpec[] = [];
   for (const b of c.buildings) {
     const cat = look.cat(b.k), s = b.size, root = Math.min(nn - 1, b.z * n + b.x);
     if (b.goneDay !== undefined) continue;                     // D011：拆掉的（墓碑）不畫
     if (b.x + s > n || b.z + s > n) continue;                  // 出界的建築不畫（城市模型已計數）
     if (blocks && b.k >= 1 && b.k <= 3) continue;               // D004：住商工交給街區配方（下面）
-    const shape = civic && b.k > 3 ? civic.shape(b.k) : null;
+    const shape = civic && b.k > 3 ? civic.shape(b.k) : null, rect = [b.x, b.z, b.x + s, b.z + s];
     if (shape) {                                               // D007：非住商工照造型表畫
-      Wg.owner = Og.owner = Dg.owner = b.id;
       let y0 = 0;
       for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) y0 = Math.max(y0, top[(b.z + dz) * n + b.x + dx]);
-      const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
-      const t0 = yard.length;
-      kindUsed[b.id] = [...drawKind({ W: Wg, O: Og, D: Dg, trees: yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, C: civic!.colors(b.k, b.lv) }, shape)];
-      if (yard.length > t0) treeOwners.push([b.id, t0, yard.length]);
-      anchors.set(b.id, new THREE.Vector3(b.x + s / 2, y0 + H / 2, b.z + s / 2));
+      specs.push({ key: `K${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}`, owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
+        const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
+        m.kindUsed = [...drawKind({ W, O, D, trees: m.yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, C: civic!.colors(b.k, b.lv) }, shape)];
+        m.anchor = new THREE.Vector3(b.x + s / 2, y0 + H / 2, b.z + s / 2);
+      } });
       continue;
     }
-    Wg.owner = Og.owner = b.id;
-    const H = Math.max(0.12, look.height(b.k, b.lv, b.v)), y0 = Math.max(0, top[root]);
-    const m = s === 1 ? (RCI.has(cat) ? 0.17 : 0.1) : 0.12 * s, x0 = b.x + m, z0 = b.z + m, x1 = b.x + s - m, z1 = b.z + s - m, cx = b.x + s / 2, cz = b.z + s / 2;
-    const wall = wallColor(b, cat, H), roofDark = C(210, 0.08, 0.34), flat = C(30, 0.06, 0.5);
-    let yTop: number;
-    if (H < 0.35) {                                            // 貼地的：農田、公園、太陽能板、廣場
-      const topCol = cat === 'G' ? C(110, 0.4, 0.42) : cat === 'F' ? C(70, 0.45, 0.5) : cat === 'E' ? C(220, 0.45, 0.28) : C(35, 0.1, 0.7);
-      yTop = y0 + Math.max(0.06, H * 0.6);
-      Og.box(x0, z0, x1, z1, y0, yTop, wall, topCol, null);
-    } else if (H <= 2.4 && (cat === 'R' || (!RCI.has(cat) && H <= 1.4))) {   // 矮房子：帶窗的牆＋山牆屋頂
-      const wh = H * 0.78; yTop = y0 + H;
-      Wg.box(x0, z0, x1, z1, y0, y0 + wh, wall, null, { floorH: 0.3 });
-      Og.gable(x0, z0, x1, z1, y0 + wh, H - wh, cat === 'R' ? C(355 + hash2(b.x, b.z, 32) * 12, 0.35, 0.32) : roofDark, wall);
-    } else if (H > 3) {                                        // 高樓：裙樓＋收窄的塔身＋屋頂設備
-      const ph = Math.min(1, H * 0.18), t = (x1 - x0) * 0.16;
-      yTop = y0 + H;
-      Wg.box(x0, z0, x1, z1, y0, y0 + ph, wall, flat, { floorH: 0.3 });
-      Wg.box(x0 + t, z0 + t, x1 - t, z1 - t, y0 + ph, yTop, cat === 'C' ? C(205, 0.3, 0.68) : wall.clone().offsetHSL(0, -0.05, 0.05), roofDark, { floorH: 0.3 });
-      Og.box(cx - 0.14, cz - 0.14, cx + 0.14, cz + 0.14, yTop, yTop + 0.16, C(0, 0, 0.7), C(0, 0, 0.8), null);
-    } else {                                                   // 中型：平頂盒；工業加一支煙囪
-      yTop = y0 + H;
-      Wg.box(x0, z0, x1, z1, y0, yTop, wall, cat === 'I' ? roofDark : flat, { floorH: cat === 'I' ? 0.4 : 0.3 });
-      if (cat === 'I') Og.cylinder(x1 - 0.18, z0 + 0.18, 0.07, 0.05, yTop, 0.45, C(0, 0, 0.72), 6);
-    }
-    if (!RCI.has(cat)) {                                       // 分類色環（參考實驗線 T345 的類別色環，讓遠看也分得出是什麼設施）
-      const band = hex(look.catColor(cat));
-      Og.box(x0 - 0.03, z0 - 0.03, x1 + 0.03, z1 + 0.03, y0, y0 + 0.07, band, band, null);
-    }
-    anchors.set(b.id, new THREE.Vector3(cx, (y0 + yTop) / 2, cz));
+    const y0 = Math.max(0, top[root]);
+    specs.push({ key: `H${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}_${b.abandoned ? 1 : 0}`, owner: b.id, block: -1, rect, gen: (Wg, Og, _D, mm) => {
+      const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
+      const m = s === 1 ? (RCI.has(cat) ? 0.17 : 0.1) : 0.12 * s, x0 = b.x + m, z0 = b.z + m, x1 = b.x + s - m, z1 = b.z + s - m, cx = b.x + s / 2, cz = b.z + s / 2;
+      const wall = wallColor(b, cat, H), roofDark = C(210, 0.08, 0.34), flat = C(30, 0.06, 0.5);
+      let yTop: number;
+      if (H < 0.35) {                                            // 貼地的：農田、公園、太陽能板、廣場
+        const topCol = cat === 'G' ? C(110, 0.4, 0.42) : cat === 'F' ? C(70, 0.45, 0.5) : cat === 'E' ? C(220, 0.45, 0.28) : C(35, 0.1, 0.7);
+        yTop = y0 + Math.max(0.06, H * 0.6);
+        Og.box(x0, z0, x1, z1, y0, yTop, wall, topCol, null);
+      } else if (H <= 2.4 && (cat === 'R' || (!RCI.has(cat) && H <= 1.4))) {   // 矮房子：帶窗的牆＋山牆屋頂
+        const wh = H * 0.78; yTop = y0 + H;
+        Wg.box(x0, z0, x1, z1, y0, y0 + wh, wall, null, { floorH: 0.3 });
+        Og.gable(x0, z0, x1, z1, y0 + wh, H - wh, cat === 'R' ? C(355 + hash2(b.x, b.z, 32) * 12, 0.35, 0.32) : roofDark, wall);
+      } else if (H > 3) {                                        // 高樓：裙樓＋收窄的塔身＋屋頂設備
+        const ph = Math.min(1, H * 0.18), t = (x1 - x0) * 0.16;
+        yTop = y0 + H;
+        Wg.box(x0, z0, x1, z1, y0, y0 + ph, wall, flat, { floorH: 0.3 });
+        Wg.box(x0 + t, z0 + t, x1 - t, z1 - t, y0 + ph, yTop, cat === 'C' ? C(205, 0.3, 0.68) : wall.clone().offsetHSL(0, -0.05, 0.05), roofDark, { floorH: 0.3 });
+        Og.box(cx - 0.14, cz - 0.14, cx + 0.14, cz + 0.14, yTop, yTop + 0.16, C(0, 0, 0.7), C(0, 0, 0.8), null);
+      } else {                                                   // 中型：平頂盒；工業加一支煙囪
+        yTop = y0 + H;
+        Wg.box(x0, z0, x1, z1, y0, yTop, wall, cat === 'I' ? roofDark : flat, { floorH: cat === 'I' ? 0.4 : 0.3 });
+        if (cat === 'I') Og.cylinder(x1 - 0.18, z0 + 0.18, 0.07, 0.05, yTop, 0.45, C(0, 0, 0.72), 6);
+      }
+      if (!RCI.has(cat)) {                                       // 分類色環（參考實驗線 T345 的類別色環，讓遠看也分得出是什麼設施）
+        const band = hex(look.catColor(cat));
+        Og.box(x0 - 0.03, z0 - 0.03, x1 + 0.03, z1 + 0.03, y0, y0 + 0.07, band, band, null);
+      }
+      mm.anchor = new THREE.Vector3(cx, (y0 + yTop) / 2, cz);
+    } });
   }
-  // D004 街區：三角形的 owner 記成 −(街區索引＋1)，點擊時再換回點到的那一格
-  const blockAnchors: (THREE.Vector3 | null)[] = [], counts = emptyCounts(), weatherTris = { core: 0, facade: 0 };
+  // D004 街區：三角形的 owner 記成 −(街區索引＋1)，點擊時再換回點到的那一格（D015：索引每次重建照這一次的計畫重寫）
   if (blocks) blocks.plan.forEach((bk, bi) => {
-    Wg.owner = Og.owner = Dg.owner = -(bi + 1);
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
-    // D014 近看小物（58393）：街區起點那棟屋齡 ≥ 9、streetHash(x,y,60630)<.72 才畫；hb＝floor(streetHash(x,y,60631)*3)
-    const ob = con && c.occ[bk.z * n + bk.x] ? c.buildings[c.occ[bk.z * n + bk.x] - 1] : null, hb = ob && nearGate(bk.x, bk.z, ob.age) ? nearHb(bk.x, bk.z) : -1;
-    const fp = blocks.detail ? blocks.facade(bk) : null, t0 = Wg.tags.length;
-    blockAnchors[bi] = drawBlock(Wg, Og, Dg, bk, blocks.recipe(bk), blocks.dress(bk), y0, yard, counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nearJobs : null, hb);
-    let tagged = 0; for (let t = t0; t < Wg.tags.length; t++) if (Wg.tags[t] > 0) tagged++;
-    if (fp) weatherTris.facade += tagged; else weatherTris.core += tagged;
+    specs.push({ key: `B${bk.x}_${bk.z}_${bk.w}_${bk.h}_${bk.k}_${bk.lv}_${bk.v}_${y0}`, owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+      const fp = blocks.detail ? blocks.facade(bk) : null, nj: NearJob[] = [];
+      m.counts = emptyCounts(); m.facade = !!fp;
+      m.anchor = drawBlock(W, O, D, bk, blocks.recipe(bk), blocks.dress(bk), y0, m.yard, m.counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nj : null);
+      m.near = nj[0] ?? null;
+    } });
   });
-  Wg.owner = Og.owner = Dg.owner = 0;
-  // 高架路：路面抬高、每兩格一根橋墩
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
-    const i = z * n + x;
-    if (!c.fly[i] || !c.road[i]) continue;
-    const y = Math.max(0, top[i]) + 0.42;
-    Og.box(x, z, x + 1, z + 1, y, y + 0.08, C(0, 0, 0.62), C(0, 0, 0.36), null);
-    if ((x + z) % 2 === 0) Og.box(x + 0.44, z + 0.44, x + 0.56, z + 0.56, Math.max(0, top[i]), y, C(0, 0, 0.6), null, null);
+  // 高架路：路面抬高、每兩格一根橋墩（全部合成一件，沒有主人）
+  const flyTiles: number[] = [];
+  for (let i = 0; i < nn; i++) if (c.fly[i] && c.road[i]) flyTiles.push(i);
+  if (flyTiles.length) specs.push({ key: 'F' + flyTiles.map(i => `${i}:${top[i]}`).join(','), owner: 0, block: -1, rect: null, gen: (_W, Og) => {
+    for (const i of flyTiles) {
+      const x = i % n, z = (i / n) | 0, y = Math.max(0, top[i]) + 0.42;
+      Og.box(x, z, x + 1, z + 1, y, y + 0.08, C(0, 0, 0.62), C(0, 0, 0.36), null);
+      if ((x + z) % 2 === 0) Og.box(x + 0.44, z + 0.44, x + 0.56, z + 0.56, Math.max(0, top[i]), y, C(0, 0, 0.6), null, null);
+    }
+  } });
+  // 產生一件：量體畫進三個新的累積器，窗樣式、風化牆、包圍盒從原始數字算（跟 D015 之前同一套），再轉成頂點資料＋施工屬性
+  const ext = !!blocks;
+  const base: Spec = [['position', 3], ['normal', 3], ['uv', 2], ['color', 3]];
+  const specW: Spec = [...base, ...(ext ? [['wStyle', 1], ['wGlass', 3], ['wBand', 1]] as Spec : []), ...(con ? [['aCon', 3]] as Spec : [])];
+  const specO: Spec = [...base, ...(con ? [['aCon', 3]] as Spec : [])];
+  const makePiece = (s: PSpec): { p: Piece; parts: (Part | null)[] } => {
+    const G = [new Geo({ ext }), new Geo(), new Geo()];
+    for (const g of G) g.owner = s.owner;
+    const m: PieceMeta = { yard: [], anchor: null, counts: null, kindUsed: null, near: null, weather: 0, facade: false, ws: [0, 0, 0], box: null, tiles: new Int32Array(0), top: new Float32Array(0), wall: new Float32Array(0) };
+    s.gen(G[0], G[1], G[2], m);
+    const W = G[0];
+    if (s.block >= 0) for (let t = 0; t < W.owners.length; t++) {
+      m.ws[0]++;
+      const plain = [0, 1, 2].every(j => W.uv[(t * 3 + j) * 2] === PLAIN_UV[0] && W.uv[(t * 3 + j) * 2 + 1] === PLAIN_UV[1]);
+      if (!plain) { m.ws[1]++; if (W.wst[t * 3] === 0) m.ws[2]++; }
+      if (W.tags[t] > 0) m.weather++;
+    }
+    if (s.owner > 0) {                                         // D007：逐棟包圍盒（含它的前庭樹）
+      const bb = [0, Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+      for (const g of G) for (let t = 0; t < g.owners.length; t++) {
+        bb[0]++;
+        for (let j = 0; j < 3; j++) { const q = (t * 3 + j) * 3; for (let a = 0; a < 3; a++) { const v = g.pos[q + a]; if (v < bb[1 + a]) bb[1 + a] = v; if (v > bb[4 + a]) bb[4 + a] = v; } }
+      }
+      if (bb[0]) {
+        for (const t of m.yard) { const sc = t.s * 1.1, r = .26 * sc; bb[1] = Math.min(bb[1], t.x - r); bb[3] = Math.min(bb[3], t.z - r); bb[4] = Math.max(bb[4], t.x + r); bb[6] = Math.max(bb[6], t.z + r); bb[5] = Math.max(bb[5], t.y + .4 * sc + .26 * 1.15 * sc); }
+        m.box = bb;
+      }
+    }
+    const topM = new Map<number, number>(), wallM = new Map<number, number>();
+    const parts = G.map((g, j): Part | null => {
+      const tris = g.owners.length;
+      if (!tris) return null;
+      const a: Float32Array[] = [Float32Array.from(g.pos), Float32Array.from(g.nor), Float32Array.from(g.uv), Float32Array.from(g.col)];
+      if (j === 0 && ext) a.push(Float32Array.from(g.wst), Float32Array.from(g.wgl), Float32Array.from(g.wbd));
+      if (con) a.push(conAttrRect(g.pos, g.nor, g.tags, s.rect, n, topM, wallM));
+      return { tris, a };
+    });
+    m.tiles = Int32Array.from(topM.keys()); m.top = Float32Array.from(topM.values()); m.wall = Float32Array.from(m.tiles, i => wallM.get(i) ?? 0);
+    return { p: { key: s.key, owner: s.owner, tris: parts.map(q => q?.tris ?? 0), slot: [-1, -1, -1], meta: m }, parts };
+  };
+  // 這一次的件（照首次建的順序：先非街區建築、再街區、最後高架路）；沒快取到的才產生
+  const cur: Piece[] = [], newParts = new Map<Piece, (Part | null)[]>(), seen = new Set<string>();
+  for (const s of specs) {
+    let key = s.key;
+    for (let k = 2; seen.has(key); k++) key = `${s.key}#${k}`;   // 鍵重複（理論上不會：位置、編號都在鍵裡）就加序號，免得兩件搶同一份
+    seen.add(key); s.key = key;
+    let p = sc.pieces.get(key);
+    if (!p) { const r = makePiece(s); p = r.p; newParts.set(p, r.parts); sc.pieces.set(key, p); stats.regen++; }
+    cur.push(p);
   }
+  stats.pieces = cur.length;
+  if (!sc.arenas) {                                            // 從頭建：照順序一件接一件（沒有空洞，跟 D015 之前逐位元組相同）
+    const sphere = new THREE.Sphere(new THREE.Vector3(n / 2, 4, n / 2), n * 0.75 + 8);
+    const tot = [0, 1, 2].map(j => cur.reduce((t, p) => t + p.tris[j], 0));
+    sc.arenas = [specW, specO, specO].map((sp, j) => new Arena(sp, Arena.capFor(tot[j]), sphere));
+    for (const p of cur) newParts.get(p)!.forEach((q, j) => { if (!q) return; const a = sc.arenas![j], s0 = a.used; a.used += q.tris; a.write(s0, q, p.owner, true); p.slot[j] = s0; });
+    for (const a of sc.arenas) a.geo.setDrawRange(0, a.used * 3);
+  } else {
+    const A = sc.arenas;
+    for (const a of A) { a.up = 0; a.grown = 0; }
+    for (const [k, p] of sc.pieces) if (!seen.has(k)) { p.slot.forEach((s0, j) => { if (s0 >= 0) A[j].clear(s0, p.tris[j]); }); sc.pieces.delete(k); }   // 換下來的件：清成空洞
+    for (const p of cur) { const q = newParts.get(p); if (q) q.forEach((part, j) => { if (!part) return; const s0 = A[j].place(part.tris); A[j].write(s0, part, p.owner); p.slot[j] = s0; }); }
+    // 尾端的件搬進前面放得下它的空洞（縮短要畫的範圍）；空洞還是太多就整份重排
+    for (let j = 0; j < 3; j++) {
+      const a = A[j];
+      for (let mv = 0; mv < MAX_MOVES && a.free.length; mv++) {
+        let last: Piece | null = null;
+        for (const p of cur) if (p.slot[j] >= 0 && (!last || p.slot[j] > last.slot[j])) last = p;
+        if (!last) break;
+        const t = last.tris[j], from = last.slot[j];
+        if (!a.free.some(([s0, cnt]) => cnt >= t && s0 < from)) break;
+        const to = a.place(t);
+        a.move(from, to, t); last.slot[j] = to; stats.moved++;
+      }
+      if (a.used > 4096 && a.holes() > a.used * HOLE_LIMIT) {
+        a.relayout(cur.filter(p => p.slot[j] >= 0).map(p => ({ s: p.slot[j], tris: p.tris[j], owner: p.owner, set: (s0: number) => { p.slot[j] = s0; } })));
+        stats.relayout++;
+      }
+    }
+  }
+  // 主人照這一次重寫（街區索引會跟著計畫變）
+  cur.forEach((p, i) => { const want = specs[i].owner; if (p.owner !== want) { p.slot.forEach((s0, j) => { if (s0 >= 0) sc.arenas![j].setOwner(s0, p.tris[j], want); }); p.owner = want; } });
+  const [aW, aO, aD] = sc.arenas;
+  stats.up += aW.up + aO.up + aD.up; stats.grown = aW.grown + aO.grown + aD.grown;
+  stats.upFull += aW.live * aW.bytesPerTri() + aO.live * aO.bytesPerTri() + aD.live * aD.bytesPerTri() + stats.groundFull;   // D015 之前每次重建整份上傳的量（建築三個網格＋地面；野樹在下面加）
   mark('bldGeo');
-  // D014 施工：每個頂點的 aCon（片段屬於哪一格、牆頂高），順便量每格的最高點與牆頂（量自幾何，工地的樓高、樓板線用）
+  // 照首次建的順序把每件的結果收起來：前庭樹、錨點、點綴件數、包圍盒、用色、窗樣式、風化牆、畫到誰、每格最高點與牆頂；近看小物照這一次的屋齡判
+  const yard: YardTree[] = [], anchors = new Map<number, THREE.Vector3>(), blockAnchors: (THREE.Vector3 | null)[] = [];
+  const counts = emptyCounts(), weatherTris = { core: 0, facade: 0 }, kindUsed: Record<number, string[]> = {}, boxes: Record<number, number[]> = {};
+  const ws = { blockTris: 0, windowed: 0, style0Windowed: 0 }, nearJobs: NearJob[] = [], drawn = new Set<number>(), drawnBlocks = new Set<number>();
+  const ctop = Float32Array.from(top), wallTop = new Float32Array(nn), blockOf = new Int32Array(nn);
+  cur.forEach((p, idx) => {
+    const s = specs[idx], m = p.meta;
+    for (const t of m.yard) yard.push(t);
+    if (s.block >= 0) blockAnchors[s.block] = m.anchor; else if (m.anchor) anchors.set(s.owner, m.anchor);
+    if (m.kindUsed) kindUsed[s.owner] = m.kindUsed;
+    if (m.box) boxes[s.owner] = m.box.slice();
+    if (m.counts) addCounts(counts, m.counts);
+    if (s.block >= 0) {
+      if (m.facade) weatherTris.facade += m.weather; else weatherTris.core += m.weather;
+      ws.blockTris += m.ws[0]; ws.windowed += m.ws[1]; ws.style0Windowed += m.ws[2];
+      // D014 近看小物（58393）：街區起點那棟屋齡 ≥ 9、streetHash(x,y,60630)<.72 才畫；hb＝floor(streetHash(x,y,60631)*3)
+      const bk = blocks!.plan[s.block], oi = c.occ[bk.z * n + bk.x], ob = oi ? c.buildings[oi - 1] : null;
+      if (m.near && con && ob && nearGate(bk.x, bk.z, ob.age)) { const j = { ...m.near, hb: nearHb(bk.x, bk.z), owner: s.owner }; nearJobs.push(j); countNear(j, counts); }
+    }
+    if (p.tris[0] + p.tris[1] + p.tris[2] > 0) { if (s.owner > 0) drawn.add(s.owner); else if (s.owner < 0) drawnBlocks.add(-s.owner - 1); }
+    for (let k = 0; k < m.tiles.length; k++) { const i = m.tiles[k]; if (m.top[k] > ctop[i]) ctop[i] = m.top[k]; if (m.wall[k] > wallTop[i]) wallTop[i] = m.wall[k]; }
+  });
+  if (blocks) for (const bi of drawnBlocks) for (const i of blocks.plan[bi].cells) if (c.occ[i]) drawn.add(c.occ[i]);
+  // D014 施工：每格的最高點與牆頂（量自幾何，工地的樓高、樓板線用）、每格屬於哪個街區
   let conOut: BuiltCity['con'] = null, nearRect: ((o: number) => number[] | null) | null = null;
-  const conAttrs: Float32Array[] = [];
   if (con) {
     const byIdR = new Map(c.buildings.map(b => [b.id, b]));
-    const rectOf = (o: number): number[] | null => {
+    nearRect = (o: number): number[] | null => {
       if (o > 0) { const b = byIdR.get(o); return b ? [b.x, b.z, b.x + b.size, b.z + b.size] : null; }
       const bk = blocks?.plan[-o - 1]; return bk ? [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h] : null;
     };
-    const ctop = Float32Array.from(top), wallTop = new Float32Array(nn), blockOf = new Int32Array(nn);
-    for (const G of [Wg, Og, Dg]) conAttrs.push(conAttr(G.pos, G.nor, G.owners, G.tags, rectOf, n, ctop, wallTop));
     if (blocks) blocks.plan.forEach((bk, bi) => { for (const i of bk.cells) blockOf[i] = bi + 1; });
     conOut = { top: ctop, base: Float32Array.from(top), wallTop, blockOf };
-    nearRect = rectOf;
   }
   mark('conAttr');
   // D005：街區模式的牆用窗磚圖集（第 0 格＝D003 窗磚，非住商工畫面不變）；D003 模式照舊用單張窗磚
   const texW = blocks ? windowAtlas() : windowTexture(); disposables.push(texW);
-  // D007：逐棟包圍盒（建幾何之前先從累積器算，之後就不用再讀 GPU 緩衝）
-  const boxes: Record<number, number[]> = {};
-  for (const g of [Wg, Og, Dg]) for (let t = 0; t < g.owners.length; t++) {
-    const id = g.owners[t]; if (id <= 0) continue;
-    const bb = boxes[id] ??= [0, Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
-    bb[0]++;
-    for (let j = 0; j < 3; j++) { const q = (t * 3 + j) * 3; for (let a = 0; a < 3; a++) { const v = g.pos[q + a]; if (v < bb[1 + a]) bb[1 + a] = v; if (v > bb[4 + a]) bb[4 + a] = v; } }
-  }
-  for (const [id, a, z] of treeOwners) { const bb = boxes[id]; if (!bb) continue; for (let i = a; i < z; i++) { const t = yard[i], sc = t.s * 1.1, r = .26 * sc; bb[1] = Math.min(bb[1], t.x - r); bb[3] = Math.min(bb[3], t.z - r); bb[4] = Math.max(bb[4], t.x + r); bb[6] = Math.max(bb[6], t.z + r); bb[5] = Math.max(bb[5], t.y + .4 * sc + .26 * 1.15 * sc); } }
   const wallMat = mat({ map: texW, vertexColors: true });
   if (blocks) patchWindowMaterial(wallMat);
   if (con) patchClip(wallMat, con.uni, true);
-  const wallsMesh = new THREE.Mesh(Wg.geometry(), wallMat);
-  const ws = { blockTris: 0, windowed: 0, style0Windowed: 0 };
-  if (blocks) for (let t = 0; t < Wg.owners.length; t++) {
-    if (Wg.owners[t] >= 0) continue;
-    ws.blockTris++;
-    const plain = [0, 1, 2].every(j => Wg.uv[(t * 3 + j) * 2] === PLAIN_UV[0] && Wg.uv[(t * 3 + j) * 2 + 1] === PLAIN_UV[1]);
-    if (!plain) { ws.windowed++; if (Wg.wst[t * 3] === 0) ws.style0Windowed++; }
-  }
-  const otherMesh = new THREE.Mesh(Og.geometry(), mat({ vertexColors: true }));
-  const owners = new Map<THREE.Object3D, Int32Array>([[wallsMesh, Int32Array.from(Wg.owners)], [otherMesh, Int32Array.from(Og.owners)]]);
-  for (const m of [wallsMesh, otherMesh]) { m.castShadow = m.receiveShadow = true; disposables.push(m.geometry); scene.add(m); }
-  // D005 點綴：不投影子（收影子），單獨一個網格；沒有街區時不建（D003 模式的 draw call 不變）
-  const dressMesh = Dg.owners.length ? new THREE.Mesh(Dg.geometry(), mat({ vertexColors: true })) : null;
-  if (dressMesh) { dressMesh.receiveShadow = true; owners.set(dressMesh, Int32Array.from(Dg.owners)); disposables.push(dressMesh.geometry); scene.add(dressMesh); }
+  // 三個建築網格的幾何屬於快取（src/render/pieces.ts），不跟著場景丟
+  const wallsMesh = new THREE.Mesh(aW.geo, wallMat);
+  const otherMesh = new THREE.Mesh(aO.geo, mat({ vertexColors: true }));
+  const owners = new Map<THREE.Object3D, Arena>([[wallsMesh, aW], [otherMesh, aO]]);
+  for (const m of [wallsMesh, otherMesh]) { m.castShadow = m.receiveShadow = true; scene.add(m); }
+  // D005 點綴：不投影子（收影子），單獨一個網格；沒有點綴時不建（D003 模式的 draw call 不變）
+  const dressMesh = aD.live ? new THREE.Mesh(aD.geo, mat({ vertexColors: true })) : null;
+  if (dressMesh) { dressMesh.receiveShadow = true; owners.set(dressMesh, aD); scene.add(dressMesh); }
+  if (!con) for (const a of sc.arenas) disposables.push(a);   // 沒有施工資料（快取只給這一次）：跟著場景丟
   // D014 近看小物：單獨一個網格、不投影子，縮放夠近才畫（setNear）
   let nearM: THREE.Mesh | null = null;
   const buildNear = () => {
@@ -323,16 +442,12 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   };
   // D014：三個建築網格都吃施工裁切；影子那趟用同一段裁切的深度材質
   if (con) {
-    [wallsMesh, otherMesh, dressMesh].forEach((m, j) => {
+    [wallsMesh, otherMesh, dressMesh].forEach(m => {
       if (!m) return;
-      m.geometry.setAttribute('aCon', new THREE.Float32BufferAttribute(conAttrs[j], 3));
       if (m !== wallsMesh) patchClip(m.material as THREE.Material, con.uni, false);
       if (m.castShadow) { const dm = clipDepthMaterial(con.uni); m.customDepthMaterial = dm; disposables.push(dm); }
     });
   }
-  const drawn = new Set<number>(), drawnBlocks = new Set<number>();
-  for (const a of owners.values()) for (const id of a) if (id > 0) drawn.add(id); else if (id < 0) drawnBlocks.add(-id - 1);
-  if (blocks) for (const bi of drawnBlocks) for (const i of blocks.plan[bi].cells) if (c.occ[i]) drawn.add(c.occ[i]);
   mark('buildings');
 
   // ---- 樹：偶數樹種是針葉（錐形），奇數是闊葉（圓冠）；有建築、道路、水的格子不種 ----
@@ -340,26 +455,44 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   for (let i = 0; i < nn; i++) if (c.tree[i] && !c.occ[i] && !c.road[i] && c.ter[i] !== 0 && !c.rail[i]) spots.push([i % n, (i / n) | 0, c.tree[i], top[i]]);
   if (spots.length) {
     const round = spots.filter(s => s[2] % 2 === 1), cone = spots.filter(s => s[2] % 2 === 0);
-    // D005：街區模式的樹幹不帶上下蓋（下蓋朝地、上蓋藏在樹冠裡，畫面逐像素相同），省一半樹幹三角形；D003 模式照舊
-    const tg = new THREE.CylinderGeometry(0.045, 0.06, 0.28, 5, 1, !!blocks), rg = new THREE.IcosahedronGeometry(0.3, 0), cg = new THREE.ConeGeometry(0.28, 0.7, 6);
-    disposables.push(tg, rg, cg);
-    const trunks = new THREE.InstancedMesh(tg, mat({ color: 0x6b4f35 }), spots.length);
-    const crownsR = new THREE.InstancedMesh(rg, mat({ color: 0xffffff }), Math.max(1, round.length));
-    const crownsC = new THREE.InstancedMesh(cg, mat({ color: 0xffffff }), Math.max(1, cone.length));
-    crownsR.count = round.length; crownsC.count = cone.length;
-    const q = new THREE.Object3D(), col = new THREE.Color();
-    let ti = 0;
-    const place = (arr: typeof spots, mesh: THREE.InstancedMesh, coneShape: boolean) => arr.forEach(([x, z, sp, y], k) => {
-      const jx = (hash2(x, z, 11) - 0.5) * 0.4, jz = (hash2(x, z, 12) - 0.5) * 0.4, sc = 0.8 + hash2(x, z, 13) * 0.4;
-      q.position.set(x + 0.5 + jx, y + 0.14 * sc, z + 0.5 + jz); q.rotation.set(0, 0, 0); q.scale.set(sc, sc, sc); q.updateMatrix(); trunks.setMatrixAt(ti++, q.matrix);
-      q.position.y = y + (coneShape ? 0.55 : 0.42) * sc; q.rotation.set(0, hash2(x, z, 15) * 3, 0); q.updateMatrix(); mesh.setMatrixAt(k, q.matrix);
-      const h = hash2(x, z, 16) + sp * 0.07;
-      mesh.setColorAt(k, col.setHSL((coneShape ? 0.33 : 0.27) + (h % 1) * 0.06, 0.45, (coneShape ? 0.28 : 0.36) + (h % 1) * 0.1, THREE.SRGBColorSpace));
-    });
-    place(round, crownsR, false);
-    place(cone, crownsC, true);
-    for (const m of [trunks, crownsR, crownsC]) { m.castShadow = true; m.receiveShadow = true; scene.add(m); disposables.push(m); }   // D010：實例網格的矩陣／顏色緩衝要自己釋放（逐日重建會一直換場景）
-  }
+    // D015：樹的位置、種類、地面高沒變就沿用上一次的幾何與實例資料（同一份緩衝，不重傳）；實例網格本身每次新建（材質跟著場景）
+    const key = spots.map(q => q.join(',')).join(';'), kept = con && sc.trees?.key === key ? sc.trees : null;
+    const mats = [mat({ color: 0x6b4f35 }), mat({ color: 0xffffff }), mat({ color: 0xffffff })];
+    let meshes: THREE.InstancedMesh[];
+    if (kept) {
+      meshes = [new THREE.InstancedMesh(kept.tg, mats[0], spots.length), new THREE.InstancedMesh(kept.rg, mats[1], Math.max(1, round.length)), new THREE.InstancedMesh(kept.cg, mats[2], Math.max(1, cone.length))];
+      meshes[0].instanceMatrix = kept.attrs[0]; meshes[1].instanceMatrix = kept.attrs[1]; meshes[2].instanceMatrix = kept.attrs[3];
+      if (kept.attrs[2]) meshes[1].instanceColor = kept.attrs[2];
+      if (kept.attrs[4]) meshes[2].instanceColor = kept.attrs[4];
+      stats.treesKept = true;
+    } else {
+      if (con) sc.disposeTrees();
+      // D005：街區模式的樹幹不帶上下蓋（下蓋朝地、上蓋藏在樹冠裡，畫面逐像素相同），省一半樹幹三角形；D003 模式照舊
+      const tg = new THREE.CylinderGeometry(0.045, 0.06, 0.28, 5, 1, !!blocks), rg = new THREE.IcosahedronGeometry(0.3, 0), cg = new THREE.ConeGeometry(0.28, 0.7, 6);
+      const trunks = new THREE.InstancedMesh(tg, mats[0], spots.length);
+      const crownsR = new THREE.InstancedMesh(rg, mats[1], Math.max(1, round.length));
+      const crownsC = new THREE.InstancedMesh(cg, mats[2], Math.max(1, cone.length));
+      const q = new THREE.Object3D(), col = new THREE.Color();
+      let ti = 0;
+      const place = (arr: typeof spots, mesh: THREE.InstancedMesh, coneShape: boolean) => arr.forEach(([x, z, sp, y], k) => {
+        const jx = (hash2(x, z, 11) - 0.5) * 0.4, jz = (hash2(x, z, 12) - 0.5) * 0.4, sc = 0.8 + hash2(x, z, 13) * 0.4;
+        q.position.set(x + 0.5 + jx, y + 0.14 * sc, z + 0.5 + jz); q.rotation.set(0, 0, 0); q.scale.set(sc, sc, sc); q.updateMatrix(); trunks.setMatrixAt(ti++, q.matrix);
+        q.position.y = y + (coneShape ? 0.55 : 0.42) * sc; q.rotation.set(0, hash2(x, z, 15) * 3, 0); q.updateMatrix(); mesh.setMatrixAt(k, q.matrix);
+        const h = hash2(x, z, 16) + sp * 0.07;
+        mesh.setColorAt(k, col.setHSL((coneShape ? 0.33 : 0.27) + (h % 1) * 0.06, 0.45, (coneShape ? 0.28 : 0.36) + (h % 1) * 0.1, THREE.SRGBColorSpace));
+      });
+      place(round, crownsR, false);
+      place(cone, crownsC, true);
+      meshes = [trunks, crownsR, crownsC];
+      for (const m of meshes) stats.up += (m.instanceMatrix.array as Float32Array).byteLength + ((m.instanceColor?.array as Float32Array | undefined)?.byteLength ?? 0);
+      // 有施工資料：幾何與實例資料歸快取（換下來才釋放）；沒有就跟著場景丟（D010：實例網格的矩陣／顏色緩衝要自己釋放）
+      if (con) sc.trees = { key, tg, rg, cg, attrs: [trunks.instanceMatrix, crownsR.instanceMatrix, crownsR.instanceColor!, crownsC.instanceMatrix, crownsC.instanceColor!], counts: [spots.length, round.length, cone.length], meshes };
+      else disposables.push(tg, rg, cg, ...meshes);
+    }
+    meshes[1].count = round.length; meshes[2].count = cone.length;
+    for (const m of meshes) stats.upFull += (m.instanceMatrix.array as Float32Array).byteLength + ((m.instanceColor?.array as Float32Array | undefined)?.byteLength ?? 0);
+    for (const m of meshes) { m.castShadow = true; m.receiveShadow = true; scene.add(m); }
+  } else if (con) sc.disposeTrees();
   let yardAges: { attr: THREE.InstancedBufferAttribute; tiles: number[] } | null = null;
   // D005 前庭的樹（villa、住宅地坪）：八面體樹冠＋三稜樹幹，14 個三角形（野樹 40 個），不投影子
   if (yard.length) {
@@ -389,8 +522,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   sun.position.copy(center).add(new THREE.Vector3(-0.35, 1.25, 1.0).multiplyScalar(n));
   sun.target.position.copy(center);
   sun.castShadow = true;
-  const sc = sun.shadow.camera as THREE.OrthographicCamera;
-  sc.left = sc.bottom = -n * 0.75; sc.right = sc.top = n * 0.75; sc.near = 1; sc.far = n * 4;
+  const shc = sun.shadow.camera as THREE.OrthographicCamera;
+  shc.left = shc.bottom = -n * 0.75; shc.right = shc.top = n * 0.75; shc.near = 1; shc.far = n * 4;
   const shadowSize = style.softShadow ? 2048 : Math.min(2048, Math.max(1536, n * 16));
   sun.shadow.mapSize.set(shadowSize, shadowSize);
   sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
@@ -405,7 +538,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   const pickables: THREE.Object3D[] = [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : []), ground];
   const pick = (ray: THREE.Raycaster): CityHit | null => {
     for (const h of ray.intersectObjects(pickables, false)) {
-      const id = owners.has(h.object) && h.faceIndex != null ? owners.get(h.object)![h.faceIndex] : 0;
+      const id = owners.has(h.object) && h.faceIndex != null ? owners.get(h.object)!.owners[h.faceIndex] : 0;
       if (id < 0 && blocks) {                                  // 街區：取點到的那一格（夾在街區範圍內，屋簷外挑也算）
         const bi = -id - 1, bk = blocks.plan[bi];
         const x = Math.min(bk.x + bk.w - 1, Math.max(bk.x, Math.floor(h.point.x))), z = Math.min(bk.z + bk.h - 1, Math.max(bk.z, Math.floor(h.point.z)));
@@ -438,7 +571,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       scene.traverse(o => {
         const m = o as THREE.Mesh;
         if (!m.isMesh) return;
-        const g = m.geometry, per = (g.index ? g.index.count : g.attributes.position.count) / 3, inst = (m as THREE.InstancedMesh).isInstancedMesh ? (m as THREE.InstancedMesh).count : (g as THREE.InstancedBufferGeometry).isInstancedBufferGeometry ? (g as THREE.InstancedBufferGeometry).instanceCount : 1;
+        const g = m.geometry, dr = g.drawRange, pc = g.attributes.position.count, per = (g.index ? g.index.count : Math.min(pc, dr.start + dr.count) - dr.start) / 3, inst = (m as THREE.InstancedMesh).isInstancedMesh ? (m as THREE.InstancedMesh).count : (g as THREE.InstancedBufferGeometry).isInstancedBufferGeometry ? (g as THREE.InstancedBufferGeometry).instanceCount : 1;
         out.push({ name: names.get(m) ?? (m.name || ((m as THREE.InstancedMesh).isInstancedMesh ? 'inst' + per : 'mesh')), tris: per * inst, shadow: m.castShadow });
       });
       return out;
@@ -458,7 +591,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     siteMesh: () => siteM,
     setNear: on => { if (on) buildNear(); if (nearM) nearM.visible = on; },
     buildingMeshes: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])],
-    pickOwners: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])].map(m => owners.get(m)!),
+    pickOwners: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])].map(m => owners.get(m)!.owners),
     groundCheck: () => { const full = paintGround(c, k => look.cat(k), S, lots, plates), cur = gtex.image.data as Uint8Array; if (full.length !== cur.length) return false; for (let i = 0; i < full.length; i++) if (full[i] !== cur[i]) return false; return true; },
     weatherInfo: () => ({ ...weatherTris }),
     nearMesh: () => nearM,

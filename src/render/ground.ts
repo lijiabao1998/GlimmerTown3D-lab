@@ -57,17 +57,17 @@ export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uin
   }
   return [k1, k2];
 }
-export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null): { cache: GroundCache; painted: number } {
+// D015：inPlace＝直接改上一次的像素（地面貼圖常駐、只上傳變動的格；tiles＝重畫了哪幾格）；不給就照 D014 另存一份
+export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null, inPlace = false): { cache: GroundCache; painted: number; tiles: number[] | null } {
   const n = c.n, [k1, k2] = groundKeys(c, cat, lots, plates);
-  if (!prev || prev.n !== n || prev.S !== S) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, data }, painted: n * n }; }
-  const data = prev.data.slice();
-  let painted = 0;
+  if (!prev || prev.n !== n || prev.S !== S) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, data }, painted: n * n, tiles: null }; }
+  const data = inPlace ? prev.data : prev.data.slice(), tiles: number[] = [];
   for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
     const i = z * n + x;
     if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i]) continue;
-    paintTile(c, cat, S, lots, plates, data, x, z); painted++;
+    paintTile(c, cat, S, lots, plates, data, x, z); tiles.push(i);
   }
-  return { cache: { n, S, k1, k2, data }, painted };
+  return { cache: { n, S, k1, k2, data }, painted: tiles.length, tiles };
 }
 
 function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, data: Uint8Array, x: number, z: number) {

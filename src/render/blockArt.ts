@@ -19,9 +19,9 @@ const P = (px: number) => px / PX_PER_CELL;
 
 // Wg＝有窗的牆、Og＝屋頂與量體細節（都投影子）；Dg＝點綴（前庭道具、屋頂設備、雨遮、門、裝卸口）：不投影子，手機上省一半三角形（影子那趟不畫它）
 // fp／tp：D008 英美立面逐戶計畫與核心路徑飾條（A 檔不帶，維持 D007 的樣子）
-// nearJobs：D014 近看小物先排隊、不畫（縮放夠近才由 drawNearJob 畫，平常重建省下這一段）；件數這裡先照計畫算好
+// nearJobs：D014 近看小物先排隊、不畫（縮放夠近才由 drawNearJob 畫，平常重建省下這一段）；D015 起這裡只記底稿，要不要畫、件數在 cityScene 每次重建另算
 export interface NearJob { r: Recipe; x0: number; z0: number; x1: number; z1: number; y0: number; hb: number; owner: number }
-export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d: Dressing, y0: number, trees: YardTree[], n: ArtCounts, fp: FacadePlan | null = null, tp: TrimPlan | null = null, nearJobs: NearJob[] | null = null, hb = -1): THREE.Vector3 {
+export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d: Dressing, y0: number, trees: YardTree[], n: ArtCounts, fp: FacadePlan | null = null, tp: TrimPlan | null = null, nearJobs: NearJob[] | null = null): THREE.Vector3 {
   const X = (u: number) => bk.x + u * bk.w, Z = (v: number) => bk.z + v * bk.h;
   const wall = col(r.pal.light), glass = col(r.pal.glass), b = r.box, yw = y0 + P(r.wallPx);
   const x0 = X(b[0]), x1 = X(b[1]), z0 = Z(b[2]), z1 = Z(b[3]);
@@ -41,7 +41,7 @@ export function drawBlock(Wg: Geo, Og: Geo, Dg: Geo, bk: DrawBlock, r: Recipe, d
     Wg.tag = yw;                                                   // D014：核心路徑主體牆會風化（T606 只疊在核心路徑，英美立面不疊）；記牆頂高給著色器
     Wg.box(x0, z0, x1, z1, y0, yw, wall, topCol, band ? { ...win, ...band } : win);
     Wg.tag = 0;
-    if (nearJobs && hb >= 0) { const job = { r, x0, z0, x1, z1, y0, hb, owner: Wg.owner }; nearJobs.push(job); for (const it of nearItems(job)) { n.near++; n.nearKinds[it.kind] = (n.nearKinds[it.kind] ?? 0) + 1; } }
+    if (nearJobs) nearJobs.push({ r, x0, z0, x1, z1, y0, hb: -1, owner: Wg.owner });   // D015：近看小物的底稿（要不要畫看起點那棟的屋齡，每次重建另判、另數：countNear）
     if (tp) drawTrim(Dg, tp, x0, z0, x1, z1, y0, yw, n);
     if (rf.kind === 'parapet') {                                   // 女兒牆：屋頂板往內收 7%（shrinkPara547 .07）再墊高 4px
       const du = (x1 - x0) * .035, dv = (z1 - z0) * .035;
@@ -218,6 +218,8 @@ const nearItems = (j: NearJob) => {
   const r = j.r, cat = r.k === 1 ? 'R' : r.k === 2 ? 'C' : 'I';
   return nearPlan({ cat, v: r.v, bw: r.w, bh: r.h, hb: j.hb, lenL: Math.round(FACE_PX * (j.x1 - j.x0)), lenD: Math.round(FACE_PX * (j.z1 - j.z0)), wallH: r.wallPx });
 };
+// 近看小物的件數（逐種）加進 n（D015：從 drawBlock 搬出來，每次重建照這一次的 hb 算）
+export function countNear(j: NearJob, n: ArtCounts) { for (const it of nearItems(j)) { n.near++; n.nearKinds[it.kind] = (n.nearKinds[it.kind] ?? 0) + 1; } }
 export function drawNearJob(G: Geo, j: NearJob) {
   const { x0, z1, x1, y0 } = j, items = nearItems(j);
   G.owner = j.owner;
