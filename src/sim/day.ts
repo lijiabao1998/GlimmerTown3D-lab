@@ -126,6 +126,21 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     if (t.bld) tickBld.push(i);
     if (t.zone) { tickZone.push(i); if (t.zone === 2) czone++; }
   }
+  // 55050–55063 主計數迴圈（建築索引、跳過 ref 格）：D016 起數得到的設施——學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（照實驗線的順序）。
+  // 給固定就業（55246）與維護費（55973）。迴圈其餘的計數（產業、旅宿、地標、資源……）本線蓋不出來，都是 0；升級加成就業（55055 upJob）要手動升級，沒搬
+  const fac = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
+  for (const i of tickBld) {
+    const b = w.tiles[i].bld;
+    if (!b || b.ref) continue;
+    if (b.k === 7) fac.schools++;                                         // 55056
+    if (b.k === 8) fac.dumps++;                                           // 55057
+    if (b.k === 9) fac.stadiums++;                                        // 55058
+    if (b.k === 10) fac.waterTowers++;                                    // 55059
+    if (b.k === 13) fac.clinics++;                                        // 55060
+    if (b.k === 14) fac.libraries++;                                      // 55061
+    if (b.k === 15) fac.posts++;                                          // 55062
+    if (b.k === 16) fac.cemeteries++;                                     // 55063
+  }
   // 54949 噪音：沒搬（起步城的 k1／2／3／5／11 都不是噪音源，實驗線也是 0）
   s.day++;                                                               // 54950
   // 54952 事故 T493：關（第 1 類，沒有事故）；54953 城市活動 T299：沒搬（第 2 類，實驗線照跑、每 37 天可能一場）
@@ -185,8 +200,9 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
       if (b.k === 2) jobsC += rciJobs(b, !!t.office); else jobsI += rciJobs(b, false);
     }
   }
-  // 55246–55250（F8）：名目就業＝商工＋各設施固定就業；設施計數（55055–55140）沒搬——起步城的電廠、警察局 lv1 都是 0
+  // 55246–55250（F8）：名目就業＝商工＋各設施固定就業（D016 起數學校、診所、圖書館、郵局、墓園、體育場；電廠、警察局、公園、消防、醫院、派出所沒有固定就業）
   const jc = jobCounts(); jc.jobsC = jobsC; jc.jobsI = jobsI;
+  jc.schools = fac.schools; jc.stadiums = fac.stadiums; jc.clinics = fac.clinics; jc.libraries = fac.libraries; jc.posts = fac.posts; jc.cemeteries = fac.cemeteries;
   let pop = popN, jobs = nominalJobs(jc);
   // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
@@ -218,7 +234,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   }
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
   // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
-  const settle = settleToday(s, tickBld, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  const settle = settleToday(s, tickBld, fac, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
@@ -231,7 +247,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
 // 55969–56027 維護費、56028 城市活動、56053 結算、56079 貸款、56081 里程碑、56098–56131 星等、56142 紓困。
 // 第 2 類系統（經濟快照 T481／T482、城市活動 T299、夜間城市 T487、進口）沒搬：乘數 1、進口費 0、沒有城市活動（D011 卡第 5 節）。
 // 沙盒（diff 3）照算收支、只是不入帳（56053），里程碑與星等照給（實驗線也是）。
-function settleToday(s: Sim, tickBld: number[], c2?: Class2In): SettleReport {
+function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, c2?: Class2In): SettleReport {
   const w = s.w, f = fieldsOf(s.g);
   let chN = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (b && !b.ref && b.k === 42) chN++; }   // 55874 civicMul：市政廳數（第一個迴圈 55055 起數的）
   const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });
@@ -240,7 +256,7 @@ function settleToday(s: Sim, tickBld: number[], c2?: Class2In): SettleReport {
   const income = cityEventIncome(pre, c2?.eventTax ?? null);
   const c = inc.counts;
   const upkeep = dailyUpkeep({ ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec,
-    counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals } }), ...c2?.upkeep });   // 其他設施數（55055–55140）沒搬：D011 蓋不出來
+    counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals, ...fac } }), ...c2?.upkeep });   // 主計數迴圈的設施（55050 起，D016）；其餘本線蓋不出來
   const sc = scoreCounts(w, f, tickBld);
   const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: 2 });   // 55260：沒有垃圾場，垃圾比例 2（0 分）
   return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };

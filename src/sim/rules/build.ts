@@ -1,6 +1,8 @@
 // 建造規則（D011）：實驗線 canPlace／placeCost／doPlace 裡本卡工具的分支，加上觸控手勢（T436）與復原（T460）的語意。
 // 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d（index.html 行號）。對拍見 tools/lab-build.mjs、tools/unit-d011-build.mjs（規則 8）。
-// 本卡的工具：路 alley／road／coll／art／hwy（等級 1–5）、分區 zr／zc／zi、電廠 plant（k5）、警察局 police（k11）、拆除 doze。其他工具一律丟例外。
+// 本卡的工具：路 alley／road／coll／art／hwy（等級 1–5）、分區 zr／zc／zi、電廠 plant（k5）、警察局 police（k11）、拆除 doze。
+// D016 加公共設施：公園 park（k4）、消防局 fire（k6）、派出所 policeBox（k52）、醫院 hospital（k12）、診所 clinic（k13）、學校 school（k7）、
+// 圖書館 library（k14）、郵局 post（k15）、墓園 cemetery（k16）。其他工具一律丟例外。
 // 資料形狀與欄位名照實驗線的 tiles[i]／bld（規則 9）。純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；拆除確認的時間由呼叫端給。
 //
 // 實驗線的 doPlace 外面還包了五層（67216 T500 轉運站、67266 T501 主動運輸、67446 T502 路口、70198 T514 財政、72597 T516A 遙測），
@@ -17,16 +19,20 @@ import { COVR, POL_SRC, covFieldOfK, rebuildCov, stampCov, stampPolSrc, stampPol
 
 // 37428：五級道路造價（小巷、支路、次幹道、主幹道、快速路）
 export const ROAD_COST = [8, 15, 28, 55, 120];
-// 37442 COST 裡本卡用到的鍵（COST.road／hwy／hwyBridge 實驗線沒人讀，道路造價只看 ROAD_COST；樹上加價用的是 COST.doze，51623）
-export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60 };
+// 37442 COST 裡本卡用到的鍵（COST.road／hwy／hwyBridge 實驗線沒人讀，道路造價只看 ROAD_COST；樹上加價用的是 COST.doze，51623）。
+// D016 的九個鍵之後沒有被 Object.assign 改過（37536–37546、67110、67242），守衛在 vm 裡讀最終值核對
+export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
+  park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350 };
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
 export const DOZE_ARM_MS = 3000;
 
 export const D011_TOOLS: readonly string[] = ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'zc', 'zi', 'plant', 'police', 'doze'];
-const TOOL_SET = new Set(D011_TOOLS);
-function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('D011 未搬：' + tool); }
+// D016：公共設施（實驗線 canPlace 51278 跟電廠、警察局同一支；水塔、垃圾場不在這批）
+export const D016_TOOLS: readonly string[] = ['park', 'fire', 'policeBox', 'hospital', 'clinic', 'school', 'library', 'post', 'cemetery'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS]);
+function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
 // 51161
@@ -86,7 +92,7 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.road) return '道路上不能分區';
       if (t.bld) return '已有建築';
       return null;
-    case 'plant': case 'police':                                                // 51278–51282（公園、水塔等同一支，不在本卡）
+    case 'park': case 'plant': case 'fire': case 'police': case 'policeBox': case 'hospital': case 'clinic': case 'school': case 'library': case 'post': case 'cemetery':   // 51278–51282（水塔、垃圾場同一支，還沒搬）
       if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
       if (t.road) return '道路上不能建造';
       if (t.bld) return '已有建築';
@@ -114,8 +120,17 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
       break; }
     case 'zr': case 'zc': case 'zi':                                            // 51514–51515
       c = COST.zone; if (t.zone) c = 0; break;
+    case 'park': c = COST.park; break;                                          // 51516
     case 'plant': c = COST.plant; break;                                        // 51517
+    case 'fire': c = COST.fire; break;                                          // 51525
     case 'police': c = COST.police; break;                                      // 51526
+    case 'policeBox': c = COST.policeBox; break;                                // 51527
+    case 'hospital': c = COST.hospital; break;                                  // 51528
+    case 'clinic': c = COST.clinic; break;                                      // 51529
+    case 'school': c = COST.school; break;                                      // 51530
+    case 'library': c = COST.library; break;                                    // 51531
+    case 'post': c = COST.post; break;                                          // 51532
+    case 'cemetery': c = COST.cemetery; break;                                  // 51533
     case 'doze': c = t.crater ? 120 : COST.doze; break;                         // 51546：隕石坑 120
   }
   if (toolId !== 'doze' && t.tree) c += COST.doze;                              // 51623（stad、地形筆刷也不加，不在本卡）
@@ -233,14 +248,50 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
       if (t.zone === ZONE_OF[toolId] && !t.tree) { st.onPlace?.(toolId, x, y, false, 0); return false; }   // 同類重劃不動、不收錢（快照已存，關交易時會丟掉）
       t.zone = ZONE_OF[toolId]; t.tree = 0; t.deco = 0;                         // office 不清，照抄
       break;
+    case 'park':                                                                // 51667–51670：變體抽一次亂數 ri(9)
+      t.bld = { k: 4, lv: 1, v: st.rng.ri(9), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'park', x, y, COVR.park, 1);
+      break;
     case 'plant':                                                               // 51671–51675：變體看座標，不抽亂數
       t.bld = { k: 5, lv: 1, v: (x * 7 + y * 13) % 3, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       stampCov(g, st.budget, 'plant', x, y, COVR.plant, 1);
       stampPolSrc(g, x, y, 5, 1);
       break;
+    case 'fire':                                                                // 51682–51685
+      t.bld = { k: 6, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'fire', x, y, COVR.fire, 1);
+      break;
     case 'police':                                                              // 51686–51689：變體抽一次亂數 ri(5)
       t.bld = { k: 11, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       stampCov(g, st.budget, 'police', x, y, COVR.police, 1);
+      break;
+    case 'policeBox':                                                           // 51690–51693：變體固定 0，不抽亂數
+      t.bld = { k: 52, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'police2', x, y, COVR.police2, 1);
+      break;
+    case 'hospital':                                                            // 51694–51697
+      t.bld = { k: 12, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'hospital', x, y, COVR.hospital, 1);
+      break;
+    case 'clinic':                                                              // 51698–51701
+      t.bld = { k: 13, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'clinic', x, y, COVR.clinic, 1);
+      break;
+    case 'school':                                                              // 51702–51705
+      t.bld = { k: 7, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'school', x, y, COVR.school, 1);
+      break;
+    case 'library':                                                             // 51706–51709
+      t.bld = { k: 14, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'library', x, y, COVR.library, 1);
+      break;
+    case 'post':                                                                // 51710–51713
+      t.bld = { k: 15, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'post', x, y, COVR.post, 1);
+      break;
+    case 'cemetery':                                                            // 51714–51717
+      t.bld = { k: 16, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampCov(g, st.budget, 'cemetery', x, y, COVR.cemetery, 1);
       break;
     case 'doze':
       doze(st, t, x, y);
@@ -251,7 +302,7 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
   st.money -= cost;                                                             // 52399
   if (txn) txn.spent += cost;                                                   // 52400
   if (toolId === 'plant' || roadToolToRc(toolId) || toolId === 'doze') st.onPower?.();   // 52401–52404（分區、警察局不重算）
-  // 52405–52412 水、污水、排水、清運、緊急出勤、韌性、地面重繪的髒旗標：本線沒有這些系統（或是畫面）
+  // 52405–52412 水、污水、排水、清運、緊急出勤（消防局、派出所、警察局也會設，52410）、韌性、地面重繪的髒旗標：本線沒有這些系統（或是畫面）
   st.onPlace?.(toolId, x, y, true, cost);
   return true;
 }

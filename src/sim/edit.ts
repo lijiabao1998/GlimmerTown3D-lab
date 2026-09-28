@@ -14,10 +14,18 @@ export const ROAD_TOOLS = [
   { id: 'art', name: '主幹道', cost: ROAD_COST[3] }, { id: 'hwy', name: '快速路', cost: ROAD_COST[4] },
 ];
 export const TOOL_PRICE = { zr: COST.zone, zc: COST.zone, zi: COST.zone, plant: COST.plant, police: COST.police, doze: COST.doze };
+// D016 公共設施：名稱與順序照實驗線工具列 svc 類（TOOLS 37584–37595；電廠有自己的按鈕，水塔、垃圾場還沒搬），造價 COST（37442）；short＝按鈕上的一個字
+export const CIVIC_TOOLS = [
+  { id: 'park', name: '公園', short: '園', cost: COST.park }, { id: 'fire', name: '消防局', short: '消', cost: COST.fire },
+  { id: 'police', name: '警察局', short: '警', cost: COST.police }, { id: 'policeBox', name: '派出所', short: '派', cost: COST.policeBox },
+  { id: 'hospital', name: '醫院', short: '醫', cost: COST.hospital }, { id: 'clinic', name: '診所', short: '診', cost: COST.clinic },
+  { id: 'school', name: '學校', short: '學', cost: COST.school }, { id: 'library', name: '圖書館', short: '圖', cost: COST.library },
+  { id: 'post', name: '郵局', short: '郵', cost: COST.post }, { id: 'cemetery', name: '墓園', short: '墓', cost: COST.cemetery },
+];
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
-// 介面的按鈕 → 實驗線的工具代號（規則 9：按鈕寫進資料的東西照實驗線）
-export const labToolOf = (ui: string, roadTool: string) => ui === 'road' ? roadTool : ui;
+// 介面的按鈕 → 實驗線的工具代號（規則 9：按鈕寫進資料的東西照實驗線）。路、公共設施是一組：按鈕下面那一排選的是哪一種
+export const labToolOf = (ui: string, roadTool: string, civicTool = 'police') => ui === 'road' ? roadTool : ui === 'civic' ? civicTool : ui;
 // 實驗線觸控的手勢（T436）：路是線、分區與拆除是框、建築是點
 export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) ? 'line' : (tool in ZONE_OF || tool === 'doze') ? 'rect' : 'tap';
 
