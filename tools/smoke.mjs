@@ -255,7 +255,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // D012 兩件事一起改了釘：預設 B → C（D0 與被吸收的 1×1 也畫）；讀檔照實驗線重挑 v（原型跟著 v 換，切分也跟著 v 變：1 級住宅 v 0／5／10 是別墅、不併）。
   // 釘改成 D012 量的值，預設 C 與 ?blocks=b 都釘：預設 C 種子城 94,002、AI 城 74,990（卡面研究時用存檔 v 量的 C 是 93,610／74,566）；
   // ?blocks=b 71,690／68,028（D008 的 69,598／67,396 是存檔 v）。預設 C 另驗仍在手機預算內（≤ D003 基線 1.5 倍、draw call ≤ 18）
-  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 74990, b: 68028 } }, D012_CALLS = 15;
+  // D018 故意改了公園（k4）照實驗線九種設計畫：AI 城有 17 座公園，三檔都多 1,654 個三角形（C 74,990 → 76,644、B 68,028 → 69,682）；種子城沒有公園、不變。
+  // 公園以外的幾何沒變由 Node 守衛證（tools/unit-d018.mjs：183 種 × 9 個變體逐位＝動手前）
+  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 76644, b: 69682 } }, D012_CALLS = 15;
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone(), mode: __gt.blockMode()})');
@@ -358,7 +360,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     // A 檔一格一棟、每一棟照自己的 v 挑原型，幾何跟著換：釘改成 D012 量的值 121,606／78,424（沒有立面、飾條照舊）。
     // 注意：種子城 A 檔 121,606 超過 D004 驗收 8 的手機預算（三檔都 ≤ D003 基線 1.5 倍＝118,884）。D004 那一項的 A 檔三角形改成只量不判、照印超過多少；
     // 這裡的逐位釘照判，A 檔幾何再變就紅。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡）
-    const D012_A = { seed516: 121606, ai120: 78424 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003
+    const D012_A = { seed516: 121606, ai120: 80078 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
     for (const id of ['seed516', 'ai120']) {
       await open(`sample=${id}&clean=1&blocks=a`);
       const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');

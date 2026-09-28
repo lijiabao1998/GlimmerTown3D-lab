@@ -9,6 +9,7 @@ import crypto from 'node:crypto';
 import { ROOT } from './cdp.mjs';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { PARK } from '../src/render/kindArt.ts';
+import { kindColors, PARK_GRASS } from '../src/content/kindShapes.ts';
 import { kindHashes, drawOne, VARIANTS } from './d018-kinds.mjs';
 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -69,6 +70,12 @@ async function guards(log) {
     }
     log(!bad.length, 'D018 驗收 1：九種各有自己的設計——每一種用到的色碼都逐字出現在實驗線那一個變體的原文裡；石徑長椅花、池塘、噴泉廣場、玫瑰園、遊樂場、涼亭、球場、野餐區都畫到自己的招牌件，沒畫到別種的',
       bad.join('；') || runs.map((r, v) => `v${v} ${NAMES[v]} ${r.used.length} 色`).join('、'));
+  }
+  // ---- 3b. 地坪：公園的地坪＝實驗線公園精靈的草地底色（lab-looks.json 沒有公園，缺省原本是沙色）----
+  {
+    const pc = kindColors(LOOKS, 4, 1, KT.catColor(KT.cat(4))).plate.toLowerCase(), other = kindColors(LOOKS, 999, 1, '#000000').plate;
+    const ok = pc === PARK_GRASS && (t.v012 ?? '').includes(`dia(g,32,ay-32,32,'${PARK_GRASS}')`) && !LOOKS['4_1'] && other === '#c9c3b5';
+    log(ok, `D018：公園的地坪＝實驗線公園精靈的草地底色 ${PARK_GRASS}（原文 40610 dia(g,32,ay-32,32,'${PARK_GRASS}')；lab-looks.json 沒有公園，其他沒有抽到色的種類照舊沙色）`, `公園 ${pc}、其他缺省 ${other}`);
   }
   // ---- 4. 預算 ----
   {

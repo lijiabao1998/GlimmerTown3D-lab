@@ -207,11 +207,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 
 export const shapeOf = (k: number): Shape | null => KIND_SHAPES[k] ?? null;
 
+export const PARK_GRASS = '#82c163';   // D018：實驗線公園精靈的草地底色（40610）
 // 五色（lab-looks.json 讀出的實驗線精靈色）；缺的用分類色補。純函式，looks 由呼叫端傳入
 export interface LabLook { plate: string | null; roof: string | null; wallL: string | null; wallR: string | null; accent: string | null }
 export interface KindColors { wall: string; wallR: string; roof: string; accent: string; plate: string }
 export function kindColors(looks: Record<string, LabLook>, k: number, lv: number, catColor: string): KindColors {
   const L = looks[`${k}_${lv}`] ?? looks[`${k}_1`] ?? null;
   const wall = L?.wallL ?? '#d8d0c0';
-  return { wall, wallR: L?.wallR ?? wall, roof: L?.roof ?? '#6a7078', accent: L?.accent ?? catColor, plate: L?.plate ?? '#c9c3b5' };
+  // 公園（k4）的地坪：lab-looks.json 沒有公園（D007 抽色時沒抽到 SPR.park），缺省是沙色；實驗線公園精靈的底是草地 #82c163（40610 dia(g,32,ay-32,32,'#82c163')，D018）
+  return { wall, wallR: L?.wallR ?? wall, roof: L?.roof ?? '#6a7078', accent: L?.accent ?? catColor, plate: L?.plate ?? (k === 4 ? PARK_GRASS : '#c9c3b5') };
 }

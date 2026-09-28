@@ -793,4 +793,66 @@ if (want('d016')) {
   }
 }
 
+// D018：公園九種。2D＝實驗線自己的精靈 SPR.park（記憶體副本插一行出口讀出 PNG，放大 4 倍、像素不糊）；
+// 3D＝新城地形上擺一張 3×3 的測試城（九座公園，變體 0–8，屋齡 20），每一座拉近拍；另拍 AI 城 120 天公園最密的一帶。
+if (want('d018')) {
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), LAB = path.resolve(ROOT, arg('lab', '../GlimmerTown-lab')), labDir = path.join(ROOT, 'scratch/lab');
+  const { decodeLabCode, encodeLabCode } = await import('../src/io/labcode.ts'), { starterLayout } = await import('../src/content/starter.ts');
+  const base = R('src/content/samples/newcity.code.txt').trim(), S = decodeLabCode(base).save, raw = { ...S.raw }, n = S.n;
+  const lay = k => Uint8Array.from(S.layers[k] ?? '', ch => ch.charCodeAt(0) - 48), L = starterLayout(n, lay('ter'), lay('el'));
+  const spots = Array.from({ length: 9 }, (_, v) => [L.x0 + 3 + 6 * (v % 3), L.z0 + 3 + 6 * Math.floor(v / 3)]);
+  raw.bl = spots.map(([x, z], v) => [z * n + x, 4, 1, v, 20]);
+  const code = encodeLabCode(raw, { deflate: true });
+  if (fs.existsSync(path.join(LAB, 'index.html'))) {
+    const { CONFIGS, preloadOf, injectLab } = await import('./lab-configs.mjs');
+    const copy = injectLab(fs.readFileSync(path.join(LAB, 'index.html'), 'utf8'), "window.__d018=()=>SPR.park.map(s=>s.img.toDataURL('image/png'));");
+    fs.mkdirSync(labDir, { recursive: true });
+    await withBrowser({ root: LAB, entry: 'd018s.html', overlay: { 'd018s.html': copy }, port: 8433, width: 800, height: 600, gl: false, preload: preloadOf(CONFIGS.fallback), ready: '!!window.__bootDone453&&!!window.__d018', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+      await open('');
+      const urls = await page.evaluate('__d018()');
+      urls.forEach((u, v) => fs.writeFileSync(path.join(labDir, `d018_v${v}_2d.png`), Buffer.from(u.split(',')[1], 'base64')));
+      console.log(`實驗線 2D：SPR.park ${urls.length} 張`);
+    });
+  } else console.log(`（${path.relative(ROOT, LAB)} 沒有實驗線，2D 那一欄留白）`);
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await open('sample=seed516&clean=1');
+    const r = await page.evaluate(`__gt.loadCode(${JSON.stringify(code)})`);
+    if (!r.ok) throw new Error('3D 讀不進測試城');
+    for (const [v, [x, z]] of spots.entries()) {
+      await page.evaluate(`(__gt.view(${x + .5}, ${z + .5}, 18), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 250));
+      const s = await page.send('Page.captureScreenshot', { format: 'png', clip: { x: 490, y: 250, width: 300, height: 300, scale: 1 } });
+      fs.writeFileSync(path.join(out, `d018_v${v}_3d.png`), Buffer.from(s.data, 'base64'));
+    }
+    await open('sample=ai120&clean=1');
+    const parks = await page.evaluate('__gt.conBuildings().filter(b=>b.k===4&&!b.gone)');
+    let best = parks[0], bn = -1;
+    for (const p of parks) { const c = parks.filter(q => Math.abs(q.x - p.x) <= 6 && Math.abs(q.z - p.z) <= 6).length; if (c > bn) { bn = c; best = p; } }
+    await page.evaluate(`(__gt.view(${best.x + .5}, ${best.z + .5}, 3.4), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 300));
+    await save(page, 'd018_ai120');
+    console.log(`AI 城 120 天：公園 ${parks.length} 座，畫面中央 (${best.x},${best.z}) 附近 ${bn} 座`);
+    errors += page.errors.length;
+  });
+  const copy2d = f => { const src = path.join(labDir, f), has = fs.existsSync(src); if (has) fs.copyFileSync(src, path.join(out, f)); return has ? f : ''; };
+  const NAMES = ['石徑、長椅、花', '石徑', '池塘', '噴泉廣場', '玫瑰園', '遊樂場', '涼亭', '球場', '野餐區'];
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  fs.writeFileSync(path.join(out, 'd018_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(3,576px);gap:14px;padding:8px 12px 12px}.pair{display:flex;gap:8px;align-items:flex-end}
+    .pair img.a{width:256px;height:224px;image-rendering:pixelated;background:#0b1020}.pair img.b{width:300px;height:300px}.big{grid-column:1/-1}.big img{width:1280px;height:800px}</style>
+    <h1>D018 公園九種：左 2D 實驗線精靈（SPR.park，放大 4 倍）｜右 3D</h1><p class="s">實驗線 d23c18d 放公園時抽 ri(9) 決定變體（51667）；D018 之前 3D 九種都畫成同一個樣子（沙地十字路＋三棵樹）。3D 拉近到 18 倍、畫面中央 300×300。最後一張是 AI 城 120 天公園最密的一帶（3.4 倍）。</p>
+    <div class="g">${NAMES.map((nm, v) => { const a = copy2d(`d018_v${v}_2d.png`); return `<figure><figcaption>v${v}・${nm}</figcaption><div class="pair">${a ? `<img class="a" src="${a}">` : '<div>（沒有 2D）</div>'}<img class="b" src="d018_v${v}_3d.png"></div></figure>`; }).join('')}
+    <figure class="big"><figcaption>AI 城 120 天（3D）</figcaption><img src="d018_ai120.png"></figure></div>`);
+  for (const [page0, file, w, h] of [['d018_compare.html', 'D018-parks.jpg', 1790, 2000]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log('OK', file, `${w}×${ch}`);
+    });
+  }
+}
+
 if (errors) process.exitCode = 1;
