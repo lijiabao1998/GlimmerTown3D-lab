@@ -1,0 +1,104 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-noise.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "idx",
+   "anchors": {
+    "start": "const idx=(x,y)=>y*N+x;"
+   },
+   "line": 39731,
+   "endLine": 39731,
+   "sha": "950a9b3b6e75c896963ad712904e9870574f7807df434b7f1c2fda30534bd847"
+  },
+  {
+   "kind": "exact",
+   "name": "NOISE",
+   "anchors": {
+    "start": "let NOISE=new Uint8Array(N*N);"
+   },
+   "line": 53020,
+   "endLine": 53020,
+   "sha": "79b1c8b17cc3b1b7e1eb35eb09ba02ec59f3e8d8a82aca1fb969ee6465f4572d"
+  },
+  {
+   "kind": "decl",
+   "name": "NOISE_SRC",
+   "anchors": {
+    "start": "const NOISE_SRC="
+   },
+   "line": 53021,
+   "endLine": 53021,
+   "sha": "15f72040f52353a3c4a0c5002aeb0bf2992466a3de681d876de9dd5ce7696410"
+  },
+  {
+   "kind": "exact",
+   "name": "noiseSig",
+   "anchors": {
+    "start": "let noiseSig=-1;"
+   },
+   "line": 53022,
+   "endLine": 53022,
+   "sha": "bcd3ed5fc8acaf4f07dd6c8cff9d92589885dd2ce0878f486025784a07a691b1"
+  },
+  {
+   "kind": "fn",
+   "name": "rebuildNoise",
+   "anchors": {
+    "start": "function rebuildNoise(",
+    "closure": "balanced-brace"
+   },
+   "line": 53023,
+   "endLine": 53043,
+   "sha": "0f73d813b368d0cd07aaf63038fe32849d06fad9d8178325a3e4a80dd10d8708"
+  },
+  {
+   "kind": "span",
+   "name": "每天開頭",
+   "anchors": {
+    "start": "rebuildNoise(tickBld); // T325：噪音場每日稀疏重建",
+    "end": "rebuildNoise(tickBld); // T325：噪音場每日稀疏重建"
+   },
+   "line": 54949,
+   "endLine": 54949,
+   "sha": "ae4c0613e406037f9cee12133a00559a33ffb232364fe2c7cfefeeded749314d"
+  },
+  {
+   "kind": "span",
+   "name": "地價髒重建",
+   "anchors": {
+    "start": "rebuildNoise(null); // T325：全量重建",
+    "end": "rebuildNoise(null); // T325：全量重建"
+   },
+   "line": 54997,
+   "endLine": 54997,
+   "sha": "e2f2014a346c12c9fd89f46ffa4cb310c7c7ad4d328c37aed02b969e9187d834"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔清場",
+   "anchors": {
+    "start": "NOISE=new Uint8Array(N*N);noiseSig=-1; // T325",
+    "end": "NOISE=new Uint8Array(N*N);noiseSig=-1; // T325"
+   },
+   "line": 56934,
+   "endLine": 56934,
+   "sha": "b7a436579e491ad8b91df8a0052595bdca4da5f62508b69a3100c5ada9a11c63"
+  }
+ ],
+ "text": {
+  "idx": "const idx=(x,y)=>y*N+x;",
+  "NOISE": "let NOISE=new Uint8Array(N*N);",
+  "NOISE_SRC": "const NOISE_SRC={19:{r:8,p:50},9:{r:5,p:26},56:{r:6,p:30},39:{r:5,p:28},65:{r:4,p:22},17:{r:4,p:20},55:{r:5,p:24},62:{r:4,p:18},76:{r:3,p:16},165:{r:5,p:24},166:{r:6,p:28},167:{r:4,p:18},170:{r:4,p:18},171:{r:4,p:16},172:{r:4,p:18},173:{r:6,p:30},174:{r:7,p:36},181:{r:3,p:14},184:{r:2,p:12}};",
+  "noiseSig": "let noiseSig=-1;",
+  "rebuildNoise": "function rebuildNoise(idxList){ // idxList=tickBld（tick 內）或 null（rebuildCov／load 全掃）\n  NOISE.fill(0);\n  let sig=0;\n  const scan=(i)=>{\n    const b=tiles[i].bld;\n    if(!b||b.ref)return;\n    const cfg=NOISE_SRC[b.k];if(!cfg)return;\n    const x=i%N,y=(i/N)|0;\n    sig=(sig+i*31+b.k)>>>0;\n    for(let dy=-cfg.r;dy<=cfg.r;dy++){const ny=y+dy;if(ny<0||ny>=N)continue;\n      for(let dx=-cfg.r;dx<=cfg.r;dx++){const nx=x+dx;if(nx<0||nx>=N)continue;\n        const d=Math.max(Math.abs(dx),Math.abs(dy));\n        const v=Math.round(cfg.p*(1-d/(cfg.r+1)));if(v<=0)continue;\n        const j=idx(nx,ny);\n        const nv=NOISE[j]+v;NOISE[j]=nv<255?nv:255;\n      }}\n  };\n  if(idxList)for(const i of idxList)scan(i);\n  else for(let i=0;i<N*N;i++)scan(i);\n  if(sig!==noiseSig){noiseSig=sig;landDirty=true;landBox=null;} // 噪音源增減→地價全圖重算（landStaticAt 含噪音項）\n}",
+  "callTick": "  rebuildNoise(tickBld); // T325：噪音場每日稀疏重建（tickBld 剛新鮮） // T313：本 tick 的建築格索引",
+  "callLand": "  rebuildNoise(null); // T325：全量重建（load/newWorld/預算變更），先於 LANDBASE",
+  "alloc": "  NOISE=new Uint8Array(N*N);noiseSig=-1; // T325"
+ }
+}

@@ -5,14 +5,14 @@
 //      T471 分時調度（舊版供電 __legacyPower450／__legacyPower471）、行動力 T491／T509、財政回饋 T510／T515、事故 T493、水（舊式 __legacyWater449）、災害。
 //   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒）、通勤 T141、道路負載與壅堵 T129、
 //      垃圾清運、糧食供應、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
-//   3. 起步城用不到：噪音（沒有噪音源）、污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。
+//   3. 起步城用不到：污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。噪音 D017 搬了（讀進來的城有噪音源）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
 import { cityFromLab, stadiumSize, type City, type CityBuilding, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 import { labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
-import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
+import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
@@ -38,6 +38,7 @@ export interface Sim {
   // 每天 55279 把它設成「整張」；doPlace 第一行 markLandDirty（51627）會把「整張」換成框——實驗線的 bug，照抄（D011 卡第 8 節）。
   // stale＝本線自己的逐格標記：地價基準的輸入（覆蓋、污染）變過、還沒重算的格。實驗線「整張重算」＝重算這些格（其餘格輸入沒變，算出來逐位相同）
   landDirty: boolean; landBox: [number, number, number, number] | null; stale: Uint8Array;
+  noiseSig: number;                 // D017：噪音來源簽名（實驗線 noiseSig 53022；讀檔、開新圖 −1，56934）。不存檔
   // 資金（D011）：實驗線全域 money、diff、loan、msIdx、bestStar、bailoutDay；讀檔還原照 load（66923–66987），bailoutDay 不存檔（新圖 −999，51113）
   money: number; diff: number; loan: { remain: number; daily: number } | null; msIdx: number; bestStar: number; bailoutDay: number;
   // 施工（D011，src/sim/edit.ts）：stroke＝下一筆手勢的編號（事件的 g）；txns＝同一天的交易（復原用，過一天清空）
@@ -103,6 +104,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     pop: 0, jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
+    noiseSig: -1,                                                         // 56934：讀檔時 NOISE 清 0、簽名 −1（rebuildCov 不算噪音，第一天開頭才補上）
     money: save.money, diff: save.df, loan: save.ln ? { remain: save.ln[0], daily: save.ln[1] } : null, msIdx: save.msIdx, bestStar: save.star, bailoutDay: -999,
     stroke: 1, txns: [], dozeArm: null,
   };
@@ -141,7 +143,13 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     if (b.k === 15) fac.posts++;                                          // 55062
     if (b.k === 16) fac.cemeteries++;                                     // 55063
   }
-  // 54949 噪音：沒搬（起步城的 k1／2／3／5／11 都不是噪音源，實驗線也是 0）
+  // 54949 噪音（D017，rebuildNoise 53023）：照建築索引算；來源簽名變了（讀檔後第一天一定變）就把地價設成整張重算。
+  // 本線的「整張重算」只算 stale 格，所以噪音變了的格要標 stale（其餘格的噪音沒變、地價基準的輸入沒變，算出來逐位相同）
+  {
+    const prev = g.NOISE.slice();
+    rebuildNoise(w, g, s, tickBld);
+    for (let i = 0; i < nn; i++) if (prev[i] !== g.NOISE[i]) s.stale[i] = 1;
+  }
   s.day++;                                                               // 54950
   // 54952 事故 T493：關（第 1 類，沒有事故）；54953 城市活動 T299：沒搬（第 2 類，實驗線照跑、每 37 天可能一場）
   // 54956 乾旱只由災害設定；災害關（第 1 類）
@@ -149,8 +157,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   s.weather = { weather: wx.weather, wxT: wx.wxT };
   // 54991 通勤（T141，每 4 天）、54995 道路負載（T129）：沒搬，實驗線沒有開關、照跑（第 2 類）；本線 commutePenalty、roadLoad 都是 0
   // 54996–55001 地價基準髒重建：landDirty 時，有框只重算框裡，沒框整張（前一天 55279 設成整張；玩家施工把它換成框，見 Sim.landDirty）。
-  // 54997 rebuildNoise：沒搬，NOISE 一直是 0，不會觸發整張重算。本線蓋得出來的東西（D011 的路、分區、電廠 k5、警察局 k11，D016 的九種設施）都不在 NOISE_SRC 53021；
-  // 但讀進來的城可能有噪音源（體育場 k9 等 19 種），那時住宅幸福與地價跟實驗線不同（D016 卡「施工中遇到」1、「沒做成的事」1）。
+  // 54997 rebuildNoise(null)：跟 54949 那一次之間建築沒變（天氣、通勤、道路負載都不動建築），噪音與簽名都一樣，不重算（D017）。
   // 整張＝重算 stale 格（地價基準只取決於該格的覆蓋、污染、噪音與半徑 4 的犯罪（landStaticAt）；輸入沒變的格算出來一樣）；
   // opts.fullLand＝逐字照實驗線把整張算一遍（守衛的慢速版，結果要逐位相同）
   if (s.landDirty) {

@@ -64,8 +64,9 @@ const MUTANTS = [
   ['預算半徑 Math.round→Math.floor', 'Math.round(r * budget[cat])', 'Math.floor(r * budget[cat])'],
   ['預算半徑下限 1→0', 'Math.max(1, Math.round(r * budget[cat]))', 'Math.max(0, Math.round(r * budget[cat]))'],
   ['污染衰減 (r + 1)→(r + 2)', 'p * (1 - d / (r + 1))', 'p * (1 - d / (r + 2))'],
-  ['污染 if (v <= 0)→(v < 0)', 'if (v <= 0) continue', 'if (v < 0) continue', 'equivalent'],
-  ['污染門檻 if (v <= 0)→(v <= 3)（上一條的替身）', 'if (v <= 0) continue', 'if (v <= 3) continue'],
+  // D017 起 rebuildNoise 也有同一句門檻：錨點連污染那一行的變數一起寫（const v = Math.round(p * …），噪音那一行是 cfg.p）
+  ['污染 if (v <= 0)→(v < 0)', 'const v = Math.round(p * (1 - d / (r + 1))); if (v <= 0) continue', 'const v = Math.round(p * (1 - d / (r + 1))); if (v < 0) continue', 'equivalent'],
+  ['污染門檻 if (v <= 0)→(v <= 3)（上一條的替身）', 'const v = Math.round(p * (1 - d / (r + 1))); if (v <= 0) continue', 'const v = Math.round(p * (1 - d / (r + 1))); if (v <= 3) continue'],
   ['POLBASE 上限 255→256', 'clamp(g.POLBASE[i] + sign * v, 0, 255)', 'clamp(g.POLBASE[i] + sign * v, 0, 256)'],
   ['樹減免 sign * 2→sign * 3', 'sign * 2', 'sign * 3'],
   ['POL_SRC k3 p 30→31', '3: { r: 5, p: 30 }', '3: { r: 5, p: 31 }'],

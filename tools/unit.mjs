@@ -517,6 +517,7 @@ await guard('./unit-d014.mjs', 'd014Guards');
 await guard('./unit-d015.mjs', 'd015Guards');     // D015：件的鍵夠不夠（一次改一個輸入：幾何變了鍵一定跟著變；鍵少了一項要紅）     // D014：施工分期、露出曲線、風化、近看小物（實驗線原文在 vm 裡跑，黃金樣本 d014-lab.json，tools/lab-d014.mjs 摘）、地面增量重畫   // D012：讀檔照實驗線重挑外觀（T531）逐棟對拍、讀檔之後的切分、突變要轉紅（黃金樣本 d012-lab.json，tools/d012-parity.mjs 錄）
 await guard('./unit-d016-build.mjs', 'd016BuildGuards');   // D016：公共設施九支的建造規則黃金樣本（d016-build.json，tools/lab-build.mjs --set=d016）、原碼突變
 await guard('./unit-d016-parity.mjs', 'd016ParityGuards');   // D016：實驗線實跑錨點（d016-lab.json，tools/d016-parity.mjs 錄）、分享碼互通、歷史與存檔
+await guard('./unit-d017.mjs', 'd017Guards');   // D017：噪音場逐格＝實驗線原文（d017-noise.json，tools/lab-noise.mjs 摘）、原碼突變、接線、預建城體育場實跑（d017-lab.json）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

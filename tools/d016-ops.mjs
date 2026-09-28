@@ -54,7 +54,8 @@ export function d016Ops(n, ter, el, tre) {
 // 留著體育場跑過一次（種子 5162026）：第 1976 格住宅實驗線的幸福少 .032＝噪音 4 × .004 × 富人 2，逐位對得上——噪音是另一件事，記在卡面「沒做成的事」
 export const NOISE_KINDS = [19, 9, 56, 39, 65, 17, 55, 62, 76, 165, 166, 167, 170, 171, 172, 173, 174, 181, 184];
 // 預建城：先拆噪音源；九種設施各找一格（格索引順序第一格：陸地、沒路、沒建築、兩格內有住宅根格），蓋完拆診所再復原
-export function prebuilt16Ops(s) {
+// keepNoise（D017）：不拆噪音源，體育場留著（噪音搬了之後，同一份劇本連噪音一起比）
+export function prebuilt16Ops(s, keepNoise = false) {
   const n = s.w.N, T = s.w.tiles, taken = new Set(), at = [];
   const noisy = [];
   T.forEach((t, i) => { if (t.bld && !t.bld.ref && NOISE_KINDS.includes(t.bld.k)) { noisy.push([i % n, (i / n) | 0]); const sz = t.bld.sz || 1; for (let dz = 0; dz < sz; dz++) for (let dx = 0; dx < sz; dx++) taken.add(i + dz * n + dx); } });
@@ -66,7 +67,8 @@ export function prebuilt16Ops(s) {
     taken.add(i); at.push([tool, i % n, (i / n) | 0]);
   }
   const clinic = at.find(([t]) => t === 'clinic');
-  return { at, noisy, ops: [{ k: 'money', v: 20000 }, ...noisy.map(([x, z]) => doze1(x, z)), ...at.map(([t, x, z]) => put(t, x, z)), doze1(clinic[1], clinic[2]), { k: 'undo' }] };
+  const dz = keepNoise ? [] : noisy;
+  return { at, noisy: dz, ops: [{ k: 'money', v: 20000 }, ...dz.map(([x, z]) => doze1(x, z)), ...at.map(([t, x, z]) => put(t, x, z)), doze1(clinic[1], clinic[2]), { k: 'undo' }] };
 }
 
 // ---- 本線那一半 ----
@@ -88,10 +90,10 @@ export function civic3d(code, KT, vrank, stepOpts = {}) {
   return out;
 }
 // 預建城：拆噪音源 → 九種設施 → 拆診所再復原 → 推進一天。bare＝只拆噪音源、不蓋設施（守衛拿來證明這批設施真的改到了住宅的幸福）
-export function prebuilt16(code, KT, vrank, stepOpts = {}, bare = false) {
+export function prebuilt16(code, KT, vrank, stepOpts = {}, bare = false, keepNoise = false) {
   const L = loadCode(code, KT, vrank);
   if (!L.ok) throw new Error('本線讀不進預建城：' + L.error);
-  const s = L.sim, P = prebuilt16Ops(s), h = harness(s);
+  const s = L.sim, P = prebuilt16Ops(s, keepNoise), h = harness(s);
   const out = { mig: L.restyled, snap0: h.head(h.snap()) };
   out.ops = h.batch(bare ? P.ops.slice(0, 1 + P.noisy.length) : P.ops);
   const a = h.snap();

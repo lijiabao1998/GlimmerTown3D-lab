@@ -7,6 +7,7 @@
 //     預建城（d011-prebuilt.code.txt 換種子）：九種設施 → 拆診所再復原 → GV.step(1) → 推進後的 INV、有電、每一棟住宅的幸福、探針。
 //   另開一頁：本線匯出的碼（C 段＋第 1 天之後）匯入實驗線，讀回設施清單與對帳數字。
 // 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 [GT_PORT=8712] node tools/d016-parity.mjs --lab=/path/to/glimmertown-lab [--seeds=8]
+//       --set=d017（D017 噪音）：只跑預建城、體育場留著（不拆噪音源），寫 src/content/samples/d017-lab.json
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -22,7 +23,9 @@ import { d016Ops, prebuilt16Ops, civic3d, CIVV_SRC, PROBE16_EXTRA } from './d016
 import { loadCode } from '../src/io/save.ts';
 
 const arg = k => process.argv.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
-const LAB = path.resolve(arg('lab') ?? '../lijiabao1998/glimmertown-lab'), NSEEDS = +(arg('seeds') ?? 8);
+const LAB = path.resolve(arg('lab') ?? '../lijiabao1998/glimmertown-lab'), NSEEDS = +(arg('seeds') ?? 8), SET = arg('set') ?? 'd016';
+if (!['d016', 'd017'].includes(SET)) throw new Error(`--set 只能是 d016 或 d017：${SET}`);
+const D17 = SET === 'd017';
 const SEEDS = STARTER_SEEDS.slice(0, NSEEDS), J = JSON.stringify, read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 if (commit !== 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0') throw new Error(`D016 實驗線版本錯誤：${commit}`);
@@ -93,16 +96,16 @@ const newcity = read('src/content/samples/newcity.code.txt').trim(), prebuilt = 
 const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
 const S0 = decodeLabCode(newcity).save, lay = k => Uint8Array.from(S0.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
 const ops = d016Ops(S0.n, lay('ter'), lay('el'), lay('tre'));
-const P = prebuilt16Ops(loadCode(codeWithSeed(prebuilt, SEEDS[0]), KT, vrank).sim);   // 劇本只看格子（讀檔重挑不動位置），每個種子同一份
+const P = prebuilt16Ops(loadCode(codeWithSeed(prebuilt, SEEDS[0]), KT, vrank).sim, D17);   // 劇本只看格子（讀檔重挑不動位置），每個種子同一份
 const cfg = CONFIGS.fallback;
 const opt = { root: LAB, entry: 'd016.html', overlay: { 'd016.html': copy }, port: +(process.env.GT_PORT ?? 0) || 8422, width: 1024, height: 700, gl: false, preload: preloadOf(cfg),
   ready: '!!window.__bootDone453&&!!window.__d011', readyMs: 240000, settle: 300 };
 const rowR6 = x => [...x.slice(0, 21).map(r6), ...x.slice(21)];
-const t0 = Date.now(), lab = { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version, tool: 'tools/d016-parity.mjs', code: 'src/content/samples/newcity.code.txt', prebuilt: 'src/content/samples/d011-prebuilt.code.txt' },
-  config: 'fallback', seeds: SEEDS, probeExtra: PROBE16_EXTRA, runs: {}, prebuilt: {}, readback: {} };
+const t0 = Date.now(), lab = { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version, tool: D17 ? 'tools/d016-parity.mjs --set=d017' : 'tools/d016-parity.mjs', code: 'src/content/samples/newcity.code.txt', prebuilt: 'src/content/samples/d011-prebuilt.code.txt' },
+  config: 'fallback', seeds: SEEDS, probeExtra: PROBE16_EXTRA, keepNoise: D17, runs: {}, prebuilt: {}, readback: {} };
 
 for (const seed of SEEDS) {
-  await withBrowser(opt, async ({ open, page }) => {
+  if (!D17) await withBrowser(opt, async ({ open, page }) => {
     await open('');
     const r = await page.evaluate(RUN(codeWithSeed(newcity, seed), ops));
     r.day1 = rowR6(r.day1); r.measureC = measureRows(r.measureC);
@@ -118,8 +121,8 @@ for (const seed of SEEDS) {
     console.log(`種子 ${seed} 預建城：推進後 ${J(r.post)}；住宅 ${r.hs.length} 棟；抽取 ${r.tickDraws}`);
   });
 }
-// 本線 → 實驗線：本線 C 段＋第 1 天之後匯出的碼
-await withBrowser(opt, async ({ open, page }) => {
+// 本線 → 實驗線：本線 C 段＋第 1 天之後匯出的碼（D017 不跑）
+if (!D17) await withBrowser(opt, async ({ open, page }) => {
   await open('');
   for (const seed of SEEDS) {
     const code = civic3d(codeWithSeed(newcity, seed), KT, vrank).codeC;
@@ -129,5 +132,5 @@ await withBrowser(opt, async ({ open, page }) => {
   }
 });
 lab.seconds = Math.round((Date.now() - t0) / 1000);
-fs.writeFileSync(path.join(ROOT, 'src/content/samples/d016-lab.json'), J(lab));
-console.log(`寫出 d016-lab.json（${lab.seconds}s，實驗線 ${commit.slice(0, 7)} v${version}）`);
+fs.writeFileSync(path.join(ROOT, `src/content/samples/${SET}-lab.json`), J(lab));
+console.log(`寫出 ${SET}-lab.json（${lab.seconds}s，實驗線 ${commit.slice(0, 7)} v${version}）`);

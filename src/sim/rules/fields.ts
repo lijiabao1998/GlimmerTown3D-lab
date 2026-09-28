@@ -112,6 +112,39 @@ export function eduStaticAt(g: Grids, x: number, y: number, e: EduCtx): number {
   return Math.min(255, Math.round(v * tq(e.tech, 'C1', 1.05, 1) * tq(e.tech, 'C4a', 1.15, 1) * tq(e.tech, 'C4b', 1.08, 1) * tq(e.tech, 'D7', 1.10, 1) * sq('edu', 1.08, 1)));
 }
 
+// 53021：噪音源（D017）：半徑 r、中心強度 p（T325）。實驗線 19 種原樣
+export const NOISE_SRC: Record<number, { r: number; p: number }> = {
+  19: { r: 8, p: 50 }, 9: { r: 5, p: 26 }, 56: { r: 6, p: 30 }, 39: { r: 5, p: 28 }, 65: { r: 4, p: 22 }, 17: { r: 4, p: 20 }, 55: { r: 5, p: 24 }, 62: { r: 4, p: 18 },
+  76: { r: 3, p: 16 }, 165: { r: 5, p: 24 }, 166: { r: 6, p: 28 }, 167: { r: 4, p: 18 }, 170: { r: 4, p: 18 }, 171: { r: 4, p: 16 }, 172: { r: 4, p: 18 },
+  173: { r: 6, p: 30 }, 174: { r: 7, p: 36 }, 181: { r: 3, p: 14 }, 184: { r: 2, p: 12 },
+};
+// 53022／53042：來源簽名與地價髒標記（實驗線全域 noiseSig、landDirty、landBox）；讀檔、開新圖 noiseSig＝−1（allocGrids 56934）
+export interface NoiseState { noiseSig: number; landDirty: boolean; landBox: unknown }
+// 53023–53043 rebuildNoise（D017）：清 0；每一棟根格（ref 格跳過）是噪音源的，照 Chebyshev 距離 d 加 round(p×(1−d/(r+1)))（≤ 0 不加），每格上限 255；
+// 同時算來源簽名 (sig+i*31+k)>>>0，跟上一次不同就把地價設成整張重算。idxList＝當天的建築索引（54949）或 null（整張掃，54997）
+export function rebuildNoise(w: World, g: Grids, st: NoiseState, idxList: readonly number[] | null): void {
+  const NOISE = g.NOISE, N = w.N, tiles = w.tiles;
+  NOISE.fill(0);
+  let sig = 0;
+  const scan = (i: number) => {
+    const b = tiles[i].bld;
+    if (!b || b.ref) return;
+    const cfg = NOISE_SRC[b.k]; if (!cfg) return;
+    const x = i % N, y = (i / N) | 0;
+    sig = (sig + i * 31 + b.k) >>> 0;
+    for (let dy = -cfg.r; dy <= cfg.r; dy++) { const ny = y + dy; if (ny < 0 || ny >= N) continue;
+      for (let dx = -cfg.r; dx <= cfg.r; dx++) { const nx = x + dx; if (nx < 0 || nx >= N) continue;
+        const d = Math.max(Math.abs(dx), Math.abs(dy));
+        const v = Math.round(cfg.p * (1 - d / (cfg.r + 1))); if (v <= 0) continue;
+        const j = ny * N + nx;   // idx(nx,ny)（39731）
+        const nv = NOISE[j] + v; NOISE[j] = nv < 255 ? nv : 255;
+      } }
+  };
+  if (idxList) for (const i of idxList) scan(i);
+  else for (let i = 0; i < N * N; i++) scan(i);
+  if (sig !== st.noiseSig) { st.noiseSig = sig; st.landDirty = true; st.landBox = null; }   // 噪音源增減 → 地價整張重算
+}
+
 // D009 公式讀的場（landStaticAt、judgeWealth、住宅幸福……）：同一批陣列的視圖，不複製。
 // 各鍵＝實驗線的全域：COV 52960、POL 52990、NOISE 53020、LAND 53066、EDU 53127、commutePenalty 56927、METRO_TOD467B 56267、ACCESS468 39671
 export function fieldsOf(g: Grids): Fields {
@@ -119,7 +152,7 @@ export function fieldsOf(g: Grids): Fields {
 }
 
 // tick() 54996–55001 的全圖分支（landBox＝null）：LANDBASE 逐格重算；存進 Uint8Array＝小數截尾。
-// 實驗線這一支先跑 rebuildNoise(null)（53023）；噪音沒搬，NOISE 維持呼叫端給的值。
+// 實驗線這一支先跑 rebuildNoise(null)（54997）；跟當天開頭（54949）那一次之間建築沒變，結果一樣，這裡直接讀 NOISE（D017）。
 export function rebuildLandBase(w: World, g: Grids): void {
   const f = fieldsOf(g), N = g.N;
   for (let i = 0; i < N * N; i++) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0);

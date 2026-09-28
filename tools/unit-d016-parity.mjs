@@ -34,6 +34,36 @@ const civvOk = v => Array.isArray(v) && v.length > 0 && v.every(r => Array.isArr
 const recsOk = (xs, list) => Array.isArray(xs) && xs.length === list.length && xs.every((r, i) => isObj(r) && r.k === list[i].k && typeof r.money === 'number' && Number.isInteger(r.draws) && isHex(r.tileHash) && isHex(r.fieldHash));
 const kCount = (tiles, k) => tiles.reduce((n, t) => n + (t.bld && !t.bld.ref && t.bld.k === k ? 1 : 0), 0);
 
+// 預建城逐項比（D016 先拆噪音源、D017 留著體育場，兩份共用）：pre＝本線那一跑（d016-ops.mjs prebuilt16 的回傳，照種子）、labPre＝實驗線樣本的 prebuilt、
+// bareOf(seed)＝同一座城只做劇本開頭（資金、拆噪音源）、不蓋設施時推進後住宅的 h（Map）。回傳 bad、每個種子幸福被設施改到的住宅棟數、住在噪音裡的住宅棟數
+export function prebuiltCheck(seeds, pre, labPre, P, bareOf) {
+  const bad = [], moved = [], noisy = [];
+  for (const seed of seeds) {
+    const m = pre[seed], L = labPre[seed], q = L.probe;
+    for (const [name, a, b] of [['開跑前', m.snap0, L.snap0], ['劇本後', m.snapOps, L.snapOps]]) if (J(a) !== J(b)) bad.push(`種子 ${seed} ${name}：本線 ${J(a)} ≠ 實驗線 ${J(b)}`);
+    const d = batchDiff(m.ops, L.ops, true); if (d) bad.push(`種子 ${seed} 劇本${d}`);
+    for (const e of effectOf(P.ops, m.ops, 3000).filter(e => !e.eff)) bad.push(`種子 ${seed} 劇本第 ${e.i + 1} 筆沒改到東西`);
+    if (J(m.inv) !== J(L.inv)) bad.push(`種子 ${seed} 推進後（住商工以外、覆蓋、地價）：本線 ${J(m.inv)} ≠ 實驗線 ${J(L.inv)}`);
+    if (m.tickLand !== L.tickLand) bad.push(`種子 ${seed}：推進開頭地價框改了 本線 ${m.tickLand} ≠ 實驗線 ${L.tickLand} 格`);
+    const old = new Set(m.pwBefore), pwOld = x => J(x.filter(([i]) => old.has(i)));
+    if (pwOld(m.pw) !== pwOld(L.pw)) bad.push(`種子 ${seed} 推進前就在的住商工有電不同`);
+    const ds = sharedOff(L.tickSites, m.tickSites, PRE_GROWTH_LINES.map(String)); if (ds) bad.push(`種子 ${seed} 推進那一天生長之前的抽取：${ds}`);
+    // 推進前就在的每一棟住宅：實驗線 h＝本線 h 依序套垃圾（全城池 garbPen409、離垃圾場太遠 −.045）與糧食（55414–55419）
+    const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs), food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);
+    if (!res.length || q.garbFar409 !== res.length) bad.push(`種子 ${seed}：推進前就在的住宅 ${res.length} 棟、離垃圾場太遠 ${q.garbFar409} 棟`);
+    for (const [i, h] of res) {
+      const want = clamp(clamp(clamp(h - q.garbPen409, .05, 1) - .045, .05, 1) + food, .05, 1);
+      if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} 套垃圾與糧食 ${want}`);
+    }
+    // 這批設施真的改到了幸福：同一座城不蓋設施，推進前就在的住宅本線的 h 不同
+    const bare = bareOf(seed);
+    moved.push(res.filter(([i, h]) => bare.get(i) !== h).length);
+    if (!res.some(([i, h]) => bare.get(i) !== h)) bad.push(`種子 ${seed}：蓋不蓋設施，推進前就在的住宅幸福都一樣（比了等於沒比）`);
+    noisy.push(res.filter(([i]) => m.sim.g.NOISE[i] > 0).length);
+  }
+  return { bad, moved, noisy };
+}
+
 export async function d016ParityGuards(log) {
   const read = p => fs.readFileSync(path.resolve(ROOT, p), 'utf8'), file = 'src/content/samples/d016-lab.json';
   if (!fs.existsSync(path.join(ROOT, file))) { log(false, 'D016 實驗線實跑錨點', `${file} 不存在：跑 tools/d016-parity.mjs`); return; }
@@ -120,30 +150,8 @@ export async function d016ParityGuards(log) {
   }
   // ---- 預建城 ----
   {
-    const bad = [], moved = [];
-    for (const seed of seeds) {
-      const m = pre[seed], L = lab.prebuilt[seed], q = L.probe;
-      for (const [name, a, b] of [['開跑前', m.snap0, L.snap0], ['劇本後', m.snapOps, L.snapOps]]) if (J(a) !== J(b)) bad.push(`種子 ${seed} ${name}：本線 ${J(a)} ≠ 實驗線 ${J(b)}`);
-      const d = batchDiff(m.ops, L.ops, true); if (d) bad.push(`種子 ${seed} 劇本${d}`);
-      for (const e of effectOf(P.ops, m.ops, 3000).filter(e => !e.eff)) bad.push(`種子 ${seed} 劇本第 ${e.i + 1} 筆沒改到東西`);
-      if (J(m.inv) !== J(L.inv)) bad.push(`種子 ${seed} 推進後（住商工以外、覆蓋、地價）：本線 ${J(m.inv)} ≠ 實驗線 ${J(L.inv)}`);
-      if (m.tickLand !== L.tickLand) bad.push(`種子 ${seed}：推進開頭地價框改了 本線 ${m.tickLand} ≠ 實驗線 ${L.tickLand} 格`);
-      const old = new Set(m.pwBefore), pwOld = x => J(x.filter(([i]) => old.has(i)));
-      if (pwOld(m.pw) !== pwOld(L.pw)) bad.push(`種子 ${seed} 推進前就在的住商工有電不同`);
-      const ds = sharedOff(L.tickSites, m.tickSites, PRE_GROWTH_LINES.map(String)); if (ds) bad.push(`種子 ${seed} 推進那一天生長之前的抽取：${ds}`);
-      // 推進前就在的每一棟住宅：實驗線 h＝本線 h 依序套垃圾（全城池 garbPen409、離垃圾場太遠 −.045）與糧食（55414–55419）
-      const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs), food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);
-      if (!res.length || q.garbFar409 !== res.length) bad.push(`種子 ${seed}：推進前就在的住宅 ${res.length} 棟、離垃圾場太遠 ${q.garbFar409} 棟`);
-      for (const [i, h] of res) {
-        const want = clamp(clamp(clamp(h - q.garbPen409, .05, 1) - .045, .05, 1) + food, .05, 1);
-        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} 套垃圾與糧食 ${want}`);
-      }
-      // 這批設施真的改到了幸福：同一座城只拆噪音源、不蓋設施，推進前就在的住宅本線的 h 不同
-      const bare = new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true).hs);
-      moved.push(res.filter(([i, h]) => bare.get(i) !== h).length);
-      if (!res.some(([i, h]) => bare.get(i) !== h)) bad.push(`種子 ${seed}：蓋不蓋設施，推進前就在的住宅幸福都一樣（比了等於沒比）`);
-    }
-    log(!bad.length, `D016 預建城（${seeds.length} 個種子，${P.ops.length} 筆：先拆噪音源（本線沒搬噪音，見卡面）、在住宅旁蓋九種設施、拆診所再復原）：每一筆逐項相等；推進一天之後住商工以外的格子、覆蓋、地價、推進前就在的住商工有電、生長之前的抽取都相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福依序套垃圾與糧食（第 2 類，同 D011），逐位相等；而且這批設施真的改到了它們的幸福`,
+    const { bad, moved } = prebuiltCheck(seeds, pre, lab.prebuilt, P, seed => new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true).hs));
+    log(!bad.length, `D016 預建城（${seeds.length} 個種子，${P.ops.length} 筆：先拆噪音源（D016 那時本線沒搬噪音；D017 另跑一份留著體育場的）、在住宅旁蓋九種設施、拆診所再復原）：每一筆逐項相等；推進一天之後住商工以外的格子、覆蓋、地價、推進前就在的住商工有電、生長之前的抽取都相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福依序套垃圾與糧食（第 2 類，同 D011），逐位相等；而且這批設施真的改到了它們的幸福`,
       bad.slice(0, 3).join('；') || `九種設施 ${P.at.map(([t, x, z]) => `${t}(${x},${z})`).join(' ')}；幸福被設施改到的住宅 ${moved.join('、')} 棟`);
   }
   // ---- 分享碼互通 ----
