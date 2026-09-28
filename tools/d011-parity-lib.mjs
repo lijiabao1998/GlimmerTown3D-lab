@@ -188,7 +188,7 @@ export function opsOf(code) { const { S, lay } = layersOf(code); return d011Ops(
 export function prebuiltOf(code) { const { S, lay } = layersOf(code); return prebuiltOps(S.n, S.bl, lay('rd'), lay('rcl')); }
 
 // 本線一座城的量具：亂數抽取計數（{k:'seed'} 換掉 s.rng 的 R、ri 之後重新包）、拆除確認的時鐘（每筆 gap，預設 10 秒）、快照、一段操作逐筆記
-function harness(s) {
+export function harness(s) {
   const h = { draws: 0, clock: 0, picks: {}, cap: null };
   // 推進一天時另記每一次抽取的呼叫位置（siteOf：堆疊裡第一個 src/sim 的檔名:行，跳過亂數本身 lab.ts）
   const site = () => { const k = siteOf(new Error().stack); h.cap[k] = (h.cap[k] || 0) + 1; };

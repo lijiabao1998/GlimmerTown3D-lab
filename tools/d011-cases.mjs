@@ -3,6 +3,7 @@
 // 每個案例＝一張隨機小圖（N 10–18，另有 14 張 N 24–34 的大圖量地價框的邊：水、沙、草、高地、樹、各級道路與橋、分區、住商工 lv1–3、電廠、警察局、多格建築、其他圖層）
 // ＋起始資金、難度、科技／特化、服務預算、地價髒框的起始狀態、亂數種子＋一串操作（點、拉線、框選、復原、設定資金；每張 ≥20 筆）。
 // 新增家族一律接在最後、分支只在自己的家族裡抽亂數：前面各家族的案例逐字不變。
+// D016 另開一組家族（FAMILIES16，種子 D016_SEED，cases16(k)）：地圖、參數照 D011 同名的底家族生，操作改抽公共設施九支（civic 參數），D011 的案例逐字不變。
 // runMap(impl, c) 用同一套步驟跑一個案例、逐筆記錄（兩邊只差 impl：實驗線是 vm 裡的原始碼，本線是 src/sim/rules/build.ts）：
 //   pre（點：施工前 canPlace 的理由與 placeCost）、res（點＝成敗；線＝路線與逐格成敗；框＝蓋成幾格與提示原文；復原＝有沒有東西可退）、
 //   calls（每一次 doPlace 的 [x,y,成敗]，照呼叫順序）、txn（這一筆推進復原堆疊的交易：[spent, 快照格號…]）、depth（堆疊深度）、
@@ -23,6 +24,12 @@ export const D011_SEED = 20261011;
 //   含從 ref 格起框、之後復原）
 export const FAMILIES = [['random', 104], ['money', 24], ['doze', 28], ['sandbox', 12], ['tech', 18], ['undo', 16], ['edge', 24], ['wide', 14], ['multi', 16]];
 export const D011_COUNT = FAMILIES.reduce((n, [, c]) => n + c, 0);
+// D016：[家族, 張數, 底家族]。地圖與參數照底家族（random 隨機城、money 資金邊界、doze 各圖層與焦土隕石坑、sandbox、tech 科技與特化、edge 貼邊與圖外、undo 長串復原），
+// 操作的工具改抽公共設施九支；另加「蓋了馬上拆／復原」（新建築被拆撤覆蓋、被復原）
+export const D016_SEED = 20261016;
+export const CIVIC = ['park', 'fire', 'policeBox', 'hospital', 'clinic', 'school', 'library', 'post', 'cemetery'];
+export const FAMILIES16 = [['c-random', 70, 'random'], ['c-money', 24, 'money'], ['c-doze', 24, 'doze'], ['c-sandbox', 10, 'sandbox'], ['c-tech', 16, 'tech'], ['c-edge', 12, 'edge'], ['c-undo', 8, 'undo']];
+export const D016_COUNT = FAMILIES16.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -35,8 +42,8 @@ const ARM_GAPS = [1, 500, 1500, 2999, 3000, 3001, 6000];               // 拆除
 const TECH_COST = ['B5', 'C8', 'D4a'], TECH_EDU = ['C1', 'C4a', 'C4b', 'D7'];
 const D4 = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 
-export function seedOf(name, k) {
-  let h = (D011_SEED ^ 0x9e3779b9) >>> 0;
+export function seedOf(name, k, base = D011_SEED) {
+  let h = (base ^ 0x9e3779b9) >>> 0;
   for (const c of name) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
   h = Math.imul(h ^ (k + 1), 2654435761) >>> 0;
   h ^= h >>> 15;
@@ -242,7 +249,8 @@ function landOf(g, N) {
   return [true, [x0, y0, g.int(x0, N - 1), g.int(y0, N - 1)]];
 }
 
-function genOps(g, N, tiles, fam, stacks, multis) {
+// civic：D016 的家族（工具改抽 CIVIC；null＝D011，每一個分支都跟原本一樣抽亂數）
+function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
   const ops = [], outP = fam === 'edge' ? .3 : .05;
   let now = g.int(1000, 90000);
   const list = pred => tiles.flatMap((t, i) => pred(t) ? [i] : []);
@@ -260,13 +268,22 @@ function genOps(g, N, tiles, fam, stacks, multis) {
     if (tool === 'doze') return u < .3 ? from(cats.bld) : u < .45 ? from(cats.multi) : u < .6 ? from(cats.road) : u < .75 ? from(cats.stuff) : u < .88 ? from(cats.zone) : any();
     if (ROADS.includes(tool)) return u < .3 ? from(cats.road) : u < .5 ? from(cats.water) : u < .6 ? from(cats.tree) : u < .7 ? from(cats.bld) : any();
     if (ZONES.includes(tool)) return u < .35 ? from(cats.zone) : u < .5 ? from(cats.tree) : u < .6 ? from(cats.road) : u < .7 ? from(cats.water) : any();
+    if (civic && CIVIC.includes(tool)) return u < .15 ? from(cats.tree) : u < .25 ? from(cats.bld) : u < .35 ? from(cats.water) : u < .45 ? from(cats.road) : u < .8 ? from(cats.free) : any();
     return u < .2 ? from(cats.tree) : u < .3 ? from(cats.bld) : u < .4 ? from(cats.water) : any();
   };
-  const tapOp = () => { const u = g.R(), tool = u < .3 ? g.pick(ROADS) : u < .55 ? g.pick(ZONES) : u < .65 ? 'plant' : u < .8 ? 'police' : 'doze'; const [x, y] = target(tool); ops.push({ op: 'tap', tool, x, y }); };
-  const lineOp = () => { const tool = g.ch(.88) ? g.pick(ROADS) : g.pick(['zr', 'zi', 'doze', 'police']); const [x0, y0] = target(tool); ops.push({ op: 'line', tool, x0, y0, x1: x0 + g.int(-7, 7), y1: y0 + g.int(-7, 7) }); };
+  const tapOp = () => {
+    const u = g.R(), tool = civic ? (u < .12 ? g.pick(ROADS) : u < .2 ? g.pick(ZONES) : u < .82 ? g.pick(CIVIC) : 'doze')
+      : u < .3 ? g.pick(ROADS) : u < .55 ? g.pick(ZONES) : u < .65 ? 'plant' : u < .8 ? 'police' : 'doze';
+    const [x, y] = target(tool); ops.push({ op: 'tap', tool, x, y });
+  };
+  const lineOp = () => {
+    const tool = civic ? (g.ch(.55) ? g.pick(ROADS) : g.pick([...CIVIC, 'doze'])) : g.ch(.88) ? g.pick(ROADS) : g.pick(['zr', 'zi', 'doze', 'police']);
+    const [x0, y0] = target(tool); ops.push({ op: 'line', tool, x0, y0, x1: x0 + g.int(-7, 7), y1: y0 + g.int(-7, 7) });
+  };
   const rectAt = (tool, x0, y0, x1, y1, gap) => { now += gap ?? g.pick([200, 900, 2500, 4000, 12000]); ops.push({ op: 'rect', tool, x0, y0, x1, y1, now }); };
   const rectOp = () => {
-    const u = g.R(), tool = u < .55 ? g.pick(ZONES) : u < .93 ? 'doze' : g.pick(['police', 'plant', 'road']); const [x, y] = target(tool);
+    const u = g.R(), tool = civic ? (u < .25 ? g.pick(ZONES) : u < .55 ? 'doze' : g.pick(CIVIC)) : u < .55 ? g.pick(ZONES) : u < .93 ? 'doze' : g.pick(['police', 'plant', 'road']);
+    const [x, y] = target(tool);
     if (g.ch(.25)) rectAt(tool, x, y, x, y);
     else { const w = g.int(0, 4), h = g.int(0, 4), flip = g.ch(.3); rectAt(tool, flip ? x + w : x, flip ? y + h : y, flip ? x : x + w, flip ? y : y + h); }
   };
@@ -274,7 +291,14 @@ function genOps(g, N, tiles, fam, stacks, multis) {
   // 單格拆二級以上：第一次只預備，隔 gap 毫秒再按同一格（中間偶爾夾別的操作）
   const armSeq = () => { const [x, y] = from(cats.hi); rectAt('doze', x, y, x, y); if (g.ch(.8)) { if (g.ch(.25)) (g.ch(.5) ? tapOp : rectOp)(); rectAt('doze', x, y, x, y, g.pick(ARM_GAPS)); } };
   const moneyOp = () => ops.push(g.ch(.65) ? { op: 'money', next: g.pick(NEXT_D) } : { op: 'money', v: g.pick(MONEY_V) });
-  if (fam === 'undo') {   // 先蓋 56–62 筆（約八成成功，交易超過堆疊上限 40），再退 44–50 次（最後幾次沒東西可退）
+  // D016：在空地蓋一種設施，接著四成拆掉（點或 1×1 框；一級服務設施不用確認）、三成復原、其餘留著；拆了的一半再復原（拆除撤印、復原重建覆蓋）
+  const civicCycle = () => {
+    const [x, y] = from(cats.free), tool = g.pick(CIVIC), u = g.R();
+    if (g.ch(.2)) moneyOp();
+    ops.push({ op: 'tap', tool, x, y });
+    if (u < .4) { if (g.ch(.5)) ops.push({ op: 'tap', tool: 'doze', x, y }); else rectAt('doze', x, y, x, y); if (g.ch(.5)) ops.push({ op: 'undo' }); }
+    else if (u < .7) ops.push({ op: 'undo' });
+  };  if (fam === 'undo') {   // 先蓋 56–62 筆（約八成成功，交易超過堆疊上限 40），再退 44–50 次（最後幾次沒東西可退）
     for (let s = 0, m = g.int(56, 62); s < m; s++) (g.ch(.6) ? tapOp : g.ch(.5) ? lineOp : rectOp)();
     for (let s = 0, m = g.int(44, 50); s < m; s++) { ops.push({ op: 'undo' }); if (g.ch(.1)) tapOp(); }
     return ops;
@@ -287,7 +311,7 @@ function genOps(g, N, tiles, fam, stacks, multis) {
     for (let s = 0, m = Math.min(pool.length, g.int(3, 6)); s < m; s++) first.push(pool.splice(g.int(0, pool.length - 1), 1)[0]);
     for (const i of first) {
       const [x, y] = xy(i);
-      if (g.ch(.5)) ops.push({ op: 'tap', tool: g.pick([...ROADS, ...ZONES, 'plant', 'police']), x, y });
+      if (g.ch(.5)) ops.push({ op: 'tap', tool: g.pick(civic ? [...CIVIC, 'road', 'zr'] : [...ROADS, ...ZONES, 'plant', 'police']), x, y });
       for (let q = 0, r = g.int(3, 6); q < r; q++) ops.push({ op: 'tap', tool: 'doze', x, y });
     }
   }
@@ -328,6 +352,7 @@ function genOps(g, N, tiles, fam, stacks, multis) {
     }
   }
   while (ops.length < n) {
+    if (civic && g.ch(.18)) { civicCycle(); continue; }
     const u = g.R();
     if (u < (fam === 'money' ? .3 : .08)) { moneyOp(); buildOp(); }
     else if (u < .42) tapOp();
@@ -353,6 +378,19 @@ export function cases(k) {
     base += count;
   }
   throw new Error(`D011 案例 ${k} 超出 ${D011_COUNT}`);
+}
+// D016 第 k 個案例（0 ≤ k < D016_COUNT）：地圖、參數照底家族，操作抽公共設施
+export function cases16(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES16) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D016_SEED));
+      const m = genMap(g, fam, j), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, CIVIC) };
+    }
+    base += count;
+  }
+  throw new Error(`D016 案例 ${k} 超出 ${D016_COUNT}`);
 }
 
 // ---- 兩邊共用的跑法 ----

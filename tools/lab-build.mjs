@@ -4,6 +4,8 @@
 // 地價髒框 markLandDirty、覆蓋與污染蓋印、rebuildCov。片段文字一個字都不改；片段以外的東西換成樁（見 d011-cases.mjs makeLab）。
 // 片段原文也存進樣本（gzip）：本線守衛在沒有實驗線的環境（CI）也能核雜湊、重跑、做原碼單點突變。
 // 用法：node tools/lab-build.mjs --lab=<實驗線工作目錄>   → src/content/samples/d011-build.json
+//       node tools/lab-build.mjs --lab=<實驗線工作目錄> --set=d016   → src/content/samples/d016-build.json（D016 公共設施的家族 cases16，同一批片段；
+//       覆蓋率另有一份門檻 NEED16，civic-* 與 doze-civic、undo-civic 標籤只在 d016 記，D011 的樣本逐字不變）
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -11,12 +13,20 @@ import { gzipSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { labSource } from './labsrc.mjs';
-import { cases, D011_SEED, D011_COUNT, FAMILIES, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
+import { cases, D011_SEED, D011_COUNT, FAMILIES, cases16, D016_SEED, D016_COUNT, FAMILIES16, CIVIC, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LAB = path.resolve(arg('lab', path.join(ROOT, 'scratch/lab-src')));
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
+const SET = arg('set', 'd011');
+if (!['d011', 'd016'].includes(SET)) throw new Error(`--set 只能是 d011 或 d016：${SET}`);
+const D16 = SET === 'd016';
+const CASES = D16 ? cases16 : cases, COUNT = D16 ? D016_COUNT : D011_COUNT;
+// D016：公共設施九支的種類與服務預算類別（doPlace 51667–51717、SVC_BUDGET_CAT 52967；公園、郵局、墓園不看預算）
+const CIVIC_K = { park: 4, fire: 6, policeBox: 52, hospital: 12, clinic: 13, school: 7, library: 14, post: 15, cemetery: 16 };
+const CIVIC_KS = new Set(Object.values(CIVIC_K));
+const CIVIC_CAT = { fire: 'fire', policeBox: 'police', hospital: 'health', clinic: 'health', school: 'edu', library: 'edu' };
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
 if (commit !== PINNED) throw new Error(`D011 實驗線版本錯誤：要求 ${PINNED}，目前 ${commit}`);
 if (execFileSync('git', ['-C', LAB, 'status', '--porcelain', '--', 'index.html']).toString().trim()) throw new Error('實驗線 index.html 有未提交的修改');
@@ -114,8 +124,10 @@ lab.spy = {
     tag(`call:${opKind}`);
     if (!s0.t) { tag('call-out-of-map'); return; }
     if (s0.land) tag('land-full-to-box');
-    if (s0.reason) { tag(`reason:${tool === 'doze' ? 'doze:' : ''}${s0.reason}`); return; }
+    const civ = D16 && CIVIC.includes(tool);
+    if (s0.reason) { tag(`reason:${tool === 'doze' ? 'doze:' : ''}${s0.reason}`); if (civ) tag(`civic-reason:${s0.reason}`); return; }
     if (!ok) {
+      if (civ && s0.cost > s0.money) { tag('civic-refused-money'); if (s0.cost - s0.money <= 1) tag('civic-refused-money-by≤1'); }
       if (s0.cost > s0.money) { tag('refused-money'); if (s0.cost - s0.money <= 1) tag('refused-money-by≤1'); if (s0.cost === 0) tag('refused-money-negative'); if (opKind === 'line') { tag('line-ran-out'); lineShort = true; } }
       else tag(`noop:${tool}`);
       return;
@@ -140,6 +152,15 @@ lab.spy = {
     else if (['zr', 'zc', 'zi'].includes(tool)) tag(b.zone ? (b.zone === t.zone ? 'zone-same-on-tree' : 'zone-rezone-free') : 'zone-new');
     else if (tool === 'doze') { const l = topLayer(b), below = LAYERS.slice(LAYERS.indexOf(l) + 1).find(q => q.split('|').some(k => b[k])); if (below) tag(`doze-order:${l}>${below}`); tag(`doze:${l}${l === 'bld' ? (b.bld.ref || b.bld.sz > 1 ? ':multi' : b.bld.k <= 3 ? `:rci-lv${b.bld.lv}` : ':svc') : ''}`); if (l === 'bld' && b.zone && t.zone) tag('doze:bld-keeps-zone'); if (l === 'ruin' && b.zone) tag('doze:ruin-with-zone'); if (b.crater) tag('doze:crater-120'); }
     else tag(`build:${tool}`);
+    if (civ) {
+      if (s0.cost === s0.money && s0.cost > 0) tag('civic-money-exact');
+      if (s0.cost % 1) tag('civic-cost-fractional');
+      if (lab.diff() === 3) tag('civic-sandbox-free');
+      if (b.tree) tag('civic-tree-surcharge');
+      if (CIVIC_CAT[tool] && lab.run('svcBudget')[CIVIC_CAT[tool]] !== 1) tag('civic-budget-scaled');
+      if (opKind !== 'tap') tag(`civic-${opKind}`);
+    }
+    if (D16 && tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && !(b.bld.sz > 1) && CIVIC_KS.has(b.bld.k)) tag(`doze-civic:k${b.bld.k}`);
   },
 };
 // 有「整棟快照後再拆同一格」的交易 → 手勢之前的格子（去掉畫面遮罩）；復原這一筆之後要一模一樣
@@ -149,7 +170,14 @@ for (const m of ['tap', 'line', 'rect', 'undo']) {
   impl[m] = op => {
     opKind = m; lineShort = false; via = new Map(); resnapped = false;
     const top0 = lab.getStack().at(-1), pre = (m === 'line' || m === 'rect') && op.tool === 'doze' ? flat() : null, r = f(op), top = lab.getStack().at(-1);
-    if (m === 'undo') { if (r && resnapTxn.has(top0)) { tag('txn-resnap-undone'); if (flat() === resnapTxn.get(top0)) tag('txn-resnap-undo-restores'); } }
+    if (m === 'undo') {
+      if (r && resnapTxn.has(top0)) { tag('txn-resnap-undone'); if (flat() === resnapTxn.get(top0)) tag('txn-resnap-undo-restores'); }
+      if (D16 && r && top0) for (const q of top0.snaps) {   // 復原的這一筆蓋了／拆了公共設施（快照前後，closeUndo 62729 存的 s、a）
+        const s = JSON.parse(q.s).bld, a = JSON.parse(q.a).bld;
+        if (a && !a.ref && CIVIC_KS.has(a.k) && !s) tag('undo-civic-build');
+        if (s && !s.ref && CIVIC_KS.has(s.k) && !a) tag('undo-civic-doze');
+      }
+    }
     else if (resnapped && top !== top0) resnapTxn.set(top, pre);
     return r;
   };
@@ -158,8 +186,8 @@ for (const m of ['tap', 'line', 'rect', 'undo']) {
 const outputs = [], hashes = [];
 let nOps = 0, minOps = Infinity, bytesRaw = 0;
 const opCounts = {};
-for (let k = 0; k < D011_COUNT; k++) {
-  const c = cases(k), raw = [];
+for (let k = 0; k < COUNT; k++) {
+  const c = CASES(k), raw = [];
   const r = runMap(impl, c, { raw });
   outputs.push(r);
   hashes.push(crypto.createHash('sha256').update(r.ops.join('\n') + '\n' + r.end).digest('hex').slice(0, 16));
@@ -207,33 +235,47 @@ const NEED = {
 };
 // 拆除鏈相鄰兩層的先後：每一對都要有一格兩層都在、先拆上面那層（兩支對調就量得到）
 for (let i = 0; i + 1 < LAYERS.length; i++) NEED[`doze-order:${LAYERS[i]}>${LAYERS[i + 1]}`] = 1;
-const missing = Object.entries(NEED).filter(([k, n]) => (cov[k] || 0) < n).map(([k, n]) => `${k} ${cov[k] || 0}/${n}`);
-if (missing.length || minOps < 20 || D011_COUNT < 200) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${D011_COUNT} 張`);
-if (cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
-if (cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
+// D016（卡面驗收 1）：每一種新工具成功 ≥ 20 次；每一種拒絕理由都出現；樹上加價、沙盒、科技與特化係數、服務預算縮放半徑；
+// 新建築被拆（每一種都拆過）、被復原；線與框也蓋過；公園抽 ri(9)、其他抽 ri(5)
+const NEED16 = {
+  ...Object.fromEntries(CIVIC.map(t => [`build:${t}`, 60])),
+  'civic-reason:只能蓋在陸地上': 100, 'civic-reason:道路上不能建造': 100, 'civic-reason:已有建築': 200, 'civic-reason:焦土需先清理': 10, 'civic-reason:隕石坑需先剷除': 10,
+  'civic-refused-money': 300, 'civic-refused-money-by≤1': 20, 'civic-money-exact': 15, 'civic-tree-surcharge': 60, 'civic-sandbox-free': 60, 'civic-cost-fractional': 20,
+  'civic-budget-scaled': 100, 'civic-line': 100, 'civic-rect': 100, 'rect-refused-money': 100,
+  ...Object.fromEntries(Object.values(CIVIC_K).map(k => [`doze-civic:k${k}`, 5])),
+  'undo-civic-build': 200, 'undo-civic-doze': 30, 'undo-ok': 300, 'log:ri,9': 60, 'log:ri,5': 300, 'pre:null': 1000,
+};
+const need = D16 ? NEED16 : NEED;
+const missing = Object.entries(need).filter(([k, n]) => (cov[k] || 0) < n).map(([k, n]) => `${k} ${cov[k] || 0}/${n}`);
+if (missing.length || minOps < 20 || COUNT < (D16 ? 150 : 200)) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${COUNT} 張`);
+if (!D16 && cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
+if (!D16 && cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
 
 // ---- 實驗線自己的表（本線 build.ts 的常數逐項比這一份）----
 const R = s => lab.run(s);
 const tables = {
-  roadCost: [...R('ROAD_COST')], cost: JSON.parse(JSON.stringify(R('({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge})'))),
+  roadCost: [...R('ROAD_COST')],
+  cost: JSON.parse(JSON.stringify(R(`({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge${D16 ? CIVIC.map(t => `,${t}:COST.${t}`).join('') : ''}})`))),
+  ...(D16 ? { covr: JSON.parse(JSON.stringify(R('({park:COVR.park,fire:COVR.fire,police2:COVR.police2,hospital:COVR.hospital,clinic:COVR.clinic,school:COVR.school,library:COVR.library,post:COVR.post,cemetery:COVR.cemetery})'))),
+    budgetCat: JSON.parse(JSON.stringify(R('SVC_BUDGET_CAT'))) } : {}),
   roadToolToRc: ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'plant', 'doze', 'rail'].map(t => [t, R('roadToolToRc')(t)]),
   renderKeys: [...RENDER_KEYS],
 };
 
 const pack = a => gzipSync(Buffer.from(JSON.stringify(a)), { level: 9, mtime: 0 }).toString('base64');
 const out = {
-  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: 'tools/lab-build.mjs',
-    how: '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
+  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: D16 ? 'tools/lab-build.mjs --set=d016' : 'tools/lab-build.mjs',
+    how: (D16 ? 'D016 公共設施：tools/d011-cases.mjs 的 cases16（FAMILIES16，地圖與參數照底家族、操作抽公共設施九支），其餘同 D011。' : '') + '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
     casesSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'tools/d011-cases.mjs'))).digest('hex'),
     pieces: L.pieces },
-  seed: D011_SEED, families: FAMILIES, counts: { maps: D011_COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
+  seed: D16 ? D016_SEED : D011_SEED, families: D16 ? FAMILIES16 : FAMILIES, counts: { maps: COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
   tables, coverage: cov, hashes,
   lab: { codec: 'gzip+base64+json', pieces: pack(pieces) },
   exact: { codec: 'gzip+base64+json', outputs: pack(outputs) },
 };
 const json = JSON.stringify(out);
 if (/https?:\/\//.test(json)) throw new Error('樣本裡不能有外部網址（零外部素材守衛）');
-const file = path.join(ROOT, 'src/content/samples/d011-build.json');
+const file = path.join(ROOT, `src/content/samples/${SET}-build.json`);
 fs.writeFileSync(file, json);
-console.log(`D011 建造樣本：${D011_COUNT} 張小圖、${nOps} 筆操作（每張至少 ${minOps}）；片段 ${pieces.length} 段；原始記錄 ${(bytesRaw / 1048576).toFixed(1)} MB → 樣本 ${(json.length / 1024).toFixed(0)} KB；${((Date.now() - t0) / 1000).toFixed(1)}s`);
+console.log(`${SET.toUpperCase()} 建造樣本：${COUNT} 張小圖、${nOps} 筆操作（每張至少 ${minOps}）；片段 ${pieces.length} 段；原始記錄 ${(bytesRaw / 1048576).toFixed(1)} MB → 樣本 ${(json.length / 1024).toFixed(0)} KB；${((Date.now() - t0) / 1000).toFixed(1)}s`);
 console.log('覆蓋：' + JSON.stringify(cov));

@@ -36,7 +36,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 export const D011_LAB_COMMIT = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 // 黃金樣本必須摘到的實驗線片段（名稱＝tools/lab-build.mjs 的 labSource 名稱，照載入順序）
-const REQUIRED_PIECES = ['clamp', 'mulberry32', 'ROAD_COST', 'COST', 'sq', 'tool', 'tq', 'T', 'idx', 'inMap', 'recalcMask', 'roadToolToRc', 'roadCostAt',
+export const REQUIRED_PIECES = ['clamp', 'mulberry32', 'ROAD_COST', 'COST', 'sq', 'tool', 'tq', 'T', 'idx', 'inMap', 'recalcMask', 'roadToolToRc', 'roadCostAt',
   'canPlace', 'placeCost', 'doPlace', 'countNear', 'COVR', 'COV', 'covFieldOfK', 'svcBudget', 'SVC_BUDGET_CAT', 'covFieldOfK 覆寫', 'stampCov', 'POL', 'POL_SRC',
   'POL_LV3_MAX', 'recomputePol', 'stampPolSrc', 'stampPolTree', 'LAND', 'landDirty', 'landBox', 'markLandDirty', 'landStaticAt', 'recomputeLandDynamic', 'EDU',
   'EDU_W_SCHOOL', 'eduStaticAt', 'rebuildCov', 'allocGrids', 'roadDraftTiles436', 'rect', '手勢狀態', '觸控狀態', '復原堆疊', 'txnLabel460', 'openUndo', 'closeUndo',
@@ -77,12 +77,12 @@ export function impl3d(Bm = B) {
   };
 }
 
-const unpack = s => JSON.parse(gunzipSync(Buffer.from(s ?? '', 'base64')).toString('utf8'));
+export const unpack = s => JSON.parse(gunzipSync(Buffer.from(s ?? '', 'base64')).toString('utf8'));
 // 兩個字串第一個不同的位置附近
-const where = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return `@${i} 本線「${a.slice(Math.max(0, i - 60), i + 60)}」≠ 實驗線「${String(b).slice(Math.max(0, i - 60), i + 60)}」`; };
-const opText = op => op ? `${op.op}${op.tool ? ' ' + op.tool : ''} ${['x', 'y', 'x0', 'y0', 'x1', 'y1', 'now', 'v', 'next'].filter(k => op[k] !== undefined).map(k => `${k}=${op[k]}`).join(' ')}` : '（結尾）';
+export const where = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return `@${i} 本線「${a.slice(Math.max(0, i - 60), i + 60)}」≠ 實驗線「${String(b).slice(Math.max(0, i - 60), i + 60)}」`; };
+export const opText = op => op ? `${op.op}${op.tool ? ' ' + op.tool : ''} ${['x', 'y', 'x0', 'y0', 'x1', 'y1', 'now', 'v', 'next'].filter(k => op[k] !== undefined).map(k => `${k}=${op[k]}`).join(' ')}` : '（結尾）';
 // 一張圖跟樣本比：回第一個不同的地方（null＝全相等）
-function firstDiff(got, want, c) {
+export function firstDiff(got, want, c) {
   for (let j = 0; j < Math.max(got.ops.length, want.ops.length); j++) if (got.ops[j] !== want.ops[j]) return { j, text: `第 ${j} 筆（${opText(c.ops[j])}）${where(got.ops[j] ?? '', want.ops[j] ?? '')}` };
   if (got.end !== want.end) return { j: 'end', text: `結尾 ${where(got.end ?? '', want.end ?? '')}` };
   return null;
@@ -191,16 +191,17 @@ const MUTANTS_3D = [
 ];
 const BUILD_EXPORTS = ['ROAD_COST', 'COST', 'UNDO_MAX', 'DOZE_ARM_MS', 'D011_TOOLS', 'roadToolToRc', 'roadCostAt', 'markLandDirty', 'canPlace', 'placeCost', 'dozeLayer', 'doPlace',
   'openTxn', 'closeTxn', 'pushTxn', 'roadDraftTiles', 'commitLine', 'tap', 'commitRect', 'undoTxn'];
-function buildModule(source) {
+export function buildModule(source) {
   const js = stripTypeScriptTypes(source).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
   const ctx = vm.createContext({ ...labHelpers, ...fieldsMod });
   vm.runInContext(`${js}\n;globalThis.__m = { ${BUILD_EXPORTS.join(', ')} };`, ctx, { filename: 'mutant:build.ts' });
   return ctx.__m;
 }
-function implAgainst(Bm, want, order) {
+// casesFn：哪一組案例（D016 用 cases16，tools/unit-d016-build.mjs）
+export function implAgainst(Bm, want, order, casesFn = cases) {
   const impl = impl3d(Bm);
   for (const k of order) {
-    const c = cases(k), w = want[k];
+    const c = casesFn(k), w = want[k];
     const got = runMap(impl, c, { stopAt: (j, rec) => rec !== w.ops[j] });
     if (got.stopped !== undefined) return { k, j: got.stopped, c };
     const d = firstDiff(got, w, c);
@@ -210,10 +211,10 @@ function implAgainst(Bm, want, order) {
 }
 
 // 在 vm 裡跑一組實驗線片段（或已經載好的 lab），跟樣本逐張比，第一個不同就停
-function labAgainst(pieces, want, order, lab = makeLab(pieces)) {
+export function labAgainst(pieces, want, order, lab = makeLab(pieces), casesFn = cases) {
   const impl = labImpl(lab);
   for (const k of order) {
-    const c = cases(k), w = want[k];
+    const c = casesFn(k), w = want[k];
     const got = runMap(impl, c, { stopAt: (j, rec) => rec !== w.ops[j] });
     if (got.stopped !== undefined) return { k, j: got.stopped, c, text: `第 ${got.stopped} 筆（${opText(c.ops[got.stopped])}）${where(got.ops[got.stopped], w.ops[got.stopped] ?? '')}` };
     const d = firstDiff(got, w, c);
