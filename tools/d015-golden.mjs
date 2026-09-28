@@ -7,7 +7,7 @@ import { withBrowser, ROOT } from './cdp.mjs';
 import { D015_CASES, caseDigest } from './d015-cases.mjs';
 
 const commit = execFileSync('git', ['-C', ROOT, 'rev-parse', 'HEAD']).toString().trim();
-if (execFileSync('git', ['-C', ROOT, 'status', '--porcelain', '--', 'src']).toString().trim()) throw new Error('src 有未提交的修改：黃金樣本要錄在一個乾淨的 commit 上');
+if (execFileSync('git', ['-C', ROOT, 'status', '--porcelain', '--', 'src', ':!src/content/samples/d015-golden.json']).toString().trim()) throw new Error('src 有未提交的修改：黃金樣本要錄在一個乾淨的 commit 上');
 const out = { commit, note: 'D015 之前（整張建）的場景摘要：首次建要逐位元組相同', cases: {} };
 await withBrowser({ width: 412, height: 860, mobile: true }, async ({ open, page }) => {
   const ev = s => page.evaluate(s);
