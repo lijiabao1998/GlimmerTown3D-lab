@@ -505,7 +505,8 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       + `C：網址「${c1.url}」、住商工 ${c1.px.length} 格、地坪不對 ${badC.length} 格${okB && okC ? '' : `；選單 B ${okB}、C ${okC}`}`);
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     const rb = [];
-    try { for (let k = 0; k < 3; k++) rb.push(await ev('__gt.simRebuild(true)')); }   // D015 起量整張重建（清空快取，最壞的情形） finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
+    // D015 起量整張重建（清空快取，最壞的情形）
+    try { for (let k = 0; k < 3; k++) rb.push(await ev('__gt.simRebuild(true)')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
     const rmed = [...rb].sort((p, q) => p - q)[1];
     log(rb.length === 3 && rmed <= 400, 'D012 手機預算：劇本城第 121 天讀檔重挑之後（C 檔）重建一次場景，CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；同 D010 起步城那一項；D015 起量整張重建）',
       `${rb.map(x => x.toFixed(0)).join('、')} ms，中位數 ${rmed?.toFixed(0)}`);

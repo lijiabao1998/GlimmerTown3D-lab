@@ -421,7 +421,8 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）、畫到 ${d.owners} 棟；變異數 ${d.blank}`);
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     const ms = [];
-    try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild(true)')); }   // D015 起量整張重建（清空快取，最壞的情形）；播放中的增量重建另見 D015 finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
+    // D015 起量整張重建（清空快取，最壞的情形）；播放中的增量重建另見 D015
+    try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild(true)')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
     const med = [...ms].sort((a, b) => a - b)[1];
     log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D012 起是 C 檔；D015 起量整張重建）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
     await page.evaluate('__gt.loadSample("starter")');
