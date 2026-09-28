@@ -513,7 +513,8 @@ await guard('./unit-d011-money.mjs', 'd011MoneyGuards');
 await guard('./unit-d011-edit.mjs', 'd011EditGuards');
 await guard('./unit-d011-parity.mjs', 'd011ParityGuards');
 await guard('./unit-d012.mjs', 'd012LookGuards');
-await guard('./unit-d014.mjs', 'd014Guards');     // D014：施工分期、露出曲線、風化、近看小物（實驗線原文在 vm 裡跑，黃金樣本 d014-lab.json，tools/lab-d014.mjs 摘）、地面增量重畫   // D012：讀檔照實驗線重挑外觀（T531）逐棟對拍、讀檔之後的切分、突變要轉紅（黃金樣本 d012-lab.json，tools/d012-parity.mjs 錄）
+await guard('./unit-d014.mjs', 'd014Guards');
+await guard('./unit-d015.mjs', 'd015Guards');     // D015：件的鍵夠不夠（一次改一個輸入：幾何變了鍵一定跟著變；鍵少了一項要紅）     // D014：施工分期、露出曲線、風化、近看小物（實驗線原文在 vm 裡跑，黃金樣本 d014-lab.json，tools/lab-d014.mjs 摘）、地面增量重畫   // D012：讀檔照實驗線重挑外觀（T531）逐棟對拍、讀檔之後的切分、突變要轉紅（黃金樣本 d012-lab.json，tools/d012-parity.mjs 錄）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

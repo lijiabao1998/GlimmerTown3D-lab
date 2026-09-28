@@ -18,7 +18,7 @@ import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { nearGate, nearHb } from '../content/construction.ts';
 import { conAttr, conAttrRect, patchClip, clipDepthMaterial, patchTree, patchSite, siteDepthMaterial, siteGeometry, type ConState, type SiteSpec } from './construction.ts';
-import { Arena, SceneCache, MAX_MOVES, HOLE_LIMIT, type Spec, type Part, type Piece, type PieceMeta } from './pieces.ts';
+import { Arena, SceneCache, MAX_MOVES, HOLE_LIMIT, blockKey, civicKey, houseKey, type Spec, type Part, type Piece, type PieceMeta } from './pieces.ts';
 
 export interface KindLook { cat(k: number): string; catColor(cat: string): string; height(k: number, lv: number, v?: number): number }
 export interface CityHit { id: number; x: number; z: number; block?: number }
@@ -233,7 +233,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     if (shape) {                                               // D007：非住商工照造型表畫
       let y0 = 0;
       for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) y0 = Math.max(y0, top[(b.z + dz) * n + b.x + dx]);
-      specs.push({ key: `K${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}`, owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
+      specs.push({ key: civicKey(b, s, y0), owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
         const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
         m.kindUsed = [...drawKind({ W, O, D, trees: m.yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, C: civic!.colors(b.k, b.lv) }, shape)];
         m.anchor = new THREE.Vector3(b.x + s / 2, y0 + H / 2, b.z + s / 2);
@@ -241,7 +241,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       continue;
     }
     const y0 = Math.max(0, top[root]);
-    specs.push({ key: `H${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}_${b.abandoned ? 1 : 0}`, owner: b.id, block: -1, rect, gen: (Wg, Og, _D, mm) => {
+    specs.push({ key: houseKey(b, s, y0), owner: b.id, block: -1, rect, gen: (Wg, Og, _D, mm) => {
       const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
       const m = s === 1 ? (RCI.has(cat) ? 0.17 : 0.1) : 0.12 * s, x0 = b.x + m, z0 = b.z + m, x1 = b.x + s - m, z1 = b.z + s - m, cx = b.x + s / 2, cz = b.z + s / 2;
       const wall = wallColor(b, cat, H), roofDark = C(210, 0.08, 0.34), flat = C(30, 0.06, 0.5);
@@ -276,7 +276,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   if (blocks) blocks.plan.forEach((bk, bi) => {
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
-    specs.push({ key: `B${bk.x}_${bk.z}_${bk.w}_${bk.h}_${bk.k}_${bk.lv}_${bk.v}_${y0}`, owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+    specs.push({ key: blockKey(bk, y0), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
       const fp = blocks.detail ? blocks.facade(bk) : null, nj: NearJob[] = [];
       m.counts = emptyCounts(); m.facade = !!fp;
       m.anchor = drawBlock(W, O, D, bk, blocks.recipe(bk), blocks.dress(bk), y0, m.yard, m.counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nj : null);
@@ -456,7 +456,10 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   if (spots.length) {
     const round = spots.filter(s => s[2] % 2 === 1), cone = spots.filter(s => s[2] % 2 === 0);
     // D015：樹的位置、種類、地面高沒變就沿用上一次的幾何與實例資料（同一份緩衝，不重傳）；實例網格本身每次新建（材質跟著場景）
-    const key = spots.map(q => q.join(',')).join(';'), kept = con && sc.trees?.key === key ? sc.trees : null;
+    // 鍵：每棵樹的格、樹種、地面高逐一混成兩個 32 位元雜湊（不串字串：幾千棵樹每次重建都要算）
+    let h1 = 0x811c9dc5, h2 = 0x9e3779b9;
+    for (const [x, z, sp, y] of spots) { const w = (z * n + x) * 16 + sp; h1 = Math.imul(h1 ^ w, 0x01000193) >>> 0; h2 = Math.imul(h2 ^ (w + Math.round(y * 1000)), 0x85ebca6b) >>> 0; }
+    const key = `${spots.length}:${h1}:${h2}`, kept = con && sc.trees?.key === key ? sc.trees : null;
     const mats = [mat({ color: 0x6b4f35 }), mat({ color: 0xffffff }), mat({ color: 0xffffff })];
     let meshes: THREE.InstancedMesh[];
     if (kept) {

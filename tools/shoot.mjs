@@ -563,7 +563,7 @@ if (want('d012')) {
         const med = a => [...a].sort((p, q) => p - q)[Math.floor(a.length / 2)], rb = [], cm = [];
         await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
         try {
-          for (let k = 0; k < 3; k++) rb.push(await page.evaluate('__gt.simRebuild()'));
+          for (let k = 0; k < 3; k++) rb.push(await page.evaluate('__gt.simRebuild(true)'));   // D015 起量整張重建
           const runs = await page.evaluate(`(()=>{const L=__gt.layers(),n=L.n,ok=i=>!L.road[i]&&!L.zone[i]&&!L.occ[i]&&!L.tree[i]&&L.ter[i]!==0,o=[];
             for(let z=1;z<n-1&&o.length<3;z+=2)for(let x=0;x+6<=n&&o.length<3;x++){let g=true;for(let d=0;d<6;d++)if(!ok(z*n+x+d)){g=false;break;}if(g){o.push([x,z]);x+=6;}}return o;})()`);
           for (const [x, z] of runs) {

@@ -12,6 +12,7 @@ import { runStarter } from './unit-d010-sim.mjs';
 import { labPartition, partRow, drawPlan } from '../src/content/blocks.ts';
 import { d011Smoke, d011SkipNote, rciCover, planRow, lotsOf, lotBad, villaOf, ARCHE } from './smoke-d011.mjs';
 import { d014Smoke } from './smoke-d014.mjs';
+import { d015Smoke, d015SkipNote } from './smoke-d015.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -420,9 +421,9 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）、畫到 ${d.owners} 棟；變異數 ${d.blank}`);
     await page.send('Emulation.setCPUThrottlingRate', { rate: 6 });
     const ms = [];
-    try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild()')); } finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
+    try { for (let k = 0; k < 3; k++) ms.push(await page.evaluate('__gt.simRebuild(true)')); }   // D015 起量整張重建（清空快取，最壞的情形）；播放中的增量重建另見 D015 finally { await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
     const med = [...ms].sort((a, b) => a - b)[1];
-    log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D012 起是 C 檔）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
+    log(med <= 400, 'D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D012 起是 C 檔；D015 起量整張重建）', `${ms.map(x => x.toFixed(0)).join('、')} ms，中位數 ${med.toFixed(0)}`);
     await page.evaluate('__gt.loadSample("starter")');
     await page.evaluate('__gt.simSpeed(2)');
     const fA = await page.evaluate('(__gt.simPlay(true), __gt.frames())');
@@ -520,8 +521,11 @@ await d011Smoke(withBrowser, log, blankCheck);
 
 // ===== D014：看得見的施工、近看的細節（tools/smoke-d014.mjs：樓體照屋齡露出、工地跟著城市走、沒有突然冒出來、手機預算、風化與近看小物；自己開五個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY) await d014Smoke(withBrowser, log);
-// D011_SMOKE_ONLY（突變測試用）只跑了 D011 的幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
+// ===== D015：重建只換變動的部分（tools/smoke-d015.mjs：首次建＝黃金樣本、增量建＝整張重建、畫面逐像素相同、上傳量與時間；自己開四個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY) await d015Smoke(withBrowser, log);
+// D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
+if (d015SkipNote()) console.log(d015SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

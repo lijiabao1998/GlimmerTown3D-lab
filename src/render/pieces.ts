@@ -22,7 +22,8 @@ export class Arena {
   free: [number, number][] = [];              // 空洞 [起點, 三角形數]，照起點排序、相鄰的合併
   up = 0; grown = 0;                          // 這一次重建上傳了幾個位元組、放大了幾次
   private arrs: Float32Array[] = []; private attrs: THREE.BufferAttribute[] = [];
-  constructor(readonly spec: Spec, cap: number, private sphere: THREE.Sphere) { this.alloc(Math.max(MIN_CAP, cap), 0); }
+  readonly spec: Spec; private sphere: THREE.Sphere;   // Node 守衛直接載這個檔（只去型別），不用建構子參數屬性
+  constructor(spec: Spec, cap: number, sphere: THREE.Sphere) { this.spec = spec; this.sphere = sphere; this.alloc(Math.max(MIN_CAP, cap), 0); }
   static capFor(tris: number) { return Math.max(MIN_CAP, Math.ceil(tris * (1 + SPARE))); }
   bytesPerTri() { return this.spec.reduce((s, [, k]) => s + k, 0) * 3 * 4; }
   // 配新的緩衝（新的 BufferGeometry：第一次畫會整份上傳）；keep＝沿用舊緩衝前面多少個三角形
@@ -109,6 +110,14 @@ export interface PieceMeta {
   tiles: Int32Array; top: Float32Array; wall: Float32Array;   // 對每格最高點、牆頂的貢獻
 }
 export interface Piece { key: string; owner: number; tris: number[]; slot: number[]; meta: PieceMeta }
+
+// 件的鍵：決定它幾何的全部輸入（tools/unit-d015.mjs 逐項改一個輸入：幾何變了，鍵一定要跟著變）。
+// 街區：位置、寬高、種類、等級、變體、地基高（配方、點綴、立面都只看 k、lv、w、h、v；逐戶立面開不開跟著畫法檔，換檔就清快取）
+export const blockKey = (bk: { x: number; z: number; w: number; h: number; k: number; lv: number; v: number }, y0: number) => `B${bk.x}_${bk.z}_${bk.w}_${bk.h}_${bk.k}_${bk.lv}_${bk.v}_${y0}`;
+// 非住商工（照造型表）：編號、種類、等級、變體、位置、大小、地基高
+export const civicKey = (b: { id: number; k: number; lv: number; v: number; x: number; z: number }, s: number, y0: number) => `K${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}`;
+// 不走街區的量體（?blocks=off）：同上＋廢棄（牆色跟著變）
+export const houseKey = (b: { id: number; k: number; lv: number; v: number; x: number; z: number; abandoned: boolean }, s: number, y0: number) => `H${b.id}_${b.k}_${b.lv}_${b.v}_${b.x}_${b.z}_${s}_${y0}_${b.abandoned ? 1 : 0}`;
 
 // 一座城一份（放在施工資料裡，換城、換畫法檔清空）
 export class SceneCache {
