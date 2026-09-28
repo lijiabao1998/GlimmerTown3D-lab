@@ -1,5 +1,5 @@
 {
- "commit": "4dc7d4bbfb8bdbd3de5f21d19af209d05a3ac647",
+ "commit": "c598e681150fcb15af75b0130ab0693f5aec845c",
  "note": "D015 之前（整張建）的場景摘要：首次建要逐位元組相同",
  "cases": {
   "seed516-a": {
@@ -6671,7 +6671,7 @@
      }
     }
    },
-   "ground": "de13480d",
+   "ground": "8a5f4aed",
    "inst": [
     "525:d46d8950:-:-",
     "267:aa1721f7:af744140:-",
@@ -7132,7 +7132,7 @@
      }
     }
    },
-   "ground": "c1b40709",
+   "ground": "6a7d39ed",
    "inst": [
     "57:5e1f1c88:-:525d1a72",
     "57:ea7380c5:d00d7e9c:525d1a72",
