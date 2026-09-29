@@ -1,5 +1,5 @@
 // 人口與就業（D009）：出處見各行號（實驗線 index.html @ d23c18d）
-import { clamp, type Bld } from './lab.ts';
+import { clamp, type Bld, type World } from './lab.ts';
 
 export const POPS = [0, 8, 22, 54];                        // 37409 住宅各級人口
 export const JOBSC = [0, 5, 14, 38];                       // 37410 商業各級就業
@@ -36,4 +36,25 @@ export function nominalJobs(c: JobCounts) {
   jobs += c.court364 + c.tennis364 + c.play364 + c.socialHousing364 * 2 + c.substation364 * 3 + c.desal364 * 10 + c.pump364 * 4 + c.center364 * 14 + c.shelter364 * 2 + c.radar364 * 6;
   jobs += c.transitDepotJobs501;
   return jobs;
+}
+
+// 掃整張圖、每棟（跳過 ref 格）查表相加的四個就業函式（D024）：電力設施 k140–150（52828 powerJobs471）、水務 k151–160（52910 waterJobs472）、基建 k161–164（52912 infraJobs475）、
+// 車庫 k175–178（67162 transitDepotJobs501，掃 tickBld；沒有建築時掃整張圖）。維護費的對應表在 money.ts
+export const POWER_JOBS471: Record<number, number> = { 140: 28, 141: 5, 142: 14, 143: 10, 144: 16, 145: 22, 146: 8, 147: 12, 148: 10, 149: 24, 150: 8 };
+export const WATER_JOBS472: Record<number, number> = { 151: 8, 152: 6, 153: 18, 154: 5, 155: 3, 156: 24, 157: 3, 158: 16, 159: 3, 160: 4 };
+export const INFRA_JOBS475: Record<number, number> = { 161: 5, 162: 3, 163: 2, 164: 8 };
+export const DEPOT501: Record<number, { jobs: number; upkeep: number }> = { 175: { jobs: 8, upkeep: 6 }, 176: { jobs: 10, upkeep: 8 }, 177: { jobs: 14, upkeep: 12 }, 178: { jobs: 16, upkeep: 14 } };   // 67111 TRANSIT_DEPOT_META501：公車、輕軌、鐵路、地鐵
+export function sumKinds(w: World, table: Record<number, number>): number {
+  let n = 0;
+  for (let i = 0; i < w.N * w.N; i++) { const b = w.tiles[i].bld; if (!b || b.ref) continue; n += table[b.k] || 0; }
+  return n;
+}
+export const powerJobs471 = (w: World) => sumKinds(w, POWER_JOBS471);
+export const waterJobs472 = (w: World) => sumKinds(w, WATER_JOBS472);
+export const infraJobs475 = (w: World) => sumKinds(w, INFRA_JOBS475);
+export function transitDepotTotals501(w: World, tickBld?: readonly number[]): { jobs: number; upkeep: number } {
+  const scan = tickBld && tickBld.length ? tickBld : Array.from({ length: w.N * w.N }, (_, i) => i);
+  let jobs = 0, upkeep = 0;
+  for (const i of scan) { const b = w.tiles[i]?.bld; const m = b ? DEPOT501[b.k] : undefined; if (!m || b!.ref) continue; jobs += m.jobs; upkeep += m.upkeep; }
+  return { jobs, upkeep };
 }

@@ -4,7 +4,7 @@
 // D011 的模擬給中性值（neutralTaxMul、neutralUpkeepIn：乘數 1、進口費 0、沒有城市活動）；對拍給隨機值。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）。
 import { clamp, tq, type Bld, type Fields, type World } from './lab.ts';
-import { JOBSC, JOBSI, MEGA_JOBS, TOWER_JOBS, residentPopulation488 } from './jobs.ts';
+import { JOBSC, JOBSI, MEGA_JOBS, TOWER_JOBS, residentPopulation488, sumKinds, transitDepotTotals501 } from './jobs.ts';
 import { getMaxRoadClass } from './grid.ts';
 import type { SvcBudget } from './fields.ts';
 
@@ -189,6 +189,23 @@ export const IMPORT_KEYS = ['goodsImportCost481', 'foodImportCost482', 'gasImpor
 export type ImportCosts = Record<(typeof IMPORT_KEYS)[number], number>;
 export const ZERO_IMPORTS: ImportCosts = Object.fromEntries(IMPORT_KEYS.map(k => [k, 0])) as ImportCosts;
 
+// 掃整張圖的三個維護費函式（D024）：電力設施 k140–150（52829 powerUpkeep471：舊版供電 __legacyPower471 的 power471.operatingCost 是 0，只剩查表）、
+// 水務 k151–160（52911 waterUpkeep472）、基建 k161–164 加格子旗標（52913 infraUpkeep475：手工配電線 lv475、地下線 ud475、立交 fly475／ix475，逐格照索引順序加）。就業的對應表在 jobs.ts
+export const POWER_UPKEEP471: Record<number, number> = { 140: 16, 141: 5, 142: 9, 143: 10, 144: 18, 145: 20, 146: 8, 147: 14, 148: 8, 149: 14, 150: 7 };
+export const WATER_UPKEEP472: Record<number, number> = { 151: 7, 152: 5, 153: 12, 154: 6, 155: 3, 156: 18, 157: 3, 158: 11, 159: 4, 160: 4 };
+export const INFRA_UPKEEP475: Record<number, number> = { 161: 3, 162: 2, 163: 2, 164: 5 };
+export const powerUpkeep471 = (w: World): number => +sumKinds(w, POWER_UPKEEP471).toFixed(2);
+export const waterUpkeep472 = (w: World): number => sumKinds(w, WATER_UPKEEP472);
+export function infraUpkeep475(w: World): number {
+  let n = 0;
+  for (let i = 0; i < w.N * w.N; i++) {
+    const t = w.tiles[i];
+    if (t.lv475) n += .035; if (t.ud475) n += .018; if (t.fly475) n += .11; if (t.ix475) n += .24;
+    const b = t.bld; if (b && !b.ref) n += INFRA_UPKEEP475[b.k] || 0;
+  }
+  return +n.toFixed(2);
+}
+
 // 55971：edu 專精日費隨人口縮放，夾 6–40（T394b）
 export const eduFee394Of = (pop: number) => Math.min(40, Math.max(6, Math.round(pop / 100)));
 // 55972：法規與政策的每日固定支出（沒有政策＝只剩科技、專精、政策套件日費）
@@ -220,6 +237,16 @@ export const neutralUpkeepIn = (p: { roadUpkeep: number; counts: Partial<UpkeepC
   ...p, pol: null, policyDailyCost504: 0, powerUpkeep471: 0, waterUpkeep472: 0, infraUpkeep475: 0, transitDepotUpkeep501: 0, metroCost: 0, railOpsCost463: 0,
   svcFleet: { ...SVC_FLEET_DEFAULT }, imports: { ...ZERO_IMPORTS }, busOpsCost468: 0, nightOpsCost487: 0,
 });
+
+// 55973–55977 維護費讀的一整組輸入（D024）：主計數迴圈的全部計數（cnt）＋稅收迴圈順手數的六種（IncomeCounts）＋掃整張圖的四個函式（電力、水務、基建、車庫）；
+// 其餘（政策、地鐵、車隊、進口……）照 D011 的中性值，呼叫端要另外給就用展開蓋過去
+export function upkeepIn(w: World, tickBld: readonly number[], cnt: Record<string, number>, tax: IncomeCounts, p: { pop: number; svcBudget: SvcBudget; tech: readonly string[]; spec: string | null }): UpkeepIn {
+  return {
+    ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: p.pop, svcBudget: p.svcBudget, tech: p.tech, spec: p.spec,
+      counts: { ...cnt, parks: tax.parks, plants: tax.plants, fireStations: tax.fireStations, policeStations: tax.policeStations, policeBoxes: tax.policeBoxes, hospitals: tax.hospitals } }),
+    powerUpkeep471: powerUpkeep471(w), waterUpkeep472: waterUpkeep472(w), infraUpkeep475: infraUpkeep475(w), transitDepotUpkeep501: transitDepotTotals501(w, tickBld).upkeep,
+  };
+}
 
 // 55969–55977、55988–55990、56025、56027：一天的維護費，照實驗線逐次累加（55978–55986 地鐵逐線迴圈、55991–56024 旅宿與產業鏈只動收入或沒搬）
 export function dailyUpkeep(u: UpkeepIn): number {

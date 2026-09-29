@@ -76,11 +76,29 @@ export async function d015Smoke(withBrowser, log) {
     log(mx(tail, 'geometries') <= mx(head, 'geometries') + 1 && mx(tail, 'textures') <= mx(head, 'textures') && mx(tail, 'programs') <= mx(head, 'programs'),
       'D015 驗收 7：不漏——起步城 60 天，最後五次重建的幾何、貼圖、著色器程式數不多於最前面五次（renderer.info）',
       `幾何 ${head.map(x => x.geometries).join('/')} → ${tail.map(x => x.geometries).join('/')}；貼圖 ${mx(head, 'textures')} → ${mx(tail, 'textures')}；程式 ${mx(head, 'programs')} → ${mx(tail, 'programs')}`);
-    // 驗收 5 的比值：同一頁裡增量重建（建場景＋同步工地）的 JS 中位數 ≤ 整張重建的一半
-    const inc = rows.filter(r => !r.grown).map(r => r.rebuildAll), full = [];
-    for (let k = 0; k < 5; k++) { await ev('__gt.simRebuild(true), 1'); full.push((await ev('__gt.sceneStats()')).rebuildAll); }
-    log(med(inc) <= 0.5 * med(full), 'D015 驗收 5：同一頁裡，增量重建的 JS（建場景＋同步工地，不含容量放大那幾次）中位數 ≤ 整張重建的一半（不看機器快慢）',
-      `增量 ${f1(med(inc))} ms（${inc.length} 次）；整張 ${f1(med(full))} ms（${full.map(f1).join('、')}）；比值 ${(med(inc) / med(full)).toFixed(2)}`);
+    // 驗收 5 的比值：同一頁裡增量重建（建場景＋同步工地）的 JS ≤ 整張重建的一半。
+    // 量法（D024 起）：增量與整張成對量、在同一種負載下量——播放走到下一次重建，量增量那一次，緊接著整張重建一次再量；每一對算自己的比值，取中位數（≥ 10 對）。
+    // 以前是「播放中量增量、播放停了才量整張（5 次）、兩邊各取中位數再相除」：兩邊的負載不一樣（播放中畫面還在畫），CI 上跑到過 0.52（增量 10.3 ms、整張 19.9 ms）；
+    // 雜訊只會把時間往上加，成對量讓兩邊吃到同一份雜訊、每一對的比值大致抵消，取中位數再壓掉少數離群的一對。門檻 0.5 不動。
+    // 對數上限：只有城在長的時候才有自然的重建（長完就不再重建），所以一直走到湊滿 18 對或走了 300 秒模擬時間為止。
+    await ev('__gt.simPlay(true), __gt.simSpeed(0), 1');
+    let rbP = (await ev('__gt.conCheck()')).rebuilds;
+    const pairs = [];
+    for (let k = 0; k < 1200 && pairs.length < 18; k++) {
+      const c = await ev('__gt.advanceBy(0.25)');
+      if (c.rebuilds === rbP) continue;
+      const st = await ev('__gt.sceneStats()');
+      if (!st.grown && !st.fresh) {   // 容量放大那幾次是另一種成本（驗收 4 另列），不算
+        await ev('__gt.simRebuild(true), 1');
+        const full = (await ev('__gt.sceneStats()')).rebuildAll;
+        pairs.push({ inc: st.rebuildAll, full, r: st.rebuildAll / full });
+        rbP = (await ev('__gt.conCheck()')).rebuilds;
+      } else rbP = c.rebuilds;
+    }
+    await ev('__gt.simPlay(false), 1');
+    const rs = pairs.map(q => q.r).sort((a, b) => a - b), mr = med(rs);
+    log(pairs.length >= 10 && mr <= 0.5, 'D015 驗收 5：同一頁裡，增量重建的 JS（建場景＋同步工地，不含容量放大那幾次）≤ 整張重建的一半（不看機器快慢；成對量、每對算比值、取中位數，≥ 10 對）',
+      `${pairs.length} 對，比值中位數 ${mr.toFixed(2)}（最小 ${rs[0]?.toFixed(2)}、最大 ${rs.at(-1)?.toFixed(2)}）；增量 ${f1(med(pairs.map(q => q.inc)))} ms、整張 ${f1(med(pairs.map(q => q.full)))} ms（各取中位數）`);
   });
 
   // ---- script ----

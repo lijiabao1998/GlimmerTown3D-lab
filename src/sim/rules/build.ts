@@ -62,6 +62,7 @@ export interface BuildState {
   onPower?: () => void;   // 實驗線當場重算供電（computePower）的時機；本線每天開頭整張重算（day.ts），這裡只通知
   onPlace?: (tool: string, x: number, y: number, ok: boolean, cost: number) => void;
   onWater?: () => void;   // D019：實驗線放水塔、水管、拆除之後當場重算供水網（52405 computeWater）；本線每天開頭也重算（day.ts），這裡只通知   // 每一次 doPlace 之後（成功或失敗；cost＝實付，失敗 0）。給對拍記錄用，不改模擬
+  protect?: boolean;      // D024：本線的施工把讀進來的鐵路、手工配電線、地下線、高架與立交當成看不見的（見 FOREIGN_LAYERS）；對拍實驗線的守衛不開
 }
 
 // 53074–53084：地價基準的髒框。landDirty＝true、landBox＝null 在實驗線是「隔天整張重算」（每天收尾 55279 → 64129／67355 都是這個狀態），
@@ -79,6 +80,13 @@ export function markLandDirty(st: BuildState, x: number, y: number, r: number): 
     if (y1 > b[3]) b[3] = y1;
   }
 }
+
+// D024：讀檔會把鐵路（rl）、手工配電線（lvl475）、地下線（udl475）、高架（fly475）、立交（ix475）的旗標帶進格子（算就業、維護費、物流運作中、電力載體用）；
+// 但本線不畫、不能蓋這幾層，歷史事件（src/sim/city.ts DozeEvent）也還沒有它們的拆除碼。本線的施工（BuildState.protect）因此把它們當成看不見的：
+// 拆除不挑它們（拆的是下一層）、canPlace 的「這裡沒東西」不算它們，跟 D024 之前（格子上根本沒有這些旗標）一樣。拆路照實驗線一併清掉高架與立交旗標（51808–51809），那是路這一層的事。
+// 對拍實驗線的守衛（tools/unit-d011-*.mjs）不開 protect，逐字照實驗線。
+export const FOREIGN_LAYERS = ['rail', 'lv475', 'ud475', 'fly475', 'ix475'] as const;
+const seen = (t: Tile, protect?: boolean): Tile => protect && FOREIGN_LAYERS.some(k => t[k]) ? { ...t, rail: 0, lv475: 0, ud475: 0, fly475: 0, ix475: 0 } : t;
 
 // 51262–51489：能不能蓋；回拒絕理由（原文），可以蓋回 null
 export function canPlace(st: BuildState, toolId: string, x: number, y: number): string | null {
@@ -108,10 +116,11 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.t !== 2 && t.t !== 1) return '只能鋪在陸地上';
       if (t.wp) return '已有水管';
       return null;
-    case 'doze':                                                                // 51353–51355（rdec、bus 不在清單上：只有它們的格子拆不了）
-      if (!t.road && !t.bld && !t.zone && !t.tree && !t.deco && !t.ruin && !t.rail && !t.tram && !t.dock && !t.oneway && !t.light && !t.busLane && !t.levee && !t.flood
-        && !t.wp && !t.crater && !t.hv471 && !t.ug471 && !t.wm472 && !t.sm472 && !t.lv475 && !t.ud475 && !t.fly475 && !t.ix475) return '這裡沒東西';
-      return null;
+    case 'doze': {                                                              // 51353–51355（rdec、bus 不在清單上：只有它們的格子拆不了）
+      const q = seen(t, st.protect);
+      if (!q.road && !q.bld && !q.zone && !q.tree && !q.deco && !q.ruin && !q.rail && !q.tram && !q.dock && !q.oneway && !q.light && !q.busLane && !q.levee && !q.flood
+        && !q.wp && !q.crater && !q.hv471 && !q.ug471 && !q.wm472 && !q.sm472 && !q.lv475 && !q.ud475 && !q.fly475 && !q.ix475) return '這裡沒東西';
+      return null; }
   }
   return '無法建造';                                                             // 51488（到不了：need() 已擋）
 }
@@ -185,7 +194,7 @@ export function dozeLayer(t: Tile): DozeLayer | null {
 // 鄰格遮罩重算（recalcMask、recalcRailMask4、recalcInfraMask4_475、recalcPowerGridMask4_471、recalcWaterMainMask4_472）是畫面用，不搬。
 function doze(st: BuildState, t: Tile, x: number, y: number): void {
   const w = st.w, g = st.g, b = st.budget, txn = st.txn;
-  switch (dozeLayer(t)) {
+  switch (dozeLayer(seen(t, st.protect))) {
     case 'ruin': t.ruin = 0; t.zone = 0; break;                                 // 51777（office 不清，照抄）
     case 'crater': t.crater = 0; break;                                         // 51778
     case 'bld': {                                                               // 51779–51798

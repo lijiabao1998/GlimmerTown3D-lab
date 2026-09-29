@@ -13,6 +13,7 @@ const DEN_POP = [.70, .85, 1.00, 1.25, 1.60], POPS = [0, 8, 22, 54];
 // 一座城的組裝器：template＝新城碼解出來的整份存檔 JSON（欄位齊全，實驗線讀得進來）；地形換成整張草地、沒有樹、沒有分區
 export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：這一種佔幾格（D022 起可傳內容表的尺寸，蓋農場、觀光建築那些大的種類用）
   const nn = N21 * N21, road = new Uint8Array(nn), rcl = new Uint8Array(nn), occ = new Uint8Array(nn), wp = new Uint8Array(nn), bl = [];
+  const layers = {}, ter = new Uint8Array(nn).fill(2);   // D024：其他逐格圖層（of、rl、lvl475、udl475、fly475、ix475；名稱→0／1 或 0–9）與地形（2 草地、0 水）；沒用到就不寫進碼（舊的城，碼逐字不變）
   const inMap = (x, z) => x >= 0 && z >= 0 && x < N21 && z < N21, at = (x, z) => z * N21 + x;
   const b = {
     bl, occ, at, inMap,
@@ -36,6 +37,10 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
       }
       return b;
     },
+    // D024：旗標圖層的一格／一個矩形；水格（地形 0）
+    flag(name, x, z, v = 1) { if (!inMap(x, z)) throw new Error(`flag ${name}：(${x},${z}) 出界`); (layers[name] ??= new Uint8Array(nn))[at(x, z)] = v; return b; },
+    flagRect(name, x0, z0, x1, z1, v = 1) { for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) b.flag(name, x, z, v); return b; },
+    water(x0, z0, x1, z1) { for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) { if (!inMap(x, z) || occ[at(x, z)]) throw new Error(`water：(${x},${z}) 出界或被佔用`); ter[at(x, z)] = 0; } return b; },
     // 建築：住宅 k1 帶密度 den 與財富 we（存檔列 [i,k,lv,v,age,fire,den,we]），其餘 [i,k,lv,v,age]；多格的只記根格（讀檔補 ref 格）
     put(x, z, k, lv = 1, o = {}) {
       const sz = sizeOf(k);
@@ -48,9 +53,10 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
     row(x0, x1, z, k, lv, o = {}, step = 1) { for (let x = x0; x <= x1; x += step) b.put(x, z, k, lv, o); return b; },
     code(seed = 5162026, day = 1, name = '清運') {
       const s2 = '2'.repeat(nn), z0 = '0'.repeat(nn);
-      const o = { ...template, seed, day, money: 3000, nm: name, ter: s2, tre: z0, el: z0, zn: z0, wp: [...wp].join(''),
+      const o = { ...template, seed, day, money: 3000, nm: name, ter: ter.every(v => v === 2) ? s2 : [...ter].join(''), tre: z0, el: z0, zn: z0, wp: [...wp].join(''),
         rd: [...road].join(''), rcl: [...rcl].map(v => v ? String.fromCharCode(48 + v) : '0').join(''),
         bl: [...bl].sort((p, q) => p[0] - q[0]) };
+      for (const [k, arr] of Object.entries(layers)) o[k] = k === 'ix475' ? [...arr].map(v => String.fromCharCode(48 + v)).join('') : [...arr].join('');
       delete o.z; delete o.d3;
       return encodeLabCode(o, { deflate: true });
     },

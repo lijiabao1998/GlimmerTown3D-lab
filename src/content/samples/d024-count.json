@@ -1,0 +1,338 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-count.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "decl",
+   "name": "POPS",
+   "anchors": {
+    "start": "const POPS ="
+   },
+   "line": 37409,
+   "endLine": 37409,
+   "sha": "30bd7ce80105a71ee5861f6b0957a1286414661610df9ec9662ea4ab3f2e0fd6"
+  },
+  {
+   "kind": "decl",
+   "name": "JOBSC",
+   "anchors": {
+    "start": "const JOBSC="
+   },
+   "line": 37410,
+   "endLine": 37410,
+   "sha": "a5103166e4c3988d66ef76fc21750daf2d36aeb2fb93629abc694b1a58290c5b"
+  },
+  {
+   "kind": "decl",
+   "name": "TOWER_MULT",
+   "anchors": {
+    "start": "const TOWER_MULT="
+   },
+   "line": 37418,
+   "endLine": 37418,
+   "sha": "6b57d47311912e73a6ef592cad7c6d3ad9c8424a93d8ac700aaf4f1d92eadebe"
+  },
+  {
+   "kind": "decl",
+   "name": "MEGA_JOBS",
+   "anchors": {
+    "start": "const MEGA_JOBS="
+   },
+   "line": 37421,
+   "endLine": 37421,
+   "sha": "83485ff9a5cbfc6f5f43790eb99973d06f39864af119a5363a90da59b8abe501"
+  },
+  {
+   "kind": "decl",
+   "name": "TOWER_JOBS",
+   "anchors": {
+    "start": "const TOWER_JOBS="
+   },
+   "line": 37422,
+   "endLine": 37422,
+   "sha": "6f153f09b48219d5d2e3c222c1350dc1a390761fd55fe5200154d96419b611ad"
+  },
+  {
+   "kind": "decl",
+   "name": "ROAD_UPKEEP",
+   "anchors": {
+    "start": "const ROAD_UPKEEP="
+   },
+   "line": 37429,
+   "endLine": 37429,
+   "sha": "69804c6aea48f7f9580e56ed604d313ca8c21776992251a0b9fa6e6a9ee71347"
+  },
+  {
+   "kind": "decl",
+   "name": "DIRV",
+   "anchors": {
+    "start": "const DIRV="
+   },
+   "line": 56955,
+   "endLine": 56955,
+   "sha": "3d8c5f7f04ab9b3abd7252b52f6dd167a4ed79bf8c5dab5ab3651d877dde84aa"
+  },
+  {
+   "kind": "decl",
+   "name": "UP_MAX",
+   "anchors": {
+    "start": "const UP_MAX="
+   },
+   "line": 63008,
+   "endLine": 63008,
+   "sha": "701c6145f6fec91898286d5d006efc6ca56bdd6899fa60c63e1e8618e25263ed"
+  },
+  {
+   "kind": "decl",
+   "name": "UP_JOB",
+   "anchors": {
+    "start": "const UP_JOB="
+   },
+   "line": 63009,
+   "endLine": 63009,
+   "sha": "7907b6042e031c2989113ea757b178c0650a9809117e12fc850e37006e6f8a43"
+  },
+  {
+   "kind": "span",
+   "name": "LOGISTICS_META485",
+   "anchors": {
+    "start": "const LOGISTICS_META485={",
+    "end": "const LOGISTICS_TOOL_IDS485="
+   },
+   "line": 37295,
+   "endLine": 37306,
+   "sha": "d7249c5af71b0a0452bf2cbe31019f962466698a8b866be585deb3d29a51db0b"
+  },
+  {
+   "kind": "span",
+   "name": "TRANSIT_DEPOT_META501",
+   "anchors": {
+    "start": "const TRANSIT_DEPOT_META501={",
+    "end": "const TRANSIT_DEPOT_BY_K501="
+   },
+   "line": 67111,
+   "endLine": 67116,
+   "sha": "49e26c36cbd73c04d2eaa6c087ef708f2775158052a9b1b0204360a9d8b84af2"
+  },
+  {
+   "kind": "decl",
+   "name": "TRANSIT_DEPOT_BY_K501",
+   "anchors": {
+    "start": "const TRANSIT_DEPOT_BY_K501="
+   },
+   "line": 67117,
+   "endLine": 67117,
+   "sha": "735f3af9ae227e665df4c2c2f9a3dc54eb0d29ca821e56332886436f715cbbb1"
+  },
+  {
+   "kind": "fn",
+   "name": "sanRoadSeeds445",
+   "anchors": {
+    "start": "function sanRoadSeeds445(",
+    "closure": "balanced-brace"
+   },
+   "line": 37986,
+   "endLine": 37993,
+   "sha": "48c1ae0afbcc825443920719eec0e0d8218f5e4349464edf47b52d5a6b21f63f"
+  },
+  {
+   "kind": "fn",
+   "name": "countNear",
+   "anchors": {
+    "start": "function countNear(",
+    "closure": "balanced-brace"
+   },
+   "line": 52934,
+   "endLine": 52942,
+   "sha": "60c4716f14a2f6b3406a37d3a46fbbc8e69a9a3a8466bb7cb9ad5fbde0a370ea"
+  },
+  {
+   "kind": "fn",
+   "name": "assetAvailability493",
+   "anchors": {
+    "start": "function assetAvailability493(",
+    "closure": "balanced-brace"
+   },
+   "line": 64520,
+   "endLine": 64520,
+   "sha": "58d9c74e4ce777d93ce740b1230f28941aeb36b579291fe4f84bd920d20ec6c8"
+  },
+  {
+   "kind": "fn",
+   "name": "logisticsOperational485",
+   "anchors": {
+    "start": "function logisticsOperational485(",
+    "closure": "balanced-brace"
+   },
+   "line": 51246,
+   "endLine": 51254,
+   "sha": "4c1b5bdb0587cbfda0a50c31b3582d04fbf10d8fd572dd4f86db84bc04337507"
+  },
+  {
+   "kind": "fn",
+   "name": "powerJobs471",
+   "anchors": {
+    "start": "function powerJobs471(",
+    "closure": "balanced-brace"
+   },
+   "line": 52828,
+   "endLine": 52828,
+   "sha": "007796b7a28540ff473bdd10024744b9b323bd251959b5148171fc52203a0488"
+  },
+  {
+   "kind": "fn",
+   "name": "powerUpkeep471",
+   "anchors": {
+    "start": "function powerUpkeep471(",
+    "closure": "balanced-brace"
+   },
+   "line": 52829,
+   "endLine": 52829,
+   "sha": "6436433f5e68800abd8c2bd581ad2a86b41e937537a0fe43f63b1139be33019c"
+  },
+  {
+   "kind": "fn",
+   "name": "waterJobs472",
+   "anchors": {
+    "start": "function waterJobs472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52910,
+   "endLine": 52910,
+   "sha": "2039d69583daabadf3489e892a025ef53aa057facc57d4726b730d4ddc3f85cc"
+  },
+  {
+   "kind": "fn",
+   "name": "waterUpkeep472",
+   "anchors": {
+    "start": "function waterUpkeep472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52911,
+   "endLine": 52911,
+   "sha": "da59391748ff4346e336496904a1579b6881a4f94872139d3dce4094dd9d00a9"
+  },
+  {
+   "kind": "fn",
+   "name": "infraJobs475",
+   "anchors": {
+    "start": "function infraJobs475(",
+    "closure": "balanced-brace"
+   },
+   "line": 52912,
+   "endLine": 52912,
+   "sha": "47cddace80ce80f74171ff9a4a82c3055df6587afc451c52d0c4586bc083de07"
+  },
+  {
+   "kind": "fn",
+   "name": "infraUpkeep475",
+   "anchors": {
+    "start": "function infraUpkeep475(",
+    "closure": "balanced-brace"
+   },
+   "line": 52913,
+   "endLine": 52913,
+   "sha": "a98caf224ca95e84239aabb3f27a1ffc3a52614990cce6820c322935820cbca7"
+  },
+  {
+   "kind": "fn",
+   "name": "transitDepotPools501",
+   "anchors": {
+    "start": "function transitDepotPools501(",
+    "closure": "balanced-brace"
+   },
+   "line": 67161,
+   "endLine": 67161,
+   "sha": "bb7f16e8fcee6edcf25238d53f2e23f182f20236da9c19194973bca6b3275952"
+  },
+  {
+   "kind": "fn",
+   "name": "transitDepotJobs501",
+   "anchors": {
+    "start": "function transitDepotJobs501(",
+    "closure": "balanced-brace"
+   },
+   "line": 67162,
+   "endLine": 67162,
+   "sha": "42b1b656681d40b9283e33ef0dc4f99a24c05ab75ea52d0065708601e9823d53"
+  },
+  {
+   "kind": "fn",
+   "name": "transitDepotUpkeep501",
+   "anchors": {
+    "start": "function transitDepotUpkeep501(",
+    "closure": "balanced-brace"
+   },
+   "line": 67163,
+   "endLine": 67163,
+   "sha": "3cefe06f8d4e3203243188da41e9fe9fb921758971a731ac0a1b10f1aa5f2111"
+  },
+  {
+   "kind": "span",
+   "name": "tick 就業加總",
+   "anchors": {
+    "start": "pop=popN+towerPop488+megaPop488;jobs=jobsC+jobsI+schools*8",
+    "end": "jobs+=transitDepotJobs501(); // T501：四種車庫／機廠固定就業"
+   },
+   "line": 55246,
+   "endLine": 55250,
+   "sha": "13498233906345334aba5a2b8b35db98b34133d02f030e3078bac884ee04a7a7"
+  },
+  {
+   "kind": "span",
+   "name": "tick 維護費加總",
+   "anchors": {
+    "start": "let roadUpkeep=0;",
+    "end": "upkeep+=transitDepotUpkeep501(); // T501：機廠與車庫維護"
+   },
+   "line": 55969,
+   "endLine": 55977,
+   "sha": "d96463042719f95ca6b25ea67235e955b3f2fa81f783d54a9938b36fdffd4b73"
+  },
+  {
+   "kind": "span",
+   "name": "tick 服務預算維護費",
+   "anchors": {
+    "start": "upkeep+=(fireStations*3+fs2*6+fhqN*10)*(svcBudget.fire-1)",
+    "end": "upkeep+=(fireStations*3+fs2*6+fhqN*10)*(svcBudget.fire-1)"
+   },
+   "line": 55990,
+   "endLine": 55990,
+   "sha": "7a538bd046e7e21a6782364d830ae950ac5c0bf91e5af7e1a5affa58bd97127f"
+  }
+ ],
+ "text": {
+  "POPS": "const POPS =[0,8,22,54];    // 住宅各級人口",
+  "JOBSC": "const JOBSC=[0,5,14,38];    // 商業各級就業",
+  "TOWER_MULT": "const TOWER_MULT=1.15;                    // T127：摩天樓合併「四格 lv3 總和」獎勵倍率",
+  "MEGA_JOBS": "const MEGA_JOBS=Math.round(JOBSC[3]*9*1.35); // T341：商業綜合體（k106 3×3）",
+  "TOWER_JOBS": "const TOWER_JOBS=Math.round(JOBSC[3]*4*TOWER_MULT); // T127：商業塔（k34）就業＝四格 lv3 商業總和×1.15＝175",
+  "ROAD_UPKEEP": "const ROAD_UPKEEP=[0.01,0.02,0.05,0.12,0.35];",
+  "DIRV": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];",
+  "UP_MAX": "const UP_MAX={9:15,6:10,7:10,11:10,12:10,13:10,14:10,15:10,10:10,5:10,16:10,28:10,29:10,30:10,17:10,18:10,21:10,54:10,55:10,53:8,56:15,22:8,23:8,25:10,26:10,57:10,58:10,59:10,60:10,61:10,62:10,63:8,64:10,65:8}; // T290：購物中心擴店 8 級；T285：倉儲容量升級；T280：溫室擴建 8 級；T265：焚化發電機組可升至10級；T257：核電/水力/地熱亦可升級擴容、消防總局可升級；T251：農場 k22 灌溉升級（8 級）；大農場 k53 亦升級；T252：牧場 k23 牧養升級（8 級）；T253：太陽能 k25/風力 k26 亦可升級擴容；T254：食品加工廠 k57 可升級加工容量（10 級）",
+  "UP_JOB": "const UP_JOB={9:15,54:8,55:12,53:3,17:8,18:8,56:18,22:1,23:1,5:0,25:0,26:0,57:0,58:0,59:0,60:0,62:0,63:1,64:0,65:20}; // T290：購物中心每級 +20 零售就業；T285：倉儲升級純擴容；T280：溫室升級主給食物金幣就業+1；T265：焚化發電升級只擴容，不加就業；每級加成就業（大型建築較高，其餘預設6）；T257：三新電源亦純擴容(k58/59/60:0)，消防總局走預設6；T251：農場升級主要給金幣/食物，就業加成小(k22:1/k53:3)；T252：牧場同農場(k23:1)；T253：電廠/太陽能/風力升級＝純擴容不加就業(k5/k25/k26:0)；T254：食品加工廠升級＝純加工容量不加就業(k57:0)",
+  "LOGISTICS_META485": "const LOGISTICS_META485={\n  165:{tool:'containerLogistics',size:4,jobs:36,upkeep:18,ic:'📦',effect:'一般商品倉容 +240；貨運與貿易能力大幅提升'},\n  166:{tool:'intermodalHub',size:4,jobs:42,upkeep:20,ic:'🚆',effect:'鐵公路聯運：重貨物流與貿易能力大幅提升'},\n  167:{tool:'distributionCenter',size:3,jobs:24,upkeep:12,ic:'🚚',effect:'一般商品倉容 +180；城市配送效率提升'},\n  168:{tool:'coldStorage',size:2,jobs:14,upkeep:8,ic:'🧊',effect:'冷鏈降低食物損耗並增加食物出口能力'},\n  169:{tool:'grainSilo',size:2,jobs:8,upkeep:6,ic:'🌾',effect:'糧食緩衝與出口能力提升'},\n  170:{tool:'fuelDepot',size:3,jobs:16,upkeep:14,ic:'⛽',effect:'燃料庫存上限 +80；增加燃料出口通道'},\n  171:{tool:'gasDepot',size:3,jobs:18,upkeep:14,ic:'🔥',effect:'天然氣貿易與儲配能力提升'},\n  172:{tool:'steelYard',size:2,jobs:12,upkeep:8,ic:'🔩',effect:'鋼材庫存上限 +80；重貨物流提升'},\n  173:{tool:'bulkTerminal',size:4,jobs:38,upkeep:22,ic:'⚓',effect:'散裝糧食／燃料／原料港運與船隊容量提升'},\n  174:{tool:'containerPort',size:5,jobs:70,upkeep:36,ic:'🏗️',effect:'大型貨櫃貿易門戶；商品倉容、船隊與貿易容量大幅提升'}\n};",
+  "TRANSIT_DEPOT_META501": "const TRANSIT_DEPOT_META501={\n  bus:{k:175,tool:'busDepot',nm:'公車車庫',ic:'🚌',size:2,capacity:8,jobs:8,upkeep:6,base:4,color:'#e0b64d'},\n  tram:{k:176,tool:'tramDepot',nm:'輕軌車庫',ic:'🚊',size:2,capacity:6,jobs:10,upkeep:8,base:2,color:'#53c7c8'},\n  rail:{k:177,tool:'railYard',nm:'鐵路車輛基地',ic:'🚆',size:3,capacity:8,jobs:14,upkeep:12,base:2,color:'#7199df'},\n  metro:{k:178,tool:'metroDepot',nm:'地鐵機廠',ic:'🚇',size:3,capacity:10,jobs:16,upkeep:14,base:2,color:'#d67ce7'}\n};",
+  "TRANSIT_DEPOT_BY_K501": "const TRANSIT_DEPOT_BY_K501=Object.fromEntries(Object.entries(TRANSIT_DEPOT_META501).map(([m,q])=>[q.k,{...q,mode:m}]));",
+  "sanRoadSeeds445": "function sanRoadSeeds445(rootIdx){\n  const out=[];if(rootIdx<0||rootIdx>=N*N)return out;const b=tiles[rootIdx]&&tiles[rootIdx].bld;if(!b||b.ref)return out;\n  const rx=rootIdx%N,ry=(rootIdx/N)|0,sz=Math.max(1,b.sz||1);\n  for(let fy=0;fy<sz;fy++)for(let fx=0;fx<sz;fx++)for(const[dx,dy]of DIRV){\n    const nx=rx+fx+dx,ny=ry+fy+dy;if(!inMap(nx,ny))continue;const j=idx(nx,ny);if(!tiles[j].road||out.includes(j))continue;out.push(j);\n  }\n  return out;\n}",
+  "countNear": "function countNear(x,y,r,pred){\n  let n=0;\n  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){\n    const nx=x+dx,ny=y+dy;\n    if(!inMap(nx,ny))continue;\n    if(pred(T(idx(nx,ny))))n++;\n  }\n  return n;\n}",
+  "assetAvailability493": "function assetAvailability493(root,sector=''){if(window.__noIncident493||!incidents493.length)return 1;root=incidentResolveRoot493(root);const rows=incidentByRoot493.get(root);if(!rows||!rows.length)return 1;let a=1;for(const q of rows)if(incidentActive493(q)&&(!sector||q.sector===sector||q.sector==='services'))a=Math.min(a,incidentAvailabilityFrom493(q));return clamp(a,0,1);}",
+  "logisticsOperational485": "function logisticsOperational485(rootIdx,b){if(assetAvailability493(rootIdx,'logistics')<=.02)return false;\n  if(!b||b.ref||!LOGISTICS_META485[b.k]||!b.pw)return false;\n  if(!sanRoadSeeds445(rootIdx).length)return false; // 物流設施必須真正貼到道路 frontage\n  const x=rootIdx%N,y=(rootIdx/N)|0;\n  if(b.k===166&&countNear(x,y,6,t=>t.rail)<2)return false;\n  if(b.k===173&&countNear(x,y,5,t=>t.t===0)<4)return false;\n  if(b.k===174&&countNear(x,y,6,t=>t.t===0)<5)return false;\n  return true;\n}",
+  "powerJobs471": "function powerJobs471(){let n=0;for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.ref)continue;n+=({140:28,141:5,142:14,143:10,144:16,145:22,146:8,147:12,148:10,149:24,150:8}[b.k]||0);}return n;}",
+  "powerUpkeep471": "function powerUpkeep471(){let n=power471.operatingCost*.12;for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.ref)continue;n+=({140:16,141:5,142:9,143:10,144:18,145:20,146:8,147:14,148:8,149:14,150:7}[b.k]||0);}return +n.toFixed(2);}",
+  "waterJobs472": "function waterJobs472(){let n=0;const m={151:8,152:6,153:18,154:5,155:3,156:24,157:3,158:16,159:3,160:4};for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&!b.ref)n+=m[b.k]||0;}return n;}",
+  "waterUpkeep472": "function waterUpkeep472(){let n=0;const m={151:7,152:5,153:12,154:6,155:3,156:18,157:3,158:11,159:4,160:4};for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&!b.ref)n+=m[b.k]||0;}return n;}",
+  "infraJobs475": "function infraJobs475(){let n=0;const m={161:5,162:3,163:2,164:8};for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&!b.ref)n+=m[b.k]||0;}return n;}",
+  "infraUpkeep475": "function infraUpkeep475(){let n=0;const m={161:3,162:2,163:2,164:5};for(let i=0;i<N*N;i++){const t=tiles[i];if(t.lv475)n+=.035;if(t.ud475)n+=.018;if(t.fly475)n+=.11;if(t.ix475)n+=.24;const b=t.bld;if(b&&!b.ref)n+=m[b.k]||0;}return +n.toFixed(2);}",
+  "transitDepotPools501": "function transitDepotPools501(){const pools={};for(const[mode,m]of Object.entries(TRANSIT_DEPOT_META501))pools[mode]={mode,nm:m.nm,ic:m.ic,base:m.base,built:0,online:0,builtCapacity:0,onlineCapacity:0,capacity:m.base,requested:0,ratio:1,jobs:0,upkeep:0,roots:[]};const scan=tickBld&&tickBld.length?tickBld:Array.from({length:N*N},(_,i)=>i);for(const i of scan){const b=tiles&&tiles[i]?.bld,m=TRANSIT_DEPOT_BY_K501[b?.k];if(!m||b.ref)continue;const p=pools[m.mode],on=transitDepotOperational501(i,b,m.mode);p.built++;p.builtCapacity+=m.capacity;p.jobs+=m.jobs;p.upkeep+=m.upkeep;if(on){p.online++;p.onlineCapacity+=m.capacity;}p.roots.push({root:i,on});}for(let r=0;r<busRoutes.length;r++)if(busRoutes[r].stops.length>=2)pools.bus.requested+=Math.max(0,busOpsCfg468[r].fleet|0);for(const L of tramLines463)if(L.stops.length>=2)pools.tram.requested+=Math.max(0,L.fleet|0);for(const L of railLines463)if(L.stops.length>=2)pools.rail.requested+=Math.max(0,L.fleet|0);for(const L of metroLines)if((L.path||[]).length>=2)pools.metro.requested+=Math.max(0,L.trains|0);for(const p of Object.values(pools)){p.capacity=p.base+(window.__noDepot501||window.__noTransitOps501?p.builtCapacity:p.onlineCapacity);p.ratio=p.requested>0?clamp(p.capacity/p.requested,0,1):1;p.spare=Math.max(0,p.capacity-p.requested);}return pools;}",
+  "transitDepotJobs501": "function transitDepotJobs501(){if(!tiles)return 0;return Object.values(transitDepotPools501()).reduce((a,p)=>a+p.jobs,0);}",
+  "transitDepotUpkeep501": "function transitDepotUpkeep501(){if(!tiles)return 0;return Object.values(transitDepotPools501()).reduce((a,p)=>a+p.upkeep,0);}",
+  "jobs": "  pop=popN+towerPop488+megaPop488;jobs=jobsC+jobsI+schools*8+stadiums*20+clinics*4+libraries*4+posts*5+cemeteries*2+bigCemN*8+st*12+gstN*30+scN*40+fpN*25+nkN*30+hyN*12+geN*5+fhqN*20+ghN*4+whN284*8+mallN*70+wteN*12+po*10+ai*40+pa*1+tr*6+fa*3+bigFa*18+ra*2+la*8+so*2+wi*2+se*4+am*5+rc*4+fs2*8+pr*10+un*20+trC*TOWER_JOBS+mgC341*MEGA_JOBS+faN*12+ctN307*4+obN307*10+jobsLm309+mu*12+th*10+aq*14+zo*20+ap*24+ci*6+gl*16+chN*20+crtN*14+cvN*35+inN*22+wsN*8+bgN*18+mhN*28+owN*6+mnN*8+mgN*40+gh330*2+ht330*12+rs330*30+kg330*4+sn330*3+bk330*8+mk330*10+cp330*4+tv330*6+mr330*8+tp336*8+dg336*1+ir336*5+sk336*3+fw340*1+pl340*3+fp340*3+hs340*4+ch340*5+br340*14+wp340*16+vt340*4+sr340*10+cg340*1+cr342*4+hsc342*12+tpk342*45+frt342*10+upc342*12+cpk342*2+gpk465*4+gmc466*85+art466*70+adm466*120+res466*140+cam342*40+mpt342*60+cvc342*18+dtc342*20+gw346*6+fp346*14+kt346*12+ff346*4+upJob+powerJobs471()+waterJobs472()+infraJobs475();   // T472：水務就業；T265：焚化發電固定 12 就業；T239：升級服務就業加成；T39-T54 就業；T127：住宅塔人口/商業塔就業＝四格lv3總和×1.15；T138：博物館12/劇院10/水族館14/動物園20/遊樂園24/電影院6/圖書總館16 就業；T139：市政廳20/法院14/會展中心35/研究院22/氣象站8/植物園18/綜合醫院28 就業；T140：油井6/礦場8/太空研究中心40 就業\n  jobs+=refineryN*18+steelMillN*22+shipyardN*16; // T364b：三座固定製造就業（不進 RCI 稅）\n  jobs+=cl485*36+im485*42+dc485*24+cold485*14+silo485*8+fuelDep485*16+gasDep485*18+steelY485*12+bulk485*38+cport485*70; // T485：物流設施固定就業\n  jobs+=court364+tennis364+play364+socialHousing364*2+substation364*3+desal364*10+pump364*4+center364*14+shelter364*2+radar364*6; // T364c/d：公共設施與社宅的固定就業\n  jobs+=transitDepotJobs501(); // T501：四種車庫／機廠固定就業",
+  "upkeep": "  let roadUpkeep=0;\n  for(const i of tickRoad){const t=tiles[i];if(t.road)roadUpkeep+=ROAD_UPKEEP[(t.rc||2)-1];} // T316：只掃道路格\n  const eduFee394=Math.min(40,Math.max(6,Math.round(pop/100))); /* T394b：edu 專精日費由固定 $12 改隨規模縮放——固定額在解鎖點約等於全城工業稅 1-3 倍（實測 edu 早選 11/12 種子 60 天淨虧＝嚴格劣勢選項）；pop/100 夾 [6,40]，未選 edu 時 sq() 恆回 0＝零基線影響 */\n  const upReg=(pol&&pol.recycle?8:0)+(pol&&pol.tourPromo?10:0)+(pol&&pol.schoolLunch?12:0)+(pol&&pol.smokeDetect?6:0)+(pol&&pol.parkNight?5:0)+(pol&&pol.insurance?18:0)+(pol&&pol.waterConserve?3:0)+(pol&&pol.reclaimPriority?6:0)+(pol&&pol.industrialPretreat?5:0)+(pol&&pol.spongeCity?4:0)+(pol&&pol.housingSubsidy?10:0)+(pol&&pol.inclusionaryHousing?4:0)+(pol&&pol.stationHousing?3:0)+(pol&&pol.infrastructureStimulus?18:0)+(pol&&pol.consumptionSupport?14:0)+(pol&&pol.industrialRelief?12:0)+(pol&&pol.completeStreets?8:0)+(pol&&pol.parkingManagement?2:0)+(pol&&pol.criticalReserve492?10:0)+(pol&&pol.emergencyStockpile492?8:0)+tq('B4a',10,0)+tq('C4a',8,0)+sq('edu',eduFee394,0)+policyDailyCost504(); // T504：只加政策套件日費；既有全城政策固定費仍由本式原欄位計算 // T327/T337 保險保費 $18/日 // T122：法規每日固定支出——回收宣導$8、觀光推廣$10\n  upkeep=roadUpkeep+parks*.5+plants*4+fireStations*3+policeStations*4+policeBoxes*1.5+hospitals*5+clinics*2.5+schools*2.5+libraries*2+posts*3+cemeteries*2+bigCemN*8+dumps*2+stadiums*8+waterTowers*3+st*6+gstN*15+scN*18+fpN*14+nkN*28+hyN*9+geN*4+fhqN*10+wteN*10+ghN*3+whN284*4+mallN*16+po*5+ai*25+pa*1.5+tr*4+fa*1+bigFa*6+ra*1.5+la*8+so*1+wi*1.5+se*3+am*4+rc*2+fs2*6+pr*5+un*8+faN*8+ctN307*4+obN307*9+upLm309+mu*6+th*5+aq*7+zo*10+ap*12+ci*3+gl*8+chN*10+crtN*6+cvN*20+inN*10+wsN*4+bgN*14+mhN*16+owN*4+mnN*5+mgN*25+upReg+gh330*1+ht330*5+rs330*12+kg330*2+sn330*2+bk330*3+mk330*3+cp330*2+tv330*4+mr330*4+tp336*4+dg336*1+ir336*3+sk336*2+fw340*1+pl340*2+fp340*1+hs340*2+ch340*3+br340*5+wp340*6+vt340*2+sr340*4+cg340*1+cr342*3+hsc342*5+tpk342*10+frt342*4+upc342*4+cpk342*2+gpk465*6+gmc466*32+art466*26+adm466*38+res466*42+cam342*12+mpt342*20+cvc342*6+dtc342*8+gw346*4+fp346*5+kt346*4+ff346*2+powerUpkeep471()+waterUpkeep472()+infraUpkeep475(); // T472：水務固定維護＋T471 電力維護；T265：焚化發電維護10；T39-T54 維護費（T95：am 3→4，同步 COST.ambulance 調整）；T122 追加法規固定支出；T138：博物館6/劇院5/水族館7/動物園10/遊樂園12/電影院3/圖書總館8 維護費；T139：市政廳10/法院6/會展中心20/研究院10/氣象站4/植物園14/綜合醫院16 維護費（綜合醫院比照 T95 教訓，維護費遠高於醫院的5，避免超大半徑碾壓既有醫療建築）；T140：油井4/礦場5/太空研究中心25 維護費\n  upkeep+=refineryN*11+steelMillN*13+shipyardN*15; // T364b：深加工廠固定維護\n  upkeep+=cl485*18+im485*20+dc485*12+cold485*8+silo485*6+fuelDep485*14+gasDep485*14+steelY485*8+bulk485*22+cport485*36; // T485：物流與港區維護\n  upkeep+=court364*1+tennis364*1.2+play364*.8+socialHousing364*5+substation364*3+desal364*11+pump364*4+center364*12+shelter364*4+radar364*7; // T364c/d：固定公共維護\n  upkeep+=transitDepotUpkeep501(); // T501：機廠與車庫維護",
+  "upkeepBudget": "  upkeep+=(fireStations*3+fs2*6+fhqN*10)*(svcBudget.fire-1)+(policeStations*4+policeBoxes*1.5+crtN*6)*(svcBudget.police-1)+(hospitals*5+clinics*2.5+am*4+mhN*16)*(svcBudget.health-1)+(schools*2.5+libraries*2+un*8+inN*10)*(svcBudget.edu-1); // T294：服務預算維護費調整——各類基礎維護×(budget−1)，預算 1.5×→多花50%養更廣覆蓋、0.5×→省一半但覆蓋縮水；budget=1 時為 0 精確恆等"
+ }
+}
