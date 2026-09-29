@@ -11,7 +11,7 @@ export const FAC_K = [8, 29, 62, 88, 111];
 const DEN_POP = [.70, .85, 1.00, 1.25, 1.60], POPS = [0, 8, 22, 54];
 
 // 一座城的組裝器：template＝新城碼解出來的整份存檔 JSON（欄位齊全，實驗線讀得進來）；地形換成整張草地、沒有樹、沒有分區
-export function builder(template) {
+export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：這一種佔幾格（D022 起可傳內容表的尺寸，蓋農場、觀光建築那些大的種類用）
   const nn = N21 * N21, road = new Uint8Array(nn), rcl = new Uint8Array(nn), occ = new Uint8Array(nn), wp = new Uint8Array(nn), bl = [];
   const inMap = (x, z) => x >= 0 && z >= 0 && x < N21 && z < N21, at = (x, z) => z * N21 + x;
   const b = {
@@ -38,7 +38,7 @@ export function builder(template) {
     },
     // 建築：住宅 k1 帶密度 den 與財富 we（存檔列 [i,k,lv,v,age,fire,den,we]），其餘 [i,k,lv,v,age]；多格的只記根格（讀檔補 ref 格）
     put(x, z, k, lv = 1, o = {}) {
-      const sz = SIZE[k] ?? 1;
+      const sz = sizeOf(k);
       if (!b.isFree(x, z, sz)) throw new Error(`put k${k}：(${x},${z}) 被佔用或出界`);
       for (let dz = 0; dz < sz; dz++) for (let dx = 0; dx < sz; dx++) occ[at(x + dx, z + dz)] = 2;
       bl.push(k === 1 ? [at(x, z), 1, lv, o.v ?? 0, o.age ?? 20, 0, o.den ?? 3, o.we ?? 1] : [at(x, z), k, lv, o.v ?? 0, o.age ?? 20]);

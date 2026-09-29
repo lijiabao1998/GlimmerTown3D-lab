@@ -1,0 +1,242 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-food.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "exact",
+   "name": "spec386",
+   "anchors": {
+    "start": "let spec386='';"
+   },
+   "line": 37849,
+   "endLine": 37849,
+   "sha": "eddb25d5c435a3820c3b4e9aa2fb14eb9eac5abeff66ce3d6683265434aa9918"
+  },
+  {
+   "kind": "exact",
+   "name": "sq",
+   "anchors": {
+    "start": "const sq=(id,on,off)=>spec386===id?on:off;"
+   },
+   "line": 37851,
+   "endLine": 37851,
+   "sha": "5bf7902bead6c162b85fc39e20a6948e981e75291aef774b9dbb0cb0b0971a87"
+  },
+  {
+   "kind": "decl",
+   "name": "FARM_SEASON_MULT",
+   "anchors": {
+    "start": "const FARM_SEASON_MULT="
+   },
+   "line": 38128,
+   "endLine": 38128,
+   "sha": "4022608a5474238f0028e49895739b87616df06f093a0d21eed39a6fcc5a708d"
+  },
+  {
+   "kind": "decl",
+   "name": "LMCFG309",
+   "anchors": {
+    "start": "const LMCFG309="
+   },
+   "line": 38129,
+   "endLine": 38129,
+   "sha": "6686bfba7d4743f25365a1d12b81593cea2faaca41229170870e8ce91547dacd"
+  },
+  {
+   "kind": "decl",
+   "name": "TOUR_SEASON_MULT",
+   "anchors": {
+    "start": "const TOUR_SEASON_MULT="
+   },
+   "line": 38210,
+   "endLine": 38210,
+   "sha": "53a7bd632543ef54f0c958f303c8b64797b4bb9615615eeb99e3a943c57b9ea6"
+  },
+  {
+   "kind": "decl",
+   "name": "foodPoints",
+   "anchors": {
+    "start": "let foodPoints="
+   },
+   "line": 38249,
+   "endLine": 38249,
+   "sha": "8ad7d30f6cadfe71595b303ef502c53a02e53cd73b5154addff76531621f3f7f"
+  },
+  {
+   "kind": "exact",
+   "name": "tourists",
+   "anchors": {
+    "start": "let tourists=0;"
+   },
+   "line": 38250,
+   "endLine": 38250,
+   "sha": "ea576342ef84dab43e72f4e2fa13a8cdb0da48c303cd4145f972fb0196bda57d"
+  },
+  {
+   "kind": "fn",
+   "name": "logisticsEfficiency481",
+   "anchors": {
+    "start": "function logisticsEfficiency481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38269,
+   "endLine": 38269,
+   "sha": "b932ad683c1363265f996e4b7235a72cc9ab5b2f862c775d00f2a1adc3a26edd"
+  },
+  {
+   "kind": "decl",
+   "name": "CONVENTION_PULSE_DAYS",
+   "anchors": {
+    "start": "const CONVENTION_PULSE_DAYS="
+   },
+   "line": 39445,
+   "endLine": 39445,
+   "sha": "651794b8fab6ea94a902a760f58bc1422c009b0fd613ebdcbe9c71a678f027e1"
+  },
+  {
+   "kind": "decl",
+   "name": "REFINERY_RATE",
+   "anchors": {
+    "start": "const REFINERY_RATE="
+   },
+   "line": 39452,
+   "endLine": 39452,
+   "sha": "594e12859734c4263fbf11752488844b14ae3b1d3958065a41610a4ca9023ff6"
+  },
+  {
+   "kind": "fn",
+   "name": "enterpriseTypeUtilization489",
+   "anchors": {
+    "start": "function enterpriseTypeUtilization489(",
+    "closure": "balanced-brace"
+   },
+   "line": 39574,
+   "endLine": 39574,
+   "sha": "467c1b4e228fe1e1e1dffa57d0bb86695c228f531f08c354df72be6e87b2c958"
+  },
+  {
+   "kind": "fn",
+   "name": "enterpriseEffectiveCount489",
+   "anchors": {
+    "start": "function enterpriseEffectiveCount489(",
+    "closure": "balanced-brace"
+   },
+   "line": 39576,
+   "endLine": 39576,
+   "sha": "3cb7f9c903774be824b83da85a61dad7d4b46cfcce502706cf6b1ea2407f4975"
+  },
+  {
+   "kind": "fn",
+   "name": "gpnTradeCapacityMul508",
+   "anchors": {
+    "start": "function gpnTradeCapacityMul508(",
+    "closure": "balanced-brace"
+   },
+   "line": 68190,
+   "endLine": 68190,
+   "sha": "cc48415c00d55161e7598cade9a483316b6c34d0a2352ea65c10a5247673afcb"
+  },
+  {
+   "kind": "fn",
+   "name": "gpnImportAvailability508",
+   "anchors": {
+    "start": "function gpnImportAvailability508(",
+    "closure": "balanced-brace"
+   },
+   "line": 68191,
+   "endLine": 68191,
+   "sha": "cafaca81de417caf8c4ae5f6ab384fd65fbd2a8af876613e1e860a2b0f23371b"
+  },
+  {
+   "kind": "span",
+   "name": "tick 計數宣告",
+   "anchors": {
+    "start": "let popN=0,jobsC=0,jobsI=0,happySum=0,happyN=0,schools=0,",
+    "end": "let court364=0,tennis364=0,play364=0,socialHousing364=0,substation364=0,desal364=0,pump364=0,center364=0,shelter364=0,radar364=0;"
+   },
+   "line": 55039,
+   "endLine": 55048,
+   "sha": "8b59da54c75fe810ff226aa5bf621bf0d397cb2c9382629b8c228ea5dd5acbdf"
+  },
+  {
+   "kind": "span",
+   "name": "tick 主計數迴圈",
+   "anchors": {
+    "start": "for(const i88 of tickBld){",
+    "end": "if(!b||(b.k>3&&b.k!==127))continue;"
+   },
+   "line": 55050,
+   "endLine": 55149,
+   "sha": "6caeb891fee8a87b0f2e102045a45adcae3a490c51549afd94a154404dec560e"
+  },
+  {
+   "kind": "span",
+   "name": "tick 有效單位與食物遊客",
+   "anchors": {
+    "start": "const whEff489=enterpriseEffectiveCount489(64,whN284)",
+    "end": "// T140：資源供應鏈——本日開採（suppliesGain"
+   },
+   "line": 55286,
+   "endLine": 55299,
+   "sha": "078ed6940db3ff23d891dd91d57c23ba39db40e4eac109a8e200e71c8bc93c73"
+  },
+  {
+   "kind": "span",
+   "name": "tick 貿易額度與糧食",
+   "anchors": {
+    "start": "logisticsNow481=logisticsEfficiency481(tickRoad,freightUnits485,warehouseUnits485,portEquivalent485,railUnits485,freightTaxMul);",
+    "end": "foodServedCore482=foodDomesticCore482+foodImport482,foodSupplyRate482="
+   },
+   "line": 55333,
+   "endLine": 55342,
+   "sha": "170d38973b812280432a2ed6e8a3b2ff04b784da4e8b3ab8b35794c85eca48bb"
+  },
+  {
+   "kind": "span",
+   "name": "tick 糧食加減",
+   "anchors": {
+    "start": "if(foodCoreNeed482>0||se>0){",
+    "end": "// T69/T70 災害（可關）"
+   },
+   "line": 55414,
+   "endLine": 55424,
+   "sha": "cc1b2a8c67225b74ace96f4046021b901612c89980d6d8c26a7bf1041c90e421"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "spec386": "let spec386='';",
+  "sq": "const sq=(id,on,off)=>spec386===id?on:off;",
+  "FARM_SEASON_MULT": "const FARM_SEASON_MULT=[1,1.15,1.4,0.4];",
+  "LMCFG309": "const LMCFG309={70:{t:10,j:3,u:3},73:{t:14,j:4,u:5},78:{t:10,j:1,u:2},79:{t:12,j:2,u:3},80:{t:20,j:4,u:5},74:{t:9,j:2,u:3},69:{t:16,j:4,u:4},71:{t:8,j:2,u:3},72:{t:18,j:3,u:4},75:{t:17,j:3,u:4},76:{t:24,j:6,u:7},77:{t:11,j:3,u:4},179:{t:14,j:2,u:3},180:{t:22,j:3,u:5},181:{t:28,j:8,u:9},182:{t:8,j:1,u:1},183:{t:15,j:2,u:4},184:{t:10,j:5,u:3},185:{t:24,j:3,u:4},186:{t:12,j:1,u:2}}; // T309：觀光地標配置；T517：＋節慶/灣岸六座（k179-184，t觀光/j就業/u維護）；T518：＋k185-186",
+  "TOUR_SEASON_MULT": "const TOUR_SEASON_MULT=[1,1.3,1.2,0.85];",
+  "foodPoints": "let foodPoints=0;        // 食物點數（T46，每天重算）",
+  "tourists": "let tourists=0;",
+  "logisticsEfficiency481": "function logisticsEfficiency481(roadList,freightN,warehouseN,portN,railN,fuelMul){let sum=0,n=0,over=0;for(const i of roadList){const t=tiles[i];if(!t?.road)continue;const cap=roadCap475(t)||1,r=(roadLoad[i]||0)/cap;sum+=Math.min(2,r);n++;if(r>1)over++;}const avg=n?sum/n:0,overShare=n?over/n:0,bonus=Math.min(.26,freightN*.035+warehouseN*.022+portN*.025+railN*.012),fuelBonus=Math.max(0,(fuelMul||1)-1)*.30,pen=Math.max(0,avg-.65)*.35+overShare*.22,eff=clamp(.78+bonus+fuelBonus-pen,.45,1.12);return{efficiency:+eff.toFixed(4),avgRoadLoad:+avg.toFixed(4),overloadedShare:+overShare.toFixed(4)};}",
+  "CONVENTION_PULSE_DAYS": "const CONVENTION_PULSE_DAYS=20;         // T139：會展中心觀光脈衝週期（天）",
+  "REFINERY_RATE": "const REFINERY_RATE=3,STEEL_MILL_RATE=2,FUEL_STOCK_CAP=120,STEEL_STOCK_CAP=120;",
+  "enterpriseTypeUtilization489": "function enterpriseTypeUtilization489(k){const q=enterprise489&&enterprise489.ready?enterprise489.byType[k]:null;return q?clamp(q.utilization,0,1):1;}",
+  "enterpriseEffectiveCount489": "function enterpriseEffectiveCount489(k,n){return (+n||0)*enterpriseTypeUtilization489(k);}",
+  "gpnTradeCapacityMul508": "function gpnTradeCapacityMul508(){if(window.__noGpn508||window.__noShipping508)return 1;const d=gpn508.ready?(gpn508.city.portDelay||0):gpnRouteDelay508('hub'),p=gpnProgramStrength508('portResilience');return clamp(1-d*.26+p*.15,.58,1.20);}",
+  "gpnImportAvailability508": "function gpnImportAvailability508(id,n){n=Math.max(0,Math.floor(+n||0));if(!n||window.__noGpn508||window.__noTradeAvailability508)return n;const a=gpn508.ready?(gpn508.commodities?.[id]?.availability??1):1,buffer=gpnProgramStrength508('stockpile')*.12,f=clamp(a+buffer,.05,1.08);if(f>=.999)return n;const q=Math.floor(n*f+1e-9);return Math.min(n,f<.18?0:Math.max(1,q));}",
+  "lets": "  let popN=0,jobsC=0,jobsI=0,happySum=0,happyN=0,schools=0,dumps=0,stadiums=0,waterTowers=0,clinics=0,libraries=0,posts=0,cemeteries=0;\n  let st=0,po=0,ai=0,pa=0,tr=0,fa=0,ra=0,la=0,so=0,wi=0,se=0,am=0,rc=0,fs2=0,pr=0,un=0,trR=0,trC=0,towerPop488=0,megaPop488=0,bigFa=0,bigCemN=0,gstN=0,scN=0,upJob=0,farmFoodU=0,farmGoldU=0,ranchFoodU=0,ranchGoldU=0,fpN=0,procCapU=0,nkN=0,hyN=0,geN=0,fhqN=0,ghN=0,ghFoodU=0,ghGoldU=0,wteN=0,whN284=0,whCap284=0,nIndG284=0,nComG284=0,mallN=0,gh330=0,ht330=0,rs330=0,kg330=0,sn330=0,bk330=0,mk330=0,cp330=0,tv330=0,mr330=0,tp336=0,dg336=0,ir336=0,sk336=0,fw340=0,pl340=0,fp340=0,hs340=0,ch340=0,br340=0,wp340=0,vt340=0,sr340=0,cg340=0,mgR341=0,mgC341=0,cr342=0,hsc342=0,tpk342=0,frt342=0,upc342=0,cpk342=0,gpk465=0,gmc466=0,art466=0,adm466=0,res466=0,cam342=0,mpt342=0,cvc342=0,dtc342=0,eduSumT342=0,eduCntT342=0,gw346=0,fp346=0,kt346=0,ff346=0,mortPop346=0; // T290：購物中心計數 // T265：焚化發電計數；T257：核電/水力/地熱/消防總局計數；T228：大農場計數；T233：大墓園計數；T234：中央車站計數；T241：體育園區計數；T239：升級就業加成；T251：農場等級加權食物/金幣累加；T252：牧場等級加權食物/金幣累加（不隨季節＝畜牧全年穩定）；T254：食品加工廠計數＋加工容量累加\n  let mu=0,th=0,aq=0,zo=0,ap=0,ci=0,gl=0,faN=0,ctN307=0,obN307=0,tourLm309=0,jobsLm309=0,upLm309=0; // T307 鐘樓/天文台；T296 信仰中心；T138：mu博物館/th劇院/aq水族館/zo動物園/ap遊樂園/ci電影院/gl圖書總館（root）計數\n  let chN=0,crtN=0,cvN=0,inN=0,wsN=0,bgN=0,mhN=0; // T139：chN市政廳/crtN法院/cvN會展中心/inN研究院/wsN氣象站/bgN植物園/mhN綜合醫院（root）計數\n  let owN=0,mnN=0,mgN=0,indBldN=0,suppliesGain=0; // T140：owN油井/mnN礦場/mgN太空研究中心（root）計數；indBldN=工業建築計數（供資源消耗鏈用，獨立於既有 nI/jobsI，不限電力）；suppliesGain=本日開採彙總\n  /* T364b：全是本 tick 的可觀測流量；庫存 fuel/steel 才跨日。 */\n  let refineryN=0,steelMillN=0,shipyardN=0,oilGain=0,oreGain=0,cl485=0,im485=0,dc485=0,cold485=0,silo485=0,fuelDep485=0,gasDep485=0,steelY485=0,bulk485=0,cport485=0,clOp485=0,imOp485=0,dcOp485=0,coldOp485=0,siloOp485=0,fuelDepOp485=0,gasDepOp485=0,steelYOp485=0,bulkOp485=0,cportOp485=0;\n  fuelMade=0;steelMade=0;steelUsed=0;fuelTaxMul=1;freightTaxMul=1;steelTaxMul=1;shipTradeTaxMul=1;shipPortGold=0;shipDailyGold418=0;fuelUse418=0;fuelExport418=0;constrSteelUse418=0;steelDisc418=false; // T418：本日快照 load 成對歸零（覆核：從有船城市載入空城未 tick 時 shipDaily/fuelUse/fuelExport 不得殘留）\n  let happyAggSum=null; // T111：幸福構成累加器（沿用既有 happySum/happyN 迴圈，逐建築累加各項後於迴圈尾除以 happyN）\n  let court364=0,tennis364=0,play364=0,socialHousing364=0,substation364=0,desal364=0,pump364=0,center364=0,shelter364=0,radar364=0;",
+  "count": "  for(const i88 of tickBld){ // T316：主計數迴圈改遍歷建築索引（空格子純白跑；同集合同序＝亂數流零位移）\n    const x=i88%N,y=(i88/N)|0;\n    const t=tiles[i88];\n    const b=t.bld;\n    if(!b||b.ref)continue;             // 多格建築 ref 格不參與任何模擬（T22）\n    if(b&&UP_MAX[b.k]&&b.lv>1)upJob+=(b.lv-1)*(UP_JOB[b.k]??6); // T239：升級服務每級加成就業；T254 修：用 ?? 而非 ||，否則顯式 0（電源/加工廠 k5/25/26/57 純擴容不加就業）會被 0||6 誤 fallback 成 6\n    if(b&&b.k===7)schools++;\n    if(b&&b.k===8)dumps++;\n    if(b&&b.k===9)stadiums++;          // 體育場（root）計數，供 jobs/維護（T22）\n    if(b&&b.k===10)waterTowers++;      // 水塔計數（T31）\n    if(b&&b.k===13)clinics++;          // 診所計數（T34）\n    if(b&&b.k===14)libraries++;        // 圖書館計數（T35）\n    if(b&&b.k===15)posts++;             // 郵局計數（T36）\n    if(b&&b.k===16)cemeteries++;        // 墓園計數（T38）\n    if(b&&b.k===54)bigCemN++;           // 大墓園計數（T233，3×3 root）\n    if(b&&b.k===55)gstN++;              // 中央車站計數（T234，3×3 root）\n    if(b&&b.k===56)scN++;               // 體育園區計數（T241，3×3 root）\n    if(b&&b.k===57){fpN++;if(b.pw)procCapU+=40+((b.lv||1)-1)*20;} // 食品加工廠（T254，3×3 root）：加工容量隨機組等級（基礎40+20/級），僅供電廠計入\n    if(b&&b.k===58)nkN++;               // 核電廠（T257，3×3 root）\n    if(b&&b.k===59)hyN++;               // 水力發電（T257，2×2 root）\n    if(b&&b.k===60)geN++;               // 地熱發電（T257，1×1）\n    if(b&&b.k===61)fhqN++;              // 消防總局（T257，3×3 root）\n    if(b&&b.k===62)wteN++;              // 垃圾焚化發電廠（T265，2×2 root）\n    if(b&&b.k===63){ghN++;const glv=b.lv||1;ghFoodU+=glv*6;ghGoldU+=glv*4;} // 溫室（T280，2×2 root）：全年恆溫＝食物6/級＋金幣4/級，不乘季節\n    if(b&&b.k===64){whN284++;whCap284+=120+((b.lv||1)-1)*60;} // 倉儲物流中心（T285，2×2 root）：工業品容量 120+60/級\n    if(b&&b.k===65){mallN++;if(b.pw)nComG284+=3;}\n    if(b&&b.k===81)gh330++;if(b&&b.k===82)ht330++;if(b&&b.k===83)rs330++; // T330 旅宿（ref 已在迴圈頭跳過）\n    if(b&&b.k===84)kg330++;if(b&&b.k===85)sn330++;if(b&&b.k===86)bk330++; // T330 配套\n    if(b&&b.k===87)mk330++;if(b&&b.k===88)cp330++;if(b&&b.k===89)tv330++;if(b&&b.k===90)mr330++; // T330\n    if(b&&b.k===91)tp336++;if(b&&b.k===92)dg336++;if(b&&b.k===93)ir336++;if(b&&b.k===94)sk336++; // T336\n    if(b&&b.k===95)fw340++;if(b&&b.k===96)pl340++;if(b&&b.k===97)fp340++;if(b&&b.k===98)hs340++;if(b&&b.k===99)ch340++; // T340\n    if(b&&b.k===100)br340++;if(b&&b.k===101)wp340++;if(b&&b.k===102)vt340++;if(b&&b.k===103)sr340++;if(b&&b.k===104)cg340++; // T340 // 大型購物中心（T290，4×4 root）：大零售＝工業品需求 ×3（供電時）\n    if(b&&b.k===3&&!b.ref&&b.lv>=2&&b.pw)nIndG284++;  // T284：可產工業品的工業（lv2+ 供電）\n    if(b&&b.k===2&&!b.ref&&b.lv>=2&&b.pw)nComG284++;  // T284：可銷工業品的商業（lv2+ 供電）\n    if(b&&b.k===17)st++;               // 火車站（T39）\n    if(b&&b.k===18)po++;               // 港口（T40）\n    if(b&&b.k===19)ai++;               // 機場（T41）\n    if(b&&b.k===20)pa++;               // 停車場（T43）\n    if(b&&b.k===21)tr++;               // 輕軌站（T44）\n    if(b&&b.k===22){fa++;const flv=b.lv||1;const fb=(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1;farmFoodU+=flv*3*fb;farmGoldU+=flv*3*fb;} /* T346 化肥增產 */ // 農場（T46）；T251：灌溉等級加權食物(3/級)＋金幣收益(3/級)\n    if(b&&b.k===53){bigFa++;const flv=b.lv||1;const fb=(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1;farmFoodU+=flv*20*fb;farmGoldU+=flv*12*fb;} /* T346 化肥增產 */ // 大農場（T228，5×5 root）；T251：食物20/級＋金幣12/級\n    if(b&&b.k===23){ra++;const rlv=b.lv||1;ranchFoodU+=rlv*2;ranchGoldU+=rlv*2;} // 牧場（T46）；T252：牧養等級加權食物(2/級)＋金幣收益(2/級)，不隨季節（畜牧全年穩定，與農場季節峰谷區隔）\n    if(b&&b.k===24)la++;               // 地標（T47）\n    if(b&&b.k===25)so++;               // 太陽能（T48）\n    if(b&&b.k===26)wi++;               // 風力（T48）\n    if(b&&b.k===27)se++;               // 污水廠（T49）\n    if(b&&b.k===28)am++;               // 救護站（T50）\n    if(b&&b.k===29)rc++;               // 回收中心（T51）\n    if(b&&b.k===30)fs2++;              // 高級消防（T52）\n    if(b&&b.k===31)pr++;               // 監獄（T53）\n    if(b&&b.k===32)un++;               // 大學（T54）\n    if(b&&b.k===107)cr342++;if(b&&b.k===108)hsc342++;if(b&&b.k===109)tpk342++;if(b&&b.k===110)frt342++;if(b&&b.k===111)upc342++; // T342\n    if(b&&b.k===117)gw346++;if(b&&b.k===118)fp346++;if(b&&b.k===119)kt346++;if(b&&b.k===120)ff346++; // T346\n    if(b&&b.k===121)refineryN++;if(b&&b.k===122)steelMillN++;if(b&&b.k===123)shipyardN++; // T364b\n    if(b&&b.k===165){cl485++;if(logisticsOperational485(i88,b))clOp485++;}if(b&&b.k===166){im485++;if(logisticsOperational485(i88,b))imOp485++;}if(b&&b.k===167){dc485++;if(logisticsOperational485(i88,b))dcOp485++;}if(b&&b.k===168){cold485++;if(logisticsOperational485(i88,b))coldOp485++;}if(b&&b.k===169){silo485++;if(logisticsOperational485(i88,b))siloOp485++;}if(b&&b.k===170){fuelDep485++;if(logisticsOperational485(i88,b))fuelDepOp485++;}if(b&&b.k===171){gasDep485++;if(logisticsOperational485(i88,b))gasDepOp485++;}if(b&&b.k===172){steelY485++;if(logisticsOperational485(i88,b))steelYOp485++;}if(b&&b.k===173){bulk485++;if(logisticsOperational485(i88,b))bulkOp485++;}if(b&&b.k===174){cport485++;if(logisticsOperational485(i88,b))cportOp485++;} // T485：built 與 operational 分離；效果需電力＋道路，聯運/港區另需 rail/water\n    if(b&&b.k===124)court364++;if(b&&b.k===125)tennis364++;if(b&&b.k===126)play364++;if(b&&b.k===127)socialHousing364++;\n    if(b&&b.k===128)substation364++;if(b&&b.k===129)desal364++;if(b&&b.k===130)pump364++;if(b&&b.k===131)center364++;if(b&&b.k===132)shelter364++;if(b&&b.k===133)radar364++; // T364c/d：root 計數\n    if(b&&b.k===112)cpk342++;if(b&&b.k===134)gpk465++;if(b&&b.k===135)gmc466++;if(b&&b.k===136)art466++;if(b&&b.k===137)adm466++;if(b&&b.k===138)res466++;if(b&&b.k===113)cam342++;if(b&&b.k===114)mpt342++;if(b&&b.k===115)cvc342++;if(b&&b.k===116)dtc342++; // T342/T465/T466\n    if(b&&b.k===105){mgR341++;megaPop488+=residentPopulation488(i88,b);}         // T488：住宅巨廈使用單一人口真相\n    if(b&&b.k===106)mgC341++;         // T341：商業綜合體（root）\n    if(b&&b.k===33){trR++;towerPop488+=residentPopulation488(i88,b);}              // T488：住宅塔使用單一人口真相\n    if(b&&b.k===34)trC++;              // T127：商業塔（root，就業併入 jobs 尾端計算）\n    if(b&&b.k===35)mu++;               // 博物館（T138）\n    if(b&&b.k===66)faN++;              // 信仰中心（T296）\n    if(b&&b.k===67)ctN307++;           // 鐘樓（T307）\n    if(b&&b.k===68)obN307++;           // 天文台（T307）\n    if(b&&b.k>=69&&b.k<=80&&!b.ref){const lc309=LMCFG309[b.k];if(lc309){tourLm309+=lc309.t;jobsLm309+=lc309.j;upLm309+=lc309.u;}} // T309 地標累加\n    if(b&&b.k===36)th++;               // 劇院（T138）\n    if(b&&b.k===37)aq++;               // 水族館（T138）\n    if(b&&b.k===38)zo++;               // 動物園（T138）\n    if(b&&b.k===39)ap++;               // 遊樂園（T138）\n    if(b&&b.k===40)ci++;               // 電影院（T138）\n    if(b&&b.k===41)gl++;               // 圖書總館（T138）\n    if(b&&b.k===42)chN++;              // 市政廳（T139）\n    if(b&&b.k===43)crtN++;             // 法院（T139）\n    if(b&&b.k===44)cvN++;              // 會展中心（T139）\n    if(b&&b.k===45)inN++;              // 研究院（T139）\n    if(b&&b.k===46)wsN++;              // 氣象站（T139）\n    if(b&&b.k===47)bgN++;              // 植物園（T139）\n    if(b&&b.k===48)mhN++;              // 綜合醫院（T139）\n    if(b&&b.k===3)indBldN++;           // T140：工業建築計數（不限電力，供資源消耗鏈用，獨立於既有 nI/jobsI）\n    if(b&&b.k===49){                   // T140：油井——每日抽取本格資源，累加 supplies，資源耗盡（RDEP 達上限）自動停產，不消耗 R()\n      owN++;\n      const oi=idx(x,y);\n      if(RESOURCE[oi]===1&&RDEP[oi]<RESOURCE_STOCK){\n        const ext=Math.min(OIL_RATE,RESOURCE_STOCK-RDEP[oi]);\n        RDEP[oi]+=ext;suppliesGain+=ext;oilGain+=ext;\n      }\n    }\n    if(b&&b.k===50){                   // T140：礦場——同油井樣式，不消耗 R()\n      mnN++;\n      const mi=idx(x,y);\n      if(RESOURCE[mi]===2&&RDEP[mi]<RESOURCE_STOCK){\n        const ext=Math.min(ORE_RATE,RESOURCE_STOCK-RDEP[mi]);\n        RDEP[mi]+=ext;suppliesGain+=ext;oreGain+=ext;\n      }\n    }\n    if(b&&b.k===51&&!b.ref)mgN++;      // 太空研究中心（T140，root only；週期性消耗 supplies 見下方 foodPoints 區塊之後）\n    /* T364c：社宅是固定容量的住宅，不參與 RCI 生長／升級，仍走道路、電水、幸福與人口結算。\n       不併入下方既有隨機災害抽樣，避免為新設施改動共用亂數流。 */",
+  "econ": "const whEff489=enterpriseEffectiveCount489(64,whN284),frtEff489=enterpriseEffectiveCount489(110,frt342),clEff489=enterpriseEffectiveCount489(165,clOp485),imEff489=enterpriseEffectiveCount489(166,imOp485),dcEff489=enterpriseEffectiveCount489(167,dcOp485),coldEff489=enterpriseEffectiveCount489(168,coldOp485),siloEff489=enterpriseEffectiveCount489(169,siloOp485),fuelDepEff489=enterpriseEffectiveCount489(170,fuelDepOp485),gasDepEff489=enterpriseEffectiveCount489(171,gasDepOp485),steelYEff489=enterpriseEffectiveCount489(172,steelYOp485),bulkEff489=enterpriseEffectiveCount489(173,bulkOp485),cportEff489=enterpriseEffectiveCount489(174,cportOp485),\n      freightUnits485=frtEff489+clEff489*2+imEff489*3+dcEff489+bulkEff489*2+cportEff489*4,\n      warehouseUnits485=whEff489+clEff489*2+dcEff489*1.5+coldEff489+siloEff489*.5+fuelDepEff489*.5+gasDepEff489*.5+steelYEff489,\n      portEquivalent485=po+bulkEff489+cportEff489*2,railUnits485=railLines463.length+imEff489*2,\n      fuelCap485=FUEL_STOCK_CAP+fuelDepEff489*80,steelCap485=STEEL_STOCK_CAP+steelYEff489*80,\n      foodPreserveMul485=1+Math.min(.20,coldEff489*.05+siloEff489*.035),goodsCapBonus485=clEff489*240+dcEff489*180+cportEff489*300;\n// T81 食物 / T80 觀光\nfoodPoints=Math.round((farmFoodU*FARM_SEASON_MULT[sea]+ranchFoodU+ghFoodU+fp340*3+cg340*1+ff346*4)*foodPreserveMul485*(cityEvent?CITY_EVENTS[cityEvent.i].food:1)); // T299：事件食物加成（豐收節 ×1.5；無事件 ×1 恆等） // T280：溫室恆溫食物不乘季節 // T252：牧場食物改牧養等級加權(ranchFoodU，lv1 時＝ra*2 向後相容，不隨季節)；T251：農場食物灌溉等級加權(farmFoodU，lv1＝fa*3+bigFa*20)；T228：大農場日產 20 // T136：農場產量季節曲線（春播基準1／夏長1.15／秋收峰1.4／冬歇0.4），牧場（ra）不隨季節變動\n  tourists=Math.round((la*25+ctN307*12+obN307*22+tourLm309+ai*40+st*5+mu*15+th*12+ci*8+aq*35+zo*45+ap*55+bgN*20+rs330*15+tv330*18+mr330*30+ch340*8+wp340*34+sr340*16+cpk342*12+gpk465*28+art466*80+adm466*25+res466*20+mpt342*120)*TOUR_SEASON_MULT[sea]*sq('green',1.15,1)); /* T342 */ // T136：觀光夏秋雙高峰（春基準1／夏1.3／秋1.2／冬清淡0.85）；T138：博物館/劇院/電影院中度觀光係數＋水族館/動物園/遊樂園強觀光吸引（圖書總館 gl 純教育，不貢獻觀光）；T139：植物園持續觀光貢獻（市政廳/法院/研究院/氣象站/綜合醫院不貢獻觀光）\n  if(cvN>0&&day%CONVENTION_PULSE_DAYS===0){ // T139：會展中心——非連續型「觀光脈衝」機制，區別於上方持續型觀光貢獻，每 20 天一次性大額遊客湧入（純由 day 導出，不消耗 R()，cvN=0 時整段不執行、零回歸影響）\n    const burst=Math.round(500*cvN*TOUR_SEASON_MULT[sea]);\n    tourists+=burst;\n    toast('🎪 '+townName+'會展中心舉辦大型展覽，遊客湧入 +'+burst,'gold');\n  }",
+  "trade": "        logisticsNow481=logisticsEfficiency481(tickRoad,freightUnits485,warehouseUnits485,portEquivalent485,railUnits485,freightTaxMul);\n  const roadTradeBase482=tickRoad.length?Math.min(8,1+Math.floor(tickRoad.length/80)):0,\n        tradeCapacity481=Math.max(tickRoad.length>0?3:0,Math.floor((roadTradeBase482+tp336*4+portEquivalent485*4+freightUnits485*3+warehouseUnits485*2+clEff489*8+imEff489*10+dcEff489*4+coldEff489*3+siloEff489*3+fuelDepEff489*4+gasDepEff489*4+steelYEff489*3+bulkEff489*12+cportEff489*18+Math.min(shipCount,portEquivalent485*2))*logisticsNow481.efficiency*gpnTradeCapacityMul508())); /* T482A1 修①：陸路小額貿易下限——原式無農小城 floor(1×.78)=0＝民生零進口＝供糧率 0＝幸福 −.06/日觸地板（實測 56 人/7%/−1,439 死亡螺旋根因）。有路即有 3 單位，小城民生進口有入口；常數 3 不隨城擴放大，中大城容量仍由港/貿易站/貨運/倉儲主導，原式取 max 即可 */\n  const solvent482A1=money>=0; /* T482A1 修④：償付能力旗標——破產時暫停 fuel/steel/supplies 三類「產業緩衝」進口（借錢囤庫存＝越破產越失血）；民生（food/gas）與零售閉環（goods）不受此旗標約束，斷帳不斷糧 */\n  let tradeRemaining482=tradeCapacity481,tradeUsed482=0;\n  const takeTrade482=n=>{const q=Math.max(0,Math.min(Math.floor(n||0),tradeRemaining482));tradeRemaining482-=q;tradeUsed482+=q;return q;};\n  // FOOD：先保居民與遊客基本需求，再把剩餘本地糧食分配給廚房→農貿→食品加工→釀酒，最後才出口。\n  const foodResidentNeed482=Math.ceil(pop/10),foodTouristNeed482=Math.ceil(tourists/160),foodCoreNeed482=foodResidentNeed482+foodTouristNeed482,\n        foodDomesticCore482=Math.min(foodPoints,foodCoreNeed482),foodShortCore482=Math.max(0,foodCoreNeed482-foodDomesticCore482),foodImport482=takeTrade482(gpnImportAvailability508('food',foodShortCore482)),\n        foodServedCore482=foodDomesticCore482+foodImport482,foodSupplyRate482=foodCoreNeed482>0?clamp(foodServedCore482/foodCoreNeed482,0,1):1;",
+  "happy": "  if(foodCoreNeed482>0||se>0){\n    happySum=0;happyN=0;\n    const foodHappyDelta482=clamp((foodSupplyRate482-.50)*.11,-.06,.05); /* T482A1 修②：中性點 .55→.50「半飽即穩」——原式供糧率 .5 仍為負（−.0055/日＝小城永久陰跌）；改後進口 3/需求 6 恰好止跌，蓋農地即轉正回升。全飢罰則近不變（−.055 vs −.06）、全飽獎勵不變（+.05 夾持） */\n    for(const i of tickBld){\n      const b=tiles[i].bld;if(!b||b.k!==1||b.ref)continue;\n      if(foodCoreNeed482>0)b.h=clamp(b.h+foodHappyDelta482,.05,1);\n      if(se>0&&SEW_OK442[i]){const ind=countNear(i%N,(i/N)|0,3,tt=>tt.bld&&tt.bld.k===3);if(ind)b.h=clamp(b.h+ind*.025,.05,1);} // T442：舊污水減壓效果改為只有真正接入管網的住宅才獲得\n      happySum+=b.h;happyN++;\n    }\n    if(happyN)cityHappy=happySum/happyN;\n  }"
+ }
+}

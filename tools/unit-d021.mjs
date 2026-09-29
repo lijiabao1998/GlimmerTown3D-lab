@@ -21,13 +21,13 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8'), J = JSON.stringif
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 
 // src/sim/day.ts 在記憶體裡另載一份、改壞幾處（不改 src；同 tools/unit-d011-edit.mjs 的 stepDayWith，多回傳 simFromSave）
-async function dayVariant(edits) {
+export async function dayVariant(edits, over = {}) {   // over＝{ './rules/food.ts': 換掉的模組 }：day.ts 的 import 改用這一份（D022 拿來換一份改壞的 food.ts）
   const file = path.join(ROOT, 'src/sim/day.ts');
   let src = fs.readFileSync(file, 'utf8');
   for (const [a, b] of edits) { if (src.split(a).length !== 2) throw new Error(`突變的錨點要剛好一處：${a.slice(0, 60)}`); src = src.replace(a, b); }
   const ctx = {};
   for (const [, names, from] of src.matchAll(/^import \{([^}]*)\} from '([^']+)';$/gm)) {
-    const ns = await import(new URL(from, pathToFileURL(file)).href);
+    const ns = over[from] ?? await import(new URL(from, pathToFileURL(file)).href);
     for (const k of names.split(',').map(q => q.trim()).filter(q => q && !q.startsWith('type '))) { if (!(k in ns)) throw new Error(`${from} 沒有匯出 ${k}`); ctx[k] = ns[k]; }
   }
   const js = stripTypeScriptTypes(src).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');

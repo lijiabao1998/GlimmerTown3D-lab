@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1033,6 +1033,58 @@ if (set === 'd020-traj') {   // 只在明講要它時才跑（不進 all）：�
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });   // 用 clip 截整頁：headless 改視窗大小後偶爾只重畫上半截
     fs.writeFileSync(path.join(out, 'D020-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D020-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
+if (set === 'd022') {   // 只在明講要它時才跑（不進 all）：手機上住宅的建築卡多一列「糧食」——起步城（供糧率低、幸福減）與 AI 城 120 天當成「我的城」（供糧率 100%、幸福加）
+  const ai = fs.readFileSync(path.join(ROOT, 'src/content/samples/ai120.code.txt'), 'utf8').trim();
+  const homeOf = `(()=>{const h=__gt.conBuildings().filter(b=>!b.gone&&b.k===1);return h.length?[h[0].x,h[0].z]:null;})()`;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    await open('sample=starter');
+    await page.evaluate('(__gt.simStep(30), 1)');
+    let h = await page.evaluate(homeOf);
+    await page.evaluate(`(__gt.view(${h[0] + .5}, ${h[1] + .5}, 4.2), __gt.setVisT(2.2), __gt.openTile(${h[0]}, ${h[1]}), 1)`);
+    await new Promise(res => setTimeout(res, 900)); await save(page, 'd022_mob_starter');
+    await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()');   // clean=1 的頁面離開時不自動存檔，塞進去的存檔才不會被蓋掉（同 tools/smoke-d021.mjs）
+    await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(ai)})`);
+    await open('');
+    await page.evaluate('(__gt.simStep(1), 1)');
+    h = await page.evaluate(homeOf);
+    await page.evaluate(`(__gt.view(${h[0] + .5}, ${h[1] + .5}, 4.2), __gt.setVisT(2.2), __gt.openTile(${h[0]}, ${h[1]}), 1)`);
+    await new Promise(res => setTimeout(res, 900)); await save(page, 'd022_mob_ai');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(2,412px);gap:10px;padding:8px 12px 12px}img{display:block;width:412px;height:860px}`;
+  fs.writeFileSync(path.join(out, 'd022_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D022 手機 412×860：住宅的建築卡多一列「糧食」</h1><p class="s">左：起步城推進 30 天（沒有農場、進口額度 3，供糧率低、每天幸福減）；右：AI 城 120 天當成「我的城」讀進來推進一天（食物 121 ≥ 需求 112，供糧率 100%、每天幸福 +5.0）。</p>
+    <div class="g"><figure><figcaption>起步城・第 31 天</figcaption><img src="d022_mob_starter.png"></figure><figure><figcaption>AI 城 120 天・推進一天</figcaption><img src="d022_mob_ai.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd022_mobile.html', width: 880, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d022_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 880, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D022-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D022-mobile.jpg');
+  });
+}
+
+if (set === 'd022-traj') {   // 只在明講要它時才跑（不進 all）：D022 之前的樣本取自 git（D021 收尾 4f389ce），CI 只拉最新一個提交拿不到
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const data = d020Data(arg('base', '4f389ce'));
+  const svg = d020Svg(data, { title: 'D022 糧食接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D022 之前（D021 收尾）', after: '本線 D022 之後',
+    beforeSrc: 'D022 之前＝git {base} 的 d010-3d.json', afterSrc: 'D022 之後＝現在的 src 現算', doc: 'docs/D022-food.md',
+    foot: '前 60 天幸福的差縮小（糧食單日算式跟實驗線逐位相等）；第 121 天拉開：本線平均 59.5% 的住宅沒電（幸福 .065，有電的 .378），實驗線的城只長 54 棟、幾乎都有電。數字表見 {doc}。' });
+  fs.writeFileSync(path.join(out, 'd022_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd022_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d022_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });   // 用 clip 截整頁：headless 改視窗大小後偶爾只重畫上半截
+    fs.writeFileSync(path.join(out, 'D022-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D022-trajectory.jpg', `1600×${ch}`);
   });
 }
 

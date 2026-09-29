@@ -74,9 +74,10 @@ export async function d020ParityGuards(log) {
       // 垃圾的數字：本線這一天的回報＝實驗線那一段的輸出
       if (J(mine(m.garb)) !== J(labOf(L.ga))) bad.push(`種子 ${seed} 垃圾（量、容量、比例、懲罰、太遠、沒清運、評分用、區數、正式）本線 ${J(mine(m.garb))} ≠ 實驗線 ${J(labOf(L.ga))}`);
       if (garbScoreOf(m.garb.dec) !== L.garbScore) bad.push(`種子 ${seed} 評分的垃圾那一項 本線 ${garbScoreOf(m.garb.dec)} ≠ 實驗線 ${L.garbScore}`);
-      // 推進前就在的每一棟住宅：實驗線 h＝本線 h 套糧食（55414–55419，第 2 類沒搬）
-      const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs), food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);
-      for (const [i, h] of res) { const want = clamp(h + food, .05, 1); if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} 套糧食 ${want}`); }
+      // 推進前就在的每一棟住宅：實驗線 h＝本線 h，直接相等（D022 起糧食本線自己算，不再套）；糧食需求與供糧率＝實驗線探針
+      const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs);
+      if (!(q.foodCoreNeed482 > 0) || m.food?.need !== q.foodCoreNeed482 || m.food?.rate !== q.foodSupplyRate482) bad.push(`種子 ${seed}：糧食需求／供糧率 本線 ${m.food?.need}／${m.food?.rate} ≠ 實驗線 ${q.foodCoreNeed482}／${q.foodSupplyRate482}`);
+      for (const [i, h] of res) if (!Object.is(labH.get(i), h)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h}`);
       // 實驗線那一段的輸入代進本線 garbageDay：輸出逐位相等
       const g = garbFromLab(m.tiles0, L.gb);
       if (g.bad.length) bad.push(`種子 ${seed} 代入：${g.bad.slice(0, 2).join('；')}`);
@@ -85,7 +86,7 @@ export async function d020ParityGuards(log) {
       if (!(L.ga.garbCap === 80 && L.ga.far === 0 && res.length > 0 && !L.ga.formal)) bad.push(`種子 ${seed}：容量 ${L.ga.garbCap}、太遠 ${L.ga.far}、住宅 ${res.length}、正式 ${L.ga.formal}`);
       tallies.push(`${seed}：住宅 ${res.length} 棟、垃圾 ${L.ga.garbage.toFixed(2)}／${L.ga.garbCap}、評分垃圾 ${L.garbScore}`);
     }
-    log(!bad.length, 'D020 驗收 3：實驗線頁面實跑預建城（8 個種子）——放兩座垃圾場（接路、不接路）每一筆逐項相等、設施相等；推進一天：住商工以外的格子與場、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅的幸福直接相等（只套糧食）；垃圾量、容量、比例、懲罰、太遠與沒清運的棟數、清運區數、評分用的比例、評分的垃圾那一項＝實驗線；實驗線那一段的輸入代進本線，輸出逐位相等',
+    log(!bad.length, 'D020 驗收 3：實驗線頁面實跑預建城（8 個種子）——放兩座垃圾場（接路、不接路）每一筆逐項相等、設施相等；推進一天：住商工以外的格子與場、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅的幸福直接相等（不套任何東西：垃圾 D020、糧食 D022 本線都自己算）；糧食需求與供糧率＝實驗線；垃圾量、容量、比例、懲罰、太遠與沒清運的棟數、清運區數、評分用的比例、評分的垃圾那一項＝實驗線；實驗線那一段的輸入代進本線，輸出逐位相等',
       bad.slice(0, 3).join('；') || tallies.slice(0, 3).join('；') + '……');
   }
 

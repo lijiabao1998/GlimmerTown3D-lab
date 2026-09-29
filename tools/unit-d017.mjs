@@ -219,7 +219,7 @@ async function guards(log) {
       const r = bad.length ? { bad: [], moved: [], noisy: [] } : prebuiltCheck(seeds, pre, lab.prebuilt, P, seed => new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true, true).hs));
       bad.push(...r.bad);
       if (!bad.length && !r.noisy.every(v => v > 0)) bad.push(`有種子推進前就在的住宅沒有一棟在噪音裡：${r.noisy.join('、')}`);
-      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福套糧食（垃圾 D020 搬了）（含噪音那一項），逐位相等；每個種子都有住宅在體育場的噪音裡`,
+      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福（含噪音那一項；垃圾 D020、糧食 D022 本線都自己算，不套任何東西），直接逐位相等；每個種子都有住宅在體育場的噪音裡`,
         bad.slice(0, 3).join('；') || `住在噪音裡的住宅 ${r.noisy.join('、')} 棟；幸福被設施改到的 ${r.moved.join('、')} 棟`);
     }
   }

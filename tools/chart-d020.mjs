@@ -45,7 +45,6 @@ export function d020Data(base = '63ebc81') {
 
 // ---- 圖（SVG 字串）----
 const C = { surface: '#1a1a19', ink1: '#ffffff', ink2: '#c3c2b7', muted: '#898781', grid: '#2c2c2a', axis: '#383835', lab: '#3987e5', before: '#d95926', after: '#199e70' };   // palette.md 暗面：類別色 1–3、文字色、格線
-const SERIES = [['lab', '實驗線 d23c18d（fallback 設定）'], ['before', '本線 D020 之前'], ['after', '本線 D020 之後']];
 const FONT = `system-ui, -apple-system, "Segoe UI", "Noto Sans CJK TC", "Noto Sans TC", sans-serif`;
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 function niceMax(v) { const p = 10 ** Math.floor(Math.log10(v)), r = v / p; return (r <= 1 ? 1 : r <= 1.5 ? 1.5 : r <= 2 ? 2 : r <= 3 ? 3 : r <= 4 ? 4 : r <= 5 ? 5 : r <= 7.5 ? 7.5 : 10) * p; }
@@ -53,11 +52,16 @@ const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('en-
 // 沒有字型度量可用：中日韓字元＝一個字寬、數字 .58、拉丁字母 .6、其餘（空白、標點）.32（只拿來排版，差一點不影響意思）
 const tw = (t, size) => [...String(t)].reduce((a, ch) => a + (/[\u2E80-\uFFFF]/.test(ch) ? size : /[0-9]/.test(ch) ? size * .58 : /[A-Za-z]/.test(ch) ? size * .6 : size * .32), 0);
 
-export function d020Svg(data) {
+// opt（D022 起可換字）：title、before／after（圖例）、beforeShort／afterShort（每格底下的小標）、beforeSrc／afterSrc（來源那一行）、doc（完整數字表在哪張卡）、foot（最後一行）
+const D020_TEXT = { title: 'D020 垃圾接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D020 之前', after: '本線 D020 之後', beforeShort: '之前', afterShort: '之後',
+  beforeSrc: 'D020 之前＝git {base} 的 d010-3d.json', afterSrc: 'D020 之後＝現在的 src 現算', doc: 'docs/D020-garbage.md',
+  foot: '垃圾之外的第 2 類系統（經濟快照、通勤、壅堵、糧食、夜間城市、城市活動、火災、犯罪、廢棄、疾病、死亡）都還沒搬，商業、住宅棟數的差距主要在那裡（D010 卡「沒做成的事」1）。完整數字表見 {doc}。' };
+export function d020Svg(data, opt = {}) {
+  const T = { ...D020_TEXT, ...opt }, SERIES = [['lab', '實驗線 d23c18d（fallback 設定）'], ['before', T.before], ['after', T.after]];
   const W = 1600, PW = 496, PG = 24, X0 = 32, PT = 150, PH = 412, PLOT = { l: 52, r: 14, t: 46, b: 30, h: 250 }, H = PT + 2 * PH + 78;
-  let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="起步城 8 個種子 × 120 天：實驗線、本線 D020 之前、本線 D020 之後的整城軌跡" font-family='${FONT}'>
+  let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="起步城 8 個種子 × 120 天：實驗線、${esc(T.before)}、${esc(T.after)}的整城軌跡" font-family='${FONT}'>
 <title>起步城 8 個種子 × 120 天：整城軌跡對照</title><rect width="${W}" height="${H}" fill="${C.surface}"/>
-<text x="${X0}" y="44" font-size="26" font-weight="600" fill="${C.ink1}">D020 垃圾接上之後，起步城的整城軌跡離實驗線多近</text>
+<text x="${X0}" y="44" font-size="26" font-weight="600" fill="${C.ink1}">${esc(T.title)}</text>
 <text x="${X0}" y="72" font-size="15" fill="${C.ink2}">起步城 8 個種子 × 120 天；每條線＝8 個種子在那一天的平均。淡色帶＝實驗線 8 個種子之間的 ±1 個標準差。</text>`;
   let lx = X0;
   for (const [k, name] of SERIES) {
@@ -85,7 +89,7 @@ export function d020Svg(data) {
     // 底下三行：第 121 天三個數字（顏色只在小圓點上）、跟實驗線的平均絕對差（之前 → 之後）、實驗線自己的種子間 sd
     let cx = px; const cy = oy + ph + 48;
     s += `<text x="${cx}" y="${cy}" font-size="13" fill="${C.muted}">第 121 天</text>`; cx += tw('第 121 天', 13) + 14;
-    for (const [k, short] of [['lab', '實驗線'], ['before', '之前'], ['after', '之後']]) {
+    for (const [k, short] of [['lab', '實驗線'], ['before', T.beforeShort], ['after', T.afterShort]]) {
       const t = `${short} ${fmt(S[k][p.f].mean[120], p.dec)}`;
       s += `<circle cx="${cx + 4}" cy="${cy - 4}" r="4" fill="${C[k]}"/><text x="${cx + 15}" y="${cy}" font-size="14" fill="${C.ink2}">${t}</text>`; cx += 15 + tw(t, 14) + 16;
     }
@@ -93,8 +97,8 @@ export function d020Svg(data) {
     s += `<text x="${px}" y="${cy + 24}" font-size="13" fill="${C.muted}">跟實驗線的平均絕對差（第 1–120 天）：之前 <tspan fill="${C.ink2}">${fmt(g.before.all, p.dec + 1)}</tspan> → 之後 <tspan fill="${C.ink1}" font-weight="600">${fmt(g.after.all, p.dec + 1)}</tspan></text>
 <text x="${px}" y="${cy + 44}" font-size="13" fill="${C.muted}">實驗線 8 個種子之間的標準差（同期平均）：${fmt(data.labSd[p.f], p.dec + 1)}</text>`;
   });
-  s += `<text x="${X0}" y="${H - 30}" font-size="12" fill="${C.muted}">來源：tools/chart-d020.mjs。實驗線＝d010-lab.json（tools/lab-compare.mjs 在實驗線 d23c18d 的頁面上跑，回退設定）；D020 之前＝git ${data.base} 的 d010-3d.json；D020 之後＝現在的 src 現算。</text>
-<text x="${X0}" y="${H - 12}" font-size="12" fill="${C.muted}">垃圾之外的第 2 類系統（經濟快照、通勤、壅堵、糧食、夜間城市、城市活動、火災、犯罪、廢棄、疾病、死亡）都還沒搬，商業、住宅棟數的差距主要在那裡（D010 卡「沒做成的事」1）。完整數字表見 docs/D020-garbage.md。</text></svg>`;
+  s += `<text x="${X0}" y="${H - 30}" font-size="12" fill="${C.muted}">來源：tools/chart-d020.mjs。實驗線＝d010-lab.json（tools/lab-compare.mjs 在實驗線 d23c18d 的頁面上跑，回退設定）；${esc(T.beforeSrc.replace('{base}', data.base))}；${esc(T.afterSrc)}。</text>
+<text x="${X0}" y="${H - 12}" font-size="12" fill="${C.muted}">${esc(T.foot.replace('{doc}', T.doc))}</text></svg>`;
   return s;
 }
 

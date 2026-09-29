@@ -18,6 +18,7 @@ import { d013Smoke, d013SkipNote } from './smoke-d013.mjs';
 import { d019Smoke, d019SkipNote } from './smoke-d019.mjs';
 import { d020Smoke, d020SkipNote } from './smoke-d020.mjs';
 import { d021Smoke, d021SkipNote } from './smoke-d021.mjs';
+import { d022Smoke, d022SkipNote } from './smoke-d022.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -541,6 +542,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d019Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d020Smoke(withBrowser, log);
 // ===== D021：讀進來的城的人口（tools/smoke-d021.mjs：AI 城、種子城當成「我的城」讀進來，第一天之前與推進一天後的人口＝實驗線；自己開兩個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d021Smoke(withBrowser, log);
+// ===== D022：糧食（tools/smoke-d022.mjs：起步城與 AI 城的住宅建築卡講糧食，數字＝當天回報；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d022Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -549,6 +552,7 @@ if (d013SkipNote()) console.log(d013SkipNote());
 if (d019SkipNote()) console.log(d019SkipNote());
 if (d020SkipNote()) console.log(d020SkipNote());
 if (d021SkipNote()) console.log(d021SkipNote());
+if (d022SkipNote()) console.log(d022SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
