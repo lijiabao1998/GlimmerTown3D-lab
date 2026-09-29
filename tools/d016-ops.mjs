@@ -99,7 +99,7 @@ export function prebuilt16(code, KT, vrank, stepOpts = {}, bare = false, keepNoi
   const a = h.snap();
   out.snapOps = h.head(a); out.pwBefore = pwOf(s.w.tiles).map(r => r[0]); out.hsBefore = hsOf(s.w.tiles).map(r => r[0]);
   const t = h.tick(stepOpts), b = h.snap();
-  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle;
+  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb;
   out.post = h.head(b, false); out.postChanged = diffOf(a.proj, b.proj);
   out.inv = invOf(s.w.tiles, s.g.COV, s.g.POLTREE, s.g.LANDBASE, s.g.LAND); out.pw = pwOf(s.w.tiles); out.hs = hsOf(s.w.tiles);
   out.at = P.at; out.noisy = P.noisy; out.sim = s; out.load = L;

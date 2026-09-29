@@ -74,7 +74,7 @@ const CSS = `
 .tool .price { font-size: 10px; color: #aab3c6; line-height: 1.1; }
 .tool.on { background: #2a3566; border-color: var(--c); box-shadow: inset 0 0 0 2px var(--c); }
 #roadSub, #civicSub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
-#civicSub { grid-template-columns: repeat(5, minmax(0, 1fr)); }   /* D019 起 12 種；D020 起 13 種：手機 5 欄三排（6 欄第三排只剩一顆，7 欄在 360 寬 < 44 px）*/
+#civicSub { grid-template-columns: repeat(7, minmax(0, 1fr)); }   /* D020：13 種，兩排（7＋6） */
 #roadSub[hidden], #civicSub[hidden] { display: none; }
 #roadSub button, #civicSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
 #roadSub button small, #civicSub button small { color: #aab3c6; font-size: 10.5px; }
@@ -108,18 +108,16 @@ const CSS = `
 #bio h2 { margin-right: 48px; }
 @media (max-width: 400px) {   /* 360 寬的手機：七個工具鈕也要 ≥ 44 px（(360 − 16 − 24) ÷ 7 ≈ 45.7） */
   #dock { padding-left: 8px; padding-right: 8px; }
-  .tools { gap: 4px; }
+  .tools, #civicSub { gap: 4px; }   /* D020：公共設施一排七個，(360 − 16 − 24) ÷ 7 ≈ 45.7 */
 }
 @media (min-width: 720px) {
   #menu .sheet { margin: 64px auto auto 10px; width: 380px; border-radius: 16px; border: 1px solid #ffffff26; }
   .tools { grid-template-columns: repeat(7, 64px); justify-content: center; }
   #roadSub, #civicSub { grid-template-columns: repeat(5, 76px); justify-content: center; }
-  #civicSub { grid-template-columns: repeat(7, 76px); }   /* 桌機 13 種：7＋6 兩排 */
+  #civicSub { grid-template-columns: repeat(7, 76px); }
   #dock { align-items: stretch; }
 }
 @media (max-width: 640px) { #bio { bottom: 168px !important; max-height: 40vh !important; } }
-/* 手機上建築卡開著時不顯示教學那一條：卡的下緣固定離底 168 px，只夠沒有提示、或一行提示的 dock；D020 的垃圾提示要兩行（小城一開始都會有），蓋在卡底下會透出字 */
-@media (max-width: 640px) { body:has(#bio:not([hidden])) #coach { display: none; } }
 `;
 
 export function createBuildUi(on: BuildUiEvents) {

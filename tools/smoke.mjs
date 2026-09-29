@@ -536,7 +536,7 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d016Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d013Smoke(withBrowser, log);
 // ===== D019：供水（tools/smoke-d019.mjs：手機拉水管、放水塔、地面只在拿著水管類工具時畫水管、建築卡講有沒有水、增量＝整張、手機預算；自己開三個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d019Smoke(withBrowser, log);
-// ===== D020：垃圾（tools/smoke-d020.mjs：手機蓋垃圾場、13 顆公共設施按鈕、建築卡講垃圾處理與清運、教學提示、增量＝整張、手機預算；自己開 Chrome）=====
+// ===== D020：垃圾（tools/smoke-d020.mjs：手機蓋垃圾場、公共設施 13 顆兩排 ≥ 44×44、建築卡講清運、增量＝整張、手機預算；自己開三個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d020Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());

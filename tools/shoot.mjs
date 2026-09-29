@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -933,56 +933,91 @@ if (want('d018')) {
   }
 }
 
-// D020：垃圾。兩張圖：① 起步城 8 種子 × 120 天的整城軌跡（實驗線｜D020 之前｜D020 之後，畫法與數字都在 tools/chart-d020.mjs）；
-// ② 手機 360×740 四格：沒垃圾場的起步城（教學那一條講垃圾堆積）、住宅建築卡的「清運」、「公共設施」選垃圾場、蓋在路邊之後的垃圾場建築卡。全部本線 3D，不需要實驗線
+// D020：垃圾。同一串操作（D011 的 A 段＋主街旁邊一格貼路的空地蓋一座垃圾場，種子 5162026）在實驗線 2D 與本線 3D 各跑一次：蓋下去那天、20 天之後。
+// 手機：「公共設施」一組選垃圾場（兩排七個）、住宅建築卡的「清運」一列。2D 要實驗線（--lab），沒有就只拍 3D
 if (want('d020')) {
-  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
-  const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption><img src="${src}"></figure>`;
-  const grab = async (page0, file, w, h) => {   // 開 out 裡的頁、量內容高度、用 clip 截整頁（不改視窗大小：headless 改大小後偶爾只重畫上半截）
-    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: `!!document.querySelector('svg,img')`, settle: 200 }, async ({ page }) => {
-      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
-      for (let i = 0; i < 60 && !(await page.evaluate(`document.querySelector('svg,.g')!==null&&[...document.images].every(i=>i.complete&&i.naturalWidth)`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
-      const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
-      await new Promise(r => setTimeout(r, 300));
-      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: w, height: ch, scale: 1 } });
-      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
-      console.log('OK', file, `${w}×${ch}`);
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), LAB = path.resolve(ROOT, arg('lab', '../GlimmerTown-lab')), labDir = path.join(ROOT, 'scratch/lab');
+  const { decodeLabCode } = await import('../src/io/labcode.ts'), { d016Ops } = await import('./d016-ops.mjs'), { loadCode } = await import('../src/io/save.ts');
+  const { kindTableFrom } = await import('../src/content/kindTable.ts'), { harness } = await import('./d011-parity-lib.mjs');
+  const code = codeWithSeed(R('src/content/samples/newcity.code.txt').trim(), 5162026), S = decodeLabCode(code).save, lay = k => Uint8Array.from(S.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
+  const o16 = d016Ops(S.n, lay('ter'), lay('el'), lay('tre')), X = o16.site.x0, Z = o16.site.z0, n = S.n;
+  // 垃圾場的位置：本線照 A 段做完之後，離主街西端 (X−1, Z+5) 最近、四鄰有路的空地（陸地、沒路、沒建築、沒分區）
+  const KT = kindTableFrom(JSON.parse(R('src/content/lab-kinds.json'))), vrank = JSON.parse(R('src/content/samples/d009-live.json')).vrank;
+  const s0 = loadCode(code, KT, vrank).sim; harness(s0).batch(o16.A);
+  const T = s0.w.tiles; let spot = null, best = 1e9;
+  for (let i = 0; i < n * n; i++) {
+    const t = T[i], x = i % n, z = (i / n) | 0; if (!(t.t === 1 || t.t === 2) || t.road || t.bld || t.zone) continue;
+    if (![[0, -1], [1, 0], [0, 1], [-1, 0]].some(([dx, dz]) => T[(z + dz) * n + x + dx]?.road && x + dx >= 0 && x + dx < n)) continue;
+    const d = Math.abs(x - (X - 1)) + Math.abs(z - (Z + 5)); if (d < best) { best = d; spot = [x, z]; }
+  }
+  if (!spot) throw new Error('D020 樣張：找不到貼路的空地');
+  const G = [{ k: 'money', v: 20000 }, { k: 'tap', tool: 'dump', x: spot[0], z: spot[1] }];
+  const all = [...o16.A, ...G], CX = spot[0] + 4.5, CZ = spot[1] + .5;   // 垃圾場在畫面左邊一點、主街的住宅在右邊
+  if (fs.existsSync(path.join(LAB, 'index.html'))) {
+    const { CONFIGS, preloadOf, injectLab } = await import('./lab-configs.mjs');
+    const EX = `window.__d020s={tap:(id,x,y)=>{tool=id;openUndo();paintLast=null;paintTo(x,y);closeUndo();paintLast=null;},
+  line:(id,x0,y0,x1,y1)=>{tool=id;roadDraft436={x0,y0,x1,y1,active:true};commitRoadDraft436();roadDraft436=null;},
+  rect:(id,x0,y0,x1,y1,now)=>{tool=id;rect.x0=x0;rect.y0=y0;rect.x1=x1;rect.y1=y1;performance.now=()=>now;try{commitRect();}finally{delete performance.now;}},setMoney:v=>{money=v;},setTool:v=>{tool=v;}};`;
+    const copy = injectLab(fs.readFileSync(path.join(LAB, 'index.html'), 'utf8'), EX);
+    fs.mkdirSync(labDir, { recursive: true });
+    await withBrowser({ root: LAB, entry: 'd020s.html', overlay: { 'd020s.html': copy }, port: 8433, width: 1280, height: 800, gl: false, preload: preloadOf(CONFIGS.fallback), ready: '!!window.__bootDone453&&!!window.__d020s', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+      await open('');
+      const shot = `(()=>{__d020s.setTool('pan');GV.lookAt(${CX},${CZ});GV.art574.zoom574(1.5);GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`;
+      const png = url => Buffer.from(url.split(',')[1], 'base64');
+      await page.evaluate(`(()=>{GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${JSON.stringify(code)}))throw new Error('import');GV.setSpeed(0);GV.ai(false);let clock=0;
+        for(const o of ${JSON.stringify(all)}){clock+=o.gap??10000;if(o.k==='money'){__d020s.setMoney(o.v);continue;}if(o.k==='undo'){GV.undo();continue;}if(o.k==='seed'||o.k==='pick')continue;
+          const c=o.k==='tap'?[o.x,o.z,o.x,o.z]:[o.x0,o.z0,o.x1,o.z1];if(o.k==='tap')__d020s.tap(o.tool,c[0],c[1]);else if(o.k==='line')__d020s.line(o.tool,c[0],c[1],c[2],c[3]);else __d020s.rect(o.tool,c[0],c[1],c[2],c[3],clock);}return 1;})()`);
+      fs.writeFileSync(path.join(labDir, 'd020_day0_2d.png'), png(await page.evaluate(shot)));
+      for (let d = 0; d < 20; d++) await page.evaluate('GV.step(1)');
+      fs.writeFileSync(path.join(labDir, 'd020_day20_2d.png'), png(await page.evaluate(shot)));
+      console.log('實驗線 2D：d020_day0_2d.png、d020_day20_2d.png');
+      errors += page.errors.filter(e => !/manifest|service ?worker|favicon/i.test(e)).length;
     });
-  };
-  // ① 軌跡圖
-  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
-  const data = d020Data(arg('base', '63ebc81'));
-  fs.writeFileSync(path.join(out, 'd020_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${d020Svg(data)}`);
-  await grab('d020_traj.html', 'D020-trajectory.jpg', 1600, 1300);
-  // ② 手機四格
-  await withBrowser({ width: 360, height: 740 }, async ({ open, page }) => {
-    await page.send('Emulation.setDeviceMetricsOverride', { width: 360, height: 740, deviceScaleFactor: 2, mobile: true });
-    await open('sample=starter');
-    const wait = ms => new Promise(r => setTimeout(r, ms));
-    await page.evaluate('(__gt.simStep(8), 1)'); await wait(3200); await save(page, 'd020_mob_hint');
-    const home = await page.evaluate(`(()=>{for(const b of __gt.conBuildings())if(!b.gone&&b.k===1)return [b.x,b.z];return null;})()`);
-    if (!home) throw new Error('第 9 天起步城沒有住宅');
-    await page.evaluate(`(__gt.view(${home[0] + .5}, ${home[1] + .5}, 4.2), __gt.openTile(${home[0]}, ${home[1]}), 1)`); await wait(500); await save(page, 'd020_mob_house');
-    await page.evaluate(`(document.querySelector('#bio .x').click(), __gt.tool('civic','dump'), 1)`); await wait(3200); await save(page, 'd020_mob_menu');
-    const L = await page.evaluate('__gt.layers()'), n = L.n; let put = null;
-    for (let i = 0; i < n * n && !put; i++) {   // 路邊第一格空地（不是路、分區、建築、樹、水）
-      if (!L.road[i]) continue;
-      for (const j of [i - 1, i + 1, i - n, i + n]) {
-        if (j < 0 || j >= n * n || L.road[j] || L.zone[j] || L.occ[j] || L.tree[j] || L.ter[j] === 0) continue;
-        const r = await page.evaluate(`__gt.edit(${JSON.stringify({ k: 'tap', tool: 'dump', x0: j % n, z0: (j / n) | 0, x1: j % n, z1: (j / n) | 0 })})`);
-        if (r?.placed) { put = [j % n, (j / n) | 0]; break; }
-      }
-    }
-    if (!put) throw new Error('起步城找不到路邊空地蓋垃圾場');
-    await page.evaluate(`(__gt.tool(null), __gt.simStep(1), __gt.view(${put[0] + .5}, ${put[1] + .5}, 4.2), __gt.openTile(${put[0]}, ${put[1]}), 1)`); await wait(500); await save(page, 'd020_mob_dump');
-    console.log(`手機四格：住宅 (${home})、垃圾場 (${put})`);
+  } else console.log(`（${path.relative(ROOT, LAB)} 沒有實驗線，2D 那一欄留白）`);
+  const apply3d = async page => { for (const o of all) { if (o.k === 'pick') continue; await page.evaluate(js(toOp(o))); } };
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await fresh(open, page, 'clean=1');
+    await apply3d(page);
+    await page.evaluate(`(__gt.view(${CX}, ${CZ}, 4.8), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 300)); await save(page, 'd020_day0_3d');
+    await page.evaluate('(__gt.simStep(20), 1)');
+    await page.evaluate(`(__gt.view(${CX}, ${CZ}, 4.8), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 300)); await save(page, 'd020_day20_3d');
     errors += page.errors.length;
   });
+  // 手機：「公共設施」一組選垃圾場；放下工具點離垃圾場最近的一棟住宅
+  await withBrowser({ width: 360, height: 740 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 360, height: 740, deviceScaleFactor: 2, mobile: true });
+    await fresh(open, page, '');
+    await apply3d(page);
+    await page.evaluate(`(__gt.simStep(20), __gt.view(${spot[0] + .5}, ${spot[1] + .5}, 4.2), __gt.setVisT(2.2), __gt.tool('civic','dump'), 1)`);
+    await new Promise(res => setTimeout(res, 3200)); await save(page, 'd020_mob_menu');
+    const home = await page.evaluate(`(()=>{let b0=null,d0=1e9;for(const b of __gt.conBuildings()){if(b.gone||b.k!==1)continue;const d=Math.abs(b.x-${spot[0]})+Math.abs(b.z-${spot[1]});if(d<d0){d0=d;b0=[b.x,b.z];}}return b0;})()`);
+    if (home) await page.evaluate(`(__gt.tool(null), __gt.openTile(${home[0]}, ${home[1]}), 1)`);
+    await new Promise(res => setTimeout(res, 400)); await save(page, 'd020_mob_card');
+    errors += page.errors.length;
+  });
+  const copy2d = f => { const src = path.join(labDir, f), has = fs.existsSync(src); if (has) fs.copyFileSync(src, path.join(out, f)); return has ? f : ''; };
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  const cell = (src, cap, cls = '') => `<figure><figcaption>${cap}</figcaption>${src ? `<img class="${cls}" src="${src}">` : `<div class="none ${cls}">（沒有這一格的圖）</div>`}</figure>`;
+  fs.writeFileSync(path.join(out, 'd020_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:800px;height:480px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D020 垃圾：同一串操作（D011 A 段＋主街西端旁邊 (${spot}) 一座貼路的垃圾場，種子 5162026），2D 實驗線｜3D</h1><p class="s">垃圾場 k 8 的造型是 D007 的（這一張卡不改造型）。沒有垃圾場時每一棟住宅都扣全城懲罰與「離垃圾場太遠」；蓋了之後住宅不再扣，兩邊的城市幸福都跟著變高。2D 那一欄是實驗線 d23c18d 自己跑同一串（兩邊整城第 2 天起分岔，住商工的棟數本來就不同）。畫面中央 800×480、1:1。</p>
+    <div class="g">${cell(copy2d('d020_day0_2d.png'), '蓋下去那天・2D 實驗線')}${cell('d020_day0_3d.png', '蓋下去那天・3D')}${cell(copy2d('d020_day20_2d.png'), '20 天之後・2D 實驗線')}${cell('d020_day20_3d.png', '20 天之後・3D')}</div>`);
   fs.writeFileSync(path.join(out, 'd020_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
-    .g{display:grid;grid-template-columns:repeat(4,360px);gap:12px;padding:8px 12px 12px}img{display:block;width:360px;height:740px}</style>
-    <h1>D020 手機 360×740（起步城第 9 天，本線 3D）</h1><p class="s">① 沒有垃圾場：教學那一條講垃圾堆積；② 住宅建築卡的「清運」（500 人前的小城口徑）；③「公共設施」一組多了垃圾場（$300）；④ 蓋在路邊、推進一天之後的垃圾場建築卡：接到路、上線、容量 40。</p>
-    <div class="g">${cell('d020_mob_hint.png', '① 沒有垃圾場')}${cell('d020_mob_house.png', '② 住宅：清運')}${cell('d020_mob_menu.png', '③ 選垃圾場')}${cell('d020_mob_dump.png', '④ 垃圾場：上線')}</div>`);
-  await grab('d020_mobile.html', 'D020-mobile.jpg', 1500, 900);
+    .g{display:grid;grid-template-columns:repeat(2,360px);gap:10px;padding:8px 12px 12px}img{display:block;width:360px;height:740px}</style>
+    <h1>D020 手機 360×740</h1><p class="s">左：「公共設施」一組（13 種，兩排七個）選垃圾場；右：放下工具、點離垃圾場最近的住宅看建築卡的「清運」一列。</p>
+    <div class="g">${cell('d020_mob_menu.png', '選垃圾場')}${cell('d020_mob_card.png', '建築卡：清運')}</div>`);
+  for (const [page0, file, w, h] of [['d020_compare.html', 'D020-compare.jpg', 1640, 1200], ['d020_mobile.html', 'D020-mobile.jpg', 760, 900]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log(`OK ${file}`);
+    });
+  }
 }
 
 if (errors) process.exitCode = 1;

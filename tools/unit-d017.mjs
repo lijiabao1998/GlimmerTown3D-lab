@@ -17,7 +17,7 @@ import { ROOT } from './cdp.mjs';
 import { mulberry32 } from '../src/sim/rng.ts';
 import * as labHelpers from '../src/sim/rules/lab.ts';
 import { landStaticAt } from '../src/sim/rules/land.ts';
-import { allocGrids, rebuildNoise, rebuildLandBase, fieldsOf, NOISE_SRC } from '../src/sim/rules/fields.ts';
+import { allocGrids, rebuildNoise, rebuildLandBase, NOISE_SRC } from '../src/sim/rules/fields.ts';
 import { loadCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
 import { commitOp } from '../src/sim/edit.ts';
@@ -180,24 +180,21 @@ async function guards(log) {
     const L1 = loadCode(pre, KT, vrank), L2 = loadCode(pre, KT, vrank), s1 = L1.sim, s2 = L2.sim;   // s2＝逐字照實驗線整張重算的慢速版
     if (s1.noiseSig !== -1 || s1.g.NOISE.some(v => v)) bad.push(`讀檔後 noiseSig ${s1.noiseSig}、NOISE 非零 ${s1.g.NOISE.filter(v => v).length} 格（要 −1、全 0）`);
     const n = s1.w.N, stad = s1.w.tiles.findIndex(q => q.bld && !q.bld.ref && q.bld.k === 9);
-    const fresh = s => { const g = allocGrids(n); g.COV = s.g.COV; g.POL = s.g.POL; g.EDU = s.g.EDU; g.NOISE = s.g.NOISE; rebuildLandBase(s.w, g); return g.LANDBASE; };
+    // 照「重算那一刻」的場從頭算：地價基準在一天開頭（54996）重算，當天稍後長出來的工業會蓋污染（55624，不標髒框、隔天才算進去），
+    // 所以污染用推進前的那一份（重算之前污染不會變）；覆蓋、教育、噪音當天重算之後不變（D020：垃圾改了幸福，第 6 天長出工業才碰到）
+    const fresh = (s, pol) => { const g = allocGrids(n); g.COV = s.g.COV; g.POL = pol; g.EDU = s.g.EDU; g.NOISE = s.g.NOISE; rebuildLandBase(s.w, g); return g.LANDBASE; };
     const eq = (x, y) => x.length === y.length && x.every((v, i) => v === y[i]);
-    // 地價基準是「每天開頭那一次」的結果：白天長出來的工業馬上蓋污染源（55624，本線同天把那一圈標 stale），地價基準隔天開頭才補算——
-    // 所以「照現在的場從頭算」要比的是「加上明天開頭會補算的 stale 格」（有 stale 才不同；沒有 stale 的日子就是原本的逐格相等）。
-    // D020 以前預建城前 6 天沒有工業長出來、兩邊剛好一樣；D020 起本線自己扣垃圾、長法跟著變，第 6 天長出一棟工業，原本的比法就紅了（測法的問題，地價沒有錯）
-    const pending = s => { const p = s.g.LANDBASE.slice(), f = fieldsOf(s.g); let k = 0; for (let i = 0; i < p.length; i++) if (s.stale[i]) { p[i] = landStaticAt(s.w, f, i % n, (i / n) | 0); k++; } return { p, k }; };
-    let nzMax = 0, before = null, staleDays = 0, staleMax = 0;
+    let nzMax = 0, before = null;
     for (let d = 1; d <= 6; d++) {
       if (d === 4) {   // 第 4 天開頭之前拆體育場（框選拆除它的根格；一級不用確認）
         before = s1.g.LANDBASE.slice();
         for (const s of [s1, s2]) commitOp(s, { k: 'rect', tool: 'doze', x0: stad % n, z0: (stad / n) | 0, x1: stad % n, z1: (stad / n) | 0 }, 0);
       }
+      const pol0 = s1.g.POL.slice();
       stepDay(s1); stepDay(s2, { fullLand: true });
       nzMax = Math.max(nzMax, s1.g.NOISE.filter(v => v).length);
       if (!eq(s1.g.LANDBASE, s2.g.LANDBASE)) bad.push(`第 ${d} 天：地價基準（只算 stale）≠ 整張重算`);
-      const pd = pending(s1);
-      if (!eq(pd.p, fresh(s1))) bad.push(`第 ${d} 天：地價基準（加上明天開頭會補算的 ${pd.k} 格 stale）≠ 照現在的場從頭算`);
-      if (pd.k) { staleDays++; staleMax = Math.max(staleMax, pd.k); }
+      if (!eq(s1.g.LANDBASE, fresh(s1, pol0))) bad.push(`第 ${d} 天：地價基準 ≠ 照現在的場從頭算`);
       if (d === 1 && s1.noiseSig !== (stad * 31 + 9) >>> 0) bad.push(`第 1 天簽名 ${s1.noiseSig}（體育場在 ${stad}）`);
       if (d === 4 && (s1.noiseSig !== 0 || s1.g.NOISE.some(v => v))) bad.push(`拆掉體育場的隔天：簽名 ${s1.noiseSig}、NOISE 非零 ${s1.g.NOISE.filter(v => v).length} 格`);
     }
@@ -205,8 +202,8 @@ async function guards(log) {
     const nc = loadCode(newc, KT, vrank).sim; stepDay(nc);
     if (nc.noiseSig !== 0) bad.push(`新城第 1 天簽名 ${nc.noiseSig}（要 0）`);
     if (!(stad >= 0 && nzMax > 0 && changed > 0)) bad.push(`體育場 ${stad}、噪音非零格最多 ${nzMax}、拆了之後地價基準變了 ${changed} 格`);
-    log(!bad.length, 'D017 驗收 2：接線——day.ts 在 day++ 之前照建築索引算噪音（實驗線 54949 在 54950 之前）；讀檔 noiseSig −1、NOISE 全 0（56934）；預建城讀檔後 6 天每天的地價基準＝逐字照實驗線整張重算＝照當下的場從頭算（當天長出來的工業污染源，那一圈隔天開頭才重算：先補上 stale 格再比）；第 4 天拆掉體育場，隔天簽名 0、噪音歸零、體育場那一圈的地價基準變回來；新城第 1 天簽名 −1 → 0',
-      bad.slice(0, 3).join('；') || `體育場在第 ${stad} 格；噪音非零 ${nzMax} 格；拆了之後地價基準變了 ${changed} 格；有 stale 格（當天長出工業）的日子 ${staleDays} 天（最多 ${staleMax} 格）`);
+    log(!bad.length, 'D017 驗收 2：接線——day.ts 在 day++ 之前照建築索引算噪音（實驗線 54949 在 54950 之前）；讀檔 noiseSig −1、NOISE 全 0（56934）；預建城讀檔後 6 天每天的地價基準＝逐字照實驗線整張重算＝照當下的場從頭算；第 4 天拆掉體育場，隔天簽名 0、噪音歸零、體育場那一圈的地價基準變回來；新城第 1 天簽名 −1 → 0',
+      bad.slice(0, 3).join('；') || `體育場在第 ${stad} 格；噪音非零 ${nzMax} 格；拆了之後地價基準變了 ${changed} 格`);
   }
   // ---- 6. 實驗線頁面實跑（驗收 3）：預建城留著體育場，蓋九種設施、拆診所再復原、推進一天（tools/d016-parity.mjs --set=d017 → d017-lab.json）----
   {
@@ -222,7 +219,7 @@ async function guards(log) {
       const r = bad.length ? { bad: [], moved: [], noisy: [] } : prebuiltCheck(seeds, pre, lab.prebuilt, P, seed => new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true, true).hs));
       bad.push(...r.bad);
       if (!bad.length && !r.noisy.every(v => v > 0)) bad.push(`有種子推進前就在的住宅沒有一棟在噪音裡：${r.noisy.join('、')}`);
-      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福只套糧食（含噪音那一項；垃圾 D020 起本線自己算），逐位相等，垃圾量、容量、懲罰、離垃圾場太遠的棟數、評分用的比例＝本線 s.san；每個種子都有住宅在體育場的噪音裡`,
+      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福套糧食（垃圾 D020 搬了）（含噪音那一項），逐位相等；每個種子都有住宅在體育場的噪音裡`,
         bad.slice(0, 3).join('；') || `住在噪音裡的住宅 ${r.noisy.join('、')} 棟；幸福被設施改到的 ${r.moved.join('、')} 棟`);
     }
   }

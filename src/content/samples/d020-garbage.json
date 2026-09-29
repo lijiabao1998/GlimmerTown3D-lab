@@ -17,46 +17,6 @@
    "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
   },
   {
-   "kind": "exact",
-   "name": "T",
-   "anchors": {
-    "start": "const T=i=>tiles[i];"
-   },
-   "line": 39730,
-   "endLine": 39730,
-   "sha": "df082f689c21e60a6de628b3cfcc352aaacd344f2e39adfc37ceef40ad25e249"
-  },
-  {
-   "kind": "exact",
-   "name": "idx",
-   "anchors": {
-    "start": "const idx=(x,y)=>y*N+x;"
-   },
-   "line": 39731,
-   "endLine": 39731,
-   "sha": "950a9b3b6e75c896963ad712904e9870574f7807df434b7f1c2fda30534bd847"
-  },
-  {
-   "kind": "exact",
-   "name": "inMap",
-   "anchors": {
-    "start": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;"
-   },
-   "line": 39732,
-   "endLine": 39732,
-   "sha": "168c53d60c2607ecd7c43e7194bb014a0219b464f958f6bc7748402368e07a65"
-  },
-  {
-   "kind": "exact",
-   "name": "DIRV",
-   "anchors": {
-    "start": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];"
-   },
-   "line": 56955,
-   "endLine": 56955,
-   "sha": "3d8c5f7f04ab9b3abd7252b52f6dd167a4ed79bf8c5dab5ab3651d877dde84aa"
-  },
-  {
    "kind": "decl",
    "name": "POPS",
    "anchors": {
@@ -158,16 +118,6 @@
   },
   {
    "kind": "decl",
-   "name": "SOCIAL_HOUSING_POP",
-   "anchors": {
-    "start": "const SOCIAL_HOUSING_POP="
-   },
-   "line": 39460,
-   "endLine": 39460,
-   "sha": "a80dd6469911af1ccf8c79e5bb309d44e286fea526892ea2d74c0606a6174362"
-  },
-  {
-   "kind": "decl",
    "name": "garbage",
    "anchors": {
     "start": "let garbage="
@@ -175,26 +125,6 @@
    "line": 37966,
    "endLine": 37966,
    "sha": "ecd0e8791bfccda996c8b40d666d4078ebad5d91df51a3bace699a11a7de47d9"
-  },
-  {
-   "kind": "decl",
-   "name": "lastGarbT",
-   "anchors": {
-    "start": "let lastGarbT="
-   },
-   "line": 37967,
-   "endLine": 37967,
-   "sha": "4eb6ae8d3fedae4bba969607b30ed9ed57bd17756496de752655f3f35e03a459"
-  },
-  {
-   "kind": "decl",
-   "name": "garbLocal",
-   "anchors": {
-    "start": "let garbLocal="
-   },
-   "line": 37968,
-   "endLine": 37968,
-   "sha": "9252f40f1e240914dbf9fdcb69c62f8b43c401810913ff4969ac96ff1285670e"
   },
   {
    "kind": "decl",
@@ -431,17 +361,6 @@
   },
   {
    "kind": "fn",
-   "name": "resetSanitation452",
-   "anchors": {
-    "start": "function resetSanitation452(",
-    "closure": "balanced-brace"
-   },
-   "line": 38056,
-   "endLine": 38056,
-   "sha": "3653d18a9b62c962cb1c3f51806e2586c1d34909ccdd660d3291c41f4355a654"
-  },
-  {
-   "kind": "fn",
    "name": "rebuildSanitationDistricts452",
    "anchors": {
     "start": "function rebuildSanitationDistricts452(",
@@ -529,15 +448,14 @@
    "sha": "d99fe33d341cb845cb40667558927f12e34f59b5c49b490a18c4c2c6ed6b2e6a"
   },
   {
-   "kind": "fn",
-   "name": "computeGarbLocal",
+   "kind": "decl",
+   "name": "SOCIAL_HOUSING_POP",
    "anchors": {
-    "start": "function computeGarbLocal(",
-    "closure": "balanced-brace"
+    "start": "const SOCIAL_HOUSING_POP="
    },
-   "line": 57697,
-   "endLine": 57722,
-   "sha": "5f49981851944110aa6635d793ee1669d6a8adbf572ba16a4257daf56373e556"
+   "line": 39460,
+   "endLine": 39460,
+   "sha": "a80dd6469911af1ccf8c79e5bb309d44e286fea526892ea2d74c0606a6174362"
   },
   {
    "kind": "fn",
@@ -639,6 +557,57 @@
    "sha": "ec7291855389f987fdf48232ba78d6cfedeaa2fc3a22a13027e328affcd521bf"
   },
   {
+   "kind": "exact",
+   "name": "T",
+   "anchors": {
+    "start": "const T=i=>tiles[i];"
+   },
+   "line": 39730,
+   "endLine": 39730,
+   "sha": "df082f689c21e60a6de628b3cfcc352aaacd344f2e39adfc37ceef40ad25e249"
+  },
+  {
+   "kind": "exact",
+   "name": "idx",
+   "anchors": {
+    "start": "const idx=(x,y)=>y*N+x;"
+   },
+   "line": 39731,
+   "endLine": 39731,
+   "sha": "950a9b3b6e75c896963ad712904e9870574f7807df434b7f1c2fda30534bd847"
+  },
+  {
+   "kind": "exact",
+   "name": "inMap",
+   "anchors": {
+    "start": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;"
+   },
+   "line": 39732,
+   "endLine": 39732,
+   "sha": "168c53d60c2607ecd7c43e7194bb014a0219b464f958f6bc7748402368e07a65"
+  },
+  {
+   "kind": "exact",
+   "name": "DIRV",
+   "anchors": {
+    "start": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];"
+   },
+   "line": 56955,
+   "endLine": 56955,
+   "sha": "3d8c5f7f04ab9b3abd7252b52f6dd167a4ed79bf8c5dab5ab3651d877dde84aa"
+  },
+  {
+   "kind": "fn",
+   "name": "computeGarbLocal",
+   "anchors": {
+    "start": "function computeGarbLocal(",
+    "closure": "balanced-brace"
+   },
+   "line": 57697,
+   "endLine": 57722,
+   "sha": "5f49981851944110aa6635d793ee1669d6a8adbf572ba16a4257daf56373e556"
+  },
+  {
    "kind": "decl",
    "name": "UP_MAX",
    "anchors": {
@@ -659,6 +628,16 @@
    "sha": "7907b6042e031c2989113ea757b178c0650a9809117e12fc850e37006e6f8a43"
   },
   {
+   "kind": "decl",
+   "name": "incidents493",
+   "anchors": {
+    "start": "let incidents493="
+   },
+   "line": 64504,
+   "endLine": 64504,
+   "sha": "72e7fe3c67cb5c6de762469384716fac068ed85b6a9768013f19ab806553b54c"
+  },
+  {
    "kind": "fn",
    "name": "assetAvailability493",
    "anchors": {
@@ -671,22 +650,18 @@
   },
   {
    "kind": "span",
-   "name": "tickGarbage",
+   "name": "tick 垃圾",
    "anchors": {
-    "start": "// 垃圾（T19→T445）：產量公式原封不動；容量在成熟城市改讀「真正接路的清運設施」。",
+    "start": "const recycleMul452=(pol&&pol.recycle?.85:1);",
     "end": "if(sanLocal452){garbPen409=garbLoc445.penAvg||0;"
    },
-   "line": 55256,
+   "line": 55257,
    "endLine": 55278,
-   "sha": "e7d2585ae6e06dacae0bddb74c3a726f542cfcb1580c2d9c4cc6d85186d2a6c1"
+   "sha": "4c5442e69e1157e51e55d058a5ad6b387134c70ec7cac295c7aa9976a3b32972"
   }
  ],
  "text": {
   "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
-  "T": "const T=i=>tiles[i];",
-  "idx": "const idx=(x,y)=>y*N+x;",
-  "inMap": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;",
-  "DIRV": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];",
   "POPS": "const POPS =[0,8,22,54];    // 住宅各級人口",
   "JOBSC": "const JOBSC=[0,5,14,38];    // 商業各級就業",
   "JOBSI": "const JOBSI=[0,7,20,48];    // 工業各級就業",
@@ -697,10 +672,7 @@
   "MEGA_JOBS": "const MEGA_JOBS=Math.round(JOBSC[3]*9*1.35); // T341：商業綜合體（k106 3×3）",
   "TOWER_JOBS": "const TOWER_JOBS=Math.round(JOBSC[3]*4*TOWER_MULT); // T127：商業塔（k34）就業＝四格 lv3 商業總和×1.15＝175",
   "DUMP_CAP": "const DUMP_CAP=40;          // 每座垃圾場處理容量（T19）",
-  "SOCIAL_HOUSING_POP": "const SOCIAL_HOUSING_POP=76,SOCIAL_HOUSING_WE=0;",
   "garbage": "let garbage=0,garbCap=0,garbRatio=0; // 垃圾（T19）：每日重算，不進存檔，供 inspect/統計面板讀取",
-  "lastGarbT": "let lastGarbT=-999;                  // 垃圾超載 toast 節流（T19，不進存檔）",
-  "garbLocal": "let garbLocal=new Float32Array(N*N); // T119：住宅局部垃圾係數（T445 起正式市政階段改讀全體清運設施道路距離；500 人前保留 T119 舊口徑）",
   "SAN_FORMAL_POP445": "const SAN_FORMAL_POP445=500,SAN_WARN_DIST445=12,SAN_LONG_DIST445=18,SAN_INF445=65535;",
   "SAN_CAP445": "const SAN_CAP445={8:DUMP_CAP,29:DUMP_CAP*.75,62:100,88:60,111:40};",
   "sanQ445": "let sanQ445=null,SAN_DIST445=null,SAN_SRC445=null,SAN_ACTIVE445=null;",
@@ -723,7 +695,6 @@
   "sanUnion452": "function sanUnion452(a,b){a=sanFind452(a);b=sanFind452(b);if(a<0||b<0||a===b)return a;let ra=SAN_RANK452[a],rb=SAN_RANK452[b];if(ra<rb){const t=a;a=b;b=t;ra=rb;}SAN_PARENT452[b]=a;if(ra===rb)SAN_RANK452[a]++;return a;}",
   "sanFacilityFrontage452": "function sanFacilityFrontage452(rootIdx){return sanRoadSeeds445(rootIdx).filter(j=>SAN_PARENT452[j]>=0);}",
   "emptySanAlloc452": "function emptySanAlloc452(){return {prepared:false,totalDemand:0,assignedDemand:0,noRoadDemand:0,deadDemand:0,overflow:0,overloadedDistricts:0,worstDistrict:-1,worstLoad:0};}",
-  "resetSanitation452": "function resetSanitation452(){SAN_NET452=null;SAN_PARENT452=null;SAN_RANK452=null;sanDistricts452=[];sanFacilityMap452=new Map();sanRootAlloc452=new Map();sanAlloc452=emptySanAlloc452();try{delete window.__t452Sanitation;delete window.__t452Load;}catch(e){window.__t452Sanitation=undefined;window.__t452Load=undefined;}}",
   "rebuildSanitationDistricts452": "function rebuildSanitationDistricts452(){\n  ensureSan452();SAN_NET452.fill(-1);SAN_PARENT452.fill(-1);SAN_RANK452.fill(0);sanDistricts452=[];sanFacilityMap452=new Map();sanRootAlloc452=new Map();sanAlloc452=emptySanAlloc452();\n  // A. 每條道路先成為 union-find node，四鄰道路合併。\n  for(let i=0;i<N*N;i++)if(tiles[i].road)SAN_PARENT452[i]=i;\n  for(let y=0;y<N;y++)for(let x=0;x<N;x++){const i=idx(x,y);if(SAN_PARENT452[i]<0)continue;if(x+1<N&&SAN_PARENT452[i+1]>=0)sanUnion452(i,i+1);if(y+1<N&&SAN_PARENT452[i+N]>=0)sanUnion452(i,i+N);}\n  // B. 處理設施是場內動線節點：完整 footprint frontage 若貼多段道路，容量共用同一個 sanitation district。\n  for(const root of sanAllRoots445){const b=tiles[root]&&tiles[root].bld;if(!b||b.ref||!isSanFacility445(b.k))continue;const f=sanFacilityFrontage452(root);for(let k=1;k<f.length;k++)sanUnion452(f[0],f[k]);}\n  // C. compact 全道路 component；即便沒有處理廠也保留 district，讓「死路網」可被診斷/修復。\n  const rootToDist=new Map();\n  for(let i=0;i<N*N;i++)if(SAN_PARENT452[i]>=0){const r=sanFind452(i);let d=rootToDist.get(r);if(d===undefined){d=sanDistricts452.length;rootToDist.set(r,d);sanDistricts452.push({id:d,roads:0,anchor:i,facilities:0,capacity:0,demand:0,spare:0,overflow:0,load:0,clients:0,byK:{},samples:[]});}SAN_NET452[i]=d;const q=sanDistricts452[d];q.roads++;if(q.samples.length<96)q.samples.push(i);}\n  let nominal=0,online=0,onlineFacilities=0,offlineFacilities=0;\n  for(const root of sanAllRoots445){const b=tiles[root]&&tiles[root].bld;if(!b||b.ref||!isSanFacility445(b.k))continue;const baseCap=SAN_CAP445[b.k]||0,cap=baseCap*assetAvailability493(root,'sanitation');nominal+=baseCap;const f=sanRoadSeeds445(root).filter(j=>SAN_NET452[j]>=0),on=!!SAN_ACTIVE445[root]&&f.length>0&&cap>.01,d=on?SAN_NET452[f[0]]:-1;const info={root,k:b.k,capacity:cap,nominalCapacity:baseCap,online:on,district:d};sanFacilityMap452.set(root,info);if(on&&d>=0&&sanDistricts452[d]){const q=sanDistricts452[d];q.capacity+=cap;q.facilities++;q.byK[b.k]=(q.byK[b.k]||0)+1;online+=cap;onlineFacilities++;}else offlineFacilities++;}\n  window.__t452Sanitation={nominalCapacity:nominal,onlineCapacity:online,offlineCapacity:nominal-online,districts:sanDistricts452.length,onlineFacilities,offlineFacilities,formal:!!sanStat445.formal};return window.__t452Sanitation;\n}",
   "ensureSanitationDistricts452": "function ensureSanitationDistricts452(){if(!SAN_NET452||SAN_NET452.length!==N*N||!window.__t452Sanitation)rebuildSanitationDistricts452();return window.__t452Sanitation;}",
   "sanRootDistrictChoice452": "function sanRootDistrictChoice452(rootIdx){\n  ensureSanitationDistricts452();const roads=sanRoadSeeds445(rootIdx);if(!roads.length)return {district:-1,road:-1,dist:SAN_INF445,src:-1};\n  const cand=[];for(const j of roads){const d=SAN_NET452[j];if(d<0)continue;cand.push({district:d,road:j,dist:SAN_DIST445[j],src:SAN_SRC445[j]});}\n  if(!cand.length)return {district:-1,road:-1,dist:SAN_INF445,src:-1};cand.sort((a,b)=>a.dist-b.dist||a.district-b.district||a.road-b.road);return cand[0];\n}",
@@ -732,7 +703,7 @@
   "sanWorstDistrict452": "function sanWorstDistrict452(){if(sanitationLegacy452()||!sanStat445.formal)return null;if(!sanAlloc452.prepared)prepareSanitationLoad452(pol&&pol.recycle?.85:1);return sanAlloc452.worstDistrict>=0?sanDistricts452[sanAlloc452.worstDistrict]:null;}",
   "garbDecisionRatio452": "function garbDecisionRatio452(){const w=sanWorstDistrict452();if(w)return Math.max(garbRatio,w.load);if(!sanitationLegacy452()&&sanStat445.formal&&sanAlloc452.deadDemand>0)return Math.max(garbRatio,2);return garbRatio;}",
   "sanitationAt452": "function sanitationAt452(x,y){\n  if(!inMap(x,y))return null;if(sanDirty445)computeSanitation445();else ensureSanitationDistricts452();if(sanStat445.formal&&!sanitationLegacy452()&&!sanAlloc452.prepared)prepareSanitationLoad452(pol&&pol.recycle?.85:1);\n  let i=idx(x,y),b=tiles[i].bld;if(b&&b.ref){i=idx(b.ref[0],b.ref[1]);x=i%N;y=(i/N)|0;b=tiles[i].bld;}\n  if(tiles[i].road){const d=SAN_NET452[i],q=d>=0?sanDistricts452[d]:null,dd=SAN_DIST445[i],src=SAN_SRC445[i];return {kind:'road',district:d,capacity:q?q.capacity:0,demand:q?q.demand:0,spare:q?q.spare:0,overflow:q?q.overflow:0,load:q?q.load:0,reachable:dd<SAN_INF445,dist:dd,src,sourceText:dd<SAN_INF445?sanitationSourceText445(src):'無'};}\n  if(b&&isSanFacility445(b.k)){const f=sanFacilityMap452.get(i),q=f&&f.district>=0?sanDistricts452[f.district]:null;return {kind:'facility',facility:true,active:!!(f&&f.online),district:f?f.district:-1,cap:f?f.capacity:(SAN_CAP445[b.k]||0),capacity:q?q.capacity:0,demand:q?q.demand:0,spare:q?q.spare:0,overflow:q?q.overflow:0,load:q?q.load:0};}\n  if(b&&isSanClient445(b.k)){const pick=sanRootAlloc452.get(i)||sanRootDistrictChoice452(i),q=pick.district>=0?sanDistricts452[pick.district]:null;let reason='ok';if(pick.district<0)reason='no-road';else if(!q||q.capacity<=0||pick.dist>=SAN_INF445)reason='dead-network';else if(q.load>1)reason='capacity';else if(pick.dist>SAN_LONG_DIST445)reason='far';else if(pick.dist>SAN_WARN_DIST445)reason='warn';return {kind:'building',district:pick.district,capacity:q?q.capacity:0,demand:q?q.demand:0,spare:q?q.spare:0,overflow:q?q.overflow:0,load:q?q.load:0,reachable:pick.dist<SAN_INF445,dist:pick.dist,src:pick.src,sourceText:pick.dist<SAN_INF445?sanitationSourceText445(pick.src):'無',reason};}\n  return {kind:'tile',district:-1,capacity:0,demand:0,spare:0,overflow:0,load:0,reachable:false,dist:SAN_INF445,src:-1,sourceText:'無',reason:'none'};\n}",
-  "computeGarbLocal": "function computeGarbLocal(){\n  let far409=0,unserved445=0,warn445=0;\n  if(!sanStat445.formal){\n    const dsrc=[];\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&((!b.ref&&b.k===8)||b.k===62))dsrc.push(i);}\n    const dist=new Uint16Array(N*N).fill(9999),q=[];\n    for(const di of dsrc){const dx0=di%N,dy0=(di/N)|0;for(const[dx,dy]of DIRV){const nx=dx0+dx,ny=dy0+dy;if(inMap(nx,ny)){const j=idx(nx,ny);if(T(j).road&&dist[j]>0){dist[j]=0;q.push(j);}}}}\n    let head=0;while(head<q.length){const cur=q[head++],d=dist[cur],cx=cur%N,cy=(cur/N)|0;for(const[dx,dy]of DIRV){const nx=cx+dx,ny=cy+dy;if(!inMap(nx,ny))continue;const j=idx(nx,ny);if(T(j).road&&dist[j]>d+1){dist[j]=d+1;q.push(j);}}}\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const x=i%N,y=(i/N)|0;let bd=9999;for(const[dx,dy]of DIRV){const nx=x+dx,ny=y+dy;if(inMap(nx,ny)){const j=idx(nx,ny);if(T(j).road)bd=Math.min(bd,dist[j]);}}if(bd>18){garbLocal[i]=clamp(garbRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}else garbLocal[i]=garbRatio;}\n    return {far:far409,unserved:0,warn:0,penAvg:0};\n  }\n  if(sanitationLegacy452()){ // T452 rollback：逐字保留 T445 正式清運＝全城 ratio + 局部 reach\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const a=sanAccessRoot445(i);if(a.dist>=SAN_INF445){garbLocal[i]=clamp(garbRatio+.45,0,2);b.h=clamp(b.h-.06,.05,1);unserved445++;}else if(a.dist>SAN_LONG_DIST445){garbLocal[i]=clamp(garbRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}else{garbLocal[i]=garbRatio;if(a.dist>SAN_WARN_DIST445)warn445++;}}\n    return {far:far409,unserved:unserved445,warn:warn445,penAvg:0};\n  }\n  if(!sanAlloc452.prepared)prepareSanitationLoad452(pol&&pol.recycle?.85:1);\n  let capPenSum=0,capPenN=0;\n  for(let i=0;i<N*N;i++){\n    const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const st=sanitationAt452(i%N,(i/N)|0),q=st&&st.district>=0?sanDistricts452[st.district]:null;\n    if(!st||st.district<0||!q||q.capacity<=0||st.dist>=SAN_INF445){garbLocal[i]=2;b.h=clamp(b.h-.06,.05,1);unserved445++;continue;}\n    const localRatio=clamp(q.load,0,2),capPen=q.load>1?(q.load-1)*.15:0;if(capPen>0){b.h=clamp(b.h-capPen,.05,1);capPenSum+=capPen;capPenN++;}\n    if(st.dist>SAN_LONG_DIST445){garbLocal[i]=clamp(localRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}\n    else{garbLocal[i]=localRatio;if(st.dist>SAN_WARN_DIST445)warn445++;}\n  }\n  return {far:far409,unserved:unserved445,warn:warn445,penAvg:capPenN?capPenSum/capPenN:0};\n}",
+  "SOCIAL_HOUSING_POP": "const SOCIAL_HOUSING_POP=76,SOCIAL_HOUSING_WE=0;",
   "housingBand488": "function housingBand488(b){if(!b||b.ref)return null;if(b.k===127)return'social';if(b.k===33||b.k===105)return'high';if(b.k!==1)return null;const d=b.den||3;return d<=2?'low':d===3?'mid':'high';}",
   "residentCapacity488": "function residentCapacity488(b){if(!b||b.ref)return 0;if(b.k===1)return Math.round((POPS[b.lv]||0)*(b.den?DEN_POP[b.den-1]:1));if(b.k===127)return SOCIAL_HOUSING_POP;if(b.k===33)return TOWER_POP;if(b.k===105)return MEGA_POP;return 0;}",
   "residentEligible488": "function residentEligible488(root,b){if(!b||b.ref)return false;if(b.k===1)return !!(b.pw&&!b.sick&&!b.death);if(b.k===127)return !!(b.pw&&b.wa&&!b.sick&&!b.death);if(b.k===33||b.k===105)return true;return false;}",
@@ -742,9 +713,15 @@
   "enterpriseLegacyJobs489": "function enterpriseLegacyJobs489(root,b){const p=enterprisePotentialJobs489(root,b),k=b&&b.k|0;if(k===2||k===3)return b&&b.pw?p:0;return p;}",
   "enterpriseRootInfo489": "function enterpriseRootInfo489(root){return enterpriseRoot489.get(root)||null;}",
   "enterpriseActualJobs489": "function enterpriseActualJobs489(root,b,kind='employed'){const q=enterpriseRootInfo489(root);if(q)return kind==='positions'?q.activePositions:q.employed;if(!b||b.ref)return 0;return enterpriseLegacyJobs489(root,b);}",
+  "T": "const T=i=>tiles[i];",
+  "idx": "const idx=(x,y)=>y*N+x;",
+  "inMap": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;",
+  "DIRV": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];",
+  "computeGarbLocal": "function computeGarbLocal(){\n  let far409=0,unserved445=0,warn445=0;\n  if(!sanStat445.formal){\n    const dsrc=[];\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&((!b.ref&&b.k===8)||b.k===62))dsrc.push(i);}\n    const dist=new Uint16Array(N*N).fill(9999),q=[];\n    for(const di of dsrc){const dx0=di%N,dy0=(di/N)|0;for(const[dx,dy]of DIRV){const nx=dx0+dx,ny=dy0+dy;if(inMap(nx,ny)){const j=idx(nx,ny);if(T(j).road&&dist[j]>0){dist[j]=0;q.push(j);}}}}\n    let head=0;while(head<q.length){const cur=q[head++],d=dist[cur],cx=cur%N,cy=(cur/N)|0;for(const[dx,dy]of DIRV){const nx=cx+dx,ny=cy+dy;if(!inMap(nx,ny))continue;const j=idx(nx,ny);if(T(j).road&&dist[j]>d+1){dist[j]=d+1;q.push(j);}}}\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const x=i%N,y=(i/N)|0;let bd=9999;for(const[dx,dy]of DIRV){const nx=x+dx,ny=y+dy;if(inMap(nx,ny)){const j=idx(nx,ny);if(T(j).road)bd=Math.min(bd,dist[j]);}}if(bd>18){garbLocal[i]=clamp(garbRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}else garbLocal[i]=garbRatio;}\n    return {far:far409,unserved:0,warn:0,penAvg:0};\n  }\n  if(sanitationLegacy452()){ // T452 rollback：逐字保留 T445 正式清運＝全城 ratio + 局部 reach\n    for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const a=sanAccessRoot445(i);if(a.dist>=SAN_INF445){garbLocal[i]=clamp(garbRatio+.45,0,2);b.h=clamp(b.h-.06,.05,1);unserved445++;}else if(a.dist>SAN_LONG_DIST445){garbLocal[i]=clamp(garbRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}else{garbLocal[i]=garbRatio;if(a.dist>SAN_WARN_DIST445)warn445++;}}\n    return {far:far409,unserved:unserved445,warn:warn445,penAvg:0};\n  }\n  if(!sanAlloc452.prepared)prepareSanitationLoad452(pol&&pol.recycle?.85:1);\n  let capPenSum=0,capPenN=0;\n  for(let i=0;i<N*N;i++){\n    const b=tiles[i].bld;if(!b||b.k!==1){garbLocal[i]=0;continue;}const st=sanitationAt452(i%N,(i/N)|0),q=st&&st.district>=0?sanDistricts452[st.district]:null;\n    if(!st||st.district<0||!q||q.capacity<=0||st.dist>=SAN_INF445){garbLocal[i]=2;b.h=clamp(b.h-.06,.05,1);unserved445++;continue;}\n    const localRatio=clamp(q.load,0,2),capPen=q.load>1?(q.load-1)*.15:0;if(capPen>0){b.h=clamp(b.h-capPen,.05,1);capPenSum+=capPen;capPenN++;}\n    if(st.dist>SAN_LONG_DIST445){garbLocal[i]=clamp(localRatio+.3,0,2);b.h=clamp(b.h-.045,.05,1);far409++;}\n    else{garbLocal[i]=localRatio;if(st.dist>SAN_WARN_DIST445)warn445++;}\n  }\n  return {far:far409,unserved:unserved445,warn:warn445,penAvg:capPenN?capPenSum/capPenN:0};\n}",
   "UP_MAX": "const UP_MAX={9:15,6:10,7:10,11:10,12:10,13:10,14:10,15:10,10:10,5:10,16:10,28:10,29:10,30:10,17:10,18:10,21:10,54:10,55:10,53:8,56:15,22:8,23:8,25:10,26:10,57:10,58:10,59:10,60:10,61:10,62:10,63:8,64:10,65:8}; // T290：購物中心擴店 8 級；T285：倉儲容量升級；T280：溫室擴建 8 級；T265：焚化發電機組可升至10級；T257：核電/水力/地熱亦可升級擴容、消防總局可升級；T251：農場 k22 灌溉升級（8 級）；大農場 k53 亦升級；T252：牧場 k23 牧養升級（8 級）；T253：太陽能 k25/風力 k26 亦可升級擴容；T254：食品加工廠 k57 可升級加工容量（10 級）",
   "UP_JOB": "const UP_JOB={9:15,54:8,55:12,53:3,17:8,18:8,56:18,22:1,23:1,5:0,25:0,26:0,57:0,58:0,59:0,60:0,62:0,63:1,64:0,65:20}; // T290：購物中心每級 +20 零售就業；T285：倉儲升級純擴容；T280：溫室升級主給食物金幣就業+1；T265：焚化發電升級只擴容，不加就業；每級加成就業（大型建築較高，其餘預設6）；T257：三新電源亦純擴容(k58/59/60:0)，消防總局走預設6；T251：農場升級主要給金幣/食物，就業加成小(k22:1/k53:3)；T252：牧場同農場(k23:1)；T253：電廠/太陽能/風力升級＝純擴容不加就業(k5/k25/k26:0)；T254：食品加工廠升級＝純加工容量不加就業(k57:0)",
+  "incidents493": "let incidents493=[],incidentByRoot493=new Map(),afterAction493=[],incidentSeq493=1,incidentDay493=-1,incidentDirty493=true;",
   "assetAvailability493": "function assetAvailability493(root,sector=''){if(window.__noIncident493||!incidents493.length)return 1;root=incidentResolveRoot493(root);const rows=incidentByRoot493.get(root);if(!rows||!rows.length)return 1;let a=1;for(const q of rows)if(incidentActive493(q)&&(!sector||q.sector===sector||q.sector==='services'))a=Math.min(a,incidentAvailabilityFrom493(q));return clamp(a,0,1);}",
-  "tickGarbage": "  // 垃圾（T19→T445）：產量公式原封不動；容量在成熟城市改讀「真正接路的清運設施」。\n  const recycleMul452=(pol&&pol.recycle?.85:1);\n  garbage=(pop*.05+(enterprise489.ready?enterprise489.rcIndustrialEmployed:jobsI)*.08)*recycleMul452; // T122/T452：產量公式逐字保留；T452 只改 ownership，不改總垃圾量\n  sanDirty445=true;const san445=computeSanitation445();garbCap=san445.effectiveCap; // T445：<500 人相容全容量；>=500 只認 activeCap\n  garbRatio=garbCap>0?clamp(garbage/garbCap,0,2):2; // 全城 aggregate 只保留 HUD/歷史相容；T452 gameplay 改讀 local district load\n  const sanLocal452=san445.formal&&!sanitationLegacy452();if(sanLocal452)prepareSanitationLoad452(recycleMul452);\n  if(sanLocal452){ // T452：資源回收產出也必須吃本區垃圾，B 區回收廠不能隔空處理 A 區垃圾\n    let upGoods452=0;for(const q452 of sanDistricts452){const n452=q452.byK[111]||0;if(n452>0&&q452.demand>0)upGoods452+=Math.min(Math.round(q452.demand*.08),n452*6);}if(upGoods452>0)goods=Math.min(goodsCap283(),goods+upGoods452);\n  }else{\n    const upcEff445=san445.formal?(san445.activeByK[111]||0):upc342;if(upcEff445>0)goods=Math.min(goodsCap283(),goods+Math.min(Math.round(garbage*.08),upcEff445*6)); /* T445 legacy */\n  }\n  let garbPen409=0; /* T409/T452：正式清運時改記錄 local capacity penalty 的住宅平均；rollback 保留舊全城 pen */\n  if(!sanLocal452&&garbage>0&&garbRatio>1){ // T452 rollback/小城：逐字保留 T445 全城容量池懲罰\n    const pen=(garbRatio-1)*.15;\n    garbPen409=pen;\n    happySum=0;happyN=0;\n    for(const i of tickBld){const b=tiles[i].bld;if(!b||b.k!==1)continue;b.h=clamp(b.h-pen,.05,1);happySum+=b.h;happyN++;}\n    cityHappy=happyN?happySum/happyN:cityHappy;\n    if(day-lastGarbT>=30){toast('🗑️ 垃圾堆積！增建垃圾場／回收中心／焚化發電廠','bad');lastGarbT=day;}\n  }\n  // T119→T445→T452：成熟城同時套 local district overload + T445 距離/斷網；小城/rollback 保留舊口徑。\n  const garbLoc445=computeGarbLocal(),garbFar409=garbLoc445.far,garbUnserved445=garbLoc445.unserved,garbWarn445=garbLoc445.warn;\n  if(sanLocal452){garbPen409=garbLoc445.penAvg||0;if((sanAlloc452.overloadedDistricts||0)>0&&day-lastGarbT>=30){const w452=sanWorstDistrict452();toast('🗑️ 清運區 #'+(w452?w452.id:'?')+' 容量超載！請在該道路網增建處理設施','bad');lastGarbT=day;}}"
+  "tick": "  const recycleMul452=(pol&&pol.recycle?.85:1);\n  garbage=(pop*.05+(enterprise489.ready?enterprise489.rcIndustrialEmployed:jobsI)*.08)*recycleMul452; // T122/T452：產量公式逐字保留；T452 只改 ownership，不改總垃圾量\n  sanDirty445=true;const san445=computeSanitation445();garbCap=san445.effectiveCap; // T445：<500 人相容全容量；>=500 只認 activeCap\n  garbRatio=garbCap>0?clamp(garbage/garbCap,0,2):2; // 全城 aggregate 只保留 HUD/歷史相容；T452 gameplay 改讀 local district load\n  const sanLocal452=san445.formal&&!sanitationLegacy452();if(sanLocal452)prepareSanitationLoad452(recycleMul452);\n  if(sanLocal452){ // T452：資源回收產出也必須吃本區垃圾，B 區回收廠不能隔空處理 A 區垃圾\n    let upGoods452=0;for(const q452 of sanDistricts452){const n452=q452.byK[111]||0;if(n452>0&&q452.demand>0)upGoods452+=Math.min(Math.round(q452.demand*.08),n452*6);}if(upGoods452>0)goods=Math.min(goodsCap283(),goods+upGoods452);\n  }else{\n    const upcEff445=san445.formal?(san445.activeByK[111]||0):upc342;if(upcEff445>0)goods=Math.min(goodsCap283(),goods+Math.min(Math.round(garbage*.08),upcEff445*6)); /* T445 legacy */\n  }\n  let garbPen409=0; /* T409/T452：正式清運時改記錄 local capacity penalty 的住宅平均；rollback 保留舊全城 pen */\n  if(!sanLocal452&&garbage>0&&garbRatio>1){ // T452 rollback/小城：逐字保留 T445 全城容量池懲罰\n    const pen=(garbRatio-1)*.15;\n    garbPen409=pen;\n    happySum=0;happyN=0;\n    for(const i of tickBld){const b=tiles[i].bld;if(!b||b.k!==1)continue;b.h=clamp(b.h-pen,.05,1);happySum+=b.h;happyN++;}\n    cityHappy=happyN?happySum/happyN:cityHappy;\n    if(day-lastGarbT>=30){toast('🗑️ 垃圾堆積！增建垃圾場／回收中心／焚化發電廠','bad');lastGarbT=day;}\n  }\n  // T119→T445→T452：成熟城同時套 local district overload + T445 距離/斷網；小城/rollback 保留舊口徑。\n  const garbLoc445=computeGarbLocal(),garbFar409=garbLoc445.far,garbUnserved445=garbLoc445.unserved,garbWarn445=garbLoc445.warn;\n  if(sanLocal452){garbPen409=garbLoc445.penAvg||0;if((sanAlloc452.overloadedDistricts||0)>0&&day-lastGarbT>=30){const w452=sanWorstDistrict452();toast('🗑️ 清運區 #'+(w452?w452.id:'?')+' 容量超載！請在該道路網增建處理設施','bad');lastGarbT=day;}}"
  }
 }

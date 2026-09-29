@@ -16,8 +16,7 @@
 //          hadTree＝t.tree>0（51634）為假就是 t.tree 為 0 或沒有這個欄位，施工後還是假 → 這一支永遠不走。
 //      同一筆交易裡「整棟快照之後再拆同一格」（多格建築占地迴圈 51789 記 seen、51635 看 seen）另有 multi 家族與覆蓋標籤 txn-resnap-after-multi 守著；
 //   5. 本線原碼單點突變（同 D010）：build.ts 改一處、型別剝除後在 vm 裡載入重跑，守衛要轉紅；
-//   6. 本卡以外的工具一律丟「未搬」（D016 起公共設施九支搬了、D019 水塔與配水管搬了、D020 垃圾場搬了，這一項改用還沒搬的淡化廠、回收中心、體育場、商辦、樹、鐵路；
-//      回收中心 recycling 在實驗線 canPlace 51362 那一大組、placeCost 51580、doPlace 52187 都有，本線 need() 不認得）。
+//   6. 本卡以外的工具一律丟「未搬」（D016 起公共設施九支搬了，這一項改用還沒搬的淡化廠、焚化廠、體育場、商辦、樹、鐵路；水塔 D019、垃圾場 D020 搬了）。
 // 用法：import { d011BuildGuards } from './unit-d011-build.mjs'; await d011BuildGuards(log)　log(ok, 名稱, 細節) 同 tools/unit.mjs
 import fs from 'node:fs';
 import path from 'node:path';
@@ -353,11 +352,11 @@ export async function d011BuildGuards(log) {
     const w = { N: 3, tiles: Array.from({ length: 9 }, () => ({ t: 2, bld: null })) };
     const st = { w, g: allocGrids(3), budget: { police: 1, fire: 1, health: 1, edu: 1 }, rng: labRng(1), money: 1e6, diff: 1, tech: [], spec: null,
       landDirty: false, landBox: null, txn: null, dozeArm: null };
-    const tries = [() => B.canPlace(st, 'desalination', 1, 1), () => B.placeCost(st, 'recycling', 1, 1), () => B.doPlace(st, 'office', 1, 1), () => B.tap(st, 'tree', 1, 1),
+    const tries = [() => B.canPlace(st, 'desalination', 1, 1), () => B.placeCost(st, 'wasteIncinerator', 1, 1), () => B.doPlace(st, 'office', 1, 1), () => B.tap(st, 'tree', 1, 1),
       () => B.commitLine(st, 'rail', 0, 0, 2, 0), () => B.commitRect(st, 'stad', 0, 0, 1, 1, 0)];
     const bad = tries.map((f, i) => { try { f(); return `#${i} 沒丟例外`; } catch (e) { return /^未搬：/.test(e.message) ? null : `#${i} ${e.message}`; } }).filter(Boolean);
     const untouched = JSON.stringify(w.tiles) === JSON.stringify(Array.from({ length: 9 }, () => ({ t: 2, bld: null }))) && st.money === 1e6 && !st.landDirty;
-    log(bad.length === 0 && untouched, 'D011 本卡以外的工具（D020 起：淡化廠、回收中心、體育場、商辦、樹、鐵路……；水塔 D019、垃圾場 D020 搬了）canPlace／placeCost／doPlace／手勢都丟「未搬」，不動格子、資金、地價框',
+    log(bad.length === 0 && untouched, 'D011 本卡以外的工具（D020 起：淡化廠、焚化廠、體育場、商辦、樹、鐵路……；水塔 D019、垃圾場 D020 搬了）canPlace／placeCost／doPlace／手勢都丟「未搬」，不動格子、資金、地價框',
       bad.join('；') || '6 種呼叫都丟例外，狀態沒動');
   }
 }
