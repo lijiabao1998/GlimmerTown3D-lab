@@ -645,7 +645,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     }
   }
   // D020：建築卡的「清運」一列。清運網當場照模擬的規則算一次（實驗線 sanitationAt452 38094 也是髒了就重算）；
-  // 全城垃圾量讀最近一天的回報（人口、工業就業）。讀檔之後還沒推進過就不知道（simFromSave 人口 0），照實講
+  // 全城垃圾量讀最近一天的回報（人口、工業就業）。讀檔之後還沒推進過就不知道（D021 起人口讀檔就有了，但工業就業要到第一天才算，垃圾量算不出來），照實講
   function garbRow(b: { k: number; x: number; z: number }): Row | null {
     if (!sim || !(b.k === 1 || isSanFacility445(b.k))) return null;
     const w = sim.w, i = b.z * w.N + b.x, san = computeSanitation445(w, sim.pop);
