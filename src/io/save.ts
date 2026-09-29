@@ -123,11 +123,12 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   const N = s.w.N, nn = N * N, o: Record<string, unknown> = { ...template };
   delete o.z;   // encodeLabCode 會重新壓、重新標
   delete o.d3;
-  let tre = '', rd = '', zn = '', rcl = '', ab = '', wp = '';
+  let tre = '', rd = '', zn = '', rcl = '', ab = '', wp = '', of = '', fly = '', ix = '';
   const bl: number[][] = [];
   for (let i = 0; i < nn; i++) {
     const t = s.w.tiles[i], b = t.bld;
     tre += String.fromCharCode(48 + (t.tree || 0)); rd += roadCode(t.road, t.hw, t.bridge); zn += t.zone || 0; rcl += String.fromCharCode(48 + (t.rc || 0)); wp += t.wp ? 1 : 0;   // wp：D019（66717 同寫法）
+    of += t.office ? 1 : 0; fly += t.fly475 ? 1 : 0; ix += String.fromCharCode(48 + ((t.ix475 as number) || 0));   // D024：66717、66729 同寫法
     ab += b && !b.ref && (b as { abandoned?: unknown }).abandoned ? 1 : 0;
     if (b && !b.ref) {                                                       // 66740–66756：多格建築只存根格
       const e = [i, b.k, b.lv, b.v, b.age];
@@ -142,6 +143,11 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
     v: 1, n: N, seed: s.seed, day: s.day, money: Math.round(s.money), msIdx: s.msIdx, star: s.bestStar, df: s.diff,
     ln: s.loan ? [s.loan.remain, s.loan.daily] : null, nm: s.city.name, tre, rd, zn, rcl, wp, ab, bl,
   });
+  // D024：拆路帶走高架與立交的旗標、拆分區帶走辦公區的旗標（51808、51811）——這三層讀檔時進了格子，存檔要寫回去（同 wp）。
+  // 範本有這一層、或現在有格子帶旗標才寫；都沒有就不加欄位（存檔位元組不變）。鐵路、配電線、地下線本線的施工碰不到（build.ts FOREIGN_LAYERS），照範本原樣留著
+  if (typeof template.of === 'string' || of.includes('1')) o.of = of;
+  if (typeof template.fly475 === 'string' || fly.includes('1')) o.fly475 = fly;
+  if (typeof template.ix475 === 'string' || /[^0]/.test(ix)) o.ix475 = ix;
   if (opts.history !== false && opts.journal) {
     const { id, st } = opts.journal;
     o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;

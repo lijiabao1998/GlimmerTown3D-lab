@@ -16,14 +16,15 @@ import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomp
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
 import { garbageDay, garbDecisionRatio452 } from './rules/garbage.ts';
-import { applyFoodHappy, countFood, emptyFoodCount, foodDay, type FoodReport } from './rules/food.ts';
+import { applyFoodHappy, foodDay, type FoodReport } from './rules/food.ts';
 import { residentialHappy } from './rules/happy.ts';
-import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
+import { nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
+import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
 import { judgeWealth, landStaticAt } from './rules/land.ts';
-import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, neutralUpkeepIn, roadUpkeep, scoreCounts, settleDay, OTHER_INCOME_KEYS, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
+import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
 export interface Sim {
   city: City;                       // 給畫面與歷史用（建築清單、occ 跟 w 同步）
@@ -77,12 +78,21 @@ export interface Class2In {
 export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, msz: (k: number) => number = k => kinds.size(k), forRestyle = false): Sim {
   const city = cityFromLab(save, kinds, code), n = save.n, nn = n * n;
   const tiles: Tile[] = new Array(nn);
+  const layerOf = (k: string) => { const v = save.raw[k]; return typeof v === 'string' ? v : undefined; };
+  const office = save.layers.of, railL = save.layers.rl, lvl475 = layerOf('lvl475'), udl475 = layerOf('udl475'), ix475 = layerOf('ix475');
   for (let i = 0; i < nn; i++) {
     const rd = city.road[i], road = rd ? 1 : 0, hw = rd >= 3 ? 1 : 0;
     let rc = city.rclass[i];
     if (road && !rc) rc = hw ? 5 : 2;
     tiles[i] = { t: city.ter[i], road, hw, bridge: rd === 2 || rd === 4 ? 1 : 0, rc, zone: city.zone[i], tree: city.tree[i], bld: null };
     if (city.wp[i]) tiles[i].wp = 1;                                // D019：配水管（實驗線 load 66881 wp:+d.wp[i]）
+    // D024：辦公區（of：商業就業 ×1.5，55242）、鐵路格（rl）與 T475 的四個格子旗標（手工配電線 lvl475、地下線 udl475、高架 fly475、立交 ix475：維護費 52913、電力載體 50950）
+    if (office && office.charCodeAt(i) === 49) tiles[i].office = 1;
+    if (railL && railL.charCodeAt(i) === 49) tiles[i].rail = 1;               // 鐵路格（rl）：聯運樞紐 k166 的「運作中」要鄰近 ≥2 格（51250）
+    if (lvl475 && lvl475.charCodeAt(i) === 49) tiles[i].lv475 = 1;
+    if (udl475 && udl475.charCodeAt(i) === 49) tiles[i].ud475 = 1;
+    if (city.fly[i]) tiles[i].fly475 = 1;
+    if (ix475) { const q = ix475.charCodeAt(i) - 48; if (q > 0) tiles[i].ix475 = q; }
   }
   const root = new Map<number, CityBuilding>();
   for (const r of save.bl) {
@@ -155,27 +165,10 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     if (t.zone) { tickZone.push(i); if (t.zone === 2) czone++; }
     if (t.road) roads++;
   }
-  // 55050–55063 主計數迴圈（建築索引、跳過 ref 格）：D016 起數得到的設施——學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（照實驗線的順序）。
-  // 給固定就業（55246）與維護費（55973）。D022 起另外數食物來源、觀光建築、貿易設施（rules/food.ts countFood，給糧食）；這些種類的固定就業與維護費還沒接（本線蓋不出來、讀進來的城會有差）；
-  // 升級加成就業（55055 upJob）要手動升級，沒搬
-  const fac = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
-  let towerPop = 0, megaPop = 0;                                          // 55040 towerPop488、megaPop488（D021）：住宅塔、巨廈的居民，不看有沒有電
-  const fc = emptyFoodCount();                                            // D022：食物來源、觀光建築、貿易設施的計數
-  for (const i of tickBld) {
-    const b = w.tiles[i].bld;
-    if (!b || b.ref) continue;
-    countFood(fc, b);
-    if (b.k === 105) megaPop += residentPopulation488(b, () => undefined);   // 55108：住宅巨廈（T488 單一人口真相；住房沒就緒＝入住率 1）
-    if (b.k === 33) towerPop += residentPopulation488(b, () => undefined);   // 55110：住宅塔
-    if (b.k === 7) fac.schools++;                                         // 55056
-    if (b.k === 8) fac.dumps++;                                           // 55057
-    if (b.k === 9) fac.stadiums++;                                        // 55058
-    if (b.k === 10) fac.waterTowers++;                                    // 55059
-    if (b.k === 13) fac.clinics++;                                        // 55060
-    if (b.k === 14) fac.libraries++;                                      // 55061
-    if (b.k === 15) fac.posts++;                                          // 55062
-    if (b.k === 16) fac.cemeteries++;                                     // 55063
-  }
+  // 55050–55149 主計數迴圈（建築索引、跳過 ref 格）：D016 數學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（fac）；D022 數食物來源、觀光建築、貿易設施（rules/food.ts countFood）；
+  // D024 補齊剩下的（rules/count.ts countMore：升級加成就業、電廠以外的發電、產業鏈、物流與運作中判斷、旅宿配套、科技園區、公共設施……）。三份計數合起來就是實驗線的 157 個計數
+  // （資源開採量 suppliesGain／oilGain／oreGain 除外，給 0）；給固定就業（55246–55250）與維護費（55973–55977）
+  const tally = tallyBuildings(w, tickBld), { fc, cnt, towerPop, megaPop } = tally;   // 55040 towerPop488、megaPop488（D021）：住宅塔、巨廈的居民，不看有沒有電；cnt＝三份計數合成一份
   // 54949 噪音（D017，rebuildNoise 53023）：照建築索引算；來源簽名變了（讀檔後第一天一定變）就把地價設成整張重算。
   // 本線的「整張重算」只算 stale 格，所以噪音變了的格要標 stale（其餘格的噪音沒變、地價基準的輸入沒變，算出來逐位相同）
   {
@@ -243,9 +236,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
       if (b.k === 2) jobsC += rciJobs(b, !!t.office); else jobsI += rciJobs(b, false);
     }
   }
-  // 55246–55250（F8）：名目就業＝商工＋各設施固定就業（D016 起數學校、診所、圖書館、郵局、墓園、體育場；電廠、警察局、公園、消防、醫院、派出所沒有固定就業）
-  const jc = jobCounts(); jc.jobsC = jobsC; jc.jobsI = jobsI;
-  jc.schools = fac.schools; jc.stadiums = fac.stadiums; jc.clinics = fac.clinics; jc.libraries = fac.libraries; jc.posts = fac.posts; jc.cemeteries = fac.cemeteries;
+  // 55246–55250（F8）：名目就業＝商工＋各設施固定就業（D024 起全部的種類；電廠、警察局、公園、消防、醫院、派出所沒有固定就業）
+  const jc = jobCountsOf(tally, w, tickBld, jobsC, jobsI);                // 每一個固定就業的計數＋四個掃圖函式（電力、水務、基建、車庫）
   let pop = popN + towerPop + megaPop, jobs = nominalJobs(jc);            // 55246 pop=popN+towerPop488+megaPop488（D021：塔、巨廈的居民不看有沒有電）
   // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
@@ -285,7 +277,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
   // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
   const garbDec = garbDecisionRatio452(san, w, garbRatio, recycleMul);   // 56117：評分讀的垃圾比例（清運區在 55261 算好，生長不動它）
-  const settle = settleToday(s, tickBld, fac, garbDec, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  const settle = settleToday(s, tickBld, cnt, garbDec, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
@@ -300,7 +292,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
 // 55969–56027 維護費、56028 城市活動、56053 結算、56079 貸款、56081 里程碑、56098–56131 星等、56142 紓困。
 // 第 2 類系統（經濟快照 T481／T482、城市活動 T299、夜間城市 T487、進口）沒搬：乘數 1、進口費 0、沒有城市活動（D011 卡第 5 節）。
 // 沙盒（diff 3）照算收支、只是不入帳（56053），里程碑與星等照給（實驗線也是）。
-function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, garbScoreRatio: number, c2?: Class2In): SettleReport {
+function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, garbScoreRatio: number, c2?: Class2In): SettleReport {
   const w = s.w, f = fieldsOf(s.g);
   let chN = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (b && !b.ref && b.k === 42) chN++; }   // 55874 civicMul：市政廳數（第一個迴圈 55055 起數的）
   const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });
@@ -308,8 +300,7 @@ function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, gar
   const pre = c2?.other ? addOtherIncome(inc.income, { ...Object.fromEntries([...OTHER_INCOME_KEYS, 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487'].map(k => [k, 0])), ...c2.other } as OtherIncome) : inc.income;
   const income = cityEventIncome(pre, c2?.eventTax ?? null);
   const c = inc.counts;
-  const upkeep = dailyUpkeep({ ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec,
-    counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals, ...fac } }), ...c2?.upkeep });   // 主計數迴圈的設施（55050 起，D016）；其餘本線蓋不出來
+  const upkeep = dailyUpkeep({ ...upkeepIn(w, tickBld, cnt, c, { pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec }), ...c2?.upkeep });   // 主計數迴圈的全部計數（D016、D022、D024）＋稅收迴圈順手數的六種＋掃整張圖的四個函式
   const sc = scoreCounts(w, f, tickBld);
   const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: garbScoreRatio });   // 56117（D020）：garbDecisionRatio452
   return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };

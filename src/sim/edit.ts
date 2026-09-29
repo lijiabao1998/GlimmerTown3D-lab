@@ -41,7 +41,7 @@ interface DayTxn { g: number; txn: Txn; created: number[]; removed: number[] }
 
 function stateOf(s: Sim): BuildState {
   return { w: s.w, g: s.g, budget: s.budget, rng: s.rng, money: s.money, diff: s.diff, tech: s.edu.tech, spec: s.edu.spec,
-    landDirty: s.landDirty, landBox: s.landBox, txn: null, dozeArm: s.dozeArm, onPower: () => { /* 供電每天開頭整張重算（day.ts 55008）；介面要看就叫 powerStatus */ },
+    landDirty: s.landDirty, landBox: s.landBox, txn: null, dozeArm: s.dozeArm, protect: true, onPower: () => { /* 供電每天開頭整張重算（day.ts 55008）；介面要看就叫 powerStatus */ },
     onWater: () => { computeWaterLegacy449(s.w); } };   // D019：當場重算接通的水管（實驗線 52405、66572），畫面與建築卡馬上看得到；每天開頭也重算
 }
 function writeBack(s: Sim, st: BuildState) { s.money = st.money; s.landDirty = st.landDirty; s.landBox = st.landBox; s.dozeArm = st.dozeArm; }
