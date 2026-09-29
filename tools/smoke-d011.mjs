@@ -487,12 +487,13 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       'D012 劇本城讀檔重挑之後，預設 C（網址沒帶 blocks）：住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）、每一棟都畫到，街區計畫逐塊＝Node；手機預算：三角形 ≤ 118,884、draw call ≤ 18',
       `${String(a1.mode).toUpperCase()} 檔 住商工 ${cov1.rci} 格、沒畫 ${cov1.undrawn}、重疊 ${cov1.over}、街區 ${cov1.blocks} 塊（補切 ${cov1.fill}）${J(a1.bi.plan) === J(planRC) ? '＝' : '≠'} Node；`
       + `畫到 ${a1.owners}／${a1.n} 棟；${a1.i.triangles.toLocaleString()} 個三角形、${a1.i.calls} 次`);
-    // 建築卡（src/cityView.ts lotEvents）：被重挑的每一棟，卡片跟讀檔前逐列相同——只有街區那一列會變（v 換了原型，切分也可能跟著換）；沒有一列講重挑
+    // 建築卡（src/cityView.ts lotEvents）：被重挑的每一棟，卡片跟讀檔前逐列相同——只有街區那一列會變（v 換了原型，切分也可能跟著換）；沒有一列講重挑。
+    // D020 的「清運」一列是當下的狀態（全城垃圾量讀最近一天的回報，讀檔之後還沒推進過就不知道），也不比
     const picked = add1.map(e => [e.x, e.z]), cards1 = picked.length ? await cards(picked) : {};
-    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r));
+    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r) && !/^清運/.test(r));
     const cbad = picked.filter(([x, z]) => { const a = cards0[x + ',' + z], b = cards1[x + ',' + z]; return !a || !b || a.length !== b.length || J(strip(a)) !== J(strip(b)) || b.some(r => /restyle|重挑|外觀/.test(r)); });
     const ex = picked.length ? cards1[picked[0].join(',')] : null;
-    log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型），沒有一列講重挑外觀',
+    log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型；D020 的清運一列是當下狀態、不比），沒有一列講重挑外觀',
       `${picked.length} 棟，不對 ${cbad.length}${cbad.length ? '（' + cbad.slice(0, 3).map(q => `(${q})`).join('、') + '）' : ''}；例 (${picked[0] ?? '—'})：${ex ? ex.join('／') : '沒有卡片'}`);
     // ☰ 選單（真的點）切 B、再切回 C：B 照實驗線的切分，實驗線沒畫的住商工格（D0＋被吸收）鋪草坪；C 每一格都依 k 上色
     const pickMode = async m => {

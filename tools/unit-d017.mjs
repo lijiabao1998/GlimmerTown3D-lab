@@ -180,7 +180,9 @@ async function guards(log) {
     const L1 = loadCode(pre, KT, vrank), L2 = loadCode(pre, KT, vrank), s1 = L1.sim, s2 = L2.sim;   // s2＝逐字照實驗線整張重算的慢速版
     if (s1.noiseSig !== -1 || s1.g.NOISE.some(v => v)) bad.push(`讀檔後 noiseSig ${s1.noiseSig}、NOISE 非零 ${s1.g.NOISE.filter(v => v).length} 格（要 −1、全 0）`);
     const n = s1.w.N, stad = s1.w.tiles.findIndex(q => q.bld && !q.bld.ref && q.bld.k === 9);
-    const fresh = s => { const g = allocGrids(n); g.COV = s.g.COV; g.POL = s.g.POL; g.EDU = s.g.EDU; g.NOISE = s.g.NOISE; rebuildLandBase(s.w, g); return g.LANDBASE; };
+    // 照「重算那一刻」的場從頭算：地價基準在一天開頭（54996）重算，當天稍後長出來的工業會蓋污染（55624，不標髒框、隔天才算進去），
+    // 所以污染用推進前的那一份（重算之前污染不會變）；覆蓋、教育、噪音當天重算之後不變（D020：垃圾改了幸福，第 6 天長出工業才碰到）
+    const fresh = (s, pol) => { const g = allocGrids(n); g.COV = s.g.COV; g.POL = pol; g.EDU = s.g.EDU; g.NOISE = s.g.NOISE; rebuildLandBase(s.w, g); return g.LANDBASE; };
     const eq = (x, y) => x.length === y.length && x.every((v, i) => v === y[i]);
     let nzMax = 0, before = null;
     for (let d = 1; d <= 6; d++) {
@@ -188,10 +190,11 @@ async function guards(log) {
         before = s1.g.LANDBASE.slice();
         for (const s of [s1, s2]) commitOp(s, { k: 'rect', tool: 'doze', x0: stad % n, z0: (stad / n) | 0, x1: stad % n, z1: (stad / n) | 0 }, 0);
       }
+      const pol0 = s1.g.POL.slice();
       stepDay(s1); stepDay(s2, { fullLand: true });
       nzMax = Math.max(nzMax, s1.g.NOISE.filter(v => v).length);
       if (!eq(s1.g.LANDBASE, s2.g.LANDBASE)) bad.push(`第 ${d} 天：地價基準（只算 stale）≠ 整張重算`);
-      if (!eq(s1.g.LANDBASE, fresh(s1))) bad.push(`第 ${d} 天：地價基準 ≠ 照現在的場從頭算`);
+      if (!eq(s1.g.LANDBASE, fresh(s1, pol0))) bad.push(`第 ${d} 天：地價基準 ≠ 照現在的場從頭算`);
       if (d === 1 && s1.noiseSig !== (stad * 31 + 9) >>> 0) bad.push(`第 1 天簽名 ${s1.noiseSig}（體育場在 ${stad}）`);
       if (d === 4 && (s1.noiseSig !== 0 || s1.g.NOISE.some(v => v))) bad.push(`拆掉體育場的隔天：簽名 ${s1.noiseSig}、NOISE 非零 ${s1.g.NOISE.filter(v => v).length} 格`);
     }
@@ -216,7 +219,7 @@ async function guards(log) {
       const r = bad.length ? { bad: [], moved: [], noisy: [] } : prebuiltCheck(seeds, pre, lab.prebuilt, P, seed => new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true, true).hs));
       bad.push(...r.bad);
       if (!bad.length && !r.noisy.every(v => v > 0)) bad.push(`有種子推進前就在的住宅沒有一棟在噪音裡：${r.noisy.join('、')}`);
-      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福依序套垃圾與糧食（含噪音那一項），逐位相等；每個種子都有住宅在體育場的噪音裡`,
+      log(!bad.length, `D017 驗收 3：實驗線頁面實跑（${seeds.length} 個種子，${lab.source?.commit?.slice(0, 7)}）——預建城留著體育場，蓋九種設施、拆診所再復原、推進一天：每一筆逐項相等；推進後住商工以外的格子、覆蓋、地價 LANDBASE／LAND（含噪音那一項）、推進前就在的住商工有電、生長之前的抽取相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福套糧食（垃圾 D020 搬了）（含噪音那一項），逐位相等；每個種子都有住宅在體育場的噪音裡`,
         bad.slice(0, 3).join('；') || `住在噪音裡的住宅 ${r.noisy.join('、')} 棟；幸福被設施改到的 ${r.moved.join('、')} 棟`);
     }
   }

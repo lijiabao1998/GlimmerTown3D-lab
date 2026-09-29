@@ -254,7 +254,7 @@ export function prebuilt3d(code, KT, vrank) {
   out.pwBefore = pwOf(s.w.tiles).map(r => r[0]);                        // 推進前就在的住商工（根格）
   const t = h.tick();
   const b = h.snap();
-  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle;
+  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb;
   out.post = h.head(b, false);
   out.postChanged = diffOf(a.proj, b.proj);                              // 推進那一天改了哪些格（屋齡、生長、升級）
   out.inv = invOf(s.w.tiles, s.g.COV, s.g.POLTREE, s.g.LANDBASE, s.g.LAND);

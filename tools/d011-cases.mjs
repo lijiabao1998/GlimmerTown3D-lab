@@ -35,6 +35,11 @@ export const D019_SEED = 20261019;
 export const WATER = ['water', 'wpipe'];
 export const FAMILIES19 = [['w-random', 70, 'random'], ['w-money', 20, 'money'], ['w-doze', 24, 'doze'], ['w-sandbox', 10, 'sandbox'], ['w-tech', 12, 'tech'], ['w-edge', 12, 'edge'], ['w-undo', 8, 'undo'], ['w-wide', 10, 'wide']];
 export const D019_COUNT = FAMILIES19.reduce((n, [, c]) => n + c, 0);
+// D020：垃圾場。家族同 D016 的寫法（地圖、參數照底家族，操作抽 DUMP）；地圖另外放幾座垃圾場（genMap 的 dumps），拆除才拆得到
+export const D020_SEED = 20261020;
+export const DUMP = ['dump'];
+export const FAMILIES20 = [['g-random', 60, 'random'], ['g-money', 20, 'money'], ['g-doze', 24, 'doze'], ['g-sandbox', 10, 'sandbox'], ['g-tech', 12, 'tech'], ['g-edge', 12, 'edge'], ['g-undo', 8, 'undo'], ['g-wide', 8, 'wide']];
+export const D020_COUNT = FAMILIES20.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -188,7 +193,7 @@ function putLayer(t, layer, g, alt) {
   if (name === 'bld') t.bld = rci(g, g.int(1, 3), [1, 2]);
   else PUT[name](t);
 }
-function genMap(g, fam, j, water = false) {
+function genMap(g, fam, j, water = false, dumps = false) {
   const N = fam === 'edge' || fam === 'undo' ? g.int(10, 12) : fam === 'wide' ? g.int(24, 34) : g.int(10, 18), dense = fam === 'doze', multi = fam === 'multi';
   const { tiles, sparse } = genTiles(g, N, fam);
   layRoads(g, tiles, N, dense ? g.int(2, 4) : fam === 'wide' ? g.int(5, 9) : multi ? g.int(1, 3) : g.int(2, 5), sparse);
@@ -232,6 +237,8 @@ function genMap(g, fam, j, water = false) {
     for (let q = 0; q < len; q++) { const x = hz ? Math.min(N - 1, b0 + q) : a, y = hz ? a : Math.min(N - 1, b0 + q), t = tiles[y * N + x]; if (land(t)) t.wp = 1; }
     if (g.ch(.6)) placeFree(g, tiles, N, (t, x, y) => { t.bld = { k: 10, lv: 1, v: g.int(0, 4), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
   }
+  // D020：幾座垃圾場（k8，變體 0–2）；只在 dumps 抽亂數，之前各卡的地圖逐位不變
+  if (dumps) for (let s = 0, m = g.int(1, 3); s < m; s++) placeFree(g, tiles, N, t => { t.bld = { k: 8, lv: 1, v: g.int(0, 2), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
   if (g.ch(fam === 'random' || dense || fam === 'edge' ? .15 : 0)) placeFree(g, tiles, N, t => {
     const ref = g.ch(.5) ? [g.pick([-1, N]), g.int(0, N - 1)] : [g.int(0, N - 1), g.int(0, N - 1)];
     const inside = ref[0] >= 0 && ref[0] < N;
@@ -260,7 +267,7 @@ function landOf(g, N) {
   return [true, [x0, y0, g.int(x0, N - 1), g.int(y0, N - 1)]];
 }
 
-// civic：D016 的家族抽 CIVIC、D019 抽 WATER（null＝D011，每一個分支都跟原本一樣抽亂數）
+// civic：D016 的家族抽 CIVIC、D019 抽 WATER、D020 抽 DUMP（null＝D011，每一個分支都跟原本一樣抽亂數）
 function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
   const ops = [], outP = fam === 'edge' ? .3 : .05;
   let now = g.int(1000, 90000);
@@ -415,6 +422,20 @@ export function cases19(k) {
     base += count;
   }
   throw new Error(`D019 案例 ${k} 超出 ${D019_COUNT}`);
+}
+
+// D020 第 k 個案例（0 ≤ k < D020_COUNT）：同 cases16，操作抽 DUMP、地圖多放垃圾場
+export function cases20(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES20) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D020_SEED));
+      const m = genMap(g, fam, j, false, true), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, DUMP) };
+    }
+    base += count;
+  }
+  throw new Error(`D020 案例 ${k} 超出 ${D020_COUNT}`);
 }
 
 // ---- 兩邊共用的跑法 ----

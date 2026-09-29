@@ -4,7 +4,7 @@
 //   1. 實驗線有開關：本線接它關掉時的回退值（對照的 fallback 設定也用實驗線自己的開關關掉）——住房市場 T488、企業 T489、
 //      T471 分時調度（舊版供電 __legacyPower450／__legacyPower471）、行動力 T491／T509、財政回饋 T510／T515、事故 T493、水（舊式 __legacyWater449）、災害。
 //   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒）、通勤 T141、道路負載與壅堵 T129、
-//      垃圾清運、糧食供應、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
+//      糧食供應、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
 //   3. 起步城用不到：污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。噪音 D017 搬了（讀進來的城有噪音源）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
@@ -15,6 +15,7 @@ import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
+import { garbageDay, garbDecisionRatio452 } from './rules/garbage.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
@@ -52,7 +53,9 @@ export interface DayReport {
   dem: [number, number, number]; employed: number; workers: number; weather: number; cap: number; powered: number;
   grown: number; upgraded: number;
   money: number; settle: SettleReport;          // D011：結算後的資金與當天的結算（沙盒照算，只是不入帳）
+  garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
 }
+export interface GarbReport { amount: number; cap: number; ratio: number; formal: boolean; districts: number; pen: number; far: number; unserved: number; dec: number }   // pen＝實驗線 garbPen409（探針讀得到）；dec＝評分用的比例
 // 一天的結算（D011，src/sim/rules/money.ts）：收入、維護費、淨額，以及當天發生的里程碑、星等獎金、紓困
 export interface SettleReport { income: number; upkeep: number; net: number; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }
 // 第 2 類系統當天的值（經濟快照、貿易進口、城市活動、夜間城市……本線沒搬）。只給對拍用：把實驗線那一天探針讀出的值代進本線公式，
@@ -219,7 +222,11 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
   let cityHappy = happyN ? happySum / happyN : .6;                        // 55254（住宅 k1 與社宅 k127）
-  // 55256–55277 垃圾清運：沒搬（第 2 類，實驗線照跑）
+  // 55256–55278 垃圾（D020，src/sim/rules/garbage.ts）：產量、清運網、全城比例；500 人以上分清運區算負載。
+  // 回收政策沒搬：係數 1（55257）；企業關：工業用四捨五入後的 jobsI（55258）。55262–55266 資源回收廠產貨物：貨物是經濟系統，沒搬
+  const recycleMul = 1;
+  const gd = garbageDay(w, tickBld, pop, jobsI, cityHappy, recycleMul);
+  const { garbage, garbCap, garbRatio, garbPen409, san, loc: garbLoc } = gd; cityHappy = gd.cityHappy;
   s.landDirty = true; s.landBox = null;                                   // 55279 rebuildAccess468（64146 → 64129）每天把地價設成「隔天整張重算」
   { let s1 = 0, n1 = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (!b || b.k !== 1) continue; s1 += b.h as number; n1++; } if (n1) cityHappy = s1 / n1; }   // 55282–55284：只用住宅 k1 重算
   // 55414 糧食供應：沒搬（第 2 類）；55426 災害：關（第 1 類）
@@ -246,12 +253,14 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   }
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
   // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
-  const settle = settleToday(s, tickBld, fac, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  const garbDec = garbDecisionRatio452(san, w, garbRatio, recycleMul);   // 56117：評分讀的垃圾比例（清運區在 55261 算好，生長不動它）
+  const settle = settleToday(s, tickBld, fac, garbDec, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
+    garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
   };
 }
 
@@ -259,7 +268,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
 // 55969–56027 維護費、56028 城市活動、56053 結算、56079 貸款、56081 里程碑、56098–56131 星等、56142 紓困。
 // 第 2 類系統（經濟快照 T481／T482、城市活動 T299、夜間城市 T487、進口）沒搬：乘數 1、進口費 0、沒有城市活動（D011 卡第 5 節）。
 // 沙盒（diff 3）照算收支、只是不入帳（56053），里程碑與星等照給（實驗線也是）。
-function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, c2?: Class2In): SettleReport {
+function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, garbScoreRatio: number, c2?: Class2In): SettleReport {
   const w = s.w, f = fieldsOf(s.g);
   let chN = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (b && !b.ref && b.k === 42) chN++; }   // 55874 civicMul：市政廳數（第一個迴圈 55055 起數的）
   const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });
@@ -270,7 +279,7 @@ function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, c2?
   const upkeep = dailyUpkeep({ ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec,
     counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals, ...fac } }), ...c2?.upkeep });   // 主計數迴圈的設施（55050 起，D016）；其餘本線蓋不出來
   const sc = scoreCounts(w, f, tickBld);
-  const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: 2 });   // 55260：沒有垃圾場，垃圾比例 2（0 分）
+  const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: garbScoreRatio });   // 56117（D020）：garbDecisionRatio452
   return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
 }
 

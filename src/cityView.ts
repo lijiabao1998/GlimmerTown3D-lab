@@ -14,6 +14,7 @@ import { packMore, PACK0, type JournalStore, type PackState } from './io/journal
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng } from './sim/rules/lab.ts';
+import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
@@ -643,6 +644,35 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       case 'pipe': return [d, `鋪了配水管${e.cost ? `（$${e.cost}）` : ''}${tail}`];
     }
   }
+  // D020：建築卡的「清運」一列。清運網當場照模擬的規則算一次（實驗線 sanitationAt452 38094 也是髒了就重算）；
+  // 全城垃圾量讀最近一天的回報（人口、工業就業）。讀檔之後還沒推進過就不知道（simFromSave 人口 0），照實講
+  function garbRow(b: { k: number; x: number; z: number }): Row | null {
+    if (!sim || !(b.k === 1 || isSanFacility445(b.k))) return null;
+    const w = sim.w, i = b.z * w.N + b.x, san = computeSanitation445(w, sim.pop);
+    if (san.formal) prepareSanitationLoad452(san, w, 1);
+    const amount = lastRep ? lastRep.garb.amount : null, cap = san.effectiveCap, pct = (v: number) => `${Math.round(v * 100)}%`;
+    const total = amount === null ? `處理容量 ${cap}（全城垃圾量推進一天之後才算得出來）` : `垃圾 ${amount.toFixed(1)}／${cap}`;
+    if (isSanFacility445(b.k)) {
+      const f = san.facilities.get(i), q = f && f.district >= 0 ? san.districts[f.district] : null;
+      if (!san.formal) return ['清運', `處理容量 ${SAN_CAP445[b.k]}；人口未滿 ${SAN_FORMAL_POP445}，全城設施一起算：${total}`];
+      if (!q) return ['清運', `沒貼路，垃圾車進不來：容量 ${SAN_CAP445[b.k]} 不算`];
+      return ['清運', `清運區 #${q.id}：${q.facilities} 座設施、容量 ${q.capacity}，垃圾 ${q.demand.toFixed(1)}（負載 ${pct(q.load)}）`];
+    }
+    if (!san.formal) {
+      const d = garbLegacyAt(w, garbLegacyDist(w), i), r = amount === null ? 0 : cap > 0 ? Math.min(2, amount / cap) : 2, bits: string[] = [];
+      bits.push(cap > 0 ? '全城' + total : '全城沒有垃圾場');
+      if (amount !== null && amount > 0 && r > 1) bits.push(`容量不夠，每棟幸福 −${((r - 1) * 15).toFixed(1)}`);
+      bits.push(d > SAN_LONG_DIST445 ? '離垃圾場沿路太遠，幸福 −4.5' : `垃圾場沿路 ${d} 格`);
+      return ['清運', bits.join('；')];
+    }
+    const st = sanitationAtRoot452(san, w, i);
+    if (st.reason === 'no-road') return ['清運', '不貼路，垃圾車到不了：幸福 −6'];
+    if (st.reason === 'dead-network') return ['清運', `清運區 #${st.district} 沒有貼路的處理設施：幸福 −6`];
+    const bits = [`清運區 #${st.district}，負載 ${pct(st.load)}`, `沿路 ${st.dist} 格`];
+    if (st.load > 1) bits.push(`超載，幸福 −${((st.load - 1) * 15).toFixed(1)}`);
+    if (st.dist > SAN_LONG_DIST445) bits.push('太遠，幸福 −4.5');
+    return ['清運', bits.join('；')];
+  }
   function showTile(x: number, z: number) {
     if (!city || !built) return null;
     cardAt = [x, z];
@@ -658,6 +688,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${util}${b.abandoned ? '・已遭遺棄' : ''}${onSite(b.k, b.age, b.goneDay !== undefined) ? `・施工中，第 ${b.age + 1}／${CON_DAYS} 天` : ''}`;   // D014
       // D010：逐日模擬記下的生長、升級；D011：這一塊地上的施工（劃區、鋪路、蓋、拆）照發生順序一起列。
       // 匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
+      const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const evs = lotEvents(c, b.x, b.z);
       if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
@@ -914,6 +945,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       return { want: [b.x, b.z, id], got: h, name: KINDS.name(b.k) };
     },
     openTile: (x: number, z: number) => showTile(x, z),
+    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, garb: lastRep.garb } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）
     // 目前卡片的樣子（clean=1 時介面沒掛進 document，測試從這裡讀）
     card: () => ({ open: !bio.hidden, at: cardAt, title: $('#bio h2').textContent, sub: $('#bio .sub').textContent }),
     // 挑一棟當點擊測試的目標：佔地最大、同佔地取最高、再取編號最小（決定性）
