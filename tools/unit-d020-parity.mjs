@@ -5,7 +5,7 @@
 //     實驗線垃圾那一段的輸入代進本線 garbageDay，輸出（含每一棟住宅的幸福、城市幸福、偏遠的棟數）逐位相等；
 //     本線的碼（劇本＋推進一天）匯入實驗線：讀得進來，設施（兩座垃圾場）與對帳數字＝本線。
 //   讀進來的城（AI 城 120 天、種子城；兩座都是正式清運）：實驗線垃圾那一段的輸入代進本線 garbageDay，輸出逐位相等；
-//     AI 城本線自己推進一天（人口兩邊相同）的垃圾數字也＝實驗線。種子城本線人口少算住宅塔、巨廈（第 3 類，卡面「沒做成的事」），只量不判。
+//     兩座本線自己推進一天的垃圾數字也＝實驗線（AI 城人口兩邊相同；種子城的人口 1,400 全部來自住宅塔與巨廈，D021 起本線算進 pop，才判得了）。
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './cdp.mjs';
@@ -114,10 +114,10 @@ export async function d020ParityGuards(log) {
       if (!L.ga.formal) bad.push(`${id}：實驗線不是正式清運（要比到 500 人以上那一支）`);
       const s = loadCode(code, KT, vrank).sim, r = stepDay(s);
       const same = J(mine(r.garb)) === J(labOf(L.ga));
-      if (id === 'ai120' && !same) bad.push(`ai120 本線自己推進一天的垃圾 ${J(mine(r.garb))} ≠ 實驗線 ${J(labOf(L.ga))}`);
-      notes.push(`${id}：實驗線人口 ${L.gb.pop}、本線 ${r.pop}；垃圾 ${L.ga.garbage}／${L.ga.garbCap}、清運區 ${L.ga.districts}、太遠 ${L.ga.far}、沒清運 ${L.ga.unserved}、偏遠 ${L.ga.warn} 棟；住宅 ${L.ga.h.length} 棟逐位相等；本線自己推進 ${same ? '也相等' : '不同（人口少算住宅塔、巨廈）'}`);
+      if (!same) bad.push(`${id} 本線自己推進一天的垃圾 ${J(mine(r.garb))} ≠ 實驗線 ${J(labOf(L.ga))}`);   // D021 起兩座都判（種子城原本只量不判：本線人口少算塔與巨廈）
+      notes.push(`${id}：實驗線人口 ${L.gb.pop}、本線 ${r.pop}；垃圾 ${L.ga.garbage}／${L.ga.garbCap}、清運區 ${L.ga.districts}、太遠 ${L.ga.far}、沒清運 ${L.ga.unserved}、偏遠 ${L.ga.warn} 棟；住宅 ${L.ga.h.length} 棟逐位相等；本線自己推進 ${same ? '也相等' : '不同'}`);
     }
-    log(!bad.length, 'D020 驗收 4：讀進來的城（AI 城 120 天、種子城，兩座都是正式清運）——實驗線垃圾那一段的輸入代進本線 garbageDay，垃圾量、容量、比例、懲罰、太遠／沒清運／偏遠的棟數、評分用的比例、清運區數、城市幸福與每一棟住宅的幸福逐位相等；AI 城本線自己推進一天的垃圾數字也相等',
+    log(!bad.length, 'D020 驗收 4：讀進來的城（AI 城 120 天、種子城，兩座都是正式清運）——實驗線垃圾那一段的輸入代進本線 garbageDay，垃圾量、容量、比例、懲罰、太遠／沒清運／偏遠的棟數、評分用的比例、清運區數、城市幸福與每一棟住宅的幸福逐位相等；兩座本線自己推進一天的垃圾數字也相等（種子城 D021 起判）',
       bad.slice(0, 3).join('；') || notes.join('；'));
   }
 }
