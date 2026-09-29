@@ -22,7 +22,8 @@ export const ROAD_COST = [8, 15, 28, 55, 120];
 // 37442 COST 裡本卡用到的鍵（COST.road／hwy／hwyBridge 實驗線沒人讀，道路造價只看 ROAD_COST；樹上加價用的是 COST.doze，51623）。
 // D016 的九個鍵之後沒有被 Object.assign 改過（37536–37546、67110、67242），守衛在 vm 裡讀最終值核對
 export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
-  park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350 };
+  park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350,
+  water: 400, wpipe: 10 };   // D019：水塔、配水管（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
@@ -31,7 +32,9 @@ export const DOZE_ARM_MS = 3000;
 export const D011_TOOLS: readonly string[] = ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'zc', 'zi', 'plant', 'police', 'doze'];
 // D016：公共設施（實驗線 canPlace 51278 跟電廠、警察局同一支；水塔、垃圾場不在這批）
 export const D016_TOOLS: readonly string[] = ['park', 'fire', 'policeBox', 'hospital', 'clinic', 'school', 'library', 'post', 'cemetery'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS]);
+// D019：水塔（點，canPlace 同公共設施）、配水管（拉線，isLineTool436 62763）
+export const D019_TOOLS: readonly string[] = ['water', 'wpipe'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -54,7 +57,8 @@ export interface BuildState {
   landDirty: boolean; landBox: [number, number, number, number] | null;
   txn: Txn | null; dozeArm: { i: number; t: number } | null;
   onPower?: () => void;   // 實驗線當場重算供電（computePower）的時機；本線每天開頭整張重算（day.ts），這裡只通知
-  onPlace?: (tool: string, x: number, y: number, ok: boolean, cost: number) => void;   // 每一次 doPlace 之後（成功或失敗；cost＝實付，失敗 0）。給對拍記錄用，不改模擬
+  onPlace?: (tool: string, x: number, y: number, ok: boolean, cost: number) => void;
+  onWater?: () => void;   // D019：實驗線放水塔、水管、拆除之後當場重算供水網（52405 computeWater）；本線每天開頭也重算（day.ts），這裡只通知   // 每一次 doPlace 之後（成功或失敗；cost＝實付，失敗 0）。給對拍記錄用，不改模擬
 }
 
 // 53074–53084：地價基準的髒框。landDirty＝true、landBox＝null 在實驗線是「隔天整張重算」（每天收尾 55279 → 64129／67355 都是這個狀態），
@@ -92,10 +96,14 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.road) return '道路上不能分區';
       if (t.bld) return '已有建築';
       return null;
-    case 'park': case 'plant': case 'fire': case 'police': case 'policeBox': case 'hospital': case 'clinic': case 'school': case 'library': case 'post': case 'cemetery':   // 51278–51282（水塔、垃圾場同一支，還沒搬）
+    case 'park': case 'plant': case 'water': case 'fire': case 'police': case 'policeBox': case 'hospital': case 'clinic': case 'school': case 'library': case 'post': case 'cemetery':   // 51278–51282（垃圾場同一支，還沒搬）
       if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
       if (t.road) return '道路上不能建造';
       if (t.bld) return '已有建築';
+      return null;
+    case 'wpipe':                                                               // 51312–51315：陸地、還沒有水管就行（路、分區、建築底下都可以鋪）
+      if (t.t !== 2 && t.t !== 1) return '只能鋪在陸地上';
+      if (t.wp) return '已有水管';
       return null;
     case 'doze':                                                                // 51353–51355（rdec、bus 不在清單上：只有它們的格子拆不了）
       if (!t.road && !t.bld && !t.zone && !t.tree && !t.deco && !t.ruin && !t.rail && !t.tram && !t.dock && !t.oneway && !t.light && !t.busLane && !t.levee && !t.flood
@@ -122,6 +130,8 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
       c = COST.zone; if (t.zone) c = 0; break;
     case 'park': c = COST.park; break;                                          // 51516
     case 'plant': c = COST.plant; break;                                        // 51517
+    case 'water': c = COST.water; break;                                        // 51518
+    case 'wpipe': c = COST.wpipe; break;                                        // 51519（樹上照樣 +COST.doze，水管又不清樹：照抄）
     case 'fire': c = COST.fire; break;                                          // 51525
     case 'police': c = COST.police; break;                                      // 51526
     case 'policeBox': c = COST.policeBox; break;                                // 51527
@@ -257,6 +267,12 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
       stampCov(g, st.budget, 'plant', x, y, COVR.plant, 1);
       stampPolSrc(g, x, y, 5, 1);
       break;
+    case 'water':                                                               // 51676–51678：變體抽一次亂數 ri(5)
+      t.bld = { k: 10, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      break;
+    case 'wpipe':                                                               // 51679–51681：只設 wp；接頭遮罩（recalcInfraMask4_475）是畫面的事，本線在畫面層算
+      t.wp = 1;
+      break;
     case 'fire':                                                                // 51682–51685
       t.bld = { k: 6, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       stampCov(g, st.budget, 'fire', x, y, COVR.fire, 1);
@@ -302,7 +318,8 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
   st.money -= cost;                                                             // 52399
   if (txn) txn.spent += cost;                                                   // 52400
   if (toolId === 'plant' || roadToolToRc(toolId) || toolId === 'doze') st.onPower?.();   // 52401–52404（分區、警察局不重算）
-  // 52405–52412 水、污水、排水、清運、緊急出勤（消防局、派出所、警察局也會設，52410）、韌性、地面重繪的髒旗標：本線沒有這些系統（或是畫面）
+  if (toolId === 'water' || toolId === 'wpipe' || toolId === 'doze') st.onWater?.();      // 52405（D019）：當場重算供水網（舊式只更新每一格的 wr）
+  // 52406–52412 污水、排水、清運、緊急出勤（消防局、派出所、警察局也會設，52410）、韌性、地面重繪的髒旗標：本線沒有這些系統（或是畫面）
   st.onPlace?.(toolId, x, y, true, cost);
   return true;
 }
@@ -402,6 +419,7 @@ export function undoTxn(st: BuildState, txn: Txn, edu: EduCtx): void {
   for (const sn of txn.snaps) st.w.tiles[sn.i] = JSON.parse(sn.s);              // 66583
   st.money += txn.spent || 0;                                                   // 66597
   st.onPower?.();                                                               // 66571
+  st.onWater?.();                                                               // 66572（D019）
   rebuildCov(st.w, st.g, st.budget, edu);                                       // 66578
   st.landDirty = false; st.landBox = null;                                      // 53154
 }

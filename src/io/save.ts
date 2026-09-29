@@ -14,7 +14,7 @@
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { CITY_FORMAT, cityStats, roadCode, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
+import { CITY_FORMAT, cityStats, eventFormat, roadCode, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
@@ -30,10 +30,19 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // 種類碼照事件出現的先後編；拆除的圖層碼 0 建築、1 路、2 分區、3 樹。
 // 列的欄位：import [0,dDay,source,gameVer,seed,codeHash,buildings]；grow／upgrade [1|2,dDay,x,z,k,lv,v]；road [3,dDay,x,z,rc,cost,dG]；
 // zone [4,dDay,x,z,zone,cost,dG]；place [5,dDay,x,z,k,lv,v,id,cost,dG]；doze [6,dDay,x,z,layer,cost,dG(,k,id)]；undo [7,dDay,dG,refund]；
-// restyle [8,dDay,x,z,v]（D012：城市格式 4）。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
+// restyle [8,dDay,x,z,v]（D012：城市格式 4）；pipe [9,dDay,x,z,cost,dG]、拆除圖層碼 4＝水管（D019：城市格式 5）。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle'] as const;
-const LAYERS = ['bld', 'road', 'zone', 'tree'] as const;
+const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe'] as const;
+const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp'] as const;
+
+// 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
+const fmtSeen = new WeakMap<readonly CityEvent[], { n: number; f: number }>();
+export function historyFormat(h: readonly CityEvent[]): number {
+  let m = fmtSeen.get(h);
+  if (!m || m.n > h.length) { m = { n: 0, f: 4 }; fmtSeen.set(h, m); }
+  for (; m.n < h.length; m.n++) m.f = Math.max(m.f, eventFormat(h[m.n]));
+  return m.f;
+}
 
 // 整份編一次（hv 2 的 d3.r、匯出的分享碼）。D013 起編法只寫一份：src/io/journal.ts packMore（日誌接續編碼用同一支，接起來逐列相同）
 export function packHistory(h: readonly CityEvent[]): unknown[][] { return packMore(h, PACK0).rows; }
@@ -66,13 +75,14 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
     }
     case 'undo': return { day, t, g: int('g', 0, 2 ** 31), refund: num('refund') };
     case 'restyle': { const [x, z] = xz(); return { day, t, x, z, v: int('v', 0, 9999) }; }
+    case 'pipe': { const [x, z] = xz(); return { day, t, x, z, cost: num('cost'), g: int('g', 0, 2 ** 31) }; }
     default: throw bad('種類');
   }
 }
 const ROW_FIELDS: Record<string, string[]> = {
   import: ['source', 'gameVer', 'seed', 'codeHash', 'buildings'], grow: ['x', 'z', 'k', 'lv', 'v'], upgrade: ['x', 'z', 'k', 'lv', 'v'],
   road: ['x', 'z', 'rc', 'cost', 'g'], zone: ['x', 'z', 'zone', 'cost', 'g'], place: ['x', 'z', 'k', 'lv', 'v', 'id', 'cost', 'g'],
-  doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'],
+  doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'], pipe: ['x', 'z', 'cost', 'g'],
 };
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
@@ -113,11 +123,11 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   const N = s.w.N, nn = N * N, o: Record<string, unknown> = { ...template };
   delete o.z;   // encodeLabCode 會重新壓、重新標
   delete o.d3;
-  let tre = '', rd = '', zn = '', rcl = '', ab = '';
+  let tre = '', rd = '', zn = '', rcl = '', ab = '', wp = '';
   const bl: number[][] = [];
   for (let i = 0; i < nn; i++) {
     const t = s.w.tiles[i], b = t.bld;
-    tre += String.fromCharCode(48 + (t.tree || 0)); rd += roadCode(t.road, t.hw, t.bridge); zn += t.zone || 0; rcl += String.fromCharCode(48 + (t.rc || 0));
+    tre += String.fromCharCode(48 + (t.tree || 0)); rd += roadCode(t.road, t.hw, t.bridge); zn += t.zone || 0; rcl += String.fromCharCode(48 + (t.rc || 0)); wp += t.wp ? 1 : 0;   // wp：D019（66717 同寫法）
     ab += b && !b.ref && (b as { abandoned?: unknown }).abandoned ? 1 : 0;
     if (b && !b.ref) {                                                       // 66740–66756：多格建築只存根格
       const e = [i, b.k, b.lv, b.v, b.age];
@@ -130,12 +140,12 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   }
   Object.assign(o, {
     v: 1, n: N, seed: s.seed, day: s.day, money: Math.round(s.money), msIdx: s.msIdx, star: s.bestStar, df: s.diff,
-    ln: s.loan ? [s.loan.remain, s.loan.daily] : null, nm: s.city.name, tre, rd, zn, rcl, ab, bl,
+    ln: s.loan ? [s.loan.remain, s.loan.daily] : null, nm: s.city.name, tre, rd, zn, rcl, wp, ab, bl,
   });
   if (opts.history !== false && opts.journal) {
     const { id, st } = opts.journal;
-    o.d3 = { f: CITY_FORMAT, s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;
-  } else if (opts.history !== false) o.d3 = { f: CITY_FORMAT, s: start, g: s.stroke, hv: HISTORY_VER, r: packHistory(s.city.history) } satisfies D3Ext;
+    o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;
+  } else if (opts.history !== false) o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: HISTORY_VER, r: packHistory(s.city.history) } satisfies D3Ext;
   return encodeLabCode(o, { deflate: true });
 }
 
@@ -217,6 +227,7 @@ function mismatch(a: City, b: City): string | null {
   const n = a.n, rootOf = (c: City, i: number) => { const id = c.occ[i]; if (!id) return -1; const q = c.buildings[id - 1]; return q.z * n + q.x; };
   for (let i = 0; i < n * n; i++) {
     if (a.road[i] !== b.road[i] || a.rclass[i] !== b.rclass[i] || a.zone[i] !== b.zone[i] || a.tree[i] !== b.tree[i]) return `第 ${i} 格的地面不同`;
+    if (a.wp[i] !== b.wp[i]) return `第 ${i} 格的水管不同`;   // D019
     if (rootOf(a, i) !== rootOf(b, i)) return `第 ${i} 格的建築不同`;
   }
   const key = (q: CityBuilding) => [q.x, q.z, q.k, q.lv, q.v, q.age].join(',');

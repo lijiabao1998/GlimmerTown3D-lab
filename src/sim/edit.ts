@@ -3,6 +3,7 @@
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；拆除確認的「3 秒內再按一次」用呼叫端給的 now。
 import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRect, tap, undoTxn, pushTxn, ROAD_COST, COST, type BuildState, type Txn } from './rules/build.ts';
 import { computePower, powerCap } from './rules/power.ts';
+import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
 import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
 import type { Sim } from './day.ts';
@@ -14,9 +15,11 @@ export const ROAD_TOOLS = [
   { id: 'art', name: '主幹道', cost: ROAD_COST[3] }, { id: 'hwy', name: '快速路', cost: ROAD_COST[4] },
 ];
 export const TOOL_PRICE = { zr: COST.zone, zc: COST.zone, zi: COST.zone, plant: COST.plant, police: COST.police, doze: COST.doze };
-// D016 公共設施：名稱與順序照實驗線工具列 svc 類（TOOLS 37584–37595；電廠有自己的按鈕，水塔、垃圾場還沒搬），造價 COST（37442）；short＝按鈕上的一個字
+// D016 公共設施：名稱與順序照實驗線工具列 svc 類（TOOLS 37584–37595；電廠有自己的按鈕，垃圾場還沒搬），造價 COST（37442）；short＝按鈕上的一個字。
+// D019：水塔（svc 類，37586，實驗線排在電廠後面）、配水管（實驗線在 road 類 37554，本線放在水塔旁邊）；配水管是拉線、造價一格
 export const CIVIC_TOOLS = [
-  { id: 'park', name: '公園', short: '園', cost: COST.park }, { id: 'fire', name: '消防局', short: '消', cost: COST.fire },
+  { id: 'park', name: '公園', short: '園', cost: COST.park }, { id: 'water', name: '水塔', short: '水', cost: COST.water },
+  { id: 'wpipe', name: '配水管', short: '管', cost: COST.wpipe }, { id: 'fire', name: '消防局', short: '消', cost: COST.fire },
   { id: 'police', name: '警察局', short: '警', cost: COST.police }, { id: 'policeBox', name: '派出所', short: '派', cost: COST.policeBox },
   { id: 'hospital', name: '醫院', short: '醫', cost: COST.hospital }, { id: 'clinic', name: '診所', short: '診', cost: COST.clinic },
   { id: 'school', name: '學校', short: '學', cost: COST.school }, { id: 'library', name: '圖書館', short: '圖', cost: COST.library },
@@ -26,8 +29,8 @@ const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
 // 介面的按鈕 → 實驗線的工具代號（規則 9：按鈕寫進資料的東西照實驗線）。路、公共設施是一組：按鈕下面那一排選的是哪一種
 export const labToolOf = (ui: string, roadTool: string, civicTool = 'police') => ui === 'road' ? roadTool : ui === 'civic' ? civicTool : ui;
-// 實驗線觸控的手勢（T436）：路是線、分區與拆除與公園是框（isRectTool 62750：zr／zc／zi／doze／park，另有 tree、fill 還沒搬）、其他建築是點
-export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) ? 'line' : (tool in ZONE_OF || tool === 'doze' || tool === 'park') ? 'rect' : 'tap';
+// 實驗線觸控的手勢（T436）：路與配水管是線（isLineTool436 62763）、分區與拆除與公園是框（isRectTool 62750：zr／zc／zi／doze／park，另有 tree、fill 還沒搬）、其他建築是點
+export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) || tool === 'wpipe' ? 'line' : (tool in ZONE_OF || tool === 'doze' || tool === 'park') ? 'rect' : 'tap';
 
 export interface EditOp { k: 'tap' | 'line' | 'rect'; tool: string; x0: number; z0: number; x1: number; z1: number }
 export interface OpPreview { cells: { x: number; z: number; ok: boolean; cost: number }[]; count: number; total: number; affordable: boolean; reason?: string }
@@ -37,7 +40,8 @@ interface DayTxn { g: number; txn: Txn; created: number[]; removed: number[] }
 
 function stateOf(s: Sim): BuildState {
   return { w: s.w, g: s.g, budget: s.budget, rng: s.rng, money: s.money, diff: s.diff, tech: s.edu.tech, spec: s.edu.spec,
-    landDirty: s.landDirty, landBox: s.landBox, txn: null, dozeArm: s.dozeArm, onPower: () => { /* 供電每天開頭整張重算（day.ts 55008）；介面要看就叫 powerStatus */ } };
+    landDirty: s.landDirty, landBox: s.landBox, txn: null, dozeArm: s.dozeArm, onPower: () => { /* 供電每天開頭整張重算（day.ts 55008）；介面要看就叫 powerStatus */ },
+    onWater: () => { computeWaterLegacy449(s.w); } };   // D019：當場重算接通的水管（實驗線 52405、66572），畫面與建築卡馬上看得到；每天開頭也重算
 }
 function writeBack(s: Sim, st: BuildState) { s.money = st.money; s.landDirty = st.landDirty; s.landBox = st.landBox; s.dozeArm = st.dozeArm; }
 
@@ -112,7 +116,7 @@ function syncEdit(s: Sim, txn: Txn, costs: Map<number, number>, g: number, dt: D
   for (const sn of txn.snaps) {
     const i = sn.i, x = i % n, z = (i / n) | 0, a = JSON.parse(sn.s) as Tile, b = s.w.tiles[i], cost = costs.get(i) ?? 0;
     const hadRoot = !!(a.bld && !a.bld.ref), hasRoot = !!(b.bld && !b.bld.ref);
-    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0;
+    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0;
     if (hasRoot && (!hadRoot || a.bld!.k !== b.bld!.k)) {             // 放了建築（51672／51687）
       const cb: CityBuilding = { id: c.buildings.length + 1, k: b.bld!.k, lv: b.bld!.lv, v: b.bld!.v, age: b.bld!.age, x, z, size: s.kinds.size(b.bld!.k), abandoned: false, builtDay: day };
       c.buildings.push(cb); s.root.set(i, cb); dt.created.push(cb.id);
@@ -132,6 +136,8 @@ function syncEdit(s: Sim, txn: Txn, costs: Map<number, number>, g: number, dt: D
     else if (a.road && !b.road) out.push({ day, t: 'doze', x, z, layer: 'road', cost, g });                          // 51808
     else if ((b.zone || 0) !== (a.zone || 0)) out.push(b.zone ? { day, t: 'zone', x, z, zone: b.zone, cost, g } : { day, t: 'doze', x, z, layer: 'zone', cost, g });   // 51665／51811
     else if (a.tree && !b.tree) out.push({ day, t: 'doze', x, z, layer: 'tree', cost, g });                         // 只砍了樹
+    else if (b.wp && !a.wp) out.push({ day, t: 'pipe', x, z, cost, g });                                            // D019：鋪水管（51679）
+    else if (a.wp && !b.wp) out.push({ day, t: 'doze', x, z, layer: 'wp', cost, g });                               // D019：拆水管（51810）
   }
   c.history.push(...out);
   return out;
@@ -152,7 +158,7 @@ export function undoOp(s: Sim): { ok: boolean; refund: number } {
   for (const id of dt.removed) { const cb = c.buildings[id - 1]; delete cb.goneDay; s.root.set(cb.z * n + cb.x, cb); }
   for (const sn of dt.txn.snaps) {
     const i = sn.i, b = s.w.tiles[i];
-    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.occ[i] = 0;
+    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0; c.occ[i] = 0;
   }
   for (const [i, cb] of s.root) for (let dz = 0; dz < cb.size; dz++) for (let dx = 0; dx < cb.size; dx++) { const j = (cb.z + dz) * n + cb.x + dx; if (cb.x + dx < n && cb.z + dz < n && dt.txn.snaps.some(q => q.i === j)) c.occ[j] = cb.id; void i; }
   const refund = s.money - m0;

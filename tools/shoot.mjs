@@ -793,6 +793,84 @@ if (want('d016')) {
   }
 }
 
+// D019：供水。同一串操作（D011 的 A 段＋主街北邊那一排分區底下一條配水管、西端一座水塔，種子 5162026）在實驗線 2D 與本線 3D 各跑一次，拿著配水管拍（兩邊平常都不畫水管）：
+// 蓋下去那天、20 天之後。手機：「公共設施」一組選配水管、有水的住宅建築卡。2D 要實驗線（--lab），沒有就只拍 3D
+if (want('d019')) {
+  const R = f => fs.readFileSync(path.join(ROOT, f), 'utf8'), LAB = path.resolve(ROOT, arg('lab', '../GlimmerTown-lab')), labDir = path.join(ROOT, 'scratch/lab');
+  const { decodeLabCode } = await import('../src/io/labcode.ts'), { d016Ops } = await import('./d016-ops.mjs');
+  const code = codeWithSeed(R('src/content/samples/newcity.code.txt').trim(), 5162026), S = decodeLabCode(code).save, lay = k => Uint8Array.from(S.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
+  const o16 = d016Ops(S.n, lay('ter'), lay('el'), lay('tre')), X = o16.site.x0, Z = o16.site.z0, n = S.n, ter = lay('ter');
+  // 主街（Z+5）北邊那一排（Z+4，住宅區）從 X−2 拉到 X+20 的配水管（實驗線路底下的水管被路蓋住，拍不到）；水塔：西端那一格上下兩格裡第一格陸地
+  const wx = X - 2, tz = [Z + 3, Z + 5, Z + 2, Z + 6].find(z => ter[z * n + wx] !== 0);
+  const W = [{ k: 'money', v: 20000 }, { k: 'line', tool: 'wpipe', x0: wx, z0: Z + 4, x1: X + 20, z1: Z + 4 }, { k: 'tap', tool: 'water', x: wx, z: tz }];
+  const all = [...o16.A, ...W], CX = X + 9, CZ = Z + 5.5;
+  if (fs.existsSync(path.join(LAB, 'index.html'))) {
+    const { CONFIGS, preloadOf, injectLab } = await import('./lab-configs.mjs');
+    const EX = `window.__d019s={tap:(id,x,y)=>{tool=id;openUndo();paintLast=null;paintTo(x,y);closeUndo();paintLast=null;},
+  line:(id,x0,y0,x1,y1)=>{tool=id;roadDraft436={x0,y0,x1,y1,active:true};commitRoadDraft436();roadDraft436=null;},
+  rect:(id,x0,y0,x1,y1,now)=>{tool=id;rect.x0=x0;rect.y0=y0;rect.x1=x1;rect.y1=y1;performance.now=()=>now;try{commitRect();}finally{delete performance.now;}},setMoney:v=>{money=v;},setTool:v=>{tool=v;}};`;
+    const copy = injectLab(fs.readFileSync(path.join(LAB, 'index.html'), 'utf8'), EX);
+    fs.mkdirSync(labDir, { recursive: true });
+    await withBrowser({ root: LAB, entry: 'd019s.html', overlay: { 'd019s.html': copy }, port: 8433, width: 1280, height: 800, gl: false, preload: preloadOf(CONFIGS.fallback), ready: '!!window.__bootDone453&&!!window.__d019s', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
+      await open('');
+      const shot = `(()=>{__d019s.setTool('wpipe');GV.lookAt(${CX},${CZ});GV.art574.zoom574(1.5);GV.setVisT(GV.art574.cycle574()*0.5);GV.forceDraw();GV.forceDraw();return document.getElementById('game').toDataURL('image/png');})()`;
+      const png = url => Buffer.from(url.split(',')[1], 'base64');
+      await page.evaluate(`(()=>{GV.setMapSize(72);GV.newWorldSeeded(777);if(!GV.importCode(${JSON.stringify(code)}))throw new Error('import');GV.setSpeed(0);GV.ai(false);let clock=0;
+        for(const o of ${JSON.stringify(all)}){clock+=o.gap??10000;if(o.k==='money'){__d019s.setMoney(o.v);continue;}if(o.k==='undo'){GV.undo();continue;}if(o.k==='seed'||o.k==='pick')continue;
+          const c=o.k==='tap'?[o.x,o.z,o.x,o.z]:[o.x0,o.z0,o.x1,o.z1];if(o.k==='tap')__d019s.tap(o.tool,c[0],c[1]);else if(o.k==='line')__d019s.line(o.tool,c[0],c[1],c[2],c[3]);else __d019s.rect(o.tool,c[0],c[1],c[2],c[3],clock);}return 1;})()`);
+      fs.writeFileSync(path.join(labDir, 'd019_day0_2d.png'), png(await page.evaluate(shot)));
+      for (let d = 0; d < 20; d++) await page.evaluate('GV.step(1)');
+      fs.writeFileSync(path.join(labDir, 'd019_day20_2d.png'), png(await page.evaluate(shot)));
+      console.log('實驗線 2D：d019_day0_2d.png、d019_day20_2d.png');
+      errors += page.errors.filter(e => !/manifest|service ?worker|favicon/i.test(e)).length;
+    });
+  } else console.log(`（${path.relative(ROOT, LAB)} 沒有實驗線，2D 那一欄留白）`);
+  const apply3d = async page => { for (const o of all) { if (o.k === 'pick') continue; await page.evaluate(js(toOp(o))); } };
+  await withBrowser({ width: 1280, height: 800 }, async ({ open, page }) => {
+    await fresh(open, page, 'clean=1');
+    await apply3d(page);
+    await page.evaluate(`(__gt.tool('civic','wpipe'), __gt.view(${CX}, ${CZ}, 4.8), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 300)); await save(page, 'd019_day0_3d');
+    await page.evaluate('(__gt.tool(null), __gt.simStep(20), 1)');
+    await page.evaluate(`(__gt.tool('civic','wpipe'), __gt.view(${CX}, ${CZ}, 4.8), __gt.setVisT(2.2), 1)`); await new Promise(res => setTimeout(res, 300)); await save(page, 'd019_day20_3d');
+    errors += page.errors.length;
+  });
+  // 手機：「公共設施」一組選配水管（地面畫出水管）；放下工具點一棟有水的住宅
+  await withBrowser({ width: 360, height: 740 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 360, height: 740, deviceScaleFactor: 2, mobile: true });
+    await fresh(open, page, '');
+    await apply3d(page);
+    await page.evaluate(`(__gt.simStep(20), __gt.view(${CX}, ${CZ}, 4.2), __gt.setVisT(2.2), __gt.tool('civic','wpipe'), 1)`);
+    await new Promise(res => setTimeout(res, 3200)); await save(page, 'd019_mob_menu');
+    const wet = await page.evaluate(`(()=>{for(const b of __gt.conBuildings())if(!b.gone&&b.k===1&&__gt.tileWa(b.x,b.z))return [b.x,b.z];return null;})()`);
+    if (wet) await page.evaluate(`(__gt.tool(null), __gt.openTile(${wet[0]}, ${wet[1]}), 1)`);
+    await new Promise(res => setTimeout(res, 400)); await save(page, 'd019_mob_card');
+    errors += page.errors.length;
+  });
+  const copy2d = f => { const src = path.join(labDir, f), has = fs.existsSync(src); if (has) fs.copyFileSync(src, path.join(out, f)); return has ? f : ''; };
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  const cell = (src, cap, cls = '') => `<figure><figcaption>${cap}</figcaption>${src ? `<img class="${cls}" src="${src}">` : `<div class="none ${cls}">（沒有這一格的圖）</div>`}</figure>`;
+  fs.writeFileSync(path.join(out, 'd019_compare.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(2,800px);gap:10px;padding:8px 12px 12px}img,.none{display:block;width:800px;height:480px;object-fit:none;object-position:50% 50%}.none{background:#222a44;display:flex;align-items:center;justify-content:center}</style>
+    <h1>D019 供水：同一串操作（D011 A 段＋主街北邊那一排分區底下一條配水管、西端一座水塔，種子 5162026），拿著配水管，2D 實驗線｜3D</h1><p class="s">兩邊平常都不畫水管（實驗線埋在地下，utilityLineMode485C 50907），拿著配水管才畫；路底下、建築底下的水管兩邊都被蓋住。3D 的水管畫在地面貼圖上（顏色取實驗線水管精靈：管身 #52bde0、外框、中心亮點），不加網格。2D 那一欄是實驗線 d23c18d 自己跑同一串（兩邊整城第 2 天起分岔，住商工的棟數本來就不同）。畫面中央 800×480、1:1。</p>
+    <div class="g">${cell(copy2d('d019_day0_2d.png'), '蓋下去那天・2D 實驗線')}${cell('d019_day0_3d.png', '蓋下去那天・3D')}${cell(copy2d('d019_day20_2d.png'), '20 天之後・2D 實驗線')}${cell('d019_day20_3d.png', '20 天之後・3D')}</div>`);
+  fs.writeFileSync(path.join(out, 'd019_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(2,360px);gap:10px;padding:8px 12px 12px}img{display:block;width:360px;height:740px}</style>
+    <h1>D019 手機 360×740</h1><p class="s">左：「公共設施」一組（多了水塔、配水管）選配水管，地面畫出水管；右：放下工具、點一棟有水的住宅看建築卡。</p>
+    <div class="g">${cell('d019_mob_menu.png', '選配水管')}${cell('d019_mob_card.png', '建築卡：有電・有水')}</div>`);
+  for (const [page0, file, w, h] of [['d019_compare.html', 'D019-compare.jpg', 1640, 1200], ['d019_mobile.html', 'D019-mobile.jpg', 760, 900]]) {
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+      await page.send('Emulation.setDeviceMetricsOverride', { width: w, height: ch, deviceScaleFactor: 1, mobile: false });
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log(`OK ${file}`);
+    });
+  }
+}
+
 // D018：公園九種。2D＝實驗線自己的精靈 SPR.park（記憶體副本插一行出口讀出 PNG，放大 4 倍、像素不糊）；
 // 3D＝新城地形上擺一張 3×3 的測試城（九座公園，變體 0–8，屋齡 20），每一座拉近拍；另拍 AI 城 120 天公園最密的一帶。
 if (want('d018')) {

@@ -13,7 +13,7 @@ import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
-import { paintGround, paintGroundInc, groundCellPx } from './ground.ts';
+import { paintGround, paintGroundInc, groundCellPx, type GroundCity } from './ground.ts';
 import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { nearGate, nearHb } from '../content/construction.ts';
@@ -75,7 +75,7 @@ export function tileTop(c: City, i: number): number {
 // 地面貼圖：每格 S×S 像素；逐像素顏色在 ground.ts（D006：顏色取自實驗線、草皮格線、人行道、車道線）
 // D014：有施工資料（城市模式）時走增量重畫：跟上一次重建一樣的格沿用像素（src/render/ground.ts paintGroundInc）
 // D015：有施工資料時貼圖常駐（施工資料的快取），像素直接改在上一次那份上，只上傳變動的格（每格 S 列，一列一段）；變動超過一半就整張傳
-function groundTexture(c: City, look: KindLook, S: number, lots?: Uint8Array, plates?: Int32Array, con?: ConState, T?: Record<string, number>): THREE.DataTexture {
+function groundTexture(c: GroundCity, look: KindLook, S: number, lots?: Uint8Array, plates?: Int32Array, con?: ConState, T?: Record<string, number>): THREE.DataTexture {
   const W = c.n * S;
   const make = (px: Uint8Array) => {
     const t = new THREE.DataTexture(px, W, W, THREE.RGBAFormat);
@@ -135,7 +135,8 @@ export const TONES: Record<Tone, { ramp: [number, number, number]; hemi: number;
   d: { ramp: [80, 125, 255], hemi: 1.1, sun: 2.2 },   // 施工中加的第四檔：只壓暗背光面，受光面與天光同 a（c 的太陽太強，米白牆被削成粉紅）
 };
 // fresh＝從頭建（換城、換畫法檔）：清空快取。平常（逐日、施工之後）只換變動的件
-export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState, fresh = false): BuiltCity {
+// pipes（D019）：地面畫不畫配水管——實驗線平常埋在地下看不到，拿著配水管類工具才畫（utilityLineMode485C 50907）
+export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState, fresh = false, pipes = false): BuiltCity {
   const TN = TONES[tone];
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
@@ -172,7 +173,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
   }
-  const gtex = groundTexture(c, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
+  const gc: GroundCity = pipes ? c : { ...c, wp: undefined };
+  const gtex = groundTexture(gc, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
   stats.up += stats.groundUp; stats.groundFull = n * S * n * S * 4;
   mark('groundTex');
   const top = new Float32Array(nn);
@@ -595,7 +597,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     setNear: on => { if (on) buildNear(); if (nearM) nearM.visible = on; },
     buildingMeshes: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])],
     pickOwners: () => [wallsMesh, otherMesh, ...(dressMesh ? [dressMesh] : [])].map(m => owners.get(m)!.owners),
-    groundCheck: () => { const full = paintGround(c, k => look.cat(k), S, lots, plates), cur = gtex.image.data as Uint8Array; if (full.length !== cur.length) return false; for (let i = 0; i < full.length; i++) if (full[i] !== cur[i]) return false; return true; },
+    groundCheck: () => { const full = paintGround(gc, k => look.cat(k), S, lots, plates), cur = gtex.image.data as Uint8Array; if (full.length !== cur.length) return false; for (let i = 0; i < full.length; i++) if (full[i] !== cur[i]) return false; return true; },
     weatherInfo: () => ({ ...weatherTris }),
     nearMesh: () => nearM,
     groundAt: (x, z) => { const d = gtex.image.data as Uint8Array, W = n * S, o: number[] = []; for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) { const i = ((z * S + v) * W + x * S + u) * 4; o.push(d[i], d[i + 1], d[i + 2]); } return o; },

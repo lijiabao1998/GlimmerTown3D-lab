@@ -16,7 +16,7 @@ export function hashRow(h: number, row: unknown[]): number {
 }
 export const hashRows = (rows: readonly unknown[][], h0 = PACK0.h) => rows.reduce<number>((h, r) => hashRow(h, r), h0);
 
-const LAYERS = ['bld', 'road', 'zone', 'tree'] as const;
+const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp'] as const;
 // 從 st 那一列接著把 hist[st.n..] 編成緊湊列（種類碼與欄位同 save.ts T_CODE／ROW_FIELDS）
 export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unknown[][]; st: PackState } {
   const rows: unknown[][] = [];
@@ -37,6 +37,7 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       }
       case 'undo': row = [7, dd, e.g - g0, e.refund]; g0 = e.g; break;
       case 'restyle': row = [8, dd, e.x, e.z, e.v]; break;
+      case 'pipe': row = [9, dd, e.x, e.z, e.cost, e.g - g0]; g0 = e.g; break;   // D019
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

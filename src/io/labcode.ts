@@ -13,8 +13,8 @@ export const MAX_CODE = 2_000_000;
 export const RLE_FIELDS = ['ter', 'tre', 'rd', 'zn', 'dc', 'rn', 'rc', 'rcl', 'wp', 'el', 'bs', 'cm', 'sk', 'dt', 'skd', 'dtd', 'rl', 'rb', 'dk', 'ow', 'tl', 'pm', 'bln', 'tr', 'of', 'fl', 'le', 'ab', 'ctr', 'cmd',
   'hvl471', 'ugc471', 'wmn472', 'smn472', 'lvl475', 'udl475', 'fly475', 'ix475'] as const;
 
-// 本線會讀的逐格圖層：每個都是長 n² 的字串，一格一個字元（save，66714–66742）。fly475＝高架路（T475）
-export const TILE_LAYERS = ['ter', 'tre', 'rd', 'zn', 'rcl', 'el', 'rl', 'rb', 'dk', 'tr', 'bs', 'rn', 'ctr', 'fl', 'le', 'ab', 'dc', 'rc', 'of', 'fly475'] as const;
+// 本線會讀的逐格圖層：每個都是長 n² 的字串，一格一個字元（save，66714–66742）。fly475＝高架路（T475）；wp＝配水管（D019）
+export const TILE_LAYERS = ['ter', 'tre', 'rd', 'zn', 'rcl', 'el', 'rl', 'rb', 'dk', 'tr', 'bs', 'rn', 'ctr', 'fl', 'le', 'ab', 'dc', 'rc', 'of', 'fly475', 'wp'] as const;
 export type TileLayer = typeof TILE_LAYERS[number];
 
 // 建築一筆：[格索引, 種類 k, 等級 lv, 變體 v, 年齡 age, 第 6 位（體育場 k=9 是 sz，其餘是火災）, 密度 den（住宅）, 財富 we（住宅）]

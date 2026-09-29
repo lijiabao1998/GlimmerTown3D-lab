@@ -30,6 +30,11 @@ export const D016_SEED = 20261016;
 export const CIVIC = ['park', 'fire', 'policeBox', 'hospital', 'clinic', 'school', 'library', 'post', 'cemetery'];
 export const FAMILIES16 = [['c-random', 70, 'random'], ['c-money', 24, 'money'], ['c-doze', 24, 'doze'], ['c-sandbox', 10, 'sandbox'], ['c-tech', 16, 'tech'], ['c-edge', 12, 'edge'], ['c-undo', 8, 'undo']];
 export const D016_COUNT = FAMILIES16.reduce((n, [, c]) => n + c, 0);
+// D019：水塔、配水管。家族同 D016 的寫法（地圖、參數照底家族，操作抽 WATER）；地圖另外鋪幾段水管（genMap 的 water）
+export const D019_SEED = 20261019;
+export const WATER = ['water', 'wpipe'];
+export const FAMILIES19 = [['w-random', 70, 'random'], ['w-money', 20, 'money'], ['w-doze', 24, 'doze'], ['w-sandbox', 10, 'sandbox'], ['w-tech', 12, 'tech'], ['w-edge', 12, 'edge'], ['w-undo', 8, 'undo'], ['w-wide', 10, 'wide']];
+export const D019_COUNT = FAMILIES19.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -183,7 +188,7 @@ function putLayer(t, layer, g, alt) {
   if (name === 'bld') t.bld = rci(g, g.int(1, 3), [1, 2]);
   else PUT[name](t);
 }
-function genMap(g, fam, j) {
+function genMap(g, fam, j, water = false) {
   const N = fam === 'edge' || fam === 'undo' ? g.int(10, 12) : fam === 'wide' ? g.int(24, 34) : g.int(10, 18), dense = fam === 'doze', multi = fam === 'multi';
   const { tiles, sparse } = genTiles(g, N, fam);
   layRoads(g, tiles, N, dense ? g.int(2, 4) : fam === 'wide' ? g.int(5, 9) : multi ? g.int(1, 3) : g.int(2, 5), sparse);
@@ -221,6 +226,12 @@ function genMap(g, fam, j) {
     for (let q = 0, r = g.int(2, 5); q < r; q++) pool.splice(g.int(0, pool.length - 1), 1)[0][1](t);
     stacks.push(y * N + x);
   });
+  // D019：水管幾段（陸地上直線，可以壓在路、分區、建築底下）＋幾座水塔在水管旁；只在 water 抽亂數，D011／D016 的地圖逐位不變
+  if (water) for (let s = 0, m = g.int(1, 4); s < m; s++) {
+    const hz = g.ch(.5), a = g.int(0, N - 1), b0 = g.int(0, N - 1), len = g.int(3, N);
+    for (let q = 0; q < len; q++) { const x = hz ? Math.min(N - 1, b0 + q) : a, y = hz ? a : Math.min(N - 1, b0 + q), t = tiles[y * N + x]; if (land(t)) t.wp = 1; }
+    if (g.ch(.6)) placeFree(g, tiles, N, (t, x, y) => { t.bld = { k: 10, lv: 1, v: g.int(0, 4), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
+  }
   if (g.ch(fam === 'random' || dense || fam === 'edge' ? .15 : 0)) placeFree(g, tiles, N, t => {
     const ref = g.ch(.5) ? [g.pick([-1, N]), g.int(0, N - 1)] : [g.int(0, N - 1), g.int(0, N - 1)];
     const inside = ref[0] >= 0 && ref[0] < N;
@@ -249,7 +260,7 @@ function landOf(g, N) {
   return [true, [x0, y0, g.int(x0, N - 1), g.int(y0, N - 1)]];
 }
 
-// civic：D016 的家族（工具改抽 CIVIC；null＝D011，每一個分支都跟原本一樣抽亂數）
+// civic：D016 的家族抽 CIVIC、D019 抽 WATER（null＝D011，每一個分支都跟原本一樣抽亂數）
 function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
   const ops = [], outP = fam === 'edge' ? .3 : .05;
   let now = g.int(1000, 90000);
@@ -268,21 +279,21 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
     if (tool === 'doze') return u < .3 ? from(cats.bld) : u < .45 ? from(cats.multi) : u < .6 ? from(cats.road) : u < .75 ? from(cats.stuff) : u < .88 ? from(cats.zone) : any();
     if (ROADS.includes(tool)) return u < .3 ? from(cats.road) : u < .5 ? from(cats.water) : u < .6 ? from(cats.tree) : u < .7 ? from(cats.bld) : any();
     if (ZONES.includes(tool)) return u < .35 ? from(cats.zone) : u < .5 ? from(cats.tree) : u < .6 ? from(cats.road) : u < .7 ? from(cats.water) : any();
-    if (civic && CIVIC.includes(tool)) return u < .15 ? from(cats.tree) : u < .25 ? from(cats.bld) : u < .35 ? from(cats.water) : u < .45 ? from(cats.road) : u < .8 ? from(cats.free) : any();
+    if (civic && civic.includes(tool)) return u < .15 ? from(cats.tree) : u < .25 ? from(cats.bld) : u < .35 ? from(cats.water) : u < .45 ? from(cats.road) : u < .8 ? from(cats.free) : any();
     return u < .2 ? from(cats.tree) : u < .3 ? from(cats.bld) : u < .4 ? from(cats.water) : any();
   };
   const tapOp = () => {
-    const u = g.R(), tool = civic ? (u < .12 ? g.pick(ROADS) : u < .2 ? g.pick(ZONES) : u < .82 ? g.pick(CIVIC) : 'doze')
+    const u = g.R(), tool = civic ? (u < .12 ? g.pick(ROADS) : u < .2 ? g.pick(ZONES) : u < .82 ? g.pick(civic) : 'doze')
       : u < .3 ? g.pick(ROADS) : u < .55 ? g.pick(ZONES) : u < .65 ? 'plant' : u < .8 ? 'police' : 'doze';
     const [x, y] = target(tool); ops.push({ op: 'tap', tool, x, y });
   };
   const lineOp = () => {
-    const tool = civic ? (g.ch(.55) ? g.pick(ROADS) : g.pick([...CIVIC, 'doze'])) : g.ch(.88) ? g.pick(ROADS) : g.pick(['zr', 'zi', 'doze', 'police']);
+    const tool = civic ? (g.ch(.55) ? g.pick(ROADS) : g.pick([...civic, 'doze'])) : g.ch(.88) ? g.pick(ROADS) : g.pick(['zr', 'zi', 'doze', 'police']);
     const [x0, y0] = target(tool); ops.push({ op: 'line', tool, x0, y0, x1: x0 + g.int(-7, 7), y1: y0 + g.int(-7, 7) });
   };
   const rectAt = (tool, x0, y0, x1, y1, gap) => { now += gap ?? g.pick([200, 900, 2500, 4000, 12000]); ops.push({ op: 'rect', tool, x0, y0, x1, y1, now }); };
   const rectOp = () => {
-    const u = g.R(), tool = civic ? (u < .25 ? g.pick(ZONES) : u < .55 ? 'doze' : g.pick(CIVIC)) : u < .55 ? g.pick(ZONES) : u < .93 ? 'doze' : g.pick(['police', 'plant', 'road']);
+    const u = g.R(), tool = civic ? (u < .25 ? g.pick(ZONES) : u < .55 ? 'doze' : g.pick(civic)) : u < .55 ? g.pick(ZONES) : u < .93 ? 'doze' : g.pick(['police', 'plant', 'road']);
     const [x, y] = target(tool);
     if (g.ch(.25)) rectAt(tool, x, y, x, y);
     else { const w = g.int(0, 4), h = g.int(0, 4), flip = g.ch(.3); rectAt(tool, flip ? x + w : x, flip ? y + h : y, flip ? x : x + w, flip ? y : y + h); }
@@ -293,7 +304,7 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
   const moneyOp = () => ops.push(g.ch(.65) ? { op: 'money', next: g.pick(NEXT_D) } : { op: 'money', v: g.pick(MONEY_V) });
   // D016：在空地蓋一種設施，接著四成拆掉（點或 1×1 框；一級服務設施不用確認）、三成復原、其餘留著；拆了的一半再復原（拆除撤印、復原重建覆蓋）
   const civicCycle = () => {
-    const [x, y] = from(cats.free), tool = g.pick(CIVIC), u = g.R();
+    const [x, y] = from(cats.free), tool = g.pick(civic), u = g.R();
     if (g.ch(.2)) moneyOp();
     ops.push({ op: 'tap', tool, x, y });
     if (u < .4) { if (g.ch(.5)) ops.push({ op: 'tap', tool: 'doze', x, y }); else rectAt('doze', x, y, x, y); if (g.ch(.5)) ops.push({ op: 'undo' }); }
@@ -311,7 +322,7 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
     for (let s = 0, m = Math.min(pool.length, g.int(3, 6)); s < m; s++) first.push(pool.splice(g.int(0, pool.length - 1), 1)[0]);
     for (const i of first) {
       const [x, y] = xy(i);
-      if (g.ch(.5)) ops.push({ op: 'tap', tool: g.pick(civic ? [...CIVIC, 'road', 'zr'] : [...ROADS, ...ZONES, 'plant', 'police']), x, y });
+      if (g.ch(.5)) ops.push({ op: 'tap', tool: g.pick(civic ? [...civic, 'road', 'zr'] : [...ROADS, ...ZONES, 'plant', 'police']), x, y });
       for (let q = 0, r = g.int(3, 6); q < r; q++) ops.push({ op: 'tap', tool: 'doze', x, y });
     }
   }
@@ -391,6 +402,19 @@ export function cases16(k) {
     base += count;
   }
   throw new Error(`D016 案例 ${k} 超出 ${D016_COUNT}`);
+}
+// D019 第 k 個案例（0 ≤ k < D019_COUNT）：同 cases16，操作抽 WATER、地圖多鋪水管與水塔
+export function cases19(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES19) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D019_SEED));
+      const m = genMap(g, fam, j, true), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, WATER) };
+    }
+    base += count;
+  }
+  throw new Error(`D019 案例 ${k} 超出 ${D019_COUNT}`);
 }
 
 // ---- 兩邊共用的跑法 ----
@@ -507,7 +531,8 @@ const markMobilityDirty462=noop,markPowerDirty450=noop,markPowerDirty471=noop,sy
 const computePower=()=>__h.power(),toast=m=>__h.toast(m),R=()=>__h.R(),ri=n=>__h.ri(n);
 const performance={now:()=>__h.now()},KNAME=new Proxy({},{get:(_,k)=>'#'+String(k)});
 `;
-export function makeLab(pieces) {
+// opts.water（D019）：computeWater 不再是空樁，接實驗線舊式供水網原文（computeWaterLegacy449，片段要帶；對拍設定 __legacyWater449 下 computeWater 就是它，53303–53309）
+export function makeLab(pieces, opts = {}) {
   const log = [], calls = [], toasts = [], clock = { now: 0 };
   let rand = null;
   const host = {
@@ -515,7 +540,7 @@ export function makeLab(pieces) {
     R: () => { log.push(['R']); return rand(); }, ri: n => { log.push(['ri', n]); return Math.floor(rand() * n); },
   };
   const ctx = vm.createContext({ console, __h: host });
-  vm.runInContext(PRELUDE, ctx, { filename: 'lab:樁' });
+  vm.runInContext(opts.water ? PRELUDE.replace('computeWater=()=>0,', 'computeWater=()=>computeWaterLegacy449(),') : PRELUDE, ctx, { filename: 'lab:樁' });
   for (const p of pieces) vm.runInContext(`'use strict';\n${p.src}`, ctx, { filename: `lab:${p.name}` });
   const run = s => vm.runInContext(`'use strict';\n(${s})`, ctx);
   const base = run('doPlace');

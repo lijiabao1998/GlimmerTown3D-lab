@@ -8,6 +8,8 @@
 //   另開一頁：本線匯出的碼（C 段＋第 1 天之後）匯入實驗線，讀回設施清單與對帳數字。
 // 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 [GT_PORT=8712] node tools/d016-parity.mjs --lab=/path/to/glimmertown-lab [--seeds=8]
 //       --set=d017（D017 噪音）：只跑預建城、體育場留著（不拆噪音源），寫 src/content/samples/d017-lab.json
+//       --set=d019（D019 供水）：預建城改跑供水劇本（tools/d019-ops.mjs：一條接水塔的配水管、一條沒接的），另外量水管、接通的水管、每一棟的水，匯出實驗線的碼；
+//         樣本城（AI 城 120 天、種子城）讀進來推進一天；本線的預建城碼匯入實驗線讀回水管。寫 src/content/samples/d019-lab.json
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -21,11 +23,12 @@ import { DEFAULT_GAP } from './d011-ops.mjs';
 import { SNAP_SRC, PICK_SRC, POWERED_SRC, PW_SRC, DIFF_SRC, LANDDIFF_SRC, INV_SRC, HS_SRC, EXTRA_SRC, PROBE_SRC, MEASURE_SRC, r6, measureRows } from './d011-parity-lib.mjs';
 import { d016Ops, prebuilt16Ops, civic3d, CIVV_SRC, PROBE16_EXTRA } from './d016-ops.mjs';
 import { loadCode } from '../src/io/save.ts';
+import { WA_SRC, WP_SRC, WR_SRC, prebuilt19Ops, prebuilt19 } from './d019-ops.mjs';
 
 const arg = k => process.argv.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
 const LAB = path.resolve(arg('lab') ?? '../lijiabao1998/glimmertown-lab'), NSEEDS = +(arg('seeds') ?? 8), SET = arg('set') ?? 'd016';
-if (!['d016', 'd017'].includes(SET)) throw new Error(`--set 只能是 d016 或 d017：${SET}`);
-const D17 = SET === 'd017';
+if (!['d016', 'd017', 'd019'].includes(SET)) throw new Error(`--set 只能是 d016、d017 或 d019：${SET}`);
+const D17 = SET === 'd017', D19 = SET === 'd019';
 const SEEDS = STARTER_SEEDS.slice(0, NSEEDS), J = JSON.stringify, read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 if (commit !== 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0') throw new Error(`D016 實驗線版本錯誤：${commit}`);
@@ -54,7 +57,7 @@ if (copy.split('\n').length !== html.split('\n').length + 1 + EXPORT.split('\n')
 const ROWJS = `()=>{const s=GV.stats(),L=GV.truth496().labor,N=GV.N(),C={1:[0,0,0,0],2:[0,0,0,0],3:[0,0,0,0]},T=__d011.state().tiles;
   for(let i=0;i<N*N;i++){const b=T[i].bld;if(!b||b.ref||b.k<1||b.k>3)continue;C[b.k][0]++;C[b.k][b.lv||1]++;}
   return [s.day,s.pop,s.jobs,L.employed,L.workers,GV.skyline516B().happy,s.dem[1],s.dem[2],s.dem[3],...C[1],...C[2],...C[3],__d011.money(),POWERED(T)];}`;
-const PRELUDE = `const SNAP=${SNAP_SRC},PICK=${PICK_SRC},POWERED=${POWERED_SRC},PW=${PW_SRC},DIFF=${DIFF_SRC},LANDDIFF=${LANDDIFF_SRC},INV=${INV_SRC},HS=${HS_SRC},EXTRA=${EXTRA_SRC},CIVV=${CIVV_SRC},INJ=${INJ},EXL=${EXL};
+const PRELUDE = `${D19 ? `const WA=${WA_SRC},WP=${WP_SRC},WR=${WR_SRC};` : ''}const SNAP=${SNAP_SRC},PICK=${PICK_SRC},POWERED=${POWERED_SRC},PW=${PW_SRC},DIFF=${DIFF_SRC},LANDDIFF=${LANDDIFF_SRC},INV=${INV_SRC},HS=${HS_SRC},EXTRA=${EXTRA_SRC},CIVV=${CIVV_SRC},INJ=${INJ},EXL=${EXL};
   let probe=null;window.__d011p=o=>{probe=o;};
   const draws=()=>__d011.n,snap=()=>{const x=__d011.state();return SNAP(x.tiles,x.COV,x.POL,x.POLBASE,x.POLTREE,x.LANDBASE,x.LAND,x.landDirty,x.landBox);};
   const head=(x,m=true)=>({tileHash:x.tileHash,fieldHash:x.fieldHash,land:x.land,...(m?{money:__d011.money()}:{})});
@@ -88,7 +91,16 @@ const PRE = (code, P) => `(()=>{${PRELUDE}const mig=start(${J(code)});
   out.ops=batch(${J(P.ops)});const a=snap();out.snapOps=head(a);
   const t=tick();out.tickDraws=t.draws;out.tickSites=t.sites;out.tickLand=t.land;out.tickExtra=t.extra;out.day1=row();out.probe=probe;
   const b=snap(),x=__d011.state();out.post=head(b,false);out.postChanged=DIFF(a.proj,b.proj);out.inv=INV(x.tiles,x.COV,x.POLTREE,x.LANDBASE,x.LAND);out.pw=PW(x.tiles);out.hs=HS(x.tiles);
+  ${D19 ? 'out.wa=WA(x.tiles);out.wr=WR(x.tiles);GV.save();out.codeW=btoa(unescape(encodeURIComponent(GV.rawSave())));' : ''}
   return out;})()`;
+// D019：劇本做完（推進之前）量水管與接通的水管——插在 batch 之後那一行
+const PRE19 = (code, P) => PRE(code, P).replace('const a=snap();out.snapOps=head(a);', 'const a=snap();out.snapOps=head(a);out.wp=WP(__d011.state().tiles);out.wrOps=WR(__d011.state().tiles);');
+// D019：樣本城讀進來推進一天
+const SAMPLE19 = code => `(()=>{${PRELUDE}const mig=start(${J(code)});const t=tick();const x=__d011.state();
+  return {mig,tickDraws:t.draws,tickSites:t.sites,wa:WA(x.tiles),pw:PW(x.tiles),wr:WR(x.tiles),wp:WP(x.tiles)};})()`;
+// D019：本線的碼匯入實驗線，讀回水管與對帳數字
+const READBACK19 = code => `(()=>{const WP=${WP_SRC};GV.setMapSize(72);GV.newWorldSeeded(777);const ok=GV.importCode(${J(code)});
+  return {ok,wp:WP(__d011.state().tiles),measure:${MEASURE_SRC},money:__d011.money(),day:GV.stats().day};})()`;
 const READBACK = code => `(()=>{const CIVV=${CIVV_SRC};GV.setMapSize(72);GV.newWorldSeeded(777);const ok=GV.importCode(${J(code)});
   return {ok,civv:CIVV(__d011.state().tiles),measure:${MEASURE_SRC},money:__d011.money(),day:GV.stats().day};})()`;
 
@@ -96,16 +108,16 @@ const newcity = read('src/content/samples/newcity.code.txt').trim(), prebuilt = 
 const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
 const S0 = decodeLabCode(newcity).save, lay = k => Uint8Array.from(S0.layers[k] ?? '', ch => ch.charCodeAt(0) - 48);
 const ops = d016Ops(S0.n, lay('ter'), lay('el'), lay('tre'));
-const P = prebuilt16Ops(loadCode(codeWithSeed(prebuilt, SEEDS[0]), KT, vrank).sim, D17);   // 劇本只看格子（讀檔重挑不動位置），每個種子同一份
+const P = D19 ? prebuilt19Ops(loadCode(codeWithSeed(prebuilt, SEEDS[0]), KT, vrank).sim) : prebuilt16Ops(loadCode(codeWithSeed(prebuilt, SEEDS[0]), KT, vrank).sim, D17);   // 劇本只看格子（讀檔重挑不動位置），每個種子同一份
 const cfg = CONFIGS.fallback;
 const opt = { root: LAB, entry: 'd016.html', overlay: { 'd016.html': copy }, port: +(process.env.GT_PORT ?? 0) || 8422, width: 1024, height: 700, gl: false, preload: preloadOf(cfg),
   ready: '!!window.__bootDone453&&!!window.__d011', readyMs: 240000, settle: 300 };
 const rowR6 = x => [...x.slice(0, 21).map(r6), ...x.slice(21)];
-const t0 = Date.now(), lab = { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version, tool: D17 ? 'tools/d016-parity.mjs --set=d017' : 'tools/d016-parity.mjs', code: 'src/content/samples/newcity.code.txt', prebuilt: 'src/content/samples/d011-prebuilt.code.txt' },
-  config: 'fallback', seeds: SEEDS, probeExtra: PROBE16_EXTRA, keepNoise: D17, runs: {}, prebuilt: {}, readback: {} };
+const t0 = Date.now(), lab = { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version, tool: D17 ? 'tools/d016-parity.mjs --set=d017' : D19 ? 'tools/d016-parity.mjs --set=d019' : 'tools/d016-parity.mjs', code: 'src/content/samples/newcity.code.txt', prebuilt: 'src/content/samples/d011-prebuilt.code.txt' },
+  config: 'fallback', seeds: SEEDS, probeExtra: PROBE16_EXTRA, keepNoise: D17, runs: {}, prebuilt: {}, readback: {}, ...(D19 ? { samples: {} } : {}) };
 
 for (const seed of SEEDS) {
-  if (!D17) await withBrowser(opt, async ({ open, page }) => {
+  if (!D17 && !D19) await withBrowser(opt, async ({ open, page }) => {
     await open('');
     const r = await page.evaluate(RUN(codeWithSeed(newcity, seed), ops));
     r.day1 = rowR6(r.day1); r.measureC = measureRows(r.measureC);
@@ -115,14 +127,29 @@ for (const seed of SEEDS) {
   });
   await withBrowser(opt, async ({ open, page }) => {
     await open('');
-    const r = await page.evaluate(PRE(codeWithSeed(prebuilt, seed), P));
+    const r = await page.evaluate((D19 ? PRE19 : PRE)(codeWithSeed(prebuilt, seed), P));
     r.day1 = rowR6(r.day1);
     lab.prebuilt[seed] = r;
-    console.log(`種子 ${seed} 預建城：推進後 ${J(r.post)}；住宅 ${r.hs.length} 棟；抽取 ${r.tickDraws}`);
+    console.log(`種子 ${seed} 預建城：推進後 ${J(r.post)}；住宅 ${r.hs.length} 棟；抽取 ${r.tickDraws}${D19 ? `；水管 ${r.wp.length} 格、接通 ${r.wrOps.length}、有水 ${r.wa.filter(q => q[1]).length}／${r.wa.length}` : ''}`);
   });
 }
-// 本線 → 實驗線：本線 C 段＋第 1 天之後匯出的碼（D017 不跑）
-if (!D17) await withBrowser(opt, async ({ open, page }) => {
+// D019：樣本城讀進來推進一天；本線預建城（劇本＋推進一天）匯出的碼給實驗線讀回
+if (D19) await withBrowser(opt, async ({ open, page }) => {
+  await open('');
+  for (const id of ['ai120', 'seed516']) {
+    const x = await page.evaluate(SAMPLE19(read(`src/content/samples/${id}.code.txt`).trim()));
+    lab.samples[id] = x;
+    console.log(`樣本城 ${id}：水管 ${x.wp.length} 格、接通 ${x.wr.length}、有水 ${x.wa.filter(q => q[1]).length}／${x.wa.length}；抽取 ${x.tickDraws}`);
+  }
+  for (const seed of SEEDS) {
+    const code = prebuilt19(codeWithSeed(prebuilt, seed), KT, vrank).code;
+    const x = await page.evaluate(READBACK19(code));
+    x.measure = measureRows(x.measure);
+    lab.readback[seed] = { ...x, codeHash: fnv1a(code) };
+  }
+});
+// 本線 → 實驗線：本線 C 段＋第 1 天之後匯出的碼（D017、D019 不跑）
+if (!D17 && !D19) await withBrowser(opt, async ({ open, page }) => {
   await open('');
   for (const seed of SEEDS) {
     const code = civic3d(codeWithSeed(newcity, seed), KT, vrank).codeC;

@@ -74,6 +74,7 @@ const CSS = `
 .tool .price { font-size: 10px; color: #aab3c6; line-height: 1.1; }
 .tool.on { background: #2a3566; border-color: var(--c); box-shadow: inset 0 0 0 2px var(--c); }
 #roadSub, #civicSub { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+#civicSub { grid-template-columns: repeat(6, minmax(0, 1fr)); }   /* D019：12 種，兩排 */
 #roadSub[hidden], #civicSub[hidden] { display: none; }
 #roadSub button, #civicSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
 #roadSub button small, #civicSub button small { color: #aab3c6; font-size: 10.5px; }
@@ -113,6 +114,7 @@ const CSS = `
   #menu .sheet { margin: 64px auto auto 10px; width: 380px; border-radius: 16px; border: 1px solid #ffffff26; }
   .tools { grid-template-columns: repeat(7, 64px); justify-content: center; }
   #roadSub, #civicSub { grid-template-columns: repeat(5, 76px); justify-content: center; }
+  #civicSub { grid-template-columns: repeat(6, 76px); }
   #dock { align-items: stretch; }
 }
 @media (max-width: 640px) { #bio { bottom: 168px !important; max-height: 40vh !important; } }

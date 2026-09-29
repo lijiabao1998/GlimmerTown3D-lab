@@ -51,7 +51,7 @@ export async function d016Smoke(withBrowser, log) {
     const small = [...lay.sub, ...lay.tools].filter(b => b.wh[0] < 44 - .5 || b.wh[1] < 44 - .5 || !b.in).map(b => `${b.c ?? b.t} ${b.wh.join('×')}${b.in ? '' : '（出界）'}`);
     const want = CIVIC_TOOLS.map(c => [c.id, c.name, '$' + c.cost]), got = lay.sub.map(b => [b.c, b.name, b.price]);
     log(ui0.tool === 'civic' && !lay.hidden && J(got) === J(want) && lay.tools.length === 7 && !small.length && lay.subBottom <= lay.barTop + .5 && lay.barIn && lay.label === '警' && lay.price === '$500' && lay.vw === 360,
-      'D016 驗收 4：手機 360×740 按「公共設施」跳出 10 種可選，名稱與造價照實驗線工具列（CIVIC_TOOLS）；10 顆設施鈕與 7 顆工具鈕都 ≥ 44×44、在畫面內；設施那一排在播放列上面、不蓋住它；組按鈕預設「警 $500」',
+      `D016 驗收 4：手機 360×740 按「公共設施」跳出 ${CIVIC_TOOLS.length} 種可選（D019 起多了水塔、配水管），名稱與造價照實驗線工具列（CIVIC_TOOLS）；${CIVIC_TOOLS.length} 顆設施鈕與 7 顆工具鈕都 ≥ 44×44、在畫面內；設施那一排在播放列上面、不蓋住它；組按鈕預設「警 $500」`,
       small.length ? `太小或出界：${small.join('、')}` : `${lay.vw}×${lay.vh}；${got.map(g => g.slice(1).join(' ')).join('、')}；設施那一排底 ${lay.subBottom.toFixed(1)} ≤ 播放列頂 ${lay.barTop.toFixed(1)}；工具鈕 ${lay.tools[0].wh.join('×')}、設施鈕 ${lay.sub[0].wh.join('×')}`);
     // ---- 每一種點下去：組按鈕的字與價錢跟著換 ----
     {
@@ -93,7 +93,7 @@ export async function d016Smoke(withBrowser, log) {
       await open('sample=starter');
       await tapBtn('.tool[data-t="civic"]');
       const r = await ev(`(()=>({sub:[...document.querySelectorAll('#civicSub button small')].map(s=>s.textContent),g:document.querySelector('.tool[data-t="civic"] .price').textContent}))()`);
-      log(r.sub.length === 10 && r.sub.every(t => t === '免費') && r.g === '免費' && (await sim()).diff === 3, 'D016 驗收 4：沙盒（起步城 df 3）十種都寫「免費」、組按鈕也寫「免費」', J(r));
+      log(r.sub.length === CIVIC_TOOLS.length && r.sub.every(t => t === '免費') && r.g === '免費' && (await sim()).diff === 3, `D016 驗收 4：沙盒（起步城 df 3）${CIVIC_TOOLS.length} 種（D019 起多了水塔、配水管）都寫「免費」、組按鈕也寫「免費」`, J(r));
     }
   }, { W: 360, H: 740 });
 

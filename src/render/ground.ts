@@ -17,12 +17,22 @@ export const GROUND = {
   lot: { 1: [0x6f8a58, 0x7d9a62, 0x628050], 2: [0x87888c, 0x919296, 0x7c7d81], 3: [0x6d675d, 0x777166, 0x635d54], 4: [0x54833f, 0x659950, 0x48733a] } as Record<number, number[]>,
   zone: [0, 0x9fd28a, 0x8fb4e0, 0xe0c27a],
   tram: 0x2e2e2e,
+  // D019 配水管：實驗線 localWater475 精靈（49616）的三色——外框 rgba(27,46,58,.68)、管身 #52bde0、中心亮點 #d7f7ff
+  pipe: 0x52bde0, pipeEdge: 0x1b2e3a, pipeHi: 0xd7f7ff,
 };
 
 export interface GroundCity {
   n: number; road: Uint8Array; rclass: Uint8Array; ter: Uint8Array; el: Uint8Array; zone: Uint8Array;
   rail: Uint8Array; dock: Uint8Array; tram: Uint8Array; occ: Int32Array; buildings: { k: number }[];
+  wp?: Uint8Array;   // D019 配水管（沒有＝不畫）
 }
+// D019：配水管的接頭（實驗線 recalcLocalWaterMask475 50925：上 1、右 2、下 4、左 8）。建築、路、鐵路、電車底下的不畫：實驗線先畫水管再畫路（60562→60563），被蓋住；回 −1＝這一格不畫水管
+const pipeMask = (c: GroundCity, x: number, z: number) => {
+  const n = c.n, wp = c.wp, i = z * n + x;
+  if (!wp || !wp[i] || c.occ[i] || c.road[i] || c.rail[i] || c.tram[i]) return -1;
+  const at = (xx: number, zz: number) => xx >= 0 && zz >= 0 && xx < n && zz < n && wp[zz * n + xx] > 0;
+  return (at(x, z - 1) ? 1 : 0) | (at(x + 1, z) ? 2 : 0) | (at(x, z + 1) ? 4 : 0) | (at(x - 1, z) ? 8 : 0);
+};
 
 const mix = (a: number, b: number, t: number) => {
   const ch = (sh: number) => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t);
@@ -43,10 +53,10 @@ export function paintGround(c: GroundCity, cat: (k: number) => string, S: number
 
 // D014 增量重畫：每一格的輸入（路、等級、鐵路、碼頭、電車、地形、高地、分區、建築分類、地坪、非住商工地坪、四鄰有沒有路）壓成兩個整數；
 // 跟上一次一樣的格直接沿用上一次的像素，不一樣的才重畫（同一個 paintTile，結果跟整張重畫逐位元組相同，守衛核對）
-export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; data: Uint8Array }
+export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; k3: Int8Array; data: Uint8Array }
 const CATCODE = (ct: string) => ct === '' ? 0 : ct === 'R' || ct === 'C' || ct === 'I' ? 1 : ct === 'G' ? 2 : ct === 'F' ? 3 : 4;
-export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array] {
-  const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n);
+export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array, Int8Array] {
+  const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n), k3 = new Int8Array(n * n);   // k3（D019）：配水管的接頭，−1＝不畫
   const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
   for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
     const i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
@@ -54,20 +64,21 @@ export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uin
     k1[i] = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
       | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0);
     k2[i] = plates ? plates[i] : -2;
+    k3[i] = pipeMask(c, x, z);
   }
-  return [k1, k2];
+  return [k1, k2, k3];
 }
 // D015：inPlace＝直接改上一次的像素（地面貼圖常駐、只上傳變動的格；tiles＝重畫了哪幾格）；不給就照 D014 另存一份
 export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null, inPlace = false): { cache: GroundCache; painted: number; tiles: number[] | null } {
-  const n = c.n, [k1, k2] = groundKeys(c, cat, lots, plates);
-  if (!prev || prev.n !== n || prev.S !== S) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, data }, painted: n * n, tiles: null }; }
+  const n = c.n, [k1, k2, k3] = groundKeys(c, cat, lots, plates);
+  if (!prev || prev.n !== n || prev.S !== S) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, k3, data }, painted: n * n, tiles: null }; }
   const data = inPlace ? prev.data : prev.data.slice(), tiles: number[] = [];
   for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
     const i = z * n + x;
-    if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i]) continue;
+    if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i] && k3[i] === prev.k3[i]) continue;
     paintTile(c, cat, S, lots, plates, data, x, z); tiles.push(i);
   }
-  return { cache: { n, S, k1, k2, data }, painted: tiles.length, tiles };
+  return { cache: { n, S, k1, k2, k3, data }, painted: tiles.length, tiles };
 }
 
 function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, data: Uint8Array, x: number, z: number) {
@@ -79,6 +90,11 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
     const i = z * n + x, r = c.road[i], b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null, ct = b ? cat(b.k) : '';
     const rN = isRoad(x, z - 1), rS = isRoad(x, z + 1), rW = isRoad(x - 1, z), rE = isRoad(x + 1, z);
     const straightNS = rN && rS && !rW && !rE, straightEW = rW && rE && !rN && !rS;
+    // D019 配水管：沿格子中線往有水管的鄰格畫——管身 1 像素（u 或 v＝mid−1），下方／右方 1 像素陰影（外框色），中心 1 像素亮點；沒有鄰格就只畫中心亮點。
+    // 實驗線的管身約是格寬的 5%（線寬 3／64），本線一格 8 像素，1 像素（12.5%）已是最細
+    const pm = pipeMask(c, x, z), a = mid - 1;
+    const onArm = (u: number, v: number, w: number) => (u === a + w && (((pm & 1) && v <= a + w) || ((pm & 4) && v >= a)))
+      || (v === a + w && (((pm & 8) && u <= a + w) || ((pm & 2) && u >= a)));
     for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) {
       const h = hash2(x * S + u, z * S + v, 7), edge = u === 0 || v === 0 || u === S - 1 || v === S - 1;
       // 面向非道路那一側的邊（人行道、護欄、高速黃邊都畫在這裡）
@@ -114,6 +130,11 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
         if (zn) col = mix(col, GROUND.zone[zn], edge ? 0.45 : 0.22);   // 劃了區還沒蓋：淡淡帶一點分區色，邊框深一點（實驗線也只是淡淡的）
       }
       if (c.tram[i] && (u === 1 || u === S - 2)) col = GROUND.tram;
+      if (pm >= 0) {
+        if (u === a && v === a) col = GROUND.pipeHi;
+        else if (onArm(u, v, 0)) col = GROUND.pipe;
+        else if (onArm(u, v, 1)) col = mix(col, GROUND.pipeEdge, 0.45);
+      }
       put(x * S + u, z * S + v, col);
     }
   }

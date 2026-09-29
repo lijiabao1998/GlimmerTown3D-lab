@@ -8,8 +8,12 @@ import { fnv1a } from './rng.ts';
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
 // 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
-// 格式 4（D012）：多了讀檔時照實驗線重挑外觀的事件 restyle（src/sim/restyle.ts）。格式 1–3 照讀；比 4 新的不猜（src/io/save.ts）
-export const CITY_FORMAT = 4;
+// 格式 4（D012）：多了讀檔時照實驗線重挑外觀的事件 restyle（src/sim/restyle.ts）。格式 1–3 照讀
+// 格式 5（D019）：多了鋪配水管的事件 pipe，拆除多了水管那一層（layer 'wp'）。格式 1–4 照讀；比 5 新的不猜（src/io/save.ts）
+export const CITY_FORMAT = 5;
+// 存檔寫的格式看歷史裡有什麼（D019）：有鋪水管、拆水管的事件才寫 5，沒有就寫 4——比這一版舊的程式（認到 4）照樣讀得回來，
+// 沒有水管的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
+export const eventFormat = (e: CityEvent) => e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
 
 // 體育場（k 9）的大小存在建築那筆的第 6 位（實驗線 load 66900），沒有就是 2。實驗線只會放 2×2（51728），
 // 手改的碼可能寫任何數：夾在 1–4（D012 審查：一串互相重疊的大體育場會讓讀檔配出 n³ 個附屬格，1000×1000 約要 50 秒）
@@ -36,10 +40,12 @@ export interface GrowEvent { day: number; t: 'grow' | 'upgrade'; x: number; z: n
 export interface RoadEvent { day: number; t: 'road'; x: number; z: number; rc: number; cost: number; g: number }
 export interface ZoneEvent { day: number; t: 'zone'; x: number; z: number; zone: number; cost: number; g: number }
 export interface PlaceEvent { day: number; t: 'place'; x: number; z: number; k: number; lv: number; v: number; id: number; cost: number; g: number }
-export interface DozeEvent { day: number; t: 'doze'; x: number; z: number; layer: 'bld' | 'road' | 'zone' | 'tree'; k?: number; id?: number; cost: number; g: number }
+export interface DozeEvent { day: number; t: 'doze'; x: number; z: number; layer: 'bld' | 'road' | 'zone' | 'tree' | 'wp'; k?: number; id?: number; cost: number; g: number }
+// 鋪配水管（D019，實驗線 51679 t.wp＝1）：一格一筆；水管不清樹、不清分區，可以鋪在路、建築底下
+export interface PipeEvent { day: number; t: 'pipe'; x: number; z: number; cost: number; g: number }
 // 復原（D011）：把第 g 筆手勢碰過的格子整格還原、退回花的錢（實驗線 T460 undo 66594）；只能在同一天
 export interface UndoEvent { day: number; t: 'undo'; g: number; refund: number }
-export type EditEvent = RoadEvent | ZoneEvent | PlaceEvent | DozeEvent | UndoEvent;
+export type EditEvent = RoadEvent | ZoneEvent | PlaceEvent | DozeEvent | PipeEvent | UndoEvent;
 // 讀檔時照實驗線重挑外觀（D012，T531）：一棟一筆、只記換了的；x、z 是根格，v 是新的變體。不是施工，不能復原
 export interface RestyleEvent { day: number; t: 'restyle'; x: number; z: number; v: number }
 export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent;
@@ -55,6 +61,7 @@ export interface City {
   zone: Uint8Array;             // 0 無、1 住、2 商、3 工
   el: Uint8Array;               // 高地
   rail: Uint8Array; railBridge: Uint8Array; tram: Uint8Array; dock: Uint8Array; fly: Uint8Array;
+  wp: Uint8Array;               // D019：配水管（實驗線存檔的 wp 圖層，0／1）
   occ: Int32Array;              // 建築 id，0＝空
   buildings: CityBuilding[];
   issues: { overlap: number; outOfMap: number; unknownKinds: number[] };
@@ -75,7 +82,7 @@ export function cityFromLab(save: LabSave, kinds: KindTable, code: string): City
     format: CITY_FORMAT, n, name: save.nm || '（沒有名字的城市）', day: save.day, seed: save.seed, gameVer: save.gameVer,
     ter: layer(L.ter, nn, digit), tree: layer(L.tre, nn, code48), road: layer(L.rd, nn, digit), rclass: layer(L.rcl, nn, code48),
     zone: layer(L.zn, nn, digit), el: layer(L.el, nn, digit), rail: layer(L.rl, nn, digit), railBridge: layer(L.rb, nn, digit),
-    tram: layer(L.tr, nn, digit), dock: layer(L.dk, nn, digit), fly: layer(L.fly475, nn, digit),
+    tram: layer(L.tr, nn, digit), dock: layer(L.dk, nn, digit), fly: layer(L.fly475, nn, digit), wp: layer(L.wp, nn, digit),
     occ: new Int32Array(nn), buildings: [], issues: { overlap: 0, outOfMap: 0, unknownKinds: [] },
     history: [],
   };

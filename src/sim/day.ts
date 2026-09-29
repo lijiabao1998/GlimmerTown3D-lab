@@ -14,6 +14,7 @@ import { labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.t
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
+import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
@@ -75,6 +76,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     let rc = city.rclass[i];
     if (road && !rc) rc = hw ? 5 : 2;
     tiles[i] = { t: city.ter[i], road, hw, bridge: rd === 2 || rd === 4 ? 1 : 0, rc, zone: city.zone[i], tree: city.tree[i], bld: null };
+    if (city.wp[i]) tiles[i].wp = 1;                                // D019：配水管（實驗線 load 66881 wp:+d.wp[i]）
   }
   const root = new Map<number, CityBuilding>();
   for (const r of save.bl) {
@@ -170,11 +172,14 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55006 住房市場 T488：關（第 1 類；沒就緒：入住率 1、住房懲罰 0、新住宅密度＝道路等級、升級係數 1）
   const sea = season(s.day);
   const nominal = computePower(w).cap, cap = powerCap(nominal, sea);   // 55008（F11，舊版供電）；55009 T471 調度略過
-  // 55010 水：舊版供水 wa＝pw && 附近有水設施 && 容量——起步城沒有水設施，一律 false；水壓／水質懲罰走舊式＝0（第 1 類，__legacyWater449）
+  // 55010 水（D019）：舊式供水網（第 1 類，__legacyWater449；src/sim/rules/water.ts），重算每一格的 wr、容量＝水塔×80＋淡化廠×80。
+  // 乾旱（×DROUGHT_WATER_MULT）只由災害設定，災害關：恆 ×1。水壓／水質懲罰走舊式＝0
+  const wCap = Math.floor(computeWaterLegacy449(w));
   const sewNeed = s.pop >= 500;                                           // 55011 sewerRequired442：昨天的人口 ≥500
   const sewOkArr = new Uint8Array(nn);                                    // 沒有污水處理廠：需要時全城都不合格（兩種模式相同）
   // 55015 死亡前置、55046 每日計數歸零：疾病、死亡沒搬（第 2 類，實驗線照跑），本線沒有生病、死亡
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
+  assignWater(w, tickBld, wCap);                                          // 55157–55160（D019）：有電、兩格內有接得到水源的水管、容量還沒用完
   let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
   // 這一格各服務的覆蓋（HappyIn.c）：一天建一個鍵齊全的物件，每棟只覆寫值（residentialHappy 讀完就丟、不留參照）。
   // 以前每棟新建一個約 60 個鍵的物件，佔推進一天三成的時間（D011 效能；鍵與值都跟以前一樣）
@@ -188,7 +193,6 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     if (!b || b.ref) continue;
     if (b.k > 3 && b.k !== 127) continue;
     const x = i % N, y = (i / N) | 0;
-    b.wa = false;                                                         // 55157
     if (b.k === 1 || b.k === 127) {
       const residentPop = residentPopulation488(b, () => undefined);      // 55163：住房沒就緒＝入住率 1
       const hp = residentialHappy({                                       // 55164–55236（F7）

@@ -56,7 +56,7 @@ const MUTANTS = [
 // 本線原碼單點突變（build.ts 改一處，型別剝除後在 vm 裡載入重跑）
 const MUTANTS_3D = [
   ['醫院造價 600→601', 'hospital: 600,', 'hospital: 601,'],
-  ['墓園造價 350→351', 'cemetery: 350 }', 'cemetery: 351 }'],
+  ['墓園造價 350→351', 'cemetery: 350,', 'cemetery: 351,'],   // D019 起 COST 這一行後面還有水塔、水管
   ['少蓋學校的覆蓋場', "stampCov(g, st.budget, 'school', x, y, COVR.school, 1);", ''],
   ['圖書館蓋到學校的場', "stampCov(g, st.budget, 'library', x, y, COVR.library, 1);", "stampCov(g, st.budget, 'school', x, y, COVR.library, 1);"],
   ['派出所多抽一次亂數', 'k: 52, lv: 1, v: 0,', 'k: 52, lv: 1, v: st.rng.ri(5) * 0,'],

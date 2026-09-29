@@ -520,6 +520,9 @@ await guard('./unit-d016-parity.mjs', 'd016ParityGuards');   // D016：實驗線
 await guard('./unit-d017.mjs', 'd017Guards');   // D017：噪音場逐格＝實驗線原文（d017-noise.json，tools/lab-noise.mjs 摘）、原碼突變、接線、預建城體育場實跑（d017-lab.json）
 await guard('./unit-d018.mjs', 'd018Guards');   // D018：公園九種照實驗線 SPR.park（d018-lab.json，tools/lab-parks.mjs 摘）、只動了公園（d018-kinds-before.json）、預算
 await guard('./unit-d013.mjs', 'd013Guards');   // D013：歷史改存日誌——日誌逐列＝整份編碼、超過分享碼上限、存檔不跟歷史長度成正比、壞掉的情形、舊檔（記憶體版存放；突變另跑 tools/d013-mutate.mjs）
+await guard('./unit-d019-build.mjs', 'd019BuildGuards');   // D019：水塔、配水管的建造規則黃金樣本（d019-build.json，tools/lab-build.mjs --set=d019）、原碼突變
+await guard('./unit-d019.mjs', 'd019Guards');   // D019：供水網逐格＝實驗線原文（d019-water.json，tools/lab-water.mjs 摘）、原碼突變、接線、鋪水管的歷史、讀進來的城有水
+await guard('./unit-d019-parity.mjs', 'd019ParityGuards');   // D019：實驗線頁面實跑（d019-lab.json，tools/d016-parity.mjs --set=d019 錄）：預建城拉水管放水塔逐筆、推進一天逐棟電與水、讀回；樣本城推進一天
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

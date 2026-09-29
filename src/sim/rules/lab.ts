@@ -25,6 +25,7 @@ export interface Tile {
   crater?: number | boolean; rail?: number | boolean; railBridge?: number | boolean; tram?: number | boolean; tramBridge?: number | boolean;
   dock?: number | boolean; fly475?: number | boolean; ix475?: number; wm472?: number | boolean; sm472?: number | boolean; wp?: number | boolean;
   oneway?: number | boolean; light?: number | boolean; busLane?: number | boolean; levee?: number | boolean; flood?: number | boolean;
+  wr?: boolean;                                         // D019：這一格水管接得到水源（舊式供水網 computeWaterLegacy449 53270／53287 每次重算整張，不存檔）
 }
 export interface World { N: number; tiles: Tile[] }
 export const idx = (w: World, x: number, y: number) => y * w.N + x;                         // 39731

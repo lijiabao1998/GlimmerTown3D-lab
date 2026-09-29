@@ -6,6 +6,8 @@
 // 用法：node tools/lab-build.mjs --lab=<實驗線工作目錄>   → src/content/samples/d011-build.json
 //       node tools/lab-build.mjs --lab=<實驗線工作目錄> --set=d016   → src/content/samples/d016-build.json（D016 公共設施的家族 cases16，同一批片段；
 //       覆蓋率另有一份門檻 NEED16，civic-* 與 doze-civic、undo-civic 標籤只在 d016 記，D011 的樣本逐字不變）
+//       node tools/lab-build.mjs --lab=<實驗線工作目錄> --set=d019   → src/content/samples/d019-build.json（D019 水塔、配水管：家族 cases19；
+//       片段多三段（WATER_TOWER_CAP、DESAL_CAP、computeWaterLegacy449），computeWater 接舊式供水網原文，格子的 wr 一起比；門檻 NEED19）
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -13,16 +15,16 @@ import { gzipSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { labSource } from './labsrc.mjs';
-import { cases, D011_SEED, D011_COUNT, FAMILIES, cases16, D016_SEED, D016_COUNT, FAMILIES16, CIVIC, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
+import { cases, D011_SEED, D011_COUNT, FAMILIES, cases16, D016_SEED, D016_COUNT, FAMILIES16, CIVIC, cases19, D019_SEED, D019_COUNT, FAMILIES19, WATER, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LAB = path.resolve(arg('lab', path.join(ROOT, 'scratch/lab-src')));
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 const SET = arg('set', 'd011');
-if (!['d011', 'd016'].includes(SET)) throw new Error(`--set 只能是 d011 或 d016：${SET}`);
-const D16 = SET === 'd016';
-const CASES = D16 ? cases16 : cases, COUNT = D16 ? D016_COUNT : D011_COUNT;
+if (!['d011', 'd016', 'd019'].includes(SET)) throw new Error(`--set 只能是 d011、d016 或 d019：${SET}`);
+const D16 = SET === 'd016', D19 = SET === 'd019';
+const CASES = D16 ? cases16 : D19 ? cases19 : cases, COUNT = D16 ? D016_COUNT : D19 ? D019_COUNT : D011_COUNT;
 // D016：公共設施九支的種類與服務預算類別（doPlace 51667–51717、SVC_BUDGET_CAT 52967；公園、郵局、墓園不看預算）
 const CIVIC_K = { park: 4, fire: 6, policeBox: 52, hospital: 12, clinic: 13, school: 7, library: 14, post: 15, cemetery: 16 };
 const CIVIC_KS = new Set(Object.values(CIVIC_K));
@@ -38,11 +40,13 @@ const t0 = Date.now();
 const P = [
   ['clamp', () => L.exact('clamp', 'const clamp=(v,a,b)=>v<a?a:(v>b?b:v);')],                          // 37219
   ['mulberry32', () => L.fn('mulberry32')],                                                                // 37221
+  ...(D19 ? [['WATER_TOWER_CAP', () => L.exact('WATER_TOWER_CAP', 'const WATER_TOWER_CAP=80;   // 每座水塔供水建築數（T31）')]] : []),   // 37425（D019）
   ['ROAD_COST', () => L.decl('ROAD_COST')],                                                                // 37428
   ['COST', () => L.decl('COST')],                                                                          // 37442（本卡用到的鍵之後沒有再被 Object.assign 改過：37536–37546、67110、67242）
   ['sq', () => L.exact('sq', 'const sq=(id,on,off)=>spec386===id?on:off;')],                              // 37851
   ['tool', () => L.exact('tool', "let tool='pan';")],                                                     // 38109
   ['tq', () => L.decl('tq')],                                                                              // 38549
+  ...(D19 ? [['DESAL_CAP', () => L.exact('DESAL_CAP', 'const DESAL_CAP=80;')]] : []),                   // 39655（D019）
   ['T', () => L.exact('T', 'const T=i=>tiles[i];')],                                                     // 39730
   ['idx', () => L.exact('idx', 'const idx=(x,y)=>y*N+x;')],                                              // 39731
   ['inMap', () => L.decl('inMap')],                                                                        // 39732
@@ -73,6 +77,7 @@ const P = [
   ['EDU', () => L.decl('EDU')], ['EDU_W_SCHOOL', () => L.decl('EDU_W_SCHOOL')],                            // 53127、53128
   ['eduStaticAt', () => L.fn('eduStaticAt')],                                                              // 53129
   ['rebuildCov', () => L.fn('rebuildCov')],                                                                // 53135–53157
+  ...(D19 ? [['computeWaterLegacy449', () => L.fn('computeWaterLegacy449')]] : []),                        // 53267–53299（D019）
   ['allocGrids', () => L.fn('allocGrids')],                                                                // 56931
   ['roadDraftTiles436', () => L.fn('roadDraftTiles436')],                                                  // 62597–62602
   ['rect', () => L.exact('rect', 'const rect={on:false,x0:0,y0:0,x1:0,y1:0};')],                          // 62707
@@ -93,7 +98,7 @@ const pieces = P.map(([name, get]) => ({ name, src: get() }));
 if (L.pieces.length !== pieces.length || L.pieces.some((p, i) => p.name !== pieces[i].name)) throw new Error('片段名稱與 labSource 記錄對不上');
 
 // ---- 跑：spy 統計覆蓋率（只讀）----
-const lab = makeLab(pieces), impl = labImpl(lab);
+const lab = makeLab(pieces, { water: D19 }), impl = labImpl(lab);
 const tags = new Map(), tag = (k, n = 1) => tags.set(k, (tags.get(k) || 0) + n);
 const inMap = (x, y) => x >= 0 && y >= 0 && x < lab.N() && y < lab.N();
 const LAYERS = ['ruin', 'crater', 'bld', 'rail', 'tram', 'dock', 'rdec', 'bus', 'lv475|ud475', 'fly475|ix475', 'hv471|ug471', 'wm472|sm472', 'road', 'wp', 'zone', 'tree', 'deco',
@@ -117,14 +122,15 @@ lab.spy = {
         }
       }
     }
-    return { t: t ? JSON.parse(JSON.stringify(t)) : null, money: lab.money(), reason: lab.canPlace(tool, x, y), cost: t ? lab.placeCost(tool, x, y) : null, land: lab.getLand()[1] === null && lab.getLand()[0],
+    const wr = D19 ? lab.tiles().filter(q => q.wr).length : 0;
+    return { wr, t: t ? JSON.parse(JSON.stringify(t)) : null, money: lab.money(), reason: lab.canPlace(tool, x, y), cost: t ? lab.placeCost(tool, x, y) : null, land: lab.getLand()[1] === null && lab.getLand()[0],
       seen: !!(t && g && g.seen[y * N + x]), foot, fromRef: !!(t && t.bld && t.bld.ref) };
   },
   after(s0, tool, x, y, ok) {
     tag(`call:${opKind}`);
     if (!s0.t) { tag('call-out-of-map'); return; }
     if (s0.land) tag('land-full-to-box');
-    const civ = D16 && CIVIC.includes(tool);
+    const civ = (D16 && CIVIC.includes(tool)) || (D19 && WATER.includes(tool));
     if (s0.reason) { tag(`reason:${tool === 'doze' ? 'doze:' : ''}${s0.reason}`); if (civ) tag(`civic-reason:${s0.reason}`); return; }
     if (!ok) {
       if (civ && s0.cost > s0.money) { tag('civic-refused-money'); if (s0.cost - s0.money <= 1) tag('civic-refused-money-by≤1'); }
@@ -159,6 +165,11 @@ lab.spy = {
       if (b.tree) tag('civic-tree-surcharge');
       if (CIVIC_CAT[tool] && lab.run('svcBudget')[CIVIC_CAT[tool]] !== 1) tag('civic-budget-scaled');
       if (opKind !== 'tap') tag(`civic-${opKind}`);
+    }
+    if (D19) {   // D019：水管壓在建築、路、分區、樹底下；放完或拆完接通的水管格數變了
+      if (tool === 'wpipe') { if (b.bld) tag('wpipe-under-bld'); if (b.road) tag('wpipe-under-road'); if (b.zone) tag('wpipe-on-zone'); if (b.tree) tag('wpipe-keeps-tree'); }
+      if (lab.tiles().filter(q => q.wr).length !== s0.wr) tag(`water-reach:${tool}`);
+      if (tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && b.bld.k === 10) tag('doze-tower');
     }
     if (D16 && tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && !(b.bld.sz > 1) && CIVIC_KS.has(b.bld.k)) tag(`doze-civic:k${b.bld.k}`);
   },
@@ -245,17 +256,26 @@ const NEED16 = {
   ...Object.fromEntries(Object.values(CIVIC_K).map(k => [`doze-civic:k${k}`, 5])),
   'undo-civic-build': 200, 'undo-civic-doze': 30, 'undo-ok': 300, 'log:ri,9': 60, 'log:ri,5': 300, 'pre:null': 1000,
 };
-const need = D16 ? NEED16 : NEED;
+// D019（卡面驗收 1）：水塔、水管各自成功夠多次；兩種的拒絕理由都出現；水管壓在建築、路、分區、樹底下；接通的水管格數因放水塔、水管、拆除而變；
+// 拆水管、拆水塔、復原；線與框；水塔抽 ri(5)
+const NEED19 = {
+  'build:water': 60, 'build:wpipe': 300, 'civic-reason:只能蓋在陸地上': 10, 'civic-reason:道路上不能建造': 10, 'civic-reason:已有建築': 20, 'civic-reason:只能鋪在陸地上': 20, 'civic-reason:已有水管': 60,
+  'civic-reason:焦土需先清理': 3, 'civic-reason:隕石坑需先剷除': 3, 'civic-refused-money': 30, 'civic-tree-surcharge': 30, 'civic-sandbox-free': 20, 'civic-line': 60, 'civic-rect': 30,
+  'wpipe-under-bld': 10, 'wpipe-under-road': 10, 'wpipe-on-zone': 10, 'wpipe-keeps-tree': 10, 'water-reach:water': 20, 'water-reach:wpipe': 60, 'water-reach:doze': 10,
+  'doze:wp': 20, 'doze-tower': 3, 'undo-ok': 100, 'log:ri,5': 60, 'pre:null': 300,
+};
+const need = D16 ? NEED16 : D19 ? NEED19 : NEED;
 const missing = Object.entries(need).filter(([k, n]) => (cov[k] || 0) < n).map(([k, n]) => `${k} ${cov[k] || 0}/${n}`);
-if (missing.length || minOps < 20 || COUNT < (D16 ? 150 : 200)) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${COUNT} 張`);
-if (!D16 && cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
-if (!D16 && cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
+if (missing.length || minOps < 20 || COUNT < (D16 || D19 ? 150 : 200)) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${COUNT} 張`);
+if (!D16 && !D19 && cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
+if (!D16 && !D19 && cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
 
 // ---- 實驗線自己的表（本線 build.ts 的常數逐項比這一份）----
 const R = s => lab.run(s);
 const tables = {
   roadCost: [...R('ROAD_COST')],
-  cost: JSON.parse(JSON.stringify(R(`({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge${D16 ? CIVIC.map(t => `,${t}:COST.${t}`).join('') : ''}})`))),
+  cost: JSON.parse(JSON.stringify(R(`({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge${D16 ? CIVIC.map(t => `,${t}:COST.${t}`).join('') : D19 ? WATER.map(t => `,${t}:COST.${t}`).join('') : ''}})`))),
+  ...(D19 ? { waterCap: [R('WATER_TOWER_CAP'), R('DESAL_CAP')] } : {}),
   ...(D16 ? { covr: JSON.parse(JSON.stringify(R('({park:COVR.park,fire:COVR.fire,police2:COVR.police2,hospital:COVR.hospital,clinic:COVR.clinic,school:COVR.school,library:COVR.library,post:COVR.post,cemetery:COVR.cemetery})'))),
     budgetCat: JSON.parse(JSON.stringify(R('SVC_BUDGET_CAT'))) } : {}),
   roadToolToRc: ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'plant', 'doze', 'rail'].map(t => [t, R('roadToolToRc')(t)]),
@@ -264,11 +284,11 @@ const tables = {
 
 const pack = a => gzipSync(Buffer.from(JSON.stringify(a)), { level: 9, mtime: 0 }).toString('base64');
 const out = {
-  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: D16 ? 'tools/lab-build.mjs --set=d016' : 'tools/lab-build.mjs',
-    how: (D16 ? 'D016 公共設施：tools/d011-cases.mjs 的 cases16（FAMILIES16，地圖與參數照底家族、操作抽公共設施九支），其餘同 D011。' : '') + '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
+  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: D16 ? 'tools/lab-build.mjs --set=d016' : D19 ? 'tools/lab-build.mjs --set=d019' : 'tools/lab-build.mjs',
+    how: (D16 ? 'D016 公共設施：tools/d011-cases.mjs 的 cases16（FAMILIES16，地圖與參數照底家族、操作抽公共設施九支），其餘同 D011。' : D19 ? 'D019 水塔、配水管：tools/d011-cases.mjs 的 cases19（FAMILIES19，地圖多鋪水管與水塔、操作抽 WATER）；computeWater 接實驗線舊式供水網原文，格子的 wr 一起比，其餘同 D011。' : '') + '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
     casesSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'tools/d011-cases.mjs'))).digest('hex'),
     pieces: L.pieces },
-  seed: D16 ? D016_SEED : D011_SEED, families: D16 ? FAMILIES16 : FAMILIES, counts: { maps: COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
+  seed: D16 ? D016_SEED : D19 ? D019_SEED : D011_SEED, families: D16 ? FAMILIES16 : D19 ? FAMILIES19 : FAMILIES, counts: { maps: COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
   tables, coverage: cov, hashes,
   lab: { codec: 'gzip+base64+json', pieces: pack(pieces) },
   exact: { codec: 'gzip+base64+json', outputs: pack(outputs) },

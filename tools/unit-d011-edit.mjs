@@ -670,9 +670,9 @@ async function guards(log) {
     // 再存的碼：前 H 列＝第一次存的碼逐列相同（既有的種類碼 0–7 不動），多出來的都是 restyle 列 [8, 日子差, x, z, v]（第一列的日子差＝讀檔那天減最後一筆的日子，其餘 0）
     const rowsOk = J(rows2.slice(0, H)) === J(raw.d3?.r) && rows2.length === H + T.restyle.length
       && T.restyle.every((e, j) => J(rows2[H + j]) === J([8, j ? 0 : e.day - last, e.x, e.z, e.v]));
-    log(!T.bad && raw.d3?.f === CITY_FORMAT && raw.d3?.hv === 2 && raw.d3.r?.length === H && T.raw2?.d3?.f === CITY_FORMAT && T.raw2.d3.hv === 2 && rowsOk,
+    log(!T.bad && raw.d3?.f === 4 && raw.d3?.hv === 2 && raw.d3.r?.length === H && T.raw2?.d3?.f === 4 && T.raw2.d3.hv === 2 && rowsOk,
       '存檔（實驗線分享碼格式＋附加欄位 d3，歷史存法 hv 2）再讀檔：逐格、建築（含墓碑）、資金取整、天數、難度、里程碑、星等、手勢編號都相同，歷史重播成功；'
-      + 'D012 讀檔照實驗線重挑外觀：歷史＝存檔時的＋restyle、那幾棟 v 照換；再存的碼 d3 格式 4、hv 仍 2，前段逐列相同、多出來的都是 restyle 列 [8, 日子差, x, z, v]；再存再讀第二次 0 棟、兩次存檔的碼逐位元組相同',
+      + 'D012 讀檔照實驗線重挑外觀：歷史＝存檔時的＋restyle、那幾棟 v 照換；再存的碼 d3 格式 4（沒有水管事件，D019 起照寫 4）、hv 仍 2，前段逐列相同、多出來的都是 restyle 列 [8, 日子差, x, z, v]；再存再讀第二次 0 棟、兩次存檔的碼逐位元組相同',
       T.bad || (!rowsOk ? `再存的碼的列不對：${rows2.length} 列（要 ${H}＋${T.restyle.length}）` : '')
         || `碼 ${T.code.length} 字、d3 格式 ${raw.d3?.f}、hv ${raw.d3?.hv}、歷史 ${raw.d3?.r?.length} 筆、$${raw.money}；第 ${s.day} 天讀回重挑 ${T.restyle.length} 棟（住商工 ${rci} 棟；歷史 ${H} → ${H + T.restyle.length} 筆）、再存再讀 ${T.q2.restyled} 棟、兩次存檔的碼逐位元組相同（${T.code2.length} 字）`);
     // 存讀檔往返的量法自己先驗（D012）：第一次讀回放寬了（准多 restyle、那幾棟 v 照換），要確定它還咬得到。
@@ -766,7 +766,7 @@ async function guards(log) {
       return u ? `${name}：${u}` : null;
     }).filter(Boolean);
     log(!res.length, `竄改過的 d3（${cases.length} 種：hv 1 事件物件、hv 2 緊湊列；日子是 HTML、座標超出地圖、不認得的拆除圖層、列比種類長、不認得的種類、不認得的 hv；超出範圍的座標 −1、日子 −1、路等級 0／9、分區 0／7 各放在留到最後的與之後被蓋過的那一筆，要講出第幾筆的哪一項；`
-      + `D012 城市格式 5（比這一版新）不猜、講明；restyle 列 ${groups[1]?.cases.length ?? 0} 種：座標 −1／n、v −1／10000／小數／HTML／缺、列比種類長要講出第幾筆的哪一項，那一格沒有住商工根格（路、空地、劃了區還沒長房子、非住商工的建築、拆掉的建築）重播擋下、講出第幾天哪一格，移到另一棟住商工跟存檔對不上）`
+      + `D012 城市格式比這一版新（D019 起是 6）不猜、講明；restyle 列 ${groups[1]?.cases.length ?? 0} 種：座標 −1／n、v −1／10000／小數／HTML／缺、列比種類長要講出第幾筆的哪一項，那一格沒有住商工根格（路、空地、劃了區還沒長房子、非住商工的建築、拆掉的建築）重播擋下、講出第幾天哪一格，移到另一棟住商工跟存檔對不上）`
       + `都被擋下，退回只用存檔（歷史＝這張碼的匯入＋照實驗線重挑外觀，跟同一份存檔正常讀回的那一串逐筆相同），城照樣能推進、施工、再存再讀；照讀的（多出來的欄位、格式 3 的舊檔 hv 1／hv 2、hv 1 的 restyle 物件）＝同一份存檔正常讀回，多出來的欄位不帶進城市`,
       res.slice(0, 3).join('；') || cases.map(c => c[0]).join('、'));
     const L6 = loadCode(read('src/content/samples/starter.code.txt'), KT, vrank), h6 = L6.ok ? L6.sim.city.history : [];

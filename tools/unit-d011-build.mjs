@@ -44,7 +44,8 @@ export const REQUIRED_PIECES = ['clamp', 'mulberry32', 'ROAD_COST', 'COST', 'sq'
 
 // 本線那一邊：build.ts 的手勢函式（tap／commitLine／commitRect）與 undoTxn；交易推進自己的堆疊（上限 40，同實驗線 62731）。
 // 拆除確認與資金不足的提示：本線回 refused（確認拆除少了種類名稱，種類在 arm.k），這裡照實驗線的提示原文拼回去比（KNAME 在兩邊都換成「#k」）
-export function impl3d(Bm = B) {
+// water（D019）：放水塔、水管、拆除、復原之後當場重算供水網（本線 onWater；實驗線 52405、66572 的 computeWater）
+export function impl3d(Bm = B, water = null) {
   let st = null, stack = [], edu = null;
   const calls = [];
   const push = txn => { if (!txn) return null; Bm.pushTxn(stack, txn); return [txn.spent, txn.snaps.map(s => s.i)]; };
@@ -56,7 +57,7 @@ export function impl3d(Bm = B) {
       rebuildCov(w, g, c.budget, edu);
       const rng = labRng(c.seed, true);
       st = { w, g, budget: { ...c.budget }, rng, money: c.money0, diff: c.diff, tech: c.tech, spec: c.spec, landDirty: c.land[0], landBox: c.land[1] ? [...c.land[1]] : null,
-        txn: null, dozeArm: null, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]) };
+        txn: null, dozeArm: null, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]), ...(water ? { onWater: () => water(w) } : {}) };
       stack = [];
     },
     canPlace: (t, x, y) => Bm.canPlace(st, t, x, y), placeCost: (t, x, y) => Bm.placeCost(st, t, x, y), path: op => Bm.roadDraftTiles(op.x0, op.y0, op.x1, op.y1),
@@ -197,9 +198,9 @@ export function buildModule(source) {
   vm.runInContext(`${js}\n;globalThis.__m = { ${BUILD_EXPORTS.join(', ')} };`, ctx, { filename: 'mutant:build.ts' });
   return ctx.__m;
 }
-// casesFn：哪一組案例（D016 用 cases16，tools/unit-d016-build.mjs）
-export function implAgainst(Bm, want, order, casesFn = cases) {
-  const impl = impl3d(Bm);
+// casesFn：哪一組案例（D016 用 cases16，tools/unit-d016-build.mjs）；water：D019 的供水網重算（見 impl3d）
+export function implAgainst(Bm, want, order, casesFn = cases, water = null) {
+  const impl = impl3d(Bm, water);
   for (const k of order) {
     const c = casesFn(k), w = want[k];
     const got = runMap(impl, c, { stopAt: (j, rec) => rec !== w.ops[j] });
@@ -351,11 +352,11 @@ export async function d011BuildGuards(log) {
     const w = { N: 3, tiles: Array.from({ length: 9 }, () => ({ t: 2, bld: null })) };
     const st = { w, g: allocGrids(3), budget: { police: 1, fire: 1, health: 1, edu: 1 }, rng: labRng(1), money: 1e6, diff: 1, tech: [], spec: null,
       landDirty: false, landBox: null, txn: null, dozeArm: null };
-    const tries = [() => B.canPlace(st, 'water', 1, 1), () => B.placeCost(st, 'dump', 1, 1), () => B.doPlace(st, 'office', 1, 1), () => B.tap(st, 'tree', 1, 1),
+    const tries = [() => B.canPlace(st, 'desalination', 1, 1), () => B.placeCost(st, 'dump', 1, 1), () => B.doPlace(st, 'office', 1, 1), () => B.tap(st, 'tree', 1, 1),
       () => B.commitLine(st, 'rail', 0, 0, 2, 0), () => B.commitRect(st, 'stad', 0, 0, 1, 1, 0)];
     const bad = tries.map((f, i) => { try { f(); return `#${i} 沒丟例外`; } catch (e) { return /^未搬：/.test(e.message) ? null : `#${i} ${e.message}`; } }).filter(Boolean);
     const untouched = JSON.stringify(w.tiles) === JSON.stringify(Array.from({ length: 9 }, () => ({ t: 2, bld: null }))) && st.money === 1e6 && !st.landDirty;
-    log(bad.length === 0 && untouched, 'D011 本卡以外的工具（D016 起：水塔、垃圾場、體育場、商辦、樹、鐵路……）canPlace／placeCost／doPlace／手勢都丟「未搬」，不動格子、資金、地價框',
+    log(bad.length === 0 && untouched, 'D011 本卡以外的工具（D019 起：淡化廠、垃圾場、體育場、商辦、樹、鐵路……；水塔 D019 搬了）canPlace／placeCost／doPlace／手勢都丟「未搬」，不動格子、資金、地價框',
       bad.join('；') || '6 種呼叫都丟例外，狀態沒動');
   }
 }

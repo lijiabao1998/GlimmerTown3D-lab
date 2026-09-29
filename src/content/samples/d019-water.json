@@ -1,0 +1,139 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-water.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "T",
+   "anchors": {
+    "start": "const T=i=>tiles[i];"
+   },
+   "line": 39730,
+   "endLine": 39730,
+   "sha": "df082f689c21e60a6de628b3cfcc352aaacd344f2e39adfc37ceef40ad25e249"
+  },
+  {
+   "kind": "exact",
+   "name": "idx",
+   "anchors": {
+    "start": "const idx=(x,y)=>y*N+x;"
+   },
+   "line": 39731,
+   "endLine": 39731,
+   "sha": "950a9b3b6e75c896963ad712904e9870574f7807df434b7f1c2fda30534bd847"
+  },
+  {
+   "kind": "exact",
+   "name": "inMap",
+   "anchors": {
+    "start": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;"
+   },
+   "line": 39732,
+   "endLine": 39732,
+   "sha": "168c53d60c2607ecd7c43e7194bb014a0219b464f958f6bc7748402368e07a65"
+  },
+  {
+   "kind": "exact",
+   "name": "WATER_TOWER_CAP",
+   "anchors": {
+    "start": "const WATER_TOWER_CAP=80;   // 每座水塔供水建築數（T31）"
+   },
+   "line": 37425,
+   "endLine": 37425,
+   "sha": "ebb36ee4568963a15a783b97f732c51f383b438df2c960bf2d80c253d57fb9bf"
+  },
+  {
+   "kind": "exact",
+   "name": "DESAL_CAP",
+   "anchors": {
+    "start": "const DESAL_CAP=80;"
+   },
+   "line": 39655,
+   "endLine": 39655,
+   "sha": "f8e74afdf1e5e41f3d4da018b4e33face973f97958ae1835c11efb7e20cf479e"
+  },
+  {
+   "kind": "fn",
+   "name": "computeWaterLegacy449",
+   "anchors": {
+    "start": "function computeWaterLegacy449(",
+    "closure": "balanced-brace"
+   },
+   "line": 53267,
+   "endLine": 53299,
+   "sha": "11199b8c6fdeaa9e15ff29d7639afa63c212b19bdfd66fc7e68149e305a89a94"
+  },
+  {
+   "kind": "fn",
+   "name": "hasWaterNear",
+   "anchors": {
+    "start": "function hasWaterNear(",
+    "closure": "balanced-brace"
+   },
+   "line": 53581,
+   "endLine": 53588,
+   "sha": "bbf769f726869453e607f8b73b1650e3af83f989d49a8e9b62410183476063f8"
+  },
+  {
+   "kind": "span",
+   "name": "舊式分支取容量",
+   "anchors": {
+    "start": "const cap=computeWaterLegacy449();",
+    "end": "const cap=computeWaterLegacy449();"
+   },
+   "line": 53304,
+   "endLine": 53304,
+   "sha": "2621b18a0263f6351ece3f0b0160952777915c3d4c1112945d18aada66087f0b"
+  },
+  {
+   "kind": "span",
+   "name": "每天的容量",
+   "anchors": {
+    "start": "const wCap=Math.floor(computeWater()*(drought?DROUGHT_WATER_MULT:1));",
+    "end": "const wCap=Math.floor(computeWater()*(drought?DROUGHT_WATER_MULT:1));"
+   },
+   "line": 55010,
+   "endLine": 55010,
+   "sha": "99de0434ff667a3e4a9819ac1dd3b308587d4c214e2c0083498c558eb56f2365"
+  },
+  {
+   "kind": "span",
+   "name": "逐棟有沒有水",
+   "anchors": {
+    "start": "if(waterLegacy449())b.wa=b.pw&&hasWaterNear(x,y,2)&&watered<wCap;",
+    "end": "if(waterLegacy449())b.wa=b.pw&&hasWaterNear(x,y,2)&&watered<wCap;"
+   },
+   "line": 55157,
+   "endLine": 55157,
+   "sha": "4dee40c2145ff7e8e2a633ae6cf28cd9bcec28dcd4927dfdf8f84b6fa3383d3e"
+  },
+  {
+   "kind": "span",
+   "name": "數有水的棟數",
+   "anchors": {
+    "start": "    if(b.wa)watered++;",
+    "end": "    if(b.wa)watered++;"
+   },
+   "line": 55160,
+   "endLine": 55160,
+   "sha": "df33421c848cc51681cd2d0f3c7ad93e989e74afe86e721b96aea0f3b178ae9c"
+  }
+ ],
+ "text": {
+  "T": "const T=i=>tiles[i];",
+  "idx": "const idx=(x,y)=>y*N+x;",
+  "inMap": "const inMap=(x,y)=>x>=0&&y>=0&&x<N&&y<N;",
+  "WATER_TOWER_CAP": "const WATER_TOWER_CAP=80;   // 每座水塔供水建築數（T31）",
+  "DESAL_CAP": "const DESAL_CAP=80;",
+  "computeWaterLegacy449": "function computeWaterLegacy449(){\n  let towers=0,desalRoots=0;\n  for(let i=0;i<N*N;i++){\n    const b=tiles[i].bld;tiles[i].wr=false;\n    if(b&&!b.ref){if(b.k===10)towers++;else if(b.k===129)desalRoots++;}\n  }\n  if(!towers&&!desalRoots)return 0;\n  const seen=new Uint8Array(N*N);\n  const q=[];\n  for(let y=0;y<N;y++)for(let x=0;x<N;x++){\n    const t=T(idx(x,y));\n    if(!(t.bld&&(t.bld.k===10||t.bld.k===129)))continue; // T364d：2×2 淡化廠每一側均可接水管，但容量只在 root 計一次\n    for(const[dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]]){\n      const nx=x+dx,ny=y+dy;\n      if(inMap(nx,ny)&&T(idx(nx,ny)).wp&&!seen[idx(nx,ny)]){\n        seen[idx(nx,ny)]=1;q.push([nx,ny,0]);\n      }\n    }\n  }\n  let head=0;\n  while(head<q.length){\n    const[x,y,d]=q[head++];\n    T(idx(x,y)).wr=true;\n    if(d>=90)continue;\n    for(const[dx,dy]of[[0,-1],[1,0],[0,1],[-1,0]]){\n      const nx=x+dx,ny=y+dy;\n      if(!inMap(nx,ny))continue;\n      const j=idx(nx,ny);\n      if(T(j).wp&&!seen[j]){seen[j]=1;q.push([nx,ny,d+1]);}\n    }\n  }\n  return towers*WATER_TOWER_CAP+desalRoots*DESAL_CAP;\n}",
+  "hasWaterNear": "function hasWaterNear(x,y,r=2){\n  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){\n    const nx=x+dx,ny=y+dy;\n    if(!inMap(nx,ny))continue;\n    if(T(idx(nx,ny)).wr)return true;\n  }\n  return false;\n}",
+  "callLegacy": "    const cap=computeWaterLegacy449();WATER_COMP449.fill(-1);WATER_DIST449.fill(WATER_DIST_INF449);",
+  "callWCap": "  const wCap=Math.floor(computeWater()*(drought?DROUGHT_WATER_MULT:1)); // T137：乾旱期間供水上限打折（非乾旱精確恆等 ×1，Math.floor 對已為整數之值原樣返回）",
+  "callWa": "    if(waterLegacy449())b.wa=b.pw&&hasWaterNear(x,y,2)&&watered<wCap; // T449 rollback：逐字回到 T448 全城容量池",
+  "callWatered": "    if(b.wa)watered++;"
+ }
+}

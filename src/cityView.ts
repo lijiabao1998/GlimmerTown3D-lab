@@ -147,7 +147,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const conFor = (c: City) => { if (!con || con.n !== c.n) { con?.dispose(); con = new ConState(c.n); } return con; };
   // fresh＝從頭建（換城、換畫法檔；D015 清空快取）；平常逐日、施工之後只換變動的件
   function makeScene(c: City, fresh: boolean): BuiltCity {
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh);
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown);
     b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
     builtDay = c.day;
     if (b.con) st.setGeometry(b.con.top, b.con.base, b.con.wallTop);
@@ -407,7 +407,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>`;
   const bui = createBuildUi({
-    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncDock(); updatePreview(); },
+    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
     menu: id => onMenu(id), menuOpen: () => bui.setMenu(menuSections()), startBuild: () => menuCity('newcity'),
   });
@@ -524,9 +524,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
 
   // ---- D011 建造：選工具、拖曳預覽、放開提交、復原 ----
+  // D019：拿著水塔、配水管時地面畫出配水管（實驗線平常埋在地下，utilityLineMode485C 50907）；換了就重建一次（只重畫有水管的格）
+  let pipesShown = false;
+  function syncPipes() {
+    const want = tool === 'civic' && (civicTool === 'wpipe' || civicTool === 'water');
+    if (want !== pipesShown) { pipesShown = want; if (city && city.wp.some(Boolean)) rebuildScene(); }
+  }
   function setTool(t: ToolId | null, silent = false) {
     if (t && !sim) t = null;
     tool = t; stroke = null; lastPreview = null; preview.clear(); bui.hideCost();
+    syncPipes();
     // 拿著工具：一指（滑鼠左鍵）拿來蓋，兩指照舊縮放、平移；放下工具：一指照舊轉鏡頭
     (controls.touches as { ONE: THREE.TOUCH | null }).ONE = t ? null : THREE.TOUCH.ROTATE;
     (controls.mouseButtons as { LEFT: THREE.MOUSE | null }).LEFT = t ? null : THREE.MOUSE.ROTATE;
@@ -632,7 +639,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       case 'road': return [d, `鋪了${RCN[e.rc] ?? '路'}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
       case 'zone': return [d, `劃成${ZONE[e.zone]}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
       case 'place': return [d, `蓋了${KINDS.name(e.k)}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
-      case 'doze': return [d, `${e.layer === 'bld' ? '拆掉' + KINDS.name(e.k ?? 0) : e.layer === 'road' ? '拆掉道路' : e.layer === 'zone' ? '取消分區' : '砍掉樹'}${tail}`];
+      case 'doze': return [d, `${e.layer === 'bld' ? '拆掉' + KINDS.name(e.k ?? 0) : e.layer === 'road' ? '拆掉道路' : e.layer === 'zone' ? '取消分區' : e.layer === 'wp' ? '拆掉水管' : '砍掉樹'}${tail}`];
+      case 'pipe': return [d, `鋪了配水管${e.cost ? `（$${e.cost}）` : ''}${tail}`];
     }
   }
   function showTile(x: number, z: number) {
@@ -645,7 +653,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (b) {
       const cat = KINDS.cat(b.k);
       title = `${KINDS.name(b.k)}（${b.x}, ${b.z}）`;
-      $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${b.abandoned ? '・已遭遺棄' : ''}${onSite(b.k, b.age, b.goneDay !== undefined) ? `・施工中，第 ${b.age + 1}／${CON_DAYS} 天` : ''}`;   // D014
+      // D019：住商工、社宅講有沒有電、有沒有水（模擬最近一天給的；二級要有水才升得到三級）
+      const sb = sim && (b.k <= 3 || b.k === 127) && b.goneDay === undefined ? sim.w.tiles[b.z * c.n + b.x].bld : null, util = sb ? `・${sb.pw ? '有電' : '沒電'}・${sb.wa ? '有水' : '沒水'}` : '';
+      $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${util}${b.abandoned ? '・已遭遺棄' : ''}${onSite(b.k, b.age, b.goneDay !== undefined) ? `・施工中，第 ${b.age + 1}／${CON_DAYS} 天` : ''}`;   // D014
       // D010：逐日模擬記下的生長、升級；D011：這一塊地上的施工（劃區、鋪路、蓋、拆）照發生順序一起列。
       // 匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
       const evs = lotEvents(c, b.x, b.z);
@@ -662,7 +672,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       rows.push([`第 ${impDay.toLocaleString()} 天`, `從 2D 實驗線 v${c.gameVer} 匯入 3D（這之前的歷史 2D 存檔沒有記）`]);
     } else {
       title = `${ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
-      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + '（還沒蓋）' : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : ''].filter(Boolean);
+      const pipe = c.wp[i] ? (sim ? (sim.w.tiles[i].wr ? '配水管（接通水源）' : '配水管（沒接到水塔）') : '配水管') : '';   // D019
+      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + '（還沒蓋）' : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
       for (const e of lotEvents(c, x, z)) rows.push(lotRow(c, e));      // D011：這一格的施工與拆掉的建築
       rows.push([`第 ${impDay.toLocaleString()} 天`, `從 2D 實驗線 v${c.gameVer} 匯入 3D`]);
@@ -853,7 +864,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // 旁邊另建一份（自己的施工資料與快取，從頭建）取摘要就丟：增量建的場景要跟它一樣（前庭樹的屋齡照今天的）
     freshDigest: () => {
       if (!city || !con) return null;
-      const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true), live = con;
+      const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true, pipesShown), live = con;   // D019：地面畫不畫水管跟真的一樣
       b.setTreeAges(i => live.siteAge(i));
       b.scene.add(preview.mesh);                                          // 場景結構跟真的一樣（施工預覽也在場景裡），摘要完放回去
       const d = sceneDigest(b); built?.scene.add(preview.mesh); b.dispose(); st.dispose();
@@ -867,6 +878,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     ui: () => ({ tool, roadTool, civicTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
     tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') civicTool = rc; else roadTool = rc; } setTool(t); return tool; },
+    pipesShown: () => pipesShown,   // D019
+    tileWa: (x: number, z: number) => sim ? !!sim.w.tiles[z * sim.w.N + x]?.bld?.wa : null,   // D019：那一格的建築（根格）有沒有水
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
     preview: (op: EditOp) => sim ? previewOp(sim, op) : null,
     undo: () => doUndo(),
@@ -1058,6 +1071,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
       needsRender = true; draw();
       return screenOf(a);
+    },
+    // D019 樣張：鏡頭對準某一格（同 focusBuilding 的角度），回傳那一格地面中心在螢幕上的位置
+    focusCell(x: number, z: number, zoom: number) {
+      const n = city!.n, target = new THREE.Vector3(x + .5, 0, z + .5), D = n * 1.6;
+      cam.position.set(target.x + D, D * Math.SQRT2 * Math.tan(Math.PI / 6), target.z + D);
+      cam.zoom = zoom; cam.lookAt(target); controls.target.copy(target); cam.updateProjectionMatrix(); cam.updateMatrixWorld();
+      needsRender = true; draw();
+      return screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city!, z * n + x)), z + .5));
     },
     // D008 逐型對照：鏡頭對準某個街區（佔地中心），同 focusBuilding；回傳街區錨點（主體頂面中心）在螢幕上的位置
     // clip：只留目標前方 clip 格以內（把鏡頭前面擋住的高樓切掉，檢查立面用；不給就還原近平面）
