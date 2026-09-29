@@ -76,7 +76,7 @@
 ## 施工紀錄
 
 - 雲端施工，卡 `76d8d50`。
-- 施工與收尾：見 `LOG.md` r19。
+- 施工與收尾：`b149282`（見 `LOG.md` r19）。
 
 ### 做了什麼
 
@@ -172,7 +172,7 @@
    - 拉水管之後、拿著配水管、推進一天、放下工具，每一次增量重建＝整張重建。
    - 三角形 46,940 → 46,940（拿著配水管，只改地面貼圖）、draw call 17 → 17。
    - 對照圖 `docs/img/D019-compare.jpg`（同一串操作，2D 實驗線｜3D，都拿著配水管）、`docs/img/D019-mobile.jpg`。
-8. **全綠、上線**：本機全綠；`main` 的 Actions 推上去之後補在這裡。
+8. **全綠、上線** ✅：[Actions run 36523101736](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36523101736)（`main` `b149282`）的 Node 守衛、smoke、樣張、Pages 都成功。
 
 ### 沒做成的事
 
