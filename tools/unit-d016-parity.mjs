@@ -5,7 +5,7 @@
 //             推進第 1 天之後的格子與場（含地價 LANDBASE／LAND）、逐行的亂數抽取、設施清單；第 1 天那一列（人口、就業、需求、住商工棟數、有電）；
 //             收入與維護費：實驗線探針讀到的設施數＝本線城裡的棟數（每一種都 > 0），代入實驗線那一天的第 2 類乘數與進口費，本線的收入、維護費、結算後資金完全相等。
 //   預建城（8 個種子）：拆噪音源、九種設施、拆診所再復原，每一筆逐項相等；推進一天之後住商工以外的格子、覆蓋、地價、推進前就在的住商工有沒有電相等；
-//             推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福套糧食（第 2 類，同 D011；垃圾 D020 搬了）逐位相等；而且這批設施真的改到了這些住宅的幸福（不蓋設施時不同）。
+//             推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福，直接相等（垃圾 D020、糧食 D022 本線都自己算，不套任何東西）；本線的糧食需求與供糧率＝實驗線探針；而且這批設施真的改到了這些住宅的幸福（不蓋設施時不同）。
 //   分享碼：本線匯出的碼（帶這批設施）實驗線讀得進來，每一棟設施的種類、等級、變體＝本線、對帳數字＝本線；實驗線匯出的碼本線解碼，設施清單與對帳數字＝實驗線自己量的。
 //   歷史與存檔（驗收 3，只有本線）：新城與預建城做完之後，歷史重播＝模擬、存檔再讀檔逐格相同（tools/unit-d011-edit.mjs 的 replayDiff、roundTrip）；
 //             C 段蓋墓園再復原：覆蓋各場、污染逐格回到蓋之前；教育場＝照復原後的城整張重算（實驗線復原走 rebuildCov 53135，黃金樣本逐筆比過 EDU）。
@@ -48,15 +48,13 @@ export function prebuiltCheck(seeds, pre, labPre, P, bareOf) {
     const old = new Set(m.pwBefore), pwOld = x => J(x.filter(([i]) => old.has(i)));
     if (pwOld(m.pw) !== pwOld(L.pw)) bad.push(`種子 ${seed} 推進前就在的住商工有電不同`);
     const ds = sharedOff(L.tickSites, m.tickSites, PRE_GROWTH_LINES.map(String)); if (ds) bad.push(`種子 ${seed} 推進那一天生長之前的抽取：${ds}`);
-    // 推進前就在的每一棟住宅：實驗線 h＝本線 h 套糧食（55414–55419，第 2 類沒搬）；垃圾（全城池 garbPen409、離垃圾場太遠 −.045）D020 搬了，量、容量、懲罰、太遠的棟數＝實驗線
-    const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs), food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);
+    // 推進前就在的每一棟住宅：實驗線 h＝本線 h，直接相等（垃圾 D020、糧食 D022 搬了：垃圾量、容量、懲罰、太遠的棟數、糧食需求與供糧率＝實驗線探針）
+    const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs);
+    if (!(q.foodCoreNeed482 > 0) || m.food?.need !== q.foodCoreNeed482 || m.food?.rate !== q.foodSupplyRate482) bad.push(`種子 ${seed}：糧食需求／供糧率 本線 ${m.food?.need}／${m.food?.rate} ≠ 實驗線 ${q.foodCoreNeed482}／${q.foodSupplyRate482}`);
     if (!res.length || q.garbFar409 !== res.length) bad.push(`種子 ${seed}：推進前就在的住宅 ${res.length} 棟、離垃圾場太遠 ${q.garbFar409} 棟`);
     const g = m.garb, gl = [q.garbage, q.garbCap, q.garbPen409, q.garbFar409];
     if (JSON.stringify([g.amount, g.cap, g.pen, g.far]) !== JSON.stringify(gl)) bad.push(`種子 ${seed}：垃圾量／容量／全城懲罰／太遠的棟數 本線 ${JSON.stringify([g.amount, g.cap, g.pen, g.far])} ≠ 實驗線 ${JSON.stringify(gl)}`);
-    for (const [i, h] of res) {
-      const want = clamp(h + food, .05, 1);
-      if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} 套糧食 ${want}`);
-    }
+    for (const [i, h] of res) if (!Object.is(labH.get(i), h)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h}`);
     // 這批設施真的改到了幸福：同一座城不蓋設施，推進前就在的住宅本線的 h 不同
     const bare = bareOf(seed);
     moved.push(res.filter(([i, h]) => bare.get(i) !== h).length);
@@ -153,7 +151,7 @@ export async function d016ParityGuards(log) {
   // ---- 預建城 ----
   {
     const { bad, moved } = prebuiltCheck(seeds, pre, lab.prebuilt, P, seed => new Map(prebuilt16(codeWithSeed(prebuilt, seed), KT, vrank, {}, true).hs));
-    log(!bad.length, `D016 預建城（${seeds.length} 個種子，${P.ops.length} 筆：先拆噪音源（D016 那時本線沒搬噪音；D017 另跑一份留著體育場的）、在住宅旁蓋九種設施、拆診所再復原）：每一筆逐項相等；推進一天之後住商工以外的格子、覆蓋、地價、推進前就在的住商工有電、生長之前的抽取都相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福套糧食（第 2 類，同 D011；垃圾 D020 搬了，量、容量、懲罰＝實驗線），逐位相等；而且這批設施真的改到了它們的幸福`,
+    log(!bad.length, `D016 預建城（${seeds.length} 個種子，${P.ops.length} 筆：先拆噪音源（D016 那時本線沒搬噪音；D017 另跑一份留著體育場的）、在住宅旁蓋九種設施、拆診所再復原）：每一筆逐項相等；推進一天之後住商工以外的格子、覆蓋、地價、推進前就在的住商工有電、生長之前的抽取都相等；推進前就在的每一棟住宅，實驗線的幸福＝本線的幸福，直接逐位相等（垃圾 D020、糧食 D022 本線都自己算；量、容量、懲罰、糧食需求與供糧率＝實驗線）；而且這批設施真的改到了它們的幸福`,
       bad.slice(0, 3).join('；') || `九種設施 ${P.at.map(([t, x, z]) => `${t}(${x},${z})`).join(' ')}；幸福被設施改到的住宅 ${moved.join('、')} 棟`);
   }
   // ---- 分享碼互通 ----

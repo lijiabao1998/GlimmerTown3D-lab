@@ -50,7 +50,7 @@ export function prebuilt20(code, KT, vrank) {
   out.pwBefore = pwOf(s.w.tiles).map(r => r[0]); out.hsBefore = hsOf(s.w.tiles).map(r => r[0]);
   out.tiles0 = JSON.parse(JSON.stringify(s.w.tiles));   // 推進前的格子（代進實驗線的輸入用）
   const t = h.tick(), b = h.snap();
-  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb; out.pop = t.rep.pop;
+  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb; out.food = t.rep.food; out.pop = t.rep.pop;
   out.post = h.head(b, false); out.postChanged = diffOf(a.proj, b.proj);
   out.inv = invOf(s.w.tiles, s.g.COV, s.g.POLTREE, s.g.LANDBASE, s.g.LAND); out.pw = pwOf(s.w.tiles); out.hs = hsOf(s.w.tiles);
   out.code = saveCode(s, L.template, L.start);

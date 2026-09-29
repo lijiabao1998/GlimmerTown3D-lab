@@ -276,12 +276,11 @@ export async function d011ParityGuards(log, opts = {}) {
     log(fact.length === 0, `錄製時的事實（預建城推進那一天；兩邊都是實驗線錄的值，CI 不重算）：實驗線逐行記的次數加總＝它記的總抽取數；${xs.length ? `${linesText(xs)} 的次數＝照實驗線自己推進後的格子與覆蓋算的棟數` : '多抽的三行一次都沒抽到'}${xq.length ? `；${linesText(xq)} 錄到 0 次、照格子算也是 0，這一天沒對拍到` : ''}（${seeds.length} 個種子）`,
       fact.slice(0, 2).join('；') || `實驗線逐行次數（各種子最少–最多）：${countsText(EXTRA, perX)}`);
   }
-  // 預建城推進那一天的第 2 類差異，精確找出來：實驗線住宅的幸福在本卡的公式（55164–55236，本線 residentialHappy 逐項相同）之後，再被垃圾與糧食改過：
-  //   垃圾（D020 搬了）：沒有垃圾場時全城容量池懲罰 garbPen409＝(garbRatio−1)×.15（55270–55274），再加每一棟離垃圾場太遠 −.045（computeGarbLocal 57697 起）——
-  //     本線的垃圾量、容量、全城懲罰、太遠的棟數要＝實驗線探針；
-  //   糧食（本線沒搬，第 2 類）：+clamp((foodSupplyRate482−.5)×.11,−.06,.05)（55414–55419）。夾在 .05..1，在需求（55578）之前。
-  // 第 1 天的新城推進前沒有住宅（人口 0、垃圾 0、糧食需求 0），所以沒有這個差。核對：推進前就在的每一棟住宅，實驗線的 h＝本線的 h 套糧食（逐位）。
-  // 全城幸福不同 → 住宅需求 demR 不同（legacyDemand）→ 生長機率不同（55613），生長、升級、新房子的變體與後面起火／生病擲骰的次數就可能不同（哪些種子不同只量不判）
+  // 預建城推進那一天，住宅的幸福：實驗線在本卡的公式（55164–55236，本線 residentialHappy 逐項相同）之後，再被垃圾與糧食改過——
+  //   垃圾（D020 搬了）：沒有垃圾場時全城容量池懲罰 garbPen409＝(garbRatio−1)×.15（55270–55274），再加每一棟離垃圾場太遠 −.045（computeGarbLocal 57697 起）——本線的垃圾量、容量、全城懲罰、太遠的棟數要＝實驗線探針；
+  //   糧食（D022 搬了）：+clamp((foodSupplyRate482−.5)×.11,−.06,.05)（55414–55419），夾在 .05..1，在需求（55578）之前——本線的糧食需求、供糧率要＝實驗線探針。
+  // 第 1 天的新城推進前沒有住宅（人口 0、垃圾 0、糧食需求 0），所以沒有這個差。核對：推進前就在的每一棟住宅，實驗線的 h＝本線的 h，直接逐位相等（D022 以前要「套糧食」）。
+  // 全城幸福因此相同 → 住宅需求 demR、生長機率跟著相同；生長、升級、新房子的變體與後面起火／生病擲骰的次數還有沒搬的系統（經濟閉環、通勤、火災、犯罪、疾病……）會讓兩邊分岔（哪些種子分岔只量不判）
   {
     const bad = [], hap = [], full = [], up = { 55648: [0, 0], 55649: [0, 0] };   // 升級那兩行 [實驗線, 本線] 合計（只量不判）
     const col = f => ROW_FIELDS.indexOf(f);
@@ -294,16 +293,13 @@ export async function d011ParityGuards(log, opts = {}) {
       if (!(q.garbPen409 > 0) || q.garbFar409 !== res.length || !(q.foodCoreNeed482 > 0)) bad.push(`種子 ${seed}：垃圾懲罰 ${q.garbPen409}、離垃圾場太遠的住宅 ${q.garbFar409} 棟（推進前就在的住宅 ${res.length} 棟）、糧食需求 ${q.foodCoreNeed482}`);
       const g = m.garb, gl = [q.garbage, q.garbCap, q.garbPen409, q.garbFar409];
       if (J([g.amount, g.cap, g.pen, g.far]) !== J(gl)) bad.push(`種子 ${seed}：垃圾量／容量／全城懲罰／太遠的棟數 本線 ${J([g.amount, g.cap, g.pen, g.far])} ≠ 實驗線 ${J(gl)}`);
-      const food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);   // 55416
-      for (const [i, h] of res) {
-        const want = clamp(h + food, .05, 1);
-        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} ${food >= 0 ? '+' : ''}${food} ＝ ${want}`);
-      }
+      if (m.food?.need !== q.foodCoreNeed482 || m.food?.rate !== q.foodSupplyRate482) bad.push(`種子 ${seed}：糧食需求／供糧率 本線 ${m.food?.need}／${m.food?.rate} ≠ 實驗線 ${q.foodCoreNeed482}／${q.foodSupplyRate482}`);
+      for (const [i, h] of res) if (!Object.is(labH.get(i), h)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h}`);
       hap.push(`${m.day1[col('happy')]}/${L.day1[col('happy')]}`);
       full.push(J(m.post) === J(L.post) && !cellsDiff(m.postChanged, L.postChanged) && J(m.pw) === J(L.pw) && J(labSitesOf(m.tickSites)) === J(Object.fromEntries(Object.entries(L.tickSites).filter(([l]) => !Object.values(EXTRA_LINES).includes(+l)))));
     }
     const q0 = labPre[seeds[0]]?.probe ?? {};
-    log(bad.length === 0, `預建城推進那一天的第 2 類差異（精確找出來）：實驗線住宅的幸福在本卡公式之後，再被垃圾（全城容量池懲罰 garbPen409 55270–55274、離垃圾場太遠 −.045 57697 起；D020 搬了，垃圾量、容量、懲罰、太遠的棟數＝實驗線）與糧食（55414–55419，沒搬）改過——推進前就在的每一棟住宅，實驗線的 h＝本線的 h 套糧食，逐位相等（${seeds.length} 個種子）；全城幸福因此不同，住宅需求與生長機率跟著不同，生長、升級只量不判`,
+    log(bad.length === 0, `預建城推進那一天，住宅的幸福直接相等：實驗線的 h 在本卡公式之後再被垃圾（全城容量池懲罰 garbPen409 55270–55274、離垃圾場太遠 −.045 57697 起；D020 搬了）與糧食（55414–55419；D022 搬了）改過——本線的垃圾量、容量、懲罰、太遠的棟數、糧食需求與供糧率＝實驗線探針，推進前就在的每一棟住宅，實驗線的 h＝本線的 h，逐位相等（${seeds.length} 個種子；D022 以前要「套糧食」）；生長、升級只量不判`,
       bad.slice(0, 2).join('；') || `垃圾 ${q0.garbage}／容量 ${q0.garbCap}、懲罰 ${q0.garbPen409}；供糧率 ${q0.foodSupplyRate482}（幸福 ${clamp((q0.foodSupplyRate482 - .5) * .11, -.06, .05)}）；全城幸福 本線/實驗線 ${hap.join('、')}；推進後整張（含生長、升級、有電、抽取逐行）剛好全等的種子 ${full.filter(Boolean).length}/${seeds.length}；升級那兩行只在這一天抽到、只量不判（SITE_MAP 升級那兩項沒有對拍到）：${Object.entries(up).map(([l, [a, b]]) => `${LINE_NAMES[l]} ${l} 實驗線 ${a}／本線 ${b} 次`).join('、')}（${seeds.length} 個種子合計）`);
   }
   // 驗收 4：分享碼互通

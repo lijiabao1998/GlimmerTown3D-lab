@@ -2,7 +2,7 @@
 // 格式與逐筆的做法同 tools/d011-ops.mjs（run3d、頁面裡的 apply）；量法同 tools/d011-parity-lib.mjs（同一段原始碼）。
 //   預建城（d011-prebuilt.code.txt 換種子）：錢設 20000；住商工最北那一排的下一列拉一條橫貫的配水管（拉線工具；水上那幾格拒絕），
 //     在它北邊找格索引順序第一格空地放一座水塔（接通）；最南那一排的下一列另拉一段、不接水塔（沒接通：旁邊的住宅沒有水）→ 推進一天。
-//     比每一筆、水管圖層、接通的水管格（wr）、推進後每一棟住商工與社宅的電與水、推進前就在的住宅幸福（套糧食，同 D016；垃圾 D020 搬了）、住商工以外的格子與場、生長之前的抽取。
+//     比每一筆、水管圖層、接通的水管格（wr）、推進後每一棟住商工與社宅的電與水、推進前就在的住宅幸福（直接相等，同 D016；垃圾 D020、糧食 D022 搬了）、住商工以外的格子與場、生長之前的抽取。
 //   樣本城（AI 城 120 天、種子城）：讀進來推進一天，比每一棟的電與水、接通的水管格。
 import { loadCode, saveCode } from '../src/io/save.ts';
 import { harness, invOf, pwOf, hsOf, diffOf, row3d } from './d011-parity-lib.mjs';
@@ -39,7 +39,7 @@ export function prebuilt19(code, KT, vrank) {
   out.snapOps = h.head(a); out.wp = wpOf(s.w.tiles); out.wrOps = wrOf(s.w.tiles);
   out.pwBefore = pwOf(s.w.tiles).map(r => r[0]); out.hsBefore = hsOf(s.w.tiles).map(r => r[0]); out.waBefore = waOf(s.w.tiles).map(r => r[0]);
   const t = h.tick(), b = h.snap();
-  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb;
+  out.tickDraws = t.draws; out.tickSites = t.sites; out.tickLand = t.land; out.tickExtra = t.extra; out.day1 = row3d(s); out.settle = t.rep.settle; out.garb = t.rep.garb; out.food = t.rep.food;
   out.post = h.head(b, false); out.postChanged = diffOf(a.proj, b.proj);
   out.inv = invOf(s.w.tiles, s.g.COV, s.g.POLTREE, s.g.LANDBASE, s.g.LAND); out.pw = pwOf(s.w.tiles); out.hs = hsOf(s.w.tiles); out.wa = waOf(s.w.tiles); out.wr = wrOf(s.w.tiles);
   out.code = saveCode(s, L.template, L.start);
@@ -51,5 +51,5 @@ export function sample19(code, KT, vrank) {
   const L = loadCode(code, KT, vrank);
   if (!L.ok) throw new Error('本線讀不進樣本城：' + L.error);
   const s = L.sim, h = harness(s), t = h.tick();
-  return { mig: L.restyled, tickDraws: t.draws, tickSites: t.sites, garb: t.rep.garb, wa: waOf(s.w.tiles), pw: pwOf(s.w.tiles), wr: wrOf(s.w.tiles), wp: wpOf(s.w.tiles), sim: s };
+  return { mig: L.restyled, tickDraws: t.draws, tickSites: t.sites, garb: t.rep.garb, food: t.rep.food, wa: waOf(s.w.tiles), pw: pwOf(s.w.tiles), wr: wrOf(s.w.tiles), wp: wpOf(s.w.tiles), sim: s };
 }

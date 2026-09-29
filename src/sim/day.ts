@@ -3,8 +3,8 @@
 // 沒搬的上層系統分三類（名單與理由見 docs/D010-starter-city.md「上層系統」一節）：
 //   1. 實驗線有開關：本線接它關掉時的回退值（對照的 fallback 設定也用實驗線自己的開關關掉）——住房市場 T488、企業 T489、
 //      T471 分時調度（舊版供電 __legacyPower450／__legacyPower471）、行動力 T491／T509、財政回饋 T510／T515、事故 T493、水（舊式 __legacyWater449）、災害。
-//   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒）、通勤 T141、道路負載與壅堵 T129、
-//      糧食供應、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
+//   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒；D022 起糧食那一段搬了，見 rules/food.ts）、通勤 T141、道路負載與壅堵 T129、
+//      夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
 //   3. 起步城用不到：污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。噪音 D017 搬了（讀進來的城有噪音源）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
@@ -16,6 +16,7 @@ import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomp
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
 import { garbageDay, garbDecisionRatio452 } from './rules/garbage.ts';
+import { applyFoodHappy, countFood, emptyFoodCount, foodDay, type FoodReport } from './rules/food.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
@@ -54,6 +55,7 @@ export interface DayReport {
   grown: number; upgraded: number;
   money: number; settle: SettleReport;          // D011：結算後的資金與當天的結算（沙盒照算，只是不入帳）
   garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
+  food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
 }
 export interface GarbReport { amount: number; cap: number; ratio: number; formal: boolean; districts: number; pen: number; far: number; unserved: number; dec: number }   // pen＝實驗線 garbPen409（探針讀得到）；dec＝評分用的比例
 // 一天的結算（D011，src/sim/rules/money.ts）：收入、維護費、淨額，以及當天發生的里程碑、星等獎金、紓困
@@ -138,19 +140,23 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   const { w, g } = s, N = w.N, nn = N * N, f = fieldsOf(g);
   // 54948 buildTickIndex：有建築的格（含 ref）、分區格、商業分區格數，都升序
   const tickBld: number[] = [], tickZone: number[] = [];
-  let czone = 0;
+  let czone = 0, roads = 0;                                                // roads＝tickRoad.length（54940）：貿易額度的底（55334）
   for (let i = 0; i < nn; i++) {
     const t = w.tiles[i];
     if (t.bld) tickBld.push(i);
     if (t.zone) { tickZone.push(i); if (t.zone === 2) czone++; }
+    if (t.road) roads++;
   }
   // 55050–55063 主計數迴圈（建築索引、跳過 ref 格）：D016 起數得到的設施——學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（照實驗線的順序）。
-  // 給固定就業（55246）與維護費（55973）。迴圈其餘的計數（產業、旅宿、地標、資源……）本線蓋不出來，都是 0；升級加成就業（55055 upJob）要手動升級，沒搬
+  // 給固定就業（55246）與維護費（55973）。D022 起另外數食物來源、觀光建築、貿易設施（rules/food.ts countFood，給糧食）；這些種類的固定就業與維護費還沒接（本線蓋不出來、讀進來的城會有差）；
+  // 升級加成就業（55055 upJob）要手動升級，沒搬
   const fac = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
   let towerPop = 0, megaPop = 0;                                          // 55040 towerPop488、megaPop488（D021）：住宅塔、巨廈的居民，不看有沒有電
+  const fc = emptyFoodCount();                                            // D022：食物來源、觀光建築、貿易設施的計數
   for (const i of tickBld) {
     const b = w.tiles[i].bld;
     if (!b || b.ref) continue;
+    countFood(fc, b);
     if (b.k === 105) megaPop += residentPopulation488(b, () => undefined);   // 55108：住宅巨廈（T488 單一人口真相；住房沒就緒＝入住率 1）
     if (b.k === 33) towerPop += residentPopulation488(b, () => undefined);   // 55110：住宅塔
     if (b.k === 7) fac.schools++;                                         // 55056
@@ -243,7 +249,10 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   const { garbage, garbCap, garbRatio, garbPen409, san, loc: garbLoc } = gd; cityHappy = gd.cityHappy;
   s.landDirty = true; s.landBox = null;                                   // 55279 rebuildAccess468（64146 → 64129）每天把地價設成「隔天整張重算」
   { let s1 = 0, n1 = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (!b || b.k !== 1) continue; s1 += b.h as number; n1++; } if (n1) cityHappy = s1 / n1; }   // 55282–55284：只用住宅 k1 重算
-  // 55414 糧食供應：沒搬（第 2 類）；55426 災害：關（第 1 類）
+  // 55286–55342、55414–55424 糧食（D022，src/sim/rules/food.ts）：食物產量、遊客、貿易額度、供糧率，再把每天的加減加到每棟住宅（k1）的幸福上、用住宅重算城市幸福。
+  // 在垃圾（55256–55278）之後、災害與生長之前；整段沒有亂數。55426 災害：關（第 1 類）
+  const fd = foodDay(fc, roads, pop, sea, s.day);
+  cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy);
   const labor = laborMarket481(pop, jobs, null, s.day);                   // 55329（F2，企業沒就緒那一支）
   const L = legacyDemand({ pop, jobs, cityHappy, czone, jobsC, jobsI, indSubsidy: false, tech: s.edu.tech });   // 55578–55584（F1）
   const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, null);                          // 55585（F3，經濟沒就緒）
@@ -275,6 +284,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
+    food: fd,
   };
 }
 
