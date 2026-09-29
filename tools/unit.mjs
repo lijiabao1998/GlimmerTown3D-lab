@@ -528,6 +528,7 @@ await guard('./unit-d020.mjs', 'd020Guards');   // D020：清運網、清運區�
 await guard('./unit-d020-parity.mjs', 'd020ParityGuards');   // D020：實驗線頁面實跑（d020-lab.json，tools/d016-parity.mjs --set=d020 錄）：預建城放垃圾場逐筆、推進一天幸福與垃圾數字、讀回；樣本城代入實驗線的輸入
 await guard('./unit-d021.mjs', 'd021Guards');   // D021：讀進來的城的人口——讀檔後、推進一天後的 pop 逐座＝實驗線頁面（d021-lab.json，tools/d021-lab.mjs 錄）、day.ts 副本突變
 await guard('./unit-d022.mjs', 'd022Guards');   // D022：糧食——食物量、遊客、貿易額度、供糧率、每棟住宅的加減逐項＝實驗線原文（d022-food.json，tools/lab-food.mjs 摘）、原碼突變、接線
+await guard('./unit-d023.mjs', 'd023Guards');   // D023：讀檔還原服務預算 sb——sim.budget 與 60 個覆蓋場逐座＝實驗線頁面（d023-lab.json，tools/d023-lab.mjs 錄）、day.ts 副本突變、存檔不丟、維護費有傳進去
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
