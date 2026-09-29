@@ -3,8 +3,8 @@
 // 沒搬的上層系統分三類（名單與理由見 docs/D010-starter-city.md「上層系統」一節）：
 //   1. 實驗線有開關：本線接它關掉時的回退值（對照的 fallback 設定也用實驗線自己的開關關掉）——住房市場 T488、企業 T489、
 //      T471 分時調度（舊版供電 __legacyPower450／__legacyPower471）、行動力 T491／T509、財政回饋 T510／T515、事故 T493、水（舊式 __legacyWater449）、災害。
-//   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——經濟閉環 T481／T482（第 2 天起就緒；D022 起糧食那一段搬了，見 rules/food.ts）、通勤 T141、道路負載與壅堵 T129、
-//      夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡。
+//   2. 實驗線沒有開關、照跑：本線沒搬，是跟實驗線的差距來源——通勤 T141、道路負載與壅堵 T129、夜間城市 T487、城市活動 T299、火災、犯罪、廢棄、疾病、死亡、
+//      天然氣化肥與熟食與其餘收入加成 T346、資源開採 T140。經濟閉環 T481／T482 D025 起搬了（rules/economy.ts；D022 起糧食那一段在 rules/food.ts）。
 //   3. 起步城用不到：污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。噪音 D017 搬了（讀進來的城有噪音源）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
@@ -16,7 +16,9 @@ import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomp
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
 import { garbageDay, garbDecisionRatio452 } from './rules/garbage.ts';
-import { applyFoodHappy, foodDay, type FoodReport } from './rules/food.ts';
+import { applyFoodHappy, type FoodReport } from './rules/food.ts';
+import type { RoadStats } from './rules/logistics.ts';
+import { activeConstruction482, economyLate, economyMain, economySnapshots, emptyEconState, recycleGoods, steelConstruction, wealthPower481, type EconCtx, type EconLate, type EconState } from './rules/economy.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { jobCountsOf, tallyBuildings } from './rules/count.ts';
@@ -24,7 +26,7 @@ import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMark
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
 import { judgeWealth, landStaticAt } from './rules/land.ts';
-import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
+import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, type ImportCosts, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
 export interface Sim {
   city: City;                       // 給畫面與歷史用（建築清單、occ 跟 w 同步）
@@ -36,6 +38,7 @@ export interface Sim {
   // 跨日的全域值（實驗線 tick() 讀昨天的、今天覆寫）
   pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
   dem: Record<number, number>; immWave: number; labor: Labor | null;
+  econ: EconState;                  // D025：商品庫存（goods、supplies、fuel、steel）、船、昨天的倉容量與經濟快照（隔天的商工需求讀它）；存檔欄位 sup、gds、fuel364、steel364、shipCount、shipProgress
   root: Map<number, CityBuilding>;  // 根格 → 城市建築（同步 lv、v、age）
   kinds: KindTable;
   // 地價髒框（D011）：實驗線 landDirty／landBox（53067／53073）照抄。landDirty＝true 時隔天開頭重算：有框只算框裡、沒框整張（54996–55001）。
@@ -57,14 +60,19 @@ export interface DayReport {
   money: number; settle: SettleReport;          // D011：結算後的資金與當天的結算（沙盒照算，只是不入帳）
   garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
+  econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
 }
+// 經濟一天的全部輸出：ec＝55305–55413 那一段的區域變數（同名）、late＝55996–56021 的出口、sn＝56030–56046 的快照三份與價格、cons＝55664–55671 煉鋼廠加速施工耗掉的鋼
+export interface EconReport { ec: EconCtx; late: EconLate; sn: ReturnType<typeof economySnapshots>; cons: number }
 export interface GarbReport { amount: number; cap: number; ratio: number; formal: boolean; districts: number; pen: number; far: number; unserved: number; dec: number }   // pen＝實驗線 garbPen409（探針讀得到）；dec＝評分用的比例
 // 一天的結算（D011，src/sim/rules/money.ts）：收入、維護費、淨額，以及當天發生的里程碑、星等獎金、紓困
-export interface SettleReport { income: number; upkeep: number; net: number; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }
-// 第 2 類系統當天的值（經濟快照、貿易進口、城市活動、夜間城市……本線沒搬）。只給對拍用：把實驗線那一天探針讀出的值代進本線公式，
-// 收入、維護費、結算後資金要跟實驗線逐位相等（D011 驗收 3）。平常不傳＝乘數 1、沒有進口、沒有其他收入（D011 卡第 5 節）
+export interface SettleReport { income: number; upkeep: number; net: number; tax: { R: number; C: number; I: number }; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }   // tax＝實驗線的 taxR、taxC、taxI（住宅、商業、工業的稅，D025 拿來分項對拍）
+// 第 2 類系統當天的值（城市活動、夜間城市、農牧與旅宿的收入加成……本線沒搬；D025 起經濟閉環搬了，稅乘數、進口費與出口金本線自己算，這裡給的會蓋過去）。
+// 只給對拍用：把實驗線那一天探針讀出的值代進本線公式，收入、維護費、結算後資金要跟實驗線逐位相等（D011 驗收 3）。平常不傳＝沒有其他收入（D011 卡第 5 節）。
+// D025：economy 是經濟段的輸入裡本線沒有的五樣——幸福（本線的城市幸福有已知的差，例如存檔裡的政策）、道路負載統計（T129，backlog C）、火車線數（T463）、天然氣發電調度（T471）、城市活動的食物加成（T299）
 export interface Class2In {
   mul?: Partial<TaxMul>; nightCommerceGold487?: number; other?: Partial<OtherIncome>; eventTax?: number | null;
+  economy?: { happy?: number; roadStats?: RoadStats; railLines?: number; gasPowerDispatch?: number; eventFood?: number };
   upkeep?: Partial<Omit<UpkeepIn, 'roadUpkeep' | 'counts' | 'pop' | 'tech' | 'spec' | 'svcBudget'>>;
 }
 
@@ -112,6 +120,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     root.set(i, b);
   }
   const w: World = { N: n, tiles };
+  const econ = econOfSave(save);
   const g = allocGrids(n), budget = budgetOfSave(save.raw.sb), edu: EduCtx = { tech: [], spec: null, schoolLunch: false };   // D023：sb（四類服務預算）66964
   const landAt = forRestyle ? [...root.keys()].filter(i => { const k = (tiles[i].bld!.k | 0); return k >= 1 && k <= 3; }) : undefined;
   rebuildCov(w, g, budget, edu, landAt);                         // 66940／66965
@@ -119,7 +128,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   return {
     city, w, g, rng, seed: save.seed, day: save.day, weather, vrank, budget, edu,
-    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null,
+    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, econ,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
     noiseSig: -1,                                                         // 56934：讀檔時 NOISE 清 0、簽名 −1（rebuildCov 不算噪音，第一天開頭才補上）
@@ -134,6 +143,15 @@ export function budgetOfSave(sb: unknown): SvcBudget {
   const b: SvcBudget = { ...SVC_BUDGET_DEFAULT };
   if (sb && typeof sb === 'object') for (const k of Object.keys(b) as (keyof SvcBudget)[]) { const v = (sb as Record<string, unknown>)[k]; if (typeof v === 'number') b[k] = clamp(v, .5, 1.5); }
   return b;
+}
+
+// 存檔的商品庫存與船（D025，實驗線 load() 66952–66959）：sup（供應品）、gds（貨物）、fuel364、steel364、shipCount、shipProgress，數字才收（`(+d.x)||0`：缺、非數字、NaN 都是 0）；
+// 快照不存＝讀檔第一天商工需求走舊式；gWhCap284（昨天的倉容量）不入存檔，由存檔裡的倉儲物流中心（k64，每座 120＋(等級−1)×60）重算（66959）
+export function econOfSave(save: LabSave): EconState {
+  const num = (v: unknown) => (+(v as number)) || 0, r = save.raw, e = emptyEconState();
+  e.supplies = num(r.sup); e.fuel = num(r.fuel364); e.steel = num(r.steel364); e.shipCount = num(r.shipCount); e.shipProgress = num(r.shipProgress); e.goods = num(r.gds);
+  for (const rec of save.bl) if (rec && rec[1] === 64) e.gWhCap += 120 + ((+rec[2] || 1) - 1) * 60;
+  return e;
 }
 
 // 讀檔後、第一天之前的 pop（D021）：實驗線 load() 被 T510 包了一層（68519 只多呼叫 balancePrepareAuthorities510），
@@ -243,19 +261,25 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
   let cityHappy = happyN ? happySum / happyN : .6;                        // 55254（住宅 k1 與社宅 k127）
   // 55256–55278 垃圾（D020，src/sim/rules/garbage.ts）：產量、清運網、全城比例；500 人以上分清運區算負載。
-  // 回收政策沒搬：係數 1（55257）；企業關：工業用四捨五入後的 jobsI（55258）。55262–55266 資源回收廠產貨物：貨物是經濟系統，沒搬
+  // 回收政策沒搬：係數 1（55257）；企業關：工業用四捨五入後的 jobsI（55258）
   const recycleMul = 1;
   const gd = garbageDay(w, tickBld, pop, jobsI, cityHappy, recycleMul);
   const { garbage, garbCap, garbRatio, garbPen409, san, loc: garbLoc } = gd; cityHappy = gd.cityHappy;
+  // 55262–55266 資源回收廠（k111）產貨物（D025，rules/economy.ts recycleGoods）：清運區算好之後、用昨天的倉容量（今天的在經濟段才算）
+  recycleGoods(s.econ, { formal: san.formal, activeByK: san.activeByK, districts: san.districts }, garbage, cnt.upc342 ?? 0);
   s.landDirty = true; s.landBox = null;                                   // 55279 rebuildAccess468（64146 → 64129）每天把地價設成「隔天整張重算」
   { let s1 = 0, n1 = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (!b || b.k !== 1) continue; s1 += b.h as number; n1++; } if (n1) cityHappy = s1 / n1; }   // 55282–55284：只用住宅 k1 重算
-  // 55286–55342、55414–55424 糧食（D022，src/sim/rules/food.ts）：食物產量、遊客、貿易額度、供糧率，再把每天的加減加到每棟住宅（k1）的幸福上、用住宅重算城市幸福。
-  // 在垃圾（55256–55278）之後、災害與生長之前；整段沒有亂數。55426 災害：關（第 1 類）
-  const fd = foodDay(fc, roads, pop, sea, s.day);
-  cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy);
+  // 55286–55413 經濟（D025，src/sim/rules/economy.ts）：T485 物流單位、食物與遊客（D022 food.ts）、T364b／T418 深加工鏈、共享貿易額度與六種商品的進出口、貨物與零售、價格、四個稅乘數、太空研究中心。
+  // 錢：太空研究中心的獎金在 55408 直接加進 money（在當天結算之前）。整段沒有亂數。道路負載、火車線、天然氣發電調度沒搬＝0
   const labor = laborMarket481(pop, jobs, null, s.day);                   // 55329（F2，企業沒就緒那一支）
+  const x2 = opts.class2?.economy;
+  const ec = economyMain(s.econ, { day: s.day, sea, pop, jobs, cityHappy: x2?.happy ?? cityHappy, money: s.money, spec: s.edu.spec, roads, roadStats: x2?.roadStats, railLines: x2?.railLines, gasPowerDispatch: x2?.gasPowerDispatch, eventFood: x2?.eventFood, c: cnt, fc, labor, wealth: wealthPower481(w, tickBld, pop), activeConstruction: activeConstruction482(w, tickBld) });
+  s.money += ec.mgReward;
+  // 55414–55424 糧食的每日加減（D022）：每棟住宅（k1）的幸福加 clamp((供糧率−.5)×.11, −.06, .05)、用住宅重算城市幸福。在經濟之後、災害與生長之前。55426 災害：關（第 1 類）
+  const fd = ec.fd;
+  cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy);
   const L = legacyDemand({ pop, jobs, cityHappy, czone, jobsC, jobsI, indSubsidy: false, tech: s.edu.tech });   // 55578–55584（F1）
-  const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, null);                          // 55585（F3，經濟沒就緒）
+  const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, s.econ.snap);                    // 55585（F3）：讀昨天的經濟快照（讀檔與新圖第一天沒就緒＝舊式）
   const dem = { 1: housingRciDemand488(E.r, null), 2: E.c, 3: E.i };      // 55586–55587（F4，住房沒就緒）
   const im = immigration(s.immWave, pop, s.day, cityHappy, dem[1]);       // 55594–55595（F4）
   const dMul = demoMul(cityHappy, im.immWave, 0);                         // 55596：交通層 T509、財政 T510 沒就緒＝0
@@ -266,6 +290,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   };
   const { spawned } = spawnStep(ctx);                                     // 55597–55627（F5）
   const ups = upgradeStep(ctx);                                           // 55628–55652（F6）
+  const cons = steelConstruction(s.econ, cnt.steelMillN ?? 0, w, tickBld, s.day);   // 55655–55672 煉鋼廠加速施工（D025）：用鋼庫存讓施工中的房屋多長一天
   if (s.day % 30 === 0) {                                                 // 55676–55686：每 30 天住宅財富往判定值移一級（F9 judgeWealth）
     for (const i of tickBld) {
       const b = w.tiles[i].bld;
@@ -275,16 +300,28 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     }
   }
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
-  // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市、56030 經濟快照：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
+  // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
   const garbDec = garbDecisionRatio452(san, w, garbRatio, recycleMul);   // 56117：評分讀的垃圾比例（清運區在 55261 算好，生長不動它）
-  const settle = settleToday(s, tickBld, cnt, garbDec, opts.class2);                   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  // 55996–56021 出口的金幣與燃料、鋼材出口（在貨物出口之後才抽貿易池）、56030–56046 快照（隔天的商工需求讀 economy481）：D025
+  const late = economyLate(s.econ, ec, cnt), sn = economySnapshots(s.econ, ec, late, cnt, s.day, cons);
+  s.econ.snap = sn.economy481;
+  const settle = settleToday(s, tickBld, cnt, garbDec, opts.class2, econToday(ec, late));   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    food: fd,
+    food: fd, econ: { ec, late, sn, cons },
+  };
+}
+
+// 經濟給結算的三樣（D025）：稅率乘數（55322–55323、55316、55397–55406，遊客數 55294 進商業稅）、稅以外的收入（貿易金、天然氣金、燃料與鋼材與貨物出口金、船的每日金與港口金，56025）、六種商品的進口費（56025 進維護費）
+function econToday(ec: EconCtx, late: EconLate): { mul: Partial<TaxMul>; other: Partial<OtherIncome>; imports: ImportCosts } {
+  return {
+    mul: { goodsMul284: ec.goodsMul284, commerceSalesMul481: ec.commerceSalesMul481, industrialMarketMul481: ec.industrialMarketMul481, indSupplyMul: ec.indSupplyMul, fuelTaxMul: ec.fuelTaxMul, steelTaxMul: ec.steelTaxMul, freightTaxMul: ec.freightTaxMul, tourists: ec.tourists },
+    other: { tradeGold: late.tradeGold, gasGold: late.gasGold, shipPortGold: ec.shipPortGold, shipDailyGold418: ec.shipDailyGold418, fuelExportGold418: late.fuelExportGold418, steelExportGold482: late.steelExportGold482, goodsExportGold481: ec.goodsExportGold481 },
+    imports: { goodsImportCost481: ec.goodsImportCost481, foodImportCost482: ec.foodImportCost482, gasImportCost482: ec.gasImportCost482, fuelImportCost482: ec.fuelImportCost482, steelImportCost482: ec.steelImportCost482, suppliesImportCost482: ec.suppliesImportCost482 },
   };
 }
 
@@ -292,18 +329,18 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
 // 55969–56027 維護費、56028 城市活動、56053 結算、56079 貸款、56081 里程碑、56098–56131 星等、56142 紓困。
 // 第 2 類系統（經濟快照 T481／T482、城市活動 T299、夜間城市 T487、進口）沒搬：乘數 1、進口費 0、沒有城市活動（D011 卡第 5 節）。
 // 沙盒（diff 3）照算收支、只是不入帳（56053），里程碑與星等照給（實驗線也是）。
-function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, garbScoreRatio: number, c2?: Class2In): SettleReport {
+function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, garbScoreRatio: number, c2?: Class2In, e?: { mul: Partial<TaxMul>; other: Partial<OtherIncome>; imports: ImportCosts }): SettleReport {
   const w = s.w, f = fieldsOf(s.g);
   let chN = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (b && !b.ref && b.k === 42) chN++; }   // 55874 civicMul：市政廳數（第一個迴圈 55055 起數的）
-  const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });
-  // 55988、56025、56027 其他收入：D011 的城都是 0（對拍時照實驗線那天的值加）；56028 城市活動：沒搬（對拍時照實驗線那天的稅率）
-  const pre = c2?.other ? addOtherIncome(inc.income, { ...Object.fromEntries([...OTHER_INCOME_KEYS, 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487'].map(k => [k, 0])), ...c2.other } as OtherIncome) : inc.income;
+  const inc = dailyIncome(w, f, tickBld, { ...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...e?.mul, ...c2?.mul }, { nightCommerceGold487: c2?.nightCommerceGold487 ?? 0 });   // D025：稅乘數與遊客數來自經濟；c2 是對拍時蓋過去的
+  // 55988、56025、56027 其他收入：D025 起有貿易與船的金幣（農牧、旅宿、市場、釀酒、科技、數據中心、銀行利息 D026 才搬，對拍時照實驗線那天的值加）；56028 城市活動：沒搬（對拍時照實驗線那天的稅率）
+  const pre = e || c2?.other ? addOtherIncome(inc.income, { ...Object.fromEntries([...OTHER_INCOME_KEYS, 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487'].map(k => [k, 0])), ...e?.other, ...c2?.other } as OtherIncome) : inc.income;
   const income = cityEventIncome(pre, c2?.eventTax ?? null);
   const c = inc.counts;
-  const upkeep = dailyUpkeep({ ...upkeepIn(w, tickBld, cnt, c, { pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec }), ...c2?.upkeep });   // 主計數迴圈的全部計數（D016、D022、D024）＋稅收迴圈順手數的六種＋掃整張圖的四個函式
+  const upkeep = dailyUpkeep({ ...upkeepIn(w, tickBld, cnt, c, { pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec }), ...(e ? { imports: e.imports } : {}), ...c2?.upkeep });   // 主計數迴圈的全部計數（D016、D022、D024）＋稅收迴圈順手數的六種＋掃整張圖的四個函式＋六種商品的進口費（D025）
   const sc = scoreCounts(w, f, tickBld);
   const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: garbScoreRatio });   // 56117（D020）：garbDecisionRatio452
-  return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
+  return { income, upkeep, net: r.net, tax: { R: inc.taxR, C: inc.taxC, I: inc.taxI }, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
 }
 
 // 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步
@@ -333,7 +370,7 @@ export function simHash(s: Sim) {
   const bl = [...s.root.keys()].map(i => { const b = s.w.tiles[i].bld!; return [i, b.pw ? 1 : 0, b.h, b.we ?? -1, b.den ?? -1]; });
   const ground = s.w.tiles.map(t => `${t.road ? t.rc : 0}${t.zone || 0}${t.tree ? 1 : 0}`).join('');
   return fnv1a(JSON.stringify([s.day, s.pop, s.jobs, s.jobsC, s.jobsI, s.cityHappy, s.dem, s.immWave, s.weather, blds, bl, Array.from(s.g.POL), Array.from(s.g.LANDBASE),
-    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox]));
+    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox, s.econ]));
 }
 
 export function simCounts(s: Sim) {

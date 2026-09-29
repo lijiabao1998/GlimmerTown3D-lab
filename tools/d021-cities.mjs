@@ -51,12 +51,13 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
     },
     // 一排：同一列 z 從 x0 到 x1（step 格一棟）都放同一種
     row(x0, x1, z, k, lv, o = {}, step = 1) { for (let x = x0; x <= x1; x += step) b.put(x, z, k, lv, o); return b; },
-    code(seed = 5162026, day = 1, name = '清運') {
+    code(seed = 5162026, day = 1, name = '清運', extra = {}) {   // D025：extra＝要蓋過去的存檔欄位（資金 money、庫存 sup／gds／fuel364／steel364、船 shipCount／shipProgress）
       const s2 = '2'.repeat(nn), z0 = '0'.repeat(nn);
       const o = { ...template, seed, day, money: 3000, nm: name, ter: ter.every(v => v === 2) ? s2 : [...ter].join(''), tre: z0, el: z0, zn: z0, wp: [...wp].join(''),
         rd: [...road].join(''), rcl: [...rcl].map(v => v ? String.fromCharCode(48 + v) : '0').join(''),
         bl: [...bl].sort((p, q) => p[0] - q[0]) };
       for (const [k, arr] of Object.entries(layers)) o[k] = k === 'ix475' ? [...arr].map(v => String.fromCharCode(48 + v)).join('') : [...arr].join('');
+      Object.assign(o, extra);
       delete o.z; delete o.d3;
       return encodeLabCode(o, { deflate: true });
     },

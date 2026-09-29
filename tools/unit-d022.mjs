@@ -19,6 +19,7 @@ import { ROOT } from './cdp.mjs';
 import { mulberry32 } from '../src/sim/rng.ts';
 import * as labHelpers from '../src/sim/rules/lab.ts';
 import * as F from '../src/sim/rules/food.ts';
+import * as LOGI from '../src/sim/rules/logistics.ts';   // D025：food.ts 讀 logistics.ts 的單位（改壞的 food.ts 副本在 vm 裡另載，要把它們帶進去）
 import { codeWithSeed, decodeLabCode } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import * as realDay from '../src/sim/day.ts';
@@ -291,7 +292,7 @@ async function guards(log) {
       if (!d) missed.push(`實驗線「${name}」`);
     }
     const src = read('src/sim/rules/food.ts');
-    const load = s => { const js = stripTypeScriptTypes(s).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers });
+    const load = s => { const js = stripTypeScriptTypes(s).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers, ...LOGI });
       vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy};', ctx); return ctx.__m; };
     const baseOk = !compare(makeLab(T), makeMine(load(src)), true).diffs;
     for (const [name, from, to] of MINE_MUT) {
@@ -308,11 +309,12 @@ async function guards(log) {
   {
     const bad = [], day = read('src/sim/day.ts');
     const iH = day.indexOf('let cityHappy = happyN ? happySum / happyN : .6;'), iG = day.indexOf('garbageDay(w, tickBld, pop, jobsI, cityHappy, recycleMul)'), iK = day.indexOf('// 55282–55284：只用住宅 k1 重算'),
-      iF = day.indexOf('foodDay(fc, roads, pop, sea, s.day)'), iA = day.indexOf('applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy)'), iL = day.indexOf('laborMarket481(pop, jobs, null, s.day)'), cnt = read('src/sim/rules/count.ts'), iC = cnt.indexOf('countFood(fc, b)'), iR = cnt.indexOf('if (!b || b.ref) continue;'), iS = cnt.indexOf('if (b.k === 7) fac.schools++;');
+      iF = day.indexOf('economyMain(s.econ,'), iA = day.indexOf('applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy)'), iL = day.indexOf('laborMarket481(pop, jobs, null, s.day)'), iD = day.indexOf('economyDemands481('), cnt = read('src/sim/rules/count.ts'), eco = read('src/sim/rules/economy.ts'),
+      iC = cnt.indexOf('countFood(fc, b)'), iR = cnt.indexOf('if (!b || b.ref) continue;'), iS = cnt.indexOf('if (b.k === 7) fac.schools++;');   // D025：糧食那一段搬進 economyMain（rules/economy.ts）裡叫 foodDay，day.ts 叫 economyMain 一次
     const iT = day.indexOf('tallyBuildings(w, tickBld)');   // D024：主計數迴圈搬到 rules/count.ts 的 tallyBuildings，day.ts 叫它一次
-    if (!(iH > 0 && iG > iH && iK > iG && iF > iK && iA > iF && iL > iA)) bad.push('day.ts 的順序要是：城市幸福（55254）→ 垃圾（55278）→ 住宅重算城市幸福（55284）→ 糧食 → 勞動市場與需求（55329、55578）');
+    if (!(iH > 0 && iG > iH && iK > iG && iL > iK && iF > iL && iA > iF && iD > iA)) bad.push('day.ts 的順序要是：城市幸福（55254）→ 垃圾（55278）→ 住宅重算城市幸福（55284）→ 勞動市場（55329）→ 經濟（含糧食）→ 糧食加減到住宅 → 商工需求（55578）');
     if (!(iR > 0 && iC > iR && iS > iC && iT > 0 && iT < iF)) bad.push('countFood 要在主計數迴圈（count.ts 的 tallyBuildings）裡、跳過 ref 格之後，而且 day.ts 在糧食之前叫 tallyBuildings');
-    if (day.split('foodDay(').length !== 2 || day.split('applyFoodHappy(').length !== 2 || cnt.split('countFood(').length !== 2) bad.push('foodDay、applyFoodHappy（day.ts）、countFood（count.ts）都只叫一次');
+    if (day.split('economyMain(').length !== 2 || day.split('applyFoodHappy(').length !== 2 || eco.split('foodDay(').length !== 2 || cnt.split('countFood(').length !== 2) bad.push('economyMain、applyFoodHappy（day.ts）、foodDay（economy.ts 的 economyMain 裡叫一次）、countFood（count.ts）都只叫一次');
     if (!day.includes('food: fd,')) bad.push('回報要有 food');
     // 預建城起步那一天：沒有農場、沒有貿易站，路格 < 80（底 1、效率 .78 → floor(.78)＝0 → 最少 3），額度 3；需求 ceil(pop/10)，本地 0，進口 min(3, 需求)，供糧率＝進口／需求
     const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
@@ -407,7 +409,7 @@ async function guards(log) {
 
     // 突變：本線的 food.ts 改壞一處，這批要紅（沒改的先核過全等）
     const src = read('src/sim/rules/food.ts');
-    const load = t => { const js = stripTypeScriptTypes(t).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers });
+    const load = t => { const js = stripTypeScriptTypes(t).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers, ...LOGI });
       vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy};', ctx); return ctx.__m; };
     const LIVE_MUT = [
       ['農場 ×3→×4', 'c.farmFoodU += (b.lv || 1) * 3;', 'c.farmFoodU += (b.lv || 1) * 4;'],
@@ -432,7 +434,7 @@ async function guards(log) {
       ['需求 0 也加', 'if (!(need > 0)) return cityHappy;', ''],
     ];
     const missed = [], out = [];
-    const variantOf = async food => dayVariant([], { './rules/food.ts': food, './rules/count.ts': await loadMod('src/sim/rules/count.ts', [], { './food.ts': food }) });   // D024：countFood 在 count.ts 裡被叫，改壞的 food.ts 要接到 count.ts 上
+    const variantOf = async food => dayVariant([], { './rules/food.ts': food, './rules/count.ts': await loadMod('src/sim/rules/count.ts', [], { './food.ts': food }), './rules/economy.ts': await loadMod('src/sim/rules/economy.ts', [], { './food.ts': food }) });   // D024：countFood 在 count.ts 裡被叫；D025：foodDay 在 economy.ts 的 economyMain 裡被叫——改壞的 food.ts 要接到這兩份上
     const V0 = await variantOf(load(src)), ok0 = runAll(V0).filter(x => judged(codes.find(k => k.id === x.id)) && x.diffs.length);
     for (const [name, from, to] of LIVE_MUT) {
       if (src.split(from).length !== 2) { missed.push(`「${name}」錨點不唯一（${src.split(from).length - 1}）`); continue; }

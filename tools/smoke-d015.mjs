@@ -81,6 +81,12 @@ export async function d015Smoke(withBrowser, log) {
     // 以前是「播放中量增量、播放停了才量整張（5 次）、兩邊各取中位數再相除」：兩邊的負載不一樣（播放中畫面還在畫），CI 上跑到過 0.52（增量 10.3 ms、整張 19.9 ms）；
     // 雜訊只會把時間往上加，成對量讓兩邊吃到同一份雜訊、每一對的比值大致抵消，取中位數再壓掉少數離群的一對。門檻 0.5 不動。
     // 對數上限：只有城在長的時候才有自然的重建（長完就不再重建），所以一直走到湊滿 18 對或走了 300 秒模擬時間為止。
+    // D025 起起步城長得少（實驗線也是：第 60 天以後住商工幾乎不再變、總共約 100 棟）：前面驗收 2 走完 60 天城就長完了，之後湊不到對（那一輪 1 對）；
+    // 重讀一份起步城從頭量，湊得到 16 對，但整張重建只剩 13 ms、增量的固定成本（同步工地 6 ms）佔了一半，比值中位數 0.53 > 0.5——這條驗收的對象是「大城」，
+    // 所以換 AI 城（399 棟、第 121 天）當「我的城」讀進來量：一路都有升級與施工的重建，200 個 0.25 秒內湊滿 18 對，整張約 49 ms（同 D022 的讀法）。
+    await open('sample=seed516&clean=1'); await ev('__gt.clearSave()');
+    await ev(`localStorage.setItem('gt3d.v1.save', ${J(R('src/content/samples/ai120.code.txt').trim())}), 1`);
+    await open('');
     await ev('__gt.simPlay(true), __gt.simSpeed(0), 1');
     let rbP = (await ev('__gt.conCheck()')).rebuilds;
     const pairs = [];
@@ -96,8 +102,9 @@ export async function d015Smoke(withBrowser, log) {
       } else rbP = c.rebuilds;
     }
     await ev('__gt.simPlay(false), 1');
+    await ev('__gt.clearSave(), 1');
     const rs = pairs.map(q => q.r).sort((a, b) => a - b), mr = med(rs);
-    log(pairs.length >= 10 && mr <= 0.5, 'D015 驗收 5：同一頁裡，增量重建的 JS（建場景＋同步工地，不含容量放大那幾次）≤ 整張重建的一半（不看機器快慢；成對量、每對算比值、取中位數，≥ 10 對）',
+    log(pairs.length >= 10 && mr <= 0.5, 'D015 驗收 5：同一頁裡，增量重建的 JS（建場景＋同步工地，不含容量放大那幾次）≤ 整張重建的一半（不看機器快慢；成對量、每對算比值、取中位數，≥ 10 對；D025 起量在 AI 城 399 棟上）',
       `${pairs.length} 對，比值中位數 ${mr.toFixed(2)}（最小 ${rs[0]?.toFixed(2)}、最大 ${rs.at(-1)?.toFixed(2)}）；增量 ${f1(med(pairs.map(q => q.inc)))} ms、整張 ${f1(med(pairs.map(q => q.full)))} ms（各取中位數）`);
   });
 

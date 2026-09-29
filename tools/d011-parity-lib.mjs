@@ -11,7 +11,7 @@ import { stepDay, simCounts, simFromSave } from '../src/sim/day.ts';
 import { weatherStep } from '../src/sim/rules/weather.ts';
 import { mulberry32 } from '../src/sim/rng.ts';
 import { d011Ops, prebuiltOps, run3d, PICK_SRC, DEFAULT_GAP } from './d011-ops.mjs';
-import { OTHER_INCOME_KEYS, IMPORT_KEYS } from '../src/sim/rules/money.ts';
+import { OTHER_INCOME_KEYS } from '../src/sim/rules/money.ts';
 
 export { PICK_SRC };
 
@@ -264,18 +264,18 @@ export function prebuilt3d(code, KT, vrank) {
   return out;
 }
 
-// 實驗線探針讀出的那一天 → 本線 stepDay 的 class2（src/sim/day.ts Class2In）：第 2 類乘數、夜間城市、其他收入、城市活動、進口費與運輸營運費
+// 實驗線探針讀出的那一天 → 本線 stepDay 的 class2（src/sim/day.ts Class2In）：政策、夜間城市、其他收入、城市活動、運輸營運費。
+// D025 起經濟閉環（稅乘數與遊客、進口費、貿易金與各項出口金、船的金幣）本線自己算，不再代入實驗線的值：第 1 天的收入、維護費、結算後資金要靠本線自己的經濟跟實驗線相等
+const ECON_OTHER = ['tradeGold', 'gasGold', 'shipPortGold', 'shipDailyGold418', 'fuelExportGold418', 'steelExportGold482', 'goodsExportGold481'];
 export function class2Of(p) {
   const pick = keys => Object.fromEntries(keys.map(k => [k, p[k] ?? 0]));
   return {
-    mul: { pm: p.pol ?? null, goodsMul284: p.goodsMul284, commerceSalesMul481: p.commerceSalesMul481, industrialMarketMul481: p.industrialMarketMul481, indSupplyMul: p.indSupplyMul,
-      fuelTaxMul: p.fuelTaxMul, steelTaxMul: p.steelTaxMul, freightTaxMul: p.freightTaxMul, tourists: p.tourists, nightCityReady: !!p.nightCity?.ready, nightCityTaxMul: p.nightCity?.taxMul ?? 1,
-      tech: p.tech ?? [], spec: p.spec ?? null },
+    mul: { pm: p.pol ?? null, nightCityReady: !!p.nightCity?.ready, nightCityTaxMul: p.nightCity?.taxMul ?? 1, tech: p.tech ?? [], spec: p.spec ?? null },
     nightCommerceGold487: p.nightCommerceGold487 ?? 0,
-    other: pick([...OTHER_INCOME_KEYS, 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487']),
+    other: pick([...OTHER_INCOME_KEYS.filter(k => !ECON_OTHER.includes(k)), 'metroRev', 'metroAds', 'transitRev', 'nightTransitRev487']),
     eventTax: p.cityEvent ? p.cityEvent.tax : null,
     upkeep: { pol: p.pol ?? null, policyDailyCost504: p.policyDailyCost504 ?? 0, powerUpkeep471: p.powerUpkeep471 ?? 0, waterUpkeep472: p.waterUpkeep472 ?? 0, infraUpkeep475: p.infraUpkeep475 ?? 0,
-      transitDepotUpkeep501: p.transitDepotUpkeep501 ?? 0, metroCost: p.metroCost ?? 0, railOpsCost463: p.railOpsCost463 ?? 0, svcFleet: p.svcFleet, imports: pick(IMPORT_KEYS),
+      transitDepotUpkeep501: p.transitDepotUpkeep501 ?? 0, metroCost: p.metroCost ?? 0, railOpsCost463: p.railOpsCost463 ?? 0, svcFleet: p.svcFleet,
       busOpsCost468: p.busOpsCost468 ?? 0, nightOpsCost487: p.nightOpsCost487 ?? 0 },
   };
 }

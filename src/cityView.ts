@@ -682,6 +682,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const d = f.delta * 100;
     return ['糧食', `供糧率 ${Math.round(f.rate * 100)}%（需求 ${f.need}：本地 ${f.domestic}＋進口 ${f.imports}，進口額度 ${f.cap}）；每天幸福 ${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(1)}`];
   }
+  // D025：商業與工業建築卡的「市場」一列。讀最近一天的經濟快照（購買力、零售利用率、銷售乘數；工業的市場乘數、缺貨、原料）；讀檔之後還沒推進過就不知道，照實講
+  function marketRow(b: { k: number }): Row | null {
+    if (!sim || (b.k !== 2 && b.k !== 3)) return null;
+    const e = lastRep ? lastRep.econ.sn.economy481 : null;
+    if (!e) return ['市場', '推進一天之後才算得出來（購買力、零售與貨物庫存看全城）'];
+    if (b.k === 2) return ['市場', `購買力 ${e.consumption.purchasingPower.toFixed(2)}；零售利用率 ${Math.round(e.commerce.utilization * 100)}%（貨物需求 ${e.goods.need}：本地 ${e.goods.domestic}＋進口 ${e.goods.imports}）；銷售乘數 ×${e.commerce.salesMul.toFixed(2)}`];
+    return ['市場', `市場乘數 ×${e.production.marketMul.toFixed(2)}（缺貨 ${Math.round(e.goods.shortageRatio * 100)}%、貨物庫存 ${e.goods.stock}／${e.goods.cap}）；原料 ${e.production.inputUsed.toFixed(1)}／${e.production.inputDemand.toFixed(1)}`];
+  }
   function showTile(x: number, z: number) {
     if (!city || !built) return null;
     cardAt = [x, z];
@@ -699,6 +707,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       // 匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
+      const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
       const evs = lotEvents(c, b.x, b.z);
       if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
@@ -955,7 +964,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       return { want: [b.x, b.z, id], got: h, name: KINDS.name(b.k) };
     },
     openTile: (x: number, z: number) => showTile(x, z),
-    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, garb: lastRep.garb, food: lastRep.food } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
+    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // 目前卡片的樣子（clean=1 時介面沒掛進 document，測試從這裡讀）
     card: () => ({ open: !bio.hidden, at: cardAt, title: $('#bio h2').textContent, sub: $('#bio .sub').textContent }),
     // 挑一棟當點擊測試的目標：佔地最大、同佔地取最高、再取編號最小（決定性）
