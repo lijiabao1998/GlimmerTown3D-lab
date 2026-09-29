@@ -16,6 +16,7 @@ import { d015Smoke, d015SkipNote } from './smoke-d015.mjs';
 import { d016Smoke, d016SkipNote } from './smoke-d016.mjs';
 import { d013Smoke, d013SkipNote } from './smoke-d013.mjs';
 import { d019Smoke, d019SkipNote } from './smoke-d019.mjs';
+import { d020Smoke, d020SkipNote } from './smoke-d020.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -535,12 +536,15 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d016Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d013Smoke(withBrowser, log);
 // ===== D019：供水（tools/smoke-d019.mjs：手機拉水管、放水塔、地面只在拿著水管類工具時畫水管、建築卡講有沒有水、增量＝整張、手機預算；自己開三個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d019Smoke(withBrowser, log);
+// ===== D020：垃圾（tools/smoke-d020.mjs：手機蓋垃圾場、13 顆公共設施按鈕、建築卡講垃圾處理與清運、教學提示、增量＝整張、手機預算；自己開 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d020Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
 if (d016SkipNote()) console.log(d016SkipNote());
 if (d013SkipNote()) console.log(d013SkipNote());
 if (d019SkipNote()) console.log(d019SkipNote());
+if (d020SkipNote()) console.log(d020SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

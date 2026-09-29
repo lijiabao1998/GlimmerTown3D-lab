@@ -8,6 +8,8 @@
 //       覆蓋率另有一份門檻 NEED16，civic-* 與 doze-civic、undo-civic 標籤只在 d016 記，D011 的樣本逐字不變）
 //       node tools/lab-build.mjs --lab=<實驗線工作目錄> --set=d019   → src/content/samples/d019-build.json（D019 水塔、配水管：家族 cases19；
 //       片段多三段（WATER_TOWER_CAP、DESAL_CAP、computeWaterLegacy449），computeWater 接舊式供水網原文，格子的 wr 一起比；門檻 NEED19）
+//       node tools/lab-build.mjs --lab=<實驗線工作目錄> --set=d020   → src/content/samples/d020-build.json（D020 垃圾場：家族 cases20，地圖多放垃圾場、操作抽 DUMP；
+//       片段跟 D011 同一份（垃圾場的 canPlace／placeCost／doPlace 分支與污染源蓋印都在裡面），污染場、格子照 D011 一起比；覆蓋率門檻 NEED20，dump-* 標籤只在 d020 記）
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
@@ -15,19 +17,22 @@ import { gzipSync } from 'node:zlib';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { labSource } from './labsrc.mjs';
-import { cases, D011_SEED, D011_COUNT, FAMILIES, cases16, D016_SEED, D016_COUNT, FAMILIES16, CIVIC, cases19, D019_SEED, D019_COUNT, FAMILIES19, WATER, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
+import { cases, D011_SEED, D011_COUNT, FAMILIES, cases16, D016_SEED, D016_COUNT, FAMILIES16, CIVIC, cases19, D019_SEED, D019_COUNT, FAMILIES19, WATER,
+  cases20, D020_SEED, D020_COUNT, FAMILIES20, DUMP, makeLab, labImpl, runMap, RENDER_KEYS } from './d011-cases.mjs';
 
 const arg = (n, d) => { const a = process.argv.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=').slice(1).join('=') : d; };
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LAB = path.resolve(arg('lab', path.join(ROOT, 'scratch/lab-src')));
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 const SET = arg('set', 'd011');
-if (!['d011', 'd016', 'd019'].includes(SET)) throw new Error(`--set 只能是 d011、d016 或 d019：${SET}`);
-const D16 = SET === 'd016', D19 = SET === 'd019';
-const CASES = D16 ? cases16 : D19 ? cases19 : cases, COUNT = D16 ? D016_COUNT : D19 ? D019_COUNT : D011_COUNT;
+if (!['d011', 'd016', 'd019', 'd020'].includes(SET)) throw new Error(`--set 只能是 d011、d016、d019 或 d020：${SET}`);
+const D16 = SET === 'd016', D19 = SET === 'd019', D20 = SET === 'd020';
+const CASES = D16 ? cases16 : D19 ? cases19 : D20 ? cases20 : cases, COUNT = D16 ? D016_COUNT : D19 ? D019_COUNT : D20 ? D020_COUNT : D011_COUNT;
+const DUMP_KS = new Set([8]);   // D020：垃圾場的種類（doPlace 51718）
 // D016：公共設施九支的種類與服務預算類別（doPlace 51667–51717、SVC_BUDGET_CAT 52967；公園、郵局、墓園不看預算）
 const CIVIC_K = { park: 4, fire: 6, policeBox: 52, hospital: 12, clinic: 13, school: 7, library: 14, post: 15, cemetery: 16 };
 const CIVIC_KS = new Set(Object.values(CIVIC_K));
+const CIV_KS = D20 ? DUMP_KS : CIVIC_KS;   // 復原標籤（undo-civic-*）認的種類：D016 是九支公共設施、D020 是垃圾場
 const CIVIC_CAT = { fire: 'fire', policeBox: 'police', hospital: 'health', clinic: 'health', school: 'edu', library: 'edu' };
 const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
 if (commit !== PINNED) throw new Error(`D011 實驗線版本錯誤：要求 ${PINNED}，目前 ${commit}`);
@@ -104,6 +109,9 @@ const inMap = (x, y) => x >= 0 && y >= 0 && x < lab.N() && y < lab.N();
 const LAYERS = ['ruin', 'crater', 'bld', 'rail', 'tram', 'dock', 'rdec', 'bus', 'lv475|ud475', 'fly475|ix475', 'hv471|ug471', 'wm472|sm472', 'road', 'wp', 'zone', 'tree', 'deco',
   'oneway', 'light', 'busLane', 'levee', 'flood'];   // 51777–51818 的順序（只用來貼標籤，不影響輸出）
 const topLayer = t => LAYERS.find(l => l.split('|').some(k => t[k]));
+// D020（只給標籤用）：污染源場（POLBASE）跟動手前的複本比：變了沒有；垃圾場的蓋印範圍（POL_SRC[8].r＝5）裡有沒有一格是 255（Uint8 的上限，蓋印用 clamp 夾住）
+const polChanged = arr => { const P = lab.state().POLBASE; for (let i = 0; i < P.length; i++) if (P[i] !== arr[i]) return true; return false; };
+const footHas255 = (arr, x, y) => { const N = lab.N(); for (let dy = -5; dy <= 5; dy++) for (let dx = -5; dx <= 5; dx++) { const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < N && ny < N && arr[ny * N + nx] === 255) return true; } return false; };
 // 同一筆交易裡「整棟快照之後再拆同一格」：拆多格建築時占地迴圈（51789）替還沒存過的格存快照、記 seen；
 // 框或線後面再拆到這些格的下一層，doPlace（51635）看到 seen 就不再存。via：格號 → [這一格是哪一筆多格拆除存的（從根格或 ref 格起）, 是不是根格]，每一筆手勢重來
 const group = lab.run('()=>undoGroup');
@@ -123,14 +131,15 @@ lab.spy = {
       }
     }
     const wr = D19 ? lab.tiles().filter(q => q.wr).length : 0;
-    return { wr, t: t ? JSON.parse(JSON.stringify(t)) : null, money: lab.money(), reason: lab.canPlace(tool, x, y), cost: t ? lab.placeCost(tool, x, y) : null, land: lab.getLand()[1] === null && lab.getLand()[0],
+    const polArr = D20 ? lab.state().POLBASE.slice() : null, polHere = D20 && t ? polArr[y * N + x] : 0;   // D020：動手前的污染源場（複本）與這一格的值
+    return { wr, polArr, polHere, t: t ? JSON.parse(JSON.stringify(t)) : null, money: lab.money(), reason: lab.canPlace(tool, x, y), cost: t ? lab.placeCost(tool, x, y) : null, land: lab.getLand()[1] === null && lab.getLand()[0],
       seen: !!(t && g && g.seen[y * N + x]), foot, fromRef: !!(t && t.bld && t.bld.ref) };
   },
   after(s0, tool, x, y, ok) {
     tag(`call:${opKind}`);
     if (!s0.t) { tag('call-out-of-map'); return; }
     if (s0.land) tag('land-full-to-box');
-    const civ = (D16 && CIVIC.includes(tool)) || (D19 && WATER.includes(tool));
+    const civ = (D16 && CIVIC.includes(tool)) || (D19 && WATER.includes(tool)) || (D20 && DUMP.includes(tool));
     if (s0.reason) { tag(`reason:${tool === 'doze' ? 'doze:' : ''}${s0.reason}`); if (civ) tag(`civic-reason:${s0.reason}`); return; }
     if (!ok) {
       if (civ && s0.cost > s0.money) { tag('civic-refused-money'); if (s0.cost - s0.money <= 1) tag('civic-refused-money-by≤1'); }
@@ -171,6 +180,20 @@ lab.spy = {
       if (lab.tiles().filter(q => q.wr).length !== s0.wr) tag(`water-reach:${tool}`);
       if (tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && b.bld.k === 10) tag('doze-tower');
     }
+    if (D20) {   // D020：垃圾場蓋在分區、裝飾上（清掉）；蓋印真的改了污染源場、蓋在乾淨或別的污染上、蓋到 255 上限；拆垃圾場撤印（含上限那一圈）
+      if (tool === 'dump') {
+        if (b.zone) tag('dump-on-zone');
+        if (b.deco) tag('dump-on-deco');
+        if (polChanged(s0.polArr)) tag('dump-pol-stamped');
+        tag(s0.polHere > 0 ? 'dump-on-polluted' : 'dump-on-clean');
+        if (footHas255(lab.state().POLBASE, x, y) && !footHas255(s0.polArr, x, y)) tag('dump-pol-hit-255');
+      }
+      if (tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && b.bld.k === 8) {
+        tag('doze-dump');
+        if (polChanged(s0.polArr)) tag('doze-dump-pol-unstamped');
+        if (footHas255(s0.polArr, x, y)) tag('doze-dump-on-saturated');
+      }
+    }
     if (D16 && tool === 'doze' && topLayer(b) === 'bld' && !b.bld.ref && !(b.bld.sz > 1) && CIVIC_KS.has(b.bld.k)) tag(`doze-civic:k${b.bld.k}`);
   },
 };
@@ -183,10 +206,10 @@ for (const m of ['tap', 'line', 'rect', 'undo']) {
     const top0 = lab.getStack().at(-1), pre = (m === 'line' || m === 'rect') && op.tool === 'doze' ? flat() : null, r = f(op), top = lab.getStack().at(-1);
     if (m === 'undo') {
       if (r && resnapTxn.has(top0)) { tag('txn-resnap-undone'); if (flat() === resnapTxn.get(top0)) tag('txn-resnap-undo-restores'); }
-      if (D16 && r && top0) for (const q of top0.snaps) {   // 復原的這一筆蓋了／拆了公共設施（快照前後，closeUndo 62729 存的 s、a）
+      if ((D16 || D20) && r && top0) for (const q of top0.snaps) {   // 復原的這一筆蓋了／拆了公共設施（D020：垃圾場）（快照前後，closeUndo 62729 存的 s、a）
         const s = JSON.parse(q.s).bld, a = JSON.parse(q.a).bld;
-        if (a && !a.ref && CIVIC_KS.has(a.k) && !s) tag('undo-civic-build');
-        if (s && !s.ref && CIVIC_KS.has(s.k) && !a) tag('undo-civic-doze');
+        if (a && !a.ref && CIV_KS.has(a.k) && !s) tag('undo-civic-build');
+        if (s && !s.ref && CIV_KS.has(s.k) && !a) tag('undo-civic-doze');
       }
     }
     else if (resnapped && top !== top0) resnapTxn.set(top, pre);
@@ -264,18 +287,28 @@ const NEED19 = {
   'wpipe-under-bld': 10, 'wpipe-under-road': 10, 'wpipe-on-zone': 10, 'wpipe-keeps-tree': 10, 'water-reach:water': 20, 'water-reach:wpipe': 60, 'water-reach:doze': 10,
   'doze:wp': 20, 'doze-tower': 3, 'undo-ok': 100, 'log:ri,5': 60, 'pre:null': 300,
 };
-const need = D16 ? NEED16 : D19 ? NEED19 : NEED;
+// D020（卡面驗收 1）：垃圾場蓋成夠多次；拒絕理由（水上、路上、有建築、焦土、隕石坑、錢不夠）都出現；樹上加價、沙盒、造價有小數（科技與特化）；
+// 蓋在分區、裝飾上（清掉）；蓋印真的改了污染源場、蓋在乾淨與別的污染上、蓋到 Uint8 上限 255；拆垃圾場撤印（地圖上原有的與新蓋的都拆、含上限那一圈）；
+// 蓋與拆都被復原；線與框；垃圾場抽 ri(3)
+const NEED20 = {
+  'build:dump': 60, 'civic-reason:只能蓋在陸地上': 20, 'civic-reason:道路上不能建造': 20, 'civic-reason:已有建築': 40, 'civic-reason:焦土需先清理': 5, 'civic-reason:隕石坑需先剷除': 5,
+  'civic-refused-money': 60, 'civic-refused-money-by≤1': 5, 'civic-money-exact': 5, 'civic-tree-surcharge': 30, 'civic-sandbox-free': 20, 'civic-cost-fractional': 10, 'civic-line': 30, 'civic-rect': 30,
+  'dump-on-zone': 10, 'dump-on-deco': 3, 'dump-pol-stamped': 60, 'dump-on-polluted': 10, 'dump-on-clean': 3, 'dump-pol-hit-255': 5, 'doze-dump': 20, 'doze-dump-pol-unstamped': 20, 'doze-dump-on-saturated': 5,
+  'undo-civic-build': 50, 'undo-civic-doze': 10, 'undo-ok': 100, 'log:ri,3': 60, 'pre:null': 300,
+};
+const need = D16 ? NEED16 : D19 ? NEED19 : D20 ? NEED20 : NEED;
 const missing = Object.entries(need).filter(([k, n]) => (cov[k] || 0) < n).map(([k, n]) => `${k} ${cov[k] || 0}/${n}`);
-if (missing.length || minOps < 20 || COUNT < (D16 || D19 ? 150 : 200)) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${COUNT} 張`);
-if (!D16 && !D19 && cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
-if (!D16 && !D19 && cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
+if (missing.length || minOps < 20 || COUNT < (D16 || D19 || D20 ? 150 : 200)) throw new Error(`案例覆蓋不足：${missing.join('；')}；最少 ${minOps} 筆／張，${COUNT} 張`);
+if (!D16 && !D19 && !D20 && cov['txn-resnap-other']) throw new Error(`有 ${cov['txn-resnap-other']} 次成功的 doPlace 碰到同一筆交易已存快照、卻不是多格占地迴圈存的格（標籤的前提不成立）`);
+if (!D16 && !D19 && !D20 && cov['txn-resnap-undone'] !== cov['txn-resnap-undo-restores']) throw new Error(`復原整棟快照後再拆的交易 ${cov['txn-resnap-undone']} 次，回到手勢之前的只有 ${cov['txn-resnap-undo-restores']} 次`);
 
 // ---- 實驗線自己的表（本線 build.ts 的常數逐項比這一份）----
 const R = s => lab.run(s);
 const tables = {
   roadCost: [...R('ROAD_COST')],
-  cost: JSON.parse(JSON.stringify(R(`({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge${D16 ? CIVIC.map(t => `,${t}:COST.${t}`).join('') : D19 ? WATER.map(t => `,${t}:COST.${t}`).join('') : ''}})`))),
+  cost: JSON.parse(JSON.stringify(R(`({zone:COST.zone,plant:COST.plant,police:COST.police,doze:COST.doze,bridge:COST.bridge${D16 ? CIVIC.map(t => `,${t}:COST.${t}`).join('') : D19 ? WATER.map(t => `,${t}:COST.${t}`).join('') : D20 ? DUMP.map(t => `,${t}:COST.${t}`).join('') : ''}})`))),
   ...(D19 ? { waterCap: [R('WATER_TOWER_CAP'), R('DESAL_CAP')] } : {}),
+  ...(D20 ? { polSrc8: JSON.parse(JSON.stringify(R('POL_SRC[8]'))) } : {}),   // POL_SRC 52991：垃圾場 k8 的污染源半徑與強度（doPlace 51720 蓋的就是它）
   ...(D16 ? { covr: JSON.parse(JSON.stringify(R('({park:COVR.park,fire:COVR.fire,police2:COVR.police2,hospital:COVR.hospital,clinic:COVR.clinic,school:COVR.school,library:COVR.library,post:COVR.post,cemetery:COVR.cemetery})'))),
     budgetCat: JSON.parse(JSON.stringify(R('SVC_BUDGET_CAT'))) } : {}),
   roadToolToRc: ['alley', 'road', 'coll', 'art', 'hwy', 'zr', 'plant', 'doze', 'rail'].map(t => [t, R('roadToolToRc')(t)]),
@@ -284,11 +317,11 @@ const tables = {
 
 const pack = a => gzipSync(Buffer.from(JSON.stringify(a)), { level: 9, mtime: 0 }).toString('base64');
 const out = {
-  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: D16 ? 'tools/lab-build.mjs --set=d016' : D19 ? 'tools/lab-build.mjs --set=d019' : 'tools/lab-build.mjs',
-    how: (D16 ? 'D016 公共設施：tools/d011-cases.mjs 的 cases16（FAMILIES16，地圖與參數照底家族、操作抽公共設施九支），其餘同 D011。' : D19 ? 'D019 水塔、配水管：tools/d011-cases.mjs 的 cases19（FAMILIES19，地圖多鋪水管與水塔、操作抽 WATER）；computeWater 接實驗線舊式供水網原文，格子的 wr 一起比，其餘同 D011。' : '') + '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
+  source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, tool: D16 ? 'tools/lab-build.mjs --set=d016' : D19 ? 'tools/lab-build.mjs --set=d019' : D20 ? 'tools/lab-build.mjs --set=d020' : 'tools/lab-build.mjs',
+    how: (D16 ? 'D016 公共設施：tools/d011-cases.mjs 的 cases16（FAMILIES16，地圖與參數照底家族、操作抽公共設施九支），其餘同 D011。' : D19 ? 'D019 水塔、配水管：tools/d011-cases.mjs 的 cases19（FAMILIES19，地圖多鋪水管與水塔、操作抽 WATER）；computeWater 接實驗線舊式供水網原文，格子的 wr 一起比，其餘同 D011。' : D20 ? 'D020 垃圾場：tools/d011-cases.mjs 的 cases20（FAMILIES20，地圖多放垃圾場、操作抽 DUMP）；片段跟 D011 同一份，污染場（POLBASE／POLTREE／POL）照 D011 逐筆雜湊，其餘同 D011。' : '') + '實驗線 index.html 摘出的原始碼片段在 Node vm（strict）裡求值：tools/d011-cases.mjs 的隨機小圖，照玩家觸控路徑叫實驗線自己的函式——點＝openUndo→paintTo→closeUndo、線＝roadDraft436＋commitRoadDraft436、框＝rect＋commitRect、復原＝undo；逐筆用 runMap 記錄（施工前理由與造價、每次 doPlace 成敗、交易快照格號與花費、堆疊深度、資金、R／ri／供電重算的呼叫序列、變了的格子欄位、地價髒標記與框、拆除確認、各場雜湊），每張圖結束記全部場；每筆 canon() 成字串，gzip 壓縮後放 exact.outputs。片段原文 gzip 後放 lab.pieces（守衛核 sha256、重跑、做原碼突變）',
     casesSha256: crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, 'tools/d011-cases.mjs'))).digest('hex'),
     pieces: L.pieces },
-  seed: D16 ? D016_SEED : D19 ? D019_SEED : D011_SEED, families: D16 ? FAMILIES16 : D19 ? FAMILIES19 : FAMILIES, counts: { maps: COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
+  seed: D16 ? D016_SEED : D19 ? D019_SEED : D20 ? D020_SEED : D011_SEED, families: D16 ? FAMILIES16 : D19 ? FAMILIES19 : D20 ? FAMILIES20 : FAMILIES, counts: { maps: COUNT, ops: nOps, minOpsPerMap: minOps, byOp: opCounts },
   tables, coverage: cov, hashes,
   lab: { codec: 'gzip+base64+json', pieces: pack(pieces) },
   exact: { codec: 'gzip+base64+json', outputs: pack(outputs) },

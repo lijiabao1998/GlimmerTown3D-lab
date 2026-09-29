@@ -1,5 +1,6 @@
 // D010 跟實驗線對照：起步城 × 8 個種子 × 120 天，兩邊逐日記同一組數字（CLAUDE.md 規則 8：整城軌跡先求多種子統計；這張只量不判）。
 // 用法：CHROME_PATH=… node tools/lab-compare.mjs --lab=<實驗線目錄> [--days=120] [--seeds=8] [--shots] [--diag [--config=fallback|default]]
+//       node tools/lab-compare.mjs --3d-only     只重錄本線那一半（d010-3d.json；D020 起）：改的是本線的模擬、實驗線那一半沒變時用，不開 Chrome、不需要實驗線（讀 d010-lab.json 印卡面表）
 // 產出：
 //   src/content/samples/d010-lab.json   實驗線兩種設定的逐日數字（記 commit）
 //   src/content/samples/d010-3d.json    本線的逐日數字
@@ -36,10 +37,12 @@ const LAB = path.resolve(arg('lab', process.env.LAB_DIR || path.join(ROOT, '..',
 const DAYS = Number(arg('days', STARTER_DAYS)), NSEED = Number(arg('seeds', STARTER_SEEDS.length)), SHOTS = process.argv.includes('--shots'), DIAG = process.argv.includes('--diag');
 const SEEDS = STARTER_SEEDS.slice(0, NSEED);
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
-const commit = execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
-if (execFileSync('git', ['-C', LAB, 'status', '--porcelain', '--', 'index.html']).toString().trim()) throw new Error('實驗線 index.html 有未提交的修改');
-const html = fs.readFileSync(path.join(LAB, 'index.html'), 'utf8');
-const ver = /const GAME_VER='([^']+)'/.exec(html)[1], anchor = /const GAME_ANCHOR='([^']+)'/.exec(html)[1];
+const ONLY3D = process.argv.includes('--3d-only');
+const prevLab = ONLY3D ? JSON.parse(read('src/content/samples/d010-lab.json')) : null;   // --3d-only：實驗線那一半用存下的
+const commit = ONLY3D ? prevLab.source.commit : execFileSync('git', ['-C', LAB, 'rev-parse', 'HEAD']).toString().trim();
+if (!ONLY3D && execFileSync('git', ['-C', LAB, 'status', '--porcelain', '--', 'index.html']).toString().trim()) throw new Error('實驗線 index.html 有未提交的修改');
+const html = ONLY3D ? '' : fs.readFileSync(path.join(LAB, 'index.html'), 'utf8');
+const ver = ONLY3D ? prevLab.source.version : /const GAME_VER='([^']+)'/.exec(html)[1], anchor = ONLY3D ? prevLab.source.anchor : /const GAME_ANCHOR='([^']+)'/.exec(html)[1];
 const code = read('src/content/samples/starter.code.txt'), meta = JSON.parse(read('src/content/samples/starter.json'));
 const J = JSON.stringify;
 
@@ -108,9 +111,10 @@ if (DIAG || SHOTS) {
   process.exit(0);
 }
 
-const out = { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-compare.mjs', code: 'src/content/samples/starter.code.txt' }, fields: FIELDS, days: DAYS, seeds: SEEDS, configs: {} };
+const out = ONLY3D ? prevLab : { source: { repo: 'lijiabao1998/GlimmerTown-lab', commit, version: ver, anchor, tool: 'tools/lab-compare.mjs', code: 'src/content/samples/starter.code.txt' }, fields: FIELDS, days: DAYS, seeds: SEEDS, configs: {} };
+if (ONLY3D && (prevLab.days !== DAYS || J(prevLab.seeds) !== J(SEEDS) || J(prevLab.fields) !== J(FIELDS))) throw new Error('--3d-only：d010-lab.json 的天數、種子、欄位跟這一次不同，請整份重錄');
 const t0 = Date.now();
-for (const [name, cfg] of Object.entries(CONFIGS)) {
+for (const [name, cfg] of ONLY3D ? [] : Object.entries(CONFIGS)) {
   out.configs[name] = { flags: cfg.flags, disasters: cfg.disasters, runs: {} };
   await withBrowser({ root: LAB, port: 8411, width: 1280, height: 800, gl: false, preload: preloadOf(cfg), ready: '!!window.__bootDone453', readyMs: 240000, settle: 300 }, async ({ open, page }) => {
     for (const seed of SEEDS) {
@@ -127,7 +131,7 @@ for (const [name, cfg] of Object.entries(CONFIGS)) {
   const ji = FIELDS.indexOf('jobs'), dead = Object.values(out.configs[name].runs).every(rows => rows.slice(10).every(row => row[ji] === 0));
   if (dead) throw new Error(`實驗線 ${name} 設定：所有種子第 10 天起就業都是 0，設定有問題`);
 }
-fs.writeFileSync(path.join(ROOT, 'src/content/samples/d010-lab.json'), J(out));
+if (!ONLY3D) fs.writeFileSync(path.join(ROOT, 'src/content/samples/d010-lab.json'), J(out));
 
 // 本線：同 8 個種子，同一組欄位（第 0 天＝匯入後、還沒推進）
 const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;

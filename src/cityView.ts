@@ -7,13 +7,15 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, type City, type CityBuilding, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng } from './sim/rules/lab.ts';
+import { COST } from './sim/rules/build.ts';
+import { SAN_CAP, SAN_LONG_DIST, SAN_WARN_DIST, SAN_INF, computeSanitation445, prepareSanitationLoad452, sanitationAt452, garbDecisionRatio452, newSan, type SanState } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
@@ -510,6 +512,17 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!playing && sim.pop === 0 && sim.day <= 3) return '④ 按 ▶ 讓時間走，房子會自己長出來';
     if (pw.powered + pw.unpowered > pw.cap) return `⚡ 電不夠了：${pw.powered + pw.unpowered} 棟要用電、電廠只供 ${pw.cap} 棟，再蓋一座電廠（一座約供 75 棟）`;
     if (sim.pop > 0 && ci === 0) return '🎉 居民入住了！接著劃「商」「工」提供工作';
+    return garbageCoach();
+  }
+  // D020 垃圾：每天推進時算的清運（sim.san）。沒有處理設施、容量不夠、道路網上沒有設施，住宅每天都會扣幸福（實驗線的樣子）；
+  // 提示放在教學那一條（不是 toast：toast 會接住觸控、擋在拖路起點上）。小城（人口 < 500）看全城比例，正式清運（≥ 500）看最壞的一區
+  function garbageCoach(): string | null {
+    const sn = sim?.san;
+    if (!sn || !(sn.garbage > 0)) return null;
+    if (!sn.stat.formal) return sn.garbRatio > 1 ? `🗑️ 垃圾堆積，住宅每天扣幸福：「公共設施」選垃圾場（$${COST.dump}），蓋在路邊` : null;   // 手機 360 寬最多兩行（建築卡 bottom 168 px 只留這麼多）；數字在住宅的建築卡
+    const w = sn.alloc.worstDistrict >= 0 ? sn.districts[sn.alloc.worstDistrict] : null;
+    if (w) return `🗑️ 清運區 #${w.id} 超載（${Math.round(w.load * 100)}%）：在它的道路旁再蓋垃圾場（一座處理 ${SAN_CAP[8]}）`;
+    if (sn.alloc.deadDemand > 0) return '🗑️ 有些住宅的道路網沒接到垃圾場，垃圾清不掉：在那片道路旁蓋垃圾場';
     return null;
   }
   // 分區格的中心（D010 起步城開場對準它）
@@ -643,6 +656,31 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       case 'pipe': return [d, `鋪了配水管${e.cost ? `（$${e.cost}）` : ''}${tail}`];
     }
   }
+  // D020 建築卡的清運那一列（實驗線 sanitationAt452 38094 的意思）：住宅、社宅、工業講清運狀況，處理設施講容量與有沒有接路。
+  // 另外配一份狀態現算（玩家剛蓋垃圾場、鋪了路，模擬的那份要等下一天才更新）；不動模擬的狀態、不扣幸福
+  let uiSan: SanState | null = null;
+  function sanRowOf(b: CityBuilding): Row | null {
+    if (!sim || b.goneDay !== undefined) return null;
+    const isFac = Object.prototype.hasOwnProperty.call(SAN_CAP, b.k), isClient = b.k === 1 || b.k === 127 || b.k === 3;
+    if (!isFac && !isClient) return null;
+    if (!uiSan || uiSan.n !== sim.w.N) uiSan = newSan(sim.w.N);
+    const st = computeSanitation445(sim.w, uiSan, sim.pop);
+    if (st.formal) prepareSanitationLoad452(sim.w, uiSan, 1);
+    const info = sanitationAt452(sim.w, uiSan, b.x, b.z), pct = (v: number) => `${Math.round(v * 100)}%`;
+    if (!info) return null;
+    if (isFac) return ['垃圾處理', info.active ? `上線，容量 ${info.cap}${st.formal ? `・清運區 #${info.district}（區負載 ${pct(info.load)}）` : ''}` : `沒接到路，不算容量（容量 ${info.cap}）`];
+    if (!st.formal) return ['清運', `小城（人口 < 500）：全城垃圾 ${(sim.pop * .05 + sim.jobsI * .08).toFixed(1)}／處理容量 ${st.totalCap}，比例超過 1 時住宅每天扣幸福；離垃圾場、焚化廠太遠（> ${SAN_LONG_DIST} 格）再扣`];
+    const d = info.dist ?? SAN_INF, at = d < SAN_INF ? `、離處理設施 ${d} 格` : '';
+    switch (info.reason) {
+      case 'ok': return ['清運', `正常：清運區 #${info.district}${at}、區負載 ${pct(info.load)}`];
+      case 'warn': return ['清運', `偏遠：清運區 #${info.district}${at}（超過 ${SAN_WARN_DIST} 格）、區負載 ${pct(info.load)}`];
+      case 'far': return ['清運', `很遠：清運區 #${info.district}${at}（超過 ${SAN_LONG_DIST} 格），住宅幸福 −0.045`];
+      case 'capacity': return ['清運', `超載：清運區 #${info.district} 負載 ${pct(info.load)}，住宅幸福 −${((info.load - 1) * .15).toFixed(3)}${d > SAN_LONG_DIST ? '，另因太遠 −0.045' : ''}`];
+      case 'dead-network': return ['清運', `這一區沒有可用的處理設施，垃圾清不掉，住宅幸福 −0.06`];
+      case 'no-road': return ['清運', `沒有接到路，垃圾清不掉，住宅幸福 −0.06`];
+      default: return null;
+    }
+  }
   function showTile(x: number, z: number) {
     if (!city || !built) return null;
     cardAt = [x, z];
@@ -655,9 +693,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       title = `${KINDS.name(b.k)}（${b.x}, ${b.z}）`;
       // D019：住商工、社宅講有沒有電、有沒有水（模擬最近一天給的；二級要有水才升得到三級）
       const sb = sim && (b.k <= 3 || b.k === 127) && b.goneDay === undefined ? sim.w.tiles[b.z * c.n + b.x].bld : null, util = sb ? `・${sb.pw ? '有電' : '沒電'}・${sb.wa ? '有水' : '沒水'}` : '';
+      const sanRow = sanRowOf(b);   // D020：清運
       $('#bio .sub').textContent = `${KINDS.catName(cat)}・${b.lv} 級・佔地 ${b.size}×${b.size}${util}${b.abandoned ? '・已遭遺棄' : ''}${onSite(b.k, b.age, b.goneDay !== undefined) ? `・施工中，第 ${b.age + 1}／${CON_DAYS} 天` : ''}`;   // D014
       // D010：逐日模擬記下的生長、升級；D011：這一塊地上的施工（劃區、鋪路、蓋、拆）照發生順序一起列。
       // 匯入的建築先列 2D 存檔推算的蓋起日（屋齡取匯入當時的，b.age 會跟著模擬長）
+      if (sanRow) rows.push(sanRow);
       const evs = lotEvents(c, b.x, b.z);
       if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
@@ -879,6 +919,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
     tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') civicTool = rc; else roadTool = rc; } setTool(t); return tool; },
     pipesShown: () => pipesShown,   // D019
+    // D020 測試出口：最近一天算的清運（垃圾量、容量、比例、全城池扣分、太遠／到不了的住宅數、清運區數、超載區數、評分用的比例）；還沒推進過＝null
+    san: () => { const sn = sim?.san; return sn ? { garbage: sn.garbage, garbCap: sn.garbCap, garbRatio: sn.garbRatio, garbPen409: sn.garbPen409, formal: sn.stat.formal, far: sn.far, unserved: sn.unserved, warn: sn.warn, districts: sn.districts.length, overloaded: sn.alloc.overloadedDistricts, decision: garbDecisionRatio452(sn) } : null; },
     tileWa: (x: number, z: number) => sim ? !!sim.w.tiles[z * sim.w.N + x]?.bld?.wa : null,   // D019：那一格的建築（根格）有沒有水
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
     preview: (op: EditOp) => sim ? previewOp(sim, op) : null,

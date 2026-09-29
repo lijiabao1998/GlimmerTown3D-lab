@@ -1,6 +1,7 @@
 // D019 驗收 3、4：實驗線頁面實跑錨點（src/content/samples/d019-lab.json，tools/d016-parity.mjs --set=d019 錄）跟本線同一份劇本逐項比。
 //   預建城（8 個種子）：劇本（tools/d019-ops.mjs：一條接水塔的配水管、一條沒接的）每一筆、做完之後的水管與接通的水管、推進一天：
-//     推進前就在的住商工與社宅每一棟的電與水、推進前就在的住宅幸福（套垃圾與糧食，同 D016）、住商工以外的格子與場、生長之前的抽取；
+//     推進前就在的住商工與社宅每一棟的電與水、推進前就在的住宅幸福（只套糧食：垃圾 D020 起本線自己算，直接相等；垃圾量、容量、懲罰、離垃圾場太遠的棟數、評分用的比例＝本線 s.san）、
+//     住商工以外的格子與場、生長之前的抽取；
 //     實驗線匯出的碼本線解碼，水管圖層＝本線；本線的碼匯入實驗線，讀回的水管與對帳數字＝本線。
 //   樣本城（AI 城 120 天、種子城）：讀進來推進一天，每一棟的電與水、接通的水管、水管、讀檔重挑外觀的棟數、生長之前的抽取。
 import fs from 'node:fs';
@@ -12,6 +13,7 @@ import { fnv1a } from '../src/sim/rng.ts';
 import { cityFromLab, cityStats } from '../src/sim/city.ts';
 import { PRE_GROWTH_LINES } from './d011-parity-lib.mjs';
 import { batchDiff, sharedOff } from './unit-d011-parity.mjs';
+import { garbFieldsOff } from './d020-ops.mjs';
 import { prebuilt19, sample19 } from './d019-ops.mjs';
 
 const J = JSON.stringify, isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
@@ -62,11 +64,12 @@ export async function d019ParityGuards(log) {
       if (pick(m.pw, oldP) !== pick(L.pw, oldP)) bad.push(`種子 ${seed} 推進前就在的住商工有電不同`);
       const wet = m.wa.filter(([i, w]) => oldW.has(i) && w).length, dry = m.wa.filter(([i, w]) => oldW.has(i) && !w).length;
       if (!wet || !dry) bad.push(`種子 ${seed}：有水 ${wet} 棟、沒水 ${dry} 棟（兩種都要有，比了才有意義）`);
-      // 推進前就在的每一棟住宅：實驗線 h＝本線 h 依序套垃圾與糧食（同 D016，第 2 類系統本線沒搬）；舊式供水沒有水的幸福項
+      // 推進前就在的每一棟住宅：實驗線 h＝本線 h 只套糧食（同 D016，第 2 類系統本線沒搬；垃圾 D020 起本線自己算）；舊式供水沒有水的幸福項
       const homes = new Set(m.hsBefore), res = m.hs.filter(([i]) => homes.has(i)), labH = new Map(L.hs), food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);
+      const gf = garbFieldsOff(q, m.sim); if (gf) bad.push(`種子 ${seed} 垃圾欄位（本線 s.san）：${gf}`);
       for (const [i, h] of res) {
-        const want = clamp(clamp(clamp(h - q.garbPen409, .05, 1) - .045, .05, 1) + food, .05, 1);
-        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} 套垃圾與糧食 ${want}`);
+        const want = clamp(h + food, .05, 1);
+        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 h ${h} 套糧食 ${want}`);
       }
       // 實驗線匯出的碼（推進後）：水管圖層＝本線
       const cw = decodeLabCode(L.codeW);
@@ -74,7 +77,7 @@ export async function d019ParityGuards(log) {
       else { const wp = []; for (let i = 0; i < cw.save.n ** 2; i++) if (cw.save.layers.wp?.[i] === '1') wp.push(i); if (J(wp) !== J(m.wp)) bad.push(`種子 ${seed} 實驗線匯出的碼的水管 ${wp.length} 格 ≠ 本線 ${m.wp.length}`); }
       tallies.push(`${seed}：水管 ${m.wp.length} 格（接通 ${m.wrOps.length}）、有水 ${wet}／沒水 ${dry}`);
     }
-    log(!bad.length, 'D019 驗收 3：實驗線頁面實跑預建城（8 個種子）——拉水管、放水塔（實驗線自己的拉線與點）每一筆逐項相等；水管圖層、接通的水管相等；推進一天：推進前就在的住商工每一棟的電與水、住宅幸福（套垃圾與糧食）、住商工以外的格子與場、生長之前的抽取都相等；實驗線匯出的碼的水管＝本線',
+    log(!bad.length, 'D019 驗收 3：實驗線頁面實跑預建城（8 個種子）——拉水管、放水塔（實驗線自己的拉線與點）每一筆逐項相等；水管圖層、接通的水管相等；推進一天：推進前就在的住商工每一棟的電與水、住宅幸福（只套糧食）、垃圾欄位（＝本線 s.san）、住商工以外的格子與場、生長之前的抽取都相等；實驗線匯出的碼的水管＝本線',
       bad.slice(0, 3).join('；') || tallies.slice(0, 3).join('；') + '……');
   }
 

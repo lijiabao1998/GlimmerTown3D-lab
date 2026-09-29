@@ -41,7 +41,7 @@ const MUTANTS = [
 ];
 const MUTANTS_3D = [
   ['水塔造價 400→401', 'water: 400,', 'water: 401,'],
-  ['水管造價 10→11', 'wpipe: 10 };', 'wpipe: 11 };'],
+  ['水管造價 10→11', 'wpipe: 10,', 'wpipe: 11,'],   // D020 起 COST 的最後一行是垃圾場（dump: 300 };），水管後面不再是 };
   ['水塔變體 ri(5)→ri(4)', 'k: 10, lv: 1, v: st.rng.ri(5)', 'k: 10, lv: 1, v: st.rng.ri(4)'],
   ['水管可以重複鋪', "      if (t.wp) return '已有水管';\n", ''],
   ['水管清掉樹', '      t.wp = 1;\n', '      t.wp = 1; t.tree = 0;\n'],

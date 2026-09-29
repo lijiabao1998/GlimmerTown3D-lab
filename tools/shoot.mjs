@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -931,6 +931,58 @@ if (want('d018')) {
       console.log('OK', file, `${w}×${ch}`);
     });
   }
+}
+
+// D020：垃圾。兩張圖：① 起步城 8 種子 × 120 天的整城軌跡（實驗線｜D020 之前｜D020 之後，畫法與數字都在 tools/chart-d020.mjs）；
+// ② 手機 360×740 四格：沒垃圾場的起步城（教學那一條講垃圾堆積）、住宅建築卡的「清運」、「公共設施」選垃圾場、蓋在路邊之後的垃圾場建築卡。全部本線 3D，不需要實驗線
+if (want('d020')) {
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}`;
+  const cell = (src, cap) => `<figure><figcaption>${cap}</figcaption><img src="${src}"></figure>`;
+  const grab = async (page0, file, w, h) => {   // 開 out 裡的頁、量內容高度、用 clip 截整頁（不改視窗大小：headless 改大小後偶爾只重畫上半截）
+    await withBrowser({ root: out, entry: page0, width: w, height: h, ready: `!!document.querySelector('svg,img')`, settle: 200 }, async ({ page }) => {
+      await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/${page0}` });
+      for (let i = 0; i < 60 && !(await page.evaluate(`document.querySelector('svg,.g')!==null&&[...document.images].every(i=>i.complete&&i.naturalWidth)`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+      const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+      await new Promise(r => setTimeout(r, 300));
+      const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: w, height: ch, scale: 1 } });
+      fs.writeFileSync(path.join(out, file), Buffer.from(shot.data, 'base64'));
+      console.log('OK', file, `${w}×${ch}`);
+    });
+  };
+  // ① 軌跡圖
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const data = d020Data(arg('base', '63ebc81'));
+  fs.writeFileSync(path.join(out, 'd020_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${d020Svg(data)}`);
+  await grab('d020_traj.html', 'D020-trajectory.jpg', 1600, 1300);
+  // ② 手機四格
+  await withBrowser({ width: 360, height: 740 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 360, height: 740, deviceScaleFactor: 2, mobile: true });
+    await open('sample=starter');
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    await page.evaluate('(__gt.simStep(8), 1)'); await wait(3200); await save(page, 'd020_mob_hint');
+    const home = await page.evaluate(`(()=>{for(const b of __gt.conBuildings())if(!b.gone&&b.k===1)return [b.x,b.z];return null;})()`);
+    if (!home) throw new Error('第 9 天起步城沒有住宅');
+    await page.evaluate(`(__gt.view(${home[0] + .5}, ${home[1] + .5}, 4.2), __gt.openTile(${home[0]}, ${home[1]}), 1)`); await wait(500); await save(page, 'd020_mob_house');
+    await page.evaluate(`(document.querySelector('#bio .x').click(), __gt.tool('civic','dump'), 1)`); await wait(3200); await save(page, 'd020_mob_menu');
+    const L = await page.evaluate('__gt.layers()'), n = L.n; let put = null;
+    for (let i = 0; i < n * n && !put; i++) {   // 路邊第一格空地（不是路、分區、建築、樹、水）
+      if (!L.road[i]) continue;
+      for (const j of [i - 1, i + 1, i - n, i + n]) {
+        if (j < 0 || j >= n * n || L.road[j] || L.zone[j] || L.occ[j] || L.tree[j] || L.ter[j] === 0) continue;
+        const r = await page.evaluate(`__gt.edit(${JSON.stringify({ k: 'tap', tool: 'dump', x0: j % n, z0: (j / n) | 0, x1: j % n, z1: (j / n) | 0 })})`);
+        if (r?.placed) { put = [j % n, (j / n) | 0]; break; }
+      }
+    }
+    if (!put) throw new Error('起步城找不到路邊空地蓋垃圾場');
+    await page.evaluate(`(__gt.tool(null), __gt.simStep(1), __gt.view(${put[0] + .5}, ${put[1] + .5}, 4.2), __gt.openTile(${put[0]}, ${put[1]}), 1)`); await wait(500); await save(page, 'd020_mob_dump');
+    console.log(`手機四格：住宅 (${home})、垃圾場 (${put})`);
+    errors += page.errors.length;
+  });
+  fs.writeFileSync(path.join(out, 'd020_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}
+    .g{display:grid;grid-template-columns:repeat(4,360px);gap:12px;padding:8px 12px 12px}img{display:block;width:360px;height:740px}</style>
+    <h1>D020 手機 360×740（起步城第 9 天，本線 3D）</h1><p class="s">① 沒有垃圾場：教學那一條講垃圾堆積；② 住宅建築卡的「清運」（500 人前的小城口徑）；③「公共設施」一組多了垃圾場（$300）；④ 蓋在路邊、推進一天之後的垃圾場建築卡：接到路、上線、容量 40。</p>
+    <div class="g">${cell('d020_mob_hint.png', '① 沒有垃圾場')}${cell('d020_mob_house.png', '② 住宅：清運')}${cell('d020_mob_menu.png', '③ 選垃圾場')}${cell('d020_mob_dump.png', '④ 垃圾場：上線')}</div>`);
+  await grab('d020_mobile.html', 'D020-mobile.jpg', 1500, 900);
 }
 
 if (errors) process.exitCode = 1;

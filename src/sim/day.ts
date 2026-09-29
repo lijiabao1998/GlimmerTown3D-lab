@@ -15,6 +15,7 @@ import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
+import { garbageStep, garbDecisionRatio452, newSan, type SanState } from './rules/garbage.ts';
 import { residentialHappy } from './rules/happy.ts';
 import { jobCounts, nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
@@ -40,6 +41,7 @@ export interface Sim {
   // stale＝本線自己的逐格標記：地價基準的輸入（覆蓋、污染）變過、還沒重算的格。實驗線「整張重算」＝重算這些格（其餘格輸入沒變，算出來逐位相同）
   landDirty: boolean; landBox: [number, number, number, number] | null; stale: Uint8Array;
   noiseSig: number;                 // D017：噪音來源簽名（實驗線 noiseSig 53022；讀檔、開新圖 −1，56934）。不存檔
+  san?: SanState;                   // D020：清運狀態（src/sim/rules/garbage.ts）。每天 stepDay 整張重算，不存檔；第一次推進才配置
   // 資金（D011）：實驗線全域 money、diff、loan、msIdx、bestStar、bailoutDay；讀檔還原照 load（66923–66987），bailoutDay 不存檔（新圖 −999，51113）
   money: number; diff: number; loan: { remain: number; daily: number } | null; msIdx: number; bestStar: number; bailoutDay: number;
   // 施工（D011，src/sim/edit.ts）：stroke＝下一筆手勢的編號（事件的 g）；txns＝同一天的交易（復原用，過一天清空）
@@ -66,7 +68,8 @@ export interface Class2In {
 // 地面：路（rd 1–4 → road／hw／bridge，66879–66880）；無等級的路補 2（高速 5）（66896）；分區、樹。
 // 建築：每筆 [i,k,lv,v,age,…]；住宅缺欄位補 den 3、we 1（66905 起）；一律 pw true、h .6；多格建築補 sz、h 1，ref 格指回根格（66900 起、FIX-J）。
 // 亂數：R＝mulberry32(seed^day)（66876），接著天氣重設 wxT＝3＋ri(5)（66931）——讀檔就抽掉一個亂數，這裡照抽。
-// 全域值：實驗線 load() 不重設 pop／jobs／cityHappy／dem，對照跑法會先開新圖（newWorld 51110：pop 0、jobs 0、cityHappy .6、dem {1:.5,2:0,3:0}、immWave 0）。
+// 全域值：實驗線 load() 不重設 jobs／cityHappy／dem，對照跑法會先開新圖（newWorld 51110：pop 0、jobs 0、cityHappy .6、dem {1:.5,2:0,3:0}、immWave 0）。
+// 例外是 pop（D020 對拍抓到）：T510 把 load() 包了一層（68519），讀檔後 pop 就是住宅人口總和（loadPop488）——第一天開頭的 sewNeed（55011：pop ≥ 500）讀的就是它。
 // forRestyle：只拿來讀檔重挑外觀（D012 只能看的城）——地價只算住商工根格（rebuildCov landAt），這個模擬不能拿來推進
 export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, msz: (k: number) => number = k => kinds.size(k), forRestyle = false): Sim {
   const city = cityFromLab(save, kinds, code), n = save.n, nn = n * n;
@@ -103,13 +106,23 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   return {
     city, w, g, rng, seed: save.seed, day: save.day, weather, vrank, budget, edu,
-    pop: 0, jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null,
+    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
     noiseSig: -1,                                                         // 56934：讀檔時 NOISE 清 0、簽名 −1（rebuildCov 不算噪音，第一天開頭才補上）
     money: save.money, diff: save.df, loan: save.ln ? { remain: save.ln[0], daily: save.ln[1] } : null, msIdx: save.msIdx, bestStar: save.star, bailoutDay: -999,
     stroke: 1, txns: [], dozeArm: null,
   };
+}
+
+// 讀檔後、第一天之前的 pop：實驗線 load() 被 T510 包了一層（68519 只多呼叫 balancePrepareAuthorities510），
+// 68443–68448 pop＝round(Σ 每棟 residentPopulation488)（64188；住房沒就緒＝入住率 1）。讀檔蓋出來的建築只有 pw:true（66898–66925），
+// 沒有 wa、沒病沒死，所以住宅 k1、塔、巨廈照算，社宅 k127（要 pw 且 wa）讀檔時是 0——本線 simFromSave 蓋的建築一樣，直接用。
+// （68507 那行 pw／wa 全設 true 在 QA 治具函式裡，不是讀檔。）D020 對拍：40 座城（預建城、AI 城、種子城、自造城，含有社宅的）實驗線讀檔後的 pop 都等於它
+function loadPop488(tiles: Tile[]): number {
+  let p = 0;
+  for (const t of tiles) { const b = t.bld; if (b && !b.ref && (b.k === 1 || b.k === 127 || b.k === 33 || b.k === 105)) p += residentPopulation488(b, () => undefined); }
+  return Math.round(p);
 }
 
 // 地價基準的輸入在 (x,y) 半徑 r 的方框裡變了（本線的逐格標記；實驗線沒有，它整張重算）
@@ -133,9 +146,12 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55050–55063 主計數迴圈（建築索引、跳過 ref 格）：D016 起數得到的設施——學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（照實驗線的順序）。
   // 給固定就業（55246）與維護費（55973）。迴圈其餘的計數（產業、旅宿、地標、資源……）本線蓋不出來，都是 0；升級加成就業（55055 upJob）要手動升級，沒搬
   const fac = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
+  let towerPop = 0, megaPop = 0;                                          // 55040 towerPop488、megaPop488（D020 起：讀進來的城有住宅塔、巨廈，人口要算進 pop；垃圾量與 500 人門檻都吃它）
   for (const i of tickBld) {
     const b = w.tiles[i].bld;
     if (!b || b.ref) continue;
+    if (b.k === 105) megaPop += residentPopulation488(b, () => undefined);   // 55108：住宅巨廈（T488 單一人口真相；住房沒就緒＝入住率 1）
+    if (b.k === 33) towerPop += residentPopulation488(b, () => undefined);   // 55110：住宅塔
     if (b.k === 7) fac.schools++;                                         // 55056
     if (b.k === 8) fac.dumps++;                                           // 55057
     if (b.k === 9) fac.stadiums++;                                        // 55058
@@ -215,11 +231,13 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   // 55246–55250（F8）：名目就業＝商工＋各設施固定就業（D016 起數學校、診所、圖書館、郵局、墓園、體育場；電廠、警察局、公園、消防、醫院、派出所沒有固定就業）
   const jc = jobCounts(); jc.jobsC = jobsC; jc.jobsI = jobsI;
   jc.schools = fac.schools; jc.stadiums = fac.stadiums; jc.clinics = fac.clinics; jc.libraries = fac.libraries; jc.posts = fac.posts; jc.cemeteries = fac.cemeteries;
-  let pop = popN, jobs = nominalJobs(jc);
+  let pop = popN + towerPop + megaPop, jobs = nominalJobs(jc);            // 55246 pop=popN+towerPop488+megaPop488（塔、巨廈的居民不看有沒有電）
   // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
   let cityHappy = happyN ? happySum / happyN : .6;                        // 55254（住宅 k1 與社宅 k127）
-  // 55256–55277 垃圾清運：沒搬（第 2 類，實驗線照跑）
+  // 55256–55278 垃圾清運（D020，src/sim/rules/garbage.ts）：垃圾量→清運（T445 多源 BFS、T452 清運分區與負載）→垃圾比例→住宅幸福扣分。
+  // 沒有垃圾場的城每天都扣（全城池 −(比例−1)×.15、離垃圾場太遠 −.045），這是實驗線的樣子，D020 以前本線沒有；結算的評分讀 garbDecisionRatio452（56117）
+  garbageStep(w, s.san ??= newSan(N), pop, jobsI, tickBld);
   s.landDirty = true; s.landBox = null;                                   // 55279 rebuildAccess468（64146 → 64129）每天把地價設成「隔天整張重算」
   { let s1 = 0, n1 = 0; for (const i of tickBld) { const b = w.tiles[i].bld; if (!b || b.k !== 1) continue; s1 += b.h as number; n1++; } if (n1) cityHappy = s1 / n1; }   // 55282–55284：只用住宅 k1 重算
   // 55414 糧食供應：沒搬（第 2 類）；55426 災害：關（第 1 類）
@@ -270,7 +288,7 @@ function settleToday(s: Sim, tickBld: number[], fac: Record<string, number>, c2?
   const upkeep = dailyUpkeep({ ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec,
     counts: { parks: c.parks, plants: c.plants, fireStations: c.fireStations, policeStations: c.policeStations, policeBoxes: c.policeBoxes, hospitals: c.hospitals, ...fac } }), ...c2?.upkeep });   // 主計數迴圈的設施（55050 起，D016）；其餘本線蓋不出來
   const sc = scoreCounts(w, f, tickBld);
-  const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: 2 });   // 55260：沒有垃圾場，垃圾比例 2（0 分）
+  const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: garbDecisionRatio452(s.san!) });   // 56117（D020）：最壞那一區的負載，或全城比例；沒有垃圾場＝2（0 分）
   return { income, upkeep, net: r.net, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
 }
 

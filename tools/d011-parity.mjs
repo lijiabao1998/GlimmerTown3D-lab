@@ -1,5 +1,7 @@
 // D011 驗收 3、4：實驗線實跑錨點與分享碼互通（離線工具，要無頭 Chrome；結果存成樣本，tools/unit-d011-parity.mjs 在 CI 上重算本線那一半逐項比）。
 // 用法：CHROME_PATH=... TMPDIR=/tmp/claude-0 [GT_PORT=8711] node tools/d011-parity.mjs --lab=../lijiabao1998/glimmertown-lab [--days=120] [--seeds=8] [--code=起點碼 --out=輸出目錄（除錯用）]
+//       加 --reuse-lab（D020 起）：本線的模擬變了、實驗線沒變時用——新城 runs、預建城 prebuilt、timing 沿用存下的 d011-lab.json（實驗線那一半的逐日跑法不重跑，省掉十幾分鐘），
+//       只重算本線那一半（d011-3d.json），並把新的 B 段之後的碼拿去實驗線讀回（readback 一定要重錄：它讀的是本線的碼）
 // 流程（每個種子兩頁新頁面、各開一個 Chrome，同 D010）：
 //   新城：GV.setMapSize(72)＋GV.newWorldSeeded(777)＋GV.importCode(新城碼換種子)＋GV.setSpeed(0)＋GV.ai(false)（回退設定：tools/lab-configs.mjs）；
 //     A 段（開跑前）→ GV.step(1)（推進後的快照 snap1）→ B 段 → GV.save()＋GV.rawSave() 匯出 → 之後每天 GV.step(1) 到第 days 天。
@@ -115,6 +117,8 @@ const cfg = CONFIGS.fallback;
 const opt = { root: LAB, entry: 'd011.html', overlay: { 'd011.html': copy }, port: +(process.env.GT_PORT ?? 0) || 8421, width: 1024, height: 700, gl: false, preload: preloadOf(cfg),
   ready: '!!window.__bootDone453&&!!window.__d011', readyMs: 240000, settle: 300 };
 const rowR6 = x => [...x.slice(0, 21).map(r6), ...x.slice(21)];
+const REUSE = process.argv.includes('--reuse-lab'), prev = REUSE ? JSON.parse(read('src/content/samples/d011-lab.json')) : null;
+if (REUSE && (prev.source.commit !== commit || prev.config !== 'fallback' || prev.days !== DAYS || J(prev.seeds) !== J(SEEDS) || J(prev.fields) !== J(ROW_FIELDS))) throw new Error('--reuse-lab：d011-lab.json 的實驗線 commit、設定、天數、種子、欄位跟這一次不同，請整份重錄（不加 --reuse-lab）');
 
 // --shots：只跑第一個種子、拍 2D 畫面（第 0、30、60、120 天，1280×800）存到 scratch/lab/；這一跑的逐日數字要等於 d011-lab.json（拍照沒改到模擬）
 if (process.argv.includes('--shots')) {
@@ -136,7 +140,8 @@ if (process.argv.includes('--shots')) {
 const mine = {}, minePre = {};
 for (const seed of SEEDS) { mine[seed] = parity3d(codeWithSeed(newcity, seed), KT, vrank, DAYS); minePre[seed] = prebuilt3d(codeWithSeed(prebuilt, seed), KT, vrank); }
 
-for (const seed of SEEDS) {
+if (REUSE) { lab.runs = prev.runs; lab.prebuilt = prev.prebuilt; lab.timing = prev.timing; console.log('--reuse-lab：新城 runs、預建城 prebuilt、timing 沿用 d011-lab.json；只重算本線那一半，重錄 readback'); }
+for (const seed of REUSE ? [] : SEEDS) {
   const tm = lab.timing[seed] = {};
   await withBrowser(opt, async ({ open, page }) => {
     let t = Date.now();
@@ -184,7 +189,7 @@ for (const seed of SEEDS) {
   const p = minePre[seed]; delete p.sim;
   threeD.prebuilt[seed] = p;
 }
-lab.seconds = Math.round((Date.now() - t0) / 1000);
+lab.seconds = REUSE ? prev.seconds : Math.round((Date.now() - t0) / 1000);   // --reuse-lab：錄一整份實驗線要的秒數，沿用
 // 寫之前先核形狀（跟守衛同一個 shapeOff）：錄到的欄位不齊就不寫，舊樣本留著（漏掉的欄在守衛裡兩邊都是 undefined，逐項比會「相等」）
 const shapeBad = [['d011-lab.json', shapeOff('lab', lab, { seeds: SEEDS, days: DAYS, ops, P })], ['d011-3d.json', shapeOff('3d', threeD, { seeds: SEEDS, days: DAYS, ops, P })]].filter(([, o]) => o.length);
 if (shapeBad.length) throw new Error(`錄到的欄位不齊，不寫樣本：${shapeBad.map(([f, o]) => `${f} ${o.slice(0, 6).join('、')}`).join('；')}`);

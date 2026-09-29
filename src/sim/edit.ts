@@ -15,7 +15,7 @@ export const ROAD_TOOLS = [
   { id: 'art', name: '主幹道', cost: ROAD_COST[3] }, { id: 'hwy', name: '快速路', cost: ROAD_COST[4] },
 ];
 export const TOOL_PRICE = { zr: COST.zone, zc: COST.zone, zi: COST.zone, plant: COST.plant, police: COST.police, doze: COST.doze };
-// D016 公共設施：名稱與順序照實驗線工具列 svc 類（TOOLS 37584–37595；電廠有自己的按鈕，垃圾場還沒搬），造價 COST（37442）；short＝按鈕上的一個字。
+// D016 公共設施：名稱與順序照實驗線工具列 svc 類（TOOLS 37584–37595；電廠有自己的按鈕），造價 COST（37442）；short＝按鈕上的一個字。
 // D019：水塔（svc 類，37586，實驗線排在電廠後面）、配水管（實驗線在 road 類 37554，本線放在水塔旁邊）；配水管是拉線、造價一格
 export const CIVIC_TOOLS = [
   { id: 'park', name: '公園', short: '園', cost: COST.park }, { id: 'water', name: '水塔', short: '水', cost: COST.water },
@@ -24,6 +24,7 @@ export const CIVIC_TOOLS = [
   { id: 'hospital', name: '醫院', short: '醫', cost: COST.hospital }, { id: 'clinic', name: '診所', short: '診', cost: COST.clinic },
   { id: 'school', name: '學校', short: '學', cost: COST.school }, { id: 'library', name: '圖書館', short: '圖', cost: COST.library },
   { id: 'post', name: '郵局', short: '郵', cost: COST.post }, { id: 'cemetery', name: '墓園', short: '墓', cost: COST.cemetery },
+  { id: 'dump', name: '垃圾場', short: '垃', cost: COST.dump },   // D020：實驗線 svc 類最後一個（37597）
 ];
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 

@@ -23,7 +23,8 @@ export const ROAD_COST = [8, 15, 28, 55, 120];
 // D016 的九個鍵之後沒有被 Object.assign 改過（37536–37546、67110、67242），守衛在 vm 裡讀最終值核對
 export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
   park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350,
-  water: 400, wpipe: 10 };   // D019：水塔、配水管（37442）
+  water: 400, wpipe: 10,   // D019：水塔、配水管（37442）
+  dump: 300 };             // D020：垃圾場（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
@@ -34,7 +35,9 @@ export const D011_TOOLS: readonly string[] = ['alley', 'road', 'coll', 'art', 'h
 export const D016_TOOLS: readonly string[] = ['park', 'fire', 'policeBox', 'hospital', 'clinic', 'school', 'library', 'post', 'cemetery'];
 // D019：水塔（點，canPlace 同公共設施）、配水管（拉線，isLineTool436 62763）
 export const D019_TOOLS: readonly string[] = ['water', 'wpipe'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS]);
+// D020：垃圾場（點，canPlace 同公共設施 51278）
+export const D020_TOOLS: readonly string[] = ['dump'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -96,7 +99,7 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.road) return '道路上不能分區';
       if (t.bld) return '已有建築';
       return null;
-    case 'park': case 'plant': case 'water': case 'fire': case 'police': case 'policeBox': case 'hospital': case 'clinic': case 'school': case 'library': case 'post': case 'cemetery':   // 51278–51282（垃圾場同一支，還沒搬）
+    case 'park': case 'plant': case 'water': case 'fire': case 'police': case 'policeBox': case 'hospital': case 'clinic': case 'school': case 'library': case 'post': case 'cemetery': case 'dump':   // 51278–51282（D020：垃圾場同一支）
       if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
       if (t.road) return '道路上不能建造';
       if (t.bld) return '已有建築';
@@ -141,6 +144,7 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
     case 'library': c = COST.library; break;                                    // 51531
     case 'post': c = COST.post; break;                                          // 51532
     case 'cemetery': c = COST.cemetery; break;                                  // 51533
+    case 'dump': c = COST.dump; break;                                          // 51534
     case 'doze': c = t.crater ? 120 : COST.doze; break;                         // 51546：隕石坑 120
   }
   if (toolId !== 'doze' && t.tree) c += COST.doze;                              // 51623（stad、地形筆刷也不加，不在本卡）
@@ -308,6 +312,10 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
     case 'cemetery':                                                            // 51714–51717
       t.bld = { k: 16, lv: 1, v: st.rng.ri(5), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       stampCov(g, st.budget, 'cemetery', x, y, COVR.cemetery, 1);
+      break;
+    case 'dump':                                                                // 51718–51721（D020）：變體抽一次亂數 ri(3)；污染源 T110
+      t.bld = { k: 8, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      stampPolSrc(g, x, y, 8, 1);
       break;
     case 'doze':
       doze(st, t, x, y);

@@ -6,7 +6,7 @@
 //             地價髒狀態、變了哪些格；新城推進第 1 天之後的快照（snap1）與逐行的亂數抽取（這一天兩邊有抽的共用行是生長洗牌 55605、擲骰 55618、變體 55622，
 //             每個種子兩邊都要 > 0；天氣、升級那幾行這一天兩邊都 0 次、沒對拍到；實驗線多的只在起火、犯罪、生病擲骰三行，次數照本線推進後的格子算）；
 //             預建城推進一天之後在第 2 類系統起作用之前就定案的部分（推進前就在的住商工有沒有電、住商工以外的格、覆蓋、地價、生長洗牌 55605 的抽取），
-//             以及兩邊住宅幸福的差＝實驗線的垃圾與糧食（第 2 類）那三項（逐位）；
+//             以及兩邊住宅幸福的差＝實驗線的糧食那一項（第 2 類，逐位；垃圾 D020 起本線自己算、直接相等），垃圾量、容量、懲罰、離垃圾場太遠的棟數、評分用的垃圾比例＝本線 s.san；
 //             SITE_MAP 天氣那 7 行（上面兩天都沒抽天氣）：實驗線天氣原文（sha256 核過）在 vm 裡跑、本線跑 weatherStep，D009 F10 的起點逐次比呼叫行；
 //             第 1 天那一列（D010 的 21 欄＋有電棟數）；實驗線匯出的碼本線解碼＝實驗線自己的對帳數字；本線匯出的碼＝實驗線 B 段後自己量的城，實驗線讀回＝本線的對帳數字。
 //   劇本不空跑：每個種子上 pick 都找到住商工；每一筆施工「有沒有改到格子或資金」跟劇本註明的一樣（nop）；地價框推進時真的改了格子；快速路真的過了河。
@@ -24,6 +24,7 @@ import { cityFromLab, cityStats } from '../src/sim/city.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { fnv1a } from '../src/sim/rng.ts';
 import { cases as d009Cases, COUNTS as D009_COUNTS } from './d009-cases.mjs';
+import { garbFieldsOff } from './d020-ops.mjs';
 import { ROW_FIELDS, PROJ_FIELDS, EXTRA_LINES, PRE_GROWTH_LINES, SITE_MAP, LINE_NAMES, LAB_WEATHER, LAB_INWINTER, labSitesOf, weatherSites, shapeOff,
   parity3d, prebuilt3d, opsOf, prebuiltOf, meanSd, class2Of } from './d011-parity-lib.mjs';
 
@@ -276,11 +277,12 @@ export async function d011ParityGuards(log, opts = {}) {
     log(fact.length === 0, `錄製時的事實（預建城推進那一天；兩邊都是實驗線錄的值，CI 不重算）：實驗線逐行記的次數加總＝它記的總抽取數；${xs.length ? `${linesText(xs)} 的次數＝照實驗線自己推進後的格子與覆蓋算的棟數` : '多抽的三行一次都沒抽到'}${xq.length ? `；${linesText(xq)} 錄到 0 次、照格子算也是 0，這一天沒對拍到` : ''}（${seeds.length} 個種子）`,
       fact.slice(0, 2).join('；') || `實驗線逐行次數（各種子最少–最多）：${countsText(EXTRA, perX)}`);
   }
-  // 預建城推進那一天的第 2 類差異，精確找出來：實驗線住宅的幸福在本卡的公式（55164–55236，本線 residentialHappy 逐項相同）之後，再被兩個本線沒搬的第 2 類系統改過：
-  //   垃圾：沒有垃圾場時全城容量池懲罰 garbPen409＝(garbRatio−1)×.15（55270–55274），再加每一棟離垃圾場太遠 −.045（computeGarbLocal 57697 起）；
-  //   糧食：+clamp((foodSupplyRate482−.5)×.11,−.06,.05)（55414–55419）。都夾在 .05..1，都在需求（55578）之前。
-  // 第 1 天的新城推進前沒有住宅（人口 0、垃圾 0、糧食需求 0），所以沒有這個差。核對：推進前就在的每一棟住宅，實驗線的 h＝本線的 h 依序套這三項（逐位）。
-  // 全城幸福不同 → 住宅需求 demR 不同（legacyDemand）→ 生長機率不同（55613），生長、升級、新房子的變體與後面起火／生病擲骰的次數就可能不同（哪些種子不同只量不判）
+  // 預建城推進那一天，實驗線住宅的幸福跟本線只差一個本線沒搬的第 2 類系統：糧食（+clamp((foodSupplyRate482−.5)×.11,−.06,.05)，55414–55419，夾在 .05..1，在需求 55578 之前）。
+  // 垃圾（沒有垃圾場時全城容量池懲罰 garbPen409＝(garbRatio−1)×.15，55270–55274；再加每一棟離垃圾場太遠 −.045，computeGarbLocal 57697 起）D020 起本線自己算（src/sim/rules/garbage.ts），
+  // 所以不再「扣回垃圾」：推進前就在的每一棟住宅，實驗線的 h＝本線的 h **只套糧食**（逐位）；另外垃圾量、容量、全城池懲罰、離垃圾場太遠與沒路的棟數、評分用的垃圾比例
+  // （探針 garbage garbCap garbPen409 garbFar409 garbUnserved445 garbRatio）＝本線 s.san。
+  // 第 1 天的新城推進前沒有住宅（人口 0、垃圾 0、糧食需求 0），所以沒有這個差。
+  // 全城幸福仍不同（實驗線多了糧食）→ 住宅需求 demR 不同（legacyDemand）→ 生長機率不同（55613），生長、升級、新房子的變體與後面起火／生病擲骰的次數就可能不同（哪些種子不同只量不判）
   {
     const bad = [], hap = [], full = [], up = { 55648: [0, 0], 55649: [0, 0] };   // 升級那兩行 [實驗線, 本線] 合計（只量不判）
     const col = f => ROW_FIELDS.indexOf(f);
@@ -291,16 +293,17 @@ export async function d011ParityGuards(log, opts = {}) {
       for (const l of Object.keys(up)) { up[l][0] += L.tickSites[l] ?? 0; up[l][1] += my[l] ?? 0; }
       const old = new Set(m.pwBefore), res = m.hs.filter(([i]) => old.has(i)), labH = new Map(L.hs);
       if (!(q.garbPen409 > 0) || q.garbFar409 !== res.length || !(q.foodCoreNeed482 > 0)) bad.push(`種子 ${seed}：垃圾懲罰 ${q.garbPen409}、離垃圾場太遠的住宅 ${q.garbFar409} 棟（推進前就在的住宅 ${res.length} 棟）、糧食需求 ${q.foodCoreNeed482}`);
+      const gf = garbFieldsOff(q, m.sim); if (gf) bad.push(`種子 ${seed} 垃圾欄位（本線 s.san）：${gf}`);
       const food = clamp((q.foodSupplyRate482 - .50) * .11, -.06, .05);   // 55416
       for (const [i, h] of res) {
-        const want = clamp(clamp(clamp(h - q.garbPen409, .05, 1) - .045, .05, 1) + food, .05, 1);
-        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 ${h} −${q.garbPen409} −.045 ${food >= 0 ? '+' : ''}${food} ＝ ${want}`);
+        const want = clamp(h + food, .05, 1);   // 本線已經扣過垃圾（D020），只差糧食
+        if (!Object.is(labH.get(i), want)) bad.push(`種子 ${seed} 第 ${i} 格住宅：實驗線 h ${labH.get(i)} ≠ 本線 h ${h} ${food >= 0 ? '+' : ''}${food}（只套糧食）＝ ${want}`);
       }
       hap.push(`${m.day1[col('happy')]}/${L.day1[col('happy')]}`);
       full.push(J(m.post) === J(L.post) && !cellsDiff(m.postChanged, L.postChanged) && J(m.pw) === J(L.pw) && J(labSitesOf(m.tickSites)) === J(Object.fromEntries(Object.entries(L.tickSites).filter(([l]) => !Object.values(EXTRA_LINES).includes(+l)))));
     }
     const q0 = labPre[seeds[0]]?.probe ?? {};
-    log(bad.length === 0, `預建城推進那一天的第 2 類差異（精確找出來）：實驗線住宅的幸福在本卡公式之後，再被垃圾（全城容量池懲罰 garbPen409 55270–55274、離垃圾場太遠 −.045 57697 起）與糧食（55414–55419）改過——推進前就在的每一棟住宅，實驗線的 h＝本線的 h 依序套這三項，逐位相等（${seeds.length} 個種子）；全城幸福因此不同，住宅需求與生長機率跟著不同，生長、升級只量不判`,
+    log(bad.length === 0, `預建城推進那一天的第 2 類差異（精確找出來）：垃圾 D020 起本線自己算（全城容量池懲罰 garbPen409 55270–55274、離垃圾場太遠 −.045 57697 起），實驗線住宅的幸福只再被糧食（55414–55419）改過——推進前就在的每一棟住宅，實驗線的 h＝本線的 h 只套糧食，逐位相等；垃圾量、容量、懲罰、離垃圾場太遠的棟數、評分用的比例＝本線 s.san（${seeds.length} 個種子）；全城幸福因糧食而不同，住宅需求與生長機率跟著不同，生長、升級只量不判`,
       bad.slice(0, 2).join('；') || `垃圾 ${q0.garbage}／容量 ${q0.garbCap}、懲罰 ${q0.garbPen409}；供糧率 ${q0.foodSupplyRate482}（幸福 ${clamp((q0.foodSupplyRate482 - .5) * .11, -.06, .05)}）；全城幸福 本線/實驗線 ${hap.join('、')}；推進後整張（含生長、升級、有電、抽取逐行）剛好全等的種子 ${full.filter(Boolean).length}/${seeds.length}；升級那兩行只在這一天抽到、只量不判（SITE_MAP 升級那兩項沒有對拍到）：${Object.entries(up).map(([l, [a, b]]) => `${LINE_NAMES[l]} ${l} 實驗線 ${a}／本線 ${b} 次`).join('、')}（${seeds.length} 個種子合計）`);
   }
   // 驗收 4：分享碼互通
