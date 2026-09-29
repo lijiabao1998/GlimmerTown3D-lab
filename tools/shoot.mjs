@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1018,6 +1018,22 @@ if (want('d020')) {
       console.log(`OK ${file}`);
     });
   }
+}
+
+// D020 補：起步城 8 種子 × 120 天的整城軌跡圖（實驗線｜D020 之前｜D020 之後；畫法與數字在 tools/chart-d020.mjs），存成 D020-trajectory.jpg。不需要實驗線（讀存下的 d010-lab.json）
+if (set === 'd020-traj') {   // 只在明講要它時才跑（不進 all）：要用 git 裡的 D020 之前的樣本，CI 只拉最新一個提交拿不到
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const data = d020Data(arg('base', '63ebc81'));
+  fs.writeFileSync(path.join(out, 'd020_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${d020Svg(data)}`);
+  await withBrowser({ root: out, entry: 'd020_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d020_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });   // 用 clip 截整頁：headless 改視窗大小後偶爾只重畫上半截
+    fs.writeFileSync(path.join(out, 'D020-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D020-trajectory.jpg', `1600×${ch}`);
+  });
 }
 
 if (errors) process.exitCode = 1;

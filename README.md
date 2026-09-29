@@ -87,6 +87,10 @@
 
 ![D020 手機](docs/img/D020-mobile.jpg)
 
+起步城 8 個種子 × 120 天的整城軌跡，實驗線｜D020 之前｜D020 之後（D020 補）：
+
+![D020 起步城整城軌跡](docs/img/D020-trajectory.jpg)
+
 供水，同一串操作、拿著配水管，左 2D 實驗線、右 3D（D019）：
 
 ![D019 供水 2D｜3D](docs/img/D019-compare.jpg)
