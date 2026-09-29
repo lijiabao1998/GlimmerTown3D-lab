@@ -2,7 +2,8 @@
 // 預設種子 5162026 搬自 2D 實驗線（lijiabao1998/GlimmerTown-lab 的 gallery.js／probe-civic.js 用 metroArtSeedWorld516(5162026) 拍樣張）。
 // 300 年示範只借了這個數字：它的世界生成與 2D 無關；2D 城市模式的種子城則是實驗線那座城本身（src/content/samples/seed516）。
 import { startHistory } from './historyView.ts';
-import { startCity } from './cityView.ts';
+import { startCity, bootJournal } from './cityView.ts';
 
+// D013：城市模式開頁先開世界歷史的日誌（IndexedDB，非同步），讀好「我的城」那一條再開城
 if (new URLSearchParams(location.search).get('mode') === 'history') startHistory();
-else startCity();
+else bootJournal().then(startCity, () => startCity());

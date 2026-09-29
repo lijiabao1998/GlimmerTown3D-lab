@@ -19,8 +19,9 @@ export const TOOLS: { id: ToolId; label: string; name: string; color: string }[]
 ];
 
 // power：[要用電的住商工棟數, 電廠容量]。不用「有電棟數」：實驗線當天新長出來的房子一律帶電（55623），隔天才照容量分配，有電棟數會短暫超過容量
-// pop：'—'＝讀檔後還沒過第一天、人口還沒算；unsaved：自動存檔失敗的原因（空字串＝沒事）
-export interface HudState { name: string; sub: string; money: number | null; sandbox: boolean; day: number | null; pop: number | '—' | null; power: [number, number] | null; unsaved?: string }
+// pop：'—'＝讀檔後還沒過第一天、人口還沒算；unsaved：自動存檔失敗的原因（空字串＝沒事）；
+// journal：世界歷史的日誌（IndexedDB）不能用的原因（D013；空字串＝沒事）——這時歷史整份塞在存檔裡，有上限
+export interface HudState { name: string; sub: string; money: number | null; sandbox: boolean; day: number | null; pop: number | '—' | null; power: [number, number] | null; unsaved?: string; journal?: string }
 export interface DockState {
   mode: 'build' | 'view'; tool: ToolId | null; roadTool: string; roadTools: { id: string; name: string; cost: number }[];
   civicTool: string; civicTools: { id: string; name: string; short: string; cost: number }[];
@@ -54,6 +55,7 @@ const CSS = `
 .stat svg { width: 15px; height: 15px; opacity: .9; }
 .stat.money { color: #ffd98a; }
 .stat.bad { color: #ff9a9a; border-color: #ff8a8a77; }
+.stat.warn { color: #ffd98a; border-color: #ffd98a66; }
 #dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(#0d122600, #0d1226ee 30%); display: flex; flex-direction: column; gap: 8px; }
 #dock[hidden] { display: none; }
 #dock .bar { display: flex; align-items: center; gap: 6px; min-height: 44px; }
@@ -161,8 +163,8 @@ export function createBuildUi(on: BuildUiEvents) {
     s.appendChild(t); stats.appendChild(s);
     return { s, t };
   };
-  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, '');
-  chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved';
+  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, ''), chJ = chip(null, '');
+  chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved'; chJ.s.dataset.k = 'journal';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
   let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight;
@@ -182,6 +184,8 @@ export function createBuildUi(on: BuildUiEvents) {
       if (h.power) { setText(chPower.t, `${h.power[0]}/${h.power[1]}`); chPower.s.className = 'stat' + (h.power[0] > h.power[1] ? ' bad' : ''); }
       chSave.s.hidden = !h.unsaved;
       if (h.unsaved) { setText(chSave.t, '⚠ 未存檔'); chSave.s.className = 'stat bad'; chSave.s.title = `自動存檔失敗：${h.unsaved}。請從 ☰ 匯出分享碼備份`; }
+      chJ.s.hidden = !h.journal || !!h.unsaved;                          // 存不進去的那一顆比較要緊，同時只亮一顆
+      if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下`; }
       stats.dataset.money = h.money === null ? '' : String(h.money);
     },
     setDock(d: DockState) {

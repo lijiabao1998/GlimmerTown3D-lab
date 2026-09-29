@@ -519,6 +519,7 @@ await guard('./unit-d016-build.mjs', 'd016BuildGuards');   // D016：公共設�
 await guard('./unit-d016-parity.mjs', 'd016ParityGuards');   // D016：實驗線實跑錨點（d016-lab.json，tools/d016-parity.mjs 錄）、分享碼互通、歷史與存檔
 await guard('./unit-d017.mjs', 'd017Guards');   // D017：噪音場逐格＝實驗線原文（d017-noise.json，tools/lab-noise.mjs 摘）、原碼突變、接線、預建城體育場實跑（d017-lab.json）
 await guard('./unit-d018.mjs', 'd018Guards');   // D018：公園九種照實驗線 SPR.park（d018-lab.json，tools/lab-parks.mjs 摘）、只動了公園（d018-kinds-before.json）、預算
+await guard('./unit-d013.mjs', 'd013Guards');   // D013：歷史改存日誌——日誌逐列＝整份編碼、超過分享碼上限、存檔不跟歷史長度成正比、壞掉的情形、舊檔（記憶體版存放；突變另跑 tools/d013-mutate.mjs）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

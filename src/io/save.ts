@@ -6,7 +6,9 @@
 // 歷史的存法（規則 4：格式一改就加版本號、舊檔要能讀）：
 //   hv 1（D011 第一版，沒有 hv 欄位）：h＝事件物件陣列，每筆約 59 字元。
 //   hv 2（D011 審查後）：r＝緊湊列，每筆一個陣列 [種類碼, 距上一筆的天數, 欄位…]，手勢編號也存差值；每筆約 18 字元，同一座城的存檔約短 3 倍。
-//   讀檔兩種都認；存檔一律 hv 2。
+//   hv 3（D013）：歷史本身存在 IndexedDB 的日誌（src/io/journal.ts），d3 只記 j＝{ id 日誌編號, n 已經確定寫進日誌的列數, h 前 n 列的滾動雜湊 }，
+//     加上 t＝存檔那一刻還沒確定寫進日誌的尾巴幾列（通常是上一次存檔之後新的那幾筆；附加完成不重寫存檔，下一次存檔就縮回來）。列的編法跟 hv 2 一樣、差值接著前一列。
+//   讀檔三種都認；「我的城」有日誌可用時存 hv 3，沒有（IndexedDB 不能用）存 hv 2；匯出的分享碼一律 hv 2（整份歷史，實驗線與本線都讀得回來）。
 // 讀檔照實驗線 load 的語意（亂數 seed^day 重設、天氣重設：src/sim/day.ts simFromSave）；城市（編號、蓋起日、墓碑、歷史）由 d3 重播，
 // 再跟存檔裡的格子、建築逐項核對，對不上就退回只用存檔（歷史從這張碼重新起算），並回報原因。
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
@@ -16,11 +18,13 @@ import { CITY_FORMAT, cityStats, roadCode, type City, type CityBuilding, type Ci
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
+import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
 export const HISTORY_VER = 2;
+export const JOURNAL_VER = 3;   // D013：歷史在日誌裡
 // 存檔的長度上限＝分享碼的上限（實驗線 importShareCode 64904 與本線 decodeLabCode 都是 2,000,000 字元）：超過就讀不回來，也貼不進實驗線
 export const SAVE_LIMIT = MAX_CODE;
-export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: CityEvent[] }
+export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: CityEvent[]; j?: { id: string; n: number; h: number }; t?: unknown[][] }
 
 // ---- 歷史的緊湊列（hv 2）----
 // 種類碼照事件出現的先後編；拆除的圖層碼 0 建築、1 路、2 分區、3 樹。
@@ -31,29 +35,8 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree'] as const;
 
-export function packHistory(h: readonly CityEvent[]): unknown[][] {
-  const out: unknown[][] = [];
-  let d0 = 0, g0 = 0;
-  for (const e of h) {
-    const dd = e.day - d0; d0 = e.day;
-    switch (e.t) {
-      case 'import': out.push([0, dd, e.source, e.gameVer, e.seed, e.codeHash, e.buildings]); break;
-      case 'grow': case 'upgrade': out.push([e.t === 'grow' ? 1 : 2, dd, e.x, e.z, e.k, e.lv, e.v]); break;
-      case 'road': out.push([3, dd, e.x, e.z, e.rc, e.cost, e.g - g0]); g0 = e.g; break;
-      case 'zone': out.push([4, dd, e.x, e.z, e.zone, e.cost, e.g - g0]); g0 = e.g; break;
-      case 'place': out.push([5, dd, e.x, e.z, e.k, e.lv, e.v, e.id, e.cost, e.g - g0]); g0 = e.g; break;
-      case 'doze': {
-        const row = [6, dd, e.x, e.z, LAYERS.indexOf(e.layer), e.cost, e.g - g0];
-        if (e.layer === 'bld' && e.k !== undefined && e.id !== undefined) row.push(e.k, e.id);
-        out.push(row); g0 = e.g; break;
-      }
-      case 'undo': out.push([7, dd, e.g - g0, e.refund]); g0 = e.g; break;
-      case 'restyle': out.push([8, dd, e.x, e.z, e.v]); break;
-      default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);   // 漏寫一種，存檔會悄悄少一段歷史（D012 研究時發現沒有 default）
-    }
-  }
-  return out;
-}
+// 整份編一次（hv 2 的 d3.r、匯出的分享碼）。D013 起編法只寫一份：src/io/journal.ts packMore（日誌接續編碼用同一支，接起來逐列相同）
+export function packHistory(h: readonly CityEvent[]): unknown[][] { return packMore(h, PACK0).rows; }
 
 // ---- 驗型別（兩種存法共用）：欄位一個一個驗，組回跟模擬產生的事件同一個欄位順序（重播、再存檔逐位元組相同）----
 const isInt = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v);
@@ -124,8 +107,9 @@ export function checkHistory(h: unknown, n: number): CityEvent[] {
 }
 
 // 存檔：template＝這座城讀進來時的整份存檔 JSON（LabSave.raw），本線不認得的欄位原樣保留。
-// history＝false：不帶 d3（實驗線照樣能開；本線貼回來只能看）——給「存檔超過上限」時匯出用
-export function saveCode(s: Sim, template: Record<string, unknown>, start: string, opts: { history?: boolean } = {}): string {
+// history＝false：不帶 d3（實驗線照樣能開；本線貼回來只能看）——給「存檔超過上限」時匯出用。
+// journal（D013）：存 hv 3——st＝已經確定寫進日誌 id 的編碼狀態（前 st.n 列），d3 只帶 j 與尾巴 t（st 之後的事件接著編的列）
+export function saveCode(s: Sim, template: Record<string, unknown>, start: string, opts: { history?: boolean; journal?: { id: string; st: PackState } } = {}): string {
   const N = s.w.N, nn = N * N, o: Record<string, unknown> = { ...template };
   delete o.z;   // encodeLabCode 會重新壓、重新標
   delete o.d3;
@@ -148,21 +132,33 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
     v: 1, n: N, seed: s.seed, day: s.day, money: Math.round(s.money), msIdx: s.msIdx, star: s.bestStar, df: s.diff,
     ln: s.loan ? [s.loan.remain, s.loan.daily] : null, nm: s.city.name, tre, rd, zn, rcl, ab, bl,
   });
-  if (opts.history !== false) o.d3 = { f: CITY_FORMAT, s: start, g: s.stroke, hv: HISTORY_VER, r: packHistory(s.city.history) } satisfies D3Ext;
+  if (opts.history !== false && opts.journal) {
+    const { id, st } = opts.journal;
+    o.d3 = { f: CITY_FORMAT, s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;
+  } else if (opts.history !== false) o.d3 = { f: CITY_FORMAT, s: start, g: s.stroke, hv: HISTORY_VER, r: packHistory(s.city.history) } satisfies D3Ext;
   return encodeLabCode(o, { deflate: true });
 }
 
 // restyled＝讀檔最後一步照實驗線重挑外觀換了幾棟（D012，每一棟也記成一筆 restyle 事件）
+// journal（D013，hv 3 才有）：接上的日誌編號與「前 n 列」的編碼狀態（呼叫端從這裡接著寫）
 export type LoadResult =
-  | { ok: true; sim: Sim; start: string; template: Record<string, unknown>; replayed: boolean; note: string; restyled: number }
+  | { ok: true; sim: Sim; start: string; template: Record<string, unknown>; replayed: boolean; note: string; restyled: number; journal?: { id: string; st: PackState } }
   | { ok: false; error: string };
+// hv 3 的存檔讀檔時要的日誌：rows＝日誌裡這個編號的前幾列（呼叫端先從 IndexedDB 讀好；讀不到給 null 與原因）
+export interface JournalIn { id: string; rows: unknown[][] | null; why?: string }
+// 存檔的 d3 指到哪一條日誌（開頁先讀這個，才知道要從 IndexedDB 讀哪一條、讀幾列）
+export function journalRef(code: string | null): { id: string; n: number } | null {
+  const r = code ? decodeLabCode(code) : null;
+  const d3 = r?.ok ? r.save.raw.d3 as Partial<D3Ext> | undefined : undefined, j = d3?.j;
+  return d3?.hv === JOURNAL_VER && j && typeof j.id === 'string' && isInt(j.n) && j.n >= 0 ? { id: j.id, n: j.n } : null;
+}
 
 // 讀檔：一般的實驗線分享碼也吃（沒有 d3 就是一座新匯入的城，歷史從這張碼起算）。
 // 最後一步照實驗線 load 的 ensureVariety531(true)（67035）重挑住商工的外觀（src/sim/restyle.ts）：接上歷史、退回只用存檔都挑——實驗線每次讀檔都挑
-export function loadCode(code: string, kinds: KindTable, vrank: Record<string, number[]>): LoadResult {
+export function loadCode(code: string, kinds: KindTable, vrank: Record<string, number[]>, journal?: JournalIn): LoadResult {
   const r = decodeLabCode(code);
   if (!r.ok) return r;
-  const res = loadSim(r.save, code, kinds, vrank);
+  const res = loadSim(r.save, code, kinds, vrank, journal);
   return { ...res, restyled: restyle531(res.sim) };
 }
 
@@ -175,18 +171,29 @@ export function viewCode(code: string, kinds: KindTable, vrank: Record<string, n
   return { ok: true, city: sim.city, restyled };
 }
 
-function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>) {
+function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, journal?: JournalIn) {
   const sim = simFromSave(save, code, kinds, vrank);
   const d3 = save.raw.d3 as Partial<D3Ext> | undefined, only = (why: string) => ({ ok: true as const, sim, start: code, template: save.raw, replayed: false, note: why });
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
-  if (d3.hv !== undefined && d3.hv !== HISTORY_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
+  if (d3.hv !== undefined && d3.hv !== HISTORY_VER && d3.hv !== JOURNAL_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
   // 城市格式（D012 起才檢查）：比這一版新＝可能有這一版不認得的事件，不猜；不是 1..這一版的整數＝不認得（審查：之前只擋整數，"5"、4.5 照讀）。沒有 f 的照舊當舊檔
   if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);
   if (d3.f !== undefined && !(isInt(d3.f) && d3.f >= 1)) return only(`不認得的城市格式 f=${JSON.stringify(d3.f)}：只用存檔`);
-  let events: CityEvent[], c: City;
+  let events: CityEvent[], c: City, jr: { id: string; n: number; h: number } | null = null, rows = d3.r;
+  if (d3.hv === JOURNAL_VER) {   // D013：歷史在日誌裡——前 n 列從日誌來（雜湊要對）、尾巴從 d3.t 來
+    const j = d3.j;
+    if (!j || typeof j !== 'object' || typeof j.id !== 'string' || j.id.length > 64 || !isInt(j.n) || j.n < 0 || !isInt(j.h)) return only('日誌的指標不對：只用存檔');
+    if (!Array.isArray(d3.t)) return only('日誌的尾巴不對：只用存檔');
+    if (!journal || journal.id !== j.id || !journal.rows) return only(`讀不到歷史的日誌（${journal?.why ?? (journal && journal.id !== j.id ? '編號對不上' : '沒有日誌')}）：只用存檔`);
+    if (journal.rows.length < j.n) return only(`日誌只有 ${journal.rows.length} 列、存檔要 ${j.n} 列：只用存檔`);
+    const head = journal.rows.slice(0, j.n);                    // 多出來的列（寫進日誌、存檔還沒跟上就關頁）用不到
+    if (hashRows(head) !== j.h) return only('日誌前幾列的雜湊跟存檔對不上：只用存檔');
+    rows = [...head, ...d3.t];                                    // 不改讀進來的存檔物件（template 會原樣留著）
+    jr = j;
+  }
   try {
-    events = d3.hv === HISTORY_VER ? unpackHistory(d3.r, save.n) : checkHistory(d3.h, save.n);
+    events = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? unpackHistory(rows, save.n) : checkHistory(d3.h, save.n);
     c = replayCity(d3.s, events, kinds, save.day);
   } catch (e) { return only('歷史重播失敗，只用存檔：' + (e as Error).message); }
   const bad = mismatch(c, sim.city);
@@ -198,7 +205,9 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   for (const b of c.buildings) if (b.goneDay === undefined) sim.root.set(b.z * c.n + b.x, b);
   for (const [i, b] of sim.root) { const t = sim.w.tiles[i].bld; if (t) { b.age = t.age; b.lv = t.lv; b.v = t.v; } }
   sim.stroke = isInt(d3.g) && d3.g >= 1 ? d3.g : 1;
-  return { ok: true as const, sim, start: d3.s, template: save.raw, replayed: true, note: `歷史 ${events.length} 筆重播成功` };
+  // hv 3：從日誌的前 n 列接著寫。差值的起點（上一列的天數、手勢編號）從重播出來的事件算；雜湊用日誌裡實有的列算的那一個（上面核過）
+  const journalOut = jr ? { id: jr.id, st: { ...packMore(events.slice(0, jr.n), PACK0).st, h: jr.h } } : undefined;
+  return { ok: true as const, sim, start: d3.s, template: save.raw, replayed: true, note: `歷史 ${events.length} 筆重播成功` + (jr ? `（日誌 ${jr.n} 列＋存檔 ${events.length - jr.n} 列）` : ''), journal: journalOut };
 }
 
 // 重播的城跟存檔的城要一樣：對帳數字、逐格路／等級／分區／樹／occ 對到的根格、每棟還在的建築（種類、等級、變體、屋齡、位置）

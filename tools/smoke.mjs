@@ -14,6 +14,7 @@ import { d011Smoke, d011SkipNote, rciCover, planRow, lotsOf, lotBad, villaOf, AR
 import { d014Smoke } from './smoke-d014.mjs';
 import { d015Smoke, d015SkipNote } from './smoke-d015.mjs';
 import { d016Smoke, d016SkipNote } from './smoke-d016.mjs';
+import { d013Smoke, d013SkipNote } from './smoke-d013.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -529,10 +530,13 @@ if (!process.env.D011_SMOKE_ONLY) await d014Smoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY) await d015Smoke(withBrowser, log);
 // ===== D016：公共設施九支（tools/smoke-d016.mjs：手機 360×740 的「公共設施」一組、真的觸控蓋設施、九種都畫得出來、施工、增量＝整張、手機預算；自己開兩個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d016Smoke(withBrowser, log);
+// ===== D013：世界歷史改存 IndexedDB（tools/smoke-d013.mjs：日誌真的在 IndexedDB、重新整理接得上、換城、開新城刪舊日誌、封鎖 IndexedDB 退回 hv 2；自己開兩個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d013Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
 if (d016SkipNote()) console.log(d016SkipNote());
+if (d013SkipNote()) console.log(d013SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

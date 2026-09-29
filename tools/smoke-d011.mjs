@@ -52,7 +52,8 @@ for (const t of ['pointerdown', 'pointerup', 'pointercancel', 'click']) addEvent
 // 一次 evaluate 最多等多久：頁面卡住時那一段記紅燈，整支測試不會永遠等下去
 const timed = (p, ms, what) => { let t; return Promise.race([p, new Promise((_, rej) => { t = setTimeout(() => rej(new Error(`等了 ${ms / 1000} 秒沒有回應：${what.slice(0, 80)}`)), ms); })]).finally(() => clearTimeout(t)); };
 // 存檔碼 → 天數、資金、難度、歷史筆數（Node 端解）
-const saveInfo = code => { const r = code ? decodeLabCode(code) : null; if (!r?.ok) return null; const d3 = r.save.raw.d3; return { day: r.save.day, money: r.save.money, df: r.save.df, events: d3?.r?.length ?? d3?.h?.length ?? 0 }; };
+// 存檔裡的歷史筆數：hv 2 的 r、hv 1 的 h；D013 起我的城存 hv 3——前 j.n 列在 IndexedDB 的日誌裡，存檔只帶尾巴 t
+const saveInfo = code => { const r = code ? decodeLabCode(code) : null; if (!r?.ok) return null; const d3 = r.save.raw.d3; return { day: r.save.day, money: r.save.money, df: r.save.df, events: d3?.r?.length ?? d3?.h?.length ?? (d3?.j ? d3.j.n + d3.t.length : 0) }; };
 
 // ---- D012 共用（tools/smoke.mjs 也用）----
 // 讀檔最後一步照實驗線重挑外觀（src/sim/restyle.ts，實驗線 load 的 ensureVariety531(true) 67035 @d23c18d），換了的每一棟記一筆 restyle（日子＝讀檔那天）。
@@ -106,6 +107,15 @@ export async function pageSession(page, open0, { W = 412, H = 860, mobile = true
   if (mobile) await page.send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
   await page.send('Page.addScriptToEvaluateOnNewDocument', { source: DIALOG_GUARD + '\n' + TAP_PROBE });
   const ev = (e, ms = 240000) => timed(page.evaluate(e), ms, e);
+  // D013：hv 3 的存檔拼回 hv 2（日誌的前 j.n 列從頁面的 IndexedDB 讀回來＋存檔的尾巴），要改歷史、拆歷史的項目用
+  const fullSave = async code => {
+    const S = decodeLabCode(code).save, d3 = S.raw.d3;
+    if (d3?.hv !== 3) return S;
+    const rows = await ev(`__gt.journalRows(${J(d3.j.id)}, ${d3.j.n})`);
+    if (!Array.isArray(rows) || rows.length < d3.j.n) throw new Error(`D013 日誌讀不回來：要 ${d3.j.n} 列、拿到 ${rows?.length}`);
+    S.raw.d3 = { f: d3.f, s: d3.s, g: d3.g, hv: 2, r: [...rows.slice(0, d3.j.n), ...d3.t] };
+    return S;
+  };
   // 觸控點 [x, y] 或 [x, y, 手指編號]（沒給＝陣列位置）。實測 CDP 的語意：touchStart 列出所有按著的指，新的編號＝放下；touchMove 列出要動的指
   // （少列一指只是那一指不動，不會放開它）；touchEnd 列出的指＝放開那幾指，列空的＝全部放開
   const touch = (type, pts) => page.send('Input.dispatchTouchEvent', { type, touchPoints: pts.map(([x, y, id], k) => ({ x, y, id: id ?? k })) });
@@ -148,7 +158,7 @@ export async function pageSession(page, open0, { W = 412, H = 860, mobile = true
   const freshStart = async () => { await open('sample=seed516&clean=1'); await ev('__gt.clearSave()'); await open(''); };
   const waitFor = async (f, ms = 4000) => { for (const t0 = Date.now(); Date.now() - t0 < ms; await sleep(50)) if (await f()) return true; return false; };
 
-  return { W, H, ev, touch, drag, release, tapAt, tapBtn, center, rectOf, hit, toasts, click, clickBtn, key, cell, sim, onScreen, code, script, X, Z, visibleRun, findBox, freshStart, waitFor, open, frames };
+  return { W, H, ev, touch, drag, release, tapAt, tapBtn, center, rectOf, hit, toasts, click, clickBtn, key, cell, sim, onScreen, code, script, X, Z, visibleRun, findBox, freshStart, waitFor, open, frames, fullSave };
 }
 
 // 空的陸地（沒有路、分區、建築、樹）
@@ -559,7 +569,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     await ev('__gt.clearSave()');
   });
 
-  await run('switch', '換城與存檔', async ({ ev, sim, tapBtn, open, waitFor, toasts, X, Z }, page) => {
+  await run('switch', '換城與存檔', async ({ ev, sim, tapBtn, open, waitFor, toasts, X, Z, fullSave }, page) => {
     // ---- 實驗線的鍵（卡面第 7 節：兩條線都在 lijiabao1998.github.io，localStorage 共用）：頁面還沒跑任何程式之前先放兩個哨兵，整段做完要逐字不變 ----
     const SENT = { 'glimmerville.v1': 'GVX1:哨兵・實驗線的存檔（3D 不讀不寫）eyJ2IjoxfQ==', 'glimmerville.v1.slot': '哨兵・存檔槽 2' };
     const pre = await page.send('Page.addScriptToEvaluateOnNewDocument', { source: `for (const [k, v] of Object.entries(${J(SENT)})) localStorage.setItem(k, v);` });
@@ -642,7 +652,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     // ---- 讀檔時歷史接不回來要講原因（審查：之前一律說「已接著上次的城繼續」）：把存檔裡一筆路的等級 2 改成 4（格式對、重播得出來，跟存檔對不上）再開頁 ----
     {
       await open('sample=seed516&clean=1');                               // 先離開我的城（離開時會存一次），改過的存檔才不會被舊頁面蓋回去
-      const S = decodeLabCode(await ev('__gt.saved()')).save, n = S.n, rd = S.layers.rd ?? '', rcl = S.layers.rcl ?? '';
+      const S = await fullSave(await ev('__gt.saved()')), n = S.n, rd = S.layers.rd ?? '', rcl = S.layers.rcl ?? '';   // D013：存檔是 hv 3 的話拼回 hv 2 再改（寫回去的是 hv 2，讀檔照讀）
       const tiles = Array.from({ length: n * n }, (_, i) => ({ road: rd[i] !== '0', rc: rcl.charCodeAt(i) - 48 }));
       const T = rcTamper(S.raw, unpackHistory(S.raw.d3.r, n), tiles, n), o = { ...S.raw, d3: T.d3 };
       delete o.z;
@@ -688,7 +698,7 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       };
       // D012：回答不要＝讀一次我的城：歷史要是存檔裡那份的逐筆前綴、多出來的只有 restyle（筆數＝__gt.restyled()）；存檔本身一個字都不能動（讀檔不存檔）
       const no = await ask(false), yes = await ask(true), b0 = saveInfo(no.before), ys = saveInfo(yes.saved);
-      const d0 = no.before ? decodeLabCode(no.before) : null, g = d0?.ok ? grew(unpackHistory(d0.save.raw.d3.r, d0.save.n), no.h, no.restyled) : null;
+      const d0 = no.before ? await fullSave(no.before) : null, g = d0 ? grew(unpackHistory(d0.raw.d3.r, d0.n), no.h, no.restyled) : null;
       log(no.asked?.length === 1 && /蓋掉/.test(no.asked[0]) && no.sample === 'mine' && no.saved === no.before && b0?.events > 1 && !!g?.ok && g.before === b0.events && no.s.events === g.after
         && yes.asked?.length === 1 && yes.sample === 'mine' && yes.s.events === 1 && yes.s.money === 3000 && ys?.events === 1 && ys.money === 3000 && ys.day === 1,
         'D011 網址 ?sample=newcity 而且已經有我的城：先問「會蓋掉目前的我的城」；回答不要＝開我的城（歷史＝存檔那份逐筆＋讀檔重挑外觀的 restyle，D012）、存檔一個字都沒動；回答要＝開新城、立刻存成我的城（1 筆、$3000）',

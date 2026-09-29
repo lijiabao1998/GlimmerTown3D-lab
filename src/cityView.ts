@@ -9,7 +9,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityStats, buildingAt, liveBuildings, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
-import { loadCode, saveCode, viewCode, SAVE_LIMIT } from './io/save.ts';
+import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
+import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
+import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng } from './sim/rules/lab.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
@@ -55,7 +57,16 @@ const SAVE_DAYS = 5;                // D011：播放中每隔幾天自動存檔
 const TER = ['水面', '沙地', '草地'], ROAD = ['', '道路', '橋', '高速公路', '高速公路橋'], ZONE = ['', '住宅區', '商業區', '工業區'];
 const readSave = () => { try { return localStorage.getItem(SAVE_KEY); } catch { return null; } };
 
-export function startCity() {
+// D013：開頁先開日誌（IndexedDB）、讀「我的城」那一條的前 n 列，再開城（src/main.ts）。讀不到照樣開：hv 3 的存檔退回只用存檔、講原因
+export interface BootJournal { store: JournalStore | null; why: string; id: string; rows: unknown[][] | null }
+export async function bootJournal(): Promise<BootJournal> {
+  const { store, why } = await openJournal(), ref = journalRef(readSave());
+  if (!store || !ref) return { store, why, id: ref?.id ?? '', rows: null };
+  try { return { store, why, id: ref.id, rows: await store.read(ref.id, ref.n) }; }
+  catch (e) { return { store, why: '讀日誌失敗（' + ((e as Error)?.message ?? String(e)) + '）', id: ref.id, rows: null }; }
+}
+
+export function startCity(boot: BootJournal = { store: null, why: '沒有開日誌', id: '', rows: null }) {
   const q = new URLSearchParams(location.search);
   const clean = q.get('clean') === '1';
   const sq = q.get('style') ?? 'A', style: Style = Object.hasOwn(STYLES, sq) ? STYLES[sq as Style['id']] : STYLES.A;   // D012 審查：?style=constructor 之前會拿到 Object 原型上的東西
@@ -122,6 +133,13 @@ export function startCity() {
   // 這座城要不要自動存檔：載入時就決定、跟著這座城走（我的城、新城存；起步城是沙盒、其他只能看）。
   // 審查阻斷：之前存檔時才拿 sampleId 判斷，換城時 sampleId 已經是新城的、sim 還是舊城的，舊城被存進我的城
   let autosave = false, saveErr = '';
+  // D013 世界歷史的日誌：jstore＝IndexedDB（null＝不能用，存 hv 2）；jid＝這座城的日誌編號（只有自動存檔的城有）；
+  // jConf＝已經確定寫進日誌的編碼狀態（前 jConf.n 列）；jBusy＝有一筆附加還沒完成；jSaved＝上一次存檔時歷史有幾筆（存檔靠日誌＋尾巴涵蓋到這裡）；mineRows＝「我的城」那一條日誌的列（開頁讀的、離開我的城時留一份），回到我的城時用
+  let jstore: JournalStore | null = boot.store, jwhy = boot.why, jid = '', jConf: PackState = PACK0, jBusy = false, jSaved = 0;
+  let mineRows: { id: string; rows: unknown[][] } | null = boot.rows ? { id: boot.id, rows: boot.rows } : null;
+  const dropped = new Set<string>();
+  const newJid = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 2 ** 32).toString(36);   // 介面層：日誌編號只要不撞
+  const dropJournal = (id: string) => { if (!id) return; dropped.add(id); if (mineRows?.id === id) mineRows = null; jstore?.drop(id).catch(() => { /* 刪不掉就留著，不影響新城 */ }); };
   const preview = new Preview();
   const timing: Record<string, number> = {};
   // D014 施工：一座城一份施工資料（屋齡、每格最高點）；builtDay＝目前場景是哪一天建的；visT＝動畫時間（只在播放時走）
@@ -182,7 +200,10 @@ export function startCity() {
     const r = decodeLabCode(code);
     const t1 = performance.now();
     if (!r.ok) return r;
-    const L = simulate ? loadCode(code, KINDS, VRANK) : null;             // 先算好再動目前的城：讀不成就什麼都不改
+    // D013：「我的城」是 hv 3 的話，歷史的前幾列在日誌裡（開頁從 IndexedDB 讀好的、或離開我的城時留在記憶體的那一份）
+    const ref = saves ? journalRef(code) : null;
+    const jin: JournalIn | undefined = ref ? { id: ref.id, rows: mineRows?.id === ref.id ? mineRows.rows : null, why: jwhy || (jstore ? '日誌裡沒有這座城' : '沒有日誌') } : undefined;
+    const L = simulate ? loadCode(code, KINDS, VRANK, jin) : null;        // 先算好再動目前的城：讀不成就什麼都不改
     if (L && !L.ok) return L;
     const V = simulate ? null : viewCode(code, KINDS, VRANK);             // D012：只能看的城也照實驗線重挑外觀（要讀檔時的地價，所以也建一次格子與場）
     if (V && !V.ok) return V;
@@ -191,6 +212,8 @@ export function startCity() {
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
     sim = L ? L.sim : null; template = L ? L.template : {}; startCode = L ? L.start : ''; loadNote = L ? L.note : ''; lastRep = null;
     autosave = saves && !!sim; saveErr = ''; loadDay = sim ? sim.day : -1;
+    // D013：自動存檔的城接上它的日誌（hv 3 讀得回來的），不然開一條新的；其他城沒有日誌
+    jid = autosave ? L!.journal?.id ?? newJid() : ''; jConf = autosave ? L!.journal?.st ?? PACK0 : PACK0; jSaved = 0;
     const c = sim ? sim.city : V!.city;
     restyled = L ? L.restyled : V!.restyled;
     daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; rebuilds = 0; simAcc = 0;
@@ -233,6 +256,7 @@ export function startCity() {
     if (!first) {
       if (id === 'mine' && sampleId === 'mine' && sim) { saveNow(); return { ok: true as const, replayed: true }; }
       saveNow();
+      if (autosaves() && sim && jid) mineRows = { id: jid, rows: packMore(sim.city.history, PACK0).rows };   // D013：離開我的城，日誌的列留一份在記憶體（回來時接得上，不必等 IndexedDB）
     }
     const code = id === 'mine' ? readSave() : own(SAMPLES, id) ? SAMPLES[id].code : null;
     if (!code) return { ok: false as const, error: '沒有這座城' };
@@ -299,7 +323,9 @@ export function startCity() {
     let why = '', code = '';
     // 產生存檔碼本身也可能丟例外（D012：packHistory 遇到不認得的事件種類改成丟例外，不再悄悄少一段歷史）：
     // 接住、跟存不進去一樣講出來，不讓例外打斷施工或推進那一條路（D012 審查）
-    try { code = saveCode(sim, template, startCode); } catch (e) { why = '存檔碼產生失敗（' + ((e as Error)?.message ?? String(e)) + '）'; }
+    // D013：有日誌就存 hv 3（歷史的前 jConf.n 列在日誌裡，d3 只帶尾巴），存完再把尾巴附加進日誌；沒有日誌存 hv 2（整份歷史，有上限）
+    const useJ = !!jstore && !!jid;
+    try { code = useJ ? saveCode(sim, template, startCode, { journal: { id: jid, st: jConf } }) : saveCode(sim, template, startCode); } catch (e) { why = '存檔碼產生失敗（' + ((e as Error)?.message ?? String(e)) + '）'; }
     if (!why && code.length > SAVE_LIMIT) why = `存檔 ${code.length.toLocaleString()} 字元，超過分享碼上限 ${SAVE_LIMIT.toLocaleString()}`;
     if (!why) try { localStorage.setItem(SAVE_KEY, code); } catch (e) { why = (e as Error)?.name === 'QuotaExceededError' ? '瀏覽器的儲存空間滿了' : '瀏覽器不讓這個網頁存資料'; }
     if (why) {
@@ -309,7 +335,30 @@ export function startCity() {
     }
     if (saveErr) { saveErr = ''; bui.toast('已恢復自動存檔', 'good'); syncUi(); }
     if (sampleId === 'newcity') sampleId = 'mine';
+    if (useJ) { jSaved = sim.city.history.length; kickJournal(); }
     return true;
+  }
+  // D013：把還沒確定寫進日誌的列附加上去（一筆交易）。同一時間只有一筆。
+  // 完成之後只前進「已確定」，不為了縮尾巴重寫存檔（存檔的時機照 D011：每一筆手勢、每 5 天、暫停、切到背景）——下一次存檔尾巴自然縮回去；
+  // 附加途中又存過一次（那一次的附加被擋下），它的尾巴接著寫進去
+  function kickJournal() {
+    if (!jstore || !sim || !jid || jBusy) return;
+    const { rows, st } = packMore(sim.city.history, jConf);
+    if (!rows.length) return;
+    const id = jid, simAt = sim;
+    jBusy = true;
+    jstore.append(id, jConf.n, rows).then(() => {
+      jBusy = false;
+      if (id !== jid || dropped.has(id)) return;
+      jConf = st;
+      if (sim === simAt && jSaved > jConf.n) kickJournal();
+    }, (e: unknown) => {
+      jBusy = false;
+      if (id !== jid) return;
+      jstore = null; jwhy = '日誌寫不進去（' + ((e as Error)?.message ?? String(e)) + '）';
+      bui.toast('⚠️ 歷史的日誌寫不進去，改回整份存在瀏覽器的存檔裡（有上限）', 'bad');
+      if (sim === simAt && autosaves()) saveNow();
+    });
   }
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveNow(); });
   // 推進（播放中才動）與作畫分開：測試出口、對焦只作畫，不會順手多推天數
@@ -422,7 +471,9 @@ export function startCity() {
   }
   function menuCity(id: string) {
     if (id === 'newcity' && readSave() && !confirm('開新城會蓋掉目前的「我的城」，要繼續嗎？')) return;
+    const oldJ = id === 'newcity' ? journalRef(readSave())?.id ?? '' : '';
     const r = openSample(id);
+    if (r.ok && oldJ && oldJ !== jid) dropJournal(oldJ);                  // D013：舊的我的城被新城蓋掉，它的日誌一起刪
     if (!r.ok) bui.toast(r.error, 'bad');
   }
 
@@ -437,7 +488,7 @@ export function startCity() {
       sub: sim ? `第 ${sim.day.toLocaleString()} 天・住 ${k![1][0]}／商 ${k![2][0]}／工 ${k![3][0]}（二級 ${k![1][2] + k![2][2] + k![3][2]}）・幸福 ${pending ? '—' : sim.cityHappy.toFixed(2)}`
         : `實驗線 v${c.gameVer}・第 ${c.day.toLocaleString()} 天・建築 ${live.length}（${kinds} 種）・${c.n}×${c.n}`,
       money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? (pending ? '—' : sim.pop) : null,
-      power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '',
+      power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '',
     });
     syncDock();
   }
@@ -831,7 +882,12 @@ export function startCity() {
     save: () => sim ? saveCode(sim, template, startCode) : null,
     saved: () => readSave(),
     saveNow: () => saveNow(),
-    clearSave: () => { try { localStorage.removeItem(SAVE_KEY); } catch { /* 無痕模式 */ } return !readSave(); },
+    clearSave: () => { const old = journalRef(readSave())?.id ?? ''; try { localStorage.removeItem(SAVE_KEY); } catch { /* 無痕模式 */ } dropJournal(old); return !readSave(); },
+    // D013 日誌：用的是哪一種存放、為什麼不能用、這座城的編號、確定寫進去幾列、有沒有附加還沒完成、存檔裡的尾巴幾列
+    journal: () => ({ kind: jstore?.kind ?? null, why: jwhy, id: jid, confirmed: jConf.n, busy: jBusy, tail: sim && jid ? sim.city.history.length - jConf.n : 0 }),
+    journalFlush: async () => { for (let i = 0; i < 400 && jBusy; i++) await new Promise(r => setTimeout(r, 25)); return (window as unknown as { __gt: { journal(): unknown } }).__gt.journal(); },
+    journalRows: async (id?: string, n = 1e9) => jstore ? await jstore.read(id ?? jid, n) : null,
+    journalCount: async (id?: string) => jstore ? await jstore.count(id ?? jid) : null,
     menuItems: () => menuSections().flatMap(s => s.items.map(i => i.id)),
     menu: (id: string) => onMenu(id),
     loadNote: () => loadNote,
