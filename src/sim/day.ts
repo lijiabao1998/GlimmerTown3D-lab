@@ -10,7 +10,7 @@
 import type { LabSave } from '../io/labcode.ts';
 import { cityFromLab, stadiumSize, type City, type CityBuilding, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
-import { labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
+import { clamp, labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
@@ -102,7 +102,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     root.set(i, b);
   }
   const w: World = { N: n, tiles };
-  const g = allocGrids(n), budget = { ...SVC_BUDGET_DEFAULT }, edu: EduCtx = { tech: [], spec: null, schoolLunch: false };
+  const g = allocGrids(n), budget = budgetOfSave(save.raw.sb), edu: EduCtx = { tech: [], spec: null, schoolLunch: false };   // D023：sb（四類服務預算）66964
   const landAt = forRestyle ? [...root.keys()].filter(i => { const k = (tiles[i].bld!.k | 0); return k >= 1 && k <= 3; }) : undefined;
   rebuildCov(w, g, budget, edu, landAt);                         // 66940／66965
   const rng = labRng(save.seed ^ save.day);
@@ -116,6 +116,14 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     money: save.money, diff: save.df, loan: save.ln ? { remain: save.ln[0], daily: save.ln[1] } : null, msIdx: save.msIdx, bestStar: save.star, bailoutDay: -999,
     stroke: 1, txns: [], dozeArm: null,
   };
+}
+
+// 存檔的服務預算 sb（D023，實驗線 load() 66964）：有 sb 就逐鍵看，是數字才收、夾在 .5–1.5，不是數字的鍵保留預設 1（新開的世界原值就是 1）；沒有 sb 就全 1。
+// 覆蓋場的半徑（stampCov 52977）與每天的維護費（settleToday 傳的 s.budget）都讀它
+export function budgetOfSave(sb: unknown): SvcBudget {
+  const b: SvcBudget = { ...SVC_BUDGET_DEFAULT };
+  if (sb && typeof sb === 'object') for (const k of Object.keys(b) as (keyof SvcBudget)[]) { const v = (sb as Record<string, unknown>)[k]; if (typeof v === 'number') b[k] = clamp(v, .5, 1.5); }
+  return b;
 }
 
 // 讀檔後、第一天之前的 pop（D021）：實驗線 load() 被 T510 包了一層（68519 只多呼叫 balancePrepareAuthorities510），
