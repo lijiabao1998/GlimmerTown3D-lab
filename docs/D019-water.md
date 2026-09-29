@@ -76,7 +76,7 @@
 ## 施工紀錄
 
 - 雲端施工，卡 `76d8d50`。
-- 施工與收尾：見 `LOG.md` r19。
+- 施工與收尾：`b149282`（見 `LOG.md` r19）。
 
 ### 做了什麼
 
@@ -172,10 +172,9 @@
    - 拉水管之後、拿著配水管、推進一天、放下工具，每一次增量重建＝整張重建。
    - 三角形 46,940 → 46,940（拿著配水管，只改地面貼圖）、draw call 17 → 17。
    - 對照圖 `docs/img/D019-compare.jpg`（同一串操作，2D 實驗線｜3D，都拿著配水管）、`docs/img/D019-mobile.jpg`。
-8. **全綠、上線** ✅
-   - `main` 推上去的那一輪：[Actions run 36523101736](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36523101736)（`main` `b149282`）smoke 與 pages 兩個工作都成功。雲端 Node 24、Chrome 153.0.8010.52；Node 守衛綠（82.0 秒）、煙霧 237 項 0 NG（427.4 秒）；拍樣張那一步也綠。
-   - 公開頁 <https://lijiabao1998.github.io/GlimmerTown3D-lab/> HTTP 200、983,547 位元組（sha1 `c2b72bae…`），跟這個提交在本機建置的 `dist/index.html` 逐位元組相同。這一項是接手時（2026-09-29，本機獨立重跑）補核的；D014 起這個容器一度連不到 `github.io`，這次連得到。
-   - 接手時（2026-09-29）本機獨立重跑同一個提交，不照單全收：型別檢查過；建置 983,547 位元組；Node 22.22.2 守衛 235 項 0 NG（116.5 秒）；Node 24.21.0 守衛 235 項 0 NG（104.5 秒）；煙霧 237 項 0 NG（428.8 秒，Chromium 141）。跟上面雲端那一輪、跟 LOG r19 的數字一致。
+8. **全綠、上線** ✅：[Actions run 36523101736](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/36523101736)（`main` `b149282`）的 Node 守衛、smoke、樣張、Pages 都成功。雲端 Node 24、Chrome 153.0.8010.52；Node 守衛綠（82.0 秒）、煙霧 237 項 0 NG（427.4 秒）。
+   - 公開頁 <https://lijiabao1998.github.io/GlimmerTown3D-lab/> HTTP 200、983,547 位元組（sha1 `c2b72bae…`），跟這個提交在本機建置的 `dist/index.html` 逐位元組相同（接手時 2026-09-29 補核；D014 起這個容器一度連不到 `github.io`，這次連得到）。
+   - 接手時本機獨立重跑同一個提交，不照單全收：型別檢查過；建置 983,547 位元組；Node 22.22.2 守衛 235 項 0 NG（116.5 秒）；Node 24.21.0 守衛 235 項 0 NG（104.5 秒）；煙霧 237 項 0 NG（428.8 秒，Chromium 141）。跟雲端那一輪、跟 LOG r19 的數字一致。
    - 本機有 Node 24 的做法（之後每張卡雙版本驗）：`npm install --no-save node@24`，裝在容器暫存目錄，跑 `node_modules/.bin/node tools/unit.mjs`。
 
 ### 沒做成的事
