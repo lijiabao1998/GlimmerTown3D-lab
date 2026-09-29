@@ -800,6 +800,9 @@ async function guards(log) {
     for (let d = 0; d < 60; d++) { const st = stepDay(s).settle; net += st.income - st.upkeep; m += (st.milestone?.reward ?? 0) + (st.star?.bonus ?? 0) + (st.bailout ?? 0); }
     if (s.money !== m || !net) bad.push(`60 天後資金 ${s.money} ≠ 只加里程碑、星等、紓困的 ${m}（收支 ${net} 照算不入帳）`);
     const m0 = s.money;
+    // D025：經濟接上之後起步城商業需求為負（−0.7 上下，跟實驗線回退設定的起步城一樣），60 天後全是一級。這個測試要二級以上的建築，
+    // 自己把每三棟住商工升成二級（升級會把屋齡歸零，實驗線 upgradeStep 一樣）：格子、城市模型一起改，照 syncCity 記成 upgrade 事件（歷史只增不改，重播與存讀檔才對得上）
+    { let q = 0; for (const [i, b] of s.root) if (b.k <= 3 && b.goneDay === undefined && q++ % 3 === 0) { b.lv = 2; b.age = 0; s.w.tiles[i].bld.lv = 2; s.w.tiles[i].bld.age = 0; s.city.history.push({ day: s.day, t: 'upgrade', x: b.x, z: b.z, k: b.k, lv: 2, v: b.v }); } }
     const lv2 = [...s.root.values()].filter(b => b.k <= 3 && b.lv >= 2), lv1 = [...s.root.values()].filter(b => b.k <= 3 && b.lv === 1);
     const h = lv2[0], rect = (x, z, t) => commitOp(s, { k: 'rect', tool: 'doze', x0: x, z0: z, x1: x, z1: z }, t);
     const r1 = rect(h.x, h.z, 100000), r2 = rect(h.x, h.z, 102999);

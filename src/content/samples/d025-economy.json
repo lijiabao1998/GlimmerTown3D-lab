@@ -1,0 +1,340 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-economy.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "decl",
+   "name": "GOODS_IMPORT_COST481",
+   "anchors": {
+    "start": "const GOODS_IMPORT_COST481="
+   },
+   "line": 38261,
+   "endLine": 38261,
+   "sha": "a3e4bc23c5ea63e02e9f5e58841c177209fa03a872a84bd74d16254aa878c8a5"
+  },
+  {
+   "kind": "span",
+   "name": "COMMODITY_META482",
+   "anchors": {
+    "start": "const COMMODITY_META482={",
+    "end": "const RECIPES482=["
+   },
+   "line": 38278,
+   "endLine": 38285,
+   "sha": "65d4d2e9005075006f9b07be7fe931c38a99f211fe0c54ce4e0ba9fd217f8900"
+  },
+  {
+   "kind": "decl",
+   "name": "INDUSTRY_SUPPLY_UNIT",
+   "anchors": {
+    "start": "const INDUSTRY_SUPPLY_UNIT="
+   },
+   "line": 39449,
+   "endLine": 39449,
+   "sha": "8821755d76fd8046c78093f5394033c69f1da18f217f0b2ba6c863d752affd7c"
+  },
+  {
+   "kind": "decl",
+   "name": "INDUSTRY_SUPPLY_BOOST",
+   "anchors": {
+    "start": "const INDUSTRY_SUPPLY_BOOST="
+   },
+   "line": 39450,
+   "endLine": 39450,
+   "sha": "9dfe2a1ef439d830d784566e70f464673ecb0da3336465e637b51b68e6fb8719"
+  },
+  {
+   "kind": "decl",
+   "name": "FUEL_INDUSTRY_TAX_MUL",
+   "anchors": {
+    "start": "const FUEL_INDUSTRY_TAX_MUL="
+   },
+   "line": 39453,
+   "endLine": 39453,
+   "sha": "014f1a32c65d21f29a539949bfdeede0c11fe7f3512a53ad99bba0bbd1d4e913"
+  },
+  {
+   "kind": "decl",
+   "name": "SHIPYARD_STEEL_USE",
+   "anchors": {
+    "start": "const SHIPYARD_STEEL_USE="
+   },
+   "line": 39454,
+   "endLine": 39454,
+   "sha": "c4306a86295504ee8e64546e685183739f8ab2667544f491715a61535c19850a"
+  },
+  {
+   "kind": "decl",
+   "name": "FREIGHT_FUEL_USE",
+   "anchors": {
+    "start": "const FREIGHT_FUEL_USE="
+   },
+   "line": 39457,
+   "endLine": 39457,
+   "sha": "b83a2bf591e66167eded1f84bd28972d6da204ba705e5920eaeec8096ce26cc0"
+  },
+  {
+   "kind": "decl",
+   "name": "SHIP_STEEL",
+   "anchors": {
+    "start": "const SHIP_STEEL="
+   },
+   "line": 39458,
+   "endLine": 39458,
+   "sha": "b96ed99dccd467aaf94e29b5031ec22ad60325de6b7a4c6610e9e25d40c537d9"
+  },
+  {
+   "kind": "decl",
+   "name": "MEGAPROJECT_CYCLE_DAYS",
+   "anchors": {
+    "start": "const MEGAPROJECT_CYCLE_DAYS="
+   },
+   "line": 39660,
+   "endLine": 39660,
+   "sha": "5f63952e581849e0f70b3b0c837861955b6f0f11f8649032369fa52b34ce08fb"
+  },
+  {
+   "kind": "fn",
+   "name": "goodsCap283",
+   "anchors": {
+    "start": "function goodsCap283(",
+    "closure": "balanced-brace"
+   },
+   "line": 38202,
+   "endLine": 38202,
+   "sha": "4c98413f3a477a94dc742cd445026893f93daed5c2b6cba7fe44e12ef2b645fe"
+  },
+  {
+   "kind": "fn",
+   "name": "foodPriceOf",
+   "anchors": {
+    "start": "function foodPriceOf(",
+    "closure": "balanced-brace"
+   },
+   "line": 38203,
+   "endLine": 38208,
+   "sha": "d5072c905cbb72858a75986a3fde2efb78365a180c4dc3afafd2962702a29b9f"
+  },
+  {
+   "kind": "fn",
+   "name": "laborMarket481",
+   "anchors": {
+    "start": "function laborMarket481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38264,
+   "endLine": 38267,
+   "sha": "6d116d86b326235d097c8aeb89b974c412d7c25025d9aaa4e05e6aa81116e458"
+  },
+  {
+   "kind": "fn",
+   "name": "wealthPower481",
+   "anchors": {
+    "start": "function wealthPower481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38268,
+   "endLine": 38268,
+   "sha": "4bb03699ea3ed0e0ead31d09242d06c7f07a468808f28dc956ce5c2baa669e0c"
+  },
+  {
+   "kind": "fn",
+   "name": "purchasingPower481",
+   "anchors": {
+    "start": "function purchasingPower481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38270,
+   "endLine": 38270,
+   "sha": "84c81f57e54dbb1eec8f99330ee540e2263d8d26406994bd4b0a17888075408a"
+  },
+  {
+   "kind": "fn",
+   "name": "externalPrice482",
+   "anchors": {
+    "start": "function externalPrice482(",
+    "closure": "balanced-brace"
+   },
+   "line": 38298,
+   "endLine": 38298,
+   "sha": "dc9ee0b79462110a3d0351db9b3d506ebf6afce69054077fae49d81b07f18d6a"
+  },
+  {
+   "kind": "fn",
+   "name": "commoditySupply482",
+   "anchors": {
+    "start": "function commoditySupply482(",
+    "closure": "balanced-brace"
+   },
+   "line": 38299,
+   "endLine": 38299,
+   "sha": "9c81c4d01fd62caa62461f4a59580af1ab5f67d7f8d95ebda0db577c9a6acb07"
+  },
+  {
+   "kind": "fn",
+   "name": "businessCycleConsumptionMul490",
+   "anchors": {
+    "start": "function businessCycleConsumptionMul490(",
+    "closure": "balanced-brace"
+   },
+   "line": 39601,
+   "endLine": 39601,
+   "sha": "7a85f2dadcac6f974d93a4ec18be5f521fc337c44308de8680151795e3fd6e3d"
+  },
+  {
+   "kind": "fn",
+   "name": "gpnExportDemand508",
+   "anchors": {
+    "start": "function gpnExportDemand508(",
+    "closure": "balanced-brace"
+   },
+   "line": 68192,
+   "endLine": 68192,
+   "sha": "cecda557c9b1d584a49a0b3f209b5683ecdf8128afcd109d08bb806f2def638e"
+  },
+  {
+   "kind": "span",
+   "name": "tick 資源回收廠產貨物",
+   "anchors": {
+    "start": "if(sanLocal452){ // T452：資源回收產出",
+    "end": "let garbPen409=0;"
+   },
+   "line": 55262,
+   "endLine": 55266,
+   "sha": "67b6440e5c12169595d9380c249ce51cb10c59661ea64c5733f60a3255353a98"
+  },
+  {
+   "kind": "span",
+   "name": "tick T364b 深加工鏈",
+   "anchors": {
+    "start": "const refineryUtil489=enterpriseTypeUtilization489(121)",
+    "end": "/* ===== T364b A 深加工鏈 END ===== */"
+   },
+   "line": 55305,
+   "endLine": 55325,
+   "sha": "a8272f2ed4a9da72cac1a12e31bb243a2ed0347b6fe6943d0eed6543850dcbe4"
+  },
+  {
+   "kind": "span",
+   "name": "tick T481／T482 經濟",
+   "anchors": {
+    "start": "gWhCap284=whCap284+goodsCapBonus485;",
+    "end": "if(foodCoreNeed482>0||se>0){"
+   },
+   "line": 55328,
+   "endLine": 55413,
+   "sha": "354963369365214c142fcdd17466442fe62ba6e19f543eff906cf1b75a0171c5"
+  },
+  {
+   "kind": "span",
+   "name": "tick 煉鋼廠加速施工",
+   "anchors": {
+    "start": "let cap418=Math.min(steelMillN*STEEL_MILL_RATE,steel);",
+    "end": "b.age++;cap418--;steel--;constrSteelUse418++;"
+   },
+   "line": 55664,
+   "endLine": 55671,
+   "sha": "c00ad173e2b57146b7becb028e59fe2eaa3ceb94eaf9e4c998cbe807d7e2978d"
+  },
+  {
+   "kind": "span",
+   "name": "tick 食物出口金",
+   "anchors": {
+    "start": "const tradeGoldBase=foodExportGold482;",
+    "end": "const tradeGold=shipTradeTaxMul>1?Math.round(tradeGoldBase*shipTradeTaxMul):tradeGoldBase;"
+   },
+   "line": 55996,
+   "endLine": 55997,
+   "sha": "8dc0382fe6b13e367afda01f4f0729fecbe1d2274d52c1eb86875998e702402a"
+  },
+  {
+   "kind": "span",
+   "name": "tick 食物價格快照",
+   "anchors": {
+    "start": "const foodPrice=foodPrice481;",
+    "end": "const foodPrice=foodPrice481;"
+   },
+   "line": 55991,
+   "endLine": 55991,
+   "sha": "1d8b470f92ba359f9d57c7e3e98b41c659fd78d3c5d65a5823c922924074e45a"
+  },
+  {
+   "kind": "span",
+   "name": "tick 燃料出口",
+   "anchors": {
+    "start": "fuelExport418=(tp336+fuelDepOp485",
+    "end": "const fuelExportGold418=fuelExport418>0?"
+   },
+   "line": 56000,
+   "endLine": 56002,
+   "sha": "6b520bcffe9c496b1c0357bd1bc462d20db76c2b816d43a8e419dc6f0d726e64"
+  },
+  {
+   "kind": "span",
+   "name": "tick 天然氣出口金",
+   "anchors": {
+    "start": "const gasGold=Math.round(gasExportGold482)",
+    "end": "const gasGold=Math.round(gasExportGold482)"
+   },
+   "line": 56011,
+   "endLine": 56011,
+   "sha": "3edb49af339b4f236c5c55ff0f1dacac223b5e32c8c502e7a137a2f80c4660c0"
+  },
+  {
+   "kind": "span",
+   "name": "tick 鋼材出口",
+   "anchors": {
+    "start": "const steelReserve482=Math.max(18",
+    "end": "const suppliesUsed482=gInput482+indSupplyUsed+megaSupplyUsed482;"
+   },
+   "line": 56018,
+   "endLine": 56021,
+   "sha": "6c4f3940570ef0e98d3d4e99d8cf9baa2c8232fe83fafd5d5650a691dd35771f"
+  },
+  {
+   "kind": "span",
+   "name": "tick 經濟快照",
+   "anchors": {
+    "start": "economy481={ready:true,day,labor:{...laborNow481}",
+    "end": "businessCycleStep490(); // T490"
+   },
+   "line": 56030,
+   "endLine": 56046,
+   "sha": "91a2e090524c22d5419175a4c1f661b565747c7dc259309b49ee2e7b39e546a6"
+  }
+ ],
+ "text": {
+  "GOODS_IMPORT_COST481": "const GOODS_IMPORT_COST481=2.8,GOODS_EXPORT_PRICE481=2.35;",
+  "COMMODITY_META482": "const COMMODITY_META482={\n  food:{nm:'食物',ic:'🌾',importPrice:1.35,exportPrice:1.05,phase:.4},\n  goods:{nm:'一般商品',ic:'📦',importPrice:GOODS_IMPORT_COST481,exportPrice:GOODS_EXPORT_PRICE481,phase:1.2},\n  fuel:{nm:'燃料',ic:'⛽',importPrice:2.55,exportPrice:2.00,phase:2.1},\n  steel:{nm:'鋼材',ic:'🔩',importPrice:3.20,exportPrice:2.55,phase:2.9},\n  gas:{nm:'天然氣',ic:'🔥',importPrice:1.45,exportPrice:1.10,phase:3.7},\n  supplies:{nm:'工業原料',ic:'🪨',importPrice:1.75,exportPrice:1.20,phase:4.4}\n};",
+  "INDUSTRY_SUPPLY_UNIT": "const INDUSTRY_SUPPLY_UNIT=.6;          // T140：每座工業建築每日供應品需求量（供選消耗鏈用，非強制）",
+  "INDUSTRY_SUPPLY_BOOST": "const INDUSTRY_SUPPLY_BOOST=.3;         // T140：工業稅收加成上限（需求被 100% 滿足時 ×1.3，未供應精確恆等 ×1）",
+  "FUEL_INDUSTRY_TAX_MUL": "const FUEL_INDUSTRY_TAX_MUL=1.10,FUEL_FREIGHT_TAX_MUL=1.08,STEEL_INDUSTRY_TAX_MUL=1.12;",
+  "SHIPYARD_STEEL_USE": "const SHIPYARD_STEEL_USE=1,SHIPYARD_TRADE_TAX_MUL=1.15,SHIPYARD_PORT_GOLD=5;",
+  "FREIGHT_FUEL_USE": "const FREIGHT_FUEL_USE=2,FUEL_EXPORT_RATE=4,FUEL_EXPORT_GOLD=2.0; // T418：貨運耗油 2/座/日；貿易站出口 4/座/日、$2/油",
+  "SHIP_STEEL": "const SHIP_STEEL=30,SHIP_PORT_CAP=2,SHIP_DAILY_GOLD=6; // T418：30 鋼=1 船；船上限=港口×2；每船每日貿易收入 $6",
+  "MEGAPROJECT_CYCLE_DAYS": "const MEGAPROJECT_CYCLE_DAYS=24,MEGAPROJECT_SUPPLY_COST=180,MEGAPROJECT_REWARD=3500; // T140：太空研究中心週期天數／單次消耗供應品／單次資金回饋（純由 day 導出，不消耗 R()）",
+  "goodsCap283": "function goodsCap283(){return 60+gWhCap284;}",
+  "foodPriceOf": "function foodPriceOf(d,sea){\n  const wave=0.20*Math.sin(d*0.61)+0.10*Math.sin(d*0.173+2.3);\n  const seaB=[1,0.95,0.85,1.22][sea]||1;\n  const dem=((d%53)<4)?1.35:1;\n  return clamp((1+wave)*seaB*dem,0.6,1.8);\n}",
+  "laborMarket481": "function laborMarket481(p,j){\n  const workers=Math.max(1,Math.round(p*.60)),actual=(typeof enterprise489!=='undefined'&&enterprise489&&enterprise489.ready&&enterprise489.day===day&&!enterprise489.rollback)?Math.min(workers,Math.max(0,enterprise489.cityEmployed||0)):Math.min(workers,Math.max(0,j)),employed=actual,unemployed=Math.max(0,workers-employed),vacancies=Math.max(0,Math.max(0,j)-employed),employmentRate=workers?employed/workers:1,unemploymentRate=workers?unemployed/workers:0,vacancyRate=Math.max(0,j)?vacancies/Math.max(1,j):0,wageIndex=clamp(j/workers,.55,1.55);\n  return{workers,employed:+employed.toFixed(2),unemployed:+unemployed.toFixed(2),vacancies:+vacancies.toFixed(2),employmentRate:+employmentRate.toFixed(4),unemploymentRate:+unemploymentRate.toFixed(4),vacancyRate:+vacancyRate.toFixed(4),wageIndex:+wageIndex.toFixed(4)};\n}",
+  "wealthPower481": "function wealthPower481(list,pTotal){let covered=0,weighted=0;for(const i of list){const b=tiles[i]?.bld;if(!b||b.ref)continue;let pp=0,w=1;if([1,127,33,105].includes(b.k)){pp=residentPopulation488(i,b);if(b.k===1){const we=b.we!==undefined?b.we:1;w=we===0?.72:we===2?1.28:1;}else if(b.k===127)w=.72;else if(b.k===33)w=1.08;else w=1.12;}if(pp>0){covered+=pp;weighted+=pp*w;}}const rest=Math.max(0,pTotal-covered);return pTotal>0?clamp((weighted+rest)/pTotal,.65,1.35):1;}",
+  "purchasingPower481": "function purchasingPower481(labor,wealth,happy,cost,taxR){const emp=.55+.45*clamp(labor.employmentRate,0,1),wage=.82+.18*clamp(labor.wageIndex,.55,1.55),mood=.92+.08*clamp(happy,0,1),tax=clamp(1-Math.max(0,(taxR||1)-1)*.18,.82,1.06),price=clamp(1.12-(cost||1)*.12,.82,1.08);return clamp(wealth*emp*wage*mood*tax*price,.45,1.45);}",
+  "externalPrice482": "function externalPrice482(id,d,sea){const m=COMMODITY_META482[id],p=m.phase||0;let v=1+.075*Math.sin(d*.071+p)+.045*Math.sin(d*.019+p*1.7);if(id==='food')v*=([1.00,.96,.90,1.12][sea]||1);else if(id==='fuel'||id==='gas')v*=([.98,1.08,1.00,1.12][sea]||1);else if(id==='steel'||id==='supplies')v*=([1.00,1.03,1.05,.98][sea]||1);return +clamp(v,.82,1.22).toFixed(3);}",
+  "commoditySupply482": "function commoditySupply482(production,demand,served,stock,cap,imports,exports,localPrice,externalPrice,importCost,exportGold,id){const supplyRate=demand>0?clamp(served/demand,0,1):1,shortageRatio=1-supplyRate,stockRatio=cap>0?clamp(stock/cap,0,2):0;return{id,nm:COMMODITY_META482[id].nm,production:+production.toFixed(2),demand:+demand.toFixed(2),served:+served.toFixed(2),stock:+stock.toFixed(2),cap:+cap.toFixed(2),imports:+imports.toFixed(2),exports:+exports.toFixed(2),supplyRate:+supplyRate.toFixed(3),shortageRatio:+shortageRatio.toFixed(3),stockRatio:+stockRatio.toFixed(3),localPrice:+localPrice.toFixed(3),externalPrice:+externalPrice.toFixed(3),importCost:Math.round(importCost||0),exportGold:Math.round(exportGold||0)};}",
+  "businessCycleConsumptionMul490": "function businessCycleConsumptionMul490(){if(window.__noBusinessCycle490)return 1;const st=businessCycleState490(),confidence={stable:1,expansion:1.015,overheat:1.005,slowdown:.982,recession:.955,recovery:1.018}[st]||1,support=pol?.consumptionSupport?1.06:1;return clamp(confidence*support,.88,1.12);}",
+  "gpnExportDemand508": "function gpnExportDemand508(id,n){n=Math.max(0,Math.floor(+n||0));if(!n||window.__noGpn508||window.__noExportDemand508)return n;const d=gpn508.ready?(gpn508.commodities?.[id]?.demand??1):1,f=clamp(d+gpnProgramStrength508('exportCredit')*.08,.12,1.10);return Math.min(n,Math.floor(n*f+1e-9));}",
+  "recycle": "  if(sanLocal452){ // T452：資源回收產出也必須吃本區垃圾，B 區回收廠不能隔空處理 A 區垃圾\n    let upGoods452=0;for(const q452 of sanDistricts452){const n452=q452.byK[111]||0;if(n452>0&&q452.demand>0)upGoods452+=Math.min(Math.round(q452.demand*.08),n452*6);}if(upGoods452>0)goods=Math.min(goodsCap283(),goods+upGoods452);\n  }else{\n    const upcEff445=san445.formal?(san445.activeByK[111]||0):upc342;if(upcEff445>0)goods=Math.min(goodsCap283(),goods+Math.min(Math.round(garbage*.08),upcEff445*6)); /* T445 legacy */\n  }",
+  "chain": "  const refineryUtil489=enterpriseTypeUtilization489(121),steelMillUtil489=enterpriseTypeUtilization489(122),shipyardUtil489=enterpriseTypeUtilization489(123);\n  fuelMade=refineryN>0?Math.min(oilGain,refineryN*REFINERY_RATE*refineryUtil489,Math.max(0,fuelCap485-fuel)):0;\n  steelMade=steelMillN>0?Math.min(oreGain,steelMillN*STEEL_MILL_RATE*steelMillUtil489,Math.max(0,steelCap485-steel)):0;\n  supplies+=suppliesGain-fuelMade-steelMade;\n  fuel+=fuelMade;steel+=steelMade;\n  steelUsed=shipyardN>0?Math.min(steel,shipyardN*SHIPYARD_STEEL_USE*shipyardUtil489):0;\n  steel-=steelUsed;\n  /* T418 交付①：貨運中心（k110）每日耗油——供油率→freightTaxMul（照抄 T284 供貨率模板：\n     滿供 ×FUEL_FREIGHT_TAX_MUL、無油/無貨運 ×1）；油只進不出的純開關退役。 */\n  fuelUse418=freightUnits485>0?Math.min(fuel,freightUnits485*FREIGHT_FUEL_USE):0;\n  fuel-=fuelUse418;\n  freightTaxMul=1+(FUEL_FREIGHT_TAX_MUL-1)*(freightUnits485>0?fuelUse418/(freightUnits485*FREIGHT_FUEL_USE):0);\n  /* T418 交付③：船變實體——steelUsed 累積→shipProgress，滿 SHIP_STEEL→shipCount+1（上限=港口×2，無港不造）；\n     shipCount/shipProgress 跨日入存檔；每日貿易收入 shipDailyGold418 併入 income（與 shipTradeTaxMul 並存）。 */\n  if(steelUsed>0&&portEquivalent485>0){shipProgress+=steelUsed;if(shipProgress>=SHIP_STEEL){shipCount+=Math.floor(shipProgress/SHIP_STEEL);shipProgress%=SHIP_STEEL;}} // T418 覆核退修：每 30 鋼完整兌換（70 鋼=2 艘＋進度 10，而非 1 艘＋40）；progress 恆 <30\n  if(shipCount>portEquivalent485*SHIP_PORT_CAP)shipCount=portEquivalent485*SHIP_PORT_CAP; // 上限截斷（多餘船丟棄；progress 已餘 <30 不受影響）\n  shipDailyGold418=shipCount*SHIP_DAILY_GOLD;\n  fuelTaxMul=fuel>0?FUEL_INDUSTRY_TAX_MUL:1;\n  steelTaxMul=steel>0?STEEL_INDUSTRY_TAX_MUL:1;steelDisc418=steel>0; // T418b SK-1：升級折扣快照與稅乘數同時點（造船後、施工前）——upCost/面板讀它，施工吃庫存不再吃掉折扣\n  shipTradeTaxMul=steelUsed>0?SHIPYARD_TRADE_TAX_MUL:1;\n  shipPortGold=steelUsed>0?Math.round(portEquivalent485*steelUsed*SHIPYARD_PORT_GOLD*sq('ind',1.25,1)):0;",
+  "economy": "  gWhCap284=whCap284+goodsCapBonus485;\n  const laborNow481=laborMarket481(pop,jobs),effectiveIndUnits489=nIndG284*enterpriseTypeUtilization489(3),effectiveComUnits489=nComG284*enterpriseTypeUtilization489(2);\n  const extFood482=externalPrice482('food',day,sea),extGoods482=externalPrice482('goods',day,sea),extFuel482=externalPrice482('fuel',day,sea),extSteel482=externalPrice482('steel',day,sea),extGas482=externalPrice482('gas',day,sea),extSup482=externalPrice482('supplies',day,sea),\n        wealthNow481=wealthPower481(tickBld,pop),prevCost481=economy481.ready?economy481.prices.costOfLiving:foodPriceOf(day,sea),\n        purchaseBase481=clamp(purchasingPower481(laborNow481,wealthNow481,cityHappy,prevCost481,pol?.taxR||1)*businessCycleConsumptionMul490(),.40,1.65),\n        logisticsNow481=logisticsEfficiency481(tickRoad,freightUnits485,warehouseUnits485,portEquivalent485,railUnits485,freightTaxMul);\n  const roadTradeBase482=tickRoad.length?Math.min(8,1+Math.floor(tickRoad.length/80)):0,\n        tradeCapacity481=Math.max(tickRoad.length>0?3:0,Math.floor((roadTradeBase482+tp336*4+portEquivalent485*4+freightUnits485*3+warehouseUnits485*2+clEff489*8+imEff489*10+dcEff489*4+coldEff489*3+siloEff489*3+fuelDepEff489*4+gasDepEff489*4+steelYEff489*3+bulkEff489*12+cportEff489*18+Math.min(shipCount,portEquivalent485*2))*logisticsNow481.efficiency*gpnTradeCapacityMul508())); /* T482A1 修①：陸路小額貿易下限——原式無農小城 floor(1×.78)=0＝民生零進口＝供糧率 0＝幸福 −.06/日觸地板（實測 56 人/7%/−1,439 死亡螺旋根因）。有路即有 3 單位，小城民生進口有入口；常數 3 不隨城擴放大，中大城容量仍由港/貿易站/貨運/倉儲主導，原式取 max 即可 */\n  const solvent482A1=money>=0; /* T482A1 修④：償付能力旗標——破產時暫停 fuel/steel/supplies 三類「產業緩衝」進口（借錢囤庫存＝越破產越失血）；民生（food/gas）與零售閉環（goods）不受此旗標約束，斷帳不斷糧 */\n  let tradeRemaining482=tradeCapacity481,tradeUsed482=0;\n  const takeTrade482=n=>{const q=Math.max(0,Math.min(Math.floor(n||0),tradeRemaining482));tradeRemaining482-=q;tradeUsed482+=q;return q;};\n  // FOOD：先保居民與遊客基本需求，再把剩餘本地糧食分配給廚房→農貿→食品加工→釀酒，最後才出口。\n  const foodResidentNeed482=Math.ceil(pop/10),foodTouristNeed482=Math.ceil(tourists/160),foodCoreNeed482=foodResidentNeed482+foodTouristNeed482,\n        foodDomesticCore482=Math.min(foodPoints,foodCoreNeed482),foodShortCore482=Math.max(0,foodCoreNeed482-foodDomesticCore482),foodImport482=takeTrade482(gpnImportAvailability508('food',foodShortCore482)),\n        foodServedCore482=foodDomesticCore482+foodImport482,foodSupplyRate482=foodCoreNeed482>0?clamp(foodServedCore482/foodCoreNeed482,0,1):1;\n  let foodProcessPool482=Math.max(0,foodPoints-foodDomesticCore482);\n  const kitchenFoodUse482=Math.min(foodProcessPool482,kt346*10*enterpriseTypeUtilization489(119));foodProcessPool482-=kitchenFoodUse482;\n  const marketFoodUse482=Math.min(foodProcessPool482,mk330*4);foodProcessPool482-=marketFoodUse482;\n  const foodPlantUse482=Math.min(foodProcessPool482,procCapU);foodProcessPool482-=foodPlantUse482;\n  const brewFoodUse482=Math.min(foodProcessPool482,br340*3*enterpriseTypeUtilization489(100));foodProcessPool482-=brewFoodUse482;\n  const foodExportLimit485=tp336*15+siloEff489*18+coldEff489*8+bulkEff489*24+cportEff489*35,foodHold492=pol?.emergencyStockpile492?Math.ceil(foodCoreNeed482*.75):0,foodExportCandidate482=foodExportLimit485>0?Math.min(Math.max(0,foodProcessPool482-foodHold492),foodExportLimit485):0;\n  const foodShortage482=1-foodSupplyRate482,foodSurplusSignal482=foodCoreNeed482>0?clamp(foodProcessPool482/Math.max(1,foodCoreNeed482),0,1):0,\n        foodPrice481=clamp(extFood482*(1+foodShortage482*.32-foodSurplusSignal482*.08),.70,1.80),\n        foodImportCost482=Math.round(foodImport482*COMMODITY_META482.food.importPrice*extFood482);\n  // GAS：化肥/中央廚房/食品加工 + T471 當日 CCGT/peaker 調度形成真燃料需求；不足可經同一貿易池進口。\n  const gasPowerDispatchNow482=powerGasDispatch482(),gasPowerNeed482=Math.ceil(gasPowerDispatchNow482*.035);\n  gasSup=gw346*8;gasDem=fp346*3*enterpriseTypeUtilization489(118)+kt346*2*enterpriseTypeUtilization489(119)+fpN*enterpriseTypeUtilization489(57)+gasPowerNeed482;\n  const gasShortLocal482=Math.max(0,gasDem-gasSup),gasImport482=takeTrade482(gpnImportAvailability508('gas',gasShortLocal482)),gasServed482=Math.min(gasDem,gasSup+gasImport482);\n  gasRatio=gasDem>0?clamp(gasServed482/gasDem,0,1):1;\n  const gasSurplus482=Math.max(0,gasSup-gasDem),gasExportCandidate482=gasImport482>0?0:Math.min(Math.max(0,gasSurplus482-(pol?.emergencyStockpile492?Math.ceil(gasDem*.75):0)),tp336*4+gasDepEff489*8+bulkEff489*5+cportEff489*6),\n        gasImportCost482=Math.round(gasImport482*COMMODITY_META482.gas.importPrice*extGas482);\n  // FUEL：既有貨運燃料已在本 tick 先消耗；T482 允許以共享貿易容量補回缺口，作下一日物流緩衝。\n  const fuelDemand482=freightUnits485*FREIGHT_FUEL_USE,fuelShort482=Math.max(0,fuelDemand482-fuelUse418),fuelImport482=solvent482A1?takeTrade482(gpnImportAvailability508('fuel',Math.min(fuelShort482,Math.max(0,fuelCap485-fuel)))):0; // T482A1 修④：破產不補次日物流緩衝（斷帳先斷產業緩衝）\n  fuel=Math.min(fuelCap485,fuel+fuelImport482);\n  const fuelImportCost482=Math.round(fuelImport482*COMMODITY_META482.fuel.importPrice*extFuel482);\n  // STEEL：造船先吃本地鋼；估算當日施工中 root 數量後補安全庫存，進口鋼可在稍後 T418 工地輪轉直接被消耗。\n  let activeConstruction482=0;for(const ci482 of tickBld){const cb482=tiles[ci482].bld;if(cb482&&!cb482.ref&&cb482.age<9)activeConstruction482++;}\n  const steelConstructionNeed482=steelMillN>0?Math.min(activeConstruction482,steelMillN*STEEL_MILL_RATE*steelMillUtil489):0,steelBase482=(steelMillUtil489>0||shipyardUtil489>0)?Math.ceil(12*Math.max(steelMillUtil489,shipyardUtil489)):0,steelTarget482=Math.min(steelCap485,steelConstructionNeed482+shipyardN*SHIPYARD_STEEL_USE*shipyardUtil489+steelBase482), /* T482A1 修③：+12 安全庫存改為有鋼鐵基礎設施才成立——原式任何城無條件囤 12 鋼，配合修①的容量下限會讓每座路城平白進口 $38 鋼材 */\n        steelImport482=solvent482A1?takeTrade482(gpnImportAvailability508('steel',Math.max(0,steelTarget482-steel))):0;steel=Math.min(steelCap485,steel+steelImport482); // T482A1 修④：破產不補鋼安全庫存\n  const steelImportCost482=Math.round(steelImport482*COMMODITY_META482.steel.importPrice*extSteel482);\n  // SUPPLIES：先用貿易補一般工業的短缺，再跑既有 goods recipe；避免每條產業鏈另造一套 import capacity。\n  const suppliesTarget482=Math.ceil(effectiveIndUnits489/2)+Math.ceil(effectiveIndUnits489*INDUSTRY_SUPPLY_UNIT*.6),suppliesImport482=solvent482A1?takeTrade482(gpnImportAvailability508('supplies',Math.max(0,suppliesTarget482-supplies))):0; // T482A1 修④：破產不補工業原料倉\n  supplies+=suppliesImport482;\n  const suppliesImportCost482=Math.round(suppliesImport482*COMMODITY_META482.supplies.importPrice*extSup482);\n  let gInput482=0;{const gCap=goodsCap283(),room482=Math.max(0,gCap-goods);\n   gInput482=(supplies>0&&effectiveIndUnits489>0)?Math.min(supplies,Math.ceil(effectiveIndUnits489/2),Math.floor(room482/2)):0;\n   gMade384=Math.max(0,gInput482*2);\n   if(gInput482>0){supplies-=gInput482;goods=Math.min(gCap,goods+gMade384);}\n  }\n  const gCap481=goodsCap283(),retailCapacity481=effectiveComUnits489>0?Math.max(1,effectiveComUnits489*.80):0,\n        residentGoodsDemand481=pop/180*purchaseBase481,touristGoodsDemand481=tourists/320,\n        rawRetailDemand481=effectiveComUnits489>0?Math.max(effectiveComUnits489*.12,residentGoodsDemand481+touristGoodsDemand481):0,\n        retailPressure481=retailCapacity481>0?rawRetailDemand481/retailCapacity481:0,\n        gNeed284=retailCapacity481>0?Math.ceil(Math.min(retailCapacity481,rawRetailDemand481)):0,\n        domesticDeliverCap481=Math.ceil(gNeed284*Math.min(1,logisticsNow481.efficiency)),gDomesticUse481=Math.min(goods,domesticDeliverCap481);\n  goods-=gDomesticUse481;\n  const shortagePreImport481=Math.max(0,gNeed284-gDomesticUse481),goodsImport481=takeTrade482(gpnImportAvailability508('goods',shortagePreImport481)),\n        gUse284=gDomesticUse481+goodsImport481,supplyRate481=gNeed284>0?clamp(gUse284/gNeed284,0,1):1,\n        shortageRatio481=1-supplyRate481,importShare481=gUse284>0?goodsImport481/gUse284:0,\n        stockPreExport481=goods,stockRatioPre481=gCap481>0?goods/gCap481:0,\n        reserve481=Math.max(gNeed284*2,gCap481*.28)*(pol?.emergencyStockpile492?1.35:1),exportable481=Math.max(0,goods-reserve481),exportSignal481=tradeCapacity481>0?clamp(exportable481/Math.max(1,tradeCapacity481*.35),0,1):0;\n  // T482：所有短缺進口已完成後才開始出口，避免「先把糧氣賣掉，再發現其他商品缺貨」的共享容量反常。\n  let foodExport482=takeTrade482(gpnExportDemand508('food',foodExportCandidate482));foodProcessPool482-=foodExport482;\n  let gasExport482=takeTrade482(gpnExportDemand508('gas',gasExportCandidate482));\n  let goodsExport481=goodsImport481>0?0:takeTrade482(gpnExportDemand508('goods',exportable481));goods-=goodsExport481;\n  const foodExportGold482=Math.round(foodExport482*COMMODITY_META482.food.exportPrice*extFood482),gasExportGold482=Math.round(gasExport482*COMMODITY_META482.gas.exportPrice*extGas482),\n        goodsPrice481=clamp(extGoods482*(1+shortageRatio481*.18+importShare481*.05-(gCap481>0?goods/gCap481:0)*.06),.82,1.32),\n        costOfLiving481=foodPrice481*.55+goodsPrice481*.45,purchasingPowerNow481=clamp(purchasingPower481(laborNow481,wealthNow481,cityHappy,costOfLiving481,pol?.taxR||1)*businessCycleConsumptionMul490(),.40,1.65),\n        goodsImportCost481=Math.round(goodsImport481*COMMODITY_META482.goods.importPrice*extGoods482),goodsExportGold481=Math.round(goodsExport481*COMMODITY_META482.goods.exportPrice*extGoods482),\n        goodsMul284=.75+.50*supplyRate481,\n        commerceSalesMul481=clamp((.72+purchasingPowerNow481*.28)*(.94+Math.min(1.25,retailPressure481)*.08),.64,1.18),\n        industrialMarketMul481=clamp(.78+shortageRatio481*.26+exportSignal481*.20+Math.min(1,retailPressure481)*.08-Math.max(0,stockRatioPre481-.70)*.20,.70,1.22);\n  logisticsNow481.tradeCapacity=tradeCapacity481;\n  gFlow284={gain:stockPreExport481+gDomesticUse481,use:gUse284,mul:+goodsMul284.toFixed(3)};\n  let megaSupplyUsed482=0;\n  const indSupplyDemand=effectiveIndUnits489*INDUSTRY_SUPPLY_UNIT;\n  const indSupplyUsed=Math.min(supplies,indSupplyDemand);\n  supplies-=indSupplyUsed;\n  let indSupplyMul=indSupplyDemand>0?1+(indSupplyUsed/indSupplyDemand)*INDUSTRY_SUPPLY_BOOST:1;\n  if(mgN>0&&day%MEGAPROJECT_CYCLE_DAYS===0&&supplies>=MEGAPROJECT_SUPPLY_COST){\n    supplies-=MEGAPROJECT_SUPPLY_COST;megaSupplyUsed482=MEGAPROJECT_SUPPLY_COST;\n    const mgReward=MEGAPROJECT_REWARD*mgN;\n    money+=mgReward;\n    toast('🚀 '+townName+'太空研究中心完成一輪任務！消耗供應品 '+MEGAPROJECT_SUPPLY_COST+'，獲得 $'+mgReward,'gold');\n    sFanfare();\n  }",
+  "steelCons": "    let cap418=Math.min(steelMillN*STEEL_MILL_RATE,steel); // T418b SK-3：額度=鋼廠日吞吐、料源=庫存（含當日入庫）\n    const el418=[];\n    for(const i of tickBld){const b=tiles[i].bld;if(b&&!b.ref&&b.age<9)el418.push(i);} // 合格子集＝施工中根格（完工/ref 不耗鋼）\n    const nE418=el418.length,offE418=nE418?day%nE418:0; // T418b F1：輪轉基數=合格子集長度（大城也輪得完）\n    for(let j418=0;j418<nE418;j418++){\n      if(cap418<=0||steel<=0)break;     // 額度或庫存耗盡→停（決定性：輪轉序）\n      const b=tiles[el418[(j418+offE418)%nE418]].bld;\n      b.age++;cap418--;steel--;constrSteelUse418++; // T418a A1：鋼真的流向工地",
+  "lateFood": "  const tradeGoldBase=foodExportGold482;\n  const tradeGold=shipTradeTaxMul>1?Math.round(tradeGoldBase*shipTradeTaxMul):tradeGoldBase; // T482：食物出口走共享 trade capacity；造船鏈仍可放大既有貿易收益",
+  "lateFoodPrice": "  const foodPrice=foodPrice481; // T481：與商品需求/生活成本共用同一個本日農產價格快照",
+  "lateFuel": "  fuelExport418=(tp336+fuelDepOp485+bulkOp485+cportOp485)>0?takeTrade482(gpnExportDemand508('fuel',Math.min(Math.max(0,fuel-Math.ceil(fuelDemand482*(pol?.emergencyStockpile492?2.5:1))),tp336*FUEL_EXPORT_RATE+fuelDepOp485*8+bulkOp485*10+cportOp485*12))):0;\n  if(fuelExport418>0)fuel-=fuelExport418;\n  const fuelExportGold418=fuelExport418>0?Math.round(fuelExport418*COMMODITY_META482.fuel.exportPrice*extFuel482):0;",
+  "lateGas": "  const gasGold=Math.round(gasExportGold482); // T482：天然氣盈餘只有經共享 trade capacity 真正出口才產生收入",
+  "lateSteel": "  const steelReserve482=Math.max(18,steelConstructionNeed482+shipyardN*SHIPYARD_STEEL_USE*shipyardUtil489*3),steelExport482=steelImport482>0?0:takeTrade482(gpnExportDemand508('steel',Math.max(0,steel-steelReserve482)));\n  if(steelExport482>0)steel-=steelExport482;\n  const steelExportGold482=Math.round(steelExport482*COMMODITY_META482.steel.exportPrice*extSteel482);\n  const suppliesUsed482=gInput482+indSupplyUsed+megaSupplyUsed482;",
+  "snapshot": "  economy481={ready:true,day,labor:{...laborNow481},consumption:{wealthPower:+wealthNow481.toFixed(3),purchasingPower:+purchasingPowerNow481.toFixed(3),residentDemand:+residentGoodsDemand481.toFixed(2),touristDemand:+touristGoodsDemand481.toFixed(2),retailCapacity:+retailCapacity481.toFixed(2),retailPressure:+retailPressure481.toFixed(3),unmetRatio:+shortageRatio481.toFixed(3)},goods:{made:gMade384,need:gNeed284,domestic:gDomesticUse481,imports:goodsImport481,served:gUse284,exports:goodsExport481,stock:Math.round(goods),cap:gCap481,stockRatio:+(gCap481?goods/gCap481:0).toFixed(3),shortageRatio:+shortageRatio481.toFixed(3),supplyRate:+supplyRate481.toFixed(3)},production:{industryUnits:+effectiveIndUnits489.toFixed(2),inputDemand:+indSupplyDemand.toFixed(2),inputUsed:+indSupplyUsed.toFixed(2),marketMul:+industrialMarketMul481.toFixed(3)},logistics:{...logisticsNow481},trade:{imports:goodsImport481,exports:goodsExport481,importCost:goodsImportCost481,exportGold:goodsExportGold481,balance:goodsExportGold481-goodsImportCost481,importShare:+importShare481.toFixed(3),exportSignal:+exportSignal481.toFixed(3)},prices:{food:+foodPrice.toFixed(3),goods:+goodsPrice481.toFixed(3),costOfLiving:+costOfLiving481.toFixed(3)},commerce:{salesMul:+commerceSalesMul481.toFixed(3),utilization:+retailPressure481.toFixed(3)},finance:{net:income-upkeep,taxR,taxC,taxI}};\n  const totalImportCost482=foodImportCost482+gasImportCost482+fuelImportCost482+steelImportCost482+suppliesImportCost482+goodsImportCost481,\n        totalExportGold482=tradeGold+gasGold+fuelExportGold418+steelExportGold482+goodsExportGold481,\n        fuelServed482=Math.min(fuelDemand482,fuelUse418),steelDemand482=shipyardN*SHIPYARD_STEEL_USE*shipyardUtil489+steelConstructionNeed482,\n        steelServed482=Math.min(steelDemand482,steelUsed+constrSteelUse418),suppliesDemand482=Math.ceil(effectiveIndUnits489/2)+indSupplyDemand+megaSupplyUsed482,\n        suppliesServed482=Math.min(suppliesDemand482,suppliesUsed482),fuelLocalPrice482=clamp(extFuel482*(1+(fuelDemand482>0?1-fuelServed482/fuelDemand482:0)*.18-(fuel/fuelCap485)*.04),.82,1.35),\n        steelLocalPrice482=clamp(extSteel482*(1+(steelDemand482>0?1-steelServed482/steelDemand482:0)*.20-(steel/steelCap485)*.04),.82,1.40),\n        gasLocalPrice482=clamp(extGas482*(1+(1-gasRatio)*.22),.82,1.40),supLocalPrice482=clamp(extSup482*(1+(suppliesDemand482>0?1-suppliesServed482/suppliesDemand482:0)*.18),.82,1.35);\n  economy482={ready:true,day,commodities:{\n    food:commoditySupply482(foodPoints,foodCoreNeed482,foodServedCore482,0,0,foodImport482,foodExport482,foodPrice,extFood482,foodImportCost482,tradeGold,'food'),\n    goods:commoditySupply482(gMade384,gNeed284,gUse284,goods,gCap481,goodsImport481,goodsExport481,goodsPrice481,extGoods482,goodsImportCost481,goodsExportGold481,'goods'),\n    fuel:commoditySupply482(fuelMade,fuelDemand482,fuelServed482,fuel,fuelCap485,fuelImport482,fuelExport418,fuelLocalPrice482,extFuel482,fuelImportCost482,fuelExportGold418,'fuel'),\n    steel:commoditySupply482(steelMade,steelDemand482,steelServed482,steel,steelCap485,steelImport482,steelExport482,steelLocalPrice482,extSteel482,steelImportCost482,steelExportGold482,'steel'),\n    gas:commoditySupply482(gasSup,gasDem,gasServed482,0,0,gasImport482,gasExport482,gasLocalPrice482,extGas482,gasImportCost482,gasGold,'gas'),\n    supplies:commoditySupply482(Math.max(0,suppliesGain-fuelMade-steelMade),suppliesDemand482,suppliesServed482,supplies,0,suppliesImport482,0,supLocalPrice482,extSup482,suppliesImportCost482,0,'supplies')\n  },trade:{capacity:tradeCapacity481,used:tradeUsed482,remaining:tradeRemaining482,imports:foodImport482+goodsImport481+fuelImport482+steelImport482+gasImport482+suppliesImport482,exports:foodExport482+goodsExport481+fuelExport418+steelExport482+gasExport482,importCost:totalImportCost482,exportGold:totalExportGold482,balance:totalExportGold482-totalImportCost482},recipes:RECIPES482.map(q=>({...q,in:{...q.in},out:{...q.out}})),powerGas:{dispatch:gasPowerDispatchNow482,demand:gasPowerNeed482},financialMarket:false};\n  logistics485={ready:true,day,facilities:{containerLogistics:{built:cl485,active:clOp485,effective:+clEff489.toFixed(2)},intermodalHub:{built:im485,active:imOp485,effective:+imEff489.toFixed(2)},distributionCenter:{built:dc485,active:dcOp485,effective:+dcEff489.toFixed(2)},coldStorage:{built:cold485,active:coldOp485,effective:+coldEff489.toFixed(2)},grainSilo:{built:silo485,active:siloOp485,effective:+siloEff489.toFixed(2)},fuelDepot:{built:fuelDep485,active:fuelDepOp485,effective:+fuelDepEff489.toFixed(2)},gasDepot:{built:gasDep485,active:gasDepOp485,effective:+gasDepEff489.toFixed(2)},steelYard:{built:steelY485,active:steelYOp485,effective:+steelYEff489.toFixed(2)},bulkTerminal:{built:bulk485,active:bulkOp485,effective:+bulkEff489.toFixed(2)},containerPort:{built:cport485,active:cportOp485,effective:+cportEff489.toFixed(2)}},freightUnits:freightUnits485,warehouseUnits:+warehouseUnits485.toFixed(1),portEquivalent:portEquivalent485,railUnits:railUnits485,goodsCapBonus:goodsCapBonus485,fuelCap:fuelCap485,steelCap:steelCap485,foodPreservation:+foodPreserveMul485.toFixed(3),tradeCapacity:tradeCapacity481,logisticsEfficiency:+logisticsNow481.efficiency.toFixed(3)};"
+ }
+}

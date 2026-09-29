@@ -145,6 +145,9 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   });
   // D024：拆路帶走高架與立交的旗標、拆分區帶走辦公區的旗標（51808、51811）——這三層讀檔時進了格子，存檔要寫回去（同 wp）。
   // 範本有這一層、或現在有格子帶旗標才寫；都沒有就不加欄位（存檔位元組不變）。鐵路、配電線、地下線本線的施工碰不到（build.ts FOREIGN_LAYERS），照範本原樣留著
+  // D025：商品庫存與船（66763–66769）。sup（供應品）、gds（貨物）每次寫；fuel364、steel364、shipCount、shipProgress 非零才寫（範本裡讀進來的舊值要拿掉，不然庫存用完了存檔還留著）
+  o.sup = s.econ.supplies; o.gds = s.econ.goods;
+  for (const [k, v] of [['fuel364', s.econ.fuel], ['steel364', s.econ.steel], ['shipCount', s.econ.shipCount], ['shipProgress', s.econ.shipProgress]] as const) { if (v > 0) o[k] = v; else delete o[k]; }
   if (typeof template.of === 'string' || of.includes('1')) o.of = of;
   if (typeof template.fly475 === 'string' || fly.includes('1')) o.fly475 = fly;
   if (typeof template.ix475 === 'string' || /[^0]/.test(ix)) o.ix475 = ix;

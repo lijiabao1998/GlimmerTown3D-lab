@@ -1088,4 +1088,55 @@ if (set === 'd022-traj') {   // 只在明講要它時才跑（不進 all）：D0
   });
 }
 
+if (set === 'd025') {   // 只在明講要它時才跑（不進 all）：手機上商業與工業的建築卡多一列「市場」——種子城（商業卡：購買力、零售利用率、銷售乘數）與 D025 自造城 G2（工業卡：市場乘數、貨物庫存、原料）當成「我的城」讀進來推進一天
+  const seedCity = fs.readFileSync(path.join(ROOT, 'src/content/samples/seed516.code.txt'), 'utf8').trim();   // AI 城沒有商業建築，商業卡用種子城（商業 377 棟）
+  const { cities25 } = await import('./d025-cities.mjs'), { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const g2 = cities25(fs.readFileSync(path.join(ROOT, 'src/content/samples/newcity.code.txt'), 'utf8'), kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')))).find(c => c.id === 'G2').code;
+  const pickOf = k => `(()=>{const h=__gt.conBuildings().filter(b=>!b.gone&&b.k===${k});return h.length?[h[0].x,h[0].z]:null;})()`;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    for (const [code, k, file] of [[seedCity, 2, 'd025_mob_com'], [g2, 3, 'd025_mob_ind']]) {
+      await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()');   // clean=1 的頁面離開時不自動存檔，塞進去的存檔才不會被蓋掉（同 tools/smoke-d021.mjs）
+      await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(code)})`);
+      await open('');
+      await page.evaluate('(__gt.simStep(1), 1)');
+      const h = await page.evaluate(pickOf(k));
+      await page.evaluate(`(__gt.view(${h[0] + .5}, ${h[1] + .5}, 4.2), __gt.setVisT(2.2), __gt.openTile(${h[0]}, ${h[1]}), 1)`);
+      await new Promise(res => setTimeout(res, 900)); await save(page, file);
+    }
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(2,412px);gap:10px;padding:8px 12px 12px}img{display:block;width:412px;height:860px}`;
+  fs.writeFileSync(path.join(out, 'd025_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D025 手機 412×860：商業與工業的建築卡多一列「市場」</h1><p class="s">左：種子城當成「我的城」讀進來推進一天，商業卡（購買力、零售利用率、貨物需求的本地與進口、銷售乘數）；右：D025 自造城 G2（貨物生產與出口），工業卡（市場乘數、缺貨、貨物庫存、原料）。</p>
+    <div class="g"><figure><figcaption>種子城・商業建築</figcaption><img src="d025_mob_com.png"></figure><figure><figcaption>自造城 G2・工業建築</figcaption><img src="d025_mob_ind.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd025_mobile.html', width: 880, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d025_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 880, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D025-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D025-mobile.jpg');
+  });
+}
+
+if (set === 'd025-traj') {   // 只在明講要它時才跑（不進 all）：D025 之前的樣本取自 git（D024 施工 e7cc3fb），CI 只拉最新一個提交拿不到
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const data = d020Data(arg('base', 'e7cc3fb'));
+  const svg = d020Svg(data, { title: 'D025 經濟接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D025 之前（D024 施工）', after: '本線 D025 之後',
+    beforeSrc: 'D025 之前＝git {base} 的 d010-3d.json', afterSrc: 'D025 之後＝現在的 src 現算', doc: 'docs/D025-economy.md',
+    foot: '商業與工業需求從 +1.000 落到實驗線的停長帶（−0.78、−0.235），人口的差縮到 1 人；就業、工業棟數、幸福剩的差（幸福反而變大）推測來自本線沒搬的火災、疾病、死亡、廢棄、犯罪與壅堵，沒有逐項量過。數字表見 {doc}。' });
+  fs.writeFileSync(path.join(out, 'd025_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd025_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d025_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });   // 用 clip 截整頁：headless 改視窗大小後偶爾只重畫上半截
+    fs.writeFileSync(path.join(out, 'D025-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D025-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
 if (errors) process.exitCode = 1;

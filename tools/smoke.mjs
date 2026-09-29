@@ -19,6 +19,7 @@ import { d019Smoke, d019SkipNote } from './smoke-d019.mjs';
 import { d020Smoke, d020SkipNote } from './smoke-d020.mjs';
 import { d021Smoke, d021SkipNote } from './smoke-d021.mjs';
 import { d022Smoke, d022SkipNote } from './smoke-d022.mjs';
+import { d025Smoke, d025SkipNote } from './smoke-d025.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -446,13 +447,22 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
       __gt.simStep(30);const c=__gt.openTile(b[2],b[3]).rows;return {a,c,d0:__gt.history()[0].day};})()`);
     const impRow = rows => rows.find(r => /匯入 3D/.test(r)), ageRow = rows => rows.find(r => /age=/.test(r));
     log(impRow(imp.a) === impRow(imp.c) && ageRow(imp.a) === ageRow(imp.c) && impRow(imp.c).includes(`第 ${imp.d0} 天`), 'D010 建築卡：模擬推進 30 天後，匯入建築的匯入日與存檔屋齡不變', `${impRow(imp.c)}／${ageRow(imp.c)}`);
-    // 卡片開著時逐日重建：卡片用新的城市重寫（等級跟著變）
-    const up = await page.evaluate(`(()=>{__gt.loadSample('starter');__gt.simStep(80);const e=__gt.history().filter(e=>e.t==='upgrade')[0];if(!e)return null;
-      __gt.loadSample('starter');let n=0;while(!__gt.history().some(h=>h.t==='grow'&&h.x===e.x&&h.z===e.z)&&n<200){__gt.simStep(1);n++;}
-      __gt.openTile(e.x,e.z);const before=__gt.card().sub;
-      while(!__gt.history().some(h=>h.t==='upgrade'&&h.x===e.x&&h.z===e.z)&&n<200){__gt.simStep(1);n++;}
-      const c=__gt.card();return {before,after:c.sub,open:c.open,at:[e.x,e.z],lv:e.lv};})()`);
-    log(!!up && up.open && /1 級/.test(up.before) && up.after.includes(`${up.lv} 級`), 'D010 建築卡：卡片開著時升級，逐日重建後卡上的等級跟著變', up ? `(${up.at}) ${up.before} → ${up.after}` : '120 天內沒有升級');
+    // 卡片開著時逐日重建：卡片用新的城市重寫（等級跟著變）。
+    // D025 起起步城 120 天內沒有任何一棟升級（實驗線回退設定的 8 個種子也一樣：d010-lab.json 第 121 列的 R2、R3、C2、I2 全是 0，
+    // 以前本線靠商工需求恆 +1 才升級），換 AI 城（第 121 天）當「我的城」讀進來（同 D022 的做法）：挑一棟先升 2 級、當天以前沒有 grow 事件的住宅
+    const AI = R('src/content/samples/ai120.code.txt').trim();
+    const loadAi = async () => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${J(AI)})`); await open(''); };
+    await loadAi();
+    const upE = await page.evaluate(`(()=>{__gt.simStep(60);const g=new Set(__gt.history().filter(h=>h.t==='grow').map(h=>h.x+','+h.z));return __gt.history().find(e=>e.t==='upgrade'&&e.lv===2&&!g.has(e.x+','+e.z))||null;})()`);
+    let up = null;
+    if (upE) {
+      await loadAi();
+      up = await page.evaluate(`(()=>{const e=${J(upE)};__gt.openTile(e.x,e.z);const before=__gt.card().sub;let n=0;
+        while(!__gt.history().some(h=>h.t==='upgrade'&&h.x===e.x&&h.z===e.z)&&n<200){__gt.simStep(1);n++;}
+        const c=__gt.card();return {before,after:c.sub,open:c.open,at:[e.x,e.z],lv:e.lv};})()`);
+    }
+    await page.evaluate('__gt.clearSave()');
+    log(!!up && up.open && /1 級/.test(up.before) && up.after.includes(`${up.lv} 級`), 'D010 建築卡：卡片開著時升級，逐日重建後卡上的等級跟著變（D025 起用 AI 城當「我的城」：起步城 120 天沒有升級，跟實驗線一致）', up ? `(${up.at}) ${up.before} → ${up.after}` : '60 天內沒有升級');
     // 播放中切到別的城市：不會先替要丟掉的場景重建（計時裡沒有 rebuild）
     const sw2 = await page.evaluate(`(()=>{__gt.loadSample('starter');__gt.simSpeed(2);__gt.simPlay(true);__gt.simStep(3);__gt.loadSample('seed516');const t=__gt.timing();return {rebuild:'rebuild' in t,sim:__gt.sim(),sample:__gt.sample};})()`);
     log(!sw2.rebuild && sw2.sim === null && sw2.sample === 'seed516', 'D010 播放中切換城市：模擬停掉、不替丟掉的場景重建', JSON.stringify(sw2));
@@ -544,6 +554,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d020Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d021Smoke(withBrowser, log);
 // ===== D022：糧食（tools/smoke-d022.mjs：起步城與 AI 城的住宅建築卡講糧食，數字＝當天回報；自己開一個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d022Smoke(withBrowser, log);
+// ===== D025：經濟（tools/smoke-d025.mjs：商業與工業的建築卡講「市場」，數字＝當天的經濟快照，讀檔後沒推進過講實話；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d025Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -553,6 +565,7 @@ if (d019SkipNote()) console.log(d019SkipNote());
 if (d020SkipNote()) console.log(d020SkipNote());
 if (d021SkipNote()) console.log(d021SkipNote());
 if (d022SkipNote()) console.log(d022SkipNote());
+if (d025SkipNote()) console.log(d025SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

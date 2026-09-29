@@ -215,8 +215,8 @@ export async function d011ParityGuards(log, opts = {}) {
       bad.slice(0, 2).join('；') || `住商工 ${seeds.map(s => lab.runs[s].day1.at(-1)).join('、')} 棟`);
     log(fact.length === 0, `錄製時的事實（新城第 1 天那一列；兩個數都是實驗線錄的值，CI 不重算）：實驗線的有電棟數＝住商工總數（${seeds.length} 個種子）`, fact.slice(0, 2).join('；') || `${seeds.length} 個種子`);
     const [m, sd] = meanSd(money), p = lab.runs[seeds[0]].probe1 || {};
-    log(true, '第 1 天的資金（只量不判）：本線第 2 類乘數固定 1、沒有進口，比實驗線多的錢', `本線−實驗線 ${m.toFixed(4)} ± ${sd.toFixed(4)}；實驗線第 1 天進口 鋼 ${p.steelImportCost482} 糧 ${p.foodImportCost482}、goodsMul284 ${p.goodsMul284}、commerceSalesMul481 ${p.commerceSalesMul481}、industrialMarketMul481 ${p.industrialMarketMul481}`);
-    // 代入實驗線那一天的第 2 類值（探針讀的），本線公式算出的收入、維護費、結算後資金要跟實驗線逐位相等：證明公式和輸入都對
+    log(m === 0 && sd === 0, '第 1 天的資金：本線自己的經濟（稅乘數、進口費、貿易金；D025 起，沒有代入實驗線的值）推進一天後，資金跟實驗線逐位相等', `本線−實驗線 ${m.toFixed(4)} ± ${sd.toFixed(4)}；實驗線第 1 天進口 鋼 ${p.steelImportCost482} 糧 ${p.foodImportCost482}、goodsMul284 ${p.goodsMul284}、commerceSalesMul481 ${p.commerceSalesMul481}、industrialMarketMul481 ${p.industrialMarketMul481}`);
+    // 代入實驗線那一天本線還沒搬的第 2 類值（探針讀的：政策、夜間城市、城市活動、農牧旅宿的收入加成、運輸營運費；D025 起經濟閉環本線自己算、不代入），本線公式算出的收入、維護費、結算後資金要跟實驗線逐位相等：證明公式和輸入都對
     const off = [];
     for (const seed of seeds) {
       const L = lab.runs[seed], q = L.probe1;
@@ -225,7 +225,7 @@ export async function d011ParityGuards(log, opts = {}) {
       const got = [r.settle1.income, r.settle1.upkeep, r.day1[n]], want = [q.income, q.upkeep, L.day1[n]];
       if (!got.every((v, i) => Object.is(v, want[i]))) off.push(`種子 ${seed}：收入／維護費／資金 本線 ${J(got)} ≠ 實驗線 ${J(want)}`);
     }
-    log(off.length === 0, `第 1 天的資金：把實驗線當天的第 2 類乘數與進口費代進本線公式，收入、維護費、結算後資金跟實驗線完全相等（${seeds.length} 個種子）`,
+    log(off.length === 0, `第 1 天的資金：只把本線沒搬的第 2 類值代進本線公式（經濟閉環的乘數、進口費、貿易金是本線自己算的），收入、維護費、結算後資金跟實驗線完全相等（${seeds.length} 個種子）`,
       off.slice(0, 2).join('；') || `例：種子 ${seeds[0]} 收入 ${p.income}、維護費 ${p.upkeep}（其中進口 ${p.steelImportCost482 + p.foodImportCost482}）`);
   }
   // 預建城（d011-prebuilt.code.txt × 同一組種子）：拆除劇本逐筆；推進一天之後只比「在第 2 類系統起作用之前就定案」的部分（為什麼見下一段）

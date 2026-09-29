@@ -2,11 +2,13 @@
 // 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d，index.html 行號。順序照 tick()：主計數迴圈（55050–55149）數食物來源、觀光建築與貿易設施 →
 // 55293–55295 食物與遊客 → 55333–55338 貿易額度與 takeTrade482 → 55340–55342 糧食需求、進口、供糧率 → 55414–55424 加到每棟住宅的幸福上。
 // 沒搬（本線沒有，一律當沒有／0；讀進來有這些東西的城，糧食那一項會跟實驗線不同，D022 卡「不做什麼」）：
-//   化肥 T346（fertReady、農場 ×1.35）、物流 T485（k165–174 與冷藏庫、穀倉對食物保存的加成）、船 T418（shipCount）、火車線 T463（railLines463）、
-//   壅堵 T129（roadLoad：logisticsEfficiency481 的扣分）、城市活動 T299（事件食物加成）、專業化 T386（sq('green',…) 取關的值）、
-//   企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性照原數）、污水廠 T442（55420 那一句：k27 不算）。
+//   化肥 T346（fertReady、農場 ×1.35）、火車線 T463（railLines463）、壅堵 T129（roadLoad：logisticsEfficiency481 的扣分，預設 0）、城市活動 T299（事件食物加成）、
+//   專業化 T386（sq('green',…) 取關的值）、企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性照原數）、污水廠 T442（55420 那一句：k27 不算）。
+// D025 起：物流 T485 的單位（logistics.ts unitsOf485）、冷藏庫與穀倉的食物保存加成、船、燃料的效率加成、壅堵輸入，都可以由呼叫端用第六個參數 x 給進來（經濟 economy.ts 的做法）；
+// 不給 x＝D022 的行為（單位從食物計數算：貨運中心、倉儲、港口；其餘 0）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史。
 import { clamp, type Bld, type World } from './lab.ts';
+import { NO_ROAD_LOAD, unitsOf485, type RoadStats, type Units485 } from './logistics.ts';
 
 export const FARM_SEASON_MULT = [1, 1.15, 1.4, 0.4];      // 38128：農場食物的季節倍率（春夏秋冬）
 export const TOUR_SEASON_MULT = [1, 1.3, 1.2, 0.85];      // 38210：觀光的季節倍率
@@ -84,22 +86,26 @@ export interface FoodReport {
   roadBase: number; eff: number;                  // 55334 roadTradeBase482、55333 logisticsNow481.efficiency
 }
 
-// 一天的糧食（沒有副作用）。roads＝道路格數（tickRoad.length，含橋與快速路）；pop＝當天的人口（55246）；sea＝季節 0–3；day＝已經 ++ 之後的日子
-export function foodDay(c: FoodCount, roads: number, pop: number, sea: number, day: number): FoodReport {
-  // 55293：（農場×季節＋牧場＋溫室＋加工類）×食物保存 foodPreserveMul485（冷藏庫、穀倉 T485 沒搬：1）×事件食物加成（T299 沒搬：1）
-  const foodPoints = Math.round((c.farmFoodU * FARM_SEASON_MULT[sea] + c.ranchFoodU + c.ghFoodU + c.fp340 * 3 + c.cg340 * 1 + c.ff346 * 4) * 1 * 1);
+// 一天的糧食（沒有副作用）。roads＝道路格數（tickRoad.length，含橋與快速路）；pop＝當天的人口（55246）；sea＝季節 0–3；day＝已經 ++ 之後的日子。
+// x（D025）：U＝T485 單位（沒給＝從 c 的貨運中心、倉儲、港口算，其餘 0）、roadStats＝壅堵（沒給＝0）、shipCount＝船、fuelMul＝貨運燃料乘數 freightTaxMul（效率的燃料加成，沒給＝1）、eventFood＝城市活動（T299）的食物加成（沒給＝1）
+export interface FoodX { U?: Units485; roadStats?: RoadStats; shipCount?: number; fuelMul?: number; eventFood?: number }
+export function foodDay(c: FoodCount, roads: number, pop: number, sea: number, day: number, x: FoodX = {}): FoodReport {
+  const U = x.U ?? unitsOf485(c as unknown as Record<string, number>);
+  // 55293：（農場×季節＋牧場＋溫室＋加工類）×食物保存 foodPreserveMul485（冷藏庫、穀倉，T485）×事件食物加成（T299 城市活動沒搬：1；對拍時 x.eventFood 給實驗線那天的事件加成，豐收 1.5、乾旱 0.7……）
+  const foodPoints = Math.round((c.farmFoodU * FARM_SEASON_MULT[sea] + c.ranchFoodU + c.ghFoodU + c.fp340 * 3 + c.cg340 * 1 + c.ff346 * 4) * U.foodPreserveMul485 * (x.eventFood ?? 1));
   // 55294：觀光建築與地標各自的係數加總×季節×sq('green',1.15,1)（專業化 T386 沒搬：取關的值 1）
   let tourists = Math.round((c.la * 25 + c.ctN307 * 12 + c.obN307 * 22 + c.tourLm309 + c.ai * 40 + c.st * 5 + c.mu * 15 + c.th * 12 + c.ci * 8 + c.aq * 35 + c.zo * 45 + c.ap * 55 + c.bgN * 20
     + c.rs330 * 15 + c.tv330 * 18 + c.mr330 * 30 + c.ch340 * 8 + c.wp340 * 34 + c.sr340 * 16 + c.cpk342 * 12 + c.gpk465 * 28 + c.art466 * 80 + c.adm466 * 25 + c.res466 * 20 + c.mpt342 * 120) * TOUR_SEASON_MULT[sea] * 1);
   if (c.cvN > 0 && day % CONVENTION_PULSE_DAYS === 0) tourists += Math.round(500 * c.cvN * TOUR_SEASON_MULT[sea]);   // 55295–55297 會展中心的脈衝（不消耗亂數）
-  // 55286–55289：有效單位。企業層 T489 沒就緒（利用率 1）；物流 T485 的九種設施、火車線 railLines463 沒搬：0
-  const freightUnits = c.frt342, warehouseUnits = c.whN284, portEquivalent = c.po, railUnits = 0;
-  // 55333 logisticsEfficiency481（38269）：設施加成 min(.26, …)；壅堵扣分 pen 讀 roadLoad（T129 沒搬：平均負載 0、超載比 0）；油的加成讀 freightTaxMul（燃料 T364b 沒搬：1）
-  const bonus = Math.min(.26, freightUnits * .035 + warehouseUnits * .022 + portEquivalent * .025 + railUnits * .012), fuelBonus = 0, pen = 0;
+  // 55286–55291：有效單位（logistics.ts unitsOf485）。企業層 T489 沒就緒（利用率 1）；火車線 railLines463 沒搬
+  const freightUnits = U.freightUnits485, warehouseUnits = U.warehouseUnits485, portEquivalent = U.portEquivalent485, railUnits = U.railUnits485, rd = x.roadStats ?? NO_ROAD_LOAD;
+  // 55333 logisticsEfficiency481（38269）：設施加成 min(.26, …)；壅堵扣分 pen 讀 roadLoad（T129 沒搬：預設平均負載 0、超載比 0）；油的加成讀 freightTaxMul（x.fuelMul）
+  const bonus = Math.min(.26, freightUnits * .035 + warehouseUnits * .022 + portEquivalent * .025 + railUnits * .012), fuelBonus = Math.max(0, (x.fuelMul || 1) - 1) * .30, pen = Math.max(0, rd.avg - .65) * .35 + rd.over * .22;
   const eff = +clamp(.78 + bonus + fuelBonus - pen, .45, 1.12).toFixed(4);
-  // 55334–55335：有路就有 min(8, 1＋路格/80) 的底，加各種設施，乘效率（gpnTradeCapacityMul508＝1）；最少 3（有路的話）。物流 T485 各項、船 T418 沒搬
+  // 55334–55335：有路就有 min(8, 1＋路格/80) 的底，加各種設施，乘效率（gpnTradeCapacityMul508＝1）；最少 3（有路的話）。物流九種各自的額度（clEff489×8……cportEff489×18）與船（T418）由 x 給
   const roadBase = roads ? Math.min(8, 1 + Math.floor(roads / 80)) : 0;
-  const cap = Math.max(roads > 0 ? 3 : 0, Math.floor((roadBase + c.tp336 * 4 + portEquivalent * 4 + freightUnits * 3 + warehouseUnits * 2 + 0 /* 物流 T485 */ + Math.min(0 /* shipCount */, portEquivalent * 2)) * eff * 1));
+  const cap = Math.max(roads > 0 ? 3 : 0, Math.floor((roadBase + c.tp336 * 4 + portEquivalent * 4 + freightUnits * 3 + warehouseUnits * 2 + U.clEff489 * 8 + U.imEff489 * 10 + U.dcEff489 * 4 + U.coldEff489 * 3 + U.siloEff489 * 3
+    + U.fuelDepEff489 * 4 + U.gasDepEff489 * 4 + U.steelYEff489 * 3 + U.bulkEff489 * 12 + U.cportEff489 * 18 + Math.min(x.shipCount ?? 0, portEquivalent * 2)) * eff * 1));
   let remaining = cap, used = 0;                                                        // 55337–55338
   const take = (n: number) => { const q = Math.max(0, Math.min(Math.floor(n || 0), remaining)); remaining -= q; used += q; return q; };
   // 55340–55342 糧食：居民每 10 人 1 單位、遊客每 160 人 1 單位；本地不夠向共用貿易額度拿（糧食排第一個拿，gpnImportAvailability508 在 gpn 關時原數）
