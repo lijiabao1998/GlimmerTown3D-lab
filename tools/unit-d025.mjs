@@ -94,7 +94,8 @@ const OUT_LOCALS = (() => {
   const st = ECON.emptyEconState(), c = {}, fc = FOOD.emptyFoodCount();
   const ec = ECON.economyMain(st, { day: 1, sea: 0, pop: 0, jobs: 0, cityHappy: .6, money: 0, spec: null, roads: 0, c, fc, labor: portLabor(0, 0, null, 1), wealth: 1, activeConstruction: 0 });
   const late = ECON.economyLate(st, ec, c), sn = ECON.economySnapshots(st, ec, late, c, 1, 0);
-  return [...Object.keys(ec.U), ...Object.keys(ec).filter(k => !['U', 'fd', 'mgReward'].includes(k)), ...Object.keys(late),
+  return [...Object.keys(ec.U), ...Object.keys(ec).filter(k => !['U', 'fd', 'mgReward', 'fuelHoldMul492'].includes(k)),   // fuelHoldMul492：本線專有（實驗線燃料出口內聯 pol?.emergencyStockpile492?2.5:1，本線把倍數留在 ec 讓 economyLate 用；D032 的 vm 守衛逐項對拍）
+    ...Object.keys(late),
     ...Object.keys(sn).filter(k => !['economy481', 'economy482', 'logistics485'].includes(k))];
 })();
 
@@ -553,7 +554,7 @@ const MINE_MUTANTS = [
   ['econ', '工業有效單位 ×2', "effectiveIndUnits489 = g('nIndG284') * 1", "effectiveIndUnits489 = g('nIndG284') * 2"],
   ['econ', '商業有效單位 ×2', "effectiveComUnits489 = g('nComG284') * 1", "effectiveComUnits489 = g('nComG284') * 2"],
   ['econ', '生活成本不讀快照', 'prevCost481 = st.snap ? st.snap.prices.costOfLiving : foodPriceOf(day, sea);', 'prevCost481 = foodPriceOf(day, sea);'],
-  ['econ', '購買基準下限', 'i.cityHappy, prevCost481, 1) * 1, .40, 1.65)', 'i.cityHappy, prevCost481, 1) * 1, .50, 1.65)'],
+  ['econ', '購買基準下限', 'i.cityHappy, prevCost481, i.pol?.taxR || 1) * 1, .40, 1.65)', 'i.cityHappy, prevCost481, i.pol?.taxR || 1) * 1, .50, 1.65)'],   // D032：稅率進購買力
   ['econ', '額度改讀沒有船的', 'shipCount: st.shipCount, fuelMul: freightTaxMul', 'shipCount: 0, fuelMul: freightTaxMul'],
   ['econ', '額度不吃貨運燃料加成', 'shipCount: st.shipCount, fuelMul: freightTaxMul', 'shipCount: st.shipCount, fuelMul: 1'],
   ['econ', '償付能力', 'const solvent482A1 = i.money >= 0;', 'const solvent482A1 = i.money > 0;'],
@@ -608,7 +609,7 @@ const MINE_MUTANTS = [
   ['econ', '食物出口金不乘造船貿易', 'Math.round(tradeGoldBase * ec.shipTradeTaxMul)', 'tradeGoldBase'],
   ['econ', '燃料出口不算貨櫃港', '(tp336 + fuelDepOp485 + bulkOp485 + cportOp485) > 0', '(tp336 + fuelDepOp485 + bulkOp485) > 0'],
   ['econ', '燃料出口上限', 'cportOp485 * 12', 'cportOp485 * 13'],
-  ['econ', '燃料留下的量', 'Math.ceil(ec.fuelDemand482 * 1)', 'Math.ceil(ec.fuelDemand482 * 2)'],
+  ['econ', '燃料留下的量', 'Math.ceil(ec.fuelDemand482 * ec.fuelHoldMul492)', 'Math.ceil(ec.fuelDemand482 * 2)'],   // D032：緊急物資儲備開了乘 2.5（沒開 1）
   ['econ', '天然氣出口金', 'const gasGold = Math.round(ec.gasExportGold482);', 'const gasGold = Math.round(ec.gasExportGold482) + 1;'],
   ['econ', '鋼安全庫存下限', 'Math.max(18, ec.steelConstructionNeed482', 'Math.max(19, ec.steelConstructionNeed482'],
   ['econ', '鋼出口不看當天進口', 'steelExport482 = ec.steelImport482 > 0 ? 0 : takeTrade482', 'steelExport482 = takeTrade482'],

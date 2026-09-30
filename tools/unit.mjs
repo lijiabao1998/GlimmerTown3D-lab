@@ -539,11 +539,13 @@ await guard('./unit-d028.mjs', 'd028Guards');   // D028：經濟（二）——T
 await guard('./unit-d029.mjs', 'd029Guards');   // D029：夜間城市（T487）——輸入、結算、犯罪乘數逐項＝實驗線原文（d029-night.json，tools/lab-night.mjs 摘）、實驗線原文與原碼各一批突變
 await guard('./unit-d030.mjs', 'd030Guards');   // D030：城市活動（T299）——事件表 61 條、觸發與倒數、讀檔驗證逐項＝實驗線原文（d030-events.json，tools/lab-events.mjs 摘）、實驗線原文與原碼各一批突變
 await guard('./unit-d031.mjs', 'd031Guards');   // D031：城市等級（T133）——等級表 26 條、城市點數、晉升、讀檔逐項＝實驗線原文（d031-rank.json，tools/lab-rank.mjs 摘）、實驗線原文與原碼各一批突變
+await guard('./unit-d032.mjs', 'd032Guards');   // D032：政策與預算（K）——目錄 29 條、預設物件、冷卻與套用、稅率與預算按鈕、購買力的稅率項、災害保險、緊急物資儲備、回收乘數、讀檔逐項＝實驗線原文（d032-policy.json，tools/lab-policy.mjs 摘）、實驗線原文與原碼各一批突變
 await guard('./unit-d027-live.mjs', 'd027LiveGuards');   // D027：通勤與壅堵的實驗線頁面實跑（自造城 17 座、D022–D025 的 120 座城兩批、起步城存檔 24 份、起步城 8 種子 × 120 天代入與不代入）、接線突變、存檔與決定性、地面貼圖的輸入（d027-lab.json，tools/d027-lab.mjs 錄）
 await guard('./unit-d028-live.mjs', 'd028LiveGuards');   // D028：經濟（二）的實驗線頁面實跑（自造城 K1–K16、D022–D025 的 120 座城兩批連推 10–13 天，資金、稅、十二個收入項、T346 鏈條、幸福構成逐項）、起步城沒有這些建築、接線突變、存檔與決定性（d028-lab.json，tools/d028-lab.mjs 錄）
 await guard('./unit-d029-live.mjs', 'd029LiveGuards');   // D029：夜間城市的實驗線頁面實跑（不代入夜間城市：自造城 K1–K16、D022–D025 的 120 座城兩批、起步城 8 種子 × 120 天與存檔 24 份）、接線突變（對拍、輸入接線、犯罪乘數、夜市稅、雜湊）、存檔與決定性
 await guard('./unit-d030-live.mjs', 'd030LiveGuards');   // D030：城市活動的實驗線頁面實跑（不代入活動：起步城 8 種子 × 120 天、存檔 24 份、自造城、D022–D025 的 120 座城）、day.ts 接線突變、存檔（cev）與決定性
 await guard('./unit-d031-live.mjs', 'd031LiveGuards');   // D031：城市等級的實驗線頁面實跑（讀檔那一刻與每天的等級與點數：起步城 8 種子 × 120 天、存檔 24 份、自造城、老城 120 座、缺 rk 的舊檔）、day.ts 接線突變、存檔（rk、只升不降）與決定性
+await guard('./unit-d032-live.mjs', 'd032LiveGuards');   // D032：政策與預算的實驗線頁面實跑（底城 × 政策組 182 筆、玩家按按鈕 7 筆、本線存的碼給實驗線讀 4 筆；政策由存檔的 pol 讀進來、不代入、資金也判）、效果要看得到、day.ts／edit.ts／save.ts 接線突變、存檔與決定性
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

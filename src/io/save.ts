@@ -16,7 +16,7 @@
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
 import { ACT_CODES, CITY_FORMAT, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
-import { simFromSave, type Sim } from '../sim/day.ts';
+import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
@@ -170,6 +170,13 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   // D031：城市等級（66762 寫 rk:rankIdx，實驗線每次都寫，0 級也寫；66969 讀：有 rk 原樣還原、沒有就從點數往上爬）。一律寫：缺 rk 在讀檔時的意思是「舊檔，從點數往上爬」，
   // 不是「0 級」——0 級的城不寫 rk，存了再讀會從點數爬到別的等級（全守衛的「存檔再讀檔、讀回再存的碼＝第一次存的碼」抓到：第 1 天的新城）。所以跟 cev 不同，不能「沒有就不加欄位」
   o.rk = s.rankIdx;
+  // D032：政策（66750 寫 pol，66975 讀 `if(d.pol)pol=d.pol`）。有政策就寫整個物件（讀進來的原樣留著、不加不減欄位，所以沒動政策的存檔位元組不變）；
+  // 沒有政策：範本有這個欄位就寫 null（範本裡讀不進來的怪值——非物件——存回去變成乾淨的 null），都沒有就不加欄位。冷卻（polLast）是執行期的、不存
+  if (s.pol) o.pol = s.pol; else if ('pol' in template) o.pol = null;
+  // D032：服務預算（66764 寫 sb:{...svcBudget}，實驗線每次都寫；66964 讀：數字才收、夾 .5–1.5）。D023 起讀檔會還原它（存檔裡的 sb 原樣留著、不改），玩家在面板調預算之後要存回去：
+  // 跟「讀這份範本的 sb 會得到的預算」不同才寫（整組四項、鍵的順序＝實驗線的 svcBudget：police、fire、health、edu）；沒動預算就不碰範本的 sb（怪值、缺欄、沒有 sb 都原樣，存檔位元組不變）
+  const b0 = budgetOfSave(template.sb), b1 = s.budget;
+  if (b1.police !== b0.police || b1.fire !== b0.fire || b1.health !== b0.health || b1.edu !== b0.edu) o.sb = { police: b1.police, fire: b1.fire, health: b1.health, edu: b1.edu };
   if (opts.history !== false && opts.journal) {
     const { id, st } = opts.journal;
     o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;

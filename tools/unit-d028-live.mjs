@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './cdp.mjs';
+import { ensurePol } from '../src/sim/rules/policy.ts';
 import { fnv1a } from '../src/sim/rng.ts';
 import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
@@ -50,15 +51,15 @@ export function rowOf28(s, rep) {
 const labNc = row => [row.night.ready, row.night.score, row.night.hd, row.ng, row.un[3], row.uu[3]];   // 樣本裡對應 nc 的六個值
 const FIELDS = ['day', 'pop', 'jobs', 'happy', 'money', 'net', 'tx', 'inc', 'ch', 'fd', 'tr', 'ho', 'nc', 'nh', 'hh', 'ah', 'peek'];
 const NAMES = { day: '日', pop: '人口', jobs: '就業', happy: '城市幸福', money: '資金', net: '淨額（收入−維護費）', tx: '稅 R／C／I', inc: '其餘收入十二項', ch: 'T346 鏈條九欄', fd: '食物點數', tr: '遊客', ho: '旅宿床位與入住', nc: '夜間城市六欄（ready、安全分數、幸福加減、晚間消費金、夜間運輸收入、夜間營運費）', nh: '住宅棟數', hh: '每一棟住宅的幸福', ah: '幸福構成雜湊', agg: '幸福構成', peek: '下一個亂數（亂數次數或順序不同）' };
-// 政策開著的城：本線沒有政策（K）的稅率、日費與收入加成，資金、淨額、稅不判（其餘欄位照判）
-const MONEYF = ['money', 'net', 'tx'];
-const polOn = p => Object.entries(JSON.parse(p)).some(([k, v]) => v === true || (/^tax[RCI]$/.test(k) && v !== 1));
+// 政策（K，D032）：存檔裡的 pol 本線自己讀、自己算（稅率、法規費、收入加成都接上了），不代入、資金也判（D028 原本對政策開著的城不判錢）
 
 // 一座城連推 rec.days 天，逐天跟實驗線比。mod＝day.ts（真的或改壞的）。
 // 回 { d: [不同處], days, first: 第一個不同的日子（0＝沒有）, fields: 任何一天不同的欄位鍵, firstFields: 第一個不同的日子裡不同的欄位鍵, parts: 第一個不同的日子裡幸福構成不同的項, judgedMoney: 判了資金的天數 }
 // onDay(day, mine, row, rep, sim)：每天比完之後呼叫
 export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, onDay } = {}) {
   const r = decodeLabCode(code), s = mod.simFromSave(r.save, code, KT, vrank), d = [], out = { d, days: 0, first: 0, fields: [], firstFields: [], parts: [], judgedMoney: 0 };
+  const pl = J(ensurePol(s.pol));   // D032：政策是存檔裡的 pol，本線自己讀——讀進來的要跟實驗線讀進來的一樣（逐欄、含順序）；兩邊都補齊再比（實驗線讀檔後 pol 已是補齊的物件，本線留著讀進來的樣子，行為一樣）
+  if (pl !== rec.start.pol) return { ...out, d: [`讀檔後的政策 本線 ${pl.slice(0, 80)} ≠ 實驗線 ${String(rec.start.pol).slice(0, 80)}`], days: 0, first: 1 };
   let prev = rec.start;
   const st = { pol: rec.start.pol, tech: rec.start.tech, spec: rec.start.spec };   // 政策、科技、專精：樣本裡跟前一列一樣的不存（tools/d027-lab.mjs compactRows），往前找最近一次記的
   for (let day = 1; day <= rec.days; day++) {
@@ -70,10 +71,9 @@ export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, o
       upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },
     };
     const rep = mod.stepDay(s, { hazard: inj.hazard, class2 });
-    const mine = rowOf28(s, rep), skipMoney = polOn(st.pol);
-    if (!skipMoney) out.judgedMoney++;
+    const mine = rowOf28(s, rep);
+    out.judgedMoney++;
     for (const k of FIELDS) {
-      if (skipMoney && MONEYF.includes(k)) continue;
       const lv = k === 'nc' ? labNc(row) : row[k];
       if (J(mine[k]) !== J(lv)) { dd.push(`${NAMES[k]} 本線 ${J(mine[k])} ≠ 實驗線 ${J(lv)}`); ff.push(k); }
     }
@@ -311,8 +311,8 @@ export async function persistGuards(log, { cities, KT, vrank }) {
 export async function foldGuards(log, { olds, KT, vrank }) {
   const bad = [], stat = { cities: 0, days: 0, road: 0, infra: 0, hvCity: 0 };
   const V0 = await dayVariant([]), ORIG = await dayVariant([
-    ['spec: s.edu.spec }, scan), ...(e ? { imports: e.imports } : {})', 'spec: s.edu.spec }), ...(e ? { imports: e.imports } : {})'],
-    ['computePower(w, false, false, hvFirst).cap', 'computePower(w).cap'],
+    ['spec: s.edu.spec }, scan), pol: s.pol, ...(e ? { imports: e.imports } : {})', 'spec: s.edu.spec }), pol: s.pol, ...(e ? { imports: e.imports } : {})'],
+    ['computePower(w, !!(pol && pol.ecoReg), false, hvFirst).cap', 'computePower(w).cap'],
   ]);
   const run = (mod, code, days, prep) => {
     const r = decodeLabCode(code), s = mod.simFromSave(r.save, code, KT, vrank); prep?.(s);

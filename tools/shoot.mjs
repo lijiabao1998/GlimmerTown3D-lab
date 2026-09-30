@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|d030|d030-traj|d031|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|d030|d030-traj|d031|d032|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1398,6 +1398,37 @@ if (set === 'd031') {   // 只在明講要它時才跑（不進 all）：手機�
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
     fs.writeFileSync(path.join(out, 'D031-mobile.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D031-mobile.jpg');
+  });
+}
+
+if (set === 'd032') {   // 只在明講要它時才跑（不進 all）：手機上的政策與預算——①☰「政策與預算」面板（P4 公園與學校的城：住宅稅＋、營養午餐開、教育預算＋之後，列與冷卻與日費）、②冷卻中再按的提示、③災害保險（P2：沒有消防局、一開始就有帶燃燒天數的建築）投保後第一天的金色理賠提示
+  const { d032Runs } = await import('./d032-cities.mjs'), runs = d032Runs();
+  const p4 = runs.find(r => r.id === 'P4/none').code, p2 = runs.find(r => r.id === 'P2/none').code;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    const load = async c => { await open('sample=seed516&clean=1'); await page.evaluate(`(__gt.clearSave(), localStorage.setItem('gt3d.v1.save', ${JSON.stringify(c)}), 1)`); await open(''); };   // 當成「我的城」讀進來（跟 smoke-d032 同一招）
+    await load(p4);
+    await page.evaluate(`(__gt.simStep(3), __gt.menu('policy'), 1)`); await pause(500);
+    await page.evaluate(`(__gt.policyClick('taxR', '+'), __gt.policyClick('schoolLunch', 'toggle'), __gt.policyClick('edu', '+'), __gt.policyClick('edu', '+'), 1)`); await pause(900); await save(page, 'd032_mob_panel');
+    await page.evaluate(`(__gt.policyClick('taxR', '+'), document.querySelector('#pl .card').scrollTop = 99999, 1)`); await pause(700); await save(page, 'd032_mob_cool');
+    await page.evaluate(`(document.getElementById('plX').click(), 1)`);
+    await load(p2);
+    await page.evaluate(`(__gt.menu('policy'), __gt.policyClick('insurance', 'toggle'), document.getElementById('plX').click(), __gt.simStep(1), 1)`); await pause(1200); await save(page, 'd032_mob_ins');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(3,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd032_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D032 手機 412×860：政策與預算</h1><p class="s">實驗線 ☰ 市政統計面板的三條稅率（0.5–2.0×）、四條服務預算（0.5–1.5×）、四個法規與七個政策開關，3D 版：按了馬上生效、下一天的結算與幸福與災禍都讀新的設定；有日費的寫日費、冷卻中講還剩幾天（實驗線是靜默不動）。①P4（公園、學校、垃圾場、商店）按住宅稅＋、營養午餐開、教育預算＋＋之後；②冷卻中再按住宅稅＋：狀態不動、講還剩 40 天（提示固定在面板上方，捲到下面的政策也看得到；下面是開著的營養午餐與它的冷卻）；③P2（沒有消防局、一開始就有帶燃燒天數的建築）投保災害保險、推進一天：金色的「🛡️ 災害保險理賠 +$35／戶」。全部是模擬給的數字，介面只是 DOM，不多畫。</p>
+    <div class="g"><figure><figcaption>① 政策與預算</figcaption><img src="d032_mob_panel.png"></figure><figure><figcaption>② 冷卻中</figcaption><img src="d032_mob_cool.png"></figure><figure><figcaption>③ 災害保險理賠</figcaption><img src="d032_mob_ins.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd032_mobile.html', width: 1400, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d032_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1400, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D032-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D032-mobile.jpg');
   });
 }
 

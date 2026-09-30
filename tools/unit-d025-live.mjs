@@ -17,6 +17,7 @@ import * as realDay from '../src/sim/day.ts';
 import * as ECON from '../src/sim/rules/economy.ts';
 import * as FOOD from '../src/sim/rules/food.ts';
 import * as CNT from '../src/sim/rules/count.ts';
+import * as MONEY from '../src/sim/rules/money.ts';
 import { laborMarket481 as portLabor, legacyDemand, economyDemands481, housingRciDemand488 } from '../src/sim/rules/demand.ts';
 import { saveCode, loadCode } from '../src/io/save.ts';
 import { dayVariant } from './unit-d021.mjs';
@@ -98,7 +99,7 @@ async function guards(log) {
       const unp = UNPORTED_INC.reduce((a, k) => a + (B[k] ?? 0), 0), tax = rep.settle.tax, tdiff = [];
       for (const [k, key, skip] of [['R', 'R', B.flagged > 0 || polOn], ['C', 'C', B.flagged > 0 || polOn], ['I', 'I', B.flagged > 0 || polOn]]) if (!skip && !Object.is(tax[k], B.tax[key])) tdiff.push(`tax${k} 本線 ${tax[k]} ≠ 實驗線 ${B.tax[key]}`);
       // 維護費（含六種商品的進口費，D025 起本線自己算）：實驗線的維護費扣掉本線沒搬的（地鐵、鐵路、公車、車隊超出預設 7 輛的保養、法規與科技與專精的日費，同 D024；夜間城市的營運費 D029 起本線自己算）
-      const fl = B.up.fleet[0] + B.up.fleet[1] + B.up.fleet[2], unpUp = B.up.metroCost + B.up.railOps + B.up.busOps + (fl - 7) * .8 + B.up.upReg;
+      const fl = B.up.fleet[0] + B.up.fleet[1] + B.up.fleet[2], unpUp = B.up.metroCost + B.up.railOps + B.up.busOps + (fl - 7) * .8 + (B.up.upReg - MONEY.upRegOf(s.pol, [], null, rep.pop, 0));   // D032 起存檔裡的政策日費本線自己付
       if (Math.abs(rep.settle.upkeep - (B.upkeep - unpUp)) > 1e-9) d.push(`維護費 本線 ${rep.settle.upkeep} ≠ 實驗線 ${B.upkeep}－沒搬的 ${unpUp}`);
       const incOff = Math.abs(rep.settle.income - (B.income - unp)) > 1e-6;
       if (!causes.length) { d.push(...tdiff); if (incOff) d.push(`收入 本線 ${rep.settle.income} ≠ 實驗線 ${B.income}－沒搬的 ${unp}`); }

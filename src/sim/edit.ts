@@ -3,6 +3,8 @@
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；拆除確認的「3 秒內再按一次」用呼叫端給的 now。
 import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRect, tap, undoTxn, pushTxn, ROAD_COST, COST, type BuildState, type Txn } from './rules/build.ts';
 import { computePower, powerCap } from './rules/power.ts';
+import { rebuildCov, type SvcBudget } from './rules/fields.ts';
+import { applyPolicy, stepBudget, type PolicyResult } from './rules/policy.ts';
 import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
 import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
@@ -168,9 +170,33 @@ export function undoOp(s: Sim): { ok: boolean; refund: number } {
   return { ok: true, refund };
 }
 
+// ---- 政策與預算（D032）：玩家在面板調的旋鈕。立刻生效（回退設定：T504 治理關，policyApply504 67570 直接轉給 mayorPolicyApply470A 53750，保留冷卻）；
+// 下一天的結算、幸福、災禍、電力……讀新的設定（stepDay 每天讀 s.pol、s.budget）。改教育場要重算的只有營養午餐與預算（rebuildCov：EDU 是快取、覆蓋半徑讀預算）。
+// 實驗線 rebuildCov 最後清地價髒標記（53154），這裡跟 undoOp 一樣照做。不寫世界歷史（不加事件種類，要業主定的事 1）
+function recoverCov(s: Sim) {
+  rebuildCov(s.w, s.g, s.budget, s.edu);
+  s.landDirty = false; s.landBox = null; s.stale.fill(0);
+}
+// 套用一項政策：回傳 applyPolicy 的結果（ok＝真的改了；冷卻沒到、同值、不認得的鍵都不動）。沒套用成功也會補出預設物件（53750 先補預設物件），所以 s.pol 一定換成回傳的新物件
+export function setPolicy(s: Sim, k: string, value: unknown): PolicyResult {
+  const r = applyPolicy(s.pol, s.polLast, s.day, k, value);
+  s.pol = r.pol;
+  if (!r.ok) return r;
+  s.polLast = r.last;
+  if (r.effects.coverage) { s.edu.schoolLunch = !!r.pol.schoolLunch; recoverCov(s); }   // 53754：營養午餐 → rebuildCov（教育場 ×1.25 或還原）；清運（回收）與電力（節能）本線每天開頭整張重算，不必當場動
+  return r;
+}
+// 服務預算 ±（setSvcBudget 52968–52973）：不認得的類別不動（回 false）；認得的一律夾限、重算覆蓋（夾到頭數字沒變也算，實驗線照叫 rebuildCov）；沒有冷卻
+export function setBudget(s: Sim, cat: keyof SvcBudget | string, delta: number): boolean {
+  const b = stepBudget(s.budget, cat, delta);
+  if (b === s.budget) return false;
+  s.budget = b; recoverCov(s);
+  return true;
+}
+
 // 電：容量（燃煤電廠 75 棟起，52473；季節係數 55008）與有電、沒電的住商工棟數（昨天的分配，55154–55156）
 export function powerStatus(s: Sim) {
-  const cap = powerCap(computePower(s.w).cap, season(s.day));
+  const cap = powerCap(computePower(s.w, !!(s.pol && s.pol.ecoReg)).cap, season(s.day));   // D032：節能條例 ecoReg 發電廠容量 +5
   let powered = 0, unpowered = 0;
   for (const cb of s.root.values()) if (cb.k <= 3) { const b = s.w.tiles[cb.z * s.w.N + cb.x].bld; if (b?.pw) powered++; else unpowered++; }
   return { cap, powered, unpowered };

@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './cdp.mjs';
+import { ensurePol } from '../src/sim/rules/policy.ts';
 import { fnv1a } from '../src/sim/rng.ts';
 import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
@@ -49,14 +50,15 @@ export function rowOf(s, rep) {
 const FIELDS = ['day', 'pop', 'jobs', 'happy', 'ah', 'lg', 'rl', 'cp', 'cl', 'ld', 'lb', 'jc', 'nh', 'hh', 'peek'];
 const NAMES = { rl: '道路負載', cp: '通勤懲罰', cl: '叢集路徑', ld: '動態地價', lb: '地價基準', jc: '過載道路格數', nh: '住宅棟數', hh: '住宅幸福', happy: '城市幸福', pop: '人口', jobs: '就業', peek: '下一個亂數（亂數次數或順序不同）', day: '日子', lg: '物流效率與貿易額度（壅堵扣分進經濟）', ah: '幸福構成（57 項城市平均的位元雜湊）' };
 
-// 這一天要代進去的輸入（本線沒有的政策、科技、專精；D028 起經濟段的也用它，另加 class2；夜間城市 D029、城市活動 D030 起本線自己算，不再代）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
-// row＝這一列。inject＝false 時什麼都不代（玩家實際玩到的本線）。prev（前一列）以前給夜間城市用，現在沒用、簽名照舊（chart-d028 等呼叫端不必改）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol } 或 { err }
+// 這一天要代進去的輸入（本線沒有的科技、專精；D028 起經濟段的也用它，另加 class2；夜間城市 D029、城市活動 D030、政策 D032 起本線自己算，不再代——政策是存檔裡的 pol，simFromSave 讀進來）：
+// st＝目前有效的 tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的；st.pol 只剩核對用：讀檔那一刻本線的 pol 要＝實驗線的）、row＝這一列。inject＝false 時專精也不代（玩家實際玩到的本線）。
+// prev（前一列）以前給夜間城市用，現在沒用、簽名照舊（chart-d028 等呼叫端不必改）。副作用：把科技寫進 s.edu.tech。回 { hazard } 或 { err }
 export function injectInputs(s, st, prev, row, inject) {
-  const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech);
+  const tech = JSON.parse(st.tech);
   if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { err: `科技不是字串陣列：${st.tech}` };
   s.edu.tech = tech;
-  const hazard = inject ? { pol, spec: st.spec || null } : undefined;
-  return { hazard, pol };
+  const hazard = inject ? { spec: st.spec || null } : undefined;
+  return { hazard };
 }
 
 // 一座城連推 rec.days 天，逐天跟實驗線比。mod＝day.ts（真的或改壞的）。inject＝false 時不代任何輸入（政策、夜間城市、城市活動都當沒有＝玩家實際玩到的本線）
@@ -64,6 +66,8 @@ export function injectInputs(s, st, prev, row, inject) {
 // onDay(day, mine, row, rep, sim)：每天比完之後呼叫（拿本線當天的值做別的檢查，例如逐項幸福）
 export function compareCity27(mod, code, rec, KT, vrank, { stopAtFirst = true, inject = true, onDay } = {}) {
   const r = decodeLabCode(code), s = mod.simFromSave(r.save, code, KT, vrank), d = [], out = { d, days: 0, first: 0, parts: [], fields: [], firstFields: [] };
+  const pl = J(ensurePol(s.pol));   // D032：政策是存檔裡的 pol，本線自己讀——讀進來的要跟實驗線讀進來的一樣（逐欄、含順序）。實驗線讀檔之後 pol 已是補齊的物件（讀檔後不久 mayorEnsurePolicy470A 就建了，沒有 pol 的存檔也是），本線留著讀進來的樣子（沒有＝null，消費者都容錯、行為一樣）——兩邊都補齊再比
+  if (pl !== rec.start.pol) return { ...out, d: [`讀檔後的政策 本線 ${pl.slice(0, 80)} ≠ 實驗線 ${String(rec.start.pol).slice(0, 80)}`], days: 0, first: 1 };
   let prev = rec.start;
   const st = { pol: rec.start.pol, tech: rec.start.tech, spec: rec.start.spec };   // 政策、科技、專精：樣本裡跟前一列一樣的不存（tools/d027-lab.mjs compactRows），往前找最近一次記的
   for (let day = 1; day <= rec.days; day++) {
@@ -293,7 +297,7 @@ export async function wiringGuards(log, { lab, cities, olds, KT, vrank, evolvedC
     ['道路格數當 0（貿易額度的底）', [['const roads = tickRoad.length;', 'const roads = 0;']], 'lab'],
     ['幸福構成不加總', [['for (let k = 0; k < hp.parts.length; k++) aggSum[k] = (aggSum[k] ?? 0) + hp.parts[k];', '']], 'lab'],
     ['幸福構成除以錯的數', [['aggSum.map(v => v / happyN)', 'aggSum.map(v => v / nn)']], 'lab'],
-    ['夜間城市不餵幸福', [['nightCity: hzx?.nightCity ?? NIGHT_OFF,', 'nightCity: NIGHT_OFF,']], 'lab'],
+    ['夜間城市不餵幸福', [['nightCity: hzx.nightCity ?? NIGHT_OFF,', 'nightCity: NIGHT_OFF,']], 'lab'],
     ['城市活動不餵幸福', [['eventHappy: opts.hazard?.eventHappy ?? (evd ? evd.happy : null),', 'eventHappy: opts.hazard?.eventHappy ?? null,']], 'lab'],
     ['讀檔後叢集不是空的', [['commuteClusters: [], commuteDay: -1,', 'commuteClusters: [[0]], commuteDay: -1,']], 'lab'],
     ['電視訊號不留到明天（一律 false）', [['tvSignal: s.tvSignal, tech: s.edu.tech,', 'tvSignal: false, tech: s.edu.tech,']], 'lab'],

@@ -387,7 +387,7 @@ async function guards(log) {
     if (J(lab.order) !== J(codes.map(c => c.id))) bad.push('樣本的城跟 d024Codes() 的順序不同');
     for (const c of codes) if (lab.cities[c.id]?.codeHash !== fnv1a(c.code)) bad.push(`${c.id} 的碼雜湊跟樣本不同`);
     // 一份 day.ts（真的或改壞的）逐座比：讀檔後本線主計數迴圈的每個計數（實驗線探針讀 tick() 區域變數）、四個掃圖函式、推進一天後的名目就業與商工職位、維護費。
-    // 維護費：實驗線那一天的維護費，減掉本線沒搬的（地鐵、鐵路、公車、夜間城市的營運費；車隊超出預設 7 輛的保養；法規與科技與專精的日費），要＝本線的維護費（差 < 1e-9）。
+    // 維護費：實驗線那一天的維護費，減掉本線沒搬的（地鐵、鐵路、公車、夜間城市的營運費；車隊超出預設 7 輛的保養；科技與專精的日費——法規日費 D032 起本線自己付），要＝本線的維護費（差 < 1e-9）。
     // 六種商品的進口費 D025 搬了（本線自己算，103 座讀進來的第一天都跟實驗線探針的一樣），不再扣
     const check = (mod, stopAtFirst = false) => {
       const rows = [], diffs = [];
@@ -401,7 +401,7 @@ async function guards(log) {
         if (t.towerPop !== D.tp || t.megaPop !== D.mp) d.push(`塔／巨廈居民 ${D.tp}／${D.mp}≠${t.towerPop}／${t.megaPop}`);
         const tot = JOBS.transitDepotTotals501(s.w, order), scan = { pj: JOBS.powerJobs471(s.w), wj: JOBS.waterJobs472(s.w), ij: JOBS.infraJobs475(s.w), dj: tot.jobs, pu: MONEY.powerUpkeep471(s.w), wu: MONEY.waterUpkeep472(s.w), iu: MONEY.infraUpkeep475(s.w), du: tot.upkeep };
         for (const k of Object.keys(scan)) if (scan[k] !== L.scan[k]) d.push(`掃圖 ${k} 實驗線 ${L.scan[k]}≠本線 ${scan[k]}`);
-        const rep = mod.stepDay(s), fl = D.fleet[0] + D.fleet[1] + D.fleet[2], unported = D.metroCost + D.railOps + D.busOps + (fl - 7) * .8 + D.upReg, want = D.upkeep - unported;
+        const rep = mod.stepDay(s), fl = D.fleet[0] + D.fleet[1] + D.fleet[2], unported = D.metroCost + D.railOps + D.busOps + (fl - 7) * .8 + (D.upReg - MONEY.upRegOf(s.pol, [], null, D.pop, 0)), want = D.upkeep - unported;   // D032 起存檔裡的政策日費本線自己付；沒搬的只剩科技與專精的日費
         if (rep.jobs !== D.jobs) d.push(`jobs 實驗線 ${D.jobs}≠本線 ${rep.jobs}`);
         if (rep.jobsC !== D.jobsC) d.push(`商業職位 ${D.jobsC}≠${rep.jobsC}`);
         if (rep.jobsI !== D.jobsI) d.push(`工業職位 ${D.jobsI}≠${rep.jobsI}`);

@@ -3,8 +3,8 @@
 //   → 55835–55855 疾病（diseaseStep）→ 55856–55865 死亡（deathStep）→ 55868 起收稅（旗標讓建築停稅，money.ts 已有）。
 // 這一串不受災害開關 disastersOn 管（回退設定照跑）；工業洩漏 55798（disastersOn 才跑）、龍捲風、隕石坑點火（55478）本線沒有災害，不搬。
 // 逐行照搬，包括亂數被抽的順序與次數（每一段都是 for (const i of tickBld)，順序＝建築格索引升序、新長的接在後面）與浮點乘法的結合順序。
-// 沒搬的輸入（第 1、2 類，見 docs/D026-hazards.md）：政策 pol（煙霧偵測、宵禁、夜市、公園夜間開放，55766、55817）預設 null；夜間治安 nightCrimeMul487（T487）：D029 起 day.ts 用前一天的夜間城市餵進來（沒給＝1，給了就蓋過去，守衛用）；
-// 乾旱起火率（災害）不搬；T495 民生服務關（醫療覆蓋只看 COV）；T472 水質病風險舊式供水＝0；保險理賠 insPayout（政策）沒有。
+// 沒搬的輸入（第 1、2 類，見 docs/D026-hazards.md）：政策 pol（煙霧偵測、宵禁、夜市、公園夜間開放，55766、55817）D032 起 day.ts 用 Sim.pol 餵進來（沒給＝null，給了就蓋過去，守衛用）；夜間治安 nightCrimeMul487（T487）：D029 起 day.ts 用前一天的夜間城市餵進來（沒給＝1，給了就蓋過去，守衛用）；
+// 乾旱起火率（災害）不搬；T495 民生服務關（醫療覆蓋只看 COV）；T472 水質病風險舊式供水＝0；保險理賠 insPayout（53047）在 day.ts 照燒毀的棟數加（D032，policy.ts INSURANCE_PAYOUT）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不寫世界歷史（day.ts 拿回傳的事件去記）。
 import { idx, inMap, streetHash, tq, type Bld, type Fields, type Rng, type World } from './lab.ts';
 import { stampPolSrc, type Grids } from './fields.ts';
@@ -12,8 +12,8 @@ import { stampPolSrc, type Grids } from './fields.ts';
 // 39657、39658：災害應變中心與避難公園的係數（韌性讀取層 resilience364At 53568）
 export const DISASTER_CENTER_DAMAGE_MUL = .60, DISASTER_CENTER_RECOVERY_CHANCE = .55, SHELTER_CASUALTY_MUL = .55;
 
-// 政策（K）本線還沒搬：災禍段讀 smokeDetect、curfew、nightMarket、parkNight；住宅幸福讀 freeTransit、parkNight、curfew（happy.ts）。同一個物件兩邊共用
-export interface HazardPol { smokeDetect?: boolean; curfew?: boolean; nightMarket?: boolean; parkNight?: boolean; freeTransit?: boolean }
+// 政策（K，D032）：災禍段讀 smokeDetect、curfew、nightMarket、parkNight；住宅幸福讀 freeTransit、parkNight、curfew（happy.ts）。同一個物件兩邊共用（Sim.pol）
+export type HazardPol = import('./policy.ts').PolState;   // D032：災禍段讀 smokeDetect、curfew、nightMarket（抽籤）；同一個政策物件（Sim.pol）。不另開 import 行：亂數抽取的呼叫行號（D011 錨點、SITE_MAP）不能位移
 // 本線沒有來源、只有守衛注入的輸入（生產路徑全部不給＝實驗線回退設定的值）
 // D027 起同一個物件也帶住宅幸福讀的兩個輸入：夜間城市（J，T487：前一天結算的 ready 與 happinessDelta；D029 起 day.ts 自己給，這裡給了就蓋過去）、城市活動（D，T299：這一天的 happy 加成，沒有活動＝null，還沒搬）
 export interface HazardX { pol?: HazardPol | null; nightCrimeMul?: (i: number, b: Bld) => number; spec?: string | null; nightCity?: { ready: boolean; happinessDelta: number }; eventHappy?: number | null }

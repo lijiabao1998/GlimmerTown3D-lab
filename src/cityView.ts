@@ -14,9 +14,11 @@ import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
+import { upRegOf } from './sim/rules/money.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
-import { roadCap475, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
+import { roadCap475, hashBytes, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
 import { HAPPY_NAMES } from './sim/rules/happy.ts';
 import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
@@ -352,6 +354,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
+    if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
     for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
     if (daysSinceSave >= SAVE_DAYS) saveNow();
     return rep;
@@ -457,7 +460,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
     <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>
-    <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>`;
+    <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
+    <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -594,6 +598,80 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     rk.hidden = false;
   }
 
+  // D032：☰「政策與預算」（實驗線 ☰ 市政統計面板的稅率、服務預算、法規與政策開關的 3D 版）。按了馬上生效（實驗線回退設定：T504 治理關，policyApply504 直接轉給 mayorPolicyApply470A，保留冷卻），
+  // 下一天的結算、幸福、災禍、電力、垃圾……讀新的設定；冷卻（稅率 40 天、其餘 35–60 天）中再按，講還剩幾天（實驗線是靜默不動）。只列本線有效果的 11 個開關；其餘 15 個沒有對應的系統
+  // （存讀照舊、日費照付），最底下一列講。面板只讀、開著不建預設物件（實驗線 65449 打開面板就建：行為一樣，只差存檔裡多一個 pol 欄位）。不寫世界歷史（不加事件種類）
+  const pl = $<HTMLElement>('#pl');
+  $<HTMLButtonElement>('#plX').onclick = () => { pl.hidden = true; };
+  pl.onclick = e => { if (e.target === pl) pl.hidden = true; };
+  const TAX_ROWS = [['taxR', '住宅稅', '住宅稅收 ×倍率；高過 1.0× 會壓低購買力（每多 0.1× 約 −1.8%），商業營業額跟著降'], ['taxC', '商業稅', '商業稅收 ×倍率'], ['taxI', '工業稅', '工業稅收 ×倍率']] as const;
+  const BUDGET_NOTE: Record<string, string> = { police: '警察局、派出所、法院的覆蓋半徑與維護費 ×倍率', fire: '消防局、消防站、消防總部的覆蓋半徑與維護費 ×倍率', health: '醫院、診所、救護站的覆蓋半徑與維護費 ×倍率', edu: '學校、大學、圖書館的覆蓋半徑與維護費 ×倍率' };
+  const POLICY_NOTE: Record<string, string> = { curfew: '夜間犯罪機率 ×0.6；住宅幸福 −0.02', recycle: '垃圾產量 ×0.85', tourPromo: '遊客帶來的商業稅加成 ×1.1', ecoReg: '商業稅 ×0.95；每座發電廠容量 +5',
+    schoolLunch: '學校的教育分 ×1.25', smokeDetect: '起火機率 ×0.6', indSubsidy: '工業稅 ×0.9；工業需求 +0.15', nightMarket: '商業稅 ×1.06（夜間城市有結算時照它的稅乘數）；夜間犯罪 ×1.15', parkNight: '公園覆蓋內的住宅幸福 +0.02；夜間路燈多一項',
+    insurance: '火災燒毀的建築每棟理賠 $35', emergencyStockpile492: '出口前先留：糧食與天然氣 75%、燃料 2.5 倍需求；商品儲備 ×1.35' };
+  type BudgetId = (typeof BUDGET_CATS)[number]['id'];
+  let plTip = '';
+  const polVal = (k: string): number | boolean => { const v = sim?.pol ? (sim.pol as Record<string, unknown>)[k] : undefined; return POLICY_CATALOG[k].type === 'tax' ? (typeof v === 'number' ? v : 1) : !!v; };   // 沒有政策＝稅率 1、開關關
+  function plRow(kind: 'tax' | 'budget' | 'toggle', k: string, name: string, note: string): HTMLLIElement {
+    const li = document.createElement('li'), head = document.createElement('div'), b = document.createElement('b'), ctl = document.createElement('span'), sub = document.createElement('small');
+    li.dataset.k = k; li.dataset.kind = kind; head.className = 'h'; ctl.className = 'ctl'; sub.className = 'note';
+    b.textContent = name;
+    const btn = (label: string, aria: string, on: () => void) => { const x = document.createElement('button'); x.type = 'button'; x.textContent = label; x.setAttribute('aria-label', aria); x.onclick = on; return x; };
+    const val = document.createElement('span'); val.className = 'val';
+    const cool = kind === 'budget' ? 0 : cooldownLeft(sim!.polLast, sim!.day, k), fee = kind === 'toggle' ? POLICY_FEE[k] ?? 0 : 0;
+    if (kind === 'tax') {
+      val.textContent = (polVal(k) as number).toFixed(1) + '×';
+      ctl.append(btn('−', name + ' 降 0.1', () => uiPolicy(k, stepTax(polVal(k) as number, -1))), val, btn('＋', name + ' 升 0.1', () => uiPolicy(k, stepTax(polVal(k) as number, 1))));
+    } else if (kind === 'budget') {
+      val.textContent = '×' + sim!.budget[k as BudgetId].toFixed(1);
+      ctl.append(btn('−', name + ' 預算降 0.1', () => uiBudget(k, -1)), val, btn('＋', name + ' 預算升 0.1', () => uiBudget(k, 1)));
+    } else {
+      const on = polVal(k) as boolean; val.textContent = on ? '開' : '關';
+      const t = btn(on ? '開' : '關', name + (on ? '：開著，按一下關掉' : '：關著，按一下開啟'), () => uiPolicy(k, !polVal(k))); t.setAttribute('aria-pressed', String(on)); t.className = on ? 'on' : '';
+      ctl.append(t);
+    }
+    sub.textContent = note + (fee > 0 ? `　日費 $${fee}` : '') + (cool > 0 ? `　冷卻中：還剩 ${cool} 天` : '');
+    if (cool > 0) sub.classList.add('cool');
+    head.append(b, ctl); li.append(head, sub);
+    return li;
+  }
+  function renderPolicy() {
+    if (!sim) return;
+    const box = $('#pl .body'), sec = (title: string, rows: HTMLLIElement[]) => { const h = document.createElement('h3'), ol = document.createElement('ol'); h.textContent = title; ol.append(...rows); return [h, ol]; };
+    const hidden = Object.keys(POLICY_CATALOG).filter(k => POLICY_CATALOG[k].type === 'toggle' && !(POLICY_SHOWN.law as readonly string[]).includes(k) && !(POLICY_SHOWN.policy as readonly string[]).includes(k) && sim!.pol && (sim!.pol as Record<string, unknown>)[k]);
+    const hidFee = hidden.reduce((a, k) => a + upRegOf({ [k]: true }, [], null, 0, 0), 0);
+    box.replaceChildren(
+      ...sec('稅率', TAX_ROWS.map(([k, n, note]) => plRow('tax', k, n, note))), ...sec('服務預算', BUDGET_CATS.map(c => plRow('budget', c.id, c.nm, BUDGET_NOTE[c.id]))),
+      ...sec('法規', POLICY_SHOWN.law.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))), ...sec('政策', POLICY_SHOWN.policy.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))));
+    const fees = POLICY_SHOWN.law.concat(POLICY_SHOWN.policy as never).reduce((a, k) => a + (polVal(k) ? POLICY_FEE[k] ?? 0 : 0), 0) + hidFee;
+    $('#pl .sub').textContent = `第 ${sim.day.toLocaleString()} 天・按了馬上生效，下一天的結算、幸福、災禍、電力……讀新的設定；開著的法規與政策每天付日費（現在合計 $${fees}）`;
+    $('#pl .tip').textContent = plTip || (hidden.length ? `存檔裡另有 ${hidden.length} 項本線沒有對應系統的政策開著（${hidden.map(k => POLICY_CATALOG[k].nm).join('、')}），日費 $${hidFee} 照付，這裡不給改` : '');
+  }
+  // 按了一個政策或稅率：成功就講、存檔；冷卻中或同值就講原因，不動狀態。稅率的文字照實驗線 53752：「住宅稅：1.0× → 1.1×」
+  function uiPolicy(k: string, value: unknown) {
+    if (!sim || !own(POLICY_CATALOG, k)) return null;
+    const cfg = POLICY_CATALOG[k], old = polVal(k), left = cooldownLeft(sim.polLast, sim.day, k), r = setPolicy(sim, k, value);
+    if (r.ok) {
+      const now = polVal(k); plTip = '';
+      bui.toast(`📜 ${cfg.nm}：${cfg.type === 'tax' ? `${(old as number).toFixed(1)}× → ${(now as number).toFixed(1)}×` : now ? '開啟' : '關閉'}`, 'gold');
+      saveNow();
+    } else plTip = left > 0 ? `${cfg.nm}：冷卻中，還剩 ${left} 天才能再調（防止每天開關；實驗線是靜默不動）` : cfg.type === 'tax' ? `${cfg.nm}已經是 ${(old as number).toFixed(1)}×（範圍 0.5–2.0×）` : '';
+    renderPolicy();
+    return r;
+  }
+  // 服務預算 ±0.1（0.5–1.5，實驗線 setSvcBudget 52968；沒有冷卻）：覆蓋半徑立刻重算。提示字照實驗線 65800
+  function uiBudget(cat: string, dir: 1 | -1) {
+    if (!sim) return false;
+    const c = BUDGET_CATS.find(q => q.id === cat); if (!c || !setBudget(sim, cat, dir * BUDGET_STEP)) return false;
+    bui.toast(`🎚️ ${c.nm}預算 ×${sim.budget[c.id].toFixed(1)}${dir > 0 ? '（覆蓋更廣、更貴）' : '（省錢、覆蓋縮水）'}`); plTip = '';
+    saveNow(); renderPolicy();
+    return true;
+  }
+  function openPolicy() {
+    if (!sim) return;
+    plTip = ''; renderPolicy(); pl.hidden = false;
+  }
+
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
     const saved = readSave(), r = saved ? decodeLabCode(saved) : null;
@@ -613,6 +691,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
         ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
+        ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
     ];
@@ -630,6 +709,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'fin') openFin();
     else if (id === 'night') openNight();
     else if (id === 'rank') openRank();
+    else if (id === 'policy') openPolicy();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -772,6 +852,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
     if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
+    if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -1234,6 +1315,18 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     rankRows: () => [...ui.querySelectorAll('#rk li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className]),
     rankPanel: () => ({ open: !rk.hidden, sub: $('#rk .sub').textContent, bar: $<HTMLElement>('#rk .bar i').style.width }),
     rankRep: () => sim ? { day: sim.day, name: city?.name ?? '微光小鎮', idx: sim.rankIdx, points: sim.cityPoints, promoted: lastRep ? lastRep.rank.promoted : [] } : null,
+    // ---- D032 政策與預算（守衛與拍照用）：☰「政策與預算」面板的列、按面板上真的按鈕、套用政策與預算（走跟按鈕同一條路）、目前的政策物件與冷卻與預算 ----
+    policyRows: () => [...ui.querySelectorAll<HTMLElement>('#pl li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', name: li.querySelector('b')?.textContent ?? '', val: li.querySelector('.val')?.textContent ?? li.querySelector('button')?.textContent ?? '', note: li.querySelector('.note')?.textContent ?? '', on: !!li.querySelector('button.on') })),
+    policyPanel: () => ({ open: !pl.hidden, sub: $('#pl .sub').textContent, tip: $('#pl .tip').textContent }),
+    policyClick: (k: string, which: '-' | '+' | 'toggle') => {   // 按面板上的按鈕（稅率與預算：第一顆是 −、最後一顆是 ＋；開關：唯一一顆）；面板沒開或沒這一列回 false
+      const bs = pl.hidden ? [] : [...ui.querySelectorAll<HTMLButtonElement>(`#pl li[data-k="${k}"] button`)];
+      const b = which === '-' ? bs[0] : which === '+' ? bs.at(-1) : bs[0];
+      if (!b || (which === 'toggle') !== (bs.length === 1)) return false;
+      b.click(); return true;
+    },
+    policyApply: (k: string, v: unknown) => { const r = uiPolicy(k, v); return r ? { ok: r.ok } : null; },
+    budgetApply: (cat: string, dir: 1 | -1) => uiBudget(cat, dir),
+    policyState: () => sim ? { pol: sim.pol ? { ...sim.pol } : null, last: { ...sim.polLast }, budget: { ...sim.budget }, day: sim.day, schoolLunch: sim.edu.schoolLunch, edu: hashBytes(sim.g.EDU), money: sim.money, insured: lastRep ? lastRep.hazard.insured : 0 } : null,
     cityEventRep: () => lastRep ? { day: lastRep.day, ...lastRep.cityEvent, active: sim?.cityEvent ? { ...sim.cityEvent, ...CITY_EVENTS[sim.cityEvent.i] } : null } : null,   // D030：今天剛開始／剛結束的活動編號，與進行中的活動
     nightRep: () => lastRep ? { day: lastRep.day, night: lastRep.night, simReady: sim ? sim.night.ready : null } : null,
     dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, night: lastRep.night.finance, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,

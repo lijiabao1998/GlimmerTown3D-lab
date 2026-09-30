@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './cdp.mjs';
+import { ensurePol } from '../src/sim/rules/policy.ts';
 import { fnv1a } from '../src/sim/rng.ts';
 import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
@@ -64,15 +65,16 @@ export function compareCity(mod, code, rec, KT, vrank, { stopAtFirst = true, lan
   if (d.length) return { d, days: 0, first: 0, stat };
   for (let day = 1; day <= rec.days; day++) {
     const { H0: a, H2: b } = rec.rows[day - 1], dd = [];
-    // 本線沒有的輸入：政策、科技與專精——用實驗線這一天探針讀到的。夜間治安分數（夜間城市 T487，第 2 天起才有）D029 起本線自己算（前一天結算的 s.night），要跟實驗線這一天開頭讀到的一樣
-    const pol = JSON.parse(a.pol), tech = JSON.parse(a.tech);
+    // 本線沒有的輸入：科技與專精——用實驗線這一天探針讀到的（政策 D032 起是存檔裡的 pol，本線自己讀：不代入，只核對讀進來的跟實驗線這一天的一樣）。夜間治安分數（夜間城市 T487，第 2 天起才有）D029 起本線自己算（前一天結算的 s.night），要跟實驗線這一天開頭讀到的一樣
+    const tech = JSON.parse(a.tech);
     if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { d: [`科技不是字串陣列：${a.tech}`], days: day, first: day, stat };
     s.edu.tech = tech;
+    if (J(ensurePol(s.pol)) !== a.pol) dd.push(`政策 本線 ${J(ensurePol(s.pol)).slice(0, 60)} ≠ 實驗線 ${String(a.pol).slice(0, 60)}`);   // 實驗線讀檔之後 pol 已是補齊的物件（29 欄，讀檔後不久 mayorEnsurePolicy470A 就建了）；本線留著讀進來的樣子（沒有＝null，各消費者都容錯、行為一樣），所以兩邊都補齊再比
     if (s.night.ready !== a.night.ready || (a.night.ready && s.night.safety.score !== a.night.score)) dd.push(`夜間治安分數 本線 ${s.night.ready ? s.night.safety.score : '（沒算過）'} ≠ 實驗線 ${a.night.ready ? a.night.score : '（沒算過）'}`);
     if (a.night.ready) stat.night++;
     const capBefore = s.medCap, want = a.fs.ok ? a.fs.cap : null;
     if (finiteOrNull(capBefore ?? Infinity) !== want) dd.push(`昨天的床位容量 本線 ${capBefore} ≠ 實驗線 ${want}（null＝沒有上限）`);
-    const rep = mod.stepDay(s, { hazard: { pol, spec: a.spec || null } }), hz = rep.hazard;
+    const rep = mod.stepDay(s, { hazard: { spec: a.spec || null } }), hz = rep.hazard;
     if (rep.day !== a.day) dd.push(`日子 本線 ${rep.day} ≠ 實驗線 ${a.day}`);
     const fl = flagRows(s), rn = ruinRows(s);
     if (J(fl) !== J(b.fl)) dd.push(`旗標 ${firstRowDiff(fl, b.fl)}`);
@@ -251,7 +253,7 @@ async function guards(log) {
       ['災禍五段整段不跑', [['const hz = hazardDay(s, tickBld, f, dp, hzx);', 'const hz = { ignited: [], spread: [], burned: [], crimes: [], abandons: [], sicks: [], cures: [], deaths: [], ended: [], cured: 0, queued: 0, sickN: 0, penalty: [], cemCap: 0, soothed: 0, alerts: [], events: [], burnedAge: [] };']]],
       ['政策、夜間治安、專精的輸入不傳進災禍段', [['hazardDay(s, tickBld, f, dp, hzx)', 'hazardDay(s, tickBld, f, dp)']]],
       ['床位容量不留到明天', [['s.medCap = medCapOf(', 's.medCap = null; void medCapOf(']]],
-      ['政策不傳進住宅幸福', [['pol: opts.hazard?.pol ?? null, rankIdx: s.rankIdx,', 'pol: null, rankIdx: s.rankIdx,']]],
+      ['政策不傳進住宅幸福', [['pol, rankIdx: s.rankIdx,', 'pol: null, rankIdx: s.rankIdx,']]],
       ['疾病段不讀昨天的床位容量', [['diseaseStep(w, f, s.rng, tickBld, s.medCap ?? Infinity)', 'diseaseStep(w, f, s.rng, tickBld, Infinity)']]],
       ['災禍不同步城市模型與歷史', [['syncHazards(s, hz);', '']]],
       ['燒毀不記焦土圖層', [['c.ruin[b.i] = 1;', '']]],

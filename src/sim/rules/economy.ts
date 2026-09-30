@@ -4,8 +4,9 @@
 //   55328–55413 T481／T482 經濟（economyMain：貿易額度、糧食／天然氣／燃料／鋼材／供應品／貨物的進出口、貨物與零售、價格、四個乘數、太空研究中心）→
 //   55664–55671 煉鋼廠加速施工（steelConstruction）→ 55996–56021 出口的金幣與燃料、鋼材出口（economyLate）→ 56030–56046 快照（economySnapshots）。
 // 沒搬（本線沒有，一律當沒有／0／恆等；卡「不做什麼」）：開採量（suppliesGain、oilGain、oreGain＝計數裡恆 0，backlog M）、道路負載與壅堵（T129，輸入 roadStats，本線給 0）、
-//   火車線 T463（輸入 railLines）、事故 T493、政策 pol（緊急儲備 emergencyStockpile492 假、稅率 taxR＝1）、企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性與出口需求只取整）、
+//   火車線 T463（輸入 railLines）、事故 T493、企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性與出口需求只取整）、
 //   商業循環 T490（消費乘數 1）、城市活動 T299、天然氣發電調度（power471.pools，輸入 gasPowerDispatch，本線給 0）、化肥與熟食與收入加成（T346，下一張）。
+// 政策 pol（D032）：稅率 taxR 進購買力（55332、55395：`pol?.taxR||1`）、緊急物資儲備 emergencyStockpile492 進糧食與天然氣與燃料的出口留存和商品儲備（55348、55357、55388、56000）；沒有政策＝稅率 1、儲備關。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史。
 import { clamp, type World } from './lab.ts';
 import { residentPopulation488 } from './jobs.ts';
@@ -70,6 +71,11 @@ export function purchasingPower481(labor: Labor, wealth: number, happy: number, 
     tax = clamp(1 - Math.max(0, (taxR || 1) - 1) * .18, .82, 1.06), price = clamp(1.12 - (cost || 1) * .12, .82, 1.08);
   return clamp(wealth * emp * wage * mood * tax * price, .45, 1.45);
 }
+// 55348／55357／55388／56000 緊急物資儲備（pol?.emergencyStockpile492，D032）：出口與儲備多留一部分庫存；stock＝!!pol?.emergencyStockpile492
+export const foodHold492Of = (stock: boolean, foodCoreNeed482: number): number => (stock ? Math.ceil(foodCoreNeed482 * .75) : 0);   // 55348：糧食出口前先留核心需求的 75%
+export const gasHold492Of = (stock: boolean, gasDem: number): number => (stock ? Math.ceil(gasDem * .75) : 0);                      // 55357：天然氣出口前先留需求的 75%
+export const goodsReserveMul492 = (stock: boolean): number => (stock ? 1.35 : 1);                                                   // 55388：商品儲備 ×1.35
+export const fuelHoldMul492 = (stock: boolean): number => (stock ? 2.5 : 1);                                                        // 56000：燃料出口前先留需求的 2.5 倍
 // 38268 wealthPower481：住宅（k1 依財富級、社宅、塔、巨廈）的居民加權平均，沒住宅的人口算 1
 export function wealthPower481(w: World, tickBld: readonly number[], pTotal: number): number {
   let covered = 0, weighted = 0;
@@ -121,6 +127,7 @@ export interface EconIn {
   roadStats?: RoadStats;                 // 道路負載（T129，沒搬＝0）
   railLines?: number;                    // 火車線（T463，沒搬＝0）
   gasPowerDispatch?: number;             // T471 當日 CCGT／調峰機組的調度量（舊版供電＝0）
+  pol?: { taxR?: number; emergencyStockpile492?: unknown } | null;   // 政策（D032）：稅率 taxR 進購買力（pol?.taxR||1）、緊急物資儲備 emergencyStockpile492 進出口的留存（55348、55357、55388、56000）
   eventFood?: number;                    // T299 城市活動的食物加成（本線沒有城市活動＝1；對拍時給實驗線那天的）
   c: Readonly<Record<string, number>>;   // 主計數迴圈的全部計數（count.ts tallyBuildings 的 cnt）
   fc: FoodCount;                         // 食物、觀光、貿易的計數（tally.fc）
@@ -152,6 +159,7 @@ export interface EconCtx {
   foodExport482: number; gasExport482: number; goodsExport481: number; foodExportGold482: number; gasExportGold482: number; goodsPrice481: number; costOfLiving481: number; purchasingPowerNow481: number;
   goodsImportCost481: number; goodsExportGold481: number; goodsMul284: number; commerceSalesMul481: number; industrialMarketMul481: number;
   gFlow284: { gain: number; use: number; mul: number };
+  fuelHoldMul492: number;                // 56000：燃料出口前留的倍數（緊急物資儲備 2.5、沒開 1；economyLate 用）
   megaSupplyUsed482: number; indSupplyDemand: number; indSupplyUsed: number; indSupplyMul: number; mgReward: number;
 }
 // 一天的經濟（55305–55413）：改 st 的庫存與船、倉容量；回傳當天的每一個實驗線變數（同名）。呼叫端要在同一天接著叫 steelConstruction（施工之後）、economyLate、economySnapshots
@@ -159,6 +167,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const c = i.c, g = (k: string) => c[k] ?? 0, day = i.day, sea = i.sea, pop = i.pop;
   const U = unitsOf485(c, i.railLines ?? 0);
   const roadStats = i.roadStats ?? NO_ROAD_LOAD;
+  const stock = !!i.pol?.emergencyStockpile492;   // 政策：緊急物資儲備（55348、55357、55388、56000）
   // 55305–55325 T364b／T418 深加工鏈：企業層關＝利用率 1；開採量（oilGain、oreGain、suppliesGain）沒搬＝計數裡恆 0
   const refineryUtil489 = 1, steelMillUtil489 = 1, shipyardUtil489 = 1;
   const refineryN = g('refineryN'), steelMillN = g('steelMillN'), shipyardN = g('shipyardN');
@@ -186,7 +195,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const extFood482 = externalPrice482('food', day, sea), extGoods482 = externalPrice482('goods', day, sea), extFuel482 = externalPrice482('fuel', day, sea), extSteel482 = externalPrice482('steel', day, sea),
     extGas482 = externalPrice482('gas', day, sea), extSup482 = externalPrice482('supplies', day, sea);
   const wealthNow481 = i.wealth, prevCost481 = st.snap ? st.snap.prices.costOfLiving : foodPriceOf(day, sea);
-  const purchaseBase481 = clamp(purchasingPower481(laborNow481, wealthNow481, i.cityHappy, prevCost481, 1) * 1, .40, 1.65);   // pol?.taxR||1＝1；businessCycleConsumptionMul490()＝1
+  const purchaseBase481 = clamp(purchasingPower481(laborNow481, wealthNow481, i.cityHappy, prevCost481, i.pol?.taxR || 1) * 1, .40, 1.65);   // 55332：pol?.taxR||1；businessCycleConsumptionMul490()＝1
   // 55293–55299、55333–55342：食物與遊客、貿易額度、糧食進口與供糧率（food.ts foodDay；額度用 T485 的單位、船、壅堵、貨運燃料的效率加成）
   const fd = foodDay(i.fc, i.roads, pop, sea, day, { U, roadStats, shipCount: st.shipCount, fuelMul: freightTaxMul, eventFood: i.eventFood });
   const logisticsNow481 = { efficiency: fd.eff, avgRoadLoad: +roadStats.avg.toFixed(4), overloadedShare: +roadStats.over.toFixed(4), tradeCapacity: fd.cap };
@@ -201,7 +210,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const marketFoodUse482 = Math.min(foodProcessPool482, g('mk330') * 4); foodProcessPool482 -= marketFoodUse482;
   const foodPlantUse482 = Math.min(foodProcessPool482, g('procCapU')); foodProcessPool482 -= foodPlantUse482;
   const brewFoodUse482 = Math.min(foodProcessPool482, g('br340') * 3 * 1); foodProcessPool482 -= brewFoodUse482;
-  const foodExportLimit485 = tp336 * 15 + U.siloEff489 * 18 + U.coldEff489 * 8 + U.bulkEff489 * 24 + U.cportEff489 * 35, foodHold492 = 0,
+  const foodExportLimit485 = tp336 * 15 + U.siloEff489 * 18 + U.coldEff489 * 8 + U.bulkEff489 * 24 + U.cportEff489 * 35, foodHold492 = foodHold492Of(stock, fd.need),
     foodExportCandidate482 = foodExportLimit485 > 0 ? Math.min(Math.max(0, foodProcessPool482 - foodHold492), foodExportLimit485) : 0;
   const foodShortage482 = 1 - fd.rate, foodSurplusSignal482 = fd.need > 0 ? clamp(foodProcessPool482 / Math.max(1, fd.need), 0, 1) : 0,
     foodPrice481 = clamp(extFood482 * (1 + foodShortage482 * .32 - foodSurplusSignal482 * .08), .70, 1.80),
@@ -211,7 +220,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const gasSup = g('gw346') * 8, gasDem = g('fp346') * 3 * 1 + g('kt346') * 2 * 1 + g('fpN') * 1 + gasPowerNeed482;
   const gasShortLocal482 = Math.max(0, gasDem - gasSup), gasImport482 = takeTrade482(gpnInt(gasShortLocal482)), gasServed482 = Math.min(gasDem, gasSup + gasImport482);
   const gasRatio = gasDem > 0 ? clamp(gasServed482 / gasDem, 0, 1) : 1;
-  const gasSurplus482 = Math.max(0, gasSup - gasDem), gasExportCandidate482 = gasImport482 > 0 ? 0 : Math.min(Math.max(0, gasSurplus482 - 0), tp336 * 4 + U.gasDepEff489 * 8 + U.bulkEff489 * 5 + U.cportEff489 * 6),
+  const gasSurplus482 = Math.max(0, gasSup - gasDem), gasExportCandidate482 = gasImport482 > 0 ? 0 : Math.min(Math.max(0, gasSurplus482 - gasHold492Of(stock, gasDem)), tp336 * 4 + U.gasDepEff489 * 8 + U.bulkEff489 * 5 + U.cportEff489 * 6),
     gasImportCost482 = Math.round(gasImport482 * COMMODITY_META482.gas.importPrice * extGas482);
   // FUEL：貨運燃料已在上面先消耗；有償付能力才用貿易額度補回缺口
   const fuelDemand482 = U.freightUnits485 * FREIGHT_FUEL_USE, fuelShort482 = Math.max(0, fuelDemand482 - fuelUse418),
@@ -247,7 +256,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
     gUse284 = gDomesticUse481 + goodsImport481, supplyRate481 = gNeed284 > 0 ? clamp(gUse284 / gNeed284, 0, 1) : 1,
     shortageRatio481 = 1 - supplyRate481, importShare481 = gUse284 > 0 ? goodsImport481 / gUse284 : 0,
     stockPreExport481 = st.goods, stockRatioPre481 = gCap481 > 0 ? st.goods / gCap481 : 0,
-    reserve481 = Math.max(gNeed284 * 2, gCap481 * .28) * 1, exportable481 = Math.max(0, st.goods - reserve481),
+    reserve481 = Math.max(gNeed284 * 2, gCap481 * .28) * goodsReserveMul492(stock), exportable481 = Math.max(0, st.goods - reserve481),
     exportSignal481 = tradeCapacity481 > 0 ? clamp(exportable481 / Math.max(1, tradeCapacity481 * .35), 0, 1) : 0;
   // 所有短缺進口完成後才開始出口（糧食→天然氣→貨物；燃料與鋼材的出口在 economyLate）
   const foodExport482 = takeTrade482(gpnInt(foodExportCandidate482)); foodProcessPool482 -= foodExport482;
@@ -256,7 +265,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const foodExportGold482 = Math.round(foodExport482 * COMMODITY_META482.food.exportPrice * extFood482), gasExportGold482 = Math.round(gasExport482 * COMMODITY_META482.gas.exportPrice * extGas482),
     goodsPrice481 = clamp(extGoods482 * (1 + shortageRatio481 * .18 + importShare481 * .05 - (gCap481 > 0 ? st.goods / gCap481 : 0) * .06), .82, 1.32),
     costOfLiving481 = foodPrice481 * .55 + goodsPrice481 * .45,
-    purchasingPowerNow481 = clamp(purchasingPower481(laborNow481, wealthNow481, i.cityHappy, costOfLiving481, 1) * 1, .40, 1.65),
+    purchasingPowerNow481 = clamp(purchasingPower481(laborNow481, wealthNow481, i.cityHappy, costOfLiving481, i.pol?.taxR || 1) * 1, .40, 1.65),
     goodsImportCost481 = Math.round(goodsImport481 * COMMODITY_META482.goods.importPrice * extGoods482), goodsExportGold481 = Math.round(goodsExport481 * COMMODITY_META482.goods.exportPrice * extGoods482),
     goodsMul284 = .75 + .50 * supplyRate481,
     commerceSalesMul481 = clamp((.72 + purchasingPowerNow481 * .28) * (.94 + Math.min(1.25, retailPressure481) * .08), .64, 1.18),
@@ -281,7 +290,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
     gCap481, retailCapacity481, residentGoodsDemand481, touristGoodsDemand481, rawRetailDemand481, retailPressure481, gNeed284, domesticDeliverCap481, gDomesticUse481, shortagePreImport481, goodsImport481, gUse284,
     supplyRate481, shortageRatio481, importShare481, stockPreExport481, stockRatioPre481, reserve481, exportable481, exportSignal481,
     foodExport482, gasExport482, goodsExport481, foodExportGold482, gasExportGold482, goodsPrice481, costOfLiving481, purchasingPowerNow481, goodsImportCost481, goodsExportGold481, goodsMul284, commerceSalesMul481, industrialMarketMul481,
-    gFlow284, megaSupplyUsed482, indSupplyDemand, indSupplyUsed, indSupplyMul, mgReward,
+    gFlow284, fuelHoldMul492: fuelHoldMul492(stock), megaSupplyUsed482, indSupplyDemand, indSupplyUsed, indSupplyMul, mgReward,
   };
 }
 
@@ -312,7 +321,7 @@ export function economyLate(st: EconState, ec: EconCtx, c: Readonly<Record<strin
   const tradeGoldBase = ec.foodExportGold482;
   const tradeGold = ec.shipTradeTaxMul > 1 ? Math.round(tradeGoldBase * ec.shipTradeTaxMul) : tradeGoldBase;                              // 55997
   const fuelExport418 = (tp336 + fuelDepOp485 + bulkOp485 + cportOp485) > 0
-    ? takeTrade482(gpnInt(Math.min(Math.max(0, st.fuel - Math.ceil(ec.fuelDemand482 * 1)), tp336 * FUEL_EXPORT_RATE + fuelDepOp485 * 8 + bulkOp485 * 10 + cportOp485 * 12))) : 0;   // 56000：pol?.emergencyStockpile492 假＝×1
+    ? takeTrade482(gpnInt(Math.min(Math.max(0, st.fuel - Math.ceil(ec.fuelDemand482 * ec.fuelHoldMul492)), tp336 * FUEL_EXPORT_RATE + fuelDepOp485 * 8 + bulkOp485 * 10 + cportOp485 * 12))) : 0;   // 56000：pol?.emergencyStockpile492 ？ 2.5 : 1
   if (fuelExport418 > 0) st.fuel -= fuelExport418;
   const fuelExportGold418 = fuelExport418 > 0 ? Math.round(fuelExport418 * COMMODITY_META482.fuel.exportPrice * ec.extFuel482) : 0;
   const gasGold = Math.round(ec.gasExportGold482);                                                                                         // 56011
