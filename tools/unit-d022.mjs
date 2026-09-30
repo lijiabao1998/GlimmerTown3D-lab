@@ -246,9 +246,9 @@ async function guards(log) {
     const MINE_MUT = [
       ['夏季農場倍率 1.15→1.16', '[1, 1.15, 1.4, 0.4]', '[1, 1.16, 1.4, 0.4]'],
       ['溫室 ×6→×7', 'c.ghFoodU += (b.lv || 1) * 6;', 'c.ghFoodU += (b.lv || 1) * 7;'],
-      ['大農場 ×20→×21', 'c.farmFoodU += (b.lv || 1) * 20;', 'c.farmFoodU += (b.lv || 1) * 21;'],
+      ['大農場 ×20→×21', 'c.farmFoodU += (b.lv || 1) * 20 * fb;', 'c.farmFoodU += (b.lv || 1) * 21 * fb;'],
       ['牧場 ×2→×3', 'c.ranchFoodU += (b.lv || 1) * 2;', 'c.ranchFoodU += (b.lv || 1) * 3;'],
-      ['農場 ×3→×4', 'c.farmFoodU += (b.lv || 1) * 3;', 'c.farmFoodU += (b.lv || 1) * 4;'],
+      ['農場 ×3→×4', 'c.farmFoodU += (b.lv || 1) * 3 * fb;', 'c.farmFoodU += (b.lv || 1) * 4 * fb;'],
       ['食品加工 k97 ×3→×4', 'c.fp340 * 3', 'c.fp340 * 4'],
       ['動物園 45→46', 'c.zo * 45', 'c.zo * 46'],
       ['地標 k70 觀光值 10→11', '70: 10', '70: 11'],
@@ -293,7 +293,7 @@ async function guards(log) {
     }
     const src = read('src/sim/rules/food.ts');
     const load = s => { const js = stripTypeScriptTypes(s).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers, ...LOGI });
-      vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy};', ctx); return ctx.__m; };
+      vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy,FERT_BOOST};', ctx); return ctx.__m; };
     const baseOk = !compare(makeLab(T), makeMine(load(src)), true).diffs;
     for (const [name, from, to] of MINE_MUT) {
       if (src.split(from).length !== 2) { missed.push(`本線「${name}」錨點不唯一（${src.split(from).length - 1}）`); continue; }
@@ -310,8 +310,8 @@ async function guards(log) {
     const bad = [], day = read('src/sim/day.ts');
     const iH = day.indexOf('let cityHappy = happyN ? happySum / happyN : .6;'), iG = day.indexOf('garbageDay(w, tickBld, pop, jobsI, cityHappy, recycleMul)'), iK = day.indexOf('// 55282–55284：只用住宅 k1 重算'),
       iF = day.indexOf('economyMain(s.econ,'), iA = day.indexOf('applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy)'), iL = day.indexOf('laborMarket481(pop, jobs, null, s.day)'), iD = day.indexOf('economyDemands481('), cnt = read('src/sim/rules/count.ts'), eco = read('src/sim/rules/economy.ts'),
-      iC = cnt.indexOf('countFood(fc, b)'), iR = cnt.indexOf('if (!b || b.ref) continue;'), iS = cnt.indexOf('if (b.k === 7) fac.schools++;');   // D025：糧食那一段搬進 economyMain（rules/economy.ts）裡叫 foodDay，day.ts 叫 economyMain 一次
-    const iT = day.indexOf('tallyBuildings(w, tickBld)');   // D024：主計數迴圈搬到 rules/count.ts 的 tallyBuildings，day.ts 叫它一次
+      iC = cnt.indexOf('countFood(fc, b'), iR = cnt.indexOf('if (!b || b.ref) continue;'), iS = cnt.indexOf('if (b.k === 7) fac.schools++;');   // D025：糧食那一段搬進 economyMain（rules/economy.ts）裡叫 foodDay，day.ts 叫 economyMain 一次
+    const iT = day.indexOf('tallyBuildings(w, tickBld');   // D024：主計數迴圈搬到 rules/count.ts 的 tallyBuildings，day.ts 叫它一次
     if (!(iH > 0 && iG > iH && iK > iG && iL > iK && iF > iL && iA > iF && iD > iA)) bad.push('day.ts 的順序要是：城市幸福（55254）→ 垃圾（55278）→ 住宅重算城市幸福（55284）→ 勞動市場（55329）→ 經濟（含糧食）→ 糧食加減到住宅 → 商工需求（55578）');
     if (!(iR > 0 && iC > iR && iS > iC && iT > 0 && iT < iF)) bad.push('countFood 要在主計數迴圈（count.ts 的 tallyBuildings）裡、跳過 ref 格之後，而且 day.ts 在糧食之前叫 tallyBuildings');
     if (day.split('economyMain(').length !== 2 || day.split('applyFoodHappy(').length !== 2 || eco.split('foodDay(').length !== 2 || cnt.split('countFood(').length !== 2) bad.push('economyMain、applyFoodHappy（day.ts）、foodDay（economy.ts 的 economyMain 裡叫一次）、countFood（count.ts）都只叫一次');
@@ -410,10 +410,10 @@ async function guards(log) {
     // 突變：本線的 food.ts 改壞一處，這批要紅（沒改的先核過全等）
     const src = read('src/sim/rules/food.ts');
     const load = t => { const js = stripTypeScriptTypes(t).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, ''); const ctx = vm.createContext({ ...labHelpers, ...LOGI });
-      vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy};', ctx); return ctx.__m; };
+      vm.runInContext(js + '\nglobalThis.__m={emptyFoodCount,countFood,foodDay,applyFoodHappy,FERT_BOOST};', ctx); return ctx.__m; };
     const LIVE_MUT = [
-      ['農場 ×3→×4', 'c.farmFoodU += (b.lv || 1) * 3;', 'c.farmFoodU += (b.lv || 1) * 4;'],
-      ['大農場 ×20→×21', 'c.farmFoodU += (b.lv || 1) * 20;', 'c.farmFoodU += (b.lv || 1) * 21;'],
+      ['農場 ×3→×4', 'c.farmFoodU += (b.lv || 1) * 3 * fb;', 'c.farmFoodU += (b.lv || 1) * 4 * fb;'],
+      ['大農場 ×20→×21', 'c.farmFoodU += (b.lv || 1) * 20 * fb;', 'c.farmFoodU += (b.lv || 1) * 21 * fb;'],
       ['冬季農場倍率 0.4→0.5', '[1, 1.15, 1.4, 0.4]', '[1, 1.15, 1.4, 0.5]'],
       ['秋季農場倍率 1.4→1.5', '[1, 1.15, 1.4, 0.4]', '[1, 1.15, 1.5, 0.4]'],
       ['溫室 ×6→×7', 'c.ghFoodU += (b.lv || 1) * 6;', 'c.ghFoodU += (b.lv || 1) * 7;'],

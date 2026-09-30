@@ -367,7 +367,7 @@ async function guards(log) {
   // ---- 4. 接線 ----
   {
     const bad = [], day = read('src/sim/day.ts');
-    const iT = day.indexOf('tallyBuildings(w, tickBld)'), iN = day.indexOf('rebuildNoise(w, g, s, tickBld)'), iJ = day.indexOf('jobCountsOf(tally, w, tickBld, jobsC, jobsI)'), iM = day.indexOf('nominalJobs(jc)'),
+    const iT = day.indexOf('tallyBuildings(w, tickBld'), iN = day.indexOf('rebuildNoise(w, g, s, tickBld)'), iJ = day.indexOf('jobCountsOf(tally, w, tickBld, jobsC, jobsI)'), iM = day.indexOf('nominalJobs(jc)'),
       iU = day.indexOf('upkeepIn(w, tickBld, cnt, c,'), iS = day.indexOf('function settleToday');
     if (!(iT > 0 && iN > iT && iJ > iN && iM > iJ && iU > iS)) bad.push('day.ts 的順序要是：主計數迴圈 tallyBuildings → 噪音 → jobCountsOf → nominalJobs；維護費在 settleToday 裡 upkeepIn');
     for (const [needle, what] of [['tallyBuildings(', 'tallyBuildings'], ['jobCountsOf(', 'jobCountsOf'], ['upkeepIn(', 'upkeepIn'], ['nominalJobs(', 'nominalJobs']]) if (day.split(needle).length !== 2) bad.push(`${what} 只叫一次（實際 ${day.split(needle).length - 1}）`);
@@ -428,7 +428,7 @@ async function guards(log) {
       ['讀檔不讀地下線', 'if (udl475 && udl475.charCodeAt(i) === 49) tiles[i].ud475 = 1;', ''],
       ['讀檔不讀高架', 'if (city.fly[i]) tiles[i].fly475 = 1;', ''],
       ['讀檔不讀立交', 'tiles[i].ix475 = q;', 'void q;'],
-      ['主計數迴圈什麼都不數', 'tallyBuildings(w, tickBld)', 'tallyBuildings(w, [])'],
+      ['主計數迴圈什麼都不數', 'tallyBuildings(w, tickBld, fert)', 'tallyBuildings(w, [], fert)'],
       ['名目就業不算商業職位', 'jobCountsOf(tally, w, tickBld, jobsC, jobsI)', 'jobCountsOf(tally, w, tickBld, 0, jobsI)'],
       ['維護費不餵計數', 'upkeepIn(w, tickBld, cnt, c,', 'upkeepIn(w, tickBld, {}, c,'],
     ];

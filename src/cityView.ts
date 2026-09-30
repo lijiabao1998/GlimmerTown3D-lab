@@ -448,7 +448,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="dlg" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
       <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
-    <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>`;
+    <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
+    <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -506,6 +507,35 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     hs.hidden = false;
   }
 
+  // D028：☰「收支明細」（實驗線收支面板的 3D 版）。每一列都讀最近一天的回報（settle：稅、其他收入、維護費與其中的進口費、淨額；chain346 的工資指數），跟實驗線的 fin 同一份；不另存任何東西
+  const fin = $<HTMLElement>('#fin');
+  $<HTMLButtonElement>('#finX').onclick = () => { fin.hidden = true; };
+  fin.onclick = e => { if (e.target === fin) fin.hidden = true; };
+  const INCOME_NAME: [string, string][] = [['farmGold', '農場'], ['ranchGold', '牧場'], ['ghGold', '溫室'], ['procGold', '食品加工'], ['lodgeRev', '旅宿'], ['mktGold', '農貿市場'], ['brewGold', '釀酒'], ['techGold', '科技園'], ['dcGold', '數據中心'],
+    ['cookGold', '中央廚房（熟食）'], ['bankInt', '銀行利息'], ['tradeGold', '貿易'], ['gasGold', '天然氣出口'], ['fuelExportGold418', '燃料出口'], ['steelExportGold482', '鋼材出口'], ['goodsExportGold481', '貨物出口'], ['shipPortGold', '港口船運'], ['shipDailyGold418', '船運日收入']];
+  const IMPORT_NAME: [string, string][] = [['foodImportCost482', '糧食'], ['gasImportCost482', '天然氣'], ['fuelImportCost482', '燃料'], ['steelImportCost482', '鋼材'], ['suppliesImportCost482', '供應品'], ['goodsImportCost481', '貨物']];
+  const money$ = (v: number) => (Math.round(v) < 0 ? '−' : '') + '$' + Math.abs(Math.round(v)).toLocaleString();
+  interface FinRow { name: string; text: string; tone: '' | 'pos' | 'neg'; sum: boolean }
+  function finList(rep: DayReport): FinRow[] {
+    const s = rep.settle, rows: FinRow[] = [], other = s.other as unknown as Record<string, number>, imports = s.imports as unknown as Record<string, number>;
+    rows.push({ name: '住宅稅', text: money$(s.tax.R), tone: 'pos', sum: false }, { name: '商業稅', text: money$(s.tax.C), tone: 'pos', sum: false }, { name: '工業稅', text: money$(s.tax.I), tone: 'pos', sum: false });
+    for (const [k, name] of INCOME_NAME) { const v = other[k]; if (v && Math.round(v) !== 0) rows.push({ name, text: money$(v), tone: v > 0 ? 'pos' : 'neg', sum: false }); }
+    rows.push({ name: '收入合計', text: money$(s.income), tone: '', sum: true });
+    rows.push({ name: '維護費', text: money$(-s.upkeep), tone: 'neg', sum: false });
+    for (const [k, name] of IMPORT_NAME) { const v = imports[k]; if (v && Math.round(v) !== 0) rows.push({ name: `　其中進口${name}`, text: money$(-v), tone: 'neg', sum: false }); }
+    rows.push({ name: '淨額（收入−維護費）', text: money$(s.income - s.upkeep), tone: '', sum: true });
+    rows.push({ name: '工資指數', text: `×${rep.chain346.wageIdx.toFixed(2)}`, tone: '', sum: false });
+    return rows;
+  }
+  function openFin() {
+    if (!sim) return;
+    const rep = lastRep, list = rep ? finList(rep) : [];
+    $('#fin .sub').textContent = rep ? `第 ${rep.day.toLocaleString()} 天・資金 ${money$(sim.money)}${sim.diff === 3 ? '（沙盒：收支照算、不入帳）' : ''}・每一列都是這一天結算的數字（化肥與熟食是昨天的天然氣決定的，見農場與中央廚房的卡）` : '推進一天之後才算得出來';
+    $('#fin ol').replaceChildren(...list.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
+    $('#fin .tip').textContent = rep && rep.settle.income - rep.settle.upkeep < 0 ? '每天收支是負的：稅收不夠付維護費（多蓋有稅收的住商工，或先停掉用不上的公共設施）' : '';
+    fin.hidden = false;
+  }
+
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
     const saved = readSave(), r = saved ? decodeLabCode(saved) : null;
@@ -521,6 +551,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       ] },
       { title: '住商工的畫法', items: Object.entries(BLOCK_MODES).filter(([k]) => k !== 'a').map(([k, v]) => ({ id: 'blocks:' + k, label: `${k.toUpperCase()} ${v}`, on: blockMode === k })) },   // D014：A 檔超過手機預算，拿出選單（?blocks=a 照舊，給守衛與對照）
       { title: '其他', items: [
+        ...(sim ? [{ id: 'fin', label: '收支明細', note: '稅收、其他收入、維護費、淨額（D028）', icon: 'coin' as const }] : []),
         ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
@@ -536,6 +567,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     }
     else if (id === 'paste') openDlg('paste');
     else if (id === 'happy') openHappy();
+    else if (id === 'fin') openFin();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -675,6 +707,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (clean) return;
     if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
+    if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -768,6 +801,24 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (b.k === 2) return ['市場', `購買力 ${e.consumption.purchasingPower.toFixed(2)}；零售利用率 ${Math.round(e.commerce.utilization * 100)}%（貨物需求 ${e.goods.need}：本地 ${e.goods.domestic}＋進口 ${e.goods.imports}）；銷售乘數 ×${e.commerce.salesMul.toFixed(2)}`];
     return ['市場', `市場乘數 ×${e.production.marketMul.toFixed(2)}（缺貨 ${Math.round(e.goods.shortageRatio * 100)}%、貨物庫存 ${e.goods.stock}／${e.goods.cap}）；原料 ${e.production.inputUsed.toFixed(1)}／${e.production.inputDemand.toFixed(1)}`];
   }
+  // D028：農場與大農場的「化肥」一列、天然氣井與化肥廠與中央廚房的「天然氣」一列。讀最近一天的回報與覆蓋場。
+  // 化肥與熟食是「昨天的天然氣」決定今天的效果（旗標留到明天，讀檔與新圖是 false），所以這裡講的是「下一天」：最近一天化肥廠有產出，覆蓋（半徑 10 格）內的農場下一天食物與金幣 ×1.35
+  function chainRows(b: { k: number; x: number; z: number }): Row[] {
+    if (!sim || ![22, 53, 117, 118, 119].includes(b.k)) return [];
+    const c = lastRep ? lastRep.chain346 : null, ec = lastRep ? lastRep.econ.ec : null, pct = (v: number) => `${Math.round(v * 100)}%`;
+    const gas = c && ec ? `全城天然氣：本地產 ${c.gasSup}、需求 ${c.gasDem}${ec.gasImport482 > 0 ? `、進口 ${ec.gasImport482}` : ''}，供氣率 ${pct(c.gasRatio)}` : null;
+    if (b.k === 22 || b.k === 53) {
+      const covered = sim.g.COV.fertco[b.z * sim.w.N + b.x] > 0;
+      if (!covered) return [['化肥', '不在化肥廠覆蓋內（半徑 10 格）：食物與金幣照常 ×1']];
+      if (sim.fertReady && c) return [['化肥', `最近一天（第 ${sim.day.toLocaleString()} 天）化肥廠有產出 ${c.fertOut}：這座在覆蓋內，下一天食物與金幣 ×1.35`]];
+      if (!c) return [['化肥', '在化肥廠覆蓋內；讀檔之後化肥廠要先運轉一天，隔天才有增產（旗標不進存檔）']];
+      return [['化肥', `在化肥廠覆蓋內，但最近一天化肥廠沒有產出（${gas}）：下一天不增產（×1）`]];
+    }
+    if (!gas || !c) return [['天然氣', '推進一天之後才算得出來（全城的天然氣供需與供氣率）']];
+    if (b.k === 118) return [['天然氣', `${gas}；化肥產出 ${c.fertOut}（${c.fertReady ? '下一天覆蓋內的農場增產 ×1.35' : '沒有產出，下一天不增產'}）`]];
+    if (b.k === 119) return [['天然氣', `${gas}；熟食產出 ${c.cookedOut}（${c.cookedReady ? '下一天覆蓋內的住宅幸福 +3%、每份熟食收入 $0.6' : '沒有產出'}）`]];
+    return [['天然氣', gas]];
+  }
   // D027：道路格卡的「交通」一列。負載（每天的移動平均）、容量（路級，高架 ×1.28、立交 ×1.55）、比例；過載要講「過載」與它對周圍的影響（規則同住宅幸福的「交通壅堵」與動態地價）。
   // 讀檔之後第一個 4 的倍數的日子之前沒有通勤路徑，也就沒有車流——講清楚，不要讓人以為路很空
   function trafficRow(i: number): Row | null {
@@ -836,6 +887,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
       const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
+      if (b.goneDay === undefined) rows.push(...chainRows(b));                          // D028
       if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
       const evs = lotEvents(c, b.x, b.z);
       if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
@@ -1108,6 +1160,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     houseAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x; return { pen: sim.g.commutePenalty[i], jam: sim.g.jam[i] }; },
     happyRows: () => [...ui.querySelectorAll('#hs li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className]),
     happyPanel: () => ({ open: !hs.hidden, sub: $('#hs .sub').textContent, tip: $('#hs .tip').textContent }),
+    // ---- D028 經濟（二）（守衛與拍照用）：☰「收支明細」面板的列、最近一天的回報（稅、收入項、進口費、維護費、鏈條）、覆蓋場 ----
+    finRows: () => [...ui.querySelectorAll('#fin li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className, li.querySelector('span')?.className ?? '']),
+    finPanel: () => ({ open: !fin.hidden, sub: $('#fin .sub').textContent, tip: $('#fin .tip').textContent }),
+    dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,
+    covAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x; return { fertco: sim.g.COV.fertco[i], kitchen: sim.g.COV.kitchen[i], fertReady: sim.fertReady, cookedReady: sim.cookedReady }; },
     hazard: () => ({ marks: haz.count, visible: haz.mesh.visible, ruins: city ? city.ruin.reduce((a, v) => a + v, 0) : 0, alerts: lastRep?.hazard.alerts ?? [] }),
     flags: (x: number, z: number) => { const b = sim?.w.tiles[z * sim.w.N + x]?.bld; return b && !b.ref ? { k: b.k, fire: +(b.fire || 0), crime: b.crime ? 1 : 0, crimeDays: b.crimeDays ?? 0, sick: b.sick ? 1 : 0, sickDays: b.sickDays ?? 0, death: b.death ? 1 : 0, deathAge: b.deathAge ?? 0, abandoned: b.abandoned ? 1 : 0 } : null; },
     actButtons: () => [...ui.querySelectorAll<HTMLButtonElement>('#bio .acts button')].map(b => ({ act: b.dataset.act, text: b.textContent })),

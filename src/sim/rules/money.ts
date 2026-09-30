@@ -79,9 +79,14 @@ export function buildingTax(w: World, f: TaxFields, i: number, b: MoneyBld, mul:
     if (pm.nightMarket) mult *= mul.nightCityReady ? mul.nightCityTaxMul : 1.06;
     const v2 = JOBSC[b.lv] * .18 * mult * (pm.taxC || 1) * (pm.ecoReg ? .95 : 1) * civicMul * mul.goodsMul284 * mul.commerceSalesMul481 * tq(t, 'A3', 1.04, 1) * tq(t, 'A6', 1.05, 1) * tq(t, 'B4b', 1.05, 1) * tq(t, 'C3', 1.03, 1) * tq(t, 'D3', 1.04, 1) * sqOf(spec, 'hub', 1.03, 1) * mul.enterpriseTaxFactor(i);
     return { kind: 'C', v: v2 };
-  } else if (b.k === 65) {
-    // 55964 k65 大型購物中心（T290）：沒搬（D011 蓋不出來、讀檔也只能看）。這裡不收稅，跟實驗線不同；對拍案例不放 k65
-    return null;
+  } else if (b.k === 65) {                                                                              // 55964 k65 大型購物中心（T290，4×4 旗艦）：基礎 150＋55／級，綁商品供貨與營業額與公車、郵局、停車覆蓋與觀光（D028）
+    const COV = f.COV, bx = i % w.N, byy = (i / w.N) | 0;
+    const rc = getMaxRoadClass(w, bx, byy, 1);
+    let mult = (1 + rc * .08) * (COV.bus![i] > 0 ? 1.1 : 1) * (COV.post![i] > 0 ? 1.15 : 1) * ((COV.parking && COV.parking[i] > 0) ? 1.1 : 1);
+    if (mul.tourists > 0) mult *= 1 + Math.min(.25, mul.tourists / 400);
+    if (pm.nightMarket) mult *= mul.nightCityReady ? mul.nightCityTaxMul : 1.06;
+    const v65 = (150 + (b.lv - 1) * 55) * mult * (pm.taxC || 1) * (pm.ecoReg ? .95 : 1) * civicMul * mul.goodsMul284 * mul.commerceSalesMul481 * mul.enterpriseTaxFactor(i);
+    return { kind: 'C', v: v65 };
   } else {                                                                                              // 55965 工業（也是分支鏈沒列到的種類的去處）
     const eduIndMul = b.lv === 3 ? 1 + (f.EDU[i] / 255) * .4 : 1;
     const v2 = JOBSI[b.lv] * .15 * (pm.taxI || 1) * (pm.indSubsidy ? .9 : 1) * civicMul * mul.indSupplyMul * mul.industrialMarketMul481 * eduIndMul * mul.fuelTaxMul * mul.steelTaxMul * tq(t, 'A1', 1.04, 1) * tq(t, 'A4a', 1.08, 1) * tq(t, 'A4b', .98, 1) * tq(t, 'A8', 1.06, 1) * sqOf(spec, 'ind', 1.06, 1) * sqOf(spec, 'green', .92, 1) * mul.enterpriseTaxFactor(i);
@@ -240,11 +245,12 @@ export const neutralUpkeepIn = (p: { roadUpkeep: number; counts: Partial<UpkeepC
 
 // 55973–55977 維護費讀的一整組輸入（D024）：主計數迴圈的全部計數（cnt）＋稅收迴圈順手數的六種（IncomeCounts）＋掃整張圖的四個函式（電力、水務、基建、車庫）；
 // 其餘（政策、地鐵、車隊、進口……）照 D011 的中性值，呼叫端要另外給就用展開蓋過去
-export function upkeepIn(w: World, tickBld: readonly number[], cnt: Record<string, number>, tax: IncomeCounts, p: { pop: number; svcBudget: SvcBudget; tech: readonly string[]; spec: string | null }): UpkeepIn {
+export function upkeepIn(w: World, tickBld: readonly number[], cnt: Record<string, number>, tax: IncomeCounts, p: { pop: number; svcBudget: SvcBudget; tech: readonly string[]; spec: string | null }, pre?: { roadUpkeep: number; infraUpkeep475: number }): UpkeepIn {
+  // pre＝stepDay 的初始掃描（每天本來就要走過每一格一次）順手加的道路維護費與基建維護費（同一個加總順序、逐位相同，守衛核對）；不給就各掃一趟
   return {
-    ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: p.pop, svcBudget: p.svcBudget, tech: p.tech, spec: p.spec,
+    ...neutralUpkeepIn({ roadUpkeep: pre ? pre.roadUpkeep : roadUpkeep(w), pop: p.pop, svcBudget: p.svcBudget, tech: p.tech, spec: p.spec,
       counts: { ...cnt, parks: tax.parks, plants: tax.plants, fireStations: tax.fireStations, policeStations: tax.policeStations, policeBoxes: tax.policeBoxes, hospitals: tax.hospitals } }),
-    powerUpkeep471: powerUpkeep471(w, tickBld), waterUpkeep472: waterUpkeep472(w, tickBld), infraUpkeep475: infraUpkeep475(w), transitDepotUpkeep501: transitDepotTotals501(w, tickBld).upkeep,
+    powerUpkeep471: powerUpkeep471(w, tickBld), waterUpkeep472: waterUpkeep472(w, tickBld), infraUpkeep475: pre ? pre.infraUpkeep475 : infraUpkeep475(w), transitDepotUpkeep501: transitDepotTotals501(w, tickBld).upkeep,
   };
 }
 
