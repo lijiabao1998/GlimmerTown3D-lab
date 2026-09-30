@@ -1191,4 +1191,58 @@ if (set === 'd026-traj') {   // 只在明講要它時才跑（不進 all）：D0
   });
 }
 
+if (set === 'd027') {   // 只在明講要它時才跑（不進 all）：手機上的通勤與壅堵——過載道路的暖色（俯瞰）、過載路格的卡、住宅卡的通勤與壅堵、☰「幸福構成」
+  const { cities27 } = await import('./d027-cities.mjs'), { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const newcity = fs.readFileSync(path.join(ROOT, 'src/content/samples/newcity.code.txt'), 'utf8'), KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')));
+  const j1 = cities27(newcity, KT).find(c => c.id === 'J1').code;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const fresh = async code => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(code)})`); await open(''); };
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    // 1 俯瞰：J1 推 12 天，整條 2 級路上近工業那一段的暖色（黃到紅）；2 過載路格的卡（負載最大的那一格）；3 靠近工業的住宅卡（通勤不扣分、附近路格過載）；4 離工業最遠的住宅卡（通勤封頂）
+    await fresh(j1);
+    await page.evaluate('(__gt.simStep(12), 1)');
+    const tr = await page.evaluate('__gt.traffic()'), worst = tr.cells.reduce((a, c) => c[1] / c[2] > a[1] / a[2] ? c : a), wx = worst[0] % 72, wz = (worst[0] / 72) | 0;
+    await page.evaluate(`(__gt.view(40.5, 30.5, 2.4), __gt.setVisT(2.2), 1)`); await pause(900); await save(page, 'd027_mob_over');
+    await page.evaluate(`(__gt.view(${wx + .5}, ${wz + .5}, 5.2), __gt.openTile(${wx}, ${wz}), 1)`); await pause(900); await save(page, 'd027_mob_road');
+    await page.evaluate(`(__gt.view(58.5, 31.5, 5.2), __gt.openTile(58, 31), 1)`); await pause(900); await save(page, 'd027_mob_house');
+    await page.evaluate(`(__gt.view(6.5, 31.5, 5.2), __gt.openTile(6, 31), 1)`); await pause(900); await save(page, 'd027_mob_far');
+    // 5 ☰「幸福構成」：起步城推 40 天
+    await open('sample=starter'); await page.evaluate('(__gt.simStep(40), 1)');
+    await page.evaluate(`(__gt.menu('happy'), 1)`); await pause(900); await save(page, 'd027_mob_happy');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(5,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd027_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D027 手機 412×860：通勤與壅堵</h1><p class="s">J1（一條 2 級路、十四個叢集的通勤路徑全擠在同一條路上）推進 12 天。①俯瞰：過載的路格疊暖色（黃到紅，實驗線 60574 的公式，地面貼圖上、不佔 draw call）；②負載最大的一格的卡：「交通 負載／容量（比例）——過載」；③靠近工業的住宅：通勤沒扣、「交通壅堵」半徑 2 格內 5 格過載道路、幸福 −15.0（上限）；④離工業最遠的住宅：「通勤」封頂 −18.0、附近的路沒過載；⑤☰「幸福構成」（起步城第 40 天）：城市平均每一項幸福，最負的一項標紅並附建議。全部程式生成、沒有外部素材。</p>
+    <div class="g"><figure><figcaption>① 過載的道路</figcaption><img src="d027_mob_over.png"></figure><figure><figcaption>② 過載路格的卡</figcaption><img src="d027_mob_road.png"></figure><figure><figcaption>③ 靠近工業的住宅</figcaption><img src="d027_mob_house.png"></figure><figure><figcaption>④ 離工業最遠的住宅</figcaption><img src="d027_mob_far.png"></figure><figure><figcaption>⑤ 幸福構成</figcaption><img src="d027_mob_happy.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd027_mobile.html', width: 2200, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d027_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 2200, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D027-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D027-mobile.jpg');
+  });
+}
+
+if (set === 'd027-traj') {   // 只在明講要它時才跑（不進 all）：D027 之前的樣本取自 git（D026 收工 44e2e73），CI 只拉最新一個提交拿不到。foot 的數字由資料現算（不手打）
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const base = arg('base', '44e2e73'), data = d020Data(base), g = f => data.gap[f], n3 = v => v.toFixed(3), n1 = v => v.toFixed(1);
+  const foot = `通勤與壅堵接上之後：幸福度第 121 列與實驗線的差 ${n3(g('happy').before.d121)}→${n3(g('happy').after.d121)}（全程平均差 ${n3(g('happy').before.all)}→${n3(g('happy').after.all)}，實驗線種子間 sd ${n3(data.labSd.happy)}）——D026 收工時最大的一項差（.084，t＝5.75）收進種子間的散布裡；\n人口 ${n1(g('pop').before.d121)}→${n1(g('pop').after.d121)}、就業 ${n1(g('jobs').before.d121)}→${n1(g('jobs').after.d121)}、住宅棟數 ${n1(g('R').before.d121)}→${n1(g('R').after.d121)}、工業棟數 ${n1(g('I').before.d121)}→${n1(g('I').after.d121)}（第 121 列的差）。剩下的幸福差是夜間城市（本線沒搬，實驗線每棟住宅平均 −.003）。數字表見 {doc}。`;
+  const svg = d020Svg(data, { title: 'D027 通勤與壅堵接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D027 之前（D026 收工）', after: '本線 D027 之後',
+    beforeSrc: 'D027 之前＝git {base} 的 d010-3d.json', afterSrc: 'D027 之後＝現在的 src 現算', doc: 'docs/D027-traffic.md', foot });
+  fs.writeFileSync(path.join(out, 'd027_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd027_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d027_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
+    fs.writeFileSync(path.join(out, 'D027-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D027-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
 if (errors) process.exitCode = 1;

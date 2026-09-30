@@ -15,7 +15,8 @@ export const DISASTER_CENTER_DAMAGE_MUL = .60, DISASTER_CENTER_RECOVERY_CHANCE =
 // 政策（K）本線還沒搬：災禍段讀 smokeDetect、curfew、nightMarket、parkNight；住宅幸福讀 freeTransit、parkNight、curfew（happy.ts）。同一個物件兩邊共用
 export interface HazardPol { smokeDetect?: boolean; curfew?: boolean; nightMarket?: boolean; parkNight?: boolean; freeTransit?: boolean }
 // 本線沒有來源、只有守衛注入的輸入（生產路徑全部不給＝實驗線回退設定的值）
-export interface HazardX { pol?: HazardPol | null; nightCrimeMul?: (i: number, b: Bld) => number; spec?: string | null }
+// D027 起同一個物件也帶住宅幸福讀的兩個沒搬的輸入：夜間城市（J，T487：前一天結算的 ready 與 happinessDelta）、城市活動（D，T299：這一天的 happy 加成，沒有活動＝null）
+export interface HazardX { pol?: HazardPol | null; nightCrimeMul?: (i: number, b: Bld) => number; spec?: string | null; nightCity?: { ready: boolean; happinessDelta: number }; eventHappy?: number | null }
 
 const sq = (spec: string | null | undefined, id: string, on: number, off: number) => spec === id ? on : off;   // 37851：sq(id,on,off)＝spec386===id?on:off
 

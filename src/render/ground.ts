@@ -22,12 +22,21 @@ export const GROUND = {
   // D026 焦土：燒毀的建築留下的炭黑空地——炭黑一族、零星餘燼與灰、邊緣更暗（程式生成，沒有外部素材；實驗線畫的是焦土精靈，這裡只求一眼認得出來）
   ruin: [0x3a322c, 0x352d28, 0x2f2823, 0x403730], ruinEmber: 0x9a4a24, ruinAsh: 0x5b544c, ruinEdge: 0x1f1a17,
 };
+// D027 過載道路的暖色（實驗線 60574 @ d23c18d：過載的路格疊 rgba(255, 210−170r, 40−40r, .16+.34r)，r＝過載比例夾在 0–1，黃到紅）；本線量化成 OVER_LEVELS 檔，貼圖才不會每天每格都重畫
+export const OVER_LEVELS = 7;
+// 負載超過容量才有等級：1（剛超過）… OVER_LEVELS（超過一倍以上）；0＝沒過載（不畫）
+export const overLevel = (load: number, cap: number): number => !(load > cap) ? 0 : 1 + Math.min(OVER_LEVELS - 1, Math.floor(Math.min(1, (load - cap) / cap) * OVER_LEVELS));
+export const overTint = (level: number): { color: number; alpha: number } => {
+  const r = (level - 1) / (OVER_LEVELS - 1);
+  return { color: (255 << 16) | (Math.round(210 - 170 * r) << 8) | Math.round(40 - 40 * r), alpha: .16 + .34 * r };
+};
 
 export interface GroundCity {
   n: number; road: Uint8Array; rclass: Uint8Array; ter: Uint8Array; el: Uint8Array; zone: Uint8Array;
   rail: Uint8Array; dock: Uint8Array; tram: Uint8Array; occ: Int32Array; buildings: { k: number }[];
   wp?: Uint8Array;   // D019 配水管（沒有＝不畫）
   ruin?: Uint8Array;   // D026 焦土（沒有＝不畫；建築、路、鐵路的格子不畫，那是不該同時出現的資料）
+  over?: Uint8Array;   // D027 過載道路的等級（0＝沒過載，1–OVER_LEVELS；只在道路格上畫；渲染層的輸入：由介面從模擬的道路負載算出來，不是世界狀態）
 }
 // D019：配水管的接頭（實驗線 recalcLocalWaterMask475 50925：上 1、右 2、下 4、左 8）。建築、路、鐵路、電車底下的不畫：實驗線先畫水管再畫路（60562→60563），被蓋住；回 −1＝這一格不畫水管
 const pipeMask = (c: GroundCity, x: number, z: number) => {
@@ -58,18 +67,24 @@ export function paintGround(c: GroundCity, cat: (k: number) => string, S: number
 // 跟上一次一樣的格直接沿用上一次的像素，不一樣的才重畫（同一個 paintTile，結果跟整張重畫逐位元組相同，守衛核對）
 export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; k3: Int8Array; data: Uint8Array }
 const CATCODE = (ct: string) => ct === '' ? 0 : ct === 'R' || ct === 'C' || ct === 'I' ? 1 : ct === 'G' ? 2 : ct === 'F' ? 3 : 4;
+// 一格的三個鍵（groundKeys 逐格呼叫它；D027 的就地更新也用它，只重算一格）
+export function keysAt(c: GroundCity, cat: (k: number) => string, x: number, z: number, lots?: Uint8Array, plates?: Int32Array): [number, number, number] {
+  const n = c.n, i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
+  const isRoad = (xx: number, zz: number) => xx >= 0 && zz >= 0 && xx < n && zz < n && c.road[zz * n + xx] > 0;
+  const nb = (isRoad(x, z - 1) ? 1 : 0) | (isRoad(x, z + 1) ? 2 : 0) | (isRoad(x - 1, z) ? 4 : 0) | (isRoad(x + 1, z) ? 8 : 0);
+  const k1 = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
+    | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0) | (c.ruin && c.ruin[i] && !b && !c.road[i] ? 1 << 27 : 0) | ((c.over && c.road[i] ? c.over[i] & 7 : 0) << 28);
+  return [k1, plates ? plates[i] : -2, pipeMask(c, x, z)];
+}
 export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array, Int8Array] {
   const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n), k3 = new Int8Array(n * n);   // k3（D019）：配水管的接頭，−1＝不畫
-  const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
-    const i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
-    const nb = (isRoad(x, z - 1) ? 1 : 0) | (isRoad(x, z + 1) ? 2 : 0) | (isRoad(x - 1, z) ? 4 : 0) | (isRoad(x + 1, z) ? 8 : 0);
-    k1[i] = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
-      | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0) | (c.ruin && c.ruin[i] && !b && !c.road[i] ? 1 << 27 : 0);
-    k2[i] = plates ? plates[i] : -2;
-    k3[i] = pipeMask(c, x, z);
-  }
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) { const i = z * n + x, [a, b, q] = keysAt(c, cat, x, z, lots, plates); k1[i] = a; k2[i] = b; k3[i] = q; }
   return [k1, k2, k3];
+}
+// D027：就地重畫指定的幾格（過載暖色每天在變，只有等級變了的路格要重畫；不必把整張 72×72 的鍵重算一遍）。改的是 cache 裡的像素與鍵，跟 paintGroundInc 同一個 paintTile，結果逐位元組等於整張重畫（守衛核對）
+export function repaintTiles(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, cache: GroundCache, tiles: readonly number[]): void {
+  const n = c.n;
+  for (const i of tiles) { const x = i % n, z = (i / n) | 0, [a, b, q] = keysAt(c, cat, x, z, lots, plates); cache.k1[i] = a; cache.k2[i] = b; cache.k3[i] = q; paintTile(c, cat, S, lots, plates, cache.data, x, z); }
 }
 // D015：inPlace＝直接改上一次的像素（地面貼圖常駐、只上傳變動的格；tiles＝重畫了哪幾格）；不給就照 D014 另存一份
 export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null, inPlace = false): { cache: GroundCache; painted: number; tiles: number[] | null } {
@@ -95,7 +110,7 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
     const straightNS = rN && rS && !rW && !rE, straightEW = rW && rE && !rN && !rS;
     // D019 配水管：沿格子中線往有水管的鄰格畫——管身 1 像素（u 或 v＝mid−1），下方／右方 1 像素陰影（外框色），中心 1 像素亮點；沒有鄰格就只畫中心亮點。
     // 實驗線的管身約是格寬的 5%（線寬 3／64），本線一格 8 像素，1 像素（12.5%）已是最細
-    const pm = pipeMask(c, x, z), a = mid - 1;
+    const pm = pipeMask(c, x, z), a = mid - 1, ov = r && c.over ? c.over[i] & 7 : 0, tint = ov ? overTint(ov) : null;   // D027
     const onArm = (u: number, v: number, w: number) => (u === a + w && (((pm & 1) && v <= a + w) || ((pm & 4) && v >= a)))
       || (v === a + w && (((pm & 8) && u <= a + w) || ((pm & 2) && u >= a)));
     for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) {
@@ -139,6 +154,7 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
         else if (onArm(u, v, 0)) col = GROUND.pipe;
         else if (onArm(u, v, 1)) col = mix(col, GROUND.pipeEdge, 0.45);
       }
+      if (tint) col = mix(col, tint.color, tint.alpha);   // D027：過載的道路整格疊暖色（車道線、人行道也一起染，跟實驗線疊一整塊矩形一樣）
       put(x * S + u, z * S + v, col);
     }
   }

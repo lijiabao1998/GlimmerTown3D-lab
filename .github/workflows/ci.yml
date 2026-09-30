@@ -17,7 +17,7 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 25   # D022：守衛＋煙霧＋樣張已經 13.5 分鐘（r21），再加內容會撞到原本的 15 分鐘
+    timeout-minutes: 30   # D027：守衛＋煙霧＋樣張約 20 分鐘（r26 是 18 分 40 秒，D027 加了實跑守衛與煙霧約 2 分鐘），25 分鐘的餘裕太薄；D022 那次是 15→25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

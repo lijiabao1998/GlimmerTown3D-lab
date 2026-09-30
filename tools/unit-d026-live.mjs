@@ -271,7 +271,7 @@ async function guards(log) {
       ['讀檔：非住宅的燃燒天數丟掉', [[': { k, lv, v, age, pw: true, h: .6, fire: r[5] || 0 };', ': { k, lv, v, age, pw: true, h: .6, fire: 0 };']]],
       ['雜湊不看旗標', [['+(b.fire || 0), +(b.crime || 0), b.crimeDays ?? -1, +(b.sick || 0), b.sickDays ?? -1, +(b.death || 0), b.deathAge ?? -1, +(b.abandoned || 0)]', '0]']]],
       ['雜湊不看焦土', [['const ruin = s.w.tiles.flatMap((t, i) => t.ruin ? [i] : []);', 'const ruin: number[] = [];']]],
-      ['雜湊不看床位容量', [['econ, ruin, s.medCap]));', 'econ, ruin]));']]],
+      ['雜湊不看床位容量', [['econ, ruin, s.medCap,\n', 'econ, ruin,\n']]],
     ];
     const bad = [], out = [], base0 = [dayBad(V0), syncBad(V0), hashBad(V0), differs(V0)].filter(Boolean);
     if (base0.length) bad.push(`沒改的副本就有不對：${base0.join('｜')}`);

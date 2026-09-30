@@ -13,7 +13,7 @@ import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
-import { paintGround, paintGroundInc, groundCellPx, type GroundCity } from './ground.ts';
+import { paintGround, paintGroundInc, repaintTiles, groundCellPx, type GroundCity } from './ground.ts';
 import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { nearGate, nearHb } from '../content/construction.ts';
@@ -45,6 +45,7 @@ export interface BuiltCity {
   // D014 施工：每格建築幾何的最高點、地基、牆頂（量自幾何）、每格屬於哪個街區（1 起；0＝不是街區）；前庭樹的格；工地網格
   con: { top: Float32Array; base: Float32Array; wallTop: Float32Array; blockOf: Int32Array } | null;
   setTreeAges(ageAt: (i: number) => number): void;
+  setTraffic(over: Uint8Array | undefined): number;   // D027：過載道路的暖色（每天負載在變，貼圖就地只重畫等級變了的路格；回重畫了幾格）。沒有施工資料（只能看的城）不做事、回 0
   setSites(specs: SiteSpec[], ageAt: (i: number) => number, live: boolean): { tris: number; perSite: Map<number, string[]> } | null;
   nearCounts(): { near: number; kinds: Record<string, number> };   // D014 近看小物畫了幾件（逐種）
   setNear(on: boolean): void;                          // D014 近看小物：實驗線縮放 ≥ 1.22 才畫
@@ -136,7 +137,7 @@ export const TONES: Record<Tone, { ramp: [number, number, number]; hemi: number;
 };
 // fresh＝從頭建（換城、換畫法檔）：清空快取。平常（逐日、施工之後）只換變動的件
 // pipes（D019）：地面畫不畫配水管——實驗線平常埋在地下看不到，拿著配水管類工具才畫（utilityLineMode485C 50907）
-export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState, fresh = false, pipes = false): BuiltCity {
+export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: BlockRender, tone: Tone = 'a', civic?: CivicRender, con?: ConState, fresh = false, pipes = false, over?: Uint8Array): BuiltCity {
   const TN = TONES[tone];
   const n = c.n, nn = n * n, scene = new THREE.Scene();
   const T: Record<string, number> = {}; let tp = performance.now(); const mark = (k: string) => { const q = performance.now(); T[k] = q - tp; tp = q; };
@@ -173,7 +174,8 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
   }
-  const gc: GroundCity = pipes ? c : { ...c, wp: undefined };
+  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）
+  let paintedOver: Uint8Array | undefined = over;                          // D027：現在貼圖上畫的是哪一份過載等級（setTraffic 拿它跟新的比）
   const gtex = groundTexture(gc, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
   stats.up += stats.groundUp; stats.groundFull = n * S * n * S * 4;
   mark('groundTex');
@@ -582,6 +584,22 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       return out;
     },
     con: conOut,
+    // D027：過載暖色就地更新——跟上一次畫的等級比，只有路格的等級變了才重畫那幾格（沒變就一格都不碰，每天 0 成本；貼圖沿用 D015 的常駐做法，只上傳變動的段）
+    setTraffic: ov => {
+      if (!con || !con.ground || !con.ground.data) return 0;
+      const ch: number[] = [], cur = paintedOver;
+      for (let i = 0; i < nn; i++) if (c.road[i] && (cur ? cur[i] : 0) !== (ov ? ov[i] : 0)) ch.push(i);
+      paintedOver = ov; gc.over = ov;
+      if (!ch.length) return 0;
+      repaintTiles(gc, k => look.cat(k), S, lots, plates, con.ground, ch);
+      const t = sc.groundTex, W = n * S;
+      if (t && t.image.data === con.ground.data) {
+        if (ch.length * 2 > nn) { t.clearUpdateRanges(); sc.stats.groundUp = W * W * 4; }
+        else { for (const i of ch) { const x = i % n, z = (i / n) | 0; for (let v = 0; v < S; v++) t.addUpdateRange(((z * S + v) * W + x * S) * 4, S * 4); } sc.stats.groundUp = ch.length * S * S * 4; }
+        t.needsUpdate = true;
+      }
+      return ch.length;
+    },
     setTreeAges: ageAt => { if (!yardAges) return; const a = yardAges.attr.array as Float32Array; yardAges.tiles.forEach((i, j) => { a[j] = ageAt(i); }); yardAges.attr.needsUpdate = true; },
     setSites: (specs, ageAt, live) => {
       if (!con) return null;

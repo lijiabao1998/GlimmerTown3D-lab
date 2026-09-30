@@ -4,6 +4,7 @@
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）。
 import { clamp, idx, tq, type World, type Fields } from './lab.ts';
 import { landStaticAt } from './land.ts';
+import { jamCounts } from './commute.ts';
 
 // 52957＋52958＋52959：覆蓋半徑（Chebyshev 方框）；60 個場，插入順序同實驗線
 export const COVR: Record<string, number> = {
@@ -51,9 +52,11 @@ Object.assign(POL_SRC, { 140: { r: 6, p: 22 }, 141: { r: 3, p: 12 }, 142: { r: 4
 
 // 實驗線的全域場：52960 COV、52990 POL／POLBASE／POLTREE、53020 NOISE、53066 LAND／LANDBASE、53127 EDU、56927 commutePenalty（Float32Array）、
 // 56267 METRO_TOD467B、39671 ACCESS468；依 N 重配見 allocGrids（56931）
+// D027 道路負載（56919 roadLoad Float32Array、roadPass Uint16Array；都是執行期場、不入存檔，讀檔與新圖歸零）；jam＝每格半徑 2 內過載道路格數（congestNear 一次算好，每天與 rebuildCov 重算）
 export interface Grids {
   N: number; COV: Record<string, Uint8Array>; POL: Uint8Array; POLBASE: Uint8Array; POLTREE: Uint8Array;
   LANDBASE: Uint8Array; LAND: Uint8Array; EDU: Uint8Array; NOISE: Uint8Array; commutePenalty: Float32Array; METRO_TOD467B: Uint8Array; ACCESS468: Uint8Array;
+  roadLoad: Float32Array; roadPass: Uint16Array; jam: Uint8Array;
 }
 // 52960／56931–56947：每個 COVR 場一張 Uint8Array(N*N)，其他場全 0
 export function allocGrids(N: number): Grids {
@@ -63,6 +66,7 @@ export function allocGrids(N: number): Grids {
     N, COV, POL: new Uint8Array(n), POLBASE: new Uint8Array(n), POLTREE: new Uint8Array(n),
     LANDBASE: new Uint8Array(n), LAND: new Uint8Array(n), EDU: new Uint8Array(n), NOISE: new Uint8Array(n),
     commutePenalty: new Float32Array(n), METRO_TOD467B: new Uint8Array(n), ACCESS468: new Uint8Array(n),
+    roadLoad: new Float32Array(n), roadPass: new Uint16Array(n), jam: new Uint8Array(n),
   };
 }
 
@@ -158,9 +162,15 @@ export function rebuildLandBase(w: World, g: Grids): void {
   for (let i = 0; i < N * N; i++) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0);
 }
 
-// 53098（tick 55002 每天呼叫）：LAND＝LANDBASE 扣壅堵。道路負載沒搬（全 0），實驗線這時走快路徑 LAND.set(LANDBASE)
+// 53098（tick 55002 每天呼叫）：LAND＝LANDBASE 扣壅堵（D027）。g.jam＝每格半徑 2 內過載道路格數（呼叫前要先 jamCounts 算好）；
+// 有過載道路的鄰域 LAND＝clamp(LANDBASE − min(50, jam×12), 0, 255)（landCongestAt 53096），其餘格＝LANDBASE（一次 memcpy）。道路負載全 0 時就是實驗線的快路徑
 export function recomputeLandDynamic(g: Grids): void {
   g.LAND.set(g.LANDBASE);
+  const jam = g.jam;
+  for (let i = 0; i < jam.length; i++) {
+    const n = jam[i];
+    if (n) { const v = g.LANDBASE[i] - Math.min(50, n * 12); g.LAND[i] = v <= 0 ? 0 : v >= 255 ? 255 : v; }
+  }
 }
 
 // 53135–53157：全量重建（讀檔、新圖、復原後）。清零 → 掃全圖蓋印 → LANDBASE → LAND → EDU。
@@ -188,8 +198,8 @@ export function rebuildCov(w: World, g: Grids, budget: SvcBudget, e: EduCtx, lan
     if (t.tree) stampPolTree(g, x, y, 1);
   }
   const f = fieldsOf(g);
-  if (landAt) { for (const j of landAt) g.LANDBASE[j] = landStaticAt(w, f, j % N, (j / N) | 0); recomputeLandDynamic(g); return; }   // 變數用 j：D010 突變守衛以 rebuildLandBase 那一行字面當錨點
+  if (landAt) { for (const j of landAt) g.LANDBASE[j] = landStaticAt(w, f, j % N, (j / N) | 0); jamCounts(w, g.roadLoad, g.jam); recomputeLandDynamic(g); return; }   // 變數用 j：D010 突變守衛以 rebuildLandBase 那一行字面當錨點
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) g.LANDBASE[idx(w, x, y)] = landStaticAt(w, f, x, y);   // Uint8Array 存值＝截尾
-  recomputeLandDynamic(g);
+  jamCounts(w, g.roadLoad, g.jam); recomputeLandDynamic(g);                          // 53155：以當下 roadLoad 疊一次壅堵初值
   for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) g.EDU[idx(w, x, y)] = eduStaticAt(g, x, y, e);
 }

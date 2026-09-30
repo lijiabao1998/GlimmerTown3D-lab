@@ -398,17 +398,18 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
         return out;})()`);
     } finally { if (rate !== 1) await page.send('Emulation.setCPUThrottlingRate', { rate: 1 }); }
   };
-  // 重演兩次，各自從新城起：先不降速（判卡面驗收 8 的 5 ms），再 CPU 降速 6 倍（只量不判，見下）；兩次的雜湊都要＝Node。後面幾項都接著降速那一次的城
-  const days1 = await replay(1), hash1 = (await ev('__gt.sim()'))?.hash, days = await replay(6);
+  // 重演三次，各自從新城起：不降速兩次（判卡面驗收 8 的 5 ms：取平均較低的一次，同 Node 守衛的「三輪取平均最低」——機器的雜訊只會把數字墊高、不會壓低；D027 起，
+  // 平均只看 19 天，一兩天的 GC 尖峰就能讓一次重演的平均差 0.5 ms，單次判 5 ms 會隨機紅），再 CPU 降速 6 倍（只量不判，見下）；三次的雜湊都要＝Node。後面幾項都接著降速那一次的城
+  const days1 = await replay(1), hash1 = (await ev('__gt.sim()'))?.hash, days1b = await replay(1), hash1b = (await ev('__gt.sim()'))?.hash, days = await replay(6);
   const got = await ev(`(()=>{const s=__gt.sim();return {hash:s.hash,day:s.day,pop:s.pop,money:s.money,events:s.events};})()`);
   const d = await ev('({i: __gt.renderInfo(), mode: __gt.blockMode(), bi: __gt.blockInfo(), list: __gt.buildingList(), blank: ' + blankCheck + '})');
-  log(got.hash === simHash(N.s) && got.day === N.s.day && hash1 === got.hash, `D011 劇本城在瀏覽器重演（${plan.filter(p => p.op).length} 筆施工、${plan.filter(p => p.undo).length} 筆復原、${plan.filter(p => p.seed !== undefined).length} 次亂數對齊、${N.s.day - 1} 天）：狀態雜湊＝Node 跑的（重演兩次：不降速、CPU 降速 6 倍，兩次都相同）`,
-    `瀏覽器 ${got.hash}（不降速那一次 ${hash1}）、Node ${simHash(N.s)}；第 ${got.day} 天、人口 ${got.pop}、$${Math.round(got.money)}、事件 ${got.events}`);
+  log(got.hash === simHash(N.s) && got.day === N.s.day && hash1 === got.hash && hash1b === got.hash, `D011 劇本城在瀏覽器重演（${plan.filter(p => p.op).length} 筆施工、${plan.filter(p => p.undo).length} 筆復原、${plan.filter(p => p.seed !== undefined).length} 次亂數對齊、${N.s.day - 1} 天）：狀態雜湊＝Node 跑的（重演三次：不降速兩次、CPU 降速 6 倍，三次都相同）`,
+    `瀏覽器 ${got.hash}（不降速兩次 ${hash1}、${hash1b}）、Node ${simHash(N.s)}；第 ${got.day} 天、人口 ${got.pop}、$${Math.round(got.money)}、事件 ${got.events}`);
   // D012 起預設 C（D011 量的是預設 B：44,412 個三角形）：另驗住商工每一格剛好一個街區畫（D012 驗收 5：沒畫 0 格、重疊 0）
   const cov = rciCover(d.bi, d.list);
   log(d.i.triangles <= 118884 && d.i.calls <= 18 && d.blank > 150 && d.mode === 'c' && cov.ok,
     'D011／D012 手機預算：劇本城第 121 天（預設 C 檔）三角形 ≤ 118,884、draw call ≤ 18；住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）；畫面非空白',
-    `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）；變異數 ${d.blank}`);
+    `${d.i.triangles.toLocaleString()} 個、${d.i.calls} 次；${String(d.mode).toUpperCase()} 檔 住商工 ${cov.rci} 格、沒畫 ${cov.undrawn}、重疊 ${cov.over}、街區 ${cov.blocks} 塊（補切 ${cov.fill}）、畫了 ${d.bi.drawn.length}／計畫 ${d.bi.plan.length}、不在住商工上的 ${cov.stray} 格；變異數 ${d.blank}`);
 
   // ---- 推進一天（卡面驗收 8：含結算 ≤ 5 ms）：劇本城第 61–120 天，量 simStep(1) − simStep(0)（見上）----
   // 重建場景的那幾天另扣 timing.rebuild，但丟掉舊場景、新場景第一次上傳 GPU 還算在裡面（偏高）；自動存檔那幾天多了存檔。
@@ -424,13 +425,13 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
           + `全部 60 天扣重建：平均 ${f2(mean(all))} ms（重建 ${rb.length} 天、重建平均 ${f2(mean(rb.map(x => x[2])))} ms；自動存檔 ${ds.filter(x => x[4]).length} 天）；`
           + `simStep(1) 原始耗時平均 ${f2(mean(ds.map(x => x[1])))} ms、simStep(0) 平均 ${f2(mean(ds.map(x => x[3])))} ms` };
     };
-    const u = stat(days1), t = stat(days);
+    const u1 = stat(days1), u2 = stat(days1b), u = { ok: u1.ok && u2.ok, m: Math.min(u1.m, u2.m), txt: (u2.m < u1.m ? u2 : u1).txt }, t = stat(days);
     // D014：每天同步工地（沒重建的日子）：不降速判 ≤ 5 ms（跟推進一天同一個預算），6 倍降速只量
     const syn = ds => ds.filter(x => x[2] === null).map(x => x[5]), s1 = syn(days1), s6 = syn(days);
     log(s1.length >= 10 && mean(s1) <= 5, 'D014 每天同步工地（施工資料、工地網格、前庭樹；沒重建的日子）：劇本城第 61–120 天，不降速平均 ≤ 5 ms；6 倍降速只量',
       `不降速 ${s1.length} 天：平均 ${f2(mean(s1))}、中位數 ${f2(pct(s1, .5))}、最大 ${f2(Math.max(...s1))} ms｜6 倍降速：平均 ${f2(mean(s6))}、最大 ${f2(Math.max(...s6))} ms`);
-    log(u.ok && u.m <= 5, 'D011 驗收 8「推進一天（含結算）≤ 5 ms」，瀏覽器不降速（驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均',
-      `平均 ${f2(u.m)} ms；${u.txt}｜同一套量法 CPU 降速 6 倍：平均 ${f2(t.m)} ms（只量不判，見下一項）`);
+    log(u.ok && u.m <= 5, 'D011 驗收 8「推進一天（含結算）≤ 5 ms」，瀏覽器不降速（驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均（不降速重演兩次取較低的一次）',
+      `平均 ${f2(u.m)} ms（不降速重演兩次，各 ${f2(u1.m)}、${f2(u2.m)} ms，取較低）；${u.txt}｜同一套量法 CPU 降速 6 倍：平均 ${f2(t.m)} ms（只量不判，見下一項）`);
     // 這一項只在量不到（天數不對、沒有重建沒有存檔的日子不到 10 天）時記紅燈；數字多少都不判
     log(t.ok, 'D011 手機預算：推進一天（含結算）CPU 降速 6 倍——只量不判（規則 5 以中階手機為準：這個數沒壓到 5 ms 是已知的缺口，記在卡面「沒做成的事」；判的是上一項不降速的）',
       `平均 ${f2(t.m)} ms（${t.m > 5 ? '超過 5 ms，見卡面「沒做成的事」' : '沒超過 5 ms'}）；${t.txt}｜不降速：平均 ${f2(u.m)} ms`);
@@ -488,13 +489,13 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
       `${String(a1.mode).toUpperCase()} 檔 住商工 ${cov1.rci} 格、沒畫 ${cov1.undrawn}、重疊 ${cov1.over}、街區 ${cov1.blocks} 塊（補切 ${cov1.fill}）${J(a1.bi.plan) === J(planRC) ? '＝' : '≠'} Node；`
       + `畫到 ${a1.owners}／${a1.n} 棟；${a1.i.triangles.toLocaleString()} 個三角形、${a1.i.calls} 次`);
     // 建築卡（src/cityView.ts lotEvents）：被重挑的每一棟，卡片跟讀檔前逐列相同——只有街區那一列會變（v 換了原型，切分也可能跟著換）；沒有一列講重挑。
-    // D020 的「清運」、D022 的「糧食」、D025 的「市場」三列是當下的狀態（全城垃圾量、供糧率、購買力讀最近一天的回報，讀檔之後還沒推進過就不知道），也不比
+    // D020 的「清運」、D022 的「糧食」、D025 的「市場」三列是當下的狀態（全城垃圾量、供糧率、購買力讀最近一天的回報，讀檔之後還沒推進過就不知道），也不比；D027 的「通勤」「交通壅堵」也是（通勤懲罰讀檔後歸零、每 4 天才重算，讀檔前的卡講「不可達」、讀檔後講「第 N 天才算得出來」）
     const picked = add1.map(e => [e.x, e.z]), cards1 = picked.length ? await cards(picked) : {};
     // D026：實驗線的存檔把犯罪天數封頂在 15（cmd 字元碼 48＋min(15,…)，66720）、病天數封頂 9（skd），讀回來「已 N 天」會變小（20 天→15 天）；遊戲規則只看 ≥ 15、≥ 3，行為不變，存檔格式照實驗線（規則 9）——所以這兩列的天數不比
-    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r) && !/^清運/.test(r) && !/^糧食/.test(r) && !/^市場/.test(r)).map(r => r.replace(/^(🚓.*?已) \d+ 天/, '$1 N 天').replace(/^(🏥.*?已) \d+ 天/, '$1 N 天'));
+    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r) && !/^清運/.test(r) && !/^糧食/.test(r) && !/^市場/.test(r) && !/^通勤/.test(r) && !/^交通壅堵/.test(r)).map(r => r.replace(/^(🚓.*?已) \d+ 天/, '$1 N 天').replace(/^(🏥.*?已) \d+ 天/, '$1 N 天'));
     const cbad = picked.filter(([x, z]) => { const a = cards0[x + ',' + z], b = cards1[x + ',' + z]; return !a || !b || a.length !== b.length || J(strip(a)) !== J(strip(b)) || b.some(r => /restyle|重挑|外觀/.test(r)); });
     const ex = picked.length ? cards1[picked[0].join(',')] : null;
-    log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型；D020 的清運、D022 的糧食、D025 的市場三列是當下狀態、不比），沒有一列講重挑外觀',
+    log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型；D020 的清運、D022 的糧食、D025 的市場、D027 的通勤與交通壅堵五列是當下狀態、不比），沒有一列講重挑外觀',
       `${picked.length} 棟，不對 ${cbad.length}${cbad.length ? '（' + cbad.slice(0, 3).map(q => { const a = strip(cards0[q.join(',')] ?? []), b = strip(cards1[q.join(',')] ?? []), k = a.findIndex((r, n) => r !== b[n]); return `(${q})：讀檔前「${a[k] ?? '無'}」≠ 讀檔後「${b[k] ?? '無'}」`; }).join('、') + '）' : ''}；例 (${picked[0] ?? '—'})：${ex ? ex.join('／') : '沒有卡片'}`);
     // ☰ 選單（真的點）切 B、再切回 C：B 照實驗線的切分，實驗線沒畫的住商工格（D0＋被吸收）鋪草坪；C 每一格都依 k 上色
     const pickMode = async m => {

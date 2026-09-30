@@ -12,6 +12,7 @@ import { gunzipSync } from 'node:zlib';
 import { stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import * as fields from '../src/sim/rules/fields.ts';
+import { jamCounts } from '../src/sim/rules/commute.ts';
 import * as labHelpers from '../src/sim/rules/lab.ts';
 import { landStaticAt } from '../src/sim/rules/land.ts';
 import { POL_LV3_MAX } from '../src/sim/rules/growth.ts';
@@ -97,7 +98,7 @@ const EXPORTS = ['COVR', 'SVC_BUDGET_CAT', 'SVC_BUDGET_DEFAULT', 'covFieldOfK', 
 function mutantModule(source) {
   let js = stripTypeScriptTypes(source);
   js = js.replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
-  const ctx = vm.createContext({ ...labHelpers, landStaticAt });
+  const ctx = vm.createContext({ ...labHelpers, landStaticAt, jamCounts });   // D027：fields.ts 從 commute.ts import jamCounts（rebuildCov 尾端補壅堵計數）
   vm.runInContext(`${js}\n;globalThis.__m = { ${EXPORTS.join(', ')} };`, ctx, { filename: 'mutant:fields.ts' });
   return ctx.__m;
 }

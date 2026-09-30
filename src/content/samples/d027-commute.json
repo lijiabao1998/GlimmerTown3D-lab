@@ -1,0 +1,266 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-commute.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "decl",
+   "name": "ROAD_CAP",
+   "anchors": {
+    "start": "const ROAD_CAP="
+   },
+   "line": 37431,
+   "endLine": 37431,
+   "sha": "7c48ba155f5e2a9fcd0fbafc2427fc61b50c42602c2743eda8bb3ce5cf7d03a2"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_PERIOD",
+   "anchors": {
+    "start": "const COMMUTE_PERIOD="
+   },
+   "line": 37435,
+   "endLine": 37435,
+   "sha": "44398f7939cf20802717919f86d677e59fa50829a0c0f071bdab541b193d2830"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_CELL",
+   "anchors": {
+    "start": "const COMMUTE_CELL="
+   },
+   "line": 37436,
+   "endLine": 37436,
+   "sha": "6a6b701659d930da06584efb0f0aba9b86b42bdf3933b0da04166ce8cb3f11fe"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_FAR",
+   "anchors": {
+    "start": "const COMMUTE_FAR="
+   },
+   "line": 37437,
+   "endLine": 37437,
+   "sha": "03841cea522ac8eca2a849ff0c72cb234de3d39ad427b444d7c4f2e3f9b1d4fc"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_PEN_STEP",
+   "anchors": {
+    "start": "const COMMUTE_PEN_STEP="
+   },
+   "line": 37438,
+   "endLine": 37438,
+   "sha": "f324facc75ab50a3777cc6a5513ad883e46e1621703ef61c3b1d4d3ddf905046"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_PEN_MAX",
+   "anchors": {
+    "start": "const COMMUTE_PEN_MAX="
+   },
+   "line": 37439,
+   "endLine": 37439,
+   "sha": "445f2252511d2ff43bd80de8d5f3575e2040d28e03c94cb687625039692df70c"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_PEN_UNREACH",
+   "anchors": {
+    "start": "const COMMUTE_PEN_UNREACH="
+   },
+   "line": 37440,
+   "endLine": 37440,
+   "sha": "aa3873b7d316765d975a9f04ef84464f09da72371930469fbce6c284e401a4a4"
+  },
+  {
+   "kind": "decl",
+   "name": "COMMUTE_TRIP_W",
+   "anchors": {
+    "start": "const COMMUTE_TRIP_W="
+   },
+   "line": 37441,
+   "endLine": 37441,
+   "sha": "7942d4324f2a1513ee407846074d7f2920373a5a39c6e0ed2419180e32592d19"
+  },
+  {
+   "kind": "decl",
+   "name": "DIRV",
+   "anchors": {
+    "start": "const DIRV="
+   },
+   "line": 56955,
+   "endLine": 56955,
+   "sha": "3d8c5f7f04ab9b3abd7252b52f6dd167a4ed79bf8c5dab5ab3651d877dde84aa"
+  },
+  {
+   "kind": "fn",
+   "name": "logisticsEfficiency481",
+   "anchors": {
+    "start": "function logisticsEfficiency481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38269,
+   "endLine": 38269,
+   "sha": "b932ad683c1363265f996e4b7235a72cc9ab5b2f862c775d00f2a1adc3a26edd"
+  },
+  {
+   "kind": "fn",
+   "name": "roadCap475",
+   "anchors": {
+    "start": "function roadCap475(",
+    "closure": "balanced-brace"
+   },
+   "line": 50948,
+   "endLine": 50948,
+   "sha": "6fc0701357032212202669a51e1c52e5c75b9f5c21a2c083164c2f72ee738bc0"
+  },
+  {
+   "kind": "fn",
+   "name": "congestNear",
+   "anchors": {
+    "start": "function congestNear(",
+    "closure": "balanced-brace"
+   },
+   "line": 52946,
+   "endLine": 52954,
+   "sha": "98f68c9f7a266e74639a1131840549c949eee6094a229100c7d796440d804d5a"
+  },
+  {
+   "kind": "fn",
+   "name": "landCongestAt",
+   "anchors": {
+    "start": "function landCongestAt(",
+    "closure": "balanced-brace"
+   },
+   "line": 53096,
+   "endLine": 53096,
+   "sha": "df3a3b3b5fb1153b4495338c2f7803b9f31c2bb7bef2b172f5c0d89716633549"
+  },
+  {
+   "kind": "fn",
+   "name": "recomputeLandDynamic",
+   "anchors": {
+    "start": "function recomputeLandDynamic(",
+    "closure": "balanced-brace"
+   },
+   "line": 53098,
+   "endLine": 53120,
+   "sha": "40aea3f5edf1564d019348ba9879b9eb44eddad98ec31b710ea09e40305deacc"
+  },
+  {
+   "kind": "fn",
+   "name": "computeCommuteLegacyT141",
+   "anchors": {
+    "start": "function computeCommuteLegacyT141(",
+    "closure": "balanced-brace"
+   },
+   "line": 57733,
+   "endLine": 57791,
+   "sha": "7c14450208b65b0e04ddc8850a171d9e010c086bdb112b04a07cc4d84e63ea98"
+  },
+  {
+   "kind": "fn",
+   "name": "computeCommute",
+   "anchors": {
+    "start": "function computeCommute(",
+    "closure": "balanced-brace"
+   },
+   "line": 64255,
+   "endLine": 64255,
+   "sha": "6707f879f0c4ea08cdd784bc34b099c24aa4979ea5db5a80fc2c709e509b1a8e"
+  },
+  {
+   "kind": "span",
+   "name": "tick 通勤與道路負載",
+   "anchors": {
+    "start": "if(day%COMMUTE_PERIOD===0)computeCommute();",
+    "end": "roadLoad[i]=roadLoad[i]*.85+roadPass[i]*.15;roadPass[i]=0;}"
+   },
+   "line": 54991,
+   "endLine": 54995,
+   "sha": "9b3cbf817eda661716a3170f90e148d736088594bc9d8b097a37046937a4d016"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福 jam",
+   "anchors": {
+    "start": "const jam=congestNear(x,y,2);",
+    "end": "const jam=congestNear(x,y,2);"
+   },
+   "line": 55175,
+   "endLine": 55175,
+   "sha": "21f6fc962124249daed58a7605af23a79c5d2cfac19d16f5153bc6c72438e909"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福 交通壅堵與通勤",
+   "anchors": {
+    "start": "{name:'交通壅堵',val:-Math.min(.15,jam*.03)}",
+    "end": "{name:'通勤',val:-(commutePenalty[ci]||0)},"
+   },
+   "line": 55221,
+   "endLine": 55222,
+   "sha": "ebd6dae09fd2e41b1d85e1ae6508c96735a984ccb23d8ddb54678711aa057a5d"
+  },
+  {
+   "kind": "span",
+   "name": "財富判斷 通勤項",
+   "anchors": {
+    "start": "const commuteTerm=-(commutePenalty[i]||0)*3;",
+    "end": "const commuteTerm=-(commutePenalty[i]||0)*3;"
+   },
+   "line": 53209,
+   "endLine": 53209,
+   "sha": "b92480c8b56e4f9a826c18342bc334411246ddae80a2f79b582ea3075fd27c48"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福 happyParts",
+   "anchors": {
+    "start": "const happyParts=[ // T111",
+    "end": "{name:'住房負擔',val:-housingHappinessPenalty488(ci,b)}"
+   },
+   "line": 55177,
+   "endLine": 55234,
+   "sha": "1dd829b2db2a63b1e7a5191473b9251f9970e0e4583f7914a821456b3470c929"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "ROAD_CAP": "const ROAD_CAP=[1,2,4,8,16];     // T129：道路壅堵容量（依 rc 1-5 索引，同 ROAD_SPEED 慣例；小巷最低、快速路最高。",
+  "COMMUTE_PERIOD": "const COMMUTE_PERIOD=4;          // T141：通勤叢集快取重算週期（天）——每 N 天重跑一次多源 BFS，其餘天數複用快取路徑，避免每 tick 全城 BFS",
+  "COMMUTE_CELL": "const COMMUTE_CELL=6;            // T141：叢集分塊大小（格）——塊內首個住宅格為代表，僅代表格路徑納入 commutePass 累加，控制大城逐路徑成本",
+  "COMMUTE_FAR": "const COMMUTE_FAR=20;            // T141：路距門檻（格），超過視為「過長通勤」，懲罰隨超額距離線性疊加",
+  "COMMUTE_PEN_STEP": "const COMMUTE_PEN_STEP=.012;     // T141：每超額 1 格疊加的通勤懲罰係數",
+  "COMMUTE_PEN_MAX": "const COMMUTE_PEN_MAX=.18;       // T141：「過長」通勤懲罰上限（未達不可達門檻前）",
+  "COMMUTE_PEN_UNREACH": "const COMMUTE_PEN_UNREACH=.30;   // T141：不可達（孤島，無路網連到任何就業區）固定懲罰，明顯重於「過長」封頂值（滿足「不可達最重」驗收）",
+  "COMMUTE_TRIP_W": "const COMMUTE_TRIP_W=1;          // T141：每叢集代表每天沿快取路徑貢獻的通勤 trip 權重（累加進 roadPass/commutePass，同 T129 尺度）",
+  "DIRV": "const DIRV=[[0,-1],[1,0],[0,1],[-1,0]];",
+  "logisticsEfficiency481": "function logisticsEfficiency481(roadList,freightN,warehouseN,portN,railN,fuelMul){let sum=0,n=0,over=0;for(const i of roadList){const t=tiles[i];if(!t?.road)continue;const cap=roadCap475(t)||1,r=(roadLoad[i]||0)/cap;sum+=Math.min(2,r);n++;if(r>1)over++;}const avg=n?sum/n:0,overShare=n?over/n:0,bonus=Math.min(.26,freightN*.035+warehouseN*.022+portN*.025+railN*.012),fuelBonus=Math.max(0,(fuelMul||1)-1)*.30,pen=Math.max(0,avg-.65)*.35+overShare*.22,eff=clamp(.78+bonus+fuelBonus-pen,.45,1.12);return{efficiency:+eff.toFixed(4),avgRoadLoad:+avg.toFixed(4),overloadedShare:+overShare.toFixed(4)};}",
+  "roadCap475": "function roadCap475(t){if(!t||!t.road)return 0;const base=ROAD_CAP[Math.max(0,Math.min(4,(t.rc||2)-1))]||1,m=(t.fly475?1.28:1)*(t.ix475?1.55:1);return Math.max(1,Math.round(base*m*100)/100);}",
+  "congestNear": "function congestNear(x,y,r){\n  let n=0;\n  for(let dy=-r;dy<=r;dy++){const ny=y+dy;if(ny<0||ny>=N)continue;\n    for(let dx=-r;dx<=r;dx++){const nx=x+dx;if(nx<0||nx>=N)continue;\n      const j=idx(nx,ny),tt=tiles[j];\n      if(tt.road&&roadLoad[j]>roadCap475(tt))n++;\n    }}\n  return n;\n}",
+  "landCongestAt": "function landCongestAt(x,y){return Math.min(50,congestNear(x,y,2)*12);}",
+  "recomputeLandDynamic": "function recomputeLandDynamic(){\n  /* T315 快路徑：LAND=clamp(LANDBASE−壅堵扣分)。原本每格都跑 landCongestAt（congestNear r=2＝25 格鄰域），\n     432² 全圖＝470 萬次讀取／每 tick。但「過載道路」通常極少甚至沒有（空車城恆 0），此時壅堵扣分處處為 0，\n     LAND 就等於 LANDBASE（LANDBASE 已 clamp 0-255）＝一次 TypedArray memcpy 即完全正確。\n     有過載時也只需重算「過載格半徑2鄰域」（congestNear 的定義域），其餘維持 memcpy 結果。逐位元等價、非近似。 */\n  const jam=[];\n  for(let i=0;i<N*N;i++){\n    if(roadLoad[i]===0)continue;                       // 多數格恆 0，先廉價跳過\n    const t=tiles[i];\n    if(t.road&&roadLoad[i]>roadCap475(t))jam.push(i);\n  }\n  LAND.set(LANDBASE);                                  // 基線＝無壅堵情形（一次 memcpy）\n  if(!jam.length)return;\n  for(const ji of jam){                                // 只修正受壅堵影響的鄰域\n    const jx=ji%N,jy=(ji/N)|0;\n    for(let dy=-2;dy<=2;dy++){const y=jy+dy;if(y<0||y>=N)continue;\n      for(let dx=-2;dx<=2;dx++){const x=jx+dx;if(x<0||x>=N)continue;\n        const i=idx(x,y);\n        const v=LANDBASE[i]-landCongestAt(x,y);\n        LAND[i]=v>0?(v<255?v:255):0;\n      }}\n  }\n}",
+  "computeCommuteLegacyT141": "function computeCommuteLegacyT141(){\n  commutePenalty.fill(0);\n  commuteUnreach.fill(0);\n  commuteClusters.length=0;\n  const dsrc=[];\n  for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(b&&!b.ref&&(b.k===2||b.k===3))dsrc.push(i);}\n  if(!dsrc.length)return; // 無就業區：全部維持零（不變量）\n  const dist=new Uint16Array(N*N).fill(9999);\n  const prev=new Int32Array(N*N).fill(-1);\n  const q=[];\n  for(const si of dsrc){\n    const sx0=si%N,sy0=(si/N)|0;\n    for(const[dx,dy]of DIRV){\n      const nx=sx0+dx,ny=sy0+dy;\n      if(inMap(nx,ny)){const j=idx(nx,ny);if(T(j).road&&dist[j]>0){dist[j]=0;q.push(j);}}\n    }\n  }\n  let head=0;\n  while(head<q.length){\n    const cur=q[head++],d=dist[cur],cx=cur%N,cy=(cur/N)|0;\n    for(const[dx,dy]of DIRV){\n      const nx=cx+dx,ny=cy+dy;\n      if(!inMap(nx,ny))continue;\n      const j=idx(nx,ny);\n      if(T(j).road&&dist[j]>d+1){dist[j]=d+1;prev[j]=cur;q.push(j);}\n    }\n  }\n  const blkPerRow=Math.ceil(N/COMMUTE_CELL);\n  const blkSeen=new Uint8Array(blkPerRow*blkPerRow);\n  for(let y=0;y<N;y++)for(let x=0;x<N;x++){\n    const i=idx(x,y),b=tiles[i].bld;\n    if(!b||b.ref||![1,127,33,105].includes(b.k))continue;\n    let bd=9999,broad=-1;\n    for(const[dx,dy]of DIRV){\n      const nx=x+dx,ny=y+dy;\n      if(!inMap(nx,ny))continue;\n      const j=idx(nx,ny);\n      if(T(j).road&&dist[j]<bd){bd=dist[j];broad=j;}\n    }\n    if(broad<0||bd>=9999){commuteUnreach[i]=1;commutePenalty[i]=COMMUTE_PEN_UNREACH;}\n    else if(bd>COMMUTE_FAR){commutePenalty[i]=Math.min(COMMUTE_PEN_MAX,(bd-COMMUTE_FAR)*COMMUTE_PEN_STEP);}\n    const blk=((x/COMMUTE_CELL)|0)*blkPerRow+((y/COMMUTE_CELL)|0); // 叢集鍵：粗網格分塊，塊內首個住宅格為代表\n    if(blkSeen[blk])continue;\n    blkSeen[blk]=1;\n    if(broad<0||bd>=9999)continue; // 代表格本身不可達，該叢集無路徑可貢獻 load（不進 commuteClusters）\n    const path=[];\n    let c=broad,steps=0;\n    while(c!==-1&&steps<600){path.push(c);c=prev[c];steps++;}\n    commuteClusters.push({path});\n  }\n  // T468：真正存在的多模式可達性降低長距離道路通勤懲罰；低可達性不白送幸福。\n  for(let i=0;i<N*N;i++){\n    const b=tiles[i].bld;if(!b||b.ref||![1,127,33,105].includes(b.k))continue;\n    const a=ACCESS468[i]||0;if(a<=0)continue;\n    const mul=clamp(1-a/220,.35,.88);\n    if(commuteUnreach[i]&&a>=80){commuteUnreach[i]=0;commutePenalty[i]=Math.min(.12,COMMUTE_PEN_UNREACH*mul);}\n    else commutePenalty[i]*=mul;\n  }\n}",
+  "computeCommute": "function computeCommute(){computeCommuteLegacyT141();if(window.__noMobility491||!mobility491.ready)return;for(const i of tickBld){const b=tiles[i]?.bld;if(!b||b.ref||![1,127,33,105].includes(b.k))continue;const a=(OPPORTUNITY_ACCESS491.job[i]||0)/100,p=clamp((1-a)*.19,0,.19);commutePenalty[i]=p;commuteUnreach[i]=a<.08?1:0;}}",
+  "tick": "  if(day%COMMUTE_PERIOD===0)computeCommute();\n  for(const cl of commuteClusters)for(const j of cl.path){roadPass[j]+=COMMUTE_TRIP_W;commutePass[j]+=COMMUTE_TRIP_W;}\n  // T129：道路壅堵場——用當日累計 roadPass 做衰減式移動平均，套公式後歸零累加器供下一天統計\n  // （純陣列運算，不消耗 R()；空車城 roadPass 恆 0 時 load 恆 0，speed/happyParts 與改動前逐位元一致）\n  for(let i=0;i<N*N;i++){roadLoad[i]=roadLoad[i]*.85+roadPass[i]*.15;roadPass[i]=0;}",
+  "jam": "      const jam=congestNear(x,y,2);                       // T129：半徑2內過載道路格數（load 全 0 空車城恆為 0）",
+  "happyTerms": "        {name:'交通壅堵',val:-Math.min(.15,jam*.03)}, // T129：鄰近過載道路每格 -0.03、上限 -0.15；load 全 0（空車城）時 jam 恆 0，此項恆為 0\n        {name:'通勤',val:-(commutePenalty[ci]||0)},",
+  "commuteTerm": "  const commuteTerm=-(commutePenalty[i]||0)*3; // T141：通勤附加項（不可達/路徑過長拉低財富評分，叢集快取讀取），無就業區/未觸發時精確為0",
+  "happyParts": "      const happyParts=[ // T111：各加減項先收進陣列再 reduce 求和——與原公式逐項同序、每項獨立算式原樣搬移，位元一致\n        {name:'基礎',val:.62},\n        {name:'城市活動',val:cityEvent?CITY_EVENTS[cityEvent.i].happy:0}, // T299：城市事件臨時幸福加成（無事件恆為 0，精確恆等）\n        {name:'道路等級',val:roadHappy},\n        {name:'公園',val:parks?.16:0},\n        {name:'多座公園',val:parks>1?.06:0},\n        {name:'遊樂場',val:COV.play[ci]>0?.035:0}, // T364c：家庭遊戲設施比一般公園再多一點日常幸福\n        {name:'植物園',val:COV.botanical[ci]>0?.10:0}, // T139：植物園大範圍幸福加成（COV 家族，未放置時恆為 0）\n        {name:'路旁裝飾',val:0.03*(COV.rdec[ci]>0?1:0)},\n        {name:'公車站',val:0.04*(COV.bus[ci]>0?1:0)},\n        {name:'體育場',val:(COV.stadium[ci]>0||(COV.stadium2&&COV.stadium2[ci]>0))?(COV.stadium2&&COV.stadium2[ci]>0?.11:.08):0}, // T241：體育園區大範圍且加成較高\n        {name:'博物館',val:COV.museum[ci]>0?.05:0}, // T138：博物館/劇院/電影院＝觀光＋幸福半徑（COV 家族，未放置時恆為 0）\n        {name:'信仰',val:COV.faith[ci]>0?.06:0},\n        {name:'幼兒園',val:(COV.kindergarten&&COV.kindergarten[ci]>0)?.03:0}, // T330\n        {name:'樂齡中心',val:(COV.senior&&COV.senior[ci]>0)?.03:0}, // T330\n        {name:'農貿市場',val:(COV.market&&COV.market[ci]>0)?.02:0}, // T330\n        {name:'遛狗公園',val:(COV.dogpark&&COV.dogpark[ci]>0)?.025:0}, // T336\n        {name:'溜冰場',val:(COV.icerink&&COV.icerink[ci]>0)?(inWinter()?.05:.02):0}, // T336：冬季加倍＝反制冬季低落\n        {name:'滑板公園',val:(COV.skate&&COV.skate[ci]>0)?.025:0}, // T336\n        {name:'游泳池',val:(COV.pool&&COV.pool[ci]>0)?(season()===1?.05:.02):0}, // T340：夏季加倍（與溜冰場成對）\n        {name:'婚禮教堂',val:(COV.chapel&&COV.chapel[ci]>0)?.02:0}, // T340\n        {name:'寵物醫院',val:(COV.vet&&COV.vet[ci]>0)?.02:0}, // T340\n        {name:'社區菜園',val:(COV.cgarden&&COV.cgarden[ci]>0)?.015:0}, // T340\n        {name:'中央公園',val:(COV.cpark&&COV.cpark[ci]>0)?.05:0}, /* T342 */\n        {name:'都會大公園',val:(COV.gpark&&COV.gpark[ci]>0)?.07:0}, /* T465 */\n        {name:'文化藝術中心',val:(COV.artcamp&&COV.artcamp[ci]>0)?.08:0}, /* T466 */\n        {name:'中央行政園區',val:(COV.admincamp&&COV.admincamp[ci]>0)?.06:0}, /* T466 */\n        {name:'科技研究園區',val:(COV.researchcamp&&COV.researchcamp[ci]>0)?.03:0}, /* T466 */\n        {name:'市民中心',val:(COV.civicc&&COV.civicc[ci]>0)?.04:0}, /* T342 */\n        {name:'熟食供應',val:(cookedReady&&COV.kitchen&&COV.kitchen[ci]>0)?.03:0}, /* T346 */ // T296：信仰中心覆蓋→精神滿足幸福加成（未放置時恆為 0，精確恆等）\n        {name:'劇院',val:COV.theater[ci]>0?.05:0},\n        {name:'電影院',val:COV.cinema[ci]>0?.04:0},\n        {name:'圖書館',val:library?.04:0},\n        {name:'郵局',val:post?.03:0},\n        {name:'工業汙染鄰近',val:-ind*.09},\n        {name:'電廠鄰近',val:-pl*.18},\n        {name:'空氣污染',val:-POL[ci]*.006*WEALTH_PEN[we]},\n        {name:'噪音',val:-(NOISE[ci]||0)*.004*WEALTH_PEN[we]}, // T325：富人更敏感（沿用 WEALTH_PEN）\n        {name:'免費公交',val:(pol&&pol.freeTransit&&COV.bus[ci]>0)?.02:0}, // T327\n        {name:'公園夜間開放',val:(pol&&pol.parkNight&&parks)?.02:0}, // T327\n        {name:'微光之巔',val:rankIdx>=25?.02:0},\n        {name:'電視訊號',val:tvSignal?.015:0}, // T330（前一日計數） // T329：頂級里程碑真獎勵（純由已入檔的 rankIdx 衍生，零新狀態） // T110：空間污染係數；T124：財富分級懲罰係數（貧.5/中1/富2）\n        {name:'科技進步',val:tq('B1',.01,0)+tq('B4a',.02,0)+tq('B6',.015,0)+tq('B8',.02,0)+tq('C4b',.01,0)+tq('C7',.015,0)+tq('D6',.02,0)+tq('D8',.03,0)},\n        {name:'犯罪',val:-crime*.05*WEALTH_PEN[we]}, // T124：財富分級懲罰係數（貧.5/中1/富2）\n        {name:'交通壅堵',val:-Math.min(.15,jam*.03)}, // T129：鄰近過載道路每格 -0.03、上限 -0.15；load 全 0（空車城）時 jam 恆 0，此項恆為 0\n        {name:'通勤',val:-(commutePenalty[ci]||0)},\n        {name:'排水內澇',val:-drainPen454},\n        {name:'水壓／水質',val:waterLegacy449()?0:-waterHappinessPenalty472(ci)}, // T472：低壓、限水與 B/C/D 水質形成可解釋的小幅幸福成本；不做隨機疫情 // T454：無雨/rollback 精確為 0；綠地可透過降低 runoff 間接消除此項 // T141：住宅沿路網距最近就業區過長或不可達的通勤懲罰（叢集快取讀取，無就業區/無路網時恆為 0）\n        {name:'宵禁',val:pol&&pol.curfew?-.02:0}, // T122：宵禁開啟時全城住宅幸福固定 -2%\n        {name:'喪事未安撫',val:-(deathPenalty[idx(x,y)]?.1:0)},\n        {name:'生病',val:-(b.sick?.35:0)},\n        {name:'死亡',val:-(b.death?.55:0)},\n        {name:'高密度污水',val:(sewNeed442&&b.k===1&&b.lv>=3&&!SEW_OK442[ci])?-.04:0}, // T442：不做500人瞬間全城懲罰；僅既有Lv3未接管 -4%，Lv1/2繼續化糞池過渡\n        {name:'無電',val:-(b.pw?0:.3)},\n        {name:'天氣',val:-(weather===1?.02:weather===2?.05:0)},\n        {name:'冬季',val:-(inWinter()?.02:0)},\n        {name:'夜間城市',val:nightCity487.ready?nightCity487.happinessDelta:0}, // T487：前一日夜間安全/活力的低強度回饋，避免同 tick 自我迴圈\n        {name:'住房負擔',val:-housingHappinessPenalty488(ci,b)} // T488：住房成本相對支付能力形成有限、可解釋的幸福壓力"
+ }
+}

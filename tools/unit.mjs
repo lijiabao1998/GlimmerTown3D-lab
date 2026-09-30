@@ -534,6 +534,8 @@ await guard('./unit-d025.mjs', 'd025Guards');   // D025：經濟——共享貿�
 await guard('./unit-d025-live.mjs', 'd025LiveGuards');   // D025：經濟的實驗線頁面實跑（讀進來推進一天、連續推進）、接線突變、存檔（d025-lab.json，tools/d025-lab.mjs 錄）
 await guard('./unit-d026.mjs', 'd026Guards');   // D026：每日災禍——死亡前置、火災、犯罪、廢棄、疾病、死亡、三個按鈕逐項＝實驗線原文（d026-hazard.json，tools/lab-hazard.mjs 摘）、原碼突變
 await guard('./unit-d026-live.mjs', 'd026LiveGuards');   // D026：災禍的實驗線頁面實跑（自造城連推五天、D022–D025 的城、長出來的存檔、下一個亂數、地價）、起步城軌跡、接線突變、存檔與歷史（d026-lab.json，tools/d026-lab.mjs 錄）
+await guard('./unit-d027.mjs', 'd027Guards');   // D027：通勤與壅堵——通勤叢集、道路負載、動態地價、壅堵統計逐項＝實驗線原文（d027-commute.json，tools/lab-commute.mjs 摘）、原碼突變
+await guard('./unit-d027-live.mjs', 'd027LiveGuards');   // D027：通勤與壅堵的實驗線頁面實跑（自造城 17 座、D022–D025 的 120 座城兩批、起步城存檔 24 份、起步城 8 種子 × 120 天代入與不代入）、接線突變、存檔與決定性、地面貼圖的輸入（d027-lab.json，tools/d027-lab.mjs 錄）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
