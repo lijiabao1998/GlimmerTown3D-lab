@@ -20,7 +20,9 @@ const ONLY = (process.env.D016_SMOKE_ONLY ?? '').split(',').map(s => s.trim()).f
 const NEW = [['park', 4], ['fire', 6], ['policeBox', 52], ['hospital', 12], ['clinic', 13], ['school', 7], ['library', 14], ['post', 15], ['cemetery', 16]];
 // 不分順序的比法（同 tools/smoke-d015.mjs）
 const PICK = `d=>JSON.stringify({m:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),g:d.ground,i:d.inst,q:d.queries,c:d.counts})`;
-const SAME = `(()=>{const P=${PICK},a=__gt.sceneDigest(),b=__gt.freshDigest();return P(a)===P(b);})()`;
+// 回 []＝一樣；不一樣回不同的項（同 tools/smoke-d015.mjs 的 WHERE：網格、地面、樹、各個查詢）
+const WHERE = `(a,b)=>{const o=[];for(const k of Object.keys(b.meshes)){if(!a.meshes[k]||a.meshes[k].byOwner!==b.meshes[k].byOwner)o.push(k);}if(a.ground!==b.ground)o.push('ground');if(JSON.stringify(a.inst)!==JSON.stringify(b.inst))o.push('trees');for(const k of Object.keys(b.queries))if(a.queries[k]!==b.queries[k])o.push(k);return o;}`;
+const SAME = `(()=>{const P=${PICK},W=${WHERE},a=__gt.sceneDigest(),b=__gt.freshDigest();return P(a)===P(b)?[]:W(a,b);})()`;
 
 export async function d016Smoke(withBrowser, log) {
   const unknown = ONLY.filter(k => !SECTIONS.includes(k));
@@ -122,12 +124,17 @@ export async function d016Smoke(withBrowser, log) {
       NEW.map(([t], j) => `${t}(${spots[j]}) ${tris0[j]}`).join('、'));
     const siteOk = NEW.every(([t], j) => onSite[j] === (t !== 'park'));
     // 往後 9 天：每一天增量＝整張；9 天之後工地收掉、九棟還在
-    const sames = [same0];
-    for (let d = 1; d <= 9; d++) { await ev('__gt.simStep(1), 1'); sames.push(await ev(SAME)); }
+    // 只在「這一天真的重建了」才比（D015 的重建只換變動的部分：沒有長、沒有升級的日子不重建；近看小物的屋齡門檻只在重建時看，過了門檻要等下一次重建才出現——D014 的取捨。
+    // 沒重建的日子場景本來就沒動，拿它跟「現在的整張重建」比，比的是屋齡門檻有沒有剛好在那一天跨過，不是增量對不對；D026 起起步城多了起火、生病，每天長不長的節奏變了，才第一次遇到）
+    const sames = [same0], rbs = async () => (await ev('__gt.sim().rebuilds')) ?? 0;
+    let rb = await rbs();
+    for (let d = 1; d <= 9; d++) { await ev('__gt.simStep(1), 1'); const now = await rbs(); sames.push(now === rb ? null : await ev(SAME)); rb = now; }
     const con9 = await ev('__gt.con()'), left = ids.filter(id => con9.sites.some(s => s.id === id)), tris9 = await drawn();
     log(siteOk && !left.length && tris9.every(t => t > 0), 'D016 驗收 5：公園不施工、其他 8 種蓋下去就是工地（D014 的 9 天工期）；推 9 天之後工地都收掉、九棟都還在場景裡',
       `蓋下去當天在工地上的：${NEW.filter((_, j) => onSite[j]).map(([t]) => t).join('、')}；9 天後還在工地的 ${left.length} 棟`);
-    log(sames.every(Boolean), 'D016 驗收 5：蓋完那一次與往後 9 天每一次重建，增量重建的場景＝旁邊整張重建的（D015 的比法：照主人分組、查詢、地面、樹）', sames.map(v => v ? '＝' : '≠').join(''));
+    const cmp = sames.filter(v => v !== null);
+    log(cmp.length >= 3 && cmp.every(v => Array.isArray(v) && v.length === 0), 'D016 驗收 5：蓋完那一次與往後 9 天每一次重建，增量重建的場景＝旁邊整張重建的（D015 的比法：照主人分組、查詢、地面、樹）；至少比 3 次',
+      sames.map(v => v === null ? '·' : Array.isArray(v) && v.length === 0 ? '＝' : `≠（${Array.isArray(v) ? v.join('、') : v}）`).join('') + `（＝一樣、·這一天沒重建；比了 ${cmp.length} 次）`);
     log(after.triangles <= 118884 && after.calls === before.all.calls, 'D016 驗收 6：手機預算——蓋了九種之後全部三角形 ≤ 118,884、draw call 跟蓋之前一樣',
       `三角形 ${before.all.triangles.toLocaleString()} → ${after.triangles.toLocaleString()}、draw call ${before.all.calls} → ${after.calls}（蓋之前工地 ${before.con} 座）`);
   }, { W: 412, H: 860 });

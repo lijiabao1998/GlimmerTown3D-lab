@@ -1139,4 +1139,56 @@ if (set === 'd025-traj') {   // 只在明講要它時才跑（不進 all）：D0
   });
 }
 
+if (set === 'd026') {   // 只在明講要它時才跑（不進 all）：手機上的災禍——燃燒的工業（卡：燃燒中＋滅火鈕、頭上有寶石）、焦土（地面炭黑、卡講原因）、生病與死亡的住宅（寶石＋治療鈕）
+  const { smallCity } = await import('./smoke-d026.mjs'), { cities26 } = await import('./d026-cities.mjs'), { kindTableFrom } = await import('../src/content/kindTable.ts'), { decodeLabCode } = await import('../src/io/labcode.ts');
+  const newcity = fs.readFileSync(path.join(ROOT, 'src/content/samples/newcity.code.txt'), 'utf8'), KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')));
+  const small = smallCity(decodeLabCode(newcity.trim()).save.raw, k => KT.size(k)), h9 = cities26(newcity, KT).find(c => c.id === 'H9').code, h4 = cities26(newcity, KT).find(c => c.id === 'H4').code;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    // [碼, 推進幾天, 鏡頭 x, z, 縮放, 卡開在哪一格, 檔名]：小城（第 0 天）看燃燒的工業與寶石；H9 推一天看焦土；H4 推一天看病與死亡
+    for (const [code, days, vx, vz, zoom, tile, file] of [[small, 0, 13, 31, 5.2, [10, 29], 'd026_mob_fire'], [h9, 1, 50, 42, 3.4, [50, 40], 'd026_mob_ruin'], [h4, 1, 30, 46, 3.6, null, 'd026_mob_sick']]) {
+      await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()');
+      await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(code)})`);
+      await open('');
+      if (days) await page.evaluate(`(__gt.simStep(${days}), 1)`);
+      let t = tile;
+      if (!t) { const f = await page.evaluate(`(()=>{const o=__gt.conBuildings().filter(b=>!b.gone&&b.k===1).map(b=>[b.x,b.z,__gt.flags(b.x,b.z)]).filter(q=>q[2]&&(q[2].sick||q[2].death));return o.length?o.find(q=>q[2].sick)||o[0]:null;})()`); t = f ? [f[0], f[1]] : [30, 46]; }
+      await page.evaluate(`(__gt.view(${vx + .5}, ${vz + .5}, ${zoom}), __gt.setVisT(2.2), __gt.openTile(${t[0]}, ${t[1]}), 1)`);
+      await new Promise(res => setTimeout(res, 900)); await save(page, file);
+    }
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(3,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd026_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D026 手機 412×860：每日災禍</h1><p class="s">左：燃燒中的工業（第 2 天）——卡上有「🔥 燃燒中」與 [🧯 滅火 $30]，附近的建築頭上有寶石（橘＝火、黃＝犯罪、紅＝生病、灰＝死亡、褐＝廢棄）；中：H9 推進一天，燒毀的建築留下炭黑的焦土（地面貼圖，不佔 draw call），點焦土講原因；右：H4（住宅密集、只有幾座診所）推進一天，生病與死亡中的住宅。全部程式生成、沒有外部素材。</p>
+    <div class="g"><figure><figcaption>燃燒中的工業</figcaption><img src="d026_mob_fire.png"></figure><figure><figcaption>焦土</figcaption><img src="d026_mob_ruin.png"></figure><figure><figcaption>生病與死亡的住宅</figcaption><img src="d026_mob_sick.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd026_mobile.html', width: 1300, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d026_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1300, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D026-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D026-mobile.jpg');
+  });
+}
+
+if (set === 'd026-traj') {   // 只在明講要它時才跑（不進 all）：D026 之前的樣本取自 git（D025 收工 3ecba50），CI 只拉最新一個提交拿不到
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const data = d020Data(arg('base', '3ecba50'));
+  const svg = d020Svg(data, { title: 'D026 每日災禍接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D026 之前（D025 收工）', after: '本線 D026 之後',
+    beforeSrc: 'D026 之前＝git {base} 的 d010-3d.json', afterSrc: 'D026 之後＝現在的 src 現算', doc: 'docs/D026-hazards.md',
+    foot: '起火、燒毀、生病、死亡接上之後：工業棟數往實驗線靠（第 121 列 30.9→19.5，實驗線 22.1；全程平均差 3.4→1.9）、人口第 121 列差 0.9→0.0；就業第 121 列由高 8.8 變成低 7.0（實驗線 99.5，本線 92.5；全程平均差 7.1→4.3）。\n幸福沒有實質縮小（全程平均差 .072→.067，第 121 列 .071→.084，實驗線種子間 sd .022）——幸福還缺通勤與壅堵、夜間城市、政策等項，D027 起才搬。數字表見 {doc}。' });
+  fs.writeFileSync(path.join(out, 'd026_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd026_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d026_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
+    fs.writeFileSync(path.join(out, 'D026-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D026-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
 if (errors) process.exitCode = 1;

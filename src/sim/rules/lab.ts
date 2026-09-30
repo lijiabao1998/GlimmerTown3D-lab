@@ -10,6 +10,7 @@ export interface Bld {
   k: number; lv: number; v: number; age: number;
   pw?: boolean; wa?: boolean; h?: number; den?: number; we?: number;
   fire?: number | boolean; crime?: number | boolean; sick?: number | boolean; death?: number | boolean;
+  crimeDays?: number; sickDays?: number; deathAge?: number; abandoned?: number | boolean;   // D026：犯罪天數（55828）、病天數（55860）、死亡天數（55024）、廢棄（55830）
   ref?: unknown; sz?: number;
 }
 export interface Tile {

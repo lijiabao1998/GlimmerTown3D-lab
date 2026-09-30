@@ -19,12 +19,15 @@ export const GROUND = {
   tram: 0x2e2e2e,
   // D019 配水管：實驗線 localWater475 精靈（49616）的三色——外框 rgba(27,46,58,.68)、管身 #52bde0、中心亮點 #d7f7ff
   pipe: 0x52bde0, pipeEdge: 0x1b2e3a, pipeHi: 0xd7f7ff,
+  // D026 焦土：燒毀的建築留下的炭黑空地——炭黑一族、零星餘燼與灰、邊緣更暗（程式生成，沒有外部素材；實驗線畫的是焦土精靈，這裡只求一眼認得出來）
+  ruin: [0x3a322c, 0x352d28, 0x2f2823, 0x403730], ruinEmber: 0x9a4a24, ruinAsh: 0x5b544c, ruinEdge: 0x1f1a17,
 };
 
 export interface GroundCity {
   n: number; road: Uint8Array; rclass: Uint8Array; ter: Uint8Array; el: Uint8Array; zone: Uint8Array;
   rail: Uint8Array; dock: Uint8Array; tram: Uint8Array; occ: Int32Array; buildings: { k: number }[];
   wp?: Uint8Array;   // D019 配水管（沒有＝不畫）
+  ruin?: Uint8Array;   // D026 焦土（沒有＝不畫；建築、路、鐵路的格子不畫，那是不該同時出現的資料）
 }
 // D019：配水管的接頭（實驗線 recalcLocalWaterMask475 50925：上 1、右 2、下 4、左 8）。建築、路、鐵路、電車底下的不畫：實驗線先畫水管再畫路（60562→60563），被蓋住；回 −1＝這一格不畫水管
 const pipeMask = (c: GroundCity, x: number, z: number) => {
@@ -62,7 +65,7 @@ export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uin
     const i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
     const nb = (isRoad(x, z - 1) ? 1 : 0) | (isRoad(x, z + 1) ? 2 : 0) | (isRoad(x - 1, z) ? 4 : 0) | (isRoad(x + 1, z) ? 8 : 0);
     k1[i] = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
-      | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0);
+      | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0) | (c.ruin && c.ruin[i] && !b && !c.road[i] ? 1 << 27 : 0);
     k2[i] = plates ? plates[i] : -2;
     k3[i] = pipeMask(c, x, z);
   }
@@ -114,6 +117,7 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
       }
       else if (c.rail[i]) col = (u === 1 || u === S - 2) ? 0x3a3a3a : v % 2 ? 0x7a5a3c : 0x6a6258;
       else if (c.dock[i]) col = v % 2 ? 0x8a6a48 : 0x7a5c3e;
+      else if (c.ruin && c.ruin[i] && !b) { col = h < 0.05 ? GROUND.ruinEmber : h > 0.93 ? GROUND.ruinAsh : pick(GROUND.ruin, h); if (edge) col = mix(col, GROUND.ruinEdge, 0.4); }   // D026 焦土：蓋過分區、地坪的顏色
       else if (lots && lots[i]) {
         if (lots[i] === 5) col = (u === 0 || v === 0) ? GROUND.grassLine : pick(GROUND.grass, h);
         else { const L = GROUND.lot[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; }

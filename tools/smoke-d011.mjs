@@ -490,11 +490,12 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     // 建築卡（src/cityView.ts lotEvents）：被重挑的每一棟，卡片跟讀檔前逐列相同——只有街區那一列會變（v 換了原型，切分也可能跟著換）；沒有一列講重挑。
     // D020 的「清運」、D022 的「糧食」、D025 的「市場」三列是當下的狀態（全城垃圾量、供糧率、購買力讀最近一天的回報，讀檔之後還沒推進過就不知道），也不比
     const picked = add1.map(e => [e.x, e.z]), cards1 = picked.length ? await cards(picked) : {};
-    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r) && !/^清運/.test(r) && !/^糧食/.test(r) && !/^市場/.test(r));
+    // D026：實驗線的存檔把犯罪天數封頂在 15（cmd 字元碼 48＋min(15,…)，66720）、病天數封頂 9（skd），讀回來「已 N 天」會變小（20 天→15 天）；遊戲規則只看 ≥ 15、≥ 3，行為不變，存檔格式照實驗線（規則 9）——所以這兩列的天數不比
+    const strip = rows => rows.filter(r => !/^街區 \d+×\d+/.test(r) && !/^這一格沒畫/.test(r) && !/^清運/.test(r) && !/^糧食/.test(r) && !/^市場/.test(r)).map(r => r.replace(/^(🚓.*?已) \d+ 天/, '$1 N 天').replace(/^(🏥.*?已) \d+ 天/, '$1 N 天'));
     const cbad = picked.filter(([x, z]) => { const a = cards0[x + ',' + z], b = cards1[x + ',' + z]; return !a || !b || a.length !== b.length || J(strip(a)) !== J(strip(b)) || b.some(r => /restyle|重挑|外觀/.test(r)); });
     const ex = picked.length ? cards1[picked[0].join(',')] : null;
     log(picked.length > 0 && cbad.length === 0, 'D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型；D020 的清運、D022 的糧食、D025 的市場三列是當下狀態、不比），沒有一列講重挑外觀',
-      `${picked.length} 棟，不對 ${cbad.length}${cbad.length ? '（' + cbad.slice(0, 3).map(q => `(${q})`).join('、') + '）' : ''}；例 (${picked[0] ?? '—'})：${ex ? ex.join('／') : '沒有卡片'}`);
+      `${picked.length} 棟，不對 ${cbad.length}${cbad.length ? '（' + cbad.slice(0, 3).map(q => { const a = strip(cards0[q.join(',')] ?? []), b = strip(cards1[q.join(',')] ?? []), k = a.findIndex((r, n) => r !== b[n]); return `(${q})：讀檔前「${a[k] ?? '無'}」≠ 讀檔後「${b[k] ?? '無'}」`; }).join('、') + '）' : ''}；例 (${picked[0] ?? '—'})：${ex ? ex.join('／') : '沒有卡片'}`);
     // ☰ 選單（真的點）切 B、再切回 C：B 照實驗線的切分，實驗線沒畫的住商工格（D0＋被吸收）鋪草坪；C 每一格都依 k 上色
     const pickMode = async m => {
       if (!await tapBtn('#menuBtn') || !await waitFor(async () => !(await ev(`document.getElementById('menu').hidden`)), 2000)) return false;
