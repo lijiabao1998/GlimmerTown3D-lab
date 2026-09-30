@@ -270,7 +270,7 @@ async function guards(log) {
     }
     if (KILLS) console.error('擊殺次數（少→多，前 45）：\n' + KILLS.sort((a, b) => a[0] - b[0]).slice(0, 45).map(([n, name]) => `${String(n).padStart(6)}  ${name}`).join('\n'));
     const baseOk = !compare(makeLab(T), makeMine(await loadMod('src/sim/rules/hazard.ts', [])), true).diffs;
-    log(baseOk && !missed.length, `D026 驗收 6：注入錯誤要紅——實驗線原文 ${LAB_MUTANTS.length} 個、本線原碼 ${MINE_MUTANTS.length} 個（每一個機率與係數、每一個覆蓋判斷、亂數的抽法與順序、天數門檻、床位比較、焦土與污染源、地價髒框……）；沒改的先核過全等`,
+    log(baseOk && !missed.length, `D026 驗收 2（突變）：注入錯誤要紅——實驗線原文 ${LAB_MUTANTS.length} 個、本線原碼 ${MINE_MUTANTS.length} 個（每一個機率與係數、每一個覆蓋判斷、亂數的抽法與順序、天數門檻、床位比較、焦土與污染源、地價髒框……）；沒改的先核過全等`,
       missed.join('、') || (baseOk ? '全紅' : 'vm 載入的本線原碼跟 import 的不一樣'));
   }
 

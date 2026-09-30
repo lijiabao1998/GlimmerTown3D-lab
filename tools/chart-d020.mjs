@@ -58,7 +58,8 @@ const D020_TEXT = { title: 'D020 垃圾接上之後，起步城的整城軌跡�
   foot: '垃圾之外的第 2 類系統（經濟快照、通勤、壅堵、糧食、夜間城市、城市活動、火災、犯罪、廢棄、疾病、死亡）都還沒搬，商業、住宅棟數的差距主要在那裡（D010 卡「沒做成的事」1）。完整數字表見 {doc}。' };
 export function d020Svg(data, opt = {}) {
   const T = { ...D020_TEXT, ...opt }, SERIES = [['lab', '實驗線 d23c18d（fallback 設定）'], ['before', T.before], ['after', T.after]];
-  const W = 1600, PW = 496, PG = 24, X0 = 32, PT = 150, PH = 412, PLOT = { l: 52, r: 14, t: 46, b: 30, h: 250 }, H = PT + 2 * PH + 78;
+  const footLines = T.foot.replace('{doc}', T.doc).split('\n');   // D026 起 foot 可以用 \n 分成幾行（每多一行圖高多 16）
+  const W = 1600, PW = 496, PG = 24, X0 = 32, PT = 150, PH = 412, PLOT = { l: 52, r: 14, t: 46, b: 30, h: 250 }, H = PT + 2 * PH + 78 + 16 * (footLines.length - 1);
   let s = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="起步城 8 個種子 × 120 天：實驗線、${esc(T.before)}、${esc(T.after)}的整城軌跡" font-family='${FONT}'>
 <title>起步城 8 個種子 × 120 天：整城軌跡對照</title><rect width="${W}" height="${H}" fill="${C.surface}"/>
 <text x="${X0}" y="44" font-size="26" font-weight="600" fill="${C.ink1}">${esc(T.title)}</text>
@@ -97,8 +98,8 @@ export function d020Svg(data, opt = {}) {
     s += `<text x="${px}" y="${cy + 24}" font-size="13" fill="${C.muted}">跟實驗線的平均絕對差（第 1–120 天）：之前 <tspan fill="${C.ink2}">${fmt(g.before.all, p.dec + 1)}</tspan> → 之後 <tspan fill="${C.ink1}" font-weight="600">${fmt(g.after.all, p.dec + 1)}</tspan></text>
 <text x="${px}" y="${cy + 44}" font-size="13" fill="${C.muted}">實驗線 8 個種子之間的標準差（同期平均）：${fmt(data.labSd[p.f], p.dec + 1)}</text>`;
   });
-  s += `<text x="${X0}" y="${H - 30}" font-size="12" fill="${C.muted}">來源：tools/chart-d020.mjs。實驗線＝d010-lab.json（tools/lab-compare.mjs 在實驗線 d23c18d 的頁面上跑，回退設定）；${esc(T.beforeSrc.replace('{base}', data.base))}；${esc(T.afterSrc)}。</text>
-<text x="${X0}" y="${H - 12}" font-size="12" fill="${C.muted}">${esc(T.foot.replace('{doc}', T.doc))}</text></svg>`;
+  s += `<text x="${X0}" y="${H - 30 - 16 * (footLines.length - 1)}" font-size="12" fill="${C.muted}">來源：tools/chart-d020.mjs。實驗線＝d010-lab.json（tools/lab-compare.mjs 在實驗線 d23c18d 的頁面上跑，回退設定）；${esc(T.beforeSrc.replace('{base}', data.base))}；${esc(T.afterSrc)}。</text>
+${footLines.map((ln, k) => `<text x="${X0}" y="${H - 12 - 16 * (footLines.length - 1 - k)}" font-size="12" fill="${C.muted}">${esc(ln)}</text>`).join('\n')}</svg>`;
   return s;
 }
 

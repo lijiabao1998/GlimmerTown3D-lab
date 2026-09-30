@@ -1178,7 +1178,7 @@ if (set === 'd026-traj') {   // 只在明講要它時才跑（不進 all）：D0
   const data = d020Data(arg('base', '3ecba50'));
   const svg = d020Svg(data, { title: 'D026 每日災禍接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D026 之前（D025 收工）', after: '本線 D026 之後',
     beforeSrc: 'D026 之前＝git {base} 的 d010-3d.json', afterSrc: 'D026 之後＝現在的 src 現算', doc: 'docs/D026-hazards.md',
-    foot: '起火、燒毀、生病、死亡接上之後：工業棟數往實驗線靠（第 121 列 30.9→19.5，實驗線 22.1；全程平均差 3.4→1.9）、人口第 121 列差 0.9→0.0；就業第 121 列由高 8.8 變成低 7.0（實驗線 99.5，本線 92.5；全程平均差 7.1→4.3）；幸福沒有實質縮小（全程平均差 .072→.067，第 121 列 .071→.084，實驗線種子間 sd .022）——幸福還缺通勤與壅堵、夜間城市、政策等項，D027 起才搬。數字表見 {doc}。' });
+    foot: '起火、燒毀、生病、死亡接上之後：工業棟數往實驗線靠（第 121 列 30.9→19.5，實驗線 22.1；全程平均差 3.4→1.9）、人口第 121 列差 0.9→0.0；就業第 121 列由高 8.8 變成低 7.0（實驗線 99.5，本線 92.5；全程平均差 7.1→4.3）。\n幸福沒有實質縮小（全程平均差 .072→.067，第 121 列 .071→.084，實驗線種子間 sd .022）——幸福還缺通勤與壅堵、夜間城市、政策等項，D027 起才搬。數字表見 {doc}。' });
   fs.writeFileSync(path.join(out, 'd026_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
   await withBrowser({ root: out, entry: 'd026_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
     await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d026_traj.html` });

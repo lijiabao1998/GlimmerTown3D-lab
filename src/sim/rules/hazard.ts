@@ -77,10 +77,10 @@ export function fireStep(w: World, g: Grids, f: Fields, rng: Rng, tickBld: reado
     else if (COV.firewatch && (COV.firewatch[i] as number) > 0) p *= .45;                                                             // T340：瞭望塔＝弱火險
     { const r364 = resilience364At(w, f, bx, by, b); p *= r364.damageMul * r364.casualtyMul; }
     p *= tq(tech, 'A4a', 1.10, 1) * tq(tech, 'A4b', .85, 1) * tq(tech, 'B3', .90, 1) * sq(spec, 'ind', 1.08, 1) * sq(spec, 'green', .90, 1);
-    if (rng.R() /*@55772*/ < p) { b.fire = 1; ignited.push(i); if (first < 0) first = i; }
+    /*@55772*/ if (rng.R() < p) { b.fire = 1; ignited.push(i); if (first < 0) first = i; }
   }
   for (const i of burning) {                                                                                                          // 55777 蔓延：20% 點燃 Chebyshev 1 內未燃建築
-    if (rng.R() /*@55778*/ < .20) {
+    /*@55778*/ if (rng.R() < .20) {
       const bx = i % N, by = (i / N) | 0, opts: [number, Bld][] = [];
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
         if (!dx && !dy) continue;
@@ -89,7 +89,7 @@ export function fireStep(w: World, g: Grids, f: Fields, rng: Rng, tickBld: reado
         const ni = idx(w, nx, ny), nb = w.tiles[ni].bld;
         if (nb && nb.k <= 3 && !nb.fire) opts.push([ni, nb]);
       }
-      if (opts.length) { const [ni, nb] = opts[rng.ri(opts.length) /*@55787*/]; if (!disasterBlocked364(w, f, ni % N, (ni / N) | 0, nb, 36484)) { nb.fire = 1; spread.push(ni); } }
+      /*@55787*/ if (opts.length) { const [ni, nb] = opts[rng.ri(opts.length)]; if (!disasterBlocked364(w, f, ni % N, (ni / N) | 0, nb, 36484)) { nb.fire = 1; spread.push(ni); } }
     }
   }
   for (const i of burning) {                                                                                                          // 55790 推進燃燒天數；fire≥5 燒毀成焦土
@@ -115,7 +115,7 @@ export function crimeStep(w: World, f: Fields, rng: Rng, tickBld: readonly numbe
     const b = w.tiles[i].bld;
     if (!b || b.k > 3 || b.crime) continue;
     if ((COV.police![i] as number) > 0 || (COV.police2![i] as number) > 0) continue;                                                 // T61／T222
-    if (!(COV.prison && (COV.prison[i] as number) > 0) && rng.R() /*@55817*/ < .001 * (b.k === 2 ? 2 : 1) * b.lv * (pol && pol.curfew ? .6 : 1) * (pol && pol.nightMarket ? 1.15 : 1) * (pol && pol.parkNight ? 1.05 : 1)
+    /*@55817*/ if (!(COV.prison && (COV.prison[i] as number) > 0) && rng.R() < .001 * (b.k === 2 ? 2 : 1) * b.lv * (pol && pol.curfew ? .6 : 1) * (pol && pol.nightMarket ? 1.15 : 1) * (pol && pol.parkNight ? 1.05 : 1)
       * ((COV.court && (COV.court[i] as number) > 0) ? .5 : 1) * tq(tech, 'B2', .92, 1) * tq(tech, 'B4b', 1.05, 1) * tq(tech, 'B7', .90, 1) * (x?.nightCrimeMul ? x.nightCrimeMul(i, b) : 1)) {
       b.crime = 1; crimes.push(i); if (first < 0) first = i;
     }
@@ -131,7 +131,7 @@ export function abandonStep(w: World, rng: Rng, tickBld: readonly number[]): Aba
     const b = w.tiles[i].bld;
     if (!b || b.k > 3 || !b.crime || b.abandoned) continue;
     b.crimeDays = (b.crimeDays || 0) + 1;
-    if (b.crimeDays >= 15 && rng.R() /*@55829*/ < .05) { b.abandoned = 1; abandons.push(i); if (first < 0) first = i; }
+    /*@55829*/ if (b.crimeDays >= 15 && rng.R() < .05) { b.abandoned = 1; abandons.push(i); if (first < 0) first = i; }
   }
   return { abandons, first };
 }
@@ -149,10 +149,10 @@ export function diseaseStep(w: World, f: Fields, rng: Rng, tickBld: readonly num
     const covered = hospital || clinic;
     if (b.sick) {
       if (hospital) { if (cured < medCap) { b.sick = 0; cured++; cures.push(i); } else queued++; }                                    // T387b：床位門檻（這一支沒有亂數）
-      else if (clinic && rng.R() /*@55847*/ < .5) { if (cured < medCap) { b.sick = 0; cured++; cures.push(i); } else queued++; }                 // 亂數照擲、結果被床位遮蔽
+      /*@55847*/ else if (clinic && rng.R() < .5) { if (cured < medCap) { b.sick = 0; cured++; cures.push(i); } else queued++; }                 // 亂數照擲、結果被床位遮蔽
       continue;
     }
-    if (!covered && rng.R() /*@55850*/ < .001 * (b.lv as number)) { b.sick = 1; sicks.push(i); if (first < 0) first = i; }                     // T472 水質病風險：舊式供水＝0
+    /*@55850*/ if (!covered && rng.R() < .001 * (b.lv as number)) { b.sick = 1; sicks.push(i); if (first < 0) first = i; }                     // T472 水質病風險：舊式供水＝0
   }
   return { sicks, cures, cured, queued, first };
 }
@@ -165,7 +165,7 @@ export function deathStep(w: World, rng: Rng, tickBld: readonly number[]): Death
     const b = w.tiles[i].bld;
     if (!b || b.k !== 1 || !b.sick || b.death) continue;
     sickN++; b.sickDays = (b.sickDays || 0) + 1;
-    if (b.sickDays >= 3 && rng.R() /*@55861*/ < .10) { b.death = 1; b.deathAge = 0; b.sick = 0; b.sickDays = 0; deaths.push(i); if (first < 0) first = i; }
+    /*@55861*/ if (b.sickDays >= 3 && rng.R() < .10) { b.death = 1; b.deathAge = 0; b.sick = 0; b.sickDays = 0; deaths.push(i); if (first < 0) first = i; }
   }
   return { deaths, sickN, first };
 }

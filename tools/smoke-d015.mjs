@@ -72,10 +72,11 @@ export async function d015Smoke(withBrowser, log) {
       `重做 ${(100 * med(regen)).toFixed(1)}%（${rows.map(r => r.regen).join('、')} 件）；上傳 ${(100 * med(up)).toFixed(1)}%（中位數 ${KB(med(rows.map(r => r.up)))}，整份 ${KB(med(rows.map(r => r.upFull)))}）；` +
       `容量放大 ${grow.length} 次（${grow.map(r => `第 ${r.day} 天 ${KB(r.up)}`).join('、') || '沒有'}）；野樹沿用 ${rows.filter(r => r.treesKept).length}／${rows.length} 次`);
     // 驗收 7：GPU 資源不增加（重建之後舊場景丟掉了才量；工地網格每天換，數量會上下一件）
-    const head = gl.slice(0, 5), tail = gl.slice(-5), mx = (a, k) => Math.max(...a.map(x => x[k]));
+    // D026：災禍標記的寶石網格（一個 InstancedMesh）第一次有標記時才第一次畫，一次多一個幾何與一個著色器程式——是「一次性」的、不是每次重建都長，量的時候扣掉（hazardShown＝畫過了）
+    const head = gl.slice(0, 5), tail = gl.slice(-5), mx = (a, k) => Math.max(...a.map(x => x[k] - (x.hazardShown && (k === 'geometries' || k === 'programs') ? 1 : 0)));
     log(mx(tail, 'geometries') <= mx(head, 'geometries') + 1 && mx(tail, 'textures') <= mx(head, 'textures') && mx(tail, 'programs') <= mx(head, 'programs'),
-      'D015 驗收 7：不漏——起步城 60 天，最後五次重建的幾何、貼圖、著色器程式數不多於最前面五次（renderer.info）',
-      `幾何 ${head.map(x => x.geometries).join('/')} → ${tail.map(x => x.geometries).join('/')}；貼圖 ${mx(head, 'textures')} → ${mx(tail, 'textures')}；程式 ${mx(head, 'programs')} → ${mx(tail, 'programs')}`);
+      'D015 驗收 7：不漏——起步城 60 天，最後五次重建的幾何、貼圖、著色器程式數不多於最前面五次（renderer.info；災禍標記的寶石網格第一次畫時多的一個幾何與一個程式扣掉）',
+      `幾何 ${head.map(x => x.geometries).join('/')} → ${tail.map(x => x.geometries).join('/')}；貼圖 ${mx(head, 'textures')} → ${mx(tail, 'textures')}；程式 ${mx(head, 'programs')} → ${mx(tail, 'programs')}（扣掉寶石網格之後）；最後五次寶石畫過 ${tail.filter(x => x.hazardShown).length} 次`);
     // 驗收 5 的比值：同一頁裡增量重建（建場景＋同步工地）的 JS ≤ 整張重建的一半。
     // 量法（D024 起）：增量與整張成對量、在同一種負載下量——播放走到下一次重建，量增量那一次，緊接著整張重建一次再量；每一對算自己的比值，取中位數（≥ 10 對）。
     // 以前是「播放中量增量、播放停了才量整張（5 次）、兩邊各取中位數再相除」：兩邊的負載不一樣（播放中畫面還在畫），CI 上跑到過 0.52（增量 10.3 ms、整張 19.9 ms）；

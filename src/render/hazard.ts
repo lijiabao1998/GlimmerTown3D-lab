@@ -23,6 +23,7 @@ export class HazardMarks {
     return mesh;
   }
   private cap = 0;
+  everShown = false;                                                                            // 畫過（有標記過）：寶石的幾何與著色器程式第一次畫才上傳，算 GPU 資源時要扣掉這一份（tools/smoke-d015.mjs）
   set(marks: readonly Mark[]) {
     const need = marks.length;
     if (!this.cap) this.cap = this.mesh.instanceMatrix.count;
@@ -33,7 +34,7 @@ export class HazardMarks {
       this.m.makeScale(s * .7, s, s * .7).setPosition(q.x, q.y, q.z);                           // 瘦長一點的八面體：遠看像一顆寶石
       p.setMatrixAt(k, this.m); p.setColorAt(k, this.col.setHex(MARK_COLOR[q.kind]));
     }
-    p.count = need; p.visible = need > 0;                                                       // 空的就不畫（不佔 draw call）
+    p.count = need; p.visible = need > 0; if (need > 0) this.everShown = true;                  // 空的就不畫（不佔 draw call）
     p.instanceMatrix.needsUpdate = true; if (p.instanceColor) p.instanceColor.needsUpdate = true;
   }
   // 容量不夠：換一個兩倍大的網格，接回原本的場景（同 Preview.grow）

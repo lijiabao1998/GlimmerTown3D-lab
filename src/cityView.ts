@@ -988,7 +988,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // 上一次建場景：件數、重做幾件、上傳位元組（建築三個網格＋地面＋野樹）、放大幾次、搬了幾件、整份重排幾次、是不是從頭建；三個網格的容量、要畫的範圍、真的有東西的、空洞
     sceneStats: () => con ? { ...con.cache.stats, cached: con.cache.pieces.size, rebuildAll: timing.rebuildAll ?? null,
       arenas: con.cache.arenas?.map(a => ({ cap: a.cap, used: a.used, live: a.live, holes: a.holes(), free: a.free.length })) ?? null } : null,
-    glInfo: () => ({ programs: renderer.info.programs?.length ?? -1, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures }),
+    glInfo: () => ({ programs: renderer.info.programs?.length ?? -1, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, hazardShown: haz.everShown }),
     // ---- D011 建造 ----
     ui: () => ({ tool, roadTool, civicTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
