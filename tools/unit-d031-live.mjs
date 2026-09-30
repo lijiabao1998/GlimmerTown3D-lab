@@ -247,7 +247,7 @@ async function wiringGuards(log, { lab, lab27, lab28, olds, cities28, KT, vrank,
     ['讀檔時點數的幸福讀 1（不是 .6）', [['cityPoints(w, fieldsOf(g).COV, .6, edu.tech,', 'cityPoints(w, fieldsOf(g).COV, 1, edu.tech,']]],
     ['報表不回報升級', [['promoted: rk.promoted }', 'promoted: [] }']]],
     ['報表的等級是昨天的', [['rank: { idx: s.rankIdx,', 'rank: { idx: s.rankIdx - rk.promoted.length,']]],
-    ['雜湊不看等級', [['...(s.rankIdx > 0 ? [s.rankIdx] : [])]));', ']));']]],
+    ['雜湊不看等級', [['...(s.rankIdx > 0 ? [s.rankIdx] : []),', '']]],
   ];
   const bad = [], out = [], base0 = [];
   for (const [tag, fn] of CHECK) { const w = await fn([]); if (w) base0.push(`${tag}：${w}`); }

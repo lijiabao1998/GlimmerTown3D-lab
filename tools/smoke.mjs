@@ -26,6 +26,7 @@ import { d028Smoke, d028SkipNote } from './smoke-d028.mjs';
 import { d029Smoke, d029SkipNote } from './smoke-d029.mjs';
 import { d030Smoke, d030SkipNote } from './smoke-d030.mjs';
 import { d031Smoke, d031SkipNote } from './smoke-d031.mjs';
+import { d032Smoke, d032SkipNote } from './smoke-d032.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -574,6 +575,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d029Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d030Smoke(withBrowser, log);
 // ===== D031：城市等級（tools/smoke-d031.mjs：升級的提示字、☰「城市等級」面板與進度條、頂級的寫法、手機預算；自己開一個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d031Smoke(withBrowser, log);
+// ===== D032：政策與預算（tools/smoke-d032.mjs：☰「政策與預算」面板的列與關閉、稅率＋／−與冷卻與夾限、營養午餐與教育場、服務預算與維護費、災害保險的提示與資金、存檔重開、讀檔怪癖、手機預算；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d032Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -590,6 +593,7 @@ if (d028SkipNote()) console.log(d028SkipNote());
 if (d029SkipNote()) console.log(d029SkipNote());
 if (d030SkipNote()) console.log(d030SkipNote());
 if (d031SkipNote()) console.log(d031SkipNote());
+if (d032SkipNote()) console.log(d032SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

@@ -1,0 +1,298 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-policy.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "decl",
+   "name": "pol",
+   "anchors": {
+    "start": "let pol="
+   },
+   "line": 38248,
+   "endLine": 38248,
+   "sha": "cac747a448bb1790d8277f5dd6e35fce9308fc245edd9122f1edcab86ee1ac2d"
+  },
+  {
+   "kind": "fn",
+   "name": "purchasingPower481",
+   "anchors": {
+    "start": "function purchasingPower481(",
+    "closure": "balanced-brace"
+   },
+   "line": 38270,
+   "endLine": 38270,
+   "sha": "84c81f57e54dbb1eec8f99330ee540e2263d8d26406994bd4b0a17888075408a"
+  },
+  {
+   "kind": "span",
+   "name": "政策目錄 MAYOR_POLICY_CATALOG470A",
+   "anchors": {
+    "start": "const MAYOR_POLICY_CATALOG470A={",
+    "end": "const MAYOR_SERVICE_BUDGETS470A="
+   },
+   "line": 53719,
+   "endLine": 53725,
+   "sha": "81f3a877d7fe138c12631c080e10d4ee35d728f83fa8960fab69a954ebcfe479"
+  },
+  {
+   "kind": "fn",
+   "name": "mayorEnsurePolicy470A",
+   "anchors": {
+    "start": "function mayorEnsurePolicy470A(",
+    "closure": "balanced-brace"
+   },
+   "line": 53748,
+   "endLine": 53748,
+   "sha": "d5232ac1e32b92ff17c5491d81ad4f743382915a6a950eb3f8ddecf4fb608743"
+  },
+  {
+   "kind": "fn",
+   "name": "mayorPolicyCooldownReady470A",
+   "anchors": {
+    "start": "function mayorPolicyCooldownReady470A(",
+    "closure": "balanced-brace"
+   },
+   "line": 53749,
+   "endLine": 53749,
+   "sha": "5459839463e6cd7100c47009d4f0276d4cf2444225f5eea4f692148384388a88"
+  },
+  {
+   "kind": "fn",
+   "name": "mayorPolicyApply470A",
+   "anchors": {
+    "start": "function mayorPolicyApply470A(",
+    "closure": "balanced-brace"
+   },
+   "line": 53750,
+   "endLine": 53755,
+   "sha": "49b3ad5c6d877832bd1ef7371ac0f4aac81215b99f2548f74d7d7f34f950c142"
+  },
+  {
+   "kind": "fn",
+   "name": "policyApply504",
+   "anchors": {
+    "start": "function policyApply504(",
+    "closure": "balanced-brace"
+   },
+   "line": 67570,
+   "endLine": 67570,
+   "sha": "3178fc77a961a05519c1df62ba8f9c651b55e37de8df4911ba29be78f9089d1b"
+  },
+  {
+   "kind": "span",
+   "name": "稅率按鈕 polStep",
+   "anchors": {
+    "start": "const polStep=(k,d,nm)=>{",
+    "end": "policyApply504(k,next,{source:'player',reason:'玩家在市政統計面板調整'+nm+'稅'});sTick();showStats();"
+   },
+   "line": 65791,
+   "endLine": 65793,
+   "sha": "6571dad59abd762cecdc4678378b184aaf723ecd91ff0bdca2015069fac9caf8"
+  },
+  {
+   "kind": "fn",
+   "name": "setSvcBudget",
+   "anchors": {
+    "start": "function setSvcBudget(",
+    "closure": "balanced-brace"
+   },
+   "line": 52968,
+   "endLine": 52973,
+   "sha": "4a7c2e3020d1880661191702ca7b70cd3af1ee8424170541057303a06e46e1d0"
+  },
+  {
+   "kind": "span",
+   "name": "預算按鈕 budStep",
+   "anchors": {
+    "start": "const budStep=(cat,d,nm)=>{",
+    "end": "const budStep=(cat,d,nm)=>{setSvcBudget(cat,d*.1);"
+   },
+   "line": 65800,
+   "endLine": 65800,
+   "sha": "4f19dbc3e24bec65dbeb61400ddf6fd092f7a3272fc154fb40ec39be6444c710"
+  },
+  {
+   "kind": "fn",
+   "name": "insPayout",
+   "anchors": {
+    "start": "function insPayout(",
+    "closure": "balanced-brace"
+   },
+   "line": 53047,
+   "endLine": 53051,
+   "sha": "56baf4e771211f74ff7e846a48ee805c7b3f87bec4d8914936ffad9c80714f58"
+  },
+  {
+   "kind": "span",
+   "name": "火燒毀呼叫 insPayout",
+   "anchors": {
+    "start": "if(b.fire>=5){if(b.k===3)stampPolSrc(x,y,3,-1);t.bld=null;t.ruin=1;insPayout(x,y);}",
+    "end": "if(b.fire>=5){if(b.k===3)stampPolSrc(x,y,3,-1);t.bld=null;t.ruin=1;insPayout(x,y);}"
+   },
+   "line": 55796,
+   "endLine": 55796,
+   "sha": "c2215bd57c109dc0f1d812706c362bcc9c5acfb209c69909a556dae897dab9f5"
+  },
+  {
+   "kind": "span",
+   "name": "回收乘數 recycleMul452",
+   "anchors": {
+    "start": "const recycleMul452=(pol&&pol.recycle?.85:1);",
+    "end": "const recycleMul452=(pol&&pol.recycle?.85:1);"
+   },
+   "line": 55257,
+   "endLine": 55257,
+   "sha": "52362dbe2c1c8574095f49363abb9fd4e41b4fc07567bef6875835226deb004e"
+  },
+  {
+   "kind": "span",
+   "name": "工業補貼 legacyI481",
+   "anchors": {
+    "start": "const legacyI481=clamp((jobsC*.8-jobsI)/40+(pol&&pol.indSubsidy?.15:0)+tq('A7',.10,0),-1,1);",
+    "end": "const legacyI481=clamp((jobsC*.8-jobsI)/40+(pol&&pol.indSubsidy?.15:0)+tq('A7',.10,0),-1,1);"
+   },
+   "line": 55584,
+   "endLine": 55584,
+   "sha": "c858a1e5d7c9e3951c588de3b194b9d727986292d0a7aecb0e82b9c11da9f608"
+  },
+  {
+   "kind": "span",
+   "name": "緊急儲備：糧食出口",
+   "anchors": {
+    "start": "foodHold492=pol?.emergencyStockpile492?Math.ceil(foodCoreNeed482*.75):0",
+    "end": "foodHold492=pol?.emergencyStockpile492?Math.ceil(foodCoreNeed482*.75):0"
+   },
+   "line": 55348,
+   "endLine": 55348,
+   "sha": "728afba7b9237c85357fe46c0821db8bf1faadc11e7880b8db39949a3cacb843"
+  },
+  {
+   "kind": "span",
+   "name": "緊急儲備：天然氣出口",
+   "anchors": {
+    "start": "(pol?.emergencyStockpile492?Math.ceil(gasDem*.75):0)",
+    "end": "(pol?.emergencyStockpile492?Math.ceil(gasDem*.75):0)"
+   },
+   "line": 55357,
+   "endLine": 55357,
+   "sha": "a5c02f026310c28115a195e39b528ff63174bf5fb6ac59863b432becda61cd89"
+  },
+  {
+   "kind": "span",
+   "name": "緊急儲備：商品儲備",
+   "anchors": {
+    "start": "reserve481=Math.max(gNeed284*2,gCap481*.28)*(pol?.emergencyStockpile492?1.35:1)",
+    "end": "reserve481=Math.max(gNeed284*2,gCap481*.28)*(pol?.emergencyStockpile492?1.35:1)"
+   },
+   "line": 55388,
+   "endLine": 55388,
+   "sha": "1541ceb8e81654966facfb0a82007fc98e90b8a9733d0676289b2c1d2a23599a"
+  },
+  {
+   "kind": "span",
+   "name": "緊急儲備：燃料出口",
+   "anchors": {
+    "start": "Math.ceil(fuelDemand482*(pol?.emergencyStockpile492?2.5:1))",
+    "end": "Math.ceil(fuelDemand482*(pol?.emergencyStockpile492?2.5:1))"
+   },
+   "line": 56000,
+   "endLine": 56000,
+   "sha": "9a5de5403af12254643eecfdc4b523b039a2871cb5a04a102a0103c77dce43a8"
+  },
+  {
+   "kind": "span",
+   "name": "存檔的 pol",
+   "anchors": {
+    "start": "rl,rb,dk,ow,tl,pm,bln,tr,of,fl,le,ab,pol,region,",
+    "end": "rl,rb,dk,ow,tl,pm,bln,tr,of,fl,le,ab,pol,region,"
+   },
+   "line": 66750,
+   "endLine": 66750,
+   "sha": "6a467a9d899da3aa4bec77f821d1b813ee2610249bea1af813f616fdf9aff6e6"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔的 pol",
+   "anchors": {
+    "start": "if(d.pol)pol=d.pol;",
+    "end": "if(d.pol)pol=d.pol;"
+   },
+   "line": 66975,
+   "endLine": 66975,
+   "sha": "a6db06b27102efd64d1b83add014bf71023d597b2db43dff4c02994198a2d6d4"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔先把 pol 歸零",
+   "anchors": {
+    "start": "busRiders463=0;railOpsCost463=0;pol=null;region={};",
+    "end": "busRiders463=0;railOpsCost463=0;pol=null;region={};"
+   },
+   "line": 66972,
+   "endLine": 66972,
+   "sha": "770fec130dc2a0954827374394541aeccd7fdcc489127f69e5e8fa3e930fd98a"
+  },
+  {
+   "kind": "span",
+   "name": "新圖歸零",
+   "anchors": {
+    "start": "recycleTrucks.length=0;policeCars.length=0;pol=null;region={};",
+    "end": "recycleTrucks.length=0;policeCars.length=0;pol=null;region={};"
+   },
+   "line": 51118,
+   "endLine": 51118,
+   "sha": "1f79a7c0a50fd2089d6c2dcad2ac56d09ab70b3c95c8119ff28efb35c6acb061"
+  },
+  {
+   "kind": "fn",
+   "name": "eduStaticAt",
+   "anchors": {
+    "start": "function eduStaticAt(",
+    "closure": "balanced-brace"
+   },
+   "line": 53129,
+   "endLine": 53133,
+   "sha": "d5555765a326fcaef88aeec97d87e4c5243d85c6d10d863c28a82151f19e4e28"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "polDecl": "let pol=null;            // 稅率政策 {taxR,taxC,taxI, heightLimit, envReg, transitSubsidy}（T55）；T122 擴四布林 curfew/recycle/tourPromo/ecoReg（城市法規開關，皆非稅收槓桿）",
+  "purchasingPower481": "function purchasingPower481(labor,wealth,happy,cost,taxR){const emp=.55+.45*clamp(labor.employmentRate,0,1),wage=.82+.18*clamp(labor.wageIndex,.55,1.55),mood=.92+.08*clamp(happy,0,1),tax=clamp(1-Math.max(0,(taxR||1)-1)*.18,.82,1.06),price=clamp(1.12-(cost||1)*.12,.82,1.08);return clamp(wealth*emp*wage*mood*tax*price,.45,1.45);}",
+  "catalog": "const MAYOR_POLICY_CATALOG470A={\n  taxR:{nm:'住宅稅',type:'tax',cooldown:40},taxC:{nm:'商業稅',type:'tax',cooldown:40},taxI:{nm:'工業稅',type:'tax',cooldown:40},\n  curfew:{nm:'宵禁',type:'toggle',cooldown:45},recycle:{nm:'回收宣導',type:'toggle',cooldown:35},tourPromo:{nm:'觀光推廣',type:'toggle',cooldown:45},ecoReg:{nm:'節能條例',type:'toggle',cooldown:45},\n  freeTransit:{nm:'免費公交',type:'toggle',cooldown:45},schoolLunch:{nm:'營養午餐',type:'toggle',cooldown:40},smokeDetect:{nm:'煙霧偵測',type:'toggle',cooldown:35},indSubsidy:{nm:'工業補貼',type:'toggle',cooldown:45},\n  nightMarket:{nm:'夜市',type:'toggle',cooldown:45},parkNight:{nm:'公園夜間開放',type:'toggle',cooldown:40},insurance:{nm:'災害保險',type:'toggle',cooldown:60},integratedTransit:{nm:'一票轉乘',type:'toggle',cooldown:35},housingSubsidy:{nm:'住房補貼',type:'toggle',cooldown:45},inclusionaryHousing:{nm:'包容性住宅標準',type:'toggle',cooldown:50},stationHousing:{nm:'站城住宅優先',type:'toggle',cooldown:45},waterConserve:{nm:'節水條例',type:'toggle',cooldown:40},reclaimPriority:{nm:'再生水優先',type:'toggle',cooldown:35},industrialPretreat:{nm:'工業污水預處理',type:'toggle',cooldown:40},spongeCity:{nm:'海綿城市標準',type:'toggle',cooldown:45},\n  infrastructureStimulus:{nm:'基礎建設刺激',type:'toggle',cooldown:45},consumptionSupport:{nm:'消費支持',type:'toggle',cooldown:40},industrialRelief:{nm:'產業穩崗',type:'toggle',cooldown:45},completeStreets:{nm:'完整街道',type:'toggle',cooldown:45},parkingManagement:{nm:'停車管理',type:'toggle',cooldown:40},criticalReserve492:{nm:'關鍵備轉標準',type:'toggle',cooldown:50},emergencyStockpile492:{nm:'緊急物資儲備',type:'toggle',cooldown:50}\n};",
+  "ensure": "function mayorEnsurePolicy470A(){if(pol==null)pol={taxR:1,taxC:1,taxI:1,curfew:false,recycle:false,tourPromo:false,ecoReg:false,freeTransit:false,schoolLunch:false,smokeDetect:false,indSubsidy:false,nightMarket:false,parkNight:false,insurance:false,integratedTransit:false,housingSubsidy:false,inclusionaryHousing:false,stationHousing:false,waterConserve:false,reclaimPriority:false,industrialPretreat:false,spongeCity:false,infrastructureStimulus:false,consumptionSupport:false,industrialRelief:false,completeStreets:false,parkingManagement:false,criticalReserve492:false,emergencyStockpile492:false};for(const k of Object.keys(MAYOR_POLICY_CATALOG470A))if(pol[k]===undefined)pol[k]=MAYOR_POLICY_CATALOG470A[k].type==='tax'?1:false;}",
+  "cooldown": "function mayorPolicyCooldownReady470A(k){const cfg=MAYOR_POLICY_CATALOG470A[k];if(!cfg)return false;if(!window.__noForesight470B&&mayorDecisionLocked470B('policy:'+k))return false;return day-(mayorPolicyLast470A[k]??-999)>=cfg.cooldown;}",
+  "apply": "function mayorPolicyApply470A(k,value,reason){\n  mayorEnsurePolicy470A();const cfg=MAYOR_POLICY_CATALOG470A[k];if(!cfg||!mayorPolicyCooldownReady470A(k))return false;const old=pol[k],baseline=mayorSnapshotState470||mayorSafe470(()=>mayorBuildSnapshot470(false),null);if(cfg.type==='tax')value=clamp(Math.round((+value||1)*10)/10,.5,2);else value=!!value;if(old===value)return false;\n  pol[k]=value;mayorPolicyLast470A[k]=day;const txt='📜 '+cfg.nm+'：'+(cfg.type==='tax'?(+old).toFixed(1)+'× → '+(+value).toFixed(1)+'×':(value?'開啟':'關閉'))+'｜'+reason;mayorPolicyHistory470A.push({d:day,k,old,value,reason});mayorPolicyHistory470A=mayorPolicyHistory470A.slice(-24);mayorHistory470.push({d:day,m:txt,c:'gold'});mayorHistory470=mayorHistory470.slice(-40);\n  if(!window.__noForesight470B&&!mayorPolicyRollback470B)mayorStartPolicyTrial470B(k,old,value,reason,baseline);\n  if(k==='schoolLunch')rebuildCov();if(['integratedTransit','freeTransit','completeStreets','parkingManagement'].includes(k)){railOpsDirty463=true;mobility491Dirty=true;}if(k==='recycle')sanDirty445=true;if(k==='ecoReg')markPowerDirty450();if(['waterConserve','reclaimPriority','industrialPretreat','spongeCity'].includes(k))markWaterCycleDirty472();if(['criticalReserve492','emergencyStockpile492'].includes(k)){markResilienceDirty492('policy:'+k);if(k==='criticalReserve492')markPowerDirty471();}mayorSnapshotState470=null;return true;\n}",
+  "policyApply504": "function policyApply504(k,value,opts={}){if(window.__noPolicy504){const oldTrial=mayorPolicyRollback470B;mayorPolicyRollback470B=true;const r=__mayorPolicyApply470A503(k,value,opts.reason||'');mayorPolicyRollback470B=oldTrial;return r;}mayorEnsurePolicy470A();const meta=POLICY_META504[k];if(!meta)return false;const cfg=MAYOR_POLICY_CATALOG470A[k],target=cfg.type==='tax'?clamp(Math.round((+value||1)*10)/10,.5,2):!!value,old=pol[k];if(old===target){const pending=policyLiveProgram504(k);if(pending&&pending.target!==target){pending.status='cancelled';pending.ended=day;policyLedger504('cancelled','取消尚未生效的「'+pending.name+'」',pending.id,'warn');return true;}return false;}const live=policyLiveProgram504(k),replacing=!!(live&&live.kind==='policy'&&['active','review','adjusted'].includes(live.status)&&old===live.target&&target!==live.target);if(!opts.force){if(replacing){if(day-(mayorPolicyLast470A[k]??-999)<meta.cooldown){if(opts.source==='player')toast('政策仍在觀察冷卻期，暫不能調整／退場','bad');return false;}}else if(!policyCanApply504(k)){if(opts.source==='player')toast('政策仍在執行／觀察或冷卻中','bad');return false;}}if(replacing){live.status='superseded';live.ended=day;live.nextReview=0;policyLedger504('superseded','「'+live.name+'」進入調整／退場程序',live.id,'gold');}const p=policyCreateProgram504({kind:'policy',key:k,name:meta.name,source:opts.source||'player',reason:opts.reason||'政策調整',target,old,implementationDays:meta.implementationDays,reviews:meta.reviews,autoRollback:opts.autoRollback});if(!p.implementationDays){policySetActual504(k,target,'核准後立即生效',p.source);}toast('🏛️ 已核准「'+p.name+'」：進入'+(p.implementationDays?'執行階段':'生效觀察'),'gold');return true;}",
+  "polStep": "  const polStep=(k,d,nm)=>{\n    const next=Math.max(.5,Math.min(2,Math.round((pol[k]+d*.1)*100)/100));\n    policyApply504(k,next,{source:'player',reason:'玩家在市政統計面板調整'+nm+'稅'});sTick();showStats();",
+  "setSvcBudget": "function setSvcBudget(cat,delta){ // T294：調整某類服務預算 ±，即刻 rebuildCov（fill0 全量重建＝增量撤印對稱性保證，見 stampCov 註）\n  if(!Object.prototype.hasOwnProperty.call(svcBudget,cat))return svcBudget;\n  svcBudget[cat]=clamp(+(svcBudget[cat]+delta).toFixed(2),.5,1.5);\n  rebuildCov(); // 用新預算重算所有服務覆蓋半徑\n  return svcBudget;\n}",
+  "budStep": "  const budStep=(cat,d,nm)=>{setSvcBudget(cat,d*.1);toast('🎚️ '+nm+'預算 ×'+svcBudget[cat].toFixed(1)+(d>0?'（覆蓋更廣、更貴）':'（省錢、覆蓋縮水）'));sTick();showStats();};",
+  "insPayout": "function insPayout(x,y){ // T337：投保時每戶被毀理賠 $35（未投保精確恆等＝不呼叫）\n  if(!(pol&&pol.insurance))return;\n  money+=35;\n  if(insToastDay!==day){insToastDay=day;toast('🛡️ 災害保險理賠 +$35／戶','gold',x,y);}\n}",
+  "insBurn": "    if(b.fire>=5){if(b.k===3)stampPolSrc(x,y,3,-1);t.bld=null;t.ruin=1;insPayout(x,y);} // zone 保留；T110：工業燒毀→撤銷污染源",
+  "recycleMul": "  const recycleMul452=(pol&&pol.recycle?.85:1);",
+  "indSub": "  const legacyI481=clamp((jobsC*.8-jobsI)/40+(pol&&pol.indSubsidy?.15:0)+tq('A7',.10,0),-1,1);",
+  "stockFood": "  const foodExportLimit485=tp336*15+siloEff489*18+coldEff489*8+bulkEff489*24+cportEff489*35,foodHold492=pol?.emergencyStockpile492?Math.ceil(foodCoreNeed482*.75):0,foodExportCandidate482=foodExportLimit485>0?Math.min(Math.max(0,foodProcessPool482-foodHold492),foodExportLimit485):0;",
+  "stockGas": "  const gasSurplus482=Math.max(0,gasSup-gasDem),gasExportCandidate482=gasImport482>0?0:Math.min(Math.max(0,gasSurplus482-(pol?.emergencyStockpile492?Math.ceil(gasDem*.75):0)),tp336*4+gasDepEff489*8+bulkEff489*5+cportEff489*6),",
+  "stockGoods": "        reserve481=Math.max(gNeed284*2,gCap481*.28)*(pol?.emergencyStockpile492?1.35:1),exportable481=Math.max(0,goods-reserve481),exportSignal481=tradeCapacity481>0?clamp(exportable481/Math.max(1,tradeCapacity481*.35),0,1):0;",
+  "stockFuel": "  fuelExport418=(tp336+fuelDepOp485+bulkOp485+cportOp485)>0?takeTrade482(gpnExportDemand508('fuel',Math.min(Math.max(0,fuel-Math.ceil(fuelDemand482*(pol?.emergencyStockpile492?2.5:1))),tp336*FUEL_EXPORT_RATE+fuelDepOp485*8+bulkOp485*10+cportOp485*12))):0;",
+  "saveField": "      rl,rb,dk,ow,tl,pm,bln,tr,of,fl,le,ab,pol,region, // T39-T60 新欄位（可選）",
+  "loadPol": "    if(d.pol)pol=d.pol;",
+  "loadReset": "    trains.length=0;cargoShips.length=0;lifeShips.length=0;tramCars.length=0;metroCars477.length=0;ambulances.length=0;ladderTrucks.length=0;recycleTrucks.length=0;policeCars.length=0;railOpsDirty463=true;railStationStats463=new Map();railComplexByKey463=new Map();busRiders463=0;railOpsCost463=0;pol=null;region={};riot=null;plague=null;immWave=0;demWhy={ok:false};tvSignal=false;hotelBeds=0;hotelOcc=0;gasSup=0;gasDem=0;gasRatio=1;fertOut=0;cookedOut=0;wageIdx=1;fertReady=false;cookedReady=false;mortPopLast346=0;flowStat384={ok:false};gMade384=0;economy481=emptyEconomy481();economy482=emptyEconomy482();logistics485=emptyLogistics485();housingLoad488(d.h488,d.h488===undefined);resetEnterprise489(true);businessCycleLoad490(d.c490,d.c490===undefined);resetNightCity487();resetMayor483(); // T483：市長引擎成對歸零（鐵律7）｜T39-T60 運行時重建；T384：流向快照成對歸零（鐵律7）；FIX-H：補清救護車（防舊圖救護車朝新圖舊目標行駛）；T118：暴亂狀態預設清空，下方視存檔內容還原；T119：補清消防車/垃圾車；T137：瘟疫狀態預設清空，下方視存檔內容還原；T361a：生命感船隊",
+  "newWorldReset": "  trains.length=0;cargoShips.length=0;lifeShips.length=0;tramCars.length=0;metroCars477.length=0;buses.length=0;ambulances.length=0;ladderTrucks.length=0;recycleTrucks.length=0;policeCars.length=0;pol=null;region={}; // FIX-G：開新圖清空運行時載具陣列（對齊 load()，防前一局列車/電車/貨船/公車殘留至新圖）；FIX-H：補清救護車與 pol/region（防前一局稅率政策/區域摘要帶入新圖）；T119：補清消防車/垃圾車；T361a：生命感船隊",
+  "eduStatic": "function eduStaticAt(x,y){\n  const i=idx(x,y);\n  const v=(COV.school[i]>0?Math.round(EDU_W_SCHOOL*(pol&&pol.schoolLunch?1.25:1)):0)+(COV.university[i]>0?EDU_W_UNI:0)+(COV.library[i]>0?EDU_W_LIB:0)+((COV.highsch&&COV.highsch[i]>0)?70:0)+((COV.campus&&COV.campus[i]>0)?120:0)+((COV.researchcamp&&COV.researchcamp[i]>0)?140:0); /* T342/T466 教育鏈 */ // T327：營養午餐（未開精確恆等；切換時 polToggle 觸發 rebuildCov）\n  return Math.min(255,Math.round(v*tq('C1',1.05,1)*tq('C4a',1.15,1)*tq('C4b',1.08,1)*tq('D7',1.10,1)*sq('edu',1.08,1)));\n}"
+ }
+}

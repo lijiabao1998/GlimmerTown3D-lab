@@ -261,7 +261,7 @@ export async function wiringGuards(log, { lab, lab27, cities, olds, oldzs, KT, v
     ['結算的公交乘客不是 0', [['transitRidership: 0,', 'transitRidership: 100,']]],
     ['警察覆蓋不進（恆 1）', [['nightPoliceCoverage(w, tickBld, catOf, f.COV), roads,', '1, roads,']]],
     ['道路格數不進', [['nightPoliceCoverage(w, tickBld, catOf, f.COV), roads,', 'nightPoliceCoverage(w, tickBld, catOf, f.COV), 0,']]],
-    ['政策不進夜間城市', [['const nightPol = hzx?.pol ?? null,', 'const nightPol = null,']]],
+    ['政策不進夜間城市', [['const nightPol = pol,', 'const nightPol = null,']]],
     ['輸入在生長之後才算（不是 55007 那一步）', [['  const nightIn = prepareNightInputs(w, tickRoad, tickBld, catOf, s.day, nightPol);\n', ''], ['const night = finalizeNightCity(nightIn,', 'const night = finalizeNightCity(prepareNightInputs(w, tickRoad, tickBld, catOf, s.day, nightPol),']]],
     ['不認得的種類不算市政（實驗線 kcatOf 的預設 S）', [["return c === '?' ? 'S' : c; };", 'return c; };']]],
     ['幸福項不餵夜間城市', [['nightCity: x?.nightCity ?? { ready: true, happinessDelta: n.happinessDelta },', 'nightCity: x?.nightCity ?? { ready: false, happinessDelta: 0 },']]],
