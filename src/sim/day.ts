@@ -122,7 +122,11 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     const rd = city.road[i], road = rd ? 1 : 0, hw = rd >= 3 ? 1 : 0;
     let rc = city.rclass[i];
     if (road && !rc) rc = hw ? 5 : 2;
-    tiles[i] = { t: city.ter[i], road, hw, bridge: rd === 2 || rd === 4 ? 1 : 0, rc, zone: city.zone[i], tree: city.tree[i], bld: null };
+    // 效能（D030 補）：Tile 介面的每個欄位一次給齊（值 undefined＝跟沒有一樣，讀出來還是 undefined、真假判斷不變）。之前只給七個欄位、其餘後來才加，
+    // 格子的形狀有十幾種（隱藏類別），stepDay 開頭與各規則的整圖掃描讀 lv475、ud475、fly475、ix475、hv471…都是多形態的讀取；統一成一個形狀之後推進一天 1.61 → 1.30 ms（−19%，Node 交替 A/B、24 跑），雜湊逐位相同
+    tiles[i] = { t: city.ter[i], road, hw, rp: undefined, rc, zone: city.zone[i], bld: null, ruin: undefined, office: undefined, lv475: undefined, ud475: undefined, hv471: undefined, ug471: undefined, tree: city.tree[i], rdec: undefined, bus: undefined,
+      bridge: rd === 2 || rd === 4 ? 1 : 0, deco: undefined, crater: undefined, rail: undefined, railBridge: undefined, tram: undefined, tramBridge: undefined, dock: undefined, fly475: undefined, ix475: undefined, wm472: undefined, sm472: undefined, wp: undefined,
+      oneway: undefined, light: undefined, busLane: undefined, levee: undefined, flood: undefined, wr: undefined };
     if (city.wp[i]) tiles[i].wp = 1;                                // D019：配水管（實驗線 load 66881 wp:+d.wp[i]）
     if (city.ruin[i]) tiles[i].ruin = 1;                            // D026：焦土（66881 ruin:d.rn?+d.rn[i]:0；存檔寫 t.ruin?1:0，66716）
     // D024：辦公區（of：商業就業 ×1.5，55242）、鐵路格（rl）與 T475 的四個格子旗標（手工配電線 lvl475、地下線 udl475、高架 fly475、立交 ix475：維護費 52913、電力載體 50950）

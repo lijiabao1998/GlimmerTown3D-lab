@@ -338,7 +338,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     invalidate();
   }
   function simDay() {
-    const rep = stepDay(sim!);
+    const t0 = performance.now(), rep = stepDay(sim!);
+    timing.step = performance.now() - t0;                              // D030 補：stepDay（含結算）自己的牆上時間；煙霧測試 D011 驗收 8 讀它（不含畫面同步、不含存檔）
     lastRep = rep;
     if (rep.grown || rep.upgraded) dirtyScene = true;
     if (rep.hazard.burned.length || rep.hazard.abandons.length) { dirtyScene = true; urgentRebuild = true; }   // D027：燒毀的建築要馬上從場景拿掉、廢棄的要換牆色（D026 只在生長或升級時才重建，燒掉的房子會多站好幾天，煙霧測試在劇本城第 121 天抓到）
