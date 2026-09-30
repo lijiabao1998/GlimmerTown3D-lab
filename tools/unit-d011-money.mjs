@@ -94,7 +94,7 @@ const MUTANTS = [
   ['LMCFG309_KINDS 漏 185', '184, 185, 186', '184, 186'],
   ['住宅稅 .12→.13', '* .12 * (pm.taxR || 1) * WEALTH_TAX[we]', '* .13 * (pm.taxR || 1) * WEALTH_TAX[we]'],
   ['地價槓桿 .15→.16', '/ 128 * .15', '/ 128 * .16'],
-  ['商業 郵局 1.15→1.16', '(COV.post![i] > 0 ? 1.15 : 1)', '(COV.post![i] > 0 ? 1.16 : 1)'],
+  ['商業 郵局 1.15→1.16', '(COV.post![i] > 0 ? 1.15 : 1) * ((COV.parking && COV.parking[i] > 0) ? 1.1 : 1) * ((COV.bank', '(COV.post![i] > 0 ? 1.16 : 1) * ((COV.parking && COV.parking[i] > 0) ? 1.1 : 1) * ((COV.bank'],   // D028：k65 大型購物中心那一行也有 (COV.post![i] > 0 ? 1.15 : 1)，所以錨點多帶後面的銀行覆蓋才剛好一處
   ['商業 遊客 /500→/400', 'mul.tourists / 500', 'mul.tourists / 400'],
   ['工業 .15→.16', 'JOBSI[b.lv] * .15', 'JOBSI[b.lv] * .16'],
   ['稅收條件 漏 !b.plague', '!b.abandoned && !b.riot && !b.plague)) return null;', '!b.abandoned && !b.riot)) return null;'],

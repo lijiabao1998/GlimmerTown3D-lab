@@ -45,11 +45,11 @@ export function powerFrontageRoads450(w: World, rootIdx: number) {
 }
 
 // 52505：高壓線連通元件若同時貼到發電端與 k148 開關站，該站可直接成為配電起點。
-function hvEnergizedSubstations471(w: World) {
+function hvEnergizedSubstations471(w: World, hvFirst?: number) {
   const n = w.N * w.N, out = new Set<number>();
-  let first = 0;
-  while (first < n && !w.tiles[first].hv471 && !w.tiles[first].ug471) first++;
-  if (first === n) return out;                                            // 沒有高壓線（本線目前蓋不出來）：不配置整張陣列（D011 效能；結果相同）
+  let first = hvFirst ?? 0;   // hvFirst＝呼叫端已經掃過的「第一個高壓線格」（沒有＝n；stepDay 的初始掃描順手找的，省一趟整圖）；不給就自己找
+  if (hvFirst === undefined) while (first < n && !w.tiles[first].hv471 && !w.tiles[first].ug471) first++;
+  if (first >= n) return out;                                            // 沒有高壓線（本線目前蓋不出來）：不配置整張陣列（D011 效能；結果相同）
   const comp = new Int32Array(n).fill(-1), q = new Int32Array(n);
   let cid = 0;
   for (let i = first; i < n; i++) {
@@ -86,11 +86,11 @@ function hvEnergizedSubstations471(w: World) {
 
 // 52518：清掉 rp、加總容量，從電源 BFS 讓道路帶電；有變電所時接力並重置 90 格餘裕。
 // legacySubstation444 對應實驗線 window.__legacySubstation444：變電所直接作為額外種子。
-export function computePower(w: World, ecoReg = false, legacySubstation444 = false) {
+export function computePower(w: World, ecoReg = false, legacySubstation444 = false, hvFirst?: number) {
   const n = w.N * w.N;
   let plants = 0, cap = 0, roadN = 0;
   const roots: number[] = [], substations: number[] = [];
-  const hvStarts = hvEnergizedSubstations471(w);
+  const hvStarts = hvEnergizedSubstations471(w, hvFirst);
   for (let i = 0; i < n; i++) {
     const t = w.tiles[i]; t.rp = false; if (t.road) roadN++; const b = t.bld; if (!b || b.ref) continue;
     const av = 1;

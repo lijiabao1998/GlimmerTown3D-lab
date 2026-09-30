@@ -22,6 +22,7 @@ import { d022Smoke, d022SkipNote } from './smoke-d022.mjs';
 import { d025Smoke, d025SkipNote } from './smoke-d025.mjs';
 import { d026Smoke, d026SkipNote } from './smoke-d026.mjs';
 import { d027Smoke, d027SkipNote } from './smoke-d027.mjs';
+import { d028Smoke, d028SkipNote } from './smoke-d028.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -562,6 +563,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d025Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d026Smoke(withBrowser, log);
 // ===== D027：通勤與壅堵（tools/smoke-d027.mjs：路格卡的「交通」、住宅卡的「通勤」「交通壅堵」、過載道路的暖色貼圖、☰「幸福構成」、手機預算；自己開一個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d027Smoke(withBrowser, log);
+// ===== D028：經濟（二）（tools/smoke-d028.mjs：農場的「化肥」列、天然氣井與化肥廠與中央廚房的「天然氣」列、☰「收支明細」、手機預算；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d028Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -574,6 +577,7 @@ if (d022SkipNote()) console.log(d022SkipNote());
 if (d025SkipNote()) console.log(d025SkipNote());
 if (d026SkipNote()) console.log(d026SkipNote());
 if (d027SkipNote()) console.log(d027SkipNote());
+if (d028SkipNote()) console.log(d028SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

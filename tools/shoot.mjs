@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1242,6 +1242,56 @@ if (set === 'd027-traj') {   // 只在明講要它時才跑（不進 all）：D0
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
     fs.writeFileSync(path.join(out, 'D027-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D027-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
+if (set === 'd028') {   // 只在明講要它時才跑（不進 all）：手機上的經濟（二）——農場卡的「化肥」（覆蓋內、覆蓋外、化肥廠沒有天然氣）、中央廚房卡的「天然氣」、☰「收支明細」
+  const { cities28 } = await import('./d028-cities.mjs'), { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const newcity = fs.readFileSync(path.join(ROOT, 'src/content/samples/newcity.code.txt'), 'utf8'), KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')));
+  const cs = cities28(newcity, KT), code = id => cs.find(c => c.id === id).code;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const fresh = async c => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(c)})`); await open(''); };
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    // 1 K1 覆蓋內的農場 (24,28)；2 K1 覆蓋外的農場 (56,28)；3 K2 覆蓋內但化肥廠沒有天然氣 (22,32)；4 K3 中央廚房 (20,28)；5 K4 ☰「收支明細」
+    await fresh(code('K1')); await page.evaluate('(__gt.simStep(2), 1)');
+    await page.evaluate(`(__gt.view(26.5, 29.5, 4.6), __gt.openTile(24, 28), 1)`); await pause(900); await save(page, 'd028_mob_farm_in');
+    await page.evaluate(`(__gt.view(56.5, 29.5, 4.6), __gt.openTile(56, 28), 1)`); await pause(900); await save(page, 'd028_mob_farm_out');
+    await fresh(code('K2')); await page.evaluate('(__gt.simStep(2), 1)');
+    await page.evaluate(`(__gt.view(20.5, 30.5, 4.0), __gt.openTile(22, 32), 1)`); await pause(900); await save(page, 'd028_mob_farm_nogas');
+    await fresh(code('K3')); await page.evaluate('(__gt.simStep(2), 1)');
+    await page.evaluate(`(__gt.view(22.5, 29.5, 4.6), __gt.openTile(20, 28), 1)`); await pause(900); await save(page, 'd028_mob_kitchen');
+    await fresh(code('K4')); await page.evaluate('(__gt.simStep(2), 1)');
+    await page.evaluate(`(__gt.menu('fin'), 1)`); await pause(900); await save(page, 'd028_mob_fin');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(5,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd028_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D028 手機 412×860：經濟（二）</h1><p class="s">①K1（化肥廠＋天然氣井）第 97 天：化肥廠覆蓋（半徑 10 格）內的農場卡多一列「化肥」——最近一天化肥廠有產出，下一天食物與金幣 ×1.35；②同一座城覆蓋外的農場：照常 ×1；③K2（化肥廠沒有天然氣，供氣率 0%）：覆蓋內的農場也不增產，卡上講原因；④K3 的中央廚房：「天然氣」列講全城供需與供氣率、熟食產出、下一天覆蓋內的住宅幸福 +3%；⑤K4（食物分配鏈）☰「收支明細」：住商工稅、每個非零的收入項、收入合計、維護費（其中進口費）、淨額、工資指數，都是最近一天的結算。全部程式生成、沒有外部素材。</p>
+    <div class="g"><figure><figcaption>① 覆蓋內的農場</figcaption><img src="d028_mob_farm_in.png"></figure><figure><figcaption>② 覆蓋外的農場</figcaption><img src="d028_mob_farm_out.png"></figure><figure><figcaption>③ 化肥廠沒有天然氣</figcaption><img src="d028_mob_farm_nogas.png"></figure><figure><figcaption>④ 中央廚房</figcaption><img src="d028_mob_kitchen.png"></figure><figure><figcaption>⑤ 收支明細</figcaption><img src="d028_mob_fin.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd028_mobile.html', width: 2200, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d028_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 2200, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D028-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D028-mobile.jpg');
+  });
+}
+
+if (set === 'd028-gap') {   // 只在明講要它時才跑（不進 all）：D027 收工的那棵樹取自 git（8b90d7d，開暫時的 worktree），CI 只拉最新一個提交拿不到
+  const { d028GapData, d028GapSvg } = await import('./chart-d028.mjs');
+  const data = await d028GapData(arg('base', '8b90d7d'));
+  fs.writeFileSync(path.join(out, 'd028_gap.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${d028GapSvg(data)}`);
+  await withBrowser({ root: out, entry: 'd028_gap.html', width: 1600, height: 1250, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d028_gap.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
+    fs.writeFileSync(path.join(out, 'D028-income-gap.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D028-income-gap.jpg', `1600×${ch}`);
   });
 }
 

@@ -7,7 +7,7 @@
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史。
 import { countNear } from './grid.ts';
 import { sanRoadSeeds445 } from './garbage.ts';
-import { countFood, emptyFoodCount, type FoodCount } from './food.ts';
+import { FERT_BOOST, countFood, emptyFoodCount, type FoodCount } from './food.ts';
 import { JOB_KEYS, infraJobs475, jobCounts, powerJobs471, residentPopulation488, transitDepotTotals501, waterJobs472, type JobCounts } from './jobs.ts';
 import type { Bld, Tile, World } from './lab.ts';
 
@@ -45,7 +45,8 @@ export type MoreCount = Record<(typeof MORE_KEYS)[number], number>;
 export const emptyMoreCount = (): MoreCount => Object.fromEntries(MORE_KEYS.map(k => [k, 0])) as MoreCount;
 
 // 一棟根格建築對這些計數的貢獻（55055–55147）。呼叫端先跳過 ref 格（55054）。root＝這棟的格子索引（運作中判斷要用）。行號＝實驗線那一行
-export function countMore(c: MoreCount, w: World, root: number, b: Bld): void {
+// fb：農場與大農場的化肥增產倍率（同 food.ts countFood）
+export function countMore(c: MoreCount, w: World, root: number, b: Bld, fb = 1): void {
   const k = b.k;
   if (UP_MAX[k] && (b.lv as number) > 1) c.upJob += (b.lv - 1) * (UP_JOB[k] ?? 6);   // 55055：升級服務每級加成就業（?? 而非 ||：顯式 0 不能退回 6）
   switch (k) {
@@ -136,8 +137,8 @@ export function countMore(c: MoreCount, w: World, root: number, b: Bld): void {
     case 49: c.owN++; break;                                                      // 55131 油井：開採量（RESOURCE、RDEP）沒搬，suppliesGain、oilGain 一律 0
     case 50: c.mnN++; break;                                                      // 55139 礦場：同上，oreGain 0
     case 51: c.mgN++; break;                                                      // 55147 太空研究中心
-    case 22: c.fa++; c.farmGoldU += (b.lv || 1) * 3; break;                       // 55089 農場：金幣 3／級（化肥 T346 ×1.35 沒搬：fb＝1）
-    case 53: c.bigFa++; c.farmGoldU += (b.lv || 1) * 12; break;                   // 55090 大農場：金幣 12／級
+    case 22: c.fa++; c.farmGoldU += (b.lv || 1) * 3 * fb; break;                  // 55089 農場：金幣 3／級×化肥增產 fb
+    case 53: c.bigFa++; c.farmGoldU += (b.lv || 1) * 12 * fb; break;              // 55090 大農場：金幣 12／級×fb
     case 23: c.ra++; c.ranchGoldU += (b.lv || 1) * 2; break;                      // 55091 牧場：金幣 2／級
   }
   if (k >= 69 && k <= 80) { const j = LANDMARK_JOBS309[k], u = LANDMARK_UPKEEP309[k]; if (j !== undefined) { c.jobsLm309 += j; c.upLm309 += u; } }   // 55116 地標累加（觀光值 tourLm309 在 countFood）
@@ -147,15 +148,18 @@ export function countMore(c: MoreCount, w: World, root: number, b: Bld): void {
 // 三份計數欄位互不重疊；cnt 是合成的一份（欄位名＝實驗線變數名），餵固定就業（jobCountsOf）與維護費（day.ts settleToday）
 export interface FacCount { schools: number; dumps: number; stadiums: number; waterTowers: number; clinics: number; libraries: number; posts: number; cemeteries: number }
 export interface Tally { fc: FoodCount; fac: FacCount; mc: MoreCount; towerPop: number; megaPop: number; cnt: Record<string, number> }
-export function tallyBuildings(w: World, tickBld: readonly number[]): Tally {
+// fert（選填）：昨天的化肥（T346 fertReady）與化肥廠覆蓋場（COV.fertco）；兩個都成立的根格農場與大農場食物與金幣 ×1.35（55089、55090）。沒給＝沒有化肥
+export interface FertIn { ready: boolean; fertco?: ArrayLike<number> }
+export function tallyBuildings(w: World, tickBld: readonly number[], fert?: FertIn): Tally {
   const fc = emptyFoodCount(), mc = emptyMoreCount();
   const fac: FacCount = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
   let towerPop = 0, megaPop = 0;                                            // 55040 towerPop488、megaPop488（D021）
   for (const i of tickBld) {
     const b = w.tiles[i].bld;
     if (!b || b.ref) continue;                                              // 55054：多格建築的 ref 格不參與
-    countFood(fc, b);
-    countMore(mc, w, i, b);
+    const fb = (b.k === 22 || b.k === 53) && fert && fert.ready && fert.fertco && fert.fertco[i] > 0 ? FERT_BOOST : 1;   // 55089–55090：(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1
+    countFood(fc, b, fb);
+    countMore(mc, w, i, b, fb);
     if (b.k === 105) megaPop += residentPopulation488(b, () => undefined);  // 55108：住宅巨廈（T488 單一人口真相；住房沒就緒＝入住率 1）
     if (b.k === 33) towerPop += residentPopulation488(b, () => undefined);  // 55110：住宅塔
     if (b.k === 7) fac.schools++;                                           // 55056

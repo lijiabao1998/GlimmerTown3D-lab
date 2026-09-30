@@ -1,0 +1,200 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-income.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "decl",
+   "name": "FARM_SEASON_MULT",
+   "anchors": {
+    "start": "const FARM_SEASON_MULT="
+   },
+   "line": 38128,
+   "endLine": 38128,
+   "sha": "4022608a5474238f0028e49895739b87616df06f093a0d21eed39a6fcc5a708d"
+  },
+  {
+   "kind": "decl",
+   "name": "TOUR_SEASON_MULT",
+   "anchors": {
+    "start": "const TOUR_SEASON_MULT="
+   },
+   "line": 38210,
+   "endLine": 38210,
+   "sha": "53a7bd632543ef54f0c958f303c8b64797b4bb9615615eeb99e3a943c57b9ea6"
+  },
+  {
+   "kind": "exact",
+   "name": "chainVars",
+   "anchors": {
+    "start": "let gasSup=0,gasDem=0,gasRatio=1,fertOut=0,cookedOut=0,wageIdx=1,fertReady=false,cookedReady=false;"
+   },
+   "line": 38257,
+   "endLine": 38257,
+   "sha": "092bd79048f969c0775f3f44f39685b047d89a949943f5797bd7ccbc64e08677"
+  },
+  {
+   "kind": "fn",
+   "name": "enterpriseTypeUtilization489",
+   "anchors": {
+    "start": "function enterpriseTypeUtilization489(",
+    "closure": "balanced-brace"
+   },
+   "line": 39574,
+   "endLine": 39574,
+   "sha": "467c1b4e228fe1e1e1dffa57d0bb86695c228f531f08c354df72be6e87b2c958"
+  },
+  {
+   "kind": "fn",
+   "name": "getMaxRoadClass",
+   "anchors": {
+    "start": "function getMaxRoadClass(",
+    "closure": "balanced-brace"
+   },
+   "line": 51181,
+   "endLine": 51190,
+   "sha": "91827f32d73f3581c44007178f9d759eab7534b776ac0a0f3740701d5323b39c"
+  },
+  {
+   "kind": "span",
+   "name": "農場與大農場的化肥增產 fb",
+   "anchors": {
+    "start": "if(b&&b.k===22){fa++;const flv=b.lv||1;const fb=",
+    "end": "if(b&&b.k===53){bigFa++;const flv=b.lv||1;const fb="
+   },
+   "line": 55089,
+   "endLine": 55090,
+   "sha": "51371a3f200024b8f1677a118106b87961a3363c190558c12d4c1def68dfd42a"
+  },
+  {
+   "kind": "span",
+   "name": "住宅教育總和與房貸人口",
+   "anchors": {
+    "start": "eduSumT342+=EDU[ci];eduCntT342++;",
+    "end": "mortPop346+=residentPop;"
+   },
+   "line": 55165,
+   "endLine": 55166,
+   "sha": "4821bebc10e0be5c1352984c1eac5c851b9ecd7f8f80bdda06d62518f62a1bd0"
+  },
+  {
+   "kind": "span",
+   "name": "熟食供應幸福項",
+   "anchors": {
+    "start": "{name:'熟食供應',val:(cookedReady&&COV.kitchen",
+    "end": "{name:'熟食供應',val:(cookedReady&&COV.kitchen"
+   },
+   "line": 55206,
+   "endLine": 55206,
+   "sha": "82de676c3b6bbf765c177206bad3155a1717554c03247e153767f918f987d4c1"
+  },
+  {
+   "kind": "span",
+   "name": "大型購物中心稅 k65",
+   "anchors": {
+    "start": "else if(b.k===65){const bx=i%N,byy=(i/N)|0;",
+    "end": "else if(b.k===65){const bx=i%N,byy=(i/N)|0;"
+   },
+   "line": 55964,
+   "endLine": 55964,
+   "sha": "b4ee7dd952e2d12d35003a79a5846146c0dacc00d155805f88b19fc2fef05d59"
+  },
+  {
+   "kind": "span",
+   "name": "旅宿床位、旅宿收入、農貿市場",
+   "anchors": {
+    "start": "hotelBeds=gh330*8+ht330*40+rs330*110+hs340*14;",
+    "end": "const mktGold=mk330>0?Math.round(marketFoodUse482*2*foodPrice):0;"
+   },
+   "line": 55992,
+   "endLine": 55994,
+   "sha": "23b54bf8361a48639126e666c87754288ad28cb5b4a39e4f4d4e37de77ff8ea4"
+  },
+  {
+   "kind": "span",
+   "name": "釀酒金幣",
+   "anchors": {
+    "start": "const brewGold=br340>0?",
+    "end": "const brewGold=br340>0?"
+   },
+   "line": 56003,
+   "endLine": 56003,
+   "sha": "190516c6367fc07e4f8f439b7e82ec55a4333d310d98b0b6b83dc62f37000302"
+  },
+  {
+   "kind": "span",
+   "name": "T346 鏈條結算",
+   "anchors": {
+    "start": "fertOut=Math.round(fp346*6*enterpriseTypeUtilization489(118)*gasRatio);",
+    "end": "const gasGold=Math.round(gasExportGold482);"
+   },
+   "line": 56006,
+   "endLine": 56011,
+   "sha": "2c33fb1b3cbcb144cc88e11ee65be3979977238915722ebfa70c08416e4bd311"
+  },
+  {
+   "kind": "span",
+   "name": "熟食、銀行利息、科技園、數據中心",
+   "anchors": {
+    "start": "const cookGold=Math.round(cookedOut*.6);",
+    "end": "const dcGold=Math.round(dtc342*40*enterpriseTypeUtilization489(116));"
+   },
+   "line": 56012,
+   "endLine": 56017,
+   "sha": "8238bfcda3cd95122678dc498f990fdafa819ecddc7add72c57939c4e49daae9"
+  },
+  {
+   "kind": "span",
+   "name": "農場、牧場、溫室、食品加工金幣",
+   "anchors": {
+    "start": "const farmGold=Math.round(farmGoldU*FARM_SEASON_MULT[sea]*foodPrice);",
+    "end": "const procGold=Math.round(foodPlantUse482*1.5*foodPrice);"
+   },
+   "line": 56022,
+   "endLine": 56024,
+   "sha": "da6a530040285ec2a1d023014257d6461ebc5e8c87773d45f6912b47b7188179"
+  },
+  {
+   "kind": "span",
+   "name": "其他收入加總",
+   "anchors": {
+    "start": "income+=farmGold+ranchGold+procGold+ghGold+lodgeRev+mktGold+tradeGold",
+    "end": "income+=farmGold+ranchGold+procGold+ghGold+lodgeRev+mktGold+tradeGold"
+   },
+   "line": 56025,
+   "endLine": 56025,
+   "sha": "a92cfe76c6503e94e162c35c31177e45684f4be961ac307efdce65dc15d19351"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "FARM_SEASON_MULT": "const FARM_SEASON_MULT=[1,1.15,1.4,0.4];",
+  "TOUR_SEASON_MULT": "const TOUR_SEASON_MULT=[1,1.3,1.2,0.85];",
+  "chainVars": "let gasSup=0,gasDem=0,gasRatio=1,fertOut=0,cookedOut=0,wageIdx=1,fertReady=false,cookedReady=false;",
+  "enterpriseTypeUtilization489": "function enterpriseTypeUtilization489(k){const q=enterprise489&&enterprise489.ready?enterprise489.byType[k]:null;return q?clamp(q.utilization,0,1):1;}",
+  "getMaxRoadClass": "function getMaxRoadClass(x,y,r=1){\n  let mx=0;\n  for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){\n    const nx=x+dx,ny=y+dy;\n    if(!inMap(nx,ny))continue;\n    const t=T(idx(nx,ny));\n    if(t.road&&t.rc>mx)mx=t.rc;\n  }\n  return mx;\n}",
+  "farmFb": "    if(b&&b.k===22){fa++;const flv=b.lv||1;const fb=(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1;farmFoodU+=flv*3*fb;farmGoldU+=flv*3*fb;} /* T346 化肥增產 */ // 農場（T46）；T251：灌溉等級加權食物(3/級)＋金幣收益(3/級)\n    if(b&&b.k===53){bigFa++;const flv=b.lv||1;const fb=(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1;farmFoodU+=flv*20*fb;farmGoldU+=flv*12*fb;} /* T346 化肥增產 */ // 大農場（T228，5×5 root）；T251：食物20/級＋金幣12/級",
+  "eduMort": "      eduSumT342+=EDU[ci];eduCntT342++;\n      if(b.k===1&&!window.__noMort&&COV.bank&&COV.bank[ci]>0&&b.pw)mortPop346+=residentPop; /* T346 房貸人口（銀行覆蓋住宅） */ /* T342：全城住宅教育均值（科技園產值閉環） */                          // 公園半徑4計數（原 countNear k===4）",
+  "cookedHappy": "        {name:'熟食供應',val:(cookedReady&&COV.kitchen&&COV.kitchen[ci]>0)?.03:0}, /* T346 */ // T296：信仰中心覆蓋→精神滿足幸福加成（未放置時恆為 0，精確恆等）",
+  "mallTax": "      else if(b.k===65){const bx=i%N,byy=(i/N)|0;const rc=getMaxRoadClass(bx,byy,1);let mult=(1+rc*.08)*(COV.bus[i]>0?1.1:1)*(COV.post[i]>0?1.15:1)*((COV.parking&&COV.parking[i]>0)?1.1:1);if(tourists>0)mult*=1+Math.min(.25,tourists/400);if(pm.nightMarket)mult*=nightCity487.ready?nightCity487.commerce.taxMul:1.06;const v65=(150+(b.lv-1)*55)*mult*(pm.taxC||1)*(pm.ecoReg?.95:1)*civicMul*goodsMul284*commerceSalesMul481*enterpriseTaxFactor489(i);income+=v65;taxC+=v65;} // T489：商場稅按真實營運率；T290：大型購物中心商業稅（4×4 旗艦，基礎150+55/級，綁 T284 供貨鏈＋觀光/巴士/停車加成）；鐵律14 守衛：漏此 fall-through 工業稅 lv≥4 NaN：觀光推廣＝觀光收益子項×1.1；節能條例＝商業稅×0.95；T139：市政廳全城稅收微增",
+  "lodgeMarket": "  hotelBeds=gh330*8+ht330*40+rs330*110+hs340*14;hotelOcc=Math.min(tourists,hotelBeds); /* T340 青旅床位 */ // T334 旅宿：床位/入住\n  const lodgeRev=Math.round(hotelOcc*.35*(1+(TOUR_SEASON_MULT[sea]-1)*.5)); // T335b：.05 實測滿房仍賠本（旅館 $2/日 vs 維護 $5），校準至 .35 // 旺季房價上浮（幅度取季節乘數一半）\n  const mktGold=mk330>0?Math.round(marketFoodUse482*2*foodPrice):0; // T482：農貿市場只結算真分配到的 food flow，不再與其他加工重複消耗同一份 foodPoints",
+  "brewGold": "  const brewGold=br340>0?Math.round(brewFoodUse482*2.2*foodPrice):0; // T482：釀酒只消耗真分配到的 food flow",
+  "chain346": "  fertOut=Math.round(fp346*6*enterpriseTypeUtilization489(118)*gasRatio);\n  cookedOut=Math.round(kitchenFoodUse482*gasRatio);\n  fertReady=fertOut>0;cookedReady=cookedOut>0;\n  const workers346=laborNow481.workers;\n  wageIdx=laborNow481.wageIndex;\n  const gasGold=Math.round(gasExportGold482); // T482：天然氣盈餘只有經共享 trade capacity 真正出口才產生收入",
+  "cookBankTech": "  const cookGold=Math.round(cookedOut*.6);\n  mortPopLast346=mortPop346;\n  const bankInt=Math.round(mortPop346*.006); // T488：銀行改為融資支持為主，市府只收較小金融服務稅，不再吃完整房貸利息\n  const eduAvg342=eduCntT342?eduSumT342/eduCntT342:0;\n  const techGold=tpk342>0?Math.round(tpk342*60*Math.min(1.2,eduAvg342/100)*enterpriseTypeUtilization489(109)):0; /* T342：科技園產值＝教育閉環（教育100→滿產60/座/日） */\n  const dcGold=Math.round(dtc342*40*enterpriseTypeUtilization489(116)); /* T342：數據中心固定產值 */",
+  "farmRanchProc": "  const farmGold=Math.round(farmGoldU*FARM_SEASON_MULT[sea]*foodPrice); // T251：農場灌溉金幣收益（隨季節；lv 越高越多＝Skylines 式特化經濟）\n  const ranchGold=Math.round(ranchGoldU*foodPrice),ghGold=Math.round(ghGoldU*foodPrice); // T280：溫室金幣恆溫 // T252：牧場牧養金幣收益（不隨季節＝畜牧全年穩定；lv 越高越多）\n  const procGold=Math.round(foodPlantUse482*1.5*foodPrice); // T482：食品加工只吃真分配到的 FOOD，取消與市場/廚房/釀酒的重複計帳",
+  "incomeSum": "  income+=farmGold+ranchGold+procGold+ghGold+lodgeRev+mktGold+tradeGold+brewGold+techGold+dcGold+gasGold+cookGold+bankInt+parkingRevenue491+shipPortGold+shipDailyGold418+fuelExportGold418+steelExportGold482+goodsExportGold481;upkeep+=goodsImportCost481+foodImportCost482+gasImportCost482+fuelImportCost482+steelImportCost482+suppliesImportCost482; /* T482：六商品進口成本共用財政出口；出口收入只來自真 flow，無金融市場 */"
+ }
+}

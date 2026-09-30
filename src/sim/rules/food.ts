@@ -12,6 +12,7 @@ import { NO_ROAD_LOAD, unitsOf485, type RoadStats, type Units485 } from './logis
 
 export const FARM_SEASON_MULT = [1, 1.15, 1.4, 0.4];      // 38128：農場食物的季節倍率（春夏秋冬）
 export const TOUR_SEASON_MULT = [1, 1.3, 1.2, 0.85];      // 38210：觀光的季節倍率
+export const FERT_BOOST = 1.35;                            // 55089–55090：化肥廠覆蓋內的農場（昨天 fertReady）食物與金幣 ×1.35（T346）
 export const CONVENTION_PULSE_DAYS = 20;                  // 39445：會展中心每 20 天一波遊客
 // 38129 LMCFG309 的觀光值 t（地標 k69–80；55116 只數 69–80，表裡 k179 以後的項目沒人數）
 export const LANDMARK_TOUR309: Record<number, number> = { 69: 16, 70: 10, 71: 8, 72: 18, 73: 14, 74: 9, 75: 17, 76: 24, 77: 11, 78: 10, 79: 12, 80: 20 };
@@ -32,7 +33,8 @@ export const emptyFoodCount = (): FoodCount => ({
 });
 
 // 主計數迴圈（55050–55149）裡「一棟根格建築」對這些計數的貢獻。呼叫端先跳過 ref 格（55055）。行號＝實驗線那一行
-export function countFood(c: FoodCount, b: Bld): void {
+// fb：農場與大農場的化肥增產倍率（呼叫端算：昨天 fertReady 且這座在化肥廠覆蓋內 ＝ 1.35，否則 1；其他種類不看它）
+export function countFood(c: FoodCount, b: Bld, fb = 1): void {
   const k = b.k;
   if (k >= 69 && k <= 80) { const t = LANDMARK_TOUR309[k]; if (t) c.tourLm309 += t; return; }   // 55116 地標
   switch (k) {
@@ -50,8 +52,8 @@ export function countFood(c: FoodCount, b: Bld): void {
     case 17: c.st++; break;                                       // 55084 火車站
     case 18: c.po++; break;                                       // 55085 港口
     case 19: c.ai++; break;                                       // 55086 機場
-    case 22: c.farmFoodU += (b.lv || 1) * 3; break;               // 55089 農場：等級×3（化肥 T346 ×1.35 沒搬：fb＝1）
-    case 53: c.farmFoodU += (b.lv || 1) * 20; break;              // 55090 大農場：等級×20
+    case 22: c.farmFoodU += (b.lv || 1) * 3 * fb; break;          // 55089 農場：等級×3×化肥增產 fb
+    case 53: c.farmFoodU += (b.lv || 1) * 20 * fb; break;         // 55090 大農場：等級×20×fb
     case 23: c.ranchFoodU += (b.lv || 1) * 2; break;              // 55091 牧場：等級×2，不隨季節
     case 24: c.la++; break;                                       // 55092 地標
     case 110: c.frt342++; break;                                  // 55101 貨運中心（T342）

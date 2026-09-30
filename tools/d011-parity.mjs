@@ -135,6 +135,27 @@ if (process.argv.includes('--shots')) {
 // 本線那一半先跑（B 段之後的碼要拿去實驗線讀回）
 const mine = {}, minePre = {};
 for (const seed of SEEDS) { mine[seed] = parity3d(codeWithSeed(newcity, seed), KT, vrank, DAYS); minePre[seed] = prebuilt3d(codeWithSeed(prebuilt, seed), KT, vrank); }
+function fill3d() {   // 本線這一份寫進 threeD（第一個種子的 changed 留整份清單，其餘只留個數；sim 不存）
+  for (const seed of SEEDS) {
+    const m = mine[seed]; delete m.sim;
+    if (seed !== SEEDS[0]) for (const o of [...m.A, ...m.B]) o.changed = o.changed.length;
+    threeD.runs[seed] = m;
+    const p = minePre[seed]; delete p.sim;
+    threeD.prebuilt[seed] = p;
+  }
+}
+// --mine-only：只重算本線那一份（d011-3d.json），實驗線那份讀已錄的 d011-lab.json（不開瀏覽器）。本線的模擬改了、但沒動到實驗線對拍要比的東西時用（例：D028 只在報表多了 settle.other／settle.imports 兩個欄位）；
+// 實驗線樣本的 commit、天數、種子、欄位跟這一跑不同就丟例外（要整個重跑）
+if (process.argv.includes('--mine-only')) {
+  const old = JSON.parse(read('src/content/samples/d011-lab.json'));
+  if (old.source?.commit !== commit || old.days !== DAYS || J(old.seeds) !== J(SEEDS) || J(old.fields) !== J(ROW_FIELDS)) throw new Error('--mine-only：已錄的 d011-lab.json 跟這一跑的實驗線 commit、天數、種子、欄位不同，要整個重跑');
+  fill3d();
+  const bad = shapeOff('3d', threeD, { seeds: SEEDS, days: DAYS, ops, P });
+  if (bad.length) throw new Error(`錄到的欄位不齊，不寫樣本：${bad.slice(0, 6).join('、')}`);
+  fs.writeFileSync(path.join(OUT, 'd011-3d.json'), J(threeD));
+  console.log(`--mine-only：只寫出 d011-3d.json（實驗線 d011-lab.json 沿用，${old.source.commit.slice(0, 7)}）`);
+  process.exit(0);
+}
 
 for (const seed of SEEDS) {
   const tm = lab.timing[seed] = {};
@@ -177,13 +198,7 @@ await withBrowser(opt, async ({ open, page }) => {
     lab.readback[seed] = { withD3: await rb(code), plain: await rb(plain), codeHash: fnv1a(code), plainHash: fnv1a(plain) };
   }
 });
-for (const seed of SEEDS) {
-  const m = mine[seed]; delete m.sim;
-  if (seed !== SEEDS[0]) for (const o of [...m.A, ...m.B]) o.changed = o.changed.length;
-  threeD.runs[seed] = m;
-  const p = minePre[seed]; delete p.sim;
-  threeD.prebuilt[seed] = p;
-}
+fill3d();
 lab.seconds = Math.round((Date.now() - t0) / 1000);
 // 寫之前先核形狀（跟守衛同一個 shapeOff）：錄到的欄位不齊就不寫，舊樣本留著（漏掉的欄在守衛裡兩邊都是 undefined，逐項比會「相等」）
 const shapeBad = [['d011-lab.json', shapeOff('lab', lab, { seeds: SEEDS, days: DAYS, ops, P })], ['d011-3d.json', shapeOff('3d', threeD, { seeds: SEEDS, days: DAYS, ops, P })]].filter(([, o]) => o.length);

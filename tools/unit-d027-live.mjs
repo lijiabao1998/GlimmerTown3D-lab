@@ -50,6 +50,17 @@ export function rowOf(s, rep) {
 const FIELDS = ['day', 'pop', 'jobs', 'happy', 'ah', 'lg', 'rl', 'cp', 'cl', 'ld', 'lb', 'jc', 'nh', 'hh', 'peek'];
 const NAMES = { rl: '道路負載', cp: '通勤懲罰', cl: '叢集路徑', ld: '動態地價', lb: '地價基準', jc: '過載道路格數', nh: '住宅棟數', hh: '住宅幸福', happy: '城市幸福', pop: '人口', jobs: '就業', peek: '下一個亂數（亂數次數或順序不同）', day: '日子', lg: '物流效率與貿易額度（壅堵扣分進經濟）', ah: '幸福構成（57 項城市平均的位元雜湊）' };
 
+// 這一天要代進去的輸入（本線沒有的政策、夜間城市、城市活動與科技、專精；D028 起經濟段的也用它，另加 class2）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
+// prev＝前一列（夜間城市讀昨天的）、row＝這一列（城市活動讀當天的）。inject＝false 時什麼都不代（玩家實際玩到的本線）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol, night } 或 { err }
+export function injectInputs(s, st, prev, row, inject) {
+  const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech), night = prev.night, f = s.g;
+  if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { err: `科技不是字串陣列：${st.tech}` };
+  s.edu.tech = tech;
+  const nightCrimeMul = inject && night.ready ? (i, bb) => { const sLocal = (f.COV.police[i] > 0 || f.COV.police2[i] > 0) ? 1 : 0, local = .62 * night.score + .38 * sLocal, market = (bb && bb.k === 2 && pol && pol.nightMarket) ? .05 : 0; return clamp(1.14 - local * .34 + market, .72, 1.20); } : undefined;
+  const ev = row.ev, hazard = inject ? { pol, nightCrimeMul, spec: st.spec || null, nightCity: night.ready ? { ready: true, happinessDelta: night.hd } : { ready: false, happinessDelta: 0 }, eventHappy: ev ? ev.happy : null } : undefined;
+  return { hazard, pol, night };
+}
+
 // 一座城連推 rec.days 天，逐天跟實驗線比。mod＝day.ts（真的或改壞的）。inject＝false 時不代任何輸入（政策、夜間城市、城市活動都當沒有＝玩家實際玩到的本線）
 // 回 { d: [不同處], days, first: 第一個不同的日子（0＝沒有）, parts: 第一個不同的日子裡幸福構成不同的項, fields: 任何一天不同的欄位鍵, firstFields: 第一個不同的日子裡不同的欄位鍵 }
 // onDay(day, mine, row, rep, sim)：每天比完之後呼叫（拿本線當天的值做別的檢查，例如逐項幸福）
@@ -59,11 +70,9 @@ export function compareCity27(mod, code, rec, KT, vrank, { stopAtFirst = true, i
   const st = { pol: rec.start.pol, tech: rec.start.tech, spec: rec.start.spec };   // 政策、科技、專精：樣本裡跟前一列一樣的不存（tools/d027-lab.mjs compactRows），往前找最近一次記的
   for (let day = 1; day <= rec.days; day++) {
     const row = rec.rows[day - 1], dd = [], ff = [];
-    const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech), night = prev.night, f = s.g;
-    if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { ...out, d: [`科技不是字串陣列：${st.tech}`], days: day, first: day };
-    s.edu.tech = tech;
-    const nightCrimeMul = inject && night.ready ? (i, bb) => { const sLocal = (f.COV.police[i] > 0 || f.COV.police2[i] > 0) ? 1 : 0, local = .62 * night.score + .38 * sLocal, market = (bb && bb.k === 2 && pol && pol.nightMarket) ? .05 : 0; return clamp(1.14 - local * .34 + market, .72, 1.20); } : undefined;
-    const ev = row.ev, hz = inject ? { pol, nightCrimeMul, spec: st.spec || null, nightCity: night.ready ? { ready: true, happinessDelta: night.hd } : { ready: false, happinessDelta: 0 }, eventHappy: ev ? ev.happy : null } : undefined;
+    const inj = injectInputs(s, st, prev, row, inject);
+    if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
+    const ev = row.ev, hz = inj.hazard;
     const rep = mod.stepDay(s, { hazard: hz, class2: inject && ev ? { economy: { eventFood: ev.food } } : undefined });
     const mine = rowOf(s, rep);
     for (const k of FIELDS) if (J(mine[k]) !== J(row[k])) { dd.push(`${NAMES[k]} 本線 ${J(mine[k])} ≠ 實驗線 ${J(row[k])}`); ff.push(k); }
@@ -132,10 +141,10 @@ async function guards(log) {
   // 幸福有關的欄位（本線與實驗線差在這幾個、其他欄位全等＝差只在幸福的加減，不是模擬的別處）
   const HK = ['happy', 'ah', 'hh'];
   {
-    // D022–D025 的 120 座城（分區清成 0＝不會長新房子）連推 10 天：117 座每一天每一欄全等；3 座只差幸福，差在哪一項＝哪個系統沒搬（oldx 是這三座另存的逐項幸福）
+    // D022–D025 的 120 座城（分區清成 0＝不會長新房子）連推 10 天：118 座每一天每一欄全等；2 座只差幸福，差在哪一項＝哪個系統沒搬（oldx 是這幾座另存的逐項幸福）
+    // D027 收工時是 3 座；G14（差在熟食供應 +.005，T346 cookedReady）由 D028 補上，從名單拿掉，下面另有一段正向檢查證明它現在整條全等
     const KNOWN = {
       seed516: { part: '微光之巔', why: '城市等級 ≥ 25 的獎勵 +.02（T133 城市等級：本線 rankIdx 恆 0，城市等級沒搬）' },
-      G14: { part: '熟食供應', why: '熟食供應 +.005（T346 cookedReady：經濟（二）沒搬，D028）' },
       D3: { part: null, why: '幸福構成 57 項全等，差在 55420 那一步：污水廠（k27）與管網 SEW_OK442 讓接上管網的住宅每座近旁工業加 .025（T442 污水沒搬，D029）' },
     };
     const rows = base.filter(x => x.kind === 'old'), bad = rows.filter(x => x.d.length), errs = [];
@@ -156,8 +165,14 @@ async function guards(log) {
       else if (J(r.parts) !== J(wantParts) || r.firstFields.some(f => !wantF.includes(f))) errs.push(`${id} 第 ${r.first} 天：幸福構成不同的項 ${J(r.parts)}（要 ${J(wantParts)}）、不同的欄位 ${r.firstFields.join('、')}`);
       else why.push(`${id} 第 ${r.first} 天起：${k.part ?? '（57 項全等）'}`);
     }
+    // D028：G14 的熟食供應（T346）搬了——D027 錄的逐項幸福（oldx，57 項＋每一棟住宅）現在要逐位相等
+    {
+      const rec = lab.oldx?.G14, c = olds.find(q => q.id === 'G14');
+      if (!rec || rec.codeHash !== fnv1a(c.code) || rec.rows.length !== OLD_DAYS) errs.push('G14：oldx 記錄不齊（重跑 tools/d027-lab.mjs --part=oldx）');
+      else { const r = compareCity27(realDay, c.code, rec, KT, vrank, { stopAtFirst: false }); if (r.first) errs.push(`G14 第 ${r.first} 天還有差（D028 已搬熟食供應）：${r.d[0].slice(0, 160)}`); else why.push('G14 整條全等（57 項幸福構成與每一棟住宅；D028 補了熟食供應）'); }
+    }
     if (rows.length !== olds.length) errs.push(`old 只有 ${rows.length} 座`);
-    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區清成 0）——連推 10 天，逐天逐欄跟實驗線比：全等的城要每一欄全等；有差的城只准差在幸福（城市幸福、每一棟住宅的幸福、幸福構成）、而且差在哪一項要剛好是那個沒搬的系統（微光之巔＝T133 城市等級、熟食供應＝T346、污水管網＝T442；oldx 逐項）',
+    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區清成 0）——連推 10 天，逐天逐欄跟實驗線比：全等的城要每一欄全等；有差的城只准差在幸福（城市幸福、每一棟住宅的幸福、幸福構成）、而且差在哪一項要剛好是那個沒搬的系統（微光之巔＝T133 城市等級、污水管網＝T442；oldx 逐項；D027 收工時還有熟食供應＝T346，D028 補上，G14 整條全等）',
       errs.slice(0, 4).join('｜') || `${rows.length} 座、${rows.reduce((a, x) => a + x.days, 0)} 個城日：${rows.length - bad.length} 座每一欄全等、${bad.length} 座只差幸福（${why.join('；')}）`);
   }
   {
@@ -166,10 +181,10 @@ async function guards(log) {
       bad.slice(0, 4).map(x => `${x.id} ${x.d[0].slice(0, 140)}`).join('｜') || `${rows.length} 份、${rows.reduce((a, x) => a + x.days, 0)} 個城日全等`);
   }
   {
-    // 同一批 120 座城，分區不清（生長、升級、廢棄、亂數全在跑：整條 tick 鏈）：一樣 117 座每一欄每一天全等，一樣那 3 座只差幸福
+    // 同一批 120 座城，分區不清（生長、升級、廢棄、亂數全在跑：整條 tick 鏈）：一樣 118 座每一欄每一天全等，一樣那 2 座只差幸福（D028 起 G14 全等）
     const rows = base.filter(x => x.kind === 'oldz'), bad = rows.filter(x => x.d.length), errs = [];
     for (const x of bad) {
-      if (!['seed516', 'G14', 'D3'].includes(x.id)) errs.push(`${x.id} 不在已知名單：${x.d[0].slice(0, 140)}`);
+      if (!['seed516', 'D3'].includes(x.id)) errs.push(`${x.id} 不在已知名單：${x.d[0].slice(0, 140)}`);
       else if (x.fields.some(f => !HK.includes(f))) errs.push(`${x.id} 除了幸福還有別的欄位不同：${x.fields.join('、')}（${x.d[0].slice(0, 100)}）`);
     }
     // 覆蓋：實驗線那邊真的長了東西（住宅棟數增加的城、人口變的城），不然「分區不清」跟「清成 0」沒有差別
@@ -177,7 +192,7 @@ async function guards(log) {
     const rngMoved = rows.filter(x => J(lab.oldz[x.id].rows.map(r => r.peek)) !== J(lab.old[x.id].rows.map(r => r.peek))).length, newHouses = rows.reduce((a, x) => { const L = lab.oldz[x.id].rows; return a + L.at(-1).nh - L[0].nh; }, 0);
     if (grew < 8 || popMoved < 30 || rngMoved < 8) errs.push(`覆蓋不夠：住宅棟數增加的城 ${grew}（要 ≥ 8）、人口有變的城 ${popMoved}（要 ≥ 30）、亂數流跟分區清成 0 那批不同的城 ${rngMoved}（要 ≥ 8；不同＝生長與升級的擲骰真的跑了）`);
     if (rows.length !== oldzs.length) errs.push(`oldz 只有 ${rows.length} 座`);
-    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區不清——會長新房子、升級、廢棄，亂數全在跑）——連推 10 天：整條 tick 鏈逐天逐欄跟實驗線比，跟分區清成 0 那批一樣：117 座每一欄全等、只有那 3 座只差幸福',
+    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區不清——會長新房子、升級、廢棄，亂數全在跑）——連推 10 天：整條 tick 鏈逐天逐欄跟實驗線比，跟分區清成 0 那批一樣：118 座每一欄全等、只有那 2 座只差幸福',
       errs.slice(0, 4).join('｜') || `${rows.length} 座、${rows.reduce((a, x) => a + x.days, 0)} 個城日：${rows.length - bad.length} 座每一欄全等（實驗線那邊 ${grew} 座長了新住宅〔共 ${newHouses} 棟〕、${popMoved} 座人口有變、${rngMoved} 座的亂數流跟分區清成 0 那批不同）、${bad.length} 座只差幸福（${bad.map(x => x.id).join('、')}）`);
   }
 
@@ -283,10 +298,10 @@ export async function wiringGuards(log, { lab, cities, olds, KT, vrank, evolvedC
     ['電視訊號讀今天的電視台數（不是昨天的）', [['tvSignal: s.tvSignal, tech: s.edu.tech,', 'tvSignal: fc.tv330 > 0, tech: s.edu.tech,']], 'lab'],
     ['電視訊號不更新', [['  s.tvSignal = fc.tv330 > 0; ', '  void 0; ']], 'lab'],
     ['社宅的財富級不還原', [['    if (k === 127) bld.we = 0; ', '    if (k === 127) void 0; ']], 'lab'],
-    ['雜湊不看道路負載', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));', 'hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));']], 'hash'],
-    ['雜湊不看通勤懲罰', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));', 'hashBytes(s.g.roadLoad), s.commuteClusters, s.tvSignal]));']], 'hash'],
-    ['雜湊不看叢集路徑', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));', 'hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.tvSignal]));']], 'hash'],
-    ['雜湊不看電視訊號', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));', 'hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters]));']], 'hash'],
+    ['雜湊不看道路負載', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal,', 'hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal,']], 'hash'],
+    ['雜湊不看通勤懲罰', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal,', 'hashBytes(s.g.roadLoad), s.commuteClusters, s.tvSignal,']], 'hash'],
+    ['雜湊不看叢集路徑', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal,', 'hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.tvSignal,']], 'hash'],
+    ['雜湊不看電視訊號', [['hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal,', 'hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters,']], 'hash'],
   ];
   const bad = [], out = [], base0 = [dayBad(V0), hashBad(V0)].filter(Boolean);
   if (base0.length) bad.push(`沒改的副本就有不對：${base0.join('｜')}`);

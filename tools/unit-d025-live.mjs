@@ -25,7 +25,8 @@ import { d025Codes, MUL, IMP, EXP, MULTI_DAYS, MULTI_OTHER, canonOut, scalarsOf 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
-const UNPORTED_INC = ['metroRev', 'metroAds', 'transitRev', 'nightTransitRev487', 'farmGold', 'ranchGold', 'procGold', 'ghGold', 'lodgeRev', 'mktGold', 'brewGold', 'techGold', 'dcGold', 'cookGold', 'bankInt', 'parkingRevenue491'];
+// D028 起農牧、溫室、食品加工、旅宿、農貿市場、釀酒、科技園、數據中心、中央廚房、銀行利息本線自己算（rules/income2.ts），大型購物中心的稅也搬了（money.ts）；只剩地鐵、地面運輸、夜間運輸與停車（政策與行動力）沒搬
+const UNPORTED_INC = ['metroRev', 'metroAds', 'transitRev', 'nightTransitRev487', 'parkingRevenue491'];
 const ZERO_CNT = Object.fromEntries(Object.keys(CNT.tallyBuildings({ N: 1, tiles: [{ t: 2, bld: null }] }, []).cnt).map(k => [k, 0]));
 const FOOD_KEYS = Object.keys(FOOD.emptyFoodCount());
 const same = (a, b) => J(a) === J(b);
@@ -89,13 +90,13 @@ async function guards(log) {
       for (const k of Object.keys(cnt)) if ((A.c[k] ?? 0) !== cnt[k]) inp.push(`${k} 本線 ${cnt[k]} ≠ 實驗線 ${A.c[k] ?? 0}`);
       d.push(...outDiffs({ sn: rep.econ.sn, ec, late: rep.econ.late, st: s.econ, cons: rep.econ.cons }, B));
       if (!Object.is(A.money + ec.mgReward, B.money)) d.push(`結算前的錢 本線 ${A.money + ec.mgReward} ≠ 實驗線 ${B.money}`);
-      // 收入：稅（住宅、商業、工業）分項＋合計。實驗線這一天有本線沒搬的東西時，那一項只量不判：火災／疾病／死亡／廢棄的房屋（55757–55856，不繳稅）、大型購物中心 k65 的稅（55964，D011 沒搬）、
-      // 存檔裡的政策與科技與專精（稅率、tq、sq）。沒搬的收入項（農牧、旅宿、市場、釀酒、科技、數據中心、銀行、地鐵、運輸，D026 才搬）照實驗線探針的值扣掉
+      // 收入：稅（住宅、商業、工業）分項＋合計。實驗線這一天有本線沒搬的東西時，那一項只量不判：火災／疾病／死亡／廢棄的房屋（55757–55856，不繳稅；D028 起本線也有，但這一批城的旗標是實驗線那天的，先只量不判）、
+      // 存檔裡的政策與科技與專精（稅率、tq、sq）。沒搬的收入項（地鐵、運輸、夜間運輸、停車）照實驗線探針的值扣掉
       const raw = r.save.raw, pol = raw.pol, polOn = !!(pol && (Object.values(pol).some(v => v === true) || pol.taxR !== 1 || pol.taxC !== 1 || pol.taxI !== 1));
       const causes = [];
-      if (B.flagged > 0) causes.push(`火災／疾病／死亡／廢棄 ${B.flagged} 棟`); if ((A.c.mallN ?? 0) > 0) causes.push('大型購物中心 k65 的稅'); if (polOn) causes.push('政策'); if (Array.isArray(raw.tech343) ? raw.tech343.length : raw.tech343) causes.push('科技'); if (raw.spec386) causes.push('專精');
+      if (B.flagged > 0) causes.push(`火災／疾病／死亡／廢棄 ${B.flagged} 棟`); if (polOn) causes.push('政策'); if (Array.isArray(raw.tech343) ? raw.tech343.length : raw.tech343) causes.push('科技'); if (raw.spec386) causes.push('專精');
       const unp = UNPORTED_INC.reduce((a, k) => a + (B[k] ?? 0), 0), tax = rep.settle.tax, tdiff = [];
-      for (const [k, key, skip] of [['R', 'R', B.flagged > 0 || polOn], ['C', 'C', B.flagged > 0 || polOn || (A.c.mallN ?? 0) > 0], ['I', 'I', B.flagged > 0 || polOn]]) if (!skip && !Object.is(tax[k], B.tax[key])) tdiff.push(`tax${k} 本線 ${tax[k]} ≠ 實驗線 ${B.tax[key]}`);
+      for (const [k, key, skip] of [['R', 'R', B.flagged > 0 || polOn], ['C', 'C', B.flagged > 0 || polOn], ['I', 'I', B.flagged > 0 || polOn]]) if (!skip && !Object.is(tax[k], B.tax[key])) tdiff.push(`tax${k} 本線 ${tax[k]} ≠ 實驗線 ${B.tax[key]}`);
       // 維護費（含六種商品的進口費，D025 起本線自己算）：實驗線的維護費扣掉本線沒搬的（地鐵、鐵路、公車、夜間城市的營運費、車隊超出預設 7 輛的保養、法規與科技與專精的日費，同 D024）
       const fl = B.up.fleet[0] + B.up.fleet[1] + B.up.fleet[2], unpUp = B.up.metroCost + B.up.railOps + B.up.busOps + B.up.nightOps + (fl - 7) * .8 + B.up.upReg;
       if (Math.abs(rep.settle.upkeep - (B.upkeep - unpUp)) > 1e-9) d.push(`維護費 本線 ${rep.settle.upkeep} ≠ 實驗線 ${B.upkeep}－沒搬的 ${unpUp}`);
