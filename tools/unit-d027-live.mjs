@@ -49,13 +49,13 @@ export function rowOf(s, rep) {
 const FIELDS = ['day', 'pop', 'jobs', 'happy', 'ah', 'lg', 'rl', 'cp', 'cl', 'ld', 'lb', 'jc', 'nh', 'hh', 'peek'];
 const NAMES = { rl: '道路負載', cp: '通勤懲罰', cl: '叢集路徑', ld: '動態地價', lb: '地價基準', jc: '過載道路格數', nh: '住宅棟數', hh: '住宅幸福', happy: '城市幸福', pop: '人口', jobs: '就業', peek: '下一個亂數（亂數次數或順序不同）', day: '日子', lg: '物流效率與貿易額度（壅堵扣分進經濟）', ah: '幸福構成（57 項城市平均的位元雜湊）' };
 
-// 這一天要代進去的輸入（本線沒有的政策、城市活動與科技、專精；D028 起經濟段的也用它，另加 class2；夜間城市 D029 起本線自己算，不再代）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
-// row＝這一列（城市活動讀當天的）。inject＝false 時什麼都不代（玩家實際玩到的本線）。prev（前一列）以前給夜間城市用，現在沒用、簽名照舊（chart-d028 等呼叫端不必改）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol } 或 { err }
+// 這一天要代進去的輸入（本線沒有的政策、科技、專精；D028 起經濟段的也用它，另加 class2；夜間城市 D029、城市活動 D030 起本線自己算，不再代）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
+// row＝這一列。inject＝false 時什麼都不代（玩家實際玩到的本線）。prev（前一列）以前給夜間城市用，現在沒用、簽名照舊（chart-d028 等呼叫端不必改）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol } 或 { err }
 export function injectInputs(s, st, prev, row, inject) {
   const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech);
   if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { err: `科技不是字串陣列：${st.tech}` };
   s.edu.tech = tech;
-  const ev = row.ev, hazard = inject ? { pol, spec: st.spec || null, eventHappy: ev ? ev.happy : null } : undefined;
+  const hazard = inject ? { pol, spec: st.spec || null } : undefined;
   return { hazard, pol };
 }
 
@@ -70,8 +70,8 @@ export function compareCity27(mod, code, rec, KT, vrank, { stopAtFirst = true, i
     const row = rec.rows[day - 1], dd = [], ff = [];
     const inj = injectInputs(s, st, prev, row, inject);
     if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
-    const ev = row.ev, hz = inj.hazard;
-    const rep = mod.stepDay(s, { hazard: hz, class2: inject && ev ? { economy: { eventFood: ev.food } } : undefined });
+    const hz = inj.hazard;
+    const rep = mod.stepDay(s, { hazard: hz });
     const mine = rowOf(s, rep);
     for (const k of FIELDS) if (J(mine[k]) !== J(row[k])) { dd.push(`${NAMES[k]} 本線 ${J(mine[k])} ≠ 實驗線 ${J(row[k])}`); ff.push(k); }
     if (row.agg && J(mine.agg) !== J(row.agg)) { const at = HAPPY_NAMES.filter((n, i) => J(mine.agg[i]) !== J(row.agg[i])); dd.push(`幸福構成的項不同：${at.join('、')}`); if (!out.first) out.parts = at; ff.push('agg'); }
@@ -289,7 +289,7 @@ export async function wiringGuards(log, { lab, cities, olds, KT, vrank, evolvedC
     ['幸福構成不加總', [['for (let k = 0; k < hp.parts.length; k++) aggSum[k] = (aggSum[k] ?? 0) + hp.parts[k];', '']], 'lab'],
     ['幸福構成除以錯的數', [['aggSum.map(v => v / happyN)', 'aggSum.map(v => v / nn)']], 'lab'],
     ['夜間城市不餵幸福', [['nightCity: hzx?.nightCity ?? NIGHT_OFF,', 'nightCity: NIGHT_OFF,']], 'lab'],
-    ['城市活動不餵幸福', [['eventHappy: opts.hazard?.eventHappy ?? null,', 'eventHappy: null,']], 'lab'],
+    ['城市活動不餵幸福', [['eventHappy: opts.hazard?.eventHappy ?? (evd ? evd.happy : null),', 'eventHappy: opts.hazard?.eventHappy ?? null,']], 'lab'],
     ['讀檔後叢集不是空的', [['commuteClusters: [], commuteDay: -1,', 'commuteClusters: [[0]], commuteDay: -1,']], 'lab'],
     ['電視訊號不留到明天（一律 false）', [['tvSignal: s.tvSignal, tech: s.edu.tech,', 'tvSignal: false, tech: s.edu.tech,']], 'lab'],
     ['電視訊號讀今天的電視台數（不是昨天的）', [['tvSignal: s.tvSignal, tech: s.edu.tech,', 'tvSignal: fc.tv330 > 0, tech: s.edu.tech,']], 'lab'],

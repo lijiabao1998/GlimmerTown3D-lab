@@ -1,0 +1,131 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-events.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "CITY_EVENTS",
+   "anchors": {
+    "start": "const CITY_EVENTS=[",
+    "end": "let cityEvent=null; // T299：當前城市事件"
+   },
+   "line": 38131,
+   "endLine": 38193,
+   "sha": "3cdfbed5bb7dc0f6ee08679f3ab252b6a81bf96fe163a021c8fdee299f3aeca0"
+  },
+  {
+   "kind": "decl",
+   "name": "cityEvent",
+   "anchors": {
+    "start": "let cityEvent="
+   },
+   "line": 38194,
+   "endLine": 38194,
+   "sha": "3ba522726615cdb8e9297be982c2b22d9ebdff06f65f27a152bd13a79a11f939"
+  },
+  {
+   "kind": "fn",
+   "name": "streetHash",
+   "anchors": {
+    "start": "function streetHash(",
+    "closure": "balanced-brace"
+   },
+   "line": 57805,
+   "endLine": 57811,
+   "sha": "d0d312e18d15ba432b68aca65767cbb53f9f74268d349f6ac4ea53fd7a78643c"
+  },
+  {
+   "kind": "span",
+   "name": "每天的倒數與觸發（day++ 之後、天氣之前）",
+   "anchors": {
+    "start": "if(cityEvent){cityEvent.daysLeft--;",
+    "end": "sFanfare();} // T299：day 決定性觸發（不消耗 R()）"
+   },
+   "line": 54953,
+   "endLine": 54954,
+   "sha": "0fe78b2edce44ca0a66c2c1ec256b5077c1084023903a768075a61527d54d2f2"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福的城市活動項（當天）",
+   "anchors": {
+    "start": "{name:'城市活動',val:cityEvent?CITY_EVENTS[cityEvent.i].happy:0}",
+    "end": "{name:'城市活動',val:cityEvent?CITY_EVENTS[cityEvent.i].happy:0}"
+   },
+   "line": 55179,
+   "endLine": 55179,
+   "sha": "bdad7e55379450ff5535edbca4a6a01f706d6b07ad89861be982a38e67bfed85"
+  },
+  {
+   "kind": "span",
+   "name": "食物點數的事件倍率（當天）",
+   "anchors": {
+    "start": "*(cityEvent?CITY_EVENTS[cityEvent.i].food:1)",
+    "end": "*(cityEvent?CITY_EVENTS[cityEvent.i].food:1)"
+   },
+   "line": 55293,
+   "endLine": 55293,
+   "sha": "8254b18b52b34b7bcaa73e3ebc7153be64eac549661740c60a095ffcbad06135"
+  },
+  {
+   "kind": "span",
+   "name": "收入的事件倍率（當天）",
+   "anchors": {
+    "start": "if(cityEvent){income=Math.round(income*CITY_EVENTS[cityEvent.i].tax);}",
+    "end": "if(cityEvent){income=Math.round(income*CITY_EVENTS[cityEvent.i].tax);}"
+   },
+   "line": 56028,
+   "endLine": 56028,
+   "sha": "05a5f7388369c66bd6d834b2cadd066a6cbec18495b001c38cee018631f3bc7e"
+  },
+  {
+   "kind": "span",
+   "name": "存檔的 cev",
+   "anchors": {
+    "start": "cev:cityEvent?{i:cityEvent.i,d:cityEvent.daysLeft}:0",
+    "end": "cev:cityEvent?{i:cityEvent.i,d:cityEvent.daysLeft}:0"
+   },
+   "line": 66764,
+   "endLine": 66764,
+   "sha": "c37898ae7019e0913ee6574657ba53466fba15e7c478d95c31201ef243296054"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔的 cev",
+   "anchors": {
+    "start": "cityEvent=(d.cev&&typeof d.cev.i==='number'&&d.cev.i>=0&&d.cev.i<CITY_EVENTS.length)",
+    "end": "cityEvent=(d.cev&&typeof d.cev.i==='number'&&d.cev.i>=0&&d.cev.i<CITY_EVENTS.length)"
+   },
+   "line": 66963,
+   "endLine": 66963,
+   "sha": "f6277526393d42edf88cb40b2bc81ad24bf6409fcaec5d1cc0907299e5483bc8"
+  },
+  {
+   "kind": "span",
+   "name": "新圖歸零",
+   "anchors": {
+    "start": "cityEvent=null;svcFleet={fire:3,police:2,amb:2};",
+    "end": "cityEvent=null;svcFleet={fire:3,police:2,amb:2};"
+   },
+   "line": 51111,
+   "endLine": 51111,
+   "sha": "4b5bcb6d4a62495fa263b769d9b9321e8871c31527856fa269ff66fb2d0243d9"
+  }
+ ],
+ "text": {
+  "CITY_EVENTS": "const CITY_EVENTS=[\n  {id:'harvest',name:'🌾 豐收節',days:6,tax:1,food:1.5,happy:.04,desc:'農產大豐收，食物產量 +50%'},\n  {id:'tourism',name:'🎡 旅遊旺季',days:8,tax:1.25,food:1,happy:.02,desc:'遊客湧入，全城稅收 +25%'},\n  {id:'tech',name:'🔬 科技突破',days:6,tax:1.2,food:1,happy:.03,desc:'產業升級，全城稅收 +20%'},\n  {id:'sports',name:'🏆 體育盛會',days:5,tax:1.1,food:1,happy:.06,desc:'全民歡慶，居民幸福 +6%'},\n  {id:'boom',name:'💰 經濟繁榮',days:7,tax:1.3,food:1,happy:.03,desc:'百業興旺，全城稅收 +30%'},\n  {id:'festival',name:'🎉 城市慶典',days:5,tax:1.15,food:1.1,happy:.05,desc:'節慶氣氛，幸福＋稅收齊漲'},\n  {id:'springfest',name:'🌸 新春庙会',days:5,tax:1.1,food:1.3,happy:0.06,desc:'张灯结彩迎新春，小吃摊排满街。'},\n  {id:'autumnbounty',name:'🌾 秋收庆典',days:4,tax:1.2,food:1.5,happy:0.05,desc:'粮仓爆满，全城同享丰收宴。'},\n  {id:'techfair',name:'🤖 未来科技展',days:3,tax:1.3,food:0.9,happy:0.04,desc:'机器人端咖啡，市民排队体验。'},\n  {id:'marathon',name:'🏃 城市马拉松',days:3,tax:1.05,food:1.0,happy:0.07,desc:'万人奔跑，沿途加油声震天。'},\n  {id:'tourfest',name:'🎒 国际旅游节',days:7,tax:1.4,food:1.1,happy:0.03,desc:'游客如织，酒店民宿全爆满。'},\n  {id:'artwalk',name:'🎨 涂鸦艺术周',days:5,tax:0.9,food:1.2,happy:0.08,desc:'墙壁变画廊，老街区焕新生。'},\n  {id:'musicnite',name:'🎵 不夜音乐季',days:6,tax:1.15,food:1.4,happy:0.05,desc:'露天演唱会从晚嗨到早。'},\n  {id:'solarboom',name:'☀️ 光伏红利期',days:10,tax:1.25,food:1.0,happy:0.02,desc:'电费大降，工厂机器全开动。'},\n  {id:'gardenfest',name:'🌻 城市园艺节',days:4,tax:1.0,food:1.3,happy:0.06,desc:'阳台菜园成风，全市满眼绿。'},\n  {id:'sportcup',name:'⚽ 冠军联赛主场',days:3,tax:1.3,food:1.4,happy:0.07,desc:'球赛引流，酒吧座无虚席。'},\n  {id:'bookfair',name:'📚 旧书交换集',days:5,tax:0.85,food:1.0,happy:0.06,desc:'以书会友，咖啡馆文青扎堆。'},\n  {id:'filmfest',name:'🎬 露天电影节',days:7,tax:1.05,food:1.3,happy:0.04,desc:'星空下免费放映，自带板凳。'},\n  {id:'newyear',name:'🎆 跨年烟火秀',days:3,tax:1.2,food:1.6,happy:0.05,desc:'零点烟花照亮每张笑脸。'},\n  {id:'fishmigrate',name:'🐟 渔汛大年到',days:6,tax:1.15,food:1.6,happy:0.03,desc:'鱼市海鲜便宜到像白送。'},\n  {id:'wintersale',name:'🛍️ 暖冬购物季',days:7,tax:1.25,food:0.9,happy:0.04,desc:'百货打折，人手拎满战利品。'},\n  {id:'cleanair',name:'🍃 空气改善周',days:5,tax:1.1,food:1.0,happy:0.06,desc:'蓝天白云，户外瑜伽遍地开。'},\n  {id:'startupboom',name:'💡 创客孵化潮',days:8,tax:1.35,food:1.0,happy:0.02,desc:'新公司猛增，写字楼租金涨。'},\n  {id:'streetfood',name:'🍢 夜市美食榜',days:4,tax:1.0,food:1.5,happy:0.07,desc:'网红摊排长龙，烟火气拉满。'},\n  {id:'rainyharvest',name:'🌧️ 甘霖解旱情',days:3,tax:1.05,food:1.5,happy:0.03,desc:'久旱逢雨，菜价应声回落。'},\n  {id:'culturalex',name:'🏮 非遗手艺展',days:5,tax:0.95,food:1.2,happy:0.05,desc:'老匠人现场捏面人糖画。'},\n  {id:'puppetparade',name:'🦁 巨型木偶巡游',days:3,tax:1.1,food:1.4,happy:0.06,desc:'三米高玩偶走街，孩童狂追。'},\n  {id:'flowerbloom',name:'💐 全城花季',days:6,tax:1.0,food:1.2,happy:0.08,desc:'樱花海棠接力，满街花瓣雨。'},\n  {id:'riverfest',name:'🚣 龙舟嘉年华',days:4,tax:1.05,food:1.3,happy:0.05,desc:'鼓声震天，岸边全是呐喊声。'},\n  {id:'moonfest',name:'🌕 中秋团圆会',days:3,tax:1.1,food:1.5,happy:0.04,desc:'分食巨型月饼，猜灯谜赢奖。'},\n  {id:'coldwave',name:'❄️ 寒潮急冻',days:5,tax:0.8,food:0.85,happy:-0.03,desc:'水管冻裂，菜价飙升翻倍。'},\n  {id:'plagueout',name:'🦠 流感大爆发',days:7,tax:0.9,food:0.7,happy:-0.06,desc:'诊所排长队，学校停课消毒。'},\n  {id:'strike',name:'🔧 港口大罢工',days:6,tax:0.75,food:0.8,happy:-0.04,desc:'货轮积压，超市货架空一半。'},\n  {id:'recession',name:'📉 经济衰退潮',days:10,tax:0.7,food:1.0,happy:-0.05,desc:'企业裁员，商业街转让告示。'},\n  {id:'heatwave',name:'🔥 酷热限电',days:5,tax:0.85,food:0.9,happy:-0.04,desc:'40度高温，空调开一停一。'},\n  {id:'flood',name:'🌊 暴雨内涝',days:4,tax:0.8,food:0.75,happy:-0.06,desc:'街道成河，菜地被淹损失惨。'},\n  {id:'smog',name:'💨 重度雾霾',days:6,tax:0.95,food:1.0,happy:-0.05,desc:'能见度不足十米，咳嗽声不断。'},\n  {id:'drought',name:'🏜️ 长期干旱',days:8,tax:0.9,food:0.7,happy:-0.03,desc:'水库见底，限水令每日生效。'},\n  {id:'thiefwave',name:'🦝 盗窃案频发',days:5,tax:0.9,food:0.95,happy:-0.04,desc:'入室盗窃激增，居民不安。'},\n  {id:'powerout',name:'⚡ 变电站故障',days:3,tax:0.7,food:0.8,happy:-0.05,desc:'全城大停电，冰箱食物坏光。'},\n  {id:'riot',name:'🚨 球迷骚乱',days:4,tax:0.8,food:0.9,happy:-0.06,desc:'赛后打砸，商店紧急钉板。'},\n  {id:'inflation',name:'💸 恶性通胀',days:10,tax:0.85,food:0.7,happy:-0.04,desc:'钞票变纸，一碗面贵三倍。'},\n  {id:'quake',name:'🌪️ 轻微地震',days:3,tax:0.9,food:1.0,happy:-0.03,desc:'吊灯摇晃，旧楼外墙剥落。'},\n  {id:'blight',name:'🐛 虫害泛滥',days:6,tax:0.95,food:0.6,happy:-0.02,desc:'蝗虫过境，城郊作物全啃光。'},\n  {id:'trafficjam',name:'🚗 全城大堵车',days:4,tax:0.85,food:1.05,happy:-0.05,desc:'高架变停车场，外卖迟2小时。'},\n  {id:'fakenews',name:'📰 谣言恐慌',days:5,tax:0.9,food:1.0,happy:-0.04,desc:'囤货潮起，盐和米被抢光。'},\n  {id:'fireworks',name:'🎆 煙火大會',days:4,tax:1.1,food:1.0,happy:0.09,desc:'夜空綻放，全城仰望。'}, // T338 擴充 12 條\n  {id:'comiccon',name:'🎭 動漫嘉年華',days:6,tax:1.3,food:1.0,happy:0.05,desc:'角色扮演者擠滿商業街。'},\n  {id:'adoptday',name:'🐾 寵物領養日',days:5,tax:1.0,food:1.0,happy:0.06,desc:'毛孩子找到新家。'},\n  {id:'carfree',name:'🚲 無車日',days:3,tax:0.9,food:1.0,happy:0.06,desc:'馬路還給行人與單車。'},\n  {id:'lanternfest',name:'🏮 燈光節',days:7,tax:1.2,food:1.0,happy:0.04,desc:'萬盞燈籠映亮河岸。'},\n  {id:'beerfest',name:'🍺 啤酒節',days:5,tax:1.25,food:0.9,happy:0.05,desc:'酒香四溢，餐館爆滿。'},\n  {id:'sciexpo',name:'🔬 科普博覽',days:6,tax:1.15,food:1.0,happy:0.03,desc:'孩子們排隊看機器人。'},\n  {id:'oldstreet',name:'🏮 老街市集',days:5,tax:1.12,food:1.05,happy:0.04,desc:'手作攤位擺滿巷弄。'},\n  {id:'kitefest',name:'🪁 風箏節',days:4,tax:1.05,food:1.0,happy:0.05,desc:'天空被彩色風箏佔領。'},\n  {id:'streetart',name:'🎨 街頭藝術節',days:6,tax:1.08,food:1.0,happy:0.06,desc:'灰牆一夜變畫布。'},\n  {id:'recycleweek',name:'♻️ 回收週',days:5,tax:0.97,food:1.0,happy:0.03,desc:'全城大掃除，舊物換新生。'},\n  {id:'foodtruck',name:'🚚 餐車大會',days:4,tax:1.18,food:0.95,happy:0.05,desc:'排隊最長的攤位飄著焦糖香。'},\n  {id:'lanternrise',name:'🏮 天燈季',days:5,tax:1.12,food:1.0,happy:0.07,desc:'萬盞天燈載著心願升空。'}, // T517：節慶之夜三事件\n  {id:'droneshow',name:'🛸 無人機光雕秀',days:3,tax:1.25,food:1.0,happy:0.06,desc:'千架無人機在夜空作畫。'},\n  {id:'dolphinbay',name:'🐬 海灣豚躍季',days:6,tax:1.15,food:1.2,happy:0.05,desc:'海豚寶寶集中出生，灣岸遊客爆滿。'},\n];",
+  "cityEventDecl": "let cityEvent=null; // T299：當前城市事件 {i:事件索引, daysLeft} 或 null；入存檔（cev 可選欄位）",
+  "streetHash": "function streetHash(x,y,salt){\n  let h=(x*374761393+y*668265263+salt*2246822519)|0;\n  h=Math.imul(h^(h>>>15),2246822519);\n  h=Math.imul(h^(h>>>13),3266489917);\n  h^=h>>>16;\n  return(h>>>0)/4294967296;\n}",
+  "eventTick": "  if(cityEvent){cityEvent.daysLeft--;if(cityEvent.daysLeft<=0){toast('🎏 活動結束：'+CITY_EVENTS[cityEvent.i].name);cityEvent=null;}} // T299：事件倒數\n  else if(pop>50&&day>15&&day%37===0){const ei=Math.floor(streetHash(day,7,888)*CITY_EVENTS.length)%CITY_EVENTS.length;cityEvent={i:ei,daysLeft:CITY_EVENTS[ei].days};const ev=CITY_EVENTS[ei];toast('✨ '+ev.name+'！'+ev.desc,'gold');sFanfare();} // T299：day 決定性觸發（不消耗 R()）",
+  "happyItem": "        {name:'城市活動',val:cityEvent?CITY_EVENTS[cityEvent.i].happy:0}, // T299：城市事件臨時幸福加成（無事件恆為 0，精確恆等）",
+  "foodMul": "foodPoints=Math.round((farmFoodU*FARM_SEASON_MULT[sea]+ranchFoodU+ghFoodU+fp340*3+cg340*1+ff346*4)*foodPreserveMul485*(cityEvent?CITY_EVENTS[cityEvent.i].food:1)); // T299：事件食物加成（豐收節 ×1.5；無事件 ×1 恆等） // T280：溫室恆溫食物不乘季節 // T252：牧場食物改牧養等級加權(ranchFoodU，lv1 時＝ra*2 向後相容，不隨季節)；T251：農場食物灌溉等級加權(farmFoodU，lv1＝fa*3+bigFa*20)；T228：大農場日產 20 // T136：農場產量季節曲線（春播基準1／夏長1.15／秋收峰1.4／冬歇0.4），牧場（ra）不隨季節變動",
+  "taxMul": "  if(cityEvent){income=Math.round(income*CITY_EVENTS[cityEvent.i].tax);} // T299：城市事件稅收加成（旅遊/繁榮 +25~30%；無事件 ×1）",
+  "saveCev": "      aim:aiMode?1:0,aiR,gds:goods,sb:{...svcBudget},cev:cityEvent?{i:cityEvent.i,d:cityEvent.daysLeft}:0,mln:metroLines.map(L=>({n:L.nodes,t:L.trains,u:L.underground?1:0,g:metroGradeMode467B(L),r:(L.routeModes467B||[]).slice(),fp:metroFarePolicy467B(L),sp:metroServicePolicy467B(L),gs:(L.grades467B||[]).join(''),su:Object.entries(L.stationUpgrades467B||{}).filter(q=>q[1]>0)})),sf:{...svcFleet}, // T304：服務車隊 // T302：地鐵線（nodes+列車+地下旗標，幾何 load 重建） // T299：城市事件（可選欄位） // T294：服務預算（可選欄位，舊檔缺＝全 1.0） // T284：工業品庫存（可選欄位） // T260：AI 市長開關＋擴張半徑（可選欄位，舊檔缺＝關/6）",
+  "loadCev": "    cityEvent=(d.cev&&typeof d.cev.i==='number'&&d.cev.i>=0&&d.cev.i<CITY_EVENTS.length)?{i:d.cev.i,daysLeft:(+d.cev.d)||1}:null; // T299：城市事件還原（舊檔缺＝無）",
+  "reset": "  goods=0;gWhCap284=0;gFlow284={gain:0,use:0,mul:1};svcBudget={police:1,fire:1,health:1,edu:1};cityEvent=null;svcFleet={fire:3,police:2,amb:2};nightTierDirty413=true; /* T413a：亮度梯度快取成對置髒（鐵律7 對稱） */ // T304：車隊成對重置 // T284/T294/T299：成對重置（鐵律7）——服務預算回預設 1.0×、城市事件清空 // T369 退修：gFlow284 流量快照必須與 goods 成對歸零（否則新圖／讀檔未 tick 前統計會顯示上一城售出／倍率）"
+ }
+}

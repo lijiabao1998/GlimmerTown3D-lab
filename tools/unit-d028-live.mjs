@@ -65,9 +65,7 @@ export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, o
     const row = rec.rows[day - 1], dd = [], ff = [];
     const inj = injectInputs(s, st, prev, row, true);
     if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
-    const ev = row.ev;
-    const class2 = {   // 夜間城市（晚間消費金、夜間運輸收入、夜間營運費）D029 起不代，本線自己算
-      economy: ev ? { eventFood: ev.food } : undefined, eventTax: ev ? ev.tax : null,
+    const class2 = {   // 夜間城市（晚間消費金、夜間運輸收入、夜間營運費）D029、城市活動（食物、稅率）D030 起不代，本線自己算
       other: { metroRev: row.un[0], metroAds: row.un[1], transitRev: row.un[2], parkingRevenue491: row.un[4] },
       upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },
     };

@@ -3,7 +3,7 @@
 //   2. **不代入夜間城市的任何東西**：本線自己讀檔、自己算夜間城市，跟實驗線逐天逐欄比——自造城 K1–K16 連推 13 天、D022–D025 的 120 座城（分區清成 0 與不清各一批）連推 10 天：
 //      夜間城市六欄（ready、安全分數、幸福加減、晚間消費金、夜間運輸收入、夜間營運費）逐位相等，而且 D028 的全部欄位（資金、稅、十二個收入項、鏈條、食物、遊客、旅宿、每棟住宅的幸福、幸福構成 57 項、人口、就業、亂數位置）
 //      不需要注入夜間城市也逐位全等（seed516、D3 兩座只差幸福，照舊）；
-//   3. 起步城 8 個種子 × 120 天、長出來的存檔 24 份：代入實驗線的城市活動與政策（夜間城市不代）→ 夜間城市三欄每天逐位相等；什麼都不代（玩家實際玩到的本線）→ 第一個分歧日不早於實驗線的第一場城市活動（T299，D 張還沒搬）；
+//   3. 起步城 8 個種子 × 120 天、長出來的存檔 24 份：只代政策與科技（夜間城市不代；城市活動 D030 起本線自己算，不代）→ 夜間城市三欄每天逐位相等；什麼都不代（玩家實際玩到的本線）→ 第一個分歧日不早於實驗線的第一場城市活動（D029 收工時城市活動還沒搬，所以那時會分歧；D030 之後整條全等，見 unit-d030-live.mjs）；
 //   4. 接線：day.ts 的副本改壞一處要紅（不結算、五個輸入、警察覆蓋、政策、輸入在生長之後才算、犯罪乘數不餵、隔天讀成當天讀、幸福項不餵、晚間消費金與夜間運輸收入與營運費不進收支、夜市稅乘數、雜湊……）；
 //   5. 存檔與決定性：夜間城市不進存檔（沒有新欄位、沒有新事件、格式照舊），讀檔與新圖是 ready:false、第 1 天幸福項 0、犯罪乘數 1、第 2 天起有；同一張碼讀兩次每天雜湊與夜間城市相同。
 import fs from 'node:fs';
@@ -124,8 +124,8 @@ async function guards(log) {
     }
     if (evolvedNightBad) evolvedErr.push(`夜間城市三欄有 ${evolvedNightBad} 個城日不同`);
     const ev0 = per.map(p => p.firstEvent), eqAll = nz(per, p => !p.nat.first), evEq = per.map(p => p.natEq);
-    log(!errs.length, `D029 驗收 3、7：起步城 8 個種子 × 120 天——(a) 代入實驗線的城市活動與政策（夜間城市不代）：道路負載、通勤、地價、每一棟住宅的幸福、幸福構成、人口、就業、亂數位置與夜間城市三欄（ready、分數、幸福加減）每天逐位全等；`
-      + `(b) 什麼都不代（玩家實際玩到的本線）：第一個分歧日不早於實驗線的第一場城市活動（T299，D 張還沒搬）——活動之前整條軌跡逐位元全等`,
+    log(!errs.length, `D029 驗收 3、7：起步城 8 個種子 × 120 天——(a) 只代政策與科技（夜間城市與城市活動 D030 起都是本線自己算）：道路負載、通勤、地價、每一棟住宅的幸福、幸福構成、人口、就業、亂數位置與夜間城市三欄（ready、分數、幸福加減）每天逐位全等；`
+      + `(b) 什麼都不代（玩家實際玩到的本線）：第一個分歧日不早於實驗線的第一場城市活動（D030 起城市活動本線也自己算，整條軌跡逐位元全等）`,
       errs.slice(0, 4).join('｜') || `${per.length} 個種子 × 120 天＝${per.length * 120} 個城日全等（夜間城市三欄 ${per.length * 120} 個城日全等）；玩家實際玩到的本線：第一場城市活動在第 ${ev0.join('、')} 天，第一個分歧日 ${per.map(p => p.nat.first || '—').join('／')}，`
         + `逐日全等到第 120 天的種子 ${eqAll}／${per.length}，夜間城市三欄逐日相等的天數 ${evEq.join('、')}`);
     log(!evolvedErr.length, `D029 驗收 3：實驗線頁面實跑（起步城第 30、70、110 天的實驗線存檔 24 份，連推 12 天，代入城市活動與政策，夜間城市不代）——整條 tick 鏈與夜間城市三欄逐天全等`,
@@ -274,7 +274,7 @@ export async function wiringGuards(log, { lab, lab27, cities, olds, oldzs, KT, v
     ['夜間營運費不進維護費', [['nightOpsCost487: night.finance.operatingCost, ...c2?.upkeep', 'nightOpsCost487: 0, ...c2?.upkeep']]],
     ['夜市稅乘數不餵（ready 假、稅乘數 1）', [['nightCityReady: night.ready, nightCityTaxMul: night.commerce.taxMul,', 'nightCityReady: false, nightCityTaxMul: 1,']]],
     ['夜市稅乘數讀成活力', [['nightCityTaxMul: night.commerce.taxMul,', 'nightCityTaxMul: night.commerce.activity,']]],
-    ['雜湊不看夜間城市', [['...(s.night.ready ? [s.night.safety.score, s.night.happinessDelta] : [])]));', ']));']]],
+    ['雜湊不看夜間城市', [['...(s.night.ready ? [s.night.safety.score, s.night.happinessDelta] : []),', '']]],
     ['雜湊不看安全分數', [['[s.night.safety.score, s.night.happinessDelta]', '[s.night.happinessDelta]']]],
     ['雜湊不看幸福加減', [['[s.night.safety.score, s.night.happinessDelta]', '[s.night.safety.score]']]],
   ];
