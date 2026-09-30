@@ -117,7 +117,7 @@ function syncEdit(s: Sim, txn: Txn, costs: Map<number, number>, g: number, dt: D
   for (const sn of txn.snaps) {
     const i = sn.i, x = i % n, z = (i / n) | 0, a = JSON.parse(sn.s) as Tile, b = s.w.tiles[i], cost = costs.get(i) ?? 0;
     const hadRoot = !!(a.bld && !a.bld.ref), hasRoot = !!(b.bld && !b.bld.ref);
-    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0;
+    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0; c.ruin[i] = b.ruin ? 1 : 0;   // D026：焦土
     if (hasRoot && (!hadRoot || a.bld!.k !== b.bld!.k)) {             // 放了建築（51672／51687）
       const cb: CityBuilding = { id: c.buildings.length + 1, k: b.bld!.k, lv: b.bld!.lv, v: b.bld!.v, age: b.bld!.age, x, z, size: s.kinds.size(b.bld!.k), abandoned: false, builtDay: day };
       c.buildings.push(cb); s.root.set(i, cb); dt.created.push(cb.id);
@@ -133,7 +133,8 @@ function syncEdit(s: Sim, txn: Txn, costs: Map<number, number>, g: number, dt: D
         if (!costs.has(i)) for (const [j, v] of costs) { const jx = j % n, jz = (j / n) | 0; if (jx >= x && jx < x + cb.size && jz >= z && jz < z + cb.size) { paid = v; break; } }
         out.push({ day, t: 'doze', x, z, layer: 'bld', k: cb.k, id: cb.id, cost: paid, g });
       }
-    } else if (b.road && (!a.road || a.rc !== b.rc)) out.push({ day, t: 'road', x, z, rc: b.rc || 0, cost, g });   // 鋪路、升級（51645）
+    } else if (a.ruin && !b.ruin) out.push({ day, t: 'doze', x, z, layer: 'ruin', cost, g });                          // D026：清焦土（51777：ruin＝0、zone＝0；要排在分區那一行前面，不然被記成拆分區）
+    else if (b.road && (!a.road || a.rc !== b.rc)) out.push({ day, t: 'road', x, z, rc: b.rc || 0, cost, g });   // 鋪路、升級（51645）
     else if (a.road && !b.road) out.push({ day, t: 'doze', x, z, layer: 'road', cost, g });                          // 51808
     else if ((b.zone || 0) !== (a.zone || 0)) out.push(b.zone ? { day, t: 'zone', x, z, zone: b.zone, cost, g } : { day, t: 'doze', x, z, layer: 'zone', cost, g });   // 51665／51811
     else if (a.tree && !b.tree) out.push({ day, t: 'doze', x, z, layer: 'tree', cost, g });                         // 只砍了樹
@@ -159,7 +160,7 @@ export function undoOp(s: Sim): { ok: boolean; refund: number } {
   for (const id of dt.removed) { const cb = c.buildings[id - 1]; delete cb.goneDay; s.root.set(cb.z * n + cb.x, cb); }
   for (const sn of dt.txn.snaps) {
     const i = sn.i, b = s.w.tiles[i];
-    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0; c.occ[i] = 0;
+    c.road[i] = roadCode(b.road, b.hw, b.bridge); c.rclass[i] = b.road ? (b.rc || 0) : 0; c.zone[i] = b.zone || 0; c.tree[i] = b.tree || 0; c.wp[i] = b.wp ? 1 : 0; c.ruin[i] = b.ruin ? 1 : 0; c.occ[i] = 0;
   }
   for (const [i, cb] of s.root) for (let dz = 0; dz < cb.size; dz++) for (let dx = 0; dx < cb.size; dx++) { const j = (cb.z + dz) * n + cb.x + dx; if (cb.x + dx < n && cb.z + dz < n && dt.txn.snaps.some(q => q.i === j)) c.occ[j] = cb.id; void i; }
   const refund = s.money - m0;

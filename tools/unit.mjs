@@ -532,6 +532,8 @@ await guard('./unit-d023.mjs', 'd023Guards');   // D023：讀檔還原服務預�
 await guard('./unit-d024.mjs', 'd024Guards');   // D024：主計數迴圈補齊——計數、名目就業、維護費逐項＝實驗線原文（d022-food.json＋d024-count.json，tools/lab-count.mjs 摘）、原碼突變、接線
 await guard('./unit-d025.mjs', 'd025Guards');   // D025：經濟——共享貿易池、商品庫存、零售與購買力、稅乘數、進口費、快照逐項＝實驗線原文（d025-economy.json，tools/lab-economy.mjs 摘）、原碼突變、資源回收產貨物、接線與存檔
 await guard('./unit-d025-live.mjs', 'd025LiveGuards');   // D025：經濟的實驗線頁面實跑（讀進來推進一天、連續推進）、接線突變、存檔（d025-lab.json，tools/d025-lab.mjs 錄）
+await guard('./unit-d026.mjs', 'd026Guards');   // D026：每日災禍——死亡前置、火災、犯罪、廢棄、疾病、死亡、三個按鈕逐項＝實驗線原文（d026-hazard.json，tools/lab-hazard.mjs 摘）、原碼突變
+await guard('./unit-d026-live.mjs', 'd026LiveGuards');   // D026：災禍的實驗線頁面實跑（自造城連推五天、D022–D025 的城、長出來的存檔、下一個亂數、地價）、起步城軌跡、接線突變、存檔與歷史（d026-lab.json，tools/d026-lab.mjs 錄）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

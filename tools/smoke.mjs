@@ -20,6 +20,7 @@ import { d020Smoke, d020SkipNote } from './smoke-d020.mjs';
 import { d021Smoke, d021SkipNote } from './smoke-d021.mjs';
 import { d022Smoke, d022SkipNote } from './smoke-d022.mjs';
 import { d025Smoke, d025SkipNote } from './smoke-d025.mjs';
+import { d026Smoke, d026SkipNote } from './smoke-d026.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -556,6 +557,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d021Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d022Smoke(withBrowser, log);
 // ===== D025：經濟（tools/smoke-d025.mjs：商業與工業的建築卡講「市場」，數字＝當天的經濟快照，讀檔後沒推進過講實話；自己開一個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d025Smoke(withBrowser, log);
+// ===== D026：每日災禍（tools/smoke-d026.mjs：建築卡的災禍列與三個按鈕、標記與焦土、每日警示、清焦土；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d026Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -566,6 +569,7 @@ if (d020SkipNote()) console.log(d020SkipNote());
 if (d021SkipNote()) console.log(d021SkipNote());
 if (d022SkipNote()) console.log(d022SkipNote());
 if (d025SkipNote()) console.log(d025SkipNote());
+if (d026SkipNote()) console.log(d026SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

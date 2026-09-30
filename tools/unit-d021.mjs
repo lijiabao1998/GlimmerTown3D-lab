@@ -31,7 +31,7 @@ export async function dayVariant(edits, over = {}) {   // over＝{ './rules/food
     for (const k of names.split(',').map(q => q.trim()).filter(q => q && !q.startsWith('type '))) { if (!(k in ns)) throw new Error(`${from} 沒有匯出 ${k}`); ctx[k] = ns[k]; }
   }
   const js = stripTypeScriptTypes(src).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
-  vm.runInContext(`${js}\n;globalThis.__m = { simFromSave, stepDay };`, vm.createContext(ctx), { filename: 'variant:day.ts' });
+  vm.runInContext(`${js}\n;globalThis.__m = { simFromSave, stepDay, simHash };`, vm.createContext(ctx), { filename: 'variant:day.ts' });   // D026：simHash 也給（旗標進不進雜湊的突變要用）
   return ctx.__m;
 }
 

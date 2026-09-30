@@ -1,0 +1,232 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-hazard.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "exact",
+   "name": "spec386",
+   "anchors": {
+    "start": "let spec386='';"
+   },
+   "line": 37849,
+   "endLine": 37849,
+   "sha": "eddb25d5c435a3820c3b4e9aa2fb14eb9eac5abeff66ce3d6683265434aa9918"
+  },
+  {
+   "kind": "exact",
+   "name": "sq",
+   "anchors": {
+    "start": "const sq=(id,on,off)=>spec386===id?on:off;"
+   },
+   "line": 37851,
+   "endLine": 37851,
+   "sha": "5bf7902bead6c162b85fc39e20a6948e981e75291aef774b9dbb0cb0b0971a87"
+  },
+  {
+   "kind": "decl",
+   "name": "tq",
+   "anchors": {
+    "start": "const tq="
+   },
+   "line": 38549,
+   "endLine": 38549,
+   "sha": "6811179380a102a67085d5ac7fa3f9d2ab32fd8d9194ee13b5e06c07c9e3600f"
+  },
+  {
+   "kind": "decl",
+   "name": "PUMP_FLOOD_DAMAGE_MUL",
+   "anchors": {
+    "start": "const PUMP_FLOOD_DAMAGE_MUL="
+   },
+   "line": 39656,
+   "endLine": 39656,
+   "sha": "942aa25b21fc82c1acf87fc3a449cd6db49985115cf431b399e5db487b8ae21a"
+  },
+  {
+   "kind": "decl",
+   "name": "DISASTER_CENTER_DAMAGE_MUL",
+   "anchors": {
+    "start": "const DISASTER_CENTER_DAMAGE_MUL="
+   },
+   "line": 39657,
+   "endLine": 39657,
+   "sha": "cde775b046cbf57e92b5b1e13f63b3b48223ccfed13e5a1229907277b8e1213c"
+  },
+  {
+   "kind": "decl",
+   "name": "SHELTER_CASUALTY_MUL",
+   "anchors": {
+    "start": "const SHELTER_CASUALTY_MUL="
+   },
+   "line": 39658,
+   "endLine": 39658,
+   "sha": "f019046183f39da428b9f161fe905b0da25edfe334b2f23ec3b03c6fede83045"
+  },
+  {
+   "kind": "decl",
+   "name": "drainageLegacy454",
+   "anchors": {
+    "start": "const drainageLegacy454="
+   },
+   "line": 53516,
+   "endLine": 53516,
+   "sha": "785d0798d6032e45ffd34fdbf23326fdeff0dfc4a0bd7541c0ca2918603cf4df"
+  },
+  {
+   "kind": "fn",
+   "name": "waterLegacy449",
+   "anchors": {
+    "start": "function waterLegacy449(",
+    "closure": "balanced-brace"
+   },
+   "line": 53256,
+   "endLine": 53256,
+   "sha": "d5f603297cc9cd6670f372df67fd052f8edd1b6e344a7d57631b1c82a58872aa"
+  },
+  {
+   "kind": "fn",
+   "name": "resilience364At",
+   "anchors": {
+    "start": "function resilience364At(",
+    "closure": "balanced-brace"
+   },
+   "line": 53568,
+   "endLine": 53577,
+   "sha": "1063df6f4a45f384881a402dce97d22790b88856dc7e4f9de15be8a99c3d48d0"
+  },
+  {
+   "kind": "fn",
+   "name": "disasterBlocked364",
+   "anchors": {
+    "start": "function disasterBlocked364(",
+    "closure": "balanced-brace"
+   },
+   "line": 53580,
+   "endLine": 53580,
+   "sha": "89c6e71d3659739aea6d46c83114aebda64eb9b664e547f077ef1ce0e472e825"
+  },
+  {
+   "kind": "fn",
+   "name": "nightCrimeMul487",
+   "anchors": {
+    "start": "function nightCrimeMul487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37344,
+   "endLine": 37348,
+   "sha": "b53dfde96f9a880be01a8d0f3758dda7158fac6f27f0abd3992460b13655ee0e"
+  },
+  {
+   "kind": "fn",
+   "name": "streetHash",
+   "anchors": {
+    "start": "function streetHash(",
+    "closure": "balanced-brace"
+   },
+   "line": 57805,
+   "endLine": 57811,
+   "sha": "d0d312e18d15ba432b68aca65767cbb53f9f74268d349f6ac4ea53fd7a78643c"
+  },
+  {
+   "kind": "fn",
+   "name": "civicHealthAccess495",
+   "anchors": {
+    "start": "function civicHealthAccess495(",
+    "closure": "balanced-brace"
+   },
+   "line": 64309,
+   "endLine": 64309,
+   "sha": "8aa14e62015b079fa5a3362ad68fcdf3249a61fa074cc7bb7076ddcdb5ecf20f"
+  },
+  {
+   "kind": "span",
+   "name": "tick 死亡前置",
+   "anchors": {
+    "start": "// 死亡與墓園前置處理（T38）：既有死亡事件的懲罰標記與自動消退",
+    "end": "// 供電／供水／污水判定"
+   },
+   "line": 55014,
+   "endLine": 55036,
+   "sha": "9f57a166248d16f35b57d57d8163e1f393953f66dca2e1282aff7d8b3116304a"
+  },
+  {
+   "kind": "span",
+   "name": "tick 火災",
+   "anchors": {
+    "start": "// 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土",
+    "end": "if(disastersOn){ // T137：工業洩漏"
+   },
+   "line": 55757,
+   "endLine": 55797,
+   "sha": "d56e8de18a168c0319017c1f702a3696d65b9218ec9a6cdabf1c99cda58c6570"
+  },
+  {
+   "kind": "span",
+   "name": "tick 犯罪與廢棄",
+   "anchors": {
+    "start": "// 犯罪（T32）：未受警察局半徑10覆蓋的 k≤3 建築每天小機率發生犯罪",
+    "end": "// 生病（T33/T34）：未受健康設施覆蓋的住宅每天小機率生病"
+   },
+   "line": 55810,
+   "endLine": 55833,
+   "sha": "62721e26f0df6a6fb0f885444c73352822c3bbd0291c80484c68570e1c8d063b"
+  },
+  {
+   "kind": "span",
+   "name": "tick 疾病與死亡",
+   "anchors": {
+    "start": "// 生病（T33/T34）：未受健康設施覆蓋的住宅每天小機率生病",
+    "end": "nightCity487=finalizeNightCity487({"
+   },
+   "line": 55834,
+   "endLine": 55865,
+   "sha": "4f38b405fcc169db34f01cf9dcb04eeba2ce48a8dd1fcfb304021b16dfd13305"
+  },
+  {
+   "kind": "span",
+   "name": "按鈕 處理犯罪、治療、滅火",
+   "anchors": {
+    "start": "const cb=$('#crimeBtn');                               // 處理犯罪按鈕（T32）",
+    "end": "  if(inspectB461)bindInspector461(x,y);"
+   },
+   "line": 63426,
+   "endLine": 63446,
+   "sha": "79ad72f90414d73d6654918b03f6c8a87cf6314bf2d6bb335bfc1349fbfcc7e2"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "spec386": "let spec386='';",
+  "sq": "const sq=(id,on,off)=>spec386===id?on:off;",
+  "tq": "const tq=(id,on,off)=>(tech343&&tech343.done.includes(id))?on:off; // T343c：科技效果集中三元 helper；零解鎖恆回 off",
+  "PUMP_FLOOD_DAMAGE_MUL": "const PUMP_FLOOD_DAMAGE_MUL=.45,PUMP_FLOOD_CLEAR_CHANCE=.48;",
+  "DISASTER_CENTER_DAMAGE_MUL": "const DISASTER_CENTER_DAMAGE_MUL=.60,DISASTER_CENTER_RECOVERY_CHANCE=.55,DISASTER_CENTER_FLOOD_CLEAR_CHANCE=.34;",
+  "SHELTER_CASUALTY_MUL": "const SHELTER_CASUALTY_MUL=.55,SHELTER_FLOOD_CLEAR_CHANCE=.28;",
+  "drainageLegacy454": "const drainageLegacy454=()=>!!(window.__legacyDrainage454||window.__noDrainageDistrict454);",
+  "waterLegacy449": "function waterLegacy449(){return !!(window.__legacyWater449||window.__noWaterSpine449);}",
+  "resilience364At": "function resilience364At(x,y,b){\n  if(!inMap(x,y))return {pump:false,center:false,shelter:false,floodMul:1,floodClear:.15,damageMul:1,casualtyMul:1,recovery:0};\n  const i=idx(x,y),pump=COV.pump[i]>0,center=COV.resilience[i]>0,shelter=COV.shelter[i]>0;\n  const resident=!!(b&&b.k===1); // T364c：避難傷亡倍率只覆蓋既有隨機住宅池；固定社宅不加入該池，以免改動共用亂數流\n  const legacyFlood=drainageLegacy454(); // T454：正常模式角色分工；pump/shelter 不再用半徑直接阻止水出現\n  const floodMul=legacyFlood?(pump?PUMP_FLOOD_DAMAGE_MUL:1)*(center?DISASTER_CENTER_DAMAGE_MUL:1)*(shelter?SHELTER_CASUALTY_MUL:1):1;\n  const casualtyMul=shelter&&resident?SHELTER_CASUALTY_MUL:1;\n  const floodClear=legacyFlood?(pump?PUMP_FLOOD_CLEAR_CHANCE:center?DISASTER_CENTER_FLOOD_CLEAR_CHANCE:shelter?SHELTER_FLOOD_CLEAR_CHANCE:.15):.15;\n  return {pump,center,shelter,floodMul,floodClear,damageMul:center?DISASTER_CENTER_DAMAGE_MUL:1,casualtyMul,recovery:center?DISASTER_CENTER_RECOVERY_CHANCE:0};\n}",
+  "disasterBlocked364": "function disasterBlocked364(x,y,b,salt){const r=resilience364At(x,y,b),mul=r.damageMul*r.casualtyMul;return mul<1&&streetHash(x,y,salt)>mul;}",
+  "nightCrimeMul487": "function nightCrimeMul487(i,b){\n  if(!nightCity487.ready)return 1;const g=nightCity487,sLocal=((COV.police&&COV.police[i]>0)||(COV.police2&&COV.police2[i]>0))?1:0,\n        local=.62*g.safety.score+.38*sLocal,market=(b&&b.k===2&&pol&&pol.nightMarket)?.05:0;\n  return clamp(1.14-local*.34+market,.72,1.20);\n}",
+  "streetHash": "function streetHash(x,y,salt){\n  let h=(x*374761393+y*668265263+salt*2246822519)|0;\n  h=Math.imul(h^(h>>>15),2246822519);\n  h=Math.imul(h^(h>>>13),3266489917);\n  h^=h>>>16;\n  return(h>>>0)/4294967296;\n}",
+  "civicHealthAccess495": "function civicHealthAccess495(i){if(window.__noCivicServices495||!civic495.ready)return null;return{hospital:CIVIC_HOSP_REACH495[i]>0,clinic:CIVIC_CLINIC_REACH495[i]>0,hospitalLevel:CIVIC_HOSP_REACH495[i]/255,clinicLevel:CIVIC_CLINIC_REACH495[i]/255};}",
+  "preDeath": "  // 死亡與墓園前置處理（T38）：既有死亡事件的懲罰標記與自動消退\n  const deathPenalty=new Uint8Array(N*N);\n  let cemCount=0,bigCem=0;\n  for(const i of tickBld){const b=tiles[i].bld;if(b&&b.k===16)cemCount++;if(b&&b.k===54&&!b.ref)bigCem++;} // T233：大墓園 root 計數\n  let cremPre342=0;for(const i2 of tickBld){const b2=tiles[i2].bld;if(b2&&b2.k===107)cremPre342++;}\n  const cemCap=cemCount*3+bigCem*24+cremPre342*40; /* T342：火葬場高吞吐（40） */ // T233：大墓園容量 24（8 座墓園）\n  let soothed=0;\n  for(const i of tickBld){\n    const b=tiles[i].bld;\n    if(!b||b.k!==1||!b.death)continue;\n    b.deathAge=(b.deathAge||0)+1;\n    if(b.deathAge>=10){b.death=0;b.deathAge=0;b.sick=0;continue;}\n    const x=i%N,y=(i/N)|0;\n    const covered=COV.cemetery[i]>0||COV.cem2[i]>0||(COV.crem&&COV.crem[i]>0);     // T61：墓園半徑10覆蓋（原 countNear k===16）；T233：大墓園 cem2 半徑16 同效\n    if(covered&&soothed<cemCap){soothed++;continue;}\n    // 未安撫：半徑 6 內其他住宅幸福 -0.1\n    for(let dy=-6;dy<=6;dy++)for(let dx=-6;dx<=6;dx++){\n      const nx=x+dx,ny=y+dy;\n      if(!inMap(nx,ny))continue;\n      const j=idx(nx,ny),nb=tiles[j].bld;\n      if(nb&&nb.k===1&&!nb.death)deathPenalty[j]=1;\n    }\n  }",
+  "fire": "  // 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土\n  const burning=[];\n  for(const i of tickBld){const b=tiles[i].bld;if(b&&b.k<=3&&b.fire)burning.push(i);}\n  let fireAlert=false;\n  for(const i of tickBld){                                // 起火擲骰（未燃 k≤3）\n    const b=tiles[i].bld;\n    if(!b||b.k>3||b.fire)continue;\n    let p=.0005*(b.k===3?3:1)*b.lv;\n    if(drought)p*=DROUGHT_FIRE_MULT;\n    if(pol&&pol.smokeDetect)p*=.6; // T327：煙霧偵測（只改機率不改 R() 消耗次數＝鐵律2）                     // T137：乾旱期間起火機率×2.5（非乾旱精確恆等 ×1）\n    const x=i%N,y=(i/N)|0;                               // 消防局半徑 9 覆蓋 → 起火率 -85%\n    if((COV.fire[i]>0||(COV.fire2&&COV.fire2[i]>0)||(COV.fireHQ&&COV.fireHQ[i]>0)))p*=.15;\n    else if(COV.firewatch&&COV.firewatch[i]>0)p*=.45; // T340：瞭望塔＝弱火險（有正規消防時不疊加）                             // T61：消防局半徑9覆蓋（原 countNear k===6）\n    {const r364=resilience364At(x,y,b);p*=r364.damageMul*r364.casualtyMul;}\n    p*=tq('A4a',1.10,1)*tq('A4b',.85,1)*tq('B3',.90,1)*sq('ind',1.08,1)*sq('green',.90,1);\n    if(R()<p){\n      b.fire=1;\n      if(!fireAlert){toast('🔥 '+townName+'發生火災！點擊燃燒的建築滅火','bad',x,y);sErr();fireAlert=true;}\n    }\n  }\n  for(const i of burning){                               // 蔓延：20% 點燃 Chebyshev 1 內未燃建築\n    if(R()<.20){\n      const x=i%N,y=(i/N)|0,opts=[];\n      for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){\n        if(!dx&&!dy)continue;\n        const nx=x+dx,ny=y+dy;\n        if(!inMap(nx,ny))continue;\n        const ni=idx(nx,ny),nb=tiles[ni].bld;\n        if(nb&&nb.k<=3&&!nb.fire)opts.push([ni,nb]);\n      }\n      if(opts.length){const[ni,nb]=opts[ri(opts.length)];if(!disasterBlocked364(ni%N,(ni/N)|0,nb,36484))nb.fire=1;}\n    }\n  }\n  for(const i of burning){                               // 推進燃燒天數；fire>=5 燒毀成焦土（T119：覆蓋內撲滅改由消防車抵達執行，見 updFireTrucks，不再次日瞬滅）\n    const t=tiles[i],b=t.bld;\n    if(!b||!b.fire)continue;\n    const x=i%N,y=(i/N)|0;\n    const r364=resilience364At(x,y,b);\n    if(r364.recovery&&streetHash(x,y,day+36485)<r364.recovery)b.fire=Math.max(0,b.fire-1);else b.fire++;\n    if(b.fire>=5){if(b.k===3)stampPolSrc(x,y,3,-1);t.bld=null;t.ruin=1;insPayout(x,y);} // zone 保留；T110：工業燒毀→撤銷污染源\n  }",
+  "crime": "  // 犯罪（T32）：未受警察局半徑10覆蓋的 k≤3 建築每天小機率發生犯罪\n  let crimeAlert=false;\n  for(const i of tickBld){\n    const b=tiles[i].bld;\n    if(!b||b.k>3||b.crime)continue;\n    const x=i%N,y=(i/N)|0;\n    if(COV.police[i]>0||COV.police2[i]>0)continue; // T61：警察局半徑10覆蓋則受保護（原 countNear k===11）；T222：派出所小半徑同效\n    if(!(COV.prison&&COV.prison[i]>0)&&R()<.001*(b.k===2?2:1)*b.lv*(pol&&pol.curfew?.6:1)*(pol&&pol.nightMarket?1.15:1)*(pol&&pol.parkNight?1.05:1)*((COV.court&&COV.court[i]>0)?.5:1)*tq('B2',.92,1)*tq('B4b',1.05,1)*tq('B7',.90,1)*nightCrimeMul487(i,b)){ // T487：夜間照明＋警力共同降低風險；照明不替代警察 // T67：監獄半徑8覆蓋則防犯罪（原 countNear k===31，O(N)→O(1)）；T122 宵禁：犯罪率×0.6；T139：法院半徑10覆蓋配合警局再降犯罪率×0.5（未放置時恆×1）\n      b.crime=1;markLandDirty(x,y,4); // T315：犯罪影響地價，標記影響框\n      if(!crimeAlert){toast('🚓 '+townName+'發生犯罪！點擊受害建築處理','bad',x,y);sErr();crimeAlert=true;}\n    }\n  }\n  // 廢棄（T71）：犯罪持續未被玩家處理（crimeBtn/GV.clearCrime）滿 15 天後每天 5% 機率轉為廢棄；\n  // 廢棄建築的停稅由既有經濟段 `!b.abandoned` 判定（原已預留，本卡補上唯一賦值來源）\n  let abandonAlert=false;\n  for(const i of tickBld){\n    const b=tiles[i].bld;\n    if(!b||b.k>3||!b.crime||b.abandoned)continue;\n    b.crimeDays=(b.crimeDays||0)+1;\n    if(b.crimeDays>=15&&R()<.05){\n      b.abandoned=1;\n      if(!abandonAlert){toast('🏚️ '+townName+'有建築因長期犯罪而廢棄，已停止繳稅','bad',i%N,(i/N)|0);sErr();abandonAlert=true;}\n    }\n  }",
+  "disease": "  // 生病（T33/T34）：未受健康設施覆蓋的住宅每天小機率生病；醫院覆蓋內次日康復，診所覆蓋內每天50%機率康復\n  const medCap387=(!window.__noCivicServices495&&civic495.ready)?Math.max(0,Math.floor(civic495.health.effectiveBeds)):((flowStat384&&flowStat384.ok&&flowStat384.med)?flowStat384.med.cap:Infinity); // T495：治療與面板共讀同一有效床位；rollback/首日保留舊口徑\n  let medCured387=0,medQueued387=0; // T387b：今日治癒/滯留（tick 區域，零守衛面）\n  let sickAlert=false;\n  for(const i of tickBld){\n    const b=tiles[i].bld;\n    if(!b||b.k!==1)continue;\n    const x=i%N,y=(i/N)|0;\n    const ca495=civicHealthAccess495(i),hospital=ca495?ca495.hospital:(COV.hospital[i]>0||(COV.ambulance&&COV.ambulance[i]>0)||(COV.megahosp&&COV.megahosp[i]>0)||(COV.medcamp&&COV.medcamp[i]>0)); // T495：Coverage 只由有設備、有職員且可運作的醫療設施蓋印\n    const clinic=ca495?ca495.clinic:COV.clinic[i]>0;\n    const covered=hospital||clinic;\n    if(b.sick){\n      if(hospital){if(medCured387<medCap387){b.sick=0;medCured387++;}else medQueued387++;} // T387b：床位門檻（原分支無 R，改後仍無 R）；醫院覆蓋+有床 → 次日必康復\n      else if(clinic&&R()<.5){if(medCured387<medCap387){b.sick=0;medCured387++;}else medQueued387++;} // T387b：R() 照擲、結果被床位遮蔽（消耗序恆等=T364d attempted 精神）；診所覆蓋 → 50% 且有床才康復\n      continue;\n    }\n    if(!covered&&R()<.001*b.lv+(waterLegacy449()?0:waterDiseaseRisk472(i))){ // T472：沿用原本唯一一次 R()，只微調門檻；不增加 RNG 次數／順序\n      b.sick=1;\n      if(!sickAlert){toast('🏥 '+townName+'爆發疾病！點擊生病住宅處理','bad',x,y);sErr();sickAlert=true;}\n    }\n  }\n  // 生病→死亡轉化（T38）：sick≥3 天未康復每天 10% 轉死亡\n  let deathAlert=false,sickN387=0; // T387a：同時病患計數（純觀測搭既有迴圈＝T145 svcSamples 先例；tick 區域變數=零守衛面）\n  for(const i of tickBld){\n    const b=tiles[i].bld;\n    if(!b||b.k!==1||!b.sick||b.death)continue;\n    sickN387++;b.sickDays=(b.sickDays||0)+1; // T387a：計「今日仍病者」（病癒後、轉死擲骰前）\n    if(b.sickDays>=3&&R()<.10){\n      b.death=1;b.deathAge=0;b.sick=0;b.sickDays=0;\n      if(!deathAlert){toast('💀 發生憾事！請增設健康設施或墓園','bad',i%N,(i/N)|0);sErr();deathAlert=true;}\n    }\n  }",
+  "buttons": "  const cb=$('#crimeBtn');                               // 處理犯罪按鈕（T32）\n  if(cb)cb.addEventListener('click',()=>{\n    const bb=inMap(x,y)?T(idx(x,y)).bld:null;\n    if(!bb||!bb.crime)return;\n    bb.crime=0;bb.crimeDays=0;markLandDirty(x,y,4); // T315；T412：歸零廢棄倒數＝與警車到場（updPoliceCars onArrive）同語義——原本只清旗＝玩家親手處理反而比等警車「虧」\n    toast('🚓 犯罪已處理','gold');updHud();hideInfo();\n  });\n  const sb=$('#sickBtn');                                // 治療生病按鈕（T33）\n  if(sb)sb.addEventListener('click',()=>{\n    const bb=inMap(x,y)?T(idx(x,y)).bld:null;\n    if(!bb||!bb.sick)return;\n    if(money>=50){money-=50;bb.sick=0;toast('🏥 病情已控制','gold');updHud();hideInfo();}\n    else{toast('資金不足！治療需 $50','bad');sErr();}\n  });\n  const fb=$('#fireBtn');                                // 滅火按鈕（事件綁定，不用內聯 onclick）\n  if(fb)fb.addEventListener('click',()=>{\n    const bb=inMap(x,y)?T(idx(x,y)).bld:null;\n    if(!bb||!bb.fire)return;\n    if(money>=30){money-=30;bb.fire=0;toast('🧯 火勢已撲滅！','gold');updHud();hideInfo();}\n    else{toast('資金不足！滅火需 $30','bad');sErr();}\n  });"
+ }
+}

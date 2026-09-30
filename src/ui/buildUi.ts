@@ -233,8 +233,10 @@ export function createBuildUi(on: BuildUiEvents) {
     },
     setDay(text: string) { setText($('dayLbl'), text); },
     setCoach(text: string | null) { const c = $('coach'); c.hidden = !text; setText(c, text ?? ''); },
-    toast(text: string, tone: 'good' | 'bad' | 'gold' | '' = '') {
+    // onTap（D026）：災禍的提示點一下跳到那棟建築（實驗線 toast 的 x、y，點了鏡頭過去），沒給就只是提示
+    toast(text: string, tone: 'good' | 'bad' | 'gold' | '' = '', onTap?: () => void) {
       const t = document.createElement('div'); t.className = 'toast ' + tone; t.textContent = text; toasts.appendChild(t);
+      if (onTap) { t.style.cursor = 'pointer'; t.onclick = () => { onTap(); t.remove(); }; }
       while (toasts.childElementCount > 3) toasts.firstElementChild!.remove();
       setTimeout(() => { t.style.opacity = '0'; }, 2200); setTimeout(() => t.remove(), 2700);
     },

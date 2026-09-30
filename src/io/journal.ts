@@ -3,7 +3,7 @@
 //   接續編碼：緊湊列是差值編碼（天數、手勢編號跟上一列比），記住編到哪（PackState），新的事件接著編，不重編整份；
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
-import type { CityEvent } from '../sim/city.ts';
+import { ACT_CODES, type CityEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
 export const PACK0: PackState = Object.freeze({ n: 0, d0: 0, g0: 0, h: 0x811c9dc5 }) as PackState;
@@ -16,7 +16,7 @@ export function hashRow(h: number, row: unknown[]): number {
 }
 export const hashRows = (rows: readonly unknown[][], h0 = PACK0.h) => rows.reduce<number>((h, r) => hashRow(h, r), h0);
 
-const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp'] as const;
+const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 // 從 st 那一列接著把 hist[st.n..] 編成緊湊列（種類碼與欄位同 save.ts T_CODE／ROW_FIELDS）
 export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unknown[][]; st: PackState } {
   const rows: unknown[][] = [];
@@ -38,6 +38,14 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'undo': row = [7, dd, e.g - g0, e.refund]; g0 = e.g; break;
       case 'restyle': row = [8, dd, e.x, e.z, e.v]; break;
       case 'pipe': row = [9, dd, e.x, e.z, e.cost, e.g - g0]; g0 = e.g; break;   // D019
+      // D026（城市格式 6）：災禍與處置。fire [10,dDay,x,z,k]、burn [11,dDay,x,z,k,id]、crime [12,dDay,x,z,k]、abandon [13,dDay,x,z,k,id]、sick [14,dDay,x,z]、death [15,dDay,x,z]、act [16,dDay,x,z,動作碼,cost]（動作碼 0 滅火、1 處理犯罪、2 治療）
+      case 'fire': row = [10, dd, e.x, e.z, e.k]; break;
+      case 'burn': row = [11, dd, e.x, e.z, e.k, e.id]; break;
+      case 'crime': row = [12, dd, e.x, e.z, e.k]; break;
+      case 'abandon': row = [13, dd, e.x, e.z, e.k, e.id]; break;
+      case 'sick': row = [14, dd, e.x, e.z]; break;
+      case 'death': row = [15, dd, e.x, e.z]; break;
+      case 'act': row = [16, dd, e.x, e.z, ACT_CODES.indexOf(e.what), e.cost]; break;
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

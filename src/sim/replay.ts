@@ -2,6 +2,7 @@
 // 格式 1（只有匯入一筆）重播出來就是 cityFromLab 的結果；格式 2 另外套用 grow／upgrade；格式 3（D011）再套用玩家施工：
 //   road／zone／place／doze 一格一筆，照實驗線 doPlace 的格子寫法（51641–51818）；undo 把第 g 筆手勢碰過的格子整格還原（T460 66594）。
 //   格式 4（D012）再套用 restyle：讀檔時照實驗線重挑的外觀變體（只換 v）。格式 5（D019）再套用 pipe（鋪水管）與拆除的水管那一層。
+//   格式 6（D026）再套用每天的災禍：burn（燒毀成焦土）、abandon（廢棄）；fire、crime、sick、death、act 只核對那一格有建築；拆除多了 ruin（焦土）那一層。
 // 屋齡不存在事件裡，照實驗線的規則推（tick() 55628 起的升級迴圈對每棟非 ref 建築 age+1，新長的當天就會被加到；升級那天歸零）：
 //   匯入的：匯入時 age ＋（結束日 − 匯入日）；第 d 天長出、沒升級過：1 ＋（結束日 − d）；最後一次在第 u 天升級：結束日 − u；
 //   第 d 天玩家蓋的（在第 d 天的 tick 之後）：結束日 − d（doPlace 給 age 0，51672）；拆掉的：屋齡停在拆的那一天。
@@ -10,7 +11,7 @@ import { decodeLabCode } from '../io/labcode.ts';
 import { cityFromLab, roadCode, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 
-interface Stroke { tiles: Map<number, [number, number, number, number, number, number]>; created: number[]; removed: number[] }
+interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
 
 export function replayCity(code: string, events: readonly CityEvent[], kinds: KindTable, endDay?: number): City {
   const imp = events[0];
@@ -24,7 +25,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
   for (const b of c.buildings) base.set(b.id, { age: b.age, from: D0 });
   const strokes = new Map<number, Stroke>();
   const strokeOf = (g: number) => { let s = strokes.get(g); if (!s) { s = { tiles: new Map(), created: [], removed: [] }; strokes.set(g, s); } return s; };
-  const touch = (s: Stroke, i: number) => { if (!s.tiles.has(i)) s.tiles.set(i, [c.road[i], c.rclass[i], c.zone[i], c.tree[i], c.occ[i], c.wp[i]]); };
+  const touch = (s: Stroke, i: number) => { if (!s.tiles.has(i)) s.tiles.set(i, [c.road[i], c.rclass[i], c.zone[i], c.tree[i], c.occ[i], c.wp[i], c.ruin[i]]); };
   const footprint = (b: CityBuilding, f: (j: number) => void) => { for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) f((b.z + dz) * n + b.x + dx); };
   const bury = (b: CityBuilding, day: number) => {   // 拆掉：墓碑、occ 清空、屋齡停在這一天
     const s = base.get(b.id)!;
@@ -87,6 +88,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
           if (e.layer === 'road') { c.road[i] = 0; c.rclass[i] = 0; }
           else if (e.layer === 'zone') c.zone[i] = 0;
           else if (e.layer === 'wp') c.wp[i] = 0;                         // D019：51810
+          else if (e.layer === 'ruin') { c.ruin[i] = 0; c.zone[i] = 0; }  // D026：51777 焦土優先——ruin 清掉、分區一起清掉
           else c.tree[i] = 0;
         }
         break;
@@ -101,7 +103,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         if (!s) throw new Error(`重播：第 ${e.day} 天要復原的第 ${e.g} 筆手勢不存在`);
         for (const id of s.created) { const b = c.buildings[id - 1]; if (b.goneDay === undefined) bury(b, e.day); }
         for (const id of s.removed) { const b = c.buildings[id - 1]; delete b.goneDay; base.set(b.id, { age: b.age, from: e.day }); }
-        for (const [j, [rd, rc, zn, tr, oc, wp]] of s.tiles) { c.road[j] = rd; c.rclass[j] = rc; c.zone[j] = zn; c.tree[j] = tr; c.occ[j] = oc; c.wp[j] = wp; }
+        for (const [j, [rd, rc, zn, tr, oc, wp, ru]] of s.tiles) { c.road[j] = rd; c.rclass[j] = rc; c.zone[j] = zn; c.tree[j] = tr; c.occ[j] = oc; c.wp[j] = wp; c.ruin[j] = ru; }
         strokes.delete(e.g);
         break;
       }
@@ -110,6 +112,25 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         // 同一次讀檔的重挑都是同一天，日子分不出是哪一筆：另外講出第幾筆（D012 審查）
         if (!b || b.x !== e.x || b.z !== e.z || (b.k | 0) < 1 || (b.k | 0) > 3) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可以重挑外觀的住商工（歷史第 ${k + 1} 筆）`);
         b.v = e.v;
+        break;
+      }
+      // D026（城市格式 6）：災禍。起火、犯罪、生病、死亡、玩家的處置不改城市的樣子（旗標不在城市模型裡），只確認那一格有建築（歷史壞了要講出來）；
+      // 燒毀＝墓碑＋焦土（分區留著，實驗線 55796）；廢棄＝abandoned（55830）
+      case 'fire': case 'crime': case 'sick': case 'death': case 'act': {
+        const b = c.buildings[c.occ[i] - 1];
+        if (!b || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有建築，不會有${e.t === 'act' ? '處置' : '災禍'}（歷史第 ${k + 1} 筆）`);
+        break;
+      }
+      case 'burn': {
+        const b = c.buildings[e.id - 1];
+        if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可燒毀的建築 #${e.id}（歷史第 ${k + 1} 筆）`);
+        bury(b, e.day); c.ruin[i] = 1;
+        break;
+      }
+      case 'abandon': {
+        const b = c.buildings[e.id - 1];
+        if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可廢棄的建築 #${e.id}（歷史第 ${k + 1} 筆）`);
+        b.abandoned = true;
         break;
       }
       default: throw new Error('重播：不認得的事件 ' + JSON.stringify(e));

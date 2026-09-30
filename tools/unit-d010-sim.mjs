@@ -77,7 +77,7 @@ export async function d010SimGuards(log) {
     // 格式號：D010 是 2、D011 是 3；D012 起是 4——讀檔照實驗線重挑外觀（T531，src/sim/restyle.ts）記成新事件 restyle（緊湊列種類碼 8）。
     // 格式 3 的舊檔照讀、比 4 新的退回只用存檔、restyle 列竄改擋下，由 tools/unit-d011-edit.mjs 驗
     const r = decodeLabCode(code), c1 = cityFromLab(r.save, KT, code), old = replayCity(code, c1.history.slice(0, 1), KT);
-    log(J(cityStats(old)) === J(cityStats(c1)) && J(old.buildings) === J(c1.buildings) && CITY_FORMAT === 5, '歷史格式 5（D019 起：鋪水管、拆水管；存檔沒有這兩種事件照寫 4）、格式 4（D012 起：讀檔照實驗線重挑外觀記成 restyle 事件；D011 是 3、D010 是 2）；只有匯入事件的舊格式（格式 1）照讀，重播＝原城', `格式 ${CITY_FORMAT}`);
+    log(J(cityStats(old)) === J(cityStats(c1)) && J(old.buildings) === J(c1.buildings) && CITY_FORMAT === 6, '歷史格式 6（D026 起：起火、燒毀、犯罪、廢棄、生病、死亡、處置、清焦土；存檔沒有這些事件照寫 4 或 5）、格式 5（D019 起：鋪水管、拆水管；存檔沒有這兩種事件照寫 4）、格式 4（D012 起：讀檔照實驗線重挑外觀記成 restyle 事件；D011 是 3、D010 是 2）；只有匯入事件的舊格式（格式 1）照讀，重播＝原城', `格式 ${CITY_FORMAT}`);
     const order = events.every((e, i) => i === 0 || e.day >= events[i - 1].day);
     const ups = events.filter(e => e.t === 'upgrade');
     log(order && ups.every(e => e.lv >= 2 && e.lv <= 3), '事件只增不改：日子不倒退；升級都是升到 2、3 級', `生長 ${events.length - ups.length}、升級 ${ups.length}`);
