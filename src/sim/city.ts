@@ -24,6 +24,7 @@ export const stadiumSize = (v: unknown) => { const s = typeof v === 'number' && 
 export interface KindTable {
   size(k: number): number;      // 佔地邊長（格）
   known(k: number): boolean;    // 實驗線有沒有這個種類
+  cat(k: number): string;       // 類別字母（實驗線 kcatOf 37275：R 住宅、C 商業、I 工業、E 能源、S 市政治安、H 醫療、D 教育、T 交通、A 文化觀光、F 農業食品、G 綠地、W 環衛）；D029 夜間城市的輸入分類
 }
 
 export interface CityBuilding {

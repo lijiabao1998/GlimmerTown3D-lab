@@ -33,20 +33,23 @@ export async function d028LiveGuards(log) {
   catch (e) { log(false, 'D028 實跑守衛跑到一半丟例外（沒跑完＝紅燈）', `${e.name}: ${e.message}｜` + (e.stack ?? String(e)).split('\n').slice(0, 4).join(' ｜ ')); }
 }
 
-// 本線這一天結束時的樣子，形狀跟樣本的 row 一樣（樣本另有的 night、ev、tech、pol、spec 是要代進去的輸入，ng、un、uu 也是）
+// 本線這一天結束時的樣子，形狀跟樣本的 row 一樣（樣本另有的 ev、tech、pol、spec 是要代進去的輸入，un、uu 的地鐵、公車、停車、車隊也是；夜間城市 D029 起本線自己算：nc＝[ready, 安全分數, 幸福加減, 晚間消費金, 夜間運輸收入, 夜間營運費]，
+// 對的是樣本的 night.ready、night.score、night.hd、ng、un[3]、uu[3]）
 export function rowOf28(s, rep) {
-  const N = s.w.N, hs = [], c = rep.chain346, t = rep.settle.tax, o = rep.settle.other;
+  const N = s.w.N, hs = [], c = rep.chain346, t = rep.settle.tax, o = rep.settle.other, n = rep.night;
   for (let i = 0; i < N * N; i++) { const b = s.w.tiles[i].bld; if (b && !b.ref && (b.k === 1 || b.k === 127)) hs.push(i, b.h); }
   return {
     day: s.day, pop: rep.pop, jobs: rep.jobs, happy: rep.cityHappy, money: rep.money, net: rep.settle.income - rep.settle.upkeep,
     tx: [t.R, t.C, t.I], inc: INC_KEYS.map(k => o[k]),
     ch: [c.gasSup, c.gasDem, c.gasRatio, c.fertOut, c.cookedOut, c.wageIdx, c.fertReady, c.cookedReady, c.mortPop],
     fd: rep.food.points, tr: rep.econ.ec.tourists, ho: [c.hotelBeds, c.hotelOcc],
+    nc: [n.ready, n.safety.score, n.happinessDelta, n.finance.commerceGold, n.finance.transitRevenue, n.finance.operatingCost],
     nh: hs.length / 2, hh: hashBytes(Float64Array.from(hs)), ah: hashBytes(Float64Array.from(rep.happyAgg)), agg: rep.happyAgg, peek: s.rng.R(),
   };
 }
-const FIELDS = ['day', 'pop', 'jobs', 'happy', 'money', 'net', 'tx', 'inc', 'ch', 'fd', 'tr', 'ho', 'nh', 'hh', 'ah', 'peek'];
-const NAMES = { day: '日', pop: '人口', jobs: '就業', happy: '城市幸福', money: '資金', net: '淨額（收入−維護費）', tx: '稅 R／C／I', inc: '其餘收入十二項', ch: 'T346 鏈條九欄', fd: '食物點數', tr: '遊客', ho: '旅宿床位與入住', nh: '住宅棟數', hh: '每一棟住宅的幸福', ah: '幸福構成雜湊', agg: '幸福構成', peek: '下一個亂數（亂數次數或順序不同）' };
+const labNc = row => [row.night.ready, row.night.score, row.night.hd, row.ng, row.un[3], row.uu[3]];   // 樣本裡對應 nc 的六個值
+const FIELDS = ['day', 'pop', 'jobs', 'happy', 'money', 'net', 'tx', 'inc', 'ch', 'fd', 'tr', 'ho', 'nc', 'nh', 'hh', 'ah', 'peek'];
+const NAMES = { day: '日', pop: '人口', jobs: '就業', happy: '城市幸福', money: '資金', net: '淨額（收入−維護費）', tx: '稅 R／C／I', inc: '其餘收入十二項', ch: 'T346 鏈條九欄', fd: '食物點數', tr: '遊客', ho: '旅宿床位與入住', nc: '夜間城市六欄（ready、安全分數、幸福加減、晚間消費金、夜間運輸收入、夜間營運費）', nh: '住宅棟數', hh: '每一棟住宅的幸福', ah: '幸福構成雜湊', agg: '幸福構成', peek: '下一個亂數（亂數次數或順序不同）' };
 // 政策開著的城：本線沒有政策（K）的稅率、日費與收入加成，資金、淨額、稅不判（其餘欄位照判）
 const MONEYF = ['money', 'net', 'tx'];
 const polOn = p => Object.entries(JSON.parse(p)).some(([k, v]) => v === true || (/^tax[RCI]$/.test(k) && v !== 1));
@@ -63,17 +66,18 @@ export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, o
     const inj = injectInputs(s, st, prev, row, true);
     if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
     const ev = row.ev;
-    const class2 = {
-      economy: ev ? { eventFood: ev.food } : undefined, nightCommerceGold487: row.ng, eventTax: ev ? ev.tax : null,
-      other: { metroRev: row.un[0], metroAds: row.un[1], transitRev: row.un[2], nightTransitRev487: row.un[3], parkingRevenue491: row.un[4] },
-      upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], nightOpsCost487: row.uu[3], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },
+    const class2 = {   // 夜間城市（晚間消費金、夜間運輸收入、夜間營運費）D029 起不代，本線自己算
+      economy: ev ? { eventFood: ev.food } : undefined, eventTax: ev ? ev.tax : null,
+      other: { metroRev: row.un[0], metroAds: row.un[1], transitRev: row.un[2], parkingRevenue491: row.un[4] },
+      upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },
     };
     const rep = mod.stepDay(s, { hazard: inj.hazard, class2 });
     const mine = rowOf28(s, rep), skipMoney = polOn(st.pol);
     if (!skipMoney) out.judgedMoney++;
     for (const k of FIELDS) {
       if (skipMoney && MONEYF.includes(k)) continue;
-      if (J(mine[k]) !== J(row[k])) { dd.push(`${NAMES[k]} 本線 ${J(mine[k])} ≠ 實驗線 ${J(row[k])}`); ff.push(k); }
+      const lv = k === 'nc' ? labNc(row) : row[k];
+      if (J(mine[k]) !== J(lv)) { dd.push(`${NAMES[k]} 本線 ${J(mine[k])} ≠ 實驗線 ${J(lv)}`); ff.push(k); }
     }
     if (row.agg && J(mine.agg) !== J(row.agg)) { const at = HAPPY_NAMES.filter((n, i) => J(mine.agg[i]) !== J(row.agg[i])); dd.push(`幸福構成的項不同：${at.join('、')}`); if (!out.first) out.parts = at; ff.push('agg'); }
     for (const k of ff) if (!out.fields.includes(k)) out.fields.push(k);
@@ -234,8 +238,8 @@ export async function wiringGuards(log, { lab, cities, KT, vrank }) {
     ['房貸人口不看銀行覆蓋', [['b.k === 1 && f.COV.bank && f.COV.bank[i] > 0 && b.pw) mortPop', 'b.k === 1 && b.pw) mortPop']], 'lab'],
     ['工資指數不進報表', [['wageIdx: ec.laborNow481.wageIndex,', 'wageIdx: 0,']], 'lab'],
     ...OTHER_ITEMS.map(k => [`${k} 沒進 other（收入不入帳）`, [[`${k}: x.${k}`, `${k}: 0`]], 'lab']),
-    ['雜湊不看化肥旗標', [['...(s.fertReady || s.cookedReady ? [s.fertReady, s.cookedReady] : [])]));', '...(s.fertReady || s.cookedReady ? [s.cookedReady] : [])]));']], 'hash'],
-    ['雜湊不看熟食旗標', [['...(s.fertReady || s.cookedReady ? [s.fertReady, s.cookedReady] : [])]));', '...(s.fertReady || s.cookedReady ? [s.fertReady] : [])]));']], 'hash'],
+    ['雜湊不看化肥旗標', [['...(s.fertReady || s.cookedReady ? [s.fertReady, s.cookedReady] : []),', '...(s.fertReady || s.cookedReady ? [s.cookedReady] : []),']], 'hash'],
+    ['雜湊不看熟食旗標', [['...(s.fertReady || s.cookedReady ? [s.fertReady, s.cookedReady] : []),', '...(s.fertReady || s.cookedReady ? [s.fertReady] : []),']], 'hash'],
   ];
   const bad = [], out = [], base0 = [dayBad(V0), hashBad(V0)].filter(Boolean);
   if (base0.length) bad.push(`沒改的副本就有不對：${base0.join('｜')}`);

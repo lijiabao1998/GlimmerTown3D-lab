@@ -1,0 +1,177 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-night.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "fn",
+   "name": "emptyNightInputs487",
+   "anchors": {
+    "start": "function emptyNightInputs487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37317,
+   "endLine": 37317,
+   "sha": "6cf7b67cb72a03440d822df3869bbce0bfbf2fcf95babe092637f3b6453fab19"
+  },
+  {
+   "kind": "fn",
+   "name": "emptyNightCity487",
+   "anchors": {
+    "start": "function emptyNightCity487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37318,
+   "endLine": 37318,
+   "sha": "3e6f077240dae81fd5d061d441a2ab23a55a27f5e37adc242a9f9c45325788f9"
+  },
+  {
+   "kind": "decl",
+   "name": "NIGHT_ENTERTAIN_K487",
+   "anchors": {
+    "start": "const NIGHT_ENTERTAIN_K487="
+   },
+   "line": 37320,
+   "endLine": 37320,
+   "sha": "049e35101c0b3c380ec403baf7e71c5af6a89843b13d42754d9810f65fafb692"
+  },
+  {
+   "kind": "decl",
+   "name": "NIGHT_TRANSIT_K487",
+   "anchors": {
+    "start": "const NIGHT_TRANSIT_K487="
+   },
+   "line": 37321,
+   "endLine": 37321,
+   "sha": "5b071d8e2a4021802a21d2ca39a31760efa507718cceacf1d7c72fece410641b"
+  },
+  {
+   "kind": "fn",
+   "name": "prepareNightInputs487",
+   "anchors": {
+    "start": "function prepareNightInputs487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37323,
+   "endLine": 37333,
+   "sha": "54ed0b3f3e3b354b62c24937baf5f0bbfa3a4e2cd60ed62eea4757ca9b6fe234"
+  },
+  {
+   "kind": "fn",
+   "name": "nightCrimeMul487",
+   "anchors": {
+    "start": "function nightCrimeMul487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37344,
+   "endLine": 37348,
+   "sha": "b53dfde96f9a880be01a8d0f3758dda7158fac6f27f0abd3992460b13655ee0e"
+  },
+  {
+   "kind": "fn",
+   "name": "finalizeNightCity487",
+   "anchors": {
+    "start": "function finalizeNightCity487(",
+    "closure": "balanced-brace"
+   },
+   "line": 37354,
+   "endLine": 37377,
+   "sha": "475ca38805d953bd5cdf982213766e8cd3c082bd1dc3413322b1501fc52e488f"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福的夜間城市項（前一日）",
+   "anchors": {
+    "start": "{name:'夜間城市',val:nightCity487.ready?nightCity487.happinessDelta:0}",
+    "end": "{name:'夜間城市',val:nightCity487.ready?nightCity487.happinessDelta:0}"
+   },
+   "line": 55233,
+   "endLine": 55233,
+   "sha": "ea52837c359415c150768f7a81c28d847d446d5aeb14a0fcfa0b7679f5402122"
+  },
+  {
+   "kind": "span",
+   "name": "每天結算的呼叫（災禍段之後、收稅之前）",
+   "anchors": {
+    "start": "nightCity487=finalizeNightCity487({purchasingPower:purchasingPowerNow481",
+    "end": "nightCity487=finalizeNightCity487({purchasingPower:purchasingPowerNow481"
+   },
+   "line": 55866,
+   "endLine": 55866,
+   "sha": "bcfb50b0f05e9fc4b11e2fcd05056ffa446a5eff256bf141e30acad75c986730"
+  },
+  {
+   "kind": "span",
+   "name": "晚間消費金進收入與商業稅（當天的）",
+   "anchors": {
+    "start": "const nightCommerceGold487=nightCity487.ready?nightCity487.finance.commerceGold:0;",
+    "end": "const nightCommerceGold487=nightCity487.ready?nightCity487.finance.commerceGold:0;"
+   },
+   "line": 55968,
+   "endLine": 55968,
+   "sha": "9fbc354cc354ef4400837dcb3e50aeba3839bfce9bcbb7c2b2f77fbab87a785f"
+  },
+  {
+   "kind": "span",
+   "name": "夜間運輸收入與營運費（當天的）",
+   "anchors": {
+    "start": "nightTransitRev487=nightCity487.ready?nightCity487.finance.transitRevenue:0",
+    "end": "nightTransitRev487=nightCity487.ready?nightCity487.finance.transitRevenue:0"
+   },
+   "line": 56027,
+   "endLine": 56027,
+   "sha": "349aab1b6d9db5c7fd6cafb3e9444ff501e326c15d57c7661b3fe1464aab9acf"
+  },
+  {
+   "kind": "span",
+   "name": "犯罪抽籤的夜間乘數（前一日）",
+   "anchors": {
+    "start": "*nightCrimeMul487(i,b)",
+    "end": "*nightCrimeMul487(i,b)"
+   },
+   "line": 55817,
+   "endLine": 55817,
+   "sha": "67464aad4ab3e0596c4d2b52d07e4596cf67cfe0187da6ad3a0941a0d9537b85"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔與新圖歸零",
+   "anchors": {
+    "start": "function resetNightCity487()",
+    "end": "function resetNightCity487()"
+   },
+   "line": 37322,
+   "endLine": 37322,
+   "sha": "f626bf227e2befde5f4b70849821d4313e0d553863cc9c950d9129303e3a6267"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "emptyNightInputs487": "function emptyNightInputs487(){return{day:-1,roadTiles:0,roadWeight:0,transitNodes:0,residential:0,commercial:0,entertainment:0,industrial:0,civic:0,parks:0,lightingEvening:0,lightingNight:0};}",
+  "emptyNightCity487": "function emptyNightCity487(){return{ready:false,day:0,inputs:emptyNightInputs487(),lighting:{planned:0,connected:0,served:0,energyDemand:0,energyServed:0,coverage:0,networkRate:1,powerRate:1,poweredRoads:0,totalRoads:0},commerce:{activity:0,taxMul:1,potential:0},transit:{demand:0,capacity:0,riders:0,service:1},safety:{score:1,grade:'A',policeCoverage:1,crimeMul:1},finance:{commerceGold:0,transitRevenue:0,operatingCost:0,net:0},happinessDelta:0,policies:{nightMarket:false,parkNight:false,curfew:false},saveSchemaChanged:false};}",
+  "NIGHT_ENTERTAIN_K487": "const NIGHT_ENTERTAIN_K487=new Set([9,35,36,37,38,39,40,44,56,65,66,76,81,82,83,87,90,93,94,96,98,99,101,103,136]);",
+  "NIGHT_TRANSIT_K487": "const NIGHT_TRANSIT_K487=new Set([17,18,19,21,55,90,110,114,139,166,173,174]);",
+  "prepareNightInputs487": "function prepareNightInputs487(){\n  const q=emptyNightInputs487();q.day=day;\n  for(const i of tickRoad){const t=tiles[i];if(!t||!t.road)continue;const rc=clamp((t.rc||2),1,5);q.roadTiles++;q.roadWeight+=[0,.55,.78,1.04,1.36,1.78][rc];if(t.bus)q.transitNodes++;if(t.rail||t.tram)q.transitNodes+=.35;}\n  for(const i of tickBld){const b=tiles[i]&&tiles[i].bld;if(!b||b.ref)continue;const k=b.k|0,cat=kcatOf(k),sz=Math.max(1,b.sz||1),area=Math.min(9,sz*sz);\n    if(cat==='R')q.residential+=area;else if(cat==='C')q.commercial+=area;else if(cat==='I'||cat==='E')q.industrial+=area;else if(['A','S','H','D','T'].includes(cat))q.civic+=area;\n    if(NIGHT_ENTERTAIN_K487.has(k))q.entertainment+=area;if(NIGHT_TRANSIT_K487.has(k))q.transitNodes+=Math.max(1,sz);if(cat==='G')q.parks+=area;\n  }\n  q.lightingEvening=+(q.roadWeight*.014+q.transitNodes*.045+q.civic*.010).toFixed(3);\n  q.lightingNight=+(q.roadWeight*.021+q.transitNodes*.065+q.civic*.014+(pol&&pol.parkNight?q.parks*.035:0)).toFixed(3);\n  nightInputs487=q;return q;\n}",
+  "nightCrimeMul487": "function nightCrimeMul487(i,b){\n  if(!nightCity487.ready)return 1;const g=nightCity487,sLocal=((COV.police&&COV.police[i]>0)||(COV.police2&&COV.police2[i]>0))?1:0,\n        local=.62*g.safety.score+.38*sLocal,market=(b&&b.k===2&&pol&&pol.nightMarket)?.05:0;\n  return clamp(1.14-local*.34+market,.72,1.20);\n}",
+  "finalizeNightCity487": "function finalizeNightCity487(o){\n  const I=nightInputs487.day===day?nightInputs487:prepareNightInputs487(),L=power471&&power471.publicLighting?power471.publicLighting:null,\n        planned=Math.max(0,+I.lightingNight||0),connected=L?Math.max(0,+L.connectedNight||0):0,served=L?Math.max(0,+L.servedNight||0):0,\n        networkRate=planned>0?clamp(connected/planned,0,1):1,pRate=connected>0?clamp(served/connected,0,1):(planned>0?0:1),lightingCoverage=planned>0?clamp(served/planned,0,1):1;\n  if(!nightDistrictRate487||nightDistrictRate487.length!==powerDistricts450.length)nightDistrictRate487=new Float32Array(powerDistricts450.length);else nightDistrictRate487.fill(0);\n  for(const d of powerDistricts450){const dr=power471&&power471.districts&&power471.districts[d.id],pool=dr&&power471.pools&&power471.pools[dr.pool],q=pool&&pool.night,rate=q&&q.demand>0?clamp(q.dispatched/q.demand,0,1):(q&&q.available>0?1:0);nightDistrictRate487[d.id]=rate;}\n  let poweredRoads=0,totalRoads=0,targets=0,policeCovered=0;\n  for(const i of tickRoad){const t=tiles[i];if(!t||!t.road)continue;totalRoads++;const d=POWER_DIST450&&POWER_DIST450.length===N*N?POWER_DIST450[i]:-1;if(d>=0&&d<nightDistrictRate487.length&&nightDistrictRate487[d]>.001)poweredRoads++;}\n  for(const i of tickBld){const b=tiles[i]&&tiles[i].bld;if(!b||b.ref)continue;const cat=kcatOf(b.k);if(!(cat==='R'||cat==='C'||NIGHT_ENTERTAIN_K487.has(b.k)))continue;targets++;if((COV.police&&COV.police[i]>0)||(COV.police2&&COV.police2[i]>0))policeCovered++;}\n  const policeCoverage=targets?policeCovered/targets:1,\n        pp=clamp(+o.purchasingPower||1,.45,1.45),goods=clamp(+o.goodsSupply||1,0,1),unemp=clamp(+o.unemployment||0,0,1),dailyTransit=Math.max(0,+o.transitRidership||0),\n        demand=Math.round((I.commercial*1.8+I.entertainment*3.8+I.industrial*.75+I.civic*.55+(+o.tourists||0)*.025)*(pol&&pol.nightMarket?1.25:1)*(pol&&pol.curfew?.58:1)),\n        capacity=Math.round(dailyTransit*.22+I.transitNodes*5),service=demand>0?clamp(capacity/demand,0,1):1,\n        safety=clamp(.18+lightingCoverage*.37+policeCoverage*.31+service*.10+(pol&&pol.curfew?.10:0)-(pol&&pol.nightMarket?.035:0)-(pol&&pol.parkNight?.015:0)-unemp*.06,0,1),\n        policy=(pol&&pol.nightMarket?1.18:.72)*(pol&&pol.curfew?.68:1)*(pol&&pol.parkNight?1.04:1),\n        activity=clamp((.20+lightingCoverage*.31+service*.20+safety*.16+clamp((pp-.55)/.9,0,1)*.13)*policy*goods*(1-unemp*.22),0,1.25),\n        riders=Math.round(Math.min(demand,capacity)*clamp(activity,0,1)),potential=I.commercial+I.entertainment*1.8,\n        commerceGold=Math.max(0,Math.round((potential*.16+(+o.tourists||0)*.0035)*activity*(pol&&pol.nightMarket?1:.38))),\n        transitRevenue=pol&&pol.freeTransit?0:Math.max(0,Math.round(riders*.018)),\n        operatingCost=Math.max(0,Math.round((riders*.004+I.transitNodes*.025+(pol&&pol.parkNight?I.parks*.025:0))*(pol&&pol.nightMarket||pol&&pol.parkNight?1:.45))),\n        hDelta=clamp((safety-.55)*.016+(activity-.45)*.005,-.012,.014),grade=safety>=.82?'A':safety>=.66?'B':safety>=.48?'C':'D';\n  nightCity487={ready:true,day,inputs:{...I},lighting:{planned:+planned.toFixed(3),connected:+connected.toFixed(3),served:+served.toFixed(3),energyDemand:+(L?.energyDemandNight||0).toFixed(3),energyServed:+(L?.energyServedNight||0).toFixed(3),coverage:+lightingCoverage.toFixed(3),networkRate:+networkRate.toFixed(3),powerRate:+pRate.toFixed(3),poweredRoads,totalRoads},commerce:{activity:+activity.toFixed(3),taxMul:+(pol&&pol.nightMarket?1+.04+.08*activity:1).toFixed(3),potential:+potential.toFixed(1)},transit:{demand,capacity,riders,service:+service.toFixed(3)},safety:{score:+safety.toFixed(3),grade,policeCoverage:+policeCoverage.toFixed(3),crimeMul:+clamp(1.14-safety*.34,.72,1.20).toFixed(3)},finance:{commerceGold,transitRevenue,operatingCost,net:commerceGold+transitRevenue-operatingCost},happinessDelta:+hDelta.toFixed(4),policies:{nightMarket:!!pol?.nightMarket,parkNight:!!pol?.parkNight,curfew:!!pol?.curfew},saveSchemaChanged:false};\n  window.__t487Night=nightCity487;return nightCity487;\n}",
+  "happyNightItem": "        {name:'夜間城市',val:nightCity487.ready?nightCity487.happinessDelta:0}, // T487：前一日夜間安全/活力的低強度回饋，避免同 tick 自我迴圈",
+  "tickCall": "  nightCity487=finalizeNightCity487({purchasingPower:purchasingPowerNow481,goodsSupply:supplyRate481,transitRidership,tourists,unemployment:laborNow481.unemploymentRate}); // T487：本日夜間營運 truth，供商業/財政/面板共讀",
+  "commerceGold": "  const nightCommerceGold487=nightCity487.ready?nightCity487.finance.commerceGold:0;if(nightCommerceGold487>0){income+=nightCommerceGold487;taxC+=nightCommerceGold487;} // T487：夜市/晚間消費的實際稅收鏡像",
+  "financeUse": "  const transitRev=(pol&&pol.freeTransit)?0:Math.round(surfaceFareTrips468*.03*(pol&&pol.integratedTransit?.92:1)),nightTransitRev487=nightCity487.ready?nightCity487.finance.transitRevenue:0,nightOpsCost487=nightCity487.ready?nightCity487.finance.operatingCost:0;income+=transitRev+nightTransitRev487;upkeep+=busOpsCost468+nightOpsCost487; // T487：夜間加班運輸收入/成本與日間票務分帳 // T468：只對地面/區域公共運輸收費；換乘優惠略折讓",
+  "crimeUse": "    if(!(COV.prison&&COV.prison[i]>0)&&R()<.001*(b.k===2?2:1)*b.lv*(pol&&pol.curfew?.6:1)*(pol&&pol.nightMarket?1.15:1)*(pol&&pol.parkNight?1.05:1)*((COV.court&&COV.court[i]>0)?.5:1)*tq('B2',.92,1)*tq('B4b',1.05,1)*tq('B7',.90,1)*nightCrimeMul487(i,b)){ // T487：夜間照明＋警力共同降低風險；照明不替代警察 // T67：監獄半徑8覆蓋則防犯罪（原 countNear k===31，O(N)→O(1)）；T122 宵禁：犯罪率×0.6；T139：法院半徑10覆蓋配合警局再降犯罪率×0.5（未放置時恆×1）",
+  "reset": "function resetNightCity487(){nightInputs487=emptyNightInputs487();nightCity487=emptyNightCity487();nightDistrictRate487=new Float32Array(0);}"
+ }
+}
