@@ -83,8 +83,8 @@ async function guards(log) {
       const s = mod.simFromSave(r.save, c.code, KT, vrank), order = [];
       for (let i = 0; i < s.w.tiles.length; i++) if (s.w.tiles[i].bld) order.push(i);
       const cnt = CNT.tallyBuildings(s.w, order).cnt, roads = s.w.tiles.filter(t => t.road).length;
-      // 蓋過去的：經濟段本線沒有的四樣輸入（幸福、道路負載、火車線、發電調度）、城市活動的稅率（T299，整筆收入乘它再取整）；夜間城市的晚間消費金 D029 起本線自己算
-      const rep = mod.stepDay(s, override ? { class2: { economy: { happy: A.happy, roadStats: A.rs, railLines: A.rail, gasPowerDispatch: A.gas, eventFood: A.evFood }, eventTax: B.evTax ?? null } } : {});
+      // 蓋過去的：經濟段本線沒有的四樣輸入（幸福、道路負載、火車線、發電調度）；夜間城市的晚間消費金 D029、城市活動的食物與稅率（T299）D030 起本線自己算（讀進來的存檔有 cev 就從那一場接著算）
+      const rep = mod.stepDay(s, override ? { class2: { economy: { happy: A.happy, roadStats: A.rs, railLines: A.rail, gasPowerDispatch: A.gas } } } : {});
       const ec = rep.econ.ec, cmpIn = (name, mine, theirs) => { if (!Object.is(mine, theirs)) inp.push(`${name} 本線 ${mine} ≠ 實驗線 ${theirs}`); };
       cmpIn('日', rep.day, A.day); cmpIn('人口', rep.pop, A.pop); cmpIn('職位', rep.jobs, A.jobs); cmpIn('財富力', ec.wealthNow481, A.wealth); cmpIn('施工中的房屋', ec.activeConstruction482, A.act); cmpIn('路格', roads, A.roads);
       for (const k of Object.keys(cnt)) if ((A.c[k] ?? 0) !== cnt[k]) inp.push(`${k} 本線 ${cnt[k]} ≠ 實驗線 ${A.c[k] ?? 0}`);

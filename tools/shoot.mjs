@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|d030|d030-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1343,6 +1343,49 @@ if (set === 'd029-traj') {   // 只在明講要它時才跑（不進 all）：D0
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
     fs.writeFileSync(path.join(out, 'D029-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D029-trajectory.jpg', `1600×${ch}`);
+  });
+}
+
+if (set === 'd030') {   // 只在明講要它時才跑（不進 all）：手機上的城市活動——①起步城第 37 天活動開始的金色提示、②活動中 ☰「收支明細」多一列、③活動中 ☰「幸福構成」的城市活動一項
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    await open('sample=starter'); await page.evaluate('(__gt.simStep(36), 1)'); await pause(500); await save(page, 'd030_mob_toast');
+    await page.evaluate('(__gt.simStep(1), 1)'); await pause(300);
+    await page.evaluate(`(__gt.menu('fin'), 1)`); await pause(900); await save(page, 'd030_mob_fin');
+    await page.evaluate(`(document.getElementById('finX').click(), __gt.menu('happy'), 1)`); await pause(900); await save(page, 'd030_mob_happy');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(3,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd030_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D030 手機 412×860：城市活動</h1><p class="s">起步城第 37 天（每 37 天、人口 > 50 的那一天，事件由日子決定、同一天所有城是同一場）。①活動開始的金色提示：名稱與說明照實驗線的字；②☰「收支明細」在工業稅之後多一列「✨ 名稱（剩 D 天）」，寫出稅、食物與幸福的倍率——活動中整筆收入乘那個稅率再取整；③☰「幸福構成」多了「城市活動」一項（活動中每棟住宅同加同減）。全部是模擬給的數字，介面只是 DOM，不多畫。</p>
+    <div class="g"><figure><figcaption>① 活動開始</figcaption><img src="d030_mob_toast.png"></figure><figure><figcaption>② 收支明細</figcaption><img src="d030_mob_fin.png"></figure><figure><figcaption>③ 幸福構成</figcaption><img src="d030_mob_happy.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd030_mobile.html', width: 1400, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d030_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1400, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D030-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D030-mobile.jpg');
+  });
+}
+
+if (set === 'd030-traj') {   // 只在明講要它時才跑（不進 all）：D030 之前的樣本取自 git（D029 收工 2409991），CI 只拉最新一個提交拿不到。foot 的數字由資料現算（不手打）
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const base = arg('base', '2409991'), data = d020Data(base), g = f => data.gap[f], n3 = v => v.toFixed(3), n1 = v => v.toFixed(1);
+  const n4 = v => v.toFixed(4), foot = `城市活動接上之後：幸福度第 121 列與實驗線的差 ${n4(g('happy').before.d121)}→${n4(g('happy').after.d121)}（全程平均差 ${n3(g('happy').before.all)}→${n3(g('happy').after.all)}，實驗線種子間 sd ${n3(data.labSd.happy)}）；\n人口 ${n1(g('pop').before.d121)}→${n1(g('pop').after.d121)}、就業 ${n1(g('jobs').before.d121)}→${n1(g('jobs').after.d121)}、住宅棟數 ${n1(g('R').before.d121)}→${n1(g('R').after.d121)}（第 121 列的差；全程平均差見上面各張圖）。玩家實際玩到的本線，不代入任何輸入；實驗線第 37 天起的城市活動（T299）現在本線自己算，起步城 8 個種子 × 120 天逐位元逐日全等（tools/unit-d030-live.mjs）。`;
+  const svg = d020Svg(data, { title: 'D030 城市活動接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D030 之前（D029 收工）', after: '本線 D030 之後',
+    beforeSrc: 'D030 之前＝git {base} 的 d010-3d.json', afterSrc: 'D030 之後＝現在的 src 現算', doc: 'docs/D030-city-events.md', foot });
+  fs.writeFileSync(path.join(out, 'd030_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd030_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d030_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
+    fs.writeFileSync(path.join(out, 'D030-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D030-trajectory.jpg', `1600×${ch}`);
   });
 }
 

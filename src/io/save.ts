@@ -165,6 +165,8 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   if (typeof template.of === 'string' || of.includes('1')) o.of = of;
   if (typeof template.fly475 === 'string' || fly.includes('1')) o.fly475 = fly;
   if (typeof template.ix475 === 'string' || /[^0]/.test(ix)) o.ix475 = ix;
+  // D030：城市活動（66764 寫 cev:{i,d}，沒有活動寫 0；66963 讀）。有活動就寫；沒有活動、範本有這個欄位就寫 0（範本裡讀進來的舊活動要蓋掉）；都沒有就不加欄位（存檔位元組不變）
+  if (s.cityEvent) o.cev = { i: s.cityEvent.i, d: s.cityEvent.daysLeft }; else if ('cev' in template) o.cev = 0;
   if (opts.history !== false && opts.journal) {
     const { id, st } = opts.journal;
     o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;

@@ -9,6 +9,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
 import { cityStats, buildingAt, liveBuildings, type ActKind, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
+import { CITY_EVENTS } from './sim/rules/events.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
@@ -347,6 +348,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (st?.star) bui.toast(`城市評等 ${st.star.star} 顆星：獎勵 $${st.star.bonus.toLocaleString()}`, 'gold');
     if (st?.bailout) bui.toast(`資金見底，市府紓困 $${st.bailout}`, 'bad');
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
+    if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
+    if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
     if (daysSinceSave >= SAVE_DAYS) saveNow();
     return rep;
   }
@@ -522,6 +525,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     rows.push({ name: '住宅稅', text: money$(s.tax.R), tone: 'pos', sum: false }, { name: '商業稅', text: money$(s.tax.C), tone: 'pos', sum: false });
     if (rep.night.finance.commerceGold > 0) rows.push({ name: '　其中晚間消費金', text: money$(rep.night.finance.commerceGold), tone: 'pos', sum: false });   // D029：實驗線把夜間城市的晚間消費金同時記進收入與商業稅（55968）
     rows.push({ name: '工業稅', text: money$(s.tax.I), tone: 'pos', sum: false });
+    const ev = sim?.cityEvent ? CITY_EVENTS[sim.cityEvent.i] : null;   // D030：進行中的活動（今天的收入已經乘過稅倍率，56028）
+    if (ev && sim?.cityEvent) rows.push({ name: `✨ ${ev.name}（剩 ${sim.cityEvent.daysLeft} 天）`, text: `稅×${ev.tax}　食×${ev.food}　幸福${ev.happy >= 0 ? '+' : '−'}${Math.abs(ev.happy * 100).toFixed(0)}%`, tone: '', sum: false });
     for (const [k, name] of INCOME_NAME) { const v = other[k]; if (v && Math.round(v) !== 0) rows.push({ name, text: money$(v), tone: v > 0 ? 'pos' : 'neg', sum: false }); }
     rows.push({ name: '收入合計', text: money$(s.income), tone: '', sum: true });
     rows.push({ name: '維護費', text: money$(-s.upkeep), tone: 'neg', sum: false });
@@ -1198,6 +1203,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // ---- D029 夜間城市（守衛與拍照用）：☰「夜間城市」面板的列與最近一天的夜間城市 ----
     nightRows: () => [...ui.querySelectorAll('#nc li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className, li.querySelector('span')?.className ?? '']),
     nightPanel: () => ({ open: !nc.hidden, sub: $('#nc .sub').textContent, tip: $('#nc .tip').textContent }),
+    cityEventRep: () => lastRep ? { day: lastRep.day, ...lastRep.cityEvent, active: sim?.cityEvent ? { ...sim.cityEvent, ...CITY_EVENTS[sim.cityEvent.i] } : null } : null,   // D030：今天剛開始／剛結束的活動編號，與進行中的活動
     nightRep: () => lastRep ? { day: lastRep.day, night: lastRep.night, simReady: sim ? sim.night.ready : null } : null,
     dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, night: lastRep.night.finance, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,
     covAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x; return { fertco: sim.g.COV.fertco[i], kitchen: sim.g.COV.kitchen[i], fertReady: sim.fertReady, cookedReady: sim.cookedReady }; },

@@ -37,7 +37,7 @@ function netsOf(mod, code, rec, days, KT, vrank) {
   let prev = rec.start; const st = { pol: rec.start.pol, tech: rec.start.tech, spec: rec.start.spec };
   for (let day = 1; day <= days; day++) {
     const row = rec.rows[day - 1], inj = injectInputs(s, st, prev, row, true), ev = row.ev;
-    const rep = mod.stepDay(s, { hazard: inj.hazard, class2: {
+    const rep = mod.stepDay(s, { hazard: { ...inj.hazard, eventHappy: ev ? ev.happy : null }, class2: {   // 老的那棵樹沒有城市活動（D030 之前），兩棵樹都代同一份活動的三個加成（本線的注入介面蓋過自己算的，值相同）
       economy: ev ? { eventFood: ev.food } : undefined, nightCommerceGold487: row.ng, eventTax: ev ? ev.tax : null,
       other: { metroRev: row.un[0], metroAds: row.un[1], transitRev: row.un[2], nightTransitRev487: row.un[3], parkingRevenue491: row.un[4] },
       upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], nightOpsCost487: row.uu[3], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },
