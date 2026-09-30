@@ -1,0 +1,130 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-rank.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "exact",
+   "name": "clamp",
+   "anchors": {
+    "start": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);"
+   },
+   "line": 37219,
+   "endLine": 37219,
+   "sha": "0580ec9631715a1984056d228be35f23251a54a1fc62783785b2f9c2b482fee9"
+  },
+  {
+   "kind": "span",
+   "name": "RANKS",
+   "anchors": {
+    "start": "const RANKS=[",
+    "end": "let rankIdx=0;    // T133：目前城市等級"
+   },
+   "line": 38476,
+   "endLine": 38503,
+   "sha": "597125c9ce1253a73925e64abe7c204d77cb22f9fa8a0aa9393ecc7ac51d9d7d"
+  },
+  {
+   "kind": "span",
+   "name": "等級與點數的宣告",
+   "anchors": {
+    "start": "let rankIdx=0;    // T133：目前城市等級",
+    "end": "let cityPoints=0; // T133：目前城市點數"
+   },
+   "line": 38504,
+   "endLine": 38505,
+   "sha": "d3625815e232daf5b4f2b841265d23e32be3369d6f305bd3d7021e4275a06a6b"
+  },
+  {
+   "kind": "decl",
+   "name": "tq",
+   "anchors": {
+    "start": "const tq="
+   },
+   "line": 38549,
+   "endLine": 38549,
+   "sha": "6811179380a102a67085d5ac7fa3f9d2ab32fd8d9194ee13b5e06c07c9e3600f"
+  },
+  {
+   "kind": "fn",
+   "name": "computeCityPoints",
+   "anchors": {
+    "start": "function computeCityPoints(",
+    "closure": "balanced-brace"
+   },
+   "line": 53636,
+   "endLine": 53656,
+   "sha": "8de784368c33ef2fcd7c9d557b530d45f72753b7ea05e3b4f101c3fb10727e61"
+  },
+  {
+   "kind": "span",
+   "name": "每天的晉升（結算之後）",
+   "anchors": {
+    "start": "cityPoints=computeCityPoints();\n  while(rankIdx<RANKS.length-1&&cityPoints>=RANKS[rankIdx+1].threshold){",
+    "end": "  // 紓困保底（避免卡死）"
+   },
+   "line": 56133,
+   "endLine": 56140,
+   "sha": "83d2877b59c4d99a1ffe4e94f27e77423dd383dd758f7d016d3532ae51753333"
+  },
+  {
+   "kind": "span",
+   "name": "住宅幸福的微光之巔項（昨天的等級）",
+   "anchors": {
+    "start": "{name:'微光之巔',val:rankIdx>=25?.02:0}",
+    "end": "{name:'微光之巔',val:rankIdx>=25?.02:0}"
+   },
+   "line": 55217,
+   "endLine": 55217,
+   "sha": "1ec5f035a62401e3b290f58e0099dfc0578b94527f7019ca7c90920b0bff7f4c"
+  },
+  {
+   "kind": "span",
+   "name": "存檔的 rk",
+   "anchors": {
+    "start": "rk:rankIdx,",
+    "end": "rk:rankIdx,"
+   },
+   "line": 66762,
+   "endLine": 66762,
+   "sha": "7e05f19c76b7d788416be7f0a4c6600674ae6dc9cec21ece9ee5c19328296923"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔的 rk",
+   "anchors": {
+    "start": "cityPoints=computeCityPoints();\n    if(d.rk!==undefined)rankIdx=clamp(d.rk|0,0,RANKS.length-1);",
+    "end": "else{rankIdx=0;while(rankIdx<RANKS.length-1&&cityPoints>=RANKS[rankIdx+1].threshold)rankIdx++;}"
+   },
+   "line": 66969,
+   "endLine": 66971,
+   "sha": "da76bbb568df961d72e37c2967aee1f6a2b5a4211d8d15089b6bc67aebb2577d"
+  },
+  {
+   "kind": "span",
+   "name": "新圖歸零",
+   "anchors": {
+    "start": "rankIdx=0;cityPoints=0;",
+    "end": "rankIdx=0;cityPoints=0;"
+   },
+   "line": 51128,
+   "endLine": 51128,
+   "sha": "41ba1fe362e732e7d018e5ec0abe21ee2802325d93f7a9b4e1e94ef497aea637"
+  }
+ ],
+ "text": {
+  "clamp": "const clamp=(v,a,b)=>v<a?a:(v>b?b:v);",
+  "RANKS": "const RANKS=[\n  {name:'拓荒營地',threshold:0},\n  {name:'邊陲聚落',threshold:30},\n  {name:'溪畔村落',threshold:80},\n  {name:'阡陌村莊',threshold:160},\n  {name:'磚瓦小鎮',threshold:280},\n  {name:'集市小鎮',threshold:450,unlock:'解鎖：文化建築（博物館/劇院/水族館/動物園/遊樂園/電影院/圖書總館）'},\n  {name:'石橋鎮',threshold:680},\n  {name:'通衢鎮',threshold:980,unlock:'解鎖：小型地標（鐘樓/風車/噴泉/涼亭/燈塔/碼頭亭…）'},\n  {name:'燈火小城',threshold:1360},\n  {name:'繁景小城',threshold:1830},\n  {name:'匠坊之城',threshold:2400},\n  {name:'商旅之城',threshold:3080,unlock:'解鎖：研究院'},\n  {name:'學府之城',threshold:3880},\n  {name:'港灣之城',threshold:4810},\n  {name:'花園之城',threshold:5880},\n  {name:'星軌之城',threshold:7100},\n  {name:'雲塔之城',threshold:8480,unlock:'解鎖：紀念工程（天文台/觀景塔/紀念碑/凱旋門/摩天輪/旋轉木馬）'},\n  {name:'千帆之都',threshold:10030},\n  {name:'萬家之都',threshold:11760},\n  {name:'燈海都會',threshold:13680},\n  {name:'環帶都會',threshold:15800},\n  {name:'穹頂都會',threshold:18130,unlock:'解鎖：太空研究中心'},\n  {name:'星穹大都會',threshold:20680},\n  {name:'永晝大都會',threshold:23460},\n  {name:'織夢都會',threshold:26480},\n  {name:'微光之巔',threshold:29750,unlock:'城市巔峰榮耀：全城住宅幸福 +2%（永久）'}\n];",
+  "rankDecl": "let rankIdx=0;    // T133：目前城市等級（RANKS 索引，0-based）；只升不降的晉升進度（仿 msIdx/bestStar 慣例），存檔可選欄位 rk\nlet cityPoints=0; // T133：目前城市點數（tick() 每日重算，不進存檔）",
+  "tq": "const tq=(id,on,off)=>(tech343&&tech343.done.includes(id))?on:off; // T343c：科技效果集中三元 helper；零解鎖恆回 off",
+  "computeCityPoints": "function computeCityPoints(){\n  let popN=0,zoned=0,covSum=0;\n  for(let i=0;i<N*N;i++){\n    const t=tiles[i],b=t.bld;\n    if(t.zone===1){\n      zoned++;\n      let c=0;\n      if(COV.police[i]>0||COV.police2[i]>0)c++; // T222：派出所同計警力覆蓋\n      if(COV.fire[i]>0||(COV.fire2&&COV.fire2[i]>0)||(COV.fireHQ&&COV.fireHQ[i]>0))c++;\n      if(COV.school[i]>0)c++;\n      if(COV.hospital[i]>0||(COV.clinic&&COV.clinic[i]>0))c++;\n      if(COV.park[i]>0)c++;\n      covSum+=c/5;\n    }\n    if(b&&!b.ref){\n      if([1,127,33,105].includes(b.k))popN+=residentPopulation488(i,b); // T127/T341：住宅摩天樓（root，人口併入城市點數的人口項）\n    }\n  }\n  const svcCov=zoned?covSum/zoned:0;\n  return Math.max(0,Math.round((popN+(cityHappy-.6)*400+svcCov*800)*tq('D1',1.05,1)*tq('D4b',1.10,1)));\n}",
+  "promote": "  cityPoints=computeCityPoints();\n  while(rankIdx<RANKS.length-1&&cityPoints>=RANKS[rankIdx+1].threshold){\n    rankIdx++;\n    buildToolbar(); // T343a：晉升當刻刷新等級門檻工具，不必再點分類\n    const rk=RANKS[rankIdx];\n    toast(`🏙️ ${townName}升至 Lv.${rankIdx+1} ${rk.name}！`+(rk.unlock?`　${rk.unlock}`:''),'gold'); /* T482A：RANKS.unlock 五筆中四筆資料自帶「解鎖：」前綴，模板再加一次＝「解鎖：解鎖：」雙前綴（V32 帳面 GPT 線存量）；改由資料全權供應前綴——Lv26「城市巔峰榮耀」本非解鎖，修後不再被錯冠「解鎖：」。L24407 等級面板直讀資料，本就單前綴，不動 */\n    sFanfare();\n  }",
+  "happyItem": "        {name:'微光之巔',val:rankIdx>=25?.02:0},",
+  "saveRk": "      rk:rankIdx, // T133：城市等級（可選欄位，rankIdx 0-based；load 缺欄位時由當前城市狀態即時算出，不因缺欄位降級）",
+  "loadRk": "    cityPoints=computeCityPoints();\n    if(d.rk!==undefined)rankIdx=clamp(d.rk|0,0,RANKS.length-1);\n    else{rankIdx=0;while(rankIdx<RANKS.length-1&&cityPoints>=RANKS[rankIdx+1].threshold)rankIdx++;}",
+  "reset": "  rankIdx=0;cityPoints=0; // T133：城市等級成對重置（鐵律7）——新城市回到 Lv.1，下次 tick 起即時重算"
+ }
+}

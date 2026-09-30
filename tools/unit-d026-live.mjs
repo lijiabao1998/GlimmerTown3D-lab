@@ -251,7 +251,7 @@ async function guards(log) {
       ['災禍五段整段不跑', [['const hz = hazardDay(s, tickBld, f, dp, hzx);', 'const hz = { ignited: [], spread: [], burned: [], crimes: [], abandons: [], sicks: [], cures: [], deaths: [], ended: [], cured: 0, queued: 0, sickN: 0, penalty: [], cemCap: 0, soothed: 0, alerts: [], events: [], burnedAge: [] };']]],
       ['政策、夜間治安、專精的輸入不傳進災禍段', [['hazardDay(s, tickBld, f, dp, hzx)', 'hazardDay(s, tickBld, f, dp)']]],
       ['床位容量不留到明天', [['s.medCap = medCapOf(', 's.medCap = null; void medCapOf(']]],
-      ['政策不傳進住宅幸福', [['pol: opts.hazard?.pol ?? null, rankIdx: 0,', 'pol: null, rankIdx: 0,']]],
+      ['政策不傳進住宅幸福', [['pol: opts.hazard?.pol ?? null, rankIdx: s.rankIdx,', 'pol: null, rankIdx: s.rankIdx,']]],
       ['疾病段不讀昨天的床位容量', [['diseaseStep(w, f, s.rng, tickBld, s.medCap ?? Infinity)', 'diseaseStep(w, f, s.rng, tickBld, Infinity)']]],
       ['災禍不同步城市模型與歷史', [['syncHazards(s, hz);', '']]],
       ['燒毀不記焦土圖層', [['c.ruin[b.i] = 1;', '']]],

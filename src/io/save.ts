@@ -167,6 +167,9 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   if (typeof template.ix475 === 'string' || /[^0]/.test(ix)) o.ix475 = ix;
   // D030：城市活動（66764 寫 cev:{i,d}，沒有活動寫 0；66963 讀）。有活動就寫；沒有活動、範本有這個欄位就寫 0（範本裡讀進來的舊活動要蓋掉）；都沒有就不加欄位（存檔位元組不變）
   if (s.cityEvent) o.cev = { i: s.cityEvent.i, d: s.cityEvent.daysLeft }; else if ('cev' in template) o.cev = 0;
+  // D031：城市等級（66762 寫 rk:rankIdx，實驗線每次都寫，0 級也寫；66969 讀：有 rk 原樣還原、沒有就從點數往上爬）。一律寫：缺 rk 在讀檔時的意思是「舊檔，從點數往上爬」，
+  // 不是「0 級」——0 級的城不寫 rk，存了再讀會從點數爬到別的等級（全守衛的「存檔再讀檔、讀回再存的碼＝第一次存的碼」抓到：第 1 天的新城）。所以跟 cev 不同，不能「沒有就不加欄位」
+  o.rk = s.rankIdx;
   if (opts.history !== false && opts.journal) {
     const { id, st } = opts.journal;
     o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;
