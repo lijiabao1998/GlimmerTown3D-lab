@@ -23,6 +23,7 @@ import { unpackHistory, loadCode, saveCode } from '../src/io/save.ts';
 import { gridOf, labPartition, drawPlan, partitionStats } from '../src/content/blocks.ts';
 import { GROUND } from '../src/render/ground.ts';
 import { fnv1a } from '../src/sim/rng.ts';
+import { SPEED_PROBE, SPEED_REF_MS, speedFactor, speedLimit } from './speed-probe.mjs';
 import { runScript, scriptOf } from './unit-d011-edit.mjs';
 import { rcTamper } from './d011-edit-cases.mjs';
 
@@ -401,7 +402,11 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
   // 重演四次，各自從新城起：不降速三次（判卡面驗收 8 的 5 ms：取平均最低的一次，同 Node 守衛的「三輪取平均最低」——機器的雜訊只會把數字墊高、不會壓低；D027 起，
   // 平均只看 17–20 天，一兩天的 GC 尖峰就能讓一次重演的平均差 0.3–0.5 ms，收工前量到的四次是 4.78、4.85、5.10、4.76 ms，單次判 5 ms 會隨機紅），再 CPU 降速 6 倍（只量不判，見下）；四次的雜湊都要＝Node。後面幾項都接著降速那一次的城
   const days1s = [], hash1s = [];
-  for (let r = 0; r < 3; r++) { days1s.push(await replay(1)); hash1s.push((await ev('__gt.sim()'))?.hash); }
+  // D030 補：機器速度校準（tools/speed-probe.mjs）——每次重演前後各量六次探針取最小值，門檻 5 ms 乘上這台機器比開發機慢的倍數（下限 1、上限 2）
+  const probes = [], probeNow = async () => { for (let i = 0; i < 6; i++) probes.push((await ev(SPEED_PROBE)).ms); };
+  for (let r = 0; r < 3; r++) { await probeNow(); days1s.push(await replay(1)); hash1s.push((await ev('__gt.sim()'))?.hash); }
+  await probeNow();
+  const probeMs = Math.min(...probes), limit8 = speedLimit(5, probeMs), fac8 = speedFactor(probeMs);
   const days1 = days1s[0], hash1 = hash1s[0], days = await replay(6);
   const got = await ev(`(()=>{const s=__gt.sim();return {hash:s.hash,day:s.day,pop:s.pop,money:s.money,events:s.events};})()`);
   const d = await ev('({i: __gt.renderInfo(), mode: __gt.blockMode(), bi: __gt.blockInfo(), list: __gt.buildingList(), blank: ' + blankCheck + '})');
@@ -432,8 +437,8 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     const syn = ds => ds.filter(x => x[2] === null).map(x => x[5]), s1 = syn(days1), s6 = syn(days);
     log(s1.length >= 10 && mean(s1) <= 5, 'D014 每天同步工地（施工資料、工地網格、前庭樹；沒重建的日子）：劇本城第 61–120 天，不降速平均 ≤ 5 ms；6 倍降速只量',
       `不降速 ${s1.length} 天：平均 ${f2(mean(s1))}、中位數 ${f2(pct(s1, .5))}、最大 ${f2(Math.max(...s1))} ms｜6 倍降速：平均 ${f2(mean(s6))}、最大 ${f2(Math.max(...s6))} ms`);
-    log(u.ok && u.m <= 5, 'D011 驗收 8「推進一天（含結算）≤ 5 ms」，瀏覽器不降速（驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均（不降速重演三次取最低的一次）',
-      `平均 ${f2(u.m)} ms（不降速重演三次，各 ${us.map(x => f2(x.m)).join('、')} ms，取最低）；${u.txt}｜同一套量法 CPU 降速 6 倍：平均 ${f2(t.m)} ms（只量不判，見下一項）`);
+    log(u.ok && u.m <= limit8, 'D011 驗收 8「推進一天（含結算）≤ 5 ms」，瀏覽器不降速、門檻乘機器速度係數（D030 補：CI 機器比開發機慢，見 tools/speed-probe.mjs；驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均（不降速重演三次取最低的一次）',
+      `平均 ${f2(u.m)} ms ≤ 上限 ${f2(limit8)} ms（5 ms × 機器速度係數 ${fac8.toFixed(2)}：探針最小 ${probeMs.toFixed(2)} ms／開發機基準 ${SPEED_REF_MS} ms，共量 ${probes.length} 次；係數下限 1、上限 2）（不降速重演三次，各 ${us.map(x => f2(x.m)).join('、')} ms，取最低）；${u.txt}｜同一套量法 CPU 降速 6 倍：平均 ${f2(t.m)} ms（只量不判，見下一項）`);
     // 這一項只在量不到（天數不對、沒有重建沒有存檔的日子不到 10 天）時記紅燈；數字多少都不判
     log(t.ok, 'D011 手機預算：推進一天（含結算）CPU 降速 6 倍——只量不判（規則 5 以中階手機為準：這個數沒壓到 5 ms 是已知的缺口，記在卡面「沒做成的事」；判的是上一項不降速的）',
       `平均 ${f2(t.m)} ms（${t.m > 5 ? '超過 5 ms，見卡面「沒做成的事」' : '沒超過 5 ms'}）；${t.txt}｜不降速：平均 ${f2(u.m)} ms`);
