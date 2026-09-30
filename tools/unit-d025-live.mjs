@@ -25,8 +25,8 @@ import { d025Codes, MUL, IMP, EXP, MULTI_DAYS, MULTI_OTHER, canonOut, scalarsOf 
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
-// D028 起農牧、溫室、食品加工、旅宿、農貿市場、釀酒、科技園、數據中心、中央廚房、銀行利息本線自己算（rules/income2.ts），大型購物中心的稅也搬了（money.ts）；只剩地鐵、地面運輸、夜間運輸與停車（政策與行動力）沒搬
-const UNPORTED_INC = ['metroRev', 'metroAds', 'transitRev', 'nightTransitRev487', 'parkingRevenue491'];
+// D028 起農牧、溫室、食品加工、旅宿、農貿市場、釀酒、科技園、數據中心、中央廚房、銀行利息本線自己算（rules/income2.ts），大型購物中心的稅也搬了（money.ts）；D029 起夜間運輸收入與晚間消費金也自己算（rules/nightcity.ts）；只剩地鐵、地面運輸與停車（政策與行動力）沒搬
+const UNPORTED_INC = ['metroRev', 'metroAds', 'transitRev', 'parkingRevenue491'];
 const ZERO_CNT = Object.fromEntries(Object.keys(CNT.tallyBuildings({ N: 1, tiles: [{ t: 2, bld: null }] }, []).cnt).map(k => [k, 0]));
 const FOOD_KEYS = Object.keys(FOOD.emptyFoodCount());
 const same = (a, b) => J(a) === J(b);
@@ -83,8 +83,8 @@ async function guards(log) {
       const s = mod.simFromSave(r.save, c.code, KT, vrank), order = [];
       for (let i = 0; i < s.w.tiles.length; i++) if (s.w.tiles[i].bld) order.push(i);
       const cnt = CNT.tallyBuildings(s.w, order).cnt, roads = s.w.tiles.filter(t => t.road).length;
-      // 蓋過去的：經濟段本線沒有的四樣輸入（幸福、道路負載、火車線、發電調度）、夜間城市當天的商業稅鏡像（T487）、城市活動的稅率（T299，整筆收入乘它再取整）
-      const rep = mod.stepDay(s, override ? { class2: { economy: { happy: A.happy, roadStats: A.rs, railLines: A.rail, gasPowerDispatch: A.gas, eventFood: A.evFood }, nightCommerceGold487: B.nightGold ?? 0, eventTax: B.evTax ?? null } } : {});
+      // 蓋過去的：經濟段本線沒有的四樣輸入（幸福、道路負載、火車線、發電調度）、城市活動的稅率（T299，整筆收入乘它再取整）；夜間城市的晚間消費金 D029 起本線自己算
+      const rep = mod.stepDay(s, override ? { class2: { economy: { happy: A.happy, roadStats: A.rs, railLines: A.rail, gasPowerDispatch: A.gas, eventFood: A.evFood }, eventTax: B.evTax ?? null } } : {});
       const ec = rep.econ.ec, cmpIn = (name, mine, theirs) => { if (!Object.is(mine, theirs)) inp.push(`${name} 本線 ${mine} ≠ 實驗線 ${theirs}`); };
       cmpIn('日', rep.day, A.day); cmpIn('人口', rep.pop, A.pop); cmpIn('職位', rep.jobs, A.jobs); cmpIn('財富力', ec.wealthNow481, A.wealth); cmpIn('施工中的房屋', ec.activeConstruction482, A.act); cmpIn('路格', roads, A.roads);
       for (const k of Object.keys(cnt)) if ((A.c[k] ?? 0) !== cnt[k]) inp.push(`${k} 本線 ${cnt[k]} ≠ 實驗線 ${A.c[k] ?? 0}`);
@@ -97,8 +97,8 @@ async function guards(log) {
       if (B.flagged > 0) causes.push(`火災／疾病／死亡／廢棄 ${B.flagged} 棟`); if (polOn) causes.push('政策'); if (Array.isArray(raw.tech343) ? raw.tech343.length : raw.tech343) causes.push('科技'); if (raw.spec386) causes.push('專精');
       const unp = UNPORTED_INC.reduce((a, k) => a + (B[k] ?? 0), 0), tax = rep.settle.tax, tdiff = [];
       for (const [k, key, skip] of [['R', 'R', B.flagged > 0 || polOn], ['C', 'C', B.flagged > 0 || polOn], ['I', 'I', B.flagged > 0 || polOn]]) if (!skip && !Object.is(tax[k], B.tax[key])) tdiff.push(`tax${k} 本線 ${tax[k]} ≠ 實驗線 ${B.tax[key]}`);
-      // 維護費（含六種商品的進口費，D025 起本線自己算）：實驗線的維護費扣掉本線沒搬的（地鐵、鐵路、公車、夜間城市的營運費、車隊超出預設 7 輛的保養、法規與科技與專精的日費，同 D024）
-      const fl = B.up.fleet[0] + B.up.fleet[1] + B.up.fleet[2], unpUp = B.up.metroCost + B.up.railOps + B.up.busOps + B.up.nightOps + (fl - 7) * .8 + B.up.upReg;
+      // 維護費（含六種商品的進口費，D025 起本線自己算）：實驗線的維護費扣掉本線沒搬的（地鐵、鐵路、公車、車隊超出預設 7 輛的保養、法規與科技與專精的日費，同 D024；夜間城市的營運費 D029 起本線自己算）
+      const fl = B.up.fleet[0] + B.up.fleet[1] + B.up.fleet[2], unpUp = B.up.metroCost + B.up.railOps + B.up.busOps + (fl - 7) * .8 + B.up.upReg;
       if (Math.abs(rep.settle.upkeep - (B.upkeep - unpUp)) > 1e-9) d.push(`維護費 本線 ${rep.settle.upkeep} ≠ 實驗線 ${B.upkeep}－沒搬的 ${unpUp}`);
       const incOff = Math.abs(rep.settle.income - (B.income - unp)) > 1e-6;
       if (!causes.length) { d.push(...tdiff); if (incOff) d.push(`收入 本線 ${rep.settle.income} ≠ 實驗線 ${B.income}－沒搬的 ${unp}`); }
@@ -181,10 +181,10 @@ async function guards(log) {
       ['貿易額度的路格數給 0', 'spec: s.edu.spec, roads, roadStats:', 'spec: s.edu.spec, roads: 0, roadStats:'],
       ['煉鋼廠加速施工拿掉', 'const cons = steelConstruction(s.econ, cnt.steelMillN ?? 0, w, tickBld, s.day);', 'const cons = 0;'],
       ['快照的施工耗鋼給 0', 'economySnapshots(s.econ, ec, late, cnt, s.day, cons)', 'economySnapshots(s.econ, ec, late, cnt, s.day, 0)'],
-      ['稅乘數不傳給結算', '...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...e?.mul, ...c2?.mul }', '...neutralTaxMul(s.edu.tech, s.edu.spec, chN), ...c2?.mul }'],
+      ['稅乘數不傳給結算', '...e?.mul, nightCityReady: night.ready,', 'nightCityReady: night.ready,'],
       ['遊客數不進商業稅', 'freightTaxMul: ec.freightTaxMul, tourists: ec.tourists },', 'freightTaxMul: ec.freightTaxMul },'],
-      ['出口金不進收入', '...e?.other, ...c2?.other }', '...c2?.other }'],
-      ['進口費不進維護費', "...(e ? { imports: e.imports } : {}), ...c2?.upkeep", '...c2?.upkeep'],
+      ['出口金不進收入', '...e?.other, nightTransitRev487:', 'nightTransitRev487:'],
+      ['進口費不進維護費', "...(e ? { imports: e.imports } : {}), nightOpsCost487:", 'nightOpsCost487:'],
       ['經濟讀的幸福差一點（幸福的來源接歪）', 'cityHappy: x2?.happy ?? cityHappy, money: s.money', 'cityHappy: x2?.happy ?? (cityHappy - .01), money: s.money', 'no'],
     ];
     const bad = [], out = [];

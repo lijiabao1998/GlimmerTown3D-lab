@@ -449,7 +449,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
-    <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>`;
+    <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
+    <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -512,16 +513,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   $<HTMLButtonElement>('#finX').onclick = () => { fin.hidden = true; };
   fin.onclick = e => { if (e.target === fin) fin.hidden = true; };
   const INCOME_NAME: [string, string][] = [['farmGold', '農場'], ['ranchGold', '牧場'], ['ghGold', '溫室'], ['procGold', '食品加工'], ['lodgeRev', '旅宿'], ['mktGold', '農貿市場'], ['brewGold', '釀酒'], ['techGold', '科技園'], ['dcGold', '數據中心'],
-    ['cookGold', '中央廚房（熟食）'], ['bankInt', '銀行利息'], ['tradeGold', '貿易'], ['gasGold', '天然氣出口'], ['fuelExportGold418', '燃料出口'], ['steelExportGold482', '鋼材出口'], ['goodsExportGold481', '貨物出口'], ['shipPortGold', '港口船運'], ['shipDailyGold418', '船運日收入']];
+    ['cookGold', '中央廚房（熟食）'], ['bankInt', '銀行利息'], ['tradeGold', '貿易'], ['gasGold', '天然氣出口'], ['fuelExportGold418', '燃料出口'], ['steelExportGold482', '鋼材出口'], ['goodsExportGold481', '貨物出口'], ['shipPortGold', '港口船運'], ['shipDailyGold418', '船運日收入'], ['nightTransitRev487', '夜間運輸']];
   const IMPORT_NAME: [string, string][] = [['foodImportCost482', '糧食'], ['gasImportCost482', '天然氣'], ['fuelImportCost482', '燃料'], ['steelImportCost482', '鋼材'], ['suppliesImportCost482', '供應品'], ['goodsImportCost481', '貨物']];
   const money$ = (v: number) => (Math.round(v) < 0 ? '−' : '') + '$' + Math.abs(Math.round(v)).toLocaleString();
   interface FinRow { name: string; text: string; tone: '' | 'pos' | 'neg'; sum: boolean }
   function finList(rep: DayReport): FinRow[] {
     const s = rep.settle, rows: FinRow[] = [], other = s.other as unknown as Record<string, number>, imports = s.imports as unknown as Record<string, number>;
-    rows.push({ name: '住宅稅', text: money$(s.tax.R), tone: 'pos', sum: false }, { name: '商業稅', text: money$(s.tax.C), tone: 'pos', sum: false }, { name: '工業稅', text: money$(s.tax.I), tone: 'pos', sum: false });
+    rows.push({ name: '住宅稅', text: money$(s.tax.R), tone: 'pos', sum: false }, { name: '商業稅', text: money$(s.tax.C), tone: 'pos', sum: false });
+    if (rep.night.finance.commerceGold > 0) rows.push({ name: '　其中晚間消費金', text: money$(rep.night.finance.commerceGold), tone: 'pos', sum: false });   // D029：實驗線把夜間城市的晚間消費金同時記進收入與商業稅（55968）
+    rows.push({ name: '工業稅', text: money$(s.tax.I), tone: 'pos', sum: false });
     for (const [k, name] of INCOME_NAME) { const v = other[k]; if (v && Math.round(v) !== 0) rows.push({ name, text: money$(v), tone: v > 0 ? 'pos' : 'neg', sum: false }); }
     rows.push({ name: '收入合計', text: money$(s.income), tone: '', sum: true });
     rows.push({ name: '維護費', text: money$(-s.upkeep), tone: 'neg', sum: false });
+    if (rep.night.finance.operatingCost > 0) rows.push({ name: '　其中夜間營運', text: money$(-rep.night.finance.operatingCost), tone: 'neg', sum: false });   // D029：夜間加班運輸與夜市的營運費（56027）
     for (const [k, name] of IMPORT_NAME) { const v = imports[k]; if (v && Math.round(v) !== 0) rows.push({ name: `　其中進口${name}`, text: money$(-v), tone: 'neg', sum: false }); }
     rows.push({ name: '淨額（收入−維護費）', text: money$(s.income - s.upkeep), tone: '', sum: true });
     rows.push({ name: '工資指數', text: `×${rep.chain346.wageIdx.toFixed(2)}`, tone: '', sum: false });
@@ -534,6 +538,31 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     $('#fin ol').replaceChildren(...list.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
     $('#fin .tip').textContent = rep && rep.settle.income - rep.settle.upkeep < 0 ? '每天收支是負的：稅收不夠付維護費（多蓋有稅收的住商工，或先停掉用不上的公共設施）' : '';
     fin.hidden = false;
+  }
+
+  // D029：☰「夜間城市」（實驗線 T487 夜間營運報告的精簡 3D 版）。每一列都讀最近一天的 DayReport.night（跟實驗線 nightCity487 同一份）；不另存任何東西。
+  // 當天的晚間消費金、夜間運輸收入與營運費算進當天的收支（☰「收支明細」也有）；安全分數與活力的幸福加減從隔天起進住宅幸福、安全分數從隔天起影響犯罪
+  const nc = $<HTMLElement>('#nc');
+  $<HTMLButtonElement>('#ncX').onclick = () => { nc.hidden = true; };
+  nc.onclick = e => { if (e.target === nc) nc.hidden = true; };
+  const pct$ = (v: number) => Math.round(v * 100) + '%', fp2 = (v: number) => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(2) + '%';
+  function nightList(rep: DayReport): FinRow[] {
+    const n = rep.night, g = n.safety.grade, rows: FinRow[] = [];
+    rows.push({ name: '安全', text: `${n.safety.score.toFixed(2)}（${g}）`, tone: g === 'A' || g === 'B' ? 'pos' : g === 'D' ? 'neg' : '', sum: true });
+    rows.push({ name: '　路燈覆蓋', text: pct$(n.lighting.coverage), tone: '', sum: false }, { name: '　警察覆蓋（住宅、商業、娛樂設施）', text: pct$(n.safety.policeCoverage), tone: '', sum: false }, { name: '　運輸服務（運量÷夜間需求）', text: pct$(n.transit.service), tone: '', sum: false });
+    rows.push({ name: '晚間商業活動', text: pct$(n.commerce.activity), tone: '', sum: false }, { name: '　乘客（需求 ' + n.transit.demand.toLocaleString() + '、運量 ' + n.transit.capacity.toLocaleString() + '）', text: n.transit.riders.toLocaleString(), tone: '', sum: false });
+    rows.push({ name: '晚間消費金（同時算進商業稅）', text: money$(n.finance.commerceGold), tone: 'pos', sum: false }, { name: '夜間運輸收入', text: money$(n.finance.transitRevenue), tone: 'pos', sum: false }, { name: '夜間營運費', text: money$(-n.finance.operatingCost), tone: 'neg', sum: false });
+    rows.push({ name: '夜間淨額', text: money$(n.finance.net), tone: '', sum: true });
+    rows.push({ name: '對住宅幸福（明天起每天）', text: fp2(n.happinessDelta), tone: n.happinessDelta > 0 ? 'pos' : n.happinessDelta < 0 ? 'neg' : '', sum: false });
+    return rows;
+  }
+  function openNight() {
+    if (!sim) return;
+    const rep = lastRep, list = rep ? nightList(rep) : [], n = rep?.night;
+    $('#nc .sub').textContent = rep && n ? `第 ${rep.day.toLocaleString()} 天・每天結算一次：當天的晚間消費金、夜間運輸收入與營運費算進當天的收支；安全與活力的幸福加減從明天起進住宅幸福、安全分數從明天起影響犯罪${n.lighting.planned > 0 ? '（路燈要電力調度 T471，本線還沒搬，路燈覆蓋固定是 0，跟實驗線的回退設定一樣）' : ''}` : '推進一天之後才算得出來';
+    $('#nc ol').replaceChildren(...list.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
+    $('#nc .tip').textContent = n && (n.safety.grade === 'C' || n.safety.grade === 'D') ? '安全分數偏低：警察局與派出所覆蓋越多住宅與商業越好（佔 0.31）；有公交站、鐵路與運輸設施會提高運輸服務（佔 0.10）；失業率高會扣分' : '';
+    nc.hidden = false;
   }
 
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
@@ -553,6 +582,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       { title: '其他', items: [
         ...(sim ? [{ id: 'fin', label: '收支明細', note: '稅收、其他收入、維護費、淨額（D028）', icon: 'coin' as const }] : []),
         ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
+        ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
     ];
@@ -568,6 +598,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'paste') openDlg('paste');
     else if (id === 'happy') openHappy();
     else if (id === 'fin') openFin();
+    else if (id === 'night') openNight();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -708,6 +739,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
+    if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -1163,7 +1195,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // ---- D028 經濟（二）（守衛與拍照用）：☰「收支明細」面板的列、最近一天的回報（稅、收入項、進口費、維護費、鏈條）、覆蓋場 ----
     finRows: () => [...ui.querySelectorAll('#fin li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className, li.querySelector('span')?.className ?? '']),
     finPanel: () => ({ open: !fin.hidden, sub: $('#fin .sub').textContent, tip: $('#fin .tip').textContent }),
-    dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,
+    // ---- D029 夜間城市（守衛與拍照用）：☰「夜間城市」面板的列與最近一天的夜間城市 ----
+    nightRows: () => [...ui.querySelectorAll('#nc li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className, li.querySelector('span')?.className ?? '']),
+    nightPanel: () => ({ open: !nc.hidden, sub: $('#nc .sub').textContent, tip: $('#nc .tip').textContent }),
+    nightRep: () => lastRep ? { day: lastRep.day, night: lastRep.night, simReady: sim ? sim.night.ready : null } : null,
+    dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, night: lastRep.night.finance, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,
     covAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x; return { fertco: sim.g.COV.fertco[i], kitchen: sim.g.COV.kitchen[i], fertReady: sim.fertReady, cookedReady: sim.cookedReady }; },
     hazard: () => ({ marks: haz.count, visible: haz.mesh.visible, ruins: city ? city.ruin.reduce((a, v) => a + v, 0) : 0, alerts: lastRep?.hazard.alerts ?? [] }),
     flags: (x: number, z: number) => { const b = sim?.w.tiles[z * sim.w.N + x]?.bld; return b && !b.ref ? { k: b.k, fire: +(b.fire || 0), crime: b.crime ? 1 : 0, crimeDays: b.crimeDays ?? 0, sick: b.sick ? 1 : 0, sickDays: b.sickDays ?? 0, death: b.death ? 1 : 0, deathAge: b.deathAge ?? 0, abandoned: b.abandoned ? 1 : 0 } : null; },

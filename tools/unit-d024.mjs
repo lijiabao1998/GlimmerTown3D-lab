@@ -401,7 +401,7 @@ async function guards(log) {
         if (t.towerPop !== D.tp || t.megaPop !== D.mp) d.push(`塔／巨廈居民 ${D.tp}／${D.mp}≠${t.towerPop}／${t.megaPop}`);
         const tot = JOBS.transitDepotTotals501(s.w, order), scan = { pj: JOBS.powerJobs471(s.w), wj: JOBS.waterJobs472(s.w), ij: JOBS.infraJobs475(s.w), dj: tot.jobs, pu: MONEY.powerUpkeep471(s.w), wu: MONEY.waterUpkeep472(s.w), iu: MONEY.infraUpkeep475(s.w), du: tot.upkeep };
         for (const k of Object.keys(scan)) if (scan[k] !== L.scan[k]) d.push(`掃圖 ${k} 實驗線 ${L.scan[k]}≠本線 ${scan[k]}`);
-        const rep = mod.stepDay(s), fl = D.fleet[0] + D.fleet[1] + D.fleet[2], unported = D.metroCost + D.railOps + D.busOps + D.nightOps + (fl - 7) * .8 + D.upReg, want = D.upkeep - unported;
+        const rep = mod.stepDay(s), fl = D.fleet[0] + D.fleet[1] + D.fleet[2], unported = D.metroCost + D.railOps + D.busOps + (fl - 7) * .8 + D.upReg, want = D.upkeep - unported;
         if (rep.jobs !== D.jobs) d.push(`jobs 實驗線 ${D.jobs}≠本線 ${rep.jobs}`);
         if (rep.jobsC !== D.jobsC) d.push(`商業職位 ${D.jobsC}≠${rep.jobsC}`);
         if (rep.jobsI !== D.jobsI) d.push(`工業職位 ${D.jobsI}≠${rep.jobsI}`);

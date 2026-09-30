@@ -28,7 +28,6 @@ import { d027Cities, oldList, oldzList, evolvedIds, CRAFTED_DAYS, OLD_DAYS, EVOL
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
-const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
 
 export const LIVE = {};   // 除錯用：守衛跑完之後留下樣本與城
 export async function d027LiveGuards(log) {
@@ -50,15 +49,14 @@ export function rowOf(s, rep) {
 const FIELDS = ['day', 'pop', 'jobs', 'happy', 'ah', 'lg', 'rl', 'cp', 'cl', 'ld', 'lb', 'jc', 'nh', 'hh', 'peek'];
 const NAMES = { rl: '道路負載', cp: '通勤懲罰', cl: '叢集路徑', ld: '動態地價', lb: '地價基準', jc: '過載道路格數', nh: '住宅棟數', hh: '住宅幸福', happy: '城市幸福', pop: '人口', jobs: '就業', peek: '下一個亂數（亂數次數或順序不同）', day: '日子', lg: '物流效率與貿易額度（壅堵扣分進經濟）', ah: '幸福構成（57 項城市平均的位元雜湊）' };
 
-// 這一天要代進去的輸入（本線沒有的政策、夜間城市、城市活動與科技、專精；D028 起經濟段的也用它，另加 class2）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
-// prev＝前一列（夜間城市讀昨天的）、row＝這一列（城市活動讀當天的）。inject＝false 時什麼都不代（玩家實際玩到的本線）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol, night } 或 { err }
+// 這一天要代進去的輸入（本線沒有的政策、城市活動與科技、專精；D028 起經濟段的也用它，另加 class2；夜間城市 D029 起本線自己算，不再代）：st＝目前有效的 pol／tech／spec（樣本裡跟前一列一樣的不存，往前找最近一次記的）、
+// row＝這一列（城市活動讀當天的）。inject＝false 時什麼都不代（玩家實際玩到的本線）。prev（前一列）以前給夜間城市用，現在沒用、簽名照舊（chart-d028 等呼叫端不必改）。副作用：把科技寫進 s.edu.tech。回 { hazard, pol } 或 { err }
 export function injectInputs(s, st, prev, row, inject) {
-  const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech), night = prev.night, f = s.g;
+  const pol = inject ? JSON.parse(st.pol) : null, tech = JSON.parse(st.tech);
   if (!Array.isArray(tech) || tech.some(t => typeof t !== 'string')) return { err: `科技不是字串陣列：${st.tech}` };
   s.edu.tech = tech;
-  const nightCrimeMul = inject && night.ready ? (i, bb) => { const sLocal = (f.COV.police[i] > 0 || f.COV.police2[i] > 0) ? 1 : 0, local = .62 * night.score + .38 * sLocal, market = (bb && bb.k === 2 && pol && pol.nightMarket) ? .05 : 0; return clamp(1.14 - local * .34 + market, .72, 1.20); } : undefined;
-  const ev = row.ev, hazard = inject ? { pol, nightCrimeMul, spec: st.spec || null, nightCity: night.ready ? { ready: true, happinessDelta: night.hd } : { ready: false, happinessDelta: 0 }, eventHappy: ev ? ev.happy : null } : undefined;
-  return { hazard, pol, night };
+  const ev = row.ev, hazard = inject ? { pol, spec: st.spec || null, eventHappy: ev ? ev.happy : null } : undefined;
+  return { hazard, pol };
 }
 
 // 一座城連推 rec.days 天，逐天跟實驗線比。mod＝day.ts（真的或改壞的）。inject＝false 時不代任何輸入（政策、夜間城市、城市活動都當沒有＝玩家實際玩到的本線）
@@ -229,11 +227,10 @@ async function guards(log) {
       for (let q = 0; q < DAYS.length; q++) if (Math.abs(xs[q].t) >= tmax) errs.push(`${name} 第 ${DAYS[q]} 天 本線 ${xs[q].pm.toFixed(3)} 實驗線 ${xs[q].lm.toFixed(3)}（t＝${xs[q].t.toFixed(2)} ≥ ${tmax}）`);
       line.push(`${name} ${xs.map(x => `${x.pm.toFixed(name === '幸福' ? 3 : 1)}／${x.lm.toFixed(name === '幸福' ? 3 : 1)}`).join('、')}（t ${xs.map(x => x.t.toFixed(2)).join('、')}）`);
     }
-    // 幸福構成逐項（8 種子平均，第 30、60、90、120 天）：差在 3 倍標準誤加 .004 內；本線沒搬的系統（夜間城市）本線恆 0，實驗線每天有值＝照實記下來，不判
-    const UNPORTED = { '夜間城市': 'T487（backlog J）' }, partRows = [], unp = [];
+    // 幸福構成逐項（8 種子平均，第 30、60、90、120 天）：差在 3 倍標準誤加 .004 內（夜間城市 D029 起本線自己算，跟其他 56 項一樣判）
+    const partRows = [];
     for (let i = 0; i < HAPPY_NAMES.length; i++) {
       const name = HAPPY_NAMES[i], xs = DAYS.map(d => stat(r => r.agg[i], d));
-      if (UNPORTED[name]) { unp.push(`${name} 本線 ${J(xs.map(x => +x.pm.toFixed(6)))}／實驗線 ${xs.map(x => x.lm.toFixed(4)).join('、')}（${UNPORTED[name]}）`); if (xs.some(x => x.pm !== 0)) errs.push(`${name} 本線不是 0（沒搬的系統本線恆 0，現在有值＝有人搬了：把它從沒搬名單拿掉）`); continue; }
       for (let q = 0; q < DAYS.length; q++) if (Math.abs(xs[q].diff) > 3 * xs[q].se + .004) errs.push(`${name} 第 ${DAYS[q]} 天 本線 ${xs[q].pm.toFixed(4)} ≠ 實驗線 ${xs[q].lm.toFixed(4)}（差 ${xs[q].diff.toFixed(4)} > 3 倍標準誤 ${(3 * xs[q].se).toFixed(4)} ＋ .004）`);
       partRows.push(xs);
     }
@@ -242,8 +239,8 @@ async function guards(log) {
     if (equalAll('rl') < 5 || minFirst('rl') < 30 || equalAll('pop') < 5 || minFirst('pop') < 30) errs.push(`逐日相等：道路負載全程相等 ${equalAll('rl')} 個種子（要 ≥ 5）、最早分歧 ${minFirst('rl')}（要 ≥ 30）；人口全程相等 ${equalAll('pop')} 個種子、最早分歧 ${minFirst('pop')}`);
     const busy = per.filter(p => p.rec.rows.at(-1).jc > 0).length;
     if (busy < 6) errs.push(`實驗線那邊第 ${EVOLVE_DAYS} 天有過載道路的種子只有 ${busy} 個（要 ≥ 6：不然比的是空的）`);
-    log(!errs.length, `D027 驗收 7：起步城 8 個種子 × ${EVOLVE_DAYS} 天整城軌跡（玩家實際玩到的本線：夜間城市、城市活動、政策都沒有）對實驗線——第 30、60、90、120 天的 8 種子平均：幸福 |t| < 2、人口、就業、住宅棟數、過載道路格、通勤叢集數 |t| < 3；幸福構成 57 項逐項差在 3 倍標準誤加 .004 內（夜間城市本線沒搬、本線恆 0，照實記）；逐日相等到第幾天照實記並訂地板`,
-      errs.slice(0, 5).join('｜') || `${line.join('；')}｜沒搬：${unp.join('；')}｜逐日全等到第 ${EVOLVE_DAYS} 天的種子（道路負載 ${equalAll('rl')}、通勤懲罰 ${equalAll('cp')}、叢集 ${equalAll('cl')}、動態地價 ${equalAll('ld')}、人口 ${equalAll('pop')}、就業 ${equalAll('jobs')}、住宅棟數 ${equalAll('nh')}、亂數 ${equalAll('peek')}），第一個分歧日（種子順序）：道路負載 ${fd.rl.map(v => v || '—').join('／')}、人口 ${fd.pop.map(v => v || '—').join('／')}、亂數 ${fd.peek.map(v => v || '—').join('／')}；幸福第 2 天起每個種子都差（夜間城市）`);
+    log(!errs.length, `D027 驗收 7：起步城 8 個種子 × ${EVOLVE_DAYS} 天整城軌跡（玩家實際玩到的本線：城市活動、政策都沒有；夜間城市 D029 起本線自己算）對實驗線——第 30、60、90、120 天的 8 種子平均：幸福 |t| < 2、人口、就業、住宅棟數、過載道路格、通勤叢集數 |t| < 3；幸福構成 57 項逐項差在 3 倍標準誤加 .004 內；逐日相等到第幾天照實記並訂地板`,
+      errs.slice(0, 5).join('｜') || `${line.join('；')}｜逐日全等到第 ${EVOLVE_DAYS} 天的種子（道路負載 ${equalAll('rl')}、通勤懲罰 ${equalAll('cp')}、叢集 ${equalAll('cl')}、動態地價 ${equalAll('ld')}、人口 ${equalAll('pop')}、就業 ${equalAll('jobs')}、住宅棟數 ${equalAll('nh')}、亂數 ${equalAll('peek')}、幸福 ${equalAll('happy')}），第一個分歧日（種子順序）：道路負載 ${fd.rl.map(v => v || '—').join('／')}、人口 ${fd.pop.map(v => v || '—').join('／')}、亂數 ${fd.peek.map(v => v || '—').join('／')}、幸福 ${fd.happy.map(v => v || '—').join('／')}`);
   }
 
   const ctx = { lab, cities, olds, oldzs, KT, vrank, evolvedCode };
@@ -291,7 +288,7 @@ export async function wiringGuards(log, { lab, cities, olds, KT, vrank, evolvedC
     ['道路格數當 0（貿易額度的底）', [['const roads = tickRoad.length;', 'const roads = 0;']], 'lab'],
     ['幸福構成不加總', [['for (let k = 0; k < hp.parts.length; k++) aggSum[k] = (aggSum[k] ?? 0) + hp.parts[k];', '']], 'lab'],
     ['幸福構成除以錯的數', [['aggSum.map(v => v / happyN)', 'aggSum.map(v => v / nn)']], 'lab'],
-    ['夜間城市不餵幸福', [['nightCity: opts.hazard?.nightCity ?? { ready: false, happinessDelta: 0 },', 'nightCity: { ready: false, happinessDelta: 0 },']], 'lab'],
+    ['夜間城市不餵幸福', [['nightCity: hzx?.nightCity ?? NIGHT_OFF,', 'nightCity: NIGHT_OFF,']], 'lab'],
     ['城市活動不餵幸福', [['eventHappy: opts.hazard?.eventHappy ?? null,', 'eventHappy: null,']], 'lab'],
     ['讀檔後叢集不是空的', [['commuteClusters: [], commuteDay: -1,', 'commuteClusters: [[0]], commuteDay: -1,']], 'lab'],
     ['電視訊號不留到明天（一律 false）', [['tvSignal: s.tvSignal, tech: s.edu.tech,', 'tvSignal: false, tech: s.edu.tech,']], 'lab'],

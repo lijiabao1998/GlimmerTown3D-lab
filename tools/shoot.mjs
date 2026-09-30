@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1292,6 +1292,57 @@ if (set === 'd028-gap') {   // 只在明講要它時才跑（不進 all）：D02
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 88, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
     fs.writeFileSync(path.join(out, 'D028-income-gap.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D028-income-gap.jpg', `1600×${ch}`);
+  });
+}
+
+if (set === 'd029') {   // 只在明講要它時才跑（不進 all）：手機上的夜間城市——☰「夜間城市」（起步城第 40 天、K4 安全分數低）、☰「收支明細」的夜間運輸與其中夜間營運與其中晚間消費金（gallery）、☰「幸福構成」的夜間城市一項
+  const { cities28 } = await import('./d028-cities.mjs'), { oldList } = await import('./d028-lab.mjs'), { kindTableFrom } = await import('../src/content/kindTable.ts');
+  const newcity = fs.readFileSync(path.join(ROOT, 'src/content/samples/newcity.code.txt'), 'utf8'), KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')));
+  const cs = cities28(newcity, KT), code = id => cs.find(c => c.id === id).code, gallery = oldList().find(c => c.id === 'gallery').code;
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const fresh = async c => { await open('sample=seed516&clean=1'); await page.evaluate('__gt.clearSave()'); await page.evaluate(`localStorage.setItem('gt3d.v1.save', ${JSON.stringify(c)})`); await open(''); };
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    // 1 起步城第 40 天 ☰「夜間城市」；2 K4（沒有警察局、安全等級 D）的「夜間城市」附建議；3 gallery（公車站與鐵路）☰「收支明細」；4 起步城第 40 天 ☰「幸福構成」（多了夜間城市一項）
+    await open('sample=starter'); await page.evaluate('(__gt.simStep(40), 1)');
+    await page.evaluate(`(__gt.menu('night'), 1)`); await pause(900); await save(page, 'd029_mob_night');
+    await page.evaluate(`(document.getElementById('ncX').click(), __gt.menu('happy'), 1)`); await pause(900); await save(page, 'd029_mob_happy');
+    await fresh(code('K4')); await page.evaluate('(__gt.simStep(3), 1)');
+    await page.evaluate(`(__gt.menu('night'), 1)`); await pause(900); await save(page, 'd029_mob_night_low');
+    await fresh(gallery); await page.evaluate('(__gt.simStep(3), 1)');
+    await page.evaluate(`(__gt.menu('fin'), 1)`); await pause(900); await save(page, 'd029_mob_fin');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(4,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd029_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D029 手機 412×860：夜間城市</h1><p class="s">①起步城第 40 天 ☰「夜間城市」：安全分數與等級、路燈覆蓋（本線還沒有電力調度，固定 0）、警察覆蓋、運輸服務、晚間商業活動、乘客、晚間消費金、夜間運輸收入、夜間營運費、對住宅幸福的每日加減；②同一份數字在 ☰「幸福構成」裡多了「夜間城市」一項（讀檔後第 1 天沒有、第 2 天起＝前一天的幸福加減）；③K4（沒有警察局）安全等級 D，面板附建議；④gallery（公車站與鐵路）☰「收支明細」多了夜間運輸、其中夜間營運、其中晚間消費金。全部是模擬給的數字，介面只是 DOM，不多畫。</p>
+    <div class="g"><figure><figcaption>① 夜間城市</figcaption><img src="d029_mob_night.png"></figure><figure><figcaption>② 幸福構成</figcaption><img src="d029_mob_happy.png"></figure><figure><figcaption>③ 安全偏低的建議</figcaption><img src="d029_mob_night_low.png"></figure><figure><figcaption>④ 收支明細</figcaption><img src="d029_mob_fin.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd029_mobile.html', width: 1800, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d029_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1800, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D029-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D029-mobile.jpg');
+  });
+}
+
+if (set === 'd029-traj') {   // 只在明講要它時才跑（不進 all）：D029 之前的樣本取自 git（D028 收工 dad3d2c），CI 只拉最新一個提交拿不到。foot 的數字由資料現算（不手打）
+  const { d020Data, d020Svg } = await import('./chart-d020.mjs');
+  const base = arg('base', 'dad3d2c'), data = d020Data(base), g = f => data.gap[f], n3 = v => v.toFixed(3), n1 = v => v.toFixed(1);
+  const foot = `夜間城市接上之後：幸福度第 121 列與實驗線的差 ${n3(g('happy').before.d121)}→${n3(g('happy').after.d121)}（全程平均差 ${n3(g('happy').before.all)}→${n3(g('happy').after.all)}，實驗線種子間 sd ${n3(data.labSd.happy)}）；\n人口 ${n1(g('pop').before.d121)}→${n1(g('pop').after.d121)}、就業 ${n1(g('jobs').before.d121)}→${n1(g('jobs').after.d121)}、住宅棟數 ${n1(g('R').before.d121)}→${n1(g('R').after.d121)}（第 121 列的差；全程平均差見上面各張圖）。玩家實際玩到的本線，不代入任何輸入；實驗線第 37 天起有城市活動（T299，D 張還沒搬），是剩下的差的來源。`;
+  const svg = d020Svg(data, { title: 'D029 夜間城市接上之後，起步城的整城軌跡離實驗線多近', before: '本線 D029 之前（D028 收工）', after: '本線 D029 之後',
+    beforeSrc: 'D029 之前＝git {base} 的 d010-3d.json', afterSrc: 'D029 之後＝現在的 src 現算', doc: 'docs/D029-night-city.md', foot });
+  fs.writeFileSync(path.join(out, 'd029_traj.html'), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#1a1a19}svg{display:block}</style>${svg}`);
+  await withBrowser({ root: out, entry: 'd029_traj.html', width: 1600, height: 1300, ready: `!!document.querySelector('svg')`, settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d029_traj.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate(`!!document.querySelector('svg')`).catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.documentElement.getBoundingClientRect().height)`);
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 86, clip: { x: 0, y: 0, width: 1600, height: ch, scale: 1 } });
+    fs.writeFileSync(path.join(out, 'D029-trajectory.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D029-trajectory.jpg', `1600×${ch}`);
   });
 }
 

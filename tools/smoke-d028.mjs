@@ -22,14 +22,17 @@ const rowOf = (rows, head) => rows.find(r => r.startsWith(head)) ?? null;
 const pct = v => `${Math.round(v * 100)}%`;
 const money = v => (Math.round(v) < 0 ? '−' : '') + '$' + Math.abs(Math.round(v)).toLocaleString('en-US');
 const INCOME_NAME = [['farmGold', '農場'], ['ranchGold', '牧場'], ['ghGold', '溫室'], ['procGold', '食品加工'], ['lodgeRev', '旅宿'], ['mktGold', '農貿市場'], ['brewGold', '釀酒'], ['techGold', '科技園'], ['dcGold', '數據中心'],
-  ['cookGold', '中央廚房（熟食）'], ['bankInt', '銀行利息'], ['tradeGold', '貿易'], ['gasGold', '天然氣出口'], ['fuelExportGold418', '燃料出口'], ['steelExportGold482', '鋼材出口'], ['goodsExportGold481', '貨物出口'], ['shipPortGold', '港口船運'], ['shipDailyGold418', '船運日收入']];
+  ['cookGold', '中央廚房（熟食）'], ['bankInt', '銀行利息'], ['tradeGold', '貿易'], ['gasGold', '天然氣出口'], ['fuelExportGold418', '燃料出口'], ['steelExportGold482', '鋼材出口'], ['goodsExportGold481', '貨物出口'], ['shipPortGold', '港口船運'], ['shipDailyGold418', '船運日收入'], ['nightTransitRev487', '夜間運輸']];
 const IMPORT_NAME = [['foodImportCost482', '糧食'], ['gasImportCost482', '天然氣'], ['fuelImportCost482', '燃料'], ['steelImportCost482', '鋼材'], ['suppliesImportCost482', '供應品'], ['goodsImportCost481', '貨物']];
 // 文件裡的規則（這一張的卡：「做什麼」6）：每一列的名稱與寫法。跟 src/cityView.ts finList 各寫一份，煙霧測試兩邊要對得上
 export function finWant(rep) {
-  const rows = [['住宅稅', money(rep.tax.R), 'pos'], ['商業稅', money(rep.tax.C), 'pos'], ['工業稅', money(rep.tax.I), 'pos']];
+  const rows = [['住宅稅', money(rep.tax.R), 'pos'], ['商業稅', money(rep.tax.C), 'pos']];
+  if (rep.night.commerceGold > 0) rows.push(['　其中晚間消費金', money(rep.night.commerceGold), 'pos']);   // D029：晚間消費金同時記進商業稅
+  rows.push(['工業稅', money(rep.tax.I), 'pos']);
   for (const [k, name] of INCOME_NAME) { const v = rep.other[k]; if (v && Math.round(v) !== 0) rows.push([name, money(v), v > 0 ? 'pos' : 'neg']); }
   rows.push(['收入合計', money(rep.income), 'sum']);
   rows.push(['維護費', money(-rep.upkeep), 'neg']);
+  if (rep.night.operatingCost > 0) rows.push(['　其中夜間營運', money(-rep.night.operatingCost), 'neg']);   // D029
   for (const [k, name] of IMPORT_NAME) { const v = rep.imports[k]; if (v && Math.round(v) !== 0) rows.push([`　其中進口${name}`, money(-v), 'neg']); }
   rows.push(['淨額（收入−維護費）', money(rep.income - rep.upkeep), 'sum']);
   rows.push(['工資指數', `×${rep.chain.wageIdx.toFixed(2)}`, '']);
