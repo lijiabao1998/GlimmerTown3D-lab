@@ -3,15 +3,19 @@ import { clamp, cov, hashLocal479, idx, streetHash, type Fields, type Tile, type
 import { countNear, urbanDens406 } from './grid.ts';
 
 const on = (f: Fields, name: string, i: number) => (cov(f, name, i) as number) > 0;
-const crimeNear = (w: World, x: number, y: number) => countNear(w, x, y, 4, (tt: Tile) => tt.bld && tt.bld.k <= 3 && tt.bld.crime);
+// 半徑內「有犯罪的住商工」的謂詞（52934 countNear 的那一支）；crimeAt＝同一個謂詞的累加表（grid.ts nearCounter），查詢 O(1)，結果跟逐格數是同一個整數
+export const crimeFlag = (tt: Tile) => tt.bld && tt.bld.k <= 3 && tt.bld.crime;
+export type CrimeAt = (x: number, y: number, r: number) => number;
+const crimeNear = (w: World, x: number, y: number) => countNear(w, x, y, 4, crimeFlag);
 
 // 53087：服務每種 +8、景觀（公園）最多 2 分 ×8、地鐵／可達性取大者；污染 ×1.2、噪音 ×0.4、半徑 4 內每個犯罪 −10；夾在 0..255
-export function landStaticAt(w: World, f: Fields, x: number, y: number) {
+// crimeAt（選填）：呼叫端手上有當天的犯罪累加表就給（stepDay 每天對每個待重算的格各數一次半徑 4 的犯罪，逐格掃 81 格是一天裡最大的單一熱點）；沒給就逐格掃（守衛的慢速版與工具用）
+export function landStaticAt(w: World, f: Fields, x: number, y: number, crimeAt?: CrimeAt) {
   const i = idx(w, x, y);
   const svc = ((on(f, 'police', i) || on(f, 'police2', i)) ? 1 : 0) + ((on(f, 'fire', i) || on(f, 'fire2', i) || on(f, 'fireHQ', i)) ? 1 : 0) + (on(f, 'school', i) ? 1 : 0)
     + ((on(f, 'hospital', i) || on(f, 'clinic', i)) ? 1 : 0) + (on(f, 'library', i) ? 1 : 0) + (on(f, 'post', i) ? 1 : 0);
   const land = Math.min(2, (on(f, 'park', i) ? 1 : 0) + (on(f, 'cpark', i) ? 1 : 0) + (on(f, 'gpark', i) ? 2 : 0));
-  const crime = crimeNear(w, x, y);
+  const crime = crimeAt ? crimeAt(x, y, 4) : crimeNear(w, x, y);
   return clamp(128 + svc * 8 + land * 8 + Math.max(f.METRO_TOD467B[i] || 0, f.ACCESS468[i] || 0) - (f.POL[i] || 0) * 1.2 - (f.NOISE[i] || 0) * .4 - crime * 10, 0, 255);
 }
 

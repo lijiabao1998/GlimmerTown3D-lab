@@ -1,5 +1,5 @@
 {
- "commit": "f31c3acd26febfd28b16aa5bb8409cb12e5d4b91",
+ "commit": "8c6ccf60f19c77a739a1df71cc99684296934f16",
  "note": "D015 之前（整張建）的場景摘要：首次建要逐位元組相同",
  "cases": {
   "seed516-a": {

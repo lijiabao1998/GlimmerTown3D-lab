@@ -21,7 +21,7 @@ import { commitOp, undoOp, previewOp, canUndo, EDIT_STALE_R } from '../src/sim/e
 import { replayCity } from '../src/sim/replay.ts';
 import { saveCode, loadCode, packHistory } from '../src/io/save.ts';
 import { fieldsOf, COVR, POL_SRC } from '../src/sim/rules/fields.ts';
-import { landStaticAt } from '../src/sim/rules/land.ts';
+import { crimeFlag, landStaticAt } from '../src/sim/rules/land.ts';
 import { countNear, nearCounter } from '../src/sim/rules/grid.ts';
 import { roadDraftTiles, UNDO_MAX } from '../src/sim/rules/build.ts';
 import * as OPS from './d011-ops.mjs';
@@ -149,13 +149,14 @@ export function nearMismatch(w) {
     ['工業（tick 半徑 3）', t => t.bld && t.bld.k === 3], ['住商工犯罪（tick 半徑 4）', t => t.bld && t.bld.k <= 3 && t.bld.crime], ['路', t => t.road],
     [`第 ${mid} 格起的路或分區`, t => late.has(t)], ['只有第 0 格', t => t === t0],
   ];
-  const on = {};
-  for (const [name, p] of preds) {
-    const f = nearCounter(w, p);
+  const on = {}, bld = []; for (let i = 0; i < N * N; i++) if (w.tiles[i].bld) bld.push(i);
+  for (const [k, [name, p]] of preds.entries()) {
+    const f = nearCounter(w, p), g = k < 2 ? nearCounter(w, p, bld) : null;   // 建築索引版（tick 的兩個旗標都先看 tt.bld）：前兩種旗標才適用，也逐格比
     on[name] = w.tiles.filter(p).length;
     for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) for (const r of NEAR_R) {
       const a = f(x, y, r), b = countNear(w, x, y, r, p);
       if (a !== b) return { bad: `${name}：(${x},${y}) 半徑 ${r} nearCounter ${a} ≠ countNear ${b}`, on };
+      if (g) { const c = g(x, y, r); if (c !== b) return { bad: `${name}：(${x},${y}) 半徑 ${r} nearCounter（建築索引版）${c} ≠ countNear ${b}`, on }; }
     }
   }
   return { bad: null, on };
@@ -627,6 +628,25 @@ async function guards(log) {
     log(!wrong.length && near.length === script.filter(([k]) => k === 'ops').length + 3 && Math.max(...ind) > 0 && dd < 0 && CN.days.length === A.days.length && !!hCN && hCN === hA,
       `nearCounter＝countNear：${near.length} 個狀態（劇本城每一段施工做完、第 121 天；預建城讀檔後、拆除後）逐格 × 半徑 ${NEAR_R.join('／')}，旗標五種（tick 的工業、犯罪；路；圖中央那一列的中間才第一次是真；只有第 0 格）都是同一個整數；整個 tick 換回逐格 countNear（day.ts 在記憶體裡另載一份，不改 src），劇本城 ${A.days.length} 天逐日地價基準、資金、人口與結束雜湊都相同（另有回歸錨點 d010-3d.json、d011-3d.json，c736ecd 之前錄的）`,
       wrong.map(([w, q]) => `${w}：${q.bad}`).slice(0, 2).join('；') || (dd >= 0 ? `換回 countNear 的 tick 第 ${A.days[dd].day} 天不同` : hCN !== hA ? `換回 countNear 的 tick 結束雜湊 ${hCN} ≠ ${hA}` : `工業格 ${ind.join('／')}；路格 ${near.map(([, q]) => q.on['路']).join('／')}；雜湊 ${hCN}＝${hA}`));
+  }
+
+  // 地價的犯罪累加表（src/sim/rules/land.ts landStaticAt 的 crimeAt：tick 每個待重算的格用它數半徑 4 的犯罪，編輯之後的那幾天是幾千格）＝逐格 countNear：
+  // 劇本城結束時的城，把住商工的犯罪旗標暫時設成三種樣子（全沒有、隨機三成、全部），每一格比「沒給累加表」與「給建築索引版累加表」的 landStaticAt；比完把旗標還原（不影響後面的檢查）
+  {
+    const s = A.s, w = s.w, N = w.N, f = fieldsOf(s.g), bld = [], saved = [];
+    for (let i = 0; i < N * N; i++) if (w.tiles[i].bld) { bld.push(i); saved.push([w.tiles[i].bld, w.tiles[i].bld.crime]); }
+    let z = 20260930, bad = null, flagged = 0, cells = 0;
+    const rnd = () => (z = (Math.imul(z, 1103515245) + 12345) >>> 0) / 4294967296;
+    for (const mode of ['none', 'some', 'all']) {
+      for (const i of bld) { const b = w.tiles[i].bld; if (b.k <= 3 && !b.ref) { if (mode === 'all' || (mode === 'some' && rnd() < .3)) { b.crime = 1; flagged++; } else delete b.crime; } }
+      const at = nearCounter(w, crimeFlag, bld);
+      for (let y = 0; y < N && !bad; y++) for (let x = 0; x < N; x++) {
+        const a = landStaticAt(w, f, x, y), c = landStaticAt(w, f, x, y, at); cells++;
+        if (a !== c) { bad = `${mode}：(${x},${y}) 沒給累加表 ${a} ≠ 給累加表 ${c}`; break; }
+      }
+    }
+    for (const [b, c] of saved) { if (c === undefined) delete b.crime; else b.crime = c; }
+    log(!bad && flagged > 0, `地價的犯罪累加表＝逐格 countNear：劇本城第 ${s.day} 天的城，住商工的犯罪旗標暫時設成全沒有、隨機三成、全部三種，每一格（${cells} 格次）landStaticAt 給不給累加表（建築索引版）結果逐位相同`, bad || `${N}×${N}、有建築 ${bld.length} 格、三種樣子共設了 ${flagged} 個犯罪旗標；比了 ${cells} 格次`);
   }
 
   // 涵蓋面：每一種都真的發生過（主劇本、預建城、釘住、紓困、復原上限、貸款、地價框外、預建城對拍劇本合起來；新加的都在清單上，不會悄悄不發生）

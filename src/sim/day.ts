@@ -25,7 +25,7 @@ import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
-import { judgeWealth, landStaticAt } from './rules/land.ts';
+import { crimeFlag, judgeWealth, landStaticAt } from './rules/land.ts';
 import { abandonStep, crimeStep, deathPre, deathStep, diseaseStep, fireStep, medCapOf, type DeathPre, type HazardX } from './rules/hazard.ts';
 import { markLandDirty } from './rules/build.ts';
 import { hashBytes, isCommuteDay, jamCounts, roadStatsOf, trafficStep } from './rules/commute.ts';
@@ -242,10 +242,13 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 54997 rebuildNoise(null)：跟 54949 那一次之間建築沒變（天氣、通勤、道路負載都不動建築），噪音與簽名都一樣，不重算（D017）。
   // 整張＝重算 stale 格（地價基準只取決於該格的覆蓋、污染、噪音與半徑 4 的犯罪（landStaticAt）；輸入沒變的格算出來一樣）；
   // opts.fullLand＝逐字照實驗線把整張算一遍（守衛的慢速版，結果要逐位相同）
+  // 半徑 4 的犯罪累加表：這一天用兩次——地價基準重算（每個待重算的格數一次，編輯之後的那幾天是幾千格）與下面的住宅幸福（52934 countNear，結果同逐格數，守衛核對）。
+  // 兩處之間沒有東西改犯罪旗標與建築種類（旗標只有 crimeStep 與玩家的「處理犯罪」會動，都在別的時間點）
+  const crimeNear = nearCounter(w, crimeFlag, tickBld);
   if (s.landDirty) {
-    if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const i = y * N + x; g.LANDBASE[i] = landStaticAt(w, f, x, y); s.stale[i] = 0; } }
+    if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const i = y * N + x; g.LANDBASE[i] = landStaticAt(w, f, x, y, crimeNear); s.stale[i] = 0; } }
     else if (opts.fullLand) { rebuildLandBase(w, g); s.stale.fill(0); }
-    else { for (let i = 0; i < nn; i++) if (s.stale[i]) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0); s.stale.fill(0); }
+    else { for (let i = 0; i < nn; i++) if (s.stale[i]) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0, crimeNear); s.stale.fill(0); }
     s.landDirty = false; s.landBox = null;                              // 55000
   }
   recomputeLandDynamic(g);                                                // 55002：LAND＝LANDBASE 扣壅堵（過載道路半徑 2 內每格 −12、上限 −50）
@@ -269,7 +272,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   for (const k of covKeys) cov[k] = 0;
   const covAt = (i: number) => { for (let j = 0; j < covKeys.length; j++) cov[covKeys[j]] = covArrs[j][i]; return cov; };
   // 半徑 3 的工業、半徑 4 的犯罪（countNear 52934）：主迴圈裡建築的種類與犯罪旗標不變，先做累加表（結果同逐格數，守衛核對）
-  const indNear = nearCounter(w, tt => tt.bld && tt.bld.k === 3), crimeNear = nearCounter(w, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime);
+  const indNear = nearCounter(w, tt => tt.bld && tt.bld.k === 3, tickBld);
   for (const i of tickBld) {                                              // 55050／55150 主迴圈
     const t = w.tiles[i], b = t.bld;
     if (!b || b.ref) continue;

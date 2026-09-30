@@ -176,6 +176,6 @@ export function jobCountsOf(t: Tally, w: World, tickBld: readonly number[], jobs
   const jc = jobCounts();
   for (const k of JOB_KEYS) jc[k] = t.cnt[k] ?? 0;
   jc.jobsC = jobsC; jc.jobsI = jobsI;
-  jc.powerJobs471 = powerJobs471(w); jc.waterJobs472 = waterJobs472(w); jc.infraJobs475 = infraJobs475(w); jc.transitDepotJobs501 = transitDepotTotals501(w, tickBld).jobs;
+  jc.powerJobs471 = powerJobs471(w, tickBld); jc.waterJobs472 = waterJobs472(w, tickBld); jc.infraJobs475 = infraJobs475(w, tickBld); jc.transitDepotJobs501 = transitDepotTotals501(w, tickBld).jobs;
   return jc;
 }

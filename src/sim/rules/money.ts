@@ -194,8 +194,8 @@ export const ZERO_IMPORTS: ImportCosts = Object.fromEntries(IMPORT_KEYS.map(k =>
 export const POWER_UPKEEP471: Record<number, number> = { 140: 16, 141: 5, 142: 9, 143: 10, 144: 18, 145: 20, 146: 8, 147: 14, 148: 8, 149: 14, 150: 7 };
 export const WATER_UPKEEP472: Record<number, number> = { 151: 7, 152: 5, 153: 12, 154: 6, 155: 3, 156: 18, 157: 3, 158: 11, 159: 4, 160: 4 };
 export const INFRA_UPKEEP475: Record<number, number> = { 161: 3, 162: 2, 163: 2, 164: 5 };
-export const powerUpkeep471 = (w: World): number => +sumKinds(w, POWER_UPKEEP471).toFixed(2);
-export const waterUpkeep472 = (w: World): number => sumKinds(w, WATER_UPKEEP472);
+export const powerUpkeep471 = (w: World, bldIdx?: ArrayLike<number>): number => +sumKinds(w, POWER_UPKEEP471, bldIdx).toFixed(2);
+export const waterUpkeep472 = (w: World, bldIdx?: ArrayLike<number>): number => sumKinds(w, WATER_UPKEEP472, bldIdx);
 export function infraUpkeep475(w: World): number {
   let n = 0;
   for (let i = 0; i < w.N * w.N; i++) {
@@ -244,7 +244,7 @@ export function upkeepIn(w: World, tickBld: readonly number[], cnt: Record<strin
   return {
     ...neutralUpkeepIn({ roadUpkeep: roadUpkeep(w), pop: p.pop, svcBudget: p.svcBudget, tech: p.tech, spec: p.spec,
       counts: { ...cnt, parks: tax.parks, plants: tax.plants, fireStations: tax.fireStations, policeStations: tax.policeStations, policeBoxes: tax.policeBoxes, hospitals: tax.hospitals } }),
-    powerUpkeep471: powerUpkeep471(w), waterUpkeep472: waterUpkeep472(w), infraUpkeep475: infraUpkeep475(w), transitDepotUpkeep501: transitDepotTotals501(w, tickBld).upkeep,
+    powerUpkeep471: powerUpkeep471(w, tickBld), waterUpkeep472: waterUpkeep472(w, tickBld), infraUpkeep475: infraUpkeep475(w), transitDepotUpkeep501: transitDepotTotals501(w, tickBld).upkeep,
   };
 }
 
