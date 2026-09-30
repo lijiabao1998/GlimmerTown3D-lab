@@ -6,6 +6,13 @@ import { inWinter, season } from './weather.ts';
 
 export const WEALTH_PEN = [0.5, 1, 2];   // 37417 財富分級污染／犯罪懲罰係數：貧／中／富
 
+// 55177–55234 happyParts 各項的名稱（實驗線 happyAgg 的項，showStats 讀）；順序＝下面 parts 陣列的順序，守衛（tools/unit-d027.mjs）跟實驗線原文核對
+export const HAPPY_NAMES: readonly string[] = [
+  '基礎', '城市活動', '道路等級', '公園', '多座公園', '遊樂場', '植物園', '路旁裝飾', '公車站', '體育場', '博物館', '信仰', '幼兒園', '樂齡中心', '農貿市場', '遛狗公園', '溜冰場', '滑板公園', '游泳池', '婚禮教堂',
+  '寵物醫院', '社區菜園', '中央公園', '都會大公園', '文化藝術中心', '中央行政園區', '科技研究園區', '市民中心', '熟食供應', '劇院', '電影院', '圖書館', '郵局', '工業汙染鄰近', '電廠鄰近', '空氣污染', '噪音', '免費公交',
+  '公園夜間開放', '微光之巔', '電視訊號', '科技進步', '犯罪', '交通壅堵', '通勤', '排水內澇', '水壓／水質', '宵禁', '喪事未安撫', '生病', '死亡', '高密度污水', '無電', '天氣', '冬季', '夜間城市', '住房負擔',
+];
+
 export interface HappyIn {
   c: Record<string, number | undefined>;   // 這一格各服務的覆蓋計數（COV.xxx[ci]）；整張場沒有就 undefined
   POL: number; NOISE?: number; commutePenalty?: number;

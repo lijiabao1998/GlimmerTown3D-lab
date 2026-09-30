@@ -25,9 +25,10 @@ import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
-import { judgeWealth, landStaticAt } from './rules/land.ts';
+import { crimeFlag, judgeWealth, landStaticAt } from './rules/land.ts';
 import { abandonStep, crimeStep, deathPre, deathStep, diseaseStep, fireStep, medCapOf, type DeathPre, type HazardX } from './rules/hazard.ts';
 import { markLandDirty } from './rules/build.ts';
+import { hashBytes, isCommuteDay, jamCounts, roadStatsOf, trafficStep } from './rules/commute.ts';
 import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, type ImportCosts, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
 export interface Sim {
@@ -40,6 +41,9 @@ export interface Sim {
   // 跨日的全域值（實驗線 tick() 讀昨天的、今天覆寫）
   pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
   dem: Record<number, number>; immWave: number; labor: Labor | null;
+  commuteClusters: number[][];      // D027：通勤叢集的快取路徑（每 4 天重算，其餘天沿用，實驗線 commuteClusters 56928；不存檔，讀檔與新圖是空的）
+  tvSignal: boolean;                // D027：T330 電視訊號＝前一天算出來的電視台數（tv330）>0（實驗線 let tvSignal 38251、55252 在住宅幸福迴圈後更新、下一天的幸福讀它＝一天的延遲）；不存檔，讀檔與新圖是 false
+  commuteDay: number;               // D027：最近一次重算通勤是哪一天（−1＝讀檔之後還沒算過：卡片要分得出「還沒算」跟「算過、沒有懲罰」；只給介面看，不進雜湊）
   medCap: number | null;            // D026：昨天結算寫的醫療床位（實驗線 flowStat384.med.cap 56163，明天的疾病段 55835 讀它）；讀檔、開新圖之後第一天沒有＝null＝無限
   econ: EconState;                  // D025：商品庫存（goods、supplies、fuel、steel）、船、昨天的倉容量與經濟快照（隔天的商工需求讀它）；存檔欄位 sup、gds、fuel364、steel364、shipCount、shipProgress
   root: Map<number, CityBuilding>;  // 根格 → 城市建築（同步 lv、v、age）
@@ -65,6 +69,7 @@ export interface DayReport {
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
   econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
   hazard: HazardReport;                         // D026：當天的災禍（起火、蔓延、燒毀、犯罪、廢棄、生病、治癒、死亡、恢復）
+  happyAgg: number[];                           // D027：城市平均每一項住宅幸福（實驗線 happyAgg 55255；項的順序＝rules/happy.ts HAPPY_NAMES）；沒有住宅是空的
 }
 // 經濟一天的全部輸出：ec＝55305–55413 那一段的區域變數（同名）、late＝55996–56021 的出口、sn＝56030–56046 的快照三份與價格、cons＝55664–55671 煉鋼廠加速施工耗掉的鋼
 export interface EconReport { ec: EconCtx; late: EconLate; sn: ReturnType<typeof economySnapshots>; cons: number }
@@ -125,6 +130,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
       : k === 1 ? { k, lv, v, age, pw: true, h: .6, fire: r.length >= 7 ? r[5] : (r.length === 6 ? r[5] : 0), den: r.length >= 7 ? r[6] : 3, we: r.length >= 8 ? r[7] : 1 }
       : { k, lv, v, age, pw: true, h: .6, fire: r[5] || 0 };
     if (k !== 9 && sz > 1) { bld.sz = sz; bld.h = 1; }
+    if (k === 127) bld.we = 0;                                   // D027：社宅的財富級由建築種類固定恢復（實驗線 load 66913：lv＝1、we＝SOCIAL_HOUSING_WE＝0〔39460〕，不存檔）；沒補之前社宅的 we 是空的，空氣污染等乘 WEALTH_PEN 的幸福項照中級算（差 1.2–1.9 倍）。lv＝1 沒搬：實驗線自己存的社宅本來就是 1 級，城市模型顯示存檔的等級，兩邊要一致
     tiles[i].bld = bld;
     for (let dz = 0; dz < sz; dz++) for (let dx = 0; dx < sz; dx++) if (dx || dz) {
       const x = b.x + dx, z = b.z + dz;
@@ -154,7 +160,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   return {
     city, w, g, rng, seed: save.seed, day: save.day, weather, vrank, budget, edu,
-    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, medCap: null, econ,
+    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, medCap: null, commuteClusters: [], commuteDay: -1, tvSignal: false, econ,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
     noiseSig: -1,                                                         // 56934：讀檔時 NOISE 清 0、簽名 −1（rebuildCov 不算噪音，第一天開頭才補上）
@@ -202,13 +208,15 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   const { w, g } = s, N = w.N, nn = N * N, f = fieldsOf(g);
   // 54948 buildTickIndex：有建築的格（含 ref）、分區格、商業分區格數，都升序
   const tickBld: number[] = [], tickZone: number[] = [];
-  let czone = 0, roads = 0;                                                // roads＝tickRoad.length（54940）：貿易額度的底（55334）
+  const tickRoad: number[] = [];                                             // 54940 tickRoad：所有道路格，升序
+  let czone = 0;
   for (let i = 0; i < nn; i++) {
     const t = w.tiles[i];
     if (t.bld) tickBld.push(i);
     if (t.zone) { tickZone.push(i); if (t.zone === 2) czone++; }
-    if (t.road) roads++;
+    if (t.road) tickRoad.push(i);
   }
+  const roads = tickRoad.length;                                            // roads＝tickRoad.length：貿易額度的底（55334）
   // 55050–55149 主計數迴圈（建築索引、跳過 ref 格）：D016 數學校、垃圾場、體育場、水塔、診所、圖書館、郵局、墓園（fac）；D022 數食物來源、觀光建築、貿易設施（rules/food.ts countFood）；
   // D024 補齊剩下的（rules/count.ts countMore：升級加成就業、電廠以外的發電、產業鏈、物流與運作中判斷、旅宿配套、科技園區、公共設施……）。三份計數合起來就是實驗線的 157 個計數
   // （資源開採量 suppliesGain／oilGain／oreGain 除外，給 0）；給固定就業（55246–55250）與維護費（55973–55977）
@@ -225,18 +233,25 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 54956 乾旱只由災害設定；災害關（第 1 類）
   const wx = weatherStep(s.weather, s.day, s.rng);                        // 54964–54975（F10，唯一在生長前抽亂數的一步）
   s.weather = { weather: wx.weather, wxT: wx.wxT };
-  // 54991 通勤（T141，每 4 天）、54995 道路負載（T129）：沒搬，實驗線沒有開關、照跑（第 2 類）；本線 commutePenalty、roadLoad 都是 0
+  // 54991 通勤（T141，每 4 天）、54992 路徑累加、54995 道路負載（T129；D027，rules/commute.ts）：叢集路徑每天走過的格子 +1，負載＝昨天 ×.85＋今天 ×.15。
+  // jam＝每格半徑 2 內過載道路格數（congestNear 52946，一次算好給住宅幸福與動態地價用）
+  s.commuteClusters = trafficStep(s.day, w, g, s.commuteClusters, tickBld);
+  if (isCommuteDay(s.day)) s.commuteDay = s.day;
+  jamCounts(w, g.roadLoad, g.jam);
   // 54996–55001 地價基準髒重建：landDirty 時，有框只重算框裡，沒框整張（前一天 55279 設成整張；玩家施工把它換成框，見 Sim.landDirty）。
   // 54997 rebuildNoise(null)：跟 54949 那一次之間建築沒變（天氣、通勤、道路負載都不動建築），噪音與簽名都一樣，不重算（D017）。
   // 整張＝重算 stale 格（地價基準只取決於該格的覆蓋、污染、噪音與半徑 4 的犯罪（landStaticAt）；輸入沒變的格算出來一樣）；
   // opts.fullLand＝逐字照實驗線把整張算一遍（守衛的慢速版，結果要逐位相同）
+  // 半徑 4 的犯罪累加表：這一天用兩次——地價基準重算（每個待重算的格數一次，編輯之後的那幾天是幾千格）與下面的住宅幸福（52934 countNear，結果同逐格數，守衛核對）。
+  // 兩處之間沒有東西改犯罪旗標與建築種類（旗標只有 crimeStep 與玩家的「處理犯罪」會動，都在別的時間點）
+  const crimeNear = nearCounter(w, crimeFlag, tickBld);
   if (s.landDirty) {
-    if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const i = y * N + x; g.LANDBASE[i] = landStaticAt(w, f, x, y); s.stale[i] = 0; } }
+    if (s.landBox) { const [x0, y0, x1, y1] = s.landBox; for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const i = y * N + x; g.LANDBASE[i] = landStaticAt(w, f, x, y, crimeNear); s.stale[i] = 0; } }
     else if (opts.fullLand) { rebuildLandBase(w, g); s.stale.fill(0); }
-    else { for (let i = 0; i < nn; i++) if (s.stale[i]) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0); s.stale.fill(0); }
+    else { for (let i = 0; i < nn; i++) if (s.stale[i]) g.LANDBASE[i] = landStaticAt(w, f, i % N, (i / N) | 0, crimeNear); s.stale.fill(0); }
     s.landDirty = false; s.landBox = null;                              // 55000
   }
-  recomputeLandDynamic(g);                                                // 55002：沒有壅堵，LAND＝LANDBASE
+  recomputeLandDynamic(g);                                                // 55002：LAND＝LANDBASE 扣壅堵（過載道路半徑 2 內每格 −12、上限 −50）
   // 55006 住房市場 T488：關（第 1 類；沒就緒：入住率 1、住房懲罰 0、新住宅密度＝道路等級、升級係數 1）
   const sea = season(s.day);
   const nominal = computePower(w).cap, cap = powerCap(nominal, sea);   // 55008（F11，舊版供電）；55009 T471 調度略過
@@ -250,13 +265,14 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
   assignWater(w, tickBld, wCap);                                          // 55157–55160（D019）：有電、兩格內有接得到水源的水管、容量還沒用完
   let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
+  const aggSum: number[] = [];                                           // 55237–55238 happyAggSum：每一項幸福逐棟加總（跟實驗線同一個加總順序）
   // 這一格各服務的覆蓋（HappyIn.c）：一天建一個鍵齊全的物件，每棟只覆寫值（residentialHappy 讀完就丟、不留參照）。
   // 以前每棟新建一個約 60 個鍵的物件，佔推進一天三成的時間（D011 效能；鍵與值都跟以前一樣）
   const covKeys = Object.keys(g.COV), covArrs = covKeys.map(k => g.COV[k]), cov: Record<string, number> = {};
   for (const k of covKeys) cov[k] = 0;
   const covAt = (i: number) => { for (let j = 0; j < covKeys.length; j++) cov[covKeys[j]] = covArrs[j][i]; return cov; };
   // 半徑 3 的工業、半徑 4 的犯罪（countNear 52934）：主迴圈裡建築的種類與犯罪旗標不變，先做累加表（結果同逐格數，守衛核對）
-  const indNear = nearCounter(w, tt => tt.bld && tt.bld.k === 3), crimeNear = nearCounter(w, tt => tt.bld && tt.bld.k <= 3 && tt.bld.crime);
+  const indNear = nearCounter(w, tt => tt.bld && tt.bld.k === 3, tickBld);
   for (const i of tickBld) {                                              // 55050／55150 主迴圈
     const t = w.tiles[i], b = t.bld;
     if (!b || b.ref) continue;
@@ -269,12 +285,13 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
         we: b.we, k: b.k, lv: b.lv, pw: b.pw, sick: b.sick, death: b.death,
         ind: indNear(x, y, 3),
         crime: crimeNear(x, y, 4),
-        rc: getMaxRoadClass(w, x, y, 1), jam: 0,
+        rc: getMaxRoadClass(w, x, y, 1), jam: g.jam[i],
         drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: dp.penalty[i] === 1, sewNeed, sewOk: !sewNeed,
-        weather: s.weather.weather, day: s.day, nightCity: { ready: false, happinessDelta: 0 }, housingPen: 0,
-        eventHappy: null, cookedReady: false, pol: opts.hazard?.pol ?? null, rankIdx: 0, tvSignal: false, tech: s.edu.tech,   // 政策（K）沒搬：只有守衛注入（免費公交、公園夜間開放、宵禁進幸福；同一個物件也給災禍段）
+        weather: s.weather.weather, day: s.day, nightCity: opts.hazard?.nightCity ?? { ready: false, happinessDelta: 0 }, housingPen: 0,
+        eventHappy: opts.hazard?.eventHappy ?? null, cookedReady: false, pol: opts.hazard?.pol ?? null, rankIdx: 0, tvSignal: s.tvSignal, tech: s.edu.tech,   // 夜間城市（J）、城市活動（D）、政策（K）沒搬：只有守衛注入（夜間城市與城市活動的幸福加減、免費公交、公園夜間開放、宵禁；政策同一個物件也給災禍段）
       });
       b.h = hp.h;
+      for (let k = 0; k < hp.parts.length; k++) aggSum[k] = (aggSum[k] ?? 0) + hp.parts[k];   // 55237–55238
       happySum += b.h; happyN++;                                          // 55239
       if ((b.k === 127 ? b.pw && b.wa : b.pw) && !b.sick && !b.death) popN += residentPop;   // 55240
     } else if (b.pw) {                                                    // 55241–55242（F8）
@@ -287,6 +304,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 55251 企業 T489：關（第 1 類；enterpriseRollback489 39560）＝四捨五入的名目值
   jobs = Math.max(0, Math.round(jobs)); jobsC = Math.max(0, Math.round(jobsC)); jobsI = Math.max(0, Math.round(jobsI));
   let cityHappy = happyN ? happySum / happyN : .6;                        // 55254（住宅 k1 與社宅 k127）
+  s.tvSignal = fc.tv330 > 0;                                              // 55252：今天的電視台數，明天的住宅幸福讀它
+  const happyAgg = happyN ? aggSum.map(v => v / happyN) : [];             // 55255：城市平均每一項幸福（實驗線 happyAgg，showStats 讀）
   // 55256–55278 垃圾（D020，src/sim/rules/garbage.ts）：產量、清運網、全城比例；500 人以上分清運區算負載。
   // 回收政策沒搬：係數 1（55257）；企業關：工業用四捨五入後的 jobsI（55258）
   const recycleMul = 1;
@@ -300,7 +319,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 錢：太空研究中心的獎金在 55408 直接加進 money（在當天結算之前）。整段沒有亂數。道路負載、火車線、天然氣發電調度沒搬＝0
   const labor = laborMarket481(pop, jobs, null, s.day);                   // 55329（F2，企業沒就緒那一支）
   const x2 = opts.class2?.economy;
-  const ec = economyMain(s.econ, { day: s.day, sea, pop, jobs, cityHappy: x2?.happy ?? cityHappy, money: s.money, spec: s.edu.spec, roads, roadStats: x2?.roadStats, railLines: x2?.railLines, gasPowerDispatch: x2?.gasPowerDispatch, eventFood: x2?.eventFood, c: cnt, fc, labor, wealth: wealthPower481(w, tickBld, pop), activeConstruction: activeConstruction482(w, tickBld) });
+  const ec = economyMain(s.econ, { day: s.day, sea, pop, jobs, cityHappy: x2?.happy ?? cityHappy, money: s.money, spec: s.edu.spec, roads, roadStats: x2?.roadStats ?? roadStatsOf(w, tickRoad, g.roadLoad), railLines: x2?.railLines, gasPowerDispatch: x2?.gasPowerDispatch, eventFood: x2?.eventFood, c: cnt, fc, labor, wealth: wealthPower481(w, tickBld, pop), activeConstruction: activeConstruction482(w, tickBld) });
   s.money += ec.mgReward;
   // 55414–55424 糧食的每日加減（D022）：每棟住宅（k1）的幸福加 clamp((供糧率−.5)×.11, −.06, .05)、用住宅重算城市幸福。在經濟之後、災害與生長之前。55426 災害：關（第 1 類）
   const fd = ec.fd;
@@ -342,7 +361,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    food: fd, econ: { ec, late, sn, cons }, hazard: hz,
+    food: fd, econ: { ec, late, sn, cons }, hazard: hz, happyAgg,
   };
 }
 
@@ -440,7 +459,8 @@ export function simHash(s: Sim) {
   const ruin = s.w.tiles.flatMap((t, i) => t.ruin ? [i] : []);   // D026：焦土
   const ground = s.w.tiles.map(t => `${t.road ? t.rc : 0}${t.zone || 0}${t.tree ? 1 : 0}`).join('');
   return fnv1a(JSON.stringify([s.day, s.pop, s.jobs, s.jobsC, s.jobsI, s.cityHappy, s.dem, s.immWave, s.weather, blds, bl, Array.from(s.g.POL), Array.from(s.g.LANDBASE),
-    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox, s.econ, ruin, s.medCap]));
+    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox, s.econ, ruin, s.medCap,
+    hashBytes(s.g.roadLoad), hashBytes(s.g.commutePenalty), s.commuteClusters, s.tvSignal]));   // D027：道路負載、通勤懲罰（32 位元逐位）、叢集路徑、電視訊號（跨天狀態）
 }
 
 export function simCounts(s: Sim) {

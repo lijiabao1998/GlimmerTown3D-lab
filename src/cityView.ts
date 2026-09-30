@@ -14,12 +14,15 @@ import { packMore, PACK0, type JournalStore, type PackState } from './io/journal
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
+import { roadCap475, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
+import { HAPPY_NAMES } from './sim/rules/happy.ts';
 import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
+import { overLevel } from './render/ground.ts';
 import { LOOKS } from './content/looks.ts';
 import { shapeOf, kindColors } from './content/kindShapes.ts';
 import { Pipeline } from './render/post.ts';
@@ -135,7 +138,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 
   let city: City | null = null, built: BuiltCity | null = null, label = '', needsRender = true, frames = 0;
   // D010 逐日模擬
-  let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, rebuilds = 0;
+  let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, urgentRebuild = false, rebuilds = 0;
   // D011 建造：存檔樣板（讀進來那份存檔 JSON）、起始碼、目前的工具、路的等級、最近一天的回報、存檔
   let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', civicTool = 'police', lastRep: DayReport | null = null, daysSinceSave = 0;
   let loadNote = '', loadDay = -1, restyled = 0;   // restyled：這一次讀檔照實驗線重挑外觀換了幾棟（D012）
@@ -156,8 +159,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let con: ConState | null = null, builtDay = -1, visT = 0, siteInfo: { tris: number; perSite: Map<number, string[]> } = { tris: 0, perSite: new Map() };
   const conFor = (c: City) => { if (!con || con.n !== c.n) { con?.dispose(); con = new ConState(c.n); } return con; };
   // fresh＝從頭建（換城、換畫法檔；D015 清空快取）；平常逐日、施工之後只換變動的件
+  // D027：過載的道路格（負載超過容量）各是第幾檔暖色（ground.ts overLevel）；沒有過載、沒有模擬就回 undefined。渲染只讀模擬的道路負載，不寫
+  function trafficOver(): Uint8Array | undefined {
+    if (!sim) return undefined;
+    const w = sim.w, o = new Uint8Array(w.N * w.N), rl = sim.g.roadLoad;
+    let any = false;
+    for (let i = 0; i < o.length; i++) { const t = w.tiles[i]; if (t.road && rl[i] > 0) { const q = overLevel(rl[i], roadCap475(t)); if (q) { o[i] = q; any = true; } } }
+    return any ? o : undefined;
+  }
   function makeScene(c: City, fresh: boolean): BuiltCity {
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown);
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
     b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
     builtDay = c.day;
     if (b.con) st.setGeometry(b.con.top, b.con.base, b.con.wallTop);
@@ -171,6 +182,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     built.setTreeAges(i => con!.siteAge(i));
     siteInfo = built.setSites(siteSpecs(city, con, built.con.blockOf, builtDay, (k, lv, v) => KINDS.height(k, lv, v)), i => con!.siteAge(i), !!sim) ?? siteInfo;
     timing.sites = performance.now() - t0;
+    built.setTraffic(trafficOver());                                    // D027：過載的道路每天在變，貼圖就地只重畫等級變了的格
     syncHaz();
     invalidate();
   }
@@ -244,7 +256,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     jid = autosave ? L!.journal?.id ?? newJid() : ''; jConf = autosave ? L!.journal?.st ?? PACK0 : PACK0; jSaved = 0;
     const c = sim ? sim.city : V!.city;
     restyled = L ? L.restyled : V!.restyled;
-    daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; rebuilds = 0; simAcc = 0;
+    daysSinceBuild = 0; daysSinceSave = 0; dirtyScene = false; urgentRebuild = false; rebuilds = 0; simAcc = 0;
     const t2 = performance.now();
     visT = 0;
     const b = makeScene(c, true);
@@ -320,7 +332,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     built.scene.add(preview.mesh, haz.mesh);                             // D011：施工預覽跟著搬到新場景（D026：災禍標記也是）
     syncCon();
     Object.assign(timing, { scene: t1 - t0, rebuild: t1 - t0, rebuildAll: performance.now() - t0 }, b.timing);   // rebuildAll＝建場景＋同步工地（D015 判這一段）
-    rebuilds++; daysSinceBuild = 0; dirtyScene = false;
+    rebuilds++; daysSinceBuild = 0; dirtyScene = false; urgentRebuild = false;
     if (!bio.hidden && cardAt) showTile(cardAt[0], cardAt[1]);          // 卡片開著：用新的城市與街區重寫一次（等級、街區、框都可能變了）
     invalidate();
   }
@@ -328,6 +340,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const rep = stepDay(sim!);
     lastRep = rep;
     if (rep.grown || rep.upgraded) dirtyScene = true;
+    if (rep.hazard.burned.length || rep.hazard.abandons.length) { dirtyScene = true; urgentRebuild = true; }   // D027：燒毀的建築要馬上從場景拿掉、廢棄的要換牆色（D026 只在生長或升級時才重建，燒掉的房子會多站好幾天，煙霧測試在劇本城第 121 天抓到）
     daysSinceBuild++; daysSinceSave++;
     const st = rep.settle;                                                // D011：當天的里程碑、星等獎金、紓困（實驗線 56081、56122、56142）
     if (st?.milestone) bui.toast(`人口到 ${st.milestone.pop}：獎勵 $${st.milestone.reward.toLocaleString()}`, 'gold');
@@ -399,7 +412,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       let steps = 0;
       while (simAcc >= 1 && steps < 3) { simAcc -= 1; steps++; simDay(); }   // 一幀最多推 3 天，慢機器不會卡死
       visT += dt;
-      if (steps) { if (dirtyScene && (daysSinceBuild >= REBUILD_DAYS || needBody())) rebuildScene(); else syncCon(); syncUi(); }
+      if (steps) { if (dirtyScene && (daysSinceBuild >= REBUILD_DAYS || needBody() || urgentRebuild)) rebuildScene(); else syncCon(); syncUi(); }
       if (siteInfo.tris) invalidate();                                     // D014：有工地就每一幀都畫（長高、吊車、工人）
     }
     if (con) { con.uni.uDayFrac.value = sim ? Math.min(.999, simAcc) : 0; con.uni.uTime.value = visT; }
@@ -434,7 +447,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol><div class="acts"></div></div>
     <div id="dlg" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
       <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
-      <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>`;
+      <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
+    <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -468,6 +482,29 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     dlg.hidden = true; ta.value = '';
   };
   $<HTMLButtonElement>('#bio .x').onclick = () => closeCard();
+  // D027：☰「幸福構成」——城市平均每一項幸福（DayReport.happyAgg，跟實驗線 happyAgg 55255 同一份）。照實驗線 showStats 面板（65487–65520、66360–66365 @ d23c18d）：
+  // 略過幾乎為 0 的項（|值| ≤ .0005）、由高到低排、最負的一項標紅並附建議、最後合計。建議的字照實驗線 HAPPY_TIP（65491–65505）；「交通壅堵」「通勤」兩句實驗線沒有，本線補的
+  const HAPPY_TIP: Record<string, string> = {
+    '道路等級': '🚦 幹道/快速路吵雜拉低幸福→改用支路等級道路', '工業汙染鄰近': '🏭 工業鄰近拉低幸福→拉開住宅與工業的距離', '電廠鄰近': '⚡ 電廠鄰近拉低幸福→拉開住宅與電廠的距離',
+    '空氣污染': '🏭 空氣污染拉低幸福→遠離污染源或多種樹', '噪音': '🔊 機場/體育場/遊樂園等喧鬧設施拉低幸福→與住宅區拉開距離', '犯罪': '🚓 犯罪拉低幸福→加蓋警察局', '宵禁': '🚨 宵禁法規拉低幸福→關閉法規面板內的宵禁開關',
+    '喪事未安撫': '💀 喪事未安撫拉低幸福→加蓋墓園', '生病': '🏥 居民生病拉低幸福→加蓋醫院或診所', '死亡': '💀 已發生憾事拉低幸福→加蓋墓園安撫', '無電': '⚡ 部分住宅無電拉低幸福→擴建電廠或修路通電',
+    '天氣': '🌧️ 壞天氣暫時拉低幸福→天氣好轉後會恢復', '冬季': '❄️ 冬季拉低幸福→開春後會恢復',
+    '交通壅堵': '🚗 過載的道路拉低幸福→多鋪幾條路分流、把小巷升級成幹道', '通勤': '🚌 住宅離商業或工業太遠、或到不了拉低幸福→在住宅附近劃商業或工業、讓每棟住宅四鄰有路',
+  };
+  const hs = $<HTMLElement>('#hs');
+  $<HTMLButtonElement>('#hsX').onclick = () => { hs.hidden = true; };
+  hs.onclick = e => { if (e.target === hs) hs.hidden = true; };
+  function openHappy() {
+    if (!sim) return;
+    const rep = lastRep, agg = rep?.happyAgg ?? [], fp = (v: number) => (v >= 0 ? '+' : '−') + Math.abs(v * 100).toFixed(1) + '%';
+    const all = agg.map((v, i) => ({ name: HAPPY_NAMES[i], v })), list = all.filter(p => Math.abs(p.v) > .0005).sort((a, b) => b.v - a.v);
+    const worst = all.length ? all.reduce((a, p) => p.v < a.v ? p : a) : null, total = all.reduce((a, p) => a + p.v, 0);
+    $('#hs .sub').textContent = rep && agg.length ? `第 ${rep.day.toLocaleString()} 天・城市幸福 ${Math.round(rep.cityHappy * 100)}%（住宅與社宅的平均；下面每一項也是它們的平均，每天重算、不進存檔）` : rep ? '城裡沒有住宅' : '推進一天之後才算得出來';
+    $('#hs ol').replaceChildren(...list.map(p => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = p.name; v.textContent = fp(p.v); v.className = p.v > 0 ? 'pos' : 'neg'; if (worst && p === worst && p.v < 0) li.className = 'bad'; li.append(b, v); return li; }),
+      ...(agg.length ? (() => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = '合計'; v.textContent = fp(total); li.className = 'sum'; li.append(b, v); return [li]; })() : []));
+    $('#hs .tip').textContent = worst && worst.v < 0 && HAPPY_TIP[worst.name] ? HAPPY_TIP[worst.name] : '';
+    hs.hidden = false;
+  }
 
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
@@ -483,7 +520,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         { id: 'paste', label: '貼上分享碼', note: '實驗線或本線匯出的碼', icon: 'paste' as const },
       ] },
       { title: '住商工的畫法', items: Object.entries(BLOCK_MODES).filter(([k]) => k !== 'a').map(([k, v]) => ({ id: 'blocks:' + k, label: `${k.toUpperCase()} ${v}`, on: blockMode === k })) },   // D014：A 檔超過手機預算，拿出選單（?blocks=a 照舊，給守衛與對照）
-      { title: '其他', items: [{ id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const }] },
+      { title: '其他', items: [
+        ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
+        { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
+      ] },
     ];
   }
   function onMenu(id: string) {
@@ -495,6 +535,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
     }
     else if (id === 'paste') openDlg('paste');
+    else if (id === 'happy') openHappy();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -633,6 +674,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   addEventListener('keydown', e => {
     if (clean) return;
     if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
+    if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -726,6 +768,28 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (b.k === 2) return ['市場', `購買力 ${e.consumption.purchasingPower.toFixed(2)}；零售利用率 ${Math.round(e.commerce.utilization * 100)}%（貨物需求 ${e.goods.need}：本地 ${e.goods.domestic}＋進口 ${e.goods.imports}）；銷售乘數 ×${e.commerce.salesMul.toFixed(2)}`];
     return ['市場', `市場乘數 ×${e.production.marketMul.toFixed(2)}（缺貨 ${Math.round(e.goods.shortageRatio * 100)}%、貨物庫存 ${e.goods.stock}／${e.goods.cap}）；原料 ${e.production.inputUsed.toFixed(1)}／${e.production.inputDemand.toFixed(1)}`];
   }
+  // D027：道路格卡的「交通」一列。負載（每天的移動平均）、容量（路級，高架 ×1.28、立交 ×1.55）、比例；過載要講「過載」與它對周圍的影響（規則同住宅幸福的「交通壅堵」與動態地價）。
+  // 讀檔之後第一個 4 的倍數的日子之前沒有通勤路徑，也就沒有車流——講清楚，不要讓人以為路很空
+  function trafficRow(i: number): Row | null {
+    if (!sim || !sim.w.tiles[i].road) return null;
+    const t = sim.w.tiles[i], load = sim.g.roadLoad[i], cap = roadCap475(t), mult = `${t.fly475 ? '・高架 ×1.28' : ''}${t.ix475 ? '・立交 ×1.55' : ''}`;
+    if (sim.commuteDay < 0 && !(load > 0)) return ['交通', `容量 ${cap}${mult}；讀檔之後第 ${sim.day + COMMUTE_PERIOD - (sim.day % COMMUTE_PERIOD)} 天才有通勤車流（每 ${COMMUTE_PERIOD} 天算一次路徑）`];
+    const head = `負載 ${load.toFixed(1)}／容量 ${cap}（${Math.round(load / cap * 100)}%）${mult}`;
+    return ['交通', load > cap ? `${head}——過載：半徑 2 格內的住宅每格 −3 幸福（上限 −15）、地價每格 −12（上限 −50）` : head];
+  }
+  // D027：住宅（含社宅）卡的「通勤」與「交通壅堵」兩列。通勤懲罰每 4 天重算；壅堵每天讀當下的道路負載（半徑 2 格內過載的道路格數）。
+  // 沒有公交（ACCESS468 全 0）時懲罰＝(路距−20)×.012、封頂 .18、不可達 .30，所以路距可以從懲罰反推（本線不存每一棟的路距）
+  function commuteRows(b: { k: number; x: number; z: number }): Row[] {
+    if (!sim || (b.k !== 1 && b.k !== 127)) return [];
+    const i = b.z * sim.w.N + b.x, p = sim.g.commutePenalty[i], n = sim.g.jam[i], pts = (v: number) => (v * 100).toFixed(1), rows: Row[] = [];
+    if (sim.commuteDay < 0) rows.push(['通勤', `讀檔之後第 ${sim.day + COMMUTE_PERIOD - (sim.day % COMMUTE_PERIOD)} 天才算得出來（每 ${COMMUTE_PERIOD} 天重算一次住宅到最近商業或工業的路距）`]);
+    else if (p >= COMMUTE_PEN_UNREACH - 1e-6) rows.push(['通勤', `不可達：四鄰沒有路，或那條路連不到任何商業或工業建築；幸福 −${pts(p)}`]);
+    else if (p >= COMMUTE_PEN_MAX - 1e-6) rows.push(['通勤', `離最近的就業區沿路 ${COMMUTE_FAR + Math.round(COMMUTE_PEN_MAX / COMMUTE_PEN_STEP)} 格以上（封頂）；幸福 −${pts(p)}`]);
+    else if (p > 0) rows.push(['通勤', `離最近的就業區沿路約 ${COMMUTE_FAR + Math.round(p / COMMUTE_PEN_STEP)} 格（超過 ${COMMUTE_FAR} 格每格 −${(COMMUTE_PEN_STEP * 100).toFixed(1)}）；幸福 −${pts(p)}`]);
+    else rows.push(['通勤', `沿路 ${COMMUTE_FAR} 格內就有商業或工業（或城裡還沒有就業區），不扣分`]);
+    rows.push(['交通壅堵', n ? `半徑 2 格內有 ${n} 格過載的道路；幸福 −${pts(Math.min(.15, n * .03))}` : '半徑 2 格內沒有過載的道路，不扣分']);
+    return rows;
+  }
   // D026：鏡頭平移到一格（保持縮放與視角）並開它的卡——災禍提示點一下用（實驗線的 toast 帶座標，點了鏡頭過去）
   function focusTile(x: number, z: number) {
     if (!city) return;
@@ -772,6 +836,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
       const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
+      if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
       const evs = lotEvents(c, b.x, b.z);
       if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
@@ -789,6 +854,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       const pipe = c.wp[i] ? (sim ? (sim.w.tiles[i].wr ? '配水管（接通水源）' : '配水管（沒接到水塔）') : '配水管') : '';   // D019
       const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', c.ruin[i] ? '燒毀的建築留下的空地，要用拆除清掉才能再蓋' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + (c.ruin[i] ? '（清掉焦土時一起清掉）' : '（還沒蓋）') : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
+      const tr = trafficRow(i); if (tr) rows.push(tr);                  // D027
       for (const e of lotEvents(c, x, z)) rows.push(lotRow(c, e));      // D011：這一格的施工與拆掉的建築
       rows.push([`第 ${impDay.toLocaleString()} 天`, `從 2D 實驗線 v${c.gameVer} 匯入 3D`]);
     }
@@ -979,7 +1045,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // 旁邊另建一份（自己的施工資料與快取，從頭建）取摘要就丟：增量建的場景要跟它一樣（前庭樹的屋齡照今天的）
     freshDigest: () => {
       if (!city || !con) return null;
-      const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true, pipesShown), live = con;   // D019：地面畫不畫水管跟真的一樣
+      const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true, pipesShown, trafficOver()), live = con;   // D019：地面畫不畫水管跟真的一樣
       b.setTreeAges(i => live.siteAge(i));
       b.scene.add(preview.mesh, haz.mesh);                                // 場景結構跟真的一樣（施工預覽、災禍標記也在場景裡），摘要完放回去
       const d = sceneDigest(b); built?.scene.add(preview.mesh, haz.mesh); b.dispose(); st.dispose();
@@ -1029,8 +1095,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       return { want: [b.x, b.z, id], got: h, name: KINDS.name(b.k) };
     },
     openTile: (x: number, z: number) => showTile(x, z),
-    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
+    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // ---- D026 災禍（守衛與拍照用）：標記數與焦土格數、一格的旗標、卡上的按鈕、把一格的旗標直接設好（造情境用，介面沒有這個鈕）----
+    // ---- D027 交通（守衛與拍照用）：過載道路格（讀模擬的負載，不讀畫面）、貼圖上暖色的等級、幸福構成面板的列 ----
+    traffic: () => {
+      if (!sim) return null;
+      const o = trafficOver(), cells: [number, number, number, number][] = [];
+      for (let i = 0; i < sim.w.tiles.length; i++) { const t = sim.w.tiles[i]; if (t.road && sim.g.roadLoad[i] > roadCap475(t)) cells.push([i, sim.g.roadLoad[i], roadCap475(t), o ? o[i] : 0]); }
+      return { cells, tinted: o ? o.reduce((a, v) => a + (v ? 1 : 0), 0) : 0, commuteDay: sim.commuteDay, day: sim.day, jam: sim.g.jam.reduce((a, v) => a + (v ? 1 : 0), 0) };
+    },
+    roadAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x, t = sim.w.tiles[i], o = trafficOver(); return t.road ? { load: sim.g.roadLoad[i], cap: roadCap475(t), level: o ? o[i] : 0 } : null; },
+    houseAt: (x: number, z: number) => { if (!sim) return null; const i = z * sim.w.N + x; return { pen: sim.g.commutePenalty[i], jam: sim.g.jam[i] }; },
+    happyRows: () => [...ui.querySelectorAll('#hs li')].map(li => [li.querySelector('b')?.textContent ?? '', li.querySelector('span')?.textContent ?? '', li.className]),
+    happyPanel: () => ({ open: !hs.hidden, sub: $('#hs .sub').textContent, tip: $('#hs .tip').textContent }),
     hazard: () => ({ marks: haz.count, visible: haz.mesh.visible, ruins: city ? city.ruin.reduce((a, v) => a + v, 0) : 0, alerts: lastRep?.hazard.alerts ?? [] }),
     flags: (x: number, z: number) => { const b = sim?.w.tiles[z * sim.w.N + x]?.bld; return b && !b.ref ? { k: b.k, fire: +(b.fire || 0), crime: b.crime ? 1 : 0, crimeDays: b.crimeDays ?? 0, sick: b.sick ? 1 : 0, sickDays: b.sickDays ?? 0, death: b.death ? 1 : 0, deathAge: b.deathAge ?? 0, abandoned: b.abandoned ? 1 : 0 } : null; },
     actButtons: () => [...ui.querySelectorAll<HTMLButtonElement>('#bio .acts button')].map(b => ({ act: b.dataset.act, text: b.textContent })),

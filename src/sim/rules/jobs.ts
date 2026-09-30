@@ -44,14 +44,17 @@ export const POWER_JOBS471: Record<number, number> = { 140: 28, 141: 5, 142: 14,
 export const WATER_JOBS472: Record<number, number> = { 151: 8, 152: 6, 153: 18, 154: 5, 155: 3, 156: 24, 157: 3, 158: 16, 159: 3, 160: 4 };
 export const INFRA_JOBS475: Record<number, number> = { 161: 5, 162: 3, 163: 2, 164: 8 };
 export const DEPOT501: Record<number, { jobs: number; upkeep: number }> = { 175: { jobs: 8, upkeep: 6 }, 176: { jobs: 10, upkeep: 8 }, 177: { jobs: 14, upkeep: 12 }, 178: { jobs: 16, upkeep: 14 } };   // 67111 TRANSIT_DEPOT_META501：公車、輕軌、鐵路、地鐵
-export function sumKinds(w: World, table: Record<number, number>): number {
+// bldIdx（選填）：有建築的格索引，升序（stepDay 的 tickBld）。給了就只掃這些格，加總的順序＝整圖逐格掃（索引升序），結果逐位相同（守衛核對）；
+// 表裡的種類（電力、水務、基建設施）不會由每天的生長長出來，所以一天開頭的索引到結算時還是夠用（格子上的建築照當下的樣子查）
+export function sumKinds(w: World, table: Record<number, number>, bldIdx?: ArrayLike<number>): number {
   let n = 0;
+  if (bldIdx) { for (let k = 0; k < bldIdx.length; k++) { const b = w.tiles[bldIdx[k]]?.bld; if (!b || b.ref) continue; n += table[b.k] || 0; } return n; }
   for (let i = 0; i < w.N * w.N; i++) { const b = w.tiles[i].bld; if (!b || b.ref) continue; n += table[b.k] || 0; }
   return n;
 }
-export const powerJobs471 = (w: World) => sumKinds(w, POWER_JOBS471);
-export const waterJobs472 = (w: World) => sumKinds(w, WATER_JOBS472);
-export const infraJobs475 = (w: World) => sumKinds(w, INFRA_JOBS475);
+export const powerJobs471 = (w: World, bldIdx?: ArrayLike<number>) => sumKinds(w, POWER_JOBS471, bldIdx);
+export const waterJobs472 = (w: World, bldIdx?: ArrayLike<number>) => sumKinds(w, WATER_JOBS472, bldIdx);
+export const infraJobs475 = (w: World, bldIdx?: ArrayLike<number>) => sumKinds(w, INFRA_JOBS475, bldIdx);
 export function transitDepotTotals501(w: World, tickBld?: readonly number[]): { jobs: number; upkeep: number } {
   const scan = tickBld && tickBld.length ? tickBld : Array.from({ length: w.N * w.N }, (_, i) => i);
   let jobs = 0, upkeep = 0;
