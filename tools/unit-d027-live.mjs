@@ -140,9 +140,8 @@ async function guards(log) {
   const HK = ['happy', 'ah', 'hh'];
   {
     // D022–D025 的 120 座城（分區清成 0＝不會長新房子）連推 10 天：118 座每一天每一欄全等；2 座只差幸福，差在哪一項＝哪個系統沒搬（oldx 是這幾座另存的逐項幸福）
-    // D027 收工時是 3 座；G14（差在熟食供應 +.005，T346 cookedReady）由 D028 補上，從名單拿掉，下面另有一段正向檢查證明它現在整條全等
+    // D027 收工時是 3 座；G14（差在熟食供應 +.005，T346 cookedReady）由 D028 補上、seed516（差在微光之巔 +.02，T133 城市等級）由 D031 補上，從名單拿掉，下面另有一段正向檢查證明它們現在整條全等
     const KNOWN = {
-      seed516: { part: '微光之巔', why: '城市等級 ≥ 25 的獎勵 +.02（T133 城市等級：本線 rankIdx 恆 0，城市等級沒搬）' },
       D3: { part: null, why: '幸福構成 57 項全等，差在 55420 那一步：污水廠（k27）與管網 SEW_OK442 讓接上管網的住宅每座近旁工業加 .025（T442 污水沒搬，D029）' },
     };
     const rows = base.filter(x => x.kind === 'old'), bad = rows.filter(x => x.d.length), errs = [];
@@ -169,8 +168,14 @@ async function guards(log) {
       if (!rec || rec.codeHash !== fnv1a(c.code) || rec.rows.length !== OLD_DAYS) errs.push('G14：oldx 記錄不齊（重跑 tools/d027-lab.mjs --part=oldx）');
       else { const r = compareCity27(realDay, c.code, rec, KT, vrank, { stopAtFirst: false }); if (r.first) errs.push(`G14 第 ${r.first} 天還有差（D028 已搬熟食供應）：${r.d[0].slice(0, 160)}`); else why.push('G14 整條全等（57 項幸福構成與每一棟住宅；D028 補了熟食供應）'); }
     }
+    // D031：seed516 的城市等級（T133）搬了——讀進來就在 Lv.26（rk 原樣還原），住宅幸福的「微光之巔」+.02 補上，D027 錄的逐項幸福（oldx）現在要逐位相等
+    {
+      const rec = lab.oldx?.seed516, c = olds.find(q => q.id === 'seed516');
+      if (!rec || rec.codeHash !== fnv1a(c.code) || rec.rows.length !== OLD_DAYS) errs.push('seed516：oldx 記錄不齊（重跑 tools/d027-lab.mjs --part=oldx）');
+      else { const r = compareCity27(realDay, c.code, rec, KT, vrank, { stopAtFirst: false }); if (r.first) errs.push(`seed516 第 ${r.first} 天還有差（D031 已搬城市等級）：${r.d[0].slice(0, 160)}`); else why.push('seed516 整條全等（57 項幸福構成與每一棟住宅；D031 補了城市等級）'); }
+    }
     if (rows.length !== olds.length) errs.push(`old 只有 ${rows.length} 座`);
-    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區清成 0）——連推 10 天，逐天逐欄跟實驗線比：全等的城要每一欄全等；有差的城只准差在幸福（城市幸福、每一棟住宅的幸福、幸福構成）、而且差在哪一項要剛好是那個沒搬的系統（微光之巔＝T133 城市等級、污水管網＝T442；oldx 逐項；D027 收工時還有熟食供應＝T346，D028 補上，G14 整條全等）',
+    log(!errs.length, 'D027 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，分區清成 0）——連推 10 天，逐天逐欄跟實驗線比：全等的城要每一欄全等；有差的城只准差在幸福（城市幸福、每一棟住宅的幸福、幸福構成）、而且差在哪一項要剛好是那個沒搬的系統（污水管網＝T442；oldx 逐項；D027 收工時還有熟食供應＝T346〔D028 補上，G14 整條全等〕與微光之巔＝T133 城市等級〔D031 補上，seed516 整條全等〕）',
       errs.slice(0, 4).join('｜') || `${rows.length} 座、${rows.reduce((a, x) => a + x.days, 0)} 個城日：${rows.length - bad.length} 座每一欄全等、${bad.length} 座只差幸福（${why.join('；')}）`);
   }
   {
@@ -182,7 +187,7 @@ async function guards(log) {
     // 同一批 120 座城，分區不清（生長、升級、廢棄、亂數全在跑：整條 tick 鏈）：一樣 118 座每一欄每一天全等，一樣那 2 座只差幸福（D028 起 G14 全等）
     const rows = base.filter(x => x.kind === 'oldz'), bad = rows.filter(x => x.d.length), errs = [];
     for (const x of bad) {
-      if (!['seed516', 'D3'].includes(x.id)) errs.push(`${x.id} 不在已知名單：${x.d[0].slice(0, 140)}`);
+      if (!['D3'].includes(x.id)) errs.push(`${x.id} 不在已知名單：${x.d[0].slice(0, 140)}`);
       else if (x.fields.some(f => !HK.includes(f))) errs.push(`${x.id} 除了幸福還有別的欄位不同：${x.fields.join('、')}（${x.d[0].slice(0, 100)}）`);
     }
     // 覆蓋：實驗線那邊真的長了東西（住宅棟數增加的城、人口變的城），不然「分區不清」跟「清成 0」沒有差別

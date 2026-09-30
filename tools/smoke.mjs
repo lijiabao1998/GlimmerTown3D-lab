@@ -25,6 +25,7 @@ import { d027Smoke, d027SkipNote } from './smoke-d027.mjs';
 import { d028Smoke, d028SkipNote } from './smoke-d028.mjs';
 import { d029Smoke, d029SkipNote } from './smoke-d029.mjs';
 import { d030Smoke, d030SkipNote } from './smoke-d030.mjs';
+import { d031Smoke, d031SkipNote } from './smoke-d031.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -571,6 +572,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d028Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d029Smoke(withBrowser, log);
 // ===== D030：城市活動（tools/smoke-d030.mjs：活動開始與結束的提示字、☰「收支明細」活動中的一列、「幸福構成」的城市活動一項、手機預算；自己開一個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d030Smoke(withBrowser, log);
+// ===== D031：城市等級（tools/smoke-d031.mjs：升級的提示字、☰「城市等級」面板與進度條、頂級的寫法、手機預算；自己開一個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d031Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -586,6 +589,7 @@ if (d027SkipNote()) console.log(d027SkipNote());
 if (d028SkipNote()) console.log(d028SkipNote());
 if (d029SkipNote()) console.log(d029SkipNote());
 if (d030SkipNote()) console.log(d030SkipNote());
+if (d031SkipNote()) console.log(d031SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

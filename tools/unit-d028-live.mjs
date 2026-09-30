@@ -88,7 +88,7 @@ export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, o
 
 // 已知只差幸福的城（D027 收工時是三座：seed516、G14、D3；D028 補了 G14 的熟食供應）：差的欄位只准是這幾個
 const HK = ['happy', 'hh', 'ah', 'agg'];
-const KNOWN = { seed516: 'T133 城市等級（微光之巔 +.02）', D3: 'T442 污水（管網讓近旁工業每座加 .025）' };
+const KNOWN = { D3: 'T442 污水（管網讓近旁工業每座加 .025）' };   // seed516（T133 城市等級，微光之巔 +.02）由 D031 補上、從名單拿掉
 
 async function guards(log) {
   const lab = JSON.parse(read('src/content/samples/d028-lab.json')), cities = d028Cities(), olds = oldList(), oldzs = oldzList();
@@ -153,7 +153,7 @@ async function guards(log) {
       if (rows.length !== 120) errs.push(`只有 ${rows.length} 座`);
       const gWhole = rows.find(x => x.id === 'G14');
       log(!errs.length, `D028 驗收 3：實驗線頁面實跑（D022–D025 的 120 座城，${tag}）——連推 10 天，逐天逐欄跟實驗線比（資金、淨額、稅、十二個收入項、鏈條九欄、食物、遊客、旅宿、每一棟住宅的幸福、幸福構成、人口就業、下一個亂數）：全等的城每一欄每一天全等；`
-        + `D027 收工時只差幸福的三座裡 G14（熟食供應）現在整條全等，seed516（T133 城市等級）與 D3（T442 污水）照舊只差幸福`,
+        + `D027 收工時只差幸福的三座裡 G14（熟食供應）現在整條全等，seed516（T133 城市等級，D031 補上）也整條全等，只有 D3（T442 污水）照舊只差幸福`,
         errs.slice(0, 4).join('｜') || `${rows.length} 座、${sum(rows, x => x.days)} 個城日：${rows.length - bad.length} 座每一欄全等（G14 ${gWhole?.d.length ? '有差' : '全等'}）、${bad.length} 座只差幸福（${bad.map(x => `${x.id}：${KNOWN[x.id]}，差在 ${x.fields.join('、')}，第 ${x.first} 天起`).join('；')}）；資金判了 ${sum(rows, x => x.judgedMoney)} 個城日；`
           + `有收入的城 ` + Object.entries(cov).map(([k, v]) => `${k} ${v}`).join('、') + `；有化肥的城 ${fertCities}、有熟食的城 ${cookCities}`);
     }

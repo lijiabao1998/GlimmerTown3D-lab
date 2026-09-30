@@ -26,7 +26,7 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 const HK = ['happy', 'hh', 'ah', 'agg'];
-const KNOWN = { seed516: 'T133 城市等級（微光之巔 +.02）', D3: 'T442 污水（管網讓近旁工業每座加 .025）' };
+const KNOWN = { D3: 'T442 污水（管網讓近旁工業每座加 .025）' };   // seed516（T133 城市等級，微光之巔 +.02）由 D031 補上、從名單拿掉
 const HAPPY_EVENT = HAPPY_NAMES.indexOf('城市活動');
 const nz = (a, f) => a.filter(f).length, sum = (a, f) => a.reduce((x, y) => x + f(y), 0);
 export const LIVE = {};   // 除錯用
@@ -235,10 +235,10 @@ async function wiringGuards(log, { lab27, lab28, cities28, olds, oldzs, KT, vran
     ['收入乘成食物倍率', [['econToday(ec, late, extras), night, evd ? evd.tax : null);', 'econToday(ec, late, extras), night, evd ? evd.food : null);']]],
     ['收入乘成幸福', [['econToday(ec, late, extras), night, evd ? evd.tax : null);', 'econToday(ec, late, extras), night, evd ? evd.happy : null);']]],
     ['讀檔不還原活動', [['cityEvent: eventOfSave(save.raw.cev)', 'cityEvent: null']]],
-    ['報表不回報活動', [['happyAgg, chain346, cityEvent: evs, night,', 'happyAgg, chain346, cityEvent: { state: null, started: -1, ended: -1 }, night,']]],
-    ['報表不回報開始', [['happyAgg, chain346, cityEvent: evs, night,', 'happyAgg, chain346, cityEvent: { ...evs, started: -1 }, night,']]],
-    ['報表不回報結束', [['happyAgg, chain346, cityEvent: evs, night,', 'happyAgg, chain346, cityEvent: { ...evs, ended: -1 }, night,']]],
-    ['雜湊不看活動', [['...(s.cityEvent ? [s.cityEvent.i, s.cityEvent.daysLeft] : [])]));', ']));']]],
+    ['報表不回報活動', [['cityEvent: evs, rank:', 'cityEvent: { state: null, started: -1, ended: -1 }, rank:']]],
+    ['報表不回報開始', [['cityEvent: evs, rank:', 'cityEvent: { ...evs, started: -1 }, rank:']]],
+    ['報表不回報結束', [['cityEvent: evs, rank:', 'cityEvent: { ...evs, ended: -1 }, rank:']]],
+    ['雜湊不看活動', [['...(s.cityEvent ? [s.cityEvent.i, s.cityEvent.daysLeft] : []),', '']]],
     ['雜湊不看活動的剩餘天數', [['[s.cityEvent.i, s.cityEvent.daysLeft]', '[s.cityEvent.i]']]],
     ['雜湊不看活動的編號', [['[s.cityEvent.i, s.cityEvent.daysLeft]', '[s.cityEvent.daysLeft]']]],
   ];

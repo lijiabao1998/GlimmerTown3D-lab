@@ -24,6 +24,7 @@ export const ICONS = {
   paste: svg('<rect x="6" y="4.5" width="12" height="16" rx="2"/><path d="M9.5 4.5h5v3h-5z"/>'),
   build: svg('<path d="M4 20h16"/><path d="M6 20V9l6-4 6 4v11"/><path d="M10 20v-5h4v5"/>'),
   hourglass: svg('<path d="M7 3.5h10M7 20.5h10M8 3.5c0 5 8 5 8 8.5s-8 3.5-8 8.5M16 3.5c0 5-8 5-8 8.5s8 3.5 8 8.5"/>'),
+  crown: svg('<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/><path d="M5 21h14"/>'),   // D031 城市等級
   moon: svg('<path d="M20.5 13.6A8.6 8.6 0 1 1 10.4 3.5a6.7 6.7 0 0 0 10.1 10.1z"/>'),   // D029 夜間城市
 };
 export type IconName = keyof typeof ICONS;
