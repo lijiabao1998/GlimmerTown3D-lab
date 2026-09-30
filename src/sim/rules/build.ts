@@ -68,7 +68,7 @@ export interface BuildState {
 // 53074–53084：地價基準的髒框。landDirty＝true、landBox＝null 在實驗線是「隔天整張重算」（每天收尾 55279 → 64129／67355 都是這個狀態），
 // 但這裡 if(!landBox) 把它當成「還沒有框」，整張重算就被換成這一個框——實驗線的 bug（D011 卡第 8 節），照抄；實驗線修了本線跟著改。
 // 框超出地圖照樣夾（圖外的座標可能夾出 x1<x0 的空框，照抄）；框是同一個陣列就地擴大（實驗線改 landBox 物件的欄位）。
-export function markLandDirty(st: BuildState, x: number, y: number, r: number): void {
+export function markLandDirty(st: Pick<BuildState, 'w' | 'landDirty' | 'landBox'>, x: number, y: number, r: number): void {
   st.landDirty = true;
   const N = st.w.N, x0 = Math.max(0, x - r), y0 = Math.max(0, y - r), x1 = Math.min(N - 1, x + r), y1 = Math.min(N - 1, y + r);
   const b = st.landBox;

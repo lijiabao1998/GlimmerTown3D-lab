@@ -4,7 +4,7 @@
 //             J(undefined)===J(undefined) 會「相等」；所以缺哪一欄就講哪一欄（紅），而且不往下比。
 //   精確相等：新城 A 段（開跑前）、B 段（第 1 天後）與預建城拆除劇本，每一筆的資金（不取整）、亂數抽取數、格子雜湊、場雜湊（含地價 LANDBASE、LAND）、
 //             地價髒狀態、變了哪些格；新城推進第 1 天之後的快照（snap1）與逐行的亂數抽取（這一天兩邊有抽的共用行是生長洗牌 55605、擲骰 55618、變體 55622，
-//             每個種子兩邊都要 > 0；天氣、升級那幾行這一天兩邊都 0 次、沒對拍到；實驗線多的只在起火、犯罪、生病擲骰三行，次數照本線推進後的格子算）；
+//             每個種子兩邊都要 > 0；天氣、升級那幾行這一天兩邊都 0 次、沒對拍到；起火、犯罪、生病擲骰三行 D026 起兩邊也逐行相同，次數照推進後的格子算）；
 //             預建城推進一天之後在第 2 類系統起作用之前就定案的部分（推進前就在的住商工有沒有電、住商工以外的格、覆蓋、地價、生長洗牌 55605 的抽取），
 //             以及兩邊住宅幸福的差＝實驗線的垃圾與糧食（第 2 類）那三項（逐位）；
 //             SITE_MAP 天氣那 7 行（上面兩天都沒抽天氣）：實驗線天氣原文（sha256 核過）在 vm 裡跑、本線跑 weatherStep，D009 F10 的起點逐次比呼叫行；
@@ -72,9 +72,9 @@ export function extraOff(sites, extra) {
   for (const k of ['fire', 'crime', 'disease']) if ((sites[EXTRA_LINES[k]] ?? 0) !== extra[k]) bad.push(`${EXTRA_LINES[k]} 行 ${sites[EXTRA_LINES[k]] ?? 0} 次 ≠ 算出來的 ${extra[k]}`);
   return bad.length ? bad.join('，') : null;
 }
-// sharedOff：其餘行逐行＝本線對到的那一行（only＝只比這幾行）；本線有對不到實驗線的呼叫位置就紅
+// sharedOff：每一行逐行＝本線對到的那一行（only＝只比這幾行；D026 起起火、犯罪、生病三行本線也有抽，不再排除）；本線有對不到實驗線的呼叫位置就紅
 export function sharedOff(sites, mySites, only) {
-  const mine = labSitesOf(mySites), extra = Object.values(EXTRA_LINES), bad = Object.keys(mine).filter(l => l.startsWith('?')).map(l => `本線 ${l.slice(1)} 對不到實驗線的行`);
+  const mine = labSitesOf(mySites), extra = [], bad = Object.keys(mine).filter(l => l.startsWith('?')).map(l => `本線 ${l.slice(1)} 對不到實驗線的行`);
   const lines = only ?? [...new Set([...Object.keys(sites), ...Object.keys(mine)])].filter(l => !l.startsWith('?') && !extra.includes(+l));
   for (const l of lines) if ((sites[l] ?? 0) !== (mine[l] ?? 0)) bad.push(`${l} 行實驗線 ${sites[l] ?? 0} 次 ≠ 本線 ${mine[l] ?? 0} 次`);
   return bad.length ? bad.join('，') : null;
@@ -155,10 +155,10 @@ export async function d011ParityGuards(log, opts = {}) {
     for (const seed of seeds) {
       const m = mine[seed], L = lab.runs[seed], my = labSitesOf(m.tick1Sites), e = m.tick1Extra;
       const d = [sharedOff(L.tick1Sites, m.tick1Sites), extraOff(L.tick1Sites, e) && `照本線的格子算：${extraOff(L.tick1Sites, e)}`,
-        L.tick1Draws - m.tick1Draws !== e.fire + e.crime + e.disease && `實驗線−本線 ${L.tick1Draws - m.tick1Draws} ≠ ${e.fire}＋${e.crime}＋${e.disease}`,
+        L.tick1Draws !== m.tick1Draws && `實驗線 ${L.tick1Draws} 次 ≠ 本線 ${m.tick1Draws} 次（D026 起兩邊逐行相同，起火、犯罪、生病三行本線也抽）`,
         ...DRAWN.filter(l => !(L.tick1Sites[l] > 0 && my[l] > 0)).map(l => `${l} 行（${LINE_NAMES[l]}）實驗線 ${L.tick1Sites[l] ?? 0} 次、本線 ${my[l] ?? 0} 次（兩邊都要 > 0）`)].filter(Boolean);
       if (d.length) bad.push(`種子 ${seed}：${d.join('，')}`);
-      offs.push(`${L.tick1Draws}−${m.tick1Draws}＝${e.fire}＋${e.crime}＋${e.disease}`);
+      offs.push(`${L.tick1Draws}＝${m.tick1Draws}（起火 ${e.fire}、犯罪 ${e.crime}、生病 ${e.disease}）`);
       for (const l of new Set([...Object.values(SITE_MAP), ...EXTRA])) { (per[l] ??= []).push(L.tick1Sites[l] ?? 0); (perMine[l] ??= []).push(my[l] ?? 0); }
       // 錄製時的事實：逐行次數、總數、實驗線自己的格子算出來的棟數，都是實驗線錄的值
       const sum = Object.values(L.tick1Sites).reduce((a, v) => a + v, 0), f = [sum !== L.tick1Draws && `逐行加總 ${sum} ≠ ${L.tick1Draws}`, extraOff(L.tick1Sites, L.tick1Extra)].filter(Boolean);
@@ -168,7 +168,7 @@ export async function d011ParityGuards(log, opts = {}) {
     if (quiet.length) bad.push(`${linesText(quiet)} 在 ${seeds.length} 個種子都 0 次（守衛講到它，就要有種子真的抽到）`);
     const zero = [...new Set(Object.values(SITE_MAP))].filter(l => per[l].every(v => !v) && perMine[l].every(v => !v));
     const more = [...new Set(Object.values(SITE_MAP))].filter(l => !DRAWN.includes(l) && !zero.includes(l));
-    log(bad.length === 0, `推進第 1 天的亂數抽取（${seeds.length} 個種子）：兩邊逐行記呼叫位置，本線每一次抽取都對得到實驗線的行、每一行次數相同——這一天兩邊有抽的共用行：生長洗牌 55605、生長擲骰 55618、變體 55622（每個種子兩邊都 > 0）${more.length ? `，另有 ${linesText(more)}` : ''}；實驗線多的只在起火（${EXTRA_LINES.fire}）、犯罪（${EXTRA_LINES.crime}）、生病（${EXTRA_LINES.disease}）擲骰三行（第 2 類，都在生長之後；三行 ${seeds.length} 個種子合計都 > 0），每個種子的次數＝照本線推進後的格子與覆蓋算的棟數，所以實驗線－本線＝這三行的和${zero.length ? `；${linesText(zero)} 這一天兩邊都 0 次（0＝0），這裡沒有對拍到${zero.some(l => LINE_NAMES[l] === '天氣') ? '（天氣那幾行見下一條）' : ''}` : ''}`,
+    log(bad.length === 0, `推進第 1 天的亂數抽取（${seeds.length} 個種子）：兩邊逐行記呼叫位置，本線每一次抽取都對得到實驗線的行、每一行次數相同——這一天兩邊有抽的共用行：生長洗牌 55605、生長擲骰 55618、變體 55622（每個種子兩邊都 > 0）${more.length ? `，另有 ${linesText(more)}` : ''}；起火（${EXTRA_LINES.fire}）、犯罪（${EXTRA_LINES.crime}）、生病（${EXTRA_LINES.disease}）擲骰三行 D011–D025 只有實驗線抽（第 2 類），D026 起本線搬了，兩邊也逐行相同（三行 ${seeds.length} 個種子合計都 > 0，次數＝照推進後的格子與覆蓋算的棟數），所以總抽取數兩邊相等${zero.length ? `；${linesText(zero)} 這一天兩邊都 0 次（0＝0），這裡沒有對拍到${zero.some(l => LINE_NAMES[l] === '天氣') ? '（天氣那幾行見下一條）' : ''}` : ''}`,
       bad.slice(0, 2).join('；') || `實驗線逐行次數（各種子最少–最多）：${countsText(DRAWN, per)}；${countsText(EXTRA, per)}；實驗線−本線 ${offs.join('、')}`);
     log(fact.length === 0, `錄製時的事實（新城推進第 1 天；兩邊都是實驗線錄的值，CI 不重算）：實驗線逐行記的次數加總＝它記的總抽取數；起火、犯罪、生病擲骰三行的次數＝照實驗線自己推進後的格子與覆蓋算的棟數（${seeds.length} 個種子）`,
       fact.slice(0, 2).join('；') || `總抽取數 ${seeds.map(s => lab.runs[s].tick1Draws).join('、')}`);

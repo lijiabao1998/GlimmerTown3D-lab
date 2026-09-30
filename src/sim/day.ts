@@ -8,9 +8,9 @@
 //   3. 起步城用不到：污水處理廠（沒有；500 人以上兩邊都不合格）、摩天樓合併（要有水）。噪音 D017 搬了（讀進來的城有噪音源）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；世界歷史只增不改（規則 4）。
 import type { LabSave } from '../io/labcode.ts';
-import { cityFromLab, stadiumSize, type City, type CityBuilding, type KindTable } from './city.ts';
+import { cityFromLab, stadiumSize, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
-import { clamp, labRng, type Bld, type Rng, type Tile, type World } from './rules/lab.ts';
+import { clamp, labRng, type Bld, type Fields, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
@@ -26,6 +26,8 @@ import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMark
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
 import { judgeWealth, landStaticAt } from './rules/land.ts';
+import { abandonStep, crimeStep, deathPre, deathStep, diseaseStep, fireStep, medCapOf, type DeathPre, type HazardX } from './rules/hazard.ts';
+import { markLandDirty } from './rules/build.ts';
 import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, type ImportCosts, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
 export interface Sim {
@@ -38,6 +40,7 @@ export interface Sim {
   // 跨日的全域值（實驗線 tick() 讀昨天的、今天覆寫）
   pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
   dem: Record<number, number>; immWave: number; labor: Labor | null;
+  medCap: number | null;            // D026：昨天結算寫的醫療床位（實驗線 flowStat384.med.cap 56163，明天的疾病段 55835 讀它）；讀檔、開新圖之後第一天沒有＝null＝無限
   econ: EconState;                  // D025：商品庫存（goods、supplies、fuel、steel）、船、昨天的倉容量與經濟快照（隔天的商工需求讀它）；存檔欄位 sup、gds、fuel364、steel364、shipCount、shipProgress
   root: Map<number, CityBuilding>;  // 根格 → 城市建築（同步 lv、v、age）
   kinds: KindTable;
@@ -61,12 +64,22 @@ export interface DayReport {
   garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
   econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
+  hazard: HazardReport;                         // D026：當天的災禍（起火、蔓延、燒毀、犯罪、廢棄、生病、治癒、死亡、恢復）
 }
 // 經濟一天的全部輸出：ec＝55305–55413 那一段的區域變數（同名）、late＝55996–56021 的出口、sn＝56030–56046 的快照三份與價格、cons＝55664–55671 煉鋼廠加速施工耗掉的鋼
 export interface EconReport { ec: EconCtx; late: EconLate; sn: ReturnType<typeof economySnapshots>; cons: number }
+// 當天的災禍（D026，src/sim/rules/hazard.ts）：每一項是格索引（y*N+x），照 tick() 的順序；burned 記燒毀當時的種類；alerts＝每一類第一件事的位置（實驗線每一類每天只跳一次提示）
+export interface HazardReport {
+  ignited: number[]; spread: number[]; burned: { i: number; k: number }[]; crimes: number[]; abandons: number[]; sicks: number[]; cures: number[]; deaths: number[]; ended: number[];
+  cured: number; queued: number; sickN: number;   // 55836 medCured387、medQueued387、55856 sickN387
+  penalty: number[];                                // 55014–55036 死亡前置：今天「喪事未安撫」被記幸福 −0.1 的住宅（格索引升序）；cemCap＝墓園容量、soothed＝今天安撫了幾個
+  cemCap: number; soothed: number;
+  events: CityEvent[]; burnedAge: number[];         // 要記進歷史的事件（fire、burn、crime、abandon、sick、death）；burned 每一棟燒毀當時的屋齡
+  alerts: { kind: 'fire' | 'crime' | 'abandon' | 'sick' | 'death'; x: number; z: number }[];
+}
 export interface GarbReport { amount: number; cap: number; ratio: number; formal: boolean; districts: number; pen: number; far: number; unserved: number; dec: number }   // pen＝實驗線 garbPen409（探針讀得到）；dec＝評分用的比例
 // 一天的結算（D011，src/sim/rules/money.ts）：收入、維護費、淨額，以及當天發生的里程碑、星等獎金、紓困
-export interface SettleReport { income: number; upkeep: number; net: number; tax: { R: number; C: number; I: number }; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }   // tax＝實驗線的 taxR、taxC、taxI（住宅、商業、工業的稅，D025 拿來分項對拍）
+export interface SettleReport { income: number; upkeep: number; net: number; hospitals: number; tax: { R: number; C: number; I: number }; milestone?: { pop: number; reward: number }; star?: { star: number; bonus: number }; bailout?: number; loanPaid?: number }   // tax＝實驗線的 taxR、taxC、taxI（住宅、商業、工業的稅，D025 拿來分項對拍）
 // 第 2 類系統當天的值（城市活動、夜間城市、農牧與旅宿的收入加成……本線沒搬；D025 起經濟閉環搬了，稅乘數、進口費與出口金本線自己算，這裡給的會蓋過去）。
 // 只給對拍用：把實驗線那一天探針讀出的值代進本線公式，收入、維護費、結算後資金要跟實驗線逐位相等（D011 驗收 3）。平常不傳＝沒有其他收入（D011 卡第 5 節）。
 // D025：economy 是經濟段的輸入裡本線沒有的五樣——幸福（本線的城市幸福有已知的差，例如存檔裡的政策）、道路負載統計（T129，backlog C）、火車線數（T463）、天然氣發電調度（T471）、城市活動的食物加成（T299）
@@ -94,6 +107,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     if (road && !rc) rc = hw ? 5 : 2;
     tiles[i] = { t: city.ter[i], road, hw, bridge: rd === 2 || rd === 4 ? 1 : 0, rc, zone: city.zone[i], tree: city.tree[i], bld: null };
     if (city.wp[i]) tiles[i].wp = 1;                                // D019：配水管（實驗線 load 66881 wp:+d.wp[i]）
+    if (city.ruin[i]) tiles[i].ruin = 1;                            // D026：焦土（66881 ruin:d.rn?+d.rn[i]:0；存檔寫 t.ruin?1:0，66716）
     // D024：辦公區（of：商業就業 ×1.5，55242）、鐵路格（rl）與 T475 的四個格子旗標（手工配電線 lvl475、地下線 udl475、高架 fly475、立交 ix475：維護費 52913、電力載體 50950）
     if (office && office.charCodeAt(i) === 49) tiles[i].office = 1;
     if (railL && railL.charCodeAt(i) === 49) tiles[i].rail = 1;               // 鐵路格（rl）：聯運樞紐 k166 的「運作中」要鄰近 ≥2 格（51250）
@@ -119,6 +133,18 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     if (k <= 3 && b.abandoned) (bld as Bld & { abandoned?: number }).abandoned = 1;
     root.set(i, b);
   }
+  // D026：犯罪、生病、死亡與各自的天數（實驗線 load 66914–66925）：住商工（k≤3）才有犯罪，只有住宅（k1）有生病與死亡；天數只還原病中／死亡中／犯罪中的格。
+  // 廢棄 ab 上面（cityFromLab → bld.abandoned）與火災（bl 第 6 位）已經讀了。字元一個一個讀（+s[i]：缺、不是數字＝NaN＝假），跟實驗線的 +d.cm[i] 一樣
+  const cm = layerOf('cm'), sk = layerOf('sk'), dt = layerOf('dt'), skd = layerOf('skd'), cmd = layerOf('cmd'), dtd = layerOf('dtd');
+  if (cm || sk || dt) for (let i = 0; i < nn; i++) {
+    const b = tiles[i].bld; if (!b) continue;
+    if (cm && b.k <= 3 && +cm[i]) b.crime = 1;
+    if (sk && b.k === 1 && +sk[i]) b.sick = 1;
+    if (dt && b.k === 1 && +dt[i]) b.death = 1;
+  }
+  if (skd) for (let i = 0; i < nn; i++) { const b = tiles[i].bld; if (b && b.k === 1 && b.sick) { const v = +skd[i]; if (v) b.sickDays = v; } }
+  if (cmd) for (let i = 0; i < nn; i++) { const b = tiles[i].bld; if (b && b.k <= 3 && b.crime) { const v = cmd.charCodeAt(i) - 48; if (v > 0) b.crimeDays = v; } }
+  if (dtd) for (let i = 0; i < nn; i++) { const b = tiles[i].bld; if (b && b.k === 1 && b.death) { const v = +dtd[i]; if (v) b.deathAge = v; } }
   const w: World = { N: n, tiles };
   const econ = econOfSave(save);
   const g = allocGrids(n), budget = budgetOfSave(save.raw.sb), edu: EduCtx = { tech: [], spec: null, schoolLunch: false };   // D023：sb（四類服務預算）66964
@@ -128,7 +154,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   return {
     city, w, g, rng, seed: save.seed, day: save.day, weather, vrank, budget, edu,
-    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, econ,
+    pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, medCap: null, econ,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
     noiseSig: -1,                                                         // 56934：讀檔時 NOISE 清 0、簽名 −1（rebuildCov 不算噪音，第一天開頭才補上）
@@ -172,7 +198,7 @@ export function markStale(s: Sim, x: number, y: number, r: number) {
 
 // ---- 一天（tick() 54945–56192 的順序）----
 // fullLand：每天整張重算地價基準（實驗線的做法），給守衛比對「只重算變動那一框」的結果逐位相同
-export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } = {}): DayReport {
+export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; hazard?: HazardX } = {}): DayReport {
   const { w, g } = s, N = w.N, nn = N * N, f = fieldsOf(g);
   // 54948 buildTickIndex：有建築的格（含 ref）、分區格、商業分區格數，都升序
   const tickBld: number[] = [], tickZone: number[] = [];
@@ -219,7 +245,8 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
   const wCap = Math.floor(computeWaterLegacy449(w));
   const sewNeed = s.pop >= 500;                                           // 55011 sewerRequired442：昨天的人口 ≥500
   const sewOkArr = new Uint8Array(nn);                                    // 沒有污水處理廠：需要時全城都不合格（兩種模式相同）
-  // 55015 死亡前置、55046 每日計數歸零：疾病、死亡沒搬（第 2 類，實驗線照跑），本線沒有生病、死亡
+  // 55014–55036 死亡前置（D026，rules/hazard.ts）：死亡中的住宅 deathAge++、滿 10 天恢復，未安撫的鄰居記 deathPenalty（住宅幸福 −.1）；55046 每日計數歸零（本線每天重新數）
+  const dp = deathPre(w, f, tickBld);
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
   assignWater(w, tickBld, wCap);                                          // 55157–55160（D019）：有電、兩格內有接得到水源的水管、容量還沒用完
   let popN = 0, jobsC = 0, jobsI = 0, happySum = 0, happyN = 0;
@@ -243,9 +270,9 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
         ind: indNear(x, y, 3),
         crime: crimeNear(x, y, 4),
         rc: getMaxRoadClass(w, x, y, 1), jam: 0,
-        drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: false, sewNeed, sewOk: !sewNeed,
+        drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: dp.penalty[i] === 1, sewNeed, sewOk: !sewNeed,
         weather: s.weather.weather, day: s.day, nightCity: { ready: false, happinessDelta: 0 }, housingPen: 0,
-        eventHappy: null, cookedReady: false, pol: null, rankIdx: 0, tvSignal: false, tech: s.edu.tech,
+        eventHappy: null, cookedReady: false, pol: opts.hazard?.pol ?? null, rankIdx: 0, tvSignal: false, tech: s.edu.tech,   // 政策（K）沒搬：只有守衛注入（免費公交、公園夜間開放、宵禁進幸福；同一個物件也給災禍段）
       });
       b.h = hp.h;
       happySum += b.h; happyN++;                                          // 55239
@@ -300,20 +327,62 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In } 
     }
   }
   // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
-  // 55757 火災、55810 犯罪、55824 廢棄、55835 疾病、55856 死亡、55866 夜間城市：沒搬（第 2 類，實驗線照跑；本線不發生、不就緒）
+  // 55757–55865 每天的災禍（D026，rules/hazard.ts）：火災 → 犯罪 → 廢棄 → 疾病 → 死亡，共用同一條亂數流；55866 夜間城市 T487 沒搬（第 2 類）
+  const hz = hazardDay(s, tickBld, f, dp, opts.hazard);
   const garbDec = garbDecisionRatio452(san, w, garbRatio, recycleMul);   // 56117：評分讀的垃圾比例（清運區在 55261 算好，生長不動它）
   // 55996–56021 出口的金幣與燃料、鋼材出口（在貨物出口之後才抽貿易池）、56030–56046 快照（隔天的商工需求讀 economy481）：D025
   const late = economyLate(s.econ, ec, cnt), sn = economySnapshots(s.econ, ec, late, cnt, s.day, cons);
   s.econ.snap = sn.economy481;
   const settle = settleToday(s, tickBld, cnt, garbDec, opts.class2, econToday(ec, late));   // 55868–56145（D011）：收稅、維護費、結算、里程碑、星等、紓困
+  s.medCap = medCapOf({ clinics: cnt.clinics ?? 0, hospitals: settle.hospitals, am: cnt.am ?? 0, mhN: cnt.mhN ?? 0, gmc466: cnt.gmc466 ?? 0 });   // 56151–56163 flowStat384：明天的疾病段讀它（讀檔後第一天沒有＝無限）
   syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
+  syncHazards(s, hz);                                                     // 燒毀＝墓碑與焦土、廢棄＝abandoned、災禍事件記進歷史（在生長、升級的事件之後，同 tick 順序）
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    food: fd, econ: { ec, late, sn, cons },
+    food: fd, econ: { ec, late, sn, cons }, hazard: hz,
   };
+}
+
+// 55757–55865：火災 → 犯罪 → 廢棄 → 疾病 → 死亡（rules/hazard.ts），在生長、升級、合併之後、稅收之前；一樣照實驗線：犯罪標地價髒框（55818 markLandDirty(x,y,4)），
+// 燒毀的格子與工業污染源的範圍標 stale（本線的「整張重算」只算 stale 格，見 markStale）。回報裡 events 是要記進歷史的事件（syncHazards 才寫，順序在當天的生長、升級之後）
+function hazardDay(s: Sim, tickBld: number[], f: Fields, dp: DeathPre, x?: HazardX): HazardReport {
+  const { w, g } = s, N = w.N, tech = s.edu.tech, day = s.day, ev: CityEvent[] = [];
+  const at = (i: number) => ({ x: i % N, z: (i / N) | 0 }), kindAt = (i: number) => w.tiles[i].bld?.k ?? 0;
+  const fr = fireStep(w, g, f, s.rng, tickBld, day, tech, x);
+  for (const i of fr.ignited) ev.push({ day, t: 'fire', ...at(i), k: kindAt(i) });
+  for (const i of fr.spread) ev.push({ day, t: 'fire', ...at(i), k: kindAt(i) });
+  for (const b of fr.burned) {
+    const { x: bx, z: bz } = at(b.i);
+    ev.push({ day, t: 'burn', x: bx, z: bz, k: b.k, id: s.root.get(b.i)?.id ?? 0 });
+    markStale(s, bx, bz, 4); if (b.k === 3) markStale(s, bx, bz, POL_SRC[3].r);     // 燒毀的犯罪旗標跟著沒了（地價的犯罪項）；工業燒毀撤污染源
+  }
+  const cr = crimeStep(w, f, s.rng, tickBld, tech, x);
+  for (const i of cr.crimes) { const c = at(i); markLandDirty(s, c.x, c.z, 4); markStale(s, c.x, c.z, 4); ev.push({ day, t: 'crime', ...c, k: kindAt(i) }); }
+  const ab = abandonStep(w, s.rng, tickBld);
+  for (const i of ab.abandons) ev.push({ day, t: 'abandon', ...at(i), k: kindAt(i), id: s.root.get(i)?.id ?? 0 });
+  const ds = diseaseStep(w, f, s.rng, tickBld, s.medCap ?? Infinity);
+  for (const i of ds.sicks) ev.push({ day, t: 'sick', ...at(i) });
+  const dh = deathStep(w, s.rng, tickBld);
+  for (const i of dh.deaths) ev.push({ day, t: 'death', ...at(i) });
+  const alerts: HazardReport['alerts'] = [];
+  for (const [kind, i] of [['fire', fr.first], ['crime', cr.first], ['abandon', ab.first], ['sick', ds.first], ['death', dh.first]] as const) if (i >= 0) alerts.push({ kind, ...at(i) });
+  return { ignited: fr.ignited, spread: fr.spread, burned: fr.burned.map(b => ({ i: b.i, k: b.k })), crimes: cr.crimes, abandons: ab.abandons, sicks: ds.sicks, cures: ds.cures, deaths: dh.deaths, ended: dp.ended,
+    cured: ds.cured, queued: ds.queued, sickN: dh.sickN, penalty: penaltyList(dp.penalty), cemCap: dp.cemCap, soothed: dp.soothed, alerts, events: ev, burnedAge: fr.burned.map(b => b.age) };
+}
+const penaltyList = (p: Uint8Array) => { const o: number[] = []; for (let i = 0; i < p.length; i++) if (p[i]) o.push(i); return o; };
+// 災禍寫進城市模型與歷史：燒毀的建築成了墓碑（屋齡停在燒毀那一天）、佔的格子空了、焦土圖層記上；廢棄的建築 abandoned；事件照 tick 順序接在當天的生長、升級後面
+function syncHazards(s: Sim, hz: HazardReport) {
+  const c = s.city, n = c.n;
+  hz.burned.forEach((b, k) => {
+    const cb = s.root.get(b.i);
+    if (cb) { cb.goneDay = s.day; cb.age = hz.burnedAge[k]; s.root.delete(b.i); for (let dz = 0; dz < cb.size; dz++) for (let dx = 0; dx < cb.size; dx++) { const j = (cb.z + dz) * n + cb.x + dx; if (cb.x + dx < n && cb.z + dz < n && c.occ[j] === cb.id) c.occ[j] = 0; } }
+    c.ruin[b.i] = 1;
+  });
+  for (const i of hz.abandons) { const cb = s.root.get(i); if (cb) cb.abandoned = true; }
+  c.history.push(...hz.events);
 }
 
 // 經濟給結算的三樣（D025）：稅率乘數（55322–55323、55316、55397–55406，遊客數 55294 進商業稅）、稅以外的收入（貿易金、天然氣金、燃料與鋼材與貨物出口金、船的每日金與港口金，56025）、六種商品的進口費（56025 進維護費）
@@ -340,7 +409,7 @@ function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, gar
   const upkeep = dailyUpkeep({ ...upkeepIn(w, tickBld, cnt, c, { pop: s.pop, svcBudget: s.budget, tech: s.edu.tech, spec: s.edu.spec }), ...(e ? { imports: e.imports } : {}), ...c2?.upkeep });   // 主計數迴圈的全部計數（D016、D022、D024）＋稅收迴圈順手數的六種＋掃整張圖的四個函式＋六種商品的進口費（D025）
   const sc = scoreCounts(w, f, tickBld);
   const r = settleDay(s, { income, upkeep, day: s.day, pop: s.pop, jobs: s.jobs, cityHappy: s.cityHappy, ...sc, garbRatio: garbScoreRatio });   // 56117（D020）：garbDecisionRatio452
-  return { income, upkeep, net: r.net, tax: { R: inc.taxR, C: inc.taxC, I: inc.taxI }, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
+  return { income, upkeep, net: r.net, hospitals: c.hospitals, tax: { R: inc.taxR, C: inc.taxC, I: inc.taxI }, milestone: r.milestone, star: r.star, bailout: r.bailout, loanPaid: r.loanPaid };
 }
 
 // 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步
@@ -367,10 +436,11 @@ function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: 
 // D011 起加上路、分區、樹、資金狀態、地價髒框
 export function simHash(s: Sim) {
   const blds = s.city.buildings.map(b => [b.x, b.z, b.k, b.lv, b.v, b.age, b.goneDay ?? -1]);
-  const bl = [...s.root.keys()].map(i => { const b = s.w.tiles[i].bld!; return [i, b.pw ? 1 : 0, b.h, b.we ?? -1, b.den ?? -1]; });
+  const bl = [...s.root.keys()].map(i => { const b = s.w.tiles[i].bld!; return [i, b.pw ? 1 : 0, b.h, b.we ?? -1, b.den ?? -1, +(b.fire || 0), +(b.crime || 0), b.crimeDays ?? -1, +(b.sick || 0), b.sickDays ?? -1, +(b.death || 0), b.deathAge ?? -1, +(b.abandoned || 0)]; });
+  const ruin = s.w.tiles.flatMap((t, i) => t.ruin ? [i] : []);   // D026：焦土
   const ground = s.w.tiles.map(t => `${t.road ? t.rc : 0}${t.zone || 0}${t.tree ? 1 : 0}`).join('');
   return fnv1a(JSON.stringify([s.day, s.pop, s.jobs, s.jobsC, s.jobsI, s.cityHappy, s.dem, s.immWave, s.weather, blds, bl, Array.from(s.g.POL), Array.from(s.g.LANDBASE),
-    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox, s.econ]));
+    ground, s.money, s.diff, s.loan, s.msIdx, s.bestStar, s.bailoutDay, s.landDirty, s.landBox, s.econ, ruin, s.medCap]));
 }
 
 export function simCounts(s: Sim) {

@@ -4,6 +4,7 @@
 // 施工中不量的：pw／rp／h／wa（執行期欄位；實驗線放電廠、鋪路、拆除後立刻重算帶電道路，本線每天開頭才算）。
 // 供電另外量：預建城推進一天之後，推進前就在的住商工每一棟有沒有電（PW_SRC；那一天兩邊都照容量與帶電道路重新分配過）。
 // 推進一天的亂數：兩邊都記每一次抽取的呼叫行號（實驗線＝index.html 行號；本線＝src 行號，SITE_MAP 對到實驗線那一行）。
+import fs from 'node:fs';
 import vm from 'node:vm';
 import { decodeLabCode } from '../src/io/labcode.ts';
 import { loadCode, saveCode } from '../src/io/save.ts';
@@ -65,7 +66,8 @@ export const landDiffOf = new Function(`return ${LANDDIFF_SRC}`)();
 export const invOf = new Function(`return ${INV_SRC}`)();
 export const hsOf = new Function(`return ${HS_SRC}`)();
 
-// 實驗線 tick() 裡本線沒有的亂數抽取（第 2 類系統；行號 index.html @ d23c18d），都在生長（55597–55652）之後，所以生長兩邊逐位相同：
+// 實驗線 tick() 裡的起火、犯罪、生病擲骰（行號 index.html @ d23c18d）。D011–D025 本線沒有這三行的抽取（第 2 類系統），實驗線「多抽」；D026 起本線搬了，兩邊逐行次數相同（SITE_MAP 有對應），
+// 這三行留著只為了核對實驗線自己記的次數＝照它推進後的格子算的棟數（EXTRA_SRC；錄製時的事實）。以下是當時的說明（都在生長 55597–55652 之後，所以生長兩邊逐位相同）：
 //   55772 起火擲骰：每一格 k≤3、還沒著火的建築抽一次 R()（55766–55776，機率 .0005×lv 起跳）
 //   55817 犯罪擲骰：k≤3、還沒犯罪、沒有警察局／派出所覆蓋（55815）、也沒有監獄覆蓋的建築抽一次 R()
 //   55850 生病擲骰：住宅 k1、沒生病、沒有醫療覆蓋（回退設定 __noCivicServices495 下 civicHealthAccess495 回 null，只看 COV 的 hospital／ambulance／megahosp／medcamp／clinic）抽一次 R()
@@ -84,11 +86,15 @@ export const labExtraRolls = new Function(`return ${EXTRA_SRC}`)();
 // 生長洗牌 55605／擲骰 55618／變體 55622（growth.ts 31／44／48–49）、升級擲骰 55648／變體 55649（growth.ts 81／83）。src 改了行號這張表要跟著改（對不到就紅）。
 // 哪幾行真的對拍到：新城第 1 天、預建城推進那一天兩邊都沒抽天氣（這兩天天氣都沒換態、也不是暴雨），新城第 1 天推進前沒有住商工所以也沒抽升級——
 // 天氣那 7 行另外用 weatherSites 對拍（實驗線原文在 vm 裡跑）；升級那 2 行只在預建城推進那一天抽到，那一天的生長與升級只量不判
+// D026 起本線有了火災、犯罪、廢棄、疾病、死亡（src/sim/rules/hazard.ts）：每個抽亂數的地方在原始碼那一行寫 `/*@實驗線行號*/`（起火 55772、蔓延 55778／55787、犯罪 55817、廢棄 55829、診所治癒 55847、生病 55850、死亡 55861），
+// 這裡讀那些記號建表——hazard.ts 加減行不用回頭改表；一行兩個記號、或記號少了，守衛照樣紅（對不到）
+const tagSites = (file) => { const m = {}; fs.readFileSync(new URL(`../src/sim/rules/${file}`, import.meta.url), 'utf8').split('\n').forEach((ln, i) => { const g = /\/\*@(\d+)\*\//.exec(ln); if (g) m[`${file}:${i + 1}`] = +g[1]; }); return m; };
 export const SITE_MAP = { 'weather.ts:13': 54965, 'weather.ts:15': 54967, 'weather.ts:16': 54968, 'weather.ts:17': 54969, 'weather.ts:19': 54971, 'weather.ts:20': 54972, 'weather.ts:23': 54975,
-  'growth.ts:31': 55605, 'growth.ts:44': 55618, 'growth.ts:48': 55622, 'growth.ts:49': 55622, 'growth.ts:81': 55648, 'growth.ts:83': 55649 };
+  'growth.ts:31': 55605, 'growth.ts:44': 55618, 'growth.ts:48': 55622, 'growth.ts:49': 55622, 'growth.ts:81': 55648, 'growth.ts:83': 55649,
+  ...tagSites('hazard.ts') };
 // 守衛講到哪一行時用的名字
 export const LINE_NAMES = { 54965: '天氣', 54967: '天氣', 54968: '天氣', 54969: '天氣', 54971: '天氣', 54972: '天氣', 54975: '天氣',
-  55605: '生長洗牌', 55618: '生長擲骰', 55622: '變體', 55648: '升級擲骰', 55649: '升級變體', 55772: '起火擲骰', 55817: '犯罪擲骰', 55850: '生病擲骰' };
+  55605: '生長洗牌', 55618: '生長擲骰', 55622: '變體', 55648: '升級擲骰', 55649: '升級變體', 55772: '起火擲骰', 55778: '蔓延擲骰', 55787: '蔓延挑格', 55817: '犯罪擲骰', 55829: '廢棄擲骰', 55847: '診所治癒擲骰', 55850: '生病擲骰', 55861: '死亡擲骰' };
 // 生長擲骰之前的行（天氣、洗牌）：抽幾次只看推進前的格子與天氣，跟當天的幸福、需求無關（預建城推進那一天只比這幾行；天氣那幾行那一天兩邊都 0 次）
 export const PRE_GROWTH_LINES = [54965, 54967, 54968, 54969, 54971, 54972, 54975, 55605];
 // 本線記下的呼叫位置 → 實驗線行號的逐行次數；對不到的位置記在 '?檔名:行'（守衛會紅）

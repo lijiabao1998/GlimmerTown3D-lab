@@ -41,12 +41,13 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
     flag(name, x, z, v = 1) { if (!inMap(x, z)) throw new Error(`flag ${name}：(${x},${z}) 出界`); (layers[name] ??= new Uint8Array(nn))[at(x, z)] = v; return b; },
     flagRect(name, x0, z0, x1, z1, v = 1) { for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) b.flag(name, x, z, v); return b; },
     water(x0, z0, x1, z1) { for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) { if (!inMap(x, z) || occ[at(x, z)]) throw new Error(`water：(${x},${z}) 出界或被佔用`); ter[at(x, z)] = 0; } return b; },
-    // 建築：住宅 k1 帶密度 den 與財富 we（存檔列 [i,k,lv,v,age,fire,den,we]），其餘 [i,k,lv,v,age]；多格的只記根格（讀檔補 ref 格）
+    // 建築：住宅 k1 帶密度 den 與財富 we（存檔列 [i,k,lv,v,age,fire,den,we]），其餘 [i,k,lv,v,age]；多格的只記根格（讀檔補 ref 格）。
+    // D026：o.fire＝燃燒天數（存檔第 6 位；沒給＝跟以前一模一樣的列，舊城的碼逐字不變）
     put(x, z, k, lv = 1, o = {}) {
       const sz = sizeOf(k);
       if (!b.isFree(x, z, sz)) throw new Error(`put k${k}：(${x},${z}) 被佔用或出界`);
       for (let dz = 0; dz < sz; dz++) for (let dx = 0; dx < sz; dx++) occ[at(x + dx, z + dz)] = 2;
-      bl.push(k === 1 ? [at(x, z), 1, lv, o.v ?? 0, o.age ?? 20, 0, o.den ?? 3, o.we ?? 1] : [at(x, z), k, lv, o.v ?? 0, o.age ?? 20]);
+      bl.push(k === 1 ? [at(x, z), 1, lv, o.v ?? 0, o.age ?? 20, o.fire ?? 0, o.den ?? 3, o.we ?? 1] : o.fire ? [at(x, z), k, lv, o.v ?? 0, o.age ?? 20, o.fire] : [at(x, z), k, lv, o.v ?? 0, o.age ?? 20]);
       return b;
     },
     // 一排：同一列 z 從 x0 到 x1（step 格一棟）都放同一種
@@ -56,7 +57,7 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
       const o = { ...template, seed, day, money: 3000, nm: name, ter: ter.every(v => v === 2) ? s2 : [...ter].join(''), tre: z0, el: z0, zn: z0, wp: [...wp].join(''),
         rd: [...road].join(''), rcl: [...rcl].map(v => v ? String.fromCharCode(48 + v) : '0').join(''),
         bl: [...bl].sort((p, q) => p[0] - q[0]) };
-      for (const [k, arr] of Object.entries(layers)) o[k] = k === 'ix475' ? [...arr].map(v => String.fromCharCode(48 + v)).join('') : [...arr].join('');
+      for (const [k, arr] of Object.entries(layers)) o[k] = k === 'ix475' || k === 'cmd' ? [...arr].map(v => String.fromCharCode(48 + v)).join('') : [...arr].join('');   // ix475、cmd（D026 犯罪天數，上限 15）是字元碼 48＋v，其餘 0／1 或 0–9
       Object.assign(o, extra);
       delete o.z; delete o.d3;
       return encodeLabCode(o, { deflate: true });

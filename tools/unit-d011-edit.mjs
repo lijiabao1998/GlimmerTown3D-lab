@@ -85,6 +85,7 @@ export function syncMismatch(s) {
   for (const [i, cb] of s.root) {
     const b = w.tiles[i].bld;
     if (!b || b.ref || cb.goneDay !== undefined || b.k !== cb.k || b.lv !== cb.lv || b.v !== cb.v || cb.z * n + cb.x !== i) return `根格 ${i}：建築不同步`;
+    if (b.k <= 3 && !!b.abandoned !== cb.abandoned) return `根格 ${i}：廢棄不同步（世界 ${b.abandoned}、城市 ${cb.abandoned}）`;   // D026：廢棄（只有住商工，66921）
     for (let dz = 0; dz < cb.size; dz++) for (let dx = 0; dx < cb.size; dx++) if (cb.x + dx < n && cb.z + dz < n) occ[(cb.z + dz) * n + cb.x + dx] = cb.id;
   }
   for (let i = 0; i < n * n; i++) {
@@ -92,6 +93,7 @@ export function syncMismatch(s) {
     if (t.bld && !t.bld.ref && !s.root.has(i)) return `第 ${i} 格有建築、根格表沒有`;
     if (c.road[i] !== roadCode(t.road, t.hw, t.bridge) || c.rclass[i] !== (t.road ? (t.rc || 0) : 0) || c.zone[i] !== (t.zone || 0) || c.tree[i] !== (t.tree || 0)) return `第 ${i} 格地面不同步`;
     if (c.occ[i] !== occ[i]) return `第 ${i} 格 occ ${c.occ[i]} ≠ ${occ[i]}`;
+    if (c.ruin[i] !== (t.ruin ? 1 : 0)) return `第 ${i} 格焦土 ${c.ruin[i]} ≠ ${t.ruin ? 1 : 0}`;   // D026
   }
   const badId = c.buildings.findIndex((b, k) => b.id !== k + 1);
   return badId >= 0 ? `建築編號 ${badId}` : null;
@@ -179,7 +181,7 @@ export async function stepDayWith(swap) {
 // ---- 重播與存讀檔（驗收 5）----
 // v：拿來比的變體（沒給＝建築自己的；存讀檔往返那一邊給讀檔重挑之後的）
 const BLD = (b, v = b.v) => [b.id, b.k, b.lv, v, b.age, b.x, b.z, b.size, b.abandoned, b.builtDay, b.goneDay ?? -1];
-const CITY_LAYERS = ['road', 'rclass', 'zone', 'tree', 'occ'];
+const CITY_LAYERS = ['road', 'rclass', 'zone', 'tree', 'occ', 'ruin'];   // D026：焦土
 // rv（D012）：根格 → 讀檔重挑之後的 v。a 那一邊還在的建築照它換了 v 再比，其餘逐欄照比；沒給就全部逐欄照比
 const cityDiff = (a, b, what, rv) => {
   const vOf = q => (rv && q.goneDay === undefined ? rv.get(q.z * a.n + q.x) : undefined) ?? q.v;
@@ -199,7 +201,7 @@ export function replayDiff(s, start, KT) {
 // 路圖層照實驗線 save 另抄一份（index.html 66717 @d23c18d：0 無 1 路 2 橋 3 高速 4 高速橋），不經 roadCode
 const labRd = t => t.road ? (t.hw ? (t.bridge ? 4 : 3) : (t.bridge ? 2 : 1)) : 0;
 // v：拿來比的變體（沒給＝格子上的；存讀檔往返那一邊給讀檔重挑之後的）
-const TILE = (t, v) => [t.t, t.road, t.hw, t.bridge, t.road ? t.rc : 0, t.zone || 0, t.tree || 0, t.bld ? [t.bld.k, t.bld.lv, v ?? t.bld.v, t.bld.age, t.bld.ref ?? 0, t.bld.k === 1 ? [t.bld.den ?? 3, t.bld.we ?? 1] : 0, +(t.bld.fire || 0)] : 0];
+const TILE = (t, v) => [t.t, t.road, t.hw, t.bridge, t.road ? t.rc : 0, t.zone || 0, t.tree || 0, t.bld ? [t.bld.k, t.bld.lv, v ?? t.bld.v, t.bld.age, t.bld.ref ?? 0, t.bld.k === 1 ? [t.bld.den ?? 3, t.bld.we ?? 1] : 0, +(t.bld.fire || 0), t.bld.crime ? 1 + Math.min(15, t.bld.crimeDays || 0) : 0, t.bld.sick ? 1 + Math.min(9, t.bld.sickDays || 0) : 0, t.bld.death ? 1 + Math.min(9, t.bld.deathAge || 0) : 0, t.bld.abandoned ? 1 : 0] : 0, t.ruin ? 1 : 0];   // D026：旗標（天數照實驗線存檔的上限 15／9／9，只有旗標開著才算）與焦土
 const SIMF = x => [x.money, x.day, x.diff, x.msIdx, x.bestStar, x.stroke, x.loan];
 // 存檔再讀檔：存的路圖層、資金（實驗線 66747 money:Math.round(money)）、難度、天數、貸款（66749 ln:loan?[loan.remain,loan.daily]:null）照實驗線；
 // 讀回來一定要重播成功（src/io/save.ts mismatch 為 null）、資金、天數、難度、里程碑、星等、手勢編號、貸款（實驗線 load 66924 loan=d.ln?{remain:d.ln[0],daily:d.ln[1]}:null）都相同，讀回的城也同步。
@@ -670,9 +672,11 @@ async function guards(log) {
     // 再存的碼：前 H 列＝第一次存的碼逐列相同（既有的種類碼 0–7 不動），多出來的都是 restyle 列 [8, 日子差, x, z, v]（第一列的日子差＝讀檔那天減最後一筆的日子，其餘 0）
     const rowsOk = J(rows2.slice(0, H)) === J(raw.d3?.r) && rows2.length === H + T.restyle.length
       && T.restyle.every((e, j) => J(rows2[H + j]) === J([8, j ? 0 : e.day - last, e.x, e.z, e.v]));
-    log(!T.bad && raw.d3?.f === 4 && raw.d3?.hv === 2 && raw.d3.r?.length === H && T.raw2?.d3?.f === 4 && T.raw2.d3.hv === 2 && rowsOk,
+    // 城市格式：有災禍事件（D026）寫 6、只有水管事件（D019）寫 5、都沒有寫 4——這裡自己數，不問 src 的判斷函式
+    const HAZT = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'], expectF = s.city.history.some(e => HAZT.includes(e.t)) ? 6 : s.city.history.some(e => e.t === 'pipe') ? 5 : 4;
+    log(!T.bad && raw.d3?.f === expectF && raw.d3?.hv === 2 && raw.d3.r?.length === H && T.raw2?.d3?.f === expectF && T.raw2.d3.hv === 2 && rowsOk,
       '存檔（實驗線分享碼格式＋附加欄位 d3，歷史存法 hv 2）再讀檔：逐格、建築（含墓碑）、資金取整、天數、難度、里程碑、星等、手勢編號都相同，歷史重播成功；'
-      + 'D012 讀檔照實驗線重挑外觀：歷史＝存檔時的＋restyle、那幾棟 v 照換；再存的碼 d3 格式 4（沒有水管事件，D019 起照寫 4）、hv 仍 2，前段逐列相同、多出來的都是 restyle 列 [8, 日子差, x, z, v]；再存再讀第二次 0 棟、兩次存檔的碼逐位元組相同',
+      + 'D012 讀檔照實驗線重挑外觀：歷史＝存檔時的＋restyle、那幾棟 v 照換；再存的碼 d3 格式（有災禍事件 6、只有水管事件 5、都沒有 4；D026 起起步城與劇本城推 121 天會有起火，所以是 6）、hv 仍 2，前段逐列相同、多出來的都是 restyle 列 [8, 日子差, x, z, v]；再存再讀第二次 0 棟、兩次存檔的碼逐位元組相同',
       T.bad || (!rowsOk ? `再存的碼的列不對：${rows2.length} 列（要 ${H}＋${T.restyle.length}）` : '')
         || `碼 ${T.code.length} 字、d3 格式 ${raw.d3?.f}、hv ${raw.d3?.hv}、歷史 ${raw.d3?.r?.length} 筆、$${raw.money}；第 ${s.day} 天讀回重挑 ${T.restyle.length} 棟（住商工 ${rci} 棟；歷史 ${H} → ${H + T.restyle.length} 筆）、再存再讀 ${T.q2.restyled} 棟、兩次存檔的碼逐位元組相同（${T.code2.length} 字）`);
     // 存讀檔往返的量法自己先驗（D012）：第一次讀回放寬了（准多 restyle、那幾棟 v 照換），要確定它還咬得到。
@@ -766,7 +770,7 @@ async function guards(log) {
       return u ? `${name}：${u}` : null;
     }).filter(Boolean);
     log(!res.length, `竄改過的 d3（${cases.length} 種：hv 1 事件物件、hv 2 緊湊列；日子是 HTML、座標超出地圖、不認得的拆除圖層、列比種類長、不認得的種類、不認得的 hv；超出範圍的座標 −1、日子 −1、路等級 0／9、分區 0／7 各放在留到最後的與之後被蓋過的那一筆，要講出第幾筆的哪一項；`
-      + `D012 城市格式比這一版新（D019 起是 6）不猜、講明；restyle 列 ${groups[1]?.cases.length ?? 0} 種：座標 −1／n、v −1／10000／小數／HTML／缺、列比種類長要講出第幾筆的哪一項，那一格沒有住商工根格（路、空地、劃了區還沒長房子、非住商工的建築、拆掉的建築）重播擋下、講出第幾天哪一格，移到另一棟住商工跟存檔對不上）`
+      + `D012 城市格式比這一版新（D026 起是 7）不猜、講明；restyle 列 ${groups[1]?.cases.length ?? 0} 種：座標 −1／n、v −1／10000／小數／HTML／缺、列比種類長要講出第幾筆的哪一項，那一格沒有住商工根格（路、空地、劃了區還沒長房子、非住商工的建築、拆掉的建築）重播擋下、講出第幾天哪一格，移到另一棟住商工跟存檔對不上）`
       + `都被擋下，退回只用存檔（歷史＝這張碼的匯入＋照實驗線重挑外觀，跟同一份存檔正常讀回的那一串逐筆相同），城照樣能推進、施工、再存再讀；照讀的（多出來的欄位、格式 3 的舊檔 hv 1／hv 2、hv 1 的 restyle 物件）＝同一份存檔正常讀回，多出來的欄位不帶進城市`,
       res.slice(0, 3).join('；') || cases.map(c => c[0]).join('、'));
     const L6 = loadCode(read('src/content/samples/starter.code.txt'), KT, vrank), h6 = L6.ok ? L6.sim.city.history : [];
