@@ -55,10 +55,11 @@ function comparePure(mod, code, rec27, days, KT, vrank, { inject, onDay }) {
 }
 
 // 一列樣本跟本線比：[day, rankIdx, cityPoints, pop, cityHappy]；prev＝前一天的等級（第一天＝讀檔那一刻）
+// （D033 起名單是空的：D3 的污水廠減壓搬了，D3 的點數與等級現在逐位相等；下面「已知的差」的做法留著，名單再有東西時照用。）
 // 已知的差（D027–D030 的 KNOWN 名單只剩 D3：T442 污水近旁的工業每座 +.025 幸福，本線沒搬）：D3 的城市幸福本來就不一樣，所以點數也不一樣——
 // 這裡不要求點數、等級逐位相等，改證「差得剛好等於幸福的差」：日子、人口逐位相等，點數差＝400 × 幸福差 × 科技係數（四捨五入 ±1.5）；
 // 而且至少要有一天真的有差（名單不能過期：等污水搬進來、差沒了，這一項會逼著把 D3 從名單拿掉）。
-const KNOWN31 = new Set(['D3']);
+const KNOWN31 = new Set([]);   // D033：D3 的污水廠減壓由污水這一張補上，名單空了
 function rowCheckKnown(rec, cnt, bad) {
   return (day, mine, row, rep, s) => {
     const L = rec.rows[day - 1], tech = s.edu.tech, tq = (tech.includes('D1') ? 1.05 : 1) * (tech.includes('D4b') ? 1.10 : 1);

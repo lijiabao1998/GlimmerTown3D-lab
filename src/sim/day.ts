@@ -34,6 +34,7 @@ import { chainDay, incomeExtras, type ExtrasOut } from './rules/income2.ts';
 import { CITY_EVENTS, eventOfSave, eventStep, type CityEventState, type EventStep } from './rules/events.ts';
 import { cityPoints, rankOfSave, rankStep } from './rules/rank.ts';
 import { INSURANCE_PAYOUT, insuredOf, polOfSave, recycleMulOf, type PolState } from './rules/policy.ts';
+import { SEWAGE_THRESHOLD442, sewerServed } from './rules/sewer.ts';
 import { emptyNightCity, finalizeNightCity, nightCrimeMul, nightPoliceCoverage, prepareNightInputs, type NightCity } from './rules/nightcity.ts';
 import { addOtherIncome, cityEventIncome, dailyIncome, dailyUpkeep, neutralTaxMul, scoreCounts, settleDay, upkeepIn, OTHER_INCOME_KEYS, ZERO_IMPORTS, ROAD_UPKEEP, INFRA_UPKEEP475, type ImportCosts, type OtherIncome, type TaxMul, type UpkeepIn } from './rules/money.ts';
 
@@ -83,6 +84,7 @@ export interface DayReport {
   hazard: HazardReport;                         // D026：當天的災禍（起火、蔓延、燒毀、犯罪、廢棄、生病、治癒、死亡、恢復）
   happyAgg: number[];                           // D027：城市平均每一項住宅幸福（實驗線 happyAgg 55255；項的順序＝rules/happy.ts HAPPY_NAMES）；沒有住宅是空的
   chain346: Chain346;                           // D028：T346 天然氣鏈當天的結果（實驗線 GV.chain346 鉤子的那幾欄）與旅宿床位、入住
+  sewer: { need: boolean; served: number; unserved: number; plants: number };   // D033：污水接管這一天的樣子（need＝昨天人口 ≥ 500；served／unserved＝這一圈處理的住商工與社宅根格有／沒有接管的棟數〔不需要時每棟都算接管〕＝實驗線 SEW_OK442 的總和與其餘；plants＝污水廠 k27 數）
   rank: { idx: number; points: number; promoted: number[] };   // D031：T133 城市等級這一天的樣子（今天結算之後的等級與點數、今天升到的每一級〔0 起算的 RANKS 索引，一天可以連升好幾級〕）
   cityEvent: EventStep;                         // D030：T299 城市活動這一天的樣子（活動狀態、剛開始的事件編號、剛結束的事件編號；沒有＝−1）
   night: NightCity;                             // D029：T487 夜間城市當天的結算（實驗線 nightCity487 的那份；隔天的幸福與犯罪讀它，當天的晚間消費金、夜間運輸與營運費進了 settle）
@@ -302,8 +304,10 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 55010 水（D019）：舊式供水網（第 1 類，__legacyWater449；src/sim/rules/water.ts），重算每一格的 wr、容量＝水塔×80＋淡化廠×80。
   // 乾旱（×DROUGHT_WATER_MULT）只由災害設定，災害關：恆 ×1。水壓／水質懲罰走舊式＝0
   const wCap = Math.floor(computeWaterLegacy449(w));
-  const sewNeed = s.pop >= 500;                                           // 55011 sewerRequired442：昨天的人口 ≥500
-  const sewOkArr = new Uint8Array(nn);                                    // 沒有污水處理廠：需要時全城都不合格（兩種模式相同）
+  const sewNeed = s.pop >= SEWAGE_THRESHOLD442;                           // 55011 sewerRequired442：昨天的人口 ≥500
+  const sew = sewNeed ? sewerServed(w) : null;                            // 55152 sewerRootStatus472：管網＋污水廠＋90 格（D033，rules/sewer.ts）；每天一次、在這一天的生長之前
+  const sewOkArr = sew ? sew.ok : new Uint8Array(nn).fill(1);             // SEW_OK442：人口不到 500＝每一棟都算接管（55151：sewOk442 = !sewNeed442）
+  let sewServedN = 0, sewUnservedN = 0;
   // 55014–55036 死亡前置（D026，rules/hazard.ts）：死亡中的住宅 deathAge++、滿 10 天恢復，未安撫的鄰居記 deathPenalty（住宅幸福 −.1）；55046 每日計數歸零（本線每天重新數）
   const dp = deathPre(w, f, tickBld);
   const powered = assignPower(w, tickBld, cap);                           // 55154–55156（F11）：按建築索引、兩格內有帶電道路且容量未用完
@@ -322,6 +326,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
     const t = w.tiles[i], b = t.bld;
     if (!b || b.ref) continue;
     if (b.k > 3 && b.k !== 127) continue;
+    if (sewOkArr[i] === 1) sewServedN++; else sewUnservedN++;            // D033：報表用（55151 的 SEW_OK442 在這一圈指派；人口不到 500 每棟都算接管）
     const x = i % N, y = (i / N) | 0;
     if (b.k === 1 || b.k === 127) {
       const residentPop = residentPopulation488(b, () => undefined);      // 55163：住房沒就緒＝入住率 1
@@ -333,7 +338,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
         ind: indNear(x, y, 3),
         crime: crimeNear(x, y, 4),
         rc: getMaxRoadClass(w, x, y, 1), jam: g.jam[i],
-        drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: dp.penalty[i] === 1, sewNeed, sewOk: !sewNeed,
+        drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: dp.penalty[i] === 1, sewNeed, sewOk: sewOkArr[i] === 1,
         weather: s.weather.weather, day: s.day, nightCity: hzx.nightCity ?? NIGHT_OFF, housingPen: 0,
         eventHappy: opts.hazard?.eventHappy ?? (evd ? evd.happy : null), cookedReady: s.cookedReady, pol, rankIdx: s.rankIdx, tvSignal: s.tvSignal, tech: s.edu.tech,   // 政策（K）D032 起讀 s.pol（免費公交、公園夜間開放、宵禁；同一個物件也給災禍段；守衛還能用 hazard.pol 蓋過去）；夜間城市 D029、城市活動 D030 起本線自己算（nightCity＝前一天的 s.night、eventHappy＝今天的活動；守衛還能蓋過去）
       });
@@ -370,7 +375,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   s.money += ec.mgReward;
   // 55414–55424 糧食的每日加減（D022）：每棟住宅（k1）的幸福加 clamp((供糧率−.5)×.11, −.06, .05)、用住宅重算城市幸福。在經濟之後、災害與生長之前。55426 災害：關（第 1 類）
   const fd = ec.fd;
-  cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy);
+  cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy, cnt.se ?? 0, sewOkArr, (x, y) => indNear(x, y, 3));   // 污水廠減壓：有廠（se > 0）且接管的住宅，半徑 3 內每座工業 +.025（55420，D033）
   const L = legacyDemand({ pop, jobs, cityHappy, czone, jobsC, jobsI, indSubsidy: !!(pol && pol.indSubsidy), tech: s.edu.tech });   // 55578–55584（F1；工業補貼 +.15，D032）
   const E = economyDemands481(L.legacyR481, L.legacyC481, L.legacyI481, labor, s.econ.snap);                    // 55585（F3）：讀昨天的經濟快照（讀檔與新圖第一天沒就緒＝舊式）
   const dem = { 1: housingRciDemand488(E.r, null), 2: E.c, 3: E.i };      // 55586–55587（F4，住房沒就緒）
@@ -428,7 +433,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    food: fd, econ: { ec, late, sn, cons }, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, night,
+    food: fd, econ: { ec, late, sn, cons }, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
   };
 }
 

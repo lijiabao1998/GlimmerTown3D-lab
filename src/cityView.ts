@@ -17,6 +17,7 @@ import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
+import { SEWAGE_THRESHOLD442, WATER_HOPS472, SEWER_OK, SEWER_NO_PIPE, SEWER_NO_PLANT, SEWER_TOO_FAR, SEWER_NA, sewerServed } from './sim/rules/sewer.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
 import { roadCap475, hashBytes, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
 import { HAPPY_NAMES } from './sim/rules/happy.ts';
@@ -938,6 +939,24 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const d = f.delta * 100;
     return ['糧食', `供糧率 ${Math.round(f.rate * 100)}%（需求 ${f.need}：本地 ${f.domestic}＋進口 ${f.imports}，進口額度 ${f.cap}）；每天幸福 ${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(1)}`];
   }
+  // D033：住商工卡的「污水」一列、污水廠與提升站卡的「污水網」一列。接管每天算一次（day.ts，在這一天的生長之前），這裡用現在的管網與建築重算給玩家看（純函式，開卡才算）；
+  // 昨天人口 < 500 時不要求集中污水，每棟都算接管（55151）。接管影響三件事：二級升三級的關卡、三級以上住宅的「高密度污水」幸福 −4%、有污水廠時住宅的減壓（半徑 3 內每座工業 +2.5%）
+  function sewerRows(b: { k: number; x: number; z: number; lv: number }): Row[] {
+    if (!sim) return [];
+    if (b.k === 27 || b.k === 156 || b.k === 157) {
+      const r = lastRep ? lastRep.sewer : null;
+      if (!r) return [['污水網', `沿水管 ${WATER_HOPS472} 格內、接在同一個管網的建築都接得上（容量不限，照實驗線）；全城統計推進一天之後才有`]];
+      return [['污水網', `沿水管 ${WATER_HOPS472} 格內、接在同一個管網的建築都接得上（容量不限，照實驗線）；最近一天全城 ${r.served} 棟接管、${r.unserved} 棟沒接管（污水廠 ${r.plants} 座${r.need ? '' : `；昨天人口不到 ${SEWAGE_THRESHOLD442}，還不要求集中污水`}）；接管的住宅每天幸福 +半徑 3 內工業數 × 2.5%`]];
+    }
+    if (b.k > 3) return [];
+    if (!(sim.pop >= SEWAGE_THRESHOLD442)) return [['污水', `昨天全城人口 ${sim.pop.toLocaleString()}，未達 ${SEWAGE_THRESHOLD442}：還不要求集中污水（每棟都算接管）`]];
+    const res = sewerServed(sim.w), i = b.z * sim.w.N + b.x, why = res.why[i];
+    if (why === SEWER_NA) return [];
+    if (why === SEWER_OK) return [['污水', `已接管：沿水管離污水廠 ${res.hops[i]} 格（上限 ${WATER_HOPS472}）${b.lv === 2 ? '；升三級的污水這一關過了（還要學校、污染夠低）' : ''}`]];
+    const reason = why === SEWER_NO_PIPE ? '沒有貼著水管（腳印與四邊外一圈要碰到水管）' : why === SEWER_NO_PLANT ? '貼著的水管網裡沒有污水廠' : why === SEWER_TOO_FAR ? (res.hops[i] < 65535 ? `離污水廠太遠：沿水管 ${res.hops[i]} 格，超過 ${WATER_HOPS472}` : `離污水廠太遠：沿水管超過 ${WATER_HOPS472 + 32} 格（上限 ${WATER_HOPS472}）`) : '';   // 距離只查到 122 格（52877），再遠就是 65535
+    const eff = [b.lv === 2 ? '二級升不到三級' : '', b.k === 1 && b.lv >= 3 ? '高密度污水：幸福 −4%' : ''].filter(Boolean);
+    return [['污水', `沒接管：${reason}${eff.length ? `；${eff.join('；')}` : ''}`]];
+  }
   // D025：商業與工業建築卡的「市場」一列。讀最近一天的經濟快照（購買力、零售利用率、銷售乘數；工業的市場乘數、缺貨、原料）；讀檔之後還沒推進過就不知道，照實講
   function marketRow(b: { k: number }): Row | null {
     if (!sim || (b.k !== 2 && b.k !== 3)) return null;
@@ -1031,6 +1050,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       { const hzr = hazardRows(sb); rows.push(...hzr.rows); acts = hzr.acts; }          // D026：災禍排在最前面（最急）
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
+      if (b.goneDay === undefined) rows.push(...sewerRows(b));                          // D033
       const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
       if (b.goneDay === undefined) rows.push(...chainRows(b));                          // D028
       if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
@@ -1228,7 +1248,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     },
     // 整個關掉裁切與風化（守衛比「沒施工的城加了裁切＝沒加」）
     noClip: (on: boolean) => { if (con) con.uni.uNoClip.value = on ? 1 : 0; needsRender = true; draw(); return on; },
-    conBuildings: () => city ? city.buildings.map(b => ({ id: b.id, k: b.k, x: b.x, z: b.z, s: b.size, age: b.age, gone: b.goneDay !== undefined })) : [],
+    conBuildings: () => city ? city.buildings.map(b => ({ id: b.id, k: b.k, lv: b.lv, x: b.x, z: b.z, s: b.size, age: b.age, gone: b.goneDay !== undefined })) : [],
     groundCheck: () => built?.groundCheck() ?? null,
     forceNear: (v: boolean | null) => { nearOverride = v; needsRender = true; draw(); return v; },
     // 暫停中直接設當天已過的比例（拍照用：不播放就能拍天與天之間；下一次 simStep 歸零）
@@ -1292,6 +1312,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       return { want: [b.x, b.z, id], got: h, name: KINDS.name(b.k) };
     },
     openTile: (x: number, z: number) => showTile(x, z),
+    sewerRows: (x: number, z: number) => { if (!city || !sim) return null; const b = buildingAt(city, x, z); return b ? sewerRows(b) : null; },   // D033：這一格建築的「污水」列（守衛與拍照用）
+    sewerRep: () => lastRep ? lastRep.sewer : null,   // D033：最近一天的污水回報 { need, served, unserved, plants }
     lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // ---- D026 災禍（守衛與拍照用）：標記數與焦土格數、一格的旗標、卡上的按鈕、把一格的旗標直接設好（造情境用，介面沒有這個鈕）----
     // ---- D027 交通（守衛與拍照用）：過載道路格（讀模擬的負載，不讀畫面）、貼圖上暖色的等級、幸福構成面板的列 ----

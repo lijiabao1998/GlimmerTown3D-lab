@@ -546,6 +546,9 @@ await guard('./unit-d029-live.mjs', 'd029LiveGuards');   // D029：夜間城市�
 await guard('./unit-d030-live.mjs', 'd030LiveGuards');   // D030：城市活動的實驗線頁面實跑（不代入活動：起步城 8 種子 × 120 天、存檔 24 份、自造城、D022–D025 的 120 座城）、day.ts 接線突變、存檔（cev）與決定性
 await guard('./unit-d031-live.mjs', 'd031LiveGuards');   // D031：城市等級的實驗線頁面實跑（讀檔那一刻與每天的等級與點數：起步城 8 種子 × 120 天、存檔 24 份、自造城、老城 120 座、缺 rk 的舊檔）、day.ts 接線突變、存檔（rk、只升不降）與決定性
 await guard('./unit-d032-live.mjs', 'd032LiveGuards');   // D032：政策與預算的實驗線頁面實跑（底城 × 政策組 182 筆、玩家按按鈕 7 筆、本線存的碼給實驗線讀 4 筆；政策由存檔的 pol 讀進來、不代入、資金也判）、效果要看得到、day.ts／edit.ts／save.ts 接線突變、存檔與決定性
+await guard('./unit-d033.mjs', 'd033Guards');   // D033：污水的管網元件與貼著的元件與距離與電力係數逐項＝實驗線原文（vm、突變）、原文 26 段 sha256
+await guard('./unit-d033-live.mjs', 'd033LiveGuards');   // D033：污水的實驗線頁面實跑（隨機與手排的佈局 354 個逐棟接管、Q 系列連推 13 天逐欄）、day.ts／food.ts／sewer.ts 接線突變、存檔與決定性（d033-lab.json，tools/d033-lab.mjs 錄）
+await guard('./unit-d033-build.mjs', 'd033BuildGuards');   // D033：污水廠的建造規則黃金樣本（d033-build.json，tools/lab-build.mjs --set=d033）、鄰水判定、原碼突變
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

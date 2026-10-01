@@ -274,7 +274,7 @@ async function guards(log) {
       ['加成係數 .11→.12', '* .11,', '* .12,'],
       ['加成上限 .05→.06', '-.06, .05)', '-.06, .06)'],
       ['住宅幸福下限 .05→.06', 'clamp((b.h as number) + delta, .05, 1)', 'clamp((b.h as number) + delta, .06, 1)'],
-      ['需求 0 也加', 'if (!(need > 0)) return cityHappy;', ''],
+      ['需求 0 也加', 'if (!(need > 0 || se > 0)) return cityHappy;', ''],   // D033：早退多了「有污水廠」；沒有廠時這一句只決定回傳值（不重算城市幸福）
       ['ref 格也算住宅', '!b || b.k !== 1 || b.ref', '!b || b.k !== 1'],
       ['倉儲不數', 'case 64: c.whN284++; break;', 'case 64: break;'],
       ['港口不數', 'case 18: c.po++; break;', 'case 18: break;'],
@@ -309,7 +309,7 @@ async function guards(log) {
   {
     const bad = [], day = read('src/sim/day.ts');
     const iH = day.indexOf('let cityHappy = happyN ? happySum / happyN : .6;'), iG = day.indexOf('garbageDay(w, tickBld, pop, jobsI, cityHappy, recycleMul)'), iK = day.indexOf('// 55282–55284：只用住宅 k1 重算'),
-      iF = day.indexOf('economyMain(s.econ,'), iA = day.indexOf('applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy)'), iL = day.indexOf('laborMarket481(pop, jobs, null, s.day)'), iD = day.indexOf('economyDemands481('), cnt = read('src/sim/rules/count.ts'), eco = read('src/sim/rules/economy.ts'),
+      iF = day.indexOf('economyMain(s.econ,'), iA = day.indexOf('applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy,'), iL = day.indexOf('laborMarket481(pop, jobs, null, s.day)'), iD = day.indexOf('economyDemands481('), cnt = read('src/sim/rules/count.ts'), eco = read('src/sim/rules/economy.ts'),
       iC = cnt.indexOf('countFood(fc, b'), iR = cnt.indexOf('if (!b || b.ref) continue;'), iS = cnt.indexOf('if (b.k === 7) fac.schools++;');   // D025：糧食那一段搬進 economyMain（rules/economy.ts）裡叫 foodDay，day.ts 叫 economyMain 一次
     const iT = day.indexOf('tallyBuildings(w, tickBld');   // D024：主計數迴圈搬到 rules/count.ts 的 tallyBuildings，day.ts 叫它一次
     if (!(iH > 0 && iG > iH && iK > iG && iL > iK && iF > iL && iA > iF && iD > iA)) bad.push('day.ts 的順序要是：城市幸福（55254）→ 垃圾（55278）→ 住宅重算城市幸福（55284）→ 勞動市場（55329）→ 經濟（含糧食）→ 糧食加減到住宅 → 商工需求（55578）');
@@ -323,7 +323,7 @@ async function guards(log) {
     const r = realDay.stepDay(s1), f = r.food, want = { need: Math.ceil(r.pop / 10), imp: Math.min(3, Math.ceil(r.pop / 10)) };
     if (!(f.points === 0 && f.tourists === 0 && f.cap === 3 && f.need === want.need && f.domestic === 0 && f.imports === want.imp && f.rate === want.imp / want.need && f.delta === Math.max(-.06, Math.min(.05, (f.rate - .5) * .11)))) bad.push(`預建城起步那一天：${J(f)}`);
     // 同一天、把「加到住宅」那一句拿掉的副本：推進前就在、等級沒變的每一棟住宅，差的剛好是 clamp(h＋加減, .05, 1)
-    const V = await dayVariant([['cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy);', '']]);
+    const V = await dayVariant([['cityHappy = applyFoodHappy(w, tickBld, fd.need, fd.delta, cityHappy, cnt.se ?? 0, sewOkArr, (x, y) => indNear(x, y, 3));', '']]);
     const s0 = realDay.simFromSave(save, pre, KT, vrank), s3 = V.simFromSave(save, pre, KT, vrank), lv0 = new Map();
     for (let i = 0; i < s0.w.tiles.length; i++) { const b = s0.w.tiles[i].bld; if (b && b.k === 1 && !b.ref) lv0.set(i, b.lv); }
     const r3 = V.stepDay(s3);
@@ -431,7 +431,6 @@ async function guards(log) {
       ['遊客需求 160→161', 'Math.ceil(tourists / 160)', 'Math.ceil(tourists / 161)'],
       ['中性點 .50→.55', '(rate - .50)', '(rate - .55)'],
       ['加成上限 .05→.06', '-.06, .05)', '-.06, .06)'],
-      ['需求 0 也加', 'if (!(need > 0)) return cityHappy;', ''],
     ];
     const missed = [], out = [];
     const variantOf = async food => dayVariant([], { './rules/food.ts': food, './rules/count.ts': await loadMod('src/sim/rules/count.ts', [], { './food.ts': food }), './rules/economy.ts': await loadMod('src/sim/rules/economy.ts', [], { './food.ts': food }) });   // D024：countFood 在 count.ts 裡被叫；D025：foodDay 在 economy.ts 的 economyMain 裡被叫——改壞的 food.ts 要接到這兩份上
@@ -443,7 +442,7 @@ async function guards(log) {
       out.push(`${name}：${dd} 座不等`);
       if (!dd) missed.push(`「${name}」`);
     }
-    log(!ok0.length && !missed.length, `D022 驗收 2、3 突變：本線的 food.ts 改壞一處（${LIVE_MUT.length} 個：農場與溫室係數、四季倍率、觀光係數與季節、會展、路格底與封頂、額度最少、各設施的額度與效率加成、居民與遊客需求、中性點、夾持、需求 0）——實驗線實跑的這批城要紅；沒改的先核過全等`,
+    log(!ok0.length && !missed.length, `D022 驗收 2、3 突變：本線的 food.ts 改壞一處（${LIVE_MUT.length} 個：農場與溫室係數、四季倍率、觀光係數與季節、會展、路格底與封頂、額度最少、各設施的額度與效率加成、居民與遊客需求、中性點、夾持）——實驗線實跑的這批城要紅；「需求 0 也加」在這批沒有污水廠的城裡是等價突變（內層 need > 0 擋住加成），由 D033 守衛管；沒改的先核過全等`,
       missed.length ? `沒抓到：${missed.join('、')}` : ok0.length ? `沒改的副本就有 ${ok0.length} 座不等：${ok0[0].id} ${ok0[0].diffs[0]}` : out.map(t => t.replace(/：.*座不等/, m => m.replace('：', ' '))).join('；').slice(0, 900));
   }
 }

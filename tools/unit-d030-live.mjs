@@ -26,7 +26,7 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
 const HK = ['happy', 'hh', 'ah', 'agg'];
-const KNOWN = { D3: 'T442 污水（管網讓近旁工業每座加 .025）' };   // seed516（T133 城市等級，微光之巔 +.02）由 D031 補上、從名單拿掉
+const KNOWN = {};   // seed516（T133 城市等級，微光之巔 +.02）由 D031、D3（T442 污水廠減壓）由 D033 補上，名單空了
 const HAPPY_EVENT = HAPPY_NAMES.indexOf('城市活動');
 const nz = (a, f) => a.filter(f).length, sum = (a, f) => a.reduce((x, y) => x + f(y), 0);
 export const LIVE = {};   // 除錯用

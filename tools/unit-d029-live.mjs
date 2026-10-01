@@ -39,7 +39,7 @@ export async function d029LiveGuards(log) {
 
 // 已知只差幸福的城（跟 D027、D028 同一份：seed516＝T133 城市等級、D3＝T442 污水）；夜間城市六欄本身不准差
 const HK = ['happy', 'hh', 'ah', 'agg'];
-const KNOWN = { D3: 'T442 污水（管網讓近旁工業每座加 .025）' };   // seed516（T133 城市等級，微光之巔 +.02）由 D031 補上、從名單拿掉
+const KNOWN = {};   // seed516（T133 城市等級，微光之巔 +.02）由 D031、D3（T442 污水廠減壓）由 D033 補上，名單空了
 const labNight = row => [row.night.ready, row.night.score, row.night.hd];   // 樣本 night 三欄
 const mineNight = rep => [rep.night.ready, rep.night.safety.score, rep.night.happinessDelta];
 

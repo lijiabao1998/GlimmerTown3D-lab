@@ -32,7 +32,7 @@ const MUTANTS = [
   ['canPlace 漏了垃圾場', 'canPlace', "case 'cemetery':case 'dump':", "case 'cemetery':"],
 ];
 const MUTANTS_3D = [
-  ['垃圾場造價 300→301', 'dump: 300 };', 'dump: 301 };'],
+  ['垃圾場造價 300→301', 'dump: 300,', 'dump: 301,'],
   ['垃圾場變體 ri(3)→ri(4)', 'k: 8, lv: 1, v: st.rng.ri(3)', 'k: 8, lv: 1, v: st.rng.ri(4)'],
   ['垃圾場不是污染源', '      stampPolSrc(g, x, y, 8, 1);\n', ''],
   ['垃圾場不清分區', 'k: 8, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0;', 'k: 8, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0;'],

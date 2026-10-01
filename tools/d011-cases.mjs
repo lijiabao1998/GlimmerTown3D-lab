@@ -40,6 +40,11 @@ export const D020_SEED = 20261020;
 export const DUMP = ['dump'];
 export const FAMILIES20 = [['g-random', 60, 'random'], ['g-money', 20, 'money'], ['g-doze', 24, 'doze'], ['g-sandbox', 10, 'sandbox'], ['g-tech', 12, 'tech'], ['g-edge', 12, 'edge'], ['g-undo', 8, 'undo'], ['g-wide', 8, 'wide']];
 export const D020_COUNT = FAMILIES20.reduce((n, [, c]) => n + c, 0);
+// D033：污水廠（k27，鄰水才蓋得下去）。家族同 D016 的寫法（地圖、參數照底家族，操作抽 SEWAGE）；地圖另外放幾座污水廠（genMap 的 plants），拆除才拆得到
+export const D033_SEED = 20261033;
+export const SEWAGE = ['sewage'];
+export const FAMILIES33 = [['s-random', 60, 'random'], ['s-money', 20, 'money'], ['s-doze', 24, 'doze'], ['s-sandbox', 10, 'sandbox'], ['s-tech', 12, 'tech'], ['s-edge', 12, 'edge'], ['s-undo', 8, 'undo'], ['s-wide', 8, 'wide']];
+export const D033_COUNT = FAMILIES33.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -193,7 +198,7 @@ function putLayer(t, layer, g, alt) {
   if (name === 'bld') t.bld = rci(g, g.int(1, 3), [1, 2]);
   else PUT[name](t);
 }
-function genMap(g, fam, j, water = false, dumps = false) {
+function genMap(g, fam, j, water = false, dumps = false, plants = false) {
   const N = fam === 'edge' || fam === 'undo' ? g.int(10, 12) : fam === 'wide' ? g.int(24, 34) : g.int(10, 18), dense = fam === 'doze', multi = fam === 'multi';
   const { tiles, sparse } = genTiles(g, N, fam);
   layRoads(g, tiles, N, dense ? g.int(2, 4) : fam === 'wide' ? g.int(5, 9) : multi ? g.int(1, 3) : g.int(2, 5), sparse);
@@ -239,6 +244,8 @@ function genMap(g, fam, j, water = false, dumps = false) {
   }
   // D020：幾座垃圾場（k8，變體 0–2）；只在 dumps 抽亂數，之前各卡的地圖逐位不變
   if (dumps) for (let s = 0, m = g.int(1, 3); s < m; s++) placeFree(g, tiles, N, t => { t.bld = { k: 8, lv: 1, v: g.int(0, 2), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
+  // D033：幾座污水廠（k27，變體 0–2）；只在 plants 抽亂數，之前各卡的地圖逐位不變
+  if (plants) for (let s = 0, m = g.int(1, 3); s < m; s++) placeFree(g, tiles, N, t => { t.bld = { k: 27, lv: 1, v: g.int(0, 2), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
   if (g.ch(fam === 'random' || dense || fam === 'edge' ? .15 : 0)) placeFree(g, tiles, N, t => {
     const ref = g.ch(.5) ? [g.pick([-1, N]), g.int(0, N - 1)] : [g.int(0, N - 1), g.int(0, N - 1)];
     const inside = ref[0] >= 0 && ref[0] < N;
@@ -436,6 +443,20 @@ export function cases20(k) {
     base += count;
   }
   throw new Error(`D020 案例 ${k} 超出 ${D020_COUNT}`);
+}
+
+// D033 第 k 個案例（0 ≤ k < D033_COUNT）：同 cases16，操作抽 SEWAGE、地圖多放污水廠
+export function cases33(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES33) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D033_SEED));
+      const m = genMap(g, fam, j, false, false, true), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, SEWAGE) };
+    }
+    base += count;
+  }
+  throw new Error(`D033 案例 ${k} 超出 ${D033_COUNT}`);
 }
 
 // ---- 兩邊共用的跑法 ----

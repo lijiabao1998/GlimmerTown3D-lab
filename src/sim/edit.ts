@@ -27,6 +27,7 @@ export const CIVIC_TOOLS = [
   { id: 'school', name: '學校', short: '學', cost: COST.school }, { id: 'library', name: '圖書館', short: '圖', cost: COST.library },
   { id: 'post', name: '郵局', short: '郵', cost: COST.post }, { id: 'cemetery', name: '墓園', short: '墓', cost: COST.cemetery },
   { id: 'dump', name: '垃圾場', short: '垃', cost: COST.dump },   // D020：實驗線排在大墓園後面（37597）
+  { id: 'sewage', name: '污水廠', short: '污', cost: COST.sewage },   // D033：實驗線 svc 類（37695），排在最後；🚿；鄰水才蓋得下去
 ];
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
