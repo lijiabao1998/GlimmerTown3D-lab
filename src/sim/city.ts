@@ -11,10 +11,11 @@ import { fnv1a } from './rng.ts';
 // 格式 4（D012）：多了讀檔時照實驗線重挑外觀的事件 restyle（src/sim/restyle.ts）。格式 1–3 照讀
 // 格式 5（D019）：多了鋪配水管的事件 pipe，拆除多了水管那一層（layer 'wp'）。格式 1–4 照讀；比 5 新的不猜（src/io/save.ts）
 // 格式 6（D026）：多了每天的災禍與玩家的處置——起火 fire、燒毀 burn、犯罪 crime、廢棄 abandon、生病 sick、死亡 death、處置 act（滅火、處理犯罪、治療），拆除多了焦土那一層（layer 'ruin'）。格式 1–5 照讀；比 6 新的不猜
-export const CITY_FORMAT = 6;
+// 格式 7（D034）：多了合併事件 merge——四棟相鄰同類二級以上住宅或商業合併成 2×2 摩天樓（k33、k34），更快樂的城九格合併成 3×3 巨廈（k105、k106）；吸收的建築成了墓碑。格式 1–6 照讀
+export const CITY_FORMAT = 7;
 // 存檔寫的格式看歷史裡有什麼（D019、D026）：有災禍事件、拆焦土才寫 6；有鋪水管、拆水管的事件寫 5；都沒有就寫 4——比這一版舊的程式（認到 4 或 5）照樣讀得回來，
 // 沒有水管、沒有災禍的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
-export const eventFormat = (e: CityEvent) => HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
+export const eventFormat = (e: CityEvent) => e.t === 'merge' ? 7 : HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
 export const HAZARD_EVENTS: readonly string[] = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'];
 
 // 體育場（k 9）的大小存在建築那筆的第 6 位（實驗線 load 66900），沒有就是 2。實驗線只會放 2×2（51728），
@@ -64,7 +65,11 @@ export type ActKind = 'fire' | 'crime' | 'sick';
 export const ACT_CODES: readonly ActKind[] = ['fire', 'crime', 'sick'];   // 緊湊列的動作碼：0 滅火、1 處理犯罪、2 治療（只往後加）
 export interface ActEvent { day: number; t: 'act'; x: number; z: number; what: ActKind; cost: number }
 export type HazardEvent = FireEvent | BurnEvent | CrimeEvent | AbandonEvent | SickEvent | DeathEvent | ActEvent;
-export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent;
+// 合併（D034，實驗線 55688–55756）：x、z＝新建築的根格（左上角）、k＝33／34（2×2 塔）或 105／106（3×3 巨廈）、size＝邊長、v＝變體；from＝被吸收的建築編號（含公園；每一棟都是 1×1），
+// 都成了墓碑（goneDay＝這一天）；巨廈另外清掉九格的分區。新建築的編號＝建築清單長度 + 1。只增不改（規則 4）
+export interface MergeEvent { day: number; t: 'merge'; x: number; z: number; k: number; size: number; v: number; from: number[] }
+export const MERGE_SIZE: Readonly<Record<number, number>> = { 33: 2, 34: 2, 105: 3, 106: 3 };
+export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent;
 
 export interface City {
   format: number;

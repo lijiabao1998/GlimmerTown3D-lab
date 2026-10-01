@@ -46,6 +46,7 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'sick': row = [14, dd, e.x, e.z]; break;
       case 'death': row = [15, dd, e.x, e.z]; break;
       case 'act': row = [16, dd, e.x, e.z, ACT_CODES.indexOf(e.what), e.cost]; break;
+      case 'merge': row = [17, dd, e.x, e.z, e.k, e.v, ...e.from]; break;   // D034（城市格式 7）：尾巴是被吸收的建築編號
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

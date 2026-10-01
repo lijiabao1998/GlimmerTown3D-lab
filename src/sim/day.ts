@@ -13,7 +13,7 @@ import { cityFromLab, stadiumSize, type City, type CityBuilding, type CityEvent,
 import { fnv1a } from './rng.ts';
 import { clamp, labRng, type Bld, type Fields, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
-import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampPolSrc, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
+import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampCov, stampPolSrc, COVR, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
 import { assignWater, computeWaterLegacy449 } from './rules/water.ts';
 import { garbageDay, garbDecisionRatio452 } from './rules/garbage.ts';
@@ -26,7 +26,8 @@ import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
-import { crimeFlag, judgeWealth, landStaticAt } from './rules/land.ts';
+import { crimeFlag, judgeWealth, landStaticAt, pickV406 } from './rules/land.ts';
+import { mergeDay, type MergeRec } from './rules/merge.ts';
 import { abandonStep, crimeStep, deathPre, deathStep, diseaseStep, fireStep, medCapOf, type DeathPre, type HazardX } from './rules/hazard.ts';
 import { markLandDirty } from './rules/build.ts';
 import { hashBytes, isCommuteDay, jamCounts, roadStatsOf, trafficStep } from './rules/commute.ts';
@@ -81,6 +82,7 @@ export interface DayReport {
   garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
   econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
+  merges: MergeRec[];                           // D034：當天的合併（摩天樓與巨廈：新建築的根格、種類、邊長、吸收了哪些建築；沒有合併＝空陣列）
   hazard: HazardReport;                         // D026：當天的災禍（起火、蔓延、燒毀、犯罪、廢棄、生病、治癒、死亡、恢復）
   happyAgg: number[];                           // D027：城市平均每一項住宅幸福（實驗線 happyAgg 55255；項的順序＝rules/happy.ts HAPPY_NAMES）；沒有住宅是空的
   chain346: Chain346;                           // D028：T346 天然氣鏈當天的結果（實驗線 GV.chain346 鉤子的那幾欄）與旅宿床位、入住
@@ -397,7 +399,16 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
       if (tgt > cur) b.we = cur + 1; else if (tgt < cur) b.we = cur - 1;
     }
   }
-  // 55691 摩天樓合併：起步城用不到（要有水，第 3 類）
+  // 55687–55756 摩天樓與巨廈合併（D034，rules/merge.ts）：幸福 > .55 才掃（巨廈 > .6），在財富移級之後、災禍之前，共用同一條亂數流；吸收的公園成對撤覆蓋印、
+  // 巨廈的 markLandDirty(x+1, y+1, 8) 把「隔天整張重算」換成那一個框（實驗線的 bug，照抄，同 D011 doPlace）。tickBld 不更新（實驗線同樣：後面的迴圈讀 tiles[i].bld，被吸收的格子現在是塔或 ref）。
+  // stale：本線的「整張重算」只算 stale 格，合併改的覆蓋（公園半徑 4）與犯罪旗標（半徑 4）要標待重算；實驗線只有巨廈標框，塔不標，隔天的整張重算會補上，所以這裡一律多標
+  const mgs = mergeDay(w, {
+    cityHappy, dem, sewNeed, sewOk: sewOkArr, rng: s.rng,
+    pickV: (k, lv, x, y, fb) => pickV406(w, f, s.vrank, k, lv, x, y, fb),
+    unstampPark: (x, y) => stampCov(g, s.budget, 'park', x, y, COVR.park, -1),
+    markLand: (x, y, r) => markLandDirty(s, x, y, r),
+  });
+  for (const m of mgs) markStale(s, m.x + 1, m.z + 1, 8);
   // 55757–55865 每天的災禍（D026，rules/hazard.ts）：火災 → 犯罪 → 廢棄 → 疾病 → 死亡，共用同一條亂數流
   const hz = hazardDay(s, tickBld, f, dp, hzx);
   for (let k = 0; k < hz.insured; k++) s.money += INSURANCE_PAYOUT;      // 53047–53051 insPayout：一棟一棟加（浮點順序跟實驗線逐次 money+=35 一樣）
@@ -426,14 +437,14 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   s.cityPoints = cityPoints(w, f.COV, cityHappy, s.edu.tech, b => residentPopulation488(b, () => undefined));
   const rk = rankStep(s.rankIdx, s.cityPoints); s.rankIdx = rk.rankIdx;
   s.medCap = medCapOf({ clinics: cnt.clinics ?? 0, hospitals: settle.hospitals, am: cnt.am ?? 0, mhN: cnt.mhN ?? 0, gmc466: cnt.gmc466 ?? 0 });   // 56151–56163 flowStat384：明天的疾病段讀它（讀檔後第一天沒有＝無限）
-  syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups);
+  syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups, mgs);
   syncHazards(s, hz);                                                     // 燒毀＝墓碑與焦土、廢棄＝abandoned、災禍事件記進歷史（在生長、升級的事件之後，同 tick 順序）
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    food: fd, econ: { ec, late, sn, cons }, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
+    food: fd, econ: { ec, late, sn, cons }, merges: mgs, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
   };
 }
 
@@ -519,7 +530,7 @@ function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, gar
 }
 
 // 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步
-function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: number; v: number }[]) {
+function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: number; v: number }[], merges: MergeRec[] = []) {
   const c = s.city, n = c.n;
   for (const { i, b } of grown) {
     const x = i % n, z = (i / n) | 0, size = s.kinds.size(b.k);
@@ -533,6 +544,21 @@ function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: 
     const cb = s.root.get(u.i)!;
     cb.lv = u.lv; cb.v = u.v;
     c.history.push({ day: s.day, t: 'upgrade', x: cb.x, z: cb.z, k: cb.k, lv: u.lv, v: u.v });
+  }
+  // D034：合併（在生長、升級的事件之後、災禍之前，同 tick 順序）：吸收的建築成了墓碑（屋齡停在合併那一天、占的格清空）、新建築蓋上去（編號＝清單長度 + 1，屋齡 0）、巨廈清九格分區
+  for (const m of merges) {
+    const ids: number[] = [];
+    m.from.forEach((i, q) => {
+      const cb = s.root.get(i);
+      if (!cb) throw new Error(`合併：(${i % n},${(i / n) | 0}) 沒有可吸收的建築`);
+      cb.age = m.ages[q]; cb.goneDay = s.day; s.root.delete(i); ids.push(cb.id);
+      for (let dz = 0; dz < cb.size; dz++) for (let dx = 0; dx < cb.size; dx++) { const j = (cb.z + dz) * n + cb.x + dx; if (c.occ[j] === cb.id) c.occ[j] = 0; }
+    });
+    const nb: CityBuilding = { id: c.buildings.length + 1, k: m.k, lv: 1, v: m.v, age: 0, x: m.x, z: m.z, size: m.size, abandoned: false, builtDay: s.day };
+    c.buildings.push(nb);
+    for (let dz = 0; dz < m.size; dz++) for (let dx = 0; dx < m.size; dx++) { const j = (m.z + dz) * n + m.x + dx; c.occ[j] = nb.id; if (m.clearedZone) c.zone[j] = 0; }
+    s.root.set(m.z * n + m.x, nb);
+    c.history.push({ day: s.day, t: 'merge', x: m.x, z: m.z, k: m.k, size: m.size, v: m.v, from: ids });
   }
   for (const [i, cb] of s.root) { const b = s.w.tiles[i].bld; if (b) { cb.age = b.age; cb.lv = b.lv; cb.v = b.v; } }
   c.day = s.day;

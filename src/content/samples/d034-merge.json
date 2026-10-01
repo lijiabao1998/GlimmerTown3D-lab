@@ -1,0 +1,194 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-merge.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "合併段前一行（devBeforeSkyline516B 呼叫）",
+   "anchors": {
+    "start": "if(typeof devBeforeSkyline516B==='function')devBeforeSkyline516B();",
+    "end": "if(typeof devBeforeSkyline516B==='function')devBeforeSkyline516B();"
+   },
+   "line": 55687,
+   "endLine": 55687,
+   "sha": "fe773b6e6281d50102f3af11dd8d3ce2aa4e8ee5bd16c521e38f734491d081cd"
+  },
+  {
+   "kind": "span",
+   "name": "合併整段",
+   "anchors": {
+    "start": "if(cityHappy>.55||(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())){",
+    "end": "  // 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土"
+   },
+   "line": 55691,
+   "endLine": 55756,
+   "sha": "7bc790e1b3dd09da7f097fb59417da7a86f72f0b64c5ba2f2052700da59946ef"
+  },
+  {
+   "kind": "span",
+   "name": "火災段起點",
+   "anchors": {
+    "start": "  // 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土",
+    "end": "  // 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土"
+   },
+   "line": 55757,
+   "endLine": 55757,
+   "sha": "ab20844355a25714b5cce06e5a379012eecef6b49072820d39fc24c7770a6cc3"
+  },
+  {
+   "kind": "fn",
+   "name": "devGod516B",
+   "anchors": {
+    "start": "function devGod516B(",
+    "closure": "balanced-brace"
+   },
+   "line": 72744,
+   "endLine": 72744,
+   "sha": "86aff6781f16d5989672879afefd0a60c84ef7faf6835b6d04bd7c3a1154f2d9"
+  },
+  {
+   "kind": "fn",
+   "name": "devOverride516B",
+   "anchors": {
+    "start": "function devOverride516B(",
+    "closure": "balanced-brace"
+   },
+   "line": 72745,
+   "endLine": 72745,
+   "sha": "dd51e34cf5d49e88f35253f372a2f051495182472bbf6072e412cd747f123079"
+  },
+  {
+   "kind": "fn",
+   "name": "devSkylineBypass516B",
+   "anchors": {
+    "start": "function devSkylineBypass516B(",
+    "closure": "balanced-brace"
+   },
+   "line": 72747,
+   "endLine": 72747,
+   "sha": "8ef644f82e2c74c00d8b036aa7199c90b0cea1e090db8e31aca721d9f555443f"
+  },
+  {
+   "kind": "fn",
+   "name": "devBeforeSkyline516B",
+   "anchors": {
+    "start": "function devBeforeSkyline516B(",
+    "closure": "balanced-brace"
+   },
+   "line": 72764,
+   "endLine": 72764,
+   "sha": "0688415a8b236e7047254c2b8955509184519cb0def22871c75066fc31340597"
+  },
+  {
+   "kind": "decl",
+   "name": "TOWER_MULT",
+   "anchors": {
+    "start": "const TOWER_MULT="
+   },
+   "line": 37418,
+   "endLine": 37418,
+   "sha": "6b57d47311912e73a6ef592cad7c6d3ad9c8424a93d8ac700aaf4f1d92eadebe"
+  },
+  {
+   "kind": "span",
+   "name": "TOWER_POP",
+   "anchors": {
+    "start": "const TOWER_POP=",
+    "end": "const TOWER_POP="
+   },
+   "line": 37419,
+   "endLine": 37419,
+   "sha": "3556dad258edc8b8edc0d47035af19f6e7dda22ea1505767511afa08e2a21cca"
+  },
+  {
+   "kind": "span",
+   "name": "MEGA_POP",
+   "anchors": {
+    "start": "const MEGA_POP=Math.round(POPS[3]*9*1.35);",
+    "end": "const MEGA_POP=Math.round(POPS[3]*9*1.35);"
+   },
+   "line": 37420,
+   "endLine": 37420,
+   "sha": "77948d4cdd0922dfa072e9001d0ad9ddad8bd92bbea739863851ad5f5f7d5220"
+  },
+  {
+   "kind": "span",
+   "name": "MEGA_JOBS",
+   "anchors": {
+    "start": "const MEGA_JOBS=Math.round(JOBSC[3]*9*1.35);",
+    "end": "const MEGA_JOBS=Math.round(JOBSC[3]*9*1.35);"
+   },
+   "line": 37421,
+   "endLine": 37421,
+   "sha": "83485ff9a5cbfc6f5f43790eb99973d06f39864af119a5363a90da59b8abe501"
+  },
+  {
+   "kind": "exact",
+   "name": "T",
+   "anchors": {
+    "start": "const T=i=>tiles[i];"
+   },
+   "line": 39730,
+   "endLine": 39730,
+   "sha": "df082f689c21e60a6de628b3cfcc352aaacd344f2e39adfc37ceef40ad25e249"
+  },
+  {
+   "kind": "fn",
+   "name": "markLandDirty",
+   "anchors": {
+    "start": "function markLandDirty(",
+    "closure": "balanced-brace"
+   },
+   "line": 53074,
+   "endLine": 53084,
+   "sha": "95e1ecbcb0afebfe04df520c03e5504261476ae3e35d127013fae567712b8c50"
+  },
+  {
+   "kind": "fn",
+   "name": "stampCov",
+   "anchors": {
+    "start": "function stampCov(",
+    "closure": "balanced-brace"
+   },
+   "line": 52977,
+   "endLine": 52982,
+   "sha": "966a9dbbc25055b0fe5f2f9d12afc7b381e057b6bc1d65a9b144e0a3e35c82c8"
+  },
+  {
+   "kind": "decl",
+   "name": "COVR",
+   "anchors": {
+    "start": "const COVR="
+   },
+   "line": 52957,
+   "endLine": 52957,
+   "sha": "ac26b868a810db303abbc17e29f06becf8599b45804b220bd4c27e1bfbd0538a"
+  }
+ ],
+ "text": {
+  "hook": "  if(typeof devBeforeSkyline516B==='function')devBeforeSkyline516B();",
+  "merge": "  if(cityHappy>.55||(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())){\n    const mgDone=new Uint8Array(N*N);\n    // T341h 巨廈直接成形（先於塔掃描＝街心大簇優先長大的，塔撿剩下的 2×2）：\n    // 3×3 同類分區簇，實質 Lv2+ 供電無火 ≥5/9，其餘格可為公園（吸收＝空中花園，成對撤 COV 印）\n    // 或同類空地塊/空草地；碰到路/他樓即不合格（路不可吞）。幸福>0.6、需求>0.25，每簇每天 2%。\n    // 為何不做「塔進化」：實測塔恆貼路而生（分區沿路長），3×3 環永缺一格路＝結構性死路（T341-DIAG 900 天凍結）。\n    if(cityHappy>.6||(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())){\n      for(let y=0;y<N-2;y++)for(let x=0;x<N-2;x++){\n        const i0=idx(x,y);\n        if(mgDone[i0])continue;\n        let kk=0; /* T342e⬚種子改「窗內任一 Lv2+」定類——原「左上角必為 Lv2+」漏掃大量合格窗（左上是公園/空地/L1 即盲區） */\n        for(let dy=0;dy<3&&!kk;dy++)for(let dx=0;dx<3;dx++){const qb0=tiles[idx(x+dx,y+dy)].bld;if(qb0&&!qb0.ref&&(qb0.k===1||qb0.k===2)&&(qb0.lv>=2||(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B()))){kk=qb0.k;break;}}\n        if(!kk||(dem[kk]<=.25&&!(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())))continue;\n        let ok2=true,subst=0;const parks341=[];\n        for(let dy=0;dy<3&&ok2;dy++)for(let dx=0;dx<3;dx++){\n          const qi=idx(x+dx,y+dy);\n          if(mgDone[qi]){ok2=false;break;}\n          const qt=tiles[qi],qb=qt.bld;\n          if(qb&&!qb.ref&&qb.k===kk&&(qb.lv>=2||(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B()))&&qb.pw&&qb.wa&&(!sewNeed442||SEW_OK442[qi])&&!qb.fire){subst++;continue;} /* T442：巨廈核心至少5/9棟需電+水+集中污水，基礎設施先於垂直密度 */\n          if(qb&&!qb.ref&&qb.k===kk&&qb.lv===1&&!qb.fire)continue; /* T342d：同類 Lv1 舊屋可吸收（都更敘事；實測 L1 遍地＝3×3 永不合格的真兇） */\n          if(qb&&!qb.ref&&qb.k===4){parks341.push([x+dx,y+dy]);continue;}\n          if(!qb&&!qt.road&&!qt.ruin&&(qt.zone===kk||(!qt.zone&&qt.t===2)))continue;\n          ok2=false;break;\n        }\n        if(!ok2||subst<5)continue;\n        for(let dy=0;dy<3;dy++)for(let dx=0;dx<3;dx++)mgDone[idx(x+dx,y+dy)]=1; /* T342c⬚合格即劃「大型開發預定地」——擲髀失敗也不讓後續塔掃描吃碎同一簇（實測塔多窗口 8%/日 撞贏巨廈單窗 4%，磎片化）；mgDone 每 tick 重建，預定地每日重新資格 */\n        if((typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())||R()<.04){ /* T342b: .02→.04 */\n          const mk2=kk===1?105:106;\n          for(const[px2,py2]of parks341)stampCov('park',px2,py2,COVR.park,-1); // 成對撤印（Uint8 鐵律）\n          for(let dy=0;dy<3;dy++)for(let dx=0;dx<3;dx++){\n            const j2=idx(x+dx,y+dy);\n            mgDone[j2]=1;const jt=T(j2);jt.zone=0;\n            jt.bld=(dx===0&&dy===0)?{k:mk2,lv:1,v:0,age:0,pw:true,wa:true,h:1,sz:3}:{k:mk2,ref:[x,y]};\n          }\n          markLandDirty(x+1,y+1,8);\n          toast((mk2===105?'🌆 住宅巨廈拔地而起！（居民 '+MEGA_POP+' 人）':'🌆 商業綜合體開幕！（就業 '+MEGA_JOBS+'）'),'gold',x,y);sFanfare();\n        }\n      }\n    } // 本輪已合併/佔用格，避免相鄰候選重疊消耗同一格\n    for(let y=0;y<N-1;y++)for(let x=0;x<N-1;x++){\n      const i0=idx(x,y);\n      if(mgDone[i0])continue;\n      const b0=tiles[i0].bld;\n      if(!b0||b0.ref||(b0.k!==1&&b0.k!==2)||(b0.lv<2&&!(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())))continue; /* T341c⬚種子同步放寬 Lv2+（原只改了四格檢查漏了種子） */\n      const kk=b0.k;\n      if(dem[kk]<=.3&&!(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B()))continue; /* T341c：地價閘撤除——實測供水簇全在低地價邊緣(56-87)、高地價中心無水＝閘門成空集；稀缺性由供水+密度承擔 */\n      const quad=[[x,y],[x+1,y],[x,y+1],[x+1,y+1]];\n      let ok=true;\n      for(const[qx,qy]of quad){\n        const qi=idx(qx,qy);\n        if(mgDone[qi]){ok=false;break;}\n        const qb=tiles[qi].bld;\n        if(!qb||qb.ref||qb.k!==kk||(qb.lv<2&&!(typeof devSkylineBypass516B==='function'&&devSkylineBypass516B()))||!qb.pw||!qb.wa||(sewNeed442&&!SEW_OK442[qi])||qb.fire){ok=false;break;} /* T442：摩天樓候選也需污水接管；T341b：Lv3→Lv2+（實測 700 天 5363 人城僅 4 棟 Lv3、0 合格簇＝鎖鏈餃死；改由高地價閘門承擔稀缺性） */\n      }\n      if(!ok)continue;\n      if((typeof devSkylineBypass516B==='function'&&devSkylineBypass516B())||R()<.02){ // T127：每合格 2×2 簇每天 2% 機率合併\n        for(const[qx,qy]of quad)mgDone[idx(qx,qy)]=1;\n        const tk=kk===1?33:34;\n        for(const[qx,qy]of quad){\n          const qt=T(idx(qx,qy));\n          qt.bld=(qx===x&&qy===y)?{k:tk,lv:1,v:pickV406(tk,1,x,y,ri(4)),age:0,pw:true,wa:true,h:1,sz:2}:{k:tk,ref:[x,y]}; // T516：四種原創塔樓輪廓；仍只呼叫一次 ri()，模擬 RNG 呼叫數不變，v 仍純視覺\n        }\n        toast((kk===1?'🏙️ 住宅摩天樓落成！':'🏙️ 商業摩天樓落成！'),'gold',x,y);sFanfare();\n      }\n    }\n  }",
+  "fireStart": "  // 火災（升級段之後）：起火→蔓延→推進燃燒/燒毀成焦土",
+  "devGod": "function devGod516B(){return !!(devState516B.sandbox&&devState516B.god);}",
+  "devOverride": "function devOverride516B(k){return !!(devGod516B()&&devState516B.overrides[k]);}",
+  "devBypass": "function devSkylineBypass516B(){return devOverride516B('skyline');}",
+  "devBefore": "function devBeforeSkyline516B(){if(!devGod516B())return;if(devOverride516B('demand')){dem[1]=Math.max(.95,dem[1]||0);dem[2]=Math.max(.95,dem[2]||0);dem[3]=Math.max(.95,dem[3]||0);}if(devOverride516B('unlimitedMoney'))money=Math.max(money,999999);}",
+  "towerMult": "const TOWER_MULT=1.15;                    // T127：摩天樓合併「四格 lv3 總和」獎勵倍率",
+  "towerPop": "const TOWER_POP=Math.round(POPS[3]*4*TOWER_MULT);   // T127：住宅塔（k33）人口＝四格 lv3 住宅總和×1.15＝248",
+  "megaPop": "const MEGA_POP=Math.round(POPS[3]*9*1.35);  // T341：住宅巨廈（k105 3×3）＝九棟 lv3 總和×1.35",
+  "megaJobs": "const MEGA_JOBS=Math.round(JOBSC[3]*9*1.35); // T341：商業綜合體（k106 3×3）",
+  "T": "const T=i=>tiles[i];",
+  "markLand": "function markLandDirty(x,y,r){\n  landDirty=true;\n  const x0=Math.max(0,x-r),y0=Math.max(0,y-r),x1=Math.min(N-1,x+r),y1=Math.min(N-1,y+r);\n  if(!landBox)landBox={x0,y0,x1,y1};\n  else{\n    if(x0<landBox.x0)landBox.x0=x0;\n    if(y0<landBox.y0)landBox.y0=y0;\n    if(x1>landBox.x1)landBox.x1=x1;\n    if(y1>landBox.y1)landBox.y1=y1;\n  }\n}",
+  "stampCov": "function stampCov(field,x,y,r,delta){\n  const cat=SVC_BUDGET_CAT[field];if(cat)r=Math.max(1,Math.round(r*svcBudget[cat])); // T294：預算縮放覆蓋半徑（budget=1 時 round(r×1)=r 精確恆等，不破壞既有覆蓋/測試）\n  const a=COV[field];\n  for(let dy=-r;dy<=r;dy++){const ny=y+dy;if(ny<0||ny>=N)continue;\n    for(let dx=-r;dx<=r;dx++){const nx=x+dx;if(nx<0||nx>=N)continue;a[idx(nx,ny)]+=delta;}}\n}",
+  "covr": "const COVR={park:4,plant:4,fire:9,school:8,stadium:10,police:10,hospital:12,clinic:6,library:6,post:8,cemetery:10,bus:6,rdec:2,ambulance:10,fire2:12,prison:8,university:10,parking:8,museum:8,theater:7,cinema:6,grandlib:12,court:10,institute:8,botanical:10,megahosp:18,police2:5,cem2:16,stadium2:16,fireHQ:16,faith:8,kindergarten:6,senior:6,bank:5,market:5,dogpark:4,icerink:6,skate:5,firewatch:6,pool:6,chapel:5,vet:5,cgarden:4,crem:12,highsch:10,freight:8,cpark:8,campus:12,civicc:9,fertco:10,kitchen:8}; // T257：fireHQ＝消防總局超大半徑消防場（fire/fire2 三場 OR） // T233：cem2＝大墓園大半徑安撫場 // T222：police2＝派出所小半徑警力場（fire2 同款雙場模式）；T138：博物館/劇院/電影院＝觀光＋幸福半徑；圖書總館＝大範圍教育（水族館/動物園/遊樂園純觀光係數，無 COV 欄）；T139：法院＝降犯罪半徑（配合警局）；研究院＝科技升級加成半徑；植物園＝大範圍幸福半徑；綜合醫院＝超大半徑醫療（市政廳/會展中心/氣象站為全城效果，無 COV 欄）"
+ },
+ "facts": {
+  "devDefault": true,
+  "bypassDefinitions": 1,
+  "bypassUses": 20
+ }
+}
