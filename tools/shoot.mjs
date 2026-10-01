@@ -1,5 +1,5 @@
 // 拍樣張，存到 scratch/（不進版本庫）。
-// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|d030|d030-traj|d031|d032|d033|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
+// 用法：node tools/shoot.mjs [--set=d001|timeline|bio|d003|d004|d005|d006|d007|d008|d010|d011|d012|d014|d016|d018|d019|d020|d020-traj|d022|d022-traj|d026|d027|d028|d028-gap|d029|d029-traj|d030|d030-traj|d031|d032|d033|d034|all] [--seed=5162026] [--out=scratch/shots] [--before=D010 版的 dist 目錄]
 //   d001      三畫風 × 三年份 × 全景／近景（D001 對照）
 //   timeline  畫風 A、對焦城心，第 0→300 年十格（D002）
 //   bio       手機尺寸，第 300 年打開 (26,21) 的地塊履歷（D002）
@@ -1459,6 +1459,35 @@ if (set === 'd033') {   // 只在明講要它時才跑（不進 all）：手機�
     const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
     fs.writeFileSync(path.join(out, 'D033-mobile.jpg'), Buffer.from(shot.data, 'base64'));
     console.log('OK D033-mobile.jpg');
+  });
+}
+
+if (set === 'd034') {   // 只在明講要它時才跑（不進 all）：手機上的合併——①M2b 合併前的九格窗（住宅巨廈要吞掉的那一塊）、②推進一天之後：巨廈拔地而起、金色提示、③M1b 的住宅塔：點開建築卡的合併列
+  const { expectedMerges } = await import('./smoke-d034.mjs'), M2 = expectedMerges('M2b', 1), M1 = expectedMerges('M1b', 1);
+  const mega = M2.days[0].find(m => m.k === 105), tower = M1.days[0].find(m => m.k === 33);
+  await withBrowser({ width: 412, height: 860 }, async ({ open, page }) => {
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 412, height: 860, deviceScaleFactor: 2, mobile: true });
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    const load = async c => { await open('sample=seed516&clean=1'); await page.evaluate(`(__gt.clearSave(), localStorage.setItem('gt3d.v1.save', ${JSON.stringify(c)}), 1)`); await open(''); };
+    await load(M2.code);
+    await page.evaluate(`(__gt.focusTile(${mega.x + 1},${mega.z + 1}), 1)`); await pause(1100); await save(page, 'd034_mob_before');
+    await page.evaluate(`(__gt.simStep(1), __gt.focusTile(${mega.x + 1},${mega.z + 1}), __gt.openTile(${mega.x + 2},${mega.z + 2}), 1)`); await pause(1300); await save(page, 'd034_mob_mega');
+    await load(M1.code);
+    await page.evaluate(`(__gt.simStep(1), __gt.focusTile(${tower.x + 1},${tower.z + 1}), __gt.openTile(${tower.x + 1},${tower.z + 1}), 1)`); await pause(1300); await save(page, 'd034_mob_tower');
+    errors += page.errors.length;
+  });
+  const CSS = `body{margin:0;background:#0d1226;color:#eef1f7;font:14px system-ui,"Noto Sans CJK TC",sans-serif}h1{font-size:17px;margin:10px 12px 2px}p.s{margin:0 12px;color:#aab3c5;font-size:12px}figure{margin:0}figcaption{padding:4px 2px 5px;font-weight:600}.g{display:grid;grid-template-columns:repeat(3,412px);gap:10px;padding:10px 12px}img{width:412px;display:block;border-radius:8px}`;
+  fs.writeFileSync(path.join(out, 'd034_mobile.html'), `<!doctype html><meta charset="utf-8"><style>${CSS}</style><h1>D034 手機 412×860：摩天樓與巨廈合併</h1><p class="s">實驗線 tick() 55688–55756：幸福 > .55 的城，四棟相鄰、同類、二級以上、有電有水有污水接管的住宅或商業，每天 2% 機率合併成 2×2 摩天樓；幸福 > .6 時，3×3 窗裡至少 5 棟實質（可吸收一級舊屋、公園、空地）每天 4% 機率合併成巨廈（居民 656、就業 462）。吸收的建築沒有補償、成了墓碑；巨廈清掉九格分區；歷史多一筆 merge 事件（城市格式 7）。①M2b 第 0 天：九格窗還是九棟三級住宅；②推進一天：金色提示「🌆 住宅巨廈拔地而起！」、新建築在施工（9 天）；③M1b：住宅塔 (${tower.x}, ${tower.z}) 的建築卡，歷史列「4 棟合併成住宅摩天樓（2×2）：吸收住宅 ×4」。</p>
+    <div class="g"><figure><figcaption>① 合併前的九格窗</figcaption><img src="d034_mob_before.png"></figure><figure><figcaption>② 巨廈拔地而起</figcaption><img src="d034_mob_mega.png"></figure><figure><figcaption>③ 住宅塔的建築卡</figcaption><img src="d034_mob_tower.png"></figure></div>`);
+  await withBrowser({ root: out, entry: 'd034_mobile.html', width: 1400, height: 960, ready: '[...document.images].every(i=>i.complete&&i.naturalWidth)', settle: 200 }, async ({ page }) => {
+    await page.send('Page.navigate', { url: `http://127.0.0.1:${PORT}/d034_mobile.html` });
+    for (let i = 0; i < 60 && !(await page.evaluate('[...document.images].length>0&&[...document.images].every(i=>i.complete&&i.naturalWidth)').catch(() => false)); i++) await new Promise(r => setTimeout(r, 100));
+    const ch = await page.evaluate(`Math.ceil(document.querySelector('.g').getBoundingClientRect().bottom)`);
+    await page.send('Emulation.setDeviceMetricsOverride', { width: 1400, height: ch, deviceScaleFactor: 1, mobile: false });
+    await new Promise(r => setTimeout(r, 300));
+    const shot = await page.send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
+    fs.writeFileSync(path.join(out, 'D034-mobile.jpg'), Buffer.from(shot.data, 'base64'));
+    console.log('OK D034-mobile.jpg');
   });
 }
 

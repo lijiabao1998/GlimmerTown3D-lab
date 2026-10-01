@@ -549,6 +549,8 @@ await guard('./unit-d032-live.mjs', 'd032LiveGuards');   // D032：政策與預�
 await guard('./unit-d033.mjs', 'd033Guards');   // D033：污水的管網元件與貼著的元件與距離與電力係數逐項＝實驗線原文（vm、突變）、原文 26 段 sha256
 await guard('./unit-d033-live.mjs', 'd033LiveGuards');   // D033：污水的實驗線頁面實跑（隨機與手排的佈局 354 個逐棟接管、Q 系列連推 13 天逐欄）、day.ts／food.ts／sewer.ts 接線突變、存檔與決定性（d033-lab.json，tools/d033-lab.mjs 錄）
 await guard('./unit-d033-build.mjs', 'd033BuildGuards');   // D033：污水廠的建造規則黃金樣本（d033-build.json，tools/lab-build.mjs --set=d033）、鄰水判定、原碼突變
+await guard('./unit-d034.mjs', 'd034Guards');   // D034：摩天樓與巨廈合併的實驗線原文（15 段 sha256）逐項＝merge.ts（vm：3000 張隨機小圖、亂數呼叫序列、突變 45）
+await guard('./unit-d034-live.mjs', 'd034LiveGuards');   // D034：合併的實驗線頁面實跑（M 系列 15 座連推 13 天逐欄、每格建築雜湊、實驗線讀本線存的碼）、day.ts 接線突變、歷史重播與存檔格式 7（d034-lab.json，tools/d034-lab.mjs 錄）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

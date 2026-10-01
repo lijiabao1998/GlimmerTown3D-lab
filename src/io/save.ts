@@ -14,7 +14,7 @@
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { ACT_CODES, CITY_FORMAT, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
+import { ACT_CODES, CITY_FORMAT, MERGE_SIZE, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
@@ -33,8 +33,9 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // restyle [8,dDay,x,z,v]（D012：城市格式 4）；pipe [9,dDay,x,z,cost,dG]、拆除圖層碼 4＝水管（D019：城市格式 5）；
 // D026（城市格式 6）：fire [10,dDay,x,z,k]、burn [11,dDay,x,z,k,id]、crime [12,dDay,x,z,k]、abandon [13,dDay,x,z,k,id]、sick [14,dDay,x,z]、death [15,dDay,x,z]、
 // act [16,dDay,x,z,動作碼,cost]（動作碼 0 滅火、1 處理犯罪、2 治療）、拆除圖層碼 5＝焦土。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
+// D034（城市格式 7）：merge [17,dDay,x,z,k,v,…被吸收的建築編號]（邊長由 k 推：33、34 是 2，105、106 是 3；尾巴有幾個編號就是吸收了幾棟，1–9 個）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'] as const;
+const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
 // 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
@@ -81,6 +82,13 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
     case 'fire': case 'crime': { const [x, z] = xz(); return { day, t, x, z, k: int('k', 1, 9999) }; }                                   // D026
     case 'burn': case 'abandon': { const [x, z] = xz(); return { day, t, x, z, k: int('k', 1, 9999), id: int('id', 1, 2 ** 31) }; }
     case 'sick': case 'death': { const [x, z] = xz(); return { day, t, x, z }; }
+    case 'merge': {   // D034
+      const [x, z] = xz(), k = int('k', 1, 9999), size = MERGE_SIZE[k], from = f('from');
+      if (!size) throw bad('合併的種類');
+      const sz = f('size'); if (sz !== undefined && sz !== size) throw bad('合併的邊長');
+      if (!Array.isArray(from) || from.length < 1 || from.length > 9 || !from.every(q => isInt(q) && q >= 1 && q <= 2 ** 31)) throw bad('吸收的建築');
+      return { day, t, x, z, k, size, v: int('v', 0, 9999), from: [...from] as number[] };
+    }
     case 'act': { const [x, z] = xz(), what = f('what'); if (!ACT_CODES.includes(what as ActKind)) throw bad('處置'); return { day, t, x, z, what: what as ActKind, cost: num('cost') }; }
     default: throw bad('種類');
   }
@@ -90,6 +98,7 @@ const ROW_FIELDS: Record<string, string[]> = {
   road: ['x', 'z', 'rc', 'cost', 'g'], zone: ['x', 'z', 'zone', 'cost', 'g'], place: ['x', 'z', 'k', 'lv', 'v', 'id', 'cost', 'g'],
   doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'], pipe: ['x', 'z', 'cost', 'g'],
   fire: ['x', 'z', 'k'], burn: ['x', 'z', 'k', 'id'], crime: ['x', 'z', 'k'], abandon: ['x', 'z', 'k', 'id'], sick: ['x', 'z'], death: ['x', 'z'], act: ['x', 'z', 'what', 'cost'],
+  merge: ['x', 'z', 'k', 'v'],   // D034：後面接被吸收的建築編號（不定長）
 };
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
@@ -99,12 +108,14 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
     if (!Array.isArray(row) || !isInt(row[0]) || !isNum(row[1])) throw new Error(`歷史第 ${k + 1} 筆不是一列`);
     const t = T_CODE[row[0]], names = t ? ROW_FIELDS[t] : [];
     if (!t) throw new Error(`歷史第 ${k + 1} 筆的種類不對`);
-    if (row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
+    if (t !== 'merge' && row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
     const at = (name: string) => {
       const v = row[2 + names.indexOf(name)];
       if (name === 'g') return isInt(v) ? g0 + v : v;
       if (name === 'layer') return isInt(v) ? LAYERS[v] : undefined;
       if (name === 'what') return isInt(v) ? ACT_CODES[v] : undefined;
+      if (name === 'from') return row.slice(2 + names.length);   // D034：合併的尾巴
+      if (name === 'size') return undefined;                      // D034：邊長由 k 推（列裡不存）
       return v;
     };
     const e = eventOf(t, d0 + row[1], at, n, k);

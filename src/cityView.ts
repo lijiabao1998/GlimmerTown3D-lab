@@ -17,6 +17,8 @@ import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
+import { mergeToastText } from './sim/rules/merge.ts';
+import { MEGA_POP, MEGA_JOBS } from './sim/rules/jobs.ts';
 import { SEWAGE_THRESHOLD442, WATER_HOPS472, SEWER_OK, SEWER_NO_PIPE, SEWER_NO_PLANT, SEWER_TOO_FAR, SEWER_NA, sewerServed } from './sim/rules/sewer.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
 import { roadCap475, hashBytes, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
@@ -346,6 +348,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     timing.step = performance.now() - t0;                              // D030 補：stepDay（含結算）自己的牆上時間；煙霧測試 D011 驗收 8 讀它（不含畫面同步、不含存檔）
     lastRep = rep;
     if (rep.grown || rep.upgraded) dirtyScene = true;
+    if (rep.merges.length) { dirtyScene = true; urgentRebuild = true; }   // D034：被吸收的建築要馬上從場景拿掉、新的塔與巨廈馬上長出來
     if (rep.hazard.burned.length || rep.hazard.abandons.length) { dirtyScene = true; urgentRebuild = true; }   // D027：燒毀的建築要馬上從場景拿掉、廢棄的要換牆色（D026 只在生長或升級時才重建，燒掉的房子會多站好幾天，煙霧測試在劇本城第 121 天抓到）
     daysSinceBuild++; daysSinceSave++;
     const st = rep.settle;                                                // D011：當天的里程碑、星等獎金、紓困（實驗線 56081、56122、56142）
@@ -355,6 +358,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
+    for (const m of rep.merges) bui.toast(mergeToastText(m.k, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(m.x, m.z));   // D034：合併一筆一則（55726、55753）；點一下鏡頭過去
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
     for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
     if (daysSinceSave >= SAVE_DAYS) saveNow();
@@ -898,6 +902,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       case 'abandon': return [d, '因長期犯罪而廢棄（停止繳稅）'];
       case 'sick': return [d, '生病了（人口與稅收暫停）'];
       case 'death': return [d, '發生憾事（人口與稅收暫停十天）'];
+      case 'merge': {   // D034：吸收了哪幾種（住宅、商業、公園…）一併列出
+        const n = new Map<string, number>(); for (const id of e.from) { const b = c.buildings[id - 1]; const nm = b ? KINDS.name(b.k) : '?'; n.set(nm, (n.get(nm) ?? 0) + 1); }
+        return [d, `${e.from.length} 棟合併成${KINDS.name(e.k)}（${e.size}×${e.size}）：吸收${[...n].map(([nm, q]) => `${nm} ×${q}`).join('、')}`];
+      }
       case 'act': return [d, e.what === 'fire' ? `現場滅火${e.cost ? `（$${e.cost}）` : ''}` : e.what === 'crime' ? '處理了犯罪' : `治療${e.cost ? `（$${e.cost}）` : ''}`];
     }
   }
@@ -1055,7 +1063,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       if (b.goneDay === undefined) rows.push(...chainRows(b));                          // D028
       if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
       const evs = lotEvents(c, b.x, b.z);
-      if (!evs.some(e => (e.t === 'grow' || e.t === 'place') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
+      if (!evs.some(e => (e.t === 'grow' || e.t === 'place' || e.t === 'merge') && e.day >= b.builtDay)) rows.push([`約第 ${Math.max(0, b.builtDay).toLocaleString()} 天`, `蓋起（由 2D 存檔的 age=${impDay - b.builtDay} 推算，只是估計）`]);
       for (const e of evs) rows.push(lotRow(c, e));
       if (!KINDS.known(b.k)) rows.push(['注意', '本線的種類表沒有這一種，用預設量體畫']);
       if (plan && blockMode && b.k >= 1 && b.k <= 3) {
@@ -1313,7 +1321,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     },
     openTile: (x: number, z: number) => showTile(x, z),
     sewerRows: (x: number, z: number) => { if (!city || !sim) return null; const b = buildingAt(city, x, z); return b ? sewerRows(b) : null; },   // D033：這一格建築的「污水」列（守衛與拍照用）
-    sewerRep: () => lastRep ? lastRep.sewer : null,   // D033：最近一天的污水回報 { need, served, unserved, plants }
+    sewerRep: () => lastRep ? lastRep.sewer : null,
+    mergeRep: () => lastRep ? lastRep.merges.map(m => ({ x: m.x, z: m.z, k: m.k, size: m.size, absorbed: m.from.length })) : null,   // D034：最近一天的合併（新建築的根格、種類、邊長、吸收了幾棟）   // D033：最近一天的污水回報 { need, served, unserved, plants }
     lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // ---- D026 災禍（守衛與拍照用）：標記數與焦土格數、一格的旗標、卡上的按鈕、把一格的旗標直接設好（造情境用，介面沒有這個鈕）----
     // ---- D027 交通（守衛與拍照用）：過載道路格（讀模擬的負載，不讀畫面）、貼圖上暖色的等級、幸福構成面板的列 ----

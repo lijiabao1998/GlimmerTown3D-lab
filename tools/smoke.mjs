@@ -28,6 +28,7 @@ import { d030Smoke, d030SkipNote } from './smoke-d030.mjs';
 import { d031Smoke, d031SkipNote } from './smoke-d031.mjs';
 import { d032Smoke, d032SkipNote } from './smoke-d032.mjs';
 import { d033Smoke, d033SkipNote } from './smoke-d033.mjs';
+import { d034Smoke, d034SkipNote } from './smoke-d034.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -580,6 +581,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d031Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d032Smoke(withBrowser, log);
 // ===== D033：污水（tools/smoke-d033.mjs：公共設施 14 種、內陸被擋與水邊蓋成、建築卡的「污水」列＝重算的接管與四種原因、蓋廠後右網接管與升級與維護費、手機預算；自己開四個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d033Smoke(withBrowser, log);
+// ===== D034：摩天樓與巨廈合併（tools/smoke-d034.mjs：M1b／M2b 推進一天的合併提示與歷史事件、塔與巨廈的建築卡、增量＝整張重建、手機預算；自己開四個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d034Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -598,6 +601,7 @@ if (d030SkipNote()) console.log(d030SkipNote());
 if (d031SkipNote()) console.log(d031SkipNote());
 if (d032SkipNote()) console.log(d032SkipNote());
 if (d033SkipNote()) console.log(d033SkipNote());
+if (d034SkipNote()) console.log(d034SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

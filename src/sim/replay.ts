@@ -6,9 +6,10 @@
 // 屋齡不存在事件裡，照實驗線的規則推（tick() 55628 起的升級迴圈對每棟非 ref 建築 age+1，新長的當天就會被加到；升級那天歸零）：
 //   匯入的：匯入時 age ＋（結束日 − 匯入日）；第 d 天長出、沒升級過：1 ＋（結束日 − d）；最後一次在第 u 天升級：結束日 − u；
 //   第 d 天玩家蓋的（在第 d 天的 tick 之後）：結束日 − d（doPlace 給 age 0，51672）；拆掉的：屋齡停在拆的那一天。
+//   格式 7（D034）再套用 merge：吸收的建築埋掉、蓋 2×2 塔或 3×3 巨廈（巨廈清九格分區）。
 // 未知的事件種類直接丟例外（不猜）。純邏輯。
 import { decodeLabCode } from '../io/labcode.ts';
-import { cityFromLab, roadCode, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
+import { cityFromLab, roadCode, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 
 interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
@@ -125,6 +126,21 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         const b = c.buildings[e.id - 1];
         if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可燒毀的建築 #${e.id}（歷史第 ${k + 1} 筆）`);
         bury(b, e.day); c.ruin[i] = 1;
+        break;
+      }
+      // D034（城市格式 7）：合併。吸收的建築成了墓碑（屋齡停在這一天、占的格清空）；新建築（編號＝清單長度 + 1、屋齡 0 從這一天起算）蓋在根格上；巨廈清九格分區（塔不清）
+      case 'merge': {
+        const size = MERGE_SIZE[e.k];
+        if (!size || size !== e.size || kinds.size(e.k) !== size) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 的合併種類 ${e.k} 邊長 ${e.size} 不對（歷史第 ${k + 1} 筆）`);
+        for (const id of e.from) {
+          const b = c.buildings[id - 1];
+          if (!b || b.goneDay !== undefined || b.size !== 1) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可吸收的建築 #${id}（歷史第 ${k + 1} 筆）`);
+          bury(b, e.day);
+        }
+        const nb: CityBuilding = { id: c.buildings.length + 1, k: e.k, lv: 1, v: e.v, age: 0, x: e.x, z: e.z, size, abandoned: false, builtDay: e.day };
+        c.buildings.push(nb);
+        footprint(nb, j => { if (c.occ[j]) throw new Error(`重播：第 ${e.day} 天合併的格子 ${j} 還被 #${c.occ[j]} 佔著（歷史第 ${k + 1} 筆）`); c.occ[j] = nb.id; if (e.k === 105 || e.k === 106) c.zone[j] = 0; });
+        base.set(nb.id, { age: 0, from: e.day });
         break;
       }
       case 'abandon': {
