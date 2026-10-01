@@ -3,7 +3,7 @@
 // 55293–55295 食物與遊客 → 55333–55338 貿易額度與 takeTrade482 → 55340–55342 糧食需求、進口、供糧率 → 55414–55424 加到每棟住宅的幸福上。
 // 沒搬（本線沒有，一律當沒有／0；讀進來有這些東西的城，糧食那一項會跟實驗線不同，D022 卡「不做什麼」）：
 //   化肥 T346（fertReady、農場 ×1.35）、火車線 T463（railLines463）、壅堵 T129（roadLoad：logisticsEfficiency481 的扣分，預設 0）、城市活動 T299（事件食物加成）、
-//   專業化 T386（sq('green',…) 取關的值）、企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性照原數）、污水廠 T442（55420 那一句：k27 不算）。
+//   專業化 T386（sq('green',…) 取關的值）、企業層 T489（利用率 1）、gpn T508（額度乘數 1、進口可得性照原數）、污水廠減壓（55420，D033 起在 applyFoodHappy）。
 // D025 起：物流 T485 的單位（logistics.ts unitsOf485）、冷藏庫與穀倉的食物保存加成、船、燃料的效率加成、壅堵輸入，都可以由呼叫端用第六個參數 x 給進來（經濟 economy.ts 的做法）；
 // 不給 x＝D022 的行為（單位從食物計數算：貨運中心、倉儲、港口；其餘 0）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史。
@@ -119,16 +119,20 @@ export function foodDay(c: FoodCount, roads: number, pop: number, sea: number, d
   return { points: foodPoints, tourists, residentNeed, touristNeed, need, domestic, short, imports, served, rate, delta, cap, used, remaining, roadBase, eff };
 }
 
-// 55414–55424：需求大於 0 就把 delta 加到每一棟住宅（k1，跳過 ref 格）的幸福上（夾在 .05～1，每天從當天的 h 起算、不累積），再用住宅 k1 重算城市幸福。
-// 實驗線這個迴圈的條件是「need > 0 或有污水廠」（se>0）；污水廠 T442 沒搬，這裡只看 need。need＝0 整段不做（回傳原來的城市幸福）
-export function applyFoodHappy(w: World, tickBld: number[], need: number, delta: number, cityHappy: number): number {
-  if (!(need > 0)) return cityHappy;
+// 55414–55424：「需求大於 0 或有污水廠」就走這個迴圈：每棟住宅（k1，跳過 ref 格）幸福 ① 需求 > 0 加 delta（夾在 .05～1，每天從當天的 h 起算、不累積）、
+// ② 有污水廠（se > 0）且這棟接上污水（SEW_OK442，D033；人口 < 500 時全是 1）加「半徑 3 內每座工業 × .025」（污水廠減壓，55420）；最後用住宅 k1 重算城市幸福。
+// 需求＝0 且沒有污水廠：整段不做（回傳原來的城市幸福）。indNear＝半徑 3 的工業數（day.ts 的累加表，跟 countNear(…,3,k3) 逐格相同，D027 守衛核對）
+export function applyFoodHappy(w: World, tickBld: number[], need: number, delta: number, cityHappy: number,
+  se = 0, sewOk: ArrayLike<number> | null = null, indNear: ((x: number, y: number) => number) | null = null): number {
+  if (!(need > 0 || se > 0)) return cityHappy;
+  const N = w.N;
   let happySum = 0, happyN = 0;
   for (const i of tickBld) {
     const b = w.tiles[i].bld;
     if (!b || b.k !== 1 || b.ref) continue;
-    b.h = clamp((b.h as number) + delta, .05, 1);
-    happySum += b.h; happyN++;
+    if (need > 0) b.h = clamp((b.h as number) + delta, .05, 1);
+    if (se > 0 && sewOk && sewOk[i] && indNear) { const ind = indNear(i % N, (i / N) | 0); if (ind) b.h = clamp((b.h as number) + ind * .025, .05, 1); }
+    happySum += b.h as number; happyN++;
   }
   return happyN ? happySum / happyN : cityHappy;
 }

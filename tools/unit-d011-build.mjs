@@ -28,6 +28,7 @@ import { fileURLToPath } from 'node:url';
 import * as B from '../src/sim/rules/build.ts';
 import * as fieldsMod from '../src/sim/rules/fields.ts';
 import * as labHelpers from '../src/sim/rules/lab.ts';
+import * as gridMod from '../src/sim/rules/grid.ts';
 import { allocGrids, rebuildCov } from '../src/sim/rules/fields.ts';
 import { labRng } from '../src/sim/rules/lab.ts';
 import { cases, canon, D011_SEED, D011_COUNT, FAMILIES, RENDER_KEYS, makeLab, labImpl, runMap } from './d011-cases.mjs';
@@ -194,7 +195,7 @@ const BUILD_EXPORTS = ['ROAD_COST', 'COST', 'UNDO_MAX', 'DOZE_ARM_MS', 'D011_TOO
   'openTxn', 'closeTxn', 'pushTxn', 'roadDraftTiles', 'commitLine', 'tap', 'commitRect', 'undoTxn'];
 export function buildModule(source) {
   const js = stripTypeScriptTypes(source).replace(/^import .*;\r?\n/gm, '').replace(/^export /gm, '');
-  const ctx = vm.createContext({ ...labHelpers, ...fieldsMod });
+  const ctx = vm.createContext({ ...labHelpers, ...fieldsMod, ...gridMod });
   vm.runInContext(`${js}\n;globalThis.__m = { ${BUILD_EXPORTS.join(', ')} };`, ctx, { filename: 'mutant:build.ts' });
   return ctx.__m;
 }

@@ -1,0 +1,324 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-sewer.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "水循環常數 WATER_HOPS472",
+   "anchors": {
+    "start": "const WATER_PERIODS472=['day','evening','night'],WATER_HOPS472=90;",
+    "end": "const WATER_PERIODS472=['day','evening','night'],WATER_HOPS472=90;"
+   },
+   "line": 52851,
+   "endLine": 52851,
+   "sha": "925738275bbf92613be8dfc6dc8ccfa1556a54568aa455cf710dd95d5b1eecc4"
+  },
+  {
+   "kind": "span",
+   "name": "水務設施集合 WATER_FACILITY_K472",
+   "anchors": {
+    "start": "const WATER_FACILITY_K472=new Set([10,27,129,130,151,152,153,154,155,156,157,158,159,160,163]);",
+    "end": "const WATER_FACILITY_K472=new Set([10,27,129,130,151,152,153,154,155,156,157,158,159,160,163]);"
+   },
+   "line": 52852,
+   "endLine": 52852,
+   "sha": "276b740083b88c748d0be8b8da2eca52e43c39131ca79ddb5fa00af399e17ab2"
+  },
+  {
+   "kind": "span",
+   "name": "發電廠種類 POWER_SOURCE_K450",
+   "anchors": {
+    "start": "const POWER_SOURCE_K450=new Set([5,25,26,58,59,60,62,140,141,142,143,144,145,150]);",
+    "end": "const POWER_SOURCE_K450=new Set([5,25,26,58,59,60,62,140,141,142,143,144,145,150]);"
+   },
+   "line": 52469,
+   "endLine": 52469,
+   "sha": "d25456ee5d075f83f4a6839f98f163744aac98d62c5cc93d761508d2bd4d7527"
+  },
+  {
+   "kind": "span",
+   "name": "POW_DIR",
+   "anchors": {
+    "start": "const POW_DIR=[[0,-1],[1,0],[0,1],[-1,0]];",
+    "end": "const POW_DIR=[[0,-1],[1,0],[0,1],[-1,0]];"
+   },
+   "line": 52436,
+   "endLine": 52436,
+   "sha": "29816fa304c0eaeebf2c6fd8677393df84586172c5a51fb6c452b17c840dd1bd"
+  },
+  {
+   "kind": "fn",
+   "name": "buildPipeComponents472",
+   "anchors": {
+    "start": "function buildPipeComponents472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52875,
+   "endLine": 52875,
+   "sha": "1fadde7c89333ec964c067289ec1cb6ad20a1fc2c6cce67e42082e3561980b68"
+  },
+  {
+   "kind": "fn",
+   "name": "facilityComps472",
+   "anchors": {
+    "start": "function facilityComps472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52876,
+   "endLine": 52876,
+   "sha": "26ff7742b75b7fcb4515212577e8e1ff9417cf1dc161c06d06a52141d137eb6c"
+  },
+  {
+   "kind": "fn",
+   "name": "pressureDistances472",
+   "anchors": {
+    "start": "function pressureDistances472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52877,
+   "endLine": 52877,
+   "sha": "efbdbe355c4dd6b35e330a5a8739e63bd59a18b6d6acab756253e49375d1f3f4"
+  },
+  {
+   "kind": "fn",
+   "name": "waterFacilityPowerFactor472",
+   "anchors": {
+    "start": "function waterFacilityPowerFactor472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52878,
+   "endLine": 52878,
+   "sha": "a0e2f1a2c23c2f07265b2e83720de5fbb92d5743c18cba4dd845c1d24a9e146f"
+  },
+  {
+   "kind": "fn",
+   "name": "ensureWaterCycle472",
+   "anchors": {
+    "start": "function ensureWaterCycle472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52881,
+   "endLine": 52905,
+   "sha": "3daab219ae5cfbb9a231b88b8c467132bb54ae8771556bc908bdb0a4b058229a"
+  },
+  {
+   "kind": "fn",
+   "name": "sewerRootStatus472",
+   "anchors": {
+    "start": "function sewerRootStatus472(",
+    "closure": "balanced-brace"
+   },
+   "line": 52907,
+   "endLine": 52907,
+   "sha": "479a2c6dd6bbf8018b9a0d6d161b8ee60002afc16220eb93cd0c3bed48f0e05e"
+  },
+  {
+   "kind": "fn",
+   "name": "sewerLegacy451",
+   "anchors": {
+    "start": "function sewerLegacy451(",
+    "closure": "balanced-brace"
+   },
+   "line": 53388,
+   "endLine": 53388,
+   "sha": "0dc6d25a3cd74c4e03772b2386e8c326b11013ee535e564f85b3d4e5fb024dbe"
+  },
+  {
+   "kind": "fn",
+   "name": "sewerRequired442",
+   "anchors": {
+    "start": "function sewerRequired442(",
+    "closure": "balanced-brace"
+   },
+   "line": 53487,
+   "endLine": 53487,
+   "sha": "eb1e8d3deb97d776276ef3aaa1ea0fb9c775d6932d2b6e3c53b12381ee1b0fca"
+  },
+  {
+   "kind": "span",
+   "name": "污水常數 SEWAGE_THRESHOLD442",
+   "anchors": {
+    "start": "const SEWAGE_CAP442=180,SEWAGE_THRESHOLD442=500,SEWER_HOPS451=90,SEWER_DIST_INF451=65535;",
+    "end": "const SEWAGE_CAP442=180,SEWAGE_THRESHOLD442=500,SEWER_HOPS451=90,SEWER_DIST_INF451=65535;"
+   },
+   "line": 53375,
+   "endLine": 53375,
+   "sha": "07a23fcc52a0f23da55a41d5641333c77595c7c356c51f6be36d980866e4ee9d"
+  },
+  {
+   "kind": "span",
+   "name": "sewNeed442",
+   "anchors": {
+    "start": "const sewCap=computeSewage442(),sewNeed442=sewerRequired442();",
+    "end": "const sewCap=computeSewage442(),sewNeed442=sewerRequired442();"
+   },
+   "line": 55011,
+   "endLine": 55011,
+   "sha": "c245b045ce1cd500bd3299438e8cd14f3415e7704c0cbd983a4ccb8b506161be"
+  },
+  {
+   "kind": "span",
+   "name": "55013 強制重算",
+   "anchors": {
+    "start": "if(!waterLegacy449())ensureWaterCycle472(true);",
+    "end": "if(!waterLegacy449())ensureWaterCycle472(true);"
+   },
+   "line": 55013,
+   "endLine": 55013,
+   "sha": "5c902d4452fd780e00bfd76319aa8529f2e044f494bb88b5c5d575c29ac5faf3"
+  },
+  {
+   "kind": "span",
+   "name": "接管指派 SEW_OK442",
+   "anchors": {
+    "start": "const si442=idx(x,y);let sewOk442=!sewNeed442;",
+    "end": "SEW_OK442[si442]=sewOk442?1:0;if(sewNeed442&&sewOk442)sewered442++;"
+   },
+   "line": 55151,
+   "endLine": 55153,
+   "sha": "62f79a9d5c041df4d75b9f85135fee0be3b936121ff31ca8d73103e607d9bacb"
+  },
+  {
+   "kind": "span",
+   "name": "高密度污水",
+   "anchors": {
+    "start": "{name:'高密度污水',val:(sewNeed442&&b.k===1&&b.lv>=3&&!SEW_OK442[ci])?-.04:0}",
+    "end": "{name:'高密度污水',val:(sewNeed442&&b.k===1&&b.lv>=3&&!SEW_OK442[ci])?-.04:0}"
+   },
+   "line": 55229,
+   "endLine": 55229,
+   "sha": "87c8161fc28335bea7e051e3ad9899f70e16ca4bc80b47e46f952e044febf4c9"
+  },
+  {
+   "kind": "span",
+   "name": "糧食迴圈條件",
+   "anchors": {
+    "start": "if(foodCoreNeed482>0||se>0){",
+    "end": "if(foodCoreNeed482>0||se>0){"
+   },
+   "line": 55414,
+   "endLine": 55414,
+   "sha": "6ff94f2a0bd5d93444f2b6285cff4f4b5bd5fa152b668aeff1c7f4d92c5ef41b"
+  },
+  {
+   "kind": "span",
+   "name": "污水廠減壓",
+   "anchors": {
+    "start": "if(se>0&&SEW_OK442[i]){const ind=countNear(",
+    "end": "if(se>0&&SEW_OK442[i]){const ind=countNear("
+   },
+   "line": 55420,
+   "endLine": 55420,
+   "sha": "ae18ad36b1f51affe5c1d2d5d0eb2dfb306b949a4cf3ba38253098183ac07082"
+  },
+  {
+   "kind": "span",
+   "name": "lv3Gate",
+   "anchors": {
+    "start": "const lv3Gate=b.lv!==2||(COV.school[i]>0&&POL[i]<POL_LV3_MAX&&(!sewNeed442||SEW_OK442[i]));",
+    "end": "const lv3Gate=b.lv!==2||(COV.school[i]>0&&POL[i]<POL_LV3_MAX&&(!sewNeed442||SEW_OK442[i]));"
+   },
+   "line": 55646,
+   "endLine": 55646,
+   "sha": "a2db9dd8e7a78bcc2078120b68115ccf222965b854ab919f609b8e3730fd84a8"
+  },
+  {
+   "kind": "span",
+   "name": "污水廠計數",
+   "anchors": {
+    "start": "if(b&&b.k===27)se++;",
+    "end": "if(b&&b.k===27)se++;"
+   },
+   "line": 55095,
+   "endLine": 55095,
+   "sha": "ab0c178b2b36c0e53a8af303793de3fc799dac7ec1b2b020d6710f73db2fde8f"
+  },
+  {
+   "kind": "span",
+   "name": "COST.sewage",
+   "anchors": {
+    "start": "sewage:500",
+    "end": "sewage:500"
+   },
+   "line": 37442,
+   "endLine": 37442,
+   "sha": "f22627ebd62913bdda0c38a41d707129f146ad59d7bd555057f85564d5fe120f"
+  },
+  {
+   "kind": "span",
+   "name": "工具定義",
+   "anchors": {
+    "start": "{id:'sewage',cat:'svc',ic:'🚿',nm:'污水廠',pr:'$'+COST.sewage}",
+    "end": "{id:'sewage',cat:'svc',ic:'🚿',nm:'污水廠',pr:'$'+COST.sewage}"
+   },
+   "line": 37695,
+   "endLine": 37695,
+   "sha": "4056924d9d602c720a578b3322385dd182281c1e0bddab1364be78084ace339b"
+  },
+  {
+   "kind": "span",
+   "name": "造價",
+   "anchors": {
+    "start": "case 'sewage':c=COST.sewage;break;",
+    "end": "case 'sewage':c=COST.sewage;break;"
+   },
+   "line": 51578,
+   "endLine": 51578,
+   "sha": "f67e3c4eb1098ff2624ab7b676a6c1a189d0eed9882e83679ec6af9e708c3f11"
+  },
+  {
+   "kind": "span",
+   "name": "canPlace 通用判定與鄰水",
+   "anchors": {
+    "start": "if(t.t!==2&&t.t!==1)return '只能蓋在陸地上';\n      if(t.road||t.rail||t.tram)return '交通線上不能建造';\n      if(t.lv475)return '架空配電線／電線桿擋住';",
+    "end": "if(toolId==='port'||toolId==='sewage'){if(countNear(x,y,1,tt=>tt.t===0)<2)return '需鄰近水域(≥2格)';}"
+   },
+   "line": 51384,
+   "endLine": 51389,
+   "sha": "982718bec75793bb52f9758074ecbbf5af4897fe22e7f42e7e9f612787609006"
+  },
+  {
+   "kind": "span",
+   "name": "蓋法",
+   "anchors": {
+    "start": "case 'sewage':\n      t.bld={k:27,",
+    "end": "t.bld={k:27,lv:1,v:ri(3),age:0,pw:true,h:1};t.tree=0;t.zone=0;t.deco=0;"
+   },
+   "line": 52180,
+   "endLine": 52181,
+   "sha": "fb6500ee390b73316b05c9e0196ee0281f8b2ead07567faa424ac3d2be4bc560"
+  }
+ ],
+ "text": {
+  "hops": "const WATER_PERIODS472=['day','evening','night'],WATER_HOPS472=90;",
+  "facilityK": "const WATER_FACILITY_K472=new Set([10,27,129,130,151,152,153,154,155,156,157,158,159,160,163]); // T475：配水調壓站屬水務設施，不當一般建築用水",
+  "powerK": "const POWER_SOURCE_K450=new Set([5,25,26,58,59,60,62,140,141,142,143,144,145,150]); // T471：k147 抽蓄是儲能而非一次能源，避免容量在 T450 與 T471 雙重計入",
+  "powDir": "const POW_DIR=[[0,-1],[1,0],[0,1],[-1,0]];",
+  "pipeComps": "function buildPipeComponents472(field){const arr=new Int32Array(N*N);arr.fill(-1);const comps=[],q=new Int32Array(N*N);let cid=0;for(let i=0;i<N*N;i++){const t=tiles[i];if(!field(t)||arr[i]>=0)continue;let h=0,n=0;q[n++]=i;arr[i]=cid;let wp=0,main=0;while(h<n){const j=q[h++],tt=tiles[j];if(tt.wp)wp++;if(tt.wm472||tt.sm472)main++;const x=j%N,y=(j/N)|0;for(const[dx,dy]of POW_DIR){const nx=x+dx,ny=y+dy;if(!inMap(nx,ny))continue;const z=idx(nx,ny);if(arr[z]<0&&field(tiles[z])){arr[z]=cid;q[n++]=z;}}}comps.push({id:cid,tiles:n,wp,main});cid++;}return[arr,comps];}",
+  "facilityComps": "function facilityComps472(root,arr,field){const b=tiles[root]?.bld;if(!b||b.ref)return[];const x=root%N,y=(root/N)|0,sz=Math.max(1,b.sz||1),set=new Set(),add=(xx,yy)=>{if(!inMap(xx,yy))return;const j=idx(xx,yy);if(field(tiles[j])&&arr[j]>=0)set.add(arr[j]);};for(let dy=0;dy<sz;dy++)for(let dx=0;dx<sz;dx++)add(x+dx,y+dy);for(let d=0;d<sz;d++){add(x+d,y-1);add(x+d,y+sz);add(x-1,y+d);add(x+sz,y+d);}return[...set];}",
+  "pressure": "function pressureDistances472(compArr,comps,seeds,mainField){const dist=new Uint16Array(N*N);dist.fill(65535);const dq=new Int32Array(N*N*2),OFF=N*N;let head=OFF,tail=OFF;for(const i of seeds){if(i<0||i>=N*N||compArr[i]<0)continue;if(dist[i]===0)continue;dist[i]=0;dq[tail++]=i;}while(head<tail){const j=dq[head++],x=j%N,y=(j/N)|0,d=dist[j];for(const[dx,dy]of POW_DIR){const nx=x+dx,ny=y+dy;if(!inMap(nx,ny))continue;const z=idx(nx,ny);if(compArr[z]<0||compArr[z]!==compArr[j])continue;const nd=d+(mainField(tiles[z])?0:1);if(nd<dist[z]&&nd<=WATER_HOPS472+32){dist[z]=nd;if(mainField(tiles[z])&&head>0)dq[--head]=z;else dq[tail++]=z;}}}return dist;}",
+  "powerFactor": "function waterFacilityPowerFactor472(b,root=-1){if(!b)return 0;const sector=[27,156,157].includes(b.k)?'sewer':[130,159,160].includes(b.k)?'drainage':'water',av=root>=0?assetAvailability493(root,sector):1,base=(b.k===154||b.k===159||b.k===160)?1:(b.pw===false?.18:1);return base*av;}",
+  "cycle": "function ensureWaterCycle472(force=false){if(waterCycleBusy472)return waterCycle472;if(!force&&!waterCycleDirty472&&waterCycle472.day===day)return waterCycle472;waterCycleBusy472=true;try{waterBeginDay472();[WATER_NET_COMP472,waterNetComps472]=buildPipeComponents472(t=>!!(t.wp||t.wm472));[SEWER_NET_COMP472,sewerNetComps472]=buildPipeComponents472(t=>!!(t.wp||t.sm472));\n    const WC=waterNetComps472.map(q=>({...q,roots:[],raw:0,treatment:0,direct:0,qualitySum:0,qualityCap:0,reservoirs:[],boosters:0,sourceN:0,powerLimited:0,reclaimCap:0,reclaim:0})),SC=sewerNetComps472.map(q=>({...q,roots:[],volumeCap:0,pollutionCap:0,lifts:0,reclaimLinks:[]})),disconnectedWaterRoots=[],disconnectedSewerRoots=[];WATER_ROOT_STATE472=new Uint8Array(N*N);WATER_ROOT_DELIVERED472=new Float32Array(N*N);WATER_ROOT_RECLAIMED472=new Float32Array(N*N);WATER_ROOT_QUALITY472=new Float32Array(N*N);SEWER_ROOT_OK472=new Uint8Array(N*N);let waterMainTiles=0,sewerMainTiles=0;for(const t of tiles){if(t.wm472)waterMainTiles++;if(t.sm472)sewerMainTiles++;}\n    const roots=[];for(let i=0;i<N*N;i++){const b=tiles[i].bld;if(!b||b.ref)continue;roots.push([i,b]);const wcs=facilityComps472(i,WATER_NET_COMP472,t=>!!(t.wp||t.wm472)),scs=facilityComps472(i,SEWER_NET_COMP472,t=>!!(t.wp||t.sm472));if(!WATER_FACILITY_K472.has(b.k)&&!isPowerSource450(b.k)){if(wcs.length)WC[wcs[0]].roots.push(i);else disconnectedWaterRoots.push(i);if(scs.length)SC[scs[0]].roots.push(i);else disconnectedSewerRoots.push(i);}const pf=waterFacilityPowerFactor472(b,i);\n      if([10,129,151,152].includes(b.k)&&wcs.length){const c=WC[wcs[0]];c.sourceN++;let cap=0;if(b.k===10){cap=80*pf;c.direct+=cap;}else if(b.k===129){cap=180*pf;c.direct+=cap;}else if(b.k===151){cap=240*(drought ? .65 : 1)*pf;c.raw+=cap;}else{cap=120*(drought ? .85 : 1)*pf;c.raw+=cap;}const qs=sourceQuality472(i,b.k);c.qualitySum+=qs*cap;c.qualityCap+=cap;if(pf<.5)c.powerLimited++;}\n      if(b.k===153&&wcs.length){WC[wcs[0]].treatment+=220*pf;if(pf<.5)WC[wcs[0]].powerLimited++;}\n      if(b.k===154&&wcs.length)WC[wcs[0]].reservoirs.push(i);\n      if(b.k===155&&wcs.length){WC[wcs[0]].boosters++;if(pf<.5)WC[wcs[0]].powerLimited++;}\n      if(b.k===27&&scs.length){SC[scs[0]].volumeCap+=180*pf;SC[scs[0]].pollutionCap+=105*pf;}\n      if(b.k===156&&scs.length){SC[scs[0]].volumeCap+=340*pf;SC[scs[0]].pollutionCap+=330*pf;}\n      if(b.k===157&&scs.length){SC[scs[0]].lifts++;}\n      if(b.k===158&&scs.length&&wcs.length){SC[scs[0]].reclaimLinks.push({root:i,wc:wcs[0],cap:190*pf});WC[wcs[0]].reclaimCap+=190*pf;}\n    }\n    const pressureSeeds=[];for(const[i,b]of roots)if([10,129,154,155,163].includes(b.k)&&waterFacilityPowerFactor472(b,i)>.3){const cs=facilityComps472(i,WATER_NET_COMP472,t=>!!(t.wp||t.wm472));for(const c of cs){const x=i%N,y=(i/N)|0,sz=b.sz||1;for(let dy=-1;dy<=sz;dy++)for(let dx=-1;dx<=sz;dx++){const xx=x+dx,yy=y+dy;if(inMap(xx,yy)){const z=idx(xx,yy);if(WATER_NET_COMP472[z]===c)pressureSeeds.push(z);}}}}\n    const pDist=pressureDistances472(WATER_NET_COMP472,WC,pressureSeeds,t=>!!t.wm472),sewerSeeds=[];for(const[i,b]of roots)if([27,156,157].includes(b.k)&&waterFacilityPowerFactor472(b,i)>.3){const cs=facilityComps472(i,SEWER_NET_COMP472,t=>!!(t.wp||t.sm472));for(const c of cs){const x=i%N,y=(i/N)|0,sz=b.sz||1;for(let dy=-1;dy<=sz;dy++)for(let dx=-1;dx<=sz;dx++){const xx=x+dx,yy=y+dy;if(inMap(xx,yy)){const z=idx(xx,yy);if(SEWER_NET_COMP472[z]===c)sewerSeeds.push(z);}}}}\n    const sDist=pressureDistances472(SEWER_NET_COMP472,SC,sewerSeeds,t=>!!t.sm472),periods={},deliveredRoot=new Map(),reclaimRoot=new Map();let totalDemand=0,totalPotDemand=0,totalSupply=0,totalPotableDelivered=0,totalPotableAvailable=0,totalPotableSpare=0,totalUnserved=0,totalReclaim=0,totalUnusedReclaim=0,lowPressureDemand=0,lowPressurePop=0,rawCapacity=0,treatmentCapacity=0,directPotable=0,powerLimited=0,qualityWeighted=0,qualityWeight=0;\n    for(const c of WC){rawCapacity+=c.raw;treatmentCapacity+=c.treatment;directPotable+=c.direct;powerLimited+=c.powerLimited;}\n    for(const period of WATER_PERIODS472){const ix=period==='day'?0:period==='evening'?1:2,compRows=[];let pd=0,ps=0,ppot=0,pu=0,pr=0,pavail=0,pspare=0;for(const c of WC){let gross=0,eligible=0;const demands=[];for(const r of c.roots){const b=tiles[r].bld,prof=waterProfile472(b),d=rootWaterDemandBase472(b)*prof[ix]*waterPolicyDemandMul472(b);gross+=d;if(reclaimedEligible472(b))eligible+=d*(reclaimedEligible472(b)>=2?.52:.70);demands.push([r,b,d]);}let process=Math.min(c.raw,c.treatment),basePot=c.direct+process,q=(c.qualityCap?c.qualitySum/c.qualityCap:.86);if(c.raw>c.treatment&&c.raw>0)q-=Math.min(.18,(c.raw-c.treatment)/c.raw*.18);const pot0=Math.min(gross,basePot+c.reservoirs.reduce((a,r)=>a+Math.min(110*assetAvailability493(r,'water'),waterStorageSOC472(r)),0));const provisional=demands.map(z=>[z[0],z[1],z[2],gross?z[2]/gross*pot0:0]);let wwProv=0;for(const z of provisional)wwProv+=z[3]*wastewaterReturn472(z[1]);let reclaimPotential=0;for(const sc of SC){const linked=sc.reclaimLinks.filter(x=>x.wc===c.id);if(!linked.length)continue;const cap=linked.reduce((a,x)=>a+x.cap,0),treat=Math.min(wwProv,sc.volumeCap);reclaimPotential+=Math.min(cap,treat*.72);}let reclaimed=Math.min(eligible,reclaimPotential)*(pol?.reclaimPriority?1:.88);let potableNeed=Math.max(0,gross-reclaimed),reserveHeadroom=c.reservoirs.reduce((a,r)=>a+Math.min(110*assetAvailability493(r,'water'),waterStorageSOC472(r)),0),availableCapacity=basePot+reserveHeadroom,available=basePot,charge=0,discharge=0;pavail+=availableCapacity;pspare+=Math.max(0,availableCapacity-potableNeed);if(available>potableNeed&&c.reservoirs.length){let surplus=available-potableNeed;for(const r of c.reservoirs){const soc=waterStorageSOC472(r),rav=assetAvailability493(r,'water'),put=Math.min(110*rav,420-soc,surplus);if(put>0){waterStorageState472.set(r,soc+put);charge+=put;surplus-=put;}if(surplus<=0)break;}}if(available<potableNeed&&c.reservoirs.length){let need=potableNeed-available;for(const r of c.reservoirs){const soc=waterStorageSOC472(r),rav=assetAvailability493(r,'water'),take=Math.min(110*rav,soc,need);if(take>0){waterStorageState472.set(r,soc-take);discharge+=take;available+=take;need-=take;}if(need<=0)break;}}const served=Math.min(potableNeed,available),ratio=potableNeed?served/potableNeed:1,unserved=Math.max(0,potableNeed-served);pd+=gross;ps+=served+reclaimed;ppot+=served;pu+=unserved;pr+=reclaimed;let lp=0;for(const[r,b,d]of demands){const cs=facilityComps472(r,WATER_NET_COMP472,t=>!!(t.wp||t.wm472)),ci=cs.length?cs[0]:-1;let best=65535;const x=r%N,y=(r/N)|0,sz=b.sz||1;for(let dy=-1;dy<=sz;dy++)for(let dx=-1;dx<=sz;dx++){const xx=x+dx,yy=y+dy;if(inMap(xx,yy)){const z=idx(xx,yy);if(WATER_NET_COMP472[z]===ci)best=Math.min(best,pDist[z]);}}const elev=tiles[r].el?18:0,eff=best<65535?best+elev:999,state=ratio<.05?'dry':ratio<.72?'rationing':eff>WATER_HOPS472||ratio<.90?'low':'stable',del=(d*(1-unserved/Math.max(.001,potableNeed)))+(gross?reclaimed*d/gross:0);if(period==='evening'){deliveredRoot.set(r,del);WATER_ROOT_DELIVERED472[r]=del;WATER_ROOT_RECLAIMED472[r]=gross?reclaimed*d/gross:0;WATER_ROOT_QUALITY472[r]=q;WATER_ROOT_STATE472[r]=state==='stable'?4:state==='low'?3:state==='rationing'?2:1;}if(state==='low'||state==='rationing'||state==='dry'){lp+=d;if(b.k===1||b.k===127)lowPressurePop+=Math.max(1,residentPopulation488(r,b));}reclaimRoot.set(r,(gross?reclaimed*d/gross:0));}if(period==='evening')lowPressureDemand+=lp;qualityWeighted+=q*Math.max(1,served);qualityWeight+=Math.max(1,served);compRows.push({id:c.id,demand:+gross.toFixed(2),potableNeed:+potableNeed.toFixed(2),supply:+(served+reclaimed).toFixed(2),unserved:+unserved.toFixed(2),reclaimed:+reclaimed.toFixed(2),raw:+c.raw.toFixed(1),treatment:+c.treatment.toFixed(1),direct:+c.direct.toFixed(1),storage:+c.reservoirs.reduce((a,r)=>a+waterStorageSOC472(r),0).toFixed(1),charge:+charge.toFixed(1),discharge:+discharge.toFixed(1),quality:waterQualityGrade472(q),qualityScore:+q.toFixed(3),sources:c.sourceN,boosters:c.boosters,powerLimited:c.powerLimited});}for(const r of disconnectedWaterRoots){const b=tiles[r].bld,prof=waterProfile472(b),d=rootWaterDemandBase472(b)*prof[ix]*waterPolicyDemandMul472(b);pd+=d;pu+=d;if(period==='evening'){deliveredRoot.set(r,0);WATER_ROOT_STATE472[r]=0;WATER_ROOT_DELIVERED472[r]=0;WATER_ROOT_RECLAIMED472[r]=0;WATER_ROOT_QUALITY472[r]=0;lowPressureDemand+=d;if(b.k===1||b.k===127)lowPressurePop+=Math.max(1,residentPopulation488(r,b));}}periods[period]={demand:+pd.toFixed(2),supply:+ps.toFixed(2),potableSupply:+ppot.toFixed(2),potableAvailable:+pavail.toFixed(2),unserved:+pu.toFixed(2),reclaimed:+pr.toFixed(2),reserve:+pspare.toFixed(2),comps:compRows};if(period==='evening'){totalDemand=pd;totalPotDemand=Math.max(0,pd-pr);totalSupply=ps;totalPotableDelivered=ppot;totalPotableAvailable=pavail;totalPotableSpare=pspare;totalUnserved=pu;totalReclaim=pr;}}\n    // Actual wastewater from evening delivered water + independent pollution load.\n    let ww=0,poll=0,wwCap=0,pollCap=0,wwOverflow=0,pollOverflow=0;for(const sc of SC){let vol=0,pl=0;for(const r of sc.roots){const b=tiles[r].bld,del=deliveredRoot.get(r)||0;vol+=del*wastewaterReturn472(b);pl+=del*pollutionFactor472(b)*(pol?.industrialPretreat&&reclaimedEligible472(b)>=2?.70:1);const cs=facilityComps472(r,SEWER_NET_COMP472,t=>!!(t.wp||t.sm472));let best=65535,x=r%N,y=(r/N)|0,sz=b.sz||1;for(let dy=-1;dy<=sz;dy++)for(let dx=-1;dx<=sz;dx++){const xx=x+dx,yy=y+dy;if(inMap(xx,yy)){const z=idx(xx,yy);if(cs.length&&SEWER_NET_COMP472[z]===cs[0])best=Math.min(best,sDist[z]);}}SEWER_ROOT_OK472[r]=(best<=WATER_HOPS472&&sc.volumeCap>0)?1:0;if(best>WATER_HOPS472){vol+=del*.25;pl+=del*.25*pollutionFactor472(b);}}const vo=Math.max(0,vol-sc.volumeCap),po=Math.max(0,pl-sc.pollutionCap);sc.volume=vol;sc.pollution=pl;sc.volumeOverflow=vo;sc.pollutionOverflow=po;ww+=vol;poll+=pl;wwCap+=sc.volumeCap;pollCap+=sc.pollutionCap;wwOverflow+=vo;pollOverflow+=po;}for(const r of disconnectedSewerRoots){const b=tiles[r].bld,del=deliveredRoot.get(r)||0,vol=del*wastewaterReturn472(b),pl=del*pollutionFactor472(b)*(pol?.industrialPretreat&&reclaimedEligible472(b)>=2?.70:1);ww+=vol;poll+=pl;wwOverflow+=vol;pollOverflow+=pl;}\n    // Reclaimed water / cooling coupling: reclaimed water is first-choice cooling supply; potable spare only soft-fills the remainder.\n    const thermal=[];let coolingNeed=0;for(const[i,b]of roots)if([5,58,140,145].includes(b.k)){const need=({5:5,58:20,140:10,145:8}[b.k]||0);coolingNeed+=need;thermal.push([i,b,need]);}const potableSpare=Math.max(0,periods.evening?.reserve||0),coolingProvided=Math.min(coolingNeed,totalReclaim*.32+potableSpare*.20),coolingFactor=coolingNeed?clamp(.78+.22*(coolingProvided/coolingNeed),.78,1):1;\n    const D=typeof drainageSnapshot454==='function'?drainageSnapshot454():{totalRunoff:0,overflow:0},retention=roots.reduce((a,z)=>a+(z[1].k===159?140:z[1].k===160?80:0)*assetAvailability493(z[0],'drainage'),0),sponge=pol?.spongeCity ? .80 : 1,stormRunoff=(D.totalRunoff||0)*sponge,stormRetention=Math.min(stormRunoff,retention),stormOverflow=Math.max(0,(D.overflow||0)*sponge-stormRetention*.55);const storageCap=roots.reduce((a,z)=>a+(z[1].k===154?420:0),0),storage=[...waterStorageState472.values()].reduce((a,v)=>a+v,0),qscore=qualityWeight?qualityWeighted/qualityWeight:.75,sourceCount=WC.reduce((a,c)=>a+c.sourceN,0);\n    for(const[i,b]of roots)if([129,130,151,152,153,155,156,157,158].includes(b.k)){let util=.25;if(b.k===129)util=totalDemand?Math.min(1,totalDemand/Math.max(1,directPotable)):.2;else if(b.k===153)util=rawCapacity?Math.min(1,Math.min(rawCapacity,treatmentCapacity)/Math.max(1,treatmentCapacity)):.2;else if([156,157].includes(b.k))util=wwCap?Math.min(1,ww/Math.max(1,wwCap)):.2;else if(b.k===158)util=totalReclaim?Math.min(1,totalReclaim/190):.2;b.wu472=util;}\n    waterCycle472={day,periods,waterComps:WC,sewerComps:SC,demand:+totalDemand.toFixed(2),potableDemand:+totalPotDemand.toFixed(2),potableSupply:+totalPotableDelivered.toFixed(2),potableAvailable:+totalPotableAvailable.toFixed(2),reserveMargin:totalPotDemand?+(Math.max(0,totalPotableSpare)/totalPotDemand).toFixed(3):1,storage:+storage.toFixed(1),storageCap, reclaimed:+totalReclaim.toFixed(2),reclaimedUnused:+Math.max(0,WC.reduce((a,c)=>a+c.reclaimCap,0)-totalReclaim).toFixed(2),lowPressureDemand:+lowPressureDemand.toFixed(2),lowPressurePop,unserved:+totalUnserved.toFixed(2),quality:waterQualityGrade472(qscore),qualityScore:+qscore.toFixed(3),wastewater:+ww.toFixed(2),pollution:+poll.toFixed(2),wwCapacity:+wwCap.toFixed(1),pollutionCapacity:+pollCap.toFixed(1),wwOverflow:+wwOverflow.toFixed(2),pollutionOverflow:+pollOverflow.toFixed(2),stormRunoff:+stormRunoff.toFixed(2),stormRetention:+stormRetention.toFixed(2),stormOverflow:+stormOverflow.toFixed(2),coolingNeed:+coolingNeed.toFixed(1),coolingProvided:+coolingProvided.toFixed(1),coolingFactor:+coolingFactor.toFixed(3),rawCapacity:+rawCapacity.toFixed(1),treatmentCapacity:+treatmentCapacity.toFixed(1),directPotable:+directPotable.toFixed(1),powerLimited, singleSource:sourceCount===1,poorIntake:qscore<.72,waterMainTiles,sewerMainTiles};waterCycleDirty472=false;return waterCycle472;\n  }finally{waterCycleBusy472=false;}}",
+  "rootStatus": "function sewerRootStatus472(root){ensureWaterCycle472();const b=tiles[root]?.bld;if(!b||b.ref)return null;const ok=SEWER_ROOT_OK472.length===N*N&&SEWER_ROOT_OK472[root]===1;return{served:ok,state:ok?'Collected':'Unserved'};}",
+  "legacy": "function sewerLegacy451(){return !!(window.__legacySewer451||window.__noSewerDistrict451);}",
+  "required": "function sewerRequired442(){return pop>=SEWAGE_THRESHOLD442;}",
+  "sewConsts": "const SEWAGE_CAP442=180,SEWAGE_THRESHOLD442=500,SEWER_HOPS451=90,SEWER_DIST_INF451=65535;",
+  "sewNeed": "  const sewCap=computeSewage442(),sewNeed442=sewerRequired442();prepareSewerAllocation451(); // T451：拓撲髒時才重建；每 tick 只歸零本日 district used/RCI 接管分配",
+  "forced": "  if(!waterLegacy449())ensureWaterCycle472(true); // T472：在本日 T471 電力分配＋T454 雨勢準備完成後做一次 authoritative water-cycle pass；同日儲水重建冪等，不造成反覆充放水",
+  "assign": "    const si442=idx(x,y);let sewOk442=!sewNeed442;\n    if(sewNeed442){if(sewerLegacy451())sewOk442=hasSewerNear442(x,y,2)&&sewered442<sewCap;else{allocateSewer451(x,y,2);sewOk442=!!sewerRootStatus472(si442)?.served;}}\n    SEW_OK442[si442]=sewOk442?1:0;if(sewNeed442&&sewOk442)sewered442++; // T472 authoritative：高級污水廠／提升站／截流幹管可真正服務 RCI；T451 allocator 仍執行做舊 district accounting",
+  "denseSewer": "        {name:'高密度污水',val:(sewNeed442&&b.k===1&&b.lv>=3&&!SEW_OK442[ci])?-.04:0}, // T442：不做500人瞬間全城懲罰；僅既有Lv3未接管 -4%，Lv1/2繼續化糞池過渡",
+  "foodLoop": "  if(foodCoreNeed482>0||se>0){",
+  "relief": "      if(se>0&&SEW_OK442[i]){const ind=countNear(i%N,(i/N)|0,3,tt=>tt.bld&&tt.bld.k===3);if(ind)b.h=clamp(b.h+ind*.025,.05,1);} // T442：舊污水減壓效果改為只有真正接入管網的住宅才獲得",
+  "lv3Gate": "    const lv3Gate=b.lv!==2||(COV.school[i]>0&&POL[i]<POL_LV3_MAX&&(!sewNeed442||SEW_OK442[i])); // T442：500人以上 Lv2→3 再要求集中污水接管；小城完全沿用舊門檻",
+  "seCount": "    if(b&&b.k===27)se++;               // 污水廠（T49）",
+  "cost": "const COST={road:15,bridge:60,zone:8,park:60,plant:550,water:400,wpipe:10,doze:2,fire:400,police:500,hospital:600,clinic:250,school:350,library:280,post:320,cemetery:350,dump:300,rdec:25,hwy:45,hwyBridge:180,stad:1200,tree:5,fill:20,bus:80,rail:40,railBridge:160,station:900,port:1100,dock:80,airport:3500,parking:150,parkMeter:15,busLane:35,tram:70,tramStation:700,officeZone:12,farm:120,ranch:180,landmark:2000,solar:450,wind:600,sewage:500,ambulance:550,recycling:350,fireStation2:800,prison:900,university:1200,levee:60,tdig:40,tland:60,traise:50,museum:1400,theater:1100,aquarium:1700,zoo:2300,amuse:2700,cinema:550,grandlib:1900,civicHall:2000,court:900,convention:3200,institute:1600,wstation:700,botanical:2200,megahosp:2800,oilwell:1300,mine:1500,megaproject:4500,policeBox:250,bigFarm:750,bigCemetery:1400,grandStation:2200,sportsComplex:2600,foodPlant:1800,nuclear:5000,hydro:2200,geo:900,fireHQ:1600,wasteIncinerator:1800,greenhouse:950,warehouse:1200,grandMall:3000,faithCenter:1600,clockTower:1100,observatory:2400,windmill:900,skytower:1300,ancienttree:600,harborlm:900,carousel:1700,pavilion:800,lighthouse:1400,fountain:700,monument:1600,archway:1500,ferriswheel:2000,watertowerlm:1100,guesthouse:380,hotel:1500,resort:3800,kindergarten:420,seniorCenter:450,bank:1300,market:950,compost:550,tvtower:2200,marina:1700,tradepost:1100,dogpark:320,icerink:900,skatepark:550,firewatch:180,pool:650,fishpier:520,hostel:600,chapel:1250,brewery:1350,waterpark:2400,vetclinic:480,skyrest:1900,cgarden:260,crematorium:900,highschool:1600,techpark:4200,freight:1800,upcycle:1900,centralpark:2200,unicampus:6800,megaport:9500,civiccenter:3000,datacenter:3600,gaswell:1400,fertplant:1700,kitchen:1500,fishfarm:700}; // T290：大型購物中心 4×4 商業旗艦 // T280：溫室 $950（2×2 全年恆溫食物+金幣，冬季免疫） // T265：焚化發電 2×2／$1800／垃圾容量100／供電60+8/級／高污染 // T257：核電 $5000（3×3 容量250+40/級）／水力 $2200（2×2 鄰水 100+15/級）／地熱 $900（1×1 45+8/級）／消防總局 $1600（3×3 fireHQ 半徑16） // T254：食品加工廠 $1800（3×3，農場加工鏈：食物盈餘轉金幣/就業25/維護14/可升級加工容量） // T241：體育園區 $2600（3×3，就業40/幸福半徑16/維護18） // T234：中央車站 $2200（3×3，就業30/維護15/列車上限+1） // T233：大墓園 $1400（3×3，容量24/半徑16/維護8） // T228：大農場 $750（5×5，食物20/就業18/維護6） // T222：派出所 $250（警察局 $500 的小型分型，半徑 5<10、維護 1.5<4） // T95：ambulance 400→550（原價+維護皆低於醫院、效果卻等同醫院且多送5就業，數值失衡，微調拉近但仍小於醫院600、保留半徑10<12的合理折價）；T121：tdig=挖水 tland=填土 traise=抬升削平（地形筆刷，$/格）；T138：museum博物館/theater劇院/aquarium水族館/zoo動物園/amuse遊樂園/cinema電影院/grandlib圖書總館（k=35-41）；T139：civicHall市政廳/court法院/convention會展中心/institute研究院/wstation氣象站/botanical植物園/megahosp綜合醫院（k=42-48，megahosp 比照 T95 教訓：造價2800/維護16 遠高於醫院600/5，避免以超大半徑碾壓既有醫療建築）；T140：oilwell油井/mine礦場（k=49-50，需對應資源格）/megaproject太空研究中心（k=51，終局消耗supplies大型建築，比照T95教訓造價4500/維護高於一般服務建築）",
+  "toolDef": "  {id:'sewage',cat:'svc',ic:'🚿',nm:'污水廠',pr:'$'+COST.sewage},",
+  "placeCost": "    case 'sewage':c=COST.sewage;break;",
+  "canPlace": "      if(t.t!==2&&t.t!==1)return '只能蓋在陸地上';\n      if(t.road||t.rail||t.tram)return '交通線上不能建造';\n      if(t.lv475)return '架空配電線／電線桿擋住';\n      if(t.hv471||t.ug471)return '高壓電力走廊擋住';\n      if(t.bld)return '已有建築';\n      if(toolId==='port'||toolId==='sewage'){if(countNear(x,y,1,tt=>tt.t===0)<2)return '需鄰近水域(≥2格)';}",
+  "doPlace": "    case 'sewage':\n      t.bld={k:27,lv:1,v:ri(3),age:0,pw:true,h:1};t.tree=0;t.zone=0;t.deco=0;"
+ }
+}

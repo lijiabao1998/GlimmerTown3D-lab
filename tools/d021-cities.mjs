@@ -37,6 +37,8 @@ export function builder(template, sizeOf = k => SIZE[k] ?? 1) {   // sizeOf：�
       }
       return b;
     },
+    // D033：一格配水管，不管底下有沒有路、建築（實驗線 wpipe 的規則 51312：路、分區、建築底下都可以鋪）
+    pipeAt(x, z) { if (!inMap(x, z)) throw new Error(`pipeAt：(${x},${z}) 出界`); wp[at(x, z)] = 1; return b; },
     // D024：旗標圖層的一格／一個矩形；水格（地形 0）
     flag(name, x, z, v = 1) { if (!inMap(x, z)) throw new Error(`flag ${name}：(${x},${z}) 出界`); (layers[name] ??= new Uint8Array(nn))[at(x, z)] = v; return b; },
     flagRect(name, x0, z0, x1, z1, v = 1) { for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) b.flag(name, x, z, v); return b; },

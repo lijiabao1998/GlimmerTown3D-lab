@@ -88,7 +88,7 @@ export function compareCity28(mod, code, rec, KT, vrank, { stopAtFirst = true, o
 
 // 已知只差幸福的城（D027 收工時是三座：seed516、G14、D3；D028 補了 G14 的熟食供應）：差的欄位只准是這幾個
 const HK = ['happy', 'hh', 'ah', 'agg'];
-const KNOWN = { D3: 'T442 污水（管網讓近旁工業每座加 .025）' };   // seed516（T133 城市等級，微光之巔 +.02）由 D031 補上、從名單拿掉
+const KNOWN = {};   // seed516（T133 城市等級，微光之巔 +.02）由 D031、D3（T442 污水廠減壓）由 D033 補上，名單空了
 
 async function guards(log) {
   const lab = JSON.parse(read('src/content/samples/d028-lab.json')), cities = d028Cities(), olds = oldList(), oldzs = oldzList();

@@ -2,7 +2,7 @@
 // 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d（index.html 行號）。對拍見 tools/lab-build.mjs、tools/unit-d011-build.mjs（規則 8）。
 // 本卡的工具：路 alley／road／coll／art／hwy（等級 1–5）、分區 zr／zc／zi、電廠 plant（k5）、警察局 police（k11）、拆除 doze。
 // D016 加公共設施：公園 park（k4）、消防局 fire（k6）、派出所 policeBox（k52）、醫院 hospital（k12）、診所 clinic（k13）、學校 school（k7）、
-// 圖書館 library（k14）、郵局 post（k15）、墓園 cemetery（k16）。D019 加水塔 water（k10）、配水管 wpipe；D020 加垃圾場 dump（k8）。其他工具一律丟例外。
+// 圖書館 library（k14）、郵局 post（k15）、墓園 cemetery（k16）。D019 加水塔 water（k10）、配水管 wpipe；D020 加垃圾場 dump（k8）；D033 加污水廠 sewage（k27）。其他工具一律丟例外。
 // 資料形狀與欄位名照實驗線的 tiles[i]／bld（規則 9）。純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；拆除確認的時間由呼叫端給。
 //
 // 實驗線的 doPlace 外面還包了五層（67216 T500 轉運站、67266 T501 主動運輸、67446 T502 路口、70198 T514 財政、72597 T516A 遙測），
@@ -15,6 +15,7 @@
 //          本線照最裡層的 doPlace：圖外照樣先標地價框，再回「超出地圖」。
 //   72597：遙測，不改模擬。
 import { idx, inMap, tq, type Bld, type Rng, type Tile, type World } from './lab.ts';
+import { countNear } from './grid.ts';
 import { COVR, POL_SRC, covFieldOfK, rebuildCov, stampCov, stampPolSrc, stampPolTree, type EduCtx, type Grids, type SvcBudget } from './fields.ts';
 
 // 37428：五級道路造價（小巷、支路、次幹道、主幹道、快速路）
@@ -24,7 +25,8 @@ export const ROAD_COST = [8, 15, 28, 55, 120];
 export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
   park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350,
   water: 400, wpipe: 10,     // D019：水塔、配水管（37442）
-  dump: 300 };               // D020：垃圾場（37442）
+  dump: 300,                 // D020：垃圾場（37442）
+  sewage: 500 };             // D033：污水廠（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
@@ -37,7 +39,9 @@ export const D016_TOOLS: readonly string[] = ['park', 'fire', 'policeBox', 'hosp
 export const D019_TOOLS: readonly string[] = ['water', 'wpipe'];
 // D020：垃圾場（點，canPlace 同公共設施 51278）
 export const D020_TOOLS: readonly string[] = ['dump'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS]);
+// D033：污水廠（點；canPlace 在實驗線 51384–51389 那一支：交通線、架空配電線、高壓走廊都擋，還要鄰水）
+export const D033_TOOLS: readonly string[] = ['sewage'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -112,6 +116,15 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.road) return '道路上不能建造';
       if (t.bld) return '已有建築';
       return null;
+    case 'sewage': {                                                            // 51384–51389、51446：1×1；鄰水（3×3 內水格 ≥ 2）
+      const q = seen(t, st.protect);
+      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
+      if (t.road || q.rail || t.tram) return '交通線上不能建造';
+      if (q.lv475) return '架空配電線／電線桿擋住';
+      if (t.hv471 || t.ug471) return '高壓電力走廊擋住';
+      if (t.bld) return '已有建築';
+      if (countNear(w, x, y, 1, (tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';
+      return null; }
     case 'wpipe':                                                               // 51312–51315：陸地、還沒有水管就行（路、分區、建築底下都可以鋪）
       if (t.t !== 2 && t.t !== 1) return '只能鋪在陸地上';
       if (t.wp) return '已有水管';
@@ -154,6 +167,7 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
     case 'post': c = COST.post; break;                                          // 51532
     case 'cemetery': c = COST.cemetery; break;                                  // 51533
     case 'dump': c = COST.dump; break;                                          // 51534
+    case 'sewage': c = COST.sewage; break;                                      // 51578
     case 'doze': c = t.crater ? 120 : COST.doze; break;                         // 51546：隕石坑 120
   }
   if (toolId !== 'doze' && t.tree) c += COST.doze;                              // 51623（stad、地形筆刷也不加，不在本卡）
@@ -325,6 +339,9 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
     case 'dump':                                                                // 51718–51721：變體抽一次亂數 ri(3)；垃圾場是污染源（T110）
       t.bld = { k: 8, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       stampPolSrc(g, x, y, 8, 1);
+      break;
+    case 'sewage':                                                              // 52180–52182：變體抽一次亂數 ri(3)；沒有覆蓋場、不是污染源
+      t.bld = { k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       break;
     case 'doze':
       doze(st, t, x, y);
