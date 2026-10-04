@@ -30,6 +30,7 @@ import { d032Smoke, d032SkipNote } from './smoke-d032.mjs';
 import { d033Smoke, d033SkipNote } from './smoke-d033.mjs';
 import { d034Smoke, d034SkipNote } from './smoke-d034.mjs';
 import { d035Smoke, d035SkipNote } from './smoke-d035.mjs';
+import { d036Smoke, d036SkipNote } from './smoke-d036.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -586,6 +587,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d033Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d034Smoke(withBrowser, log);
 // ===== D035：讀檔圖層補齊（tools/smoke-d035.mjs：L5 的格子卡片講得出十一層、拆有公車站的路一下拆到路、看不見的層拆不到、畫面沒有變；自己開三個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d035Smoke(withBrowser, log);
+// ===== D036：資源開採（tools/smoke-d036.mjs：W1 油井礦場的「開採」列、推進一天的開採量＝Node 端、站錯的井不產出、耗盡、畫面沒有變；自己開三個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d036Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -606,6 +609,7 @@ if (d032SkipNote()) console.log(d032SkipNote());
 if (d033SkipNote()) console.log(d033SkipNote());
 if (d034SkipNote()) console.log(d034SkipNote());
 if (d035SkipNote()) console.log(d035SkipNote());
+if (d036SkipNote()) console.log(d036SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

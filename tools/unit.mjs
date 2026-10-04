@@ -552,6 +552,8 @@ await guard('./unit-d033-build.mjs', 'd033BuildGuards');   // D033：污水廠�
 await guard('./unit-d034.mjs', 'd034Guards');   // D034：摩天樓與巨廈合併的實驗線原文（15 段 sha256）逐項＝merge.ts（vm：3000 張隨機小圖、亂數呼叫序列、突變 45）
 await guard('./unit-d034-live.mjs', 'd034LiveGuards');   // D034：合併的實驗線頁面實跑（M 系列 15 座連推 13 天逐欄、每格建築雜湊、實驗線讀本線存的碼）、day.ts 接線突變、歷史重播與存檔格式 7（d034-lab.json，tools/d034-lab.mjs 錄）
 await guard('./unit-d035.mjs', 'd035Guards');   // D035：讀檔圖層補齊（十一層進格子；L 系列 8 座連推 13 天逐欄加圖層／有電道路／覆蓋場；污水幹管佈局 170 個；本線拆路蓋東西之後存的碼給實驗線讀；拆除與寫回；存讀；接線突變）
+await guard('./unit-d036.mjs', 'd036Guards');   // D036：資源開採的實驗線原文（17 段 sha256）逐項＝resource.ts、count.ts（vm：400 個種子的資源圖、400 張小圖的抽取、亂寫的 rdep 還原、存檔配對、噪聲值逐位；突變 56）
+await guard('./unit-d036-live.mjs', 'd036LiveGuards');   // D036：實驗線頁面實跑（W 系列 5 座連推 13／60 天逐欄含耗損與庫存分流、60 個種子的資源圖、本線存的碼給實驗線讀）、day.ts 與 saveCode 接線突變、耗損存讀
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

@@ -20,6 +20,7 @@ import { upRegOf } from './sim/rules/money.ts';
 import { mergeToastText } from './sim/rules/merge.ts';
 import { MEGA_POP, MEGA_JOBS } from './sim/rules/jobs.ts';
 import { SEWAGE_THRESHOLD442, WATER_HOPS472, SEWER_OK, SEWER_NO_PIPE, SEWER_NO_PLANT, SEWER_TOO_FAR, SEWER_NA, sewerServed } from './sim/rules/sewer.ts';
+import { RES_OIL, RES_ORE, OIL_RATE, ORE_RATE, RESOURCE_STOCK } from './sim/rules/resource.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
 import { roadCap475, hashBytes, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
 import { HAPPY_NAMES } from './sim/rules/happy.ts';
@@ -965,6 +966,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const eff = [b.lv === 2 ? '二級升不到三級' : '', b.k === 1 && b.lv >= 3 ? '高密度污水：幸福 −4%' : ''].filter(Boolean);
     return [['污水', `沒接管：${reason}${eff.length ? `；${eff.join('；')}` : ''}`]];
   }
+  // D036：油井與礦場的「開採」一列。資源格種類、這一格的耗損與餘量、每天的抽取量；種類對不上（礦場在油田上、油井在沒有資源的格子）照實講不產出
+  function wellRow(b: { k: number; x: number; z: number }): Row | null {
+    if (!sim || (b.k !== 49 && b.k !== 50)) return null;
+    const i = b.z * sim.w.N + b.x, res = sim.res.resource[i], used = sim.res.rdep[i], want = b.k === 49 ? RES_OIL : RES_ORE, name = b.k === 49 ? '油井' : '礦場', rate = b.k === 49 ? OIL_RATE : ORE_RATE;
+    const kindName = (v: number) => v === RES_OIL ? '油田' : v === RES_ORE ? '礦藏' : '沒有資源';
+    if (res !== want) return ['開採', `這一格${res === 0 ? '沒有資源' : '是' + kindName(res)}，${name}要站在${kindName(want)}上才有產出（目前不產出；沒有電也一樣照抽，抽取不看電）`];
+    if (used >= RESOURCE_STOCK) return ['開採', `已耗盡（開採 ${used}／${RESOURCE_STOCK}），不再產出`];
+    const rep = lastRep ? `；最近一天全城開採：油 ${lastRep.resource.oil}、礦 ${lastRep.resource.ore}` : '';
+    return ['開採', `站在${kindName(res)}上，已開採 ${used}／${RESOURCE_STOCK}（餘量 ${RESOURCE_STOCK - used}），每天抽 ${Math.min(rate, RESOURCE_STOCK - used)} 供應品${b.k === 49 ? '（油：煉油廠有的話煉成燃料）' : '（礦：鋼鐵廠有的話煉成鋼材）'}${rep}`];
+  }
   // D025：商業與工業建築卡的「市場」一列。讀最近一天的經濟快照（購買力、零售利用率、銷售乘數；工業的市場乘數、缺貨、原料）；讀檔之後還沒推進過就不知道，照實講
   function marketRow(b: { k: number }): Row | null {
     if (!sim || (b.k !== 2 && b.k !== 3)) return null;
@@ -1059,6 +1070,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
       if (b.goneDay === undefined) rows.push(...sewerRows(b));                          // D033
+      { const wr = b.goneDay === undefined ? wellRow(b) : null; if (wr) rows.push(wr); }   // D036
       const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
       if (b.goneDay === undefined) rows.push(...chainRows(b));                          // D028
       if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
@@ -1325,7 +1337,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     sewerRows: (x: number, z: number) => { if (!city || !sim) return null; const b = buildingAt(city, x, z); return b ? sewerRows(b) : null; },   // D033：這一格建築的「污水」列（守衛與拍照用）
     sewerRep: () => lastRep ? lastRep.sewer : null,
     mergeRep: () => lastRep ? lastRep.merges.map(m => ({ x: m.x, z: m.z, k: m.k, size: m.size, absorbed: m.from.length })) : null,   // D034：最近一天的合併（新建築的根格、種類、邊長、吸收了幾棟）   // D033：最近一天的污水回報 { need, served, unserved, plants }
-    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
+    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade, resource: lastRep.resource } : null,   // D036：開採量；D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // ---- D026 災禍（守衛與拍照用）：標記數與焦土格數、一格的旗標、卡上的按鈕、把一格的旗標直接設好（造情境用，介面沒有這個鈕）----
     // ---- D027 交通（守衛與拍照用）：過載道路格（讀模擬的負載，不讀畫面）、貼圖上暖色的等級、幸福構成面板的列 ----
     traffic: () => {

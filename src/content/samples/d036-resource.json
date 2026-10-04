@@ -1,0 +1,216 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-resource.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "lerp",
+   "anchors": {
+    "start": "const lerp=(a,b,t)=>a+(b-a)*t;",
+    "end": "const lerp=(a,b,t)=>a+(b-a)*t;"
+   },
+   "line": 37220,
+   "endLine": 37220,
+   "sha": "e87f5f4b2758e4a9475c3405f25e9eb8ee0c83b298bb8f221d3a50ed192f7549"
+  },
+  {
+   "kind": "fn",
+   "name": "mulberry32",
+   "anchors": {
+    "start": "function mulberry32(",
+    "closure": "balanced-brace"
+   },
+   "line": 37221,
+   "endLine": 37221,
+   "sha": "07427dce4beb574a80451202431ba31cf030c1540c9366f9398246bc72a278bf"
+  },
+  {
+   "kind": "fn",
+   "name": "makeNoise",
+   "anchors": {
+    "start": "function makeNoise(",
+    "closure": "balanced-brace"
+   },
+   "line": 37227,
+   "endLine": 37237,
+   "sha": "5615802be9f2a5ed24bff48a977b8f89dc216b5af2421d7faa530fe4fcd2b6ec"
+  },
+  {
+   "kind": "fn",
+   "name": "genResource",
+   "anchors": {
+    "start": "function genResource(",
+    "closure": "balanced-brace"
+   },
+   "line": 53225,
+   "endLine": 53236,
+   "sha": "9b05fa02f9180a2ad7d36441cbc69ad55728b1475686cbff82e207c33889f4d2"
+  },
+  {
+   "kind": "span",
+   "name": "RESOURCE_STOCK",
+   "anchors": {
+    "start": "const RESOURCE_STOCK=240;",
+    "end": "const RESOURCE_STOCK=240;"
+   },
+   "line": 39447,
+   "endLine": 39447,
+   "sha": "26aece61ffa0d2875f7893fc4d9e09df4389bfb65e2eaad6a54d6eea3b48c0f2"
+  },
+  {
+   "kind": "span",
+   "name": "OIL_RATE、ORE_RATE",
+   "anchors": {
+    "start": "const OIL_RATE=3,ORE_RATE=2;",
+    "end": "const OIL_RATE=3,ORE_RATE=2;"
+   },
+   "line": 39448,
+   "endLine": 39448,
+   "sha": "42e76c4e91cc63d46a89b0eff2a74f2f1e9dfd5fda0efc895487ac2708ca7a3b"
+  },
+  {
+   "kind": "span",
+   "name": "主計數迴圈的開採",
+   "anchors": {
+    "start": "if(b&&b.k===49){",
+    "end": "if(b&&b.k===51&&!b.ref)mgN++;"
+   },
+   "line": 55131,
+   "endLine": 55146,
+   "sha": "105e07e63f13bcd21645ab3b7294b680451c980ebdd9fb09de6dbdebdd7495b5"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔還原耗損",
+   "anchors": {
+    "start": "RDEP.fill(0); // T140：資源耗損先歸零",
+    "end": "supplies=(+d.sup)||0; // T140"
+   },
+   "line": 66946,
+   "endLine": 66951,
+   "sha": "bad5b88c43640d0dbec98c96a2c7f2ce95d2f4984136e87ff337ba79debb93d6"
+  },
+  {
+   "kind": "span",
+   "name": "存檔的耗損配對",
+   "anchors": {
+    "start": "if(RDEP[i])rdepArr.push([i,RDEP[i]]);",
+    "end": "if(RDEP[i])rdepArr.push([i,RDEP[i]]);"
+   },
+   "line": 66730,
+   "endLine": 66730,
+   "sha": "3f564a1d0f02c820943b137d232fb21b1bb092af7987038bb20107affd463591"
+  },
+  {
+   "kind": "span",
+   "name": "存檔的 rdep 欄位",
+   "anchors": {
+    "start": "rdep:rdepArr.length?rdepArr:null}",
+    "end": "rdep:rdepArr.length?rdepArr:null}"
+   },
+   "line": 66765,
+   "endLine": 66765,
+   "sha": "7a04e4a8653359f2aad01931a156a0c40e8700f011c9c9a44d713c03b8fa54e9"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔重建資源圖",
+   "anchors": {
+    "start": "genResource(seed);",
+    "end": "genResource(seed);"
+   },
+   "line": 66895,
+   "endLine": 66895,
+   "sha": "186c16f96534c46bd337cabb59f88141db39b78f6e7c11a5e920178b109f48fa"
+  },
+  {
+   "kind": "span",
+   "name": "新圖重建資源圖",
+   "anchors": {
+    "start": "genResource(sd);",
+    "end": "genResource(sd);"
+   },
+   "line": 51029,
+   "endLine": 51029,
+   "sha": "90d4effa2fb2e968b4c322bda8703fdf55a15977069b7a5a474f6aeab102730e"
+  },
+  {
+   "kind": "span",
+   "name": "canPlace 油井",
+   "anchors": {
+    "start": "if(toolId==='oilwell'&&RESOURCE[idx(x,y)]!==1)return '需油田資源格';",
+    "end": "if(toolId==='oilwell'&&RESOURCE[idx(x,y)]!==1)return '需油田資源格';"
+   },
+   "line": 51430,
+   "endLine": 51430,
+   "sha": "0a904e1076b4bb7d6935817ec8c29df7ca4421bb5bc1c0c3443317490fc45f12"
+  },
+  {
+   "kind": "span",
+   "name": "canPlace 礦場",
+   "anchors": {
+    "start": "if(toolId==='mine'&&RESOURCE[idx(x,y)]!==2)return '需礦藏資源格';",
+    "end": "if(toolId==='mine'&&RESOURCE[idx(x,y)]!==2)return '需礦藏資源格';"
+   },
+   "line": 51431,
+   "endLine": 51431,
+   "sha": "b3baff86faafa85490c931cfb5130ce854bebac4b4630caf208383010d2bbe37"
+  },
+  {
+   "kind": "span",
+   "name": "燃料",
+   "anchors": {
+    "start": "fuelMade=refineryN>0?Math.min(oilGain,refineryN*REFINERY_RATE*refineryUtil489,Math.max(0,fuelCap485-fuel)):0;",
+    "end": "fuelMade=refineryN>0?Math.min(oilGain,refineryN*REFINERY_RATE*refineryUtil489,Math.max(0,fuelCap485-fuel)):0;"
+   },
+   "line": 55306,
+   "endLine": 55306,
+   "sha": "2c7e1291d21e8dca4049475531fcae5627abdc37f5d74b8f32b7dee53af6ce4a"
+  },
+  {
+   "kind": "span",
+   "name": "鋼材",
+   "anchors": {
+    "start": "steelMade=steelMillN>0?Math.min(oreGain,steelMillN*STEEL_MILL_RATE*steelMillUtil489,Math.max(0,steelCap485-steel)):0;",
+    "end": "steelMade=steelMillN>0?Math.min(oreGain,steelMillN*STEEL_MILL_RATE*steelMillUtil489,Math.max(0,steelCap485-steel)):0;"
+   },
+   "line": 55307,
+   "endLine": 55307,
+   "sha": "c9c3909d24b514d47ceea18f4766902df6c0e6080f79bfcf1275fb429030f58e"
+  },
+  {
+   "kind": "span",
+   "name": "供應品",
+   "anchors": {
+    "start": "supplies+=suppliesGain-fuelMade-steelMade;",
+    "end": "supplies+=suppliesGain-fuelMade-steelMade;"
+   },
+   "line": 55308,
+   "endLine": 55308,
+   "sha": "6f71f7a32ce6576d58ae3d0db95cca4e567232ce376c60e1c152860cf6c6ed57"
+  }
+ ],
+ "text": {
+  "lerp": "const lerp=(a,b,t)=>a+(b-a)*t;",
+  "mulberry": "function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}",
+  "noise": "function makeNoise(rand,G){\n  const v=new Float32Array(G*G);\n  for(let i=0;i<G*G;i++)v[i]=rand();\n  const at=(x,y)=>{\n    const xi=Math.floor(x),yi=Math.floor(y);\n    const xf=x-xi,yf=y-yi,sx=xf*xf*(3-2*xf),sy=yf*yf*(3-2*yf);\n    const g=(a,b)=>v[((a%G)+G)%G*G+(((b%G)+G)%G)];\n    return lerp(lerp(g(xi,yi),g(xi+1,yi),sx),lerp(g(xi,yi+1),g(xi+1,yi+1),sx),sy);\n  };\n  return (x,y)=>.6*at(x,y)+.3*at(x*2.13+7,y*2.13+3)+.1*at(x*4.7+13,y*4.7+11);\n}",
+  "gen": "function genResource(sd){\n  const noiOil=makeNoise(mulberry32(sd^0x7c2f19),64), noiOre=makeNoise(mulberry32(sd^0x1a4d63),64); // 獨立種子噪聲，不消耗全域 R()\n  for(let y=0;y<N;y++)for(let x=0;x<N;x++){\n    const i=idx(x,y),t=tiles[i].t;\n    let r=0;\n    if(t===1||t===2){ // 僅陸地（沙/草）鋪資源，避開水域（呼應建築須陸地放置的通用限制）\n      if(noiOil(x*.045,y*.045)>.74)r=1;        // 油：低頻噪聲門檻→地理集中斑塊（非均勻）\n      else if(noiOre(x*.05+50,y*.05+50)>.74)r=2; // 礦：獨立噪聲場＋offset，避免與油田系統性重疊\n    }\n    RESOURCE[i]=r;\n  }\n}",
+  "stock": "const RESOURCE_STOCK=240;               // T140：單一資源格總可開採量上限（RDEP 累計達此值即該格停產）",
+  "rates": "const OIL_RATE=3,ORE_RATE=2;            // T140：油井/礦場每日抽取速率（供應品/天，直接疊加 supplies 與 RDEP，不消耗 R()）",
+  "extract": "    if(b&&b.k===49){                   // T140：油井——每日抽取本格資源，累加 supplies，資源耗盡（RDEP 達上限）自動停產，不消耗 R()\n      owN++;\n      const oi=idx(x,y);\n      if(RESOURCE[oi]===1&&RDEP[oi]<RESOURCE_STOCK){\n        const ext=Math.min(OIL_RATE,RESOURCE_STOCK-RDEP[oi]);\n        RDEP[oi]+=ext;suppliesGain+=ext;oilGain+=ext;\n      }\n    }\n    if(b&&b.k===50){                   // T140：礦場——同油井樣式，不消耗 R()\n      mnN++;\n      const mi=idx(x,y);\n      if(RESOURCE[mi]===2&&RDEP[mi]<RESOURCE_STOCK){\n        const ext=Math.min(ORE_RATE,RESOURCE_STOCK-RDEP[mi]);\n        RDEP[mi]+=ext;suppliesGain+=ext;oreGain+=ext;\n      }\n    }",
+  "restore": "    RDEP.fill(0); // T140：資源耗損先歸零，再視存檔內容還原（鐵律7）\n    if(Array.isArray(d.rdep))for(const pair of d.rdep){ // T140：稀疏可選欄位還原，舊檔缺 rdep 視為全數未耗損\n      if(!Array.isArray(pair)||pair.length<2)continue;\n      const ri140=pair[0]|0,amt=pair[1]|0;\n      if(ri140>=0&&ri140<N*N&&amt>0)RDEP[ri140]=Math.min(amt,RESOURCE_STOCK);\n    }",
+  "pair": "\t      if(RDEP[i])rdepArr.push([i,RDEP[i]]); // T140：資源耗損（僅非零格才收錄，稀疏）",
+  "field": "      rdep:rdepArr.length?rdepArr:null}; // T140：資源耗損（稀疏可選欄位，僅存已開採格；缺欄位＝未耗損。RESOURCE 本身不存，由 seed 經 genResource() 重建）",
+  "callLoad": "    genResource(seed); // T140：資源層不入存檔，讀檔後以存檔內 seed 重建（tiles[].t 已於上方迴圈填妥）",
+  "callNew": "  genResource(sd); // T140：資源層（獨立種子噪聲，不消耗全域 R()，見 genResource 定義處說明）",
+  "canOil": "      if(toolId==='oilwell'&&RESOURCE[idx(x,y)]!==1)return '需油田資源格'; // T140：僅能放在油田資源格（GV.resourceAt 可查）",
+  "canMine": "      if(toolId==='mine'&&RESOURCE[idx(x,y)]!==2)return '需礦藏資源格'; // T140：僅能放在礦藏資源格",
+  "fuelMade": "  fuelMade=refineryN>0?Math.min(oilGain,refineryN*REFINERY_RATE*refineryUtil489,Math.max(0,fuelCap485-fuel)):0;",
+  "steelMade": "  steelMade=steelMillN>0?Math.min(oreGain,steelMillN*STEEL_MILL_RATE*steelMillUtil489,Math.max(0,steelCap485-steel)):0;",
+  "supplies": "  supplies+=suppliesGain-fuelMade-steelMade;"
+ }
+}

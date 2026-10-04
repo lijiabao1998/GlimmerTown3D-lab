@@ -3,13 +3,15 @@
 // D016 數了 8 種（下面 tallyBuildings 的 fac）、D022 數了食物、觀光、貿易的 36 種（food.ts countFood），這裡數剩下的（欄位名＝實驗線的區域變數名）。
 // 各計數彼此獨立、不共用累加器（每個計數在每棟建築上只被一個地方碰到），所以 countFood、fac、countMore 分開數，順序不影響結果；day.ts 只叫 tallyBuildings 一次。
 // 讀的 b.pw 是前一天算好的：計數在 55050–55149，通電在同一迴圈後面的 55154–55156（只給 k≤3 與社宅）；本線 day.ts 先數、後通電，跟 D016、D022 一樣。
-// 沒搬（一律當 0／沒有）：資源開採量（55131–55146 的 RESOURCE／RDEP：suppliesGain、oilGain、oreGain）——另有一張卡；事故 T493（logisticsOperational485 讀的可用度恆 1）。
+// 資源開採（55131–55146）：D036 起接上——油井 k49、礦場 k50 每天抽 RESOURCE／RDEP（resource.ts extractWell），suppliesGain、oilGain、oreGain 進這裡的計數；沒給資源場（res）＝沒有資源圖＝抽取量 0。
+// 沒搬（一律當 0／沒有）：事故 T493（logisticsOperational485 讀的可用度恆 1）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史。
 import { countNear } from './grid.ts';
 import { sanRoadSeeds445 } from './garbage.ts';
 import { FERT_BOOST, countFood, emptyFoodCount, type FoodCount } from './food.ts';
 import { JOB_KEYS, infraJobs475, jobCounts, powerJobs471, residentPopulation488, transitDepotTotals501, waterJobs472, type JobCounts } from './jobs.ts';
 import type { Bld, Tile, World } from './lab.ts';
+import { RES_OIL, RES_ORE, extractWell, type ResourceField } from './resource.ts';
 
 // 63008 UP_MAX：可升級的種類（有的話升級加成就業，55055）；63009 UP_JOB：每級加成就業（沒列＝預設 6；顯式 0＝純擴容不加就業，所以用 ?? 不用 ||）
 export const UP_MAX: Record<number, number> = { 9: 15, 6: 10, 7: 10, 11: 10, 12: 10, 13: 10, 14: 10, 15: 10, 10: 10, 5: 10, 16: 10, 28: 10, 29: 10, 30: 10, 17: 10, 18: 10, 21: 10, 54: 10, 55: 10, 53: 8, 56: 15, 22: 8, 23: 8, 25: 10, 26: 10,
@@ -46,7 +48,7 @@ export const emptyMoreCount = (): MoreCount => Object.fromEntries(MORE_KEYS.map(
 
 // 一棟根格建築對這些計數的貢獻（55055–55147）。呼叫端先跳過 ref 格（55054）。root＝這棟的格子索引（運作中判斷要用）。行號＝實驗線那一行
 // fb：農場與大農場的化肥增產倍率（同 food.ts countFood）
-export function countMore(c: MoreCount, w: World, root: number, b: Bld, fb = 1): void {
+export function countMore(c: MoreCount, w: World, root: number, b: Bld, fb = 1, res?: ResourceField): void {
   const k = b.k;
   if (UP_MAX[k] && (b.lv as number) > 1) c.upJob += (b.lv - 1) * (UP_JOB[k] ?? 6);   // 55055：升級服務每級加成就業（?? 而非 ||：顯式 0 不能退回 6）
   switch (k) {
@@ -134,8 +136,8 @@ export function countMore(c: MoreCount, w: World, root: number, b: Bld, fb = 1):
     case 45: c.inN++; break;                                                      // 55126 研究院
     case 46: c.wsN++; break;                                                      // 55127 氣象站
     case 48: c.mhN++; break;                                                      // 55129 綜合醫院
-    case 49: c.owN++; break;                                                      // 55131 油井：開採量（RESOURCE、RDEP）沒搬，suppliesGain、oilGain 一律 0
-    case 50: c.mnN++; break;                                                      // 55139 礦場：同上，oreGain 0
+    case 49: { c.owN++; if (res) { const e = extractWell(res, root, RES_OIL); c.suppliesGain += e; c.oilGain += e; } break; }   // 55131 油井：站在油田格上每天抽 min(3, 240−RDEP)，進耗損、供應品、油
+    case 50: { c.mnN++; if (res) { const e = extractWell(res, root, RES_ORE); c.suppliesGain += e; c.oreGain += e; } break; }    // 55139 礦場：站在礦藏格上每天抽 min(2, 240−RDEP)，進耗損、供應品、礦
     case 51: c.mgN++; break;                                                      // 55147 太空研究中心
     case 22: c.fa++; c.farmGoldU += (b.lv || 1) * 3 * fb; break;                  // 55089 農場：金幣 3／級×化肥增產 fb
     case 53: c.bigFa++; c.farmGoldU += (b.lv || 1) * 12 * fb; break;              // 55090 大農場：金幣 12／級×fb
@@ -150,7 +152,7 @@ export interface FacCount { schools: number; dumps: number; stadiums: number; wa
 export interface Tally { fc: FoodCount; fac: FacCount; mc: MoreCount; towerPop: number; megaPop: number; cnt: Record<string, number> }
 // fert（選填）：昨天的化肥（T346 fertReady）與化肥廠覆蓋場（COV.fertco）；兩個都成立的根格農場與大農場食物與金幣 ×1.35（55089、55090）。沒給＝沒有化肥
 export interface FertIn { ready: boolean; fertco?: ArrayLike<number> }
-export function tallyBuildings(w: World, tickBld: readonly number[], fert?: FertIn): Tally {
+export function tallyBuildings(w: World, tickBld: readonly number[], fert?: FertIn, res?: ResourceField): Tally {
   const fc = emptyFoodCount(), mc = emptyMoreCount();
   const fac: FacCount = { schools: 0, dumps: 0, stadiums: 0, waterTowers: 0, clinics: 0, libraries: 0, posts: 0, cemeteries: 0 };
   let towerPop = 0, megaPop = 0;                                            // 55040 towerPop488、megaPop488（D021）
@@ -159,7 +161,7 @@ export function tallyBuildings(w: World, tickBld: readonly number[], fert?: Fert
     if (!b || b.ref) continue;                                              // 55054：多格建築的 ref 格不參與
     const fb = (b.k === 22 || b.k === 53) && fert && fert.ready && fert.fertco && fert.fertco[i] > 0 ? FERT_BOOST : 1;   // 55089–55090：(fertReady&&COV.fertco&&COV.fertco[idx(x,y)]>0)?1.35:1
     countFood(fc, b, fb);
-    countMore(mc, w, i, b, fb);
+    countMore(mc, w, i, b, fb, res);
     if (b.k === 105) megaPop += residentPopulation488(b, () => undefined);  // 55108：住宅巨廈（T488 單一人口真相；住房沒就緒＝入住率 1）
     if (b.k === 33) towerPop += residentPopulation488(b, () => undefined);  // 55110：住宅塔
     if (b.k === 7) fac.schools++;                                           // 55056

@@ -21,7 +21,8 @@ function context() {
 }
 // 分區：builder 預設整張 0；b.zn（逐格字元）有人寫過就當存檔的 zn 蓋過去（實驗線讀檔的分區層）
 export const zoneRect = (b, x0, z0, x1, z1, zone) => { b.zn ??= Array.from({ length: N21 * N21 }, () => '0'); for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) b.zn[z * N21 + x] = String(zone); };
-export const mk = (seed, day, name, fn) => { const { template, sizeOf } = context(), b = builder(template, sizeOf); fn(b); return b.code(seed, day, name, b.zn ? { zn: b.zn.join('') } : {}); };
+// extra：另外要寫進存檔的欄位（D036 的 rdep）；函式的話收 builder 回傳欄位（要等 fn 跑完才知道的，例如放了哪些格子）
+export const mk = (seed, day, name, fn, extra = {}) => { const { template, sizeOf } = context(), b = builder(template, sizeOf); fn(b); return b.code(seed, day, name, { ...(b.zn ? { zn: b.zn.join('') } : {}), ...(typeof extra === 'function' ? extra(b) : extra) }); };
 export const tryPut = (b, x, z, k, lv = 1, o = {}) => { try { b.put(x, z, k, lv, o); return true; } catch { return false; } };
 export const house = (b, x, z, n = 0, lv = 3) => tryPut(b, x, z, 1, lv, { den: 1 + (n % 5), we: n % 3 });
 
