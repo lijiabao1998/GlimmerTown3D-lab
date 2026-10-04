@@ -5,6 +5,7 @@ import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRe
 import { computePower, powerCap } from './rules/power.ts';
 import { rebuildCov, type SvcBudget } from './rules/fields.ts';
 import { applyPolicy, stepBudget, type PolicyResult } from './rules/policy.ts';
+import { SPEC_MIN_RANK, TECH343_BY_ID, pickSpec, startTech, techFee, techWhy } from './rules/tech.ts';
 import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
 import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
@@ -193,6 +194,29 @@ export function setBudget(s: Sim, cat: keyof SvcBudget | string, delta: number):
   if (b === s.budget) return false;
   s.budget = b; recoverCov(s);
   return true;
+}
+
+// ---- 科技與專精（D038）：玩家在 ☰「科技與專精」面板按的。研究要付的錢現在扣、進度每天由 stepDay 推（主計數迴圈之後，55245）；不寫世界歷史（同政策，要業主定的事 1）----
+export interface TechActResult { ok: boolean; fee: number; why?: string }
+// 開始研究（startTech343 38557）：條件與費用照實驗線；回傳扣了多少（已經在做它＝成功、免費）。失敗講原因（canStartTech 的條件、錢不夠）
+export function startResearch(s: Sim, id: string): TechActResult {
+  const n = TECH343_BY_ID[id], why = techWhy(n, s.tech, s.edu.tech);
+  if (why) return { ok: false, fee: 0, why };
+  const r = startTech(id, s.tech, s.edu.tech, s.money, s.diff);
+  if (!r.ok) return { ok: false, fee: 0, why: `錢不夠：要 $${techFee(n, s.tech, s.diff).toLocaleString()}（現有 $${Math.floor(s.money).toLocaleString()}）` };
+  s.money -= r.fee;
+  return { ok: true, fee: r.fee };
+}
+// 選城市方向（specPick386 37852）：永久；城市等級 ≥ Lv.9、不是沙盒、還沒選過；選教育科技城時重建覆蓋場（教育場 ×1.08）
+export function chooseSpec(s: Sim, i: number): { ok: boolean; id: string | null; why?: string } {
+  if (s.edu.spec) return { ok: false, id: null, why: '已經選過了（永久）' };
+  if (s.diff === 3) return { ok: false, id: null, why: '沙盒不能選城市方向' };
+  if (s.rankIdx + 1 < SPEC_MIN_RANK) return { ok: false, id: null, why: `要城市等級 Lv.${SPEC_MIN_RANK}（現在 Lv.${s.rankIdx + 1}）` };
+  const id = pickSpec(i, s.edu.spec, s.diff, s.rankIdx);
+  if (!id) return { ok: false, id: null, why: '沒有這個方向' };
+  s.edu.spec = id;
+  if (id === 'edu') recoverCov(s);
+  return { ok: true, id };
 }
 
 // 電：容量（燃煤電廠 75 棟起，52473；季節係數 55008）與有電、沒電的住商工棟數（昨天的分配，55154–55156）

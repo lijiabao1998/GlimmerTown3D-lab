@@ -31,6 +31,7 @@ import { d033Smoke, d033SkipNote } from './smoke-d033.mjs';
 import { d034Smoke, d034SkipNote } from './smoke-d034.mjs';
 import { d035Smoke, d035SkipNote } from './smoke-d035.mjs';
 import { d036Smoke, d036SkipNote } from './smoke-d036.mjs';
+import { d038Smoke, d038SkipNote } from './smoke-d038.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -589,6 +590,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d034Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d035Smoke(withBrowser, log);
 // ===== D036：資源開採（tools/smoke-d036.mjs：W1 油井礦場的「開採」列、推進一天的開採量＝Node 端、站錯的井不產出、耗盡、畫面沒有變；自己開三個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d036Smoke(withBrowser, log);
+// ===== D038：科技與專精（tools/smoke-d038.mjs：☰「科技與專精」面板、開始研究扣款與進度＝Node 端、城市方向兩下確定、存檔重新整理接得上、手機 412×860 與 360×740 的版面與按鈕大小、畫面沒有變；自己開六個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d038Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -610,6 +613,7 @@ if (d033SkipNote()) console.log(d033SkipNote());
 if (d034SkipNote()) console.log(d034SkipNote());
 if (d035SkipNote()) console.log(d035SkipNote());
 if (d036SkipNote()) console.log(d036SkipNote());
+if (d038SkipNote()) console.log(d038SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

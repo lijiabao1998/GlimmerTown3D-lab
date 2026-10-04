@@ -197,7 +197,7 @@ export function economyMain(st: EconState, i: EconIn): EconCtx {
   const wealthNow481 = i.wealth, prevCost481 = st.snap ? st.snap.prices.costOfLiving : foodPriceOf(day, sea);
   const purchaseBase481 = clamp(purchasingPower481(laborNow481, wealthNow481, i.cityHappy, prevCost481, i.pol?.taxR || 1) * 1, .40, 1.65);   // 55332：pol?.taxR||1；businessCycleConsumptionMul490()＝1
   // 55293–55299、55333–55342：食物與遊客、貿易額度、糧食進口與供糧率（food.ts foodDay；額度用 T485 的單位、船、壅堵、貨運燃料的效率加成）
-  const fd = foodDay(i.fc, i.roads, pop, sea, day, { U, roadStats, shipCount: st.shipCount, fuelMul: freightTaxMul, eventFood: i.eventFood });
+  const fd = foodDay(i.fc, i.roads, pop, sea, day, { U, roadStats, shipCount: st.shipCount, fuelMul: freightTaxMul, eventFood: i.eventFood, spec: i.spec });
   const logisticsNow481 = { efficiency: fd.eff, avgRoadLoad: +roadStats.avg.toFixed(4), overloadedShare: +roadStats.over.toFixed(4), tradeCapacity: fd.cap };
   const roadTradeBase482 = fd.roadBase, tradeCapacity481 = fd.cap;
   const solvent482A1 = i.money >= 0;

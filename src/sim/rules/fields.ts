@@ -106,7 +106,7 @@ export function stampPolTree(g: Grids, x: number, y: number, sign: number): void
 // 53128：教育權重
 const EDU_W_SCHOOL = 50, EDU_W_UNI = 90, EDU_W_LIB = 35;
 // eduStaticAt 讀的三個實驗線全域：科技 tech343.done（tq，38549）、城市特化 spec386（sq，37851）、營養午餐 pol&&pol.schoolLunch（53131）
-export interface EduCtx { tech: readonly string[]; spec: string | null; schoolLunch: boolean }
+export interface EduCtx { tech: string[]; spec: string | null; schoolLunch: boolean }
 // 53129：學校／大學／圖書館／高中／大學城／研究園區覆蓋各自加分，乘科技與特化係數後四捨五入、封頂 255
 export function eduStaticAt(g: Grids, x: number, y: number, e: EduCtx): number {
   const i = y * g.N + x, COV = g.COV;   // idx(x,y)（39731）

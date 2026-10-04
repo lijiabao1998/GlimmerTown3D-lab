@@ -90,14 +90,14 @@ export interface FoodReport {
 
 // 一天的糧食（沒有副作用）。roads＝道路格數（tickRoad.length，含橋與快速路）；pop＝當天的人口（55246）；sea＝季節 0–3；day＝已經 ++ 之後的日子。
 // x（D025）：U＝T485 單位（沒給＝從 c 的貨運中心、倉儲、港口算，其餘 0）、roadStats＝壅堵（沒給＝0）、shipCount＝船、fuelMul＝貨運燃料乘數 freightTaxMul（效率的燃料加成，沒給＝1）、eventFood＝城市活動（T299）的食物加成（沒給＝1）
-export interface FoodX { U?: Units485; roadStats?: RoadStats; shipCount?: number; fuelMul?: number; eventFood?: number }
+export interface FoodX { U?: Units485; roadStats?: RoadStats; shipCount?: number; fuelMul?: number; eventFood?: number; spec?: string | null }
 export function foodDay(c: FoodCount, roads: number, pop: number, sea: number, day: number, x: FoodX = {}): FoodReport {
   const U = x.U ?? unitsOf485(c as unknown as Record<string, number>);
   // 55293：（農場×季節＋牧場＋溫室＋加工類）×食物保存 foodPreserveMul485（冷藏庫、穀倉，T485）×事件食物加成（T299 城市活動沒搬：1；對拍時 x.eventFood 給實驗線那天的事件加成，豐收 1.5、乾旱 0.7……）
   const foodPoints = Math.round((c.farmFoodU * FARM_SEASON_MULT[sea] + c.ranchFoodU + c.ghFoodU + c.fp340 * 3 + c.cg340 * 1 + c.ff346 * 4) * U.foodPreserveMul485 * (x.eventFood ?? 1));
-  // 55294：觀光建築與地標各自的係數加總×季節×sq('green',1.15,1)（專業化 T386 沒搬：取關的值 1）
+  // 55294：觀光建築與地標各自的係數加總×季節×sq('green',1.15,1)（專業化 T386，D038 起接上：x.spec 給城市方向，綠色城市 ×1.15）
   let tourists = Math.round((c.la * 25 + c.ctN307 * 12 + c.obN307 * 22 + c.tourLm309 + c.ai * 40 + c.st * 5 + c.mu * 15 + c.th * 12 + c.ci * 8 + c.aq * 35 + c.zo * 45 + c.ap * 55 + c.bgN * 20
-    + c.rs330 * 15 + c.tv330 * 18 + c.mr330 * 30 + c.ch340 * 8 + c.wp340 * 34 + c.sr340 * 16 + c.cpk342 * 12 + c.gpk465 * 28 + c.art466 * 80 + c.adm466 * 25 + c.res466 * 20 + c.mpt342 * 120) * TOUR_SEASON_MULT[sea] * 1);
+    + c.rs330 * 15 + c.tv330 * 18 + c.mr330 * 30 + c.ch340 * 8 + c.wp340 * 34 + c.sr340 * 16 + c.cpk342 * 12 + c.gpk465 * 28 + c.art466 * 80 + c.adm466 * 25 + c.res466 * 20 + c.mpt342 * 120) * TOUR_SEASON_MULT[sea] * (x.spec === 'green' ? 1.15 : 1));
   if (c.cvN > 0 && day % CONVENTION_PULSE_DAYS === 0) tourists += Math.round(500 * c.cvN * TOUR_SEASON_MULT[sea]);   // 55295–55297 會展中心的脈衝（不消耗亂數）
   // 55286–55291：有效單位（logistics.ts unitsOf485）。企業層 T489 沒就緒（利用率 1）；火車線 railLines463 沒搬
   const freightUnits = U.freightUnits485, warehouseUnits = U.warehouseUnits485, portEquivalent = U.portEquivalent485, railUnits = U.railUnits485, rd = x.roadStats ?? NO_ROAD_LOAD;

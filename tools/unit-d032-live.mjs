@@ -55,7 +55,7 @@ const NAMES = { day: '日', pop: '人口', jobs: '就業', happy: '城市幸福'
 // 一座城連推 rec.days 天，逐天跟實驗線比。mod＝day.ts（真的或改壞的）。玩家的動作（rec.acts：{d, a, r}）在「推進第 d 天之前」按。
 // 回 { d: [不同處], days, first, fields, firstFields, parts, acts: 按了幾個動作, actsOk: 其中成功改了狀態的 }
 // onDay(day, mine, row, rep, sim)：每天比完之後呼叫
-export function compareCity32(mod, code, rec, KT, vrank, { stopAtFirst = true, onDay, fns } = {}) {
+export function compareCity32(mod, code, rec, KT, vrank, { stopAtFirst = true, onDay, fns, noInject = false, before } = {}) {   // noInject（D038）：不把實驗線的科技清單寫進 s.edu.tech——本線自己有科技與專精的狀態了，要比的就是它自己推出來的
   const r = decodeLabCode(code), s = mod.simFromSave(r.save, code, KT, vrank), d = [], out = { d, days: 0, first: 0, fields: [], firstFields: [], parts: [], acts: 0, actsOk: 0 };
   // 讀檔那一刻：政策（兩邊都補齊再比——實驗線讀檔之後不久 pol 就是補齊的物件，本線留著讀進來的樣子，行為一樣）、教育場（營養午餐的讀檔怪癖）、服務預算
   const st0 = [];
@@ -77,8 +77,14 @@ export function compareCity32(mod, code, rec, KT, vrank, { stopAtFirst = true, o
       if (s.day !== x.r.day) bad.push(`按的時候是第 ${s.day} 天 ≠ 實驗線 ${x.r.day}`);
       if (bad.length) { d.push(`第 ${day} 天推進之前按 ${J(x.a)}：${bad.join('；')}`); if (!out.first) out.first = day; if (stopAtFirst) return out; }
     }
-    const inj = injectInputs(s, st, prev, row, false);   // 只把科技寫進 s.edu.tech（全是 []）；政策不代（本線自己讀存檔裡的 pol）
-    if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
+    if (!noInject) {
+      const inj = injectInputs(s, st, prev, row, false);   // 只把科技寫進 s.edu.tech（舊樣本全是 []）；政策不代（本線自己讀存檔裡的 pol）
+      if (inj.err) return { ...out, d: [inj.err], days: day, first: day };
+    }
+    if (before) {   // D038：這一天推進之前的動作（開始研究、選方向）；回傳不同處
+      const bad = before(day, s, row);
+      if (bad.length) { d.push(`第 ${day} 天推進之前：${bad.join('；')}`); if (!out.first) out.first = day; if (stopAtFirst) return out; }
+    }
     const class2 = {   // 本線還沒搬的：地鐵、公車、停車的收入與營運費、三種車隊的維護費——樣本裡的值（跟 D028 同一份）
       other: { metroRev: row.un[0], metroAds: row.un[1], transitRev: row.un[2], parkingRevenue491: row.un[4] },
       upkeep: { metroCost: row.uu[0], railOpsCost463: row.uu[1], busOpsCost468: row.uu[2], svcFleet: { fire: row.uu[4], police: row.uu[5], amb: row.uu[6] } },

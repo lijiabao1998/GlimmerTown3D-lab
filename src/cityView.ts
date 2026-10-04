@@ -14,7 +14,8 @@ import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
 import { mergeToastText } from './sim/rules/merge.ts';
@@ -467,7 +468,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
     <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>
     <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
-    <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>`;
+    <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
+    <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -678,6 +680,103 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     plTip = ''; renderPolicy(); pl.hidden = false;
   }
 
+  // D038：☰「科技與專精」（實驗線 T343 科技樹與 T386 城市方向的 3D 版；實驗線畫一張節點圖，這裡照手機改成一條路線一張清單）。四條路線 36 個節點：做完的、進行中的（進度條與還要幾天）、
+  // 開得了的（按「開始」，錢現在扣；已有進度的免費）、開不了的（講原因：前置、二選一、要先做完幾個）。城市方向四選一、永久：要城市等級 Lv.9，按一下選、再按一下才定。
+  // 按了馬上生效、存檔；進度每天由 stepDay 推。不寫世界歷史（同政策，D038 卡「要業主定的事」1）
+  const tc = $<HTMLElement>('#tc');
+  $<HTMLButtonElement>('#tcX').onclick = () => { tc.hidden = true; tcPick = -1; };
+  tc.onclick = e => { if (e.target === tc) { tc.hidden = true; tcPick = -1; } };
+  const TECH_ROUTES = [['A', '🏭', '產業線'], ['B', '🏘️', '民生線'], ['C', '🎓', '文教線'], ['D', '🔭', '遠望線']] as const;   // 65119 TECH_ROUTE_META343、65432 路線鈕
+  type TechRoute = (typeof TECH_ROUTES)[number][0];
+  let tcRoute: TechRoute = 'A', tcTip = '', tcPick = -1;   // tcPick：城市方向按過一下、等第二下確定的編號
+  function techEta(n: { id: string; points: number }): string {
+    const left = n.points - (sim!.tech.prog[n.id] ?? 0), v = Math.max(1, sim!.techSpeed);
+    return `還要 ${Math.max(1, Math.ceil(left / v)).toLocaleString()} 天`;
+  }
+  function renderTech() {
+    if (!sim) return;
+    const s = sim, done = s.edu.tech, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+    const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
+    const box = $('#tc .body'), specKids: HTMLElement[] = [], actKids: HTMLElement[] = [], routeKids: HTMLElement[] = [];   // 順序：研究（最常看）→ 路線與節點 → 城市方向（永久、一生選一次，放最下面）
+    // 城市方向
+    {
+      const h = mk('h3', '', `城市方向（永久，城市等級 Lv.${SPEC_MIN_RANK} 起；現在 Lv.${s.rankIdx + 1}）`), ol = mk('ol');
+      if (s.edu.spec) {
+        const d = SPEC386[s.edu.spec], li = mk('li'), head = mk('div', 'h'), b = mk('b', '', `${d.ic} ${d.nm}`), tag = mk('span', 'val', '已選定');
+        li.dataset.k = s.edu.spec; li.dataset.kind = 'spec'; li.dataset.st = 'done'; head.append(b, tag); li.append(head, mk('small', 'note', d.fx)); ol.append(li);
+      } else SPEC_IDS386.forEach((id, i) => {
+        const d = SPEC386[id], li = mk('li'), head = mk('div', 'h'), b = mk('b', '', `${d.ic} ${d.nm}`);
+        const can = s.diff !== 3 && s.rankIdx + 1 >= SPEC_MIN_RANK, armed = tcPick === i;
+        li.dataset.k = id; li.dataset.kind = 'spec'; li.dataset.st = can ? (armed ? 'armed' : 'can') : 'lock';
+        const t = btn(armed ? '再按一次確定' : '選這個', `${d.nm}：${armed ? '再按一次就永久選定' : '選為城市方向（要再按一次確定）'}`, can ? () => uiSpec(i) : null); if (armed) t.className = 'on';
+        head.append(b, t); li.append(head, mk('small', 'note', d.fx + (s.diff === 3 ? '　沙盒不能選' : !can ? `　要城市等級 Lv.${SPEC_MIN_RANK}` : '')));
+        ol.append(li);
+      });
+      specKids.push(h, ol);
+    }
+    // 研究中
+    {
+      const h = mk('h3', '', `研究（每天進度 +${s.techSpeed}，研究院、大學、科技園區、數據中心等加快；已完成 ${done.length}／${TECH343.length}）`), ol = mk('ol'), a = s.tech.act ? TECH343_BY_ID[s.tech.act] : null;
+      const li = mk('li'), head = mk('div', 'h');
+      li.dataset.kind = 'act'; li.dataset.k = a?.id ?? ''; li.dataset.st = a ? 'act' : 'idle';
+      if (a) {
+        const p = s.tech.prog[a.id] ?? 0;
+        head.append(mk('b', '', `▶ ${a.id} ${a.nm}`), mk('span', 'val', `${p}／${a.points}`));
+        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.min(100, Math.round(p / a.points * 100)) + '%'; bar.append(i);
+        li.append(head, bar, mk('small', 'note', `${a.effect}｜${techEta(a)}`));
+      } else { head.append(mk('b', '', '沒有進行中的研究'), mk('span', 'val', '')); li.append(head, mk('small', 'note', '下面挑一個節點按「開始」；做完一個才會停，不會自動接著做下一個')); }
+      ol.append(li); actKids.push(h, ol);
+    }
+    // 路線與節點
+    {
+      const bar = mk('div', 'tabs');
+      for (const [r, ic, nm] of TECH_ROUTES) {
+        const n = TECH343.filter(q => q.route === r), d = n.filter(q => done.includes(q.id)).length, b = btn(`${ic} ${nm} ${d}／${n.length}`, `${nm}：做完 ${d} 個，共 ${n.length} 個`, () => { tcRoute = r; tcTip = ''; renderTech(); });
+        b.setAttribute('aria-pressed', String(tcRoute === r)); if (tcRoute === r) b.className = 'on'; b.dataset.route = r; bar.append(b);
+      }
+      const ol = mk('ol');
+      for (const n of TECH343.filter(q => q.route === tcRoute)) {
+        const li = mk('li'), head = mk('div', 'h'), isDone = done.includes(n.id), isAct = s.tech.act === n.id, why = isDone ? '已完成' : techWhy(n, s.tech, done), p = s.tech.prog[n.id] ?? 0;
+        const st = isDone ? 'done' : isAct ? 'act' : why ? 'lock' : 'can', fee = techFee(n, s.tech, s.diff);
+        li.dataset.k = n.id; li.dataset.kind = 'tech'; li.dataset.st = st;
+        head.append(mk('b', '', `${n.id} ${n.nm}`));
+        head.append(isDone ? btn('✔', `${n.nm}：已完成`, null) : isAct ? btn('研究中', `${n.nm}：研究中`, null) : why ? btn('🔒', `${n.nm}：開始不了：${why}`, null)
+          : btn(fee > 0 ? `開始 $${fee.toLocaleString()}` : p > 0 ? '繼續（免費）' : '開始（免費）', `${n.nm}：開始研究${fee > 0 ? `，花 $${fee.toLocaleString()}` : '，免費'}`, () => uiTech(n.id)));
+        const parts = [n.effect, `第 ${n.tier} 層`, `${n.points} 點`, ...(isDone ? [] : [`要 $${n.cost.toLocaleString()}`]), ...(p > 0 && !isDone ? [`已有進度 ${p}／${n.points}`] : []), ...(why && !isDone ? [why] : [])];
+        li.append(head, mk('small', 'note', parts.join('　'))); if (why && !isDone) li.classList.add('lock');
+        ol.append(li);
+      }
+      routeKids.push(bar, ol);
+    }
+    box.replaceChildren(...actKids, ...routeKids, ...specKids);
+    const specNote = s.edu.spec ? `${SPEC386[s.edu.spec].ic} ${SPEC386[s.edu.spec].nm}` : s.diff === 3 ? '沙盒不能選' : s.rankIdx + 1 >= SPEC_MIN_RANK ? '還沒選（在最下面）' : `Lv.${SPEC_MIN_RANK} 起可選`;
+    $('#tc .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒：研究免費' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市方向：${specNote}`;
+    $('#tc .tip').textContent = tcTip;
+  }
+  // 開始研究：成功就講、存檔；不行講原因（前置、二選一、錢不夠），不動狀態
+  function uiTech(id: string) {
+    if (!sim || !own(TECH343_BY_ID, id)) return null;
+    const n = TECH343_BY_ID[id], was = sim.tech.act, r = startResearch(sim, id);
+    if (r.ok) {
+      tcTip = ''; if (was !== id) bui.toast(`🔬 開始研究：${n.nm}${r.fee > 0 ? `（−$${r.fee.toLocaleString()}）` : ''}`, 'gold');
+      saveNow();
+    } else tcTip = `${n.nm}：${r.why ?? '開始不了'}`;
+    renderTech(); return r;
+  }
+  // 選城市方向：第一下只是標起來（永久，不給手滑）、第二下對同一個才定。定了：教育科技城整張重建覆蓋場（教育場 ×1.08）、研究速度 +1
+  function uiSpec(i: number) {
+    if (!sim) return null;
+    if (tcPick !== i) { tcPick = i; tcTip = `${SPEC386[SPEC_IDS386[i]]?.nm ?? ''}：永久、選了不能改——再按一次確定`; renderTech(); return { ok: false, armed: true }; }
+    tcPick = -1;
+    const r = chooseSpec(sim, i);
+    if (r.ok) { tcTip = ''; bui.toast(`${SPEC386[r.id!].ic} 城市方向：${SPEC386[r.id!].nm}`, 'gold'); saveNow(); } else tcTip = r.why ?? '選不了';
+    renderTech(); return r;
+  }
+  function openTech() {
+    if (!sim) return;
+    tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
+  }
+
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
     const saved = readSave(), r = saved ? decodeLabCode(saved) : null;
@@ -698,6 +797,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
         ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
+        ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
     ];
@@ -716,6 +816,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'night') openNight();
     else if (id === 'rank') openRank();
     else if (id === 'policy') openPolicy();
+    else if (id === 'tech') openTech();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -859,6 +960,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
     if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
     if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
+    if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -1372,6 +1474,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     policyApply: (k: string, v: unknown) => { const r = uiPolicy(k, v); return r ? { ok: r.ok } : null; },
     budgetApply: (cat: string, dir: 1 | -1) => uiBudget(cat, dir),
     policyState: () => sim ? { pol: sim.pol ? { ...sim.pol } : null, last: { ...sim.polLast }, budget: { ...sim.budget }, day: sim.day, schoolLunch: sim.edu.schoolLunch, edu: hashBytes(sim.g.EDU), money: sim.money, insured: lastRep ? lastRep.hazard.insured : 0 } : null,
+    // ---- D038 科技與專精（守衛與拍照用）：☰「科技與專精」面板的列、按面板上真的按鈕、目前的研究狀態 ----
+    techRows: () => [...ui.querySelectorAll<HTMLElement>('#tc li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('.note')?.textContent ?? '' })),
+    techPanel: () => ({ open: !tc.hidden, sub: $('#tc .sub').textContent, tip: $('#tc .tip').textContent, route: tcRoute, pick: tcPick, tabs: [...ui.querySelectorAll<HTMLButtonElement>('#tc .tabs button')].map(b => b.textContent ?? '') }),
+    techRoute: (r: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc .tabs button[data-route="${r}"]`); if (!b) return false; b.click(); return true; },
+    techClick: (k: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc li[data-k="${k}"] button`); if (!b || b.disabled) return false; b.click(); return true; },   // 按面板上那一列的按鈕（節點或城市方向）；沒開、沒這一列、鈕是灰的回 false
+    techApply: (id: string) => { const r = uiTech(id); return r ? { ok: r.ok } : null; },
+    specApply: (i: number) => { const r = uiSpec(i); return r ? { ok: r.ok } : null; },
+    techState: () => sim ? { day: sim.day, act: sim.tech.act, prog: { ...sim.tech.prog }, done: [...sim.edu.tech], spec: sim.edu.spec ?? '', speed: sim.techSpeed, money: sim.money, rank: sim.rankIdx, diff: sim.diff } : null,
     cityEventRep: () => lastRep ? { day: lastRep.day, ...lastRep.cityEvent, active: sim?.cityEvent ? { ...sim.cityEvent, ...CITY_EVENTS[sim.cityEvent.i] } : null } : null,   // D030：今天剛開始／剛結束的活動編號，與進行中的活動
     nightRep: () => lastRep ? { day: lastRep.day, night: lastRep.night, simReady: sim ? sim.night.ready : null } : null,
     dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, night: lastRep.night.finance, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,

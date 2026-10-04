@@ -24,6 +24,7 @@ import { residentialHappy } from './rules/happy.ts';
 import { nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { genResource, rdepOfSave, rdepPairs, type ResourceField } from './rules/resource.ts';
+import { TECH_EDU343, advanceTech, specOfSave, techLoad, type ResearchIn, type TechProg } from './rules/tech.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
@@ -45,6 +46,7 @@ export interface Sim {
   w: World;                         // 實驗線形狀的格子（規則直接讀寫）
   g: Grids;                         // 覆蓋、污染、地價、教育等逐格場
   rng: Rng; seed: number; day: number;
+  tech: TechProg; techSpeed: number;   // D038：進行中的科技與進度（完成的清單是 edu.tech、城市方向是 edu.spec）、今天的研究速度（每天重算、不存檔；讀檔後第一天之前是 1，38547）；存檔 tech343、spec386（66770、66772、66928、66930）
   res: ResourceField;               // D036：資源圖（RESOURCE，由種子與地形重建、不入存檔，66895）與耗損（RDEP，存檔的稀疏欄位 rdep，66946）；油井 k49、礦場 k50 每天在主計數迴圈裡抽（55131–55146）
   weather: WeatherState; vrank: Record<string, number[]>;
   budget: SvcBudget; edu: EduCtx;
@@ -82,6 +84,7 @@ export interface DayReport {
   grown: number; upgraded: number;
   money: number; settle: SettleReport;          // D011：結算後的資金與當天的結算（沙盒照算，只是不入帳）
   garb: GarbReport;                             // D020：當天的垃圾（產量、容量、全城比例、正式清運、清運區數、局部扣分的棟數）
+  tech: { speed: number; finished: string | null };   // D038：今天的研究速度與完成的科技（沒有＝null）
   resource: { oil: number; ore: number; made: number; wells: [number, number] };   // D036：當天的開採（oilGain、oreGain、suppliesGain；油井數、礦場數＝owN、mnN，不管有沒有抽到）
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
   econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
@@ -187,7 +190,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   if (dtd) for (let i = 0; i < nn; i++) { const b = tiles[i].bld; if (b && b.k === 1 && b.death) { const v = +dtd[i]; if (v) b.deathAge = v; } }
   const w: World = { N: n, tiles };
   const econ = econOfSave(save);
-  const g = allocGrids(n), budget = budgetOfSave(save.raw.sb), edu: EduCtx = { tech: [], spec: null, schoolLunch: false };   // D023：sb（四類服務預算）66964
+  const T = techLoad(save.raw.tech343), g = allocGrids(n), budget = budgetOfSave(save.raw.sb), edu: EduCtx = { tech: T.done, spec: specOfSave(save.raw.spec386) || null, schoolLunch: false };   // D038：科技與專精 66928、66930 在 rebuildCov（66940）之前讀進來，教育場與城市點數一開始就算它們   // D023：sb（四類服務預算）66964
   const landAt = forRestyle ? [...root.keys()].filter(i => { const k = (tiles[i].bld!.k | 0); return k >= 1 && k <= 3; }) : undefined;
   const pol = polOfSave(save.raw.pol);                           // 66975 `if(d.pol)pol=d.pol`（D032：非物件一律當沒有政策）
   rebuildCov(w, g, budget, edu, landAt);                         // 66940／66965：這時 pol 還是 null（新圖歸零 51118、讀檔先歸零 66972），教育場不含營養午餐
@@ -196,7 +199,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   const rkPoints = cityPoints(w, fieldsOf(g).COV, .6, edu.tech, b => residentPopulation488(b, () => undefined));   // 66968：讀檔當下算一次（幸福是新世界的預設 .6，所以幸福項 0；科技清單這時是空的，守衛會注入）
   return {
-    city, w, g, rng, seed: save.seed, day: save.day, res: { resource: forRestyle ? new Uint8Array(nn) : genResource(save.seed, w), rdep: rdepOfSave(save.raw.rdep, nn) }, weather, vrank, budget, edu, pol, polLast: {},
+    city, w, g, rng, seed: save.seed, day: save.day, tech: T.st, techSpeed: 1, res: { resource: forRestyle ? new Uint8Array(nn) : genResource(save.seed, w), rdep: rdepOfSave(save.raw.rdep, nn) }, weather, vrank, budget, edu, pol, polLast: {},
     pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, medCap: null, commuteClusters: [], commuteDay: -1, tvSignal: false, fertReady: false, cookedReady: false, cityEvent: eventOfSave(save.raw.cev), rankIdx: rankOfSave(save.raw.rk, rkPoints), cityPoints: rkPoints, night: emptyNightCity(), econ,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）
@@ -269,6 +272,11 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // （資源開採量 suppliesGain／oilGain／oreGain 除外，給 0）；給固定就業（55246–55250）與維護費（55973–55977）
   const fert = { ready: s.fertReady, fertco: f.COV.fertco };                // 55089：昨天的化肥與化肥廠覆蓋場（T346，D028）
   const tally = tallyBuildings(w, tickBld, fert, s.res), { fc, cnt, towerPop, megaPop } = tally;   // 55040 towerPop488、megaPop488（D021）：住宅塔、巨廈的居民，不看有沒有電；cnt＝三份計數合成一份
+  // 55245 advanceTech343：主計數迴圈之後、人口與就業加總之前（沿用迴圈裡的六個計數＋研究機構）；完成的是教育場科技（C1、C4a、C4b、D7）就整張重建覆蓋場（38573），跟 edit.ts recoverCov 同一套收尾
+  const techPre = s.edu.tech.slice();                                    // 55219 住宅幸福的「科技進步」項在同一個大迴圈裡、早於 55245：當天完成的科技要到明天才進幸福（其餘讀科技的地方都在 55245 之後）
+  const rs = advanceTech(s.tech, s.edu.tech, cnt as unknown as ResearchIn, s.edu.spec), techRep = { speed: rs.speed, finished: rs.finished };
+  s.techSpeed = rs.speed;
+  if (rs.finished && TECH_EDU343.includes(rs.finished)) { rebuildCov(w, g, s.budget, s.edu); s.landDirty = false; s.landBox = null; s.stale.fill(0); }
   // 54949 噪音（D017，rebuildNoise 53023）：照建築索引算；來源簽名變了（讀檔後第一天一定變）就把地價設成整張重算。
   // 本線的「整張重算」只算 stale 格，所以噪音變了的格要標 stale（其餘格的噪音沒變、地價基準的輸入沒變，算出來逐位相同）
   {
@@ -349,7 +357,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
         rc: getMaxRoadClass(w, x, y, 1), jam: g.jam[i],
         drainPen: 0, waterLegacy: true, waterPen: 0, deathPenalty: dp.penalty[i] === 1, sewNeed, sewOk: sewOkArr[i] === 1,
         weather: s.weather.weather, day: s.day, nightCity: hzx.nightCity ?? NIGHT_OFF, housingPen: 0,
-        eventHappy: opts.hazard?.eventHappy ?? (evd ? evd.happy : null), cookedReady: s.cookedReady, pol, rankIdx: s.rankIdx, tvSignal: s.tvSignal, tech: s.edu.tech,   // 政策（K）D032 起讀 s.pol（免費公交、公園夜間開放、宵禁；同一個物件也給災禍段；守衛還能用 hazard.pol 蓋過去）；夜間城市 D029、城市活動 D030 起本線自己算（nightCity＝前一天的 s.night、eventHappy＝今天的活動；守衛還能蓋過去）
+        eventHappy: opts.hazard?.eventHappy ?? (evd ? evd.happy : null), cookedReady: s.cookedReady, pol, rankIdx: s.rankIdx, tvSignal: s.tvSignal, tech: techPre,   // 政策（K）D032 起讀 s.pol（免費公交、公園夜間開放、宵禁；同一個物件也給災禍段；守衛還能用 hazard.pol 蓋過去）；夜間城市 D029、城市活動 D030 起本線自己算（nightCity＝前一天的 s.night、eventHappy＝今天的活動；守衛還能蓋過去）
       });
       b.h = hp.h;
       for (let k = 0; k < hp.parts.length; k++) aggSum[k] = (aggSum[k] ?? 0) + hp.parts[k];   // 55237–55238
@@ -451,7 +459,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    resource: { oil: cnt.oilGain, ore: cnt.oreGain, made: cnt.suppliesGain, wells: [cnt.owN, cnt.mnN] }, food: fd, econ: { ec, late, sn, cons }, merges: mgs, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
+    tech: techRep, resource: { oil: cnt.oilGain, ore: cnt.oreGain, made: cnt.suppliesGain, wells: [cnt.owN, cnt.mnN] }, food: fd, econ: { ec, late, sn, cons }, merges: mgs, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
   };
 }
 
@@ -586,7 +594,8 @@ export function simHash(s: Sim) {
     ...(s.cityEvent ? [s.cityEvent.i, s.cityEvent.daysLeft] : []),   // D030：進行中的城市活動（第幾號、剩幾天；入存檔的跨天狀態）；沒有活動就不多吃，沒有活動的城雜湊逐位元組不變
     ...(s.rankIdx > 0 ? [s.rankIdx] : []),   // D031：城市等級（入存檔的跨天狀態，只升不降）；還是 0 級就不多吃
     ...(s.pol ? [s.pol] : []),
-    ...(s.res.rdep.some(v => v) ? [rdepPairs(s.res.rdep)] : [])]));   // D036：資源耗損（入存檔的跨天狀態：每口井已開採多少）；沒挖過就不多吃，沒有井的城雜湊逐位元組不變   // D032：政策物件（入存檔的跨天狀態：稅率與開關）；沒有政策（null）就不多吃，沒動過政策的城雜湊逐位元組不變。冷卻（polLast）是執行期的玩家操作限制、不影響模擬，不進雜湊
+    ...(s.res.rdep.some(v => v) ? [rdepPairs(s.res.rdep)] : []),
+    ...(s.edu.tech.length || s.tech.act || Object.keys(s.tech.prog).length || s.edu.spec ? [s.edu.tech, s.tech, s.edu.spec] : [])]));   // D038：科技與專精（入存檔的跨天狀態）；沒研究過、沒選方向就不多吃，沒有科技的城雜湊逐位元組不變   // D036：資源耗損（入存檔的跨天狀態：每口井已開採多少）；沒挖過就不多吃，沒有井的城雜湊逐位元組不變   // D032：政策物件（入存檔的跨天狀態：稅率與開關）；沒有政策（null）就不多吃，沒動過政策的城雜湊逐位元組不變。冷卻（polLast）是執行期的玩家操作限制、不影響模擬，不進雜湊
 }
 
 export function simCounts(s: Sim) {

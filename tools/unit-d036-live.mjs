@@ -166,7 +166,7 @@ async function wiringGuards(log, { lab, runs, compare36, KT, vrank, simOf }) {
     const h0 = realDay.simHash(a); if (h0 !== realDay.simHash(b)) bad.push('同一張碼讀兩次雜湊不同');
     const k = [...b.res.resource].findIndex(v => v === 1); b.res.rdep[k] = 7;
     if (realDay.simHash(b) === h0) bad.push('耗損不同的兩座城雜湊相同');
-    const V = await dayVariant([['    ...(s.res.rdep.some(v => v) ? [rdepPairs(s.res.rdep)] : [])]));', ']));']]).catch(e => { bad.push('simHash 突變的錨點對不上：' + e.message.slice(0, 80)); return null; });
+    const V = await dayVariant([['    ...(s.res.rdep.some(v => v) ? [rdepPairs(s.res.rdep)] : []),\n', '']]).catch(e => { bad.push('simHash 突變的錨點對不上：' + e.message.slice(0, 80)); return null; });
     if (V && V.simHash(b) !== V.simHash(a)) bad.push('沒抓到：雜湊不吃耗損（突變的副本還分得出來？不該）');
     out.push('雜湊吃耗損');
   }

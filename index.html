@@ -49,31 +49,39 @@
     #dlg textarea { width: 100%; box-sizing: border-box; height: 30vh; resize: vertical; background: #0d1226; color: #eef1f7; border: 1px solid #ffffff33; border-radius: 8px; padding: 8px; font: 12px/1.4 ui-monospace, monospace; word-break: break-all; }
     #dlg .err { color: #ff8a8a; min-height: 1.2em; margin: 6px 0; font-size: 13px; }
     /* D027：☰「幸福構成」面板（實驗線 showStats「幸福構成」的 3D 版）：一項一列，正的綠、負的紅，最負的一項標紅、下面附建議；D028：☰「收支明細」面板（#fin）用同一套樣式 */
-    #hs, #fin, #nc, #rk, #pl { position: fixed; inset: 0; z-index: 20; background: #0008; display: flex; align-items: center; justify-content: center; padding: 16px; }
-    #hs[hidden], #fin[hidden], #nc[hidden], #rk[hidden], #pl[hidden] { display: none; }
-    #hs .card, #fin .card, #nc .card, #rk .card, #pl .card { width: min(460px, 100%); max-height: 86vh; overflow: auto; background: #141a30f5; border: 1px solid #ffffff26; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 30px #0008; }
-    #hs h2, #fin h2, #nc h2, #rk h2, #pl h2 { margin: 0 0 4px; font-size: 16px; }
-    #hs .sub, #fin .sub, #nc .sub, #rk .sub, #pl .sub { margin: 0 0 8px; color: #aab3c6; font-size: 12px; }
-    #hs ol, #fin ol, #nc ol, #rk ol, #pl ol { margin: 0; padding: 0; list-style: none; }
-    #hs li, #fin li, #nc li, #rk li, #pl li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-top: 1px solid #ffffff14; }
-    #hs li span.pos, #fin li span.pos, #nc li span.pos, #rk li, #pl li span.pos { color: #7bd88f; } #hs li span.neg, #fin li span.neg, #nc li span.neg, #rk li, #pl li span.neg { color: #ff8a8a; }
-    #hs li.bad b, #fin li.bad b, #nc li.bad b, #rk li.bad b, #pl li.bad b { color: #e05252; } #hs li.sum, #fin li.sum, #nc li.sum, #rk li.sum, #pl li.sum { border-top: 1px solid #ffffff40; font-weight: 700; }
-    #hs .tip, #fin .tip, #nc .tip, #rk .tip, #pl .tip { color: #e05252; font-size: 12px; margin: 8px 0 0; } #hs .tip:empty, #fin .tip:empty, #nc .tip:empty, #rk .tip:empty, #pl .tip:empty { display: none; }
+    #hs, #fin, #nc, #rk, #pl, #tc { position: fixed; inset: 0; z-index: 20; background: #0008; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    #hs[hidden], #fin[hidden], #nc[hidden], #rk[hidden], #pl[hidden], #tc[hidden] { display: none; }
+    #hs .card, #fin .card, #nc .card, #rk .card, #pl .card, #tc .card { width: min(460px, 100%); max-height: 86vh; overflow: auto; background: #141a30f5; border: 1px solid #ffffff26; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 30px #0008; }
+    #hs h2, #fin h2, #nc h2, #rk h2, #pl h2, #tc h2 { margin: 0 0 4px; font-size: 16px; }
+    #hs .sub, #fin .sub, #nc .sub, #rk .sub, #pl .sub, #tc .sub { margin: 0 0 8px; color: #aab3c6; font-size: 12px; }
+    #hs ol, #fin ol, #nc ol, #rk ol, #pl ol, #tc ol { margin: 0; padding: 0; list-style: none; }
+    #hs li, #fin li, #nc li, #rk li, #pl li, #tc li { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; border-top: 1px solid #ffffff14; }
+    #hs li span.pos, #fin li span.pos, #nc li span.pos, #rk li, #pl li span.pos, #tc li span.pos { color: #7bd88f; } #hs li span.neg, #fin li span.neg, #nc li span.neg, #rk li, #pl li span.neg, #tc li span.neg { color: #ff8a8a; }
+    #hs li.bad b, #fin li.bad b, #nc li.bad b, #rk li.bad b, #pl li.bad b, #tc li.bad b { color: #e05252; } #hs li.sum, #fin li.sum, #nc li.sum, #rk li.sum, #pl li.sum, #tc li.sum { border-top: 1px solid #ffffff40; font-weight: 700; }
+    #hs .tip, #fin .tip, #nc .tip, #rk .tip, #pl .tip, #tc .tip { color: #e05252; font-size: 12px; margin: 8px 0 0; } #hs .tip:empty, #fin .tip:empty, #nc .tip:empty, #rk .tip:empty, #pl .tip:empty, #tc .tip:empty { display: none; }
     #rk .bar { height: 8px; background: #1c2340; border-radius: 4px; overflow: hidden; margin: 2px 0 8px; } #rk .bar i { display: block; height: 100%; background: linear-gradient(90deg, #5ec8ff, #7be08a); }
-    #hs .row, #fin .row, #nc .row, #rk .row, #pl .row { margin-top: 10px; } #hs .row button, #fin .row button, #nc .row button, #rk .row, #pl .row button { min-height: 44px; min-width: 72px; }
+    #hs .row, #fin .row, #nc .row, #rk .row, #pl .row, #tc .row { margin-top: 10px; } #hs .row button, #fin .row button, #nc .row button, #rk .row, #pl .row button, #tc .row button { min-height: 44px; min-width: 72px; }
     /* D032：☰「政策與預算」面板（#pl）：每一列＝名稱＋控制（稅率與預算是 − 倍率 ＋，開關是一顆按鈕）＋一行效果與日費與冷卻；按鈕 44px 以上（手機） */
-    #pl .card { width: min(520px, 100%); }
-    #pl .head { position: sticky; top: -14px; z-index: 2; margin: -14px -16px 6px; padding: 14px 16px 6px; background: #141a30; border-bottom: 1px solid #ffffff1f; }   /* 標題、日費合計與提示固定在上面（面板很長，捲到下面的政策也看得到冷卻的提示） */
-    #pl .foot { position: sticky; bottom: -14px; z-index: 2; margin: 8px -16px -14px; padding: 8px 16px 14px; background: #141a30; border-top: 1px solid #ffffff1f; }
-    #pl .head .sub { margin-bottom: 2px; } #pl .head .tip { margin: 4px 0 0; }
-    #pl h3 { margin: 12px 0 2px; font-size: 13px; color: #aab3c6; font-weight: 600; }
-    #pl li { display: block; padding: 6px 0; }
-    #pl li .h { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; }
-    #pl li .ctl { display: flex; align-items: center; gap: 6px; }
-    #pl li .ctl button { min-width: 44px; min-height: 44px; font-size: 18px; }
-    #pl li .val { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
-    #pl li small.note { display: block; color: #aab3c6; font-size: 11.5px; margin-top: 2px; } #pl li small.cool { color: #e0a752; }
-    #pl li button.on { background: #2f7d4a; border-color: #7bd88f; color: #fff; }
+    #pl .card, #tc .card { width: min(520px, 100%); }
+    #pl .head, #tc .head { position: sticky; top: -14px; z-index: 2; margin: -14px -16px 6px; padding: 14px 16px 6px; background: #141a30; border-bottom: 1px solid #ffffff1f; }   /* 標題、日費合計與提示固定在上面（面板很長，捲到下面的政策也看得到冷卻的提示） */
+    #pl .foot, #tc .foot { position: sticky; bottom: -14px; z-index: 2; margin: 8px -16px -14px; padding: 8px 16px 14px; background: #141a30; border-top: 1px solid #ffffff1f; }
+    #pl .head .sub, #tc .head .sub { margin-bottom: 2px; } #pl .head .tip, #tc .head .tip { margin: 4px 0 0; }
+    #pl h3, #tc h3 { margin: 12px 0 2px; font-size: 13px; color: #aab3c6; font-weight: 600; }
+    #pl li, #tc li { display: block; padding: 6px 0; }
+    #pl li .h, #tc li .h { display: flex; justify-content: space-between; align-items: center; gap: 12px; min-height: 44px; }
+    #pl li .ctl, #tc li .ctl { display: flex; align-items: center; gap: 6px; }
+    #pl li .ctl button, #tc li .ctl button { min-width: 44px; min-height: 44px; font-size: 18px; }
+    #pl li .val, #tc li .val { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; }
+    #pl li small.note, #tc li small.note { display: block; color: #aab3c6; font-size: 11.5px; margin-top: 2px; } #pl li small.cool, #tc li small.cool { color: #e0a752; }
+    #pl li button.on, #tc li button.on { background: #2f7d4a; border-color: #7bd88f; color: #fff; }
+    /* D038：☰「科技與專精」面板（#tc）借 #pl 的版面；路線分頁（四顆，手機一列四個）、節點的狀態（已完成淡綠、進行中金色、開不了暗掉）、研究進度條 */
+    #tc .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin: 12px 0 4px; }
+    #tc .tabs button { min-height: 44px; padding: 4px 2px; font-size: 12px; line-height: 1.25; }
+    #tc .tabs button.on { background: #2b4a8a; border-color: #8fb4ff; color: #fff; }
+    #tc li .h b { font-size: 13.5px; } #tc li .ctl, #tc li .h > button, #tc li .h > .val { flex: none; }
+    #tc li .h > button { min-width: 88px; min-height: 44px; font-size: 13px; }
+    #tc li[data-st="done"] b { color: #a8edb7; } #tc li[data-st="act"] b { color: #f0c36a; } #tc li.lock b { color: #8a93a8; } #tc li.lock small.note { color: #7c859a; }
+    #tc li .bar { height: 6px; background: #1c2340; border-radius: 3px; overflow: hidden; margin: 2px 0 4px; } #tc li .bar i { display: block; height: 100%; background: linear-gradient(90deg, #f0c36a, #7be08a); }
     @media (max-width: 640px) {
       .hint { display: none; }
       #bio { left: 12px; right: 12px; top: auto; bottom: 120px; width: auto; max-height: 45vh; }

@@ -1,0 +1,276 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-tech.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "科技表 TECH343",
+   "anchors": {
+    "start": "const TECH343=[",
+    "end": "const TECH343_BY_ID=Object.create(null);"
+   },
+   "line": 38507,
+   "endLine": 38544,
+   "sha": "810949d537679170059ec36b768774f7b6f468563b3092a856368300c0ac5e09"
+  },
+  {
+   "kind": "span",
+   "name": "TECH343_BY_ID",
+   "anchors": {
+    "start": "const TECH343_BY_ID=Object.create(null);for(const n343 of TECH343)TECH343_BY_ID[n343.id]=n343;",
+    "end": "const TECH343_BY_ID=Object.create(null);for(const n343 of TECH343)TECH343_BY_ID[n343.id]=n343;"
+   },
+   "line": 38545,
+   "endLine": 38545,
+   "sha": "ead58d6d4d7fd41380feebd1ed0f6c29ea9cb57544f19fa2f34205e8b50634da"
+  },
+  {
+   "kind": "fn",
+   "name": "emptyTech343",
+   "anchors": {
+    "start": "function emptyTech343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38546,
+   "endLine": 38546,
+   "sha": "627d80370e90d6a11e9064a7e4b8a66d1917812a807241a551237cb962a9452e"
+  },
+  {
+   "kind": "span",
+   "name": "狀態 tech343",
+   "anchors": {
+    "start": "let tech343=emptyTech343(),techSpeed343=1;",
+    "end": "let tech343=emptyTech343(),techSpeed343=1;"
+   },
+   "line": 38547,
+   "endLine": 38547,
+   "sha": "8fbbaa7f51534a8aaf24da1892beef93986a08edb9eeaa87e9fb5c67cfb44b28"
+  },
+  {
+   "kind": "fn",
+   "name": "hasTech343",
+   "anchors": {
+    "start": "function hasTech343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38548,
+   "endLine": 38548,
+   "sha": "71e9aff0d95be7d33aa80bb545b73d8f74e9a8f2dbceb578afec6c108a68d93d"
+  },
+  {
+   "kind": "span",
+   "name": "tq",
+   "anchors": {
+    "start": "const tq=(id,on,off)=>(tech343&&tech343.done.includes(id))?on:off;",
+    "end": "const tq=(id,on,off)=>(tech343&&tech343.done.includes(id))?on:off;"
+   },
+   "line": 38549,
+   "endLine": 38549,
+   "sha": "6811179380a102a67085d5ac7fa3f9d2ab32fd8d9194ee13b5e06c07c9e3600f"
+  },
+  {
+   "kind": "span",
+   "name": "TECH_EDU343",
+   "anchors": {
+    "start": "const TECH_EDU343=['C1','C4a','C4b','D7'];",
+    "end": "const TECH_EDU343=['C1','C4a','C4b','D7'];"
+   },
+   "line": 38550,
+   "endLine": 38550,
+   "sha": "b0afe6c8aed117bd1a0a518cc3b9335f2d8244ee3b38f31834a018db18c864a3"
+  },
+  {
+   "kind": "fn",
+   "name": "canStartTech343",
+   "anchors": {
+    "start": "function canStartTech343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38551,
+   "endLine": 38556,
+   "sha": "c173c87fadc5cd587167b96179c9249465e6838ab72c34117b62248d3f92f96f"
+  },
+  {
+   "kind": "fn",
+   "name": "startTech343",
+   "anchors": {
+    "start": "function startTech343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38557,
+   "endLine": 38565,
+   "sha": "a0e6c5797723f03b4a3d667db1328861196880407fa83d8c0eedb9a51dbf7ed0"
+  },
+  {
+   "kind": "fn",
+   "name": "advanceTech343",
+   "anchors": {
+    "start": "function advanceTech343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38566,
+   "endLine": 38574,
+   "sha": "20858158e75202885a3c265339784495e9b8c606093f85b17032424bfb39a984"
+  },
+  {
+   "kind": "fn",
+   "name": "techSave343",
+   "anchors": {
+    "start": "function techSave343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38583,
+   "endLine": 38588,
+   "sha": "63d08f6796d3991f224e232cceefe7e46067bb949560b1d3b21985fa36f37249"
+  },
+  {
+   "kind": "fn",
+   "name": "techLoad343",
+   "anchors": {
+    "start": "function techLoad343(",
+    "closure": "balanced-brace"
+   },
+   "line": 38589,
+   "endLine": 38611,
+   "sha": "b29d54bf037e000f2a635173ea6e0cd395992dfea4ffe9ef8efe8a555ec0895e"
+  },
+  {
+   "kind": "span",
+   "name": "專精表 SPEC386",
+   "anchors": {
+    "start": "const SPEC386={",
+    "end": "const SPEC_IDS386="
+   },
+   "line": 37843,
+   "endLine": 37847,
+   "sha": "f5242b5559f4f048601bfb33d98bbd0ab8a0a30784fd6ef40acc72596fa43fe1"
+  },
+  {
+   "kind": "span",
+   "name": "SPEC_IDS386",
+   "anchors": {
+    "start": "const SPEC_IDS386=['ind','green','edu','hub'];",
+    "end": "const SPEC_IDS386=['ind','green','edu','hub'];"
+   },
+   "line": 37848,
+   "endLine": 37848,
+   "sha": "2b4dd0c391a936c0c6186b703ef024671e7c5b308f9a56443e28ed44438613de"
+  },
+  {
+   "kind": "span",
+   "name": "spec386 變數",
+   "anchors": {
+    "start": "let spec386='';",
+    "end": "let spec386='';"
+   },
+   "line": 37849,
+   "endLine": 37849,
+   "sha": "eddb25d5c435a3820c3b4e9aa2fb14eb9eac5abeff66ce3d6683265434aa9918"
+  },
+  {
+   "kind": "span",
+   "name": "sq",
+   "anchors": {
+    "start": "const sq=(id,on,off)=>spec386===id?on:off;",
+    "end": "const sq=(id,on,off)=>spec386===id?on:off;"
+   },
+   "line": 37851,
+   "endLine": 37851,
+   "sha": "5bf7902bead6c162b85fc39e20a6948e981e75291aef774b9dbb0cb0b0971a87"
+  },
+  {
+   "kind": "fn",
+   "name": "specPick386",
+   "anchors": {
+    "start": "function specPick386(",
+    "closure": "balanced-brace"
+   },
+   "line": 37852,
+   "endLine": 37859,
+   "sha": "5711cf160ffad3c0601661e88a7742ea9c2dc03cc775661cd0283b541030f2bd"
+  },
+  {
+   "kind": "span",
+   "name": "每天的研究呼叫",
+   "anchors": {
+    "start": "advanceTech343(inN,un,tpk342,cam342,dtc342,mgN,res466);",
+    "end": "advanceTech343(inN,un,tpk342,cam342,dtc342,mgN,res466);"
+   },
+   "line": 55245,
+   "endLine": 55245,
+   "sha": "3184370f456774d1bd8ad387c40b35ddd41f9175bd5bd0c5040d7d99cabeeef4"
+  },
+  {
+   "kind": "span",
+   "name": "存檔 tech343",
+   "anchors": {
+    "start": "if(tq343)data.tech343=tq343;",
+    "end": "if(tq343)data.tech343=tq343;"
+   },
+   "line": 66770,
+   "endLine": 66770,
+   "sha": "94bf3d5d0ae4d7717a2d2d5eee4096f14e73c8a058082521cdc5f8784ed8e427"
+  },
+  {
+   "kind": "span",
+   "name": "存檔 spec386",
+   "anchors": {
+    "start": "if(spec386)data.spec386=spec386;",
+    "end": "if(spec386)data.spec386=spec386;"
+   },
+   "line": 66772,
+   "endLine": 66772,
+   "sha": "ce226e62c4bdbeb3df5f3de8a29c759d3453ede5d015fbad0e98b420d3f2bdda"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔 tech343",
+   "anchors": {
+    "start": "tech343=techLoad343(d.tech343);techSpeed343=1;",
+    "end": "tech343=techLoad343(d.tech343);techSpeed343=1;"
+   },
+   "line": 66928,
+   "endLine": 66928,
+   "sha": "e9b915340c9f05750cdbd686ab20db81301f56a3a12508eef41faa5871ca0fbc"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔 spec386",
+   "anchors": {
+    "start": "spec386=(typeof d.spec386==='string'&&SPEC386[d.spec386])?d.spec386:'';",
+    "end": "spec386=(typeof d.spec386==='string'&&SPEC386[d.spec386])?d.spec386:'';"
+   },
+   "line": 66930,
+   "endLine": 66930,
+   "sha": "763248dce438a47b6196b86a59190a63a9a93f5277284989d7ca5b8cd3cd3cc0"
+  }
+ ],
+ "text": {
+  "table": "const TECH343=[\n  {id:'A1',nm:'標準化生產',route:'A',tier:1,cost:400,points:40,pre:[],effect:'工業稅 ×1.04'},\n  {id:'A2',nm:'物流網絡',route:'A',tier:2,cost:900,points:55,pre:['A1'],effect:'公交運量 ×1.12'},\n  {id:'A3',nm:'供應鏈金融',route:'A',tier:3,cost:1500,points:70,pre:['A2'],effect:'商業稅 ×1.04'},\n  {id:'A4a',nm:'重工傾斜',route:'A',tier:4,cost:2400,points:85,pre:['A3'],mutex:'A4b',effect:'工業稅 ×1.08；起火 ×1.10'},\n  {id:'A4b',nm:'綠色轉型',route:'A',tier:4,cost:2400,points:85,pre:['A3'],mutex:'A4a',effect:'起火 ×0.85；工業稅 ×0.98'},\n  {id:'A5',nm:'精益製造',route:'A',tier:5,cost:3600,points:100,pre:[],any:['A4a','A4b'],effect:'升級率 ×1.10'},\n  {id:'A6',nm:'出口擴張',route:'A',tier:6,cost:5200,points:115,pre:['A5'],effect:'商業稅 ×1.05'},\n  {id:'A7',nm:'產業聚落',route:'A',tier:7,cost:7000,points:130,pre:['A6'],effect:'工業需求 +0.10'},\n  {id:'A8',nm:'智慧工廠',route:'A',tier:8,cost:9000,points:150,pre:['A7'],effect:'工業稅 ×1.06'},\n  {id:'B1',nm:'社區自治',route:'B',tier:1,cost:400,points:40,pre:[],effect:'幸福 +0.01'},\n  {id:'B2',nm:'鄰里守望',route:'B',tier:2,cost:900,points:55,pre:['B1'],effect:'犯罪 ×0.92'},\n  {id:'B3',nm:'公共安全網',route:'B',tier:3,cost:1500,points:70,pre:['B2'],effect:'起火 ×0.90'},\n  {id:'B4a',nm:'福利城市',route:'B',tier:4,cost:2400,points:85,pre:['B3'],mutex:'B4b',effect:'幸福 +0.02；政策日費 +$10'},\n  {id:'B4b',nm:'自由市場',route:'B',tier:4,cost:2400,points:85,pre:['B3'],mutex:'B4a',effect:'商業稅 ×1.05；犯罪 ×1.05'},\n  {id:'B5',nm:'市政效率',route:'B',tier:5,cost:3600,points:100,pre:[],any:['B4a','B4b'],effect:'建造費 ×0.95'},\n  {id:'B6',nm:'全民保健',route:'B',tier:6,cost:5200,points:115,pre:['B5'],effect:'幸福 +0.015'},\n  {id:'B7',nm:'治安現代化',route:'B',tier:7,cost:7000,points:130,pre:['B6'],effect:'犯罪 ×0.90'},\n  {id:'B8',nm:'樂活城市',route:'B',tier:8,cost:9000,points:150,pre:['B7'],effect:'幸福 +0.02'},\n  {id:'C1',nm:'公共閱讀',route:'C',tier:1,cost:400,points:40,pre:[],effect:'教育場 ×1.05'},\n  {id:'C2',nm:'教研合作',route:'C',tier:2,cost:900,points:55,pre:['C1'],effect:'升級率 ×1.08'},\n  {id:'C3',nm:'文化補助',route:'C',tier:3,cost:1500,points:70,pre:['C2'],effect:'商業稅 ×1.03'},\n  {id:'C4a',nm:'精英教育',route:'C',tier:4,cost:2400,points:85,pre:['C3'],mutex:'C4b',effect:'教育場 ×1.15；政策日費 +$8'},\n  {id:'C4b',nm:'普及教育',route:'C',tier:4,cost:2400,points:85,pre:['C3'],mutex:'C4a',effect:'教育場 ×1.08；幸福 +0.01'},\n  {id:'C5',nm:'觀光推廣',route:'C',tier:5,cost:3600,points:100,pre:[],any:['C4a','C4b'],effect:'公交運量 ×1.08'},\n  {id:'C6',nm:'學術網絡',route:'C',tier:6,cost:5200,points:115,pre:['C5'],effect:'研究速度 +1'},\n  {id:'C7',nm:'創意城市',route:'C',tier:7,cost:7000,points:130,pre:['C6'],effect:'幸福 +0.015'},\n  {id:'C8',nm:'智庫決策',route:'C',tier:8,cost:9000,points:150,pre:['C7'],effect:'建造費 ×0.95'},\n  {id:'D1',nm:'城市檔案',route:'D',tier:1,cost:400,points:40,pre:[],effect:'城市點數 ×1.05'},\n  {id:'D2',nm:'數據治理',route:'D',tier:2,cost:900,points:55,pre:['D1'],effect:'研究速度 +1'},\n  {id:'D3',nm:'資本市場',route:'D',tier:3,cost:1500,points:70,pre:['D2'],effect:'商業稅 ×1.04'},\n  {id:'D4a',nm:'巨型工程優先',route:'D',tier:4,cost:2400,points:85,pre:['D3'],mutex:'D4b',effect:'建造費 ×0.90'},\n  {id:'D4b',nm:'精明成長',route:'D',tier:4,cost:2400,points:85,pre:['D3'],mutex:'D4a',effect:'城市點數 ×1.10'},\n  {id:'D5',nm:'科研特區',route:'D',tier:5,cost:3600,points:100,pre:['C6'],any:['D4a','D4b'],effect:'研究速度 +2'},\n  {id:'D6',nm:'城市品牌',route:'D',tier:6,cost:5200,points:115,pre:['D5'],effect:'幸福 +0.02'},\n  {id:'D7',nm:'學府之都',route:'D',tier:7,cost:7000,points:130,pre:['D6'],effect:'教育場 ×1.10'},\n  {id:'D8',nm:'微光之巔',route:'D',tier:8,cost:9000,points:150,pre:['D7'],minDone:30,effect:'幸福 +0.03'}\n];",
+  "byId": "const TECH343_BY_ID=Object.create(null);for(const n343 of TECH343)TECH343_BY_ID[n343.id]=n343;",
+  "empty": "function emptyTech343(){return{act:'',prog:{},done:[]};}",
+  "state": "let tech343=emptyTech343(),techSpeed343=1;",
+  "has": "function hasTech343(id){return tech343.done.indexOf(id)>=0;}",
+  "tq": "const tq=(id,on,off)=>(tech343&&tech343.done.includes(id))?on:off; // T343c：科技效果集中三元 helper；零解鎖恆回 off",
+  "eduIds": "const TECH_EDU343=['C1','C4a','C4b','D7'];",
+  "canStart": "function canStartTech343(n){\n  if(!n||hasTech343(n.id)||(n.mutex&&(hasTech343(n.mutex)||tech343.act===n.mutex||tech343.prog[n.mutex]>0)))return false;\n  if(n.pre&&n.pre.some(id=>!hasTech343(id)))return false;\n  if(n.any&&n.any.length&&!n.any.some(id=>hasTech343(id)))return false;\n  return !(n.minDone&&tech343.done.length<n.minDone);\n}",
+  "start": "function startTech343(id){\n  const n=TECH343_BY_ID[id];\n  if(!canStartTech343(n))return false;\n  if(tech343.act===id)return true;\n  const fee=(diff===3||tech343.prog[n.id]>0)?0:n.cost;\n  if(money<fee)return false;\n  money-=fee;tech343.act=id;\n  return true;\n}",
+  "advance": "function advanceTech343(instituteN,universityN,techParkN,campusN,dataCenterN,megaProjectN,grandResearchN=0){\n  techSpeed343=1+Math.min(7,instituteN+universityN+techParkN*2+campusN*2+dataCenterN+megaProjectN*2+grandResearchN*3)+tq('C6',1,0)+tq('D2',1,0)+tq('D5',2,0)+sq('edu',1,0);\n  const n=TECH343_BY_ID[tech343.act];\n  if(!n)return;\n  const next=(tech343.prog[n.id]||0)+techSpeed343;\n  if(next<n.points){tech343.prog[n.id]=next;return;}\n  delete tech343.prog[n.id];tech343.done.push(n.id);tech343.act='';\n  if(TECH_EDU343.includes(n.id))rebuildCov();\n}",
+  "save": "function techSave343(){\n  const prog={};\n  for(const n of TECH343){const v=tech343.prog[n.id];if(Number.isInteger(v)&&v>0&&v<n.points)prog[n.id]=v;}\n  if(!tech343.act&&!tech343.done.length&&!Object.keys(prog).length)return null;\n  return{act:tech343.act,prog,done:tech343.done.slice()};\n}",
+  "load": "function techLoad343(raw){\n  const zero=emptyTech343();\n  if(raw===undefined)return zero;\n  if(!raw||typeof raw!=='object'||Array.isArray(raw)||typeof raw.act!=='string'||\n     !raw.prog||typeof raw.prog!=='object'||Array.isArray(raw.prog)||!Array.isArray(raw.done))return zero;\n  if(raw.act&&!TECH343_BY_ID[raw.act])return zero;\n  const done=[],seen={};\n  for(const id of raw.done){\n    const n=TECH343_BY_ID[id];\n    if(typeof id!=='string'||!n||seen[id]||(n.mutex&&seen[n.mutex]))return zero;\n    seen[id]=1;done.push(id);\n  }\n  const prog={};\n  for(const id of Object.keys(raw.prog)){\n    const n=TECH343_BY_ID[id],v=raw.prog[id];\n    if(!n||!Number.isInteger(v)||v<=0||v>=n.points||seen[id])return zero;\n    prog[id]=v;\n  }\n  for(const id of Object.keys(prog)){const m=TECH343_BY_ID[id].mutex;if(m&&(seen[m]||prog[m]!==undefined||raw.act===m))return zero;}\n  if(raw.act&&(seen[raw.act]||(TECH343_BY_ID[raw.act].mutex&&\n     (seen[TECH343_BY_ID[raw.act].mutex]||prog[TECH343_BY_ID[raw.act].mutex]!==undefined))))return zero;\n  return{act:raw.act,prog,done};\n}",
+  "spec": "const SPEC386={\n  ind:{nm:'工業港城',ic:'🏭',fx:'工業稅+6%・造船港金+25%｜起火+8%'},\n  green:{nm:'綠色城市',ic:'🌿',fx:'起火-10%・觀光+15%｜工業稅-8%'},\n  edu:{nm:'教育科技城',ic:'🎓',fx:'教育場+8%・研究速度+1｜政策日費+$12'},\n  hub:{nm:'交通樞紐',ic:'🚉',fx:'運量+12%・商業稅+3%｜建造費+5%'}};",
+  "specIds": "const SPEC_IDS386=['ind','green','edu','hub'];",
+  "specVar": "let spec386='';",
+  "sq": "const sq=(id,on,off)=>spec386===id?on:off;",
+  "pick": "function specPick386(i){\n  if(spec386||diff===3||rankIdx+1<9)return false; /* T394b：Lv6→Lv9。實測 Lv6 中位第 20 天到達，當時 taxI 0-10/日、運量觀光為零＝永久決定做在收益最稀薄的時刻；edu 臂 60 天 11/12 種子淨虧。Lv9（門檻 1360 點）時產業基數成形，選擇才有意義 */\n  const id=SPEC_IDS386[i];if(!id)return false;\n  spec386=id;\n  toast('🏙️ 城市方向選定：'+SPEC386[id].ic+' '+SPEC386[id].nm+'（永久）','gold');sFanfare();\n  if(id==='edu')rebuildCov(); // EDU 乘數變更→場重建（TECH_EDU343 先例）\n  return true;\n}",
+  "callAdvance": "  advanceTech343(inN,un,tpk342,cam342,dtc342,mgN,res466); // T343a/T466：沿用本迴圈既有六個 root 計數，零新增掃城",
+  "saveTech": "    {const tq343=techSave343();if(tq343)data.tech343=tq343;} // T343a：零研究狀態不落欄位，舊存檔 bytes 不變",
+  "saveSpec": "    if(spec386)data.spec386=spec386; // T386a：零狀態不落欄位",
+  "loadTech": "    tech343=techLoad343(d.tech343);techSpeed343=1; // T343a：缺欄位／畸形欄位皆整體棄用回零，不影響城市載入",
+  "loadSpec": "    spec386=(typeof d.spec386==='string'&&SPEC386[d.spec386])?d.spec386:''; // T386a：白名單驗型，非法整欄棄用（鐵律7）"
+ }
+}

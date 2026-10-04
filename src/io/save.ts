@@ -20,6 +20,7 @@ import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
 import { FLAG_LAYERS } from '../sim/rules/lab.ts';
 import { rdepOfSave, rdepPairs } from '../sim/rules/resource.ts';
+import { techSave } from '../sim/rules/tech.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
 export const HISTORY_VER = 2;
@@ -173,6 +174,8 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   // D025：商品庫存與船（66763–66769）。sup（供應品）、gds（貨物）每次寫；fuel364、steel364、shipCount、shipProgress 非零才寫（範本裡讀進來的舊值要拿掉，不然庫存用完了存檔還留著）
   o.sup = s.econ.supplies; o.gds = s.econ.goods;
   for (const [k, v] of [['fuel364', s.econ.fuel], ['steel364', s.econ.steel], ['shipCount', s.econ.shipCount], ['shipProgress', s.econ.shipProgress]] as const) { if (v > 0) o[k] = v; else delete o[k]; }
+  // D038：科技 tech343（零狀態不落欄位，66770）與城市方向 spec386（沒選不落欄位，66772）；範本裡讀進來的舊值拿掉再按模擬現在的寫（畸形的欄位讀檔整個棄用，存回去就不再帶著）
+  { const tq = techSave(s.tech, s.edu.tech); if (tq) o.tech343 = tq; else delete o.tech343; if (s.edu.spec) o.spec386 = s.edu.spec; else delete o.spec386; }
   // D036：資源耗損 rdep（66730、66765；稀疏的 [格索引, 已開採量]）。模擬的耗損跟範本讀進來的一樣就不碰（沒挖過的存檔位元組不變，範本裡的寫法照舊）；變了才寫（全空＝null）
   { const was = rdepOfSave(template.rdep, nn), now = s.res.rdep; let same = true; for (let i = 0; i < nn && same; i++) if (was[i] !== now[i]) same = false; if (!same) o.rdep = rdepPairs(now); }
   // D026：焦土與災禍旗標的七層——範本有這一層、或現在有格子帶旗標才寫；都沒有就不加欄位（存檔位元組不變）。有範本的層一定要蓋掉（旗標每天在變，不寫回就是「存了、讀回來又復原」）
