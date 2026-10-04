@@ -11,7 +11,7 @@
 import type { LabSave } from '../io/labcode.ts';
 import { cityFromLab, stadiumSize, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
-import { clamp, labRng, type Bld, type Fields, type Rng, type Tile, type World } from './rules/lab.ts';
+import { clamp, labRng, FLAG_LAYERS, type Bld, type Fields, type Rng, type Tile, type World } from './rules/lab.ts';
 import { weatherStep, season, type WeatherState } from './rules/weather.ts';
 import { allocGrids, fieldsOf, rebuildCov, rebuildLandBase, rebuildNoise, recomputeLandDynamic, stampCov, stampPolSrc, COVR, POL_SRC, SVC_BUDGET_DEFAULT, type EduCtx, type Grids, type SvcBudget } from './rules/fields.ts';
 import { assignPower, computePower, powerCap } from './rules/power.ts';
@@ -128,6 +128,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const city = cityFromLab(save, kinds, code), n = save.n, nn = n * n;
   const tiles: Tile[] = new Array(nn);
   const layerOf = (k: string) => { const v = save.raw[k]; return typeof v === 'string' ? v : undefined; };
+  const flagLayers = FLAG_LAYERS.map(([raw, field]) => [layerOf(raw), field] as const);
   const office = save.layers.of, railL = save.layers.rl, lvl475 = layerOf('lvl475'), udl475 = layerOf('udl475'), ix475 = layerOf('ix475');
   for (let i = 0; i < nn; i++) {
     const rd = city.road[i], road = rd ? 1 : 0, hw = rd >= 3 ? 1 : 0;
@@ -147,6 +148,9 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
     if (udl475 && udl475.charCodeAt(i) === 49) tiles[i].ud475 = 1;
     if (city.fly[i]) tiles[i].fly475 = 1;
     if (ix475) { const q = ix475.charCodeAt(i) - 48; if (q > 0) tiles[i].ix475 = q; }
+    // D035：其餘旗標層（66881–66891：路旁裝飾 rc、公車站 bs、輕軌 tr、公車專用道 bln、單行道 ow、紅綠燈 tl、裝飾 dc、高壓線 hvl471、地下高壓 ugc471、水幹管 wmn472、污水幹管 smn472）。
+    // 實驗線 `+d.rc[i]`：數字字元＝值、缺層或不是數字＝0（這裡不給欄位）
+    for (let q = 0; q < flagLayers.length; q++) { const s = flagLayers[q][0]; if (s) { const v = +s[i]; if (v) (tiles[i] as unknown as Record<string, number>)[flagLayers[q][1]] = v; } }
   }
   const root = new Map<number, CityBuilding>();
   for (const r of save.bl) {

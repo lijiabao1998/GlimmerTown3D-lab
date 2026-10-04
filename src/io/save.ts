@@ -18,6 +18,7 @@ import { ACT_CODES, CITY_FORMAT, MERGE_SIZE, cityStats, eventFormat, roadCode, t
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
+import { FLAG_LAYERS } from '../sim/rules/lab.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
 export const HISTORY_VER = 2;
@@ -174,6 +175,16 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   // D026：焦土與災禍旗標的七層——範本有這一層、或現在有格子帶旗標才寫；都沒有就不加欄位（存檔位元組不變）。有範本的層一定要蓋掉（旗標每天在變，不寫回就是「存了、讀回來又復原」）
   for (const [k, v, re] of [['rn', rn, /1/], ['cm', cm, /1/], ['sk', sk, /1/], ['dt', dt, /1/], ['skd', skd, /[^0]/], ['dtd', dtd, /[^0]/], ['cmd', cmd, /[^0]/]] as const) if (typeof template[k] === 'string' || re.test(v)) o[k] = v;
   if (typeof template.of === 'string' || of.includes('1')) o.of = of;
+  // D035：其餘旗標層（FLAG_LAYERS）。本線的施工只會清掉它們（拆路清路旁裝飾、公車站、公車專用道、單行道、紅綠燈；蓋路、劃區、蓋建築清裝飾，51645–51666、51808），不會新增：
+  // 範本有這一層，格子現在沒有、範本那一格是非 0 的數字，就把那一格寫成 '0'；沒動過就不碰這一串（位元組不變；範本裡 '2'、':' 之類的字元也不洗成 '1'）
+  const tilesNow = s.w.tiles;
+  for (const [raw, field] of FLAG_LAYERS) {
+    const str = template[raw];
+    if (typeof str !== 'string' || str.length !== nn) continue;
+    let cs: string[] | null = null;
+    for (let i = 0; i < nn; i++) if (+str[i] && !(tilesNow[i] as unknown as Record<string, number | undefined>)[field]) { cs ??= str.split(''); cs[i] = '0'; }
+    if (cs) o[raw] = cs.join('');
+  }
   if (typeof template.fly475 === 'string' || fly.includes('1')) o.fly475 = fly;
   if (typeof template.ix475 === 'string' || /[^0]/.test(ix)) o.ix475 = ix;
   // D030：城市活動（66764 寫 cev:{i,d}，沒有活動寫 0；66963 讀）。有活動就寫；沒有活動、範本有這個欄位就寫 0（範本裡讀進來的舊活動要蓋掉）；都沒有就不加欄位（存檔位元組不變）

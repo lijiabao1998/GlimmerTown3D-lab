@@ -5,6 +5,7 @@
 //   2. 逐項＝實驗線：實驗線原文（buildPipeComponents472、facilityComps472、pressureDistances472、waterFacilityPowerFactor472＋常數）在 Node `vm` 裡，跟本線 sewer.ts 匯出的
 //      pipeComponents、facilityComps、pipeDistances、pfOf 吃同一批隨機格子——隨機大小的地圖（6–30 格）、隨機管網（散點、走線、成團）、隨機建築（邊長 1–4）、隨機起點（含不在管網上的格）；加幾張 72×72 的蛇形管網
 //      （距離跨過 122 的截斷）。元件編號逐格相同、每棟建築貼著的元件（含插入順序）、距離逐格相同。
+//      D035 加了污水幹管 sm472（管網格＝wp 或 sm472、走進幹管格成本 0）：另一批 168 張格子（原本 428 張的亂數序列不動），vm 外殼的述詞照實驗線 ensureWaterCycle472 的寫法（有事實守衛核過）。
 //   3. 注入錯誤要紅：實驗線原文與本線原碼各改壞一批（斜向相鄰、四邊各一邊、腳印只認一格、截斷 +32 差一、90 差一、起點不在管網上、每步 +2……）；每個突變指定「哪一項比對要紅」、只跑那一項：沒紅＝那一項比對沒管用；沒改的先核過全等。
 //   接線、實驗線頁面實跑（隨機佈局的 SEWER_ROOT_OK472 逐棟、Q 系列連推 13 天）：見 tools/unit-d033-live.mjs。
 import fs from 'node:fs';
@@ -43,7 +44,7 @@ ${T.pipeComps}
 ${T.facilityComps}
 ${T.pressure}
 ${T.powerFactor}
-globalThis.__api={init:(n,ts)=>{N=n;tiles=ts;},comps:()=>buildPipeComponents472(t=>!!t.wp),fac:(root,arr)=>facilityComps472(root,arr,t=>!!t.wp),press:(arr,seeds)=>pressureDistances472(arr,[],seeds,t=>!!t.sm472),pf:(b,root)=>waterFacilityPowerFactor472(b,root)};`, ctx, { filename: 'lab:sewer' });
+globalThis.__api={init:(n,ts)=>{N=n;tiles=ts;},comps:()=>buildPipeComponents472(t=>!!(t.wp||t.sm472)),fac:(root,arr)=>facilityComps472(root,arr,t=>!!(t.wp||t.sm472)),press:(arr,seeds)=>pressureDistances472(arr,[],seeds,t=>!!t.sm472),pf:(b,root)=>waterFacilityPowerFactor472(b,root)};`, ctx, { filename: 'lab:sewer' });
   const A = ctx.__api;
   return { init: (n, ts) => A.init(n, ts), comps: () => { const [arr, comps] = A.comps(); return { comp: Array.from(arr), n: comps.length }; }, fac: (root, comp) => Array.from(A.fac(root, Int32Array.from(comp))), press: (comp, seeds) => Array.from(A.press(Int32Array.from(comp), seeds)), pf: (b, root) => A.pf(b, root) };
 }
@@ -73,7 +74,31 @@ function snakeCase(v) {
   const roots = []; for (const j of [30, 88, 89, 90, 91, 92, 120, 121, 122, 123, 124, 200]) { const [px, py] = path[Math.min(j, path.length - 1)]; const hx = px, hy = py - 1, i = hy * N + hx; if (hy >= 0 && !tiles[i].wp && !tiles[i].bld) { tiles[i].bld = { k: 1, lv: 1, v: 0, age: 0, sz: 1 }; roots.push([i, 1]); } }
   return { N, tiles, roots, seeds: [4 + 4 * N, 5 + 4 * N] };
 }
-const CASES = [...Array.from({ length: 420 }, (_, k) => gridCase(k)), ...Array.from({ length: 8 }, (_, v) => snakeCase(v))];
+// D035 加的：污水幹管 sm472（管網格＝wp 或 sm472，走進幹管格成本 0）。獨立的一批，原本 428 張的亂數序列不動
+function mainCase(k) {
+  const g = mulberry32(0x35b + k * 1013), ri = n => Math.floor(g() * n), r = () => g();
+  const N = 6 + ri(40), nn = N * N, tiles = Array.from({ length: nn }, () => ({ wp: 0, sm472: 0 })), D = [[0, -1], [1, 0], [0, 1], [-1, 0]];
+  const walk = (field, walks, len) => { for (let n = 0; n < walks; n++) { let x = ri(N), y = ri(N), d = ri(4); for (let s = 0, L = 3 + ri(len); s < L; s++) { tiles[y * N + x][field] = 1; if (r() < .25) d = ri(4); x = Math.max(0, Math.min(N - 1, x + D[d][0])); y = Math.max(0, Math.min(N - 1, y + D[d][1])); } } };
+  walk('wp', 1 + ri(5), 60); walk('sm472', ri(5), 40);
+  for (let i = 0; i < nn; i++) { const q = r(); if (q < .04) tiles[i].wp = 1; else if (q < .07) tiles[i].sm472 = 1; else if (q < .08) { tiles[i].wp = 1; tiles[i].sm472 = 1; } }
+  const roots = [];
+  for (let n = 0, B = 1 + ri(10); n < B; n++) { const sz = 1 + ri(4), x = ri(N), y = ri(N), i = y * N + x; if (!tiles[i].bld) { tiles[i].bld = { k: 1, lv: 1, v: 0, age: 0, sz }; roots.push([i, sz]); } }
+  const net = []; for (let i = 0; i < nn; i++) if (tiles[i].wp || tiles[i].sm472) net.push(i);
+  const seeds = []; for (let n = 0, S = ri(6); n < S; n++) seeds.push(net.length && r() < .8 ? net[ri(net.length)] : ri(nn));
+  return { N, tiles, roots, seeds };
+}
+// 72×72 的蛇形 wp 管網，其中一段換成幹管（後面的距離少一截，跨過 90／122 的線）
+function snakeMainCase(v) {
+  const N = 72, nn = N * N, tiles = Array.from({ length: nn }, () => ({ wp: 0, sm472: 0 })), rowLen = [60, 66, 50, 62][v % 4], rows = 8 + (v % 3);
+  let x = 4, y = 4, dir = 1; const path = [[x, y]];
+  for (let row = 0; row < rows; row++) { for (let i = 0; i < rowLen; i++) { x += dir; path.push([x, y]); } if (row === rows - 1) break; for (let i = 0; i < 3; i++) { y++; path.push([x, y]); } dir = -dir; }
+  path.forEach(([px, py], j) => { if (py < N) { tiles[py * N + px].wp = 1; if (j >= 30 + 10 * (v % 3) && j < 90 + 12 * (v % 4)) tiles[py * N + px].sm472 = v % 2 ? 1 : 0; } });
+  const roots = []; for (const j of [30, 88, 89, 90, 91, 92, 120, 121, 122, 123, 124, 160, 200]) { const [px, py] = path[Math.min(j, path.length - 1)]; const hx = px, hy = py - 1, i = hy * N + hx; if (hy >= 0 && !tiles[i].wp && !tiles[i].bld) { tiles[i].bld = { k: 1, lv: 1, v: 0, age: 0, sz: 1 }; roots.push([i, 1]); } }
+  return { N, tiles, roots, seeds: [4 + 4 * N, 5 + 4 * N] };
+}
+export const MAIN_CASES = 160;
+const CASES = [...Array.from({ length: 420 }, (_, k) => gridCase(k)), ...Array.from({ length: 8 }, (_, v) => snakeCase(v)),
+  ...Array.from({ length: MAIN_CASES }, (_, k) => mainCase(k)), ...Array.from({ length: 8 }, (_, v) => snakeMainCase(v))];
 
 // 一份實驗線＋一份本線，逐案比：元件、每棟貼著的元件、距離。回傳第一個不同（沒有＝null）。only＝只比哪一項（突變用）
 function compare(lab, port, only = null) {
@@ -104,6 +129,9 @@ async function guards(log) {
     if (S.pieces.length !== Object.keys(KEY).length) bad.push(`樣本 ${S.pieces.length} 段、守衛認得 ${Object.keys(KEY).length} 段`);
     const has = (k, s) => { if (!T[k].includes(s)) bad.push(`${KEY[k]} 裡沒有「${s.slice(0, 60)}」`); };
     has('hops', 'WATER_HOPS472=90');
+    has('cycle', '[SEWER_NET_COMP472,sewerNetComps472]=buildPipeComponents472(t=>!!(t.wp||t.sm472))');        // 管網格＝wp 或 sm472（本守衛的 vm 外殼照這個述詞）
+    has('cycle', 'facilityComps472(i,SEWER_NET_COMP472,t=>!!(t.wp||t.sm472))');
+    has('cycle', 'const sDist=pressureDistances472(SEWER_NET_COMP472,SC,sewerSeeds,t=>!!t.sm472)');
     has('cycle', 'SEWER_ROOT_OK472[r]=(best<=WATER_HOPS472&&sc.volumeCap>0)?1:0');
     has('cycle', 'if(b.k===27&&scs.length){SC[scs[0]].volumeCap+=180*pf;');
     has('cycle', 'if(b.k===156&&scs.length){SC[scs[0]].volumeCap+=340*pf;');
@@ -151,7 +179,7 @@ async function guards(log) {
     const seen = { pf: 0 }; const pfBad = [];
     for (const k of [27, 156, 157]) for (const pw of [true, false, undefined]) { const b = { k, pw }, a = lab0.pf(b, -1), c = port0.pf(b); seen.pf++; if (!Object.is(a, c)) pfBad.push(`k${k} pw ${pw}：實驗線 ${a} 本線 ${c}`); }
     for (const c of CASES.slice(0, 40)) { lab0.init(c.N, c.tiles); comps += lab0.comps().n; }
-    log(d === null && !pfBad.length, `D033 驗收 2：管網與距離逐項＝實驗線——實驗線原文（buildPipeComponents472、facilityComps472、pressureDistances472、waterFacilityPowerFactor472）在 vm 裡跟本線 sewer.ts 吃 ${CASES.length} 張格子（420 張隨機 6–30 格、8 張 72×72 蛇形管網跨過距離的截斷）：元件編號逐格、每棟貼著的元件（含插入順序）、多源距離逐格、電力係數（k27／k156／k157 × pw 真假缺）逐位相等`,
+    log(d === null && !pfBad.length, `D033 驗收 2：管網與距離逐項＝實驗線——實驗線原文（buildPipeComponents472、facilityComps472、pressureDistances472、waterFacilityPowerFactor472）在 vm 裡跟本線 sewer.ts 吃 ${CASES.length} 張格子（420 張隨機 6–30 格、8 張 72×72 蛇形管網跨過距離的截斷；D035 加 ${MAIN_CASES} 張隨機 6–45 格、8 張蛇形管網，管網格有 wp 也有污水幹管 sm472）：元件編號逐格、每棟貼著的元件（含插入順序）、多源距離逐格、電力係數（k27／k156／k157 × pw 真假缺）逐位相等`,
       d ?? (pfBad.join('；') || `${CASES.length} 張、管網格 ${wpTiles}、建築 ${roots} 棟、電力係數 ${seen.pf} 組全等`));
   }
 
@@ -166,10 +194,16 @@ async function guards(log) {
       ['截斷差一', 'pressure', 'nd<=WATER_HOPS472+32', 'nd<=WATER_HOPS472+31', 'press'], ['90 變 89', 'hops', 'WATER_HOPS472=90', 'WATER_HOPS472=89', 'press'],
       ['起點不看在不在管網上', 'pressure', 'if(i<0||i>=N*N||compArr[i]<0)continue;', 'if(i<0||i>=N*N)continue;', 'press'],
       ['每步 +2', 'pressure', 'const nd=d+(mainField(tiles[z])?0:1);', 'const nd=d+(mainField(tiles[z])?0:2);', 'press'],
+      ['幹管不免費', 'pressure', 'const nd=d+(mainField(tiles[z])?0:1);', 'const nd=d+1;', 'press'],
+      ['成本算在離開的格', 'pressure', 'const nd=d+(mainField(tiles[z])?0:1);', 'const nd=d+(mainField(tiles[j])?0:1);', 'press'],
       ['pw 為 false 的係數 .18 變 .5', 'powerFactor', 'b.pw===false?.18:1', 'b.pw===false?.5:1', 'pf'],
     ];
     const portMut = [
-      ['元件連到非管網格', "if (comp[z] < 0 && tiles[z].wp) { comp[z] = n; q[m++] = z; }", "if (comp[z] < 0) { comp[z] = n; q[m++] = z; }", 'comps'],
+      ['元件連到非管網格', "if (comp[z] < 0 && (tiles[z].wp || tiles[z].sm472)) { comp[z] = n; q[m++] = z; }", "if (comp[z] < 0) { comp[z] = n; q[m++] = z; }", 'comps'],
+      ['元件的起點只認 wp（幹管不是管網）', 'if (!(tiles[i].wp || tiles[i].sm472) || comp[i] >= 0) continue;', 'if (!tiles[i].wp || comp[i] >= 0) continue;', 'comps'],
+      ['元件往外走只認 wp（幹管接不起來）', 'if (comp[z] < 0 && (tiles[z].wp || tiles[z].sm472)) { comp[z] = n; q[m++] = z; }', 'if (comp[z] < 0 && tiles[z].wp) { comp[z] = n; q[m++] = z; }', 'comps'],
+      ['幹管不免費（走進幹管格也 +1）', 'const main = !!tiles[z].sm472, nd = d + (main ? 0 : 1);', 'const main = !!tiles[z].sm472, nd = d + 1;', 'press'],
+      ['成本算在離開的格', 'const main = !!tiles[z].sm472, nd = d + (main ? 0 : 1);', 'const main = !!tiles[z].sm472, nd = d + (tiles[j].sm472 ? 0 : 1);', 'press'],
       ['斜向也相鄰', 'const POW_DIR = [[0, -1], [1, 0], [0, 1], [-1, 0]];', 'const POW_DIR = [[0, -1], [1, 0], [0, 1], [-1, 0], [1, 1]];', 'comps'],
       ['上邊差一格', 'add(x + d, y - 1);', 'add(x + d, y - 2);', 'fac'], ['下邊差一格', 'add(x + d, y + sz);', 'add(x + d, y + sz - 1);', 'fac'],
       ['左邊差一格', 'add(x - 1, y + d);', 'add(x - 2, y + d);', 'fac'], ['右邊差一格', 'add(x + sz, y + d);', 'add(x + sz + 1, y + d);', 'fac'],
@@ -177,7 +211,7 @@ async function guards(log) {
       ['插入順序反過來', 'if (c >= 0 && !set.includes(c)) set.push(c);', 'if (c >= 0 && !set.includes(c)) set.unshift(c);', 'fac'],
       ['截斷差一', 'cutoff = WATER_HOPS472 + 32', 'cutoff = WATER_HOPS472 + 31', 'press'], ['90 變 89', 'export const WATER_HOPS472 = 90;', 'export const WATER_HOPS472 = 89;', 'press'],
       ['起點不看在不在管網上', 'if (i < 0 || i >= n || comp[i] < 0 || dist[i] === 0) continue;', 'if (i < 0 || i >= n || dist[i] === 0) continue;', 'press'],
-      ['每步 +2', 'const nd = d + 1;', 'const nd = d + 2;', 'press'],
+      ['每步 +2', 'const main = !!tiles[z].sm472, nd = d + (main ? 0 : 1);', 'const main = !!tiles[z].sm472, nd = d + (main ? 0 : 2);', 'press'],
       ['pw 為 false 的係數 .18 變 .5', 'b.pw === false ? .18 : 1', 'b.pw === false ? .5 : 1', 'pf'],
     ];
     const missed = [], names = [];

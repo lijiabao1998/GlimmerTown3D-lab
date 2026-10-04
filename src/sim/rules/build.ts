@@ -89,8 +89,14 @@ export function markLandDirty(st: Pick<BuildState, 'w' | 'landDirty' | 'landBox'
 // 但本線不畫、不能蓋這幾層，歷史事件（src/sim/city.ts DozeEvent）也還沒有它們的拆除碼。本線的施工（BuildState.protect）因此把它們當成看不見的：
 // 拆除不挑它們（拆的是下一層）、canPlace 的「這裡沒東西」不算它們，跟 D024 之前（格子上根本沒有這些旗標）一樣。拆路照實驗線一併清掉高架與立交旗標（51808–51809），那是路這一層的事。
 // 對拍實驗線的守衛（tools/unit-d011-*.mjs）不開 protect，逐字照實驗線。
-export const FOREIGN_LAYERS = ['rail', 'lv475', 'ud475', 'fly475', 'ix475'] as const;
-const seen = (t: Tile, protect?: boolean): Tile => protect && FOREIGN_LAYERS.some(k => t[k]) ? { ...t, rail: 0, lv475: 0, ud475: 0, fly475: 0, ix475: 0 } : t;
+// D035：讀檔又多帶了輕軌、路旁裝飾、公車站、高壓線、地下高壓、水幹管、污水幹管、裝飾、單行道、紅綠燈、公車專用道（src/sim/rules/lab.ts FLAG_LAYERS）；一樣不畫、一樣看不見。
+// 拆路照實驗線一併清掉其中的路旁裝飾、公車站、公車專用道、單行道、紅綠燈（51808，`doze` 的 road 分支）——不撤覆蓋印（51808 沒有 stampCov，實驗線的行為，照抄）。
+export const FOREIGN_LAYERS = ['rail', 'lv475', 'ud475', 'fly475', 'ix475', 'tram', 'rdec', 'bus', 'hv471', 'ug471', 'wm472', 'sm472', 'deco', 'oneway', 'light', 'busLane'] as const;
+const seen = (t: Tile, protect?: boolean): Tile => {
+  if (!protect || !FOREIGN_LAYERS.some(k => t[k])) return t;
+  const q: Tile = { ...t }; for (const k of FOREIGN_LAYERS) q[k] = 0;
+  return q;
+};
 
 // 51262–51489：能不能蓋；回拒絕理由（原文），可以蓋回 null
 export function canPlace(st: BuildState, toolId: string, x: number, y: number): string | null {
@@ -247,7 +253,11 @@ function doze(st: BuildState, t: Tile, x: number, y: number): void {
     case 'hv471': t.hv471 = 0; t.ug471 = 0; break;                              // 51806
     case 'wm472': t.wm472 = 0; t.sm472 = 0; break;                              // 51807
     case 'road':                                                                // 51808–51809
-      t.road = 0; t.rc = 0; t.hw = 0; t.bridge = 0; t.rdec = 0; t.bus = 0; t.busLane = 0; t.oneway = 0; t.light = 0; t.fly475 = 0; t.ix475 = 0; break;
+      // 本線（protect）看不見輕軌、路旁裝飾、公車站，一下就拆到路；實驗線的拆除鏈先拆它們才輪到路（51800、51802、51803：輕軌清掉、裝飾與公車站撤覆蓋印），
+      // 所以 51808 清 rdec／bus 在實驗線永遠是空動作。本線一次拆完要自己做那幾步，不然覆蓋場留著一個不存在的公車站，直到下一次重算
+      if (st.protect) { if (t.rdec) stampCov(g, b, 'rdec', x, y, COVR.rdec, -1); if (t.bus) stampCov(g, b, 'bus', x, y, COVR.bus, -1); t.tram = 0; t.tramBridge = 0; }
+      t.road = 0; t.rc = 0; t.hw = 0; t.bridge = 0; t.rdec = 0; t.bus = 0; t.busLane = 0; t.oneway = 0; t.light = 0; t.fly475 = 0; t.ix475 = 0;
+      break;
     case 'wp': t.wp = 0; break;                                                 // 51810
     case 'zone': t.zone = 0; t.office = 0; break;                               // 51811
     case 'tree': t.tree = 0; break;                                             // 51812（撤樹的污染減免在 doPlace 尾端）

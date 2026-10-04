@@ -23,7 +23,7 @@ function context() {
 export const zoneRect = (b, x0, z0, x1, z1, zone) => { b.zn ??= Array.from({ length: N21 * N21 }, () => '0'); for (let z = z0; z <= z1; z++) for (let x = x0; x <= x1; x++) b.zn[z * N21 + x] = String(zone); };
 export const mk = (seed, day, name, fn) => { const { template, sizeOf } = context(), b = builder(template, sizeOf); fn(b); return b.code(seed, day, name, b.zn ? { zn: b.zn.join('') } : {}); };
 export const tryPut = (b, x, z, k, lv = 1, o = {}) => { try { b.put(x, z, k, lv, o); return true; } catch { return false; } };
-const house = (b, x, z, n = 0, lv = 3) => tryPut(b, x, z, 1, lv, { den: 1 + (n % 5), we: n % 3 });
+export const house = (b, x, z, n = 0, lv = 3) => tryPut(b, x, z, 1, lv, { den: 1 + (n % 5), we: n % 3 });
 
 export function base(b) {
   b.road(4, 30, 66, 30, 3); b.put(3, 30, 5); b.put(67, 30, 5);
@@ -49,10 +49,10 @@ export const parksAt = (b, xs, z) => xs.forEach(x => tryPut(b, x, z, 4));
 
 // ---- 版型 ----
 // 共同：服務——消防局、醫院、警察局（燒毀、生病、犯罪會讓人口與簇散掉，十幾天的連推要看得到合併）
-const services = b => { tryPut(b, 44, 25, 6); tryPut(b, 30, 25, 12); tryPut(b, 20, 25, 11); };
+export const services = b => { tryPut(b, 44, 25, 6); tryPut(b, 30, 25, 12); tryPut(b, 20, 25, 11); };
 // M1：2×2 塔。北邊 z=28–29 八組住宅簇＋八組商業簇交錯（就業夠、需求高），管網通到污水廠（全部接管）；南邊 z=31–32 兩組住宅簇＋兩組商業簇，管只到 z=30（外排 z=32 沒貼管：不接管、不合格）。
 //    公園每 4 格一座（z=26、z=34）：幸福 .6–.8
-function m1(b, { parks = true, fireAt = null } = {}) {
+export function m1(b, { parks = true, fireAt = null } = {}) {
   base(b); pipes(b, 5, 50); services(b);
   [10, 14, 18, 22, 26, 30, 34, 38].forEach((x, n) => { cluster(b, x, 28, { kind: 1, lv: 3, n }); cluster(b, x + 2, 28, { kind: 2, lv: 3 }); });
   [10, 14].forEach((x, n) => { cluster(b, x, 31, { kind: 1, lv: 3, n: n + 4 }); cluster(b, x + 2, 31, { kind: 2, lv: 3 }); });

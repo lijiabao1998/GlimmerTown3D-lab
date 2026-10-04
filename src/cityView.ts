@@ -1077,7 +1077,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     } else {
       title = `${c.ruin[i] ? '焦土' : ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
       const pipe = c.wp[i] ? (sim ? (sim.w.tiles[i].wr ? '配水管（接通水源）' : '配水管（沒接到水塔）') : '配水管') : '';   // D019
-      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', c.ruin[i] ? '燒毀的建築留下的空地，要用拆除清掉才能再蓋' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + (c.ruin[i] ? '（清掉焦土時一起清掉）' : '（還沒蓋）') : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe].filter(Boolean);
+      // D035：讀進來的城帶的、本線沒有畫的幾層（模擬看得到它們：公車站與路旁裝飾進覆蓋場、輕軌進夜間城市、高壓線接力、污水幹管連管網）。拆路時公車站、路旁裝飾一起拆
+      const lt = sim ? sim.w.tiles[i] : null, extra = lt ? [lt.bus ? '公車站' : '', lt.rdec ? '路旁裝飾' : '', lt.tram ? '輕軌' : '', lt.hv471 ? '高壓輸電線' : '', lt.ug471 ? '地下高壓線' : '', lt.wm472 ? '水幹管' : '', lt.sm472 ? '污水幹管' : ''].filter(Boolean) : [];
+      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', c.ruin[i] ? '燒毀的建築留下的空地，要用拆除清掉才能再蓋' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + (c.ruin[i] ? '（清掉焦土時一起清掉）' : '（還沒蓋）') : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe, ...extra].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
       const tr = trafficRow(i); if (tr) rows.push(tr);                  // D027
       for (const e of lotEvents(c, x, z)) rows.push(lotRow(c, e));      // D011：這一格的施工與拆掉的建築

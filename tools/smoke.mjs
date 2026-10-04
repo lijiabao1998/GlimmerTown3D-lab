@@ -29,6 +29,7 @@ import { d031Smoke, d031SkipNote } from './smoke-d031.mjs';
 import { d032Smoke, d032SkipNote } from './smoke-d032.mjs';
 import { d033Smoke, d033SkipNote } from './smoke-d033.mjs';
 import { d034Smoke, d034SkipNote } from './smoke-d034.mjs';
+import { d035Smoke, d035SkipNote } from './smoke-d035.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -583,6 +584,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d032Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d033Smoke(withBrowser, log);
 // ===== D034：摩天樓與巨廈合併（tools/smoke-d034.mjs：M1b／M2b 推進一天的合併提示與歷史事件、塔與巨廈的建築卡、增量＝整張重建、手機預算；自己開四個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d034Smoke(withBrowser, log);
+// ===== D035：讀檔圖層補齊（tools/smoke-d035.mjs：L5 的格子卡片講得出十一層、拆有公車站的路一下拆到路、看不見的層拆不到、畫面沒有變；自己開三個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d035Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -602,6 +605,7 @@ if (d031SkipNote()) console.log(d031SkipNote());
 if (d032SkipNote()) console.log(d032SkipNote());
 if (d033SkipNote()) console.log(d033SkipNote());
 if (d034SkipNote()) console.log(d034SkipNote());
+if (d035SkipNote()) console.log(d035SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

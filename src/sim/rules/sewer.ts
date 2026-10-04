@@ -5,9 +5,10 @@
 //   沿同一個元件走到這棟建築周圍任一格的步數 ≤ 90（52899）。容量不限制接管（一座廠 180 只用來算溢流統計，回退設定沒有別的讀者）。
 // 照抄的細節：管網元件＝wp 格 4 向連通、索引升序掃（52875）；「貼著」＝腳印格＋四邊外一圈、不含四角、插入順序 腳印→上→下→左→右（52876）；
 //   找距離用腳印＋外一圈含四角（dy、dx 從 −1 到 sz，52899）；廠的容量只加進它貼著的第一個元件（52889–52890），但每個貼著的元件都有距離起點（52894）；
-//   距離＝多源 4 向 BFS、每格 +1、截在 WATER_HOPS472＋32（52877；本線讀檔不帶 sm472 主管線，所以沒有 0 成本的邊）；
+//   管網格＝wp 或 sm472（污水幹管，D035 起讀檔帶進來，52881 `t=>!!(t.wp||t.sm472)`）；
+//   距離＝多源 0–1 BFS、走進幹管格成本 0（插到佇列前面）、其餘每格 +1、截在 WATER_HOPS472＋32（52877）；
 //   起點只認 pf > .3 的廠（pf＝pw 為 false 時 .18、否則 1，52878；回退設定 assetAvailability493 恆 1）。
-// 沒搬：wm472／sm472 主管線（本線讀檔不帶，backlog L）、T472 的供水與水質與污水量與溢流報表、T451 的分區容量帳與面板。
+// 沒搬：wm472 水幹管（回退設定走舊式供水，沒有讀者）、元件的幹管格數 main（只有報表用）、T472 的供水與水質與污水量與溢流報表、T451 的分區容量帳與面板。
 // 每天在 55011 一次算完整張（實驗線在第一個住宅查詢時才算：回退設定 waterLegacy449 為真，55013 的強制重算不跑；結果只看管網、廠、pw 與建築位置，
 // 這些在 55150 那一圈之前不會被這一天的生長動到，兩者逐位相等）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）。
@@ -37,19 +38,19 @@ export interface SewerResult {
 
 export const pfOf = (b: { pw?: boolean }) => b.pw === false ? .18 : 1;    // 52878（k27、k156、k157 都是 sewer 類，base 不是 1 的例外只有 154、159、160）
 
-// 52875 buildPipeComponents472：wp 格 4 向連通，索引升序掃，元件編號依發現順序（−1＝不是管網格）
+// 52875 buildPipeComponents472：管網格（wp 或 sm472）4 向連通，索引升序掃，元件編號依發現順序（−1＝不是管網格）
 export function pipeComponents(w: World): { comp: Int32Array; n: number } {
   const N = w.N, nn = N * N, tiles = w.tiles, comp = new Int32Array(nn).fill(-1), q = new Int32Array(nn);
   let n = 0;
   for (let i = 0; i < nn; i++) {
-    if (!tiles[i].wp || comp[i] >= 0) continue;
+    if (!(tiles[i].wp || tiles[i].sm472) || comp[i] >= 0) continue;
     let h = 0, m = 0; q[m++] = i; comp[i] = n;
     while (h < m) {
       const j = q[h++], x = j % N, y = (j / N) | 0;
       for (const [dx, dy] of POW_DIR) {
         const nx = x + dx, ny = y + dy; if (!inMap(w, nx, ny)) continue;
         const z = idx(w, nx, ny);
-        if (comp[z] < 0 && tiles[z].wp) { comp[z] = n; q[m++] = z; }
+        if (comp[z] < 0 && (tiles[z].wp || tiles[z].sm472)) { comp[z] = n; q[m++] = z; }
       }
     }
     n++;
@@ -64,18 +65,19 @@ export function facilityComps(w: World, comp: Int32Array, root: number, sz0: num
   for (let d = 0; d < sz; d++) { add(x + d, y - 1); add(x + d, y + sz); add(x - 1, y + d); add(x + sz, y + d); }
   return set;
 }
-// 52877 pressureDistances472：多源 BFS，每格 +1、同一個元件內、截在 WATER_HOPS472＋32（本線沒有 sm472 主管線，沒有 0 成本的邊）
+// 52877 pressureDistances472：多源 0–1 BFS，同一個元件內、走進污水幹管格（sm472）成本 0、其餘 +1、截在 WATER_HOPS472＋32。
+// 佇列開 2N²、頭從 N² 開始：成本 0 的格插到頭的前面（`dq[--head]`，實驗線的寫法，後插的先出），其餘接在尾巴
 export function pipeDistances(w: World, comp: Int32Array, seeds: number[]): Uint16Array {
-  const N = w.N, n = N * N, dist = new Uint16Array(n).fill(65535), cutoff = WATER_HOPS472 + 32, dq = new Int32Array(n * 2);
-  let head = 0, tail = 0;
+  const N = w.N, n = N * N, tiles = w.tiles, dist = new Uint16Array(n).fill(65535), cutoff = WATER_HOPS472 + 32, dq = new Int32Array(n * 2);
+  let head = n, tail = n;
   for (const i of seeds) { if (i < 0 || i >= n || comp[i] < 0 || dist[i] === 0) continue; dist[i] = 0; dq[tail++] = i; }
   while (head < tail) {
     const j = dq[head++], x = j % N, y = (j / N) | 0, d = dist[j];
     for (const [dx, dy] of POW_DIR) {
       const nx = x + dx, ny = y + dy; if (!inMap(w, nx, ny)) continue;
       const z = idx(w, nx, ny); if (comp[z] < 0 || comp[z] !== comp[j]) continue;
-      const nd = d + 1;
-      if (nd < dist[z] && nd <= cutoff) { dist[z] = nd; dq[tail++] = z; }
+      const main = !!tiles[z].sm472, nd = d + (main ? 0 : 1);
+      if (nd < dist[z] && nd <= cutoff) { dist[z] = nd; if (main && head > 0) dq[--head] = z; else dq[tail++] = z; }
     }
   }
   return dist;
