@@ -554,6 +554,7 @@ await guard('./unit-d034-live.mjs', 'd034LiveGuards');   // D034：合併的實�
 await guard('./unit-d035.mjs', 'd035Guards');   // D035：讀檔圖層補齊（十一層進格子；L 系列 8 座連推 13 天逐欄加圖層／有電道路／覆蓋場；污水幹管佈局 170 個；本線拆路蓋東西之後存的碼給實驗線讀；拆除與寫回；存讀；接線突變）
 await guard('./unit-d036.mjs', 'd036Guards');   // D036：資源開採的實驗線原文（17 段 sha256）逐項＝resource.ts、count.ts（vm：400 個種子的資源圖、400 張小圖的抽取、亂寫的 rdep 還原、存檔配對、噪聲值逐位；突變 56）
 await guard('./unit-d036-live.mjs', 'd036LiveGuards');   // D036：實驗線頁面實跑（W 系列 5 座連推 13／60 天逐欄含耗損與庫存分流、60 個種子的資源圖、本線存的碼給實驗線讀）、day.ts 與 saveCode 接線突變、耗損存讀
+await guard('./unit-d037.mjs', 'd037Guards');   // D037：公車路線（bus_rt／bop468）本線沒搬——缺口量出來並鎖住（實驗線頁面實跑 T1 一條路線、T2 兩條路線＋營運設定、T3 對照；T3 全等、T1／T2 的殘差有範圍、本線完全不看路線、存檔不弄丟路線）
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
