@@ -102,4 +102,11 @@
 
 ## CI 補記
 
-（推送後補。）
+D036、D037、D038 是連續推的，CI 以最後一次推送為準（同一個分支的前一輪會被取消）：
+
+| 推送 | commit | run | 結果 |
+|---|---|---|---|
+| `main` | `d84b6da`（含 D036、D037、D038 與 CI 上限調整） | [37217966283](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37217966283) | ✅ success（job 32 分 17 秒；Pages 已發） |
+| 工作階段分支 `claude/3d-remote-status-2qeati` | `d84b6da`（同一棵樹） | [37217965995](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37217965995) | ✅ success |
+
+**過程**：`e36c8a8`（D038 施工）的兩輪 CI 每一步都 success（型別、Node 守衛、建置、煙霧、樣張、上傳附件），但整個 job 在 `timeout-minutes: 30` 的上限被標成 `cancelled`、Pages 沒發——守衛與煙霧加了 D035–D038 之後要約 32 分鐘。`d84b6da` 把上限調到 45 分鐘，重跑兩輪都綠（job 32 分 17 秒）。

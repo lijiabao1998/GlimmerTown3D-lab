@@ -117,3 +117,10 @@
 
 1. **公車站、路旁裝飾、輕軌、高壓線、幹管要不要畫、要不要有自己的建造工具**：現在只有讀進來的 2D 存檔有它們，本線的玩家蓋不出新的。
 2. **洪水、堤防、隕石坑要不要之後讓它們進模擬**（連同災害一起）：現在 3D 裡不存在。
+
+## CI 補記
+
+| 推送 | commit | run | 結果 |
+|---|---|---|---|
+| `main` | `9b558cb` | [37195686250](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37195686250) | ✅ success（約 30 分） |
+| 工作階段分支 `claude/3d-remote-status-2qeati` | `9b558cb` | [37195687896](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37195687896) | ⚪ cancelled（被同一分支下一次推送取消，不是失敗；同一棵樹在 `d84b6da` 的分支 CI 綠） |
