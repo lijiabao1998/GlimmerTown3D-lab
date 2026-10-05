@@ -11,7 +11,7 @@
 //   4. T504 的原文事實：本線的「立即生效」＝T504 關著的路徑（__noPolicy504 → 舊的立即套用）；打開時每天累計「行政量能」、除以執行天數、滿了才改 pol；六項政策的執行天數（3、4、14、10、8、5）；
 //   5. T504 量到的：off 的六項在核准當天就生效；on 的生效日＝ceil(執行天數／行政量能)＝第 5、6、20、14、11、7 天（8 座城全一樣）；生效之後的值＝off 的、一路沒有被取消或回滾（120 天裡每項只改一次）；
 //      資金差：8 座裡 5 座在第 30 天之後恆差 $278–286（延遲期間少付的政策費）、3 座因為延遲改變了起火與犯罪的亂數流、之後軌跡分岔（資金 ＋$68…＋$470、人口 ＋14…＋21）；
-//   6. 本線的做法：setPolicy 立即生效、不記生命週期（跟 off 一樣）；src 沒有委託與政策生命週期的程式（註解不算）；
+//   6. 本線的做法：setPolicy 立即生效、不記生命週期（跟 off 一樣）；src 沒有政策生命週期（T504）的程式（註解不算；D045 起委託 T385 已搬進來）；
 //   7. 摘要。
 import fs from 'node:fs';
 import path from 'node:path';
@@ -168,9 +168,9 @@ async function guards(log) {
     if (!r.ok || s.pol?.curfew !== true) bad.push(`setPolicy 宵禁：ok ${r.ok}、pol.curfew ${s.pol?.curfew}（本線要立即生效）`);
     if (JSON.stringify(Object.keys(s)) !== before) bad.push('setPolicy 多出了欄位（本線不記生命週期）');
     const walk = d => fs.readdirSync(path.join(ROOT, d), { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(d, e.name)) : /\.ts$/.test(e.name) ? [path.join(d, e.name)] : []);
-    const files = [...walk('src/sim'), ...walk('src/io'), ...walk('src/render')], re = /cms385|cmsAccept|CMS385|policyState504|implementationDays|policyLedger|policyAdminCapacity|policyStep504|p504\b/;
+    const files = [...walk('src/sim'), ...walk('src/io'), ...walk('src/render')], re = /policyState504|implementationDays|policyLedger|policyAdminCapacity|policyStep504|p504\b/;   // D045 起委託（T385：cms385、cmsAccept、CMS385）搬進來了，不再列；政策實驗室（T504）還沒搬
     for (const f of files) { const m = strip(read(f)).match(re); if (m) bad.push(`${f}：「${m[0]}」`); }
-    log(!bad.length, `D043 驗收 6：本線的做法——setPolicy 立即生效（跟 T504 關著的路徑一樣）、不記生命週期；src/sim、src/io、src/render 的 ${files.length} 個檔裡沒有委託與政策生命週期的程式（註解不算；要做的時候這一條跟驗收 3、5 要一起改）`, bad.slice(0, 3).join('；') || `宵禁核准當天生效；${files.length} 個檔乾淨`);
+    log(!bad.length, `D043 驗收 6：本線的做法——setPolicy 立即生效（跟 T504 關著的路徑一樣）、不記生命週期；src/sim、src/io、src/render 的 ${files.length} 個檔裡沒有政策生命週期（T504）的程式（註解不算；D045 起委託 T385 已搬進來，見 tools/unit-d045*.mjs）`, bad.slice(0, 3).join('；') || `宵禁核准當天生效；${files.length} 個檔乾淨`);
   }
 
   // ---- 7. 摘要 ----

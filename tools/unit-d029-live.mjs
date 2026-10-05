@@ -258,7 +258,7 @@ export async function wiringGuards(log, { lab, lab27, cities, olds, oldzs, KT, v
     ['結算的貨物供給率不進（恆 1）', [['goodsSupply: ec.supplyRate481,', 'goodsSupply: 1,']]],
     ['結算的遊客不進', [['transitRidership: 0, tourists: ec.tourists,', 'transitRidership: 0, tourists: 0,']]],
     ['結算的失業率不進', [['unemployment: ec.laborNow481.unemploymentRate }', 'unemployment: 0 }']]],
-    ['結算的公交乘客不是 0', [['transitRidership: 0,', 'transitRidership: 100,']]],
+    ['結算的公交乘客不是 0', [['transitRidership: 0, tourists: ec.tourists,', 'transitRidership: 100, tourists: ec.tourists,']]],
     ['警察覆蓋不進（恆 1）', [['nightPoliceCoverage(w, tickBld, catOf, f.COV), roads,', '1, roads,']]],
     ['道路格數不進', [['nightPoliceCoverage(w, tickBld, catOf, f.COV), roads,', 'nightPoliceCoverage(w, tickBld, catOf, f.COV), 0,']]],
     ['政策不進夜間城市', [['const nightPol = pol,', 'const nightPol = null,']]],

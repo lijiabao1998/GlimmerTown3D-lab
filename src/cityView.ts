@@ -7,15 +7,16 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type CmsEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { CITY_EVENTS } from './sim/rules/events.ts';
 import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, acceptCommission, dropCommission, commissionOffers, commissionState, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { chronicleOf, depletedToastText } from './sim/decisions.ts';
+import { CMS_BY_ID385, NO_RIDERSHIP, cmsToast, type CmsDef } from './sim/rules/commission.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
@@ -364,6 +365,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
+    if (rep.commission) { const c = CMS_BY_ID385[rep.commission.id]; if (c) { const t = cmsToast(rep.commission.t === 'done' ? 'done' : 'expire', c, rep.commission.t === 'done' ? rep.commission.bonus : undefined); bui.toast(t.text, t.tone); } }   // D045：市長委託完成（獎金已進資金）／過期，當天結算的結果
+    if (!cm.hidden) renderCommission();   // D045：面板開著、過了一天：進度、剩餘天數、三選一跟著換
     if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
     if (rep.merges.length) bui.toast(mergesToastText(rep.merges, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(rep.merges[0].x, rep.merges[0].z));   // D034：一筆的字照實驗線（55726、55753）；D042：同一天多筆合成一則；點一下鏡頭過去（第一筆）
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
@@ -475,6 +478,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
     <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
     <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
+    <div id="cm" hidden><div class="card"><div class="head"><h2>📋 市長委託</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="cmX">關閉</button></div></div></div>
     <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
@@ -796,6 +800,66 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
   }
 
+  // D045：☰「委託」（實驗線 T385 市長委託面板 showCommPanel385 65155 的 3D 版）——三選一（決定性：世界種子＋輪次）、進行中的進度與放棄、已完成的紀錄。接受、放棄馬上生效（實驗線 cmsAccept385、cmsDrop385）、
+  // 存檔、記世界歷史（cms 事件，城市格式 10）；完成、過期由每天的結算發通知。狀態的順序照實驗線：沙盒 → 進行中 → 城市等級不到 3 → 人口不到 51 → 三選一。
+  // 本線沒有公共運量（公車與票務 D037 沒搬）：兩條運量委託照常出現、可以接，但標明做不到、會過期，可以放棄換一批
+  const cm = $<HTMLElement>('#cm');
+  $<HTMLButtonElement>('#cmX').onclick = () => { cm.hidden = true; };
+  cm.onclick = e => { if (e.target === cm) cm.hidden = true; };
+  let cmTip = '';
+  const NO_RIDE_NOTE = '　⚠ 本線還沒有公共運量：這一條做不到、會過期（可以放棄換一批）';
+  function cmProgress(c: CmsDef): { cur: string; p: number } {
+    const s = sim!, st = s.cms, stock = c.type === 'stock' ? Math.floor(c.src === 'steel' ? s.econ.steel : c.src === 'fuel' ? s.econ.fuel : 0) : 0, has = s.edu.tech.includes(c.src), r1 = (v: number) => Math.round(v * 10) / 10;
+    const p = c.type === 'acc' ? Math.min(1, st.acc / (c.target as number)) : c.type === 'hold' ? Math.min(1, st.hold / (c.holdN as number)) : c.type === 'stock' ? Math.min(1, stock / (c.target as number)) : has ? 1 : 0;
+    const cur = c.type === 'acc' ? `${r1(st.acc)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : '研究中';
+    return { cur, p };
+  }
+  function renderCommission() {
+    if (!sim) return;
+    const s = sim, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+    const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
+    const note = (k: string, st: string, name: string, val: string, text: string) => { const li = mk('li'), head = mk('div', 'h'); li.dataset.k = k; li.dataset.kind = 'note'; li.dataset.st = st; head.append(mk('b', '', name), mk('span', 'val', val)); li.append(head); if (text) li.append(mk('small', 'note', text)); return li; };
+    const state = commissionState(s), kids: HTMLElement[] = [];
+    if (state === 'sandbox') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '沙盒模式無委託', '自由建造不設目標'));
+    else if (state === 'active') {
+      const c = CMS_BY_ID385[s.cms.act], el = s.day - s.cms.st;
+      if (!c) kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '這一條委託不認得', ''));
+      else {
+        const { cur, p } = cmProgress(c), left = Math.max(0, c.days - el), li = mk('li'), head = mk('div', 'h');
+        li.dataset.k = c.id; li.dataset.kind = 'act'; li.dataset.st = 'act';
+        head.append(mk('b', '', `${c.ic} ${c.nm}`), mk('span', 'val', cur));
+        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.round(p * 100) + '%'; bar.append(i);
+        li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
+        const act = mk('div', 'h'); act.append(mk('span', 'val', ''), btn('🗑 放棄委託', `放棄委託：${c.nm}（輪次加一、換一批，沒有懲罰）`, () => uiCommission('drop')));
+        li.append(act);
+        kids.push(mk('h3', '', '進行中'), li);
+      }
+    } else if (state === 'rank') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '城市等級 3 解鎖', `目前 Lv.${s.rankIdx + 1}`));
+    else if (state === 'pop') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '人口 50 解鎖', `目前 ${s.pop}`));
+    else {
+      const ol = mk('ol');
+      commissionOffers(s).forEach((c, i) => {
+        const li = mk('li'), head = mk('div', 'h'); li.dataset.k = c.id; li.dataset.kind = 'offer'; li.dataset.st = 'can';
+        head.append(mk('b', '', `${c.ic} ${c.nm}`), btn('接受', `接受委託：${c.nm}（獎金 $${c.bonus.toLocaleString()}、限 ${c.days} 天）`, () => uiCommission('accept', i)));
+        li.append(head, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜限 ${c.days} 天${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
+        ol.append(li);
+      });
+      kids.push(mk('h3', '', `三選一（第 ${s.cms.n + 1} 輪）`), ol);
+    }
+    kids.push(mk('h3', '', '紀錄'), note('done', 'rec', '已完成委託', String(s.cms.done.length), s.cms.done.length ? s.cms.done.map(id => CMS_BY_ID385[id]?.ic ?? '?').join(' ') : '—'));
+    $('#cm .body').replaceChildren(...kids);
+    $('#cm .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市 Lv.${s.rankIdx + 1}・已完成 ${s.cms.done.length} 條`;
+    $('#cm .tip').textContent = cmTip;
+  }
+  // 接受第 i 張／放棄進行中的：成功就發通知（實驗線的字）、存檔；不行講原因，不動狀態
+  function uiCommission(kind: 'accept' | 'drop', i = 0) {
+    if (!sim) return null;
+    const c = kind === 'accept' ? acceptCommission(sim, i) : dropCommission(sim);
+    if (c) { const t = cmsToast(kind, c); cmTip = ''; bui.toast(t.text, t.tone); saveNow(); } else cmTip = kind === 'accept' ? '接不了這一條（已有進行中的委託，或城市還沒到條件）' : '沒有進行中的委託';
+    renderCommission(); return c ? c.id : null;
+  }
+  function openCommission() { if (!sim) return; cmTip = ''; renderCommission(); cm.hidden = false; }
+
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
     const saved = readSave(), r = saved ? decodeLabCode(saved) : null;
@@ -818,6 +882,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
         ...(sim ? [{ id: 'resview', label: showRes ? '隱藏資源圖' : '顯示資源圖', note: '油田（黃）與礦藏（藍）；選油井、礦場工具時自動顯示（D040）', icon: 'layers' as const }] : []),
         ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
+        ...(sim ? [{ id: 'commission', label: '委託', note: '市長委託三選一、進度與放棄（D045）', icon: 'paste' as const }] : []),
         ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
@@ -838,6 +903,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'rank') openRank();
     else if (id === 'policy') openPolicy();
     else if (id === 'tech') openTech();
+    else if (id === 'commission') openCommission();
     else if (id === 'chronicle') openChronicle();
     else if (id === 'resview') { showRes = !showRes; syncRes(); invalidate(); bui.toast(showRes ? '資源圖：油田（黃）、礦藏（藍）' : '資源圖已隱藏'); }   // D040
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
@@ -1011,6 +1077,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
     if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
     if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
+    if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -1031,9 +1098,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
   // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）。
   // D012：讀檔時照實驗線重挑外觀（restyle）不列——那是讀檔的視覺遷移，不是城裡發生的事；歷史照記
-  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent>;   // D039：決策與科技完成沒有座標、不屬於哪一格（☰「大事記」列它們）
+  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent | CmsEvent>;   // D039：決策與科技完成沒有座標、不屬於哪一格（☰「大事記」列它們）
   function lotEvents(c: City, x: number, z: number) {
-    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
+    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.t !== 'cms' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
   }
   // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
   type Row = [string, string];
@@ -1535,6 +1602,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // ---- D038 科技與專精（守衛與拍照用）：☰「科技與專精」面板的列、按面板上真的按鈕、目前的研究狀態 ----
     techRows: () => [...ui.querySelectorAll<HTMLElement>('#tc li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('.note')?.textContent ?? '' })),
     techPanel: () => ({ open: !tc.hidden, sub: $('#tc .sub').textContent, tip: $('#tc .tip').textContent, route: tcRoute, pick: tcPick, tabs: [...ui.querySelectorAll<HTMLButtonElement>('#tc .tabs button')].map(b => b.textContent ?? '') }),
+    // D045 市長委託：面板的狀態與每一列、點某一列的按鈕（接受／放棄）、模擬裡的委託狀態
+    cmPanel: () => ({ open: !cm.hidden, sub: $('#cm .sub').textContent, tip: $('#cm .tip').textContent, state: sim ? commissionState(sim) : null }),
+    cmRows: () => [...ui.querySelectorAll<HTMLElement>('#cm li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', val: li.querySelector('.val')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('small.note')?.textContent ?? '', bar: li.querySelector<HTMLElement>('.bar i')?.style.width ?? '' })),
+    cmClick: (k: string) => { const b = cm.hidden ? null : ui.querySelector<HTMLButtonElement>(`#cm li[data-k="${k}"] button`); if (!b || b.disabled) return false; b.click(); return true; },
+    simCms: () => sim ? JSON.parse(JSON.stringify(sim.cms)) : null,
     techRoute: (r: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc .tabs button[data-route="${r}"]`); if (!b) return false; b.click(); return true; },
     techClick: (k: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc li[data-k="${k}"] button`); if (!b || b.disabled) return false; b.click(); return true; },   // 按面板上那一列的按鈕（節點或城市方向）；沒開、沒這一列、鈕是灰的回 false
     techApply: (id: string) => { const r = uiTech(id); return r ? { ok: r.ok } : null; },

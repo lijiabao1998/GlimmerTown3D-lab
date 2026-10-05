@@ -291,7 +291,7 @@ async function guards(log) {
       ['不清當天名單（名單越積越長，一口井記很多筆）', [['s.res.depleted = [];', 's.res.depleted ??= [];']]],
       ['種類寫死 49（礦場記成油井）', [['const k = w.tiles[i].bld!.k;', 'const k = 49;']]],
       ['座標 x、z 對調（事件）', [["{ day: s.day + 1, t: 'depleted', x: i % w.N, z: (i / w.N) | 0, k }", "{ day: s.day + 1, t: 'depleted', z: i % w.N, x: (i / w.N) | 0, k }"]]],
-      ['報告不給耗盡名單（rep.depleted 空）', [['merges: mgs, depleted, hazard: hz,', 'merges: mgs, depleted: [], hazard: hz,']]],
+      ['報告不給耗盡名單（rep.depleted 空）', [['merges: mgs, depleted, commission: cmsOut, hazard: hz,', 'merges: mgs, depleted: [], commission: cmsOut, hazard: hz,']]],
     ];
     for (const [name, edits] of dayMuts) {
       try {

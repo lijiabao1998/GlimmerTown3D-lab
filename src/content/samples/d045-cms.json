@@ -1,0 +1,180 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-cms.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "span",
+   "name": "委託表 CMS385",
+   "anchors": {
+    "start": "const CMS385=[",
+    "end": "const CMS_BY_ID385={};"
+   },
+   "line": 37784,
+   "endLine": 37798,
+   "sha": "7f612e266ac994dc7a44768cb0438fc9ca93b2158a3a856c0c56ec57ea3f10d2"
+  },
+  {
+   "kind": "span",
+   "name": "CMS_BY_ID385",
+   "anchors": {
+    "start": "const CMS_BY_ID385={};for(const c of CMS385)CMS_BY_ID385[c.id]=c;",
+    "end": "const CMS_BY_ID385={};for(const c of CMS385)CMS_BY_ID385[c.id]=c;"
+   },
+   "line": 37799,
+   "endLine": 37799,
+   "sha": "824ea33bd3718628df539be7644f4b1b1f1486507b830f2a8e16dd6a5f46492f"
+  },
+  {
+   "kind": "fn",
+   "name": "emptyCms385",
+   "anchors": {
+    "start": "function emptyCms385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37800,
+   "endLine": 37800,
+   "sha": "c4885e6320da923261b3466c825f069240ed5f6eeb24c6bb5b1e19b1b34453a0"
+  },
+  {
+   "kind": "span",
+   "name": "狀態 cms385",
+   "anchors": {
+    "start": "let cms385=emptyCms385();",
+    "end": "let cms385=emptyCms385();"
+   },
+   "line": 37801,
+   "endLine": 37801,
+   "sha": "fdf4d08f17c9cb664c9b06a55c6679446bd64248cdfcba9e77aaa4c41d32b4b7"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsHash385",
+   "anchors": {
+    "start": "function cmsHash385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37802,
+   "endLine": 37802,
+   "sha": "61235a812098f3e842c4b1004ba9c6bbe45d245b3921d929d23592b4f121c711"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsOffers385",
+   "anchors": {
+    "start": "function cmsOffers385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37803,
+   "endLine": 37809,
+   "sha": "676a369f84097ff755bfca85b4437fd1bb5af2e86b02b9141864d90684398098"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsSave385",
+   "anchors": {
+    "start": "function cmsSave385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37810,
+   "endLine": 37810,
+   "sha": "d1825b59c0adcc8ab4166d563beb2210c413a10323b3f3f07bf2b7d8c80fdc63"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsLoad385",
+   "anchors": {
+    "start": "function cmsLoad385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37811,
+   "endLine": 37827,
+   "sha": "54180ae741fd47a867c9a7dcc4be380381eea051ac4e2b71990d2beba5334737"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsAccept385",
+   "anchors": {
+    "start": "function cmsAccept385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37828,
+   "endLine": 37833,
+   "sha": "8c1d412ed7fe2ffae6a3bc151b5297e71fa4791b8aea5d1b0c19a92ecef6963c"
+  },
+  {
+   "kind": "fn",
+   "name": "cmsDrop385",
+   "anchors": {
+    "start": "function cmsDrop385(",
+    "closure": "balanced-brace"
+   },
+   "line": 37834,
+   "endLine": 37839,
+   "sha": "b220623cea5674e8c91c5ad26e33ccd5824b014d91a00ad936578e89bcc5079b"
+  },
+  {
+   "kind": "span",
+   "name": "每天的結算 T385 cms",
+   "anchors": {
+    "start": "/* ===== T385 cms BEGIN",
+    "end": "/* ===== T385 cms END ===== */"
+   },
+   "line": 56170,
+   "endLine": 56189,
+   "sha": "4f355573073bc9f9c21a7fb76f5cfef69331bded403543badaf33b424b090619"
+  },
+  {
+   "kind": "span",
+   "name": "存檔 cms385",
+   "anchors": {
+    "start": "{const c385=cmsSave385();if(c385)data.cms385=c385;}",
+    "end": "{const c385=cmsSave385();if(c385)data.cms385=c385;}"
+   },
+   "line": 66771,
+   "endLine": 66771,
+   "sha": "dc9a51f4e7f43dc1206289fb44d039dfc61be0e790974bb560df5e7b631e6e4d"
+  },
+  {
+   "kind": "span",
+   "name": "讀檔 cms385",
+   "anchors": {
+    "start": "cms385=cmsLoad385(d.cms385);",
+    "end": "cms385=cmsLoad385(d.cms385);"
+   },
+   "line": 66929,
+   "endLine": 66929,
+   "sha": "be3ea485d7f3f6d7800f0fe1ae10141468c95ffb1f59be3df22f5a788a7bd543"
+  },
+  {
+   "kind": "span",
+   "name": "☰ 委託面板的狀態文字",
+   "anchors": {
+    "start": "inner+=statTab([{sec:'委託'},{k:'狀態',v:'沙盒模式無委託'",
+    "end": "u:cms385.done.length?cms385.done.map(id=>CMS_BY_ID385[id]?CMS_BY_ID385[id].ic:'?').join(' '):'—'}]);"
+   },
+   "line": 65164,
+   "endLine": 65187,
+   "sha": "ecec8e73a46b170bdef19a326770d2b76e46da01dc0df5e5adcb7720f0500115"
+  }
+ ],
+ "text": {
+  "table": "const CMS385=[\n {id:'steel40', nm:'造船用鋼 40', ic:'⚓', type:'acc', src:'steel', target:40, days:90, bonus:1500, minRank:4},\n {id:'steel80', nm:'造船用鋼 80', ic:'⚓', type:'acc', src:'steel', target:80, days:120, bonus:2500, minRank:6},\n {id:'trade1200', nm:'糧食出口 $1200', ic:'🚢', type:'acc', src:'trade', target:1200, days:90, bonus:1200, minRank:3},\n {id:'trade3000', nm:'糧食出口 $3000', ic:'🚢', type:'acc', src:'trade', target:3000, days:120, bonus:2200, minRank:5},\n {id:'transit150', nm:'公共運量 150×30 天', ic:'🚌', type:'hold', src:'transit', target:150, holdN:30, days:90, bonus:1000, minRank:3},\n {id:'transit400', nm:'公共運量 1200×45 天', ic:'🚇', type:'hold', src:'transit', target:1200, holdN:45, days:150, bonus:2000, minRank:6} /* T394b：400→1200——實測有公交種子運量峰 1128-1935，150/400 兩檔完成率幾乎相同（26.8%/26.5%）＝階梯失效；id 'transit400' 不改（入存檔），值-名分離在此披露 */,\n {id:'happy70', nm:'幸福 70%×30 天', ic:'😊', type:'hold', src:'happy', target:.70, holdN:30, days:90, bonus:1000, minRank:2},\n {id:'happy80', nm:'幸福 78%×45 天', ic:'🥰', type:'hold', src:'happy', target:.78, holdN:45, days:150, bonus:2000, minRank:5} /* T394b：.80→.78——12種子×400天幸福峰值最高 0.75，.80 在觀測天花板之上＝無解委託；id 不改（入存檔 done[]） */,\n {id:'techC6', nm:'研究「學術網絡」', ic:'🔬', type:'tech', src:'C6', days:200, bonus:1800, minRank:4},\n /* T386b 外貿合約：stock 期末驗收型——到期日驗庫存（steel/fuel CAP 皆 120，target<CAP）；\n    純讀零模擬寫入（「驗收庫存」非「運走」，扣庫存方案否決見卡面）；bonus 攤提 <$30/天防通脹 */\n {id:'ct_steel60', nm:'外貿合約：鋼材庫存驗收 60', ic:'🚢', type:'stock', src:'steel', target:60, days:120, bonus:3200, minRank:6},\n {id:'ct_fuel80', nm:'外貿合約：燃料庫存驗收 80', ic:'⛽', type:'stock', src:'fuel', target:80, days:120, bonus:3000, minRank:5},\n];",
+  "byId": "const CMS_BY_ID385={};for(const c of CMS385)CMS_BY_ID385[c.id]=c;",
+  "empty": "function emptyCms385(){return {act:'',st:0,acc:0,hold:0,n:0,done:[]};}",
+  "state": "let cms385=emptyCms385();",
+  "hash": "function cmsHash385(a,b,c){let h=(a*374761393+b*668265263+c*2246822519)|0;h=Math.imul(h^(h>>>15),2246822519);h=Math.imul(h^(h>>>13),3266489917);h^=h>>>16;return(h>>>0)/4294967296;}",
+  "offers": "function cmsOffers385(){ // 決定性三選一：同 seed 同輪次恆同；tech 型完成過不再出\n  const elig=CMS385.filter(c=>rankIdx+1>=c.minRank&&!(c.type==='tech'&&cms385.done.includes(c.id)));\n  if(elig.length<=3)return elig.slice();\n  const out=[];let t=0;\n  while(out.length<3&&t<60){const i=Math.floor(cmsHash385(seed|0,cms385.n*31+t,3850)*elig.length)%elig.length;if(out.indexOf(elig[i])<0)out.push(elig[i]);t++;}\n  return out;\n}",
+  "save": "function cmsSave385(){const c=cms385;if(!c.act&&!c.n&&!c.done.length&&!c.acc&&!c.hold&&!c.st)return null;return {act:c.act,st:c.st,acc:c.acc,hold:c.hold,n:c.n,done:c.done.slice()};}",
+  "load": "function cmsLoad385(raw){ // 驗型失敗整欄棄用回零、任何路徑不拋（load 外層 try 會吞→蓋城）\n  try{\n    if(raw===undefined||raw===null)return emptyCms385();\n    if(typeof raw!=='object'||Array.isArray(raw))return emptyCms385();\n    const act=raw.act===undefined?'':raw.act;\n    if(typeof act!=='string'||(act!==''&&!CMS_BY_ID385[act]))return emptyCms385();\n    const o=emptyCms385();\n    for(const k of ['st','acc','hold','n']){const v=raw[k]===undefined?0:raw[k];if(!Number.isInteger(v)||v<0)return emptyCms385();o[k]=v;}\n    if(act!==''&&o.st<1)return emptyCms385();\n    const rd=raw.done===undefined?[]:raw.done;\n    if(!Array.isArray(rd))return emptyCms385();\n    const seen={};\n    for(const d2 of rd){if(typeof d2!=='string'||!CMS_BY_ID385[d2]||seen[d2])return emptyCms385();seen[d2]=1;o.done.push(d2);}\n    if(act!==''&&seen[act])return emptyCms385(); // 語意非法：進行中不可已在完成清單\n    o.act=act;return o;\n  }catch(e){return emptyCms385();}\n}",
+  "accept": "function cmsAccept385(i){\n  if(diff===3||cms385.act||rankIdx+1<3||pop<=50)return false; // T386b 補課：T385 卡面宣稱的 pop>50 門檻\n  const c=cmsOffers385()[i];if(!c)return false;\n  cms385.act=c.id;cms385.st=day;cms385.acc=0;cms385.hold=0;\n  toast('📋 接受委託：'+c.nm);return true;\n}",
+  "drop": "function cmsDrop385(){\n  if(!cms385.act)return false;\n  const c=CMS_BY_ID385[cms385.act];\n  cms385.act='';cms385.st=0;cms385.acc=0;cms385.hold=0;cms385.n++;\n  toast('📋 放棄委託：'+(c?c.nm:''),'bad');return true;\n}",
+  "daily": "  /* ===== T385 cms BEGIN（委託逐日結算：純讀本 tick 已算值，零亂數；未接單=零模擬副作用＝\n     兩釘種子在零接單路徑位元恆等；獎勵走一次性 money+=（里程碑先例，不入 income 防污染 fin/hist）） ===== */\n  if(diff!==3&&cms385.act){\n    const cAct385=CMS_BY_ID385[cms385.act];\n    if(cAct385){\n      const el385=day-cms385.st;\n      if(cAct385.type==='acc')cms385.acc+=cAct385.src==='steel'?steelUsed:cAct385.src==='trade'?tradeGold:0;\n      else if(cAct385.type==='hold'){const v385=cAct385.src==='transit'?transitRidership:cAct385.src==='happy'?Math.round(cityHappy*100)/100:0;cms385.hold=v385>=cAct385.target?cms385.hold+1:0;} /* T394b：happy 判定改用 2dp 捨入值＝與面板顯示同源——原值 0.695 時面板顯 70% 卻不計數（T394a 實測 44 個唯一邊界日），玩家視角=被騙 */\n      const stockV385=cAct385.type==='stock'?(cAct385.src==='steel'?steel:cAct385.src==='fuel'?fuel:0):0; // 純讀存量（零寫入紅線）\n      const done385=cAct385.type==='acc'?cms385.acc>=cAct385.target:cAct385.type==='hold'?cms385.hold>=cAct385.holdN:cAct385.type==='tech'?hasTech343(cAct385.src):cAct385.type==='stock'?(el385>=cAct385.days&&stockV385>=cAct385.target):false; // stock=期末驗收\n      if(done385){\n        money+=cAct385.bonus;toast('📋 委託完成：'+cAct385.nm+'　+$'+cAct385.bonus,'gold');sFanfare();spawnConfetti();\n        if(cms385.done.indexOf(cAct385.id)<0)cms385.done.push(cAct385.id);cms385.act='';cms385.st=0;cms385.acc=0;cms385.hold=0;cms385.n++; // done 只收不重複 id——重複完成照發獎但不重記，防重複項在下次 load 被驗型整欄棄用（測試抓到的真 bug）\n      }else if(el385>=cAct385.days){\n        toast('📋 委託過期：'+cAct385.nm,'bad'); // 失敗不毀城：零城市副作用（場景 lose 先例）\n        cms385.act='';cms385.st=0;cms385.acc=0;cms385.hold=0;cms385.n++;\n      }\n    }else{cms385.act='';cms385.st=0;cms385.acc=0;cms385.hold=0;} // 白名單防禦（load 驗型已擋，此為雙保險）\n  }\n  /* ===== T385 cms END ===== */",
+  "saveLine": "    {const c385=cmsSave385();if(c385)data.cms385=c385;} // T385：零委託狀態不落欄位，舊存檔 bytes 不變",
+  "loadLine": "    cms385=cmsLoad385(d.cms385); // T385：同構驗型（鐵律7 load 側；畸形整欄棄用回零不拋）",
+  "panel": "    inner+=statTab([{sec:'委託'},{k:'狀態',v:'沙盒模式無委託',u:'自由建造不設目標',t:'dim'}]);\n  }else if(cms385.act&&CMS_BY_ID385[cms385.act]){ // T386b：進行中優先於門檻 dim——簽約後人口波動跌破門檻仍須看得到自己的合約（測試抓到的呈現序 bug）\n    const c=CMS_BY_ID385[cms385.act],el=day-cms385.st;\n    const stockPv=c.type==='stock'?(c.src==='steel'?steel:c.src==='fuel'?fuel:0):0;\n    const prog=c.type==='acc'?Math.min(1,cms385.acc/c.target):c.type==='hold'?Math.min(1,cms385.hold/c.holdN):c.type==='stock'?Math.min(1,stockPv/c.target):hasTech343(c.src)?1:0;\n    const cur=c.type==='acc'?cms385.acc+' / '+c.target:c.type==='hold'?cms385.hold+' / '+c.holdN+' 天':c.type==='stock'?stockPv+' / '+c.target+'（期末驗收）':hasTech343(c.src)?'已研究':'研究中';\n    inner+=statTab([{sec:'進行中'},{k:c.ic+' '+c.nm,v:cur,u:'獎金 $'+c.bonus},{bar:prog},\n      {k:'剩餘天數',v:Math.max(0,c.days-el),u:'共 '+c.days+' 天',t:(c.days-el)<15?'warn':''}]);\n    inner+='<div style=\"margin:8px 0\"><button class=\"hbtn\" id=\"bCommDrop385\">🗑 放棄委託</button></div>';\n  }else if(rankIdx+1<3){\n    inner+=statTab([{sec:'委託'},{k:'狀態',v:'城市等級 3 解鎖',u:'目前 Lv.'+(rankIdx+1),t:'dim'}]);\n  }else if(pop<=50){\n    inner+=statTab([{sec:'委託'},{k:'狀態',v:'人口 50 解鎖',u:'目前 '+pop,t:'dim'}]);\n  }else{\n    const offers=cmsOffers385();\n    const rows=[{sec:'三選一（第 '+(cms385.n+1)+' 輪）'}];\n    for(const c of offers)rows.push({k:c.ic+' '+c.nm,v:'$'+c.bonus,u:'限 '+c.days+' 天'});\n    inner+=statTab(rows);\n    inner+='<div style=\"margin:8px 0;display:flex;gap:6px;flex-wrap:wrap\">';\n    offers.forEach((c,i)=>{inner+='<button class=\"hbtn\" id=\"bCommAcc385_'+i+'\">接受 '+c.ic+'</button>';});\n    inner+='</div>';\n  }\n  inner+=statTab([{sec:'紀錄'},{k:'已完成委託',v:cms385.done.length,\n    u:cms385.done.length?cms385.done.map(id=>CMS_BY_ID385[id]?CMS_BY_ID385[id].ic:'?').join(' '):'—'}]);"
+ }
+}

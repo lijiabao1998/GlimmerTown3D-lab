@@ -34,7 +34,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
     footprint(b, j => { if (c.occ[j] === b.id) c.occ[j] = 0; });
   };
   for (let k = 1; k < events.length; k++) {
-    const e = events[k], i = e.t === 'undo' || e.t === 'import' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
+    const e = events[k], i = e.t === 'undo' || e.t === 'import' || e.t === 'cms' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
     switch (e.t) {
       case 'import': throw new Error('重播：匯入事件只能是第一筆');
       case 'grow': {
@@ -145,6 +145,8 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
       }
       // D039（城市格式 8）：玩家的決策與科技完成——整座城的事，不改城市的樣子（政策、預算、研究、方向在模擬的狀態裡，不在城市模型裡）；`decisionsOf` 讀它們
       case 'policy': case 'budget': case 'research': case 'spec': case 'techdone': break;
+      // D045（城市格式 10）：市長委託——整座城的事，不改城市的樣子（委託的狀態在模擬的 cms385 裡）
+      case 'cms': break;
       // D040（城市格式 9）：資源耗盡——不改城市的樣子，只確認那一格有那一種井（歷史壞了要講出來）
       case 'depleted': {
         const b = c.buildings[c.occ[i] - 1];

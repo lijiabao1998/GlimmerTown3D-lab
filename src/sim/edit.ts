@@ -8,6 +8,7 @@ import { applyPolicy, ensurePol, stepBudget, type PolicyResult } from './rules/p
 import { SPEC_MIN_RANK, TECH343_BY_ID, pickSpec, startTech, techFee, techWhy } from './rules/tech.ts';
 import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
+import { cmsAccept, cmsDrop, cmsOffers, type CmsDef } from './rules/commission.ts';
 import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
 import type { Sim } from './day.ts';
 import type { Tile } from './rules/lab.ts';
@@ -236,6 +237,23 @@ export function chooseSpec(s: Sim, i: number): { ok: boolean; id: string | null;
   if (id === 'edu') recoverCov(s);
   s.city.history.push({ day: s.day, t: 'spec', id });   // D039
   return { ok: true, id };
+}
+
+// ---- 市長委託（D045）：玩家在 ☰「委託」面板按的。接受、放棄馬上生效（實驗線 cmsAccept385、cmsDrop385），記成世界歷史事件 cms；每天的結算在 stepDay（完成、過期的事件也在那裡記）----
+// 現在的三選一（決定性：世界種子＋輪次，同一輪恆同；等級不夠、沙盒時另外判斷，見 commissionState）
+export const commissionOffers = (s: Sim): CmsDef[] => cmsOffers(s.seed, s.rankIdx, s.cms);
+// 面板要顯示哪一種狀態（實驗線 65158–65187 的順序：沙盒 → 進行中 → 等級不到 3 → 人口不到 51 → 三選一）
+export type CommissionState = 'sandbox' | 'active' | 'rank' | 'pop' | 'offers';
+export const commissionState = (s: Sim): CommissionState => s.diff === 3 ? 'sandbox' : s.cms.act ? 'active' : s.rankIdx + 1 < 3 ? 'rank' : s.pop <= 50 ? 'pop' : 'offers';
+export function acceptCommission(s: Sim, i: number): CmsDef | null {
+  const c = cmsAccept(s.cms, i, { diff: s.diff, rankIdx: s.rankIdx, pop: s.pop, seed: s.seed, day: s.day });
+  if (c) s.city.history.push({ day: s.day, t: 'cms', ev: 'accept', id: c.id });
+  return c;
+}
+export function dropCommission(s: Sim): CmsDef | null {
+  const c = cmsDrop(s.cms);
+  if (c) s.city.history.push({ day: s.day, t: 'cms', ev: 'drop', id: c.id });
+  return c;
 }
 
 // 電：容量（燃煤電廠 75 棟起，52473；季節係數 55008）與有電、沒電的住商工棟數（昨天的分配，55154–55156）

@@ -560,6 +560,9 @@ await guard('./unit-d038-live.mjs', 'd038LiveGuards');   // D038：實驗線頁�
 await guard('./unit-d040-build.mjs', 'd040BuildGuards');   // D040：油井、礦場的建造規則黃金樣本（d040-build.json，tools/lab-build.mjs --set=d040）、資源格判定、原碼突變
 await guard('./unit-d044-build.mjs', 'd044BuildGuards');   // D044：天然氣井、太空研究中心的建造規則黃金樣本（d044-build.json，tools/lab-build.mjs --set=d044）、資源格判定、3×3 逐格判定、原碼突變
 await guard('./unit-d044.mjs', 'd044Guards');   // D044：天然氣井、太空研究中心的工具與拒絕、3×3 預覽、玩家蓋（一座一筆事件、整塊清樹清分區）、重播＝模擬、復原與拆、污染源、同一批東西用 2D 存檔寫法擺進去推 30 天逐欄相同、每 24 天一輪、接線突變
+await guard('./unit-d045.mjs', 'd045Guards');   // D045：市長委託（T385）的實驗線原文（14 段 sha256）逐項＝commission.ts（vm：11 條表、cmsHash 20,000 組、cmsOffers 6,000 個狀態、讀存 1,500 組、接單放棄 4,000 組、結算 500 段 × 40 天；突變 46＋47）
+await guard('./unit-d045-live.mjs', 'd045LiveGuards');   // D045：實驗線頁面實跑（11 個劇本逐列：三選一、接單、過期、完成、期末驗收、沙盒；D043 起步城 8 座 × 6 段 200 天）、day.ts 接線突變
+await guard('./unit-d045-wire.mjs', 'd045WireGuards');   // D045：動作與狀態順序、完成／過期結算、零副作用、存讀（cms385 實驗線格式）、世界歷史格式 10、大事記與通知、接線突變
 await guard('./unit-d040.mjs', 'd040Guards');   // D040：油井、礦場的工具與拒絕、玩家蓋井、枯竭事件時間軸、預先帶耗損的存檔、格式 9 編解碼與存讀、玩家蓋的＝存檔裡本來有的、大事記、資源圖圖層、接線突變
 await guard('./unit-d041.mjs', 'd041Guards');   // D041：緊急車輛——量缺口、鎖住、不搬：實驗線原文（車到了現場清旗標、只在 advance 裡動）、本線＝GV.step（V 系列 5 座 × 30 天逐日逐座）、車輛的量（處理件數、站、車上限）、逐幀迴圈本身不改模擬、本線沒有車
 await guard('./unit-d042.mjs', 'd042Guards');   // D042：合併提示一天多筆合成一則——一筆＝實驗線的字、多筆＝「今天 N 處合併」（2,000 個隨機清單、M1b／M2b 真的城）、cityView 接線、突變

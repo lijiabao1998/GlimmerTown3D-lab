@@ -14,13 +14,14 @@
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type CmsEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
 import { FLAG_LAYERS } from '../sim/rules/lab.ts';
 import { rdepOfSave, rdepPairs } from '../sim/rules/resource.ts';
 import { techSave } from '../sim/rules/tech.ts';
+import { cmsSave } from '../sim/rules/commission.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
 export const HISTORY_VER = 2;
@@ -37,10 +38,11 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // D026（城市格式 6）：fire [10,dDay,x,z,k]、burn [11,dDay,x,z,k,id]、crime [12,dDay,x,z,k]、abandon [13,dDay,x,z,k,id]、sick [14,dDay,x,z]、death [15,dDay,x,z]、
 // act [16,dDay,x,z,動作碼,cost]（動作碼 0 滅火、1 處理犯罪、2 治療）、拆除圖層碼 5＝焦土。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
 // D034（城市格式 7）：merge [17,dDay,x,z,k,v,…被吸收的建築編號]（邊長由 k 推：33、34 是 2，105、106 是 3；尾巴有幾個編號就是吸收了幾棟，1–9 個）。
+// D045（城市格式 10）：cms [24,dDay,事件碼,委託碼] 或完成時 [24,dDay,2,委託碼,獎金]（事件碼 0 接受、1 放棄、2 完成、3 過期；委託碼在 city.ts 的碼表）。
 // D040（城市格式 9）：depleted [23,dDay,x,z,k]（k 是 49 油井或 50 礦場）。
 // D039（城市格式 8）：policy [18,dDay,政策碼,改之前的值,改之後的值]、budget [19,dDay,類別碼,改之前的值,改之後的值]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]（碼表在 city.ts，只往後加）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge', 'policy', 'budget', 'research', 'spec', 'techdone', 'depleted'] as const;
+const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge', 'policy', 'budget', 'research', 'spec', 'techdone', 'depleted', 'cms'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
 // 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
@@ -113,6 +115,15 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
     case 'spec': { const id = f('id'); if (!isStr(id) || !SPEC_CODES.includes(id)) throw bad('城市方向'); return { day, t, id }; }
     case 'techdone': { const id = f('id'); if (!isStr(id) || !TECH_CODES.includes(id)) throw bad('完成的節點'); return { day, t, id }; }
     case 'depleted': { const [x, z] = xz(), k = int('k', 49, 50); return { day, t, x, z, k }; }   // D040
+    case 'cms': {   // D045：市長委託。完成帶獎金（整數），其餘沒有
+      const ev = f('ev'), id = f('id');
+      if (!isStr(ev) || !CMS_EVENTS.includes(ev)) throw bad('委託事件');
+      if (!isStr(id) || !CMS_CODES.includes(id)) throw bad('委託');
+      const e = ev as CmsEvent['ev'];
+      if (e === 'done') return { day, t, ev: e, id, bonus: int('bonus', 0, 1e6) };
+      if (f('bonus') !== undefined) throw bad('獎金（只有完成才有）');
+      return { day, t, ev: e, id };
+    }
     default: throw bad('種類');
   }
 }
@@ -122,7 +133,7 @@ const ROW_FIELDS: Record<string, string[]> = {
   doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'], pipe: ['x', 'z', 'cost', 'g'],
   fire: ['x', 'z', 'k'], burn: ['x', 'z', 'k', 'id'], crime: ['x', 'z', 'k'], abandon: ['x', 'z', 'k', 'id'], sick: ['x', 'z'], death: ['x', 'z'], act: ['x', 'z', 'what', 'cost'],
   merge: ['x', 'z', 'k', 'v'],   // D034：後面接被吸收的建築編號（不定長）
-  policy: ['key', 'from', 'value'], budget: ['cat', 'from', 'value'], research: ['id', 'fee'], spec: ['id'], techdone: ['id'], depleted: ['x', 'z', 'k'],   // D039：碼在 city.ts 的碼表；D040：depleted
+  policy: ['key', 'from', 'value'], budget: ['cat', 'from', 'value'], research: ['id', 'fee'], spec: ['id'], techdone: ['id'], depleted: ['x', 'z', 'k'], cms: ['ev', 'id', 'bonus'],   // D039：碼在 city.ts 的碼表；D040：depleted
 };
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
@@ -143,6 +154,8 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
       if (name === 'cat') return isInt(v) ? BUDGET_CODES[v] : undefined;
       if (name === 'id' && (t === 'research' || t === 'techdone')) return isInt(v) ? TECH_CODES[v] : undefined;
       if (name === 'id' && t === 'spec') return isInt(v) ? SPEC_CODES[v] : undefined;
+      if (name === 'ev' && t === 'cms') return isInt(v) ? CMS_EVENTS[v] : undefined;   // D045
+      if (name === 'id' && t === 'cms') return isInt(v) ? CMS_CODES[v] : undefined;
       if (name === 'from' && t === 'merge') return row.slice(2 + names.length);   // D034：合併的尾巴（D039：政策與預算的 from 是「改之前的值」，不能撞名）
       if (name === 'size') return undefined;                      // D034：邊長由 k 推（列裡不存）
       return v;
@@ -201,6 +214,7 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   o.sup = s.econ.supplies; o.gds = s.econ.goods;
   for (const [k, v] of [['fuel364', s.econ.fuel], ['steel364', s.econ.steel], ['shipCount', s.econ.shipCount], ['shipProgress', s.econ.shipProgress]] as const) { if (v > 0) o[k] = v; else delete o[k]; }
   // D038：科技 tech343（零狀態不落欄位，66770）與城市方向 spec386（沒選不落欄位，66772）；範本裡讀進來的舊值拿掉再按模擬現在的寫（畸形的欄位讀檔整個棄用，存回去就不再帶著）
+  { const cq = cmsSave(s.cms); if (cq) o.cms385 = cq; else delete o.cms385; }   // D045：市長委託 cms385（零狀態不落欄位，66771；範本裡的舊值拿掉再按模擬現在的寫）
   { const tq = techSave(s.tech, s.edu.tech); if (tq) o.tech343 = tq; else delete o.tech343; if (s.edu.spec) o.spec386 = s.edu.spec; else delete o.spec386; }
   // D036：資源耗損 rdep（66730、66765；稀疏的 [格索引, 已開採量]）。模擬的耗損跟範本讀進來的一樣就不碰（沒挖過的存檔位元組不變，範本裡的寫法照舊）；變了才寫（全空＝null）
   { const was = rdepOfSave(template.rdep, nn), now = s.res.rdep; let same = true; for (let i = 0; i < nn && same; i++) if (was[i] !== now[i]) same = false; if (!same) o.rdep = rdepPairs(now); }

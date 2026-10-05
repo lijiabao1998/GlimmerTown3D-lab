@@ -4,6 +4,7 @@
 import { DECISION_EVENTS, type CityEvent, type DecisionEvent } from './city.ts';
 import { ensurePol, POLICY_CATALOG, BUDGET_CATS, type PolState } from './rules/policy.ts';
 import { TECH343_BY_ID, SPEC386 } from './rules/tech.ts';
+import { CMS_BY_ID385 } from './rules/commission.ts';
 
 export interface DecisionState {
   pol: PolState;                        // 補齊的政策物件（ensurePol）
@@ -47,13 +48,17 @@ export function decisionsOf(history: readonly CityEvent[], start: Parameters<typ
   return st;
 }
 // ☰「大事記」：決策與科技完成，發生順序（面板再倒過來），每筆一行
-export interface ChronicleLine { day: number; kind: DecisionEvent['t'] | 'depleted'; text: string }
+export interface ChronicleLine { day: number; kind: DecisionEvent['t'] | 'depleted' | 'cms'; text: string }
 // 不需要起點：政策與預算的事件自己帶著「改之前的值」，白話文字讀得出「從多少調到多少」
 export function chronicleOf(history: readonly CityEvent[]): ChronicleLine[] {   // D040：資源耗盡（油井、礦場停產）也列，是這座城的大事
   const st = fresh({ pol: null, budget: { police: 1, fire: 1, health: 1, edu: 1 }, done: [], act: '', spec: null }), out: ChronicleLine[] = [];
   for (const e of history) {
     if (isDecision(e)) out.push({ day: e.day, kind: e.t, text: apply(st, e) });
     else if (e.t === 'depleted') out.push({ day: e.day, kind: 'depleted', text: `資源耗盡：${e.k === 49 ? '油井' : '礦場'}（${e.x}, ${e.z}）停產` });
+    else if (e.t === 'cms') {   // D045：市長委託的接受、放棄、完成、過期
+      const c = CMS_BY_ID385[e.id], nm = c ? c.nm : e.id;
+      out.push({ day: e.day, kind: 'cms', text: e.ev === 'accept' ? `接受委託：${c?.ic ?? ''} ${nm}（限 ${c?.days ?? '?'} 天、獎金 $${(c?.bonus ?? 0).toLocaleString()}）` : e.ev === 'drop' ? `放棄委託：${nm}` : e.ev === 'done' ? `委託完成：${nm}　+$${(e.bonus ?? 0).toLocaleString()}` : `委託過期：${nm}` });
+    }
   }
   return out;
 }

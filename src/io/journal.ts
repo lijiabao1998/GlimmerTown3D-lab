@@ -3,7 +3,7 @@
 //   接續編碼：緊湊列是差值編碼（天數、手勢編號跟上一列比），記住編到哪（PackState），新的事件接著編，不重編整份；
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
-import { ACT_CODES, BUDGET_CODES, POLICY_CODES, SPEC_CODES, TECH_CODES, type CityEvent } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, type CityEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
 export const PACK0: PackState = Object.freeze({ n: 0, d0: 0, g0: 0, h: 0x811c9dc5 }) as PackState;
@@ -54,6 +54,7 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'spec': row = [21, dd, SPEC_CODES.indexOf(e.id)]; break;
       case 'techdone': row = [22, dd, TECH_CODES.indexOf(e.id)]; break;
       case 'depleted': row = [23, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
+      case 'cms': row = e.ev === 'done' ? [24, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id), e.bonus ?? 0] : [24, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id)]; break;   // D045（城市格式 10）：完成才帶獎金
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);
