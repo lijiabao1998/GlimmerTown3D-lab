@@ -312,7 +312,8 @@ async function persistGuards(log, { lab, runs, play, KT, vrank }) {
     const s1 = loadCode(byId('P1/none'), KT, vrank).sim, h0 = s1.city.history.length;
     const r1 = setPolicy(s1, 'curfew', true), r2 = setPolicy(s1, 'curfew', false), r3 = setBudget(s1, 'edu', .1), r4 = setBudget(s1, 'nope', .1);
     if (!r1.ok || r2.ok || !r3 || r4) bad.push(`按鈕的回傳值不對：開宵禁 ${r1.ok}、馬上關（冷卻）${r2.ok}、預算＋${r3}、不認得的類別 ${r4}`);
-    if (s1.city.history.length !== h0) bad.push('政策與預算不該寫世界歷史（不加事件種類）');
+    // D039 起：真的改了的政策與預算寫世界歷史（宵禁開＝1 筆 policy、預算 +0.1＝1 筆 budget；冷卻中關宵禁、不認得的類別不記）
+    { const h = s1.city.history.slice(h0); if (h.length !== 2 || h[0].t !== 'policy' || h[0].key !== 'curfew' || h[0].from !== 0 || h[0].value !== 1 || h[1].t !== 'budget' || h[1].cat !== 'edu' || h[1].value !== 1.1) bad.push(`政策與預算的歷史事件不對（D039）：${J(h)}`); }
     realDay.stepDay(s1); seen.days++;
     const code = saveCode(s1, L.template, L.start), raw = decodeLabCode(code).save.raw;
     if (J(Object.keys(raw.pol ?? {})) !== J(Object.keys(ensurePol(null))) || raw.pol.curfew !== true) bad.push(`按了之後存的 pol 不是整個預設物件（curfew 開）：${J(raw.pol)?.slice(0, 80)}`);
@@ -352,6 +353,6 @@ async function persistGuards(log, { lab, runs, play, KT, vrank }) {
     const hit = M.saveCode(s0, L0.template, L0.start) !== good || M.saveCode(sNoPol, { ...L0.template, pol: 'x' }, L0.start) !== goodNo || M.saveCode(sOdd, LOdd.template, LOdd.start) !== goodOdd;
     seen.muts++; if (!hit) bad.push(`save.ts「${name}」沒抓到`);
   }
-  log(!bad.length, `D032 驗收 6：存檔與決定性——有政策的城（${seen.loads} 次讀檔）pol 原樣寫回、存→讀→再存的 pol／sb／rk 原樣；沒動政策的城不多欄位（範本有 pol:null 就寫 null）；按了之後寫整個預設物件與 sb、讀得回來、冷卻不存；政策與預算不寫世界歷史；讀檔擋非物件（字串、數字、陣列、true 當沒有政策，空物件照收）且推進不丟例外；同一張碼同一串動作每天雜湊相同；save.ts 改壞 ${MUT.length} 個要紅`,
+  log(!bad.length, `D032 驗收 6：存檔與決定性——有政策的城（${seen.loads} 次讀檔）pol 原樣寫回、存→讀→再存的 pol／sb／rk 原樣；沒動政策的城不多欄位（範本有 pol:null 就寫 null）；按了之後寫整個預設物件與 sb、讀得回來、冷卻不存；真的改了的政策與預算寫世界歷史（D039：policy、budget 各一筆）；讀檔擋非物件（字串、數字、陣列、true 當沒有政策，空物件照收）且推進不丟例外；同一張碼同一串動作每天雜湊相同；save.ts 改壞 ${MUT.length} 個要紅`,
     bad.slice(0, 5).join('；') || `${seen.trips} 次存讀往返、${seen.days} 個城日、save.ts 突變 ${seen.muts} 個全紅`);
 }

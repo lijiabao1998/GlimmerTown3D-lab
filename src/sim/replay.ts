@@ -9,7 +9,7 @@
 //   格式 7（D034）再套用 merge：吸收的建築埋掉、蓋 2×2 塔或 3×3 巨廈（巨廈清九格分區）。
 // 未知的事件種類直接丟例外（不猜）。純邏輯。
 import { decodeLabCode } from '../io/labcode.ts';
-import { cityFromLab, roadCode, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
+import { cityFromLab, roadCode, DECISION_EVENTS, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 
 interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
@@ -34,7 +34,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
     footprint(b, j => { if (c.occ[j] === b.id) c.occ[j] = 0; });
   };
   for (let k = 1; k < events.length; k++) {
-    const e = events[k], i = e.t === 'undo' || e.t === 'import' ? -1 : e.z * n + e.x;
+    const e = events[k], i = e.t === 'undo' || e.t === 'import' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
     switch (e.t) {
       case 'import': throw new Error('重播：匯入事件只能是第一筆');
       case 'grow': {
@@ -143,6 +143,8 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         base.set(nb.id, { age: 0, from: e.day });
         break;
       }
+      // D039（城市格式 8）：玩家的決策與科技完成——整座城的事，不改城市的樣子（政策、預算、研究、方向在模擬的狀態裡，不在城市模型裡）；`decisionsOf` 讀它們
+      case 'policy': case 'budget': case 'research': case 'spec': case 'techdone': break;
       case 'abandon': {
         const b = c.buildings[e.id - 1];
         if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可廢棄的建築 #${e.id}（歷史第 ${k + 1} 筆）`);

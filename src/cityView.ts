@@ -7,7 +7,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityStats, buildingAt, liveBuildings, type ActKind, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { CITY_EVENTS } from './sim/rules/events.ts';
 import { RANKS } from './sim/rules/rank.ts';
@@ -15,6 +15,7 @@ import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } 
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { chronicleOf } from './sim/decisions.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
@@ -469,7 +470,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>
     <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
     <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
-    <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>`;
+    <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
+    <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
@@ -772,6 +774,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (r.ok) { tcTip = ''; bui.toast(`${SPEC386[r.id!].ic} 城市方向：${SPEC386[r.id!].nm}`, 'gold'); saveNow(); } else tcTip = r.why ?? '選不了';
     renderTech(); return r;
   }
+  // D039：☰「大事記」——玩家的決策（政策、預算、開始研究、城市方向）與科技完成，世界歷史格式 8 的五種事件，新到舊一行一筆。只讀，不動狀態
+  const ch = $<HTMLElement>('#ch');
+  $<HTMLButtonElement>('#chX').onclick = () => { ch.hidden = true; };
+  ch.onclick = e => { if (e.target === ch) ch.hidden = true; };
+  const CHRON_MAX = 300;   // 最多列最近 300 筆（手機 DOM 不要太長）；總數照實講
+  function renderChronicle() {
+    if (!sim) return;
+    const all = chronicleOf(sim.city.history), shown = all.slice(-CHRON_MAX).reverse(), ol = $('#ch ol');
+    ol.replaceChildren(...shown.map(l => { const li = document.createElement('li'), b = document.createElement('b'), t = document.createElement('span'); li.dataset.kind = l.kind; b.textContent = `第 ${l.day.toLocaleString()} 天`; t.textContent = l.text; li.append(b, t); return li; }));
+    $('#ch .sub').textContent = all.length ? `共 ${all.length.toLocaleString()} 筆決策與科技完成，新到舊${all.length > CHRON_MAX ? `（只列最近 ${CHRON_MAX} 筆）` : ''}` : '還沒有——調個稅率、開一項政策、開始一項研究，就會記在這裡';
+    $('#ch .tip').textContent = '';
+  }
+  function openChronicle() { if (!sim) return; renderChronicle(); ch.hidden = false; }
   function openTech() {
     if (!sim) return;
     tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
@@ -797,6 +812,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
         ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
+        ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
         ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
@@ -817,6 +833,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'rank') openRank();
     else if (id === 'policy') openPolicy();
     else if (id === 'tech') openTech();
+    else if (id === 'chronicle') openChronicle();
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -961,6 +978,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
     if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
     if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
+    if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
@@ -981,9 +999,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
   // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）。
   // D012：讀檔時照實驗線重挑外觀（restyle）不列——那是讀檔的視覺遷移，不是城裡發生的事；歷史照記
-  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent>;
+  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent>;   // D039：決策與科技完成沒有座標、不屬於哪一格（☰「大事記」列它們）
   function lotEvents(c: City, x: number, z: number) {
-    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.x === x && e.z === z);
+    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
   }
   // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
   type Row = [string, string];
@@ -1474,6 +1492,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     policyApply: (k: string, v: unknown) => { const r = uiPolicy(k, v); return r ? { ok: r.ok } : null; },
     budgetApply: (cat: string, dir: 1 | -1) => uiBudget(cat, dir),
     policyState: () => sim ? { pol: sim.pol ? { ...sim.pol } : null, last: { ...sim.polLast }, budget: { ...sim.budget }, day: sim.day, schoolLunch: sim.edu.schoolLunch, edu: hashBytes(sim.g.EDU), money: sim.money, insured: lastRep ? lastRep.hazard.insured : 0 } : null,
+    // ---- D039 大事記（守衛與拍照用）：☰「大事記」面板的列（新到舊）與面板狀態 ----
+    chronicleRows: () => [...ui.querySelectorAll<HTMLElement>('#ch li')].map(li => ({ kind: li.dataset.kind ?? '', day: li.querySelector('b')?.textContent ?? '', text: li.querySelector('span')?.textContent ?? '' })),
+    chroniclePanel: () => ({ open: !ch.hidden, sub: $('#ch .sub').textContent }),
     // ---- D038 科技與專精（守衛與拍照用）：☰「科技與專精」面板的列、按面板上真的按鈕、目前的研究狀態 ----
     techRows: () => [...ui.querySelectorAll<HTMLElement>('#tc li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('.note')?.textContent ?? '' })),
     techPanel: () => ({ open: !tc.hidden, sub: $('#tc .sub').textContent, tip: $('#tc .tip').textContent, route: tcRoute, pick: tcPick, tabs: [...ui.querySelectorAll<HTMLButtonElement>('#tc .tabs button')].map(b => b.textContent ?? '') }),

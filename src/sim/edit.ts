@@ -4,7 +4,7 @@
 import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRect, tap, undoTxn, pushTxn, ROAD_COST, COST, type BuildState, type Txn } from './rules/build.ts';
 import { computePower, powerCap } from './rules/power.ts';
 import { rebuildCov, type SvcBudget } from './rules/fields.ts';
-import { applyPolicy, stepBudget, type PolicyResult } from './rules/policy.ts';
+import { applyPolicy, ensurePol, stepBudget, type PolicyResult } from './rules/policy.ts';
 import { SPEC_MIN_RANK, TECH343_BY_ID, pickSpec, startTech, techFee, techWhy } from './rules/tech.ts';
 import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
@@ -181,10 +181,11 @@ function recoverCov(s: Sim) {
 }
 // 套用一項政策：回傳 applyPolicy 的結果（ok＝真的改了；冷卻沒到、同值、不認得的鍵都不動）。沒套用成功也會補出預設物件（53750 先補預設物件），所以 s.pol 一定換成回傳的新物件
 export function setPolicy(s: Sim, k: string, value: unknown): PolicyResult {
-  const r = applyPolicy(s.pol, s.polLast, s.day, k, value);
+  const was = (ensurePol(s.pol) as Record<string, unknown>)[k], r = applyPolicy(s.pol, s.polLast, s.day, k, value);
   s.pol = r.pol;
   if (!r.ok) return r;
   s.polLast = r.last;
+  { const v = (r.pol as Record<string, unknown>)[k], num = (q: unknown) => typeof q === 'boolean' ? (q ? 1 : 0) : (q as number); s.city.history.push({ day: s.day, t: 'policy', key: k, from: num(was), value: num(v) }); }   // D039：真的改了才記（冷卻、同值、不認得的鍵在上面就回了）
   if (r.effects.coverage) { s.edu.schoolLunch = !!r.pol.schoolLunch; recoverCov(s); }   // 53754：營養午餐 → rebuildCov（教育場 ×1.25 或還原）；清運（回收）與電力（節能）本線每天開頭整張重算，不必當場動
   return r;
 }
@@ -192,19 +193,22 @@ export function setPolicy(s: Sim, k: string, value: unknown): PolicyResult {
 export function setBudget(s: Sim, cat: keyof SvcBudget | string, delta: number): boolean {
   const b = stepBudget(s.budget, cat, delta);
   if (b === s.budget) return false;
+  const was = (s.budget as unknown as Record<string, number>)[cat], now = (b as unknown as Record<string, number>)[cat];
   s.budget = b; recoverCov(s);
+  if (now !== was) s.city.history.push({ day: s.day, t: 'budget', cat, from: was, value: now });   // D039：夾到頭、數字沒變不記
   return true;
 }
 
-// ---- 科技與專精（D038）：玩家在 ☰「科技與專精」面板按的。研究要付的錢現在扣、進度每天由 stepDay 推（主計數迴圈之後，55245）；不寫世界歷史（同政策，要業主定的事 1）----
+// ---- 科技與專精（D038）：玩家在 ☰「科技與專精」面板按的。研究要付的錢現在扣、進度每天由 stepDay 推（主計數迴圈之後，55245）；開始研究、選方向記成世界歷史事件 research／spec（D039）----
 export interface TechActResult { ok: boolean; fee: number; why?: string }
 // 開始研究（startTech343 38557）：條件與費用照實驗線；回傳扣了多少（已經在做它＝成功、免費）。失敗講原因（canStartTech 的條件、錢不夠）
 export function startResearch(s: Sim, id: string): TechActResult {
   const n = TECH343_BY_ID[id], why = techWhy(n, s.tech, s.edu.tech);
   if (why) return { ok: false, fee: 0, why };
-  const r = startTech(id, s.tech, s.edu.tech, s.money, s.diff);
+  const was = s.tech.act, r = startTech(id, s.tech, s.edu.tech, s.money, s.diff);
   if (!r.ok) return { ok: false, fee: 0, why: `錢不夠：要 $${techFee(n, s.tech, s.diff).toLocaleString()}（現有 $${Math.floor(s.money).toLocaleString()}）` };
   s.money -= r.fee;
+  if (was !== id) s.city.history.push({ day: s.day, t: 'research', id, fee: r.fee });   // D039：再按正在做的節點不記
   return { ok: true, fee: r.fee };
 }
 // 選城市方向（specPick386 37852）：永久；城市等級 ≥ Lv.9、不是沙盒、還沒選過；選教育科技城時重建覆蓋場（教育場 ×1.08）
@@ -216,6 +220,7 @@ export function chooseSpec(s: Sim, i: number): { ok: boolean; id: string | null;
   if (!id) return { ok: false, id: null, why: '沒有這個方向' };
   s.edu.spec = id;
   if (id === 'edu') recoverCov(s);
+  s.city.history.push({ day: s.day, t: 'spec', id });   // D039
   return { ok: true, id };
 }
 

@@ -316,7 +316,7 @@ async function guards(log) {
         const q = loadCode(mutateD3(codes[id].code, fn), KT, vrank); seen.corrupt++;
         if (!q.ok || q.replayed || !want.test(q.note)) bad.push(`${what}：要「只用存檔」且原因對（${want}），讀回 ok ${q.ok}、replayed ${q.replayed}、note「${q.note}」`);
       };
-      if (codes.H1) tryMut('H1', d3 => { d3.f = 8; }, /比這一版（7）新/, '比 7 新的城市格式');
+      if (codes.H1) tryMut('H1', d3 => { d3.f = 9; }, /比這一版（8）新/, '比 8 新的城市格式');
       for (const [id, tcode, name] of [['H1', 10, '起火'], ['H1', 11, '燒毀'], ['H3', 12, '犯罪'], ['H3', 13, '廢棄'], ['H4', 14, '生病'], ['H13', 15, '死亡']]) {
         if (!codes[id]) continue;
         const has = decodeLabCode(codes[id].code).save.raw.d3.r.some(r => r[0] === tcode);
@@ -378,7 +378,7 @@ async function guards(log) {
     }
     const NEEDT = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'], lackT = NEEDT.filter(t => t === 'act' ? !seen.act : !seen.types.has(t));
     if (lackT.length) bad.push(`覆蓋不夠：沒出現過的事件 ${lackT.join('、')}`);
-    log(!bad.length, `D026 驗收 5、6、7：存檔與歷史——災禍旗標七層與 ab、bl 第 6 位逐格＝實驗線 save() 寫法另抄的一份；連推三天每天：城市與世界同步、重播＝模擬、地價待重算標得夠；存讀檔往返（含 restyle 的處理）逐項相同；歷史緊湊列來回、日誌接續編碼、城市格式（有災禍事件才 6）；壞資料與比 7 新的只用存檔；處置（滅火 $30、處理犯罪、治療 $50）扣款、旗標、act 事件、地價髒框、錢不夠不動；清焦土記 doze ruin、復原、往返；決定性`,
+    log(!bad.length, `D026 驗收 5、6、7：存檔與歷史——災禍旗標七層與 ab、bl 第 6 位逐格＝實驗線 save() 寫法另抄的一份；連推三天每天：城市與世界同步、重播＝模擬、地價待重算標得夠；存讀檔往返（含 restyle 的處理）逐項相同；歷史緊湊列來回、日誌接續編碼、城市格式（有災禍事件才 6）；壞資料與比 8 新的只用存檔；處置（滅火 $30、處理犯罪、治療 $50）扣款、旗標、act 事件、地價髒框、錢不夠不動；清焦土記 doze ruin、復原、往返；決定性`,
       bad.slice(0, 5).join('；') || `${HZ.length} 座城 × 3 天（${seen.days} 個城日）、層核對 ${seen.layers} 次、往返 ${seen.trips} 次、壞資料 ${seen.corrupt} 種、處置 ${seen.act} 種、清焦土 ${seen.doze} 次；事件種類 ${[...seen.types].filter(t => NEEDT.includes(t)).join('、')}`);
   }
 }

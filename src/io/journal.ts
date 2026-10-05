@@ -3,7 +3,7 @@
 //   接續編碼：緊湊列是差值編碼（天數、手勢編號跟上一列比），記住編到哪（PackState），新的事件接著編，不重編整份；
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
-import { ACT_CODES, type CityEvent } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, POLICY_CODES, SPEC_CODES, TECH_CODES, type CityEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
 export const PACK0: PackState = Object.freeze({ n: 0, d0: 0, g0: 0, h: 0x811c9dc5 }) as PackState;
@@ -47,6 +47,12 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'death': row = [15, dd, e.x, e.z]; break;
       case 'act': row = [16, dd, e.x, e.z, ACT_CODES.indexOf(e.what), e.cost]; break;
       case 'merge': row = [17, dd, e.x, e.z, e.k, e.v, ...e.from]; break;   // D034（城市格式 7）：尾巴是被吸收的建築編號
+      // D039（城市格式 8）：決策與科技完成。policy [18,dDay,政策碼,改之前,改之後]、budget [19,dDay,類別碼,改之前,改之後]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]
+      case 'policy': row = [18, dd, POLICY_CODES.indexOf(e.key), e.from, e.value]; break;
+      case 'budget': row = [19, dd, BUDGET_CODES.indexOf(e.cat), e.from, e.value]; break;
+      case 'research': row = [20, dd, TECH_CODES.indexOf(e.id), e.fee]; break;
+      case 'spec': row = [21, dd, SPEC_CODES.indexOf(e.id)]; break;
+      case 'techdone': row = [22, dd, TECH_CODES.indexOf(e.id)]; break;
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

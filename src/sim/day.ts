@@ -276,6 +276,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   const techPre = s.edu.tech.slice();                                    // 55219 住宅幸福的「科技進步」項在同一個大迴圈裡、早於 55245：當天完成的科技要到明天才進幸福（其餘讀科技的地方都在 55245 之後）
   const rs = advanceTech(s.tech, s.edu.tech, cnt as unknown as ResearchIn, s.edu.spec), techRep = { speed: rs.speed, finished: rs.finished };
   s.techSpeed = rs.speed;
+  if (rs.finished) s.city.history.push({ day: s.day + 1, t: 'techdone', id: rs.finished });   // D039：研究完成。這時 s.day 還是前一天的編號（下面才 s.day++），事件記「正在結算的這一天」，跟生長、災禍事件同一個規矩；玩家的決策記 s.day（結算之前）
   if (rs.finished && TECH_EDU343.includes(rs.finished)) { rebuildCov(w, g, s.budget, s.edu); s.landDirty = false; s.landBox = null; s.stale.fill(0); }
   // 54949 噪音（D017，rebuildNoise 53023）：照建築索引算；來源簽名變了（讀檔後第一天一定變）就把地價設成整張重算。
   // 本線的「整張重算」只算 stale 格，所以噪音變了的格要標 stale（其餘格的噪音沒變、地價基準的輸入沒變，算出來逐位相同）

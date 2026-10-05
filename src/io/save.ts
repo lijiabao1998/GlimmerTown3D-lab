@@ -14,7 +14,7 @@
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { ACT_CODES, CITY_FORMAT, MERGE_SIZE, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
@@ -37,8 +37,9 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // D026（城市格式 6）：fire [10,dDay,x,z,k]、burn [11,dDay,x,z,k,id]、crime [12,dDay,x,z,k]、abandon [13,dDay,x,z,k,id]、sick [14,dDay,x,z]、death [15,dDay,x,z]、
 // act [16,dDay,x,z,動作碼,cost]（動作碼 0 滅火、1 處理犯罪、2 治療）、拆除圖層碼 5＝焦土。種類碼只往後加，既有的號不改；列的編法沒變，所以 hv 仍是 2。
 // D034（城市格式 7）：merge [17,dDay,x,z,k,v,…被吸收的建築編號]（邊長由 k 推：33、34 是 2，105、106 是 3；尾巴有幾個編號就是吸收了幾棟，1–9 個）。
+// D039（城市格式 8）：policy [18,dDay,政策碼,改之前的值,改之後的值]、budget [19,dDay,類別碼,改之前的值,改之後的值]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]（碼表在 city.ts，只往後加）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge'] as const;
+const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge', 'policy', 'budget', 'research', 'spec', 'techdone'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
 // 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
@@ -93,6 +94,23 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
       return { day, t, x, z, k, size, v: int('v', 0, 9999), from: [...from] as number[] };
     }
     case 'act': { const [x, z] = xz(), what = f('what'); if (!ACT_CODES.includes(what as ActKind)) throw bad('處置'); return { day, t, x, z, what: what as ActKind, cost: num('cost') }; }
+    // D039（城市格式 8）：玩家的決策與科技完成。值的範圍照模擬會產生的（稅率 .5–2、預算 .5–1.5、開關 0／1），不照單全收
+    case 'policy': {
+      const key = f('key'), from = f('from'), value = f('value');
+      if (!isStr(key) || !POLICY_CODES.includes(key)) throw bad('政策');
+      const okV = (v: unknown): v is number => isNum(v) && (key.startsWith('tax') ? v >= 0.5 && v <= 2 : v === 0 || v === 1);
+      if (!okV(from) || !okV(value)) throw bad('政策的值');
+      return { day, t, key, from, value };
+    }
+    case 'budget': {
+      const cat = f('cat'), from = f('from'), value = f('value');
+      if (!isStr(cat) || !BUDGET_CODES.includes(cat)) throw bad('預算類別');
+      if (!isNum(from) || from < 0.5 || from > 1.5 || !isNum(value) || value < 0.5 || value > 1.5) throw bad('預算的值');
+      return { day, t, cat, from, value };
+    }
+    case 'research': { const id = f('id'); if (!isStr(id) || !TECH_CODES.includes(id)) throw bad('研究的節點'); return { day, t, id, fee: num('fee') }; }
+    case 'spec': { const id = f('id'); if (!isStr(id) || !SPEC_CODES.includes(id)) throw bad('城市方向'); return { day, t, id }; }
+    case 'techdone': { const id = f('id'); if (!isStr(id) || !TECH_CODES.includes(id)) throw bad('完成的節點'); return { day, t, id }; }
     default: throw bad('種類');
   }
 }
@@ -102,6 +120,7 @@ const ROW_FIELDS: Record<string, string[]> = {
   doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'], pipe: ['x', 'z', 'cost', 'g'],
   fire: ['x', 'z', 'k'], burn: ['x', 'z', 'k', 'id'], crime: ['x', 'z', 'k'], abandon: ['x', 'z', 'k', 'id'], sick: ['x', 'z'], death: ['x', 'z'], act: ['x', 'z', 'what', 'cost'],
   merge: ['x', 'z', 'k', 'v'],   // D034：後面接被吸收的建築編號（不定長）
+  policy: ['key', 'from', 'value'], budget: ['cat', 'from', 'value'], research: ['id', 'fee'], spec: ['id'], techdone: ['id'],   // D039：碼在 city.ts 的碼表
 };
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
@@ -117,7 +136,12 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
       if (name === 'g') return isInt(v) ? g0 + v : v;
       if (name === 'layer') return isInt(v) ? LAYERS[v] : undefined;
       if (name === 'what') return isInt(v) ? ACT_CODES[v] : undefined;
-      if (name === 'from') return row.slice(2 + names.length);   // D034：合併的尾巴
+      // D039：決策的碼（政策／預算類別／節點／方向）；值原樣
+      if (name === 'key') return isInt(v) ? POLICY_CODES[v] : undefined;
+      if (name === 'cat') return isInt(v) ? BUDGET_CODES[v] : undefined;
+      if (name === 'id' && (t === 'research' || t === 'techdone')) return isInt(v) ? TECH_CODES[v] : undefined;
+      if (name === 'id' && t === 'spec') return isInt(v) ? SPEC_CODES[v] : undefined;
+      if (name === 'from' && t === 'merge') return row.slice(2 + names.length);   // D034：合併的尾巴（D039：政策與預算的 from 是「改之前的值」，不能撞名）
       if (name === 'size') return undefined;                      // D034：邊長由 k 推（列裡不存）
       return v;
     };
