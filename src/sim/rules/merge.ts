@@ -119,3 +119,13 @@ export function mergeDay(w: World, c: MergeCtx): MergeRec[] {
 // 提示的字（55726、55753；合併一筆一則，金色）：巨廈帶人口與就業（MEGA_POP、MEGA_JOBS，jobs.ts）
 export const mergeToastText = (k: number, megaPop: number, megaJobs: number) =>
   k === 105 ? `🌆 住宅巨廈拔地而起！（居民 ${megaPop} 人）` : k === 106 ? `🌆 商業綜合體開幕！（就業 ${megaJobs}）` : k === 33 ? '🏙️ 住宅摩天樓落成！' : '🏙️ 商業摩天樓落成！';
+
+// D042（本線介面，實驗線一筆一則）：同一天的合併合成一則通知。只有一筆＝實驗線的字（上面）；兩筆以上＝「🏙️ 今天 N 處合併：住宅摩天樓 ×a、商業摩天樓 ×b、住宅巨廈 ×c、商業綜合體 ×d」
+// （種類照 33、34、105、106 的順序，沒有的不列；名稱＝內容表 lab-kinds.json）。點通知鏡頭過去的是第一筆（掃描順序）
+export const MERGE_KINDS = [33, 34, 105, 106] as const;
+export const MERGE_NAMES: Readonly<Record<number, string>> = { 33: '住宅摩天樓', 34: '商業摩天樓', 105: '住宅巨廈', 106: '商業綜合體' };
+export function mergesToastText(list: readonly { k: number }[], megaPop: number, megaJobs: number): string {
+  if (list.length === 1) return mergeToastText(list[0].k, megaPop, megaJobs);
+  const parts = MERGE_KINDS.map(k => [k, list.filter(m => m.k === k).length] as const).filter(([, n]) => n > 0).map(([k, n]) => `${MERGE_NAMES[k]} ×${n}`);
+  return `🏙️ 今天 ${list.length} 處合併：${parts.join('、')}`;
+}

@@ -14,7 +14,7 @@ import { kindTableFrom } from '../src/content/kindTable.ts';
 import * as realDay from '../src/sim/day.ts';
 import { decodeLabCode } from '../src/io/labcode.ts';
 import { MEGA_POP, MEGA_JOBS } from '../src/sim/rules/jobs.ts';
-import { mergeToastText } from '../src/sim/rules/merge.ts';
+import { mergesToastText } from '../src/sim/rules/merge.ts';
 import { d034Runs } from './d034-cities.mjs';
 
 const J = JSON.stringify, read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -47,6 +47,7 @@ export async function d034Smoke(withBrowser, log) {
   };
   const M1 = expectedMerges('M1b', 13), M2 = expectedMerges('M2b', 13);
   const loadCity = async (open, ev, code) => { await open('sample=seed516&clean=1'); await ev('__gt.clearSave()'); await ev(`localStorage.setItem('gt3d.v1.save', ${J(code)})`); await open(''); };
+  const MERGE_TOAST = /落成！|拔地而起！|開幕！|今天 \d+ 處合併/;   // D042：合併提示（單筆的三種字＋多筆合成的字；別的提示像「合併發生犯罪」不算）
   const toasts = ev => ev(`[...document.querySelectorAll('#toasts .toast')].map(e => e.textContent)`);
 
   await run('tower', '塔的提示與歷史', async ({ ev, open, waitFor }) => {
@@ -56,14 +57,23 @@ export async function d034Smoke(withBrowser, log) {
     const rep = await ev('__gt.mergeRep()'), tx = await toasts(ev), h = (await ev('__gt.history()')).filter(e => e.t === 'merge'), blds = await ev('__gt.conBuildings()');
     const want = M1.days[0];
     const gone = h.flatMap(e => e.from).filter(id => blds.find(b => b.id === id)?.gone).length, born = h.filter(e => blds.some(b => b.x === e.x && b.z === e.z && b.k === e.k && !b.gone && b.s === e.size)).length;
-    const texts = want.map(m => mergeToastText(m.k, MEGA_POP, MEGA_JOBS));
-    log(J(rep) === J(want) && want.length >= 3 && texts.every(t => tx.includes(t)) && h.length === n0 + want.length && h.every(e => e.from.length === 4 && e.size === 2) && gone === 4 * want.length && born === want.length,
-      'D034 驗收 7：M1b 推進一天——頁面回報的合併＝Node 端同一座城同一天本線 stepDay 的清單（住宅塔與商業塔共三筆）；每筆一則金色提示（字照實驗線）；歷史多了 merge 事件（吸收的編號 4 個）；被吸收的建築成了墓碑、新的塔活在根格',
+    const text = mergesToastText(want, MEGA_POP, MEGA_JOBS), mergeToasts = tx.filter(t => MERGE_TOAST.test(t));   // D042：同一天多筆合成一則
+    log(J(rep) === J(want) && want.length >= 3 && J(mergeToasts) === J([text]) && h.length === n0 + want.length && h.every(e => e.from.length === 4 && e.size === 2) && gone === 4 * want.length && born === want.length,
+      'D034 驗收 7＋D042：M1b 推進一天——頁面回報的合併＝Node 端同一座城同一天本線 stepDay 的清單（住宅塔與商業塔共三筆）；同一天三筆合成一則金色提示（D042；一筆時字照實驗線，見下一項）；歷史多了 merge 事件（吸收的編號 4 個）；被吸收的建築成了墓碑、新的塔活在根格',
       `回報 ${J(rep)}；提示 ${J(tx)}；merge 事件 ${h.length - n0} 筆；墓碑 ${gone}／新建築 ${born}；建築 ${alive0}→${blds.filter(b => !b.gone).length}`);
     // 點提示：鏡頭移到那一格（focusTile）
     await ev('__gt.focusTile(0,0), 1');
     const clicked = await ev(`(()=>{const t=[...document.querySelectorAll('#toasts .toast')].find(e=>e.textContent.includes('住宅摩天樓'));if(!t)return null;t.click();return 1;})()`);
-    log(clicked === 1, 'D034 驗收 7：點「住宅摩天樓落成」的提示不丟例外（鏡頭移過去）', `點到 ${clicked}`);
+    log(clicked === 1, 'D034 驗收 7＋D042：點合併的提示不丟例外（鏡頭移過去，第一筆）', `點到 ${clicked}`);
+    // D042：接著推到第 13 天，每天的合併提示＝Node 端那一天的清單合成的字（一筆＝實驗線的字、多筆＝「今天 N 處合併」；沒合併的日子沒有合併提示）
+    const bad = [];
+    for (let d = 1; d < M1.days.length; d++) {
+      await ev(`document.querySelectorAll('#toasts .toast').forEach(e => e.remove()), 1`);
+      await ev('__gt.simStep(1), 1');
+      const got = (await toasts(ev)).filter(t => MERGE_TOAST.test(t)), list = M1.days[d], wantT = list.length ? [mergesToastText(list, MEGA_POP, MEGA_JOBS)] : [];
+      if (J(got) !== J(wantT)) bad.push(`第 ${d + 1} 天 ${J(got)} ≠ ${J(wantT)}`);
+    }
+    log(!bad.length, 'D042 驗收：M1b 第 2–13 天每天的合併提示＝Node 端那一天清單合成的字（第 7、9 天各一筆＝實驗線的字「🏙️ 住宅摩天樓落成！」；沒合併的日子沒有提示）', bad.slice(0, 3).join('；') || `${M1.days.length - 1} 天全對（單筆日 ${M1.days.slice(1).filter(l => l.length === 1).length} 天）`);
   }, { W: 412, H: 860 });
 
   await run('card', '塔的建築卡', async ({ ev, open }) => {
@@ -80,9 +90,14 @@ export async function d034Smoke(withBrowser, log) {
     await loadCity(open, ev, M2.code);
     await ev('__gt.simStep(1), 1');
     const rep = await ev('__gt.mergeRep()'), tx = await toasts(ev), want = M2.days[0];
-    const texts = want.map(m => mergeToastText(m.k, MEGA_POP, MEGA_JOBS));
-    log(J(rep) === J(want) && want.some(m => m.k === 105) && want.some(m => m.k === 106) && want.every(m => m.size === 3) && texts.every(t => tx.includes(t)),
-      `D034 驗收 7：M2b 推進一天——巨廈與綜合體的提示字都出現（住宅巨廈「居民 ${MEGA_POP} 人」、商業綜合體「就業 ${MEGA_JOBS}」）、回報＝Node 端的清單、邊長 3`, `回報 ${J(rep)}；提示 ${J(tx)}`);
+    const text = mergesToastText(want, MEGA_POP, MEGA_JOBS), mergeToasts = tx.filter(t => MERGE_TOAST.test(t));
+    log(J(rep) === J(want) && want.some(m => m.k === 105) && want.some(m => m.k === 106) && want.every(m => m.size === 3) && J(mergeToasts) === J([text]) && text === '🏙️ 今天 2 處合併：住宅巨廈 ×1、商業綜合體 ×1',
+      'D034 驗收 7＋D042：M2b 推進一天——巨廈與綜合體同一天合成一則「今天 2 處合併：住宅巨廈 ×1、商業綜合體 ×1」、回報＝Node 端的清單、邊長 3', `回報 ${J(rep)}；提示 ${J(tx)}`);
+    // 第 4 天只有一座住宅巨廈：一筆＝實驗線的字（居民人數）
+    await ev('__gt.simStep(2), 1'); await ev(`document.querySelectorAll('#toasts .toast').forEach(e => e.remove()), 1`);
+    await ev('__gt.simStep(1), 1');
+    const t4 = (await toasts(ev)).filter(t => MERGE_TOAST.test(t)), w4 = M2.days[3];
+    log(w4.length === 1 && w4[0].k === 105 && J(t4) === J([`🌆 住宅巨廈拔地而起！（居民 ${MEGA_POP} 人）`]), `D042 驗收：M2b 第 4 天只有一座住宅巨廈——一筆＝實驗線的字「🌆 住宅巨廈拔地而起！（居民 ${MEGA_POP} 人）」`, `Node 端 ${J(w4.map(m => m.k))}；提示 ${J(t4)}`);
     const m = want.find(q => q.k === 105);
     await ev(`__gt.openTile(${m.x + 2},${m.z + 2})`);
     const card = await ev(CARD), row = card.rows.find(r => /合併成/.test(r)) ?? '';

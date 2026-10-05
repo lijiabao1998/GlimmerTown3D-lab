@@ -19,7 +19,7 @@ import { chronicleOf, depletedToastText } from './sim/decisions.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
-import { mergeToastText } from './sim/rules/merge.ts';
+import { mergesToastText } from './sim/rules/merge.ts';
 import { MEGA_POP, MEGA_JOBS } from './sim/rules/jobs.ts';
 import { SEWAGE_THRESHOLD442, WATER_HOPS472, SEWER_OK, SEWER_NO_PIPE, SEWER_NO_PLANT, SEWER_TOO_FAR, SEWER_NA, sewerServed } from './sim/rules/sewer.ts';
 import { RES_OIL, RES_ORE, OIL_RATE, ORE_RATE, RESOURCE_STOCK } from './sim/rules/resource.ts';
@@ -365,7 +365,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
     if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
-    for (const m of rep.merges) bui.toast(mergeToastText(m.k, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(m.x, m.z));   // D034：合併一筆一則（55726、55753）；點一下鏡頭過去
+    if (rep.merges.length) bui.toast(mergesToastText(rep.merges, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(rep.merges[0].x, rep.merges[0].z));   // D034：一筆的字照實驗線（55726、55753）；D042：同一天多筆合成一則；點一下鏡頭過去（第一筆）
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
     for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
     if (daysSinceSave >= SAVE_DAYS) saveNow();
