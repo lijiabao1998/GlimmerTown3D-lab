@@ -8,6 +8,8 @@ import { decodeLabCode } from '../src/io/labcode.ts';
 import * as realDay from '../src/sim/day.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { mk, tryPut, base, pipes, cluster, parksAt, range, services, m1 } from './d034-cities.mjs';
+import { commitOp } from '../src/sim/edit.ts';
+import { loadCode } from '../src/io/save.ts';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT } from './cdp.mjs';
@@ -99,3 +101,31 @@ export function d036Seeds() {
   return out;
 }
 void base; void pipes; void cluster; void parksAt; void range; void services;
+
+// D040：玩家自己用「油井」「礦場」工具蓋的井（不是存檔裡預先放好的）。底城＝W1 的種子、M1、一口井也不放；本線讀進來之後走 edit.ts 的 commitOp（跟畫面上點下去同一條路），
+// 在資源圖的空格上由小到大依格索引蓋 BUILT_OIL 口油井、BUILT_ORE 口礦場（先補足資金，這裡不測錢），回傳 { code, template, start, sim, put }（put＝[[kind, x, z]…]）。
+// 決定性：只用資源圖與格索引。
+export const BUILT_OIL = 4, BUILT_ORE = 3;
+export function builtBase() {
+  const { KT, vrank } = ctx(), code = mk(SEEDS.W1, 150, '玩家蓋井', b => { m1(b); });
+  return { code, KT, vrank };
+}
+export function builtWells() {
+  const { code, KT, vrank } = builtBase(), L = loadCode(code, KT, vrank);
+  if (!L.ok) throw new Error('玩家蓋井的底城讀不進：' + L.error);
+  const s = L.sim, N = s.w.N, put = [];
+  s.money = Math.max(s.money, 1e6);
+  for (const [kind, tool, want, n] of [['oil', 'oilwell', 1, BUILT_OIL], ['ore', 'mine', 2, BUILT_ORE]]) {
+    let q = 0;
+    for (let i = 0; i < N * N && q < n; i++) {
+      if (s.res.resource[i] !== want) continue;
+      const x = i % N, z = (i / N) | 0, r = commitOp(s, { k: 'tap', tool, x0: x, z0: z, x1: x, z1: z }, 0);
+      if (r.ok) { put.push([kind, x, z]); q++; }
+    }
+  }
+  return { ...L, put };
+}
+// 同一批井（builtWells 的 put）當成「存檔裡本來就有的」放進去：用 2D 存檔的寫法（builder）直接擺，不走玩家的工具。D040 守衛拿它跟玩家蓋的比（每天的開採、耗損、耗盡事件要一樣）
+export function builtAsBuilder(put) {
+  return mk(SEEDS.W1, 150, '玩家蓋井', b => { m1(b); for (const [kind, x, z] of put) if (!tryPut(b, x, z, kind === 'oil' ? 49 : 50)) throw new Error(`builder 擺不下 ${kind} (${x},${z})`); });
+}

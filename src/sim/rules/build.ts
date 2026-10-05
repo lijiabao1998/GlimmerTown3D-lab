@@ -26,7 +26,8 @@ export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
   park: 60, fire: 400, policeBox: 250, hospital: 600, clinic: 250, school: 350, library: 280, post: 320, cemetery: 350,
   water: 400, wpipe: 10,     // D019：水塔、配水管（37442）
   dump: 300,                 // D020：垃圾場（37442）
-  sewage: 500 };             // D033：污水廠（37442）
+  sewage: 500,               // D033：污水廠（37442）
+  oilwell: 1300, mine: 1500 };   // D040：油井、礦場（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
@@ -41,7 +42,9 @@ export const D019_TOOLS: readonly string[] = ['water', 'wpipe'];
 export const D020_TOOLS: readonly string[] = ['dump'];
 // D033：污水廠（點；canPlace 在實驗線 51384–51389 那一支：交通線、架空配電線、高壓走廊都擋，還要鄰水）
 export const D033_TOOLS: readonly string[] = ['sewage'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS]);
+// D040：油井、礦場（點；canPlace 在實驗線 51365 那一桶＋51385–51390 的通用判定＋51430／51431 的資源格判定：站在對的資源格上才行；1×1、沒有隨機、沒有覆蓋場）
+export const D040_TOOLS: readonly string[] = ['oilwell', 'mine'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS, ...D040_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -66,6 +69,7 @@ export interface BuildState {
   onPower?: () => void;   // 實驗線當場重算供電（computePower）的時機；本線每天開頭整張重算（day.ts），這裡只通知
   onPlace?: (tool: string, x: number, y: number, ok: boolean, cost: number) => void;
   onWater?: () => void;   // D019：實驗線放水塔、水管、拆除之後當場重算供水網（52405 computeWater）；本線每天開頭也重算（day.ts），這裡只通知   // 每一次 doPlace 之後（成功或失敗；cost＝實付，失敗 0）。給對拍記錄用，不改模擬
+  resource?: ArrayLike<number>;   // D040：資源圖（0 沒有、1 油田、2 礦藏；Sim.res.resource，實驗線的 RESOURCE）；沒給＝全 0（油井、礦場一律蓋不下去）
   protect?: boolean;      // D024：本線的施工把讀進來的鐵路、手工配電線、地下線、高架與立交當成看不見的（見 FOREIGN_LAYERS）；對拍實驗線的守衛不開
 }
 
@@ -131,6 +135,16 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.bld) return '已有建築';
       if (countNear(w, x, y, 1, (tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';
       return null; }
+    case 'oilwell': case 'mine': {                                              // 51365 桶＋51385–51390 通用判定＋51430／51431：1×1，站在對的資源格上
+      const q = seen(t, st.protect), r = st.resource ? st.resource[idx(w, x, y)] : 0;
+      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
+      if (t.road || q.rail || t.tram) return '交通線上不能建造';
+      if (q.lv475) return '架空配電線／電線桿擋住';
+      if (t.hv471 || t.ug471) return '高壓電力走廊擋住';
+      if (t.bld) return '已有建築';
+      if (toolId === 'oilwell' && r !== 1) return '需油田資源格';                // 51430
+      if (toolId === 'mine' && r !== 2) return '需礦藏資源格';                    // 51431
+      return null; }
     case 'wpipe':                                                               // 51312–51315：陸地、還沒有水管就行（路、分區、建築底下都可以鋪）
       if (t.t !== 2 && t.t !== 1) return '只能鋪在陸地上';
       if (t.wp) return '已有水管';
@@ -174,6 +188,8 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
     case 'cemetery': c = COST.cemetery; break;                                  // 51533
     case 'dump': c = COST.dump; break;                                          // 51534
     case 'sewage': c = COST.sewage; break;                                      // 51578
+    case 'oilwell': c = COST.oilwell; break;                                    // 51614（D040）
+    case 'mine': c = COST.mine; break;                                          // 51615
     case 'doze': c = t.crater ? 120 : COST.doze; break;                         // 51546：隕石坑 120
   }
   if (toolId !== 'doze' && t.tree) c += COST.doze;                              // 51623（stad、地形筆刷也不加，不在本卡）
@@ -352,6 +368,12 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
       break;
     case 'sewage':                                                              // 52180–52182：變體抽一次亂數 ri(3)；沒有覆蓋場、不是污染源
       t.bld = { k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      break;
+    case 'oilwell':                                                             // 52325：沒有隨機（v 固定 0）、沒有覆蓋場；抽取見 tick() 資源區塊（resource.ts）
+      t.bld = { k: 49, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      break;
+    case 'mine':                                                                // 52328
+      t.bld = { k: 50, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       break;
     case 'doze':
       doze(st, t, x, y);

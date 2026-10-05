@@ -19,7 +19,7 @@ import { fieldsOf } from '../src/sim/rules/fields.ts';
 import { encodeLabCode } from '../src/io/labcode.ts';
 import { saveCode, loadCode, packHistory, unpackHistory, historyFormat } from '../src/io/save.ts';
 import { packMore, PACK0 } from '../src/io/journal.ts';
-import { cityStats } from '../src/sim/city.ts';
+import { cityStats, CITY_FORMAT } from '../src/sim/city.ts';
 import { actAt } from '../src/sim/act.ts';
 import { commitOp, undoOp } from '../src/sim/edit.ts';
 import { syncMismatch, replayDiff, roundTrip, landStale } from './unit-d011-edit.mjs';
@@ -316,7 +316,7 @@ async function guards(log) {
         const q = loadCode(mutateD3(codes[id].code, fn), KT, vrank); seen.corrupt++;
         if (!q.ok || q.replayed || !want.test(q.note)) bad.push(`${what}：要「只用存檔」且原因對（${want}），讀回 ok ${q.ok}、replayed ${q.replayed}、note「${q.note}」`);
       };
-      if (codes.H1) tryMut('H1', d3 => { d3.f = 9; }, /比這一版（8）新/, '比 8 新的城市格式');
+      if (codes.H1) tryMut('H1', d3 => { d3.f = CITY_FORMAT + 1; }, new RegExp(`比這一版（${CITY_FORMAT}）新`), `比 ${CITY_FORMAT} 新的城市格式`);
       for (const [id, tcode, name] of [['H1', 10, '起火'], ['H1', 11, '燒毀'], ['H3', 12, '犯罪'], ['H3', 13, '廢棄'], ['H4', 14, '生病'], ['H13', 15, '死亡']]) {
         if (!codes[id]) continue;
         const has = decodeLabCode(codes[id].code).save.raw.d3.r.some(r => r[0] === tcode);

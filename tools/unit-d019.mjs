@@ -257,7 +257,7 @@ async function guards(log) {
         let msg = ''; try { unpackHistory(rr, N); msg = '竟然讀得進去'; } catch (e) { msg = e.message; }
         if (!want.test(msg)) bad.push(`${name}：${msg}`);
       }
-      log(!bad.length && f0 === 4 && CITY_FORMAT === 8,   // 現行格式 D039 起是 8（決策事件）、D034 起 7（合併事件）、D026 起 6（災禍事件）；只有水管事件的存檔仍寫 5、都沒有寫 4
+      log(!bad.length && f0 === 4 && CITY_FORMAT === 9,   // 現行格式 D040 起是 9（資源耗盡）、D039 起 8（決策事件）、D034 起 7（合併事件）、D026 起 6（災禍事件）；只有水管事件的存檔仍寫 5、都沒有寫 4
         'D019 驗收 5：歷史——新城拉 10 格水管（$10／格）、放水塔（$400）、拆一格水管、再拉、復原：事件是 pipe／place／doze wp／undo，城市模型與重播的水管圖層＝模擬；存檔（格式 5、wp 圖層）讀回逐格、逐筆相同；緊湊列 [9,…] 與拆除圖層碼 4 解得回來、竄改擋下；沒有水管事件的存檔照寫格式 4',
         bad.join('；') || `水管事件 ${pipes} 筆、拆水管 ${dozeWp} 筆；沒水管時格式 ${f0}、有水管 5`);
     }

@@ -58,7 +58,7 @@ export function impl3d(Bm = B, water = null) {
       rebuildCov(w, g, c.budget, edu);
       const rng = labRng(c.seed, true);
       st = { w, g, budget: { ...c.budget }, rng, money: c.money0, diff: c.diff, tech: c.tech, spec: c.spec, landDirty: c.land[0], landBox: c.land[1] ? [...c.land[1]] : null,
-        txn: null, dozeArm: null, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]), ...(water ? { onWater: () => water(w) } : {}) };
+        txn: null, dozeArm: null, resource: c.resource ?? undefined, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]), ...(water ? { onWater: () => water(w) } : {}) };
       stack = [];
     },
     canPlace: (t, x, y) => Bm.canPlace(st, t, x, y), placeCost: (t, x, y) => Bm.placeCost(st, t, x, y), path: op => Bm.roadDraftTiles(op.x0, op.y0, op.x1, op.y1),

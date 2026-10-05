@@ -15,7 +15,7 @@ import { fnv1a } from '../src/sim/rng.ts';
 import { CONFIGS, preloadOf, injectLab } from './lab-configs.mjs';
 import { compactRows } from './d027-lab.mjs';
 import { PROBE as PROBE34 } from './d034-lab.mjs';
-import { d036Runs, d036Seeds, W_DAYS } from './d036-cities.mjs';
+import { d036Runs, d036Seeds, W_DAYS, builtWells } from './d036-cities.mjs';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { loadCode, saveCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
@@ -25,16 +25,25 @@ const J = JSON.stringify;
 export const SEED_CHUNK = 30;
 export const RT_DAYS = 3;   // rt：本線存出來的碼，實驗線讀進來再推幾天
 export const RT_PLAYS = { W2: 13, W3: 2, W4: 30 };   // [城, 本線先推幾天再存]
+// D040：玩家自己蓋的井（builtWells：W1 的底城、油井 4 口、礦場 3 口，走 commitOp）——本線推 [天數] 天再存：13 天（耗損剛開始）、79 天（油井剩 3，實驗線讀進來第 1 天抽完 240）、
+// 81 天（油井已耗盡、碼裡有 depleted 事件，實驗線讀進來之後油井不再抽）
+export const RT_BUILT = [13, 79, 81];
 let rtCache = null;
 export function d036Rt() {
   if (rtCache) return rtCache;
   const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
   const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank, all = d036Runs();
-  return rtCache = Object.entries(RT_PLAYS).map(([id, days]) => {
+  const mine = Object.entries(RT_PLAYS).map(([id, days]) => {
     const r = all.find(q => q.id === id), L = loadCode(r.code, KT, vrank); if (!L.ok) throw new Error(`rt ${id}：本線讀不進 ${L.error}`);
     for (let d = 0; d < days; d++) stepDay(L.sim);
     return { id: `${id}@${days}`, code: saveCode(L.sim, L.template, L.start), days: RT_DAYS };
   });
+  const built = RT_BUILT.map(days => {
+    const L = builtWells();
+    for (let d = 0; d < days; d++) stepDay(L.sim);
+    return { id: `B@${days}`, code: saveCode(L.sim, L.template, L.start), days: RT_DAYS, put: L.put };
+  });
+  return rtCache = [...mine, ...built];
 }
 
 // RDEP、RESOURCE 的統計與庫存：字串的格式本線 tools/unit-d036.mjs statsOf 逐字相同

@@ -34,14 +34,14 @@ const MUTANTS = [
   ['造價漏了污水廠', 'placeCost', "case 'sewage':c=COST.sewage;break;", "case 'sewage':c=0;break;"],
 ];
 const MUTANTS_3D = [
-  ['污水廠造價 500→501', 'sewage: 500 };', 'sewage: 501 };'],
+  ['污水廠造價 500→501', 'sewage: 500,', 'sewage: 501,'],
   ['污水廠變體 ri(3)→ri(4)', 'k: 27, lv: 1, v: st.rng.ri(3)', 'k: 27, lv: 1, v: st.rng.ri(4)'],
   ['污水廠不清樹', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0;', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.zone = 0;'],
   ['污水廠不清分區', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0;', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0;'],
   ['鄰水門檻 2→3', "(tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';", "(tt: Tile) => tt.t === 0) < 3) return '需鄰近水域(≥2格)';"],
   ['鄰水範圍 3×3→5×5', 'countNear(w, x, y, 1, (tt: Tile) => tt.t === 0)', 'countNear(w, x, y, 2, (tt: Tile) => tt.t === 0)'],
   ['造價漏了污水廠', "case 'sewage': c = COST.sewage; break;", "case 'sewage': c = 0; break;"],
-  ['canPlace 漏了「只能蓋在陸地上」', "      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';\n      if (t.road || q.rail || t.tram)", "      if (t.road || q.rail || t.tram)"],
+  ['canPlace 漏了「只能蓋在陸地上」', "      const q = seen(t, st.protect);\n      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';\n      if (t.road || q.rail || t.tram)", "      const q = seen(t, st.protect);\n      if (t.road || q.rail || t.tram)"],   // D040：油井、礦場的 case 也有同樣三行（第一行不同），錨點帶上第一行才剛好一處
 ];
 const NEED = {
   'build:sewage': 40, 'civic-reason:需鄰近水域(≥2格)': 30, 'civic-reason:只能蓋在陸地上': 10, 'civic-reason:交通線上不能建造': 5, 'civic-reason:已有建築': 15, 'civic-reason:焦土需先清理': 2, 'civic-reason:隕石坑需先剷除': 2,

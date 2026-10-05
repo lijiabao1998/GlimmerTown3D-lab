@@ -63,12 +63,13 @@ export function rdepPairs(rdep: ArrayLike<number>): number[][] | null {
   return out.length ? out : null;
 }
 
-export interface ResourceField { resource: Uint8Array; rdep: Uint16Array }
+export interface ResourceField { resource: Uint8Array; rdep: Uint16Array; depleted?: number[] }   // depleted（D040）：今天耗盡的井的格子索引（stepDay 每天開頭清空、抽取時推進去；不影響抽取量與耗損）
 
 // 55131–55146：一口井今天的抽取量（也把它記進耗損）。kind＝RES_OIL（油井 k49）或 RES_ORE（礦場 k50）；root＝這口井的格子索引（1×1）。回傳抽了多少（沒抽＝0）
 export function extractWell(f: ResourceField, root: number, kind: number): number {
   if (f.resource[root] !== kind || f.rdep[root] >= RESOURCE_STOCK) return 0;
   const ext = Math.min(kind === RES_OIL ? OIL_RATE : ORE_RATE, RESOURCE_STOCK - f.rdep[root]);
   f.rdep[root] += ext;
+  if (f.rdep[root] >= RESOURCE_STOCK) f.depleted?.push(root);   // D040：這一口今天抽到 240，記下來（day.ts 記成 depleted 事件）
   return ext;
 }

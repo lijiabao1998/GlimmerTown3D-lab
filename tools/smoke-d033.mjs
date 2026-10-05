@@ -1,6 +1,6 @@
 // D033 煙霧測試：污水的瀏覽器半邊（驗收 8）。由 tools/smoke.mjs 呼叫；
 // 也能單獨跑：node tools/smoke-d033.mjs（先 npm run build；退出碼 0＝綠燈、1＝紅燈）。每一段一個 Chrome。
-//   ui      手機直式 360×740、真的觸控：「公共設施」14 種兩排（污水廠排最後，每一顆 ≥ 44×44、都在畫面裡）；選污水廠，點內陸的空地被擋下來（講「需鄰近水域(≥2格)」、錢與歷史不動），
+//   ui      手機直式 360×740、真的觸控：「公共設施」（D033 時 14 種兩排、污水廠排最後；D040 起 16 種三排、污水廠倒數第三，每一顆 ≥ 44×44、都在畫面裡）；選污水廠，點內陸的空地被擋下來（講「需鄰近水域(≥2格)」、錢與歷史不動），
 //           點水邊的空地蓋成（扣 $500、歷史 place k 27）；放下工具點它，建築卡寫「污水網」
 //   card    煙霧城（tools/d033-cities.mjs d033SmokeCity：人口 1176、四種接管狀態的住宅都有）：每一棟住宅的「污水」列＝Node 端用 sewerServed 重算的結果與原因（已接管：沿管幾格；沒貼管線；
 //           管網裡沒有污水廠；超過 90 格），四種都看得到；二級與三級住宅的後果字（升三級的關、二級升不到三級、高密度污水 −4%）；建築卡真的把那一列印出來。
@@ -67,9 +67,9 @@ export async function d033Smoke(withBrowser, log) {
     await tapBtn('.tool[data-t="civic"]');
     const btns = await ev(`[...document.querySelectorAll('#civicSub button')].map(b=>{const r=b.getBoundingClientRect();return [b.dataset.c,Math.round(r.width),Math.round(r.height),r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,Math.round(r.top),b.textContent];})`);
     const rows = new Set(btns.map(b => b[4])).size;
-    log(btns.length === 14 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 2 && btns.at(-1)[0] === 'sewage' && /污水廠/.test(btns.at(-1)[5]) && /500/.test(btns.at(-1)[5]),
-      'D033 驗收 8：手機 360×740「公共設施」14 種兩排，最後一顆是污水廠（$500），每一顆 ≥ 44×44 且在畫面裡',
-      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；最後一顆 ${J(btns.at(-1))}`);
+    log(btns.length === 16 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-3)[0] === 'sewage' && /污水廠/.test(btns.at(-3)[5]) && /500/.test(btns.at(-3)[5]),
+      'D033 驗收 8：手機 360×740「公共設施」污水廠是 D033 加的一顆（$500）；D040 起 16 種三排、污水廠退到倒數第三顆，每一顆 ≥ 44×44 且在畫面裡',
+      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；污水廠 ${J(btns.at(-3))}`);
     await tapBtn('#civicSub button[data-c="sewage"]');
     const L0 = await ev('__gt.layers()'); let near = null;                  // 新城的水不在預設的畫面裡：先把鏡頭移到第一個水邊空地
     for (let i = 0; i < L0.n * L0.n && !near; i++) if (free(i, L0) && waterAround(L0, i) >= 2) near = [i % L0.n, (i / L0.n) | 0];

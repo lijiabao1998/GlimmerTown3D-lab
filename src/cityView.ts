@@ -15,7 +15,7 @@ import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } 
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
-import { chronicleOf } from './sim/decisions.ts';
+import { chronicleOf, depletedToastText } from './sim/decisions.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
@@ -30,6 +30,7 @@ import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { Preview } from './render/preview.ts';
+import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
 import { overLevel } from './render/ground.ts';
@@ -163,6 +164,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const newJid = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 2 ** 32).toString(36);   // 介面層：日誌編號只要不撞
   const dropJournal = (id: string) => { if (!id) return; dropped.add(id); if (mineRows?.id === id) mineRows = null; jstore?.drop(id).catch(() => { /* 刪不掉就留著，不影響新城 */ }); };
   const preview = new Preview();
+  const resHints = new ResourceHints();                                     // D040：資源圖（油田黃、礦藏藍）；選了油井、礦場工具或 ☰「顯示資源圖」才畫
+  let showRes = false;
   const haz = new HazardMarks();                                            // D026：災禍標記（一個 InstancedMesh，空的不畫）
   const timing: Record<string, number> = {};
   // D014 施工：一座城一份施工資料（屋齡、每格最高點）；builtDay＝目前場景是哪一天建的；visT＝動畫時間（只在播放時走）
@@ -273,7 +276,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t3 = performance.now();
     retire(built);
     city = c; built = b; label = name; lastCode = code;
-    built.scene.add(preview.mesh, haz.mesh);
+    built.scene.add(preview.mesh, haz.mesh); attachRes();
     syncCon();
     delete timing.rebuild;
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
@@ -323,7 +326,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t0 = performance.now(), b = makeScene(city, true), t1 = performance.now();
     retire(built);
     built = b;
-    built.scene.add(preview.mesh, haz.mesh);
+    built.scene.add(preview.mesh, haz.mesh); attachRes();
     syncCon();
     Object.assign(timing, { scene: t1 - t0 }, b.timing);
     const u = new URL(location.href);
@@ -339,7 +342,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t0 = performance.now(), b = makeScene(city, fresh), t1 = performance.now();
     retire(built);
     built = b;
-    built.scene.add(preview.mesh, haz.mesh);                             // D011：施工預覽跟著搬到新場景（D026：災禍標記也是）
+    built.scene.add(preview.mesh, haz.mesh); attachRes();                             // D011：施工預覽跟著搬到新場景（D026：災禍標記也是）
     syncCon();
     Object.assign(timing, { scene: t1 - t0, rebuild: t1 - t0, rebuildAll: performance.now() - t0 }, b.timing);   // rebuildAll＝建場景＋同步工地（D015 判這一段）
     rebuilds++; daysSinceBuild = 0; dirtyScene = false; urgentRebuild = false;
@@ -361,6 +364,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
+    if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
     for (const m of rep.merges) bui.toast(mergeToastText(m.k, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(m.x, m.z));   // D034：合併一筆一則（55726、55753）；點一下鏡頭過去
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
     for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
@@ -783,7 +787,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!sim) return;
     const all = chronicleOf(sim.city.history), shown = all.slice(-CHRON_MAX).reverse(), ol = $('#ch ol');
     ol.replaceChildren(...shown.map(l => { const li = document.createElement('li'), b = document.createElement('b'), t = document.createElement('span'); li.dataset.kind = l.kind; b.textContent = `第 ${l.day.toLocaleString()} 天`; t.textContent = l.text; li.append(b, t); return li; }));
-    $('#ch .sub').textContent = all.length ? `共 ${all.length.toLocaleString()} 筆決策與科技完成，新到舊${all.length > CHRON_MAX ? `（只列最近 ${CHRON_MAX} 筆）` : ''}` : '還沒有——調個稅率、開一項政策、開始一項研究，就會記在這裡';
+    $('#ch .sub').textContent = all.length ? `共 ${all.length.toLocaleString()} 筆大事（決策、科技完成、井枯竭），新到舊${all.length > CHRON_MAX ? `（只列最近 ${CHRON_MAX} 筆）` : ''}` : '還沒有——調個稅率、開一項政策、開始一項研究，就會記在這裡';
     $('#ch .tip').textContent = '';
   }
   function openChronicle() { if (!sim) return; renderChronicle(); ch.hidden = false; }
@@ -812,6 +816,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
         ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
+        ...(sim ? [{ id: 'resview', label: showRes ? '隱藏資源圖' : '顯示資源圖', note: '油田（黃）與礦藏（藍）；選油井、礦場工具時自動顯示（D040）', icon: 'layers' as const }] : []),
         ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
         ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
@@ -834,6 +839,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'policy') openPolicy();
     else if (id === 'tech') openTech();
     else if (id === 'chronicle') openChronicle();
+    else if (id === 'resview') { showRes = !showRes; syncRes(); invalidate(); bui.toast(showRes ? '資源圖：油田（黃）、礦藏（藍）' : '資源圖已隱藏'); }   // D040
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -847,6 +853,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 
   function syncUi() {
     if (!city) return;
+    syncRes();                                                            // D040：蓋了井、場景重建、換城之後，資源圖要跟著（只畫還能蓋的格子）
     const c = city, live = liveBuildings(c), kinds = new Set(live.map(b => b.k)).size, pw = sim ? powerStatus(sim) : null;
     const k = sim ? simCounts(sim) : null;
     // 讀檔後、過第一天之前，人口與幸福還沒算（實驗線 load 也不重算，模擬照它；審查：之前狀態列直接顯示 0）：有住宅就先顯示「—」
@@ -860,7 +867,26 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     });
     syncDock();
   }
+  // D040：資源圖。要看哪幾種：☰「顯示資源圖」＝兩種；否則拿著油井（油田）或礦場（礦藏）的工具才畫對應的那一種。只畫還能蓋井的格子（陸地、沒路、沒建築）
+  // 資源圖只有「有畫」的時候才在場景裡（沒畫時不佔場景：D015 的黃金樣本逐位元組比場景裡的實例網格，多一個空的也會不同）
+  function attachRes() {
+    if (!built) return;
+    if (resHints.shown) { if (resHints.mesh.parent !== built.scene) built.scene.add(resHints.mesh); } else resHints.mesh.removeFromParent();
+  }
+  function syncRes() {
+    if (!sim || !city) { resHints.clear(); attachRes(); return; }
+    const kinds = showRes ? [1, 2] : tool === 'civic' && civicTool === 'oilwell' ? [1] : tool === 'civic' && civicTool === 'mine' ? [2] : [];
+    if (!kinds.length) { resHints.clear(); attachRes(); return; }
+    const w = sim.w, n = w.N, cells: { x: number; z: number; y: number; kind: number }[] = [], rs = sim.res.resource;
+    for (let i = 0; i < n * n; i++) {
+      const r = rs[i]; if (!r || !kinds.includes(r)) continue;
+      const t = w.tiles[i]; if (t.t === 0 || t.road || t.bld) continue;
+      cells.push({ x: i % n, z: (i / n) | 0, y: Math.max(0, tileTop(city, i)), kind: r });
+    }
+    resHints.set(cells); attachRes(); needsRender = true;
+  }
   function syncDock() {
+    syncRes();
     bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS, prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
@@ -1027,6 +1053,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         const n = new Map<string, number>(); for (const id of e.from) { const b = c.buildings[id - 1]; const nm = b ? KINDS.name(b.k) : '?'; n.set(nm, (n.get(nm) ?? 0) + 1); }
         return [d, `${e.from.length} 棟合併成${KINDS.name(e.k)}（${e.size}×${e.size}）：吸收${[...n].map(([nm, q]) => `${nm} ×${q}`).join('、')}`];
       }
+      case 'depleted': return [d, `資源耗盡，停產（已開採 240／240）`];   // D040
       case 'act': return [d, e.what === 'fire' ? `現場滅火${e.cost ? `（$${e.cost}）` : ''}` : e.what === 'crime' ? '處理了犯罪' : `治療${e.cost ? `（$${e.cost}）` : ''}`];
     }
   }
@@ -1406,8 +1433,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       if (!city || !con) return null;
       const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true, pipesShown, trafficOver()), live = con;   // D019：地面畫不畫水管跟真的一樣
       b.setTreeAges(i => live.siteAge(i));
-      b.scene.add(preview.mesh, haz.mesh);                                // 場景結構跟真的一樣（施工預覽、災禍標記也在場景裡），摘要完放回去
-      const d = sceneDigest(b); built?.scene.add(preview.mesh, haz.mesh); b.dispose(); st.dispose();
+      b.scene.add(preview.mesh, haz.mesh); if (resHints.shown) b.scene.add(resHints.mesh);   // 場景結構跟真的一樣（施工預覽、災禍標記在場景裡；資源圖有畫的時候才在），摘要完放回去
+      const d = sceneDigest(b); built?.scene.add(preview.mesh, haz.mesh); attachRes(); b.dispose(); st.dispose();
       return d;
     },
     // 上一次建場景：件數、重做幾件、上傳位元組（建築三個網格＋地面＋野樹）、放大幾次、搬了幾件、整份重排幾次、是不是從頭建；三個網格的容量、要畫的範圍、真的有東西的、空洞
@@ -1492,6 +1519,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     policyApply: (k: string, v: unknown) => { const r = uiPolicy(k, v); return r ? { ok: r.ok } : null; },
     budgetApply: (cat: string, dir: 1 | -1) => uiBudget(cat, dir),
     policyState: () => sim ? { pol: sim.pol ? { ...sim.pol } : null, last: { ...sim.polLast }, budget: { ...sim.budget }, day: sim.day, schoolLunch: sim.edu.schoolLunch, edu: hashBytes(sim.g.EDU), money: sim.money, insured: lastRep ? lastRep.hazard.insured : 0 } : null,
+    // ---- D040 資源圖（守衛與拍照用）：畫了幾格、各種幾格、是不是 ☰ 打開的、方塊的位置（x,z,kind）----
+    resourceHints: () => { const m = resHints.mesh, out: [number, number, number][] = [], mt = new THREE.Matrix4(), c = new THREE.Color(); for (let k = 0; k < m.count; k++) { m.getMatrixAt(k, mt); m.getColorAt(k, c); out.push([Math.floor(mt.elements[12]), Math.floor(mt.elements[14]), c.getHexString() === 'ffd36d' ? 1 : 2]); } return { shown: m.count, toggle: showRes, cells: out }; },
     // ---- D039 大事記（守衛與拍照用）：☰「大事記」面板的列（新到舊）與面板狀態 ----
     chronicleRows: () => [...ui.querySelectorAll<HTMLElement>('#ch li')].map(li => ({ kind: li.dataset.kind ?? '', day: li.querySelector('b')?.textContent ?? '', text: li.querySelector('span')?.textContent ?? '' })),
     chroniclePanel: () => ({ open: !ch.hidden, sub: $('#ch .sub').textContent }),

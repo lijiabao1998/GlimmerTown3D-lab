@@ -557,6 +557,8 @@ await guard('./unit-d036-live.mjs', 'd036LiveGuards');   // D036：實驗線頁�
 await guard('./unit-d037.mjs', 'd037Guards');   // D037：公車路線（bus_rt／bop468）本線沒搬——缺口量出來並鎖住（實驗線頁面實跑 T1 一條路線、T2 兩條路線＋營運設定、T3 對照；T3 全等、T1／T2 的殘差有範圍、本線完全不看路線、存檔不弄丟路線）
 await guard('./unit-d038.mjs', 'd038Guards');   // D038：科技與專精的實驗線原文（22 段 sha256）逐項＝tech.ts（vm：36 個節點逐欄、300 個隨機狀態 × 36 節點的 canStart、研究連推、400 個亂寫的存檔欄位、專精驗型；突變 91）
 await guard('./unit-d038-live.mjs', 'd038LiveGuards');   // D038：實驗線頁面實跑（T 系列 18 座連推 13 天逐欄含科技狀態、P 動作劇本 6 個 27 個動作、本線存的碼給實驗線讀 6 筆）、day.ts 與 saveCode 接線突變、存讀、效能
+await guard('./unit-d040-build.mjs', 'd040BuildGuards');   // D040：油井、礦場的建造規則黃金樣本（d040-build.json，tools/lab-build.mjs --set=d040）、資源格判定、原碼突變
+await guard('./unit-d040.mjs', 'd040Guards');   // D040：油井、礦場的工具與拒絕、玩家蓋井、枯竭事件時間軸、預先帶耗損的存檔、格式 9 編解碼與存讀、玩家蓋的＝存檔裡本來有的、大事記、資源圖圖層、接線突變
 await guard('./unit-d039.mjs', 'd039Guards');   // D039：玩家決策進世界歷史（城市格式 8）——碼表字面量＝目錄、記錄只在真的改了時記、200 段隨機劇本重播＝模擬、編解碼與只增不改、壞資料與突變、存讀與舊檔、大事記白話
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----

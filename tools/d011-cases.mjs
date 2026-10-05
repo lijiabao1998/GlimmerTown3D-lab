@@ -45,6 +45,11 @@ export const D033_SEED = 20261033;
 export const SEWAGE = ['sewage'];
 export const FAMILIES33 = [['s-random', 60, 'random'], ['s-money', 20, 'money'], ['s-doze', 24, 'doze'], ['s-sandbox', 10, 'sandbox'], ['s-tech', 12, 'tech'], ['s-edge', 12, 'edge'], ['s-undo', 8, 'undo'], ['s-wide', 8, 'wide']];
 export const D033_COUNT = FAMILIES33.reduce((n, [, c]) => n + c, 0);
+// D040：油井（k49，只能蓋在油田資源格）、礦場（k50，只能蓋在礦藏資源格）。家族同 D033 的寫法；地圖另外帶一張資源圖 resource（0 無、1 油田、2 礦藏，幾塊團）與幾口已經在資源格上的井（拆除才拆得到）
+export const D040_SEED = 20261040;
+export const WELLS = ['oilwell', 'mine'];
+export const FAMILIES40 = [['r-random', 72, 'random'], ['r-money', 20, 'money'], ['r-doze', 24, 'doze'], ['r-sandbox', 10, 'sandbox'], ['r-tech', 12, 'tech'], ['r-edge', 12, 'edge'], ['r-undo', 8, 'undo'], ['r-wide', 8, 'wide']];
+export const D040_COUNT = FAMILIES40.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -198,7 +203,7 @@ function putLayer(t, layer, g, alt) {
   if (name === 'bld') t.bld = rci(g, g.int(1, 3), [1, 2]);
   else PUT[name](t);
 }
-function genMap(g, fam, j, water = false, dumps = false, plants = false) {
+function genMap(g, fam, j, water = false, dumps = false, plants = false, wells = false) {
   const N = fam === 'edge' || fam === 'undo' ? g.int(10, 12) : fam === 'wide' ? g.int(24, 34) : g.int(10, 18), dense = fam === 'doze', multi = fam === 'multi';
   const { tiles, sparse } = genTiles(g, N, fam);
   layRoads(g, tiles, N, dense ? g.int(2, 4) : fam === 'wide' ? g.int(5, 9) : multi ? g.int(1, 3) : g.int(2, 5), sparse);
@@ -246,12 +251,25 @@ function genMap(g, fam, j, water = false, dumps = false, plants = false) {
   if (dumps) for (let s = 0, m = g.int(1, 3); s < m; s++) placeFree(g, tiles, N, t => { t.bld = { k: 8, lv: 1, v: g.int(0, 2), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
   // D033：幾座污水廠（k27，變體 0–2）；只在 plants 抽亂數，之前各卡的地圖逐位不變
   if (plants) for (let s = 0, m = g.int(1, 3); s < m; s++) placeFree(g, tiles, N, t => { t.bld = { k: 27, lv: 1, v: g.int(0, 2), age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); });
+  // D040：資源圖（2–4 塊團，各團七成五的格子有資源）＋幾口已經蓋在資源格上的井（k49 油井／k50 礦場）；只在 wells 抽亂數，之前各卡的地圖逐位不變
+  let resource = null;
+  if (wells) {
+    resource = new Uint8Array(N * N);
+    for (let s = 0, m = g.int(2, 4); s < m; s++) {
+      const kind = s < 2 ? s + 1 : g.int(1, 2), cx = g.int(0, N - 1), cy = g.int(0, N - 1), r = g.int(1, 3);
+      for (let y = Math.max(0, cy - r); y <= Math.min(N - 1, cy + r); y++) for (let x = Math.max(0, cx - r); x <= Math.min(N - 1, cx + r); x++) if (g.ch(.75)) resource[y * N + x] = kind;
+    }
+    for (let s = 0, m = g.int(1, 3); s < m; s++) for (let a = 0; a < 40; a++) {
+      const i = g.int(0, N * N - 1), t = tiles[i];
+      if (resource[i] && free(t)) { t.bld = { k: resource[i] === 1 ? 49 : 50, lv: 1, v: 0, age: g.int(0, 60), pw: true, h: 1 }; clr(t, 'zone'); clr(t, 'deco'); clr(t, 'tree'); break; }
+    }
+  }
   if (g.ch(fam === 'random' || dense || fam === 'edge' ? .15 : 0)) placeFree(g, tiles, N, t => {
     const ref = g.ch(.5) ? [g.pick([-1, N]), g.int(0, N - 1)] : [g.int(0, N - 1), g.int(0, N - 1)];
     const inside = ref[0] >= 0 && ref[0] < N;
     t.bld = { k: g.pick(ORPHAN_K), ref: inside && tiles[ref[1] * N + ref[0]].bld ? [-1, 0] : ref };   // 根格位置有建築就改指圖外（指到自己也算孤兒：sz 讀不到＝單格）
   });
-  return { N, tiles, sparse, stacks, multis: multis.map(([x, y, sz]) => [x, y, sz]) };
+  return { N, tiles, sparse, stacks, multis: multis.map(([x, y, sz]) => [x, y, sz]), resource };
 }
 
 function paramsOf(g, fam) {
@@ -275,7 +293,7 @@ function landOf(g, N) {
 }
 
 // civic：D016 的家族抽 CIVIC、D019 抽 WATER、D020 抽 DUMP（null＝D011，每一個分支都跟原本一樣抽亂數）
-function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
+function genOps(g, N, tiles, fam, stacks, multis, civic = null, resource = null) {
   const ops = [], outP = fam === 'edge' ? .3 : .05;
   let now = g.int(1000, 90000);
   const list = pred => tiles.flatMap((t, i) => pred(t) ? [i] : []);
@@ -285,6 +303,7 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
     stuff: list(t => !!(t.deco || t.ruin || t.crater || t.rail || t.tram || t.dock || t.rdec || t.bus || t.lv475 || t.ud475 || t.wp || t.hv471 || t.ug471
       || t.wm472 || t.sm472 || t.levee || t.flood || t.oneway || t.light || t.busLane || t.fly475 || t.ix475)),
   };
+  if (resource) { cats.res1 = []; cats.res2 = []; resource.forEach((v, i) => { if (v) cats['res' + v].push(i); }); }   // D040：資源格（油田、礦藏）
   const xy = i => [i % N, (i / N) | 0], any = () => [g.int(0, N - 1), g.int(0, N - 1)], from = l => l.length ? xy(g.pick(l)) : any();
   const target = tool => {
     if (g.ch(outP)) return [g.int(-3, N + 2), g.int(-3, N + 2)];
@@ -293,6 +312,8 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null) {
     if (tool === 'doze') return u < .3 ? from(cats.bld) : u < .45 ? from(cats.multi) : u < .6 ? from(cats.road) : u < .75 ? from(cats.stuff) : u < .88 ? from(cats.zone) : any();
     if (ROADS.includes(tool)) return u < .3 ? from(cats.road) : u < .5 ? from(cats.water) : u < .6 ? from(cats.tree) : u < .7 ? from(cats.bld) : any();
     if (ZONES.includes(tool)) return u < .35 ? from(cats.zone) : u < .5 ? from(cats.tree) : u < .6 ? from(cats.road) : u < .7 ? from(cats.water) : any();
+    if (resource && civic && civic.includes(tool)) return u < .08 ? from(cats.tree) : u < .13 ? from(cats.bld) : u < .18 ? from(cats.water) : u < .23 ? from(cats.road) : u < .28 ? from(cats.stuff)
+      : u < .5 ? from(cats[tool === 'oilwell' ? 'res1' : 'res2']) : u < .62 ? from(cats[tool === 'oilwell' ? 'res2' : 'res1']) : u < .72 ? from(cats.free) : any();   // D040：多數落在資源格（對的種類），也試錯的種類
     if (civic && civic.includes(tool)) return u < .15 ? from(cats.tree) : u < .25 ? from(cats.bld) : u < .35 ? from(cats.water) : u < .45 ? from(cats.road) : u < .8 ? from(cats.free) : any();
     return u < .2 ? from(cats.tree) : u < .3 ? from(cats.bld) : u < .4 ? from(cats.water) : any();
   };
@@ -459,6 +480,20 @@ export function cases33(k) {
   throw new Error(`D033 案例 ${k} 超出 ${D033_COUNT}`);
 }
 
+// D040 第 k 個案例（0 ≤ k < D040_COUNT）：同 cases16，操作抽 WELLS、地圖多一張資源圖與幾口井
+export function cases40(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES40) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D040_SEED));
+      const m = genMap(g, fam, j, false, false, false, true), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), resource: m.resource, ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, WELLS, m.resource) };
+    }
+    base += count;
+  }
+  throw new Error(`D040 案例 ${k} 超出 ${D040_COUNT}`);
+}
+
 // ---- 兩邊共用的跑法 ----
 // 畫面用的遮罩：實驗線放置／拆除時會重算鄰格（recalcMask 51147 等），本線不搬，不列入格子比對
 export const RENDER_KEYS = new Set(['mask', 'railMask', 'tramMask', 'hvMask471', 'wmMask472', 'smMask472', 'lvMask475', 'udMask475', 'wpMask475']);
@@ -597,7 +632,7 @@ export function makeLab(pieces, opts = {}) {
     setWorld: run('(n,t,m,d,tech,spec,p)=>{N=n;tiles=t;money=m;diff=d;day=1;region={};tech343={done:tech};spec386=spec;pol=p;}'),
     N: run('()=>N'), tiles: run('()=>tiles'), money: run('()=>money'), setMoney: run('v=>{money=v;}'), diff: run('()=>diff'),
     setTool: run('v=>{tool=v;}'), setDraft: run('v=>{roadDraft436=v;}'), setPaintLast: run('v=>{paintLast=v;}'), setLand: run('(d,b)=>{landDirty=d;landBox=b;}'),
-    setBudget: run('b=>{svcBudget=b;}'), reset: run("()=>{undoStack=[];redoStack=[];undoGroup=null;txnHistory460=[];dozeArm=null;paintLast=null;roadDraft436=null;tool='pan';rect.on=false;}"),
+    setResource: run('r=>{RESOURCE=r;}'), setBudget: run('b=>{svcBudget=b;}'), reset: run("()=>{undoStack=[];redoStack=[];undoGroup=null;txnHistory460=[];dozeArm=null;paintLast=null;roadDraft436=null;tool='pan';rect.on=false;}"),
     getLand: run('()=>[landDirty,landBox]'), getArm: run('()=>dozeArm'), getStack: run('()=>undoStack'),
     state: run('()=>({COV,POLBASE,POLTREE,POL,LANDBASE,LAND,EDU,NOISE,METRO_TOD467B,ACCESS468,commutePenalty})'),
   };
@@ -616,7 +651,8 @@ export function labImpl(lab) {
     init(c) {
       N = c.N;
       lab.setWorld(c.N, c.tiles, c.money0, c.diff, [...c.tech], c.spec ?? '', c.schoolLunch ? { schoolLunch: true } : c.polNull ? null : { schoolLunch: false });
-      lab.allocGrids(); lab.setBudget({ ...c.budget }); lab.reset(); lab.rebuildCov();
+      lab.allocGrids(); if (c.resource) lab.setResource(c.resource);   // D040：資源圖（allocGrids 56940 重配成全 0，之後才給）
+      lab.setBudget({ ...c.budget }); lab.reset(); lab.rebuildCov();
       lab.setLand(c.land[0], c.land[1] ? { x0: c.land[1][0], y0: c.land[1][1], x1: c.land[1][2], y1: c.land[1][3] } : null);
       lab.seed(c.seed);
     },

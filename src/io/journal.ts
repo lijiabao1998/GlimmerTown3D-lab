@@ -53,6 +53,7 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'research': row = [20, dd, TECH_CODES.indexOf(e.id), e.fee]; break;
       case 'spec': row = [21, dd, SPEC_CODES.indexOf(e.id)]; break;
       case 'techdone': row = [22, dd, TECH_CODES.indexOf(e.id)]; break;
+      case 'depleted': row = [23, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

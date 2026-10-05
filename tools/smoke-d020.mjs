@@ -50,8 +50,8 @@ export async function d020Smoke(withBrowser, log) {
     const box = await findBox(1, 1, free), spot = box.length ? box[0][0] : null;   // 新城還沒有路：隨便一格空地（貼不貼路放置規則都一樣）
     let spent = null, last = null;
     if (spot) { await waitFor(async () => (await toasts()).length === 0, 4000); const s0 = await sim(); await tapAt(await cell(...spot)); const s1 = await sim(); spent = s0.money - s1.money; last = (await ev('__gt.history()')).at(-1); }
-    log(btns.length === 14 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 2 && btns.at(-2)[0] === 'dump' && btns.at(-1)[0] === 'sewage' && u.civicTool === 'dump' && spent === 300 && last?.t === 'place' && last.k === 8,
-      'D020 驗收 5：手機 360×740「公共設施」14 種兩排（D033 加了污水廠排最後、垃圾場退到倒數第二顆）、每一顆 ≥ 44×44 且在畫面裡；選垃圾場點一格空地蓋一座：扣 $300、歷史 place k 8',
+    log(btns.length === 16 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-4)[0] === 'dump' && btns.at(-3)[0] === 'sewage' && u.civicTool === 'dump' && spent === 300 && last?.t === 'place' && last.k === 8,
+      'D020 驗收 5：手機 360×740「公共設施」16 種三排（D033 加了污水廠、D040 加了油井與礦場排最後：垃圾場倒數第四顆）、每一顆 ≥ 44×44 且在畫面裡；選垃圾場點一格空地蓋一座：扣 $300、歷史 place k 8',
       `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；垃圾場 (${spot})：花 $${spent}、${J(last)}`);
     if (!spot) return;
     await tapBtn('.tool[data-t="civic"]');                                   // 再按一次＝放下工具

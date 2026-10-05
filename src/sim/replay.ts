@@ -145,6 +145,12 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
       }
       // D039（城市格式 8）：玩家的決策與科技完成——整座城的事，不改城市的樣子（政策、預算、研究、方向在模擬的狀態裡，不在城市模型裡）；`decisionsOf` 讀它們
       case 'policy': case 'budget': case 'research': case 'spec': case 'techdone': break;
+      // D040（城市格式 9）：資源耗盡——不改城市的樣子，只確認那一格有那一種井（歷史壞了要講出來）
+      case 'depleted': {
+        const b = c.buildings[c.occ[i] - 1];
+        if (!b || b.x !== e.x || b.z !== e.z || b.k !== e.k) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有 ${e.k === 49 ? '油井' : '礦場'}，不會耗盡（歷史第 ${k + 1} 筆）`);
+        break;
+      }
       case 'abandon': {
         const b = c.buildings[e.id - 1];
         if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可廢棄的建築 #${e.id}（歷史第 ${k + 1} 筆）`);

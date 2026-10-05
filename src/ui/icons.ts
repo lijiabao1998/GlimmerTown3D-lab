@@ -27,6 +27,7 @@ export const ICONS = {
   crown: svg('<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z"/><path d="M5 21h14"/>'),   // D031 城市等級
   sliders: svg('<path d="M4 7h9.5M17.5 7H20M4 12h3.5M11.5 12H20M4 17h11M19 17h1"/><circle cx="15.5" cy="7" r="2"/><circle cx="9.5" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>'),   // D032 政策與預算
   flask: svg('<path d="M9.5 3.5h5M10.5 3.5v6L5 18.5a1.8 1.8 0 0 0 1.6 2.7h10.8a1.8 1.8 0 0 0 1.6-2.7L13.5 9.5v-6"/><path d="M7.6 14.5h8.8"/>'),   // D038 科技與專精
+  layers: svg('<path d="M12 3.5 3.5 8 12 12.5 20.5 8z"/><path d="M3.5 12 12 16.5 20.5 12M3.5 16 12 20.5 20.5 16"/>'),   // D040 資源圖
   moon: svg('<path d="M20.5 13.6A8.6 8.6 0 1 1 10.4 3.5a6.7 6.7 0 0 0 10.1 10.1z"/>'),   // D029 夜間城市
 };
 export type IconName = keyof typeof ICONS;

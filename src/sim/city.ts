@@ -12,11 +12,12 @@ import { fnv1a } from './rng.ts';
 // 格式 5（D019）：多了鋪配水管的事件 pipe，拆除多了水管那一層（layer 'wp'）。格式 1–4 照讀；比 5 新的不猜（src/io/save.ts）
 // 格式 6（D026）：多了每天的災禍與玩家的處置——起火 fire、燒毀 burn、犯罪 crime、廢棄 abandon、生病 sick、死亡 death、處置 act（滅火、處理犯罪、治療），拆除多了焦土那一層（layer 'ruin'）。格式 1–5 照讀；比 6 新的不猜
 // 格式 7（D034）：多了合併事件 merge——四棟相鄰同類二級以上住宅或商業合併成 2×2 摩天樓（k33、k34），更快樂的城九格合併成 3×3 巨廈（k105、k106）；吸收的建築成了墓碑。格式 1–6 照讀
+// 格式 9（D040）：多了資源耗盡事件 depleted——油井、礦場的耗損累積到 240（一口井只記一次）。格式 1–8 照讀
 // 格式 8（D039）：多了玩家決策與科技完成——政策 policy、服務預算 budget、開始研究 research、選城市方向 spec、研究完成 techdone；沒有座標，是整座城的事（碼表在下面，只往後加）。格式 1–7 照讀
-export const CITY_FORMAT = 8;
+export const CITY_FORMAT = 9;
 // 存檔寫的格式看歷史裡有什麼（D019、D026）：有災禍事件、拆焦土才寫 6；有鋪水管、拆水管的事件寫 5；都沒有就寫 4——比這一版舊的程式（認到 4 或 5）照樣讀得回來，
 // 沒有水管、沒有災禍的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
-export const eventFormat = (e: CityEvent) => DECISION_EVENTS.includes(e.t) ? 8 : e.t === 'merge' ? 7 : HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
+export const eventFormat = (e: CityEvent) => e.t === 'depleted' ? 9 : DECISION_EVENTS.includes(e.t) ? 8 : e.t === 'merge' ? 7 : HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
 export const DECISION_EVENTS: readonly string[] = ['policy', 'budget', 'research', 'spec', 'techdone'];
 export const HAZARD_EVENTS: readonly string[] = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'];
 
@@ -88,7 +89,9 @@ export interface SpecEvent { day: number; t: 'spec'; id: string }
 // 研究完成（每天研究推進的結果，不是玩家按的）
 export interface TechDoneEvent { day: number; t: 'techdone'; id: string }
 export type DecisionEvent = PolicyEvent | BudgetEvent | ResearchEvent | SpecEvent | TechDoneEvent;
-export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent | DecisionEvent;
+// 資源耗盡（D040，城市格式 9）：x、z＝井的格子，k＝49（油井）或 50（礦場）。一口井一生只有一筆（耗損不會下降）；讀進來就已經耗盡的井沒有事件
+export interface DepletedEvent { day: number; t: 'depleted'; x: number; z: number; k: number }
+export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent | DecisionEvent | DepletedEvent;
 
 export interface City {
   format: number;

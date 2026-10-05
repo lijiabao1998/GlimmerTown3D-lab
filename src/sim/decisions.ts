@@ -47,10 +47,20 @@ export function decisionsOf(history: readonly CityEvent[], start: Parameters<typ
   return st;
 }
 // ☰「大事記」：決策與科技完成，發生順序（面板再倒過來），每筆一行
-export interface ChronicleLine { day: number; kind: DecisionEvent['t']; text: string }
+export interface ChronicleLine { day: number; kind: DecisionEvent['t'] | 'depleted'; text: string }
 // 不需要起點：政策與預算的事件自己帶著「改之前的值」，白話文字讀得出「從多少調到多少」
-export function chronicleOf(history: readonly CityEvent[]): ChronicleLine[] {
+export function chronicleOf(history: readonly CityEvent[]): ChronicleLine[] {   // D040：資源耗盡（油井、礦場停產）也列，是這座城的大事
   const st = fresh({ pol: null, budget: { police: 1, fire: 1, health: 1, edu: 1 }, done: [], act: '', spec: null }), out: ChronicleLine[] = [];
-  for (const e of history) if (isDecision(e)) out.push({ day: e.day, kind: e.t, text: apply(st, e) });
+  for (const e of history) {
+    if (isDecision(e)) out.push({ day: e.day, kind: e.t, text: apply(st, e) });
+    else if (e.t === 'depleted') out.push({ day: e.day, kind: 'depleted', text: `資源耗盡：${e.k === 49 ? '油井' : '礦場'}（${e.x}, ${e.z}）停產` });
+  }
   return out;
+}
+
+// 當天耗盡的井合成一則通知（D040；介面發 toast）：一口＝「資源耗盡：油井（x, z）停產」，多口＝「資源耗盡：油井 2 口、礦場 1 口停產」。點一下鏡頭過去的那一格是第一口
+export function depletedToastText(list: readonly { x: number; z: number; k: number }[]): string {
+  if (list.length === 1) { const q = list[0]; return `資源耗盡：${q.k === 49 ? '油井' : '礦場'}（${q.x}, ${q.z}）停產`; }
+  const oil = list.filter(q => q.k === 49).length, ore = list.length - oil;
+  return `資源耗盡：${[oil ? `油井 ${oil} 口` : '', ore ? `礦場 ${ore} 口` : ''].filter(Boolean).join('、')}停產`;
 }

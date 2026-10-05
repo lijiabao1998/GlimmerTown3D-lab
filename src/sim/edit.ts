@@ -29,6 +29,7 @@ export const CIVIC_TOOLS = [
   { id: 'post', name: '郵局', short: '郵', cost: COST.post }, { id: 'cemetery', name: '墓園', short: '墓', cost: COST.cemetery },
   { id: 'dump', name: '垃圾場', short: '垃', cost: COST.dump },   // D020：實驗線排在大墓園後面（37597）
   { id: 'sewage', name: '污水廠', short: '污', cost: COST.sewage },   // D033：實驗線 svc 類（37695），排在最後；🚿；鄰水才蓋得下去
+  { id: 'oilwell', name: '油井', short: '油', cost: COST.oilwell }, { id: 'mine', name: '礦場', short: '礦', cost: COST.mine },   // D040：實驗線 resource 類（37752、37753）；🛢️⛏️；要站在油田／礦藏格上才蓋得下去
 ];
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
@@ -44,7 +45,7 @@ export interface EditResult { ok: boolean; placed: number; spent: number; events
 interface DayTxn { g: number; txn: Txn; created: number[]; removed: number[] }
 
 function stateOf(s: Sim): BuildState {
-  return { w: s.w, g: s.g, budget: s.budget, rng: s.rng, money: s.money, diff: s.diff, tech: s.edu.tech, spec: s.edu.spec,
+  return { w: s.w, g: s.g, budget: s.budget, rng: s.rng, resource: s.res.resource, money: s.money, diff: s.diff, tech: s.edu.tech, spec: s.edu.spec,
     landDirty: s.landDirty, landBox: s.landBox, txn: null, dozeArm: s.dozeArm, protect: true, onPower: () => { /* 供電每天開頭整張重算（day.ts 55008）；介面要看就叫 powerStatus */ },
     onWater: () => { computeWaterLegacy449(s.w); } };   // D019：當場重算接通的水管（實驗線 52405、66572），畫面與建築卡馬上看得到；每天開頭也重算
 }

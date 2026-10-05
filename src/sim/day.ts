@@ -78,6 +78,7 @@ export interface Sim {
   dozeArm: { i: number; t: number } | null;   // 單格拆二級以上的建築：第一次只「預備」，3 秒內再拆一次才拆（實驗線 62983–62992）
 }
 
+export interface DepletedRec { x: number; z: number; k: number }
 export interface DayReport {
   day: number; pop: number; jobs: number; jobsC: number; jobsI: number; cityHappy: number;
   dem: [number, number, number]; employed: number; workers: number; weather: number; cap: number; powered: number;
@@ -88,6 +89,7 @@ export interface DayReport {
   resource: { oil: number; ore: number; made: number; wells: [number, number] };   // D036：當天的開採（oilGain、oreGain、suppliesGain；油井數、礦場數＝owN、mnN，不管有沒有抽到）
   food: FoodReport;                             // D022：當天的糧食（產量、遊客、需求、進口、供糧率、每棟住宅的加減、貿易額度）
   econ: EconReport;                             // D025：當天的經濟（實驗線經濟段的每一個區域變數、出口與快照、施工耗鋼）
+  depleted: DepletedRec[];                      // D040：當天耗盡的井（座標、k49 油井／k50 礦場；沒有＝空陣列；同時記進世界歷史的 depleted 事件，介面拿它發當天的一則通知）
   merges: MergeRec[];                           // D034：當天的合併（摩天樓與巨廈：新建築的根格、種類、邊長、吸收了哪些建築；沒有合併＝空陣列）
   hazard: HazardReport;                         // D026：當天的災禍（起火、蔓延、燒毀、犯罪、廢棄、生病、治癒、死亡、恢復）
   happyAgg: number[];                           // D027：城市平均每一項住宅幸福（實驗線 happyAgg 55255；項的順序＝rules/happy.ts HAPPY_NAMES）；沒有住宅是空的
@@ -271,7 +273,10 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // D024 補齊剩下的（rules/count.ts countMore：升級加成就業、電廠以外的發電、產業鏈、物流與運作中判斷、旅宿配套、科技園區、公共設施……）。三份計數合起來就是實驗線的 157 個計數
   // （資源開採量 suppliesGain／oilGain／oreGain 除外，給 0）；給固定就業（55246–55250）與維護費（55973–55977）
   const fert = { ready: s.fertReady, fertco: f.COV.fertco };                // 55089：昨天的化肥與化肥廠覆蓋場（T346，D028）
+  s.res.depleted = [];                                                       // D040：今天耗盡的井（extractWell 推進來）
   const tally = tallyBuildings(w, tickBld, fert, s.res), { fc, cnt, towerPop, megaPop } = tally;   // 55040 towerPop488、megaPop488（D021）：住宅塔、巨廈的居民，不看有沒有電；cnt＝三份計數合成一份
+  const depleted: DepletedRec[] = [];
+  for (const i of s.res.depleted) { const k = w.tiles[i].bld!.k; depleted.push({ x: i % w.N, z: (i / w.N) | 0, k }); s.city.history.push({ day: s.day + 1, t: 'depleted', x: i % w.N, z: (i / w.N) | 0, k }); }   // D040：耗盡的井記成事件（一口井只有一筆：耗損不會下降；日子＝正在結算的這一天，同 techdone）
   // 55245 advanceTech343：主計數迴圈之後、人口與就業加總之前（沿用迴圈裡的六個計數＋研究機構）；完成的是教育場科技（C1、C4a、C4b、D7）就整張重建覆蓋場（38573），跟 edit.ts recoverCov 同一套收尾
   const techPre = s.edu.tech.slice();                                    // 55219 住宅幸福的「科技進步」項在同一個大迴圈裡、早於 55245：當天完成的科技要到明天才進幸福（其餘讀科技的地方都在 55245 之後）
   const rs = advanceTech(s.tech, s.edu.tech, cnt as unknown as ResearchIn, s.edu.spec), techRep = { speed: rs.speed, finished: rs.finished };
@@ -460,7 +465,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
     day: s.day, pop, jobs, jobsC, jobsI, cityHappy, dem: [dem[1], dem[2], dem[3]], employed: labor.employed, workers: labor.workers,
     weather: s.weather.weather, cap, powered, grown: spawned.length, upgraded: ups.length, money: s.money, settle,
     garb: { amount: garbage, cap: garbCap, ratio: garbRatio, formal: san.formal, districts: san.districts.length, pen: garbPen409, far: garbLoc.far, unserved: garbLoc.unserved, dec: garbDec },
-    tech: techRep, resource: { oil: cnt.oilGain, ore: cnt.oreGain, made: cnt.suppliesGain, wells: [cnt.owN, cnt.mnN] }, food: fd, econ: { ec, late, sn, cons }, merges: mgs, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
+    tech: techRep, resource: { oil: cnt.oilGain, ore: cnt.oreGain, made: cnt.suppliesGain, wells: [cnt.owN, cnt.mnN] }, food: fd, econ: { ec, late, sn, cons }, merges: mgs, depleted, hazard: hz, happyAgg, chain346, cityEvent: evs, rank: { idx: s.rankIdx, points: s.cityPoints, promoted: rk.promoted }, sewer: { need: sewNeed, served: sewServedN, unserved: sewUnservedN, plants: cnt.se ?? 0 }, night,
   };
 }
 

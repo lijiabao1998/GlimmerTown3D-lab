@@ -7,7 +7,7 @@
 //      完成清單（含順序）、進行中的節點、城市方向逐項＝模擬；每一筆 from＝折到那一筆之前的值；
 //   4. 編解碼：每段劇本的歷史 packHistory＝日誌接續編碼 packMore（分兩段編逐列相同）、unpackHistory 來回相同、checkHistory（hv 1 物件）來回相同；每加一個動作前面的列逐列不變
 //      （只增不改）；壞資料（碼不認得、值超出範圍、欄位缺、方向碼超界）丟明確的錯；碼表錯位、欄位丟失的突變要紅；
-//   5. 存讀：saveCode→loadCode→saveCode 的歷史逐列相同、決策與狀態都在；有決策的城存出格式 8、沒有的存出原本的格式；比 8 新的碼（f＝9）不猜（只用存檔）；
+//   5. 存讀：saveCode→loadCode→saveCode 的歷史逐列相同、決策與狀態都在；有決策的城存出格式 8、沒有的存出原本的格式；比現行格式新的碼（f＝CITY_FORMAT+1）不猜（只用存檔）；
 //   6. 大事記的白話：chronicleOf 的文字。
 import fs from 'node:fs';
 import path from 'node:path';
@@ -70,7 +70,7 @@ async function guards(log) {
   {
     const bad = [], city = await import('../src/sim/city.ts');
     if (!tableOk(city)) bad.push('碼表跟目錄／科技表／專精表現在的順序不一致（新的鍵要接在後面、既有的號不改）');
-    if (CITY_FORMAT !== 8) bad.push(`CITY_FORMAT ${CITY_FORMAT} ≠ 8`);
+    if (CITY_FORMAT < 8) bad.push(`CITY_FORMAT ${CITY_FORMAT} < 8（決策事件是格式 8，D040 起現行 9）`);
     const ev = { policy: { day: 1, t: 'policy', key: 'taxR', from: 1, value: 1.1 }, budget: { day: 1, t: 'budget', cat: 'edu', from: 1, value: 1.1 }, research: { day: 1, t: 'research', id: 'A1', fee: 400 }, spec: { day: 1, t: 'spec', id: 'ind' }, techdone: { day: 1, t: 'techdone', id: 'A1' } };
     for (const [t, e] of Object.entries(ev)) if (eventFormat(e) !== 8) bad.push(`${t} 的 eventFormat ${eventFormat(e)} ≠ 8`);
     if (DECISION_EVENTS.length !== 5) bad.push('DECISION_EVENTS 不是 5 種');
@@ -249,18 +249,18 @@ async function guards(log) {
       const before = L1.sim.city.history.length; setPolicy(L1.sim, 'taxC', 1.3); const code3 = saveCode(L1.sim, L1.template, L1.start), L3 = loadCode(code3, KT, vrank);
       if (!L3.ok || L3.sim.city.history.length !== before + 1 || L3.sim.city.history.at(-1).t !== 'policy') bad.push(`${id} 讀回來再調稅率、存、讀，歷史沒接著長`);
       // 比 8 新的碼：不猜、只用存檔
-      const future = (() => { const R = decodeLabCode(code1); R.save.raw.d3.f = 9; return null; })(); void future;
+      const future = (() => { const R = decodeLabCode(code1); R.save.raw.d3.f = CITY_FORMAT + 1; return null; })(); void future;
       info.push(`${id}：${n} 筆決策、格式 ${raw1.d3?.f}`);
     }
     // 比 8 新的格式（f＝9）：改碼的 d3.f——用 encodeLabCode 重編
     {
       const { encodeLabCode } = await import('../src/io/labcode.ts');
       const { sim } = playScript(KT, vrank, plays.P1, 3999201, { long: false }), L0 = loadCode(plays.P1, KT, vrank);
-      const code = saveCode(sim, L0.template, L0.start), R = decodeLabCode(code); R.save.raw.d3.f = 9;
+      const code = saveCode(sim, L0.template, L0.start), R = decodeLabCode(code); R.save.raw.d3.f = CITY_FORMAT + 1;
       const c9 = encodeLabCode(R.save.raw), L9 = loadCode(c9, KT, vrank);
-      if (!L9.ok || L9.replayed !== false || !/比這一版/.test(L9.note ?? '')) bad.push(`f＝9 的碼沒被當成「比這一版新、只用存檔」：${L9.ok} ${L9.replayed} ${L9.note}`); else info.push('f＝9 只用存檔');
+      if (!L9.ok || L9.replayed !== false || !/比這一版/.test(L9.note ?? '')) bad.push(`f＝CITY_FORMAT+1 的碼沒被當成「比這一版新、只用存檔」：${L9.ok} ${L9.replayed} ${L9.note}`); else info.push('f＝CITY_FORMAT+1 只用存檔');
     }
-    log(!bad.length, 'D039 驗收 5、6：存讀與舊檔——有決策的城存出格式 8、讀回來歷史逐筆相同、政策／預算／科技／方向狀態都在；存→讀→再存→讀的歷史（不算讀檔重挑外觀）不變；讀回來再做決策、存、讀，歷史接著長；比 8 新的碼（f＝9）不猜、只用存檔',
+    log(!bad.length, 'D039 驗收 5、6：存讀與舊檔——有決策的城存出格式 8、讀回來歷史逐筆相同、政策／預算／科技／方向狀態都在；存→讀→再存→讀的歷史（不算讀檔重挑外觀）不變；讀回來再做決策、存、讀，歷史接著長；比現行格式新的碼（f＝CITY_FORMAT+1）不猜、只用存檔',
       bad.slice(0, 4).join('；') || info.join('；'));
   }
 
