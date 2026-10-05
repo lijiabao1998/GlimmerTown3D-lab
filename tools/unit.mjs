@@ -559,6 +559,7 @@ await guard('./unit-d038.mjs', 'd038Guards');   // D038：科技與專精的實�
 await guard('./unit-d038-live.mjs', 'd038LiveGuards');   // D038：實驗線頁面實跑（T 系列 18 座連推 13 天逐欄含科技狀態、P 動作劇本 6 個 27 個動作、本線存的碼給實驗線讀 6 筆）、day.ts 與 saveCode 接線突變、存讀、效能
 await guard('./unit-d040-build.mjs', 'd040BuildGuards');   // D040：油井、礦場的建造規則黃金樣本（d040-build.json，tools/lab-build.mjs --set=d040）、資源格判定、原碼突變
 await guard('./unit-d040.mjs', 'd040Guards');   // D040：油井、礦場的工具與拒絕、玩家蓋井、枯竭事件時間軸、預先帶耗損的存檔、格式 9 編解碼與存讀、玩家蓋的＝存檔裡本來有的、大事記、資源圖圖層、接線突變
+await guard('./unit-d041.mjs', 'd041Guards');   // D041：緊急車輛——量缺口、鎖住、不搬：實驗線原文（車到了現場清旗標、只在 advance 裡動）、本線＝GV.step（V 系列 5 座 × 30 天逐日逐座）、車輛的量（處理件數、站、車上限）、逐幀迴圈本身不改模擬、本線沒有車
 await guard('./unit-d042.mjs', 'd042Guards');   // D042：合併提示一天多筆合成一則——一筆＝實驗線的字、多筆＝「今天 N 處合併」（2,000 個隨機清單、M1b／M2b 真的城）、cityView 接線、突變
 await guard('./unit-d039.mjs', 'd039Guards');   // D039：玩家決策進世界歷史（城市格式 8）——碼表字面量＝目錄、記錄只在真的改了時記、200 段隨機劇本重播＝模擬、編解碼與只增不改、壞資料與突變、存讀與舊檔、大事記白話
 
