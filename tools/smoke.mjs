@@ -34,6 +34,7 @@ import { d036Smoke, d036SkipNote } from './smoke-d036.mjs';
 import { d038Smoke, d038SkipNote } from './smoke-d038.mjs';
 import { d039Smoke, d039SkipNote } from './smoke-d039.mjs';
 import { d040Smoke, d040SkipNote } from './smoke-d040.mjs';
+import { d044Smoke, d044SkipNote } from './smoke-d044.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -598,6 +599,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d038Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d039Smoke(withBrowser, log);
 // ===== D040：油井、礦場（tools/smoke-d040.mjs：手機 360×740「公共設施」16 顆三排、資源圖＝Node 端算的資源空格、☰「顯示資源圖」、點油田蓋成油井、錯的格子被擋、井枯竭的事件／通知／大事記／建築卡、重新整理還在、手機預算；自己開幾個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d040Smoke(withBrowser, log);
+// ===== D044：天然氣井、太空研究中心（tools/smoke-d044.mjs：手機 360×740「公共設施」18 顆三排、太空研究中心 Lv.22 才解鎖（點了只跳提示）、天然氣井站在油田格上、按住畫整塊 3×3、蓋下去整塊清分區與樹、復原整塊還原、拆附屬格＝整棟拆、重新整理接得上、效能預算）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d044Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -622,6 +625,7 @@ if (d036SkipNote()) console.log(d036SkipNote());
 if (d038SkipNote()) console.log(d038SkipNote());
 if (d039SkipNote()) console.log(d039SkipNote());
 if (d040SkipNote()) console.log(d040SkipNote());
+if (d044SkipNote()) console.log(d044SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

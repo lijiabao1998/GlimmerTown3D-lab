@@ -27,7 +27,8 @@ export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
   water: 400, wpipe: 10,     // D019：水塔、配水管（37442）
   dump: 300,                 // D020：垃圾場（37442）
   sewage: 500,               // D033：污水廠（37442）
-  oilwell: 1300, mine: 1500 };   // D040：油井、礦場（37442）
+  oilwell: 1300, mine: 1500,     // D040：油井、礦場（37442）
+  gaswell: 1400, megaproject: 4500 };   // D044：天然氣井、太空研究中心（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
 export const UNDO_MAX = 40;
 // 62985：單格拆除二級以上的住商工，要在 3000 毫秒內再按一次
@@ -44,7 +45,9 @@ export const D020_TOOLS: readonly string[] = ['dump'];
 export const D033_TOOLS: readonly string[] = ['sewage'];
 // D040：油井、礦場（點；canPlace 在實驗線 51365 那一桶＋51385–51390 的通用判定＋51430／51431 的資源格判定：站在對的資源格上才行；1×1、沒有隨機、沒有覆蓋場）
 export const D040_TOOLS: readonly string[] = ['oilwell', 'mine'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS, ...D040_TOOLS]);
+// D044：天然氣井（k117，1×1、站在油田資源格上、放下去蓋污染源；canPlace 51415）、太空研究中心（k51，3×3，canPlaceMulti 51436；實驗線的工具列在城市 Lv.22 才解鎖，那是介面的鎖，規則沒有看等級）
+export const D044_TOOLS: readonly string[] = ['gaswell', 'megaproject'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS, ...D040_TOOLS, ...D044_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -103,6 +106,22 @@ const seen = (t: Tile, protect?: boolean): Tile => {
 };
 
 // 51262–51489：能不能蓋；回拒絕理由（原文），可以蓋回 null
+// 51490–51504：整塊 sz×sz 都要在地圖裡、陸地、沒有交通線、架空線、高壓走廊、建築、焦土（根格已經過通用判定，這裡再逐格掃一遍，順序＝先出界與地形、再交通線……）
+function canPlaceMulti(st: BuildState, x: number, y: number, sz: number, msg: string): string | null {
+  const w = st.w;
+  for (let dy = 0; dy < sz; dy++) for (let dx = 0; dx < sz; dx++) {
+    const sx = x + dx, sy = y + dy;
+    if (!inMap(w, sx, sy)) return msg;
+    const t = w.tiles[idx(w, sx, sy)], q = seen(t, st.protect);
+    if (t.t !== 2 && t.t !== 1) return msg;
+    if (t.road || q.rail || t.tram) return '交通線擋住';
+    if (q.lv475) return '架空配電線／電線桿擋住';
+    if (t.hv471 || t.ug471) return '高壓電力走廊擋住';
+    if (t.bld) return '已有建築';
+    if (t.ruin) return '焦土需先清理';
+  }
+  return null;
+}
 export function canPlace(st: BuildState, toolId: string, x: number, y: number): string | null {
   need(toolId);
   const w = st.w;
@@ -135,15 +154,17 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.bld) return '已有建築';
       if (countNear(w, x, y, 1, (tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';
       return null; }
-    case 'oilwell': case 'mine': {                                              // 51365 桶＋51385–51390 通用判定＋51430／51431：1×1，站在對的資源格上
+    case 'oilwell': case 'mine': case 'gaswell': case 'megaproject': {          // 51365 桶＋51385–51390 通用判定＋51415／51430／51431／51436：1×1 站在對的資源格上（天然氣井找油田）；太空研究中心 3×3
       const q = seen(t, st.protect), r = st.resource ? st.resource[idx(w, x, y)] : 0;
       if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
       if (t.road || q.rail || t.tram) return '交通線上不能建造';
       if (q.lv475) return '架空配電線／電線桿擋住';
       if (t.hv471 || t.ug471) return '高壓電力走廊擋住';
       if (t.bld) return '已有建築';
+      if (toolId === 'gaswell' && r !== 1) return '需油田資源格（天然氣伴生）';  // 51415
       if (toolId === 'oilwell' && r !== 1) return '需油田資源格';                // 51430
       if (toolId === 'mine' && r !== 2) return '需礦藏資源格';                    // 51431
+      if (toolId === 'megaproject') return canPlaceMulti(st, x, y, 3, '需 3×3 陸地');   // 51436
       return null; }
     case 'wpipe':                                                               // 51312–51315：陸地、還沒有水管就行（路、分區、建築底下都可以鋪）
       if (t.t !== 2 && t.t !== 1) return '只能鋪在陸地上';
@@ -189,6 +210,8 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
     case 'dump': c = COST.dump; break;                                          // 51534
     case 'sewage': c = COST.sewage; break;                                      // 51578
     case 'oilwell': c = COST.oilwell; break;                                    // 51614（D040）
+    case 'gaswell': c = COST.gaswell; break;                                    // 51601（D044）
+    case 'megaproject': c = COST.megaproject; break;                            // 51616
     case 'mine': c = COST.mine; break;                                          // 51615
     case 'doze': c = t.crater ? 120 : COST.doze; break;                         // 51546：隕石坑 120
   }
@@ -368,6 +391,18 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
       break;
     case 'sewage':                                                              // 52180–52182：變體抽一次亂數 ri(3)；沒有覆蓋場、不是污染源
       t.bld = { k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
+      break;
+    case 'gaswell':                                                             // 52037：沒有隨機；污染源（POL_SRC 117）
+      t.tree = 0; t.zone = 0; t.deco = 0; t.bld = { k: 117, lv: 1, v: 0, age: 0, pw: true, h: 1 };
+      stampPolSrc(g, x, y, 117, 1);
+      break;
+    case 'megaproject':                                                         // 52331–52338：3×3，九格各自存快照（根格上面已存）、清樹分區裝飾；根格帶 sz 3、其餘格指向根
+      for (let dy = 0; dy < 3; dy++) for (let dx = 0; dx < 3; dx++) {
+        const sx = x + dx, sy = y + dy, j = idx(w, sx, sy), ct = w.tiles[j];
+        if (txn && !txn.seen[j]) { txn.seen[j] = 1; txn.snaps.push({ i: j, s: JSON.stringify(ct) }); }
+        ct.tree = 0; ct.zone = 0; ct.deco = 0;
+        ct.bld = (dx === 0 && dy === 0) ? { k: 51, lv: 1, v: 0, age: 0, pw: true, h: 1, sz: 3 } : { k: 51, ref: [x, y] } as unknown as Bld;
+      }
       break;
     case 'oilwell':                                                             // 52325：沒有隨機（v 固定 0）、沒有覆蓋場；抽取見 tick() 資源區塊（resource.ts）
       t.bld = { k: 49, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;

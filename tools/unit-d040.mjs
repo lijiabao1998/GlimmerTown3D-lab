@@ -1,6 +1,6 @@
 // D040 Node 守衛：蓋油井與礦場、資源圖視圖、井枯竭事件（城市格式 9）。由 tools/unit.mjs 呼叫。建造規則逐筆對拍實驗線在 tools/unit-d040-build.mjs（黃金樣本 d040-build.json）；
 // 實驗線頁面實跑（玩家蓋的井存成碼、實驗線讀進去推進，耗損與耗盡的日子逐欄全等）在 tools/unit-d036-live.mjs 的 rt（B@13、B@79、B@81）。這裡驗：
-//   1. 工具：CIVIC_TOOLS 共 16 顆、最後兩顆是油井（$1,300）與礦場（$1,500）、都是點的手勢、造價＝COST；預覽與蓋下去的拒絕理由（不是對的資源格、水上、路上、有建築、錢不夠）
+//   1. 工具：CIVIC_TOOLS 共 16 顆（D044 起 18 顆）、油井（$1,300）與礦場（$1,500）接在污水廠後面、都是點的手勢、造價＝COST；預覽與蓋下去的拒絕理由（不是對的資源格、水上、路上、有建築、錢不夠）
 //      講的是實驗線的字、而且錢與歷史都不動；
 //   2. 玩家蓋井：油井 4 口、礦場 3 口（commitOp，跟畫面上點下去同一條路）——歷史 7 筆 place（k 49／50、造價 1300／1500）、扣款＝造價總和、拿掉（undo）退全額、重蓋；
 //   3. 枯竭事件的時間軸：連推 130 天，每口井的耗損第一次到 240 的那一天＝歷史裡那口井的 depleted 事件的日子（油井 80 天、礦場 120 天）、一口一筆、同一天內照格索引、座標與種類對；
@@ -61,8 +61,8 @@ async function guards(log) {
   {
     const bad = [], info = [];
     const ids = CIVIC_TOOLS.map(t => t.id);
-    if (CIVIC_TOOLS.length !== 16 || new Set(ids).size !== 16) bad.push(`公共設施 ${CIVIC_TOOLS.length} 顆（要 16 顆、不重複）`);
-    if (J(ids.slice(-2)) !== J(['oilwell', 'mine'])) bad.push(`最後兩顆 ${ids.slice(-2)}（要油井、礦場；既有的順序不動）`);
+    if (CIVIC_TOOLS.length !== 18 || new Set(ids).size !== 18) bad.push(`公共設施 ${CIVIC_TOOLS.length} 顆（D040 起 16 顆、D044 起 18 顆，不重複）`);
+    if (J(ids.slice(-4)) !== J(['oilwell', 'mine', 'gaswell', 'megaproject'])) bad.push(`最後四顆 ${ids.slice(-4)}（要油井、礦場，後面接 D044 的天然氣井、太空研究中心；既有的順序不動）`);
     for (const [id, nm, cost] of [['oilwell', '油井', 1300], ['mine', '礦場', 1500]]) {
       const t = CIVIC_TOOLS.find(q => q.id === id);
       if (!t || t.name !== nm || t.cost !== cost || COST[id] !== cost) bad.push(`${id}：${J(t)} COST ${COST[id]}（要 ${nm} $${cost}）`);
@@ -99,7 +99,7 @@ async function guards(log) {
       if (!c1.ok || s.money !== 0 || !s.w.tiles[z * N + x].bld || s.w.tiles[z * N + x].bld.k !== 49) bad.push(`$1,300 蓋油井：ok ${c1.ok}、錢 ${s.money}（要剛好蓋成、錢 0）`);
       info.push('錢差 $1 擋下、剛好蓋成');
     }
-    log(!bad.length, 'D040 驗收 2：工具——「公共設施」16 顆、最後兩顆是油井（$1,300）與礦場（$1,500）、點的手勢、造價＝COST；預覽與蓋下去：對的資源格可以蓋；種類對調、沒有資源、水上、路上、有建築、錢差 $1 都被擋，講實驗線的字、錢與歷史不動',
+    log(!bad.length, 'D040 驗收 2：工具——「公共設施」D040 起 16 顆（D044 起 18 顆）、油井（$1,300）與礦場（$1,500）接在污水廠後面、點的手勢、造價＝COST；預覽與蓋下去：對的資源格可以蓋；種類對調、沒有資源、水上、路上、有建築、錢差 $1 都被擋，講實驗線的字、錢與歷史不動',
       bad.slice(0, 4).join('；') || `${cases.length} 種情形＋錢的邊界都對：${info.join('；')}`);
   }
 

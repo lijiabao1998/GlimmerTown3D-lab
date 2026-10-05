@@ -558,6 +558,8 @@ await guard('./unit-d037.mjs', 'd037Guards');   // D037：公車路線（bus_rt�
 await guard('./unit-d038.mjs', 'd038Guards');   // D038：科技與專精的實驗線原文（22 段 sha256）逐項＝tech.ts（vm：36 個節點逐欄、300 個隨機狀態 × 36 節點的 canStart、研究連推、400 個亂寫的存檔欄位、專精驗型；突變 91）
 await guard('./unit-d038-live.mjs', 'd038LiveGuards');   // D038：實驗線頁面實跑（T 系列 18 座連推 13 天逐欄含科技狀態、P 動作劇本 6 個 27 個動作、本線存的碼給實驗線讀 6 筆）、day.ts 與 saveCode 接線突變、存讀、效能
 await guard('./unit-d040-build.mjs', 'd040BuildGuards');   // D040：油井、礦場的建造規則黃金樣本（d040-build.json，tools/lab-build.mjs --set=d040）、資源格判定、原碼突變
+await guard('./unit-d044-build.mjs', 'd044BuildGuards');   // D044：天然氣井、太空研究中心的建造規則黃金樣本（d044-build.json，tools/lab-build.mjs --set=d044）、資源格判定、3×3 逐格判定、原碼突變
+await guard('./unit-d044.mjs', 'd044Guards');   // D044：天然氣井、太空研究中心的工具與拒絕、3×3 預覽、玩家蓋（一座一筆事件、整塊清樹清分區）、重播＝模擬、復原與拆、污染源、同一批東西用 2D 存檔寫法擺進去推 30 天逐欄相同、每 24 天一輪、接線突變
 await guard('./unit-d040.mjs', 'd040Guards');   // D040：油井、礦場的工具與拒絕、玩家蓋井、枯竭事件時間軸、預先帶耗損的存檔、格式 9 編解碼與存讀、玩家蓋的＝存檔裡本來有的、大事記、資源圖圖層、接線突變
 await guard('./unit-d041.mjs', 'd041Guards');   // D041：緊急車輛——量缺口、鎖住、不搬：實驗線原文（車到了現場清旗標、只在 advance 裡動）、本線＝GV.step（V 系列 5 座 × 30 天逐日逐座）、車輛的量（處理件數、站、車上限）、逐幀迴圈本身不改模擬、本線沒有車
 await guard('./unit-d042.mjs', 'd042Guards');   // D042：合併提示一天多筆合成一則——一筆＝實驗線的字、多筆＝「今天 N 處合併」（2,000 個隨機清單、M1b／M2b 真的城）、cityView 接線、突變

@@ -67,9 +67,9 @@ export async function d033Smoke(withBrowser, log) {
     await tapBtn('.tool[data-t="civic"]');
     const btns = await ev(`[...document.querySelectorAll('#civicSub button')].map(b=>{const r=b.getBoundingClientRect();return [b.dataset.c,Math.round(r.width),Math.round(r.height),r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,Math.round(r.top),b.textContent];})`);
     const rows = new Set(btns.map(b => b[4])).size;
-    log(btns.length === 16 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-3)[0] === 'sewage' && /污水廠/.test(btns.at(-3)[5]) && /500/.test(btns.at(-3)[5]),
-      'D033 驗收 8：手機 360×740「公共設施」污水廠是 D033 加的一顆（$500）；D040 起 16 種三排、污水廠退到倒數第三顆，每一顆 ≥ 44×44 且在畫面裡',
-      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；污水廠 ${J(btns.at(-3))}`);
+    log(btns.length === 18 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-5)[0] === 'sewage' && /污水廠/.test(btns.at(-5)[5]) && /500/.test(btns.at(-5)[5]),
+      'D033 驗收 8：手機 360×740「公共設施」污水廠是 D033 加的一顆（$500）；D040 起 16 種、D044 起 18 種三排、污水廠退到倒數第五顆，每一顆 ≥ 44×44 且在畫面裡',
+      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；污水廠 ${J(btns.at(-5))}`);
     await tapBtn('#civicSub button[data-c="sewage"]');
     const L0 = await ev('__gt.layers()'); let near = null;                  // 新城的水不在預設的畫面裡：先把鏡頭移到第一個水邊空地
     for (let i = 0; i < L0.n * L0.n && !near; i++) if (free(i, L0) && waterAround(L0, i) >= 2) near = [i % L0.n, (i / L0.n) | 0];

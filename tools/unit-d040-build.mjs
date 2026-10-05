@@ -41,8 +41,8 @@ const MUTANTS = [
   ['造價漏了礦場', 'placeCost', "case 'mine':c=COST.mine;break;", "case 'mine':c=0;break;"],
 ];
 const MUTANTS_3D = [
-  ['油井造價 1300→1301', 'oilwell: 1300, mine: 1500 };', 'oilwell: 1301, mine: 1500 };'],
-  ['礦場造價 1500→1501', 'oilwell: 1300, mine: 1500 };', 'oilwell: 1300, mine: 1501 };'],
+  ['油井造價 1300→1301', 'oilwell: 1300, mine: 1500,', 'oilwell: 1301, mine: 1500,'],
+  ['礦場造價 1500→1501', 'oilwell: 1300, mine: 1500,', 'oilwell: 1300, mine: 1501,'],
   ['油井種類 k49→k48', 'k: 49, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;', 'k: 48, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;'],
   ['礦場種類 k50→k51', 'k: 50, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;', 'k: 51, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;'],
   ['油井不清樹', 'k: 49, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;', 'k: 49, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.zone = 0; t.deco = 0;'],
@@ -55,7 +55,7 @@ const MUTANTS_3D = [
   ['造價漏了油井', "case 'oilwell': c = COST.oilwell; break;", "case 'oilwell': c = 0; break;"],
   ['造價漏了礦場', "case 'mine': c = COST.mine; break;", "case 'mine': c = 0; break;"],
   ['canPlace 漏了「只能蓋在陸地上」', "r = st.resource ? st.resource[idx(w, x, y)] : 0;\n      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';", "r = st.resource ? st.resource[idx(w, x, y)] : 0;"],
-  ['canPlace 漏了「高壓電力走廊擋住」', "if (t.hv471 || t.ug471) return '高壓電力走廊擋住';\n      if (t.bld) return '已有建築';\n      if (toolId === 'oilwell'", "if (t.bld) return '已有建築';\n      if (toolId === 'oilwell'"],
+  ['canPlace 漏了「高壓電力走廊擋住」', "if (t.hv471 || t.ug471) return '高壓電力走廊擋住';\n      if (t.bld) return '已有建築';\n      if (toolId === 'gaswell'", "if (t.bld) return '已有建築';\n      if (toolId === 'gaswell'"],
 ];
 const NEED = {
   'build:oilwell': 40, 'build:mine': 40, 'civic-reason:需油田資源格': 40, 'civic-reason:需礦藏資源格': 40, 'civic-reason:只能蓋在陸地上': 10, 'civic-reason:交通線上不能建造': 5, 'civic-reason:已有建築': 15,

@@ -1,6 +1,6 @@
 // D040 煙霧測試：蓋油井與礦場、資源圖視圖、井枯竭事件的瀏覽器半邊（驗收 7）。由 tools/smoke.mjs 呼叫；
 // 也能單獨跑：node tools/smoke-d040.mjs（先 npm run build；退出碼 0＝綠燈、1＝紅燈）。每一段一個 Chrome。
-//   ui       手機直式 360×740、真的觸控：「公共設施」16 顆三排（每一顆 ≥ 44×44、都在畫面裡），最後兩顆是油井 $1,300、礦場 $1,500；選油井，畫面上的資源圖＝Node 端算的油田空格（只有黃色）、
+//   ui       手機直式 360×740、真的觸控：「公共設施」D040 起 16 顆（D044 起 18 顆）三排（每一顆 ≥ 44×44、都在畫面裡），油井 $1,300、礦場 $1,500 在倒數第四、第三顆；選油井，畫面上的資源圖＝Node 端算的油田空格（只有黃色）、
 //            選礦場只有礦藏（藍色）、換別的工具就收掉；☰「顯示資源圖」兩種都顯示、再按一次收掉；點油田的空格蓋成油井（扣 $1,300、歷史 place k49、資源圖少一格）；
 //            在礦藏上蓋油井、在沒有資源的空地蓋，都被擋下來（講「需油田資源格」、錢與歷史不動）
 //   deplete  底城＋玩家蓋的 7 口井（Node 端推 78 天再存）：頁面再推 2 天，油井 4 口第 80 天耗盡——歷史多 4 筆 depleted（日子與座標＝Node 端同一串）、當天發一則通知「資源耗盡：油井 4 口停產」、
@@ -70,9 +70,9 @@ export async function d040Smoke(withBrowser, log) {
     await tapBtn('.tool[data-t="civic"]');
     const btns = await ev(`[...document.querySelectorAll('#civicSub button')].map(b=>{const r=b.getBoundingClientRect();return [b.dataset.c,Math.round(r.width),Math.round(r.height),r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,Math.round(r.top),b.textContent];})`);
     const rows = new Set(btns.map(b => b[4])).size;
-    log(btns.length === 16 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-2)[0] === 'oilwell' && btns.at(-1)[0] === 'mine' && /油井/.test(btns.at(-2)[5]) && /1,?300/.test(btns.at(-2)[5]) && /礦場/.test(btns.at(-1)[5]) && /1,?500/.test(btns.at(-1)[5]),
-      'D040 驗收 7：手機 360×740「公共設施」16 顆三排，最後兩顆是油井（$1,300）與礦場（$1,500），每一顆 ≥ 44×44 且在畫面裡',
-      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；最後兩顆 ${J(btns.slice(-2).map(b => b[5]))}`);
+    log(btns.length === 18 && btns.every(b => b[1] >= 44 && b[2] >= 44 && b[3]) && rows === 3 && btns.at(-4)[0] === 'oilwell' && btns.at(-3)[0] === 'mine' && /油井/.test(btns.at(-4)[5]) && /1,?300/.test(btns.at(-4)[5]) && /礦場/.test(btns.at(-3)[5]) && /1,?500/.test(btns.at(-3)[5]),
+      'D040 驗收 7：手機 360×740「公共設施」D040 起 16 顆、D044 起 18 顆三排，油井（$1,300）與礦場（$1,500）在倒數第四、第三顆（後面接 D044 的天然氣井與太空研究中心），每一顆 ≥ 44×44 且在畫面裡',
+      `按鈕 ${btns.length} 顆 ${rows} 排、最小 ${Math.min(...btns.map(b => b[1]))}×${Math.min(...btns.map(b => b[2]))}；倒數第四、第三顆 ${J(btns.slice(-4, -2).map(b => b[5]))}`);
     // 資源圖：選油井只有油田、選礦場只有礦藏、換別的工具收掉
     await tapBtn('#civicSub button[data-c="oilwell"]');
     const hOil = await ev(HINTS);

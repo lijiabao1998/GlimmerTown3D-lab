@@ -63,7 +63,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         c.zone[i] = e.zone; c.tree[i] = 0;
         break;
       }
-      case 'place': {  // 51672／51687：新建築 lv 1、age 0；清掉樹、分區
+      case 'place': {  // 51672／51687：新建築 lv 1、age 0；清掉樹、分區（整塊占地）
         if (c.occ[i]) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 已經有建築，不能放`);
         if (e.id !== c.buildings.length + 1) throw new Error(`重播：第 ${e.day} 天放的建築編號 ${e.id} ≠ ${c.buildings.length + 1}`);
         const s = strokeOf(e.g), size = kinds.size(e.k);
@@ -71,7 +71,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         footprint(b, j => touch(s, j));
         c.buildings.push(b);
         footprint(b, j => { c.occ[j] = b.id; });
-        c.tree[i] = 0; c.zone[i] = 0;
+        footprint(b, j => { c.tree[j] = 0; c.zone[j] = 0; });   // D044：多格建築（太空研究中心 3×3）整塊占地都清樹、清分區（52331–52338）；1×1 就是根格自己
         base.set(b.id, { age: 0, from: e.day });
         s.created.push(b.id);
         break;

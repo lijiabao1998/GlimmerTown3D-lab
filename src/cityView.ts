@@ -14,7 +14,7 @@ import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { chronicleOf, depletedToastText } from './sim/decisions.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
@@ -477,7 +477,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
     <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
-    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
+    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
     menu: id => onMenu(id), menuOpen: () => bui.setMenu(menuSections()), startBuild: () => menuCity('newcity'),
   });
@@ -875,7 +875,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function syncRes() {
     if (!sim || !city) { resHints.clear(); attachRes(); return; }
-    const kinds = showRes ? [1, 2] : tool === 'civic' && civicTool === 'oilwell' ? [1] : tool === 'civic' && civicTool === 'mine' ? [2] : [];
+    const kinds = showRes ? [1, 2] : tool === 'civic' && (civicTool === 'oilwell' || civicTool === 'gaswell') ? [1] : tool === 'civic' && civicTool === 'mine' ? [2] : [];   // D044：天然氣井也站在油田格上
     if (!kinds.length) { resHints.clear(); attachRes(); return; }
     const w = sim.w, n = w.N, cells: { x: number; z: number; y: number; kind: number }[] = [], rs = sim.res.resource;
     for (let i = 0; i < n * n; i++) {
@@ -885,9 +885,15 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     }
     resHints.set(cells); attachRes(); needsRender = true;
   }
+  // 選公共設施的一種：城市等級不夠的選不起來，提示解鎖等級（D044，實驗線 selectCatalogTool458 63932）
+  function pickCivic(id: string): boolean {
+    const lk = sim ? toolLock(sim, id) : null;
+    if (lk) { bui.toast(lk, 'bad'); return false; }
+    civicTool = id; return true;
+  }
   function syncDock() {
     syncRes();
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS, prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS.map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
   }
@@ -1444,7 +1450,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // ---- D011 建造 ----
     ui: () => ({ tool, roadTool, civicTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
-    tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') civicTool = rc; else roadTool = rc; } setTool(t); return tool; },
+    tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') pickCivic(rc); else roadTool = rc; } setTool(t); return tool; },
     pipesShown: () => pipesShown,   // D019
     tileWa: (x: number, z: number) => sim ? !!sim.w.tiles[z * sim.w.N + x]?.bld?.wa : null,   // D019：那一格的建築（根格）有沒有水
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
@@ -1452,6 +1458,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     undo: () => doUndo(),
     // 對拍劇本的「資金設定」（兩邊設成同一個數，把建造規則跟每日結算分開；實驗線那邊是注入的 setMoney）：只給守衛與拍照用，介面沒有這個鈕
     simMoney: (v: number) => { if (!sim) return null; sim.money = v; syncUi(); return sim.money; },
+    // D044：城市等級（工具列的鎖）——只給守衛與拍照用；等級本來只升不降，所以這裡只准往上調
+    simRank: (idx: number) => { if (!sim) return null; sim.rankIdx = Math.max(sim.rankIdx, idx | 0); syncDock(); return sim.rankIdx; },
     // 對拍劇本的「亂數對齊」：兩邊的全域亂數都換成 mulberry32(v)（實驗線第 1 天比本線多抽 6 次（第 2 類系統），B 段要比會抽亂數的施工就先對齊）；只給守衛與拍照用
     simSeed: (v: number) => { if (!sim) return null; const g = labRng(v); sim.rng.R = g.R; sim.rng.ri = g.ri; return true; },
     cellScreen: (x: number, z: number) => { const n = city!.n; return screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city!, z * n + x)), z + .5)); },

@@ -121,7 +121,7 @@ async function guards(log) {
     for (const c of rts) {
       const rec = lab.rt[c.id], r = compare36(realDay, c.code, rec);
       if (r.d.length) bad.push(`${c.id}：${r.d[0].slice(0, 200)}（共 ${r.d.length} 天不同）`);
-      if (!(rec.start.rd[0] > 0)) bad.push(`${c.id}：存的碼裡沒有耗損（這一筆沒有意義）`);
+      if (/^[WB]/.test(c.id) && !(rec.start.rd[0] > 0)) bad.push(`${c.id}：存的碼裡沒有耗損（這一筆沒有意義）`);   // D044 的 I@ 沒有油井與礦場，沒有耗損
       info.push(`${c.id} 讀進來 耗損 ${J(rec.start.rd)}`);
     }
     log(!bad.length, `D036 驗收 4：實驗線讀本線存的碼——本線推一段（耗損是本線寫的）再存檔，實驗線用自己的 GV.importCode 讀「本線存出來的碼」再推 ${RT_DAYS} 天，讀回來的 RDEP＝本線的、之後的每一欄跟本線一樣`,

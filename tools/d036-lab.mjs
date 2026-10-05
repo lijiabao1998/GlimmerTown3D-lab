@@ -16,6 +16,7 @@ import { CONFIGS, preloadOf, injectLab } from './lab-configs.mjs';
 import { compactRows } from './d027-lab.mjs';
 import { PROBE as PROBE34 } from './d034-lab.mjs';
 import { d036Runs, d036Seeds, W_DAYS, builtWells } from './d036-cities.mjs';
+import { d044Built } from './d044-cities.mjs';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { loadCode, saveCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
@@ -28,6 +29,9 @@ export const RT_PLAYS = { W2: 13, W3: 2, W4: 30 };   // [城, 本線先推幾天
 // D040：玩家自己蓋的井（builtWells：W1 的底城、油井 4 口、礦場 3 口，走 commitOp）——本線推 [天數] 天再存：13 天（耗損剛開始）、79 天（油井剩 3，實驗線讀進來第 1 天抽完 240）、
 // 81 天（油井已耗盡、碼裡有 depleted 事件，實驗線讀進來之後油井不再抽）
 export const RT_BUILT = [13, 79, 81];
+// D044：玩家自己蓋的天然氣井 3 口與太空研究中心 2 座（d044Built：D044 的底城，commitOp 蓋）——本線推 [天數] 天再存：0 天（剛蓋好、施工中）、15 天（第 165 天，存之前把供應品補到 2000，
+// 實驗線讀進來推 3 天到第 168 天＝24 的倍數，太空研究中心那一輪發生：兩座 $7,000、供應品 −180）
+export const RT_IND = [0, 15];
 let rtCache = null;
 export function d036Rt() {
   if (rtCache) return rtCache;
@@ -43,7 +47,13 @@ export function d036Rt() {
     for (let d = 0; d < days; d++) stepDay(L.sim);
     return { id: `B@${days}`, code: saveCode(L.sim, L.template, L.start), days: RT_DAYS, put: L.put };
   });
-  return rtCache = [...mine, ...built];
+  const ind = RT_IND.map(days => {
+    const L = d044Built();
+    for (let d = 0; d < days; d++) stepDay(L.sim);
+    if (days) L.sim.econ.supplies = 2000;
+    return { id: `I@${days}`, code: saveCode(L.sim, L.template, L.start), days: RT_DAYS, put: L.put };
+  });
+  return rtCache = [...mine, ...built, ...ind];
 }
 
 // RDEP、RESOURCE 的統計與庫存：字串的格式本線 tools/unit-d036.mjs statsOf 逐字相同

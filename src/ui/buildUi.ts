@@ -24,7 +24,7 @@ export const TOOLS: { id: ToolId; label: string; name: string; color: string }[]
 export interface HudState { name: string; sub: string; money: number | null; sandbox: boolean; day: number | null; pop: number | '—' | null; power: [number, number] | null; unsaved?: string; journal?: string }
 export interface DockState {
   mode: 'build' | 'view'; tool: ToolId | null; roadTool: string; roadTools: { id: string; name: string; cost: number }[];
-  civicTool: string; civicTools: { id: string; name: string; short: string; cost: number }[];
+  civicTool: string; civicTools: { id: string; name: string; short: string; cost: number; label?: string; lock?: number }[];   // lock：還沒解鎖要的城市等級（D044）
   prices: Partial<Record<ToolId, number>>; playing: boolean; speed: number; speeds: number[]; canUndo: boolean; sandbox: boolean;
 }
 export interface MenuItem { id: string; label: string; note?: string; icon?: IconName; on?: boolean }
@@ -79,6 +79,7 @@ const CSS = `
 #roadSub button, #civicSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
 #roadSub button small, #civicSub button small { color: #aab3c6; font-size: 10.5px; }
 #roadSub button.on small, #civicSub button.on small { color: #3a2e10; }
+#civicSub button.locked { opacity: .55; }   /* D044：城市等級還沒到：看得到、點了只提示解鎖等級 */
 .coach { align-self: center; max-width: min(560px, 100%); background: #141a30f2; border: 1px solid #e8b74a99; color: #ffe7b0; border-radius: 12px; padding: 7px 12px; font-size: 13px; text-align: center; }
 .coach[hidden] { display: none; }
 .viewNote { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; font-size: 13px; color: #d6dbe6; }
@@ -221,12 +222,15 @@ export function createBuildUi(on: BuildUiEvents) {
       roadSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.r === d.roadTool));
       // 公共設施一組（D016）：十種，名稱與造價照實驗線；清單或沙盒變了才重建
       civicSub.hidden = d.tool !== 'civic' || !build;
-      const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}`).join() + (d.sandbox ? '|free' : '');
+      const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}:${c.lock ?? 0}`).join() + (d.sandbox ? '|free' : '');
       if (ck !== civicKey) {
         civicKey = ck; civicSub.replaceChildren();
         for (const c of d.civicTools) {
           const b = document.createElement('button'), sm = document.createElement('small'); b.dataset.c = c.id;
-          sm.textContent = d.sandbox ? '免費' : '$' + c.cost; b.append(c.name, sm); b.onclick = () => on.civicTool(c.id); civicSub.appendChild(b);
+          sm.textContent = c.lock ? `🔒Lv.${c.lock}` : d.sandbox ? '免費' : '$' + c.cost; b.append(c.label ?? c.name, sm); b.onclick = () => on.civicTool(c.id);
+          b.setAttribute('aria-label', c.lock ? `${c.name}（城市 Lv.${c.lock} 解鎖）` : `${c.name} ${d.sandbox ? '免費' : '$' + c.cost}`);   // D044：名字縮成按鈕放得下的字，完整的名字給讀屏
+          if (c.lock) { b.classList.add('locked'); b.setAttribute('aria-disabled', 'true'); }
+          civicSub.appendChild(b);
         }
       }
       civicSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.c === d.civicTool));

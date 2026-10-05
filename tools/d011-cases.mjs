@@ -50,6 +50,11 @@ export const D040_SEED = 20261040;
 export const WELLS = ['oilwell', 'mine'];
 export const FAMILIES40 = [['r-random', 72, 'random'], ['r-money', 20, 'money'], ['r-doze', 24, 'doze'], ['r-sandbox', 10, 'sandbox'], ['r-tech', 12, 'tech'], ['r-edge', 12, 'edge'], ['r-undo', 8, 'undo'], ['r-wide', 8, 'wide']];
 export const D040_COUNT = FAMILIES40.reduce((n, [, c]) => n + c, 0);
+// D044：天然氣井（k117，找油田資源格、1×1）、太空研究中心（k51，3×3）。家族與地圖同 D040（資源圖、幾口井），大圖多一點（太空研究中心要整塊 3×3 的空地），操作抽 INDUSTRY44；ops 的目標多一類「整塊 3×3 都是空地的格子」（free3）
+export const D044_SEED = 20261044;
+export const INDUSTRY44 = ['gaswell', 'megaproject'];
+export const FAMILIES44 = [['i-random', 60, 'random'], ['i-money', 20, 'money'], ['i-doze', 24, 'doze'], ['i-sandbox', 12, 'sandbox'], ['i-tech', 12, 'tech'], ['i-edge', 14, 'edge'], ['i-undo', 8, 'undo'], ['i-wide', 24, 'wide']];
+export const D044_COUNT = FAMILIES44.reduce((n, [, c]) => n + c, 0);
 
 const ROADS = ['alley', 'road', 'coll', 'art', 'hwy'], ZONES = ['zr', 'zc', 'zi'];
 const SVC1 = [5, 5, 11, 11, 4, 6, 7, 126, 52, 10, 12, 14];            // 單格服務：電廠、警察局、公園、消防、學校、遊樂場、派出所、水塔、醫院、圖書館
@@ -303,7 +308,11 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null, resource = null)
     stuff: list(t => !!(t.deco || t.ruin || t.crater || t.rail || t.tram || t.dock || t.rdec || t.bus || t.lv475 || t.ud475 || t.wp || t.hv471 || t.ug471
       || t.wm472 || t.sm472 || t.levee || t.flood || t.oneway || t.light || t.busLane || t.fly475 || t.ix475)),
   };
-  if (resource) { cats.res1 = []; cats.res2 = []; resource.forEach((v, i) => { if (v) cats['res' + v].push(i); }); }   // D040：資源格（油田、礦藏）
+  if (resource) {   // D040：資源格（油田、礦藏）；D044：整塊 3×3 都是空地的格子（free3，太空研究中心的目標）
+    cats.res1 = []; cats.res2 = []; resource.forEach((v, i) => { if (v) cats['res' + v].push(i); });
+    cats.free3 = [];
+    for (let i = 0; i < N * N; i++) { const x0 = i % N, y0 = (i / N) | 0; if (x0 + 2 >= N || y0 + 2 >= N) continue; let ok = true; for (let dy = 0; dy < 3 && ok; dy++) for (let dx = 0; dx < 3 && ok; dx++) if (!free(tiles[(y0 + dy) * N + x0 + dx])) ok = false; if (ok) cats.free3.push(i); }
+  }
   const xy = i => [i % N, (i / N) | 0], any = () => [g.int(0, N - 1), g.int(0, N - 1)], from = l => l.length ? xy(g.pick(l)) : any();
   const target = tool => {
     if (g.ch(outP)) return [g.int(-3, N + 2), g.int(-3, N + 2)];
@@ -312,8 +321,9 @@ function genOps(g, N, tiles, fam, stacks, multis, civic = null, resource = null)
     if (tool === 'doze') return u < .3 ? from(cats.bld) : u < .45 ? from(cats.multi) : u < .6 ? from(cats.road) : u < .75 ? from(cats.stuff) : u < .88 ? from(cats.zone) : any();
     if (ROADS.includes(tool)) return u < .3 ? from(cats.road) : u < .5 ? from(cats.water) : u < .6 ? from(cats.tree) : u < .7 ? from(cats.bld) : any();
     if (ZONES.includes(tool)) return u < .35 ? from(cats.zone) : u < .5 ? from(cats.tree) : u < .6 ? from(cats.road) : u < .7 ? from(cats.water) : any();
+    if (resource && civic && tool === 'megaproject') return u < .08 ? from(cats.tree) : u < .13 ? from(cats.bld) : u < .18 ? from(cats.water) : u < .23 ? from(cats.road) : u < .28 ? from(cats.stuff) : u < .78 ? from(cats.free3) : u < .9 ? from(cats.free) : any();   // D044
     if (resource && civic && civic.includes(tool)) return u < .08 ? from(cats.tree) : u < .13 ? from(cats.bld) : u < .18 ? from(cats.water) : u < .23 ? from(cats.road) : u < .28 ? from(cats.stuff)
-      : u < .5 ? from(cats[tool === 'oilwell' ? 'res1' : 'res2']) : u < .62 ? from(cats[tool === 'oilwell' ? 'res2' : 'res1']) : u < .72 ? from(cats.free) : any();   // D040：多數落在資源格（對的種類），也試錯的種類
+      : u < .5 ? from(cats[tool === 'oilwell' || tool === 'gaswell' ? 'res1' : 'res2']) : u < .62 ? from(cats[tool === 'oilwell' || tool === 'gaswell' ? 'res2' : 'res1']) : u < .72 ? from(cats.free) : any();   // D040：多數落在資源格（對的種類），也試錯的種類
     if (civic && civic.includes(tool)) return u < .15 ? from(cats.tree) : u < .25 ? from(cats.bld) : u < .35 ? from(cats.water) : u < .45 ? from(cats.road) : u < .8 ? from(cats.free) : any();
     return u < .2 ? from(cats.tree) : u < .3 ? from(cats.bld) : u < .4 ? from(cats.water) : any();
   };
@@ -492,6 +502,20 @@ export function cases40(k) {
     base += count;
   }
   throw new Error(`D040 案例 ${k} 超出 ${D040_COUNT}`);
+}
+
+// D044 第 k 個案例（0 ≤ k < D044_COUNT）：同 cases40（地圖多一張資源圖與幾口井），操作抽 INDUSTRY44
+export function cases44(k) {
+  let base = 0;
+  for (const [name, count, fam] of FAMILIES44) {
+    if (k < base + count) {
+      const j = k - base, g = gen(seedOf(name, j, D044_SEED));
+      const m = genMap(g, fam, j, false, false, false, true), p = paramsOf(g, fam);
+      return { family: name, j, N: m.N, tiles: m.tiles, sparse: m.sparse, ...p, land: landOf(g, m.N), resource: m.resource, ops: genOps(g, m.N, m.tiles, fam, m.stacks, m.multis, INDUSTRY44, m.resource) };
+    }
+    base += count;
+  }
+  throw new Error(`D044 案例 ${k} 超出 ${D044_COUNT}`);
 }
 
 // ---- 兩邊共用的跑法 ----
