@@ -157,8 +157,11 @@ export async function verifyLiveD048(){
         try{await run({page:livePage,open});}
         finally{
           try{
-            session.rawRequests=[...page.requests];session.errors=[...page.errors];
             await verifyDocument();await observer.flush();
+            // Drain the primary CDP session too, then snapshot errors/requests.
+            // Capturing before these awaited barriers could miss a late error.
+            await page.send('Runtime.evaluate',{expression:'0',returnByValue:true});
+            session.rawRequests=[...page.requests];session.errors=[...page.errors];
             const unexpected=unexpectedRequests([...session.rawRequests,...session.networkRequests.map(r=>r.url)]);
             assert.deepEqual(session.redirects,[],'no HTTP redirects permitted');
             assert.deepEqual(session.childFrames,[],'no observed child-frame navigation permitted');
