@@ -1,3 +1,4 @@
+// D046：此模組保留 D045 的 2D 原文對拍核心；實際新選單走 commissionAvailability.ts，3D 存讀走 commissionSave.ts。
 // 市長委託（D045，T385 市長委託三選一）：11 條委託表、決定性的三選一、接單、放棄、每天的結算、存與讀。
 // 出處：2D 實驗線 lijiabao1998/GlimmerTown-lab @ d23c18d，index.html 行號。
 //   委託表 CMS385 37784–37798、狀態 cms385 37801（emptyCms385 37800）、cmsHash385 37802、cmsOffers385 37803、cmsSave385 37810、cmsLoad385 37811、cmsAccept385 37828、cmsDrop385 37834；
@@ -5,7 +6,7 @@
 // 規矩（實驗線 37775–37782 的註解）：抽選＝世界種子＋輪次的純函式雜湊（零亂數消耗）；offers 不落盤（重算恆同）；沙盒（diff 3）不出委託；
 //   每天的結算純讀當天已算好的值、獎金是一次性的 money += bonus（不進當天的收入）；未接單＝零模擬副作用；失敗（過期）不毀城。
 // 存檔欄位 cms385 照實驗線的格式 {act, st, acc, hold, n, done}，零狀態不落欄位；讀檔整欄驗型，畸形就整欄棄用回零、不丟例外。
-// 本線沒有的輸入：公共運量（transitRidership，公車與票務 D037 沒搬）——兩條運量委託可以接、但這裡傳 0，連續天數永遠是 0，做不到（面板上標明）。
+// 本線沒有的輸入：公共運量（transitRidership，公車與票務 D037 沒搬）——舊抽選仍保留兩條 id 供對拍；D046 新選單排除，舊進行中仍傳 0、可無懲罰放棄。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；不動世界歷史（歷史由 day.ts／edit.ts 記）。
 export type CmsType = 'acc' | 'hold' | 'tech' | 'stock';
 export interface CmsDef { id: string; nm: string; ic: string; type: CmsType; src: string; target?: number; holdN?: number; days: number; bonus: number; minRank: number }

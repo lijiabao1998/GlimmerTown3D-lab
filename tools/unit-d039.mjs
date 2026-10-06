@@ -197,7 +197,7 @@ async function guards(log) {
     const rows = packHistory(sample1);
     const muts = [
       ['journal：預算碼用政策碼表', 'src/io/journal.ts', [['BUDGET_CODES.indexOf(e.cat)', 'POLICY_CODES.indexOf(e.cat)']]],
-      ['journal：研究列丟費用', 'src/io/journal.ts', [['row = [20, dd, TECH_CODES.indexOf(e.id), e.fee]', 'row = [20, dd, TECH_CODES.indexOf(e.id), 0]']]],
+      ['journal：研究列丟費用', 'src/io/journal.ts', [['row = [code, dd, TECH_CODES.indexOf(e.id), e.fee]', 'row = [code, dd, TECH_CODES.indexOf(e.id), 0]']]],
       ['journal：方向碼用節點碼表', 'src/io/journal.ts', [['SPEC_CODES.indexOf(e.id)', 'TECH_CODES.indexOf(e.id)']]],
       ['journal：政策列丟 from', 'src/io/journal.ts', [['POLICY_CODES.indexOf(e.key), e.from, e.value]', 'POLICY_CODES.indexOf(e.key), e.value, e.value]']]],
     ];

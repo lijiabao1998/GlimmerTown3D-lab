@@ -3,6 +3,7 @@
 //   接續編碼：緊湊列是差值編碼（天數、手勢編號跟上一列比），記住編到哪（PackState），新的事件接著編，不重編整份；
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
+import { EVENT_REGISTRY } from '../sim/eventRegistry.ts';
 import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, type CityEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
@@ -17,44 +18,44 @@ export function hashRow(h: number, row: unknown[]): number {
 export const hashRows = (rows: readonly unknown[][], h0 = PACK0.h) => rows.reduce<number>((h, r) => hashRow(h, r), h0);
 
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
-// 從 st 那一列接著把 hist[st.n..] 編成緊湊列（種類碼與欄位同 save.ts T_CODE／ROW_FIELDS）
+// 從 st 那一列接著把 hist[st.n..] 編成緊湊列（種類碼與欄位統一登記在 eventRegistry.ts）
 export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unknown[][]; st: PackState } {
   const rows: unknown[][] = [];
   let { d0, g0, h } = st;
   for (let k = st.n; k < hist.length; k++) {
-    const e = hist[k], dd = e.day - d0; d0 = e.day;
+    const e = hist[k], code = EVENT_REGISTRY[e.t]?.code, dd = e.day - d0; d0 = e.day;
     let row: unknown[];
     switch (e.t) {
-      case 'import': row = [0, dd, e.source, e.gameVer, e.seed, e.codeHash, e.buildings]; break;
-      case 'grow': case 'upgrade': row = [e.t === 'grow' ? 1 : 2, dd, e.x, e.z, e.k, e.lv, e.v]; break;
-      case 'road': row = [3, dd, e.x, e.z, e.rc, e.cost, e.g - g0]; g0 = e.g; break;
-      case 'zone': row = [4, dd, e.x, e.z, e.zone, e.cost, e.g - g0]; g0 = e.g; break;
-      case 'place': row = [5, dd, e.x, e.z, e.k, e.lv, e.v, e.id, e.cost, e.g - g0]; g0 = e.g; break;
+      case 'import': row = [code, dd, e.source, e.gameVer, e.seed, e.codeHash, e.buildings]; break;
+      case 'grow': case 'upgrade': row = [code, dd, e.x, e.z, e.k, e.lv, e.v]; break;
+      case 'road': row = [code, dd, e.x, e.z, e.rc, e.cost, e.g - g0]; g0 = e.g; break;
+      case 'zone': row = [code, dd, e.x, e.z, e.zone, e.cost, e.g - g0]; g0 = e.g; break;
+      case 'place': row = [code, dd, e.x, e.z, e.k, e.lv, e.v, e.id, e.cost, e.g - g0]; g0 = e.g; break;
       case 'doze': {
-        row = [6, dd, e.x, e.z, LAYERS.indexOf(e.layer), e.cost, e.g - g0];
+        row = [code, dd, e.x, e.z, LAYERS.indexOf(e.layer), e.cost, e.g - g0];
         if (e.layer === 'bld' && e.k !== undefined && e.id !== undefined) row.push(e.k, e.id);
         g0 = e.g; break;
       }
-      case 'undo': row = [7, dd, e.g - g0, e.refund]; g0 = e.g; break;
-      case 'restyle': row = [8, dd, e.x, e.z, e.v]; break;
-      case 'pipe': row = [9, dd, e.x, e.z, e.cost, e.g - g0]; g0 = e.g; break;   // D019
+      case 'undo': row = [code, dd, e.g - g0, e.refund]; g0 = e.g; break;
+      case 'restyle': row = [code, dd, e.x, e.z, e.v]; break;
+      case 'pipe': row = [code, dd, e.x, e.z, e.cost, e.g - g0]; g0 = e.g; break;   // D019
       // D026（城市格式 6）：災禍與處置。fire [10,dDay,x,z,k]、burn [11,dDay,x,z,k,id]、crime [12,dDay,x,z,k]、abandon [13,dDay,x,z,k,id]、sick [14,dDay,x,z]、death [15,dDay,x,z]、act [16,dDay,x,z,動作碼,cost]（動作碼 0 滅火、1 處理犯罪、2 治療）
-      case 'fire': row = [10, dd, e.x, e.z, e.k]; break;
-      case 'burn': row = [11, dd, e.x, e.z, e.k, e.id]; break;
-      case 'crime': row = [12, dd, e.x, e.z, e.k]; break;
-      case 'abandon': row = [13, dd, e.x, e.z, e.k, e.id]; break;
-      case 'sick': row = [14, dd, e.x, e.z]; break;
-      case 'death': row = [15, dd, e.x, e.z]; break;
-      case 'act': row = [16, dd, e.x, e.z, ACT_CODES.indexOf(e.what), e.cost]; break;
-      case 'merge': row = [17, dd, e.x, e.z, e.k, e.v, ...e.from]; break;   // D034（城市格式 7）：尾巴是被吸收的建築編號
+      case 'fire': row = [code, dd, e.x, e.z, e.k]; break;
+      case 'burn': row = [code, dd, e.x, e.z, e.k, e.id]; break;
+      case 'crime': row = [code, dd, e.x, e.z, e.k]; break;
+      case 'abandon': row = [code, dd, e.x, e.z, e.k, e.id]; break;
+      case 'sick': row = [code, dd, e.x, e.z]; break;
+      case 'death': row = [code, dd, e.x, e.z]; break;
+      case 'act': row = [code, dd, e.x, e.z, ACT_CODES.indexOf(e.what), e.cost]; break;
+      case 'merge': row = [code, dd, e.x, e.z, e.k, e.v, ...e.from]; break;   // D034（城市格式 7）：尾巴是被吸收的建築編號
       // D039（城市格式 8）：決策與科技完成。policy [18,dDay,政策碼,改之前,改之後]、budget [19,dDay,類別碼,改之前,改之後]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]
-      case 'policy': row = [18, dd, POLICY_CODES.indexOf(e.key), e.from, e.value]; break;
-      case 'budget': row = [19, dd, BUDGET_CODES.indexOf(e.cat), e.from, e.value]; break;
-      case 'research': row = [20, dd, TECH_CODES.indexOf(e.id), e.fee]; break;
-      case 'spec': row = [21, dd, SPEC_CODES.indexOf(e.id)]; break;
-      case 'techdone': row = [22, dd, TECH_CODES.indexOf(e.id)]; break;
-      case 'depleted': row = [23, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
-      case 'cms': row = e.ev === 'done' ? [24, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id), e.bonus ?? 0] : [24, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id)]; break;   // D045（城市格式 10）：完成才帶獎金
+      case 'policy': row = [code, dd, POLICY_CODES.indexOf(e.key), e.from, e.value]; break;
+      case 'budget': row = [code, dd, BUDGET_CODES.indexOf(e.cat), e.from, e.value]; break;
+      case 'research': row = [code, dd, TECH_CODES.indexOf(e.id), e.fee]; break;
+      case 'spec': row = [code, dd, SPEC_CODES.indexOf(e.id)]; break;
+      case 'techdone': row = [code, dd, TECH_CODES.indexOf(e.id)]; break;
+      case 'depleted': row = [code, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
+      case 'cms': row = e.ev === 'done' ? [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id), e.bonus ?? 0] : [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id)]; break;   // D045（城市格式 10）：完成才帶獎金
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

@@ -16,12 +16,14 @@
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
 import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type CmsEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
+import { fnv1a } from '../sim/rng.ts';
+import { EVENT_BY_CODE, EVENT_REGISTRY, LEGACY_UNVERSIONED_FORMAT, minimumEventFormat } from '../sim/eventRegistry.ts';
 import { simFromSave, budgetOfSave, type Sim } from '../sim/day.ts';
 import { restyle531 } from '../sim/restyle.ts';
 import { FLAG_LAYERS } from '../sim/rules/lab.ts';
 import { rdepOfSave, rdepPairs } from '../sim/rules/resource.ts';
 import { techSave } from '../sim/rules/tech.ts';
-import { cmsSave } from '../sim/rules/commission.ts';
+import { cmsSave3d } from '../sim/rules/commissionSave.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 
 export const HISTORY_VER = 2;
@@ -42,7 +44,6 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // D040（城市格式 9）：depleted [23,dDay,x,z,k]（k 是 49 油井或 50 礦場）。
 // D039（城市格式 8）：policy [18,dDay,政策碼,改之前的值,改之後的值]、budget [19,dDay,類別碼,改之前的值,改之後的值]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]（碼表在 city.ts，只往後加）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
-const T_CODE = ['import', 'grow', 'upgrade', 'road', 'zone', 'place', 'doze', 'undo', 'restyle', 'pipe', 'fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act', 'merge', 'policy', 'budget', 'research', 'spec', 'techdone', 'depleted', 'cms'] as const;
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
 // 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
@@ -127,21 +128,13 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
     default: throw bad('種類');
   }
 }
-const ROW_FIELDS: Record<string, string[]> = {
-  import: ['source', 'gameVer', 'seed', 'codeHash', 'buildings'], grow: ['x', 'z', 'k', 'lv', 'v'], upgrade: ['x', 'z', 'k', 'lv', 'v'],
-  road: ['x', 'z', 'rc', 'cost', 'g'], zone: ['x', 'z', 'zone', 'cost', 'g'], place: ['x', 'z', 'k', 'lv', 'v', 'id', 'cost', 'g'],
-  doze: ['x', 'z', 'layer', 'cost', 'g', 'k', 'id'], undo: ['g', 'refund'], restyle: ['x', 'z', 'v'], pipe: ['x', 'z', 'cost', 'g'],
-  fire: ['x', 'z', 'k'], burn: ['x', 'z', 'k', 'id'], crime: ['x', 'z', 'k'], abandon: ['x', 'z', 'k', 'id'], sick: ['x', 'z'], death: ['x', 'z'], act: ['x', 'z', 'what', 'cost'],
-  merge: ['x', 'z', 'k', 'v'],   // D034：後面接被吸收的建築編號（不定長）
-  policy: ['key', 'from', 'value'], budget: ['cat', 'from', 'value'], research: ['id', 'fee'], spec: ['id'], techdone: ['id'], depleted: ['x', 'z', 'k'], cms: ['ev', 'id', 'bonus'],   // D039：碼在 city.ts 的碼表；D040：depleted
-};
 export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
   const out: CityEvent[] = [];
   let d0 = 0, g0 = 0;
   rows.forEach((row, k) => {
     if (!Array.isArray(row) || !isInt(row[0]) || !isNum(row[1])) throw new Error(`歷史第 ${k + 1} 筆不是一列`);
-    const t = T_CODE[row[0]], names = t ? ROW_FIELDS[t] : [];
+    const t = EVENT_BY_CODE[row[0]], names = t ? EVENT_REGISTRY[t].fields : [];
     if (!t) throw new Error(`歷史第 ${k + 1} 筆的種類不對`);
     if (t !== 'merge' && row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
     const at = (name: string) => {
@@ -214,7 +207,7 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   o.sup = s.econ.supplies; o.gds = s.econ.goods;
   for (const [k, v] of [['fuel364', s.econ.fuel], ['steel364', s.econ.steel], ['shipCount', s.econ.shipCount], ['shipProgress', s.econ.shipProgress]] as const) { if (v > 0) o[k] = v; else delete o[k]; }
   // D038：科技 tech343（零狀態不落欄位，66770）與城市方向 spec386（沒選不落欄位，66772）；範本裡讀進來的舊值拿掉再按模擬現在的寫（畸形的欄位讀檔整個棄用，存回去就不再帶著）
-  { const cq = cmsSave(s.cms); if (cq) o.cms385 = cq; else delete o.cms385; }   // D045：市長委託 cms385（零狀態不落欄位，66771；範本裡的舊值拿掉再按模擬現在的寫）
+  { const cq = cmsSave3d(s.cms); if (cq.cms385) o.cms385 = cq.cms385; else delete o.cms385; if (cq.cms3d) o.cms3d = cq.cms3d; else delete o.cms3d; }   // D046：2D 整數 cms385＋配對的小數精度；每次都更新／清掉範本舊欄位
   { const tq = techSave(s.tech, s.edu.tech); if (tq) o.tech343 = tq; else delete o.tech343; if (s.edu.spec) o.spec386 = s.edu.spec; else delete o.spec386; }
   // D036：資源耗損 rdep（66730、66765；稀疏的 [格索引, 已開採量]）。模擬的耗損跟範本讀進來的一樣就不碰（沒挖過的存檔位元組不變，範本裡的寫法照舊）；變了才寫（全空＝null）
   { const was = rdepOfSave(template.rdep, nn), now = s.res.rdep; let same = true; for (let i = 0; i < nn && same; i++) if (was[i] !== now[i]) same = false; if (!same) o.rdep = rdepPairs(now); }
@@ -286,7 +279,21 @@ export function viewCode(code: string, kinds: KindTable, vrank: Record<string, n
 
 function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, journal?: JournalIn) {
   const sim = simFromSave(save, code, kinds, vrank);
-  const d3 = save.raw.d3 as Partial<D3Ext> | undefined, only = (why: string) => ({ ok: true as const, sim, start: code, template: save.raw, replayed: false, note: why });
+  const d3 = save.raw.d3 as Partial<D3Ext> | undefined;
+  const only = (why: string) => {
+    let start = code;
+    if (Object.hasOwn(save.raw, 'd3')) {
+      // D046：只有確定退回快照時才截掉舊 d3，否則每次失配都把上一份完整歷史再包進起始碼，大小呈指數增加。
+      // 不改失配判定、不補造歷史：例如鋼材加速施工的額外屋齡仍未記事件，遇到它仍如實回報只用存檔。
+      // raw 的圖層已解開 RLE，先拿掉舊 z 再編；其餘未知欄位、委託與 cms3d 精度完整保留。
+      const snapshot = { ...save.raw }; delete snapshot.d3; delete snapshot.z;
+      start = encodeLabCode(snapshot, { deflate: true });
+      // simFromSave 才剛從快照建立這筆 import；尚未接入任何舊歷史，雜湊必須對準新的起始碼。
+      const first = sim.city.history[0];
+      if (first?.t === 'import') sim.city.history[0] = { ...first, codeHash: fnv1a(start) };
+    }
+    return { ok: true as const, sim, start, template: save.raw, replayed: false, note: why };
+  };
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
   if (d3.hv !== undefined && d3.hv !== HISTORY_VER && d3.hv !== JOURNAL_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
@@ -307,6 +314,9 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   }
   try {
     events = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? unpackHistory(rows, save.n) : checkHistory(d3.h, save.n);
+    // D046：宣稱舊格式卻塞入新事件不能重播。分開「最早格式」與寫檔下限 4，讓真正的格式 1–3 仍能讀。
+    const declared = d3.f ?? LEGACY_UNVERSIONED_FORMAT, newer = events.find(e => minimumEventFormat(e) > declared);
+    if (newer) return only(`歷史事件 ${newer.t} 需要城市格式 ${minimumEventFormat(newer)}，存檔卻標 ${declared}：只用存檔`);
     c = replayCity(d3.s, events, kinds, save.day);
   } catch (e) { return only('歷史重播失敗，只用存檔：' + (e as Error).message); }
   const bad = mismatch(c, sim.city);

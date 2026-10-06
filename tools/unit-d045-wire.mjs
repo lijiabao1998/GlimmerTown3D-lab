@@ -142,12 +142,12 @@ async function guards(log) {
       const c = d045Load({ cms385: lab }), back = decodeLabCode(saveCode(c.sim, c.template, c.start)).save.raw.cms385;
       const K = o => J(Object.entries(o ?? {}).sort());   // 鍵的順序不算（實驗線的欄位是 act、st、acc、hold、n、done，這裡逐欄比）
       if (K(c.sim.cms) !== K(lab) || K(back) !== K(lab)) bad.push(`2D 存檔的委託 讀進來 ${J(c.sim.cms)}、存回去 ${J(back)}（要原樣）`);
-      // 實驗線的怪癖（37811 `Number.isInteger`）：累計 acc 帶小數的存檔讀回來整欄棄用（鋼材用量 steelUsed 是小數，造船用鋼的進度存檔後通常會丟）；本線照抄
+      // D046 的 3D 讀檔接頭修復舊檔小數；純 cmsLoad 的 2D 原文對拍仍在 unit-d045.mjs。
       const frac = d045Load({ cms385: { ...lab, acc: 12.5 } });
-      if (J(frac.sim.cms) !== J({ act: '', st: 0, acc: 0, hold: 0, n: 0, done: [] })) bad.push(`acc 帶小數的存檔讀進來 ${J(frac.sim.cms)}（實驗線整欄棄用）`); else info.push('acc 帶小數整欄棄用（照實驗線）');
+      if (K(frac.sim.cms) !== K({ ...lab, acc: 12.5 })) bad.push(`acc 帶小數的舊檔讀進來 ${J(frac.sim.cms)}（D046 要保留 12.5）`); else info.push('D046 舊 3D 小數累計保留');
     }
     // 畸形欄位整欄棄用回零（同實驗線 cmsLoad385；公式在 unit-d045.mjs 逐項比，這裡走完整的讀檔）
-    const malformed = [{ act: 'nope', st: 5 }, { act: 'steel40', st: 0 }, { act: 'steel40', st: 5, done: ['steel40'] }, { act: '', done: ['x'] }, { act: '', n: -1 }, { act: '', n: 1.5 }, 'x', [1], { act: 5 }, { done: 'steel40' }, { act: '', done: ['steel40', 'steel40'] }];
+    const malformed = [{ act: 'nope', st: 5 }, { act: 'steel40', st: 0 }, { act: 'techC6', st: 5, done: ['techC6'] }, { act: '', done: ['x'] }, { act: '', n: -1 }, { act: '', n: 1.5 }, 'x', [1], { act: 5 }, { done: 'steel40' }, { act: '', done: ['steel40', 'steel40'] }];
     for (const m of malformed) {
       const c = d045Load({ cms385: m });
       if (J(c.sim.cms) !== J({ act: '', st: 0, acc: 0, hold: 0, n: 0, done: [] })) bad.push(`畸形欄位 ${J(m)} 讀進來 ${J(c.sim.cms)}（要整欄棄用回零）`);
@@ -231,11 +231,11 @@ async function guards(log) {
         if (want && !raw.cms385) out.push(name); else bad.push(`突變「${name}」沒抓到`);
       } catch (e) { bad.push(`突變「${name}」：${String(e.message).slice(0, 120)}`); }
     };
-    await saveMut('save.ts 不寫 cms385', [['{ const cq = cmsSave(s.cms); if (cq) o.cms385 = cq; else delete o.cms385; }', '']]);
+    await saveMut('save.ts 不寫 cms385', [['{ const cq = cmsSave3d(s.cms); if (cq.cms385) o.cms385 = cq.cms385; else delete o.cms385; if (cq.cms3d) o.cms3d = cq.cms3d; else delete o.cms3d; }', '']]);
     {   // day.ts：讀檔不讀 cms385
       const { dayVariant } = await import('./unit-d021.mjs');
       try {
-        const V = await dayVariant([['cms: cmsLoad(save.raw.cms385), tech: T.st,', 'cms: cmsLoad(undefined), tech: T.st,']]), L = stateFor(), r = decodeLabCode(saveCode(L.sim, L.template, L.start));
+        const V = await dayVariant([['cms: cmsLoad3d(save.raw.cms385, save.raw.cms3d), tech: T.st,', 'cms: cmsLoad3d(undefined), tech: T.st,']]), L = stateFor(), r = decodeLabCode(saveCode(L.sim, L.template, L.start));
         const s2 = V.simFromSave(r.save, saveCode(L.sim, L.template, L.start), KT, vrank);
         if (s2.cms.act === '') out.push('day.ts 讀檔不讀 cms385'); else bad.push('突變「讀檔不讀 cms385」沒抓到');
         const H = await dayVariant([['...(cmsSave(s.cms) ? [cmsSave(s.cms)] : []),', '']]), a = d045Load(), b = stateFor();
@@ -263,7 +263,7 @@ async function guards(log) {
         ['接單不記歷史', [["if (c) s.city.history.push({ day: s.day, t: 'cms', ev: 'accept', id: c.id });", '']], E => { const q = d045Load().sim, n = q.city.history.length; E.acceptCommission(q, 0); return q.city.history.length === n; }],
         ['放棄不記歷史', [["if (c) s.city.history.push({ day: s.day, t: 'cms', ev: 'drop', id: c.id });", '']], E => { const q = stateFor().sim, n = q.city.history.length; E.dropCommission(q); return q.city.history.length === n; }],
         ['接單的開始日不是今天', [['seed: s.seed, day: s.day });\n  if (c) s.city', 'seed: s.seed, day: s.day + 1 });\n  if (c) s.city']], E => { const q = d045Load().sim; E.acceptCommission(q, 0); return q.cms.st !== q.day; }],
-        ['三選一不看世界種子', [['cmsOffers(s.seed, s.rankIdx, s.cms)', 'cmsOffers(0, s.rankIdx, s.cms)']], E => J(E.commissionOffers(d045Load().sim).map(c => c.id)) !== J(commissionOffers(d045Load().sim).map(c => c.id))],
+        ['三選一不看世界種子', [['playableCmsOffers(s.seed, s.rankIdx, s.cms)', 'playableCmsOffers(0, s.rankIdx, s.cms)']], E => J(E.commissionOffers(d045Load().sim).map(c => c.id)) !== J(commissionOffers(d045Load().sim).map(c => c.id))],
       ]) {
         try { const E = await loadMod('src/sim/edit.ts', edits, { './rules/build.ts': B }); if (probe(E)) out.push(name); else bad.push(`突變「${name}」沒抓到`); }
         catch (e) { bad.push(`edit.ts 突變「${name}」：${String(e.message).slice(0, 120)}`); }

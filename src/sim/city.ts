@@ -5,6 +5,8 @@
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
 import { fnv1a } from './rng.ts';
+import { CITY_FORMAT } from './eventRegistry.ts';
+export { CITY_FORMAT, eventFormat } from './eventRegistry.ts';
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
 // 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
@@ -12,13 +14,12 @@ import { fnv1a } from './rng.ts';
 // 格式 5（D019）：多了鋪配水管的事件 pipe，拆除多了水管那一層（layer 'wp'）。格式 1–4 照讀；比 5 新的不猜（src/io/save.ts）
 // 格式 6（D026）：多了每天的災禍與玩家的處置——起火 fire、燒毀 burn、犯罪 crime、廢棄 abandon、生病 sick、死亡 death、處置 act（滅火、處理犯罪、治療），拆除多了焦土那一層（layer 'ruin'）。格式 1–5 照讀；比 6 新的不猜
 // 格式 7（D034）：多了合併事件 merge——四棟相鄰同類二級以上住宅或商業合併成 2×2 摩天樓（k33、k34），更快樂的城九格合併成 3×3 巨廈（k105、k106）；吸收的建築成了墓碑。格式 1–6 照讀
+// 格式 8（D039）：多了玩家決策與科技完成——政策 policy、服務預算 budget、開始研究 research、選城市方向 spec、研究完成 techdone；沒有座標，是整座城的事（碼表在下面，只往後加）。格式 1–7 照讀
 // 格式 9（D040）：多了資源耗盡事件 depleted——油井、礦場的耗損累積到 240（一口井只記一次）。格式 1–8 照讀
 // 格式 10（D045）：多了市長委託事件 cms——接受 accept、放棄 drop、完成 done（帶獎金）、過期 expire；沒有座標，是整座城的事（碼 24，委託碼表在下面，只往後加）。格式 1–9 照讀
-// 格式 8（D039）：多了玩家決策與科技完成——政策 policy、服務預算 budget、開始研究 research、選城市方向 spec、研究完成 techdone；沒有座標，是整座城的事（碼表在下面，只往後加）。格式 1–7 照讀
-export const CITY_FORMAT = 10;
 // 存檔寫的格式看歷史裡有什麼（D019、D026）：有災禍事件、拆焦土才寫 6；有鋪水管、拆水管的事件寫 5；都沒有就寫 4——比這一版舊的程式（認到 4 或 5）照樣讀得回來，
 // 沒有水管、沒有災禍的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
-export const eventFormat = (e: CityEvent) => e.t === 'cms' ? 10 : e.t === 'depleted' ? 9 : DECISION_EVENTS.includes(e.t) ? 8 : e.t === 'merge' ? 7 : HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
+// D046：事件碼、列欄位與最早格式統一登記在 eventRegistry.ts；這裡保留既有匯出介面。
 export const DECISION_EVENTS: readonly string[] = ['policy', 'budget', 'research', 'spec', 'techdone'];
 export const HAZARD_EVENTS: readonly string[] = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'];
 

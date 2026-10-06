@@ -569,6 +569,11 @@ await guard('./unit-d042.mjs', 'd042Guards');   // D042：合併提示一天多�
 await guard('./unit-d043.mjs', 'd043Guards');   // D043：市長委託（T385）與政策實驗室（T504）——量缺口、鎖住、不搬：實驗線原文事實、起步城 24 次接單 0 次完成且零模擬副作用、完成的那一次 +$1,800、T504 生效日＝ceil(天數／量能)、資金差、本線立即生效且沒有這兩個系統
 await guard('./unit-d039.mjs', 'd039Guards');   // D039：玩家決策進世界歷史（城市格式 8）——碼表字面量＝目錄、記錄只在真的改了時記、200 段隨機劇本重播＝模擬、編解碼與只增不改、壞資料與突變、存讀與舊檔、大事記白話
 
+await guard('./unit-d046.mjs', 'd046Guards');
+await guard('./unit-d046-save.mjs', 'd046SaveGuards');
+await guard('./unit-d046-history.mjs', 'd046HistoryGuards');
+await guard('./unit-d046-fallback.mjs', 'd046FallbackGuards');
+
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
   const bad = [];
