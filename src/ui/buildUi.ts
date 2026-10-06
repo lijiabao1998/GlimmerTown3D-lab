@@ -4,6 +4,7 @@
 // 每天都會更新的元素（播放鈕圖示、路的等級、狀態列數字）只改文字與樣式、不重建節點（審查：播放中每天重建，滑鼠按下與放開之間節點換掉，點擊就掉了）。
 // 文字一律用 textContent 寫（選單的註記、城市名都可能來自分享碼）。
 import { ICONS, type IconName } from './icons.ts';
+import { costTagPosition } from './costTag.ts';
 
 // civic＝公共設施一組（D016）：按下去跟「路」一樣跳出一排可選（警察局、派出所、消防局、醫院……），按鈕上的字跟著選到的那一種
 export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'civic' | 'doze';
@@ -93,7 +94,7 @@ const CSS = `
 .viewNote[hidden] { display: none; }
 .viewNote button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; min-height: 44px; border-radius: 12px; background: #e8b74a; color: #1c1a14; border-color: #e8b74a; font-weight: 700; }
 .viewNote button svg { width: 18px; height: 18px; }
-#costTag { position: absolute; transform: translate(-50%, -150%); padding: 4px 9px; border-radius: 999px; background: #141a30f2; border: 1px solid #ffffff55; font-weight: 700; font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+#costTag { position: absolute; transform: translateX(-50%); box-sizing: border-box; width: max-content; max-width: calc(100vw - 16px); padding: 4px 9px; border-radius: 999px; background: #141a30f2; border: 1px solid #ffffff55; font-weight: 700; font-size: 13px; line-height: 18px; text-align: center; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 #costTag[hidden] { display: none; }
 #costTag.bad { color: #ff9a9a; border-color: #ff8a8a99; }
 #toasts { position: absolute; top: calc(98px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 6px; align-items: center; width: max-content; max-width: calc(100vw - 24px); }
@@ -178,15 +179,39 @@ export function createBuildUi(on: BuildUiEvents) {
   chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved'; chJ.s.dataset.k = 'journal';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
-  let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight;
-  // 下方整塊的上緣：排版之後才量（ResizeObserver 在排版後、畫之前呼叫，讀位置不會逼瀏覽器多排一次）；拖曳中只讀這個數
-  const measureDock = () => { dockTop = dock.getBoundingClientRect().top; };
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(dock);
-  // Keep notifications below the wrapping HUD, including the D046 commission row.
-  const measureHud = () => { toasts.style.top = Math.ceil($('hud').getBoundingClientRect().bottom + 8) + 'px'; };
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureHud).observe($('hud'));
-  addEventListener('resize', () => requestAnimationFrame(measureHud));
-  addEventListener('resize', () => requestAnimationFrame(measureDock));
+  let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight, hudBottom = 8, noticesBottom = 8;
+  let cost: { x: number; y: number; text: string } | null = null;
+  let measuredCost = { text: '', w: 0, h: 0, viewportWidth: 0 };
+  const positionCost = () => {
+    if (!cost) return;
+    let estimate = 20; for (const ch of cost.text) estimate += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
+    const maxWidth = Math.max(1, innerWidth - 16), measured = measuredCost.text === cost.text && measuredCost.viewportWidth === innerWidth;
+    const w = measured ? measuredCost.w : Math.min(estimate, maxWidth);
+    const h = measured ? measuredCost.h : 10 + 18 * Math.ceil(estimate / maxWidth);
+    const p = costTagPosition(cost.x, cost.y, w, h, innerWidth, innerHeight, Math.max(hudBottom, noticesBottom) + 8, dockTop - 8);
+    costTag.hidden = !p;   // A tiny viewport with no free strip must never cover an interactive control.
+    if (p) { costTag.style.left = p.left + 'px'; costTag.style.top = p.top + 'px'; }
+  };
+  // ResizeObserver caches chrome geometry after layout. Pointer movement only reads
+  // these numbers; HUD wrapping, live commission rows and expiring notices also
+  // reposition an already-visible tag without waiting for another finger movement.
+  const measureChrome = () => {
+    hudBottom = $('hud').getBoundingClientRect().bottom;
+    toasts.style.top = Math.ceil(hudBottom + 8) + 'px';
+    noticesBottom = toasts.childElementCount ? toasts.getBoundingClientRect().bottom : hudBottom;
+    dockTop = dock.hidden ? innerHeight : dock.getBoundingClientRect().top;
+    positionCost();
+  };
+  if (typeof ResizeObserver !== 'undefined') {
+    const chromeObserver = new ResizeObserver(measureChrome);
+    for (const el of [$('hud'), dock, toasts]) chromeObserver.observe(el);
+    new ResizeObserver(() => {
+      if (!cost || costTag.hidden) return;
+      const r = costTag.getBoundingClientRect();
+      measuredCost = { text: cost.text, w: r.width, h: r.height, viewportWidth: innerWidth }; positionCost();
+    }).observe(costTag);
+  }
+  addEventListener('resize', () => requestAnimationFrame(measureChrome));
   return {
     root, style,
     setHud(h: HudState) {
@@ -265,17 +290,13 @@ export function createBuildUi(on: BuildUiEvents) {
       while (toasts.childElementCount > 3) toasts.firstElementChild!.remove();
       setTimeout(() => { t.style.opacity = '0'; }, 2200); setTimeout(() => t.remove(), 2700);
     },
-    // 總價標籤掛在手指那一格上方；靠近畫面邊緣時往內收，整個標籤留在畫面裡，也不壓到下方整塊（審查：之前被工具列蓋住）。
-    // 寬度用字數估（全形約 13 px、其他約 8 px，加左右留白），不讀 offsetWidth：拖曳中每次更新都讀會逼瀏覽器同步排版（預算 16 ms）；
-    // 下方整塊的上緣也不在這裡量（見 measureDock）
+    // D047: fit the complete tag between the HUD/notices and dock, using cached
+    // measured size (a conservative text estimate until its first layout).
     showCost(x: number, y: number, text: string, bad: boolean) {
       costTag.hidden = false; setText(costTag, text); costTag.classList.toggle('bad', bad);
-      let w = 20; for (const ch of text) w += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
-      const h = 26, m = 8;
-      costTag.style.left = Math.max(m + w / 2, Math.min(innerWidth - m - w / 2, x)) + 'px';
-      costTag.style.top = Math.max(m + h * 1.5, Math.min(innerHeight - m, dockTop - 4 + h / 2, y)) + 'px';
+      cost = { x, y, text }; positionCost();
     },
-    hideCost() { costTag.hidden = true; },
+    hideCost() { cost = null; costTag.hidden = true; },
     setMenu(sections: MenuSection[]) {
       menuBody.replaceChildren();
       for (const s of sections) {

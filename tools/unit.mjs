@@ -573,6 +573,8 @@ await guard('./unit-d046.mjs', 'd046Guards');
 await guard('./unit-d046-save.mjs', 'd046SaveGuards');
 await guard('./unit-d046-history.mjs', 'd046HistoryGuards');
 await guard('./unit-d046-fallback.mjs', 'd046FallbackGuards');
+await guard('./unit-d047.mjs', 'd047Guards');
+await guard('./unit-d047-mobile.mjs', 'd047MobileUnit');
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

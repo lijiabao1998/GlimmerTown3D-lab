@@ -625,6 +625,64 @@ const BUILDERS: Record<string, Builder> = {
     if (o.solar) p.row(3, t => p.a.D.slope([p.X(.55 + t * .13), p.a.y0 + .05, p.Z(.9)], [p.X(.65 + t * .13), p.a.y0 + .05, p.Z(.9)], [p.X(.65 + t * .13), p.a.y0 + .2, p.Z(.7)], [p.X(.55 + t * .13), p.a.y0 + .2, p.Z(.7)], [0, 1, 1], col('#2c4a78')));
     if (o.green) p.row(4, t => p.tree(.45 + t * .15, .55, .65));
   },
+  // ---- D047 太空研究中心：3×3 整合測試園區。只畫外觀，不讀／改模擬。----
+  spacecenter(p) {
+    const H = p.H, s = p.a.s, c = p.c;
+    // 後方整合測試館：白色分段屋頂、寬貨門與藍色側帶，量體先於小件。
+    p.blk(.06, .51, .07, .49, 0, H * .70, c.wallR, c.roof, false);
+    p.bit(.055, .515, .065, .495, H * .70, H * .76, c.roof);
+    for (const u of [.15, .28, .41]) p.bit(u, u + .018, .075, .485, H * .76, H * .79, STEEL);
+    p.bit(.075, .49, .491, .499, H * .59, H * .67, c.wall);
+    p.bit(.13, .43, .499, .506, H * .035, H * .57, DARK);
+    for (const u of [.15, .22, .29, .36]) p.bit(u, u + .008, .507, .510, H * .04, H * .55, STEEL);
+    p.bit(.06, .068, .11, .45, H * .39, H * .53, c.wall);
+    // 前方任務控制翼與連廊；水平深窗、薄挑簷、中央入口。
+    p.blk(.065, .54, .68, .91, 0, H * .31, c.wall, c.roof, false);
+    p.bit(.055, .55, .67, .92, H * .31, H * .36, c.roof);
+    p.bit(.095, .51, .912, .918, H * .15, H * .26, '#274a68');
+    for (const u of [.19, .31, .43]) p.bit(u, u + .009, .918, .920, H * .15, H * .26, STEEL);
+    p.bit(.28, .35, .920, .927, 0, H * .19, DARK);
+    p.bit(.24, .39, .915, .96, H * .20, H * .225, c.roof);
+    p.blk(.18, .30, .49, .68, 0, H * .19, '#274a68', c.roof, false);
+    p.bit(.14, .24, .74, .84, H * .36, H * .43, STEEL, c.roof);
+    // 測控碟：低多邊形的真凹面（兩圈十瓣），有基座、支架和饋源。
+    p.cyl(.755, .255, .125 * s, 0, H * .045, DARK, 10);
+    p.pole(.755, .255, .024 * s, H * .045, H * .34, STEEL);
+    const cx = p.X(.755), cz = p.Z(.255), y0 = p.a.y0 + H * .34, r = .15 * s;
+    const pt = (a: number, f: number): [number, number, number] => [cx + Math.cos(a) * r * f, y0 + H * (.22 * f * f + .10 * Math.sin(a) * f), cz + Math.sin(a) * r * f];
+    for (let ring = 0; ring < 2; ring++) for (let i = 0; i < 10; i++) {
+      const a = i * Math.PI / 5, b = (i + 1) * Math.PI / 5, f0 = ring / 2, f1 = (ring + 1) / 2;
+      const color = col(i % 2 ? c.roof : WHITE);
+      if (ring === 0) p.a.O.triangle(pt(a, 0), pt(b, f1), pt(a, f1), [0, 1, 0], color);
+      else p.a.O.slope(pt(a, f0), pt(b, f0), pt(b, f1), pt(a, f1), [0, 1, 0], color);
+    }
+    p.pole(.755, .255, .007 * s, H * .35, H * .68, STEEL);
+    p.bit(.742, .768, .242, .268, H * .66, H * .72, c.accent);
+    // 太陽電池／測試機櫃與短設備管線，全部在原地界內。
+    for (const u of [.635, .79]) {
+      p.bit(u, u + .12, .41, .50, H * .05, H * .10, STEEL);
+      p.bit(u - .005, u + .125, .405, .505, H * .10, H * .125, '#274a68');
+      p.bit(u + .055, u + .062, .405, .505, H * .125, H * .13, c.wall);
+    }
+    p.bit(.905, .95, .54, .70, 0, H * .24, c.wallR, c.roof);
+    p.bit(.902, .906, .56, .59, H * .13, H * .18, c.accent);
+    // 小型火箭測試台與雙柱支架：是園區一部分，不再是孤立地標。
+    p.cyl(.735, .705, .135 * s, 0, H * .045, DARK, 10);
+    p.cyl(.735, .705, .040 * s, H * .045, H * .81, WHITE, 8);
+    p.cyl(.735, .705, .041 * s, H * .61, H * .67, c.wall, 8);
+    p.cone(.735, .705, .040 * s, H * .81, H, c.accent, 8);
+    for (const u of [.815, .875]) p.pole(u, .705, .009 * s, 0, H * .85, c.accent);
+    for (const h of [.22, .48, .76]) p.bit(.812, .878, .696, .714, H * h, H * (h + .018), STEEL);
+    p.bit(.775, .85, .696, .714, H * .72, H * .75, STEEL);
+    // 作業動線：館前淺色運輸道、貨門警戒線和入口坪，不更換城市地坪。
+    p.flat(.10, .52, .515, .65, .006, '#b3b7ba');
+    p.flat(.26, .36, .94, .995, .007, '#c8ccd0');
+    for (let i = 0; i < 6; i++) p.flat(.12 + i * .05, .145 + i * .05, .515, .53, .009, i % 2 ? DARK : '#ddc56e');
+    p.flat(.59, .605, .54, .95, .008, c.roof);
+    p.flat(.59, .94, .93, .943, .008, c.roof);
+    p.bit(.435, .49, .57, .62, 0, H * .12, c.wallR, c.roof);
+    p.bit(.50, .54, .57, .62, 0, H * .10, c.accent);
+  },
   // ---- 監獄：圍牆、角樓、牢房 ----
   prison(p) {
     const H = p.H, s = p.a.s, c = p.c;

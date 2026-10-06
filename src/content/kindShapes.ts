@@ -4,7 +4,7 @@
 export type ShapeType =
   | 'tower' | 'hall' | 'classic' | 'brick' | 'hospital' | 'church' | 'station' | 'port' | 'airport' | 'plant' | 'refinery'
   | 'solar' | 'wind' | 'dam' | 'substation' | 'basins' | 'watertower' | 'dump' | 'park' | 'court' | 'stadium' | 'ride'
-  | 'landmark' | 'farm' | 'house' | 'hotel' | 'parking' | 'campus' | 'prison';
+  | 'spacecenter' | 'landmark' | 'farm' | 'house' | 'hotel' | 'parking' | 'campus' | 'prison';
 export interface Shape { type: ShapeType; p?: Record<string, number | string | boolean> }
 
 const S = (type: ShapeType, p?: Shape['p']): Shape => ({ type, p });
@@ -142,7 +142,7 @@ export const KIND_SHAPES: Record<number, Shape> = {
   40: S('hall', { roof: 'flat', sign: 1, small: 1 }),                   // 電影院
   44: S('hall', { roof: 'barrel', halls: 3 }),                          // 會展中心
   46: S('landmark', { which: 'weather' }),                              // 氣象站
-  51: S('landmark', { which: 'rocket' }),                               // 太空研究中心
+  51: S('spacecenter'),                                                // D047：整合測試館＋任務控制翼＋測控設備場
   56: S('stadium', { dome: 1 }),                                        // 體育園區
   66: S('church', { spire: 1 }),                                        // 信仰中心
   67: S('landmark', { which: 'clock' }),                                // 鐘樓

@@ -37,6 +37,8 @@ import { d040Smoke, d040SkipNote } from './smoke-d040.mjs';
 import { d044Smoke, d044SkipNote } from './smoke-d044.mjs';
 import { d045Smoke, d045SkipNote } from './smoke-d045.mjs';
 import { d046Smoke } from './smoke-d046.mjs';
+import { d047ArtSmoke } from './smoke-d047-art.mjs';
+import { d047MobileSmoke } from './smoke-d047-mobile.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -606,6 +608,8 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d044Smok
 // ===== D045：市長委託（tools/smoke-d045.mjs：☰「委託」面板的三選一＝Node 端、接受與放棄的通知與歷史、進行中的進度、完成／過期的每天結算與通知、沙盒／等級／人口三種不能接的狀態、重新整理接得上、效能預算）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d045Smoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d046Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047ArtSmoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047MobileSmoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());

@@ -127,7 +127,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const trimOf = (b: DrawBlock) => { const k = keyOf(b); if (!trims.has(k)) trims.set(k, trimPlan(recipeOf(b))); return trims.get(k)!; };
   let plan: DrawBlock[] | null = null;
   // D007：非住商工照造型表畫（街區模式才用）
-  const civic: CivicRender = { shape: shapeOf, colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+  // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : shapeOf(k), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
@@ -483,7 +484,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const bui = createBuildUi({
     tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
-    menu: id => onMenu(id), menuOpen: () => bui.setMenu(menuSections()), startBuild: () => menuCity('newcity'),
+    menu: id => onMenu(id), menuOpen: () => { interruptBuild(); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
@@ -889,6 +890,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     ];
   }
   function onMenu(id: string) {
+    interruptBuild();   // A panel can open while the canvas still owns pointer capture.
     if (id.startsWith('city:')) menuCity(id.slice(5));
     else if (id === 'export') {
       let full = lastCode;
@@ -1036,6 +1038,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     bui.showCost(sx, sy, text, pv.count === 0 || !pv.affordable);
   }
   function cancelStroke() { stroke = null; lastPreview = null; preview.clear(); bui.hideCost(); invalidate(); }
+  function interruptBuild() { down = null; if (stroke) cancelStroke(); }
   function commitStroke(s: NonNullable<typeof stroke>) {
     preview.clear(); bui.hideCost(); lastPreview = null;
     if (!sim || !tool) return null;
@@ -1061,6 +1064,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     return res;
   }
   function doUndo() {
+    interruptBuild();
     if (!sim) return null;
     const r = undoOp(sim);
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
@@ -1072,6 +1076,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 鍵盤：對話框或選單開著時，Esc 只關它、其他鍵不作用（審查：之前選單後面照樣換工具、播放，Esc 關不掉對話框）
   addEventListener('keydown', e => {
     if (clean) return;
+    interruptBuild();   // No held preview survives a keyboard tool/menu/undo action.
     if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
@@ -1361,14 +1366,23 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   let down: { x: number; y: number; t: number } | null = null;
   const canvas = renderer.domElement;
-  // 畫布上按著的指標（實驗線 pointers，62783–62799）：每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
+  // 畫面上按著的指標（實驗線 pointers，62783–62799）：畫布上的每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
   // 只剩一根也不再蓋，全部放開之後的下一筆才是新的施工（審查：之前第一指落在地圖外、或抬起一指再放回去，照樣蓋了一條路）
   const ptrs = new Set<number>();
   const lift = (id: number) => { ptrs.delete(id); };
-  canvas.addEventListener('pointerdown', e => {
+  const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
+    && !bui.isMenuOpen() && [dlg, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
+    && document.elementFromPoint(x, y) === canvas;
+  // D047: count touches on UI too. A second finger on a toolbar/notice/panel
+  // interrupts immediately, before its click changes a tool or opens an overlay.
+  addEventListener('pointerdown', e => {
     ptrs.add(e.pointerId);
+    if (e.target !== canvas || ptrs.size > 1) interruptBuild();
+  }, true);
+  addEventListener('click', e => { if (e.target !== canvas) interruptBuild(); }, true);
+  canvas.addEventListener('pointerdown', e => {
     try { canvas.setPointerCapture(e.pointerId); } catch { /* 沒有也行：放開另由 window 收 */ }
-    if (ptrs.size > 1) { down = null; if (stroke) cancelStroke(); return; }
+    if (ptrs.size > 1 || !mapPoint(e.clientX, e.clientY)) { interruptBuild(); return; }
     down = { x: e.clientX, y: e.clientY, t: performance.now() };
     if (!tool || !sim) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -1379,6 +1393,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   });
   canvas.addEventListener('pointermove', e => {
     if (!stroke || e.pointerId !== stroke.pid) return;
+    // Keep the existing captured road/zone preview when dragged toward the dock;
+    // release over UI is rejected below, and a separate UI touch cancels at once.
     if (!stroke.moved && Math.hypot(e.clientX - stroke.x, e.clientY - stroke.y) > 8) stroke.moved = true;
     const k = opOf(stroke).k;
     if (k === 'tap') { if (stroke.moved && lastPreview) updatePreview(); return; }   // 點的工具：拖了就取消（實驗線 T436）
@@ -1388,6 +1404,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   });
   canvas.addEventListener('pointerup', e => {
     lift(e.pointerId);
+    if (!mapPoint(e.clientX, e.clientY)) { interruptBuild(); return; }
     if (stroke && e.pointerId === stroke.pid) { const s0 = stroke; stroke = null; down = null; commitStroke(s0); return; }
     if (!down || tool) { down = null; return; }
     const tap = Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6 && performance.now() - down.t < 400;
@@ -1396,8 +1413,18 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const h = pickAt(e.clientX, e.clientY);
     if (h) showTile(h.x, h.z);
   });
-  canvas.addEventListener('pointercancel', e => { lift(e.pointerId); if (stroke && e.pointerId === stroke.pid) cancelStroke(); });   // 實驗線取消時照蓋（62934），本線不照搬：取消就是取消
-  for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => lift(e.pointerId));   // 萬一沒抓住：在畫布外放開也要收掉
+  canvas.addEventListener('pointercancel', e => { lift(e.pointerId); interruptBuild(); });   // 取消就是取消，不提交
+  canvas.addEventListener('lostpointercapture', e => { if (stroke?.pid === e.pointerId || down) interruptBuild(); });
+  for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => {
+    lift(e.pointerId);
+    // Capture can fail or be lost. An outside release must clear the pending
+    // stroke, rather than leave it armed for a later pointer event.
+    if (e.target !== canvas && stroke?.pid === e.pointerId) interruptBuild();
+  });
+  const abandonPointers = () => { ptrs.clear(); interruptBuild(); };
+  addEventListener('blur', abandonPointers);
+  addEventListener('pagehide', abandonPointers);
+  addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') abandonPointers(); });
 
   const resumed = sampleId === 'mine';                                   // 開頁時就有存檔：接著上次的城（第一次開新城不提示）
   let first = openSample(sampleId, true), bootNote = '';
