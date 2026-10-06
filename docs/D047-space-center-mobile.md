@@ -1,5 +1,17 @@
 # D047 太空研究中心外觀與手機建造打磨
 
+## 最終驗收與發佈（2026-10-06）
+
+- 業主已核對本輪九張真實 CI 圖並明確回覆「沒問題，按流程上線」。候選 `3074995be8e71b13af6ea2cec2948264d8eb73d2` 經 [PR #2](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/2) 合併為 `64289885a06b0b2991d94cc9f9d59e02d569242d`；兩者 tree 都是 `db6671d0d1e25344189c6ef67e1bb768105e30d0`，沒有在圖片確認後偷換產品。
+- 候選 [push CI 37480870779](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37480870779) 與 [PR CI 37480879024](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37480879024) 各 **529 Node＋485 browser，0 失敗**。PR 臨時合併 tree 與核准候選完全相同。九張核准圖來自 artifact `11422254297`，ZIP SHA256 `e786d9a6bac14f8374de92370618e82e64bab7bcce1c6d64076c5e7d9129e2b4`。
+- [正式 main CI 37488735705](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37488735705) 全部成功：型別、**529 Node（892.3s）／485 browser（984.1s），0 NG**、單檔建置、樣張、Pages；16:13 UTC 完成。正式 [Pages](https://lijiabao1998.github.io/GlimmerTown3D-lab/) HTTP 200，下載 HTML 與核准建置逐位元組相同，SHA256 `7178ca04aed7c9ee07f688586e1f1668daca1877f42e23290516184b336e54f1`。
+- [正式網址複驗 37494251329](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37494251329) **26 項／0 失敗**：7 個新瀏覽器、25 次真正正式頁文件 hash 全等、原始網路請求無外部來源、console 零錯誤；重用本輪全部外觀／手機 smoke。驗九格預覽、成本標籤、Lv.22 鎖、一次放置與扣款、無效地點、拖動／第二指／UI／捕獲中斷、重複施工、全額復原、存讀及道路／分區／鏡頭回歸。生活週期 blur／hidden／pagehide 是明確注入；觸控和 got／lost capture 是 Chrome 實際 trusted 事件。
+- 正式站十張證據中，九張重拍圖與業主核准九張 **逐位元組相同**；額外不帶 `spaceArt` 參數的預設手機圖，亦等於核准新版手機圖。正式頁預設 geometry＝current、≠legacy，歷史與鏡頭不變。artifact `11426527803`，ZIP SHA256 `c399e30fa7774a90222b6028315f57292d22987b2b8a7f9130e78fe15da61751`。
+- 正式站複驗位於獨立 `claude/d047-live-verification`，只讀權限、沒有部署工作；**該 QA-only 分支永不合併**。收工只補四份 Markdown，產品／測試／流程均與完整綠燈版本一致。
+- 尚未做成：沒有 Android 實機驗收，412×860 僅為 Chrome 觸控模擬；固定驗收城是合成 fixture，並非玩家真實存檔；沒有新增公車／軌道、政策延遲或移除歷史 fallback。雲端本地 Chromium socket 限制仍存在，使用業主批准的 CI-first 完成驗收。
+
+以下保留施工前條件及歷次尚未完成的時間點，便於追查；最終狀態以上段為準。
+
 基線：GitHub `main` `01eecbbfb0bff3d40e0f47d49a61f3419c7ca359`（2026-10-06）。開工 fetch 後 HEAD＝origin/main，工作樹乾淨；D047 在現有卡與遠端分支沒有佔用。本輪只在 `claude/d047-space-center-mobile` 候選分支施工。D046 的 CI-first 特准不自動延伸，本輪若本機 smoke 受限，須先另取得業主允許才推送候選。圖片確認與本輪明確發版批准之前，不合併 main、不部署。兩條 2D 線只讀。
 
 ## 動手前驗收條件
