@@ -10,6 +10,15 @@ export const D048_BASELINE = {
   source: 'https://lijiabao1998.github.io/GlimmerTown3D-lab/',
 };
 export const D048_CAMERA = { x: 31, z: 30, zoom: 4.4 };
+// Exact realized camera, independently measured in all three approved-page before
+// captures: GitHub run 37497090742 / artifact 11428770255, report.json.
+// OrbitControls floating-point normalization makes z differ from the ideal 30.
+// Compare full measured cameras strictly; do not round or alter the product view.
+export const D048_BASELINE_CAMERA = {
+  pos: [146.19999999999996, 94.06040612287404, 145.2],
+  target: [31, 0, 29.999999999999993],
+  zoom: 4.4,
+};
 export const D048_VIEWS = [{ width: 360, height: 740 }, { width: 412, height: 860 }];
 export const D048_SAVE_KEY = 'gt3d.v1.save';
 export const D048_COMMISSION = { act: 'steel40', st: 140, acc: 12.5, hold: 0, n: 0, done: [] };
@@ -40,7 +49,7 @@ export function d048FixtureManifest() {
     codeSha256: createHash('sha256').update(code).digest('hex'),
     codeLength: code.length,
     seed: 5167048, day: 150, paused: true, commission: D048_COMMISSION,
-    camera: D048_CAMERA, views: D048_VIEWS,
+    camera: D048_CAMERA, measuredBaselineCamera: D048_BASELINE_CAMERA, views: D048_VIEWS,
     faultInjection: { quota: D048_QUOTA, denied: D048_DENIED, journal: D048_IDB_REASON },
   };
 }

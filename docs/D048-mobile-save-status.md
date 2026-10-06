@@ -56,3 +56,18 @@
 - 候選建置 SHA256 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。官方完整 `npm run smoke` 兩次自動 Chrome 啟動皆在第一頁前因 process-singleton socket Operation not permitted 失敗，零瀏覽器斷言執行；依現有雲端工程授權走候選 CI-first，不記本地瀏覽器通過。
 - 新瀏覽器套件已寫360／412触控、桌面鍵盤、錯誤切換與恢復、長原因真觸控捲動、普通匯出／匯入取消、130000筆測試歷史超限、匯出失敗、焦點／inert、明標 pagehide／pageshow 注入、20天不重讀檔 RNG 對照；fixture 被額外抽一次 RNG 時，第1天就不同。這些目前只是已備好的測試，不代表實跑通過。
 - 工作流只多上傳 D048-evidence.json，保留完整 aggregate、原門檻與原 timeout。
+
+## 首輪完整 CI 與測試前置修正
+
+首候選 `8b3ba071` 的 [push 37500505752](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37500505752) 與 [PR 37500739971](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37500739971) 都通過型別、536 Node、build；瀏覽器各 501 項通過／6 項失敗，原來 485 項均通過。失敗限於新 D048 測試，完整原始記錄保留；沒有把這一輪標為全綠。
+
+1. 鏡頭：真實改前圖的 target z 都是 `29.999999999999993`，測試卻用理想數學值 `30` 作逐位比較。修成與已保存 artifact `11428770255` 的完整實測 camera（pos／target／zoom）精確相等，沒有改鏡頭或加寬容差。
+2. 通知：44px 警示改變 HUD 高度，測試在 ResizeObserver 完成渲染前讀到舊 top 150，當時新委託底 154。改用單一瀏覽器 evaluation 的 RAF Promise，同一回呼內成對讀矩形、最多四次回呼，保留正高度及至少 6px 間距。雲端實測一至兩次回呼後間距 8px。
+3. 鍵盤：舊 CDP helper 沒送 Enter 字元，原生按鈕沒有收到 keypress；不是在產品加手動 click 補償。依 [Chromium 原生按鈕](https://github.com/chromium/chromium/blob/main/third_party/blink/renderer/core/html/html_element.cc) 與 [Puppeteer CDP 輸入](https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/cdp/Input.ts) 的方法，送 Enter 的 `\r`／Space 的空白 text 及 unmodifiedText，另驗 trusted keydown、keypress charCode 13／32、每次恰好一個 trusted click。
+4. 定點修後另露出 360px 測試沿用 D011 `y>150` 找拖曳格，起點仍可能在較高 HUD 下。改為量實際 HUD／dock，端點與全部九個真 CDP 拖曳位置都須命中 CANVAS；原本「先真的出現非零預覽再中斷」及城市／存檔不變斷言保留，失敗會輸出目標、命中及事件紀錄。
+
+以上均為測試修正，產品來源與單檔 SHA256 仍是 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。新增三项 Node harness 守衛執行實際鍵盤 payload 和實際 RAF 原碼，含字元遺漏／wrong type／gap 放寬／callback 延長的精確破壞案例。
+
+[第二輪只讀定點 QA 37507505107](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37507505107) 已通過 **26 項、0 失敗**，全六類 D048 覆蓋、五張新介面圖、21 個逐日完整狀態的 RNG 對照全部成功。Artifact `11432657090`，ZIP SHA256 `e5cd521e350190fdc52090d835758680a57d9a2dc469c32622fdb11f9d85e165`。`claude/d048-focused-verification` 是 QA-only 分支，永不合併；定點綠燈不能取代最後完整 aggregate／候選 CI。期間完整 Node 重跑在256項已過後為最終可見拖曳目標與原子 RAF 測試修正主動停止，沒有 NG，另重跑凍結來源全套。
+
+最終測試窄修的凍結來源完整 Node aggregate：**539 項、0 NG、844.5 秒**；比首候選多三項 harness 破壞守衛。typecheck／build 再驗，HTML SHA256 不變。接著由候選分支重跑完整 CI；定點26項綠燈與已有五張圖仍不當成全套驗收或交付批准。
