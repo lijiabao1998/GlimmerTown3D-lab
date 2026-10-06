@@ -31,6 +31,7 @@ import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
+import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -473,6 +474,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol><div class="acts"></div></div>
     <div id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgSub" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
       <textarea aria-label="分享碼" spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err" role="alert"></p>
+      <p id="copyStatus" role="status" aria-live="polite" aria-atomic="true" hidden></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
@@ -491,6 +493,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
   let dlgMode: 'paste' | 'export' = 'paste', lastCode = '', dlgFromStatus = false;
+  const copyStatus = $<HTMLElement>('#copyStatus');
+  const copyFeedback = createCopyFeedback({
+    clipboard: () => navigator.clipboard,
+    select: () => ta.select(),
+    render: phase => {
+      copyStatus.hidden = phase === 'hidden'; copyStatus.dataset.phase = phase; copyStatus.textContent = COPY_TEXT[phase];
+      dlgOk.setAttribute('aria-disabled', String(phase === 'pending'));
+      if (phase !== 'hidden') dlgOk.textContent = phase === 'pending' ? '複製中…' : '複製';
+    },
+  });
   const saveWarnings = () => ({ unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '' });
   const saveStatus = createSaveStatus({ export: () => onMenu('export'), close: () => closeSavePanels() });
   ui.appendChild(saveStatus.root);
@@ -511,9 +523,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     saveModal.show(saveStatus.root, saveStatus.title);
   }
   function closeSavePanels(restoreFocus = true) {
+    copyFeedback.reset(false);
     dlgFromStatus = false; saveModal.close(restoreFocus); dlg.hidden = true; saveStatus.root.hidden = true;
   }
   function closeDlg() {
+    copyFeedback.reset(false);
     if (dlgFromStatus) {
       dlgFromStatus = false; saveStatus.setState(saveWarnings());
       saveModal.show(saveStatus.root, saveStatus.exportButton);
@@ -530,6 +544,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     $('#dlgSub').textContent = note || (mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
       : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。');
     ta.value = text; ta.readOnly = mode === 'export'; dlgOk.textContent = mode === 'paste' ? '匯入' : '複製'; err.textContent = '';
+    copyFeedback.reset(mode === 'export');
     $('#dlgNo').textContent = dlgFromStatus ? '返回存檔狀態' : '取消';
     saveModal.show(dlg, ta);
     if (mode === 'export') ta.select();
@@ -537,7 +552,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   $<HTMLButtonElement>('#dlgNo').onclick = closeDlg;
   dlg.onclick = e => { if (e.target === dlg) closeDlg(); };
   dlgOk.onclick = () => {
-    if (dlgMode === 'export') { ta.select(); navigator.clipboard?.writeText(ta.value).then(() => bui.toast('已複製分享碼', 'good'), () => bui.toast('請手動複製')); return; }
+    if (dlgMode === 'export') { void copyFeedback.copy(ta.value); return; }
     const code = ta.value, r = decodeLabCode(code);
     if (!r.ok) { err.textContent = r.error; return; }
     const mine = !!r.save.raw.d3;                                         // 本線匯出、帶歷史的碼：接著蓋，存成我的城

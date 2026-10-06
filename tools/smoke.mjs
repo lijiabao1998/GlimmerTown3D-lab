@@ -40,6 +40,7 @@ import { d046Smoke } from './smoke-d046.mjs';
 import { d047ArtSmoke } from './smoke-d047-art.mjs';
 import { d047MobileSmoke } from './smoke-d047-mobile.mjs';
 import { d048Smoke, d048SkipNote } from './smoke-d048.mjs';
+import { d049Smoke } from './smoke-d049.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -612,6 +613,7 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d046Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047ArtSmoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047MobileSmoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d048Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d049Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
