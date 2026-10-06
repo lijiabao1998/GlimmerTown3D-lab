@@ -25,7 +25,8 @@ import { nominalJobs, rciJobs, residentPopulation488 } from './rules/jobs.ts';
 import { jobCountsOf, tallyBuildings } from './rules/count.ts';
 import { genResource, rdepOfSave, rdepPairs, type ResourceField } from './rules/resource.ts';
 import { TECH_EDU343, advanceTech, specOfSave, techLoad, type ResearchIn, type TechProg } from './rules/tech.ts';
-import { cmsDaily, cmsLoad, cmsSave, type CmsOutcome, type CmsState } from './rules/commission.ts';
+import { cmsDaily, cmsSave, type CmsOutcome, type CmsState } from './rules/commission.ts';
+import { cmsLoad3d } from './rules/commissionSave.ts';
 import { demoMul, economyDemands481, housingRciDemand488, immigration, laborMarket481, legacyDemand, type Labor } from './rules/demand.ts';
 import { spawnStep, upgradeStep, type GrowCtx } from './rules/growth.ts';
 import { nearCounter, getMaxRoadClass } from './rules/grid.ts';
@@ -204,7 +205,7 @@ export function simFromSave(save: LabSave, code: string, kinds: KindTable, vrank
   const weather: WeatherState = { weather: 0, wxT: 3 + rng.ri(5) };
   const rkPoints = cityPoints(w, fieldsOf(g).COV, .6, edu.tech, b => residentPopulation488(b, () => undefined));   // 66968：讀檔當下算一次（幸福是新世界的預設 .6，所以幸福項 0；科技清單這時是空的，守衛會注入）
   return {
-    city, w, g, rng, seed: save.seed, day: save.day, cms: cmsLoad(save.raw.cms385), tech: T.st, techSpeed: 1, res: { resource: forRestyle ? new Uint8Array(nn) : genResource(save.seed, w), rdep: rdepOfSave(save.raw.rdep, nn) }, weather, vrank, budget, edu, pol, polLast: {},
+    city, w, g, rng, seed: save.seed, day: save.day, cms: cmsLoad3d(save.raw.cms385, save.raw.cms3d), tech: T.st, techSpeed: 1, res: { resource: forRestyle ? new Uint8Array(nn) : genResource(save.seed, w), rdep: rdepOfSave(save.raw.rdep, nn) }, weather, vrank, budget, edu, pol, polLast: {},
     pop: loadPop488(tiles), jobs: 0, jobsC: 0, jobsI: 0, cityHappy: .6, dem: { 1: .5, 2: 0, 3: 0 }, immWave: 0, labor: null, medCap: null, commuteClusters: [], commuteDay: -1, tvSignal: false, fertReady: false, cookedReady: false, cityEvent: eventOfSave(save.raw.cev), rankIdx: rankOfSave(save.raw.rk, rkPoints), cityPoints: rkPoints, night: emptyNightCity(), econ,
     root, kinds,
     landDirty: false, landBox: null, stale: new Uint8Array(nn),          // rebuildCov 剛整張算過（53154 清框）

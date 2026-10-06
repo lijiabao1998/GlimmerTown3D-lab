@@ -13,8 +13,11 @@ import { fnv1a } from '../src/sim/rng.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { decodeLabCode, codeWithSeed } from '../src/io/labcode.ts';
 import * as realDay from '../src/sim/day.ts';
-import { acceptCommission, commissionOffers } from '../src/sim/edit.ts';
-import { cmsOffers } from '../src/sim/rules/commission.ts';
+// D046: these pinned D045 fixtures exercise the retained legacy selection policy.
+// Production capability-filtered actions are tested separately in unit-d046.mjs.
+import { cmsAccept, cmsOffers } from '../src/sim/rules/commission.ts';
+const commissionOffers = s => cmsOffers(s.seed, s.rankIdx, s.cms);
+const acceptCommission = (s, i) => cmsAccept(s.cms, i, { diff: s.diff, rankIdx: s.rankIdx, pop: s.pop, seed: s.seed, day: s.day });
 import { STARTER_SEEDS } from '../src/content/starter.ts';
 import { PROBE, COLS } from './d045-lab.mjs';
 import { d043Cities, CMS_DAYS, PROBE as PROBE43, CMS_COLS } from './d043-lab.mjs';

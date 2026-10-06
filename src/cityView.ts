@@ -802,16 +802,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 
   // D045：☰「委託」（實驗線 T385 市長委託面板 showCommPanel385 65155 的 3D 版）——三選一（決定性：世界種子＋輪次）、進行中的進度與放棄、已完成的紀錄。接受、放棄馬上生效（實驗線 cmsAccept385、cmsDrop385）、
   // 存檔、記世界歷史（cms 事件，城市格式 10）；完成、過期由每天的結算發通知。狀態的順序照實驗線：沙盒 → 進行中 → 城市等級不到 3 → 人口不到 51 → 三選一。
-  // 本線沒有公共運量（公車與票務 D037 沒搬）：兩條運量委託照常出現、可以接，但標明做不到、會過期，可以放棄換一批
+  // D046：新委託排除未實作的公共運量；舊檔正在進行的運量委託仍可無懲罰放棄。
   const cm = $<HTMLElement>('#cm');
   $<HTMLButtonElement>('#cmX').onclick = () => { cm.hidden = true; };
   cm.onclick = e => { if (e.target === cm) cm.hidden = true; };
   let cmTip = '';
-  const NO_RIDE_NOTE = '　⚠ 本線還沒有公共運量：這一條做不到、會過期（可以放棄換一批）';
+  const NO_RIDE_NOTE = '　⚠ 本線還沒有公共運量：這份舊委託可無懲罰放棄，新委託不再提供運量目標';
   function cmProgress(c: CmsDef): { cur: string; p: number } {
-    const s = sim!, st = s.cms, stock = c.type === 'stock' ? Math.floor(c.src === 'steel' ? s.econ.steel : c.src === 'fuel' ? s.econ.fuel : 0) : 0, has = s.edu.tech.includes(c.src), r1 = (v: number) => Math.round(v * 10) / 10;
+    const s = sim!, st = s.cms, stock = c.type === 'stock' ? Math.floor(c.src === 'steel' ? s.econ.steel : c.src === 'fuel' ? s.econ.fuel : 0) : 0, has = s.edu.tech.includes(c.src), r2 = (v: number, target: number) => Math.min(Math.round(Math.min(v, target) * 100) / 100, v < target ? target - .01 : target);
     const p = c.type === 'acc' ? Math.min(1, st.acc / (c.target as number)) : c.type === 'hold' ? Math.min(1, st.hold / (c.holdN as number)) : c.type === 'stock' ? Math.min(1, stock / (c.target as number)) : has ? 1 : 0;
-    const cur = c.type === 'acc' ? `${r1(st.acc)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : '研究中';
+    const cur = c.type === 'acc' ? `${r2(st.acc, c.target as number)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : '研究中';
     return { cur, p };
   }
   function renderCommission() {
@@ -828,7 +828,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         const { cur, p } = cmProgress(c), left = Math.max(0, c.days - el), li = mk('li'), head = mk('div', 'h');
         li.dataset.k = c.id; li.dataset.kind = 'act'; li.dataset.st = 'act';
         head.append(mk('b', '', `${c.ic} ${c.nm}`), mk('span', 'val', cur));
-        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.round(p * 100) + '%'; bar.append(i);
+        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.floor(p * 100) + '%'; bar.append(i);
         li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
         const act = mk('div', 'h'); act.append(mk('span', 'val', ''), btn('🗑 放棄委託', `放棄委託：${c.nm}（輪次加一、換一批，沒有懲罰）`, () => uiCommission('drop')));
         li.append(act);
@@ -844,7 +844,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         li.append(head, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜限 ${c.days} 天${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
         ol.append(li);
       });
-      kids.push(mk('h3', '', `三選一（第 ${s.cms.n + 1} 輪）`), ol);
+      kids.push(mk('h3', '', `${commissionOffers(s).length} 選一（第 ${s.cms.n + 1} 輪）`), ol);
     }
     kids.push(mk('h3', '', '紀錄'), note('done', 'rec', '已完成委託', String(s.cms.done.length), s.cms.done.length ? s.cms.done.map(id => CMS_BY_ID385[id]?.ic ?? '?').join(' ') : '—'));
     $('#cm .body').replaceChildren(...kids);
@@ -856,7 +856,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!sim) return null;
     const c = kind === 'accept' ? acceptCommission(sim, i) : dropCommission(sim);
     if (c) { const t = cmsToast(kind, c); cmTip = ''; bui.toast(t.text, t.tone); saveNow(); } else cmTip = kind === 'accept' ? '接不了這一條（已有進行中的委託，或城市還沒到條件）' : '沒有進行中的委託';
-    renderCommission(); return c ? c.id : null;
+    renderCommission(); syncUi(); return c ? c.id : null;
   }
   function openCommission() { if (!sim) return; cmTip = ''; renderCommission(); cm.hidden = false; }
 
@@ -931,6 +931,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? (pending ? '—' : sim.pop) : null,
       power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '',
     });
+    const activeCommission = sim && sim.diff !== 3 ? CMS_BY_ID385[sim.cms.act] : null;
+    const progress = activeCommission ? cmProgress(activeCommission) : null;
+    bui.setCommission(activeCommission && progress && sim ? { label: activeCommission.ic + ' ' + activeCommission.nm, progress: progress.cur, fraction: progress.p, days: Math.max(0, activeCommission.days - (sim.day - sim.cms.st)) } : null);
     syncDock();
   }
   // D040：資源圖。要看哪幾種：☰「顯示資源圖」＝兩種；否則拿著油井（油田）或礦場（礦藏）的工具才畫對應的那一種。只畫還能蓋井的格子（陸地、沒路、沒建築）

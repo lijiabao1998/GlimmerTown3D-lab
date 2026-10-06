@@ -49,6 +49,13 @@ const CSS = `
 #hud .name { display: flex; flex-direction: column; min-width: 0; flex: 1 1 150px; text-shadow: 0 1px 3px #000c; }
 #hud .name b { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #hud .name small { font-size: 11.5px; color: #d6dbe6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#commissionHud { min-height: 44px; flex: 0 1 100%; max-width: 390px; min-width: 0; padding: 6px 10px; display: flex; flex-direction: column; align-items: stretch; gap: 3px; text-align: left; background: #141a30ed; border-color: #e8b74a66; border-radius: 12px; touch-action: none; }
+#commissionHud[hidden] { display: none; }
+#commissionHud .summary { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+#commissionHud .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+#commissionHud .progressText { white-space: nowrap; font-size: 11px; color: #ffe7b0; }
+#commissionHud .meter { height: 3px; background: #ffffff20; border-radius: 2px; overflow: hidden; }
+#commissionHud .meter i { display: block; height: 100%; background: #e8b74a; }
 #hud .stats { display: flex; gap: 6px; flex-wrap: wrap; }
 .stat { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 999px; background: #141a30e6; border: 1px solid #ffffff26; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .stat[hidden] { display: none; }
@@ -127,7 +134,7 @@ export function createBuildUi(on: BuildUiEvents) {
   root.innerHTML = `
     <div id="hud"><button class="menuBtn" id="menuBtn" aria-label="選單">${ICONS.menu}</button>
       <div class="name"><b id="cityName"></b><small id="citySub"></small></div>
-      <div class="stats" id="stats"></div></div>
+      <div class="stats" id="stats"></div><button id="commissionHud" type="button" hidden><span class="summary"><span class="label"></span><span class="progressText"></span></span><span class="meter"><i></i></span></button></div>
     <div id="toasts"></div>
     <div id="dock">
       <div class="coach" id="coach" hidden></div>
@@ -156,6 +163,7 @@ export function createBuildUi(on: BuildUiEvents) {
   $<HTMLButtonElement>('menuBtn').onclick = () => { on.menuOpen(); menu.hidden = false; };
   $<HTMLButtonElement>('menuX').onclick = () => { menu.hidden = true; };
   $<HTMLButtonElement>('startBuild').onclick = () => on.startBuild();
+  $<HTMLButtonElement>('commissionHud').onclick = () => on.menu('commission');
   menu.onclick = e => { if (e.target === menu) menu.hidden = true; };
 
   // 狀態列的晶片：建一次，之後只改文字、樣式、藏不藏
@@ -174,6 +182,10 @@ export function createBuildUi(on: BuildUiEvents) {
   // 下方整塊的上緣：排版之後才量（ResizeObserver 在排版後、畫之前呼叫，讀位置不會逼瀏覽器多排一次）；拖曳中只讀這個數
   const measureDock = () => { dockTop = dock.getBoundingClientRect().top; };
   if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(dock);
+  // Keep notifications below the wrapping HUD, including the D046 commission row.
+  const measureHud = () => { toasts.style.top = Math.ceil($('hud').getBoundingClientRect().bottom + 8) + 'px'; };
+  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureHud).observe($('hud'));
+  addEventListener('resize', () => requestAnimationFrame(measureHud));
   addEventListener('resize', () => requestAnimationFrame(measureDock));
   return {
     root, style,
@@ -190,6 +202,15 @@ export function createBuildUi(on: BuildUiEvents) {
       chJ.s.hidden = !h.journal || !!h.unsaved;                          // 存不進去的那一顆比較要緊，同時只亮一顆
       if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下`; }
       stats.dataset.money = h.money === null ? '' : String(h.money);
+    },
+    setCommission(c: { label: string; progress: string; fraction: number; days: number } | null) {
+      const b = $('commissionHud'); b.hidden = !c;
+      if (!c) return;
+      setText(b.querySelector('.label')!, c.label);
+      setText(b.querySelector('.progressText')!, c.progress + ' · ' + c.days + '天');
+      b.setAttribute('aria-label', '查看進行中的委託：' + c.label + '，' + c.progress + '，剩餘 ' + c.days + ' 天');
+      b.title = '點擊查看委託詳情';
+      (b.querySelector('.meter i') as HTMLElement).style.width = Math.floor(Math.max(0, Math.min(1, c.fraction)) * 100) + '%';
     },
     setDock(d: DockState) {
       const build = d.mode === 'build';

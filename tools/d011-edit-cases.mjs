@@ -150,15 +150,15 @@ export const MONEY_ROUND = [[1234.4, 1234], [1234.5, 1235], [1234.6, 1235], [-10
 
 // ---- 竄改過的 d3（分享碼是別人也能改的輸入，src/io/save.ts eventOf／unpackHistory／checkHistory）----
 // 每一種都要被驗型別擋下（replayed＝false）、講得出是哪一項不對，城照樣能用。want＝null：照讀（＝同一份存檔正常讀回），但多出來的欄位不能帶進城市。
-// hist：存檔當時的歷史（跟 d3.r 一筆對一列；沒有 restyle——格式 3 的舊檔就是這樣）；n：地圖邊長
-// D012：城市格式 4。d3.f 比這一版新（現在是 8）不猜、退回只用存檔並講明（src/io/save.ts loadSim）；格式 3 的舊檔（hv 1、hv 2，沒有 restyle）照讀、讀回照樣重挑外觀
+// hist：存檔當時的歷史（跟 d3.r 一筆對一列；沒有 restyle，但 D026 起劇本已有 sick 等災禍）；n：地圖邊長
+// d3.f 比這一版新就退回快照；D046 起新版事件冒用格式 3 也擋下。真正格式 1–3 的合法舊檔另由 unit-d046-history 驗收。
 // 範圍（eventOf）：座標 0…n−1、日子 ≥ 0、路等級 1–5、分區 1–3。超出範圍的每一種各放在兩筆上，want 寫死「第幾筆的哪一項」：
 //   留到最後的那一筆（之後沒有事件碰那一格、手勢沒被復原）——範圍要是放寬，重播出來會跟存檔對不上（講的是「對不上」，不是這一項）；
 //   之後被同一種事件蓋過去的那一筆——範圍要是放寬，重播出來照樣對得上（竟然重播成功）。兩種都只能靠驗範圍擋下
 export function tamperCases(raw, hist, n) {
   const road = hist.findIndex((e, k) => k > 0 && e.t === 'road'), doze = hist.findIndex(e => e.t === 'doze');
   if (road < 0 || doze < 0) throw new Error('D011 竄改案例：歷史裡沒有鋪路或拆除');
-  if (hist.some(e => e.t === 'restyle')) throw new Error('D012 竄改案例：這份歷史已經有 restyle，當不了格式 3 的舊檔');
+  if (hist.some(e => e.t === 'restyle')) throw new Error('D012 竄改案例：這一組必須使用第一次存檔、尚未重挑外觀的歷史');
   const XSS = '<img src=x onerror=alert(1)>';
   const h1 = () => ({ f: raw.d3.f, s: raw.d3.s, g: raw.d3.g, h: JSON.parse(J(hist)) });     // 舊存法 hv 1：事件物件（沒有 hv 欄位）
   const h2 = () => JSON.parse(J(raw.d3));                                                    // hv 2：緊湊列 [種類碼, 日子差, 欄位…]
@@ -223,8 +223,9 @@ export function tamperCases(raw, hist, n) {
     ['hv2 城市格式 4.5', () => ({ ...h2(), f: 4.5 }), /^不認得的城市格式 f=4\.5：只用存檔$/],
     ['hv2 城市格式 −1', () => ({ ...h2(), f: -1 }), /^不認得的城市格式 f=-1：只用存檔$/],
     ['hv2 城市格式 0', () => ({ ...h2(), f: 0 }), /^不認得的城市格式 f=0：只用存檔$/],
-    ['hv1 城市格式 3 的舊檔（沒有 restyle）照讀', () => ({ ...h1(), f: 3 }), null],
-    ['hv2 城市格式 3 的舊檔（沒有 restyle）照讀', () => ({ ...h2(), f: 3 }), null],
+    // 沒有 restyle 不代表格式 3：此劇本已含 D026 sick，不能把它誤當合法舊檔。
+    ['hv1 帶災禍卻冒用城市格式 3', () => ({ ...h1(), f: 3 }), /^歷史事件 sick 需要城市格式 6，存檔卻標 3：只用存檔$/],
+    ['hv2 帶災禍卻冒用城市格式 3', () => ({ ...h2(), f: 3 }), /^歷史事件 sick 需要城市格式 6，存檔卻標 3：只用存檔$/],
   ];
 }
 
