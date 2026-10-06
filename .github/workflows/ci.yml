@@ -1,68 +1,58 @@
-# 每次推送：型別檢查 → Node 端守衛 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
-# main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
-name: ci
-
+# QA-only branch. Never merge. No Pages job, environment, or deploy permission.
+name: D049 official Pages verification
 on:
   push:
-    branches: [main, 'claude/**']
-    paths-ignore: ['**.md', 'docs/**']
-  pull_request:
-    paths-ignore: ['**.md', 'docs/**']
+    branches: ['claude/d049-live-verification']
   workflow_dispatch:
-
+permissions:
+  contents: read
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
+  group: d049-live-${{ github.ref }}
+  cancel-in-progress: false
 jobs:
-  smoke:
+  observe:
+    if: github.ref == 'refs/heads/claude/d049-live-verification'
     runs-on: ubuntu-latest
-    timeout-minutes: 45   # D038：守衛＋煙霧＋樣張到 D038 收工要約 32 分鐘（run 37215760854：每一步都 success，在 30 分鐘的上限被砍成 cancelled，Pages 沒發）；30→45。D027：守衛＋煙霧＋樣張約 20 分鐘（r26 是 18 分 40 秒，D027 加了實跑守衛與煙霧約 2 分鐘），25 分鐘的餘裕太薄；D022 那次是 15→25
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
+      - name: Approved product and original test suite are unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          approved=960b3e329717d7895bf788f0e095b1efee1dcc82
+          release=71bf40db307663c2713ec6a83c2aa4c327e5c7ca
+          tree=32226116bbe345d3415a00f309d9b851a3c8651f
+          test "$(git rev-parse "$approved^{tree}")" = "$tree"
+          test "$(git rev-parse "$release^{tree}")" = "$tree"
+          git diff --exit-code "$release" HEAD -- . ':(exclude).github/workflows/ci.yml' ':(exclude)tools/verify-live-d049.mjs'
       - run: npm ci
-      - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
+      - name: Existing Chinese screenshot font
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
-      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
-        run: npm run unit
       - run: npm run build
-      - name: 煙霧測試
-        run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
+      - name: Approved single-file build SHA256
         shell: bash
-      - name: 拍樣張（三畫風×三年份×兩個距離）
-        if: always()
-        run: node tools/shoot.mjs --out=scratch/shots
+        run: echo '68d825da457c2f64dec5b72da04fbda0dac131fbe8ff9f00b785f1a21f6bb000  dist/index.html' | sha256sum --check
+      - name: Local source and verifier guard preflight
+        run: node tools/verify-live-d049.mjs --preflight
+      - name: Actual official Pages trusted-input and copy-feedback verification
+        shell: bash
+        run: mkdir -p scratch/live-d049; node tools/verify-live-d049.mjs 2>&1 | tee scratch/live-d049/live-run.txt; exit ${PIPESTATUS[0]}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-${{ github.sha }}
+          name: d049-live-${{ github.sha }}
           path: |
-            smoke-run.txt
-            scratch/shots/*.png
-            scratch/shots/D048-evidence.json
+            scratch/live-d049/live-run.txt
+            scratch/live-d049/report.json
+            scratch/shots/D049-*.png
             scratch/shots/D049-evidence.json
           if-no-files-found: warn
           retention-days: 14
-      - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        with:
-          path: dist
-
-  pages:
-    needs: smoke
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
