@@ -1,5 +1,17 @@
 # D048 手機存檔警示與備份入口
 
+## 最終驗收與發佈（2026-10-06）
+
+- 業主核對八張原生圖後明確批准：「三線，該重試重試，該上線上線，圖片沒問題」。核准候選 `bfe27e861b34785ba5e9ee011899fb111fbb40ca` 經 [PR #4](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/4) 合併為 `3e9dd2adb201a2482156b9b8be9a317f14c577f3`。兩者完整tree都是 `b42f4ab4d7227a86fa780e6503776e0abe96fd04`，沒有在圖片確認後更換產品。
+- 候選 [push37509993476](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37509993476) 和 [PR37510002392](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37510002392) 各 **539 Node＋511 browser，0失敗**，PR測試合併tree亦相同。核准五張改後圖來自 artifact `11436956801`，ZIP SHA256 `2d477310313f9cd6d34f9e294d44fecdb4f498be3f8db59953cf279bb5d7f8f6`；三張改前圖來源仍是下文封存基線。
+- [正式main CI37528056685](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37528056685) 全部成功：型別、**539 Node（895.4s）＋511 browser（1127.4s）／0 NG**、build、樣張、Pages，21:19 UTC完成。正式 [Pages](https://lijiabao1998.github.io/GlimmerTown3D-lab/) HTTP200，下載HTML與核准建置逐位元組相同，SHA256 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。
+- [正式站QA37533351118](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37533351118) **37項／0失敗**：七個全新瀏覽器、16次實際正式文件hash全等、原26項D048檢查原封重跑；原始請求、全部document loader、HTTP200、redirect／child-frame／service-worker替換、console error均核對。瀏覽器最後的文件驗證與兩個CDP barrier完成後才讀錯誤清單，另用錯誤注入確認尾端錯誤不能漏報。
+- 正式站五張新介面PNG **逐位元組等於已核准五張改後圖**；觸控、原生鍵盤字元、四回呼內原子版面量測、長原因真觸控捲動、中斷／返回、超長／壞碼匯出、恢復、20天不重讀檔RNG完整軌跡全過。QA artifact `11444544851`，ZIP SHA256 `488233d766940daea5620ffa6ba90e2f4d5a72a10f122825440bb27c34a251c4`。
+- `claude/d048-baseline-capture`、`claude/d048-focused-verification`、`claude/d048-live-verification` 都是QA-only分支，**永不合併**。正式站QA只讀GitHub權限、沒有部署job；合成故障只在可丟棄的瀏覽器profile內。收工只補四份Markdown，產品／測試／工作流和完整綠燈版本逐位不變。
+- 尚未做成：沒有Android硬體驗收，360×740／412×860是Chrome觸控模擬；故障與測試城都是合成fixture，pagehide／pageshow為明標注入，不冒充真機Back測試。超長分享碼的城市-only／歷史省略與fallback限制照舊；沒有新增公車／軌道、經濟機制、儲存格式或外部分享服務。
+
+以下保留動手前條件與歷次候選的未完成狀態作為歷史紀錄；最終狀態以上段為準。
+
 ## 開工基線與範圍
 
 2026-10-06，GitHub main `0f38eff100f9161730e2208bcc24b896874dfa83`。開工 fetch 後 HEAD＝origin/main，工作樹乾淨。遠端 docs、分支和開啟 PR 均未佔用 D048；只在 `claude/d048-mobile-save-status` 的獨立雲端工作樹施工。本卡與驗收條件先於產品實作。D047 核准且已部署的單檔 SHA256 `7178ca04aed7c9ee07f688586e1f1668daca1877f42e23290516184b336e54f1` 另存作基線。
