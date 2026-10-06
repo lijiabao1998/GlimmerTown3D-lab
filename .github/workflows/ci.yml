@@ -1,66 +1,37 @@
-# 每次推送：型別檢查 → Node 端守衛 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
-# main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
-name: ci
-
+# QA-only branch. Never merge: no product changes, no Pages job, no deploy permissions.
+name: D046 official Pages verification
 on:
   push:
-    branches: [main, 'claude/**']
-    paths-ignore: ['**.md', 'docs/**']
-  pull_request:
-    paths-ignore: ['**.md', 'docs/**']
-  workflow_dispatch:
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
+    branches: ['claude/d046-live-verification']
+permissions:
+  contents: read
 jobs:
-  smoke:
+  observe:
     runs-on: ubuntu-latest
-    timeout-minutes: 45   # D038：守衛＋煙霧＋樣張到 D038 收工要約 32 分鐘（run 37215760854：每一步都 success，在 30 分鐘的上限被砍成 cancelled，Pages 沒發）；30→45。D027：守衛＋煙霧＋樣張約 20 分鐘（r26 是 18 分 40 秒，D027 加了實跑守衛與煙霧約 2 分鐘），25 分鐘的餘裕太薄；D022 那次是 15→25
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
+      - run: git fetch --no-tags --depth=1 origin 01eecbbfb0bff3d40e0f47d49a61f3419c7ca359
+      - run: git diff --exit-code 01eecbbfb0bff3d40e0f47d49a61f3419c7ca359 -- src index.html package.json package-lock.json vite.config.ts tsconfig.json
       - run: npm ci
-      - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
+      - name: Existing Chinese screenshot font
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
-      - run: npm run typecheck
-      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
-        run: npm run unit
       - run: npm run build
-      - name: 煙霧測試
-        run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
+      - name: Verify actual Pages bytes and touch-emulated mobile flows
+        run: node tools/verify-live-d046.mjs 2>&1 | tee live-run.txt; exit ${PIPESTATUS[0]}
         shell: bash
-      - name: 拍樣張（三畫風×三年份×兩個距離）
-        if: always()
-        run: node tools/shoot.mjs --out=scratch/shots
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-${{ github.sha }}
+          name: d046-live-${{ github.sha }}
           path: |
-            smoke-run.txt
-            scratch/shots/*.png
+            live-run.txt
+            scratch/live-d046/*
           if-no-files-found: warn
           retention-days: 14
-      - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        with:
-          path: dist
-
-  pages:
-    needs: smoke
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
