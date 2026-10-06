@@ -39,6 +39,7 @@ import { d045Smoke, d045SkipNote } from './smoke-d045.mjs';
 import { d046Smoke } from './smoke-d046.mjs';
 import { d047ArtSmoke } from './smoke-d047-art.mjs';
 import { d047MobileSmoke } from './smoke-d047-mobile.mjs';
+import { d048Smoke, d048SkipNote } from './smoke-d048.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -610,6 +611,7 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d045Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d046Smoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047ArtSmoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047MobileSmoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d048Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -636,6 +638,7 @@ if (d039SkipNote()) console.log(d039SkipNote());
 if (d040SkipNote()) console.log(d040SkipNote());
 if (d044SkipNote()) console.log(d044SkipNote());
 if (d045SkipNote()) console.log(d045SkipNote());
+if (d048SkipNote()) console.log(d048SkipNote());
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

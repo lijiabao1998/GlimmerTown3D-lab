@@ -37,3 +37,22 @@
 ## 尚未做成
 
 本卡建立時只完成唯讀盤點與基線保存，尚未實作、未跑本輪守衛／瀏覽器、未產出新驗收圖，沒有提交或部署。Android 實機未取得。
+
+
+## 已保存的改前證據
+
+- 基線來源在實作前封存，雲端原版截圖與初版 UI 實作並行；不是用改後程式重造改前圖。
+- QA-only `claude/d048-baseline-capture` @ `95cdb7a60b2efacbc377154498327231ce6ade0a`，只改捕獲腳本／固定 fixture／無部署的只讀工作流，**永不合併**。
+- [baseline run 37497090742](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37497090742) 成功，三張原版警示圖（quota 360×740／412×860、journal 412×860），六次實際正式文件 SHA256 均等於已核准 D047 單檔。
+- 固定 fixture code SHA256 `7413aadbe93ec7383a82768eb7db9b85b09e7cb2421d18c0396b8b90804b00d5`，17 棟建築、seed 5167048、第 150 天、委託 12.5、暫停；鏡頭中心 (31,30)、zoom 4.4。故障為測試注入；圖在 toast 消失後拍攝。
+- Artifact `11428770255`，ZIP SHA256 `4d1d86371c7909590741338cdc5120a329ca87bd4baac54f0630638b83a57be3`；本輪新 UI 尚未完整验收或交圖。
+
+## 首候選本地守衛
+
+- 首提交 `e298015` 只有驗收卡，先於產品實作；[Draft PR #4](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/4) 仍是候選。
+- 產品僅改 `src/ui/buildUi.ts`、`src/cityView.ts` 並加 `src/ui/saveStatus.ts`；`saveNow`／`kickJournal` 以原碼 SHA256 保持不變，`src/io`／`src/sim`／`src/render` 與種類配方無 diff。
+- 七項 D048 Node 守衛含八種真原碼突變、雙原因／恢復／文字安全／按鈕接線／匯出上限／小數相容；D047 event harness 只補新面板 stub，並加強測新面板中斷，原守衛未刪減。
+- 首次 aggregate 跑到179項已過後，因審查修正 body 不是可恢復焦點的 opener 而主動停止（沒有 NG）；穩定來源重跑官方完整 `npm run unit`：**536 項、0 NG、863.4 秒**。型別、單檔建置、diff whitespace 與獨立審查通過。
+- 候選建置 SHA256 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。官方完整 `npm run smoke` 兩次自動 Chrome 啟動皆在第一頁前因 process-singleton socket Operation not permitted 失敗，零瀏覽器斷言執行；依現有雲端工程授權走候選 CI-first，不記本地瀏覽器通過。
+- 新瀏覽器套件已寫360／412触控、桌面鍵盤、錯誤切換與恢復、長原因真觸控捲動、普通匯出／匯入取消、130000筆測試歷史超限、匯出失敗、焦點／inert、明標 pagehide／pageshow 注入、20天不重讀檔 RNG 對照；fixture 被額外抽一次 RNG 時，第1天就不同。這些目前只是已備好的測試，不代表實跑通過。
+- 工作流只多上傳 D048-evidence.json，保留完整 aggregate、原門檻與原 timeout。
