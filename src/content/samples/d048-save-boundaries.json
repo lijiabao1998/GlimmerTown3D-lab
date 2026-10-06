@@ -1,0 +1,17 @@
+{
+  "commit": "0f38eff100f9161730e2208bcc24b896874dfa83",
+  "sections": [
+    {
+      "name": "saveNow",
+      "from": "  function saveNow()",
+      "to": "  // D013：把",
+      "sha256": "55e70014f4be74fe3a40416a8ffef5b63349dce47cd1bd900903367eee67fd23"
+    },
+    {
+      "name": "kickJournal",
+      "from": "  function kickJournal()",
+      "to": "  addEventListener('visibilitychange'",
+      "sha256": "c55521a46c0f26c6670b2558e7e7a69a0416e58b4f5f0d4bea9bc66ed0f1b3de"
+    }
+  ]
+}

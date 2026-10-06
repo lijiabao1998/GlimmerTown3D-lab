@@ -64,6 +64,24 @@ const CSS = `
 .stat.money { color: #ffd98a; }
 .stat.bad { color: #ff9a9a; border-color: #ff8a8a77; }
 .stat.warn { color: #ffd98a; border-color: #ffd98a66; }
+.stat.saveWarning { min-width: 44px; min-height: 44px; height: auto; white-space: normal; text-align: left; }
+.stat.saveWarning:focus-visible, #saveStatus :focus-visible, #dlg :focus-visible { outline: 2px solid #ffe7b0; outline-offset: 3px; }
+#saveStatus { position: fixed; inset: 0; z-index: 20; background: #0008; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); touch-action: pan-y; }
+#saveStatus[hidden] { display: none; }
+#saveStatus .card { width: min(460px, 100%); min-width: 0; box-sizing: border-box; max-height: 100%; display: flex; flex-direction: column; background: #141a30f5; border: 1px solid #ffffff26; border-radius: 12px; padding: 16px; box-shadow: 0 10px 30px #0008; overflow-wrap: anywhere; }
+#saveStatus h2 { flex: none; margin: 0 0 10px; font-size: 17px; }
+#saveStatus .saveBody { min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+#saveStatus section { padding: 10px 12px; margin-bottom: 10px; border: 1px solid #ffd98a66; border-radius: 10px; }
+#saveStatus #saveStatusUnsaved { border-color: #ff8a8a77; }
+#saveStatus h3 { margin: 0 0 6px; color: #ffd98a; font-size: 15px; }
+#saveStatusUnsaved h3, #saveStatusError { color: #ff9a9a; }
+#saveStatus p { margin: 6px 0; font-size: 14px; line-height: 1.55; }
+#saveStatus .reason { font-weight: 600; }
+#saveStatus .note { color: #aab3c6; font-size: 12.5px; }
+#saveStatus .row { flex: none; margin-top: 14px; }
+#saveStatus button { min-width: 72px; min-height: 44px; }
+#saveStatusExport { background: #e8b74a; border-color: #e8b74a; color: #1c1a14; font-weight: 700; }
+#dlg .card { box-sizing: border-box; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; overflow-wrap: anywhere; }
 #dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(#0d122600, #0d1226ee 30%); display: flex; flex-direction: column; gap: 8px; }
 #dock[hidden] { display: none; }
 #dock .bar { display: flex; align-items: center; gap: 6px; min-height: 44px; }
@@ -168,14 +186,15 @@ export function createBuildUi(on: BuildUiEvents) {
   menu.onclick = e => { if (e.target === menu) menu.hidden = true; };
 
   // 狀態列的晶片：建一次，之後只改文字、樣式、藏不藏
-  const chip = (icon: IconName | null, title: string) => {
-    const s = document.createElement('span'), t = document.createElement('span');
+  const chip = (icon: IconName | null, title: string, warning = false) => {
+    const s = document.createElement(warning ? 'button' : 'span'), t = document.createElement('span');
     s.className = 'stat'; s.title = title; s.hidden = true;
+    if (warning) { (s as HTMLButtonElement).type = 'button'; s.setAttribute('aria-haspopup', 'dialog'); s.setAttribute('aria-controls', 'saveStatus'); s.onclick = () => on.menu('save-status'); }
     if (icon) s.innerHTML = ICONS[icon];
     s.appendChild(t); stats.appendChild(s);
     return { s, t };
   };
-  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, ''), chJ = chip(null, '');
+  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, '', true), chJ = chip(null, '', true);
   chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved'; chJ.s.dataset.k = 'journal';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
@@ -223,9 +242,9 @@ export function createBuildUi(on: BuildUiEvents) {
       chPower.s.hidden = !h.power;
       if (h.power) { setText(chPower.t, `${h.power[0]}/${h.power[1]}`); chPower.s.className = 'stat' + (h.power[0] > h.power[1] ? ' bad' : ''); }
       chSave.s.hidden = !h.unsaved;
-      if (h.unsaved) { setText(chSave.t, '⚠ 未存檔'); chSave.s.className = 'stat bad'; chSave.s.title = `自動存檔失敗：${h.unsaved}。請從 ☰ 匯出分享碼備份`; }
+      if (h.unsaved) { setText(chSave.t, '⚠ 未存檔'); chSave.s.className = 'stat bad saveWarning'; chSave.s.title = `自動存檔失敗：${h.unsaved}。點擊查看原因與匯出分享碼`; chSave.s.setAttribute('aria-label', '未存檔：查看原因與匯出分享碼'); }
       chJ.s.hidden = !h.journal || !!h.unsaved;                          // 存不進去的那一顆比較要緊，同時只亮一顆
-      if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下`; }
+      if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn saveWarning'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下。點擊查看原因與匯出分享碼`; chJ.s.setAttribute('aria-label', '歷史有上限：查看原因與匯出分享碼'); }
       stats.dataset.money = h.money === null ? '' : String(h.money);
     },
     setCommission(c: { label: string; progress: string; fraction: number; days: number } | null) {

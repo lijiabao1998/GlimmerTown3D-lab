@@ -1,0 +1,73 @@
+# D048 手機存檔警示與備份入口
+
+## 開工基線與範圍
+
+2026-10-06，GitHub main `0f38eff100f9161730e2208bcc24b896874dfa83`。開工 fetch 後 HEAD＝origin/main，工作樹乾淨。遠端 docs、分支和開啟 PR 均未佔用 D048；只在 `claude/d048-mobile-save-status` 的獨立雲端工作樹施工。本卡與驗收條件先於產品實作。D047 核准且已部署的單檔 SHA256 `7178ca04aed7c9ee07f688586e1f1668daca1877f42e23290516184b336e54f1` 另存作基線。
+
+這是 D046／D047 手機可靠性工作的下一個小範圍：讓既有「未存檔／歷史有上限」狀態在手機可讀、可操作。不是新的保存機制。兩條 2D 線只讀，原本分享碼匯出只在本地介面產生；不自動傳送給第三方。
+
+## 施工前查到的具體問題
+
+- `src/ui/buildUi.ts` 的警示晶片是 `span`、高 30px，沒有點按動作；詳細原因與備份指引只放在 `title`，手機不能依靠滑鼠懸停閱讀。
+- 自動存檔失敗的 toast 最多留 2.7 秒、通知超過三則會被擠掉；同樣失敗原因不會每次重複通知。警示晶片仍在，但玩家缺少直接可讀的原因／下一步。
+- D011 已驗儲存失敗／恢復，D013 已驗日誌 fallback 及晶片不重疊；尚未驗點警示後實際完成本地匯出、取消、回到警示的手機流程。
+- 現有匯出超過 `SAVE_LIMIT` 時，明確降為只有城市、不帶世界歷史的碼，重匯入只能看。本輪必須保留警告與行為，不能把「打開匯出／複製」說成已恢復自動存檔或一定無損備份。
+
+## 動手前驗收條件
+
+1. 只有現存儲存錯誤或日誌限制時出現相應的可觸控警示；保留兩者優先順序與原本狀態來源。觸控目標至少 44×44px、有 button 語意、可用鍵盤 Enter／Space 開啟、焦點可見。
+2. 點警示即可閱讀完整的目前原因與簡短可行下一步；兩種警示不可混為「城已丟失」。提供既有分享碼匯出入口與關閉／返回。正常儲存時不增加常駐面板或新任務。
+3. 匯出沿用 `onMenu('export')` 原有生成及限制：一般碼含原本歷史；超長碼照舊明講不帶歷史／重匯入只能看；生成失敗維持可讀錯誤。不改 `saveNow`、`kickJournal`、`src/io`、`src/sim`、歷史格式／編號、fallback 判定、RNG、任何遊戲數字。
+4. 開啟／關閉警示、匯出取消、返回、Escape、背景點擊、重複點擊與恢復後再操作，均不在背後施工、不多記事件、不扣款或改城市。開啟面板要中斷既有預覽。UI 導航不建立新的城市存檔或刪除資料。
+5. 面板有正確 dialog／label 語意；進入後焦點留在可見控制，Tab／Shift+Tab 不漏到背後施工控制；关闭／返回恢復合理焦點。手機瀏覽器 Back 若納入新面板導航，必須不離開遊戲或重演匯出；不得為此改動原本城市 URL／分享碼語意。
+6. 360×740、412×860 手機在長錯誤原因、同時有委託列與通知時，警示／說明／匯出按鈕可見、不水平溢出，與 D047 成本標籤／工具列不衝突；窄高不足允許面板本身垂直捲動。畫風 A、模型、鏡頭、全局顏色保持。
+7. 用真 Chrome CDP 觸控與桌面鍵盤跑：QuotaExceededError、一般儲存拒絕、IndexedDB 不可用／原有 fallback、通知消失後仍可閱讀、同錯誤重複操作、匯出取消／返回、復原後再開、恢復成功清警示、錯誤變更不顯示舊原因。故障由明標測試注入，不冒充自然設備故障。
+8. UI 操作前後比較完整城市／歷史／資金／存檔；RNG 不只靠 `simHash`（它不含內部 RNG 狀態），使用配對 control 與操作組在不重讀檔的相同後續日序列逐欄相等，或等價的測試專用 RNG 計數守衛。保留全部舊存檔／分享碼／D046 小數／D047 手機及藝術守衛。
+9. 全套 Node aggregate、typecheck、build、完整 browser smoke 通過，新守衛含精確突變／錯誤注入，零外部素材、原手機效能預算不放寬。本地 Chromium 仍若受限，按本輪雲端工程授權使用候選 CI-first；未跑不得記通過。Android 無實機時如實標 Chrome 觸控模擬。
+10. 圖片本輪先由業主確認才可合併／部署。沒有新增公車／軌道、經濟、機制、付費服務或帳號權限。
+
+## 固定場景與預定圖片
+
+- 以同一個可玩合成城、固定種子／天數／暫停狀態／畫風 A／鏡頭，保留 D047 基線。先取得警示 HUD 的 360×740 與 412×860 改前圖；改後以同條件比較，不拿不同城市或假示意圖代替。
+- 場景 A：正常城＋localStorage 空間滿故障，等待 toast 消失後，從持續警示觸控進入原因／本地匯出／取消返回。
+- 場景 B：既有 IndexedDB 受限 fallback，顯示「歷史有上限」及其實際原因，不等同未存檔。
+- 場景 C：同錯誤重复、原因切換、故障解除後正常存檔，核對面板／警示／焦點與城市歷史不變。
+- 預計交六至八張實際圖：兩個尺寸的同城警示前後對照、兩類說明、匯出取消返回及恢復；超長歷史降級／長字串另以自動斷言驗證，必要時補圖。所有圖註明合成驗收城和 Chrome 手機模擬。
+
+## 尚未做成
+
+本卡建立時只完成唯讀盤點與基線保存，尚未實作、未跑本輪守衛／瀏覽器、未產出新驗收圖，沒有提交或部署。Android 實機未取得。
+
+
+## 已保存的改前證據
+
+- 基線來源在實作前封存，雲端原版截圖與初版 UI 實作並行；不是用改後程式重造改前圖。
+- QA-only `claude/d048-baseline-capture` @ `95cdb7a60b2efacbc377154498327231ce6ade0a`，只改捕獲腳本／固定 fixture／無部署的只讀工作流，**永不合併**。
+- [baseline run 37497090742](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37497090742) 成功，三張原版警示圖（quota 360×740／412×860、journal 412×860），六次實際正式文件 SHA256 均等於已核准 D047 單檔。
+- 固定 fixture code SHA256 `7413aadbe93ec7383a82768eb7db9b85b09e7cb2421d18c0396b8b90804b00d5`，17 棟建築、seed 5167048、第 150 天、委託 12.5、暫停；鏡頭中心 (31,30)、zoom 4.4。故障為測試注入；圖在 toast 消失後拍攝。
+- Artifact `11428770255`，ZIP SHA256 `4d1d86371c7909590741338cdc5120a329ca87bd4baac54f0630638b83a57be3`；本輪新 UI 尚未完整验收或交圖。
+
+## 首候選本地守衛
+
+- 首提交 `e298015` 只有驗收卡，先於產品實作；[Draft PR #4](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/4) 仍是候選。
+- 產品僅改 `src/ui/buildUi.ts`、`src/cityView.ts` 並加 `src/ui/saveStatus.ts`；`saveNow`／`kickJournal` 以原碼 SHA256 保持不變，`src/io`／`src/sim`／`src/render` 與種類配方無 diff。
+- 七項 D048 Node 守衛含八種真原碼突變、雙原因／恢復／文字安全／按鈕接線／匯出上限／小數相容；D047 event harness 只補新面板 stub，並加強測新面板中斷，原守衛未刪減。
+- 首次 aggregate 跑到179項已過後，因審查修正 body 不是可恢復焦點的 opener 而主動停止（沒有 NG）；穩定來源重跑官方完整 `npm run unit`：**536 項、0 NG、863.4 秒**。型別、單檔建置、diff whitespace 與獨立審查通過。
+- 候選建置 SHA256 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。官方完整 `npm run smoke` 兩次自動 Chrome 啟動皆在第一頁前因 process-singleton socket Operation not permitted 失敗，零瀏覽器斷言執行；依現有雲端工程授權走候選 CI-first，不記本地瀏覽器通過。
+- 新瀏覽器套件已寫360／412触控、桌面鍵盤、錯誤切換與恢復、長原因真觸控捲動、普通匯出／匯入取消、130000筆測試歷史超限、匯出失敗、焦點／inert、明標 pagehide／pageshow 注入、20天不重讀檔 RNG 對照；fixture 被額外抽一次 RNG 時，第1天就不同。這些目前只是已備好的測試，不代表實跑通過。
+- 工作流只多上傳 D048-evidence.json，保留完整 aggregate、原門檻與原 timeout。
+
+## 首輪完整 CI 與測試前置修正
+
+首候選 `8b3ba071` 的 [push 37500505752](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37500505752) 與 [PR 37500739971](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37500739971) 都通過型別、536 Node、build；瀏覽器各 501 項通過／6 項失敗，原來 485 項均通過。失敗限於新 D048 測試，完整原始記錄保留；沒有把這一輪標為全綠。
+
+1. 鏡頭：真實改前圖的 target z 都是 `29.999999999999993`，測試卻用理想數學值 `30` 作逐位比較。修成與已保存 artifact `11428770255` 的完整實測 camera（pos／target／zoom）精確相等，沒有改鏡頭或加寬容差。
+2. 通知：44px 警示改變 HUD 高度，測試在 ResizeObserver 完成渲染前讀到舊 top 150，當時新委託底 154。改用單一瀏覽器 evaluation 的 RAF Promise，同一回呼內成對讀矩形、最多四次回呼，保留正高度及至少 6px 間距。雲端實測一至兩次回呼後間距 8px。
+3. 鍵盤：舊 CDP helper 沒送 Enter 字元，原生按鈕沒有收到 keypress；不是在產品加手動 click 補償。依 [Chromium 原生按鈕](https://github.com/chromium/chromium/blob/main/third_party/blink/renderer/core/html/html_element.cc) 與 [Puppeteer CDP 輸入](https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/cdp/Input.ts) 的方法，送 Enter 的 `\r`／Space 的空白 text 及 unmodifiedText，另驗 trusted keydown、keypress charCode 13／32、每次恰好一個 trusted click。
+4. 定點修後另露出 360px 測試沿用 D011 `y>150` 找拖曳格，起點仍可能在較高 HUD 下。改為量實際 HUD／dock，端點與全部九個真 CDP 拖曳位置都須命中 CANVAS；原本「先真的出現非零預覽再中斷」及城市／存檔不變斷言保留，失敗會輸出目標、命中及事件紀錄。
+
+以上均為測試修正，產品來源與單檔 SHA256 仍是 `cbd5ea3d1235042b9407769fc7bb1d8535a09f9ea43ef5173d15907be9213cec`。新增三项 Node harness 守衛執行實際鍵盤 payload 和實際 RAF 原碼，含字元遺漏／wrong type／gap 放寬／callback 延長的精確破壞案例。
+
+[第二輪只讀定點 QA 37507505107](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37507505107) 已通過 **26 項、0 失敗**，全六類 D048 覆蓋、五張新介面圖、21 個逐日完整狀態的 RNG 對照全部成功。Artifact `11432657090`，ZIP SHA256 `e5cd521e350190fdc52090d835758680a57d9a2dc469c32622fdb11f9d85e165`。`claude/d048-focused-verification` 是 QA-only 分支，永不合併；定點綠燈不能取代最後完整 aggregate／候選 CI。期間完整 Node 重跑在256項已過後為最終可見拖曳目標與原子 RAF 測試修正主動停止，沒有 NG，另重跑凍結來源全套。
+
+最終測試窄修的凍結來源完整 Node aggregate：**539 項、0 NG、844.5 秒**；比首候選多三項 harness 破壞守衛。typecheck／build 再驗，HTML SHA256 不變。接著由候選分支重跑完整 CI；定點26項綠燈與已有五張圖仍不當成全套驗收或交付批准。

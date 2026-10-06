@@ -30,6 +30,7 @@ import { HAPPY_NAMES } from './sim/rules/happy.ts';
 import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
+import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -284,7 +285,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
-    dlg.hidden = true;                                                    // 換了城，分享碼對話框不留在新城上
+    closeSavePanels();                                                    // 換了城，分享碼／存檔狀態與背景焦點鎖都不留在新城上
     syncUi();
     if (sim) warmEdit();
     return { ok: true, replayed: !!L?.replayed };
@@ -464,14 +465,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
     if (retired.length) { for (const b of retired) b.dispose(); retired = []; }
   }
-  renderer.setAnimationLoop(() => { advance(); draw(); });
+  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); draw(); });
 
   // ---- 介面（D011：上方狀態列＋☰ 選單、下方播放列＋工具列，src/ui/buildUi.ts；建築卡與分享碼對話框沿用）----
   const ui = document.createElement('div');
   ui.innerHTML = `
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol><div class="acts"></div></div>
-    <div id="dlg" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
-      <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
+    <div id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgSub" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
+      <textarea aria-label="分享碼" spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err" role="alert"></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
@@ -489,17 +490,52 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
-  let dlgMode: 'paste' | 'export' = 'paste', lastCode = '';
+  let dlgMode: 'paste' | 'export' = 'paste', lastCode = '', dlgFromStatus = false;
+  const saveWarnings = () => ({ unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '' });
+  const saveStatus = createSaveStatus({ export: () => onMenu('export'), close: () => closeSavePanels() });
+  ui.appendChild(saveStatus.root);
+  const saveModal = createSaveModalAccess(ui, [bui.root, renderer.domElement], () =>
+    bui.root.querySelector<HTMLElement>('.saveWarning:not([hidden])') ?? bui.root.querySelector<HTMLElement>('#menuBtn'));
+  function refreshSaveWarnings() {
+    if (!saveModal.isOpen()) return;
+    const shown = saveStatus.state(), current = saveWarnings();
+    // Journal failure can settle asynchronously while paused. Only read the same
+    // warning sources; do not retry saving, pause time, or change fallback rules.
+    if (shown.unsaved !== current.unsaved || shown.journal !== current.journal) syncUi();
+  }
+  function openSaveStatus() {
+    if (!dlg.hidden) return;
+    const warnings = saveWarnings();
+    if (saveStatus.root.hidden && !warnings.unsaved && !warnings.journal) return;
+    saveStatus.setState(warnings); saveStatus.setError(''); bui.menuOpen(false);
+    saveModal.show(saveStatus.root, saveStatus.title);
+  }
+  function closeSavePanels(restoreFocus = true) {
+    dlgFromStatus = false; saveModal.close(restoreFocus); dlg.hidden = true; saveStatus.root.hidden = true;
+  }
+  function closeDlg() {
+    if (dlgFromStatus) {
+      dlgFromStatus = false; saveStatus.setState(saveWarnings());
+      saveModal.show(saveStatus.root, saveStatus.exportButton);
+    } else closeSavePanels();
+  }
+  // No history entries or URL changes for panel navigation; native page navigation
+  // releases focus locks so a back-forward-cache restore cannot leave the city inert.
+  addEventListener('pagehide', () => closeSavePanels(false));
   function openDlg(mode: 'paste' | 'export', text = '', note = '') {
+    if (!dlg.hidden && dlgMode === mode) return;
+    dlgFromStatus = mode === 'export' && !saveStatus.root.hidden;
     dlgMode = mode;
     $('#dlgTitle').textContent = mode === 'paste' ? '貼上分享碼' : '匯出分享碼';
     $('#dlgSub').textContent = note || (mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
       : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。');
     ta.value = text; ta.readOnly = mode === 'export'; dlgOk.textContent = mode === 'paste' ? '匯入' : '複製'; err.textContent = '';
-    dlg.hidden = false;
-    if (mode === 'export') ta.select(); else ta.focus();
+    $('#dlgNo').textContent = dlgFromStatus ? '返回存檔狀態' : '取消';
+    saveModal.show(dlg, ta);
+    if (mode === 'export') ta.select();
   }
-  $<HTMLButtonElement>('#dlgNo').onclick = () => { dlg.hidden = true; };
+  $<HTMLButtonElement>('#dlgNo').onclick = closeDlg;
+  dlg.onclick = e => { if (e.target === dlg) closeDlg(); };
   dlgOk.onclick = () => {
     if (dlgMode === 'export') { ta.select(); navigator.clipboard?.writeText(ta.value).then(() => bui.toast('已複製分享碼', 'good'), () => bui.toast('請手動複製')); return; }
     const code = ta.value, r = decodeLabCode(code);
@@ -511,7 +547,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!res.ok) { err.textContent = res.error; return; }
     sampleId = mine ? 'mine' : '';
     if (mine) { saveNow(); if (!res.replayed) bui.toast(loadNote, 'bad'); }   // 歷史接不回來：講原因（歷史從這張碼重新起算）
-    dlg.hidden = true; ta.value = '';
+    closeSavePanels(); ta.value = '';
   };
   $<HTMLButtonElement>('#bio .x').onclick = () => closeCard();
   // D027：☰「幸福構成」——城市平均每一項幸福（DayReport.happyAgg，跟實驗線 happyAgg 55255 同一份）。照實驗線 showStats 面板（65487–65520、66360–66365 @ d23c18d）：
@@ -892,11 +928,20 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function onMenu(id: string) {
     interruptBuild();   // A panel can open while the canvas still owns pointer capture.
     if (id.startsWith('city:')) menuCity(id.slice(5));
+    else if (id === 'save-status') openSaveStatus();
     else if (id === 'export') {
+      if (!dlg.hidden && dlgMode === 'export') return;
+      saveStatus.setError('');
       let full = lastCode;
-      if (sim) try { full = saveCode(sim, template, startCode); } catch (e) { bui.toast('⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e)), 'bad'); return; }   // 同 saveNow（D012 審查）
-      if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
-      else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+      try {
+        if (sim) full = saveCode(sim, template, startCode);
+        if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
+        else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+      } catch (e) {
+        const message = '⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e));
+        if (!saveStatus.root.hidden) saveStatus.setError(message);  // 留在面板中可讀，不只靠短暫通知
+        else bui.toast(message, 'bad');
+      }
     }
     else if (id === 'paste') openDlg('paste');
     else if (id === 'happy') openHappy();
@@ -933,6 +978,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? (pending ? '—' : sim.pop) : null,
       power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '',
     });
+    saveStatus.setState(saveWarnings());
     const activeCommission = sim && sim.diff !== 3 ? CMS_BY_ID385[sim.cms.act] : null;
     const progress = activeCommission ? cmProgress(activeCommission) : null;
     bui.setCommission(activeCommission && progress && sim ? { label: activeCommission.ic + ' ' + activeCommission.nm, progress: progress.cur, fraction: progress.p, days: Math.max(0, activeCommission.days - (sim.day - sim.cms.st)) } : null);
@@ -1077,7 +1123,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   addEventListener('keydown', e => {
     if (clean) return;
     interruptBuild();   // No held preview survives a keyboard tool/menu/undo action.
-    if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
+    if (saveModal.isOpen()) {
+      if (e.key === 'Escape') { e.preventDefault(); if (!dlg.hidden) closeDlg(); else closeSavePanels(); }
+      else saveModal.keydown(e);
+      return;
+    }
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
@@ -1087,6 +1137,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
     if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
+    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning')) return;   // Native activation must not toggle playback.
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
@@ -1371,7 +1422,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const ptrs = new Set<number>();
   const lift = (id: number) => { ptrs.delete(id); };
   const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
-    && !bui.isMenuOpen() && [dlg, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
+    && !bui.isMenuOpen() && [dlg, saveStatus.root, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
     && document.elementFromPoint(x, y) === canvas;
   // D047: count touches on UI too. A second finger on a toolbar/notice/panel
   // interrupts immediately, before its click changes a tool or opens an overlay.

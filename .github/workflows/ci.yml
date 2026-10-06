@@ -44,6 +44,7 @@ jobs:
           path: |
             smoke-run.txt
             scratch/shots/*.png
+            scratch/shots/D048-evidence.json
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3
