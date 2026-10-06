@@ -43,6 +43,8 @@ export const CITY_FORMAT = Math.max(...Object.values(EVENT_REGISTRY).map(e => e.
 // D012 以前沒標 f 的檔仍接受格式 1–4 的事件；不能拿掉 f 來偷帶格式 5–10。
 export const LEGACY_UNVERSIONED_FORMAT = 4;
 export function minimumEventFormat(e: CityEvent): number {
+  // Preserve the existing save/export error contract before touching registry fields.
+  if (!Object.hasOwn(EVENT_REGISTRY, e.t)) throw new Error(`存檔：不認得的事件 ${e.t}`);
   if (e.t === 'doze' && e.layer === 'ruin') return 6;
   if (e.t === 'doze' && e.layer === 'wp') return 5;
   return EVENT_REGISTRY[e.t].format;

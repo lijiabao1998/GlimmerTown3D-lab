@@ -78,6 +78,21 @@ export async function d046HistoryGuards(log) {
     try { const info = await fn(); log(true, 'D046 歷史：' + title, info ?? '通過'); }
     catch (e) { log(false, 'D046 歷史：' + title, `${e.name}: ${e.message}`); }
   };
+  await run('未知事件保留既有存檔／匯出診斷，拒絕寫入後可正常恢復', () => {
+    const f = fixture(10, 2), L = loadCode(f.code, KT, vrank);
+    assert.ok(L.ok); const before = saveCode(L.sim, L.template, L.start);
+    for (const t of ['bogus', 'constructor', '__proto__']) {
+      const e = { day: L.sim.day, t }, want = { message: '存檔：不認得的事件 ' + t };
+      assert.throws(() => eventFormat(e), want);
+      L.sim.city.history.push(e);
+      assert.throws(() => historyFormat(L.sim.city.history), want);
+      assert.throws(() => saveCode(L.sim, L.template, L.start), want);
+      assert.throws(() => packMore(L.sim.city.history, PACK0), want);
+      L.sim.city.history.pop();
+      assert.equal(saveCode(L.sim, L.template, L.start), before);
+    }
+    return 'bogus 與原型鍵皆保留「存檔：不認得的事件 …」，移除後存檔逐位恢復';
+  });
   await run('唯一登記、0–24 既有碼不動、格式 8／9／10 分組與舊版界線', () => {
     assert.equal(CITY_FORMAT, 10); assert.equal(HISTORY_VER, 2); assert.equal(JOURNAL_VER, 3);
     assert.equal(Object.keys(EVENT_REGISTRY).length, 25);

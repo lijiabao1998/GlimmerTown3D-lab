@@ -15,7 +15,7 @@ export async function d046Smoke(browser, log) {
   await browser({ width: 960, height: 900 }, async ({ open, page }) => {
     const p = await pageSession(page, open, { W: 412, H: 860 });
     const { ev, tapBtn, tapAt, open: navigate, rectOf, key, toasts } = p;
-    const load = async code => { await navigate('sample=seed516&clean=1'); await ev(`__gt.clearSave(); localStorage.setItem('gt3d.v1.save',${J(code)})`); await navigate(''); };
+    const load = async code => { await navigate('sample=seed516&clean=1'); await ev(`__gt.clearSave(); localStorage.setItem('gt3d.v1.save',${J(code)})`); await navigate(''); assert.ok(await p.waitFor(async () => (await toasts()).length === 0, 4000), 'initial import notice should settle before review screenshots'); };
     const shot = async name => { const s = await page.send('Page.captureScreenshot', { format: 'png' }); fs.writeFileSync(path.join(OUT, 'D046-' + name + '.png'), Buffer.from(s.data, 'base64')); };
     const test = async (name, fn) => { try { await fn(); log(true, 'D046 ' + name); } catch(e) { log(false, 'D046 ' + name, e.stack); } };
     await test('412×860 playable offers, repeated touch, dismiss and active HUD', async () => {
@@ -77,7 +77,7 @@ export async function d046Smoke(browser, log) {
       await ev("__gt.menu('commission')"); await shot('06-food-export-completed-412x860');
     });
     await test('natural Lv.22 promotion unlocks existing space-center tool and shows notice', async () => {
-      await load(naturalSpaceUnlockCode()); await tapBtn('[data-t="civic"]');
+      await load(naturalSpaceUnlockCode()); await ev('__gt.view(31, 12, 1)'); await tapBtn('[data-t="civic"]');
       const before = await ev("document.querySelector('[data-c=megaproject]').getAttribute('aria-disabled')"); assert.equal(before, 'true');
       await ev('__gt.simStep(1)'); assert.equal((await ev('__gt.rankRep()')).idx, 21);
       assert.equal(await ev("document.querySelector('[data-c=megaproject]').getAttribute('aria-disabled')"), null);
