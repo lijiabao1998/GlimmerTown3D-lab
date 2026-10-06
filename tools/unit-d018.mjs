@@ -1,6 +1,6 @@
 // D018 Node 守衛：公園照實驗線九種設計（驗收 1、2、3 的一半）。由 tools/unit.mjs 呼叫。
 //   1. 實驗線原文的出處：src/content/samples/d018-lab.json（tools/lab-parks.mjs 摘 SPR.park 九種的三段）逐段 sha256＝錨點記錄；
-//   2. 只動了公園：全部非住商工種類（樣張城裡的 183 種 × 變體 0–8）的幾何雜湊，公園以外逐位＝D018 動手前錄的表（d018-kinds-before.json）；公園九個變體都變了、而且彼此不同；
+//   2. D018 歷史配方守衛（D047 的 k51 用保留原配方；現行 k51 由 D047 另驗）：全部非住商工種類（樣張城裡的 183 種 × 變體 0–8）的幾何雜湊，公園以外逐位＝D018 動手前錄的表（d018-kinds-before.json）；公園九個變體都變了、而且彼此不同；
 //   3. 九種各有自己的設計：每一種用到的色碼都逐字出現在實驗線那一個變體的原文裡（不是憑印象）；每一種都畫到自己的招牌件（招牌色），沒畫到別種的招牌件；
 //   4. 預算：一座公園（不含樹，樹另外用實例畫）≤ 200 個三角形。
 import fs from 'node:fs';
@@ -34,7 +34,7 @@ async function guards(log) {
     log(!bad.length, 'D018 公園原文：實驗線 d23c18d SPR.park 九種的三段（40602 v0–v2、44563 v3–v5、46122 v6–v8），sha256 逐段＝錨點記錄', bad.join('；') || (gold.pieces ?? []).map(p => `${p.name} ${p.line}–${p.endLine}`).join('、'));
   }
   // ---- 2. 只動了公園 ----
-  const before = JSON.parse(read('src/content/samples/d018-kinds-before.json')).kinds, now = kindHashes();
+  const before = JSON.parse(read('src/content/samples/d018-kinds-before.json')).kinds, now = kindHashes({ 51: { type: 'landmark', p: { which: 'rocket' } } }); // D047 explicitly changes k51; this historical D018 guard still verifies the preserved legacy recipe, and D047 guards the new art.
   {
     const bad = [], ks = Object.keys(before);
     if (ks.length !== Object.keys(now).length || ks.length < 180) bad.push(`種類數 動手前 ${ks.length}、現在 ${Object.keys(now).length}`);
@@ -44,7 +44,7 @@ async function guards(log) {
     if (same) bad.push(`公園有 ${same} 個變體跟動手前一樣`);
     if (new Set(park).size !== VARIANTS) bad.push(`公園九個變體只有 ${new Set(park).size} 種幾何`);
     if (new Set(before[4].h).size !== 1) bad.push('動手前的表裡公園九個變體就不一樣（表不是動手前錄的？）');
-    log(!bad.length, `D018 驗收 2：只動了公園——全部非住商工 ${ks.length} 種 × 變體 0–8 的幾何雜湊，公園以外逐位＝動手前錄的表；公園動手前九個變體同一種幾何，現在九個都變了、彼此不同`,
+    log(!bad.length, `D018 歷史配方驗收：${ks.length} 種 × 變體 0–8（k51 使用保留舊配方，現行造型由 D047 另驗），公園以外逐位＝D018 動手前；公園九種彼此不同`,
       bad.join('；') || `${ks.length - 1} 種 × ${VARIANTS} 相同；公園 ${VARIANTS} 種`);
   }
   // ---- 3. 九種各有自己的設計、色碼出自實驗線原文 ----
