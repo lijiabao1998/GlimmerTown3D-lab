@@ -16,6 +16,8 @@
 
 ## 目前狀態：D048 手機存檔警示與備份入口已發布
 
+[D049 本地分享碼複製回饋](docs/D049-copy-feedback.md) 正在候選驗收：持續的成功／手動複製提示、連點與過時回應保護。本地547項守衛通過，完整雲端瀏覽器與本輪新圖仍待確認，尚未發布。
+
 業主 2026-09-25 定案：只參考 2D 實驗線、全力做建造、原始碼零外部素材、本倉庫定位是 Pre（看 [`docs/D003-lab-city-import.md`](docs/D003-lab-city-import.md)）。
 
 **線上版**：<https://lijiabao1998.github.io/GlimmerTown3D-lab/>。手機可以直接開。

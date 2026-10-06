@@ -82,6 +82,10 @@ const CSS = `
 #saveStatus button { min-width: 72px; min-height: 44px; }
 #saveStatusExport { background: #e8b74a; border-color: #e8b74a; color: #1c1a14; font-weight: 700; }
 #dlg .card { box-sizing: border-box; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; overflow-wrap: anywhere; }
+#copyStatus { margin: 10px 0; padding: 10px 12px; border: 1px solid #aab3c644; border-radius: 8px; color: #d5dcec; font-size: 13px; line-height: 1.55; }
+#copyStatus[data-phase="success"] { color: #b4e8bc; border-color: #b4e8bc66; }
+#copyStatus[data-phase="unsupported"], #copyStatus[data-phase="failed"] { color: #ffd98a; border-color: #ffd98a66; }
+#dlgOk[aria-disabled="true"] { opacity: .65; cursor: wait; }
 #dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(#0d122600, #0d1226ee 30%); display: flex; flex-direction: column; gap: 8px; }
 #dock[hidden] { display: none; }
 #dock .bar { display: flex; align-items: center; gap: 6px; min-height: 44px; }
