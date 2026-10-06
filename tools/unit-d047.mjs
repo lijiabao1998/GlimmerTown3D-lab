@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { stripTypeScriptTypes } from 'node:module';
+import vm from 'node:vm';
 import { ROOT } from './cdp.mjs';
 import { kindHashes, drawOne } from './d018-kinds.mjs';
 import { kindTableFrom } from '../src/content/kindTable.ts';
@@ -26,6 +28,37 @@ export async function d047Guards(log) {
     for (const k of Object.keys(now)) if (k !== '51') assert.deepEqual(now[k], before.kinds[k], 'unchanged k'+k);
     assert.equal(shapeOf(51).type, 'spacecenter');
     for (let v=0;v<9;v++) assert.notEqual(now[51].h[v], before.kinds[51].h[v]);
+  });
+  const currentGolden = JSON.parse(read('src/content/samples/d047-space-center-golden.json'));
+  await test('all nine current k51 variants exactly match the complete reviewed geometry golden', () => {
+    assert.equal(currentGolden.sourceCommit, '65507654be94d0971fe7b0d9b06d657d58b0553d');
+    assert.equal(currentGolden.triangles, 636); assert.deepEqual(now[51], currentGolden.k51);
+  });
+  await test('legacy and current exact-art guards reject independent in-memory geometry mutations', async () => {
+    const source = read('src/render/kindArt.ts');
+    const mutate = async (from, to) => {
+      assert.equal(source.split(from).length, 2, 'unique mutation anchor');
+      let code = stripTypeScriptTypes(source.replace(from, to));
+      code = code.replace(/from 'three'/g, 'from '+JSON.stringify(import.meta.resolve('three')))
+        .replace(/from '\.\/windows\.ts'/g, 'from '+JSON.stringify(pathToFileURL(path.join(ROOT,'src/render/windows.ts')).href));
+      return import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+    };
+    const current = await mutate("p.blk(.06, .51, .07, .49, 0, H * .70, c.wallR, c.roof, false);", "p.blk(.06, .51, .07, .49, 0, H * .60, c.wallR, c.roof, false);");
+    assert.notDeepEqual(kindHashes({}, current.drawKind)[51], currentGolden.k51, 'current-hall mutation is caught');
+    const legacy = await mutate("p.cyl(.35, .45, .07 * s, .1, H * .8, p.c.wall, 10);", "p.cyl(.35, .45, .08 * s, .1, H * .8, p.c.wall, 10);");
+    assert.notDeepEqual(kindHashes({51:LEGACY}, legacy.drawKind)[51], before.kinds[51], 'legacy-rocket mutation is caught');
+  });
+  await test('full-gallery fresh comparison cannot hide counts-only or owner-triangle mismatches', () => {
+    const source=read('tools/smoke-d015.mjs');
+    const literal=name=>{const m=source.match(new RegExp('const '+name+' = `([^`]+)`;'));assert.ok(m,name+' comparison source');return m[1];};
+    const expression=literal('SAME').replace('${PICK}',literal('PICK')).replace('${WHERE}',literal('WHERE'));
+    const a={meshes:{walls:{byOwner:'same',ownerTris:{1:636}}},ground:'same',inst:[],queries:{ownerBoxes:'same'},counts:{owners:1,blocks:0}};
+    for(const mutate of [b=>{b.counts.owners++;},b=>{b.meshes.walls.ownerTris[1]++;}]) {
+      const b=structuredClone(a);mutate(b);
+      const result=vm.runInNewContext(expression,{__gt:{sceneDigest:()=>a,freshDigest:()=>b}});
+      assert.ok(result.length>0,'PICK mismatch must remain red even without a WHERE label');
+    }
+    assert.equal(vm.runInNewContext(expression,{__gt:{sceneDigest:()=>a,freshDigest:()=>structuredClone(a)}}).length,0);
   });
   await test('before comparison uses the unchanged legacy recipe and all nine baseline hashes', () => {
     assert.ok(read('src/render/kindArt.ts').includes(before.legacyRecipe));

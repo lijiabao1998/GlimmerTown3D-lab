@@ -32,6 +32,12 @@ export async function d047ArtSmoke(browser,log) {
         assert.ok(state.info.calls<=18,'existing mobile draw-call budget');assert.ok(state.info.triangles<=118884,'existing triangle budget');
         assert.ok(state.box,'space center geometry present');
         const shot=await page.send('Page.captureScreenshot',{format:'png'});
+        if(phase==='after') {
+          await page.evaluate('__gt.simRebuild(true);__gt.setVisT(2.2);__gt.setDayFrac(0)');
+          await sleep(250);
+          const fresh=await page.send('Page.captureScreenshot',{format:'png'});
+          assert.equal(fresh.data,shot.data,'current k51 full-frame pixels match forced fresh rebuild');
+        }
         const name=`D047-${v.name}-${phase}-${v.width}x${v.height}.png`;
         fs.writeFileSync(path.join(OUT,name),Buffer.from(shot.data,'base64'));
         report.push({...state,png:shot.data,name});

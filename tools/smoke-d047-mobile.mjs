@@ -86,6 +86,10 @@ export async function d047MobileSmoke(browser, log) {
     const before = await ev(STATE), { stroke } = await hold(p);
     assert.deepEqual(stroke.preview, { count: 1, total: 4500, cells: 9 }); assert.equal(await ev('__gt.previewCount()'), 9);
     assert.deepEqual(await ev(STATE), before); assert.ok((await toasts()).length, 'cost tag is checked while notices and the active commission HUD are present');
+    await safeTag(p);   // Keep the overlap assertion while the lock notices are live.
+    assert.ok(await waitFor(async () => !(await toasts()).length, 4000), 'old lock notices must expire before the unlocked preview review image');
+    assert.deepEqual(await ev('__gt.stroke()'), stroke, 'the genuine touch must remain held while notices expire');
+    assert.equal(await ev('__gt.previewCount()'), 9); assert.deepEqual(await ev(STATE), before);
     await safeTag(p); await shot('01-nine-cell-preview-412x860'); await release();
     const after = await ev(STATE), placed = after.history.at(-1), cells = await ev(FOOT);
     assert.equal(after.money, before.money - 4500); assert.equal(after.events, before.events + 1);
@@ -143,10 +147,53 @@ export async function d047MobileSmoke(browser, log) {
       await p.release(); await cleanCancelled(p, before);
     }
     await hold(p); await p.touch('touchCancel', []); await p.frames(2); await cleanCancelled(p, before);
-    h = await hold(p); await p.ev(`document.querySelector('canvas').releasePointerCapture(window.__d047Pid)`);
-    // Pending capture changes are processed by the next real pointer event.
-    await p.touch('touchMove', [[h.point[0] + 1, h.point[1]]]); await p.frames(2);
-    assert.equal(await p.ev('__gt.stroke()'), null); await p.release(); await cleanCancelled(p, before);
+    // A touchStart only requests capture. Releasing that pending request before
+    // the next pointer event produces neither gotpointercapture nor lostpointercapture.
+    // First observe active, trusted capture; both movements remain below the
+    // product's 8px drag-cancel threshold so that path cannot mask capture loss.
+    await p.ev(`(()=>{
+      const c=document.querySelector('canvas'), events=[], types=['pointerdown','pointermove','pointerup','pointercancel','gotpointercapture','lostpointercapture'];
+      const probe=window.__d047Capture={pid:null,origin:null,events};
+      const record=e=>{
+        if(e.type==='pointerdown'&&e.target===c){probe.pid=e.pointerId;probe.origin=[e.clientX,e.clientY];}
+        events.push({type:e.type,pid:e.pointerId,trusted:e.isTrusted,target:e.target.nodeName,x:e.clientX,y:e.clientY,buttons:e.buttons,captured:c.hasPointerCapture(e.pointerId)});
+      };
+      for(const type of types)addEventListener(type,record,true);
+      probe.stop=()=>{for(const type of types)removeEventListener(type,record,true);};
+    })()`);
+    let capturePhase = 'arm';
+    const captureState = () => p.ev(`(()=>{const p=window.__d047Capture;return {pid:p.pid,origin:p.origin,events:p.events,
+      captured:p.pid!==null&&document.querySelector('canvas').hasPointerCapture(p.pid),stroke:__gt.stroke(),preview:__gt.previewCount(),pointers:__gt.ui().pointers,costHidden:document.querySelector('#costTag').hidden};})()`);
+    try {
+      await hold(p); const armed = await captureState(), pid = armed.pid, [x, y] = armed.origin;
+      assert.equal(typeof pid, 'number'); assert.equal(armed.captured, true, 'capture is requested for the held pointer');
+      capturePhase = 'activate capture';
+      await p.touch('touchMove', [[x + 6, y, 0]]); await p.frames(2);
+      const active = await captureState();
+      assert.ok(active.events.some(e=>e.type==='gotpointercapture'&&e.pid===pid&&e.trusted&&e.target==='CANVAS'), 'must receive real gotpointercapture before requesting release');
+      assert.ok(active.events.some(e=>e.type==='pointermove'&&e.pid===pid&&e.trusted), 'activation move must reach the page');
+      assert.equal(active.captured, true); assert.equal(active.stroke?.moved, false);
+      assert.deepEqual(active.stroke?.preview, { count: 1, total: 4500, cells: 9 });
+      assert.deepEqual(await p.ev(STATE), before, 'activating capture must not change the city');
+      capturePhase = 'request release';
+      await p.ev(`(()=>{const p=window.__d047Capture;p.events.push({type:'release-request',pid:p.pid});document.querySelector('canvas').releasePointerCapture(p.pid);})()`);
+      assert.equal((await captureState()).captured, false, 'the capture release request must take effect');
+      capturePhase = 'observe capture loss';
+      await p.touch('touchMove', [[x + 7, y, 0]]); await p.frames(2);
+      const lost = await captureState(), events = lost.events;
+      const requestIndex = events.findIndex(e=>e.type==='release-request'&&e.pid===pid);
+      const lostIndex = events.findIndex(e=>e.type==='lostpointercapture'&&e.pid===pid&&e.trusted&&e.target==='CANVAS');
+      assert.ok(lostIndex > requestIndex, 'must receive real lostpointercapture after requesting release');
+      assert.ok(events.slice(lostIndex+1).some(e=>e.type==='pointermove'&&e.pid===pid&&e.trusted), 'lost capture must precede the following real move');
+      assert.ok(events.filter(e=>e.type==='pointermove'&&e.pid===pid).every(e=>Math.hypot(e.x-x,e.y-y)<8), 'all movement must stay below drag cancellation');
+      assert.equal(lost.stroke, null); assert.equal(lost.preview, 0); assert.equal(lost.costHidden, true);
+      assert.deepEqual(await p.ev(STATE), before, 'capture loss must not change the city');
+      capturePhase = 'lift and verify';
+      await p.release(); await cleanCancelled(p, before);
+    } catch (e) {
+      const diagnostic = await captureState().catch(error=>({probeError:String(error)}));
+      throw new Error(`Capture phase ${capturePhase}: ${e.message}\nPointer diagnostics: ${J(diagnostic)}`, { cause: e });
+    } finally { await p.ev('window.__d047Capture.stop()'); }
     for (const type of ['blur', 'pagehide', 'visibilitychange']) {
       await hold(p);
       if (type === 'visibilitychange') {

@@ -26,23 +26,23 @@ function geoHash(G, extra) {
   return h.digest('hex').slice(0, 16);
 }
 // 畫一棟（KindCtx 多給 v：D018 起公園照變體畫；其他種類不讀它）
-export function drawOne(KT, LOOKS, k, lv, v, s, override) {
+export function drawOne(KT, LOOKS, k, lv, v, s, override, drawer = drawKind) {
   const shape = override ?? shapeOf(k); if (!shape) return null;
   const G = [new Geo({ ext: true }), new Geo(), new Geo()], trees = [];
   for (const g of G) g.owner = 1;
   const H = Math.max(0.12, KT.height(k, lv, v));
-  const used = [...drawKind({ W: G[0], O: G[1], D: G[2], trees, x0: 0, z0: 0, s, y0: 0, H, k, v, C: kindColors(LOOKS, k, lv, KT.catColor(KT.cat(k))) }, shape)];
+  const used = [...drawer({ W: G[0], O: G[1], D: G[2], trees, x0: 0, z0: 0, s, y0: 0, H, k, v, C: kindColors(LOOKS, k, lv, KT.catColor(KT.cat(k))) }, shape)];
   return { G, trees, used, H };
 }
 // { k: { s, lv, h: [v0…v8 的雜湊] } }，k 照樣張城裡出現的非住商工種類
-export function kindHashes(overrides = {}) {
+export function kindHashes(overrides = {}, drawer = drawKind) {
   const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), LOOKS = JSON.parse(read('src/content/lab-looks.json')).looks;
   const code = read('src/content/samples/gallery.code.txt').trim(), c = cityFromLab(decodeLabCode(code).save, KT, code);
   const out = {};
   for (const b of c.buildings) {
     if (b.goneDay !== undefined || b.k <= 3 || out[b.k] || !shapeOf(b.k)) continue;
     const h = [];
-    for (let v = 0; v < VARIANTS; v++) { const r = drawOne(KT, LOOKS, b.k, b.lv, v, b.size, overrides[b.k]); h.push(geoHash(r.G, [r.trees, r.used, r.H])); }
+    for (let v = 0; v < VARIANTS; v++) { const r = drawOne(KT, LOOKS, b.k, b.lv, v, b.size, overrides[b.k], drawer); h.push(geoHash(r.G, [r.trees, r.used, r.H])); }
     out[b.k] = { s: b.size, lv: b.lv, h };
   }
   return out;

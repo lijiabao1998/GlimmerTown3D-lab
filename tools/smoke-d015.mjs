@@ -23,7 +23,7 @@ const KB = v => `${(v / 1024).toFixed(0)} KB`;
 // 不分順序的比法（在頁面裡跑）：三個網格照主人分組的摘要與三角形數、查詢結果、地面、樹、畫到的棟數與街區數
 const PICK = `d=>JSON.stringify({m:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),g:d.ground,i:d.inst,q:d.queries,c:d.counts})`;
 const WHERE = `(a,b)=>{const o=[];for(const k of Object.keys(b.meshes)){if(!a.meshes[k]||a.meshes[k].byOwner!==b.meshes[k].byOwner)o.push(k);}if(a.ground!==b.ground)o.push('ground');if(JSON.stringify(a.inst)!==JSON.stringify(b.inst))o.push('trees');for(const k of Object.keys(b.queries))if(a.queries[k]!==b.queries[k])o.push(k);return o;}`;
-const SAME = `(()=>{const P=${PICK},W=${WHERE},a=__gt.sceneDigest(),b=__gt.freshDigest();return P(a)===P(b)?[]:W(a,b);})()`;
+const SAME = `(()=>{const P=${PICK},W=${WHERE},a=__gt.sceneDigest(),b=__gt.freshDigest(),diff=W(a,b);return P(a)===P(b)?[]:diff.length?diff:['unclassified digest mismatch'];})()`;
 
 export async function d015Smoke(withBrowser, log) {
   const on = k => !ONLY.length || ONLY.includes(k);
@@ -39,11 +39,25 @@ export async function d015Smoke(withBrowser, log) {
   await session('golden', { width: 412, height: 860, mobile: true }, async ({ open, ev }) => {
     const G = JSON.parse(R('src/content/samples/d015-golden.json')), bad = [];
     for (const c of D015_CASES) {
-      const d = await caseDigest(open, ev, c), st = await ev('__gt.sceneStats()');
+      // D047 intentionally replaces only k51. Keep D015's exact historical
+      // gallery snapshot alive through the byte-identical legacy recipe; current
+      // k51 remains pinned by its own complete golden and real pixel/fresh checks.
+      const historical = c.id === 'gallery' ? { ...c, url: c.url + '&spaceArt=legacy' } : c;
+      const d = await caseDigest(open, ev, historical), st = await ev('__gt.sceneStats()');
       if (J(d) !== J(G.cases[c.id])) bad.push(c.id);
       if (!st?.fresh) bad.push(`${c.id} 不是從頭建`);
+      if (c.id === 'gallery') {
+        const current = await caseDigest(open, ev, c), diff = await ev(SAME);
+        const id = await ev('__gt.buildingList().find(b=>b[1]===51)?.[0]');
+        const golden = JSON.parse(R('src/content/samples/d047-space-center-golden.json'));
+        const triangleCount = Object.values(current.meshes).reduce((n,m)=>n+(m.ownerTris[id]??0),0);
+        log(diff.length===0 && J(current)!==J(d) && current.ground===d.ground && J(current.inst)===J(d.inst) && J(current.counts)===J(d.counts) && triangleCount===golden.triangles,
+          'D047 current full gallery: fresh/incremental geometry match; only intentional k51 art changes, exact triangle golden and city/ground/tree counts retained',
+          J({diff,k51:id,triangles:triangleCount,expected:golden.triangles}));
+      }
+
     }
-    log(bad.length === 0, `D015 驗收 1：首次建逐位元組＝黃金樣本（${G.commit.slice(0, 7)} 整張建錄的；三個建築網格每一種頂點屬性照畫的順序、主人、地面、樹、包圍盒、點綴件數、窗樣式、風化牆、施工資料……）`,
+    log(bad.length === 0, `D015 驗收 1：首次建逐位元組＝黃金樣本（${G.commit.slice(0, 7)} 整張建錄的；三個建築網格每一種頂點屬性照畫的順序、主人、地面、樹、包圍盒、點綴件數、窗樣式、風化牆、施工資料……；gallery 明確使用 D047 保留舊 k51 配方，現行造型另驗）`,
       bad.length ? `不同：${bad.join('、')}` : `${D015_CASES.length} 個情境：${D015_CASES.map(c => c.id).join('、')}`);
   });
 

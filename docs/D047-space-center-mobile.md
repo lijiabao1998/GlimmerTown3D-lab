@@ -48,3 +48,15 @@
 ## 2026-10-06 候選 CI-first 授權
 
 業主明確允許三線僅在 dot 的雲端執行，除本輪照片仍須核對外，其餘已授權工程操作毋須再逐次詢問。依此本輪可以先提交候選分支、開 Draft PR，使用既有 GitHub CI 完成被本機環境阻擋的完整瀏覽器驗收和真實對照圖。這不跳過完整測試或圖片門檻；本輪圖片尚未交付確認，不合併 main、不部署。恢復工作時重新 fetch，main 仍為 `01eecbb`，沒有別人的更新需要合併。
+
+## 第一輪候選 CI 與窄幅修正
+
+候選 `65507654be94d0971fe7b0d9b06d657d58b0553d`、Draft PR #2。push run `37469293241` 與 PR run `37469352525` 的依賴、型別、完整 Node、建置均成功；兩輪瀏覽器都在同樣兩項失敗：
+
+1. D015 的整張 gallery 舊黃金摘要仍含舊 k51，新的專屬外觀使它不同。沒有重錄／放寬舊黄金：歷史 gallery 明確用保留且逐位不變的 `spaceArt=legacy`；新 k51 另以九變體完整幾何 golden（來源為本次真 Chrome 已出圖候選）、独立突變、完整現行 gallery 的 fresh／incremental 與每個固定視角的全幅像素重建相等繼續嚴格檢查。
+2. D047 的 capture-loss 測試在 `touchStart` 之後只有等動畫幀，沒有先觀察真正 `gotpointercapture`。此時 release 可以清掉尚未成為 active 的 pending capture，因而沒有 `lostpointercapture`。測試改成先小幅真觸控移動並驗 trusted got，再 release verified pointer，再小幅移動驗 trusted lost；所有移動累計不到原本 8px 拖動取消門檻，不能讓拖動取消假裝捕獲中斷成功。失敗時輸出完整事件／階段／指標及預覽狀態。
+
+第一輪的六張實際 A 畫風前後對照、放置／九格預覽／重複／復原／存讀，以及道路／分區／鏡頭觸控組已通過；尚不能稱整套驗收通過，沒有交成最終圖或發布。上述修正不動遊戲程式，單檔仍為 `7178ca04aed7c9ee07f688586e1f1668daca1877f42e23290516184b336e54f1`。完整 Node 再跑，之後新候選需要完整 CI。
+
+
+窄修的完整本地重跑：第一次在 288 個已通過守衛後被外部終止（exit 137，沒有 NG 斷言），原始記錄保留；使用 `NODE_OPTIONS=--max-old-space-size=1536` 降低峰值記憶體再跑同一個官方 aggregate，**529 項、0 NG、846.8 秒**。未跳過守衛或放寬任何門檻。型別、建置、定點守衛及獨立修正審查均通過；遊戲單檔 SHA256 仍完全相同。完整 gallery 比較另修正舊診斷助手可能漏報 counts／ownerTris-only mismatch 的空陣列情況，加入兩種定點破壞驗證；這是加嚴，並非排除現行模型。
