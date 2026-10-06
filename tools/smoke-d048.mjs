@@ -15,7 +15,7 @@ import { kindTableFrom } from '../src/content/kindTable.ts';
 import { stepDay } from '../src/sim/day.ts';
 import { cmsLoad3d } from '../src/sim/rules/commissionSave.ts';
 import {
-  d048ReviewCode, d048FixtureManifest, D048_CAMERA, D048_VIEWS, D048_SAVE_KEY,
+  d048ReviewCode, d048FixtureManifest, D048_CAMERA, D048_BASELINE_CAMERA, D048_VIEWS, D048_SAVE_KEY,
   D048_COMMISSION, D048_QUOTA, D048_DENIED, D048_IDB_REASON, D048_IDB_BLOCK,
 } from './d048-scenes.mjs';
 
@@ -98,11 +98,22 @@ async function failSave(p, kind = 'quota') {
 async function settleToasts(p) {
   assert.ok(await p.waitFor(async () => !(await p.toasts()).length, 4500), 'toast nodes must expire, not only become transparent');
 }
-async function key(page, value, shift = false) {
+export function d048KeyEvents(value, shift = false) {
   const map = { Enter: ['Enter',13], ' ': ['Space',32], Tab: ['Tab',9], Escape: ['Escape',27] };
+  assert.ok(map[value], `unsupported D048 key ${J(value)}`);
   const [code, kc] = map[value], modifiers = shift ? 8 : 0;
-  await page.send('Input.dispatchKeyEvent', { type: 'keyDown', key: value, code, windowsVirtualKeyCode: kc, modifiers });
-  await page.send('Input.dispatchKeyEvent', { type: 'keyUp', key: value, code, windowsVirtualKeyCode: kc, modifiers });
+  // Match native CDP character dispatch, as in Puppeteer's CdpKeyboard. Chromium
+  // activates a button on Enter keypress charCode 13, not keydown alone.
+  // https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/cdp/Input.ts
+  // https://github.com/chromium/chromium/blob/main/third_party/blink/renderer/core/html/html_element.cc
+  const text = value === 'Enter' ? '\r' : value === ' ' ? ' ' : '';
+  return [
+    { type: text ? 'keyDown' : 'rawKeyDown', key: value, code, windowsVirtualKeyCode: kc, modifiers, text, unmodifiedText:text },
+    { type: 'keyUp', key: value, code, windowsVirtualKeyCode: kc, modifiers },
+  ];
+}
+async function key(page, value, shift = false) {
+  for(const event of d048KeyEvents(value,shift)) await page.send('Input.dispatchKeyEvent', event);
   await sleep(100);
 }
 async function visible(p, sel) { const r = await p.rectOf(sel); return !!r && !r.hidden; }
@@ -170,7 +181,7 @@ export async function d048Smoke(browser, log) {
   if (unknown.length) log(false, 'D048 recognized section selection', unknown.join(', '));
   const fixtureChecks = verifyD048Fixture();
   log(true,'D048 fixture: frozen bytes, D046 exact fractional compatibility, single RNG-draw sensitivity',J(fixtureChecks));
-  const manifest = { ...d048FixtureManifest(), fixtureChecks, candidateHtmlSha256: fs.existsSync(path.join(ROOT,'dist/index.html')) ? sha(fs.readFileSync(path.join(ROOT,'dist/index.html'),'utf8')) : null, screenshots: [], sections: {}, rng: null };
+  const manifest = { ...d048FixtureManifest(), fixtureChecks, candidateHtmlSha256: fs.existsSync(path.join(ROOT,'dist/index.html')) ? sha(fs.readFileSync(path.join(ROOT,'dist/index.html'),'utf8')) : null, screenshots: [], sections: {}, layouts:[], keyboard:[], rng: null };
   const run = async (section, options, fn) => {
     if (ONLY.length && !ONLY.includes(section)) return;
     try {
@@ -179,7 +190,7 @@ export async function d048Smoke(browser, log) {
         const shot = async name => {
           // The same camera and fixed render time are used for deployed-baseline and candidate.
           const cam = await p.ev('__gt.cam()');
-          assert.equal(cam.zoom, D048_CAMERA.zoom); same(cam.target, [D048_CAMERA.x,0,D048_CAMERA.z], 'review camera target');
+          same(cam, D048_BASELINE_CAMERA, `exact realized before/after review camera; actual ${J(cam)}`);
           const response = await page.send('Page.captureScreenshot', { format: 'png' });
           const file = `D048-${name}-${p.W}x${p.H}.png`, bytes = Buffer.from(response.data,'base64');
           fs.writeFileSync(path.join(OUT,file), bytes);
@@ -207,8 +218,23 @@ export async function d048Smoke(browser, log) {
     assert.equal(await visible(p, UNSAVED), false); assert.equal(await visible(p, JOURNAL), false);
     await failSave(p);
     await assertButton(p, UNSAVED);
-    const toast = await p.rectOf('#toasts'), commission = await p.rectOf('#commissionHud');
-    assert.ok(toast.t >= commission.b + 6, `toast must not cover active commission: ${J({toast,commission})}`);
+    const beforeLayout={toast:await p.rectOf('#toasts'),commission:await p.rectOf('#commissionHud')};
+    // The new 44px warning changes HUD height; the existing ResizeObserver places
+    // toasts after rendering. Wait for actual geometry, bounded to four frames,
+    // rather than accepting the old coordinates before observer delivery.
+    // Keep every measurement and the strict non-overlap assertion below.
+    const measurements=[];
+    for(let frame=1;frame<=4;frame++){
+      await p.frames(1);
+      const toast=await p.rectOf('#toasts'),commission=await p.rectOf('#commissionHud');
+      measurements.push({frame,toast,commission});
+      if(toast.h>0&&toast.t>=commission.b+6)break;
+    }
+    const {toast,commission}=measurements.at(-1);
+    const layout={viewport:[W,H],maxFrames:4,before:beforeLayout,measurements};
+    manifest.layouts.push(layout);
+    assert.ok(toast.h>0&&toast.t >= commission.b + 6, `rendered toast must not cover active commission: ${J(layout)}`);
+    log(true,`D048 portrait${W}: rendered HUD/toast measurement`,J(layout));
     await settleToasts(p);
     await assertButton(p, UNSAVED);
     await shot('warning-after');
@@ -264,13 +290,36 @@ export async function d048Smoke(browser, log) {
   await run('keyboard',{W:1280,H:800,mobile:false},async(p,page)=>{
     await loadFixture(p); await failSave(p); await settleToasts(p);
     const before = await p.ev(SNAPSHOT);
+    await p.ev(`(()=>{
+      window.__d048KeyPhase='setup';window.__d048Keys=[];
+      const label=e=>e instanceof Element?(e.id||e.getAttribute('data-k')||e.tagName):'';
+      for(const type of ['keydown','keypress','keyup','click','focusin','focusout'])addEventListener(type,e=>{
+        window.__d048Keys.push({phase:window.__d048KeyPhase,type,key:e.key??null,code:e.code??null,charCode:e.charCode??null,
+          trusted:e.isTrusted,prevented:e.defaultPrevented,target:label(e.target),active:label(document.activeElement)});
+        if(window.__d048Keys.length>200)window.__d048Keys.shift();
+      });
+    })()`);
     await p.ev(`document.querySelector(${J(UNSAVED)}).focus()`);
     // Real Tab creates keyboard modality; Shift+Tab comes back to the warning button.
     await key(page,'Tab'); await key(page,'Tab',true);
     const focus = await p.ev(`(()=>{const e=document.querySelector(${J(UNSAVED)}),s=getComputedStyle(e);return {active:document.activeElement===e,visible:e.matches(':focus-visible'),outline:s.outlineStyle,width:parseFloat(s.outlineWidth),shadow:s.boxShadow};})()`);
     assert.ok(focus.active&&focus.visible&&((focus.outline!=='none'&&focus.width>0)||focus.shadow!=='none'),`warning needs visible keyboard focus ${J(focus)}`);
     for (const opener of ['Enter',' ']) {
-      await key(page,opener); await assertModal(p,'#saveStatus'); await focusCycle(p,page,'#saveStatus');
+      const phase=opener==='Enter'?'warning Enter':'warning Space';
+      await p.ev(`window.__d048KeyPhase=${J(phase)}`);
+      assert.equal(await p.ev(`document.activeElement===document.querySelector(${J(UNSAVED)})`),true,`${phase}: warning must be focused before native activation`);
+      await key(page,opener);
+      const events=await p.ev(`window.__d048Keys.filter(e=>e.phase===${J(phase)})`);
+      manifest.keyboard.push({phase,events});
+      try {
+        assert.ok(events.some(e=>e.type==='keydown'&&e.key===opener&&e.target==='unsaved'&&e.trusted),`${phase}: trusted keydown`);
+        assert.ok(events.some(e=>e.type==='keypress'&&e.charCode===(opener==='Enter'?13:32)&&e.target==='unsaved'&&e.trusted),`${phase}: native character event`);
+        assert.equal(events.filter(e=>e.type==='click'&&e.target==='unsaved'&&e.trusted).length,1,`${phase}: exactly one trusted native click`);
+        await assertModal(p,'#saveStatus');
+      } catch(error) { throw new Error(`${phase}: ${error.message}; trusted key/click/focus trace ${J(events)}`,{cause:error}); }
+      log(true,`D048 keyboard: ${phase} native activation`,J(events));
+      await p.ev(`window.__d048KeyPhase=${J(phase+' modal navigation')}`);
+      await focusCycle(p,page,'#saveStatus');
       await p.ev("document.querySelector('#saveStatusExport').focus()"); await key(page,'Enter');
       await assertModal(p,'#dlg'); await focusCycle(p,page,'#dlg');
       // Both modal layers must reject ordinary simulation shortcuts.
