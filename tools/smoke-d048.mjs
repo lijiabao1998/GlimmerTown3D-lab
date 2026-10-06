@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { ROOT, withBrowser, sleep } from './cdp.mjs';
-import { pageSession, free, grew } from './smoke-d011.mjs';
+import { pageSession, grew } from './smoke-d011.mjs';
 import { decodeLabCode } from '../src/io/labcode.ts';
 import { SAVE_LIMIT, loadCode, saveCode } from '../src/io/save.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
@@ -55,6 +55,22 @@ const SNAPSHOT = `(()=>({
 }))()`;
 const WORLD = `(()=>({sim:__gt.sim(),layers:__gt.layers(),buildings:__gt.buildingList(),
   history:__gt.history(),commission:__gt.simCms(),code:__gt.save(),lastDay:__gt.lastDay(),dayReport:__gt.dayRep()}))()`;
+// Both rectangles are read synchronously in each browser RAF callback. Export the
+// exact evaluated source so Node/mutation guards can exercise the same bounded loop.
+export const D048_TOAST_LAYOUT_SOURCE = `new Promise(resolve=>{
+  const read=()=>{
+    const rect=sel=>{const e=document.querySelector(sel),r=e.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height,hidden:!!e.closest('[hidden]')};};
+    return {toast:rect('#toasts'),commission:rect('#commissionHud')};
+  };
+  const before=read(),measurements=[];
+  const sample=()=>{
+    const measurement={frame:measurements.length+1,...read()};measurements.push(measurement);
+    const {toast,commission}=measurement;
+    if((toast.h>0&&toast.t>=commission.b+6)||measurements.length===4)resolve({viewport:[innerWidth,innerHeight],maxFrames:4,before,measurements});
+    else requestAnimationFrame(sample);
+  };
+  requestAnimationFrame(sample);
+})`;
 
 // Also runnable without Chromium: verifies the frozen review bytes and demonstrates
 // that this fixture's subsequent simulation notices a single extra RNG draw.
@@ -162,10 +178,35 @@ async function exportReturn(p, page, how = 'button') {
 }
 async function heldPreviewCancelled(p, page) {
   await p.tapBtn('[data-t="road"]');
-  const box = await p.findBox(2, 1, free); assert.equal(box.length, 2, 'fixture has two visible free tiles');
+  // D011's generic findBox assumes y>150 is unobscured. Here the active commission
+  // plus 44px warning can cover that band, especially at 360px. Select against
+  // actual HUD/dock rectangles and hit-test both endpoints plus every CDP move.
+  const target = await p.ev(`(()=>{
+    const L=__gt.layers(),canvas=document.querySelector('canvas');
+    const rect=sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};};
+    const hud=rect('#hud'),dock=rect('#dock');
+    const free=i=>!L.road[i]&&!L.zone[i]&&!L.occ[i]&&!L.tree[i]&&L.ter[i]!==0;
+    const inside=p=>p[0]>16&&p[0]<innerWidth-16&&p[1]>hud.b+12&&p[1]<dock.t-12;
+    const hit=p=>{const e=document.elementFromPoint(p[0],p[1]);return e===canvas?'CANVAS':e?e.tagName+(e.id?'#'+e.id:''):null;};
+    for(let z=0;z<L.n;z++)for(let x=0;x<L.n-1;x++){
+      const i=z*L.n+x;if(!free(i)||!free(i+1))continue;
+      const a=__gt.cellScreen(x,z),b=__gt.cellScreen(x+1,z);if(!inside(a)||!inside(b))continue;
+      const path=Array.from({length:9},(_,k)=>[a[0]+(b[0]-a[0])*k/8,a[1]+(b[1]-a[1])*k/8]);
+      const hits=path.map(hit);if(hits.every(h=>h==='CANVAS'))return {hud,dock,cells:[[x,z],[x+1,z]],points:[a,b],path,hits};
+    }
+    return {hud,dock,cells:null,points:null,path:[],hits:[]};
+  })()`);
+  assert.ok(target.points, `fixture needs two free canvas-hit tiles and an unobscured drag path: ${J(target)}`);
+  assert.equal(target.hits.length,9); assert.ok(target.hits.every(hit=>hit==='CANVAS'));
   const before = await p.ev(SNAPSHOT);
-  await p.drag(box[0][1], box[1][1]);
-  assert.ok((await p.ev('__gt.stroke()'))?.preview?.count > 0, 'real held drag must show a preview before interruption');
+  await p.drag(target.points[0], target.points[1],8);
+  const held = await p.ev('__gt.stroke()');
+  if(!held?.preview?.count){
+    const after=await p.ev(`(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom};};return {
+      hud:rect('#hud'),dock:rect('#dock'),ui:__gt.ui(),stroke:__gt.stroke(),preview:__gt.previewCount(),events:window.__gtEv,
+      hits:${J(target.path)}.map(p=>{const e=document.elementFromPoint(...p);return e?e.tagName+(e.id?'#'+e.id:''):null;})};})()`);
+    assert.fail(`real held drag must show a preview before interruption; target ${J(target)}; after ${J(after)}`);
+  }
   // Assistive/keyboard activation while a genuine canvas touch remains captured.
   await p.ev("__gt.menu('save-status')");
   assert.equal(await p.ev('__gt.stroke()'), null); assert.equal(await p.ev('__gt.previewCount()'), 0);
@@ -218,20 +259,11 @@ export async function d048Smoke(browser, log) {
     assert.equal(await visible(p, UNSAVED), false); assert.equal(await visible(p, JOURNAL), false);
     await failSave(p);
     await assertButton(p, UNSAVED);
-    const beforeLayout={toast:await p.rectOf('#toasts'),commission:await p.rectOf('#commissionHud')};
     // The new 44px warning changes HUD height; the existing ResizeObserver places
-    // toasts after rendering. Wait for actual geometry, bounded to four frames,
-    // rather than accepting the old coordinates before observer delivery.
-    // Keep every measurement and the strict non-overlap assertion below.
-    const measurements=[];
-    for(let frame=1;frame<=4;frame++){
-      await p.frames(1);
-      const toast=await p.rectOf('#toasts'),commission=await p.rectOf('#commissionHud');
-      measurements.push({frame,toast,commission});
-      if(toast.h>0&&toast.t>=commission.b+6)break;
-    }
-    const {toast,commission}=measurements.at(-1);
-    const layout={viewport:[W,H],maxFrames:4,before:beforeLayout,measurements};
+    // toasts after rendering. The single browser-side promise collects atomic
+    // geometry in at most four RAF callbacks, with no interleaved CDP reads.
+    const layout=await p.ev(D048_TOAST_LAYOUT_SOURCE);
+    const {toast,commission}=layout.measurements.at(-1);
     manifest.layouts.push(layout);
     assert.ok(toast.h>0&&toast.t >= commission.b + 6, `rendered toast must not cover active commission: ${J(layout)}`);
     log(true,`D048 portrait${W}: rendered HUD/toast measurement`,J(layout));
