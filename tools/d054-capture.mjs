@@ -10,8 +10,9 @@ import { D052_SNAPSHOT } from './d052-capture.mjs';
 import { tapD053 } from './d053-capture.mjs';
 import { builtBase } from './d036-cities.mjs';
 import { loadCode } from '../src/io/save.ts';
+import { stepDay } from '../src/sim/day.ts';
 import { decodeLabCode } from '../src/io/labcode.ts';
-import { previewOp,commitOp,powerStatus } from '../src/sim/edit.ts';
+import { previewOp,commitOp,undoOp,powerStatus } from '../src/sim/edit.ts';
 import { D054_BASELINE,D054_MODES,D054_SHOTS,D054_SAVE_KEY,D054_OPS,d054Camera,d054ReviewCode,d054FixtureManifest } from './d054-scenes.mjs';
 const J=JSON.stringify;
 export const d054Hash=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
@@ -74,7 +75,12 @@ export async function captureD054Scene(p,page,mode,{phase,outDir,mobile=true}){
  await take('preview');item.commit=commitOp(model.sim,op,0);await d054Release(p,page,held.b,mobile);const after=await d054Snapshot(p);d054CompareModel(after,model.sim,'original commit');
  if(mode==='low-road')check('real commit skips bridge and later reaches affordable land',()=>{assert.equal(item.commit.placed,2);assert.equal(item.commit.spent,30);assert.deepEqual(item.commit.events.map(e=>[e.x,e.z]),[[28,26],[30,26]]);});
  if(mode==='low-rect')check('rectangle refuses all and spends zero',()=>{assert.equal(item.commit.placed,0);assert.equal(item.commit.spent,0);assert.deepEqual(d054Persisted(after),d054Persisted(before));});
- await take('result');item.finalWorldSha256=d054Hash(d054World(after));write(`D054-${phase}-state-final-${mode}.json`,after);item.ui=await p.ev(D054_UI);item.inputs=await p.ev('__d054Inputs');
+ await take('result');item.finalWorldSha256=d054Hash(d054World(after));write(`D054-${phase}-state-final-${mode}.json`,after);item.ui=await p.ev(D054_UI);
+ item.pairing={initial:d054Hash(d054World(initial)),preview:d054Hash(d054World(during)),committed:d054Hash(d054World(after)),undo:null,recommitted:null,future:[]};
+ if(item.commit.ok){const undo=undoOp(model.sim);assert.ok(undo.ok);await tapD053(p,'#undo',mobile);const undone=await d054Snapshot(p);d054CompareModel(undone,model.sim,'native undo');item.pairing.undo=d054Hash(d054World(undone));write(`D054-${phase}-state-undo-${mode}.json`,undone);
+   const again=await d054Hold(p,page,op,mobile);commitOp(model.sim,op,0);await d054Release(p,page,again.b,mobile);const redone=await d054Snapshot(p);d054CompareModel(redone,model.sim,'native rebuild after undo');item.pairing.recommitted=d054Hash(d054World(redone));}
+ for(let day=1;day<=6;day++){stepDay(model.sim);powerStatus(model.sim);await p.ev('__gt.simStep(1)');const current=await d054Snapshot(p);assert.equal(current.sim.money,model.sim.money,'future original money');assert.equal(current.sim.day,model.sim.day,'future original day');item.pairing.future.push({day:current.sim.day,money:current.sim.money,worldSha256:d054Hash(d054World(current))});write(`D054-${phase}-state-future-${mode}-${day}.json`,current);}
+ item.inputs=await p.ev('__d054Inputs');
  check('all actual activation input is trusted',()=>{assert.ok(item.inputs.some(e=>e.type==='click'));assert.ok(item.inputs.every(e=>e.trusted));});check('no console errors or external requests',()=>{assert.deepEqual(page.errors,[]);assert.deepEqual(page.requests.filter(u=>!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)),[]);});
  item.layout=await p.ev('({width:innerWidth,scroll:document.documentElement.scrollWidth})');check('no page horizontal overflow',()=>assert.ok(item.layout.scroll<=item.layout.width));item.passed=true;return item;
 }
