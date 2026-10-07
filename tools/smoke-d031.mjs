@@ -17,14 +17,18 @@ const J = JSON.stringify, read = p => fs.readFileSync(path.join(ROOT, p), 'utf8'
 const SECTIONS = ['toast', 'panel', 'budget'];
 const ONLY = (process.env.D031_SMOKE_ONLY ?? '').split(',').map(s => s.trim()).filter(Boolean);
 const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
+// D053 UI-only expected scope; numeric source table/golden parity is unchanged.
+const noteWant = idx => ({5:'文化建築',7:'小型地標',11:'研究院',16:'紀念工程'})[idx]
+  ? `${({5:'文化建築',7:'小型地標',11:'研究院',16:'紀念工程'})[idx]}：本線尚無建造工具；升級不會新增這類可建設施。`
+  : idx === 21 ? '解鎖：太空研究中心，可從設施導覽選取（3×3）。' : RANKS[idx].unlock ?? '';
 // 文件裡的規則（這一張的卡：「做什麼」4）：每一列的名稱與寫法。跟 src/cityView.ts rankList 各寫一份，煙霧測試兩邊要對得上
 export function rankWant(idx, pts) {
   const cur = RANKS[idx], next = RANKS[idx + 1] ?? null, pct = next ? clamp((pts - cur.threshold) / (next.threshold - cur.threshold) * 100, 0, 100) : 100;
   const rows = [['等級', `Lv.${idx + 1} ${cur.name}`, 'sum'], ['城市點數', pts.toLocaleString('en-US'), ''], ['下一級', next ? `Lv.${idx + 2} ${next.name}（${next.threshold.toLocaleString('en-US')} 點）` : '已達最高等級', ''], ['進度', `${Math.round(pct)}%`, '']];
-  if (cur.unlock) rows.push(['這一級的預告', cur.unlock, '']);
+  if (noteWant(idx)) rows.push(['本線說明', noteWant(idx), '']);
   return { rows, pct };
 }
-export const promoText = (name, q) => `🏙️ ${name}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : '');
+export const promoText = (name, q) => `🏙️ ${name}升至 Lv.${q + 1} ${RANKS[q].name}！` + (noteWant(q) ? `　${noteWant(q)}` : '');
 const rowsOf = rows => rows.map(r => [r[0], r[1], r[2] === 'sum' ? 'sum' : '']);
 
 export async function d031Smoke(withBrowser, log) {
@@ -50,7 +54,7 @@ export async function d031Smoke(withBrowser, log) {
         // 有預告的那一級：seed516 讀進來 rk＝6（Lv.7），一天之後點數所指的那一級是 Lv.8（門檻 980，有「解鎖：小型地標」預告）——只升一級
         await load(withRk(seed516, 6));
         const s2 = await stepUntil(1, r => r.promoted.length > 0), q2 = s2?.r.promoted.at(-1), t2 = s2 && s2.t.find(x => x[0] === promoText(s2.r.name, q2));
-        log(!!s2 && J(s2.r.promoted) === J([7]) && !!t2 && t2[1].includes('gold') && RANKS[7].unlock && t2[0].includes('　解鎖：'), 'D031 驗收 7：升進有解鎖預告的那一級（Lv.8）——提示帶預告（全形空白隔開）、字＝RANKS 的名稱與預告、DayReport.rank.promoted＝[7]',
+        log(!!s2 && J(s2.r.promoted) === J([7]) && !!t2 && t2[1].includes('gold') && RANKS[7].unlock && t2[0].includes('本線尚無建造工具'), 'D031 驗收 7：升進有解鎖預告的那一級（Lv.8）——提示帶本線尚無建造工具說明；RANKS 的名稱與數值不變、DayReport.rank.promoted＝[7]',
           s2 ? `提示 ${t2 ? `「${t2[0]}」（${t2[1]}）` : `沒找到：${J(s2.t)}`}；升到 ${J(s2.r.promoted)}、點數 ${s2.r.points}` : '沒升級');
         // 一天連升好幾級：rk＝0，一天之後升到點數所指的那一級（每一級一則提示，畫面上最多留三則＝最後三級）
         await load(withRk(seed516, 0));
@@ -73,7 +77,7 @@ export async function d031Smoke(withBrowser, log) {
         // 頂級：seed516 讀進來就在 Lv.26
         await load(seed516); await ev('__gt.simStep(1), 1');
         const top = await ev('__gt.rankRep()'); await ev(`__gt.menu('rank')`); const pt = await ev('__gt.rankPanel()'), rt = await ev('__gt.rankRows()'), wt = rankWant(top.idx, top.points);
-        const okT = top.idx === 25 && J(rowsOf(rt)) === J(wt.rows) && pt.bar === '100%' && rt.some(r => r[1] === '已達最高等級') && rt.some(r => r[0] === '這一級的預告' && r[1] === RANKS[25].unlock);
+        const okT = top.idx === 25 && J(rowsOf(rt)) === J(wt.rows) && pt.bar === '100%' && rt.some(r => r[1] === '已達最高等級') && rt.some(r => r[0] === '本線說明' && r[1] === RANKS[25].unlock);
         log(okT, 'D031 驗收 7：頂級（seed516 讀進來就在 Lv.26、點數只有幾千）——面板寫「已達最高等級」、進度 100%、預告是「城市巔峰榮耀：全城住宅幸福 +2%（永久）」',
           okT ? `Lv.${top.idx + 1}、${top.points} 點；${rt.map(r => `${r[0]} ${r[1]}`).join('｜')}` : `不同：面板 ${J(rowsOf(rt))} ≠ 期望 ${J(wt.rows)}；進度條 ${pt.bar}`);
         await ev(`document.getElementById('rkX').click()`);

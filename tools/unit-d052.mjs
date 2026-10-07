@@ -25,6 +25,7 @@ import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INS
 import { upRegOf } from '../src/sim/rules/money.ts';
 import { CITY_EVENTS } from '../src/sim/rules/events.ts';
 import { RANKS } from '../src/sim/rules/rank.ts';
+import { rankBuildNote } from '../src/ui/growthGuide.ts';
 import { depletedToastText } from '../src/sim/decisions.ts';
 import { mergesToastText } from '../src/sim/rules/merge.ts';
 import { MEGA_POP, MEGA_JOBS } from '../src/sim/rules/jobs.ts';
@@ -225,7 +226,7 @@ function harness(fixture, source = city, options = {}) {
     CMS_BY_ID385, NO_RIDERSHIP, cmsToast, commissionOffers, commissionState, chooseSpec,
     POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax, upRegOf,
     saveCode, SAVE_LIMIT, packMore, PACK0, liveBuildings, simCounts, powerStatus, canUndo, toolLock, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE,
-    CITY_EVENTS, RANKS, depletedToastText, mergesToastText, MEGA_POP, MEGA_JOBS,
+    CITY_EVENTS, RANKS, rankBuildNote, depletedToastText, mergesToastText, MEGA_POP, MEGA_JOBS,
   };
   const chunks = [
     section(source, '  function saveNow() {', '  // D013：把還沒確定'),
@@ -271,6 +272,8 @@ function harness(fixture, source = city, options = {}) {
     const dropped = new Set(); let daysSinceSave = 0, saveErr = '', sampleId = 'mine';
     const label = 'D052', loadDay = sim.day, clean = false, tool = null, roadTool = 'road', civicTool = 'power';
     const saveWarnings = () => ({ error: saveErr }), saveStatus = { setState: s => { x.saveStatus = s; } };
+    // D053 unrelated closed navigation surfaces are DOM boundary doubles.
+    const rk = { hidden: true }, catalog = { root: { hidden: true } }, renderRank = () => {};
     const syncRes = () => x.calls.push('resources'), timing = {}, focusTile = () => {};
     const ALERT_TEXT = new Proxy({}, { get: () => () => 'unrelated hazard notification' });
     let playing = true, lastT = 0, simAcc = 0, visT = 0, speed = 0, dirtyScene = false, urgentRebuild = false, daysSinceBuild = 0;

@@ -17,7 +17,7 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 60   # D052：D051 main 已約44分鐘；新增回饋驗證只增加總時間預算，原性能門檻不變。原紀錄： D038：守衛＋煙霧＋樣張到 D038 收工要約 32 分鐘（run 37215760854：每一步都 success，在 30 分鐘的上限被砍成 cancelled，Pages 沒發）；30→45。D027：守衛＋煙霧＋樣張約 20 分鐘（r26 是 18 分 40 秒，D027 加了實跑守衛與煙霧約 2 分鐘），25 分鐘的餘裕太薄；D022 那次是 15→25
+    timeout-minutes: 75   # D053：沿用完整舊檢查，加18項設施導覽／成長原生流程；只擴總預算，不改任何性能或驗收門檻。
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,6 +50,9 @@ jobs:
             scratch/shots/D051-evidence.json
             scratch/shots/D052-*.json
             scratch/shots/D052-*.code.txt
+            scratch/shots/D053-*.json
+            scratch/shots/D053-*.code.txt
+            scratch/shots/D053-*.html
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3
