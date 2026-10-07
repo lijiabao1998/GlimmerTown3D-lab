@@ -1,0 +1,39 @@
+# QA-only additive workflow, unchanged baseline product. Never merge/deploy this branch.
+name: D053 baseline capture
+on:
+  push:
+    branches: ['qa/d053-baseline-capture']
+permissions:
+  contents: read
+concurrency:
+  group: d053-baseline-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Existing Chinese font package for fixed captures
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Verify original HTML and capture real Chrome views
+        run: node tools/d053-capture.mjs --phase=before --out=scratch/d053-baseline 2>&1 | tee d053-baseline-run.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d053-baseline-${{ github.sha }}
+          path: |
+            d053-baseline-run.txt
+            scratch/d053-baseline/
+            tools/d053-scenes.mjs
+            tools/d053-capture.mjs
+          if-no-files-found: error
+          retention-days: 14
