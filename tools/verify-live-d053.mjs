@@ -144,11 +144,69 @@ export function guardPage(page, gate) {
   };
 }
 
+// ServiceWorker notifications cover the whole Chrome profile, including bundled
+// extensions. Keep every raw update; accept only well-formed chrome-extension
+// registrations/versions with matching extension IDs and no control of our page.
+// All HTTP(S), foreign, unknown and malformed worker observations fail closed.
+export function classifyServiceWorkerUpdates(updates, pageTargetId) {
+  assert.ok(typeof pageTargetId === 'string' && pageTargetId.length > 0, 'observed page target ID required');
+  assert.ok(Array.isArray(updates), 'worker updates must be an array');
+  const registrations = new Map(), extensionIds = new Set();
+  const versions = []; let registrationUpdates = 0;
+  const identifier = value => typeof value === 'string' && value.length > 0;
+  const extensionUrl = raw => {
+    assert.ok(typeof raw === 'string', 'worker URL must be a string');
+    const u = new URL(raw);
+    assert.equal(u.protocol, 'chrome-extension:', 'page-origin/foreign service workers forbidden');
+    assert.match(u.hostname, /^[a-p]{32}$/, 'valid isolated Chrome extension ID required');
+    assert.equal(u.username + u.password + u.port + u.search + u.hash, '', 'unambiguous extension worker URL required');
+    assert.ok(u.pathname.startsWith('/'), 'extension URL requires an absolute path');
+    return u;
+  };
+  for (const update of updates) {
+    assert.ok(update && typeof update === 'object' && !Array.isArray(update), 'malformed worker update');
+    assert.ok(identifier(update.registrationId), 'worker registration ID required');
+    const registration = Object.hasOwn(update, 'scopeURL'), version = Object.hasOwn(update, 'scriptURL');
+    assert.notEqual(registration, version, 'unknown or ambiguous worker update');
+    if (registration) {
+      assert.equal(typeof update.isDeleted, 'boolean', 'registration deletion state required');
+      const u = extensionUrl(update.scopeURL), previous = registrations.get(update.registrationId);
+      assert.ok(!previous || previous === u.hostname, 'registration cannot change extension identity');
+      registrations.set(update.registrationId, u.hostname); extensionIds.add(u.hostname); registrationUpdates++;
+    } else versions.push(update);
+  }
+  for (const version of versions) {
+    assert.ok(identifier(version.versionId), 'worker version ID required');
+    const u = extensionUrl(version.scriptURL);
+    assert.notEqual(u.pathname, '/', 'worker script path required');
+    assert.equal(registrations.get(version.registrationId), u.hostname, 'worker version requires matching extension registration');
+    assert.ok(['stopped','starting','running','stopping'].includes(version.runningStatus), 'known worker running status required');
+    assert.ok(['new','installing','installed','activating','activated','redundant'].includes(version.status), 'known worker lifecycle status required');
+    assert.ok(Array.isArray(version.controlledClients) && version.controlledClients.every(identifier), 'explicit valid controlledClients required');
+    assert.ok(!version.controlledClients.includes(pageTargetId), 'extension service worker controls the tested HTTPS page');
+    if (Object.hasOwn(version, 'targetId')) {
+      assert.ok(identifier(version.targetId), 'valid worker target ID required');
+      assert.notEqual(version.targetId, pageTargetId, 'extension worker cannot be the tested page target');
+    }
+  }
+  return { pageTargetId, pageControlled:false, extensionIds:[...extensionIds].sort(),
+    rawUpdates:updates.length, extensionRegistrationUpdates:registrationUpdates, extensionVersionUpdates:versions.length };
+}
+
+export function recordServiceWorkerEvent(session, message) {
+  const event = { method:message.method, params:message.params };
+  session.serviceWorkerEvents.push(event); // Includes deletions, empty arrays and unknown events.
+  const key = message.method === 'ServiceWorker.workerRegistrationUpdated' ? 'registrations'
+    : message.method === 'ServiceWorker.workerVersionUpdated' ? 'versions' : null;
+  if (key && Array.isArray(message.params?.[key])) session.serviceWorkers.push(...message.params[key]);
+  else session.serviceWorkers.push({ unknownOrMalformedWorkerEvent:event });
+}
+
 export function assertNetworkSession(session, verified) {
   assert.deepEqual(unexpectedRequests([...session.rawRequests, ...session.networkRequests.map(r => r.url)]), [], 'raw external/local requests');
   assert.deepEqual(session.redirects, [], 'no HTTP redirects');
   assert.deepEqual(session.childFrames, [], 'no attached or navigated child frames');
-  assert.deepEqual(session.serviceWorkers, [], 'no service worker registrations or versions');
+  const workerIsolation = classifyServiceWorkerUpdates(session.serviceWorkers, session.pageTargetId);
   assert.deepEqual(session.errors, [], 'no Chrome console/runtime errors');
   assert.ok(session.documents > 0);
   assert.equal(session.documentResponses.length, session.documents, 'every document response hashed');
@@ -159,11 +217,14 @@ export function assertNetworkSession(session, verified) {
   }
   assert.deepEqual(session.networkRequests.filter(r => r.type === 'Document').map(r => r.loaderId).sort(), [...verified.keys()].sort(), 'every requested document hashed');
   assert.deepEqual(session.documentResponses.map(r => r.loaderId).sort(), [...verified.keys()].sort(), 'every response loader hashed');
+  return workerIsolation;
 }
 
 // Independent read-only observer. Only Node-side CDP discovery uses localhost.
 async function observeRawNetwork(page, port, session) {
   const { targetInfo } = await page.send('Target.getTargetInfo');
+  assert.equal(targetInfo.type, 'page');
+  session.pageTargetId = targetInfo.targetId;
   const devPort = port + 1000 + page.chrome.tries - 1;
   const targets = await (await fetch(`http://127.0.0.1:${devPort}/json/list`)).json();
   const target = targets.find(t => t.id === targetInfo.targetId && t.type === 'page');
@@ -189,8 +250,7 @@ async function observeRawNetwork(page, port, session) {
     if (message.method === 'Network.loadingFinished') finished.add(p.requestId);
     if (message.method === 'Page.frameAttached') session.childFrames.push({ ...p, event:message.method });
     if (message.method === 'Page.frameNavigated' && p.frame.parentId) session.childFrames.push({ ...p.frame,event:message.method });
-    if (message.method === 'ServiceWorker.workerRegistrationUpdated') session.serviceWorkers.push(...p.registrations.filter(r => !r.isDeleted));
-    if (message.method === 'ServiceWorker.workerVersionUpdated') session.serviceWorkers.push(...p.versions);
+    if (message.method?.startsWith('ServiceWorker.')) recordServiceWorkerEvent(session, message);
   };
   const send = (method, params = {}) => new Promise((resolve, reject) => { const id = ++next; pending.set(id, { resolve,reject }); ws.send(J({ id,method,params })); });
   await send('Network.enable'); await send('Page.enable'); await send('ServiceWorker.enable');
@@ -245,11 +305,52 @@ export async function adapterSelfTests() {
     for (const method of ['Page.navigate','Page.reload','Fetch.enable','Fetch.fulfillRequest','Network.setBypassServiceWorker']) await assert.rejects(guarded.send(method),/unapproved suite CDP method/);
   });
   await test('raw responses reject redirects, workers, cache, frames and unverified loaders', async () => {
-    const good = {documents:1,rawRequests:[SITE],networkRequests:[{url:SITE,type:'Document',loaderId:'one'}],documentResponses:[{url:SITE,loaderId:'one',status:200,mime:'text/html',fromServiceWorker:false,fromDiskCache:false}],redirects:[],childFrames:[],serviceWorkers:[],errors:[]};
+    const good = {pageTargetId:'self-test-page',documents:1,rawRequests:[SITE],networkRequests:[{url:SITE,type:'Document',loaderId:'one'}],documentResponses:[{url:SITE,loaderId:'one',status:200,mime:'text/html',fromServiceWorker:false,fromDiskCache:false}],redirects:[],childFrames:[],serviceWorkers:[],errors:[]};
     const verified = new Map([['one',SITE]]); assertNetworkSession(good,verified);
     for(const field of ['redirects','childFrames','serviceWorkers','errors']) { const bad=structuredClone(good);bad[field].push('bad');assert.throws(()=>assertNetworkSession(bad,verified)); }
     for(const [key,value] of [['status',302],['fromServiceWorker',true],['fromDiskCache',true],['loaderId','unverified'],['url',SITE+'?changed=1']]) {const bad=structuredClone(good);bad.documentResponses[0][key]=value;assert.throws(()=>assertNetworkSession(bad,verified));}
     const local=structuredClone(good);local.networkRequests.push({url:'http://127.0.0.1:8311/',type:'Other'});assert.throws(()=>assertNetworkSession(local,verified));
+  });
+  const extension = 'chrome-extension://fignfifoniblkonapihmkfakmlgkbkcf/';
+  const registration = { registrationId:'0',scopeURL:extension,isDeleted:false };
+  const version = { versionId:'0',registrationId:'0',scriptURL:extension+'service_worker.js',runningStatus:'running',status:'activated',controlledClients:[],targetId:'extension-worker' };
+  await test('isolated extension workers accepted while all raw updates and deletions retained', async () => {
+    const session={serviceWorkerEvents:[],serviceWorkers:[]};
+    const events=[{method:'ServiceWorker.workerRegistrationUpdated',params:{registrations:[registration]}},
+      {method:'ServiceWorker.workerVersionUpdated',params:{versions:[version]}},
+      {method:'ServiceWorker.workerRegistrationUpdated',params:{registrations:[{...registration,isDeleted:true}]}},
+      {method:'ServiceWorker.workerVersionUpdated',params:{versions:[]}}];
+    for(const event of events)recordServiceWorkerEvent(session,event);
+    assert.deepEqual(session.serviceWorkerEvents,events);assert.equal(session.serviceWorkers.length,3);
+    assert.equal(session.serviceWorkers[2].isDeleted,true);
+    const result=classifyServiceWorkerUpdates(session.serviceWorkers,'self-test-page');
+    assert.equal(result.pageControlled,false);assert.equal(result.extensionVersionUpdates,1);
+    assert.deepEqual(session.serviceWorkerEvents,events,'classification never rewrites raw evidence');
+  });
+  await test('site and foreign HTTP workers rejected even when deleted or mislabelled extension', async () => {
+    for(const url of [SITE,'https://example.com/','http://127.0.0.1:8311/','data:text/javascript,0','chrome-extension://bad-id/']) {
+      for(const isDeleted of [false,true])assert.throws(()=>classifyServiceWorkerUpdates([{...registration,scopeURL:url,isDeleted}],'self-test-page'));
+      assert.throws(()=>classifyServiceWorkerUpdates([registration,{...version,scriptURL:url+'worker.js'}],'self-test-page'));
+    }
+    assert.throws(()=>classifyServiceWorkerUpdates([registration,{...version,scriptURL:'chrome-extension://ghbmnnjooekpmoecnnnilnnbdlolhkhi/worker.js'}],'self-test-page'),/matching extension registration/);
+  });
+  await test('extension control of current page and absent or malformed client evidence rejected', async () => {
+    assert.throws(()=>classifyServiceWorkerUpdates([registration,{...version,controlledClients:['self-test-page']}],'self-test-page'),/controls the tested HTTPS page/);
+    assert.throws(()=>classifyServiceWorkerUpdates([registration,{...version,targetId:'self-test-page'}],'self-test-page'),/cannot be the tested page/);
+    for(const controlledClients of [undefined,null,'self-test-page',[null],['']])assert.throws(()=>classifyServiceWorkerUpdates([registration,{...version,controlledClients}],'self-test-page'),/controlledClients/);
+    assert.throws(()=>classifyServiceWorkerUpdates([version],'self-test-page'),/matching extension registration/);
+    assert.throws(()=>classifyServiceWorkerUpdates([],undefined),/page target ID/);
+  });
+  await test('unknown and malformed service-worker events fail closed with raw evidence retained', async () => {
+    for(const event of [{method:'ServiceWorker.workerErrorReported',params:{errorMessage:{}}},
+      {method:'ServiceWorker.workerVersionUpdated',params:{versions:null}},
+      {method:'ServiceWorker.workerRegistrationUpdated',params:{}},
+      {method:'ServiceWorker.workerVersionUpdated',params:{versions:[{}]}}]) {
+      const session={serviceWorkers:[],serviceWorkerEvents:[]};recordServiceWorkerEvent(session,event);
+      assert.deepEqual(session.serviceWorkerEvents,[event]);assert.throws(()=>classifyServiceWorkerUpdates(session.serviceWorkers,'self-test-page'));
+    }
+    for(const malformed of [null,'bad',{}, {...registration,scriptURL:version.scriptURL}, {...registration,isDeleted:undefined}, {...version,status:'unknown'}])
+      assert.throws(()=>classifyServiceWorkerUpdates([registration,malformed],'self-test-page'));
   });
   await test('unchanged capture import uses isolated adapter without Chrome', async () => {
     const sentinel = new Error('QA loader self-test sentinel; no Chrome launch');
@@ -273,6 +374,7 @@ export async function verifyLiveD053() {
     hashGate:'Every document hashes before even boot-readiness evaluation. Every suite read/input/capture checks current document identity. No response interception or local replay.',
     adapter:'Node24 loader redirects only d053-capture.mjs -> ./cdp.mjs. withBrowser uses live wrapper; ROOT/sleep and original module bytes are unchanged. Only suite-facing request-list strings normalize the official origin.',
     isolation:'Disposable local profiles contain synthetic saves; no user data, accounts, credentials, server changes or deployment.',
+    serviceWorkerScope:'All raw worker notifications retained. Only well-formed isolated Chrome-extension registrations/versions are allowed; their controlledClients must exclude the observed page target. HTTP(S), foreign, unknown or malformed workers fail. Every HTML response must still have fromServiceWorker=false and cache bypass remains enabled.',
     qualifications:'Original fixture/debug observations, fixed cameras, scroll/focus positioning and explicit original simStep are retained. Dialog guard throws on unexpected prompts. No synthetic DOM clicks/keys/pointers. RNG coverage is paired future exposed-state/code/history equivalence, not a hidden RNG dump. Android hardware and device Back are not tested.',
     checks:[],suiteChecks:[],sessions:[],documentHashes:[],screenshots:[] };
   const write=()=>{report.passed=report.checks.filter(c=>c.ok).length;report.failed=report.checks.filter(c=>!c.ok).length;fs.writeFileSync(path.join(OUT,'report.json'),J(report,null,2)+'\n');};
@@ -281,7 +383,7 @@ export async function verifyLiveD053() {
   let sequence=0,adapter;
   const liveBrowser=async(options,run)=>{
     const id=++sequence,port=8450+id*10;
-    const session={id,phase:id<=10?'fixed-capture':'native-workflow',documents:0,rawRequests:[],networkRequests:[],documentResponses:[],redirects:[],childFrames:[],serviceWorkers:[],errors:[]};report.sessions.push(session);
+    const session={id,phase:id<=10?'fixed-capture':'native-workflow',documents:0,rawRequests:[],networkRequests:[],documentResponses:[],redirects:[],childFrames:[],serviceWorkers:[],serviceWorkerEvents:[],errors:[]};report.sessions.push(session);
     // Original helper's local server is an unused sentinel with no app bytes.
     // Any browser localhost request fails the independent raw-origin guard.
     try {
@@ -315,8 +417,8 @@ export async function verifyLiveD053() {
           try {
             await gate.verify();await observer.flush();await page.send('Page.getFrameTree');
             session.rawRequests=[...page.requests];session.errors=[...page.errors];
-            assertNetworkSession(session,gate.verified);
-            log(true,`Live session ${id}: raw origins, all documents, no redirects/frames/workers/errors`,J({documents:session.documents,requests:session.rawRequests.length}));
+            session.serviceWorkerIsolation=assertNetworkSession(session,gate.verified);
+            log(true,`Live session ${id}: raw origins, all documents, no redirects/frames/page-controlling workers/errors`,J({documents:session.documents,requests:session.rawRequests.length,workerIsolation:session.serviceWorkerIsolation}));
           } finally {observer.close();write();}
         }
       });
