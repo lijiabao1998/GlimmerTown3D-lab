@@ -9,6 +9,8 @@ export { D048_CAMERA as D053_CAMERA, D048_BASELINE_CAMERA as D053_BASELINE_CAMER
 export const D053_BASELINE = { commit: '39bfa913ac2e955490448ef52c2f587f9c237101', htmlSha256: '4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075' };
 export const D053_MODES = ['rank6', 'catalog', 'rank8', 'rank12', 'rank17', 'rank21', 'space-rank', 'space-catalog', 'space-build', 'rank-live'];
 export const D053_SPACE_SITE = { x: 29, z: 25, size: 3 };
+// Center the complete 3×3 construction site; shared by before and candidate.
+export const D053_SPACE_CAMERA = { x: 30.5, z: 26.5, zoom: 4.4 };
 export const D053_TOOL_IDS = ['park','water','wpipe','fire','police','policeBox','hospital','clinic','school','library','post','cemetery','dump','sewage','oilwell','mine','gaswell','megaproject'];
 export const D053_SHOTS = [
   { mode: 'rank6', width: 412, height: 860, scene: 'rank6-current-line' },
@@ -31,5 +33,5 @@ export function d053ReviewCode(mode='rank6') {
 }
 export function d053FixtureManifest(mode='rank6') {
   const code=d053ReviewCode(mode),d=decodeLabCode(code);assert.equal(d.ok,true);
-  return {synthetic:true,injection:'localStorage save fixture before real page load; no runtime world mutation',device:'Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware',baseline:D053_BASELINE,mode,cityName:d.save.nm,seed:d.save.seed,day:d.save.day,rankIndex:d.save.raw.rk,paused:true,codeSha256:hash(code),codeLength:code.length,rawCodeSha256:hash(JSON.stringify(d.save.raw)),camera:D048_CAMERA,measuredBaselineCamera:D048_BASELINE_CAMERA,views:D048_VIEWS,visT:2.2,dayFrac:0,spaceSite:D053_SPACE_SITE,qualification:mode==='rank-live'?'seed1, 32 original level1 density3 houses: original simDay changes day50/Lv3 to day51/Lv4, 169 city points. No runtime rank/pop override.':'Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city.'};
+  return {synthetic:true,injection:'localStorage save fixture before real page load; no runtime world mutation',device:'Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware',baseline:D053_BASELINE,mode,cityName:d.save.nm,seed:d.save.seed,day:d.save.day,rankIndex:d.save.raw.rk,paused:true,codeSha256:hash(code),codeLength:code.length,rawCodeSha256:hash(JSON.stringify(d.save.raw)),camera:mode==='space-build'?D053_SPACE_CAMERA:D048_CAMERA,measuredBaselineCamera:mode==='space-build'?null:D048_BASELINE_CAMERA,views:D048_VIEWS,visT:2.2,dayFrac:0,spaceSite:D053_SPACE_SITE,qualification:mode==='rank-live'?'seed1, 32 original level1 density3 houses: original simDay changes day50/Lv3 to day51/Lv4, 169 city points. No runtime rank/pop override.':'Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city.'};
 }

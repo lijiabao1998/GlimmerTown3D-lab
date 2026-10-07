@@ -13,7 +13,7 @@ import { stepDay } from '../src/sim/day.ts';
 import { previewOp } from '../src/sim/edit.ts';
 import { RANKS } from '../src/sim/rules/rank.ts';
 import { D052_SNAPSHOT } from './d052-capture.mjs';
-import { D053_BASELINE,D053_MODES,D053_SHOTS,D053_CAMERA,D053_BASELINE_CAMERA,D053_SAVE_KEY,D053_SPACE_SITE,D053_TOOL_IDS,d053ReviewCode,d053FixtureManifest } from './d053-scenes.mjs';
+import { D053_BASELINE,D053_MODES,D053_SHOTS,D053_CAMERA,D053_BASELINE_CAMERA,D053_SAVE_KEY,D053_SPACE_SITE,D053_SPACE_CAMERA,D053_TOOL_IDS,d053ReviewCode,d053FixtureManifest } from './d053-scenes.mjs';
 const J=JSON.stringify;
 export const d053Hash=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
 export const D053_SNAPSHOT=D052_SNAPSHOT;
@@ -33,12 +33,18 @@ export async function tapD053(p,selector,mobile=true) {
  assert.equal(await p.ev(`document.querySelector(${J(selector)}).contains(document.elementFromPoint(${c[0]},${c[1]}))`),true,selector+' hit target');
  assert.ok(await(mobile?p.tapBtn:p.clickBtn)(selector));
 }
+function checkCamera(mode,camera) {
+ if(mode!=='space-build')return assert.deepEqual(camera,D053_BASELINE_CAMERA);
+ assert.equal(camera.zoom,D053_SPACE_CAMERA.zoom);assert.ok(Math.abs(camera.target[0]-D053_SPACE_CAMERA.x)<1e-8);assert.equal(camera.target[1],0);assert.ok(Math.abs(camera.target[2]-D053_SPACE_CAMERA.z)<1e-8);
+ assert.ok(Math.abs(camera.pos[0]-camera.target[0]-115.2)<1e-8);assert.ok(Math.abs(camera.pos[2]-camera.target[2]-115.2)<1e-8);assert.ok(Math.abs(camera.pos[1]-94.06040612287404)<1e-8);
+}
 export async function loadD053(p,mode) {
  await p.open('sample=seed516&clean=1');await p.ev(`__gt.clearSave();localStorage.setItem(${J(D053_SAVE_KEY)},${J(d053ReviewCode(mode))})`);await p.open('');
- await p.ev(`__gt.view(${D053_CAMERA.x},${D053_CAMERA.z},${D053_CAMERA.zoom});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
+ const camera=mode==='space-build'?D053_SPACE_CAMERA:D053_CAMERA;
+ await p.ev(`__gt.view(${camera.x},${camera.z},${camera.zoom});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
  assert.equal(await p.ev('__gt.saveNow()'),true);await p.ev('__gt.journalFlush()');assert.equal(await p.ev('__gt.saveNow()'),true);
  assert.ok(await p.waitFor(async()=>!(await p.toasts()).length,6000));await p.frames(2);
- assert.deepEqual(await p.ev('__gt.cam()'),D053_BASELINE_CAMERA);assert.equal(await p.ev('__gt.sim().playing'),false);await p.ev(D053_PROBE);
+ checkCamera(mode,await p.ev('__gt.cam()'));assert.equal(await p.ev('__gt.sim().playing'),false);await p.ev(D053_PROBE);
 }
 const navWorld=s=>({code:s.code,layers:s.layers,history:s.history,buildings:s.buildings,money:s.sim.money,day:s.sim.day});
 export async function captureD053Scene(p,page,mode,{phase,outDir,mobile=true}) {
@@ -54,7 +60,7 @@ export async function captureD053Scene(p,page,mode,{phase,outDir,mobile=true}) {
  check('paused exact saved rank/day/money',()=>{assert.equal(before.sim.playing,false);assert.equal(before.sim.day,fixture.day);assert.equal(before.sim.money,10000);assert.equal(before.technology.rank,fixture.rankIndex);});
  const take=async()=>{
   if(!shot)return;assert.deepEqual(item.viewport,{width:shot.width,height:shot.height});await p.frames(2);
-  const camera=await p.ev('__gt.cam()'),con=await p.ev('__gt.con()');assert.deepEqual(camera,D053_BASELINE_CAMERA);assert.equal(con.visT,2.2);assert.equal(con.dayFrac,0);
+  const camera=await p.ev('__gt.cam()'),con=await p.ev('__gt.con()');checkCamera(mode,camera);assert.equal(con.visT,2.2);assert.equal(con.dayFrac,0);
   const filename=`D053-${phase}-${shot.scene}-${p.W}.png`,bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');assert.ok(bytes.length>10000);assert.equal(bytes.readUInt32BE(16),p.W);assert.equal(bytes.readUInt32BE(20),p.H);write(filename,bytes);
   const state=await p.ev(D053_SNAPSHOT);item.shot={filename,sha256:d053Hash(bytes),bytes:bytes.length,viewport:item.viewport,camera,cameraSha256:d053Hash(camera),visual:{visT:con.visT,dayFrac:con.dayFrac},fixture,ui:await p.ev(D053_UI),stateSha256:d053Hash(state),stateFile:`D053-${phase}-state-shot-${mode}.json`};write(item.shot.stateFile,state);
  };
@@ -97,7 +103,7 @@ export async function captureD053({phase='before',outDir=path.join(ROOT,'scratch
  fs.mkdirSync(outDir,{recursive:true});const report={purpose:'D053 shared fixed-fixture evidence. Baseline branch never merges/deploys.',phase,baseline:D053_BASELINE,qualifications:D053_CAPTURE_QUALIFICATIONS,cases:[],shots:[],passed:false};
  try{
   const html=fs.readFileSync(path.join(ROOT,'dist/index.html'));report.htmlSha256=d053Hash(html);if(phase==='before')assert.equal(report.htmlSha256,D053_BASELINE.htmlSha256,'exact unchanged baseline HTML');fs.writeFileSync(path.join(outDir,`${phase}-index.html`),html);
-  report.sources=Object.fromEntries(['src/cityView.ts','src/ui/build.ts','src/sim/edit.ts','src/sim/rules/rank.ts','tools/d053-scenes.mjs','tools/d053-capture.mjs'].filter(f=>fs.existsSync(path.join(ROOT,f))).map(f=>[f,d053Hash(fs.readFileSync(path.join(ROOT,f)))]));fs.writeFileSync(path.join(outDir,'fixture-manifest.json'),J(modes.map(d053FixtureManifest),null,2));
+  report.sources=Object.fromEntries(['src/cityView.ts','src/ui/buildUi.ts','src/sim/edit.ts','src/sim/rules/rank.ts','tools/d053-scenes.mjs','tools/d053-capture.mjs'].filter(f=>fs.existsSync(path.join(ROOT,f))).map(f=>[f,d053Hash(fs.readFileSync(path.join(ROOT,f)))]));fs.writeFileSync(path.join(outDir,'fixture-manifest.json'),J(modes.map(d053FixtureManifest),null,2));
   for(const mode of modes){const shot=D053_SHOTS.find(s=>s.mode===mode),mobile=mode!=='rank17',width=shot?.width??(mobile?412:1280),height=shot?.height??(mobile?860:800);
    await withBrowser({width:Math.max(960,width),height:900},async({page,open})=>{const p=await pageSession(page,open,{W:width,H:height,mobile});try{await loadD053(p,mode);const item=await captureD053Scene(p,page,mode,{phase,outDir,mobile});report.cases.push(item);if(item.shot)report.shots.push(item.shot);console.log(`PASS ${mode}: ${item.assertions.length} groups${item.shot?' PNG '+item.shot.filename+' sha256='+item.shot.sha256:''}`);}catch(e){const failed={mode,passed:false,error:String(e.stack??e)};report.cases.push(failed);console.error(`FAIL ${mode}: ${failed.error}`);try{fs.writeFileSync(path.join(outDir,`failure-${mode}.json`),J({state:await p.ev(D053_SNAPSHOT),ui:await p.ev(D053_UI),errors:page.errors,inputs:await p.ev('window.__d053Input??[]')},null,2));fs.writeFileSync(path.join(outDir,`failure-${mode}.png`),Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'));}catch(debug){failed.debugError=String(debug);}}});
    fs.writeFileSync(path.join(outDir,'report.json'),J(report,null,2));
