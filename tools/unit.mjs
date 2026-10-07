@@ -578,6 +578,7 @@ await guard('./unit-d047-mobile.mjs', 'd047MobileUnit');
 await guard('./unit-d048.mjs', 'd048Guards');
 await guard('./unit-d048-harness.mjs', 'd048HarnessGuards');
 await guard('./unit-d049.mjs', 'd049Guards');
+await guard('./unit-d050.mjs', 'd050Guards');
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {

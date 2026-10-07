@@ -86,6 +86,7 @@ const CSS = `
 #copyStatus[data-phase="success"] { color: #b4e8bc; border-color: #b4e8bc66; }
 #copyStatus[data-phase="unsupported"], #copyStatus[data-phase="failed"] { color: #ffd98a; border-color: #ffd98a66; }
 #dlgOk[aria-disabled="true"] { opacity: .65; cursor: wait; }
+#dlg textarea[aria-invalid="true"] { border-color: #ff9a9a; box-shadow: 0 0 0 1px #ff9a9a66; }
 #dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(#0d122600, #0d1226ee 30%); display: flex; flex-direction: column; gap: 8px; }
 #dock[hidden] { display: none; }
 #dock .bar { display: flex; align-items: center; gap: 6px; min-height: 44px; }

@@ -32,6 +32,7 @@ import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, ga
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
 import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
 import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
+import { createImportFeedback } from './ui/importFeedback.ts';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -473,7 +474,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   ui.innerHTML = `
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol><div class="acts"></div></div>
     <div id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgSub" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
-      <textarea aria-label="分享碼" spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err" role="alert"></p>
+      <textarea aria-label="分享碼" aria-describedby="dlgSub dlgError" spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p id="dlgError" class="err" role="alert"></p>
       <p id="copyStatus" role="status" aria-live="polite" aria-atomic="true" hidden></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
@@ -493,6 +494,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
   let dlgMode: 'paste' | 'export' = 'paste', lastCode = '', dlgFromStatus = false;
+  const importFeedback = createImportFeedback(ta, err as HTMLElement);
   const copyStatus = $<HTMLElement>('#copyStatus');
   const copyFeedback = createCopyFeedback({
     clipboard: () => navigator.clipboard,
@@ -523,6 +525,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     saveModal.show(saveStatus.root, saveStatus.title);
   }
   function closeSavePanels(restoreFocus = true) {
+    importFeedback.reset(false);
     copyFeedback.reset(false);
     dlgFromStatus = false; saveModal.close(restoreFocus); dlg.hidden = true; saveStatus.root.hidden = true;
   }
@@ -544,6 +547,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     $('#dlgSub').textContent = note || (mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
       : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。');
     ta.value = text; ta.readOnly = mode === 'export'; dlgOk.textContent = mode === 'paste' ? '匯入' : '複製'; err.textContent = '';
+    importFeedback.reset(mode === 'paste');
     copyFeedback.reset(mode === 'export');
     $('#dlgNo').textContent = dlgFromStatus ? '返回存檔狀態' : '取消';
     saveModal.show(dlg, ta);
@@ -553,13 +557,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   dlg.onclick = e => { if (e.target === dlg) closeDlg(); };
   dlgOk.onclick = () => {
     if (dlgMode === 'export') { void copyFeedback.copy(ta.value); return; }
+    importFeedback.clear();
     const code = ta.value, r = decodeLabCode(code);
-    if (!r.ok) { err.textContent = r.error; return; }
+    if (!r.ok) { importFeedback.show(r.error); return; }
     const mine = !!r.save.raw.d3;                                         // 本線匯出、帶歷史的碼：接著蓋，存成我的城
     if (mine && readSave() && !confirm('貼上的城會蓋掉目前的「我的城」，要繼續嗎？')) return;
     saveNow();                                                            // 舊城先用它自己的身分存（同 openSample）
     const res = load(code, mine ? '我的城' : '貼上的城市', false, mine, mine);
-    if (!res.ok) { err.textContent = res.error; return; }
+    if (!res.ok) { importFeedback.show(res.error); return; }
     sampleId = mine ? 'mine' : '';
     if (mine) { saveNow(); if (!res.replayed) bui.toast(loadNote, 'bad'); }   // 歷史接不回來：講原因（歷史從這張碼重新起算）
     closeSavePanels(); ta.value = '';

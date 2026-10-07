@@ -43,6 +43,7 @@ function wiring(text=city){
  const ctx={node,dlg,ta,ok,status,resets,copies,events};
  new Function('x',`const $=x.node,dlg=x.dlg,ta=x.ta,dlgOk=x.ok,err=x.node('#dlg .err');let dlgMode='paste',dlgFromStatus=false;
  const saveStatus=x.status,saveWarnings=()=>({}),saveModal={close(){},show(panel){dlg.hidden=true;saveStatus.root.hidden=true;panel.hidden=false;}};
+ const importFeedback={reset(){},clear(){},show(){}}; // D050 view-only integration; D049 copy guards are unchanged.
  const navigator={clipboard:undefined},COPY_TEXT={hidden:'',ready:'ready',pending:'pending',success:'success'},addEventListener=(k,f)=>x.events[k]=f;
  const createCopyFeedback=()=>({reset:v=>x.resets.push(v),copy:v=>x.copies.push(v)});
  ${stripTypeScriptTypes(prefix)}
