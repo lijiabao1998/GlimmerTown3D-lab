@@ -18,6 +18,15 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck && node tools/unit-d054.mjs && node tools/unit-d054-ui.mjs
       - run: npm run build
+      - uses: actions/checkout@v4
+        with:
+          ref: 74b884fea79afad8909cea606ff8ad3ebdc7fba7
+          path: baseline-source
+      - name: Rebuild exact original for direct layout measurement
+        run: npm ci && npm run build
+        working-directory: baseline-source
+      - name: Measure native original geometry
+        run: node tools/d054-layout-probe.mjs --root=baseline-source/dist
       - name: Native site diagnostics and immutable prior screenshot guards
         run: |
           node --input-type=module <<'JS' 2>&1 | tee d054-preflight-run.txt
