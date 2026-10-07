@@ -35,6 +35,9 @@ import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
 import { createImportFeedback } from './ui/importFeedback.ts';
 import { updatePanelContent } from './ui/panelContent.ts';
 import { createPanelUpdateGate } from './ui/panelPress.ts';
+import { rankBuildNote, facilitySummary } from './ui/growthGuide.ts';
+import { createFacilityCatalog } from './ui/facilityCatalog.ts';
+import growthGuideCss from './ui/growthGuide.css?raw';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -268,6 +271,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const V = simulate ? null : viewCode(code, KINDS, VRANK);             // D012：只能看的城也照實驗線重挑外觀（要讀檔時的地價，所以也建一次格子與場）
     if (V && !V.ok) return V;
     closeDecisionPanels();
+    closeGrowth(false);
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
@@ -378,7 +382,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
     if (rep.merges.length) bui.toast(mergesToastText(rep.merges, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(rep.merges[0].x, rep.merges[0].z));   // D034：一筆的字照實驗線（55726、55753）；D042：同一天多筆合成一則；點一下鏡頭過去（第一筆）
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
-    for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
+    for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (rankBuildNote(q) ? `　${rankBuildNote(q)}` : ''), 'gold');   // D053：數值與晉升照舊；預告只承諾本線已有的建造工具
     if (daysSinceSave >= SAVE_DAYS) saveNow();
     return rep;
   }
@@ -484,7 +488,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
     <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>
-    <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
+    <div id="rk" role="dialog" aria-modal="true" aria-labelledby="rankTitle" hidden><div class="card"><h2 id="rankTitle" tabindex="-1">🏙️ 城市成長</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><section class="growthGuide"><h3></h3><p class="nextBuild"></p><p>道路、住商工分區與電廠仍在下方工具列。設施導覽列出本線已有的公共設施、管線與資源工具。</p><button id="rkCatalog" type="button">查看可建設施</button></section><div class="row"><button id="rkX">返回城市</button></div></div></div>
     <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
     <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
     <div id="cm" hidden><div class="card"><div class="head"><h2>📋 市長委託</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="cmX">關閉</button></div></div></div>
@@ -494,6 +498,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
     menu: id => onMenu(id), menuOpen: () => { interruptBuild(); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
+  bui.style.textContent += growthGuideCss;
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
@@ -657,24 +662,56 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     nc.hidden = false;
   }
 
-  // D031：☰「城市等級」（實驗線 T133 的等級面板 65532 的 3D 版）：等級與名稱、城市點數、下一級與進度（進度條與百分比＝(點數−這一級門檻)÷(下一級門檻−這一級門檻)，夾在 0–100）、這一級的預告。讀 Sim.rankIdx／cityPoints（讀檔當下就有），不另存任何東西
-  const rk = $<HTMLElement>('#rk');
-  $<HTMLButtonElement>('#rkX').onclick = () => { rk.hidden = true; };
-  rk.onclick = e => { if (e.target === rk) rk.hidden = true; };
+  // D053: keep imported rank rules intact; provide a truthful route to existing
+  // build tools. The guide is read-only until original selection/placement runs.
+  const rk = $<HTMLElement>('#rk'), rkGate = createPanelUpdateGate(rk);
+  const catalog = createFacilityCatalog({ select: selectCatalogTool, close: () => closeGrowth(), rank: () => openRank() });
+  ui.appendChild(catalog.root);
+  const growthModal = createSaveModalAccess(ui, [bui.root, renderer.domElement], () =>
+    bui.root.querySelector<HTMLElement>('#civicGuide:not([hidden])') ?? bui.root.querySelector<HTMLElement>('#menuBtn'));
+  function closeGrowth(restoreFocus = true) { rkGate.cancel(); catalog.reset(); growthModal.close(restoreFocus); }
+  $<HTMLButtonElement>('#rkX').onclick = () => closeGrowth();
+  $<HTMLButtonElement>('#rkCatalog').onclick = () => openCatalog();
+  rk.onclick = e => { if (e.target === rk) closeGrowth(); };
+  addEventListener('pagehide', () => closeGrowth(false));
   function rankList(): { rows: FinRow[]; pct: number } {
     const idx = sim!.rankIdx, pts = sim!.cityPoints, cur = RANKS[idx], next = RANKS[idx + 1] ?? null, pct = next ? Math.min(100, Math.max(0, (pts - cur.threshold) / (next.threshold - cur.threshold) * 100)) : 100;
     const rows: FinRow[] = [{ name: '等級', text: `Lv.${idx + 1} ${cur.name}`, tone: '', sum: true }, { name: '城市點數', text: pts.toLocaleString('en-US'), tone: '', sum: false },
       { name: '下一級', text: next ? `Lv.${idx + 2} ${next.name}（${next.threshold.toLocaleString('en-US')} 點）` : '已達最高等級', tone: '', sum: false }, { name: '進度', text: `${Math.round(pct)}%`, tone: '', sum: false }];
-    if (cur.unlock) rows.push({ name: '這一級的預告', text: cur.unlock, tone: '', sum: false });
+    const note = rankBuildNote(idx);
+    if (note) rows.push({ name: '本線說明', text: note, tone: '', sum: false });
     return { rows, pct };
+  }
+  function renderRank() {
+    if (!sim || rkGate.defer(renderRank)) return;
+    const { rows, pct } = rankList(), summary = facilitySummary(sim.rankIdx);
+    $('#rk .sub').textContent = `第 ${sim.day.toLocaleString()} 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降`;
+    $<HTMLElement>('#rk .bar i').style.width = pct + '%';
+    updatePanelContent($('#rk ol'), ...rows.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
+    $('#rk .growthGuide h3').textContent = `${summary.available}／${summary.total} 項設施等級可選`;
+    $('#rk .nextBuild').textContent = summary.next
+      ? `下一個可建設施解鎖：Lv.${summary.next.unlockRank} ${summary.next.name}。其他升級不代表新增建造工具。`
+      : '本線現有18項設施已全部達到等級條件；實際落點與資金是否足夠，請看地圖預覽。';
   }
   function openRank() {
     if (!sim) return;
-    const { rows, pct } = rankList();
-    $('#rk .sub').textContent = `第 ${sim.day.toLocaleString()} 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降（點數暫時掉下去也不降級）`;
-    $<HTMLElement>('#rk .bar i').style.width = pct + '%';
-    $('#rk ol').replaceChildren(...rows.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
-    rk.hidden = false;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset(); renderRank(); growthModal.show(rk, $<HTMLElement>('#rankTitle'));
+  }
+  function openCatalog() {
+    if (!sim) return;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset();
+    catalog.update({ rankIdx: sim.rankIdx, sandbox: sim.diff === 3, day: sim.day });
+    growthModal.show(catalog.root, catalog.title);
+  }
+  function selectCatalogTool(id: string) {
+    if (!sim || !CIVIC_TOOLS.some(t => t.id === id) || !pickCivic(id)) return;
+    closeGrowth(false); setTool('civic');
+    // Selected-tool focus is visible after the dialog and its inert lock close.
+    bui.root.querySelector<HTMLButtonElement>('#tools [data-t="civic"]')?.focus({ preventScroll: true });
   }
 
   // D032：☰「政策與預算」（實驗線 ☰ 市政統計面板的稅率、服務預算、法規與政策開關的 3D 版）。按了馬上生效（實驗線回退設定：T504 治理關，policyApply504 直接轉給 mayorPolicyApply470A，保留冷卻），
@@ -962,7 +999,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'fin', label: '收支明細', note: '稅收、其他收入、維護費、淨額（D028）', icon: 'coin' as const }] : []),
         ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
-        ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
+        ...(sim ? [{ id: 'rank', label: '城市成長', note: '城市點數、成長進度與可建設施', icon: 'crown' as const }] : []),
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
         ...(sim ? [{ id: 'resview', label: showRes ? '隱藏資源圖' : '顯示資源圖', note: '油田（黃）與礦藏（藍）；選油井、礦場工具時自動顯示（D040）', icon: 'layers' as const }] : []),
         ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
@@ -974,6 +1011,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function onMenu(id: string) {
     interruptBuild();   // A panel can open while the canvas still owns pointer capture.
+    if (id !== 'rank' && id !== 'catalog') closeGrowth(false);
     if (id.startsWith('city:')) menuCity(id.slice(5));
     else if (id === 'save-status') openSaveStatus();
     else if (id === 'export') {
@@ -995,6 +1033,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'fin') openFin();
     else if (id === 'night') openNight();
     else if (id === 'rank') openRank();
+    else if (id === 'catalog') openCatalog();
     else if (id === 'policy') openPolicy();
     else if (id === 'tech') openTech();
     else if (id === 'commission') openCommission();
@@ -1028,6 +1067,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     saveStatus.setState(saveWarnings());
     syncCommissionHud();
     syncDock();
+    if (!rk.hidden) renderRank();
+    if (!catalog.root.hidden && sim) catalog.update({ rankIdx: sim.rankIdx, sandbox: sim.diff === 3, day: sim.day });
   }
   // D040：資源圖。要看哪幾種：☰「顯示資源圖」＝兩種；否則拿著油井（油田）或礦場（礦藏）的工具才畫對應的那一種。只畫還能蓋井的格子（陸地、沒路、沒建築）
   // 資源圖只有「有畫」的時候才在場景裡（沒畫時不佔場景：D015 的黃金樣本逐位元組比場景裡的實例網格，多一個空的也會不同）
@@ -1176,13 +1217,17 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
-    if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
+    if (growthModal.isOpen()) {
+      if (e.key === 'Escape') { e.preventDefault(); closeGrowth(); }
+      else growthModal.keydown(e);
+      return;
+    }
     if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); plGate.cancel(); pl.hidden = true; } return; }   // D032：政策與預算
     if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tcGate.cancel(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
     if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
     if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cmGate.cancel(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
-    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning')) return;   // Native activation must not toggle playback.
+    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning, #civicGuide')) return;   // Native activation must not toggle playback.
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
@@ -1468,7 +1513,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const lift = (id: number) => { ptrs.delete(id); };
   const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
     && !bui.isMenuOpen() && [dlg, saveStatus.root, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
-    && document.elementFromPoint(x, y) === canvas;
+    && catalog.root.hidden && document.elementFromPoint(x, y) === canvas;
   // D047: count touches on UI too. A second finger on a toolbar/notice/panel
   // interrupts immediately, before its click changes a tool or opens an overlay.
   addEventListener('pointerdown', e => {

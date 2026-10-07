@@ -94,6 +94,8 @@ function harness(sim, source = city) {
     const simCounts = () => ({ 1: [0,0,0], 2: [0,0,0], 3: [0,0,0] });
     const label = 'D051', loadDay = -1, autosaves = () => false, saveErr = '', jstore = true, jwhy = '';
     const saveWarnings = () => ({}), saveStatus = { setState() {} };
+    // D053 closed guide surfaces are unrelated DOM boundaries in this older harness.
+    const rk = { hidden: true }, catalog = { root: { hidden: true } }, renderRank = () => {};
     ${stripTypeScriptTypes(tech)}
     ${stripTypeScriptTypes(commission)}
     ${stripTypeScriptTypes(sync)}

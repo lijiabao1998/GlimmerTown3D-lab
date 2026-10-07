@@ -24,9 +24,9 @@ function harness(kind = 'tap') {
     const { canvas: inputCanvas, doc: document, state, onWindow, kind } = env;
     const renderer = { domElement: inputCanvas }, addEventListener = onWindow;
     let stroke = null, lastPreview = null, tool = 'civic'; const sim = {};
-    const panels = Array.from({length:10},()=>({hidden:true}));
-    const [dlg,hs,fin,nc,rk,pl,tc,ch,cm,statusRoot] = panels;
-    const saveStatus = {root:statusRoot};
+    const panels = Array.from({length:11},()=>({hidden:true}));
+    const [dlg,hs,fin,nc,rk,pl,tc,ch,cm,statusRoot,catalogRoot] = panels;
+    const saveStatus = {root:statusRoot}, catalog = {root:catalogRoot};
     const bui = { isMenuOpen:()=>state.menu, hideCost:()=>{} };
     const preview = {clear:()=>state.clears++}; const invalidate=()=>{};
     const tileAt=(x,y)=>[Math.floor(x/10),Math.floor(y/10)];
@@ -84,7 +84,7 @@ export function d047MobileUnit(log) {
     assert.equal(h.getStroke(), null); h.fire('pointerup', { id: 2 }); h.fire('pointerup', { target: {} }); assert.equal(h.state.commits.length, 0);
   });
   test('toolbar click, captured move/up over UI, and opened overlays reject placement', () => {
-    for (const interruption of ['click', 'move', 'release', 'menu', 'panel', 'saveStatus', 'menuClosedBeforeRelease']) {
+    for (const interruption of ['click', 'move', 'release', 'menu', 'panel', 'saveStatus', 'catalog', 'menuClosedBeforeRelease']) {
       const h = harness(); h.fire('pointerdown'); assert.ok(h.getStroke());
       if (interruption === 'click') h.fire('click', { target: {} });
       if (['move', 'release'].includes(interruption)) h.doc.elementFromPoint = () => ({});
@@ -92,6 +92,7 @@ export function d047MobileUnit(log) {
       if (interruption === 'menu') h.state.menu = true;
       if (interruption === 'panel') h.panels[8].hidden = false;
       if (interruption === 'saveStatus') h.panels[9].hidden = false;
+      if (interruption === 'catalog') h.panels[10].hidden = false;
       if (interruption === 'menuClosedBeforeRelease') h.interruptBuild();
       h.fire('pointerup'); assert.equal(h.getStroke(), null, interruption); assert.equal(h.state.commits.length, 0, interruption);
     }
