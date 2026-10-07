@@ -75,7 +75,12 @@ export async function captureD052Scene(p,page,mode,{phase,outDir}) {
     for(const cat of ['police','fire','health','edu']) {
       const prior=await p.ev(D052_SNAPSHOT);await tapD052(p,`#pl li[data-k="${cat}"] button:${high?'last':'first'}-child`);const after=await p.ev(D052_SNAPSHOT),ui=await p.ev(D052_UI);
       check(`${cat} budget${bound} clamp with actual toast`,()=>{assert.equal(after.policy.budget[cat],bound);assert.equal(after.sim.money,prior.sim.money);assert.equal(after.sim.day,prior.sim.day);assert.equal(after.history.length,prior.history.length);assert.ok(ui.toasts.some(t=>t.includes(phase==='before'?(high?'覆蓋更廣、更貴':'省錢、覆蓋縮水'):(high?'上限':'下限'))));});
-      item.budgetCases.push({cat,before:prior.policy,after:after.policy,toasts:ui.toasts});if(cat==='police')await take();
+      item.budgetCases.push({cat,before:prior.policy,after:after.policy,toasts:ui.toasts});
+      if(cat==='police'&&shot) {
+        // Notices render below the modal. Close through its real button so the
+        // limit message itself is visible in both before and after screenshots.
+        await tapD052(p,'#plX');await take();await menu(p,'policy');
+      }
     }
   } else if(mode==='resume'||mode==='sandbox') {
     await menu(p,'tech');const row=(await p.ev('__gt.techRows()')).find(r=>r.kind==='tech'&&r.k==='A1');
