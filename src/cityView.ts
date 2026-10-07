@@ -828,7 +828,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       tcTip = ''; if (was !== id) bui.toast(`🔬 開始研究：${n.nm}${r.fee > 0 ? `（−$${r.fee.toLocaleString()}）` : ''}`, 'gold');
       saveNow();
     } else tcTip = `${n.nm}：${r.why ?? '開始不了'}`;
-    renderTech(); return r;
+    renderTech(); syncCommissionHud(); return r;
   }
   // 選城市方向：第一下只是標起來（永久，不給手滑）、第二下對同一個才定。定了：教育科技城整張重建覆蓋場（教育場 ×1.08）、研究速度 +1
   function uiSpec(i: number) {
@@ -868,8 +868,15 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function cmProgress(c: CmsDef): { cur: string; p: number } {
     const s = sim!, st = s.cms, stock = c.type === 'stock' ? Math.floor(c.src === 'steel' ? s.econ.steel : c.src === 'fuel' ? s.econ.fuel : 0) : 0, has = s.edu.tech.includes(c.src), r2 = (v: number, target: number) => Math.min(Math.round(Math.min(v, target) * 100) / 100, v < target ? target - .01 : target);
     const p = c.type === 'acc' ? Math.min(1, st.acc / (c.target as number)) : c.type === 'hold' ? Math.min(1, st.hold / (c.holdN as number)) : c.type === 'stock' ? Math.min(1, stock / (c.target as number)) : has ? 1 : 0;
-    const cur = c.type === 'acc' ? `${r2(st.acc, c.target as number)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : '研究中';
+    const cur = c.type === 'acc' ? `${r2(st.acc, c.target as number)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : s.tech.act === c.src ? '研究中' : (s.tech.prog[c.src] ?? 0) > 0 ? '待繼續' : '尚未開始';
     return { cur, p };
+  }
+  // D051: starting/switching research while paused must refresh this read-only
+  // status immediately; accepting a commission never starts research for us.
+  function syncCommissionHud() {
+    const activeCommission = sim && sim.diff !== 3 ? CMS_BY_ID385[sim.cms.act] : null;
+    const progress = activeCommission ? cmProgress(activeCommission) : null;
+    bui.setCommission(activeCommission && progress && sim ? { label: activeCommission.ic + ' ' + activeCommission.nm, progress: progress.cur, fraction: progress.p, days: Math.max(0, activeCommission.days - (sim.day - sim.cms.st)) } : null);
   }
   function renderCommission() {
     if (!sim) return;
@@ -886,7 +893,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         li.dataset.k = c.id; li.dataset.kind = 'act'; li.dataset.st = 'act';
         head.append(mk('b', '', `${c.ic} ${c.nm}`), mk('span', 'val', cur));
         const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.floor(p * 100) + '%'; bar.append(i);
-        li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
+        const researchNote = c.type === 'tech' && p < 1 && s.tech.act !== c.src ? `　接受委託不會自動開始研究；請到「科技與專精」選 ${c.src} 開始或繼續研究。` : '';
+        li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}${researchNote}`));
         const act = mk('div', 'h'); act.append(mk('span', 'val', ''), btn('🗑 放棄委託', `放棄委託：${c.nm}（輪次加一、換一批，沒有懲罰）`, () => uiCommission('drop')));
         li.append(act);
         kids.push(mk('h3', '', '進行中'), li);
@@ -999,9 +1007,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '',
     });
     saveStatus.setState(saveWarnings());
-    const activeCommission = sim && sim.diff !== 3 ? CMS_BY_ID385[sim.cms.act] : null;
-    const progress = activeCommission ? cmProgress(activeCommission) : null;
-    bui.setCommission(activeCommission && progress && sim ? { label: activeCommission.ic + ' ' + activeCommission.nm, progress: progress.cur, fraction: progress.p, days: Math.max(0, activeCommission.days - (sim.day - sim.cms.st)) } : null);
+    syncCommissionHud();
     syncDock();
   }
   // D040：資源圖。要看哪幾種：☰「顯示資源圖」＝兩種；否則拿著油井（油田）或礦場（礦藏）的工具才畫對應的那一種。只畫還能蓋井的格子（陸地、沒路、沒建築）

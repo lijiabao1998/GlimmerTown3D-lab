@@ -30,3 +30,13 @@
 ## 尚未做成
 
 本卡建立時已完成遠端盤點、原函式重現、基線封存與驗收條件；尚未改產品、未執行本輪完整守衛／真 Chrome、未拍新圖、未發布。D049 四份被取消文檔仍未同步，沒有藉此輪補送。
+
+## 改前實證與候選準備
+
+- 施工前卡提交 `1ba110a8521cd6e5e7b8b10d5992ed2aec3bd97d`，早於產品修改。另以真正 `d045Load` 城市、`acceptCommission`／`dropCommission` 正常換輪後接到 techC6，證明研究仍空、資金不變、只新增 cms accept 歷史；不是只手工指定委託狀態。
+- QA-only 改前分支 `claude/d051-baseline-capture` @ `5261c33f08d0e4a34d4e6c4a78125b0eef1ee9d5`，tree `afc3af50559d1a5db423ce64637f73d68db1373c`，永不合併。[CI 37591293645](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37591293645) 成功；兩張真 Chrome 圖均重現錯誤「研究中」，完整世界／科技／委託／歷史／碼／localStorage／日誌前後全等，零儲存寫入，trusted touch 與相機均通過。
+- 改前 artifact `11468362698` 已下載、核 hash 並目視。ZIP SHA256 `d97c99505a00d92bccab8fc98619bcc35ad4890d3fac082a8afd98bffeefba52`；360 未開始面板 PNG `b245a330a3308cb0df89063864fe73510294f907dc950a771b602660e6595806`，412 切去 A1 的 HUD PNG `e6bb738972e08b1eed2262fb962f3507ce3efb19469cc6868a46f463cff7c32b`。改前 HTML 等於基線 SHA256。
+- 產品只改 cityView：四態文字、未在研究目標時的指引、從原 syncUi 抽出同一個 HUD 更新函式，讓 uiTech 在暫停時也更新。沒有新增科技／委託動作或存檔寫入。
+- 8 組新 Node 守衛已過，21 個有效原碼突變均由行為斷言抓出；真 renderTech 產生按鈕執行原 uiTech，並含完整世界／分享碼及 20 天不重读檔對照。DOM／storage／journal doubles 明標，沒有冒充瀏覽器。另 38 項 D046／D049／D050 相關舊守衛、typecheck、build、語法與 whitespace 通過。
+- 獨立原碼審查未見產品正確性或範圍問題；據審查補強瀏覽器完成獎金守衛，以實際第一／二日金額對未變的 Node 模擬結果，另與無委託控制組比較，兩日差額均恰好 $1,800，不能只看 done 事件。這兩日數字已在 Node 定點驗證。
+- 完整本地 Node 已開始串行執行，候選建立時仍在進行，尚不能稱全綠。原完整雲端 CI 包含所有既有守衛、新 D051 真 Chrome 與四張 D050 PNG 逐位守衛，未放寬或跳過任何門檻；目前本輪改後圖、完整 CI 與業主確認仍未完成，不合併／不部署。

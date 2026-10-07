@@ -47,6 +47,7 @@ jobs:
             scratch/shots/D048-evidence.json
             scratch/shots/D049-evidence.json
             scratch/shots/D050-evidence.json
+            scratch/shots/D051-evidence.json
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3
