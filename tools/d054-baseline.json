@@ -1,0 +1,875 @@
+{
+  "phase": "before",
+  "baseline": {
+    "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+    "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+    "sourceFiles": 173,
+    "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+  },
+  "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+  "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f",
+  "passed": true,
+  "provenance": {
+    "commit": "a534d5855dcdf84b83ffdda5d524a7664ebc3af0",
+    "run": 37697502030,
+    "artifact": 11515469024,
+    "zipSha256": "0784a35552166640071d28bb499944acec1814a91062bb6080b7793ada8b8f84"
+  },
+  "cases": [
+    {
+      "mode": "mixed-pipe",
+      "passed": true,
+      "pairing": {
+        "initial": "b806ee66906f0ed3f04c182bd38bda194bae7b5e327d761ca179ff9ed7af32fc",
+        "preview": "b806ee66906f0ed3f04c182bd38bda194bae7b5e327d761ca179ff9ed7af32fc",
+        "committed": "875814edad46a92f0ef1d1c0e890b7c3b35e4eec435ddbe9567d1d6a5f77d386",
+        "undo": "a2a2c1ded4d56c73e854d3a82cef60a770b566ba0ba0b3e8e604374f65a314ff",
+        "recommitted": "22c2be4c45dad062c29cf59c7a385c7742b43f01d31779a599b6c48804396a8e",
+        "future": [
+          {
+            "day": 151,
+            "money": 9947.179760071034,
+            "worldSha256": "a70b266b28ecb90f1b9ca5ef9b7a2670896c1241b14799f95c47aeea7ec6c4d3"
+          },
+          {
+            "day": 152,
+            "money": 9936.358201774168,
+            "worldSha256": "dbce1a4b4377f0afb9080607d5df790231fdb03fabce008e2434de708ae76bc7"
+          },
+          {
+            "day": 153,
+            "money": 9925.536551044896,
+            "worldSha256": "548d4e1edbab6e3f2268a0477fff192528d0b5bd0cc92da53e68574b416c2e85"
+          },
+          {
+            "day": 154,
+            "money": 9914.714785288628,
+            "worldSha256": "eda3314e026ca5698bde5cef10e4e8dcc4009782135fe7975e6f369756e9fdd2"
+          },
+          {
+            "day": 155,
+            "money": 9903.892904505366,
+            "worldSha256": "9f5fa81f318678aece84ec896f842a7010e7acda81e03caf60ba5a46df01fb74"
+          },
+          {
+            "day": 156,
+            "money": 9893.07090869511,
+            "worldSha256": "48423860169074c8f0a3b5d278a574564fe415e6a994ddeda34a652aa9cedeaf"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-mixed-pipe-preview-360.png",
+          "sha256": "c02d9951fa443afea04f2a772221f1936618a00bb4e13ac2f9ebf52032dc2ee6",
+          "mode": "mixed-pipe",
+          "stage": "preview",
+          "viewport": {
+            "width": 360,
+            "height": 740
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              141.7
+            ],
+            "target": [
+              31,
+              0,
+              26.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "c7f3d7180dbbe4baf56d9f4e27c82e4d2b5c1ba90bbc56d512df6e8f70f3ae1d",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "mixed-pipe",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 10000,
+            "paused": true,
+            "codeSha256": "e29c744cc4582b2bd74e2f3fa39ca6904361eef46a7628718c504e5980f38975",
+            "rawSha256": "e611aa4c4c0c0307bfca6fce8b55b7794e21f523991b3497f1e93d3e38e85dec",
+            "camera": {
+              "x": 31,
+              "z": 26.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "wpipe",
+              "x0": 28,
+              "z0": 26,
+              "x1": 33,
+              "z1": 26,
+              "k": "line"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "a9dcbec434dc4784f361af9a948d5e139f14800ed21e5d6543fda4087989da09",
+          "worldSha256": "b806ee66906f0ed3f04c182bd38bda194bae7b5e327d761ca179ff9ed7af32fc"
+        },
+        {
+          "filename": "D054-before-mixed-pipe-result-360.png",
+          "sha256": "df0137f8008e4aa0798960541f3f970b09df2a327bf998cd2159c9176e32e6a0",
+          "mode": "mixed-pipe",
+          "stage": "result",
+          "viewport": {
+            "width": 360,
+            "height": 740
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              141.7
+            ],
+            "target": [
+              31,
+              0,
+              26.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "c7f3d7180dbbe4baf56d9f4e27c82e4d2b5c1ba90bbc56d512df6e8f70f3ae1d",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "mixed-pipe",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 10000,
+            "paused": true,
+            "codeSha256": "e29c744cc4582b2bd74e2f3fa39ca6904361eef46a7628718c504e5980f38975",
+            "rawSha256": "e611aa4c4c0c0307bfca6fce8b55b7794e21f523991b3497f1e93d3e38e85dec",
+            "camera": {
+              "x": 31,
+              "z": 26.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "wpipe",
+              "x0": 28,
+              "z0": 26,
+              "x1": 33,
+              "z1": 26,
+              "k": "line"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "7ddfb72a390586a7e3f78e58cd99002db1ae097351c9e292e225237c3b439e9e",
+          "worldSha256": "875814edad46a92f0ef1d1c0e890b7c3b35e4eec435ddbe9567d1d6a5f77d386"
+        }
+      ]
+    },
+    {
+      "mode": "low-road",
+      "passed": true,
+      "pairing": {
+        "initial": "1fe1c6160fa5bb7b0608ebba2cc60c49afa77e7fa866d2394b5bf46e4bbeca6b",
+        "preview": "1fe1c6160fa5bb7b0608ebba2cc60c49afa77e7fa866d2394b5bf46e4bbeca6b",
+        "committed": "9fd449b2104ffd768deaf0637d23222a40390625028f4215e24bd26094dd63ae",
+        "undo": "a44b8938ad3b51d6b790e481ff29acbd4c0345b2e8fece5c8bed936ab54d2e12",
+        "recommitted": "efe0b6073756edada12ce485ed89cdcd343644d908ba990a72390aefef08966f",
+        "future": [
+          {
+            "day": 151,
+            "money": 239.14187334130048,
+            "worldSha256": "70c55efbe6e00667276e037561f260bd24d33a74336d256976bbed33a2a845c6"
+          },
+          {
+            "day": 152,
+            "money": 228.28343794573726,
+            "worldSha256": "85de32cf4c7b397b1db0c02b26ed134e44ee96ac3573c75dc74f9f90fc5d24e2"
+          },
+          {
+            "day": 153,
+            "money": 217.4249092854365,
+            "worldSha256": "275ef140f84783dcf7a592161d6088215ea53fe16109b5f176c2b4b6a7bbf338"
+          },
+          {
+            "day": 154,
+            "money": 206.56626456235125,
+            "worldSha256": "084ad5ac56395ae27f472f9c20e6405e2018290247de20a757665884c7eea98f"
+          },
+          {
+            "day": 155,
+            "money": 195.70750377648147,
+            "worldSha256": "da923ccff6757ef2a25095b374927e54b1e4728c877487ebcd71754e4f2554c9"
+          },
+          {
+            "day": 156,
+            "money": 184.84862692782718,
+            "worldSha256": "b5716f19e922d19a305612fc0ab4de4816d70dc45cfb64bae50aa9e94f9dff40"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-low-road-preview-412.png",
+          "sha256": "c36ab3ae6984f2727ad63c0e3258ec638d6e0dbeb4340958010855eb10825630",
+          "mode": "low-road",
+          "stage": "preview",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              145.19999999999996,
+              94.06040612287404,
+              141.7
+            ],
+            "target": [
+              30,
+              0,
+              26.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "f6d8e01bb1cb89227cfb76afd953adc470208c02ac885b614771c59a594f4bcd",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "low-road",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 30,
+            "paused": true,
+            "codeSha256": "9ce401164e1e087f5360849026259933a29ddc5aa6d5afece70964bdd708248e",
+            "rawSha256": "a4f571be750a944aa0ba0aac34ba92d4a2d1286e7b4023faba7f77222067ba55",
+            "camera": {
+              "x": 30,
+              "z": 26.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "road",
+              "x0": 28,
+              "z0": 26,
+              "x1": 31,
+              "z1": 26,
+              "k": "line"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "c95b2a04eaef600773cd36c9fdd9c438e5f90f881a4d9c4b2efd0faa2566f9fb",
+          "worldSha256": "1fe1c6160fa5bb7b0608ebba2cc60c49afa77e7fa866d2394b5bf46e4bbeca6b"
+        },
+        {
+          "filename": "D054-before-low-road-result-412.png",
+          "sha256": "d6ec3cc1e72cea15444edbb92c5445b8ab7f22fd370f70b9ee1cc6bf32ac00f8",
+          "mode": "low-road",
+          "stage": "result",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              145.19999999999996,
+              94.06040612287404,
+              141.7
+            ],
+            "target": [
+              30,
+              0,
+              26.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "f6d8e01bb1cb89227cfb76afd953adc470208c02ac885b614771c59a594f4bcd",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "low-road",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 30,
+            "paused": true,
+            "codeSha256": "9ce401164e1e087f5360849026259933a29ddc5aa6d5afece70964bdd708248e",
+            "rawSha256": "a4f571be750a944aa0ba0aac34ba92d4a2d1286e7b4023faba7f77222067ba55",
+            "camera": {
+              "x": 30,
+              "z": 26.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "road",
+              "x0": 28,
+              "z0": 26,
+              "x1": 31,
+              "z1": 26,
+              "k": "line"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "b0a56858b1f405ad33bc13ed85bfa0919a3fd914ce7db7a9ac0eff492b1e3a38",
+          "worldSha256": "9fd449b2104ffd768deaf0637d23222a40390625028f4215e24bd26094dd63ae"
+        }
+      ]
+    },
+    {
+      "mode": "low-rect",
+      "passed": true,
+      "pairing": {
+        "initial": "541f1bf1f844a3082249e900f47002cb653e837b38295e419a04544f6e51d9e5",
+        "preview": "541f1bf1f844a3082249e900f47002cb653e837b38295e419a04544f6e51d9e5",
+        "committed": "541f1bf1f844a3082249e900f47002cb653e837b38295e419a04544f6e51d9e5",
+        "undo": null,
+        "recommitted": null,
+        "future": [
+          {
+            "day": 151,
+            "money": 169.1818733413005,
+            "worldSha256": "5221755a00cdd2eeef272010af36467e1f73f0223e5e92a5e7e231cf6334e482"
+          },
+          {
+            "day": 152,
+            "money": 158.3634379457373,
+            "worldSha256": "c788fc3884c2d72aee6a72b582528c322d1263199097a077954f33791c696c27"
+          },
+          {
+            "day": 153,
+            "money": 147.54490928543655,
+            "worldSha256": "0955c09055449f5d26e4cc68cf24f97c8e4e932f2c7a36a6f27341ccb27e2173"
+          },
+          {
+            "day": 154,
+            "money": 136.72626456235128,
+            "worldSha256": "0700285bfca3057531e57a4e8f2a4ac4db11f3b30d320c7dfa9bde67bba6e7d0"
+          },
+          {
+            "day": 155,
+            "money": 125.9075037764815,
+            "worldSha256": "c32f8ea1f1b6ca0b1a98ca9a5d1a807c914dfb6132a4ad7099400fcfac80e668"
+          },
+          {
+            "day": 156,
+            "money": 115.08862692782722,
+            "worldSha256": "a82406fe2542b6ae7e237f69ce95ac1dfece772d2553d1ea4eab3bd37bfae4a2"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-low-rect-preview-412.png",
+          "sha256": "ffd41a80ce4811196e776d6f16cd678d469bc98f82e22ae9a8d178e0464b702e",
+          "mode": "low-rect",
+          "stage": "preview",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              144.19999999999996,
+              94.06040612287404,
+              142.2
+            ],
+            "target": [
+              29.000000000000004,
+              0,
+              26.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "db84075326d8a03657049da1babb1fbb9efc8f4abb074fca4d62767e61829a58",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "low-rect",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 180,
+            "paused": true,
+            "codeSha256": "63cf30b8dc8503c5a59f9a099a4800a0b36aa7bc944260b63fb4b40cf2f1cb7a",
+            "rawSha256": "b6fdd7c1be01e4d376681e964242549c3f05c0b2bf02234aa05aabc23037c4ef",
+            "camera": {
+              "x": 29,
+              "z": 27,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "park",
+              "x0": 28,
+              "z0": 26,
+              "x1": 29,
+              "z1": 27,
+              "k": "rect"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "ebf61af0def3e3aa141b56aeff1b43a3f1a26e296df225a7766284abb74a986a",
+          "worldSha256": "541f1bf1f844a3082249e900f47002cb653e837b38295e419a04544f6e51d9e5"
+        },
+        {
+          "filename": "D054-before-low-rect-result-412.png",
+          "sha256": "c78468075ab4f10df976cf80a2e47c14450920677ff2e58417e16e153555ccbe",
+          "mode": "low-rect",
+          "stage": "result",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              144.19999999999996,
+              94.06040612287404,
+              142.2
+            ],
+            "target": [
+              29.000000000000004,
+              0,
+              26.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "db84075326d8a03657049da1babb1fbb9efc8f4abb074fca4d62767e61829a58",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "low-rect",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 180,
+            "paused": true,
+            "codeSha256": "63cf30b8dc8503c5a59f9a099a4800a0b36aa7bc944260b63fb4b40cf2f1cb7a",
+            "rawSha256": "b6fdd7c1be01e4d376681e964242549c3f05c0b2bf02234aa05aabc23037c4ef",
+            "camera": {
+              "x": 29,
+              "z": 27,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "park",
+              "x0": 28,
+              "z0": 26,
+              "x1": 29,
+              "z1": 27,
+              "k": "rect"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "ebf61af0def3e3aa141b56aeff1b43a3f1a26e296df225a7766284abb74a986a",
+          "worldSha256": "541f1bf1f844a3082249e900f47002cb653e837b38295e419a04544f6e51d9e5"
+        }
+      ]
+    },
+    {
+      "mode": "depleted-oil",
+      "passed": true,
+      "pairing": {
+        "initial": "a9273b4445dad9e39410e476e49df0f027866914d52bcdfa17b6768c12d63374",
+        "preview": "d244d94ca503e29b73e4b7e5fec6e564f2f80f221cfe69b1237439a384ea1e2b",
+        "committed": "4aae18397c00e5c1849d729dcefcbd2ddd7279c98c77abc2750993a473c9200d",
+        "undo": "c7f15a9ae2d887767e156636f48e50c37dd29af0cc77087bbfbd079dc48069ee",
+        "recommitted": "41bdf563bd37f123d8f576d0767a038963f8581d7303752eaf9e595cb6543a8b",
+        "future": [
+          {
+            "day": 151,
+            "money": 8683.21654683809,
+            "worldSha256": "c2599f4ee6e73c12dfac0e6fe87c76fc8754447cfb291b1070fea0cfca527f99"
+          },
+          {
+            "day": 152,
+            "money": 8668.432754374366,
+            "worldSha256": "f81217b1ade26f547aca6bf14f486d38959c91dba03459a51e64bd17b2463bc3"
+          },
+          {
+            "day": 153,
+            "money": 8653.648859412695,
+            "worldSha256": "c972a36b714fef5e2b73461b9bc34fa01b23db35fbac1ac89e51c2d7e922ca7c"
+          },
+          {
+            "day": 154,
+            "money": 8638.864836898025,
+            "worldSha256": "57a7931e2b51fabf108f5cf9d8d0696f6874ab1de62a62111c169ed2e71a7d12"
+          },
+          {
+            "day": 155,
+            "money": 8624.080686830353,
+            "worldSha256": "cf561083356acf86282cf208f1181f8d05ee6785bf8c0666f43f96189016b731"
+          },
+          {
+            "day": 156,
+            "money": 8609.296409209683,
+            "worldSha256": "cc26fa2361e0ffa646ccc295a28c56ea03d9677d07ad1ca1bd9fec1a6887511c"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-depleted-oil-preview-412.png",
+          "sha256": "75b398388569764da7c64a76d8dfde85df7242e0e8744da01cb22d317d42dedf",
+          "mode": "depleted-oil",
+          "stage": "preview",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              149.69999999999996,
+              94.06040612287404,
+              137.7
+            ],
+            "target": [
+              34.5,
+              0,
+              22.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "cadc4bb5f10c0bc5a7b58247c4583104146e7a85265269fddbb7a63fa4dfa7d9",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "depleted-oil",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 10000,
+            "paused": true,
+            "codeSha256": "e9632e0e6fd2650fef3a8837c15701fe964e416082b04e8e92a86aecf9dcb04a",
+            "rawSha256": "29c9cfb6ba6225f4a63871cfc87157ea6d789140d533a4b1f056ad23d807c18e",
+            "camera": {
+              "x": 34.5,
+              "z": 22.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "oilwell",
+              "x0": 34,
+              "z0": 22,
+              "x1": 34,
+              "z1": 22,
+              "k": "tap"
+            },
+            "preparation": "Genuine native demolition of saved exhausted matching well, then select same well tool. RDEP remains240.",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "b677ae9454b875bd9d54fe973d4e3f3f471d3da4d99ac2363319896ecfb15fec",
+          "worldSha256": "d244d94ca503e29b73e4b7e5fec6e564f2f80f221cfe69b1237439a384ea1e2b"
+        }
+      ]
+    },
+    {
+      "mode": "depleted-mine",
+      "passed": true,
+      "pairing": {
+        "initial": "1a6b2fa8b8de0437df97f03b02cbbe2704e956737fdf540f58eaa87ed764971a",
+        "preview": "7ef1a30a6b20f6e7d80dadb8fd67e15afa72383ca66ed7ff164bbeaac4856520",
+        "committed": "753b464fad07378fb30c677525c51f21e9dad7666499c2c1b16ec1244edf1081",
+        "undo": "86a74bec60fac352cce371712e93d9ec6bbf45407591d54793b823ee642fdfd8",
+        "recommitted": "7c808bdc96d5c462b86f0b323de71c97d2b0970400860c4493b68a36654faf39",
+        "future": [
+          {
+            "day": 151,
+            "money": 8482.21654683809,
+            "worldSha256": "31558e1efa1f70769a766d2c172b125fd9a71bad76ad556cde4ffabd51a718d6"
+          },
+          {
+            "day": 152,
+            "money": 8466.432754374366,
+            "worldSha256": "fded994e841a07372429ce0905020c91418734a395fdf2eedcdc5d83c74a478d"
+          },
+          {
+            "day": 153,
+            "money": 8450.648859412695,
+            "worldSha256": "eb6078eb0cbab035370102f7b797671ad47c80dda99357de5c597f605d8aa97b"
+          },
+          {
+            "day": 154,
+            "money": 8434.864836898025,
+            "worldSha256": "d7b4a276ba6a3790f9fbe11005cb85c5bafc0f2d0f478f417080541801975d56"
+          },
+          {
+            "day": 155,
+            "money": 8419.080686830353,
+            "worldSha256": "ce4ca64771d9a96b784c545fc2c2da9e1ddc0bb77a98595d5e0fa50a22a4cc21"
+          },
+          {
+            "day": 156,
+            "money": 8403.296409209683,
+            "worldSha256": "23a74415e2a90e25d050070163b78cc054f889f2537b6a5caedc547961d3cab8"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-depleted-mine-preview-412.png",
+          "sha256": "5226f8485c607c1d059aba44dd1a93a317fba4768387e8cbc966898e8bb82461",
+          "mode": "depleted-mine",
+          "stage": "preview",
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              154.7,
+              94.06040612287404,
+              155.7
+            ],
+            "target": [
+              39.500000000000014,
+              0,
+              40.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "80589b4fd18746ee2041db9d3d7e2d11ea63d09285bd4f5b0dd3b567e9a3c63e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "depleted-mine",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 10000,
+            "paused": true,
+            "codeSha256": "f6ba06fe6542f30c22700973a72e53dadd5bcdf181359494ab481ac554bcc28a",
+            "rawSha256": "5ebe3c130ebeb66a20d2196c995c9320e6d6829de94658d508428b8fe5e3112d",
+            "camera": {
+              "x": 39.5,
+              "z": 40.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "mine",
+              "x0": 39,
+              "z0": 40,
+              "x1": 39,
+              "z1": 40,
+              "k": "tap"
+            },
+            "preparation": "Genuine native demolition of saved exhausted matching well, then select same well tool. RDEP remains240.",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "9e366219210fc360012c21d13418e1992c3f77f85cc891705cb4d6fa744f3a99",
+          "worldSha256": "7ef1a30a6b20f6e7d80dadb8fd67e15afa72383ca66ed7ff164bbeaac4856520"
+        }
+      ]
+    },
+    {
+      "mode": "sewage",
+      "passed": true,
+      "pairing": {
+        "initial": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6",
+        "preview": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6",
+        "committed": "45a7446fb6d07b91e55ecb74c4a6ce265d437e729ae7698e353ff21d61cef90e",
+        "undo": "81dd27e3d9dc006b75eb3be37a88233e0c1ba4e45133c40738f7c986cee67758",
+        "recommitted": "4630ad4c0c0d2e45c523bdb01f9433aa95e540e17daf8e301b0b7cb01b395f54",
+        "future": [
+          {
+            "day": 151,
+            "money": 9483.212997689969,
+            "worldSha256": "681edc16c64c53aa7307fa473040c58e86eb5543f5b71b354cf5d9eca92d349d"
+          },
+          {
+            "day": 152,
+            "money": 9466.425773157713,
+            "worldSha256": "6bda7a8a6bfb79ce10116125d0299e83eab330c11c6d9b66528e90e8624e4607"
+          },
+          {
+            "day": 153,
+            "money": 9449.638447042242,
+            "worldSha256": "7489b227d7b224e1df62c75d24da4f861c07dad0562a396e3f38c091fc9cfc72"
+          },
+          {
+            "day": 154,
+            "money": 9432.850994512104,
+            "worldSha256": "adbd21aec64715bf535034fe8bdef77d51dcbdba72140e6a777e2ca6a53f3b0e"
+          },
+          {
+            "day": 155,
+            "money": 9416.0634155673,
+            "worldSha256": "9bc47b912c17bd4e6f893f63ee089591d5e99c4edf238980f31d61184ecbe4ad"
+          },
+          {
+            "day": 156,
+            "money": 9399.275710207829,
+            "worldSha256": "6863f6945ebb50ba905ab51d9e1d11cec7ed9b5af11798c2a82cbc6c4d704a17"
+          }
+        ]
+      },
+      "shots": [
+        {
+          "filename": "D054-before-sewage-preview-360.png",
+          "sha256": "cfd69235d2a5537d3f353edf2917ad98d89317105b57843fc7f1929b8c862dfb",
+          "mode": "sewage",
+          "stage": "preview",
+          "viewport": {
+            "width": 360,
+            "height": 740
+          },
+          "camera": {
+            "pos": [
+              146.69999999999996,
+              94.06040612287404,
+              142.7
+            ],
+            "target": [
+              31.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "1089e427908f82cbadd61388872a36fdb931b8ab82a34f20a4cd728c944b7ae3",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "mode": "sewage",
+            "synthetic": true,
+            "injection": "localStorage fixture loaded before page creation; no runtime world mutation",
+            "device": "real Chrome CDP touch emulation or explicit native desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+              "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+              "sourceFiles": 173,
+              "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+            },
+            "seed": 5166004,
+            "day": 150,
+            "money": 10000,
+            "paused": true,
+            "codeSha256": "4e70fe86272bc68465dfb914ab23ee5416f0573e4db929a907b3299c64924940",
+            "rawSha256": "243ac9873e8cd85c883531c13a8f5999d450e847a625fed3560ad74c8b8f66be",
+            "camera": {
+              "x": 31.5,
+              "z": 27.5,
+              "zoom": 4.4
+            },
+            "visT": 2.2,
+            "dayFrac": 0,
+            "operation": {
+              "tool": "sewage",
+              "x0": 31,
+              "z0": 27,
+              "x1": 31,
+              "z1": 27,
+              "k": "tap"
+            },
+            "preparation": "Original saved fixture only",
+            "qualification": "Synthetic authored city, not claimed naturally played. Saved historical rank22 unlocks original tools. All simulator behavior is original."
+          },
+          "stateSha256": "ba88dd489cc6811218a4ed7869b5c1c60efe5325483c069cd2fa1e6d91b6377a",
+          "worldSha256": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6"
+        }
+      ]
+    }
+  ]
+}

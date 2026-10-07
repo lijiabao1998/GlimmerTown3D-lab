@@ -45,6 +45,7 @@ import { d050Smoke, d050CopyImageGuard } from './smoke-d050.mjs';
 import { d051Smoke, d051ImportImageGuard } from './smoke-d051.mjs';
 import { d052Smoke } from './smoke-d052.mjs';
 import { d053Smoke } from './smoke-d053.mjs';
+import { d054Smoke } from './smoke-d054.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -61,6 +62,8 @@ const blankCheck = `(()=>{const c=document.querySelector('canvas'),k=document.cr
   for(let i=0;i<d.length;i+=4){const v=(d[i]+d[i+1]+d[i+2])/3;s+=v;s2+=v*v;n++;}const m=s/n;return +(s2/n-m*m).toFixed(1);})()`;
 
 console.log('\n=== 微光小鎮 3D 煙霧測試 ===');
+// D054 new native acceptance runs first; all original suites and gates remain intact.
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d054Smoke(withBrowser, log);
 // D053 runs early for actionable candidate feedback. Every original suite below still runs.
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d053Smoke(withBrowser, log);
 await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {

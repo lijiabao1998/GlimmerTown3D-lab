@@ -147,7 +147,7 @@ export async function d053Smoke(browser,log) {
       await tap(p,`#catalog [data-tool="${t.id}"]`);assert.equal(await p.ev('__gt.ui().civicTool'),t.id);assert.equal(await p.ev('__gt.ui().tool'),'civic');await assertClosed(p);
       same(persisted(await snap(p)),persisted(before),'select '+t.id+' costs no money/day/history/save');
       const hints=await p.ev('__gt.resourceHints()');if(['oilwell','gaswell','mine'].includes(t.id)){assert.ok(hints.shown>0);assert.ok(hints.cells.every(c=>c[2]===(t.id==='mine'?2:1)));}else assert.equal(hints.shown,0);
-      assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe'].includes(t.id));
+      assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe','sewage'].includes(t.id));
       assert.equal(await p.ev(`__d053Extra.filter(e=>e.type==='click'&&e.tool===${J(t.id)}&&e.trusted).length`),1,'exactly one original selection activation');item.selected.push(t.id);
     }
     assert.equal(await p.ev('__d053Writes.length'),0);same(item.selected,D053_TOOL_IDS,'all original callbacks');await key(page,'Escape');

@@ -294,6 +294,7 @@ function growthHarness(fixture,source=citySource) {
     const syncRes=()=>x.calls.push('resources'),liveBuildings=()=>[],powerStatus=()=>({powered:0,unpowered:0,cap:0}),simCounts=()=>[[0],[0,0,0],[0,0,0],[0,0,0]];
     const label='fixture',loadDay=sim.day,autosaves=()=>true,saveErr='',jstore=null,jwhy='',saveWarnings=()=>({}),saveStatus={setState:()=>{}},syncCommissionHud=()=>{},syncDock=()=>x.calls.push('dock');
     const saveNow=()=>x.calls.push('save'),kickJournal=()=>x.calls.push('journal');
+    const sitePanel={reset:()=>{}},syncSite=()=>{}; // D054 closed UI boundary; original growth assertions remain unchanged.
     ${chunks.map(strip).join('\n')}
     return {openRank,renderRank,rankList,openCatalog,closeGrowth,syncUi,catalog,rk,playing:()=>playing};`;
   const h=new Function('x',...Object.keys(dependencies),js)(x,...Object.values(dependencies));
