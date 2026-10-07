@@ -1,75 +1,51 @@
-# 每次推送：型別檢查 → Node 端守衛 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
-# main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
-name: ci
-
+# QA only. Never merge. No write permissions or Pages/deploy job.
+# Parent creates this branch only after image-approved main CI/Pages succeeds.
+name: D053 official verification
 on:
   push:
-    branches: [main, 'claude/**']
-    paths-ignore: ['**.md', 'docs/**']
-  pull_request:
-    paths-ignore: ['**.md', 'docs/**']
+    branches: ['claude/d053-live-verification']
   workflow_dispatch:
-
+permissions:
+  contents: read
 concurrency:
-  group: ci-${{ github.ref }}
+  group: d053-official-verification
   cancel-in-progress: true
-
 jobs:
-  smoke:
+  verify:
+    if: github.ref == 'refs/heads/claude/d053-live-verification'
     runs-on: ubuntu-latest
-    timeout-minutes: 75   # D053：沿用完整舊檢查，加18項設施導覽／成長原生流程；只擴總預算，不改任何性能或驗收門檻。
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
+      - name: Chinese fonts for exact approved PNGs
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
-      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
-        run: npm run unit
       - run: npm run build
-      - name: 煙霧測試
-        run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
+      - name: Offline QA adapter negative checks; no browser launch
+        run: node tools/verify-live-d053.mjs --self-test
+      - name: Actual official HTML, unchanged D053 native suite and approved images
         shell: bash
-      - name: 拍樣張（三畫風×三年份×兩個距離）
-        if: always()
-        run: node tools/shoot.mjs --out=scratch/shots
+        run: |
+          mkdir -p scratch/live-d053
+          node tools/verify-live-d053.mjs 2>&1 | tee scratch/live-d053/live-run.txt
+          exit ${PIPESTATUS[0]}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-${{ github.sha }}
+          name: d053-official-verification
           path: |
-            smoke-run.txt
-            scratch/shots/*.png
-            scratch/shots/D048-evidence.json
-            scratch/shots/D049-evidence.json
-            scratch/shots/D050-evidence.json
-            scratch/shots/D051-evidence.json
-            scratch/shots/D052-*.json
-            scratch/shots/D052-*.code.txt
+            scratch/live-d053/*.json
+            scratch/live-d053/*.txt
+            scratch/shots/D053-*.png
             scratch/shots/D053-*.json
             scratch/shots/D053-*.code.txt
             scratch/shots/D053-*.html
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
-      - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        with:
-          path: dist
-
-  pages:
-    needs: smoke
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
