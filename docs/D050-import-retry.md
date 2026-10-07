@@ -29,3 +29,15 @@
 ## 尚未做成
 
 本卡建立時只完成盤點、原始碼重現、隔離工作區與驗收條件；尚未實作、未跑本輪守衛／瀏覽器、未產出新圖，未發布。D049被取消的收尾文檔仍獨立保留，沒有重新提交。
+
+## 改前捕獲與候選準備
+
+- 施工前卡 `84675bfe` 早於產品實作。QA-only `claude/d050-baseline-capture` @ `4649b69df44103cd0dd09a711f79757f6cdb3e46`，tree `51385e99bc533ba420f8426df0010f5565ca35da`，**永不合併**；只有捕獲腳本／無部署工作流不同於71bf40db。
+- [基線CI37550379693](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37550379693) 成功；兩個尺寸各記錄四個trusted觸控、真正Input.insertText前後事件與恰好一次提交。360填入有效1928-byte fixture後沒有再按匯入，舊「分享碼是空的」仍在；412保留原非法字元錯誤與未標記輸入框。全世界／存檔／localStorage／日誌前後全等，文件hash等於原版。
+- Artifact11452267802，ZIP SHA256 `8e6eb51c1963130635c52ae78394a4880406cdf9ca65a12206d5777659182d2d`。360圖hash `be5684a6a9af3629cc5d710d6dbdf168b2975e13848042596db68b008e5ebb8d`；412圖 `4313c02d5d0856d58218cea297ad4587ed1a7df5f3ac3ab328ca35cc086c6e93`，均下載核對並看過真像素。fixture函式保留的D048故障敘述是歷史metadata，本次基線未注入任何存檔故障。
+- 產品僅cityView、buildUi與新importFeedback：錯誤用穩定ID與aria-describedby連到textarea、aria-invalid與紅框；錯誤綁定當次提交的原字串，真正改值時清掉，若內容完全相同則錯誤仍適用；開／關及模式切換清理。沒有即時decode、沒有改碼或新增saveNow。D049複製的六張PNG另加精確golden守衛。
+- 六項新Node守衛已通過，含七個helper與六個實際接線／關聯突變。原D049 harness只加一個新view stub，舊copy守衛與突變全保留；D048／D049相關定點、typecheck、build、whitespace通過。產品HTML SHA256 `382e407eb48c05eb1b200b98ce7cf37ef73df89247627eb6a9a1832d8bc25610`；src/io、src/sim、src/render、src/content無diff。
+- 首版突變守衛識別closeDlg的第二次import reset是等價操作：paste關閉已走closeSavePanels，status返回已在export模式inactive。刪除冗餘產品呼叫，不把抓不到的等價突變假列通過；原closeSavePanels／mode reset守衛保留。
+- 完整Node首次287項／0 NG時為測試前置窄修主動中止：同一個被拒絕字串仍有同一錯誤，瀏覽器新增此分支，真正改值分支使用不同字串。另一個前置修正：view-only的__gt.save()本就回null，測試改走真正匯出UI核碼。產品在這兩項修正間未變。
+- 後兩次完整Node分別在既有D022（256項已過）及D027（291項已過）結束碼137、末行「Killed」，沒有NG，但**不是完整通過**。共享主機可用RAM約2.2–2.5GB、Node預設heap2240MiB、無swap；cgroup路徑未掛載，累計oom_kill106沒有當次前後證據，故不能斷言每次原因。另一線同時段大JSON解析也137；所有記錄保留。未再盲跑，依現有雲端候選授權與資源協調，原完整Node＋browser交候選CI首次全驗，不減覆蓋、不放寬任何门檻。
+- 本地Chrome標準啟動及自動一次重試仍在第一頁前被process-singleton socket權限阻擋，0個瀏覽器斷言執行；明記未跑。本輪完整CI、新圖与業主確認都尚未完成，不合併、不部署。D049被取消的四份收尾文檔沒有加入此候選。
