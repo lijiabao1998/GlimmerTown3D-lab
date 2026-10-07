@@ -2,7 +2,7 @@
 // 也能單獨跑：node tools/smoke-d045.mjs（先 npm run build；退出碼 0＝綠燈、1＝紅燈）。每一段一個 Chrome。
 //   panel   手機直式 360×740、真的觸控：☰ 選單有「委託」；面板三選一的三張＝Node 端同一座城的 commissionOffers（id、順序）、每張有獎金與期限、接受鈕 ≥ 44×44、運量委託標「本線還沒有公共運量」；
 //           點第 2 張的「接受」→ 通知「📋 接受委託：…」、歷史多一筆 cms accept、模擬的委託＝那一條、面板換成「進行中」（進度條、剩餘天數、放棄鈕）；點「放棄」→ 通知、輪次 +1、三選一換一批（＝Node 端輪次 1 的三選一）；
-//           沙盒「沙盒模式無委託」、城市等級不到 3「城市等級 3 解鎖」、人口不到 51「人口 50 解鎖」；面板不超出螢幕、頁面沒有橫向捲動、Esc 關得掉
+//           沙盒「沙盒模式無委託」、城市等級不到 3「城市等級 3 解鎖」、人口不到 51「人口超過 50 解鎖」；面板不超出螢幕、頁面沒有橫向捲動、Esc 關得掉
 //   settle  進行中的委託每天結算：C6 已完成接了「學術網絡」→ 推 1 天：通知「📋 委託完成：…　+$1800」、資金＝Node 端同一座城推一天的結果（含 +$1,800）、歷史多一筆 cms done、面板（開著）換成三選一第 2 輪與「已完成 1」、大事記多一行；
 //           快到期的鋼材委託 → 推 2 天：通知「📋 委託過期：…」、輪次 +1、沒有罰款
 //   persist 接單、推幾天、存檔、重新整理：進行中的委託（開始日、累計、連續天數、輪次、完成清單）與歷史的 cms 事件都在
@@ -121,13 +121,13 @@ export async function d045Smoke(withBrowser, log) {
       'D045 驗收 7：快到期的鋼材委託推 2 天——通知「📋 委託過期：造船用鋼 40」、輪次 +1、歷史多一筆 cms expire、沒有罰款（Node 端有沒有委託的同一座城，資金一樣）', `通知 ${J(t2)}；委託 ${J(cms2)}；歷史 ${J(h2)}`);
     // 三種不能接的狀態
     const states = [];
-    for (const [key, want] of [['sandbox', ['sandbox', '沙盒模式無委託']], ['low', ['rank', '城市等級 3 解鎖']], ['pop', ['pop', '人口 50 解鎖']]]) {
+    for (const [key, want] of [['sandbox', ['sandbox', '沙盒模式無委託']], ['low', ['rank', '城市等級 3 解鎖']], ['pop', ['pop', '人口超過 50 解鎖']]]) {
       await loadCity(open, ev, C[key]); await ev(`__gt.menu('commission')`);
       const pn2 = await ev(PANEL), rows2 = await ev(ROWS), st = rows2.find(r => r.k === 'state');
       states.push([key, pn2.state, st?.val, rows2.some(r => r.kind === 'offer' || r.kind === 'act')]);
       if (pn2.state !== want[0] || st?.val !== want[1] || rows2.some(r => r.kind === 'offer' || r.kind === 'act')) states.push(['不對', key, want]);
     }
-    log(!states.some(s => s[0] === '不對'), 'D045 驗收 7：不能接單的三種狀態——沙盒「沙盒模式無委託」、城市等級不到 3「城市等級 3 解鎖」、人口不到 51「人口 50 解鎖」，都沒有接受鈕', J(states));
+    log(!states.some(s => s[0] === '不對'), 'D045 驗收 7：不能接單的三種狀態——沙盒「沙盒模式無委託」、城市等級不到 3「城市等級 3 解鎖」、人口不到 51「人口超過 50 解鎖」，都沒有接受鈕', J(states));
   }, { W: 360, H: 740 });
 
   await run('persist', '重新整理', async ({ ev, open, tapBtn, waitFor, toasts }) => {
