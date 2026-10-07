@@ -7,6 +7,7 @@ import { stripTypeScriptTypes } from 'node:module';
 import { pathToFileURL } from 'node:url';
 import { ROOT } from './cdp.mjs';
 import { costTagPosition } from '../src/ui/costTag.ts';
+import { createMapClickGuard } from '../src/ui/mapClickGuard.ts';
 
 const source = fs.readFileSync(path.join(ROOT, 'src/cityView.ts'), 'utf8');
 const between = (a, b) => {
@@ -21,7 +22,7 @@ function harness(kind = 'tap') {
   const doc = { visibilityState: 'visible', elementFromPoint: () => canvas };
   const state = { commits: [], cards: 0, previews: 0, clears: 0, menu: false };
   const setup = `
-    const { canvas: inputCanvas, doc: document, state, onWindow, kind } = env;
+    const { canvas: inputCanvas, doc: document, state, onWindow, kind, createMapClickGuard } = env;
     const renderer = { domElement: inputCanvas }, addEventListener = onWindow;
     let stroke = null, lastPreview = null, tool = 'civic'; const sim = {};
     const panels = Array.from({length:11},()=>({hidden:true}));
@@ -39,12 +40,13 @@ function harness(kind = 'tap') {
     return {getStroke:()=>stroke,getDown:()=>down,getPointers:()=>ptrs.size,
       interruptBuild,panels,setTool:t=>{tool=t;}};
   `;
-  const live = new Function('env', setup)({ canvas, doc, state, kind, onWindow: (name, fn, capture = false) => win.push({ name, fn, capture }) });
+  const live = new Function('env', setup)({ canvas, doc, state, kind, createMapClickGuard, onWindow: (name, fn, capture = false) => win.push({ name, fn, capture }) });
   const fire = (name, { target = canvas, id = 1, x = 100, y = 300, button = 0 } = {}) => {
-    const event = { target, pointerId: id, clientX: x, clientY: y, button, pointerType: 'touch' };
+    const event = { target, pointerId: id, clientX: x, clientY: y, button, pointerType: 'touch', prevented: false, stopped: false, preventDefault() { this.prevented = true; }, stopPropagation() { this.stopped = true; } };
     for (const l of win.filter(l => l.name === name && l.capture)) l.fn(event);
-    if (target === canvas) for (const l of map.filter(l => l.name === name)) l.fn(event);
-    for (const l of win.filter(l => l.name === name && !l.capture)) l.fn(event);
+    if (!event.stopped && target === canvas) for (const l of map.filter(l => l.name === name)) l.fn(event);
+    if (!event.stopped) for (const l of win.filter(l => l.name === name && !l.capture)) l.fn(event);
+    return event;
   };
   return { ...live, state, doc, canvas, fire };
 }
@@ -99,6 +101,18 @@ export function d047MobileUnit(log) {
     assert.match(source, /menuOpen: \(\) => \{ interruptBuild\(\)/);
     assert.match(source, /function onMenu\(id: string\) \{\s+interruptBuild\(\)/);
     assert.match(source, /function doUndo\(\) \{\s+interruptBuild\(\)/);
+  });
+  test('old canvas release cannot click a newly opened control; fresh UI and keyboard activation survive', () => {
+    const h = harness(), button = {};
+    h.fire('pointerdown'); h.state.menu = true; h.fire('pointerup');
+    const oldClick = h.fire('click', { target: button }); assert.ok(oldClick.prevented && oldClick.stopped);
+    assert.equal(h.state.commits.length, 0);
+    h.fire('pointerdown', { target: button }); h.fire('pointerup', { target: button });
+    assert.equal(h.fire('click', { target: button }).prevented, false);
+    h.fire('pointerdown'); assert.equal(h.fire('click', { target: button, id: -1 }).prevented, false);
+    h.fire('pointerup'); assert.equal(h.fire('click', { target: button }).prevented, true);
+    h.state.menu = false; h.fire('pointerdown'); h.fire('pointerup');
+    assert.equal(h.fire('click').prevented, false); assert.equal(h.state.commits.length, 1);
   });
   test('cancel, lost capture, blur, pagehide, hidden and outside release clear safely; next tap works', () => {
     for (const interruption of ['pointercancel', 'lostpointercapture', 'blur', 'pagehide', 'visibilitychange', 'outsideUp', 'outsideCancel']) {

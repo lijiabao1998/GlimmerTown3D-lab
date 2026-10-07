@@ -125,6 +125,14 @@ export async function d053Smoke(browser,log) {
       else { assert.equal(await p.hit([3,3]),'DIV'+panel);if(mobile)await p.tapAt([3,3]);else await p.click([3,3]); }
       await assertClosed(p);same(persisted(await snap(p)),persisted(before),panel+' '+how+' is read-only');
     }
+    // The guide occupies only the three unused cells of row three. It cannot
+    // add a fourth row or obscure any original facility target/map space.
+    if ((await p.ev('__gt.ui()')).tool !== 'civic') await tap(p,'.tool[data-t="civic"]',mobile);
+    const grid = await p.ev(`(()=>{const q=s=>document.querySelector(s).getBoundingClientRect(),g=q('#civicGuide'),w=q('#civicWrap'),c=q('#civicSub');return {guide:[g.left,g.top,g.right,g.bottom,g.width,g.height],wrap:[w.top,w.bottom],grid:[c.top,c.bottom],buttons:[...document.querySelectorAll('#civicSub button')].map(e=>{const r=e.getBoundingClientRect();return [r.left,r.top,r.right,r.bottom];}),hit:document.querySelector('#civicGuide').contains(document.elementFromPoint(g.x+g.width/2,g.y+g.height/2))};})()`);
+    assert.equal(grid.buttons.length,18); assert.equal(new Set(grid.buttons.map(b=>Math.round(b[1]))).size,3,'original three facility rows');
+    assert.equal(grid.wrap[1],grid.grid[1],'guide adds no vertical dock space'); assert.ok(grid.guide[4]>=44&&grid.guide[5]>=44&&grid.hit,'guide is visible and tappable');
+    assert.ok(grid.guide[0]>=0&&grid.guide[2]<=opt.W+.5&&Math.abs(grid.guide[3]-grid.grid[1])<.5,'guide fits third row');
+    for(const b of grid.buttons)assert.ok(grid.guide[2]<=b[0]||grid.guide[0]>=b[2]||grid.guide[3]<=b[1]||grid.guide[1]>=b[3],'guide never overlaps a facility');
     // The direct toolbar entry has native Enter/Space behavior and never toggles play.
     await catalog(p,mobile);await key(page,'Escape');await position(p,'#civicGuide',true);await key(page,' ');await assertModal(p,'#catalog');assert.equal(await p.ev('__gt.sim().playing'),false);await key(page,'Escape');
     assert.equal(await p.ev('__d053Writes.length'),0,'navigation never calls localStorage save');

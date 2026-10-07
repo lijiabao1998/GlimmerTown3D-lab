@@ -34,6 +34,11 @@
 #rk .growthGuide h3 { margin: 0 0 6px; font-size: 15px; color: #ffe1a0; }
 #rk .growthGuide p { margin: 5px 0; font-size: 13px; line-height: 1.55; color: #d0d9e9; }
 #rkCatalog { width: 100%; margin-top: 8px; background: #e8b74a; border-color: #e8b74a; color: #1c1a14; font-weight: 700; }
-#civicGuide { align-self: center; min-height: 44px; padding: 6px 16px; border-radius: 12px; color: #ffe1a0; border-color: #e8b74a77; }
+#civicWrap { position: relative; --civic-gap: 6px; }
+#civicWrap[hidden] { display: none; }
+#civicGuide { position: absolute; left: calc((100% + var(--civic-gap)) * 4 / 7); right: 0; bottom: 0; box-sizing: border-box; min-height: 44px; padding: 6px 16px; border-radius: 12px; color: #ffe1a0; border-color: #e8b74a77; }
 #civicGuide[hidden] { display: none; }
 @media (min-width: 620px) { #catalog ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } #catalog li { display: flex; flex-direction: column; } #catalog li button { margin-top: auto; } }
+
+@media (max-width: 400px) { #civicWrap { --civic-gap: 4px; } }
+@media (min-width: 720px) { #civicWrap { width: 568px; align-self: center; } }

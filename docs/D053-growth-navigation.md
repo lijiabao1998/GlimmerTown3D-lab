@@ -46,3 +46,11 @@
 - 最終本地typecheck/build與D053測試模組語法/import通過，候選HTML SHA256 `b6459228e2a06aca45e5c6905f73d4456bf5c9d2ac107f6af63f6b7556cb4530`。全套Node、browser與舊門檻都已接入原CI，新增browser先跑以便及早得到可操作回饋，之後原套件照跑。
 - 上傳候選CI workflow blob時再次收到工具 `user cancelled MCP tool call` 回傳，未建立產品commit、未更新候選分支；已停該遠端寫入並回報，不歸因使用者。候選完整CI、新圖與新圖批准仍待完成，main維持D052。
 - 16:19 UTC：使用者已明確確認恢復D053候選推送、完整CI與Draft PR；核對被取消的workflow blob內容未變後原call一次重試成功。後續按同輪候選继续，不含合併／部署或新圖批准。
+
+## 首次完整 CI 回歸修正（2026-10-07 17:50 UTC）
+
+- 首候選 `97accd51` 的 push／PR CI 均完成為 failure：Node 590 組全過，browser 701 過／4 失敗。未當作可發版候選。
+- 三項 D033 岸邊建造舊回歸同源：新增設施導覽獨占一排，使 360px 的既有水邊落點被 dock 遮住。入口移到原18設施三排中第三排空出的三格；不改旧地圖座標與測試預期。另在360／412／1280原生流程加三排、44px、命中與不重疊守衛。
+- D053 中斷回歸為舊地圖按壓遇鍵盤打開選單，放開後原生 click 命中新出現的換城入口。新增僅保存地圖 pointer 原點的保護；拒絕該跨表面舊 click，保留下一次新 UI 點擊、鍵盤與正常地圖操作；取消、失焦、離頁及重用 pointer ID 清理均有原碼守衛。沒有造 click 或改模擬。
+- 接手先保留並凍結既有未提交修正為本地 `bc75657`；本地 typecheck/build、新 D053 12 組／27有效突變與 D047 mobile 6 組通過。Node 完整套件改走既有 CI，不重述被取消的本地 aggregate 為完成。
+- 本地 Chrome 再核實仍在第一頁前因 `socket() failed: Operation not permitted` 結束；零 browser 斷言執行。最終完整驗收及新圖仍走使用者已授權的 GitHub CI，沒有放寬門檻。本輪新圖未批准，未合併／部署。

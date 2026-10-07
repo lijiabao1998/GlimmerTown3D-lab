@@ -164,7 +164,7 @@ export function createBuildUi(on: BuildUiEvents) {
       <div class="coach" id="coach" hidden></div>
       <div class="viewNote" id="viewNote" hidden><span>這座城只能看。</span><button id="startBuild">${ICONS.build}開一座新城</button></div>
       <div id="roadSub" hidden></div>
-      <div id="civicSub" hidden></div><button id="civicGuide" type="button" aria-haspopup="dialog" aria-controls="catalog" hidden>設施導覽・用途與選取</button>
+      <div id="civicWrap" hidden><div id="civicSub" hidden></div><button id="civicGuide" type="button" aria-haspopup="dialog" aria-controls="catalog" hidden>設施導覽 ↗</button></div>
       <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow"></span>
         <button class="icoBtn" id="undo" aria-label="復原">${ICONS.undo}</button></div>
       <div class="tools" id="tools"></div>
@@ -292,6 +292,7 @@ export function createBuildUi(on: BuildUiEvents) {
       }
       roadSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.r === d.roadTool));
       // 公共設施一組（D016）：十種，名稱與造價照實驗線；清單或沙盒變了才重建
+      $('civicWrap').hidden = d.mode !== 'build' || d.tool !== 'civic';
       $('civicGuide').hidden = d.mode !== 'build' || d.tool !== 'civic';
       civicSub.hidden = d.tool !== 'civic' || !build;
       const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}:${c.lock ?? 0}`).join() + (d.sandbox ? '|free' : '');

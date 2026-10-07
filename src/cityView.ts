@@ -37,6 +37,7 @@ import { updatePanelContent } from './ui/panelContent.ts';
 import { createPanelUpdateGate } from './ui/panelPress.ts';
 import { rankBuildNote, facilitySummary } from './ui/growthGuide.ts';
 import { createFacilityCatalog } from './ui/facilityCatalog.ts';
+import { createMapClickGuard } from './ui/mapClickGuard.ts';
 import growthGuideCss from './ui/growthGuide.css?raw';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
@@ -1509,7 +1510,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const canvas = renderer.domElement;
   // 畫面上按著的指標（實驗線 pointers，62783–62799）：畫布上的每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
   // 只剩一根也不再蓋，全部放開之後的下一筆才是新的施工（審查：之前第一指落在地圖外、或抬起一指再放回去，照樣蓋了一條路）
-  const ptrs = new Set<number>();
+  const ptrs = new Set<number>(), mapClicks = createMapClickGuard(canvas);
   const lift = (id: number) => { ptrs.delete(id); };
   const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
     && !bui.isMenuOpen() && [dlg, saveStatus.root, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
@@ -1517,10 +1518,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // D047: count touches on UI too. A second finger on a toolbar/notice/panel
   // interrupts immediately, before its click changes a tool or opens an overlay.
   addEventListener('pointerdown', e => {
+    mapClicks.down(e);
     ptrs.add(e.pointerId);
     if (e.target !== canvas || ptrs.size > 1) interruptBuild();
   }, true);
-  addEventListener('click', e => { if (e.target !== canvas) interruptBuild(); }, true);
+  addEventListener('click', e => { mapClicks.click(e); if (e.target !== canvas) interruptBuild(); }, true);
   canvas.addEventListener('pointerdown', e => {
     try { canvas.setPointerCapture(e.pointerId); } catch { /* 沒有也行：放開另由 window 收 */ }
     if (ptrs.size > 1 || !mapPoint(e.clientX, e.clientY)) { interruptBuild(); return; }
@@ -1557,12 +1559,13 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   canvas.addEventListener('pointercancel', e => { lift(e.pointerId); interruptBuild(); });   // 取消就是取消，不提交
   canvas.addEventListener('lostpointercapture', e => { if (stroke?.pid === e.pointerId || down) interruptBuild(); });
   for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => {
+    if (ev === 'pointercancel') mapClicks.cancel(e); else mapClicks.up(e);
     lift(e.pointerId);
     // Capture can fail or be lost. An outside release must clear the pending
     // stroke, rather than leave it armed for a later pointer event.
     if (e.target !== canvas && stroke?.pid === e.pointerId) interruptBuild();
   });
-  const abandonPointers = () => { ptrs.clear(); interruptBuild(); };
+  const abandonPointers = () => { ptrs.clear(); mapClicks.clear(); interruptBuild(); };
   addEventListener('blur', abandonPointers);
   addEventListener('pagehide', abandonPointers);
   addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') abandonPointers(); });

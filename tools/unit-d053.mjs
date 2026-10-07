@@ -17,6 +17,7 @@ import { CIVIC_TOOLS, toolLock, toolSize, gestureOf, labToolOf, previewOp, commi
 import { COST } from '../src/sim/rules/build.ts';
 import { RANKS, rankStep, rankOfSave } from '../src/sim/rules/rank.ts';
 import * as Guide from '../src/ui/growthGuide.ts';
+import { createMapClickGuard } from '../src/ui/mapClickGuard.ts';
 
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
 const helperSource = read('src/ui/growthGuide.ts'), catalogSource = read('src/ui/facilityCatalog.ts');
@@ -440,8 +441,37 @@ function mutations() {
   return helpers.length+catalogs.length+selection.length+growth.length+1+' valid helper/catalog/action/growth/toast mutations rejected by behavioral assertions';
 }
 
+function clickOriginBehavior(create = createMapClickGuard) {
+  const canvas = {}, button = {}, pending = [], g = create(canvas, task => pending.push(task));
+  const e = (target, pointerId = 1, buttonCode = 0) => ({ target, pointerId, button: buttonCode, blocked: false, stopped: false, preventDefault() { this.blocked = true; }, stopPropagation() { this.stopped = true; } });
+  const down = e(canvas); g.down(down); g.up(down); const released = e(button); g.click(released); assert.ok(released.blocked && released.stopped);
+  g.down(e(button)); g.up(e(button)); const fresh = e(button); g.click(fresh); assert.equal(fresh.blocked, false);
+  g.down(down); const keyboard = e(button, -1); g.click(keyboard); assert.equal(keyboard.blocked, false); const heldRelease = e(button); g.click(heldRelease); assert.equal(heldRelease.blocked, true);
+  g.down(down); g.up(down); const runOld = pending.splice(0); g.down(down); runOld.forEach(task => task()); const reused = e(button); g.click(reused); assert.equal(reused.blocked, true, 'old cleanup cannot forget a newer press');
+  g.down(down); g.up(down); pending.splice(0).forEach(task => task()); const noClick = e(button); g.click(noClick); assert.equal(noClick.blocked, false, 'no-click release cleans up');
+  g.down(down); g.cancel(down); const cancelled = e(button); g.click(cancelled); assert.equal(cancelled.blocked, false);
+  g.down(down); g.clear(); const abandoned = e(button); g.click(abandoned); assert.equal(abandoned.blocked, false);
+  g.down(e(canvas, 2)); g.down(e(canvas, 3)); g.up(e(canvas, 2)); for(const id of [2, 3]) { const event = e(button, id); g.click(event); assert.equal(event.blocked, true); }
+  g.down(e(canvas, 4, 2)); const right = e(button, 4); g.click(right); assert.equal(right.blocked, false);
+  g.down(down); g.up(down); const canvasClick = e(canvas); g.click(canvasClick); assert.equal(canvasClick.blocked, false);
+}
+function clickOriginGuard() {
+  clickOriginBehavior();
+  const source = read('src/ui/mapClickGuard.ts');
+  for (const [from, to] of [
+    ['if (fromMap && e.target !== canvas)', 'if (false)'],
+    ['if (origins.get(e.pointerId) === origin)', 'if (true)'],
+    ['e.preventDefault(); e.stopPropagation();', 'e.preventDefault();'],
+  ]) {
+    const create = new Function(strip(change(source, from, to)) + ';return createMapClickGuard;')();
+    assert.throws(() => clickOriginBehavior(create), error => error?.code === 'ERR_ASSERTION');
+  }
+  assert.match(citySource, /mapClicks.down\(e\)/); assert.match(citySource, /mapClicks.click\(e\)/); assert.match(citySource, /mapClicks.up\(e\)/); assert.match(citySource, /mapClicks.cancel\(e\)/); assert.match(citySource, /mapClicks.clear\(\)/);
+  return 'real origin guard: old canvas release rejected, native UI/keyboard/canvas click retained, two pointers, cancel, lifetime cleanup, reused-ID race; 3 mutations rejected';
+}
+
 export function d053Guards(log,match='') {
-  const tests=[['original 156-file rule/save/RNG/render/content scope',originalScope],['18-tool metadata, base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
+  const tests=[['native click origin and cleanup safety',clickOriginGuard],['original 156-file rule/save/RNG/render/content scope',originalScope],['18-tool metadata, base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
   for(const [name,fn] of tests)if(!match||name.includes(match))try{log(true,'D053 '+name,fn());}catch(error){log(false,'D053 '+name,error.stack);}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) {
