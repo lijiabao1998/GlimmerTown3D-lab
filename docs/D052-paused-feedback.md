@@ -45,3 +45,14 @@
 ## 尚未做成
 
 建立本卡時只完成隔離工作區、六項原碼缺口與研究資料時點盤點、負向對照及驗收條件。產品未修改，尚無本輪真 Chrome 改前／改後圖或完整CI；尚未發布。既有本地 WebGL／socket 限制沿用已核驗結果，實際瀏覽器驗收由既有雲端 CI 完成；不更換使用者電腦、不改安全設定。
+
+## 施工與改前證據（2026-10-07 12:00 UTC）
+
+- 驗收卡先以 `c6eae7c8f40a48898dba6287445ab154694bdc0f` 發布，之後才修改產品。產品改动僅 `src/cityView.ts` 與生成面板的 `src/ui/panelContent.ts`；後者在研究／政策／委託刷新時保留同一控件，更新文字、屬性及最新動作，不加合成點擊或新手勢。
+- 原版 QA-only 分支 `claude/d052-baseline-capture`，commit `4c4cc63149d7dedd3434fcb8aa91ccab8df8b7bc`；[改前驗證](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37617583140) 已 success：9 場景、64 組斷言、6 張真 Chrome 原圖，完整 HTML 等於上列原版 hash。只讀權限、無部署工作流，永不合併。初跑 `37617059116` 雖斷言通過，但預算提示被面板遮住，目視退回；共用取景改成真關閉面板後拍提示再重開，完整重跑後六圖目視通過，其餘五圖逐位元組不變。
+- `tools/d052-scenes.mjs` 與 `tools/d052-capture.mjs` 共用完全相同的 fixture、操作、相機、視覺時間與視窗尺寸，比對前後六項缺口；另保留預算下限、沙盒免費、普通研究進度補充場景。每張保留原碼、原始 JSON、公開觀測快照與 hash。公開 `__gt.sim()` 仍有原 `powerStatus` 道路重算限制；完整模型／隱藏 RNG 另由 Node 配對守衛驗，不混稱純讀。
+- 14 組新增 Node 守衛已過，35 個有效原碼／DOM 輔助突變均被行為斷言抓到。原 `uiPolicy`／`uiBudget`／`uiTech` 對照逐字核對 main 並各自 pin SHA256；整份舊 cityView pin 後，六項缺口及速度／ETA 在舊版均以行為斷言失敗，沒有拿語法或缺變數錯誤充數。
+- 原 D051 21 個突變守衛全保留，按擴充後的 HUD 刷新順序對帳；D045 瀏覽器門檻文字對帳改成「超過 50」，其原實驗線文字快照、數值／相容性檢查不改。CI 總時間45→60分鐘，所有既有檢查及個別門檻保留。
+- 型別與最終 build 已過（HTML `aacdfbbe85e91fa78602d718aacb84ebe4811f95c7da3a4badabe9141ba19b53`）。本地原完整 Node aggregate 573 項／0失敗、860.2秒；該過程後段又補入下列兩组换位守衛，最終14組／35突變另跑全過，最終完整575項以候選 CI 核實。改後 Chrome／完整雙路 CI、本輪新圖目視與業主確認尚未完成，尚未合併或發布。Android 實機未測。
+
+- 獨立審查再抓到同一控件換位時 `insertBefore` 會先拆下節點：用原規則的固定城（seed1、第50天、rk2、32戶 den3）正常推一天升到rk3，委託順序從 `[trade1200,happy70]` 成為 `[happy70,steel40,trade1200]`。改用支援時的原生狀態保留移動，保留 happy70 的焦點與 capture，更新其索引動作；Chrome 新增真觸控按住跨日、放開恰好接受同一條的驗證。依 [Chrome 官方說明](https://developer.chrome.com/blog/movebefore-api) 與 [DOM 規範](https://dom.spec.whatwg.org/#dom-parentnode-movebefore)，舊瀏覽器仍走原生插入並回復焦點／捲動，無法假裝等同原子移動的 capture，不造 click 補救。此兼容路徑另驗，原存檔 fallback 不變。

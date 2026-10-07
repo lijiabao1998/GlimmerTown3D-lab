@@ -33,6 +33,7 @@ import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildU
 import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
 import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
 import { createImportFeedback } from './ui/importFeedback.ts';
+import { updatePanelContent } from './ui/panelContent.ts';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -371,6 +372,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
     if (rep.commission) { const c = CMS_BY_ID385[rep.commission.id]; if (c) { const t = cmsToast(rep.commission.t === 'done' ? 'done' : 'expire', c, rep.commission.t === 'done' ? rep.commission.bonus : undefined); bui.toast(t.text, t.tone); } }   // D045：市長委託完成（獎金已進資金）／過期，當天結算的結果
     if (!cm.hidden) renderCommission();   // D045：面板開著、過了一天：進度、剩餘天數、三選一跟著換
+    if (!tc.hidden) renderTech();         // D052：同一筆結算也更新開著的科技面板，保留原控件
     if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
     if (rep.merges.length) bui.toast(mergesToastText(rep.merges, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(rep.merges[0].x, rep.merges[0].z));   // D034：一筆的字照實驗線（55726、55753）；D042：同一天多筆合成一則；點一下鏡頭過去（第一筆）
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
@@ -715,7 +717,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const box = $('#pl .body'), sec = (title: string, rows: HTMLLIElement[]) => { const h = document.createElement('h3'), ol = document.createElement('ol'); h.textContent = title; ol.append(...rows); return [h, ol]; };
     const hidden = Object.keys(POLICY_CATALOG).filter(k => POLICY_CATALOG[k].type === 'toggle' && !(POLICY_SHOWN.law as readonly string[]).includes(k) && !(POLICY_SHOWN.policy as readonly string[]).includes(k) && sim!.pol && (sim!.pol as Record<string, unknown>)[k]);
     const hidFee = hidden.reduce((a, k) => a + upRegOf({ [k]: true }, [], null, 0, 0), 0);
-    box.replaceChildren(
+    updatePanelContent(box,
       ...sec('稅率', TAX_ROWS.map(([k, n, note]) => plRow('tax', k, n, note))), ...sec('服務預算', BUDGET_CATS.map(c => plRow('budget', c.id, c.nm, BUDGET_NOTE[c.id]))),
       ...sec('法規', POLICY_SHOWN.law.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))), ...sec('政策', POLICY_SHOWN.policy.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))));
     const fees = POLICY_SHOWN.law.concat(POLICY_SHOWN.policy as never).reduce((a, k) => a + (polVal(k) ? POLICY_FEE[k] ?? 0 : 0), 0) + hidFee;
@@ -731,14 +733,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       bui.toast(`📜 ${cfg.nm}：${cfg.type === 'tax' ? `${(old as number).toFixed(1)}× → ${(now as number).toFixed(1)}×` : now ? '開啟' : '關閉'}`, 'gold');
       saveNow();
     } else plTip = left > 0 ? `${cfg.nm}：冷卻中，還剩 ${left} 天才能再調（防止每天開關；實驗線是靜默不動）` : cfg.type === 'tax' ? `${cfg.nm}已經是 ${(old as number).toFixed(1)}×（範圍 0.5–2.0×）` : '';
-    renderPolicy();
+    renderPolicy(); syncUi();
     return r;
   }
   // 服務預算 ±0.1（0.5–1.5，實驗線 setSvcBudget 52968；沒有冷卻）：覆蓋半徑立刻重算。提示字照實驗線 65800
   function uiBudget(cat: string, dir: 1 | -1) {
     if (!sim) return false;
-    const c = BUDGET_CATS.find(q => q.id === cat); if (!c || !setBudget(sim, cat, dir * BUDGET_STEP)) return false;
-    bui.toast(`🎚️ ${c.nm}預算 ×${sim.budget[c.id].toFixed(1)}${dir > 0 ? '（覆蓋更廣、更貴）' : '（省錢、覆蓋縮水）'}`); plTip = '';
+    const c = BUDGET_CATS.find(q => q.id === cat); if (!c) return false;
+    const before = sim.budget[c.id]; if (!setBudget(sim, cat, dir * BUDGET_STEP)) return false;
+    const unchanged = sim.budget[c.id] === before;
+    bui.toast(`🎚️ ${c.nm}預算 ×${sim.budget[c.id].toFixed(1)}${unchanged ? dir > 0 ? '（預算已是上限）' : '（預算已是下限）' : dir > 0 ? '（覆蓋更廣、更貴）' : '（省錢、覆蓋縮水）'}`); plTip = '';
     saveNow(); renderPolicy();
     return true;
   }
@@ -757,8 +761,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   type TechRoute = (typeof TECH_ROUTES)[number][0];
   let tcRoute: TechRoute = 'A', tcTip = '', tcPick = -1;   // tcPick：城市方向按過一下、等第二下確定的編號
   function techEta(n: { id: string; points: number }): string {
+    if (!lastRep) return '推進一天後顯示速度與估計天數';
     const left = n.points - (sim!.tech.prog[n.id] ?? 0), v = Math.max(1, sim!.techSpeed);
-    return `還要 ${Math.max(1, Math.ceil(left / v)).toLocaleString()} 天`;
+    return `按最近速度估計還要 ${Math.max(1, Math.ceil(left / v)).toLocaleString()} 天`;
   }
   function renderTech() {
     if (!sim) return;
@@ -783,7 +788,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     }
     // 研究中
     {
-      const h = mk('h3', '', `研究（每天進度 +${s.techSpeed}，研究院、大學、科技園區、數據中心等加快；已完成 ${done.length}／${TECH343.length}）`), ol = mk('ol'), a = s.tech.act ? TECH343_BY_ID[s.tech.act] : null;
+      const rate = lastRep ? `最近結算 +${s.techSpeed}／天` : '速度待結算';
+      const h = mk('h3', '', `研究（${rate}，研究院、大學、科技園區、數據中心等加快；已完成 ${done.length}／${TECH343.length}）`), ol = mk('ol'), a = s.tech.act ? TECH343_BY_ID[s.tech.act] : null;
       const li = mk('li'), head = mk('div', 'h');
       li.dataset.kind = 'act'; li.dataset.k = a?.id ?? ''; li.dataset.st = a ? 'act' : 'idle';
       if (a) {
@@ -809,13 +815,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         head.append(mk('b', '', `${n.id} ${n.nm}`));
         head.append(isDone ? btn('✔', `${n.nm}：已完成`, null) : isAct ? btn('研究中', `${n.nm}：研究中`, null) : why ? btn('🔒', `${n.nm}：開始不了：${why}`, null)
           : btn(fee > 0 ? `開始 $${fee.toLocaleString()}` : p > 0 ? '繼續（免費）' : '開始（免費）', `${n.nm}：開始研究${fee > 0 ? `，花 $${fee.toLocaleString()}` : '，免費'}`, () => uiTech(n.id)));
-        const parts = [n.effect, `第 ${n.tier} 層`, `${n.points} 點`, ...(isDone ? [] : [`要 $${n.cost.toLocaleString()}`]), ...(p > 0 && !isDone ? [`已有進度 ${p}／${n.points}`] : []), ...(why && !isDone ? [why] : [])];
+        const cost = fee > 0 ? `本次 $${fee.toLocaleString()}` : s.diff === 3 ? '沙盒免費' : '已有進度，續研免費';
+        const parts = [n.effect, `第 ${n.tier} 層`, `${n.points} 點`, ...(isDone || isAct ? [] : [cost]), ...(p > 0 && !isDone ? [`已有進度 ${p}／${n.points}`] : []), ...(why && !isDone ? [why] : [])];
         li.append(head, mk('small', 'note', parts.join('　'))); if (why && !isDone) li.classList.add('lock');
         ol.append(li);
       }
       routeKids.push(bar, ol);
     }
-    box.replaceChildren(...actKids, ...routeKids, ...specKids);
+    updatePanelContent(box, ...actKids, ...routeKids, ...specKids);
     const specNote = s.edu.spec ? `${SPEC386[s.edu.spec].ic} ${SPEC386[s.edu.spec].nm}` : s.diff === 3 ? '沙盒不能選' : s.rankIdx + 1 >= SPEC_MIN_RANK ? '還沒選（在最下面）' : `Lv.${SPEC_MIN_RANK} 起可選`;
     $('#tc .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒：研究免費' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市方向：${specNote}`;
     $('#tc .tip').textContent = tcTip;
@@ -828,7 +835,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       tcTip = ''; if (was !== id) bui.toast(`🔬 開始研究：${n.nm}${r.fee > 0 ? `（−$${r.fee.toLocaleString()}）` : ''}`, 'gold');
       saveNow();
     } else tcTip = `${n.nm}：${r.why ?? '開始不了'}`;
-    renderTech(); syncCommissionHud(); return r;
+    renderTech(); syncUi(); return r;
   }
   // 選城市方向：第一下只是標起來（永久，不給手滑）、第二下對同一個才定。定了：教育科技城整張重建覆蓋場（教育場 ×1.08）、研究速度 +1
   function uiSpec(i: number) {
@@ -900,7 +907,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         kids.push(mk('h3', '', '進行中'), li);
       }
     } else if (state === 'rank') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '城市等級 3 解鎖', `目前 Lv.${s.rankIdx + 1}`));
-    else if (state === 'pop') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '人口 50 解鎖', `目前 ${s.pop}`));
+    else if (state === 'pop') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '人口超過 50 解鎖', `目前 ${s.pop}`));
     else {
       const ol = mk('ol');
       commissionOffers(s).forEach((c, i) => {
@@ -912,7 +919,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       kids.push(mk('h3', '', `${commissionOffers(s).length} 選一（第 ${s.cms.n + 1} 輪）`), ol);
     }
     kids.push(mk('h3', '', '紀錄'), note('done', 'rec', '已完成委託', String(s.cms.done.length), s.cms.done.length ? s.cms.done.map(id => CMS_BY_ID385[id]?.ic ?? '?').join(' ') : '—'));
-    $('#cm .body').replaceChildren(...kids);
+    updatePanelContent($('#cm .body'), ...kids);
     $('#cm .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市 Lv.${s.rankIdx + 1}・已完成 ${s.cms.done.length} 條`;
     $('#cm .tip').textContent = cmTip;
   }

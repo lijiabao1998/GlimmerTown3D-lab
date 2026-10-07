@@ -75,6 +75,9 @@ function harness(sim, source = city) {
     const {${Object.keys(dependencies).join(',')}} = d;
     let sim = x.sim, city = sim?.city ?? { name: 'read-only', gameVer: 1, day: 0, n: 1 };
     const $ = x.node, document = { createElement: tag => new x.Element(tag) };
+    // D052: this older harness observes rendered content, not DOM identity.
+    // The actual reconciliation helper is exercised by D052 and real Chrome.
+    const updatePanelContent = (box, ...kids) => box.replaceChildren(...kids), lastRep = null;
     const own = (o, k) => Object.hasOwn(o, k);
     const localStorage = { getItem: k => x.storage.get(k), setItem: (k,v) => x.storage.set(k,v), removeItem: k => x.storage.delete(k) };
     const kickJournal = () => x.journal.push('unexpected write');
@@ -214,15 +217,15 @@ function actionWiring(source = city) {
   const s = paid.sim, h = harness(s, source), day = s.day, money = s.money, history = s.city.history.length;
   h.syncUi(); assert.ok(h.hud, 'normal syncUi must publish the active commission'); assert.equal(h.hud.progress, '尚未開始');
   clickTech(h, 'C6');
-  assert.deepEqual(h.calls, ['research', 'toast', 'save', 'renderTech', 'commission']);
+  assert.deepEqual(h.calls, ['research', 'toast', 'save', 'renderTech', 'resources', 'hud', 'commission', 'dock']);
   assert.equal(h.hud.progress, '研究中'); assert.equal(h.hud.fraction, 0);
   assert.equal(s.money, money - 5200); assert.equal(s.day, day);
   assert.deepEqual(s.city.history.slice(history), [{ day, t: 'research', id: 'C6', fee: 5200 }]);
   const stable = stateBytes(s); h.calls.length = 0; h.uiTech('C6');
-  assert.deepEqual(h.calls, ['research', 'save', 'renderTech', 'commission']);
+  assert.deepEqual(h.calls, ['research', 'save', 'renderTech', 'resources', 'hud', 'commission', 'dock']);
   assert.equal(stateBytes(s), stable, 'repeat preserves the existing save but never adds a fee/event');
   clickTech(h, 'A1');
-  assert.deepEqual(h.calls, ['research', 'toast', 'save', 'renderTech', 'commission']);
+  assert.deepEqual(h.calls, ['research', 'toast', 'save', 'renderTech', 'resources', 'hud', 'commission', 'dock']);
   assert.equal(h.hud.progress, '尚未開始', 'switch away before any day has produced C6 points');
   assert.equal(s.money, money - 5600); assert.equal(s.day, day);
 
@@ -231,7 +234,7 @@ function actionWiring(source = city) {
   rh.syncUi(); assert.equal(rh.hud.progress, '待繼續');
   for (const [id, text] of [['C6', '研究中'], ['A1', '待繼續'], ['C6', '研究中']]) {
     clickTech(rh, id);
-    assert.deepEqual(rh.calls, ['research', 'toast', 'save', 'renderTech', 'commission']);
+    assert.deepEqual(rh.calls, ['research', 'toast', 'save', 'renderTech', 'resources', 'hud', 'commission', 'dock']);
     assert.equal(rh.hud.progress, text); assert.equal(rh.hud.fraction, 0);
     assert.equal(r.money, originalMoney); assert.equal(r.day, day);
   }
@@ -240,7 +243,7 @@ function actionWiring(source = city) {
     const fh = harness(failed, source), bytes = stateBytes(failed);
     fh.hud = { progress: 'stale sentinel' }; fh.calls.length = 0;
     assert.equal(fh.uiTech('C6').ok, false);
-    assert.deepEqual(fh.calls, ['research', 'renderTech', 'commission']);
+    assert.deepEqual(fh.calls, ['research', 'renderTech', 'resources', 'hud', 'commission', 'dock']);
     assert.equal(fh.hud.progress, '尚未開始', 'failed attempt must still refresh stale HUD');
     assert.ok(fh.tip().includes('學術網絡：')); assert.equal(stateBytes(failed), bytes);
     fh.calls.length = 0; assert.equal(fh.uiTech('UNKNOWN'), null); assert.deepEqual(fh.calls, []);
@@ -333,8 +336,8 @@ function mutations() {
     ['instruction while researching', "p < 1 && s.tech.act !== c.src ?", "p < 1 && s.tech.act === c.src ?", panelStates],
     ['instruction after completion', "c.type === 'tech' && p < 1 &&", "c.type === 'tech' && p <= 1 &&", panelStates],
     ['instruction on wrong types', "c.type === 'tech' && p < 1 &&", "c.type !== 'tech' && p < 1 &&", panelStates],
-    ['paused HUD removed', 'renderTech(); syncCommissionHud(); return r;', 'renderTech(); return r;', actionWiring],
-    ['failed HUD stale', 'renderTech(); syncCommissionHud(); return r;', 'renderTech(); if (r.ok) syncCommissionHud(); return r;', actionWiring],
+    ['paused HUD removed', 'renderTech(); syncUi(); return r;', 'renderTech(); return r;', actionWiring],
+    ['failed HUD stale', 'renderTech(); syncUi(); return r;', 'renderTech(); if (r.ok) syncUi(); return r;', actionWiring],
     ['research repeated', 'r = startResearch(sim, id);', 'r = (startResearch(sim, id), startResearch(sim, id));', actionWiring],
     ['save before research', 'r = startResearch(sim, id);', 'r = (saveNow(), startResearch(sim, id));', actionWiring],
     ['normal HUD removed', '    syncCommissionHud();\n    syncDock();', '    syncDock();', actionWiring],
