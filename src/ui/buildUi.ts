@@ -5,6 +5,7 @@
 // 文字一律用 textContent 寫（選單的註記、城市名都可能來自分享碼）。
 import { ICONS, type IconName } from './icons.ts';
 import { costTagPosition } from './costTag.ts';
+import { createPanelUpdateGate } from './panelPress.ts';
 
 // civic＝公共設施一組（D016）：按下去跟「路」一樣跳出一排可選（警察局、派出所、消防局、醫院……），按鈕上的字跟著選到的那一種
 export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'civic' | 'doze';
@@ -165,7 +166,7 @@ export function createBuildUi(on: BuildUiEvents) {
       <div class="viewNote" id="viewNote" hidden><span>這座城只能看。</span><button id="startBuild">${ICONS.build}開一座新城</button></div>
       <div id="roadSub" hidden></div>
       <div id="civicWrap" hidden><div id="civicSub" hidden></div><button id="civicGuide" type="button" aria-haspopup="dialog" aria-controls="catalog" hidden>設施導覽 ↗</button></div>
-      <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow"></span>
+      <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow" id="dayGrow"></span><button id="siteGuide" type="button" aria-haspopup="dialog" aria-controls="sitePanel" hidden><span id="siteToolName">建造現場 ↗</span><span id="siteDay"></span></button>
         <button class="icoBtn" id="undo" aria-label="復原">${ICONS.undo}</button></div>
       <div class="tools" id="tools"></div>
     </div>
@@ -187,6 +188,8 @@ export function createBuildUi(on: BuildUiEvents) {
   $<HTMLButtonElement>('menuBtn').onclick = () => { on.menuOpen(); menu.hidden = false; };
   $<HTMLButtonElement>('menuX').onclick = () => { menu.hidden = true; };
   $<HTMLButtonElement>('civicGuide').onclick = () => on.menu('catalog');
+  $<HTMLButtonElement>('siteGuide').onclick = () => on.menu('site');
+  const siteGate = createPanelUpdateGate($('siteGuide'));
   $<HTMLButtonElement>('startBuild').onclick = () => on.startBuild();
   $<HTMLButtonElement>('commissionHud').onclick = () => on.menu('commission');
   menu.onclick = e => { if (e.target === menu) menu.hidden = true; };
@@ -209,10 +212,11 @@ export function createBuildUi(on: BuildUiEvents) {
   let measuredCost = { text: '', w: 0, h: 0, viewportWidth: 0 };
   const positionCost = () => {
     if (!cost) return;
-    let estimate = 20; for (const ch of cost.text) estimate += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
+    const lines = cost.text.split('\n'), widths = lines.map(line => { let width = 20; for (const ch of line) width += ch.charCodeAt(0) > 0x2e7f ? 13 : 8; return width; });
+    const estimate = Math.max(...widths);
     const maxWidth = Math.max(1, innerWidth - 16), measured = measuredCost.text === cost.text && measuredCost.viewportWidth === innerWidth;
     const w = measured ? measuredCost.w : Math.min(estimate, maxWidth);
-    const h = measured ? measuredCost.h : 10 + 18 * Math.ceil(estimate / maxWidth);
+    const h = measured ? measuredCost.h : 12 + 18 * widths.reduce((rows, width) => rows + Math.ceil(width / maxWidth), 0);
     const p = costTagPosition(cost.x, cost.y, w, h, innerWidth, innerHeight, Math.max(hudBottom, noticesBottom) + 8, dockTop - 8);
     costTag.hidden = !p;   // A tiny viewport with no free strip must never cover an interactive control.
     if (p) { costTag.style.left = p.left + 'px'; costTag.style.top = p.top + 'px'; }
@@ -308,7 +312,11 @@ export function createBuildUi(on: BuildUiEvents) {
       }
       civicSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.c === d.civicTool));
     },
-    setDay(text: string) { setText($('dayLbl'), text); },
+    setSiteGuide(name: string, result: string | null) {
+      const render = () => { const b = $('siteGuide'), shown = !!name || !!result; b.hidden = !shown; $('dayLbl').hidden = shown; $('dayGrow').hidden = shown; setText($('siteToolName'), name ? name + '・現場' : '建造現場 ↗'); b.dataset.result = String(!!result); b.setAttribute('aria-label', (name ? name + '：操作與選址指引' : '建造現場指引') + (result ? '；' + result : '')); b.title = b.getAttribute('aria-label')!; };
+      if (!siteGate.defer(render)) render();
+    },
+    setDay(text: string) { setText($('dayLbl'), text); setText($('siteDay'), text); },
     setCoach(text: string | null) { const c = $('coach'); c.hidden = !text; setText(c, text ?? ''); },
     // onTap（D026）：災禍的提示點一下跳到那棟建築（實驗線 toast 的 x、y，點了鏡頭過去），沒給就只是提示
     toast(text: string, tone: 'good' | 'bad' | 'gold' | '' = '', onTap?: () => void) {

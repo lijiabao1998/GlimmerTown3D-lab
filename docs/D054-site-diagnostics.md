@@ -23,3 +23,13 @@
 ## 尚未做成
 
 只有施工前卡與原碼核對；產品未改。改前真圖、施工、候選CI、新圖及使用者看圖批准仍待完成。沒有合併／部署。
+
+
+## 改前證據與首版施工（2026-10-07 UTC）
+
+- 施工前卡 `34df37068cc4d0899153f92f62b357cfba1eb651` 先推候選，之後才以隔離 QA 分支拍攝。首次 [QA37697371094](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37697371094) 成功：6場景45 checks、9原圖逐張目視，原D053 HTML `0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd`，173個src完整hash一致。ZIP `a322d1e783213b6e06630d1ab1cb373fe053ae1854dd2dd7a3928cc710ad9ce9` 與 GitHub digest 相同。
+- 加強版 [QA37697502030](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37697502030)／`a534d5855dcdf84b83ffdda5d524a7664ebc3af0` 同樣成功，增加原生復原／重建和6場景×6天不中斷原模擬配對；9圖與首次逐位元組相同。artifact `11515469024` ZIP `0784a35552166640071d28bb499944acec1814a91062bb6080b7793ada8b8f84` 已核對；最小黃金資料收入 `tools/d054-baseline.json`，完整原始狀態／存檔／輸入／圖留在artifact。
+- 首次原圖取得及目視後才改產品。UI用原preview結果判定可建、價格及多格腳印；僅為略過根格再次查原preview補原因，未改156個原規則／IO／內容／渲染檔。管網只讀原pipeComponents／facilityComps，原圖層加入污水工具顯示。
+- 現場入口重用原播放列44px日數區，沒有新增dock列。細節沿用D053焦點／inert控制、D052按住更新gate；原日數仍可見。最近選址明示當時估價快照，當下資金另列；實際結果從commitOp回傳保存，成功復原或換城清除。
+- 查明既有負資金沙盒：preview標affordable，但$0工程仍可能拒絕；UI保留原奇例並明示負資金阻擋，沒有變造免費成功。道路線不預測連續前綴，以真正完成數／實扣回傳為準。
+- 本地typecheck/build與D047–D054專項在檢查中；完整Node已啟動，候選完整Chrome CI／新圖／本輪看圖批准尚未完成。沒有合併或部署。

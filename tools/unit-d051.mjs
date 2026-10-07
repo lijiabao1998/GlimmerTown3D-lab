@@ -90,6 +90,7 @@ function harness(sim, source = city) {
       setCommission: v => { x.calls.push('commission'); x.hud = v; }, setHud: () => x.calls.push('hud') };
     const uiSpec = () => { throw new Error('unexpected specialization action'); };
     const syncRes = () => x.calls.push('resources'), syncDock = () => x.calls.push('dock');
+    const syncSite = () => {}; // D054 closed read-only site surface; original action assertions retained.
     const liveBuildings = () => [], powerStatus = () => ({ powered: 0, unpowered: 0, cap: 0 });
     const simCounts = () => ({ 1: [0,0,0], 2: [0,0,0], 3: [0,0,0] });
     const label = 'D051', loadDay = -1, autosaves = () => false, saveErr = '', jstore = true, jwhy = '';
