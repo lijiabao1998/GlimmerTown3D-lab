@@ -31,6 +31,8 @@ import { MEGA_POP, MEGA_JOBS } from '../src/sim/rules/jobs.ts';
 
 const city = fs.readFileSync(path.join(ROOT, 'src/cityView.ts'), 'utf8');
 const panelSource = fs.readFileSync(path.join(ROOT, 'src/ui/panelContent.ts'), 'utf8');
+const pressPath = path.join(ROOT, 'src/ui/panelPress.ts');
+const pressSource = fs.existsSync(pressPath) ? fs.readFileSync(pressPath, 'utf8') : '';
 const section = (s, from, to) => {
   assert.equal(s.split(from).length, 2, 'unique source boundary: ' + from);
   const a = s.indexOf(from), b = s.indexOf(to, a);
@@ -57,6 +59,8 @@ const stateBytes = s => JSON.stringify(s, (_k, v) => {
 // A small DOM boundary with real move/remove/text/attribute ownership semantics.
 // In particular replaceChildren detaches descendants and clears their focus;
 // tests cannot accidentally pass a destructive redraw by retaining fake focus.
+// Boolean identity assertions avoid formatting the cyclic DOM on expected mutation failures.
+const sameNode = (actual, expected, why = 'same DOM node') => assert.ok(actual === expected, why);
 class TextNode {
   constructor(text, doc) { this.nodeType = 3; this.data = String(text); this.ownerDocument = doc; this.parentNode = null; }
   get textContent() { return this.data; }
@@ -67,8 +71,15 @@ class TextNode {
   get nextSibling() { const a = this.parentNode?.childNodes ?? []; return a[a.indexOf(this) + 1] ?? null; }
   remove() { this.parentNode?.removeChild(this); }
 }
-class Element {
+class EventTargetDouble {
+  constructor(){this.listeners=new Map();}
+  addEventListener(type,fn,options=false){const list=this.listeners.get(type)??[];list.push({fn,capture:typeof options==='boolean'?options:!!options.capture});this.listeners.set(type,list);}
+  removeEventListener(type,fn,options=false){const capture=typeof options==='boolean'?options:!!options.capture;this.listeners.set(type,(this.listeners.get(type)??[]).filter(l=>l.fn!==fn||l.capture!==capture));}
+  fire(event,capture){for(const l of [...(this.listeners.get(event.type)??[])])if(l.capture===capture){event.currentTarget=this;l.fn.call(this,event);}}
+}
+class Element extends EventTargetDouble {
   constructor(tag = 'div', doc) {
+    super();
     this.nodeType = 1; this.tagName = tag.toUpperCase(); this.ownerDocument = doc; this.parentNode = null;
     this.childNodes = []; this.attrs = new Map(); this.styleValues = {};
     this.style = new Proxy(this.styleValues, { set: (t,k,v) => { t[k]=String(v); this.attrs.set('style',Object.entries(t).map(([k,v])=>`${k}: ${v};`).join(' ')); return true; } });
@@ -92,6 +103,7 @@ class Element {
   get lastChild() { return this.childNodes.at(-1) ?? null; }
   get nextSibling() { const a = this.parentNode?.childNodes ?? []; return a[a.indexOf(this) + 1] ?? null; }
   get parentElement() { return this.parentNode; }
+  get isConnected() { for(let n=this;n;n=n.parentNode)if(n===this.ownerDocument.body)return true;return false; }
   get className() { return this.getAttribute('class') ?? ''; }
   set className(v) { this.setAttribute('class', v); }
   get attributes() { return [...this.attrs].map(([name, value]) => ({ name, value })); }
@@ -102,6 +114,8 @@ class Element {
   }
   removeAttribute(k) { this.attrs.delete(k);if(k==='style')for(const key of Object.keys(this.styleValues))delete this.styleValues[key]; }
   hasAttribute(k) { return this.attrs.has(k); }
+  matches(selector) { return selector==='button'?this.tagName==='BUTTON':selector==='[hidden]'?this.hidden:false; }
+  closest(selector) { for(let n=this;n;n=n.parentNode)if(n.matches?.(selector))return n;return null; }
   get textContent() { return this.childNodes.map(c => c.textContent).join(''); }
   set textContent(v) { this.replaceChildren(...(String(v) ? [this.ownerDocument.createTextNode(v)] : [])); }
   set innerHTML(_) { throw new Error('D052 never interprets HTML'); }
@@ -121,7 +135,7 @@ class Element {
     return node;
   }
   moveBefore(node, ref) {
-    assert.equal(node.parentNode,this,'atomic path is only for an already-parented row');
+    sameNode(node.parentNode,this,'atomic path is only for an already-parented row');
     if(node===ref)return;
     if(ref!==null)assert.ok(this.childNodes.includes(ref));
     // Native state-preserving move: no detach, blur or loss of pointer capture.
@@ -147,11 +161,24 @@ class Element {
   setPointerCapture(id) { this.ownerDocument.captures.set(id,this); }
   hasPointerCapture(id) { return this.ownerDocument.captures.get(id)===this; }
   releasePointerCapture(id) { this.ownerDocument.captures.delete(id); }
-  click() { if (!this.disabled) return this.onclick?.({ target: this }); }
+  click() { if (!this.disabled) return this.ownerDocument.emit('click',{target:this}); }
 }
 function domDocument({ atomic = true } = {}) {
-  const doc={activeElement:null,captures:new Map(),captureLosses:[],atomicMoves:0,focusCalls:[],
-    createElement:tag=>{const e=new Element(tag,doc);if(!atomic)e.moveBefore=undefined;return e;},createTextNode:text=>new TextNode(text,doc)};
+  const doc=Object.assign(new EventTargetDouble(),{activeElement:null,captures:new Map(),captureLosses:[],atomicMoves:0,focusCalls:[],visibilityState:'visible',
+    createElement:tag=>{const e=new Element(tag,doc);if(!atomic)e.moveBefore=undefined;return e;},createTextNode:text=>new TextNode(text,doc)});
+  doc.defaultView=new EventTargetDouble();doc.body=doc.createElement('body');
+  let timerId=0;doc.timers=new Map();doc.setTimeout=fn=>{doc.timers.set(++timerId,fn);return timerId;};doc.clearTimeout=id=>doc.timers.delete(id);
+  doc.runTimers=()=>{const ready=[...doc.timers];doc.timers.clear();for(const [,fn]of ready)fn();};
+  doc.defaultView.setTimeout=doc.setTimeout;doc.defaultView.clearTimeout=doc.clearTimeout;
+  doc.emit=(type,fields={})=>{
+    const target=fields.target??doc,event={type,target,pointerId:1,pointerType:'touch',button:0,isTrusted:true,defaultPrevented:false,...fields,
+      preventDefault(){this.defaultPrevented=true;},stopPropagation(){this.stopped=true;},composedPath(){return path;}};
+    const path=[];for(let node=target;node;node=node.parentNode)path.push(node);
+    if(!path.includes(doc)&&target!==doc.defaultView)path.push(doc);if(!path.includes(doc.defaultView))path.push(doc.defaultView);
+    for(const node of [...path].reverse()){node.fire?.(event,true);if(event.stopped)return;}
+    let result;for(const node of path){node.fire?.(event,false);if(typeof node['on'+type]==='function'){const value=node['on'+type](event);if(node===target)result=value;}if(event.stopped)break;}
+    return result;
+  };
   return doc;
 }
 
@@ -181,7 +208,11 @@ function harness(fixture, source = city, options = {}) {
   const h = { fixture, sim: fixture.sim, nodes: new Map(), doc, calls: [], toasts: [], storage: new Map([['existing-save', 'unchanged']]),
     journal: [], rngCalls: [], options: { autosave: true, ...options }, reports: [] };
   h.node = selector => {
-    if (!h.nodes.has(selector)) { const e = doc.createElement('div'); if (/^#\w+$/.test(selector)) e.hidden = true; h.nodes.set(selector, e); }
+    if (!h.nodes.has(selector)) {
+      const e=doc.createElement(/X$/.test(selector)?'button':'div');h.nodes.set(selector,e);
+      const child=selector.match(/^#(pl|tc|cm)(?:\s|X)/);
+      if(child)h.node('#'+child[1]).append(e);else{e.hidden=true;doc.body.append(e);}
+    }
     if (selector === '#tc .body') h.calls.push('renderTech');
     if (selector === '#cm .body') h.calls.push('renderCommission');
     return h.nodes.get(selector);
@@ -210,10 +241,13 @@ function harness(fixture, source = city, options = {}) {
   ];
   const js = `"use strict";
     const {${Object.keys(dependencies).join(',')}} = d;
-    const HTMLElement = x.Element;
+    const HTMLElement = x.Element, Element = x.Element;
     ${stripTypeScriptTypes(options.panelSource ?? panelSource).replace('export function updatePanelContent','function updatePanelContent')}
     let sim = x.sim, city = sim.city, lastRep = null;
-    const $ = x.node, document = x.doc, own = (o,k) => Object.hasOwn(o,k);
+    const $ = x.node, document = x.doc, window = document.defaultView, own = (o,k) => Object.hasOwn(o,k);
+    const setTimeout = document.setTimeout, clearTimeout = document.clearTimeout;
+    const addEventListener = window.addEventListener.bind(window), removeEventListener = window.removeEventListener.bind(window);
+    ${stripTypeScriptTypes(options.pressSource ?? pressSource).replace('export function createPanelUpdateGate','function createPanelUpdateGate')}
     const startResearch = (s,id) => { x.calls.push('research'); return x.startResearch(s,id); };
     const setPolicy = (s,k,v) => { x.calls.push('policy'); return x.setPolicy(s,k,v); };
     const setBudget = (s,k,v) => { x.calls.push('budget'); return x.setBudget(s,k,v); };
@@ -248,6 +282,7 @@ function harness(fixture, source = city, options = {}) {
       openTech, renderTech, openPolicy, renderPolicy, openCommission, renderCommission, simDay, advance,
       route: r => { tcRoute = r; }, setSim: s => { sim = s; }, tip: () => tcTip, pick: () => tcPick,
       lastReport: () => lastRep, saveError: () => saveErr, journalState: () => ({jwhy,jConf,jBusy,jSaved,enabled:!!jstore}) });
+    if (typeof closeDecisionPanels === 'function') x.closeDecisionPanels = closeDecisionPanels;
   `;
   new Function('x', 'd', js)(Object.assign(h, { Element, startResearch, setPolicy, setBudget, acceptCommission, dropCommission, stepDay }), dependencies);
   return h;
@@ -474,11 +509,11 @@ function trajectories(source = city) {
 function stableControls(source = city, helper = panelSource) {
   const h=harness(d045Load({rk:8,tech343:{act:'A1',prog:{A1:5},done:[]}},10000),source,{panelSource:helper});h.syncUi();h.openTech();
   const b=buttons(techRow(h,'B1'))[0],body=h.node('#tc .body');b.focus();body.scrollTop=320;body.scrollLeft=7;
-  h.advance(1);assert.equal(buttons(row(h,'tc','tech','B1'))[0],b,'unchanged actionable button retains identity across day');
-  assert.equal(h.doc.activeElement,b,'focused unchanged control remains focused');assert.equal(body.scrollTop,320);assert.equal(body.scrollLeft,7);
+  h.advance(1);sameNode(buttons(row(h,'tc','tech','B1'))[0],b,'unchanged actionable button retains identity across day');
+  sameNode(h.doc.activeElement,b,'focused unchanged control remains focused');assert.equal(body.scrollTop,320);assert.equal(body.scrollLeft,7);
   const money=h.sim.money;resetCalls(h);b.click();assert.equal(h.sim.tech.act,'B1');assert.equal(h.sim.money,money-400);assert.equal(count(h,'research'),1,'retained control fires once with current handler');
   const [a,c]=pair(()=>capacityFixture(),source);a.openPolicy();c.openPolicy();const plus=buttons(row(a,'pl','budget','edu'))[1];plus.focus();
-  a.uiPolicy('ecoReg',true);c.uiPolicy('ecoReg',true);assert.equal(buttons(row(a,'pl','budget','edu'))[1],plus,'unrelated policy refresh retains budget control');assert.equal(a.doc.activeElement,plus);equalModels(a,c,'stable policy rendering');
+  a.uiPolicy('ecoReg',true);c.uiPolicy('ecoReg',true);sameNode(buttons(row(a,'pl','budget','edu'))[1],plus,'unrelated policy refresh retains budget control');sameNode(a.doc.activeElement,plus);equalModels(a,c,'stable policy rendering');
 }
 
 function helperBehavior(helper = panelSource, atomic = true) {
@@ -494,27 +529,27 @@ function helperBehavior(helper = panelSource, atomic = true) {
   const button=a.children[0],bar=a.children[1];button.focus();parent.scrollTop=150;
   const freshA=make('A1','start',false,'new-a','25%');freshA.removeAttribute('data-old');
   update(parent,freshA,make('B1','ready',false,'new-b','0%'));
-  assert.equal(parent.children[0],a);assert.equal(a.children[0],button);assert.equal(a.children[1],bar);
-  assert.equal(doc.activeElement,button);assert.equal(parent.scrollTop,150);assert.equal(a.hasAttribute('data-old'),false);
+  sameNode(parent.children[0],a);sameNode(a.children[0],button);sameNode(a.children[1],bar);
+  sameNode(doc.activeElement,button);assert.equal(parent.scrollTop,150);assert.equal(a.hasAttribute('data-old'),false);
   assert.equal(button.disabled,false);assert.equal(button.getAttribute('aria-label'),'start');assert.equal(button.textContent,'start');assert.equal(bar.style.width,'25%');
   button.click();assert.deepEqual(calls,['new-a'],'reused button gets newest handler exactly once');
   const movedButton=b.children[0];movedButton.focus();movedButton.setPointerCapture(7);parent.scrollTop=150;parent.scrollLeft=11;
   update(parent,make('B1','ready',false,'newest-b','100%'),make('A1','active',true,'newest-a','30%'));
-  assert.equal(parent.children[0],b,'keyed reorder retains correct identity');assert.equal(parent.children[1],a);
-  assert.equal(doc.activeElement,movedButton,'retained reordered control keeps focus');assert.equal(parent.scrollTop,150);assert.equal(parent.scrollLeft,11);
+  sameNode(parent.children[0],b,'keyed reorder retains correct identity');sameNode(parent.children[1],a);
+  sameNode(doc.activeElement,movedButton,'retained reordered control keeps focus');assert.equal(parent.scrollTop,150);assert.equal(parent.scrollLeft,11);
   if(atomic){assert.ok(doc.atomicMoves>0,'native atomic move is exercised');assert.equal(movedButton.hasPointerCapture(7),true,'atomic reordered control keeps capture');assert.deepEqual(doc.captureLosses,[]);}
   else{assert.equal(doc.atomicMoves,0);assert.equal(movedButton.hasPointerCapture(7),false,'legacy detach cannot preserve capture');assert.deepEqual(doc.focusCalls.at(-1),{preventScroll:true},'legacy restores focus without scrolling');}
   assert.equal(b.children[0].disabled,false);assert.equal(a.children[0].disabled,true);b.children[0].click();assert.deepEqual(calls,['new-a','newest-b']);
   update(parent,make('B1','done',true,'unused','100%'));assert.equal(b.children[0].disabled,true);b.children[0].click();assert.deepEqual(calls,['new-a','newest-b']);assert.equal(a.parentNode,null,'removed row detaches');assert.equal(parent.children.length,1);
-  const text=doc.createTextNode('plain');update(parent,text);assert.equal(parent.firstChild,text,'incompatible element is replaced by text');
-  update(parent,doc.createTextNode('updated'));assert.equal(parent.firstChild,text);assert.equal(text.nodeValue,'updated');
+  const text=doc.createTextNode('plain');update(parent,text);sameNode(parent.firstChild,text,'incompatible element is replaced by text');
+  update(parent,doc.createTextNode('updated'));sameNode(parent.firstChild,text);assert.equal(text.nodeValue,'updated');
   const span=doc.createElement('span'),strong=doc.createElement('strong');span.textContent='a';strong.textContent='b';update(parent,span);update(parent,strong);
-  assert.equal(parent.firstChild,strong,'different element names cannot be reused');
+  sameNode(parent.firstChild,strong,'different element names cannot be reused');
 }
 
-function promotionFixture() {
+function promotionFixture(seed=1) {
   const {KT,vrank}=builtBase();
-  const code=mk(1,50,'D052 real daily promotion',b=>{
+  const code=mk(seed,50,'D052 real daily promotion',b=>{
     b.road(4,30,60,30,3).put(3,30,5);
     for(let x=10;x<42;x++)b.put(x,29,1,1,{den:3});
   },{rk:2,money:10000,cms385:{act:'',st:0,acc:0,hold:0,n:0,done:[]}});
@@ -531,13 +566,107 @@ function promotedCommission(source=city,helper=panelSource,atomic=true) {
   resetCalls(h,c);h.advance(1);c.advance(1);equalModels(h,c,'commission actual rank promotion');
   assert.equal(h.sim.rankIdx,3);assert.equal(h.sim.cityPoints,169);assert.deepEqual(h.reports.at(-1).rank.promoted,[3]);
   assert.deepEqual(rows(h,'cm','offer').map(e=>e.dataset.k),['happy70','steel40','trade1200']);
-  assert.equal(row(h,'cm','offer','happy70'),oldHappy);assert.equal(buttons(oldHappy)[0],button);
-  assert.equal(h.doc.activeElement,button,'real reordered offer retains active control');assert.equal(offers.scrollTop,87);assert.equal(offers.scrollLeft,9);
+  sameNode(row(h,'cm','offer','happy70'),oldHappy);sameNode(buttons(oldHappy)[0],button);
+  sameNode(h.doc.activeElement,button,'real reordered offer retains active control');assert.equal(offers.scrollTop,87);assert.equal(offers.scrollLeft,9);
   assert.equal(button.hasPointerCapture(11),atomic,'capture retained only by real atomic path');
   const history=h.sim.city.history.length;button.releasePointerCapture(11);resetCalls(h,c);button.click();c.uiCommission('accept',0);
   assert.equal(h.sim.cms.act,'happy70','retained button uses its new offer index, not the old index for steel40');
   equalModels(h,c,'promoted offer current acceptance handler');assert.equal(count(h,'accept'),1);assert.equal(count(h,'save'),1);
   assert.deepEqual(h.sim.city.history.slice(history),[{day:51,t:'cms',ev:'accept',id:'happy70'}]);
+}
+
+function panelGateCases(source=pressSource) {
+  const create=new Function('HTMLElement','Element',stripTypeScriptTypes(source).replace('export function createPanelUpdateGate','function createPanelUpdateGate')+'; return createPanelUpdateGate;')(Element,Element);
+  const setup=()=>{
+    const doc=domDocument(),panel=doc.createElement('div'),button=doc.createElement('button'),other=doc.createElement('button');
+    doc.body.append(panel,other);panel.append(button);const gate=create(panel),events=[];
+    const send=(type,id=1,target=button)=>doc.emit(type,{target,pointerId:id});
+    const defer=label=>{assert.equal(gate.defer(()=>events.push(label)),true);};
+    return{doc,panel,button,other,gate,events,send,defer};
+  };
+  {
+    const q=setup();assert.equal(q.gate.defer(()=>q.events.push('unexpected')),false);
+    q.button.disabled=true;q.send('pointerdown');assert.equal(q.gate.defer(()=>{}),false);q.button.disabled=false;
+    q.doc.emit('pointerdown',{target:q.button,button:2});assert.equal(q.gate.defer(()=>{}),false);
+    q.send('pointerdown',1,q.other);assert.equal(q.gate.defer(()=>{}),false);
+    q.panel.hidden=true;q.send('pointerdown');assert.equal(q.gate.defer(()=>{}),false);q.panel.hidden=false;
+    q.send('pointerdown');q.defer('superseded');q.defer('latest');q.send('pointerup');
+    assert.deepEqual(q.events,[],'pointerup cannot shift geometry before native click');
+    q.send('lostpointercapture');assert.deepEqual(q.events,[],'lost capture cannot trigger a pre-click render');
+    q.button.onclick=()=>{q.events.push('original action');q.defer('latest after action');};
+    q.send('click');assert.deepEqual(q.events,['original action','latest after action'],'target action runs before click-bubble latest render');
+    q.doc.runTimers();assert.deepEqual(q.events,['original action','latest after action'],'release fallback cannot duplicate successful click flush');
+  }
+  {
+    const q=setup();q.button.onclick=()=>q.events.push('unexpected activation');q.send('pointerdown');q.defer('latest');q.send('pointerup');assert.deepEqual(q.events,[]);
+    q.doc.runTimers();assert.deepEqual(q.events,['latest'],'released pointer with no click recovers in next task');assert.equal(q.gate.defer(()=>{}),false);
+  }
+  {
+    const q=setup();q.send('pointerdown',1);q.send('pointerdown',2);q.defer('both');q.send('pointerup',1);q.send('click',1);
+    q.doc.runTimers();assert.deepEqual(q.events,[],'second held pointer keeps the panel stationary');q.send('pointerup',2);q.send('click',2);assert.deepEqual(q.events,['both']);
+  }
+  {
+    const q=setup();q.send('pointerdown',1);q.defer('old');q.send('pointerup',1);
+    const oldTimer=[...q.doc.timers.values()][0];q.send('pointerdown',2);q.defer('new');oldTimer();
+    assert.deepEqual(q.events,[],'stale no-click timer cannot unlock a newer press');q.send('pointerup',2);q.send('click',2);q.doc.runTimers();assert.deepEqual(q.events,['new']);
+  }
+  for(const reason of ['pointercancel','blur','pagehide','visibilitychange']){
+    const q=setup();q.button.onclick=()=>q.events.push('unexpected activation');q.send('pointerdown');q.defer(reason);
+    if(reason==='visibilitychange'){q.doc.hidden=true;q.doc.visibilityState='hidden';q.doc.emit(reason,{target:q.doc});}
+    else q.doc.emit(reason,{target:reason==='pointercancel'?q.button:q.doc.defaultView,pointerId:1});
+    q.doc.runTimers();assert.deepEqual(q.events,[reason],reason+' releases pending latest view without activation');assert.equal(q.gate.defer(()=>{}),false);
+  }
+  {
+    const q=setup();q.send('pointerdown');q.defer('stale');q.send('pointerup');const oldTimer=[...q.doc.timers.values()][0];
+    q.gate.cancel();q.panel.hidden=true;oldTimer();q.send('click');q.doc.runTimers();assert.deepEqual(q.events,[],'close/cancel discards delayed presentation');
+    q.panel.hidden=false;q.send('pointerdown',2);q.defer('reopened');q.send('pointerup',2);q.send('click',2);q.doc.runTimers();assert.deepEqual(q.events,['reopened']);
+  }
+}
+
+const panelText=(h,id)=>['.body','.sub','.tip'].map(k=>h.node('#'+id+' '+k).textContent);
+function heldPanelPresentation(source=city,gateSource=pressSource) {
+  const [h,c]=pair(promotionFixture,source,{pressSource:gateSource});h.openCommission();
+  const button=buttons(row(h,'cm','offer','happy70'))[0],before=panelText(h,'cm'),history=h.sim.city.history.length;
+  h.doc.emit('pointerdown',{target:button,pointerId:8});resetCalls(h,c);h.advance(1);c.advance(1);
+  equalModels(h,c,'held promotion still settles exact original model');assert.equal(h.sim.rankIdx,3);assert.equal(h.hud.money,h.sim.money);
+  assert.deepEqual(panelText(h,'cm'),before,'held promotion freezes body, sub and tip, not only node identity');
+  assert.deepEqual(rows(h,'cm','offer').map(e=>e.dataset.k),['trade1200','happy70'],'held old order remains until activation');
+  h.doc.emit('pointerup',{target:button,pointerId:8});h.doc.emit('lostpointercapture',{target:button,pointerId:8});
+  assert.deepEqual(panelText(h,'cm'),before,'pointerup/lostcapture cannot reorder before click');
+  resetCalls(h,c);h.doc.emit('click',{target:button,pointerId:8});c.uiCommission('accept',0);h.doc.runTimers();
+  assert.equal(h.sim.cms.act,'happy70','frozen offer resolves its current ID, not its old index');equalModels(h,c,'held offer exact one action/save');
+  assert.equal(count(h,'accept'),1);assert.equal(count(h,'save'),1);assert.deepEqual(h.sim.city.history.slice(history).filter(e=>e.t==='cms'),[{day:51,t:'cms',ev:'accept',id:'happy70'}]);
+  assert.notDeepEqual(panelText(h,'cm'),before);assert.equal(rows(h,'cm','act').length,1,'latest panel flushes after acceptance');
+
+  const [gone,goneControl]=pair(()=>promotionFixture(5),source,{pressSource:gateSource});gone.openCommission();
+  const goneButton=buttons(row(gone,'cm','offer','happy70'))[0];gone.doc.emit('pointerdown',{target:goneButton,pointerId:9});
+  gone.advance(1);goneControl.advance(1);assert.equal(gone.sim.rankIdx,3);assert.ok(!commissionOffers(gone.sim).some(c=>c.id==='happy70'),'saved seed5 promotion removes the pressed offer');
+  gone.doc.emit('pointerup',{target:goneButton,pointerId:9});resetCalls(gone,goneControl);gone.doc.emit('click',{target:goneButton,pointerId:9});goneControl.uiCommission('accept',-1);gone.doc.runTimers();
+  equalModels(gone,goneControl,'disappeared pressed offer keeps original reject -1 semantics');assert.equal(gone.sim.cms.act,'');assert.equal(count(gone,'accept'),1);assert.equal(count(gone,'save'),0);assert.match(gone.node('#cm .tip').textContent,/接不了/);
+
+  const [tech,techControl]=pair(()=>d045Load({rk:8,tech343:{act:'A1',prog:{A1:5},done:[]}},10000),source,{pressSource:gateSource});
+  tech.openTech();const target=tech.node('#tc .body').all(e=>e.dataset.route==='B')[0],techBefore=panelText(tech,'tc');
+  tech.doc.emit('pointerdown',{target,pointerId:2});resetCalls(tech,techControl);tech.advance(1);techControl.advance(1);
+  equalModels(tech,techControl,'held research progresses immediately');assert.equal(tech.sim.tech.prog.A1,6);assert.deepEqual(panelText(tech,'tc'),techBefore,'held research keeps all presentation fixed');
+  tech.doc.emit('pointerup',{target,pointerId:2});assert.deepEqual(panelText(tech,'tc'),techBefore);tech.doc.runTimers();assert.match(tech.node('#tc .sub').textContent,/第 151 天/);
+
+  const [policy,policyControl]=pair(()=>capacityFixture(),source,{pressSource:gateSource});policy.openPolicy();const plus=buttons(row(policy,'pl','budget','edu'))[1],policyBefore=panelText(policy,'pl');
+  policy.doc.emit('pointerdown',{target:plus,pointerId:3});resetCalls(policy,policyControl);policy.uiPolicy('ecoReg',true);policyControl.uiPolicy('ecoReg',true);
+  equalModels(policy,policyControl,'held policy keeps immediate original action');assert.deepEqual(policy.hud.power,[78,80]);assert.equal(policy.coach,null);assert.deepEqual(panelText(policy,'pl'),policyBefore,'held policy keeps body/sub/tip fixed');
+  policy.doc.emit('pointercancel',{target:plus,pointerId:3});policy.doc.runTimers();assert.notDeepEqual(panelText(policy,'pl'),policyBefore);
+}
+
+function gatePanelLifecycle(source=city) {
+  for(const close of ['button','backdrop','city']){
+    const h=harness(promotionFixture(),source);h.syncUi();h.openCommission();const button=buttons(row(h,'cm','offer','happy70'))[0];
+    h.doc.emit('pointerdown',{target:button,pointerId:3});h.advance(1);const stale=panelText(h,'cm');
+    h.doc.emit('pointerup',{target:button,pointerId:3});const timer=[...h.doc.timers.values()][0];
+    if(close==='button')h.node('#cmX').click();else if(close==='backdrop')h.doc.emit('click',{target:h.node('#cm'),pointerId:99});else h.closeDecisionPanels();
+    assert.equal(h.node('#cm').hidden,true);timer();h.doc.runTimers();assert.deepEqual(panelText(h,'cm'),stale,'closed panel cannot replay stale queued render: '+close);
+    h.openCommission();assert.deepEqual(rows(h,'cm','offer').map(e=>e.dataset.k),['happy70','steel40','trade1200']);
+    const fresh=buttons(row(h,'cm','offer','happy70'))[0];resetCalls(h);h.doc.emit('pointerdown',{target:fresh,pointerId:4});h.renderCommission();h.doc.emit('pointerup',{target:fresh,pointerId:4});h.doc.emit('click',{target:fresh,pointerId:4});h.doc.runTimers();
+    assert.equal(h.sim.cms.act,'happy70');assert.equal(count(h,'accept'),1);assert.equal(count(h,'save'),1);
+  }
 }
 
 // Short independent probes keep mutations affordable; broad guards above cover
@@ -567,6 +696,27 @@ function mutationReadOnly(source) {
 function mutateFunction(source,name,from,to) {
   const start='  function '+name+'(',ends={uiPolicy:'  // 服務預算',uiBudget:'  function openPolicy()',uiTech:'  // 選城市方向',renderTech:'  // 開始研究',simDay:'  function setPlaying',techEta:'  function renderTech()'};
   const body=section(source,start,ends[name]);return source.replace(body,()=>change(body,from,to));
+}
+function staleOfferIndex(source) {
+  return change(change(source,'commissionOffers(s).forEach(c => {','commissionOffers(s).forEach((c, i) => {'),
+    'sim ? commissionOffers(sim).findIndex(now => now.id === c.id) : -1','i');
+}
+function pressMutations(source=city) {
+  const views=[
+    ['commission held presentation gate removed','if (cmGate.defer(renderCommission)) return;'],
+    ['research held presentation gate removed','if (tcGate.defer(renderTech)) return;'],
+    ['policy held presentation gate removed','if (plGate.defer(renderPolicy)) return;'],
+  ];
+  for(const [name,from]of views)assert.throws(()=>heldPanelPresentation(change(source,from,'void 0;')),e=>e?.code==='ERR_ASSERTION',name);
+  const gates=[
+    ['pointerup eagerly flushes before click','presses.set(event.pointerId, true); releaseFallback();','presses.delete(event.pointerId); flush();'],
+    ['lost capture incorrectly flushes before click',"  doc.addEventListener('click', event => {","  doc.addEventListener('lostpointercapture', () => { presses.clear(); flush(); });\n  doc.addEventListener('click', event => {"],
+    ['only obsolete first pending render retained','pending = renderLatest; return true;','pending ??= renderLatest; return true;'],
+    ['cancel replays stale pending render','presses.clear(); pending = null;','presses.clear(); flush();'],
+    ['no-click fallback remains locked','if (released) presses.delete(id);','if (false) presses.delete(id);'],
+  ];
+  for(const [name,from,to]of gates)assert.throws(()=>panelGateCases(change(pressSource,from,to)),e=>e?.code==='ERR_ASSERTION',name);
+  return `${views.length+gates.length} additional actual gate/wiring mutations rejected`;
 }
 function mutations(source=city) {
   const list=[
@@ -610,7 +760,9 @@ function mutations(source=city) {
     ['atomic move regresses to detaching insertion',change(panelSource,'parent.moveBefore(node, reference);','parent.insertBefore(node, reference);'),s=>helperBehavior(s,true)],
     ['legacy move omits focus recovery',change(panelSource,'if (restoreFocus) active.focus({ preventScroll: true });','void 0;'),s=>helperBehavior(s,false)],
     ['legacy move omits pre-move scroll restoration',change(panelSource,'parent.scrollTop = top; parent.scrollLeft = left;','void 0;'),s=>helperBehavior(s,false)],
-    ['promoted real offer retains its stale index handler',change(panelSource,'old.onclick = fresh.onclick;','void 0;'),s=>promotedCommission(source,s)],
+    // Stable-ID handlers intentionally remain correct even if an old handler is
+    // retained. Regress the real old-index behavior while the gate freezes it.
+    ['held promoted real offer uses its stale index',staleOfferIndex(source),s=>heldPanelPresentation(s)],
   ];
   for(const [name,altered,test]of reorderMutations)assert.throws(()=>test(altered),e=>e?.code==='ERR_ASSERTION',name);
   return `${list.length+helpers.length+reorderMutations.length} valid actual-source/helper mutations rejected by behavioral assertions`;
@@ -635,11 +787,19 @@ export function d052Guards(log, source = city) {
   test('one original daily promotion reorders actual offers, retaining moved control focus/capture and its new acceptance index',()=>{
     promotedCommission(source);promotedCommission(source,panelSource,false);
   });
+  test('actual press gate handles click ordering, latest render, no-click/cancel, two pointers, new-press timer race and lifecycle',()=>panelGateCases());
+  test('held panels freeze all presentation while model/HUD/save remain immediate; real promoted offer accepts by current ID',heldPanelPresentation);
+  test('actual close/backdrop/city cleanup discards queued render and reopening accepts exactly once',gatePanelLifecycle);
   test('valid behavior mutations are rejected by independent assertions',mutations);
+  test('actual press gate and renderer wiring mutations are rejected',pressMutations);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   let bad=0;const log=(ok,name,detail)=>{console.log(ok?'OK':'NG',name,detail??'');if(!ok)bad++;};
-  if(process.argv[2]==='--baseline'){
+  if(process.argv[2]==='--press'){
+    for(const [name,fn]of [['gate',()=>panelGateCases()],['held original functions',()=>heldPanelPresentation()],['cleanup',()=>gatePanelLifecycle()],['gate mutations',()=>pressMutations()],['stale offer index',()=>assert.throws(()=>heldPanelPresentation(staleOfferIndex(city)),e=>e?.code==='ERR_ASSERTION')]]){
+      try{log(true,'D052 focused press '+name,fn());}catch(e){log(false,'D052 focused press '+name,e.stack);}
+    }
+  }else if(process.argv[2]==='--baseline'){
     const source=fs.readFileSync(process.argv[3],'utf8');
     assert.equal(createHash('sha256').update(source).digest('hex'),'1dbdcc057c68d7c8589614a4dbc75bd62297af811829d17e24abca11a8c243b5','unaltered original main cityView');
     for(const [name,check]of [['paid HUD',pausedMoney],['policy capacity/coach',policyCapacity],['budget boundary',budgetBoundaries],['free fee text',feeTruth],['population threshold text',commissionThreshold],['open daily research',dailyResearch],['last-settlement rate/ETA',rateSemantics]]){

@@ -56,3 +56,12 @@
 - 型別與最終 build 已過（HTML `aacdfbbe85e91fa78602d718aacb84ebe4811f95c7da3a4badabe9141ba19b53`）。本地原完整 Node aggregate 573 項／0失敗、860.2秒；該過程後段又補入下列兩组换位守衛，最終14組／35突變另跑全過，最終完整575項以候選 CI 核實。改後 Chrome／完整雙路 CI、本輪新圖目視與業主確認尚未完成，尚未合併或發布。Android 實機未測。
 
 - 獨立審查再抓到同一控件換位時 `insertBefore` 會先拆下節點：用原規則的固定城（seed1、第50天、rk2、32戶 den3）正常推一天升到rk3，委託順序從 `[trade1200,happy70]` 成為 `[happy70,steel40,trade1200]`。改用支援時的原生狀態保留移動，保留 happy70 的焦點與 capture，更新其索引動作；Chrome 新增真觸控按住跨日、放開恰好接受同一條的驗證。依 [Chrome 官方說明](https://developer.chrome.com/blog/movebefore-api) 與 [DOM 規範](https://dom.spec.whatwg.org/#dom-parentnode-movebefore)，舊瀏覽器仍走原生插入並回復焦點／捲動，無法假裝等同原子移動的 capture，不造 click 補救。此兼容路徑另驗，原存檔 fallback 不變。
+
+## 首輪完整 CI 的失敗與原生觸控修正（2026-10-07 13:38 UTC）
+
+- `f43a4634` 的 push `37619713668` 與 PR `37619811916` 均是 Node **575通過／0失敗**、browser **639通過／1失敗**。唯一失敗為按住 happy70 後真日結算升級／換位，放開沒有接受委託。不是超時，也沒有省略失敗記錄。
+- Chrome154 原始事件證明：同一按鈕仍有焦點，trusted pointerdown／gotpointercapture／pointerup／lostpointercapture 都是 happy70；最後 native click 卻被送往外層。只保留 DOM 節點和 capture 不足以保住移動中的點擊目標。六張改後介面图本身與其他驗收皆通過；全輪仍判失敗，不發布。
+- `panelPress.ts` 被動觀察原有指標事件，在按住到原生 click 的既有處理完成前，保留整個面板位置與文字，僅留一個最新 renderer；模型日結算、HUD、存檔仍立即照舊。click 冒泡後刷新；取消、失焦、背景、關閉、Escape、重開、換城清理舊工作。無 click 的下一任務回復帶代次核對，不會解除新的手指；此時序已實測 Chrome154，其他引擎延遲 click 的行為不冒稱已驗。
+- 接受鈕保存委託 ID，點擊時依目前的原 offers 找索引，再走原 accept；目標已移出便走既有 −1 拒絕，不會接到原位置的新委託。不造 click、不調 capture、不改手勢或委託規則。有效／消失兩座固定城都由存檔與原 simDay 自然升級產生。
+- QA-only `claude/d052-touch-verification`／`d3f4847b4b270e3b19b0033dca97ccbc8e5869e3` 的[短雲端驗證](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37628928668) 終態 success：**18 Node組、43突變、73 browser檢查、20個真Chrome profile，零失敗**。原生按住接單、移除目標拒絕、取消／Escape／重開都通過。六圖逐位元組等於首輪六張介面圖；artifact `11484908680` ZIP SHA256 `d04c1c00c2faa9484e7b473e5750f3b9a9398a08ca114075c04efb1cfef9b343`，實際 build HTML SHA256 `4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075`。
+- 此 QA 分支只有核驗工作流，無部署且永不合併。原候選完整工作流與全部舊門檻保留；接著跑修正版的原完整雙路 CI。短驗證不是完整驗收，圖片也尚未交業主確認，現在仍不合併／發布。

@@ -78,6 +78,7 @@ function harness(sim, source = city) {
     // D052: this older harness observes rendered content, not DOM identity.
     // The actual reconciliation helper is exercised by D052 and real Chrome.
     const updatePanelContent = (box, ...kids) => box.replaceChildren(...kids), lastRep = null;
+    const createPanelUpdateGate = () => ({ defer: () => false, cancel() {} }), tcGate = createPanelUpdateGate();
     const own = (o, k) => Object.hasOwn(o, k);
     const localStorage = { getItem: k => x.storage.get(k), setItem: (k,v) => x.storage.set(k,v), removeItem: k => x.storage.delete(k) };
     const kickJournal = () => x.journal.push('unexpected write');
