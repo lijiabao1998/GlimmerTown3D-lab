@@ -34,6 +34,7 @@ import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
 import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
 import { createImportFeedback } from './ui/importFeedback.ts';
 import { updatePanelContent } from './ui/panelContent.ts';
+import { createPanelUpdateGate } from './ui/panelPress.ts';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -266,6 +267,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (L && !L.ok) return L;
     const V = simulate ? null : viewCode(code, KINDS, VRANK);             // D012：只能看的城也照實驗線重挑外觀（要讀檔時的地價，所以也建一次格子與場）
     if (V && !V.ok) return V;
+    closeDecisionPanels();
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
@@ -679,8 +681,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 下一天的結算、幸福、災禍、電力、垃圾……讀新的設定；冷卻（稅率 40 天、其餘 35–60 天）中再按，講還剩幾天（實驗線是靜默不動）。只列本線有效果的 11 個開關；其餘 15 個沒有對應的系統
   // （存讀照舊、日費照付），最底下一列講。面板只讀、開著不建預設物件（實驗線 65449 打開面板就建：行為一樣，只差存檔裡多一個 pol 欄位）。不寫世界歷史（不加事件種類）
   const pl = $<HTMLElement>('#pl');
-  $<HTMLButtonElement>('#plX').onclick = () => { pl.hidden = true; };
-  pl.onclick = e => { if (e.target === pl) pl.hidden = true; };
+  const plGate = createPanelUpdateGate(pl);
+  $<HTMLButtonElement>('#plX').onclick = () => { plGate.cancel(); pl.hidden = true; };
+  pl.onclick = e => { if (e.target === pl) { plGate.cancel(); pl.hidden = true; } };
   const TAX_ROWS = [['taxR', '住宅稅', '住宅稅收 ×倍率；高過 1.0× 會壓低購買力（每多 0.1× 約 −1.8%），商業營業額跟著降'], ['taxC', '商業稅', '商業稅收 ×倍率'], ['taxI', '工業稅', '工業稅收 ×倍率']] as const;
   const BUDGET_NOTE: Record<string, string> = { police: '警察局、派出所、法院的覆蓋半徑與維護費 ×倍率', fire: '消防局、消防站、消防總部的覆蓋半徑與維護費 ×倍率', health: '醫院、診所、救護站的覆蓋半徑與維護費 ×倍率', edu: '學校、大學、圖書館的覆蓋半徑與維護費 ×倍率' };
   const POLICY_NOTE: Record<string, string> = { curfew: '夜間犯罪機率 ×0.6；住宅幸福 −0.02', recycle: '垃圾產量 ×0.85', tourPromo: '遊客帶來的商業稅加成 ×1.1', ecoReg: '商業稅 ×0.95；每座發電廠容量 +5',
@@ -714,6 +717,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function renderPolicy() {
     if (!sim) return;
+    if (plGate.defer(renderPolicy)) return;
     const box = $('#pl .body'), sec = (title: string, rows: HTMLLIElement[]) => { const h = document.createElement('h3'), ol = document.createElement('ol'); h.textContent = title; ol.append(...rows); return [h, ol]; };
     const hidden = Object.keys(POLICY_CATALOG).filter(k => POLICY_CATALOG[k].type === 'toggle' && !(POLICY_SHOWN.law as readonly string[]).includes(k) && !(POLICY_SHOWN.policy as readonly string[]).includes(k) && sim!.pol && (sim!.pol as Record<string, unknown>)[k]);
     const hidFee = hidden.reduce((a, k) => a + upRegOf({ [k]: true }, [], null, 0, 0), 0);
@@ -748,15 +752,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function openPolicy() {
     if (!sim) return;
-    plTip = ''; renderPolicy(); pl.hidden = false;
+    plGate.cancel(); plTip = ''; renderPolicy(); pl.hidden = false;
   }
 
   // D038：☰「科技與專精」（實驗線 T343 科技樹與 T386 城市方向的 3D 版；實驗線畫一張節點圖，這裡照手機改成一條路線一張清單）。四條路線 36 個節點：做完的、進行中的（進度條與還要幾天）、
   // 開得了的（按「開始」，錢現在扣；已有進度的免費）、開不了的（講原因：前置、二選一、要先做完幾個）。城市方向四選一、永久：要城市等級 Lv.9，按一下選、再按一下才定。
   // 按了馬上生效、存檔；進度每天由 stepDay 推。不寫世界歷史（同政策，D038 卡「要業主定的事」1）
   const tc = $<HTMLElement>('#tc');
-  $<HTMLButtonElement>('#tcX').onclick = () => { tc.hidden = true; tcPick = -1; };
-  tc.onclick = e => { if (e.target === tc) { tc.hidden = true; tcPick = -1; } };
+  const tcGate = createPanelUpdateGate(tc);
+  $<HTMLButtonElement>('#tcX').onclick = () => { tcGate.cancel(); tc.hidden = true; tcPick = -1; };
+  tc.onclick = e => { if (e.target === tc) { tcGate.cancel(); tc.hidden = true; tcPick = -1; } };
   const TECH_ROUTES = [['A', '🏭', '產業線'], ['B', '🏘️', '民生線'], ['C', '🎓', '文教線'], ['D', '🔭', '遠望線']] as const;   // 65119 TECH_ROUTE_META343、65432 路線鈕
   type TechRoute = (typeof TECH_ROUTES)[number][0];
   let tcRoute: TechRoute = 'A', tcTip = '', tcPick = -1;   // tcPick：城市方向按過一下、等第二下確定的編號
@@ -767,6 +772,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function renderTech() {
     if (!sim) return;
+    if (tcGate.defer(renderTech)) return;
     const s = sim, done = s.edu.tech, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
     const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
     const box = $('#tc .body'), specKids: HTMLElement[] = [], actKids: HTMLElement[] = [], routeKids: HTMLElement[] = [];   // 順序：研究（最常看）→ 路線與節點 → 城市方向（永久、一生選一次，放最下面）
@@ -861,15 +867,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function openChronicle() { if (!sim) return; renderChronicle(); ch.hidden = false; }
   function openTech() {
     if (!sim) return;
-    tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
+    tcGate.cancel(); tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
   }
 
   // D045：☰「委託」（實驗線 T385 市長委託面板 showCommPanel385 65155 的 3D 版）——三選一（決定性：世界種子＋輪次）、進行中的進度與放棄、已完成的紀錄。接受、放棄馬上生效（實驗線 cmsAccept385、cmsDrop385）、
   // 存檔、記世界歷史（cms 事件，城市格式 10）；完成、過期由每天的結算發通知。狀態的順序照實驗線：沙盒 → 進行中 → 城市等級不到 3 → 人口不到 51 → 三選一。
   // D046：新委託排除未實作的公共運量；舊檔正在進行的運量委託仍可無懲罰放棄。
   const cm = $<HTMLElement>('#cm');
-  $<HTMLButtonElement>('#cmX').onclick = () => { cm.hidden = true; };
-  cm.onclick = e => { if (e.target === cm) cm.hidden = true; };
+  const cmGate = createPanelUpdateGate(cm);
+  $<HTMLButtonElement>('#cmX').onclick = () => { cmGate.cancel(); cm.hidden = true; };
+  cm.onclick = e => { if (e.target === cm) { cmGate.cancel(); cm.hidden = true; } };
   let cmTip = '';
   const NO_RIDE_NOTE = '　⚠ 本線還沒有公共運量：這份舊委託可無懲罰放棄，新委託不再提供運量目標';
   function cmProgress(c: CmsDef): { cur: string; p: number } {
@@ -887,6 +894,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function renderCommission() {
     if (!sim) return;
+    if (cmGate.defer(renderCommission)) return;
     const s = sim, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
     const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
     const note = (k: string, st: string, name: string, val: string, text: string) => { const li = mk('li'), head = mk('div', 'h'); li.dataset.k = k; li.dataset.kind = 'note'; li.dataset.st = st; head.append(mk('b', '', name), mk('span', 'val', val)); li.append(head); if (text) li.append(mk('small', 'note', text)); return li; };
@@ -910,9 +918,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (state === 'pop') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '人口超過 50 解鎖', `目前 ${s.pop}`));
     else {
       const ol = mk('ol');
-      commissionOffers(s).forEach((c, i) => {
+      commissionOffers(s).forEach(c => {
         const li = mk('li'), head = mk('div', 'h'); li.dataset.k = c.id; li.dataset.kind = 'offer'; li.dataset.st = 'can';
-        head.append(mk('b', '', `${c.ic} ${c.nm}`), btn('接受', `接受委託：${c.nm}（獎金 $${c.bonus.toLocaleString()}、限 ${c.days} 天）`, () => uiCommission('accept', i)));
+        head.append(mk('b', '', `${c.ic} ${c.nm}`), btn('接受', `接受委託：${c.nm}（獎金 $${c.bonus.toLocaleString()}、限 ${c.days} 天）`, () => uiCommission('accept', sim ? commissionOffers(sim).findIndex(now => now.id === c.id) : -1)));
         li.append(head, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜限 ${c.days} 天${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
         ol.append(li);
       });
@@ -930,7 +938,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (c) { const t = cmsToast(kind, c); cmTip = ''; bui.toast(t.text, t.tone); saveNow(); } else cmTip = kind === 'accept' ? '接不了這一條（已有進行中的委託，或城市還沒到條件）' : '沒有進行中的委託';
     renderCommission(); syncUi(); return c ? c.id : null;
   }
-  function openCommission() { if (!sim) return; cmTip = ''; renderCommission(); cm.hidden = false; }
+  function openCommission() { if (!sim) return; cmGate.cancel(); cmTip = ''; renderCommission(); cm.hidden = false; }
+  function closeDecisionPanels() {
+    plGate.cancel(); tcGate.cancel(); cmGate.cancel();
+    pl.hidden = tc.hidden = cm.hidden = true; tcPick = -1;
+  }
 
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
   function menuSections(): MenuSection[] {
@@ -1165,10 +1177,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
     if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
-    if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
-    if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
+    if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); plGate.cancel(); pl.hidden = true; } return; }   // D032：政策與預算
+    if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tcGate.cancel(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
     if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
-    if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cm.hidden = true; } return; }   // D045：市長委託
+    if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cmGate.cancel(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
     if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning')) return;   // Native activation must not toggle playback.
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
