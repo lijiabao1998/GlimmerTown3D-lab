@@ -1,23 +1,12 @@
-# 每次推送：型別檢查 → Node 端守衛 → 建置單檔 → 無頭 Chrome 煙霧測試（WebGL 走 SwiftShader，雲端沒有 GPU 也能跑）→ 拍九張樣張當附件。
-# main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
-name: ci
-
+# Isolated read-only QA of immutable D053 product. Never merge or deploy this branch.
+name: d054-before
 on:
   push:
-    branches: [main, 'claude/**']
-    paths-ignore: ['**.md', 'docs/**']
-  pull_request:
-    paths-ignore: ['**.md', 'docs/**']
-  workflow_dispatch:
-
-concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
+    branches: ['claude/qa-d054-before']
 jobs:
-  smoke:
+  capture:
     runs-on: ubuntu-latest
-    timeout-minutes: 75   # D053：沿用完整舊檢查，加18項設施導覽／成長原生流程；只擴總預算，不改任何性能或驗收門檻。
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,51 +14,19 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
+      - name: Chinese font for the unchanged fixed-size original scene
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
-      - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
-        run: npm run unit
       - run: npm run build
-      - name: 煙霧測試
-        run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
+      - name: Capture exact D053 before evidence
+        run: node tools/d054-capture.mjs --phase=before --out=scratch/d054-before 2>&1 | tee d054-before-run.txt; exit ${PIPESTATUS[0]}
         shell: bash
-      - name: 拍樣張（三畫風×三年份×兩個距離）
-        if: always()
-        run: node tools/shoot.mjs --out=scratch/shots
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-${{ github.sha }}
+          name: d054-before-${{ github.sha }}
           path: |
-            smoke-run.txt
-            scratch/shots/*.png
-            scratch/shots/D048-evidence.json
-            scratch/shots/D049-evidence.json
-            scratch/shots/D050-evidence.json
-            scratch/shots/D051-evidence.json
-            scratch/shots/D052-*.json
-            scratch/shots/D052-*.code.txt
-            scratch/shots/D053-*.json
-            scratch/shots/D053-*.code.txt
-            scratch/shots/D053-*.html
-          if-no-files-found: warn
+            d054-before-run.txt
+            scratch/d054-before
+          if-no-files-found: error
           retention-days: 14
-      - uses: actions/upload-pages-artifact@v3
-        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        with:
-          path: dist
-
-  pages:
-    needs: smoke
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
