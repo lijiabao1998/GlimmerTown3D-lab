@@ -93,9 +93,11 @@ function originalSemantics() {
 }
 function toolGuides(api = Site) {
   const main = [['zr', '住宅分區', 'rect'], ['zc', '商業分區', 'rect'], ['zi', '工業分區', 'rect'], ['plant', '發電廠', 'tap'], ['doze', '拆除', 'rect']];
+  const f = fixture();
   for (const [id, name, gesture] of [...ROAD_TOOLS.map(t => [t.id, t.name, 'line']), ...CIVIC_TOOLS.map(t => [t.id, t.name, gestureOf(t.id)]), ...main]) {
     const g = api.selectedToolGuide(id);
     assert.equal(g.tool, id); assert.equal(g.name, name); assert.equal(g.gesture, gesture); assert.match(g.gestureLabel, gesture === 'line' ? /拉線/ : gesture === 'rect' ? /框選/ : /點放/);
+    assert.equal(api.diagnoseSite(f.sim, op(id, X, Z)).name, name, 'name-only pointer lookup retains every authoritative tool name');
     assert.ok(g.placement.length > 5); assert.ok(g.unit.length > 0);
     if (FACILITY_NOTES[id]) { assert.equal(g.placement, FACILITY_NOTES[id].placement); assert.equal(g.use, FACILITY_NOTES[id].use); }
   }

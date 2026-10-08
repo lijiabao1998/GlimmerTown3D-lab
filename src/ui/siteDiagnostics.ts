@@ -15,6 +15,13 @@ const OTHER_TOOLS: Readonly<Record<string, { name: string; use: string; placemen
   plant: { name: '發電廠', use: '提供城市電力', placement: '點選未被道路或建築佔用的陸地；注意周邊污染。' },
   doze: { name: '拆除', use: '移除現有建設或清理地面', placement: '按住框選；二級以上住商工建築需單格再次確認，框選會略過。' },
 };
+// Tool metadata is static. Pointer previews only need the name, so prepare that
+// small lookup at module initialization rather than constructing the full guide
+// (two catalog searches, gesture/size lookup and explanatory strings) per move.
+const TOOL_NAMES: Readonly<Record<string, string>> = Object.fromEntries([
+  ...ROAD_TOOLS.map(t => [t.id, t.name]), ...CIVIC_TOOLS.map(t => [t.id, t.name]),
+  ...Object.entries(OTHER_TOOLS).map(([id, note]) => [id, note.name]),
+]);
 
 export function selectedToolGuide(tool: string) {
   const civic = CIVIC_TOOLS.find(t => t.id === tool), road = ROAD_TOOLS.find(t => t.id === tool);
@@ -54,7 +61,7 @@ export function formatSiteMoney(value: number): string {
 }
 
 export function diagnoseSite(s: Sim, op: EditOp, providedPreview?: OpPreview): SiteDiagnosis {
-  const pv = providedPreview ?? previewOp(s, op), guide = selectedToolGuide(op.tool);
+  const pv = providedPreview ?? previewOp(s, op);
   const reasons: SiteReason[] = [];
   const cells: SiteCell[] = pv.cells.map(c => {
     if (c.ok || c.foot) return { ...c };
@@ -95,7 +102,7 @@ export function diagnoseSite(s: Sim, op: EditOp, providedPreview?: OpPreview): S
       + `鄰水可建與管網服務分開判定。貼管不保證服務，仍需供電與有效管路距離（${WATER_HOPS472}步規則）。` };
   }
   return {
-    day: s.day, tool: op.tool, name: guide.name, gesture: op.k,
+    day: s.day, tool: op.tool, name: TOOL_NAMES[op.tool] ?? op.tool, gesture: op.k,
     selected, eligible: pv.count, skipped: selected - pv.count, footprint: cells.length,
     total: pv.total, funds: s.money, shortfall: Math.max(0, pv.total - s.money), affordable: pv.affordable, sandbox: s.diff === 3,
     fundingNote: s.money < 0 ? '目前資金為負；既有規則下即使 $0 工程也無法施工。' : '',

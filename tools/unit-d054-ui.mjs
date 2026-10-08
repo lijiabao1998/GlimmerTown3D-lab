@@ -85,16 +85,20 @@ function costBehavior(source = panelSource) {
   at(s, X + 1).wp = 0; at(s, X - 1, Z - 1).t = at(s, X + 1, Z - 1).t = 0; assert.match(h.siteCostText(Site.diagnoseSite(s, operation('sewage'))), /尚未貼管網.*鄰水/);
   return 'actual cost text preserves counts/mixed reasons/exact money/gesture funding rule/negative sandbox/resource/gas/network qualifications';
 }
-function cityHarness(f, source = citySource, panel = panelSource) {
+function cityHarness(f, source = citySource, panel = panelSource, options = {}) {
   const { doc, Element } = makeDom(), { createSitePanel, siteCostText } = compilePanel(doc, Element, panel), calls = [], toasts = [], guides = [], costs = [], previews = [];
-  const x = { sim: f.sim, calls, toasts, guides, costs, previews, saved: [], clock: 1000 };
-  const deps = { ...Site, CIVIC_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel, siteCostText, document: doc, HTMLElement: Element, Element };
-  const chunks = [section(source, '  // D054: ephemeral UI snapshots only', '  // D053: keep imported rank rules'), section(source, '  function syncUi() {', '  // D040：資源圖。'), section(source, '  let pipesShown = false;', '  const toolColor'), section(source, '  function opOf(', '  // 鍵盤：對話框')];
+  const x = { sim: f.sim, calls, toasts, guides, costs, previews, saved: [], clock: 1000, idle: [], delays: [], diagnoses: [], labels: [], visiblePreview: [], visibleCost: null, failDiagnosis: '' };
+  if (options.idle !== false) doc.defaultView.requestIdleCallback = task => { x.idle.push(task); };
+  const deps = { ...Site, CIVIC_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel,
+    diagnoseSite: (...args) => { const d = Site.diagnoseSite(...args); x.diagnoses.push({ op: args[1], provided: !!args[2], d }); if (x.failDiagnosis === args[1].tool) throw new Error('forced warm diagnosis failure'); return d; },
+    siteCostText: d => { x.labels.push(d); return siteCostText(d); }, document: doc, HTMLElement: Element, Element };
+  const chunks = [section(source, '  function warmEdit() {', '  // 換城：'), section(source, '  // D054: ephemeral UI snapshots only', '  // D053: keep imported rank rules'), section(source, '  function syncUi() {', '  // D040：資源圖。'), section(source, '  let pipesShown = false;', '  const toolColor'), section(source, '  function opOf(', '  // 鍵盤：對話框')];
   const js = `let sim=x.sim,city=sim.city,tool='road',roadTool='alley',civicTool='police',stroke=null,lastPreview=null,down=null,needsRender=false;
     const ui=document.createElement('div');document.body.append(ui);
     const timing={},performance={now:()=>x.clock};
-    const bui={setSiteGuide:(...a)=>x.guides.push(a),showCost:(...a)=>x.costs.push(a),hideCost:()=>x.calls.push('hideCost'),toast:(...a)=>x.toasts.push(a),menuOpen:()=>x.calls.push('menuClose'),setHud:()=>x.calls.push('hud')};
-    const preview={clear:()=>x.calls.push('previewClear'),set:(...a)=>x.previews.push(a)},tileTop=()=>0;
+    const window=document.defaultView,setTimeout=(task,delay)=>{x.delays.push(delay);return window.setTimeout(task,delay);},siteCenter=()=>[${X},${Z}];
+    const bui={setSiteGuide:(...a)=>x.guides.push(a),showCost:(...a)=>{x.costs.push(a);x.visibleCost=a;},hideCost:()=>{x.calls.push('hideCost');x.visibleCost=null;},toast:(...a)=>x.toasts.push(a),menuOpen:()=>x.calls.push('menuClose'),setHud:()=>x.calls.push('hud')};
+    const preview={clear:()=>{x.calls.push('previewClear');x.visiblePreview=[];},set:(...a)=>{x.previews.push(a);x.visiblePreview=a[0];}},tileTop=()=>0;
     const THREE={Vector3:class{constructor(x,y,z){this.x=x;this.y=y;this.z=z;}},TOUCH:{ROTATE:'rotate'},MOUSE:{ROTATE:'rotate'}};
     const screenOf=p=>[p.x,p.z],toolColor=()=> '#fff',controls={touches:{ONE:'rotate'},mouseButtons:{LEFT:'rotate'}};
     const invalidate=()=>x.calls.push('invalidate'),closeCard=()=>x.calls.push('closeCard'),rebuildScene=()=>x.calls.push('rebuild'),draw=()=>x.calls.push('draw');
@@ -104,10 +108,10 @@ function cityHarness(f, source = citySource, panel = panelSource) {
     const closeGrowth=(restoreFocus=true)=>{rkGate.cancel();catalog.reset();sitePanel.reset();growthModal.close(restoreFocus);};
     const syncRes=()=>{},liveBuildings=()=>[],powerStatus=()=>({powered:0,unpowered:0,cap:0}),simCounts=()=>[[0],[0,0,0],[0,0,0],[0,0,0]],label='test',loadDay=sim.day,autosaves=()=>true,saveErr='',jstore=null,jwhy='',saveWarnings=()=>({}),saveStatus={setState:()=>{}},syncCommissionHud=()=>{},syncDock=()=>x.calls.push('dock'),rk={hidden:true},renderRank=()=>{};
     ${chunks.map(strip).join('\n')}
-    return {sitePanel,renderSite,syncSite,syncUi,openSite,runOp,doUndo,updatePreview,commitStroke,cancelStroke,interruptBuild,syncPipes,setTool,
+    return {sitePanel,renderSite,syncSite,syncUi,openSite,runOp,doUndo,updatePreview,commitStroke,cancelStroke,interruptBuild,syncPipes,setTool,warmEdit,
       setStroke:s=>{stroke=s;},choose:id=>{if(ROAD_TOOLS.some(t=>t.id===id)){roadTool=id;setTool('road');}else if(CIVIC_TOOLS.some(t=>t.id===id)){civicTool=id;setTool('civic');}else setTool(id);},
-      state:()=>({siteEstimate,siteResult,siteNotice,stroke,lastPreview,pipesShown}),setSim:s=>{sim=s;city=s?.city;}};`;
-  return { ...new Function('x', 'saveFixture', ...Object.keys(deps), js)(x, () => saved(f), ...Object.values(deps)), doc, calls, toasts, guides, costs, previews, saves: x.saved };
+      state:()=>({siteEstimate,siteResult,siteNotice,stroke,lastPreview,pipesShown,tool,roadTool,civicTool}),timing:()=>({...timing}),setSim:s=>{sim=s;city=s?.city;}};`;
+  return { ...new Function('x', 'saveFixture', ...Object.keys(deps), js)(x, () => saved(f), ...Object.values(deps)), doc, calls, toasts, guides, costs, previews, saves: x.saved, trace: x, runWarm: () => { for (const task of x.idle.splice(0)) task(); doc.runTimers(); } };
 }
 function integration(source = citySource) {
   const cases = [
@@ -117,6 +121,7 @@ function integration(source = citySource) {
     ['none eligible', 'wpipe', s => { at(s).wp = 1; }, X],
     ['armed demolition', 'doze', s => { at(s).bld = { k: 1, lv: 2, v: 0, age: 0, pw: true, h: 1 }; }, X],
     ['fractional exact funds', 'park', s => { s.edu.tech = ['B5', 'C8', 'D4a']; s.edu.spec = 'hub'; s.money = 60 * .95 * .95 * .9 * 1.05; }, X],
+    ['free sandbox success', 'park', s => { s.diff = 3; s.money = 0; }, X + 1],
     ['grouped footprint demolition', 'doze', s => { assert.equal(commitOp(s, operation('megaproject'), 0).placed, 1); }, X + 2, Z + 2],
   ];
   for (const [label, id, setup, end, endZ = Z] of cases) {
@@ -125,12 +130,28 @@ function integration(source = citySource) {
     const before = h.state().siteEstimate; assert.deepEqual(before, Site.diagnoseSite(b.sim, q)); assert.ok(h.costs.at(-1)[2].includes(before.name));
     h.setStroke(null); const r = h.runOp(q), original = commitOp(b.sim, q, 1000); assert.deepEqual(r, original); same(a, b, ar, br, label + ' shipped runOp');
     assert.deepEqual(h.state().siteEstimate, before, label + ' snapshot captured before actual commit'); assert.deepEqual(h.state().siteResult, Site.diagnoseSiteResult(before, original));
-    if (original.spent) assert.ok(h.toasts.some(([text]) => text.includes('−' + Site.formatSiteMoney(original.spent))), label + ' success toast retains exact actual debit');
+    if (original.spent) {
+      const expected = '−$' + original.spent.toLocaleString() + (original.placed > 1 ? `（${original.placed} 格）` : '');
+      assert.deepEqual(h.toasts.filter(([text]) => text.startsWith('−')).map(([text]) => text), [expected], label + ' transient debit preserves original compact number formatting, without full-precision expansion, result counts or CTA');
+      assert.doesNotMatch(expected, /未完成|現場|可查/);
+      if (label === 'fractional exact funds') assert.notEqual('$' + original.spent.toLocaleString(), Site.formatSiteMoney(original.spent), 'fractional fixture discriminates original compact popup from exact persistent display');
+    }
+    if (original.placed && !original.spent && !original.skipped) assert.deepEqual(h.toasts, [], label + ' original free success emits no new wide result toast');
     if (before.groupedDemolition) { assert.equal(h.state().siteResult.unfinished, null); assert.ok(h.toasts.every(([text]) => !/未完成|null/.test(text)), 'grouped actual toast cannot invent unfinished cells'); }
     assert.equal(h.saves.length, original.placed || original.spent ? 1 : 0, label + ' original save triggering'); if (h.saves.length) assert.equal(h.saves[0], saved(b));
     h.openSite(); assert.equal(h.sitePanel.root.hidden, false); assert.match(h.sitePanel.root.textContent, /最近一次施工/); same(a, b, ar, br, label + ' opened details read-only');
+    const detail = h.sitePanel.root.querySelector('#siteResult').textContent;
+    assert.ok(detail.includes(h.state().siteResult.summary), label + ' full actual result remains in persistent details');
+    assert.equal(h.state().siteResult.spent, original.spent, label + ' compact notification cannot round the stored actual charge');
+    assert.ok(detail.includes('實扣 ' + Site.formatSiteMoney(original.spent)), label + ' persistent details retain exact full-precision actual amount');
+    for (const reason of before.reasons) assert.ok(detail.includes(`原選區略過 ${reason.count}：${reason.reason}`), label + ' mixed blocked reasons survive compact notification');
     const undo = h.doUndo(), controlUndo = undoOp(b.sim); assert.deepEqual(undo, controlUndo); same(a, b, ar, br, label + ' original undo');
-    if (undo.ok) { assert.equal(h.state().siteEstimate, null); assert.equal(h.state().siteResult, null); assert.match(h.state().siteNotice, /已復原/); if (undo.refund) assert.ok(h.toasts.some(([text]) => text.includes('退回 ' + Site.formatSiteMoney(undo.refund))), label + ' undo toast retains exact refund'); } else assert.notEqual(h.state().siteResult, null, 'failed undo keeps actual last outcome');
+    if (undo.ok) {
+      assert.equal(h.state().siteEstimate, null); assert.equal(h.state().siteResult, null);
+      assert.equal(h.state().siteNotice, `上一筆施工已復原，退回 ${Site.formatSiteMoney(undo.refund)}。`, label + ' persistent undo notice retains exact refund');
+      assert.equal(h.toasts.at(-1)[0], '↩ 已復原' + (undo.refund ? '，退回 $' + undo.refund.toLocaleString() : ''), label + ' transient undo toast preserves original compact number formatting');
+      assert.ok(h.sitePanel.root.querySelector('#siteResult').textContent.includes(h.state().siteNotice), label + ' exact refund remains accessible after compact toast');
+    } else assert.notEqual(h.state().siteResult, null, 'failed undo keeps actual last outcome');
   }
   return cases.length + ' real preview→runOp→actual result→open details→undo wrappers paired with unchanged simulation; exact models/history/saves/costs/RNG and original save triggers';
 }
@@ -148,8 +169,45 @@ function refreshAndWarmup(source = citySource) {
   h.setStroke(stroke(X, Z)); const model = raw(a), code = saved(a), rng = stateBytes(ar); assert.equal(h.commitStroke({ ...stroke(), moved: true }), null, 'dragged tap cancels'); assert.equal(raw(a), model); assert.equal(saved(a), code); assert.equal(stateBytes(ar), rng);
   return 'actual warmup pid−1 exclusion, held-stroke day/funds refresh, open interruption, held close across real day, captured estimate age, closed-panel quietness, water→sewage→other layer, dragged tap cancellation';
 }
+function idleWarmup(source = citySource) {
+  for (const idle of [true, false]) {
+    const a = fixture(), b = fixture(), ar = instrumentRng(a.sim), br = instrumentRng(b.sim), h = cityHarness(a, source, panelSource, { idle });
+    if (!idle) {
+      // An already recorded real operation must survive a later idle callback.
+      assert.deepEqual(h.runOp(operation('wpipe')), commitOp(b.sim, operation('wpipe'), 1000));
+      h.choose('gaswell');
+    } else h.choose('coll');
+    const before = stateBytes(h.state()), estimate = h.state().siteEstimate, result = h.state().siteResult;
+    const diagnosisCount = h.trace.diagnoses.length, labelCount = h.trace.labels.length, costCount = h.costs.length, effects = [h.saves.length, h.toasts.length, h.guides.length, h.calls.filter(v => v === 'rebuild').length];
+    const expectedFirst = h.state().roadTool;
+    h.warmEdit(); assert.equal(h.trace.diagnoses.length, diagnosisCount, 'warmEdit schedules, never synchronously taxes the load/action stack');
+    assert.equal(stateBytes(h.state()), before, 'scheduling does not alter UI state');
+    if (idle) assert.equal(h.trace.idle.length, 1); else assert.equal(h.trace.delays.at(-1), 300, 'existing timer fallback remains bounded');
+    h.runWarm();
+    const diagnoses = h.trace.diagnoses.slice(diagnosisCount), labels = h.trace.labels.slice(labelCount), costs = h.costs.slice(costCount);
+    assert.deepEqual(diagnoses.map(q => q.op.tool), [expectedFirst, 'zr', 'plant', 'doze', 'sewage', 'wpipe', 'oilwell', 'mine'], 'normal product idle work covers all eight actual preview paths');
+    assert.ok(diagnoses.every(q => q.provided), 'warm diagnostics reuse the actual authoritative preview');
+    assert.equal(labels.length, 8, 'every idle pass executes actual multiline siteCostText, not old fallback text'); assert.equal(costs.length, 8);
+    for (let i = 0; i < 8; i++) { assert.ok(labels[i] === diagnoses[i].d, 'the same local diagnosis reaches real label formatting'); assert.ok(costs[i][2].includes(labels[i].name)); assert.match(costs[i][2], /估價.*現有/); }
+    assert.equal(stateBytes(h.state()), before, 'tools, road/civic selection, pipe layer, snapshots and notices survive every pass');
+    assert.ok(h.state().siteEstimate === estimate && h.state().siteResult === result, 'real recorded objects are retained, never replaced by fake warmup');
+    assert.equal(h.trace.visibleCost, null); assert.deepEqual(h.trace.visiblePreview, []); assert.equal(h.state().stroke, null); assert.equal(h.state().lastPreview, null);
+    assert.equal(Number.isFinite(h.timing().warm), true); assert.equal('preview' in h.timing(), false, 'idle timing cannot masquerade as a native sample');
+    assert.deepEqual([h.saves.length, h.toasts.length, h.guides.length, h.calls.filter(v => v === 'rebuild').length], effects, 'idle preparation cannot save, toast, change the selected-tool label or rebuild the city');
+    same(a, b, ar, br, 'product idle warmup full purity');
+    for (let day = 0; day < 3; day++) { assert.deepEqual(stepDay(a.sim), stepDay(b.sim)); same(a, b, ar, br, 'uninterrupted post-warm day ' + day); }
+  }
+  const a = fixture(), b = fixture(), ar = instrumentRng(a.sim), br = instrumentRng(b.sim), h = cityHarness(a, source);
+  h.choose('wpipe'); h.warmEdit(); const held = stroke(X + 2); h.setStroke(held); h.updatePreview();
+  const heldState = stateBytes(h.state()), visible = stateBytes([h.trace.visiblePreview, h.trace.visibleCost]), count = h.trace.diagnoses.length;
+  h.runWarm(); assert.equal(h.trace.diagnoses.length, count, 'queued warmup skips an intervening genuine stroke'); assert.equal(stateBytes(h.state()), heldState); assert.equal(stateBytes([h.trace.visiblePreview, h.trace.visibleCost]), visible); assert.ok(h.state().stroke === held);
+  h.cancelStroke(); h.choose('gaswell'); const safeState = stateBytes(h.state()); h.trace.failDiagnosis = 'sewage'; h.warmEdit(); assert.throws(() => h.runWarm(), /forced warm diagnosis failure/);
+  assert.equal(stateBytes(h.state()), safeState, 'finally restores original selection and clears transient preview after failure'); assert.equal(h.trace.visibleCost, null); assert.deepEqual(h.trace.visiblePreview, []); same(a, b, ar, br, 'warm failure cannot write simulation/history/save/RNG');
+  h.trace.failDiagnosis = ''; h.setSim(null); const unloaded = stateBytes(h.state()), observed = h.trace.diagnoses.length; h.warmEdit(); h.runWarm(); assert.equal(h.trace.diagnoses.length, observed); assert.equal(stateBytes(h.state()), unloaded, 'queued idle preparation cannot revive an unloaded city');
+  return 'actual eight-pass idle and timer-fallback preparation; same local diagnostics/text path; tools/snapshots/model/history/save/RNG unchanged, six paired future days, genuine-stroke skip, failure/unloaded cleanup, native timing untouched';
+}
 function mutations() {
-  panelBehavior(); costBehavior(); integration(); refreshAndWarmup();
+  panelBehavior(); costBehavior(); integration(); refreshAndWarmup(); idleWarmup();
   const panels = [
     ['held gate removed', 'if (!state || gate.defer(render)) return;', 'if (!state) return;', panelBehavior],
     ['latest update ignored', 'state = s; render();', 'state ??= s; render();', panelBehavior],
@@ -167,14 +225,25 @@ function mutations() {
     ['closed panel still redraws', 'if (!sitePanel.root.hidden) renderSite();', 'renderSite();', refreshAndWarmup],
     ['sewage does not show pipe layer', " || civicTool === 'sewage'", '', refreshAndWarmup],
     ['inspection charges hidden fee', 'function renderSite() {\n    if (!sim) return;', 'function renderSite() {\n    if (!sim) return; sim.money--;', integration],
-    ['actual debit toast silently rounds fractions', 'formatSiteMoney(res.spent)', "('$' + res.spent.toLocaleString())", integration],
-    ['grouped demolition toast invents unfinished count', 'siteResult.unfinished === null', 'false', integration],
+    ['compact debit expands fractional precision', '−$${res.spent.toLocaleString()}', '−${formatSiteMoney(res.spent)}', integration],
+    ['compact refund expands fractional precision', '，退回 $${r.refund.toLocaleString()}', '，退回 ${formatSiteMoney(r.refund)}', integration],
+    ['compact format leaks into persistent actual amount', 'siteResult = diagnoseSiteResult(before, res);', 'siteResult = { ...diagnoseSiteResult(before, res), spent: Math.round(res.spent * 1000) / 1000 };', integration],
+    ['compact format leaks into persistent refund notice', 'siteNotice = `上一筆施工已復原，退回 ${formatSiteMoney(r.refund)}。`;', 'siteNotice = `上一筆施工已復原，退回 $${r.refund.toLocaleString()}。`;', integration],
+    ['grouped demolition result invents unfinished count', 'siteResult = diagnoseSiteResult(before, res);', 'siteResult = { ...diagnoseSiteResult(before, res), unfinished: before.selected - res.placed };', integration],
+    ['compact debit re-expands into result CTA', "${res.placed > 1 ? `（${res.placed} 格）` : ''}`);", "${res.placed > 1 ? `（${res.placed} 格）` : ''}・完成 ${res.placed}／未完成 ${siteResult.unfinished}，點「現場」可查`);", integration],
+    ['sandbox gains an unrequested result toast', 'if (res.spent && sim!.diff !== 3) bui.toast(', 'if (res.placed && !res.spent) bui.toast(siteResult.summary); if (res.spent && sim!.diff !== 3) bui.toast(', integration],
+    ['idle sewage branch remains cold', "['civic', 'sewage'], ", '', idleWarmup],
+    ['idle preview uses old price text', 'placeCostTag(diagnosis);', 'placeCostTag();', idleWarmup],
+    ['idle callback overwrites an active user stroke', 'if (!sim || !city || stroke) return;', 'if (!sim || !city) return;', idleWarmup],
+    ['idle callback forgets original civic selection', 'tool = t0; civicTool = civic0;', 'tool = t0;', idleWarmup],
+    ['idle callback stores last fake preview timing', 'delete timing.preview;', 'void timing.preview;', idleWarmup],
+    ['idle callback consumes simulation RNG', 'const run = () => {', 'const run = () => { if (sim) sim.rng.R();', idleWarmup],
   ];
   for (const [name, from, to, check] of city) assert.throws(() => check(change(citySource, from, to)), e => e?.code === 'ERR_ASSERTION', name);
   return panels.length + city.length + ' real-source panel/render/close/commit/undo/warmup/refresh/layer/purity mutations rejected by behavioral assertions';
 }
 export function d054UiGuards(log, match = '') {
-  const tests = [['actual site panel content and retained-control lifecycle', panelBehavior], ['actual on-map diagnostic wording', costBehavior], ['actual commit and undo integration parity', integration], ['actual warmup refresh interruption and pipe-layer integration', refreshAndWarmup], ['actual UI mutation sensitivity', mutations]];
+  const tests = [['actual site panel content and retained-control lifecycle', panelBehavior], ['actual on-map diagnostic wording', costBehavior], ['actual commit and undo integration parity', integration], ['actual warmup refresh interruption and pipe-layer integration', refreshAndWarmup], ['actual idle product preparation purity', idleWarmup], ['actual UI mutation sensitivity', mutations]];
   if (match && !tests.some(([name]) => name.includes(match))) { log(false, 'D054 UI test selection', 'No test matched: ' + match); return; }
   for (const [name, fn] of tests) if (!match || name.includes(match)) try { log(true, 'D054 UI ' + name, fn()); } catch (error) { log(false, 'D054 UI ' + name, error.stack); }
 }

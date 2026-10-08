@@ -309,14 +309,21 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function warmEdit() {
     const run = () => {
       if (!sim || !city || stroke) return;                                 // 已經在拖了就不動
-      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, t = performance.now();
-      for (const w of ['road', 'zr', 'plant', 'doze'] as const) {
-        tool = w;
-        stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: w !== 'plant' };
-        updatePreview();
+      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, civic0 = civicTool, t = performance.now();
+      // D054: warm the actual read-only diagnosis + multiline label path in the
+      // existing idle task, including the first current sewage-network scan.
+      // Local diagnoses are discarded; fake strokes never become site records.
+      try {
+        for (const [w, civic] of [['road', null], ['zr', null], ['plant', null], ['doze', null], ['civic', 'sewage'], ['civic', 'wpipe'], ['civic', 'oilwell'], ['civic', 'mine']] as const) {
+          tool = w; if (civic) civicTool = civic;
+          const gesture = gestureOf(labToolOf(w, roadTool, civicTool));
+          stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: gesture !== 'tap' };
+          updatePreview();
+        }
+      } finally {
+        stroke = null; lastPreview = null; tool = t0; civicTool = civic0; preview.clear(); bui.hideCost(); invalidate();
+        timing.warm = performance.now() - t; delete timing.preview;
       }
-      stroke = null; lastPreview = null; tool = t0; preview.clear(); bui.hideCost(); invalidate();
-      timing.warm = performance.now() - t; delete timing.preview;
     };
     const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
     if (ric) ric(run); else setTimeout(run, 300);
@@ -1188,16 +1195,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const pv = previewOp(sim, op);
     preview.set(pv.cells.map(q => ({ x: q.x, z: q.z, y: Math.max(0, tileTop(city!, q.z * n + q.x)), ok: q.ok })), toolColor());
     lastPreview = pv;
-    if (stroke.pid >= 0) siteEstimate = diagnoseSite(sim, op, pv);
-    placeCostTag();
+    const diagnosis = diagnoseSite(sim, op, pv);
+    if (stroke.pid >= 0) siteEstimate = diagnosis;
+    placeCostTag(diagnosis);
     timing.preview = performance.now() - t0;
     invalidate();
   }
-  function placeCostTag() {
+  function placeCostTag(diagnosis: SiteDiagnosis | null = stroke && stroke.pid >= 0 ? siteEstimate : null) {
     if (!stroke || !lastPreview || !city || !sim) return;
     const pv = lastPreview, [x, z] = opOf(stroke).k === 'tap' ? stroke.a : stroke.b, n = city.n;
     const [sx, sy] = screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city, z * n + x)), z + .5));
-    const diagnosis = stroke.pid >= 0 ? siteEstimate : null;
     const text = diagnosis ? siteCostText(diagnosis) : pv.count === 0 ? (pv.reason ?? '這裡不能蓋') : `${sim.diff === 3 ? '免費' : '$' + pv.total.toLocaleString()}${pv.count > 1 ? `・${pv.count} 格` : ''}`;
     bui.showCost(sx, sy, text, pv.count === 0 || !pv.affordable);
   }
@@ -1222,8 +1229,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (res.placed || res.spent) {
       rebuildScene();
       saveNow();
-      if (res.spent && sim!.diff !== 3) bui.toast(`−${formatSiteMoney(res.spent)}${siteResult.unfinished === null ? `・拆除 ${res.placed} 次（同棟佔地一併處理）` : `・完成 ${res.placed}／未完成 ${siteResult.unfinished}・現場詳情`}`);
-      else if (res.placed) bui.toast(siteResult.summary);
+      // Keep the original compact debit footprint: a wider transient result
+      // toast can steal a subsequent map press. Original number formatting also
+      // bounds fractional notices; exact actual amounts persist in
+      // the existing site entry/dialog, without making notices click-through.
+      if (res.spent && sim!.diff !== 3) bui.toast(`−$${res.spent.toLocaleString()}${res.placed > 1 ? `（${res.placed} 格）` : ''}`);
     }
     syncUi();
     needsRender = true; draw();
@@ -1237,7 +1247,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
     siteEstimate = null; siteResult = null; siteNotice = `上一筆施工已復原，退回 ${formatSiteMoney(r.refund)}。`;
     rebuildScene(); saveNow();
-    bui.toast(`↩ 已復原${r.refund ? `，退回 ${formatSiteMoney(r.refund)}` : ''}`, 'good');
+    bui.toast(`↩ 已復原${r.refund ? `，退回 $${r.refund.toLocaleString()}` : ''}`, 'good');
     syncUi();
     return r;
   }
