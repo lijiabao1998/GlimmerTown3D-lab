@@ -1,0 +1,29 @@
+// D054 recovery diagnosis: original D011 native build sequence, observational
+// pointer/toast hit evidence only. No runtime money edits or repaired clicks.
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {pathToFileURL} from 'node:url';
+import {ROOT,withBrowser,sleep} from './cdp.mjs';
+import {pageSession,free} from './smoke-d011.mjs';
+import {d054Hash} from './d054-capture.mjs';
+const J=JSON.stringify;
+const PROBE=`window.__d054RecoveryEvents=[];for(const type of ['pointerdown','pointerup','pointercancel','click'])addEventListener(type,e=>{const target=e.target,b=target.closest?.('button'),rect=n=>{const r=n.getBoundingClientRect();return[r.left,r.top,r.right,r.bottom]},hit=document.elementFromPoint(e.clientX,e.clientY);__d054RecoveryEvents.push({type,trusted:e.isTrusted,time:performance.now(),x:e.clientX,y:e.clientY,pointerId:e.pointerId??null,tag:target.tagName,id:target.id??'',cls:typeof target.className==='string'?target.className:'',button:b?.id??b?.dataset.t??b?.dataset.r??'',text:(target.textContent??'').slice(0,160),hit:hit?{tag:hit.tagName,id:hit.id,cls:typeof hit.className==='string'?hit.className:''}:null,toasts:[...document.querySelectorAll('.toast')].map(t=>({text:t.textContent,rect:rect(t),opacity:getComputedStyle(t).opacity})),stroke:window.__gt?.stroke()??null})},true)`;
+export async function d054RecoveryProbe({root=path.join(ROOT,'dist'),phase='candidate',outDir=path.join(ROOT,'scratch/shots'),expectHash}={}){
+ root=path.resolve(root);fs.mkdirSync(outDir,{recursive:true});const htmlSha256=d054Hash(fs.readFileSync(path.join(root,'index.html')));if(expectHash)assert.equal(htmlSha256,expectHash,'exact requested product HTML');const report={purpose:'Observe unchanged D011 first-highway sequence before selecting a correction',phase,htmlSha256,qualification:'Real CDP native input. Original read-only openTile inspection retained. No injected toast, runtime money edit, DOM click or timing wait for overlays.',cases:[],passed:false};
+ try{await withBrowser({root,width:960,height:600,preload:PROBE},async({page,open})=>{
+  const p=await pageSession(page,open,{W:412,H:860});const {W,H,X,Z}=p;await p.freshStart();let roadRow=null,run=[];await p.tapBtn('.tool[data-t="road"]');
+  for(let z=Z+5;z<=Z+15&&run.length<8;z++){run=await p.visibleRun(z,X+1,12);if(run.length>=8)roadRow=z;}
+  assert.ok(run.length>=8);await p.drag(run[0][1],run.at(-1)[1]);await p.release();
+  const cx=W/2,cy=H/2-80;await p.touch('touchStart',[[cx-40,cy],[cx+40,cy]]);for(let k=1;k<=8;k++){await p.touch('touchMove',[[cx-40-k*12,cy],[cx+40+k*12,cy]]);await sleep(20);}await p.touch('touchEnd',[]);await p.frames(90);
+  await p.touch('touchStart',[[cx-40,cy],[cx+40,cy]]);for(let k=1;k<=8;k++){await p.touch('touchMove',[[cx-40+k*10,cy+k*8],[cx+40+k*10,cy+k*8]]);await sleep(20);}await p.touch('touchEnd',[]);await p.frames(90);await p.open('');
+  // Keep the exact D011 pre-highway sequence and cadence. Event-capture logs
+  // preserve overlay geometry at input time without pausing for screenshots.
+  await p.tapBtn('.tool[data-t="plant"]');const s0=await p.sim();await p.tapAt(await p.cell(X+6,roadRow-1));const s1=await p.sim();await p.tapBtn('.tool[data-t="doze"]');await p.tapAt(await p.cell(X+3,roadRow));const s2=await p.sim(),L2=await p.ev('__gt.layers()');await p.tapBtn('#undo');const s3=await p.sim(),L3=await p.ev('__gt.layers()'),last=(await p.ev('__gt.history()')).at(-1);assert.equal(s1.money,s0.money-550);assert.equal(s2.money,s1.money-2);assert.equal(s3.money,s1.money);assert.equal(L2.road[roadRow*L2.n+X+3],0);assert.ok(L3.road[roadRow*L3.n+X+3]>0);assert.equal(last.t,'undo');const card=await p.ev(`__gt.openTile(${X+1},${roadRow})`);assert.ok(card.rows.some(r=>/鋪了支路/.test(r)));
+  await p.tapBtn('.tool[data-t="road"]');await p.tapBtn('#roadSub button[data-r="hwy"]');
+  const a0=await p.sim(),r1=await p.findBox(12,1,free);assert.equal(r1.length,12);await p.drag(r1[0][1],r1.at(-1)[1]);await p.release();const a1=await p.sim(),r2=await p.findBox(12,1,free);assert.equal(r2.length,12);await p.drag(r2[0][1],r2.at(-1)[1]);await p.release();const a2=await p.sim();
+  const inputs=await p.ev('__d054RecoveryEvents'),canvasEvents=inputs.filter(e=>e.type==='pointerdown'&&e.tag==='CANVAS'),world=await p.ev('({sim:__gt.sim(),history:__gt.history(),layers:__gt.layers(),code:__gt.save()})');const screenshot=`D054-recovery-${phase}-after-highways.png`;fs.writeFileSync(path.join(outDir,screenshot),Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'));
+  const item={viewport:{width:W,height:H},roadRow,prelude:{money:[s0.money,s1.money,s2.money,s3.money]},highways:{runs:[r1,r2],money:[a0.money,a1.money,a2.money],events:[a0.events,a1.events,a2.events],expectedFirstCost:1440,expectedSecondCount:Math.floor(a1.money/120),firstBuilt:a1.money===a0.money-1440,secondBuilt:a2.events-a1.events},inputs,canvasDowns:canvasEvents.length,screenshot,world,errors:page.errors,external:page.requests.filter(u=>!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u))};assert.ok(inputs.length&&inputs.every(e=>e.trusted));assert.deepEqual(item.errors,[]);assert.deepEqual(item.external,[]);report.cases.push(item);console.log('D054 recovery',phase,J(item.highways));
+ });report.passed=report.cases.length===1;return report;}finally{fs.writeFileSync(path.join(outDir,`D054-recovery-${phase}.json`),J(report,null,2));}
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const arg=n=>process.argv.find(v=>v.startsWith('--'+n+'='))?.slice(n.length+3);const report=await d054RecoveryProbe({root:arg('root'),phase:arg('phase')??'candidate',outDir:arg('out')??path.join(ROOT,'scratch/shots'),expectHash:arg('expect-hash')});process.exitCode=report.passed?0:1;}
