@@ -1,0 +1,29 @@
+{
+  "status": "Approved final candidate; both candidate full CI and exact release main CI37717850851/Pages verified success; official HTTPS verification",
+  "approvedCommit": "4f0dd04001293f92df884989ccfc295517cc8162",
+  "approvedTree": "0c0e0fef97e250e31c585c3d0c98f70e121637e1",
+  "expectedHtmlSha256": "5ab7d9960854a7caf56a056698a1fef6fbe156c1d5f02d622f6f9abeb098509e",
+  "releaseCommit": "1955bd24e2f671b8f63416321e763b5a3fb19a2a",
+  "fullCiVerified": true,
+  "finalImagesChecked": true,
+  "trajectorySha256": "a88d3703ed009810c0d1bb5a2c96dcc7ded81fcd160e83eeab61bac320ea5373",
+  "shots": {
+    "D054-after-mixed-pipe-preview-360.png": "fdcc7216dfdaace1dadaab464f16ba347ec626efb5db0befbe2f08dc1db26c0d",
+    "D054-after-mixed-pipe-result-360.png": "4a3316cfa56f74dbd114d533540ac6a9b60b0f7c589cf4ba64572b6094ee74dd",
+    "D054-after-low-road-preview-412.png": "2e9b39735ac9d3df19574e00f8aa2303f225e922a8571e402f3f266f48b66c5c",
+    "D054-after-low-road-result-412.png": "738e3bc1882c251881b4c93cb97e3a76aeec896aeb7e450ab6fff11f6ef6b265",
+    "D054-after-low-rect-preview-412.png": "19051dc1cefb9114ccf9333de5fa3efb06565d69ba4d8d807a27e014ba5a51a4",
+    "D054-after-low-rect-result-412.png": "af230f8ac5b5cca926408bbdece810ce026974463c6731e7ddb0fc5f17fdc524",
+    "D054-after-depleted-oil-preview-412.png": "d6a29f65f701804e6cd3bda452680be096bc179477afec10495954bfac6b61ab",
+    "D054-after-depleted-mine-preview-412.png": "4e31785d2e0d09fa3b07d0c685afe57638a8acd88f3206ef375b115d07a963f7",
+    "D054-after-sewage-preview-360.png": "c0c794f8fdb4826323734556c9ec12261b0e21a2a732d0c944277708da2b8d76",
+    "D054-after-retained-road-result-panel-412.png": "2713e3e4bfb3e80f036ebde0f6a9e18fe4d9288508b5c731c19431d6ea99d3be",
+    "D054-after-depleted-oil-guide-panel-412.png": "f5ec09350ab845468eaf3a175d574ab72156fb45ab564f9dcbd1f6f10a6df991"
+  },
+  "releaseRun": 37717850851,
+  "pagesJob": 113130580443,
+  "candidateRuns": [
+    37712569486,
+    37712575082
+  ]
+}
