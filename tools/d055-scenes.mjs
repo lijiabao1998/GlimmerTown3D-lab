@@ -2,7 +2,7 @@
 import {mk} from './d034-cities.mjs';
 export const D055_BASELINE={commit:'1955bd24e2f671b8f63416321e763b5a3fb19a2a',htmlSha256:'5ab7d9960854a7caf56a056698a1fef6fbe156c1d5f02d622f6f9abeb098509e'};
 export const D055_VIEWS=[{W:360,H:740,mobile:true},{W:412,H:860,mobile:true},{W:1280,H:800,mobile:false}];
-export const D055_CAMERA={x:31,z:28,zoom:3.6};
+export const D055_CAMERA={x:31,z:30,zoom:1.6};
 export const D055_TOOLS=['farm','ranch','bigFarm','greenhouse','foodPlant','market','tradepost'];
 export const D055_SITE={x:30,z:25};
 export function d055ReviewCode(){return mk(5162026,150,'從種田到外貿・固定驗收樣本',b=>{
