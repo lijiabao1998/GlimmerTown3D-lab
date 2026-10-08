@@ -17,7 +17,7 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 75   # D053：沿用完整舊檢查，加18項設施導覽／成長原生流程；只擴總預算，不改任何性能或驗收門檻。
+    timeout-minutes: 90   # D054：完整保留舊套件，再加原生現場診斷／原版未中斷配對；僅增加總時間預算，性能及像素門檻不變。
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -53,6 +53,9 @@ jobs:
             scratch/shots/D053-*.json
             scratch/shots/D053-*.code.txt
             scratch/shots/D053-*.html
+            scratch/shots/D054-*.json
+            scratch/shots/D054-*.code.txt
+            scratch/shots/D054-*.html
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3

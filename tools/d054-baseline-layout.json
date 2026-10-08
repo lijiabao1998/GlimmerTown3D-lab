@@ -1,0 +1,967 @@
+{
+  "phase": "original-only",
+  "baseline": {
+    "commit": "74b884fea79afad8909cea606ff8ad3ebdc7fba7",
+    "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+    "sourceFiles": 173,
+    "sourceTreeSha256": "f1ec3eb25ee035f2cafcc552a051a2d48867a37563afb7d6fd1f6c0bf839a65f"
+  },
+  "htmlSha256": "0b04a77ac7672de00e01a68cc2fe90c6c7c7faaf77d7eb95abe9fc7a8c5b54cd",
+  "device": "Original real Chrome with native CDP input; not Android hardware",
+  "cases": [
+    {
+      "viewport": {
+        "width": 360,
+        "height": 740,
+        "mobile": true
+      },
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          419.15625,
+          360,
+          740,
+          360,
+          320.84375
+        ],
+        "playBar": [
+          8,
+          618,
+          352,
+          664,
+          344,
+          46
+        ],
+        "civic": [
+          470,
+          610
+        ],
+        "wrap": [
+          470,
+          610
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            566,
+            610
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            566,
+            610
+          ]
+        ]
+      },
+      "shore": {
+        "cell": {
+          "tool": "sewage",
+          "x0": 31,
+          "z0": 27,
+          "x1": 31,
+          "z1": 27,
+          "k": "tap"
+        },
+        "at": [
+          180.00000000000145,
+          369.99999999999903
+        ],
+        "hit": "CANVAS"
+      },
+      "camera": {
+        "pos": [
+          146.69999999999996,
+          94.06040612287404,
+          142.7
+        ],
+        "target": [
+          31.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 4.4
+      },
+      "worldSha256": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6",
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "gotpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "lostpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "gotpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "lostpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "blur",
+          "trusted": true,
+          "pointerType": "",
+          "pointerId": null,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 412,
+        "height": 860,
+        "mobile": true
+      },
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          535.15625,
+          412,
+          860,
+          412,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          738,
+          402,
+          784,
+          392,
+          46
+        ],
+        "civic": [
+          586,
+          730
+        ],
+        "wrap": [
+          586,
+          730
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            586,
+            630
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            636,
+            680
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            686,
+            730
+          ]
+        ]
+      },
+      "shore": {
+        "cell": {
+          "tool": "sewage",
+          "x0": 31,
+          "z0": 27,
+          "x1": 31,
+          "z1": 27,
+          "k": "tap"
+        },
+        "at": [
+          206.0000000000017,
+          429.9999999999989
+        ],
+        "hit": "CANVAS"
+      },
+      "camera": {
+        "pos": [
+          146.69999999999996,
+          94.06040612287404,
+          142.7
+        ],
+        "target": [
+          31.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 4.4
+      },
+      "worldSha256": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6",
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "gotpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "lostpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 2,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "gotpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "lostpointercapture",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "blur",
+          "trusted": true,
+          "pointerType": "",
+          "pointerId": null,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch",
+          "pointerId": 3,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800,
+        "mobile": false
+      },
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          475.15625,
+          1280,
+          800,
+          1280,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          678,
+          1270,
+          724,
+          1260,
+          46
+        ],
+        "civic": [
+          526,
+          670
+        ],
+        "wrap": [
+          526,
+          670
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            76,
+            44,
+            356,
+            432,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            626,
+            670
+          ]
+        ]
+      },
+      "shore": {
+        "cell": {
+          "tool": "sewage",
+          "x0": 31,
+          "z0": 27,
+          "x1": 31,
+          "z1": 27,
+          "k": "tap"
+        },
+        "at": [
+          640.0000000000016,
+          399.999999999999
+        ],
+        "hit": "CANVAS"
+      },
+      "camera": {
+        "pos": [
+          146.69999999999996,
+          94.06040612287404,
+          142.7
+        ],
+        "target": [
+          31.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 4.4
+      },
+      "worldSha256": "ba547818ab43e55eb9fa4b4a14dc3c5aaa5a6bdd1629cdc310d7b59a9ede99b6",
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "SPAN"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "blur",
+          "trusted": true,
+          "pointerType": "",
+          "pointerId": null,
+          "key": "",
+          "id": "",
+          "tool": "civic",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse",
+          "pointerId": 1,
+          "key": "",
+          "id": "",
+          "tool": "sewage",
+          "tag": "BUTTON"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "provenance": {
+    "commit": "e7a90bfadf23860a3dd7116f7b998a8f4a571552",
+    "run": 37701297011,
+    "artifact": 11517698030,
+    "zipSha256": "52d89e461a3f030200bb736cba41dfddb4a7c1e266d9aaf1a36e4165670840cc"
+  }
+}

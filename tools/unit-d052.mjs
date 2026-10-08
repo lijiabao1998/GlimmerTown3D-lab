@@ -257,7 +257,7 @@ function harness(fixture, source = city, options = {}) {
     const stepDay = s => { x.calls.push('stepDay'); const r = x.stepDay(s); x.reports.push(r); return r; };
     const bui = { toast: (...v) => { x.calls.push('toast'); x.toasts.push(v); },
       setHud: v => { x.calls.push('hud'); x.hud = v; }, setCommission: v => { x.calls.push('commission'); x.commission = v; },
-      setDock: v => { x.calls.push('dock'); x.dock = v; }, setDay: v => { x.dayText = v; }, setCoach: v => { x.coach = v; } };
+      setDock: v => { x.calls.push('dock'); x.dock = v; }, setDay: v => { x.dayText = v; }, setCoach: v => { x.coach = v; }, setSiteGuide: () => {} };
     const localStorage = { getItem: k => x.storage.get(k), removeItem: k => x.storage.delete(k), setItem: (k,v) => {
       x.calls.push('storageWrite'); if (x.options.quota) throw Object.assign(new Error('quota'), {name:'QuotaExceededError'}); x.storage.set(k,v);
     } };
@@ -272,6 +272,8 @@ function harness(fixture, source = city, options = {}) {
     const dropped = new Set(); let daysSinceSave = 0, saveErr = '', sampleId = 'mine';
     const label = 'D052', loadDay = sim.day, clean = false, tool = null, roadTool = 'road', civicTool = 'power';
     const saveWarnings = () => ({ error: saveErr }), saveStatus = { setState: s => { x.saveStatus = s; } };
+    // D054 closed site guidance is an unrelated read-only DOM boundary.
+    const siteResult = null, syncSite = () => {};
     // D053 unrelated closed navigation surfaces are DOM boundary doubles.
     const rk = { hidden: true }, catalog = { root: { hidden: true } }, renderRank = () => {};
     const syncRes = () => x.calls.push('resources'), timing = {}, focusTile = () => {};

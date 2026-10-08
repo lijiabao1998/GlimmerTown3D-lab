@@ -39,6 +39,9 @@ import { rankBuildNote, facilitySummary } from './ui/growthGuide.ts';
 import { createFacilityCatalog } from './ui/facilityCatalog.ts';
 import { createMapClickGuard } from './ui/mapClickGuard.ts';
 import growthGuideCss from './ui/growthGuide.css?raw';
+import { diagnoseSite, diagnoseSiteResult, selectedToolGuide, formatSiteMoney, type SiteDiagnosis, type SiteResultDiagnosis } from './ui/siteDiagnostics.ts';
+import { createSitePanel, siteCostText } from './ui/sitePanel.ts';
+import siteDiagnosticsCss from './ui/siteDiagnostics.css?raw';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
@@ -254,7 +257,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     cam.updateProjectionMatrix();
     invalidate();
   }
-  addEventListener('resize', resize);
+  addEventListener('resize', () => { interruptBuild(); resize(); });
 
   // 匯入一個碼：解碼 → 城市 → 場景。失敗就回傳原因，不動目前的城市
   // simulate：逐日模擬、可以蓋（D011：走 src/io/save.ts 的讀檔，帶 d3 的碼會把本線的歷史接回來）；saves：這座城自動存檔。
@@ -273,6 +276,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (V && !V.ok) return V;
     closeDecisionPanels();
     closeGrowth(false);
+    siteEstimate = null; siteResult = null; siteNotice = '';
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
@@ -305,14 +309,21 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function warmEdit() {
     const run = () => {
       if (!sim || !city || stroke) return;                                 // 已經在拖了就不動
-      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, t = performance.now();
-      for (const w of ['road', 'zr', 'plant', 'doze'] as const) {
-        tool = w;
-        stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: w !== 'plant' };
-        updatePreview();
+      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, civic0 = civicTool, t = performance.now();
+      // D054: warm the actual read-only diagnosis + multiline label path in the
+      // existing idle task, including the first current sewage-network scan.
+      // Local diagnoses are discarded; fake strokes never become site records.
+      try {
+        for (const [w, civic] of [['road', null], ['zr', null], ['plant', null], ['doze', null], ['civic', 'sewage'], ['civic', 'wpipe'], ['civic', 'oilwell'], ['civic', 'mine']] as const) {
+          tool = w; if (civic) civicTool = civic;
+          const gesture = gestureOf(labToolOf(w, roadTool, civicTool));
+          stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: gesture !== 'tap' };
+          updatePreview();
+        }
+      } finally {
+        stroke = null; lastPreview = null; tool = t0; civicTool = civic0; preview.clear(); bui.hideCost(); invalidate();
+        timing.warm = performance.now() - t; delete timing.preview;
       }
-      stroke = null; lastPreview = null; tool = t0; preview.clear(); bui.hideCost(); invalidate();
-      timing.warm = performance.now() - t; delete timing.preview;
     };
     const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
     if (ric) ric(run); else setTimeout(run, 300);
@@ -499,7 +510,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
     menu: id => onMenu(id), menuOpen: () => { interruptBuild(); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
-  bui.style.textContent += growthGuideCss;
+  bui.style.textContent += growthGuideCss + siteDiagnosticsCss;
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
@@ -663,6 +674,27 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     nc.hidden = false;
   }
 
+  // D054: ephemeral UI snapshots only, never included in saved city state.
+  let siteEstimate: SiteDiagnosis | null = null, siteResult: SiteResultDiagnosis | null = null, siteNotice = '';
+  const sitePanel = createSitePanel({ close: () => closeGrowth() });
+  ui.appendChild(sitePanel.root);
+  function renderSite() {
+    if (!sim) return;
+    sitePanel.update({ tool: tool ? labToolOf(tool, roadTool, civicTool) : null, day: sim.day, funds: sim.money, sandbox: sim.diff === 3, estimate: siteEstimate, result: siteResult, notice: siteNotice });
+  }
+  function syncSite() {
+    const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
+    bui.setSiteGuide(selected ? selectedToolGuide(selected).name : '', siteResult?.summary ?? null);
+    if (stroke) updatePreview();
+    if (!sitePanel.root.hidden) renderSite();
+  }
+  function openSite() {
+    if (!sim) return;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset(); sitePanel.reset(); renderSite(); growthModal.show(sitePanel.root, sitePanel.title);
+  }
+
   // D053: keep imported rank rules intact; provide a truthful route to existing
   // build tools. The guide is read-only until original selection/placement runs.
   const rk = $<HTMLElement>('#rk'), rkGate = createPanelUpdateGate(rk);
@@ -670,7 +702,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   ui.appendChild(catalog.root);
   const growthModal = createSaveModalAccess(ui, [bui.root, renderer.domElement], () =>
     bui.root.querySelector<HTMLElement>('#civicGuide:not([hidden])') ?? bui.root.querySelector<HTMLElement>('#menuBtn'));
-  function closeGrowth(restoreFocus = true) { rkGate.cancel(); catalog.reset(); growthModal.close(restoreFocus); }
+  function closeGrowth(restoreFocus = true) { rkGate.cancel(); catalog.reset(); sitePanel.reset(); growthModal.close(restoreFocus); }
   $<HTMLButtonElement>('#rkX').onclick = () => closeGrowth();
   $<HTMLButtonElement>('#rkCatalog').onclick = () => openCatalog();
   rk.onclick = e => { if (e.target === rk) closeGrowth(); };
@@ -1035,6 +1067,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'night') openNight();
     else if (id === 'rank') openRank();
     else if (id === 'catalog') openCatalog();
+    else if (id === 'site') openSite();
     else if (id === 'policy') openPolicy();
     else if (id === 'tech') openTech();
     else if (id === 'commission') openCommission();
@@ -1068,6 +1101,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     saveStatus.setState(saveWarnings());
     syncCommissionHud();
     syncDock();
+    syncSite();
     if (!rk.hidden) renderRank();
     if (!catalog.root.hidden && sim) catalog.update({ rankIdx: sim.rankIdx, sandbox: sim.diff === 3, day: sim.day });
   }
@@ -1100,6 +1134,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS.map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
+    const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
+    bui.setSiteGuide(selected ? selectedToolGuide(selected).name : '', siteResult?.summary ?? null);
   }
   const syncSim = syncUi;   // D010 的呼叫點（播放、速度）沿用
   // 開局提示：照實驗線教練列的順序（checkHints 66640–66645）：先鋪路 → 路邊劃住宅 → 蓋電廠；本線開局暫停，多一步「按 ▶」
@@ -1131,7 +1167,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // D019：拿著水塔、配水管時地面畫出配水管（實驗線平常埋在地下，utilityLineMode485C 50907）；換了就重建一次（只重畫有水管的格）
   let pipesShown = false;
   function syncPipes() {
-    const want = tool === 'civic' && (civicTool === 'wpipe' || civicTool === 'water');
+    const want = tool === 'civic' && (civicTool === 'wpipe' || civicTool === 'water' || civicTool === 'sewage');
     if (want !== pipesShown) { pipesShown = want; if (city && city.wp.some(Boolean)) rebuildScene(); }
   }
   function setTool(t: ToolId | null, silent = false) {
@@ -1159,15 +1195,17 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const pv = previewOp(sim, op);
     preview.set(pv.cells.map(q => ({ x: q.x, z: q.z, y: Math.max(0, tileTop(city!, q.z * n + q.x)), ok: q.ok })), toolColor());
     lastPreview = pv;
-    placeCostTag();
+    const diagnosis = diagnoseSite(sim, op, pv);
+    if (stroke.pid >= 0) siteEstimate = diagnosis;
+    placeCostTag(diagnosis);
     timing.preview = performance.now() - t0;
     invalidate();
   }
-  function placeCostTag() {
+  function placeCostTag(diagnosis: SiteDiagnosis | null = stroke && stroke.pid >= 0 ? siteEstimate : null) {
     if (!stroke || !lastPreview || !city || !sim) return;
     const pv = lastPreview, [x, z] = opOf(stroke).k === 'tap' ? stroke.a : stroke.b, n = city.n;
     const [sx, sy] = screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city, z * n + x)), z + .5));
-    const text = pv.count === 0 ? (pv.reason ?? '這裡不能蓋') : `${sim.diff === 3 ? '免費' : '$' + pv.total.toLocaleString()}${pv.count > 1 ? `・${pv.count} 格` : ''}`;
+    const text = diagnosis ? siteCostText(diagnosis) : pv.count === 0 ? (pv.reason ?? '這裡不能蓋') : `${sim.diff === 3 ? '免費' : '$' + pv.total.toLocaleString()}${pv.count > 1 ? `・${pv.count} 格` : ''}`;
     bui.showCost(sx, sy, text, pv.count === 0 || !pv.affordable);
   }
   function cancelStroke() { stroke = null; lastPreview = null; preview.clear(); bui.hideCost(); invalidate(); }
@@ -1182,13 +1220,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 手勢和測試出口共用同一條路：規則照實驗線（src/sim/edit.ts → src/sim/rules/build.ts）、事件記進歷史、場景重建、自動存檔
   function runOp(op: EditOp) {
     const t0 = performance.now();
+    const before = diagnoseSite(sim!, op);
     const res = commitOp(sim!, op, performance.now());
+    siteEstimate = before; siteResult = diagnoseSiteResult(before, res); siteNotice = '';
     if (res.arm) bui.toast(`⚠️ 再點一次確認拆除 Lv${res.arm.lv} ${KINDS.name(res.arm.k)}`, 'gold');   // 實驗線原句（62987）
     else if (!res.placed && res.reason) bui.toast(res.reason, 'bad');
     if (res.skipped) bui.toast(`已跳過 ${res.skipped} 棟 Lv2+ 建築（單獨點兩次可拆）`);             // 實驗線原句（63004）
     if (res.placed || res.spent) {
       rebuildScene();
       saveNow();
+      // Keep the original compact debit footprint: a wider transient result
+      // toast can steal a subsequent map press. Original number formatting also
+      // bounds fractional notices; exact actual amounts persist in
+      // the existing site entry/dialog, without making notices click-through.
       if (res.spent && sim!.diff !== 3) bui.toast(`−$${res.spent.toLocaleString()}${res.placed > 1 ? `（${res.placed} 格）` : ''}`);
     }
     syncUi();
@@ -1201,6 +1245,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!sim) return null;
     const r = undoOp(sim);
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
+    siteEstimate = null; siteResult = null; siteNotice = `上一筆施工已復原，退回 ${formatSiteMoney(r.refund)}。`;
     rebuildScene(); saveNow();
     bui.toast(`↩ 已復原${r.refund ? `，退回 $${r.refund.toLocaleString()}` : ''}`, 'good');
     syncUi();
@@ -1228,7 +1273,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
     if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cmGate.cancel(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
-    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning, #civicGuide')) return;   // Native activation must not toggle playback.
+    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning, #civicGuide, #siteGuide')) return;   // Native activation must not toggle playback.
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
@@ -1514,7 +1559,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const lift = (id: number) => { ptrs.delete(id); };
   const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
     && !bui.isMenuOpen() && [dlg, saveStatus.root, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
-    && catalog.root.hidden && document.elementFromPoint(x, y) === canvas;
+    && catalog.root.hidden && sitePanel.root.hidden && document.elementFromPoint(x, y) === canvas;
   // D047: count touches on UI too. A second finger on a toolbar/notice/panel
   // interrupts immediately, before its click changes a tool or opens an overlay.
   addEventListener('pointerdown', e => {
