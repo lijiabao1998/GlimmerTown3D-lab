@@ -1,0 +1,37 @@
+name: D055 live QA
+on:
+  push:
+    branches: [qa/d055-live-0e849a6f]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Verify published product tree unchanged
+        run: |
+          git diff --exit-code 0e849a6f6322091863ab0c27b64a45c669e45444 HEAD -- src public index.html package.json package-lock.json vite.config.ts tsconfig.json
+          test "$(git rev-parse HEAD^)" = 0e849a6f6322091863ab0c27b64a45c669e45444
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: Verify real Pages origin, native interactions, reloads and approved pixels
+        run: node tools/d055-live-qa.mjs 2>&1 | tee d055-live-run.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d055-live-${{ github.sha }}
+          path: |
+            scratch/d055-live/
+            d055-live-run.txt
+          if-no-files-found: error
+          retention-days: 14
