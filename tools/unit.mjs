@@ -665,6 +665,8 @@ await guard('./unit-d054-ui.mjs', 'd054UiGuards');
 await guard("./unit-d055-build.mjs", "d055BuildGuards");
 await guard("./unit-d055-native.mjs", "d055NativeGuards");
 
+await guard('./unit-d056.mjs', 'd056Guards');
+
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);

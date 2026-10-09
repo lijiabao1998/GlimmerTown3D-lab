@@ -1,0 +1,196 @@
+{
+  "source": "GitHub Actions screenshots",
+  "derivation": "same rectangular crop and proportional resize per pair; no retouching",
+  "screenshots": [
+    {
+      "file": "d056-before/D056-before-fire-station-1440.png",
+      "sha256": "e81d2a72d12bed9696576a58e25a0dc534f067fb9801af3373fb4b6b9561375c",
+      "crop": [
+        585,
+        235,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-fire-station-1440.png",
+      "sha256": "80f372805189dd7d16561238669315fcffa945d938d666fdd2ea9813d03fd3c3",
+      "crop": [
+        585,
+        235,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-village-school-1440.png",
+      "sha256": "615959a99f9d40e65a124588daa467c1c906d34b94b931a4089a3e127fd5943d",
+      "crop": [
+        585,
+        320,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-village-school-1440.png",
+      "sha256": "6b80216ba8ed64a4b1144a120f88750fed216a31016f27ced4bb7b98caeee24a",
+      "crop": [
+        585,
+        320,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-police-station-1440.png",
+      "sha256": "0572583457d53d0193883114dd06c29d74fb0bcd4eec132854b8b3e600fbbeca",
+      "crop": [
+        585,
+        285,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-police-station-1440.png",
+      "sha256": "75e43b3dd8a5ed3f5ef3706658583a4608ee9b26c76addac8b53c3a31f3fdc50",
+      "crop": [
+        585,
+        285,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-pavilion-hospital-1440.png",
+      "sha256": "9436bb6492729470cf8c03e821b07f0d0931502424b3311d9d32623a1739aae2",
+      "crop": [
+        580,
+        230,
+        860,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-pavilion-hospital-1440.png",
+      "sha256": "f10319e50adcf27f7866bc16284550f5f0b6b72f8b9fe31f52520789b2233da2",
+      "crop": [
+        580,
+        230,
+        860,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-village-clinic-1440.png",
+      "sha256": "cedcb25390e9d07a7b1e201d0c31d0485620c281ca43cd467c83f1e91f3d5593",
+      "crop": [
+        585,
+        315,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-village-clinic-1440.png",
+      "sha256": "2f71bd350a6799ca7f5ddc2138fc8ef475032636d79ffcd26dd100e583998db0",
+      "crop": [
+        585,
+        315,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-public-library-1440.png",
+      "sha256": "fbee4762d68432a4bf6f9b7b33334d10b92f6721cf112854285342740a64233c",
+      "crop": [
+        585,
+        300,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-public-library-1440.png",
+      "sha256": "55f072411230005d9f013d68bebebb27364cea3f18041cd7504dcb5797817632",
+      "crop": [
+        585,
+        300,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-post-office-1440.png",
+      "sha256": "731ad5ab5c50f3c6973fd3cc8bd74738bfb4480a1774785404b2108547f035a8",
+      "crop": [
+        585,
+        225,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-post-office-1440.png",
+      "sha256": "b2b1926e9336181a1c9b96400f251a21ce0796ae253d9fb6f71b3fa1ec79434c",
+      "crop": [
+        585,
+        225,
+        855,
+        570
+      ]
+    },
+    {
+      "file": "d056-before/D056-before-market-hall-1440.png",
+      "sha256": "b024cbacdfbf0177c5ce075589c712cf6565ce34ecae03da73473b2793111dbf",
+      "crop": [
+        500,
+        315,
+        940,
+        620
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-market-hall-1440.png",
+      "sha256": "6288129061e7cfc8dead94f49b29335e4c572af2a2ea12f343d77befc66933f8",
+      "crop": [
+        500,
+        315,
+        940,
+        620
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-railway-station-1440.png",
+      "sha256": "b3031a951d3c6110a6d26c810ecb51d4148ec22384bd0253b3c7ea4edf0c1da3",
+      "crop": [
+        580,
+        315,
+        860,
+        570
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-town-hall-1440.png",
+      "sha256": "6216df3bd95eaa893f34559c521bf9b171f1d6f735550a99bfe9f81431ed488f",
+      "crop": [
+        490,
+        180,
+        950,
+        630
+      ]
+    },
+    {
+      "file": "d056-after/D056-after-courthouse-1440.png",
+      "sha256": "05203b355a58e426392e358c10f76335325bf2c4de54bcb9876eeae6c40cb324",
+      "crop": [
+        490,
+        235,
+        950,
+        630
+      ]
+    }
+  ]
+}

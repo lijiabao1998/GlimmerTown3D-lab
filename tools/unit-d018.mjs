@@ -1,3 +1,4 @@
+import { D056_LEGACY } from './d056-legacy.mjs';
 // D018 Node 守衛：公園照實驗線九種設計（驗收 1、2、3 的一半）。由 tools/unit.mjs 呼叫。
 //   1. 實驗線原文的出處：src/content/samples/d018-lab.json（tools/lab-parks.mjs 摘 SPR.park 九種的三段）逐段 sha256＝錨點記錄；
 //   2. D018 歷史配方守衛（D047 的 k51 用保留原配方；現行 k51 由 D047 另驗）：全部非住商工種類（樣張城裡的 183 種 × 變體 0–8）的幾何雜湊，公園以外逐位＝D018 動手前錄的表（d018-kinds-before.json）；公園九個變體都變了、而且彼此不同；
@@ -34,7 +35,7 @@ async function guards(log) {
     log(!bad.length, 'D018 公園原文：實驗線 d23c18d SPR.park 九種的三段（40602 v0–v2、44563 v3–v5、46122 v6–v8），sha256 逐段＝錨點記錄', bad.join('；') || (gold.pieces ?? []).map(p => `${p.name} ${p.line}–${p.endLine}`).join('、'));
   }
   // ---- 2. 只動了公園 ----
-  const before = JSON.parse(read('src/content/samples/d018-kinds-before.json')).kinds, now = kindHashes({ 51: { type: 'landmark', p: { which: 'rocket' } } }); // D047 explicitly changes k51; this historical D018 guard still verifies the preserved legacy recipe, and D047 guards the new art.
+  const before = JSON.parse(read('src/content/samples/d018-kinds-before.json')).kinds, now = kindHashes({ ...D056_LEGACY, 51: { type: 'landmark', p: { which: 'rocket' } } }); // D047 explicitly changes k51; this historical D018 guard still verifies the preserved legacy recipe, and D047 guards the new art.
   {
     const bad = [], ks = Object.keys(before);
     if (ks.length !== Object.keys(now).length || ks.length < 180) bad.push(`種類數 動手前 ${ks.length}、現在 ${Object.keys(now).length}`);

@@ -1,3 +1,4 @@
+import {D056_ADDED,assertD056Scope,d056HistoricalBytes} from './d056-scope.mjs';
 // D053: actual growth-guide modules plus shipped cityView selection functions.
 // DOM/event doubles are Node boundary evidence, never native Chrome/Android proof.
 // Rules, previews, commits, undo, saves, RNG and uninterrupted daily steps are real.
@@ -382,6 +383,7 @@ function selectionAndCommit(source=citySource) {
 }
 
 function originalScope() {
+  assertD056Scope();
   // D055's authorized native construction adds ONLY build.ts/edit.ts to simulation scope.
   // The 40 other simulation files remain baseline 1955bd24 bytes. Pin the two
   // reviewed D055 files individually, rather than accepting arbitrary sim edits.
@@ -397,11 +399,11 @@ function originalScope() {
     'src/content': [96, '85f9d524f33f91a96d8c23bda36e358f8e7d21c14f40ece4ceaf77cf1de4618e'],
   };
   for (const [dir,[count,sha]] of Object.entries(expected)) {
-    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).sort(),hash=createHash('sha256');
-    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(fs.readFileSync(path.join(ROOT,file))).update('\0');
+    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).filter(file=>!D056_ADDED.has(file)).sort(),hash=createHash('sha256');
+    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(d056HistoricalBytes(file)).update('\0');
     assert.equal(files.length,count,dir+' original file count');assert.equal(hash.digest('hex'),sha,dir+' unchanged baseline bytes excluding two explicitly pinned D055 files');
   }
-  return '154 original files byte-identical; only recovered build.ts and native edit.ts additions individually SHA-256 pinned';
+  return '154 original files protected; D055 gameplay pinned, D056 art pinned and tiny dispatch inverses reconstruct exact baseline bytes';
 }
 function selectionPurity(source=citySource) {
   const a=d044Load(),calls=instrumentRng(a.sim);a.sim.rankIdx=20;const h=selectionHarness(a,source);
@@ -490,7 +492,7 @@ function clickOriginGuard() {
 }
 
 export function d053Guards(log,match='') {
-  const tests=[['native click origin and cleanup safety',clickOriginGuard],['original154 + explicit D055 two-file scope',originalScope],['25-tool metadata (18 original civic), base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
+  const tests=[['native click origin and cleanup safety',clickOriginGuard],['original154 + explicit D055 gameplay and D056 art scope',originalScope],['25-tool metadata (18 original civic), base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
   for(const [name,fn] of tests)if(!match||name.includes(match))try{log(true,'D053 '+name,fn());}catch(error){log(false,'D053 '+name,error.stack);}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) {

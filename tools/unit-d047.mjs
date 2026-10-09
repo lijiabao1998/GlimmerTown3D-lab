@@ -1,3 +1,4 @@
+import { D056_LEGACY } from './d056-legacy.mjs';
 // D047 art-only contract. These factual guards do not claim visual or device QA.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -21,7 +22,7 @@ export async function d047Guards(log) {
   const test = async (n, f) => { try { await f(); log(true, 'D047 '+n); } catch(e) { log(false, 'D047 '+n, e.stack); } };
   const before = JSON.parse(read('src/content/samples/d047-kinds-before.json'));
   const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), LOOKS = JSON.parse(read('src/content/lab-looks.json')).looks;
-  const now = kindHashes();
+  const now = kindHashes(D056_LEGACY);
   await test('only k51 changes: 182 other civic kinds × 9 variants match the pre-edit baseline', () => {
     assert.equal(before.commit, D047_BASELINE); assert.equal(Object.keys(before.kinds).length, 183);
     assert.deepEqual(Object.keys(now), Object.keys(before.kinds));
@@ -40,7 +41,7 @@ export async function d047Guards(log) {
       assert.equal(source.split(from).length, 2, 'unique mutation anchor');
       let code = stripTypeScriptTypes(source.replace(from, to));
       code = code.replace(/from 'three'/g, 'from '+JSON.stringify(import.meta.resolve('three')))
-        .replace(/from '\.\/windows\.ts'/g, 'from '+JSON.stringify(pathToFileURL(path.join(ROOT,'src/render/windows.ts')).href));
+        .replace(/from '(\.\/[^']+)'/g, (_, spec) => 'from '+JSON.stringify(pathToFileURL(path.join(ROOT,'src/render',spec)).href));
       return import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
     };
     const current = await mutate("p.blk(.06, .51, .07, .49, 0, H * .70, c.wallR, c.roof, false);", "p.blk(.06, .51, .07, .49, 0, H * .60, c.wallR, c.roof, false);");
@@ -62,7 +63,7 @@ export async function d047Guards(log) {
   });
   await test('before comparison uses the unchanged legacy recipe and all nine baseline hashes', () => {
     assert.ok(read('src/render/kindArt.ts').includes(before.legacyRecipe));
-    assert.deepEqual(kindHashes({51:LEGACY}), before.kinds);
+    assert.deepEqual(kindHashes({...D056_LEGACY,51:LEGACY}), before.kinds);
   });
   await test('space center stays within its 3×3 plot, keeps source height/color, has finite nonempty geometry and ≤1600 triangles', () => {
     for (let v=0;v<9;v++) {
