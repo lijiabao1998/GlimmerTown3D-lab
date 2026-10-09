@@ -11,7 +11,7 @@ export async function d055Native(p,page,{mobile,item}){
  const before=await d054Snapshot(p),model=d054Model(before.code).sim;
  assert.equal(before.sim.playing,false,'paid native tests run paused');equalModel(before,model,'snapshot/model initial alignment');
  for(const t of FOOD_TOOLS){
-  if((await p.ev('__gt.ui()')).tool!=='civic')await tap('.tool[data-t="civic"]');await tap('#civicGuide');await tap('#catalog [data-group="food"]');await tap(`#catalog [data-tool="${t.id}"]`);
+  if(!['civic','food'].includes((await p.ev('__gt.ui()')).tool))await tap('.tool[data-t="civic"]');await tap('#civicGuide');await tap('#catalog [data-group="food"]');await tap(`#catalog [data-tool="${t.id}"]`);
   const ui=await p.ev('__gt.ui()');assert.equal(ui.tool,'food');assert.equal(ui.civicTool,t.id);
   const operation={k:'tap',tool:t.id,x0:30,z0:18,x1:30,z1:18},pv=previewOp(model,operation);
   assert.ok(pv.count===1&&pv.affordable,t.id+' fixture available');assert.equal(pv.cells.length,t.size*t.size);

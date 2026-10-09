@@ -44,7 +44,7 @@ const snap = async p => { await p.ev('__gt.journalFlush()'); return p.ev(D053_SN
 const model = code => { const {KT,vrank}=builtBase(), r=loadCode(code,KT,vrank); assert.ok(r.ok); powerStatus(r.sim); return r; };
 const op = (tool,x,z,x1=x,z1=z,k='tap') => ({k,tool,x0:x,z0:z,x1,z1});
 async function menuRank(p,mobile=true) { await tap(p,'#menuBtn',mobile); await tap(p,'#menu [data-m="rank"]',mobile); }
-async function catalog(p,mobile=true) { if((await p.ev('__gt.ui()')).tool!=='civic') await tap(p,'.tool[data-t="civic"]',mobile); await tap(p,'#civicGuide',mobile); assert.equal(await hidden(p,'#catalog'),false); }
+async function catalog(p,mobile=true) { if(!['civic','food'].includes((await p.ev('__gt.ui()')).tool)) await tap(p,'.tool[data-t="civic"]',mobile); await tap(p,'#civicGuide',mobile); assert.equal(await hidden(p,'#catalog'),false); }
 async function select(p,id,mobile=true) { await catalog(p,mobile); await tap(p,'#catalog [data-group="all"]',mobile); await tap(p,`#catalog [data-tool="${id}"]`,mobile); assert.equal(await hidden(p,'#catalog'),true); assert.equal(await p.ev('__gt.ui().civicTool'),id); }
 async function position(p,sel,focus=false) { await p.ev(`(()=>{const b=document.querySelector(${J(sel)});b.scrollIntoView({block:'center'});${focus?'b.focus({preventScroll:true});':''}})()`); await p.frames(2); }
 async function newCode(p,code) {
