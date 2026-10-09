@@ -27,3 +27,42 @@ Initial eight-model candidate b622374 passed the D056 GitHub Actions art workflo
 Local typecheck/build/focused geometry checks pass. Full Node suite is still running. Cloud shell Chrome cannot create its process-singleton socket; an approved escalated retry encountered the same restriction. No security settings were changed and no user computer was used. GitHub Actions provides the real browser verification. No real Android hardware performance claim.
 
 Draft PR only; art approval, complete final CI and final independent review remain release gates. No merge/deployment performed.
+
+## Review pictures (actual game rendering)
+
+Eight buildings available through the **existing normal build menu**:
+
+![Eight native buildings, before and after](img/D056/D056-eight-native-before-after.png)
+
+Identical rectangular crops within each before/after pair, no retouching. Original full screenshots are preserved in the CI artifact. The supported maximum desktop zoom is 8; contact sheets use actual recorded pixels at that cap.
+
+![Native district with full gameplay UI](img/D056/D056-native-district-before-after.png)
+
+![Mobile district at 360 and 412 CSS pixels](img/D056/D056-mobile-district.png)
+
+The three extras are separate and **not counted toward the eight native tools**:
+
+![Three existing-save bonus models](img/D056/D056-three-imported-bonus-models.png)
+
+## Verified evidence at art source b7a74ea
+
+[Art/native workflow 37928661825](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37928661825) passed. [Original artifact](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37928661825/artifacts/11614967647), ZIP SHA-256 `3a3051d487f436218601c97bed288066807857cec58ec9d474cc97c72e245a79`.
+
+- 30 before/after pairs (60 original PNGs), identical fixture and corresponding cameras; both phases passed.
+- Desktop 1440×1000, mobile 360×740 and 412×860; all eleven model-owner checks per viewport, 33 total.
+- Eight existing tools × two paid placements and undos × three viewports: 48 transactions verified against the independent simulation model. All events trusted. Mobile touch cancellation: 32 cases. Repeated catalogue opening/closing remains read-only.
+- Current and fresh scene digests match for the district and every placement/undo, including per-owner geometry, ground, trees, counts and query data.
+- Authored district: 9 draw calls, 16,096 submitted triangles, nonblank pixels, zero browser errors or external requests.
+- Existing D055 seven-food-tool and commission navigation suite passed at all three viewports.
+- Local focused guards pin all eleven candidate geometries, reject position and color mutations for each model, enforce ≤850 triangles/model, exact source height and parcel bounds, and reject solid walls across the market/court openings in any geometry arena.
+- Independent review inspected all eleven models and mobile views, verified source/save separation, exact triangle deltas, eight native build/undo paths in the model, and the scope-guard mutations described below.
+
+Durable evidence: [before report](evidence/D056/before.json), [after report](evidence/D056/after.json), [synthetic fixture](evidence/D056/fixture.code.txt), [crop/hash provenance](evidence/D056/D056-contact-sheet-sources.json). These are authored review cities, not naturally played cities.
+
+### Full regression and remaining gate
+
+A complete local Node run finished with only the D053/D054 historical full-source scope checks red: they still required old render/content file counts. The final scope allowance pins the six changed/added art files individually; reverses the two small render dispatch edits back to byte-identical main; excludes only four named and SHA-pinned additions from old counts. All other gameplay, IO, rendering and content bytes remain under the old aggregate hashes. Both amended scope checks pass. Independent in-memory mutations to the new renderer, dispatcher, untouched simulation and IO were rejected by both checks.
+
+The final exact-head full Node/browser CI is started after evidence publication; its result is maintained in [PR13 checks](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/13/checks), rather than calling this earlier capture a full-suite pass. No game logic or production rendering was changed to bypass a guard. A failed capture comparison was traced to the test-only visual age override leaving live tree attributes stale; removing that unnecessary override restored the unmodified age20 fixture and the strict comparison.
+
+Release gates: final full CI, owner's art-preview decision, explicit merge/deploy approval. Android hardware is untested. The draft is not a release.

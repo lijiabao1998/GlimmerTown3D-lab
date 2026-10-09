@@ -1,3 +1,4 @@
+import {D056_ADDED,assertD056Scope,d056HistoricalBytes} from './d056-scope.mjs';
 // D054: pure UI diagnostics against the unchanged simulation, with real commits,
 // undo, saves, history, traced RNG and uninterrupted paired daily trajectories.
 // This Node suite is boundary evidence; it does not claim native browser proof.
@@ -66,6 +67,7 @@ function same(a, b, ar, br, why) {
   assert.deepEqual(ar, br, why + ': RNG invocation arguments/results');
 }
 function originalScope() {
+  assertD056Scope();
   // D055's authorized native construction adds ONLY build.ts/edit.ts to simulation scope.
   // The 40 other simulation files remain baseline 1955bd24 bytes. Pin the two
   // reviewed D055 files individually, rather than accepting arbitrary sim edits.
@@ -81,11 +83,11 @@ function originalScope() {
     'src/content': [96, '85f9d524f33f91a96d8c23bda36e358f8e7d21c14f40ece4ceaf77cf1de4618e'],
   };
   for (const [dir,[count,sha]] of Object.entries(expected)) {
-    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).sort(),hash=createHash('sha256');
-    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(fs.readFileSync(path.join(ROOT,file))).update('\0');
+    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).filter(file=>!D056_ADDED.has(file)).sort(),hash=createHash('sha256');
+    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(d056HistoricalBytes(file)).update('\0');
     assert.equal(files.length,count,dir+' original file count');assert.equal(hash.digest('hex'),sha,dir+' unchanged baseline bytes excluding two explicitly pinned D055 files');
   }
-  return '154 original files byte-identical; only recovered build.ts and native edit.ts additions individually SHA-256 pinned';
+  return '154 original files protected; D055 gameplay pinned, D056 art pinned and tiny dispatch inverses reconstruct exact baseline bytes';
 }
 function originalSemantics() {
   const a = fixture(), s = a.sim;
@@ -326,7 +328,7 @@ function mutations() {
   return cases.length + ' executable guidance/count/reason/finance/resource/network/result/state/RNG mutations rejected by behavior';
 }
 export function d054Guards(log, match = '') {
-  const tests = [['original154 + explicit D055 two-file scope', originalScope], ['original authoritative baseline semantics', originalSemantics], ['selected tool names and D053 guidance', toolGuides], ['mixed selection reasons and megaproject counting', selections], ['exact finances and operation policy', finances], ['finite oil/ore reserves and legal exhausted rebuild', resourceStocks], ['actual result diagnostics preserve captured reasons', results], ['current sewage contact distinct from water placement', sewerNetworks], ['authoritative preview and pure query call boundaries', authoritativeQueries], ['deep query purity and snapshot isolation', purity], ['real paired commit undo history save RNG', pairedCommits], ['36 uninterrupted paired day trajectories', trajectories], ['behavior mutation sensitivity', mutations]];
+  const tests = [['original154 + explicit D055 gameplay and D056 art scope', originalScope], ['original authoritative baseline semantics', originalSemantics], ['selected tool names and D053 guidance', toolGuides], ['mixed selection reasons and megaproject counting', selections], ['exact finances and operation policy', finances], ['finite oil/ore reserves and legal exhausted rebuild', resourceStocks], ['actual result diagnostics preserve captured reasons', results], ['current sewage contact distinct from water placement', sewerNetworks], ['authoritative preview and pure query call boundaries', authoritativeQueries], ['deep query purity and snapshot isolation', purity], ['real paired commit undo history save RNG', pairedCommits], ['36 uninterrupted paired day trajectories', trajectories], ['behavior mutation sensitivity', mutations]];
   if (match && !tests.some(([name]) => name.includes(match))) { log(false, 'D054 test selection', 'No test matched: ' + match); return; }
   for (const [name, fn] of tests) if (!match || name.includes(match)) try { assert.ok(Site || name.startsWith('original'), 'before-image gate has not released product implementation'); log(true, 'D054 ' + name, fn()); } catch (error) { log(false, 'D054 ' + name, error.stack); }
 }

@@ -5,7 +5,7 @@ import{d056ReviewCode,D056_CAMERA,D056_SITES}from'./d056-scenes.mjs';
 const phase=process.argv.find(x=>x.startsWith('--phase='))?.slice(8)??'after';
 const out=path.join(ROOT,'scratch/d056-'+phase);fs.mkdirSync(out,{recursive:true});
 const J=JSON.stringify,hash=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
-const code=d056ReviewCode(),report={phase,qualification:'Authored synthetic fixture; Chrome software WebGL; mobile touch emulation, not Android hardware.',fixtureSha256:hash(code),cases:[],passed:false};
+const code=d056ReviewCode(),report={phase,sourceRef:process.env.GITHUB_SHA??'local',htmlSha256:hash(fs.readFileSync(path.join(ROOT,phase==='before'?'scratch/d056-before/index.html':'dist/index.html'))),qualification:'Authored synthetic fixture; Chrome software WebGL; mobile touch emulation, not Android hardware.',fixtureSha256:hash(code),cases:[],passed:false};
 fs.writeFileSync(path.join(out,'D056-fixture.code.txt'),code);
 try{
  for(const opt of [{W:1440,H:1000,mobile:false},{W:360,H:740,mobile:true},{W:412,H:860,mobile:true}]){
@@ -22,7 +22,7 @@ try{
    const nonblank=await p.ev(`(()=>{const c=document.querySelector('canvas'),k=document.createElement('canvas');k.width=96;k.height=60;const x=k.getContext('2d');x.drawImage(c,0,0,96,60);const d=x.getImageData(0,0,96,60).data;let sum=0,sq=0,n=0;for(let i=0;i<d.length;i+=4){const v=(d[i]+d[i+1]+d[i+2])/3;sum+=v;sq+=v*v;n++;}return sq/n-(sum/n)**2})()`);assert.ok(nonblank>50,'nonblank render');item.pixelVariance=nonblank;
    const same=await p.ev(D056_SAME);if(!same){item.digestMismatch=await p.ev('__d056LastDigest');console.error(J(item.digestMismatch));}assert.equal(same,true,'district cached/fresh');item.checks.push('all owner geometry and queries match fresh scene');await take('district');
    {
-    for(const s of D056_SITES.filter(s=>!opt.mobile||![17,42,43].includes(s.k))){await p.ev(`__gt.view(${s.x+s.size/2},${s.z+s.size/2},${opt.mobile?(s.size===1?8:5):(s.size===1?24:14)})`);await take(s.id);}
+    for(const s of D056_SITES.filter(s=>!opt.mobile||![17,42,43].includes(s.k))){await p.ev(`__gt.view(${s.x+s.size/2},${s.z+s.size/2},${opt.mobile&&s.size===2?5:8})`);await take(s.id);}
    }
    assert.equal(await p.ev('JSON.stringify([__gt.sim(),__gt.history(),__gt.buildingList()])'),world);item.checks.push('camera and visual time do not mutate simulation/history/buildings');
    item.boxes=await p.ev('__gt.ownerBoxes()');item.buildings=await p.ev('__gt.buildingList()');item.scene=await p.ev('__gt.sceneStats()');item.gl=await p.ev('__gt.glInfo()');

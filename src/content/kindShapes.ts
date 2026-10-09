@@ -206,7 +206,7 @@ export const KIND_SHAPES: Record<number, Shape> = {
   169: S('plant', { silos: 4, halls: 0 }),                              // 糧食筒倉
 };
 
-// Preserve the historical recipes for regression comparison; only these eight opt in to D056.
+// Preserve the historical recipes for regression comparison; only these eleven opt in to D056.
 export const shapeOf = (k: number): Shape | null => {
   const shape = KIND_SHAPES[k];
   return shape ? BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : shape : null;

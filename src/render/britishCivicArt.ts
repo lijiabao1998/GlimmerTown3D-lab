@@ -1,4 +1,4 @@
-// D056: eight authored silhouettes; all dimensions are bounded by the existing parcel and H.
+// D056: eight native and three bonus silhouettes; all dimensions are bounded by the existing parcel and H.
 // Only batched geometry is emitted. No state, random numbers, runtime assets or per-building meshes.
 import { col, type Pen } from './kindArt.ts';
 import { BRITISH_KINDS, BRITISH_PALETTE as C } from '../content/britishCivic.ts';
