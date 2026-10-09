@@ -49,5 +49,5 @@ export function createFacilityCatalog(on: { select(id: string): void; close(): v
     });
     updatePanelContent(list, ...items);
   }
-  return { root, title, update(s: FacilityCatalogState) { state = s; render(); }, reset() { gate.cancel(); }, group: () => group };
+  return { root, title, update(s: FacilityCatalogState) { state = s; render(); }, reset() { gate.cancel(); }, selectGroup(value: FacilityGroup) { group = value; render(); }, group: () => group };
 }

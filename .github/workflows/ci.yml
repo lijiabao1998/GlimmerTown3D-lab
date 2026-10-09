@@ -31,6 +31,15 @@ jobs:
       - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
         run: npm run unit
       - run: npm run build
+      - name: D055 native food trade capture
+        run: node tools/d055-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d055-${{ github.sha }}
+          path: scratch/d055-after/
+          if-no-files-found: warn
+          retention-days: 14
       - name: 煙霧測試
         run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
         shell: bash

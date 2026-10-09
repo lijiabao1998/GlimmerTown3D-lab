@@ -42,3 +42,6 @@
 
 @media (max-width: 400px) { #civicWrap { --civic-gap: 4px; } }
 @media (min-width: 720px) { #civicWrap { width: 568px; align-self: center; } }
+
+/* D055 food group has one full row: put the guide beneath it, never over a tool. */
+#civicWrap[data-group="food"] #civicGuide { position: static; width: 100%; margin-top: 6px; }

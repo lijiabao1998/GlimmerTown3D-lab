@@ -744,7 +744,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (!sim || !FACILITY_TOOLS.some(t => t.id === id) || !pickCivic(id)) return;
     closeGrowth(false); setTool(FOOD_TOOLS.some(t => t.id === id) ? 'food' : 'civic');
     // Selected-tool focus is visible after the dialog and its inert lock close.
-    bui.root.querySelector<HTMLButtonElement>(`#tools [data-t="${tool}"]`)?.focus({ preventScroll: true });
+    bui.root.querySelector<HTMLButtonElement>('#tools [data-t="civic"]')?.focus({ preventScroll: true });
   }
 
   // D032：☰「政策與預算」（實驗線 ☰ 市政統計面板的稅率、服務預算、法規與政策開關的 3D 版）。按了馬上生效（實驗線回退設定：T504 治理關，policyApply504 直接轉給 mayorPolicyApply470A，保留冷卻），
@@ -981,6 +981,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         const researchNote = c.type === 'tech' && p < 1 && s.tech.act !== c.src ? `　接受委託不會自動開始研究；請到「科技與專精」選 ${c.src} 開始或繼續研究。` : '';
         li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}${researchNote}`));
         const act = mk('div', 'h'); act.append(mk('span', 'val', ''), btn('🗑 放棄委託', `放棄委託：${c.nm}（輪次加一、換一批，沒有懲罰）`, () => uiCommission('drop')));
+        if (c.src === 'trade') { li.append(mk('small', 'note', '每日結算的外貿收入累計進度；先建立糧食盈餘與外貿設施。選取工具不會自動施工或花錢。')); act.append(btn('查看農業外貿', '開啟農業外貿設施導覽', () => { openCatalog(); catalog.selectGroup('food'); })); }
         li.append(act);
         kids.push(mk('h3', '', '進行中'), li);
       }
@@ -1280,7 +1281,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
     else if (e.key === ' ' && sim) { e.preventDefault(); setPlaying(!playing); }
-    else if (/^[1-8]$/.test(e.key) && sim) setTool(TOOLS[+e.key - 1].id);
+    else if (/^[1-7]$/.test(e.key) && sim) setTool(TOOLS[+e.key - 1].id);
   });
   // 這一格在目前檔位屬於哪個街區（plan 的索引；-1＝沒畫）
   const blockOfCell = (i: number) => {

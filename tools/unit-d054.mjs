@@ -12,7 +12,7 @@ import { d044Load, BLOCKS } from './d044-cities.mjs';
 import { d045Load } from './d045-cities.mjs';
 import { stepDay } from '../src/sim/day.ts';
 import { saveCode, loadCode } from '../src/io/save.ts';
-import { CIVIC_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
 import { FOREIGN_LAYERS, DOZE_ARM_MS } from '../src/sim/rules/build.ts';
 import { RESOURCE_STOCK, RES_OIL, RES_ORE } from '../src/sim/rules/resource.ts';
 import { pipeComponents, facilityComps, WATER_HOPS472 } from '../src/sim/rules/sewer.ts';
@@ -66,18 +66,26 @@ function same(a, b, ar, br, why) {
   assert.deepEqual(ar, br, why + ': RNG invocation arguments/results');
 }
 function originalScope() {
+  // D055's authorized native construction adds ONLY build.ts/edit.ts to simulation scope.
+  // The 40 other simulation files remain baseline 1955bd24 bytes. Pin the two
+  // reviewed D055 files individually, rather than accepting arbitrary sim edits.
+  const d055 = {
+    'src/sim/edit.ts': '4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6',
+    'src/sim/rules/build.ts': '9530e920f3f590ee467b1ba581ceb369d0d3ed4e092446109274e48d6f9245ca',
+  };
+  for (const [file, sha] of Object.entries(d055)) assert.equal(createHash('sha256').update(read(file)).digest('hex'),sha,file+' reviewed D055 bytes');
   const expected = {
-    'src/sim': [42, '925eff90599c4e58e4d966d33a6462af52526d7e726b8fa64fc67c0b72b7c6de'],
+    'src/sim': [42, '1258c893fdaa67894ccc5fc05c172ef1c8b03d3c71931512e1870a2cc212b420'],
     'src/io': [3, '3fc04802b3cb5b65f738239db7b355e13432901fa65c02db3c7648c2cd00a4fb'],
     'src/render': [15, '2adb379c0a1a309fc1de97c249af9bd98d994ec2408d9c6677a6bae57896542f'],
     'src/content': [96, '85f9d524f33f91a96d8c23bda36e358f8e7d21c14f40ece4ceaf77cf1de4618e'],
   };
-  for (const [dir, [count, sha]] of Object.entries(expected)) {
-    const files = fs.readdirSync(path.join(ROOT, dir), { recursive: true, withFileTypes: true }).filter(d => d.isFile()).map(d => path.relative(ROOT, path.join(d.parentPath, d.name)).replaceAll('\\', '/')).sort(), hash = createHash('sha256');
-    for (const file of files) hash.update(file + '\0').update(fs.readFileSync(path.join(ROOT, file))).update('\0');
-    assert.equal(files.length, count, dir + ' original file count'); assert.equal(hash.digest('hex'), sha, dir + ' byte fingerprint');
+  for (const [dir,[count,sha]] of Object.entries(expected)) {
+    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).sort(),hash=createHash('sha256');
+    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(fs.readFileSync(path.join(ROOT,file))).update('\0');
+    assert.equal(files.length,count,dir+' original file count');assert.equal(hash.digest('hex'),sha,dir+' unchanged baseline bytes excluding two explicitly pinned D055 files');
   }
-  return 'all 156 original simulation/save/render/content files remain byte-identical';
+  return '154 original files byte-identical; only recovered build.ts and native edit.ts additions individually SHA-256 pinned';
 }
 function originalSemantics() {
   const a = fixture(), s = a.sim;
@@ -94,7 +102,7 @@ function originalSemantics() {
 function toolGuides(api = Site) {
   const main = [['zr', '住宅分區', 'rect'], ['zc', '商業分區', 'rect'], ['zi', '工業分區', 'rect'], ['plant', '發電廠', 'tap'], ['doze', '拆除', 'rect']];
   const f = fixture();
-  for (const [id, name, gesture] of [...ROAD_TOOLS.map(t => [t.id, t.name, 'line']), ...CIVIC_TOOLS.map(t => [t.id, t.name, gestureOf(t.id)]), ...main]) {
+  for (const [id, name, gesture] of [...ROAD_TOOLS.map(t => [t.id, t.name, 'line']), ...FACILITY_TOOLS.map(t => [t.id, t.name, gestureOf(t.id)]), ...main]) {
     const g = api.selectedToolGuide(id);
     assert.equal(g.tool, id); assert.equal(g.name, name); assert.equal(g.gesture, gesture); assert.match(g.gestureLabel, gesture === 'line' ? /拉線/ : gesture === 'rect' ? /框選/ : /點放/);
     assert.equal(api.diagnoseSite(f.sim, op(id, X, Z)).name, name, 'name-only pointer lookup retains every authoritative tool name');
@@ -102,7 +110,7 @@ function toolGuides(api = Site) {
     if (FACILITY_NOTES[id]) { assert.equal(g.placement, FACILITY_NOTES[id].placement); assert.equal(g.use, FACILITY_NOTES[id].use); }
   }
   assert.match(api.selectedToolGuide('megaproject').unit, /3×3/);
-  return 'all 28 tools retain authoritative names and gestures; civic placement/use comes from D053 notes';
+  return 'all 35 tools retain authoritative names and gestures; all facility placement/use comes from extended D053 notes';
 }
 function selections(api = Site) {
   const f = fixture(), s = f.sim;
@@ -201,7 +209,7 @@ function sewerNetworks(api = Site) {
   return 'same legal shoreline with disconnected, touching, two networks, connected identity, sewer-main and corner-only cases; no service/past-day promise';
 }
 function compile(source = read('src/ui/siteDiagnostics.ts'), override = {}) {
-  const dependencies = { CIVIC_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, DOZE_ARM_MS, RESOURCE_STOCK, RES_OIL, RES_ORE, FACILITY_NOTES, pipeComponents, facilityComps, WATER_HOPS472, ...override };
+  const dependencies = { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, DOZE_ARM_MS, RESOURCE_STOCK, RES_OIL, RES_ORE, FACILITY_NOTES, pipeComponents, facilityComps, WATER_HOPS472, ...override };
   return new Function(...Object.keys(dependencies), strip(source) + ';return {selectedToolGuide,diagnoseSite,diagnoseSiteResult,formatSiteMoney};')(...Object.values(dependencies));
 }
 function authoritativeQueries() {
@@ -216,7 +224,7 @@ function authoritativeQueries() {
   return 'original count/ok/cost consumed directly; only rejected roots re-previewed for reason; one current sewer-component query only for sewage';
 }
 function inspect(f, api = Site) {
-  for (const id of [...ROAD_TOOLS.map(t => t.id), ...CIVIC_TOOLS.map(t => t.id), 'zr', 'zc', 'zi', 'plant', 'doze']) {
+  for (const id of [...ROAD_TOOLS.map(t => t.id), ...FACILITY_TOOLS.map(t => t.id), 'zr', 'zc', 'zi', 'plant', 'doze']) {
     api.selectedToolGuide(id);
     const operation = op(id, X, Z, X + (gestureOf(id) === 'tap' ? 0 : 3), Z), p = previewOp(f.sim, operation);
     const a = api.diagnoseSite(f.sim, operation), b = api.diagnoseSite(f.sim, operation, p); assert.deepEqual(a, b, 'optional authoritative preview equivalent');
@@ -225,16 +233,16 @@ function inspect(f, api = Site) {
   }
 }
 function purity(api = Site) {
-  const f = fixture(), s = f.sim, calls = instrumentRng(s), defs = stateBytes({ CIVIC_TOOLS, ROAD_TOOLS, FACILITY_NOTES });
+  const f = fixture(), s = f.sim, calls = instrumentRng(s), defs = stateBytes({ CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, FACILITY_NOTES });
   for (const [money, diff] of [[10000, 1], [0, 1], [-.25, 1], [0, 3], [-.25, 3]]) {
     s.money = money; s.diff = diff; const model = raw(f), code = saved(f), rng = stateBytes(calls);
     inspect(f, api); inspect(f, api); assert.equal(raw(f), model, 'queries cannot mutate any nested simulation value'); assert.equal(saved(f), code, 'queries cannot alter exact save bytes'); assert.equal(stateBytes(calls), rng, 'queries cannot call either RNG API');
   }
-  assert.equal(stateBytes({ CIVIC_TOOLS, ROAD_TOOLS, FACILITY_NOTES }), defs, 'queries cannot mutate imported metadata');
+  assert.equal(stateBytes({ CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, FACILITY_NOTES }), defs, 'queries cannot mutate imported metadata');
   const operation = op('wpipe', X, Z, X + 3, Z), p = previewOp(s, operation), code = stateBytes(p);
   p.cells.forEach(Object.freeze); Object.freeze(p.cells); Object.freeze(p); Object.freeze(operation);
   const d = api.diagnoseSite(s, operation, p); assert.equal(stateBytes(p), code); d.cells[0].cost = -123; assert.equal(stateBytes(p), code, 'result does not retain mutable preview cell aliases');
-  return 'five finances/modes × 28 tool queries twice; full model/typed arrays/Map/Set/save/RNG/metadata unchanged; frozen inputs and returned snapshot isolation';
+  return 'five finances/modes × 35 tool queries twice; full model/typed arrays/Map/Set/save/RNG/metadata unchanged; frozen inputs and returned snapshot isolation';
 }
 function pairedCommits(api = Site) {
   const scenarios = [
@@ -318,7 +326,7 @@ function mutations() {
   return cases.length + ' executable guidance/count/reason/finance/resource/network/result/state/RNG mutations rejected by behavior';
 }
 export function d054Guards(log, match = '') {
-  const tests = [['original 156-file byte scope', originalScope], ['original authoritative baseline semantics', originalSemantics], ['selected tool names and D053 guidance', toolGuides], ['mixed selection reasons and megaproject counting', selections], ['exact finances and operation policy', finances], ['finite oil/ore reserves and legal exhausted rebuild', resourceStocks], ['actual result diagnostics preserve captured reasons', results], ['current sewage contact distinct from water placement', sewerNetworks], ['authoritative preview and pure query call boundaries', authoritativeQueries], ['deep query purity and snapshot isolation', purity], ['real paired commit undo history save RNG', pairedCommits], ['36 uninterrupted paired day trajectories', trajectories], ['behavior mutation sensitivity', mutations]];
+  const tests = [['original154 + explicit D055 two-file scope', originalScope], ['original authoritative baseline semantics', originalSemantics], ['selected tool names and D053 guidance', toolGuides], ['mixed selection reasons and megaproject counting', selections], ['exact finances and operation policy', finances], ['finite oil/ore reserves and legal exhausted rebuild', resourceStocks], ['actual result diagnostics preserve captured reasons', results], ['current sewage contact distinct from water placement', sewerNetworks], ['authoritative preview and pure query call boundaries', authoritativeQueries], ['deep query purity and snapshot isolation', purity], ['real paired commit undo history save RNG', pairedCommits], ['36 uninterrupted paired day trajectories', trajectories], ['behavior mutation sensitivity', mutations]];
   if (match && !tests.some(([name]) => name.includes(match))) { log(false, 'D054 test selection', 'No test matched: ' + match); return; }
   for (const [name, fn] of tests) if (!match || name.includes(match)) try { assert.ok(Site || name.startsWith('original'), 'before-image gate has not released product implementation'); log(true, 'D054 ' + name, fn()); } catch (error) { log(false, 'D054 ' + name, error.stack); }
 }

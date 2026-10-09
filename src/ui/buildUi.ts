@@ -17,7 +17,6 @@ export const TOOLS: { id: ToolId; label: string; name: string; color: string }[]
   { id: 'zi', label: '工', name: '工業區', color: '#e0c27a' },
   { id: 'plant', label: '電', name: '燃煤電廠', color: '#f5d451' },
   { id: 'civic', label: '警', name: '公共設施', color: '#9cc0ff' },
-  { id: 'food', label: '農', name: '農業外貿', color: '#b8d98a' },
   { id: 'doze', label: '拆', name: '拆除', color: '#ff8a7a' },
 ];
 
@@ -101,7 +100,7 @@ const CSS = `
 .seg button.on { background: #e8b74a; color: #1c1a14; font-weight: 700; }
 #dayLbl { font-weight: 700; font-size: 15px; margin-left: 2px; white-space: nowrap; text-shadow: 0 1px 3px #000c; }
 #dock .bar .grow { flex: 1; }
-.tools { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; }
+.tools { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
 .tool { height: 58px; padding: 4px 0 3px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; border-radius: 14px; font-size: 12.5px; background: #1c2440ee; }
 .tool svg { width: 24px; height: 24px; color: var(--c); }
 .tool .price { font-size: 10px; color: #aab3c6; line-height: 1.1; }
@@ -142,7 +141,6 @@ const CSS = `
 #bio h2 { margin-right: 48px; }
 @media (max-width: 400px) {   /* 360 寬的手機：七個工具鈕也要 ≥ 44 px（(360 − 16 − 24) ÷ 7 ≈ 45.7） */
   #dock { padding-left: 8px; padding-right: 8px; }
-  .tools { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tools, #civicSub { gap: 4px; }   /* D020：公共設施一排七個，(360 − 16 − 24) ÷ 7 ≈ 45.7 */
 }
 @media (min-width: 720px) {
@@ -283,9 +281,9 @@ export function createBuildUi(on: BuildUiEvents) {
       const civ = d.civicTools.find(c => c.id === d.civicTool);
       toolsEl.querySelectorAll<HTMLElement>('.tool').forEach(b => {
         const id = b.dataset.t as ToolId, p = id === 'road' ? d.roadTools.find(r => r.id === d.roadTool)?.cost : (id === 'civic' || id === 'food') ? civ?.cost : d.prices[id];
-        b.classList.toggle('on', d.tool === id);
+        b.classList.toggle('on', d.tool === id || (id === 'civic' && d.tool === 'food'));
         setText(b.querySelector('.price')!, d.sandbox ? '免費' : p !== undefined ? '$' + p : '');
-        if (id === d.tool && (id === 'civic' || id === 'food') && civ) { setText(b.querySelector('span')!, civ.short); b.setAttribute('aria-label', `${id === 'food' ? '農業外貿' : '公共設施'}：${civ.name}`); }   // 組按鈕的字跟著選到的那一種
+        if (id === 'civic' && civ) { setText(b.querySelector('span')!, civ.short); b.setAttribute('aria-label', `${d.tool === 'food' ? '農業外貿' : '公共設施'}：${civ.name}`); }   // 組按鈕的字跟著選到的那一種
       });
       roadSub.hidden = d.tool !== 'road' || !build;
       const key = d.roadTools.map(r => `${r.id}:${r.name}:${r.cost}`).join() + (d.sandbox ? '|free' : '');
@@ -298,6 +296,7 @@ export function createBuildUi(on: BuildUiEvents) {
       }
       roadSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.r === d.roadTool));
       // 公共設施一組（D016）：十種，名稱與造價照實驗線；清單或沙盒變了才重建
+      $('civicWrap').dataset.group = d.tool === 'food' ? 'food' : 'civic';
       $('civicWrap').hidden = d.mode !== 'build' || (d.tool !== 'civic' && d.tool !== 'food');
       $('civicGuide').hidden = d.mode !== 'build' || (d.tool !== 'civic' && d.tool !== 'food');
       civicSub.hidden = (d.tool !== 'civic' && d.tool !== 'food') || !build;

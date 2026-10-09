@@ -9,21 +9,25 @@ import { pathToFileURL } from 'node:url';
 import { ROOT, withBrowser, sleep } from './cdp.mjs';
 import { pageSession } from './smoke-d011.mjs';
 import { d048KeyEvents } from './smoke-d048.mjs';
-import { captureD053, loadD053, tapD053, D053_SNAPSHOT, D053_UI, d053Hash } from './d053-capture.mjs';
+import { captureD053, loadD053, tapD053, D053_SNAPSHOT, D053_UI, d053Hash, D055_FOOD_IDS, D055_CATALOG_IDS } from './d053-capture.mjs';
 import { D053_MODES, D053_SHOTS, D053_TOOL_IDS, D053_SAVE_KEY, D053_SPACE_SITE, d053ReviewCode } from './d053-scenes.mjs';
 import { builtBase } from './d036-cities.mjs';
 import { mk } from './d034-cities.mjs';
 import { decodeLabCode, encodeLabCode } from '../src/io/labcode.ts';
 import { loadCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
-import { CIVIC_TOOLS, previewOp, commitOp, undoOp, powerStatus } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, previewOp, commitOp, undoOp, powerStatus } from '../src/sim/edit.ts';
 const J = JSON.stringify, OUT = path.join(ROOT, 'scratch/shots');
 const same = (a, b, label) => assert.ok(isDeepStrictEqual(a, b), `${label}: ${d053Hash(a)} != ${d053Hash(b)}`);
+assert.deepEqual(CIVIC_TOOLS.map(t=>t.id),D053_TOOL_IDS,'D055 must retain exact original civic18');
+assert.deepEqual(FOOD_TOOLS.map(t=>t.id),D055_FOOD_IDS,'exact food7 additions');
+assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),D055_CATALOG_IDS,'exact catalogue25 union');
 const GROUPS = {
-  all: D053_TOOL_IDS,
+  all: D055_CATALOG_IDS,
   service: ['park','fire','police','policeBox','hospital','clinic','school','library','post','cemetery'],
   utility: ['water','wpipe','dump','sewage'],
   resource: ['oilwell','mine','gaswell','megaproject'],
+  food: D055_FOOD_IDS,
 };
 // Do not equate sim().hash with an RNG dump. Paired uninterrupted trajectories
 // below test later stochastic behavior after navigation versus the untouched UI.
@@ -137,20 +141,20 @@ export async function d053Smoke(browser,log) {
     await catalog(p,mobile);await key(page,'Escape');await position(p,'#civicGuide',true);await key(page,' ');await assertModal(p,'#catalog');assert.equal(await p.ev('__gt.sim().playing'),false);await key(page,'Escape');
     assert.equal(await p.ev('__d053Writes.length'),0,'navigation never calls localStorage save');
   });
-  await run('all 18 selectors and exact category membership','space-catalog',{W:412,H:860},async(p,page,item)=>{
+  await run('all 25 selectors, unchanged 18 civic tools and exact seven-food category','space-catalog',{W:412,H:860},async(p,page,item)=>{
     const before=await snap(p);await catalog(p);
     for(const [group,ids] of Object.entries(GROUPS)) {await tap(p,`#catalog [data-group="${group}"]`);same(await p.ev("[...document.querySelectorAll('#catalog [data-tool]')].map(b=>b.dataset.tool)"),ids,'exact '+group+' catalog');assert.equal(await p.ev(`document.querySelector('#catalog [data-group="${group}"]').getAttribute('aria-pressed')`),'true');}
     item.selected=[];
-    for(const t of CIVIC_TOOLS) {
+    for(const t of FACILITY_TOOLS) {
       if(await hidden(p,'#catalog'))await catalog(p);await tap(p,'#catalog [data-group="all"]');
       const description=await p.ev(`document.querySelector('#catalog [data-tool="${t.id}"]').closest('li').textContent`);assert.ok(description.includes(t.name));assert.ok(description.includes('基價 $'+t.cost.toLocaleString('en-US')));
-      await tap(p,`#catalog [data-tool="${t.id}"]`);assert.equal(await p.ev('__gt.ui().civicTool'),t.id);assert.equal(await p.ev('__gt.ui().tool'),'civic');await assertClosed(p);
+      await tap(p,`#catalog [data-tool="${t.id}"]`);assert.equal(await p.ev('__gt.ui().civicTool'),t.id);assert.equal(await p.ev('__gt.ui().tool'),D055_FOOD_IDS.includes(t.id)?'food':'civic');await assertClosed(p);
       same(persisted(await snap(p)),persisted(before),'select '+t.id+' costs no money/day/history/save');
       const hints=await p.ev('__gt.resourceHints()');if(['oilwell','gaswell','mine'].includes(t.id)){assert.ok(hints.shown>0);assert.ok(hints.cells.every(c=>c[2]===(t.id==='mine'?2:1)));}else assert.equal(hints.shown,0);
       assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe','sewage'].includes(t.id));
       assert.equal(await p.ev(`__d053Extra.filter(e=>e.type==='click'&&e.tool===${J(t.id)}&&e.trusted).length`),1,'exactly one original selection activation');item.selected.push(t.id);
     }
-    assert.equal(await p.ev('__d053Writes.length'),0);same(item.selected,D053_TOOL_IDS,'all original callbacks');await key(page,'Escape');
+    assert.equal(await p.ev('__d053Writes.length'),0);same(item.selected,D055_CATALOG_IDS,'all 18 original plus seven food callbacks');await key(page,'Escape');
   });
   for(const sandbox of [false,true]) await run('rank 21 lock '+(sandbox?'sandbox':'normal'),'rank21',{W:360,H:740},async(p,page)=>{
     if(sandbox){const raw=structuredClone(decodeLabCode(d053ReviewCode('rank21')).save.raw);raw.df=3;await newCode(p,encodeLabCode(raw));assert.equal(await p.ev('__gt.techState().diff'),3);}
@@ -239,7 +243,7 @@ export async function d053Smoke(browser,log) {
   });
   const trajectories=[];
   for(const navigated of [false,true])await run('paired future trajectory '+(navigated?'all tools':'control'),'space-build',{W:412,H:860},async(p,page,item)=>{
-    if(navigated){for(const id of D053_TOOL_IDS)await select(p,id);await catalog(p);await tap(p,'#catalogRank');await tap(p,'#rkCatalog');await key(page,'Escape');}
+    if(navigated){for(const id of D055_CATALOG_IDS)await select(p,id);await catalog(p);await tap(p,'#catalogRank');await tap(p,'#rkCatalog');await key(page,'Escape');}
     else {await tap(p,'#menuBtn');await key(page,'Escape');}
     const states=[world(await snap(p))],expected=model(d053ReviewCode('space-build'));
     for(let d=0;d<6;d++){stepDay(expected.sim);await p.ev('__gt.simStep(1)');const state=await snap(p);assert.equal(state.sim.money,expected.sim.money);assert.equal(state.technology.rank,expected.sim.rankIdx);states.push(world(state));}
