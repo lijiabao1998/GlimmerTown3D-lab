@@ -1,3 +1,4 @@
+import { BRITISH_KINDS, BRITISH_PALETTE } from '../src/content/britishCivic.ts';
 // 煙霧測試：無頭 Chrome 開建置後的單檔頁面，逐條驗卡面的驗收（可斷言的事實，不是「看起來對」）。
 // D003 起預設是 2D 城市模式；300 年示範（D001／D002）改用 ?mode=history 開。
 // 用法：npm run build && node tools/smoke.mjs      退出碼 0＝綠燈、1＝紅燈
@@ -362,13 +363,13 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
         const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`];
         if (look) {
           const used = new Set(U[bid] || []), need = c => !c || used.has(c.toLowerCase()), any = [look.wallL, look.roof, look.accent, look.wallR].filter(Boolean);
-          const ok = BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
+          const ok = BRITISH_KINDS.has(k) ? [BRITISH_PALETTE.stone, BRITISH_PALETTE.slate].every(need) : BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
           if (!ok) cbad.push(`k${k}`);
         }
       }
       log(out.length === 0, `D007 ${id} 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）`, out.length ? out.slice(0, 4).join('；') : `${civ.length} 棟`);
       log(hbad.length === 0, `D007 ${id} 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格`, hbad.length ? hbad.slice(0, 4).join('；') : `${civ.length} 棟全對`);
-      log(cbad.length === 0, `D007 ${id} 顏色：模型用上實驗線精靈讀出的色（建築類受光牆＋屋頂，設施類至少一色）`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
+      log(cbad.length === 0, `D007 ${id} 顏色：既有模型保留來源色；D056 八棟明確改用石材與板岩`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
       // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）。沒有抽到色的缺省沙色；公園（k4）D018 起是實驗線公園精靈的草地 #82c163（src/content/kindShapes.ts kindColors）
       const Gd = await page.evaluate('__gt.groundData()'), rgb = Buffer.from(Gd.rgb, 'base64'), S = Gd.S, W = Gd.W, lay = await page.evaluate('__gt.layers()');
       let plateCells = 0, plateBad = 0;

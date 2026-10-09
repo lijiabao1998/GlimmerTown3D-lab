@@ -1,0 +1,27 @@
+import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+import{ROOT,withBrowser}from'./cdp.mjs';import{pageSession}from'./smoke-d011.mjs';
+import{d056ReviewCode,D056_CAMERA,D056_SITES}from'./d056-scenes.mjs';
+const phase=process.argv.find(x=>x.startsWith('--phase='))?.slice(8)??'after';
+const out=path.join(ROOT,'scratch/d056-'+phase);fs.mkdirSync(out,{recursive:true});
+const J=JSON.stringify,hash=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
+const code=d056ReviewCode(),report={phase,qualification:'Authored synthetic fixture; Chrome software WebGL; mobile touch emulation, not Android hardware.',fixtureSha256:hash(code),cases:[],passed:false};
+fs.writeFileSync(path.join(out,'D056-fixture.code.txt'),code);
+try{
+ for(const opt of [{W:1440,H:1000,mobile:false},{W:360,H:740,mobile:true},{W:412,H:860,mobile:true}]){
+  await withBrowser({width:Math.max(960,opt.W),height:Math.max(900,opt.H),port:8356,root:phase==='before'?out:undefined},async({page,open})=>{
+   const p=await pageSession(page,open,opt);await p.open('sample=seed516&clean=1');await p.ev(`__gt.clearSave();localStorage.setItem('gt3d.v1.save',${J(code)})`);await p.open('');
+   await p.ev(`__gt.view(${D056_CAMERA.x},${D056_CAMERA.z},${D056_CAMERA.zoom});__gt.setVisT(2.2);__gt.setDayFrac(0);__gt.conAgeShift(200)`);await p.waitFor(async()=>!(await p.toasts()).length,6000);await p.frames(3);
+   const item={viewport:opt,shots:[],checks:[],passed:false};report.cases.push(item);
+   const world=await p.ev('JSON.stringify([__gt.sim(),__gt.history(),__gt.buildingList()])');
+   const take=async name=>{await p.frames(2);const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');assert.equal(bytes.readUInt32BE(16),opt.W);assert.equal(bytes.readUInt32BE(20),opt.H);const file=`D056-${phase}-${name}-${opt.W}.png`;fs.writeFileSync(path.join(out,file),bytes);item.shots.push({file,sha256:hash(bytes),bytes:bytes.length,camera:await p.ev('__gt.cam()')});};
+   await take('district');
+   if(!opt.mobile){
+    for(const s of D056_SITES){await p.ev(`__gt.view(${s.x+(s.k>=42?1:.5)},${s.z+(s.k>=42?1:.5)},11)`);await take(s.id);}
+   }
+   assert.equal(await p.ev('JSON.stringify([__gt.sim(),__gt.history(),__gt.buildingList()])'),world);item.checks.push('camera and visual age do not mutate simulation/history/buildings');
+   item.boxes=await p.ev('__gt.ownerBoxes()');item.buildings=await p.ev('__gt.buildingList()');item.scene=await p.ev('__gt.sceneStats()');item.gl=await p.ev('__gt.glInfo()');
+   assert.deepEqual(page.errors,[]);assert.deepEqual(page.requests.filter(u=>!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u)),[]);item.checks.push('zero browser errors and external requests');item.passed=true;console.log('PASS D056',phase,opt.W,item.shots.length,'screenshots');
+  });
+ }
+ report.passed=report.cases.length===3&&report.cases.every(x=>x.passed);
+}finally{fs.writeFileSync(path.join(out,'D056-capture.json'),J(report,null,2));}

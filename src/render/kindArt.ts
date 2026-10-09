@@ -7,6 +7,7 @@ import type { Geo } from './scene.ts';
 import type { YardTree } from './blockArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { WIN_STYLE } from './windows.ts';
+import { drawBritishCivic } from './britishCivicArt.ts';
 
 export interface KindCtx {
   W: Geo; O: Geo; D: Geo; trees: YardTree[];
@@ -29,7 +30,7 @@ const GEO = {
 };
 
 // 一棟的畫筆：座標換算＋常用部件
-class Pen {
+export class Pen {
   a: KindCtx;
   constructor(a: KindCtx) { this.a = a; }   // 不用 TS 參數屬性：Node 的型別剝除不支援（單元守衛要 import 這支）
   X(u: number) { return this.a.x0 + u * this.a.s; }
@@ -743,7 +744,7 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
-  try { if (b) b(new Pen(a), shape!.p ?? {}); return USED; } finally { USED = null; }
+  try { const p = new Pen(a); if (!(shape?.p?.british === true && drawBritishCivic(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
 }
 export const BUILDER_TYPES = Object.keys(BUILDERS);
 export const LANDMARK_KINDS = Object.keys(LANDMARKS);
