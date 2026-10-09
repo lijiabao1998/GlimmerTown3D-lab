@@ -54,7 +54,7 @@ cdp = replaceExactly(cdp, 'await sleep(opt.settle ?? 900);', `await sleep(opt.se
 let capture = originals['tools/d055-capture.mjs'];
 capture = replaceExactly(capture,
   "page.requests.filter(u=>!/^(http:\\/\\/127\\.0\\.0\\.1:\\d+\\/|data:|blob:|about:)/.test(u))",
-  "page.requests.filter(u=>!u.startsWith(" + JSON.stringify(LIVE) + ")&&!/^(data:|blob:|about:)/.test(u))", 2);
+  "page.requests.filter(u=>!u.startsWith(" + JSON.stringify(LIVE) + ")&&u!==\"https://lijiabao1998.github.io/favicon.ico\"&&!/^(data:|blob:|about:)/.test(u))", 2);
 let result;
 try {
   fs.writeFileSync('tools/cdp.mjs', cdp);

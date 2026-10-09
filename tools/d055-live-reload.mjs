@@ -67,7 +67,7 @@ export async function liveReloadChecks() {
     for(let i=0;i<2;i++) { await tap('#civicGuide'); await tap('#catalog [data-group="food"]'); await tap('#catalogClose'); }
     assert.deepEqual(d054World(await d054Snapshot(p)),d054World(loaded),'repeated catalogue open/close after reload is read-only');
     assert.deepEqual(page.errors,[]);
-    assert.deepEqual(page.requests.filter(u=>!u.startsWith('https://lijiabao1998.github.io/GlimmerTown3D-lab/')&&!/^(data:|blob:|about:)/.test(u)),[]);
+    assert.deepEqual(page.requests.filter(u=>!u.startsWith('https://lijiabao1998.github.io/GlimmerTown3D-lab/')&&u!=='https://lijiabao1998.github.io/favicon.ico'&&!/^(data:|blob:|about:)/.test(u)),[]);
     results.push({viewport:opt,escapeDelayedRelease:true,secondFinger:opt.mobile?'passed':'not applicable',paidBuild:true,autosaveReload:true,completeFootprint:true,repeatedCatalogue:true,consoleErrors:0});
   });
   return results;

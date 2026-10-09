@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -19,7 +19,9 @@ jobs:
       - name: Verify published product tree unchanged
         run: |
           git diff --exit-code 0e849a6f6322091863ab0c27b64a45c669e45444 HEAD -- src public index.html package.json package-lock.json vite.config.ts tsconfig.json
-          test "$(git rev-parse HEAD^)" = 0e849a6f6322091863ab0c27b64a45c669e45444
+          git merge-base --is-ancestor 0e849a6f6322091863ab0c27b64a45c669e45444 HEAD
+          git diff --name-only 0e849a6f6322091863ab0c27b64a45c669e45444 HEAD | grep -Ev "^(.github/workflows/d055-live-qa.yml|tools/d055-live-qa.mjs|tools/d055-live-reload.mjs|tools/d055-approved-image-hashes.json)$" > /tmp/unexpected-files || true
+          test ! -s /tmp/unexpected-files
       - run: npm ci
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run build
