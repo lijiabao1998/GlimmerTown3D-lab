@@ -112,6 +112,51 @@ const BUILD: Record<number, (p: Pen) => void> = {
     p.cyl(.47, .885, p.a.s * .026, 0, H * .16, C.red, 6);
     p.bit(.452, .488, .91, .918, H * .11, H * .123, C.dark);
   },
+  11(p) {
+    const H=p.H; plinth(p);
+    p.blk(.21,.79,.25,.72,H*.035,H*.72,C.brick,C.slate,'grid');
+    for(const y of [.25,.48,.69]) courses(p,.19,.81,.723,H*y);
+    hip(p,.19,.81,.23,.73,H*.73,H*.16,C.slate);
+    p.blk(.38,.62,.6,.755,H*.66,H*.86,C.stone,null,'grid');
+    p.gable(.36,.64,.6,.755,H*.86,H*.14,C.slate,C.stone,'z');
+    entry(p,.5,.735,0,.24,.13);
+    for(const u of [.23,.77]) p.bit(u-.02,u+.02,.72,.745,0,H*.68,C.stone);
+    p.pole(.73,.86,.009*p.a.s,0,H*.28,C.green);
+    p.bit(.705,.755,.835,.885,H*.25,H*.32,'#345d85',C.stone);
+    rail(p,.13,.34,.9);rail(p,.64,.87,.9);
+  },
+  12(p) {
+    const H=p.H;
+    p.bit(.1,.9,.2,.88,0,H*.035,C.stone);
+    p.blk(.14,.86,.24,.45,0,H*.54,C.brick,null,'arch');
+    hip(p,.12,.88,.22,.47,H*.54,H*.16,C.slate);
+    for(const [a,b] of [[.14,.33],[.67,.86]]) {
+      p.blk(a,b,.38,.78,0,H*.49,C.stone,null,'grid');
+      p.gable(a-.01,b+.01,.36,.8,H*.49,H*.17,C.slate,C.stone,'z');
+      courses(p,a,b,.789,H*.36);
+    }
+    p.blk(.4,.6,.35,.57,0,H*.68,C.brick,null,'arch');
+    p.gable(.38,.62,.35,.57,H*.68,H*.17,C.slate,C.stone,'z');
+    entry(p,.5,.577,0,.25,.1);
+    p.bit(.484,.516,.578,.599,H*.49,H*.64,C.red);
+    p.bit(.448,.552,.578,.599,H*.54,H*.58,C.red);
+    chimney(p,.23,.31,.61,1);chimney(p,.77,.31,.61,.95);
+    p.flat(.35,.65,.64,.88,H*.038,C.stone);
+    p.bit(.42,.58,.77,.84,H*.04,H*.1,C.green);
+  },
+  13(p) {
+    const H=p.H;plinth(p);
+    p.blk(.16,.69,.26,.73,0,H*.5,C.stone,null,'grid');
+    p.gable(.14,.71,.24,.75,H*.5,H*.31,C.slate,C.stone,'x');
+    p.blk(.59,.85,.47,.79,0,H*.48,C.stone,null,'arch');
+    p.gable(.57,.87,.45,.81,H*.48,H*.28,C.slate,C.stone,'z');
+    for(const u of [.18,.34,.51,.68]) p.bit(u-.01,u+.01,.735,.752,H*.04,H*.5,C.timber);
+    for(const y of [.08,.29,.49]) p.bit(.16,.7,.735,.754,H*y,H*(y+.02),C.timber);
+    p.blk(.28,.48,.68,.85,0,H*.34,C.stone,null,false);
+    p.gable(.26,.5,.67,.86,H*.34,H*.22,C.slate,C.stone,'z');
+    entry(p,.38,.867,0,.27,.09);chimney(p,.22,.4,.65,1);
+    p.bit(.75,.79,.814,.825,H*.19,H*.35,C.red);p.bit(.71,.83,.814,.825,H*.25,H*.29,C.red);
+  },
   17(p) {
     const H = p.H;
     p.bit(.08, .92, .18, .88, 0, H * .08, C.stone);

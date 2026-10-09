@@ -42,7 +42,7 @@ export async function d015Smoke(withBrowser, log) {
       // D047 intentionally replaces only k51. Keep D015's exact historical
       // gallery snapshot alive through the byte-identical legacy recipe; current
       // k51 remains pinned by its own complete golden and real pixel/fresh checks.
-      const historical = c.id === 'gallery' ? { ...c, url: c.url + '&spaceArt=legacy' } : c;
+      const historical = { ...c, url: c.url + '&britishArt=legacy' + (c.id === 'gallery' ? '&spaceArt=legacy' : '') };
       const d = await caseDigest(open, ev, historical), st = await ev('__gt.sceneStats()');
       if (J(d) !== J(G.cases[c.id])) bad.push(c.id);
       if (!st?.fresh) bad.push(`${c.id} 不是從頭建`);
@@ -52,7 +52,7 @@ export async function d015Smoke(withBrowser, log) {
         const golden = JSON.parse(R('src/content/samples/d047-space-center-golden.json'));
         const triangleCount = Object.values(current.meshes).reduce((n,m)=>n+(m.ownerTris[id]??0),0);
         log(diff.length===0 && J(current)!==J(d) && current.ground===d.ground && J(current.inst)===J(d.inst) && J(current.counts)===J(d.counts) && triangleCount===golden.triangles,
-          'D047 current full gallery: fresh/incremental geometry match; only intentional k51 art changes, exact triangle golden and city/ground/tree counts retained',
+          'D047 current full gallery: fresh/incremental geometry match; only intentional D047/D056 art changes, exact triangle golden and city/ground/tree counts retained',
           J({diff,k51:id,triangles:triangleCount,expected:golden.triangles}));
       }
 

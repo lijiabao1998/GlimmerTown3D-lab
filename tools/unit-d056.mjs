@@ -1,17 +1,31 @@
+import * as THREE from 'three';
+import {drawKind} from '../src/render/kindArt.ts';
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';import {kindHashes,drawOne} from './d018-kinds.mjs';import{D056_LEGACY}from'./d056-legacy.mjs';
-import{BRITISH_CIVIC,BRITISH_KINDS,BRITISH_PALETTE as C}from'../src/content/britishCivic.ts';
+import{BRITISH_CIVIC,BRITISH_NATIVE_KINDS,BRITISH_KINDS,BRITISH_PALETTE as C}from'../src/content/britishCivic.ts';
 import{kindTableFrom}from'../src/content/kindTable.ts';
+function clearOpening(r,s,u,front,back,y){
+ const ray=new THREE.Raycaster(new THREE.Vector3(u*s,y*r.H,front*s),new THREE.Vector3(0,0,-1),0,(front-back)*s);
+ return r.G.every(g=>{const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(g.pos,3));const material=new THREE.MeshBasicMaterial({side:THREE.DoubleSide});const mesh=new THREE.Mesh(geo,material);mesh.updateMatrixWorld();const clear=ray.intersectObject(mesh).length===0;geo.dispose();material.dispose();return clear;});
+}
 const read=p=>JSON.parse(fs.readFileSync(path.join(ROOT,p),'utf8'));
 export async function d056Guards(log){
  const test=(name,f)=>{try{f();log(true,'D056 '+name)}catch(e){log(false,'D056 '+name,e.stack)}};
  const before=read('src/content/samples/d056-kinds-before.json'),now=kindHashes(),KT=kindTableFrom(read('src/content/lab-kinds.json')),looks=read('src/content/lab-looks.json').looks;
- test('eight unique functions and architecture; only these eight × nine variants change',()=>{
-  assert.equal(before.commit,'0e849a6f6322091863ab0c27b64a45c669e45444');assert.equal(BRITISH_CIVIC.length,8);
-  assert.equal(new Set(BRITISH_CIVIC.map(x=>x.silhouette)).size,8);assert.equal(BRITISH_KINDS.size,8);
+ test('eight native and three bonus architectures; only these eleven × nine variants change',()=>{
+  assert.equal(before.commit,'0e849a6f6322091863ab0c27b64a45c669e45444');assert.equal(BRITISH_CIVIC.length,11);assert.equal(BRITISH_NATIVE_KINDS.size,8);
+  assert.equal(new Set(BRITISH_CIVIC.map(x=>x.silhouette)).size,11);assert.equal(BRITISH_KINDS.size,11);
   assert.deepEqual(Object.keys(now),Object.keys(before.kinds));assert.deepEqual(kindHashes(D056_LEGACY),before.kinds);
   for(const k of Object.keys(now)){if(BRITISH_KINDS.has(+k)){for(let v=0;v<9;v++)assert.notEqual(now[k].h[v],before.kinds[k].h[v]);}else assert.deepEqual(now[k],before.kinds[k],'unchanged kind '+k);}
-  assert.equal(new Set(BRITISH_CIVIC.map(({k})=>now[k].h[0])).size,8);
+  assert.equal(new Set(BRITISH_CIVIC.map(({k})=>now[k].h[0])).size,11);
+ });
+ test('complete candidate geometry golden and independent position/color mutations for every revised kind',()=>{
+  const golden=read('src/content/samples/d056-current-art.json').kinds;
+  for(const {k} of BRITISH_CIVIC)assert.deepEqual(now[k],golden[k],'current geometry '+k);
+  for(const field of ['pos','col']){
+   const mutated=kindHashes({},(ctx,shape)=>{const used=drawKind(ctx,shape);if(BRITISH_KINDS.has(ctx.k)){const g=[ctx.W,ctx.O,ctx.D].find(g=>g[field].length);g[field][0]+=.01;}return used;});
+   for(const {k} of BRITISH_CIVIC)assert.notDeepEqual(mutated[k],golden[k],field+' mutation '+k);
+  }
  });
  test('bounded finite geometry, valid normals, exact height, correct picking owners, ≤850 triangles each',()=>{
   for(const {k} of BRITISH_CIVIC)for(let v=0;v<9;v++){
@@ -22,10 +36,12 @@ export async function d056Guards(log){
   }
  });
  test('geometry is deterministic at every variant without editing the content inputs',()=>{const frozen=JSON.stringify([KT.data,looks]);assert.deepEqual(kindHashes(),now);assert.equal(JSON.stringify([KT.data,looks]),frozen)});
- test('specialized structures have genuinely open spaces instead of painted solid boxes',()=>{
-  // Ray-independent geometric proof: no wall triangle spans the market's front arcade openings.
-  const r=drawOne(KT,looks,87,1,0,2);assert.equal(r.G[0].pos.length,0,'market has no windowed wall mass');
-  const court=drawOne(KT,looks,43,1,0,2);assert.ok(court.G[1].pos.length>300,'portico and pediment are real geometry');
+ test('market arcades and courthouse inter-column gaps are open across all three geometry arenas',()=>{
+  const market=drawOne(KT,looks,87,1,0,2),court=drawOne(KT,looks,43,1,0,2);
+  for(const u of [.24,.5,.76])assert.ok(clearOpening(market,2,u,.9,.74,.4),'market opening '+u);
+  for(const u of [.37,.5,.63])assert.ok(clearOpening(court,2,u,.9,.72,.4),'court opening '+u);
+  const blocked=(k,u)=>drawOne(KT,looks,k,1,0,2,undefined,(ctx,shape)=>{const used=drawKind(ctx,shape);ctx.O.box(.13*2,.77*2,.87*2,.81*2,.1*ctx.H,.58*ctx.H,new THREE.Color(C.brick),null,null);return used;});
+  for(const k of [87,43])assert.equal(clearOpening(blocked(k),2,.5,.9,.72,.4),false,'solid-front mutation must fail '+k);
  });
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){let fail=0;await d056Guards((ok,n,e)=>{console.log(ok?'PASS':'FAIL',n,e??'');if(!ok)fail++});process.exitCode=fail?1:0;}
