@@ -1,10 +1,10 @@
-// Real mouse/touch placement for the five existing native tools; three imported civic kinds
+// Real mouse/touch placement for the eight existing native tools; three imported civic kinds
 // are render-only in the existing catalogue. D056 deliberately does not invent their game rules.
 import assert from 'node:assert/strict';
 import {tapD053} from './d053-capture.mjs';
 import {d054Snapshot,d054Model,d054World} from './d054-capture.mjs';
 import {previewOp,commitOp,undoOp} from '../src/sim/edit.ts';
-export const D056_SAME = `(()=>{const pick=d=>JSON.stringify({m:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),g:d.ground,i:d.inst,q:d.queries,c:d.counts});return pick(__gt.sceneDigest())===pick(__gt.freshDigest());})()`;
+export const D056_SAME = `(()=>{const pick=d=>JSON.stringify({m:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),g:d.ground,i:d.inst,q:d.queries,c:d.counts});const a=__gt.sceneDigest(),b=__gt.freshDigest();window.__d056LastDigest={actual:a,expected:b};return pick(a)===pick(b);})()`;
 const J=JSON.stringify;
 function equalModel(a,s,label){assert.equal(a.sim.money,s.money,label+' funds');assert.equal(a.sim.day,s.day,label+' day');for(const k of ['road','rclass','ter','el','zone','tree','rail','dock','tram','occ'])assert.deepEqual(a.layers[k],Array.from(s.city[k]),label+' '+k);assert.deepEqual(a.history,s.city.history,label+' history');}
 export async function d056Native(p,page,{mobile,item}){
