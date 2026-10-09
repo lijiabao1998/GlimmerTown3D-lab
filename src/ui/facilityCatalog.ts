@@ -1,4 +1,4 @@
-import { CIVIC_TOOLS } from '../sim/edit.ts';
+import { FACILITY_TOOLS } from '../sim/edit.ts';
 import { FACILITY_GROUPS, FACILITY_NOTES, facilityPresentation, facilitySummary, type FacilityGroup } from './growthGuide.ts';
 import { updatePanelContent } from './panelContent.ts';
 import { createPanelUpdateGate } from './panelPress.ts';
@@ -16,7 +16,7 @@ export function createFacilityCatalog(on: { select(id: string): void; close(): v
   let group: FacilityGroup = 'all', state: FacilityCatalogState | null = null;
   for (const f of FACILITY_GROUPS) {
     const b = document.createElement('button'); b.type = 'button'; b.dataset.group = f.id;
-    const count = CIVIC_TOOLS.filter(t => f.id === 'all' || FACILITY_NOTES[t.id].group === f.id).length;
+    const count = FACILITY_TOOLS.filter(t => f.id === 'all' || FACILITY_NOTES[t.id].group === f.id).length;
     b.textContent = `${f.name} ${count}`;
     b.onclick = () => { group = f.id; render(); root.querySelector('.body')!.scrollTop = 0; };
     filters.appendChild(b);
@@ -31,7 +31,7 @@ export function createFacilityCatalog(on: { select(id: string): void; close(): v
     for (const b of filters.querySelectorAll<HTMLButtonElement>('button')) {
       b.classList.toggle('on', b.dataset.group === group); b.setAttribute('aria-pressed', String(b.dataset.group === group));
     }
-    const items = CIVIC_TOOLS.filter(t => group === 'all' || FACILITY_NOTES[t.id].group === group).map(t => {
+    const items = FACILITY_TOOLS.filter(t => group === 'all' || FACILITY_NOTES[t.id].group === group).map(t => {
       const p = facilityPresentation(t, state!.rankIdx, state!.sandbox), li = document.createElement('li');
       li.dataset.kind = 'facility'; li.dataset.k = t.id; li.dataset.locked = String(p.locked);
       const head = document.createElement('div'); head.className = 'facilityHead';
@@ -49,5 +49,5 @@ export function createFacilityCatalog(on: { select(id: string): void; close(): v
     });
     updatePanelContent(list, ...items);
   }
-  return { root, title, update(s: FacilityCatalogState) { state = s; render(); }, reset() { gate.cancel(); }, group: () => group };
+  return { root, title, update(s: FacilityCatalogState) { state = s; render(); }, reset() { gate.cancel(); }, selectGroup(value: FacilityGroup) { group = value; render(); }, group: () => group };
 }

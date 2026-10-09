@@ -256,7 +256,7 @@ async function guards(log) {
       ['附屬格也記事件（拿掉 syncEdit 的略過）', 'src/sim/edit.ts', [["    if (!hasRoot && b.bld?.ref && !a.bld) continue;", '']], r => r.events !== 1],
       ['預覽不畫整塊（sz 永遠 1）', 'src/sim/edit.ts', [["const sz = op.k === 'tap' ? toolSize(op.tool) : 1;", "const sz = 1;"]], r => r.cells !== 9],
       ['工具鎖拿掉', 'src/sim/edit.ts', [["return t?.unlockRank && s.rankIdx + 1 < t.unlockRank ?", "return false ?"]], r => !r.lock],
-      ['占地大小寫死 1', 'src/sim/edit.ts', [["export const toolSize = (id: string) => CIVIC_TOOLS.find(c => c.id === id)?.size ?? 1;", "export const toolSize = (id: string) => 1;"]], r => r.size !== 3 || r.cells !== 9],
+      ['占地大小寫死 1', 'src/sim/edit.ts', [["export const toolSize = (id: string) => FACILITY_TOOLS.find(c => c.id === id)?.size ?? 1;", "export const toolSize = (id: string) => 1;"]], r => r.size !== 3 || r.cells !== 9],
     ];
     for (const [name, file, ed, caught] of edits) {
       try { const M = await loadMod(file, ed, { './rules/build.ts': await import('../src/sim/rules/build.ts') }), r = probe(M); if (caught(r)) out.push(name); else bad.push(`突變「${name}」沒抓到：${J(r)}`); }

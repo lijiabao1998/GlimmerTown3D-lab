@@ -9,7 +9,7 @@ import { ROOT } from './cdp.mjs';
 import { d044Load, BLOCKS } from './d044-cities.mjs';
 import { saveCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
-import { CIVIC_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
 import { FOREIGN_LAYERS } from '../src/sim/rules/build.ts';
 import * as Site from '../src/ui/siteDiagnostics.ts';
 
@@ -89,7 +89,7 @@ function cityHarness(f, source = citySource, panel = panelSource, options = {}) 
   const { doc, Element } = makeDom(), { createSitePanel, siteCostText } = compilePanel(doc, Element, panel), calls = [], toasts = [], guides = [], costs = [], previews = [];
   const x = { sim: f.sim, calls, toasts, guides, costs, previews, saved: [], clock: 1000, idle: [], delays: [], diagnoses: [], labels: [], visiblePreview: [], visibleCost: null, failDiagnosis: '' };
   if (options.idle !== false) doc.defaultView.requestIdleCallback = task => { x.idle.push(task); };
-  const deps = { ...Site, CIVIC_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel,
+  const deps = { ...Site, CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel,
     diagnoseSite: (...args) => { const d = Site.diagnoseSite(...args); x.diagnoses.push({ op: args[1], provided: !!args[2], d }); if (x.failDiagnosis === args[1].tool) throw new Error('forced warm diagnosis failure'); return d; },
     siteCostText: d => { x.labels.push(d); return siteCostText(d); }, document: doc, HTMLElement: Element, Element };
   const chunks = [section(source, '  function warmEdit() {', '  // 換城：'), section(source, '  // D054: ephemeral UI snapshots only', '  // D053: keep imported rank rules'), section(source, '  function syncUi() {', '  // D040：資源圖。'), section(source, '  let pipesShown = false;', '  const toolColor'), section(source, '  function opOf(', '  // 鍵盤：對話框')];
@@ -109,7 +109,7 @@ function cityHarness(f, source = citySource, panel = panelSource, options = {}) 
     const syncRes=()=>{},liveBuildings=()=>[],powerStatus=()=>({powered:0,unpowered:0,cap:0}),simCounts=()=>[[0],[0,0,0],[0,0,0],[0,0,0]],label='test',loadDay=sim.day,autosaves=()=>true,saveErr='',jstore=null,jwhy='',saveWarnings=()=>({}),saveStatus={setState:()=>{}},syncCommissionHud=()=>{},syncDock=()=>x.calls.push('dock'),rk={hidden:true},renderRank=()=>{};
     ${chunks.map(strip).join('\n')}
     return {sitePanel,renderSite,syncSite,syncUi,openSite,runOp,doUndo,updatePreview,commitStroke,cancelStroke,interruptBuild,syncPipes,setTool,warmEdit,
-      setStroke:s=>{stroke=s;},choose:id=>{if(ROAD_TOOLS.some(t=>t.id===id)){roadTool=id;setTool('road');}else if(CIVIC_TOOLS.some(t=>t.id===id)){civicTool=id;setTool('civic');}else setTool(id);},
+      setStroke:s=>{stroke=s;},choose:id=>{if(ROAD_TOOLS.some(t=>t.id===id)){roadTool=id;setTool('road');}else if(FACILITY_TOOLS.some(t=>t.id===id)){civicTool=id;setTool(FOOD_TOOLS.some(t=>t.id===id)?'food':'civic');}else setTool(id);},
       state:()=>({siteEstimate,siteResult,siteNotice,stroke,lastPreview,pipesShown,tool,roadTool,civicTool}),timing:()=>({...timing}),setSim:s=>{sim=s;city=s?.city;}};`;
   return { ...new Function('x', 'saveFixture', ...Object.keys(deps), js)(x, () => saved(f), ...Object.values(deps)), doc, calls, toasts, guides, costs, previews, saves: x.saved, trace: x, runWarm: () => { for (const task of x.idle.splice(0)) task(); doc.runTimers(); } };
 }

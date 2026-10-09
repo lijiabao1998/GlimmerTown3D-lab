@@ -662,6 +662,9 @@ await guard('./unit-d054-ui.mjs', 'd054UiGuards');
   log(assets.length === 0 && urls.length === 0, '零外部素材：src 沒有圖片／字型／模型／音效檔，也不引用外部網址', [...assets, ...urls].join(' ') || '乾淨');
 }
 
+await guard("./unit-d055-build.mjs", "d055BuildGuards");
+await guard("./unit-d055-native.mjs", "d055NativeGuards");
+
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);

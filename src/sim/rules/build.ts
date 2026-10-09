@@ -27,6 +27,8 @@ export const COST = { zone: 8, plant: 550, police: 500, doze: 2, bridge: 60,
   water: 400, wpipe: 10,     // D019：水塔、配水管（37442）
   dump: 300,                 // D020：垃圾場（37442）
   sewage: 500,               // D033：污水廠（37442）
+  // D055：2D實驗線 d23c18d COST 37442；原價，無新增等級鎖。
+  farm: 120, ranch: 180, bigFarm: 750, greenhouse: 950, foodPlant: 1800, market: 950, tradepost: 1100,
   oilwell: 1300, mine: 1500,     // D040：油井、礦場（37442）
   gaswell: 1400, megaproject: 4500 };   // D044：天然氣井、太空研究中心（37442）
 // 62731：復原堆疊上限（closeUndo 推進 undoStack 後超過 40 筆就丟最舊的）
@@ -47,7 +49,9 @@ export const D033_TOOLS: readonly string[] = ['sewage'];
 export const D040_TOOLS: readonly string[] = ['oilwell', 'mine'];
 // D044：天然氣井（k117，1×1、站在油田資源格上、放下去蓋污染源；canPlace 51415）、太空研究中心（k51，3×3，canPlaceMulti 51436；實驗線的工具列在城市 Lv.22 才解鎖，那是介面的鎖，規則沒有看等級）
 export const D044_TOOLS: readonly string[] = ['gaswell', 'megaproject'];
-const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS, ...D040_TOOLS, ...D044_TOOLS]);
+// D055：原 canPlace/placeCost/doPlace 七種生產與外貿設施。
+export const D055_TOOLS: readonly string[] = ['farm', 'ranch', 'bigFarm', 'greenhouse', 'foodPlant', 'market', 'tradepost'];
+const TOOL_SET = new Set([...D011_TOOLS, ...D016_TOOLS, ...D019_TOOLS, ...D020_TOOLS, ...D033_TOOLS, ...D040_TOOLS, ...D044_TOOLS, ...D055_TOOLS]);
 function need(tool: string): void { if (!TOOL_SET.has(tool)) throw new Error('未搬：' + tool); }
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };   // 51639
 
@@ -154,6 +158,22 @@ export function canPlace(st: BuildState, toolId: string, x: number, y: number): 
       if (t.bld) return '已有建築';
       if (countNear(w, x, y, 1, (tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';
       return null; }
+    // D055：51362–51444 原通用順序；大農場根格沙地的理由與2×2農牧不同。
+    case 'farm': case 'ranch': case 'bigFarm': case 'greenhouse': case 'foodPlant': case 'market': case 'tradepost': {
+      const q = seen(t, st.protect);
+      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
+      if (t.road || q.rail || t.tram) return '交通線上不能建造';
+      if (q.lv475) return '架空配電線／電線桿擋住';
+      if (t.hv471 || t.ug471) return '高壓電力走廊擋住';
+      if (t.bld) return '已有建築';
+      if (toolId === 'market' || toolId === 'tradepost') return canPlaceMulti(st, x, y, 2, '需 2×2 陸地');
+      if ((toolId === 'farm' || toolId === 'ranch' || toolId === 'greenhouse') && t.t !== 2) return '只能蓋在草地上';
+      if (toolId === 'foodPlant') { const size = 3; return canPlaceMulti(st, x, y, size, '需 3×3 陸地'); }
+      const sz = toolId === 'bigFarm' ? 5 : 2;
+      const why = canPlaceMulti(st, x, y, sz, sz === 5 ? '需 5×5 陸地' : '需 2×2 陸地');
+      if (why) return why;
+      for (let dy = 0; dy < sz; dy++) for (let dx = 0; dx < sz; dx++) if (w.tiles[idx(w, x + dx, y + dy)].t !== 2) return sz === 5 ? '需 5×5 草地' : '需 2×2 草地';
+      return null; }
     case 'oilwell': case 'mine': case 'gaswell': case 'megaproject': {          // 51365 桶＋51385–51390 通用判定＋51415／51430／51431／51436：1×1 站在對的資源格上（天然氣井找油田）；太空研究中心 3×3
       const q = seen(t, st.protect), r = st.resource ? st.resource[idx(w, x, y)] : 0;
       if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';
@@ -208,6 +228,13 @@ export function placeCost(st: BuildState, toolId: string, x: number, y: number):
     case 'post': c = COST.post; break;                                          // 51532
     case 'cemetery': c = COST.cemetery; break;                                  // 51533
     case 'dump': c = COST.dump; break;                                          // 51534
+    case 'farm': c = COST.farm; break;
+    case 'ranch': c = COST.ranch; break;
+    case 'bigFarm': c = COST.bigFarm; break;
+    case 'greenhouse': c = COST.greenhouse; break;
+    case 'foodPlant': c = COST.foodPlant; break;
+    case 'market': c = COST.market; break;
+    case 'tradepost': c = COST.tradepost; break;
     case 'sewage': c = COST.sewage; break;                                      // 51578
     case 'oilwell': c = COST.oilwell; break;                                    // 51614（D040）
     case 'gaswell': c = COST.gaswell; break;                                    // 51601（D044）
@@ -410,6 +437,23 @@ export function doPlace(st: BuildState, toolId: string, x: number, y: number): b
     case 'mine':                                                                // 52328
       t.bld = { k: 50, lv: 1, v: 0, age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0; t.deco = 0;
       break;
+    // D055：51855–51872、51908–51924、51982–51990、52132–52147。
+    // 原七分支同構；只有farm逐附屬格撤樹的污染減免，其他六類不額外撤印（原規則）。
+    case 'farm': case 'ranch': case 'bigFarm': case 'greenhouse': case 'foodPlant': case 'market': case 'tradepost': {
+      const kind = { farm: 22, ranch: 23, bigFarm: 53, greenhouse: 63, foodPlant: 57, market: 87, tradepost: 91 }[toolId];
+      const size = toolId === 'bigFarm' ? 5 : toolId === 'foodPlant' ? 3 : 2;
+      const variant = toolId === 'farm' ? (x * 5 + y * 11) % 16 : toolId === 'ranch' ? (x * 7 + y * 5) % 5 : 0;
+      for (let dy = 0; dy < size; dy++) for (let dx = 0; dx < size; dx++) {
+        const sx = x + dx, sy = y + dy, j = idx(w, sx, sy), ct = w.tiles[j];
+        if (txn && !txn.seen[j]) { txn.seen[j] = 1; txn.snaps.push({ i: j, s: JSON.stringify(ct) }); }
+        if (toolId === 'farm' && (dx || dy) && ct.tree) stampPolTree(g, sx, sy, -1);
+        ct.tree = 0;
+        ct.zone = 0;
+        ct.deco = 0;
+        ct.bld = (dx === 0 && dy === 0) ? { k: kind, lv: 1, v: variant, age: 0, pw: true, h: 1, sz: size } : { k: kind, ref: [x, y] } as unknown as Bld;
+      }
+      if (toolId === 'market') stampCov(g, st.budget, 'market', x, y, COVR.market, 1);
+      break; }
     case 'doze':
       doze(st, t, x, y);
       break;

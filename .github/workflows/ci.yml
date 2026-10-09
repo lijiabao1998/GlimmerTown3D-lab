@@ -63,8 +63,30 @@ jobs:
         with:
           path: dist
 
+  d055:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D055 native food trade capture
+        run: node tools/d055-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d055-quick-${{ github.sha }}
+          path: scratch/d055-after/
+          if-no-files-found: error
+          retention-days: 14
+
   pages:
-    needs: smoke
+    needs: [smoke, d055]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:

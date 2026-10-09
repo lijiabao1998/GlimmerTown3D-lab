@@ -1,15 +1,22 @@
 // D053: presentation scope only. The imported rank table, tool ids, prices and
 // unlock rules stay authoritative; no simulation or saved-state writes here.
-import { CIVIC_TOOLS, type CivicTool } from '../sim/edit.ts';
+import { FACILITY_TOOLS, type CivicTool } from '../sim/edit.ts';
 import { RANKS } from '../sim/rules/rank.ts';
 
 export const FACILITY_GROUPS = [
   { id: 'all', name: '全部' }, { id: 'service', name: '生活服務' },
-  { id: 'utility', name: '城市管線' }, { id: 'resource', name: '資源研究' },
+  { id: 'utility', name: '城市管線' }, { id: 'resource', name: '資源研究' }, { id: 'food', name: '農業外貿' },
 ] as const;
 export type FacilityGroup = typeof FACILITY_GROUPS[number]['id'];
 interface FacilityNote { group: Exclude<FacilityGroup, 'all'>; use: string; placement: string }
 export const FACILITY_NOTES: Readonly<Record<string, FacilityNote>> = {
+ farm: { group: 'food', use: '生產糧食，產量依季節、供電與原有規則結算', placement: '連續2×2草地；整塊不能有交通線、電力走廊或建築。' },
+ ranch: { group: 'food', use: '牧業糧食生產', placement: '連續2×2草地；其他阻擋以落點預覽為準。' },
+ bigFarm: { group: 'food', use: '大型糧食生產基地', placement: '連續5×5草地；造價只收一次，整塊占地一併建造。' },
+ greenhouse: { group: 'food', use: '溫室農業生產', placement: '連續2×2草地；仍須注意供電及每日結算。' },
+ foodPlant: { group: 'food', use: '將糧食盈餘加工為收入', placement: '連續3×3陸地；先建立糧食供應，生產依原有規則。' },
+ market: { group: 'food', use: '農貿收入與市場覆蓋', placement: '連續2×2陸地；收益於每日結算反映。' },
+ tradepost: { group: 'food', use: '產生外貿收入，支援外貿委託', placement: '連續2×2陸地；收入依現有生產及外貿公式每日結算。' },
   park: { group: 'service', use: '提供周邊公園覆蓋', placement: '在空陸地按住拖出範圍，每格一座公園。' },
   fire: { group: 'service', use: '提供消防服務覆蓋', placement: '點選未被道路或建築佔用的陸地。' },
   police: { group: 'service', use: '提供警察服務覆蓋', placement: '點選未被道路或建築佔用的陸地。' },
@@ -42,10 +49,10 @@ export function rankBuildNote(idx: number): string {
   return RANKS[idx]?.unlock ?? '';
 }
 export function facilitySummary(rankIdx: number) {
-  const available = CIVIC_TOOLS.filter(t => !t.unlockRank || rankIdx + 1 >= t.unlockRank);
-  const next = CIVIC_TOOLS.filter(t => t.unlockRank && rankIdx + 1 < t.unlockRank)
+  const available = FACILITY_TOOLS.filter(t => !t.unlockRank || rankIdx + 1 >= t.unlockRank);
+  const next = FACILITY_TOOLS.filter(t => t.unlockRank && rankIdx + 1 < t.unlockRank)
     .sort((a, b) => a.unlockRank! - b.unlockRank!)[0] ?? null;
-  return { available: available.length, total: CIVIC_TOOLS.length, next };
+  return { available: available.length, total: FACILITY_TOOLS.length, next };
 }
 export function facilityPresentation(t: CivicTool, rankIdx: number, sandbox: boolean) {
   const note = FACILITY_NOTES[t.id];

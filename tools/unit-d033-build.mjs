@@ -148,10 +148,14 @@ export async function d033BuildGuards(log) {
     catch (e) { baseline = `沒改的 build.ts 在 vm 裡載入失敗：${e.message}`; }
     for (const [name, from, to] of MUTANTS_3D) {
       try {
-        const parts = source.split(from);
+        // D055 adds a second identical terrain sequence; mutate only the original sewage case.
+        const start = name.startsWith('canPlace 漏了') ? source.indexOf("    case 'sewage': {") : 0;
+        const end = name.startsWith('canPlace 漏了') ? source.indexOf('      return null; }', start) + '      return null; }'.length : source.length;
+        if (start < 0 || end <= start) throw new Error('污水廠 case 範圍不存在');
+        const parts = source.slice(start, end).split(from);
         if (parts.length !== 2) throw new Error(`突變錨點不是剛好一處（${parts.length - 1} 處）`);
         let M;
-        try { M = buildModule(parts.join(to)); } catch (e) { throw new Error(`突變後載入失敗：${e.message}`); }
+        try { M = buildModule(source.slice(0, start) + parts.join(to) + source.slice(end)); } catch (e) { throw new Error(`突變後載入失敗：${e.message}`); }
         let d;
         try { d = implAgainst(M, want, ORDER, cases33); } catch (e) { d = { k: -1, text: `執行時例外 ${String(e.message).slice(0, 60)}` }; }
         if (d) detected.push(`${name}：${d.k >= 0 ? `第 ${d.k} 張（${d.c.family}）第 ${d.j} 筆` : d.text}`);

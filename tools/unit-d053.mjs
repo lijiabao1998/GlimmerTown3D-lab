@@ -13,7 +13,7 @@ import { d045Load } from './d045-cities.mjs';
 import { stepDay } from '../src/sim/day.ts';
 import { saveCode, loadCode } from '../src/io/save.ts';
 import { decodeLabCode } from '../src/io/labcode.ts';
-import { CIVIC_TOOLS, toolLock, toolSize, gestureOf, labToolOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, toolLock, toolSize, gestureOf, labToolOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
 import { COST } from '../src/sim/rules/build.ts';
 import { RANKS, rankStep, rankOfSave } from '../src/sim/rules/rank.ts';
 import * as Guide from '../src/ui/growthGuide.ts';
@@ -44,7 +44,7 @@ const stateBytes = value => JSON.stringify(value, (_key, v) => {
 const raw = fixture => stateBytes(fixture.sim);
 const saved = fixture => saveCode(fixture.sim, fixture.template, fixture.start);
 const op = (tool, x, z, x1 = x, z1 = z) => ({ k: gestureOf(tool), tool, x0: x, z0: z, x1, z1 });
-const tool = id => CIVIC_TOOLS.find(t => t.id === id);
+const tool = id => FACILITY_TOOLS.find(t => t.id === id);
 const instrumentRng = sim => {
   const calls = [];
   for (const key of ['R', 'ri']) {
@@ -66,6 +66,14 @@ const TOOLS = [
   ['oilwell', '油井', '油', 1300, 'resource', 'tap'], ['mine', '礦場', '礦', 1500, 'resource', 'tap'],
   ['gaswell', '天然氣井', '氣', 1400, 'resource', 'tap'], ['megaproject', '太空研究中心', '太', 4500, 'resource', 'tap'],
 ];
+// D055 additions are independent expected metadata; the original civic list above stays exact.
+const FOOD = [
+ ['farm','農場','農',120,'food','tap',2], ['ranch','牧場','牧',180,'food','tap',2],
+ ['bigFarm','大農場','田',750,'food','tap',5], ['greenhouse','溫室','溫',950,'food','tap',2],
+ ['foodPlant','食品加工廠','糧',1800,'food','tap',3], ['market','農貿市場','市',950,'food','tap',2],
+ ['tradepost','外貿商行','貿',1100,'food','tap',2],
+];
+const ALL_TOOLS = [...TOOLS,...FOOD];
 const RANK_NAMES = ['拓荒營地','邊陲聚落','溪畔村落','阡陌村莊','磚瓦小鎮','集市小鎮','石橋鎮','通衢鎮','燈火小城','繁景小城','匠坊之城','商旅之城','學府之城','港灣之城','花園之城','星軌之城','雲塔之城','千帆之都','萬家之都','燈海都會','環帶都會','穹頂都會','星穹大都會','永晝大都會','織夢都會','微光之巔'];
 const RANK_POINTS = [0,30,80,160,280,450,680,980,1360,1830,2400,3080,3880,4810,5880,7100,8480,10030,11760,13680,15800,18130,20680,23460,26480,29750];
 const ORIGINAL_NOTES = {
@@ -76,18 +84,20 @@ const ORIGINAL_NOTES = {
 };
 function metadata(guide = Guide) {
   assert.deepEqual(CIVIC_TOOLS.map(t => [t.id,t.name,t.short,t.cost]), TOOLS.map(t => t.slice(0,4)));
-  assert.deepEqual(Object.keys(guide.FACILITY_NOTES).sort(), TOOLS.map(t => t[0]).sort(), 'exactly all 18 real tools, without invented entries');
-  assert.deepEqual(guide.FACILITY_GROUPS, [{id:'all',name:'全部'},{id:'service',name:'生活服務'},{id:'utility',name:'城市管線'},{id:'resource',name:'資源研究'}]);
-  for (const [id,name,short,cost,group,gesture] of TOOLS) {
+  assert.deepEqual(FOOD_TOOLS.map(t=>[t.id,t.name,t.short,t.cost]),FOOD.map(t=>t.slice(0,4)));
+  assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),ALL_TOOLS.map(t=>t[0]));
+  assert.deepEqual(Object.keys(guide.FACILITY_NOTES).sort(), ALL_TOOLS.map(t => t[0]).sort(), 'exactly all 25 real tools, without invented entries');
+  assert.deepEqual(guide.FACILITY_GROUPS, [{id:'all',name:'全部'},{id:'service',name:'生活服務'},{id:'utility',name:'城市管線'},{id:'resource',name:'資源研究'},{id:'food',name:'農業外貿'}]);
+  for (const [id,name,short,cost,group,gesture,size] of ALL_TOOLS) {
     const t = tool(id);
     assert.equal(COST[id],cost,id+' unchanged original price'); assert.equal(t.name,name); assert.equal(t.short,short);
     assert.equal(gestureOf(id),gesture); assert.equal(labToolOf('civic','road',id),id);
-    assert.equal(toolSize(id),id==='megaproject'?3:1);
+    assert.equal(toolSize(id),size??(id==='megaproject'?3:1));
     for (let rankIdx=0;rankIdx<26;rankIdx++) for (const sandbox of [false,true]) {
       const p = guide.facilityPresentation(t,rankIdx,sandbox), locked = id==='megaproject' && rankIdx<21;
       assert.equal(p.group,group,id+' group'); assert.equal(p.locked,locked,id+' rank '+rankIdx);
       assert.equal(p.status,locked?'Lv.22 開放':'等級可選');
-      assert.equal(p.unit,id==='wpipe'?'每格・拉線':id==='park'?'每格1×1・框選':id==='megaproject'?'3×3・點放':'1×1・點放');
+      assert.equal(p.unit,id==='wpipe'?'每格・拉線':id==='park'?'每格1×1・框選':`${size??(id==='megaproject'?3:1)}×${size??(id==='megaproject'?3:1)}・點放`);
       assert.ok(p.price.includes('基價 $'+cost.toLocaleString('en-US')),id+' must retain original base price even in sandbox');
       if(sandbox)assert.match(p.price,/沙盒 \$0/);else assert.doesNotMatch(p.price,/沙盒/);
       assert.ok(p.use.length>3 && p.placement.length>6,id+' non-empty purpose and placement');
@@ -102,7 +112,7 @@ function metadata(guide = Guide) {
   for(const id of ['oilwell','gaswell'])assert.match(notes[id].placement,/油田.*黃色/);
   assert.match(notes.mine.placement,/礦藏.*藍色/); assert.match(notes.megaproject.placement,/3×3陸地/);
   assert.match(notes.megaproject.placement,/道路或建築/);
-  return '18 exact tools × 26 levels × 2 modes; original names, IDs, costs, groups, units and selection locks';
+  return '18 unchanged civic + 7 food tools × 26 levels × 2 modes; original names, IDs, costs, groups, units and selection locks';
 }
 function ranks(guide=Guide) {
   assert.deepEqual(RANKS,RANK_NAMES.map((name,i)=>({name,threshold:RANK_POINTS[i],...(ORIGINAL_NOTES[i]?{unlock:ORIGINAL_NOTES[i]}:{})})));
@@ -112,7 +122,7 @@ function ranks(guide=Guide) {
     if(pending[i]) { assert.ok(note.includes(pending[i])); assert.match(note,/本線尚無建造工具/); assert.match(note,/不會新增/); assert.doesNotMatch(note,/^解鎖/); }
     else if(i===21){assert.match(note,/解鎖：太空研究中心/);assert.match(note,/3×3/);}
     else assert.equal(note,ORIGINAL_NOTES[i]??'');
-    assert.equal(summary.total,18); assert.equal(summary.available,i<21?17:18);
+    assert.equal(summary.total,25); assert.equal(summary.available,i<21?24:25);
     assert.equal(summary.next,i<21?tool('megaproject'):null,'next must be real Lv.22 facility, never imported preview milestones');
     assert.equal(rankStep(i,0).rankIdx,i,'low current points never lower historical rank');
     assert.equal(rankOfSave(i,0),i,'saved rank is preserved');
@@ -134,19 +144,19 @@ function promotionTruth(source=citySource) {
   return 'actual simDay promotion toast loop qualifies four unavailable milestones, actual Lv.22 and unchanged Lv.26';
 }
 function compileGuide(source=helperSource) {
-  return new Function('CIVIC_TOOLS','RANKS',strip(source)+'; return { FACILITY_GROUPS,FACILITY_NOTES,rankBuildNote,facilitySummary,facilityPresentation };')(CIVIC_TOOLS,RANKS);
+  return new Function('FACILITY_TOOLS','RANKS',strip(source)+'; return { FACILITY_GROUPS,FACILITY_NOTES,rankBuildNote,facilitySummary,facilityPresentation };')(FACILITY_TOOLS,RANKS);
 }
 function inspect(fixture, guide=Guide) {
   const s=fixture.sim;
   for(let n=0;n<3;n++) {
     guide.facilitySummary(s.rankIdx);
     for(let i=0;i<26;i++)guide.rankBuildNote(i);
-    for(const t of CIVIC_TOOLS)guide.facilityPresentation(t,s.rankIdx,s.diff===3);
+    for(const t of FACILITY_TOOLS)guide.facilityPresentation(t,s.rankIdx,s.diff===3);
   }
 }
 function readOnly(guide=Guide) {
   const a=d044Load(), b=d044Load(), ar=instrumentRng(a.sim),br=instrumentRng(b.sim);
-  const defs=stateBytes({CIVIC_TOOLS,RANKS,notes:guide.FACILITY_NOTES,groups:guide.FACILITY_GROUPS});
+  const defs=stateBytes({CIVIC_TOOLS,FOOD_TOOLS,FACILITY_TOOLS,RANKS,notes:guide.FACILITY_NOTES,groups:guide.FACILITY_GROUPS});
   for(const rankIdx of [0,5,7,11,16,20,21,25]) for(const diff of [1,3]) {
     a.sim.rankIdx=b.sim.rankIdx=rankIdx;a.sim.diff=b.sim.diff=diff;
     const before=raw(a),code=saved(a),rng=stateBytes(ar);
@@ -155,7 +165,7 @@ function readOnly(guide=Guide) {
     assert.equal(saved(a),code,'queries cannot change any share/save bytes');assert.equal(stateBytes(ar),rng,'queries cannot call either RNG interface');
     assert.equal(raw(a),raw(b));assert.equal(saved(a),saved(b));
   }
-  assert.equal(stateBytes({CIVIC_TOOLS,RANKS,notes:guide.FACILITY_NOTES,groups:guide.FACILITY_GROUPS}),defs,'helpers do not reorder/mutate imported definitions');
+  assert.equal(stateBytes({CIVIC_TOOLS,FOOD_TOOLS,FACILITY_TOOLS,RANKS,notes:guide.FACILITY_NOTES,groups:guide.FACILITY_GROUPS}),defs,'helpers do not reorder/mutate imported definitions');
   assert.deepEqual(ar,br);
   return '16 rank/mode states: full model, exact save bytes, RNG calls and all imported definitions unchanged';
 }
@@ -187,7 +197,7 @@ function placementTruth(guide=Guide) {
   clean();s.edu.tech=['B5','C8','D4a'];s.edu.spec='hub';at().tree=1;
   assert.equal(check('park',true).total,62*.95*.95*.9*1.05);assert.match(guide.facilityPresentation(tool('park'),21,false).price,/基價 \$60/);
   s.diff=3;assert.equal(check('park',true).total,0);assert.match(guide.facilityPresentation(tool('park'),21,true).price,/沙盒 \$0/);
-  return 'all tools checked against actual preview: base/tree/tech/spec/sandbox price; land/road/building/ruin/crater; pipe reuse; oil/ore; sewage 0/1/2 water; 3×3 footprint';
+  return 'all 18 original civic tools checked against actual preview: base/tree/tech/spec/sandbox price; land/road/building/ruin/crater; pipe reuse; oil/ore; sewage 0/1/2 water; 3×3 footprint';
 }
 
 function trajectories(guide=Guide) {
@@ -242,7 +252,7 @@ function makeDom() {
 }
 function catalogHarness({guide=Guide,source=catalogSource,onSelect}={}) {
   const {doc,Element}=makeDom(),selected=[],closed=[];
-  const dependencies={CIVIC_TOOLS,...guide,document:doc,HTMLElement:Element,Element};
+  const dependencies={CIVIC_TOOLS,FOOD_TOOLS,FACILITY_TOOLS,...guide,document:doc,HTMLElement:Element,Element};
   const js=[read('src/ui/panelContent.ts'),read('src/ui/panelPress.ts'),source].map(strip).join('\n');
   const create=new Function(...Object.keys(dependencies),js+';return createFacilityCatalog;')(...Object.values(dependencies));
   const catalog=create({select:id=>{selected.push(id);onSelect?.(id);},close:()=>{closed.push('close');},rank:()=>{closed.push('rank');}});
@@ -252,13 +262,13 @@ function catalogHarness({guide=Guide,source=catalogSource,onSelect}={}) {
 function catalogBehavior(source=catalogSource) {
   const h=catalogHarness({source});const {catalog:c,doc}=h;c.root.hidden=false;c.update({rankIdx:20,sandbox:false,day:150});
   assert.equal(c.root.getAttribute('role'),'dialog');assert.equal(c.root.getAttribute('aria-modal'),'true');assert.equal(c.root.getAttribute('aria-labelledby'),c.title.id);
-  assert.equal(h.rows().length,18);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,17);
-  for(const [id,name,,,group] of TOOLS){const row=h.rows().find(r=>r.dataset.k===id);assert.equal(row.querySelector('h3').textContent,name);assert.ok(row.querySelector('.meta').textContent.includes('基價 $'+tool(id).cost.toLocaleString('en-US')));assert.equal(h.button(id).disabled,id==='megaproject');if(id!=='megaproject'){h.button(id).click();assert.equal(h.selected.at(-1),id);}assert.equal(Guide.FACILITY_NOTES[id].group,group);}
-  h.button('megaproject').click();assert.equal(h.selected.length,17,'locked button cannot dispatch a selection');
-  for(const [group,count] of [['service',10],['utility',4],['resource',4],['all',18]]){h.filter(group).click();assert.equal(c.group(),group);assert.equal(h.rows().length,count);assert.equal(h.filter(group).getAttribute('aria-pressed'),'true');}
+  assert.equal(h.rows().length,25);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,24);
+  for(const [id,name,,,group] of ALL_TOOLS){const row=h.rows().find(r=>r.dataset.k===id);assert.equal(row.querySelector('h3').textContent,name);assert.ok(row.querySelector('.meta').textContent.includes('基價 $'+tool(id).cost.toLocaleString('en-US')));assert.equal(h.button(id).disabled,id==='megaproject');if(id!=='megaproject'){h.button(id).click();assert.equal(h.selected.at(-1),id);}assert.equal(Guide.FACILITY_NOTES[id].group,group);}
+  h.button('megaproject').click();assert.equal(h.selected.length,24,'locked button cannot dispatch a selection');
+  for(const [group,count] of [['service',10],['utility',4],['resource',4],['food',7],['all',25]]){h.filter(group).click();assert.equal(c.group(),group);assert.equal(h.rows().length,count);assert.equal(h.filter(group).getAttribute('aria-pressed'),'true');}
   h.filter('resource').click();const button=h.button('mine'),body=c.root.querySelector('.body');body.scrollTop=73;button.focus({preventScroll:true});const oldRows=h.rows();
   c.update({rankIdx:21,sandbox:true,day:151});assert.equal(c.group(),'resource');assert.equal(body.scrollTop,73);assert.ok(doc.activeElement===button);assert.ok(h.button('mine')===button,'real reconciliation retains button identity');assert.ok(h.rows().every((r,i)=>r===oldRows[i]));
-  assert.equal(h.button('megaproject').disabled,false);assert.match(c.root.querySelector('.sub').textContent,/18／18.*151/);h.button('megaproject').click();assert.equal(h.selected.at(-1),'megaproject');
+  assert.equal(h.button('megaproject').disabled,false);assert.match(c.root.querySelector('.sub').textContent,/25／25.*151/);h.button('megaproject').click();assert.equal(h.selected.at(-1),'megaproject');
   // A held original button's entire presentation remains fixed until its one
   // original click. The latest update is used, not the first queued day.
   const held=h.button('gaswell'),text=c.root.textContent,selectionCount=h.selected.length;
@@ -268,7 +278,7 @@ function catalogBehavior(source=catalogSource) {
   doc.emit('pointerdown',{target:held,pointerId:42});c.update({rankIdx:21,sandbox:true,day:154});doc.emit('pointercancel',{target:held,pointerId:42});doc.runTimers();assert.match(c.root.querySelector('.sub').textContent,/154/);assert.equal(h.selected.length,selectionCount+1);
   doc.emit('pointerdown',{target:held,pointerId:43});c.update({rankIdx:21,sandbox:true,day:155});c.reset();c.root.hidden=true;doc.emit('pointerup',{target:held,pointerId:43});doc.runTimers();assert.match(c.root.querySelector('.sub').textContent,/154/,'reset cancels stale pending presentation');
   c.root.hidden=false;c.update({rankIdx:21,sandbox:false,day:156});c.root.querySelector('#catalogClose').click();c.root.querySelector('#catalogRank').click();doc.emit('click',{target:c.root});assert.deepEqual(h.closed,['close','rank','close']);
-  return 'actual catalog: 18 rows, group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks';
+  return 'actual catalog: 25 rows, group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks';
 }
 
 // Execute original rank render/open/close/selection and syncUi wiring; modal
@@ -280,7 +290,7 @@ function growthHarness(fixture,source=citySource) {
     if(!nodes.has(selector)) {const e=doc.createElement(/X$|Catalog$/.test(selector)?'button':'div');nodes.set(selector,e);if(selector==='#rk'){e.hidden=true;ui.append(e);}else node('#rk').append(e);}
     return nodes.get(selector);
   };
-  const dependencies={CIVIC_TOOLS,RANKS,...Guide,document:doc,HTMLElement:Element,Element,ui,node};
+  const dependencies={CIVIC_TOOLS,FOOD_TOOLS,FACILITY_TOOLS,RANKS,...Guide,document:doc,HTMLElement:Element,Element,ui,node};
   const mods=[read('src/ui/panelContent.ts'),read('src/ui/panelPress.ts'),catalogSource].map(strip).join('\n');
   const chunks=[section(source,"  const rk = $<HTMLElement>('#rk')",'  // D032：'),section(source,'  function syncUi() {','  // D040：資源圖。')];
   const js=`let sim=x.sim,city=sim.city,playing=true;const $=node,addEventListener=document.defaultView.addEventListener.bind(document.defaultView);
@@ -310,7 +320,7 @@ function growthBehavior(source=citySource) {
     assert.equal(raw(a),before);assert.equal(saved(a),code);assert.deepEqual(ar,br);
     const result=h.rankList();assert.equal(result.pct,rankIdx===25?100:0,'retained high rank with fallen points clamps to 0');
     assert.equal(h.node('#rk .bar i').style.width,(rankIdx===25?100:0)+'%');
-    assert.match(text()[2],rankIdx<21?/17／18/:/18／18/);
+    assert.match(text()[2],rankIdx<21?/24／25/:/25／25/);
     if(rankIdx<21)assert.match(text()[3],/Lv.22 太空研究中心/);else assert.doesNotMatch(text()[3],/下一個/);
     if([5,7,11,16].includes(rankIdx))assert.match(text()[1],/本線尚無建造工具/);
     if(rankIdx===25)assert.match(text()[1],/全城住宅幸福 \+2%（永久）/);
@@ -321,7 +331,7 @@ function growthBehavior(source=citySource) {
   h.openRank();assert.equal(h.catalog.root.hidden,true);assert.equal(h.rk.hidden,false);
   const close=h.node('#rkX');h.doc.emit('pointerdown',{target:close,pointerId:51});const held=text();
   a.sim.day=b.sim.day=151;a.sim.cityPoints=b.sim.cityPoints=18130;a.sim.rankIdx=b.sim.rankIdx=21;h.syncUi();assert.deepEqual(text(),held,'rank presentation stays stationary under held control');
-  h.doc.emit('pointercancel',{target:close,pointerId:51});h.doc.runTimers();assert.match(text()[0],/151/);assert.match(text()[2],/18／18/);
+  h.doc.emit('pointercancel',{target:close,pointerId:51});h.doc.runTimers();assert.match(text()[0],/151/);assert.match(text()[2],/25／25/);
   h.openCatalog();const oldCatalogText=h.catalog.root.textContent;a.sim.day=b.sim.day=152;h.syncUi();assert.notEqual(h.catalog.root.textContent,oldCatalogText);assert.match(h.catalog.root.querySelector('.sub').textContent,/152/);
   const closedRank=text(),closedCatalog=h.catalog.root.textContent;h.closeGrowth();a.sim.day=b.sim.day=153;h.syncUi();assert.deepEqual(text(),closedRank);assert.equal(h.catalog.root.textContent,closedCatalog,'closed catalog not refreshed by actual syncUi');
   assert.equal(raw(a),raw(b),'all user-visible refreshes leave exact full state unchanged');assert.equal(saved(a),saved(b));assert.deepEqual(ar,br);assert.equal(h.playing(),true);assert.ok(!h.calls.includes('save')&&!h.calls.includes('journal'),'guide cannot save/write journal');
@@ -333,7 +343,7 @@ function selectionHarness(fixture,source=citySource) {
   const calls=[],toasts=[],x={sim:fixture.sim,calls,toasts};
   const chunks=[section(source,'  function selectCatalogTool(','  // D032：'),section(source,'  function pickCivic(','  function syncDock()'),section(source,'  function setTool(','  const toolColor'),section(source,'  function opOf(','  function updatePreview()'),section(source,'  function commitStroke(','  // 手勢和測試出口')];
   const js=`let sim=x.sim,city=sim.city,tool='road',roadTool='alley',civicTool='police',stroke={old:true},lastPreview={old:true};
-    const toolLock=d.toolLock,labToolOf=d.labToolOf,gestureOf=d.gestureOf,CIVIC_TOOLS=d.CIVIC_TOOLS;
+    const toolLock=d.toolLock,labToolOf=d.labToolOf,gestureOf=d.gestureOf,CIVIC_TOOLS=d.CIVIC_TOOLS,FACILITY_TOOLS=d.FACILITY_TOOLS,FOOD_TOOLS=d.FOOD_TOOLS;
     const closeGrowth=restore=>x.calls.push(['closeGrowth',restore]);
     const controls={touches:{ONE:'rotate'},mouseButtons:{LEFT:'rotate'}},THREE={TOUCH:{ROTATE:'rotate'},MOUSE:{ROTATE:'rotate'}};
     const preview={clear:()=>x.calls.push('clear')},bui={root:{querySelector:()=>({focus:options=>x.calls.push(['focus',options])})},hideCost:()=>x.calls.push('hideCost'),toast:(...args)=>x.toasts.push(args)};
@@ -341,15 +351,15 @@ function selectionHarness(fixture,source=citySource) {
     const runOp=op=>{x.calls.push('commit');return d.commitOp(sim,op,0);},saveNow=()=>x.calls.push('save'),kickJournal=()=>x.calls.push('journal');
     ${chunks.map(strip).join('\n')}
     return {selectCatalogTool,pickCivic,setTool,opOf,commitStroke,setSim:value=>{sim=value;},read:()=>({tool,civicTool,stroke,lastPreview,controls}),setStroke:s=>{stroke=s;lastPreview={old:true};}};`;
-  return {...new Function('x','d',js)(x,{toolLock,labToolOf,gestureOf,commitOp,CIVIC_TOOLS}),calls,toasts,fixture};
+  return {...new Function('x','d',js)(x,{toolLock,labToolOf,gestureOf,commitOp,CIVIC_TOOLS,FACILITY_TOOLS,FOOD_TOOLS}),calls,toasts,fixture};
 }
 function selectionAndCommit(source=citySource) {
   let builds=0;
-  for(const [id] of TOOLS) {
+  for(const [id] of ALL_TOOLS) {
     const a=d044Load(),b=d044Load();a.sim.rankIdx=b.sim.rankIdx=21;const ar=instrumentRng(a.sim),br=instrumentRng(b.sim),h=selectionHarness(a,source);
     const before=raw(a),code=saved(a);h.selectCatalogTool(id);
     assert.deepEqual(h.calls.filter(c=>Array.isArray(c)),[['closeGrowth',false],['focus',{preventScroll:true}]],'original callback closes before selecting and restores visible tool focus');
-    assert.equal(h.read().civicTool,id);assert.equal(h.read().tool,'civic');assert.equal(h.read().stroke,null);assert.equal(h.read().lastPreview,null);assert.equal(h.read().controls.touches.ONE,null);assert.equal(h.read().controls.mouseButtons.LEFT,null);
+    assert.equal(h.read().civicTool,id);assert.equal(h.read().tool,FOOD.some(t=>t[0]===id)?'food':'civic');assert.equal(h.read().stroke,null);assert.equal(h.read().lastPreview,null);assert.equal(h.read().controls.touches.ONE,null);assert.equal(h.read().controls.mouseButtons.LEFT,null);
     assert.ok(!h.calls.includes('save')&&!h.calls.includes('journal'));assert.equal(raw(a),before,'selection only is read-only: '+id);assert.equal(saved(a),code);assert.deepEqual(ar,[]);
     const N=a.sim.w.N;
     if(id==='sewage')for(const f of [a,b])for(const [dx,dz]of [[-1,-1],[1,-1]]){const i=(BLOCKS.C[1]+dz)*N+BLOCKS.C[0]+dx;f.sim.w.tiles[i].t=0;f.sim.city.ter[i]=0;}
@@ -372,18 +382,26 @@ function selectionAndCommit(source=citySource) {
 }
 
 function originalScope() {
-  const expected={
-    'src/sim':[42,'925eff90599c4e58e4d966d33a6462af52526d7e726b8fa64fc67c0b72b7c6de'],
-    'src/io':[3,'3fc04802b3cb5b65f738239db7b355e13432901fa65c02db3c7648c2cd00a4fb'],
-    'src/render':[15,'2adb379c0a1a309fc1de97c249af9bd98d994ec2408d9c6677a6bae57896542f'],
-    'src/content':[96,'85f9d524f33f91a96d8c23bda36e358f8e7d21c14f40ece4ceaf77cf1de4618e'],
+  // D055's authorized native construction adds ONLY build.ts/edit.ts to simulation scope.
+  // The 40 other simulation files remain baseline 1955bd24 bytes. Pin the two
+  // reviewed D055 files individually, rather than accepting arbitrary sim edits.
+  const d055 = {
+    'src/sim/edit.ts': '4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6',
+    'src/sim/rules/build.ts': '9530e920f3f590ee467b1ba581ceb369d0d3ed4e092446109274e48d6f9245ca',
   };
-  for(const [dir,[count,sha]] of Object.entries(expected)) {
-    const base=path.join(ROOT,dir),files=fs.readdirSync(base,{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).sort(),hash=createHash('sha256');
-    for(const file of files)hash.update(file+'\0').update(fs.readFileSync(path.join(ROOT,file))).update('\0');
-    assert.equal(files.length,count,dir+' original file count');assert.equal(hash.digest('hex'),sha,dir+' entire original-main byte fingerprint');
+  for (const [file, sha] of Object.entries(d055)) assert.equal(createHash('sha256').update(read(file)).digest('hex'),sha,file+' reviewed D055 bytes');
+  const expected = {
+    'src/sim': [42, '1258c893fdaa67894ccc5fc05c172ef1c8b03d3c71931512e1870a2cc212b420'],
+    'src/io': [3, '3fc04802b3cb5b65f738239db7b355e13432901fa65c02db3c7648c2cd00a4fb'],
+    'src/render': [15, '2adb379c0a1a309fc1de97c249af9bd98d994ec2408d9c6677a6bae57896542f'],
+    'src/content': [96, '85f9d524f33f91a96d8c23bda36e358f8e7d21c14f40ece4ceaf77cf1de4618e'],
+  };
+  for (const [dir,[count,sha]] of Object.entries(expected)) {
+    const files=fs.readdirSync(path.join(ROOT,dir),{recursive:true,withFileTypes:true}).filter(d=>d.isFile()).map(d=>path.relative(ROOT,path.join(d.parentPath,d.name)).replaceAll('\\','/')).sort(),hash=createHash('sha256');
+    for(const file of files)if(!(file in d055))hash.update(file+'\0').update(fs.readFileSync(path.join(ROOT,file))).update('\0');
+    assert.equal(files.length,count,dir+' original file count');assert.equal(hash.digest('hex'),sha,dir+' unchanged baseline bytes excluding two explicitly pinned D055 files');
   }
-  return '156 original-main files byte-identical: simulation/rank/RNG, save, renderer and content';
+  return '154 original files byte-identical; only recovered build.ts and native edit.ts additions individually SHA-256 pinned';
 }
 function selectionPurity(source=citySource) {
   const a=d044Load(),calls=instrumentRng(a.sim);a.sim.rankIdx=20;const h=selectionHarness(a,source);
@@ -472,7 +490,7 @@ function clickOriginGuard() {
 }
 
 export function d053Guards(log,match='') {
-  const tests=[['native click origin and cleanup safety',clickOriginGuard],['original 156-file rule/save/RNG/render/content scope',originalScope],['18-tool metadata, base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
+  const tests=[['native click origin and cleanup safety',clickOriginGuard],['original154 + explicit D055 two-file scope',originalScope],['25-tool metadata (18 original civic), base cost and all rank/mode locks',metadata],['rank presentation versus untouched authoritative ladder',ranks],['actual promotion notification truth',promotionTruth],['deep read-only helper queries',readOnly],['placement and cost claims match real preview rules',placementTruth],['uninterrupted model/report/save/RNG control trajectories',trajectories],['actual catalog module state and held control lifecycle',catalogBehavior],['actual growth panel and visible refresh integration',growthBehavior],['actual city selection, placement and undo integration',selectionAndCommit],['behavior mutation sensitivity',mutations]];
   for(const [name,fn] of tests)if(!match||name.includes(match))try{log(true,'D053 '+name,fn());}catch(error){log(false,'D053 '+name,error.stack);}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href) {
