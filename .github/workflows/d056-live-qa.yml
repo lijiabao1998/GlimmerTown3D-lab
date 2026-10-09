@@ -1,0 +1,40 @@
+name: D056 live QA
+on:
+  push:
+    branches: [qa/d056-live-422647c]
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Verify published product tree unchanged
+        run: |
+          git diff --exit-code 422647c77f51b07fd53a1fa26d35799cd7b33ef8 HEAD -- src public index.html package.json package-lock.json vite.config.ts tsconfig.json
+          git merge-base --is-ancestor 422647c77f51b07fd53a1fa26d35799cd7b33ef8 HEAD
+          git diff --name-only 422647c77f51b07fd53a1fa26d35799cd7b33ef8 HEAD | grep -Ev "^(.github/workflows/d056-live-qa.yml|tools/d056-live-qa.mjs|tools/d055-live-reload.mjs|tools/d056-approved-image-hashes.json)$" > /tmp/unexpected-files || true
+          test ! -s /tmp/unexpected-files
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: Verify real Pages origin, native interactions, reloads and approved pixels
+        run: node tools/d056-live-qa.mjs 2>&1 | tee d056-live-run.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d056-live-${{ github.sha }}
+          path: |
+            scratch/d056-live/
+            scratch/d056-after/
+            d056-live-run.txt
+          if-no-files-found: error
+          retention-days: 14
