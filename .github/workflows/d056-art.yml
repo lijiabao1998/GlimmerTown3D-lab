@@ -32,6 +32,8 @@ jobs:
         run: |
           node tools/d056-capture.mjs --phase=before
           node tools/d056-capture.mjs --phase=after
+      - name: Current and historical dialog UI regression
+        run: node tools/d056-dialog-goldens.mjs
       - name: Existing D055 native placement and interruption regression
         run: node tools/d055-capture.mjs --phase=after
       - uses: actions/upload-artifact@v4
@@ -47,5 +49,9 @@ jobs:
             scratch/d056-after/*.code.txt
             scratch/d055-after/*.png
             scratch/d055-after/*.json
+            scratch/shots/D049-*.png
+            scratch/shots/D050-*.png
+            scratch/shots/D056-*.png
+            scratch/shots/D056-*.json
           if-no-files-found: error
           retention-days: 14

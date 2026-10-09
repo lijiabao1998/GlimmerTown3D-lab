@@ -41,6 +41,7 @@ import { d046Smoke } from './smoke-d046.mjs';
 import { d047ArtSmoke } from './smoke-d047-art.mjs';
 import { d047MobileSmoke } from './smoke-d047-mobile.mjs';
 import { d048Smoke, d048SkipNote } from './smoke-d048.mjs';
+import { d056DialogGoldens } from './d056-dialog-goldens.mjs';
 import { d049Smoke } from './smoke-d049.mjs';
 import { d050Smoke, d050CopyImageGuard } from './smoke-d050.mjs';
 import { d051Smoke, d051ImportImageGuard } from './smoke-d051.mjs';
@@ -294,8 +295,10 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ?blocks=b 71,690／68,028（D008 的 69,598／67,396 是存檔 v）。預設 C 另驗仍在手機預算內（≤ D003 基線 1.5 倍、draw call ≤ 18）
   // D018 故意改了公園（k4）照實驗線九種設計畫：AI 城有 17 座公園，三檔都多 1,654 個三角形（C 74,990 → 76,644、B 68,028 → 69,682）；種子城沒有公園、不變。
   // 公園以外的幾何沒變由 Node 守衛證（tools/unit-d018.mjs：183 種 × 9 個變體逐位＝動手前）
-  // D056: ai120 has 8 schools (+1616), 1 hospital (+178), 10 clinics (+1620); fixed +3414, source geometry counted independently.
-  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 76644 + 3414, b: 69682 + 3414 } }, D012_CALLS = 15;
+  // D056: ai120 primary geometry +3414; shadow-casting W/O arenas submit +758 again.
+  // 8 schools: 8*(202+34), 1 hospital: 178+66, 10 clinics: 10*(162+42) = +4172.
+  // tools/d056-render-budget.mjs independently decodes/restyles and counts each arena.
+  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 76644 + 4172, b: 69682 + 4172 } }, D012_CALLS = 15;
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone(), mode: __gt.blockMode()})');
@@ -398,7 +401,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     // A 檔一格一棟、每一棟照自己的 v 挑原型，幾何跟著換：釘改成 D012 量的值 121,606／78,424（沒有立面、飾條照舊）。
     // 注意：種子城 A 檔 121,606 超過 D004 驗收 8 的手機預算（三檔都 ≤ D003 基線 1.5 倍＝118,884）。D004 那一項的 A 檔三角形改成只量不判、照印超過多少；
     // 這裡的逐位釘照判，A 檔幾何再變就紅。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡）
-    const D012_A = { seed516: 121606, ai120: 80078 + 3414 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
+    const D012_A = { seed516: 121606, ai120: 80078 + 4172 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
     for (const id of ['seed516', 'ai120']) {
       await open(`sample=${id}&clean=1&blocks=a`);
       const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');
@@ -625,7 +628,7 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047ArtS
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047MobileSmoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d048Smoke(withBrowser, log);
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d049Smoke(withBrowser, log);
-if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) { await d050Smoke(withBrowser, log); d050CopyImageGuard(log); }
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) { await d050Smoke(withBrowser, log); await d056DialogGoldens(withBrowser, log); }
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) { await d051Smoke(withBrowser, log); d051ImportImageGuard(log); }
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d052Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪

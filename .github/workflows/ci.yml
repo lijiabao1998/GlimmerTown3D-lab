@@ -56,6 +56,7 @@ jobs:
             scratch/shots/D054-*.json
             scratch/shots/D054-*.code.txt
             scratch/shots/D054-*.html
+            scratch/shots/D056-*.json
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3

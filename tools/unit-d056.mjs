@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';import fs from 'node:fs';import path fro
 import {ROOT} from './cdp.mjs';import {kindHashes,drawOne} from './d018-kinds.mjs';import{D056_LEGACY}from'./d056-legacy.mjs';
 import{BRITISH_CIVIC,BRITISH_NATIVE_KINDS,BRITISH_KINDS,BRITISH_PALETTE as C}from'../src/content/britishCivic.ts';
 import{kindTableFrom}from'../src/content/kindTable.ts';
+import{assertD056RenderBudget}from'./d056-render-budget.mjs';
 function clearOpening(r,s,u,front,back,y){
  const ray=new THREE.Raycaster(new THREE.Vector3(u*s,y*r.H,front*s),new THREE.Vector3(0,0,-1),0,(front-back)*s);
  return r.G.every(g=>{const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(g.pos,3));const material=new THREE.MeshBasicMaterial({side:THREE.DoubleSide});const mesh=new THREE.Mesh(geo,material);mesh.updateMatrixWorld();const clear=ray.intersectObject(mesh).length===0;geo.dispose();material.dispose();return clear;});
@@ -12,6 +13,7 @@ const read=p=>JSON.parse(fs.readFileSync(path.join(ROOT,p),'utf8'));
 export async function d056Guards(log){
  const test=(name,f)=>{try{f();log(true,'D056 '+name)}catch(e){log(false,'D056 '+name,e.stack)}};
  const before=read('src/content/samples/d056-kinds-before.json'),now=kindHashes(),KT=kindTableFrom(read('src/content/lab-kinds.json')),looks=read('src/content/lab-looks.json').looks;
+ test('ai120 primary +3414 and shadow +758 derive the complete +4172 render budget',()=>{assertD056RenderBudget();});
  test('eight native and three bonus architectures; only these eleven × nine variants change',()=>{
   assert.equal(before.commit,'0e849a6f6322091863ab0c27b64a45c669e45444');assert.equal(BRITISH_CIVIC.length,11);assert.equal(BRITISH_NATIVE_KINDS.size,8);
   assert.equal(new Set(BRITISH_CIVIC.map(x=>x.silhouette)).size,11);assert.equal(BRITISH_KINDS.size,11);
