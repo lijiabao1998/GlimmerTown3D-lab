@@ -37,7 +37,18 @@ export const CIVIC_TOOLS: CivicTool[] = [
   { id: 'gaswell', name: '天然氣井', short: '氣', label: '氣井', cost: COST.gaswell },   // D044：實驗線 resource 類（37656）；⛽；要站在油田格上（天然氣伴生）才蓋得下去
   { id: 'megaproject', name: '太空研究中心', short: '太', label: '太空', cost: COST.megaproject, unlockRank: 22, size: 3 },   // D044：實驗線 resource 類（37754）；🚀；3×3，城市 Lv.22 解鎖
 ];
-export const toolSize = (id: string) => CIVIC_TOOLS.find(c => c.id === id)?.size ?? 1;
+// D055 reconstructed native catalogue; prices and footprints follow lab d23c18d.
+export const FOOD_TOOLS: CivicTool[] = [
+ { id: 'farm', name: '農場', short: '農', cost: COST.farm, size: 2 },
+ { id: 'ranch', name: '牧場', short: '牧', cost: COST.ranch, size: 2 },
+ { id: 'bigFarm', name: '大農場', short: '田', cost: COST.bigFarm, size: 5 },
+ { id: 'greenhouse', name: '溫室', short: '溫', cost: COST.greenhouse, size: 2 },
+ { id: 'foodPlant', name: '食品加工廠', short: '糧', label: '加工廠', cost: COST.foodPlant, size: 3 },
+ { id: 'market', name: '農貿市場', short: '市', label: '市場', cost: COST.market, size: 2 },
+ { id: 'tradepost', name: '外貿商行', short: '貿', label: '外貿', cost: COST.tradepost, size: 2 },
+];
+export const FACILITY_TOOLS = [...CIVIC_TOOLS, ...FOOD_TOOLS];
+export const toolSize = (id: string) => FACILITY_TOOLS.find(c => c.id === id)?.size ?? 1;
 // 工具列的鎖（實驗線 toolUnlocked458 63877、selectCatalogTool458 63932）：城市等級不夠就選不起來、提示解鎖等級。這是介面的鎖，規則（canPlace）本來就不看等級
 export function toolLock(s: Sim, id: string): string | null {
   const t = CIVIC_TOOLS.find(c => c.id === id);
@@ -46,7 +57,7 @@ export function toolLock(s: Sim, id: string): string | null {
 const ZONE_OF: Record<string, number> = { zr: 1, zc: 2, zi: 3 };
 
 // 介面的按鈕 → 實驗線的工具代號（規則 9：按鈕寫進資料的東西照實驗線）。路、公共設施是一組：按鈕下面那一排選的是哪一種
-export const labToolOf = (ui: string, roadTool: string, civicTool = 'police') => ui === 'road' ? roadTool : ui === 'civic' ? civicTool : ui;
+export const labToolOf = (ui: string, roadTool: string, civicTool = 'police') => ui === 'road' ? roadTool : ui === 'civic' || ui === 'food' ? civicTool : ui;
 // 實驗線觸控的手勢（T436）：路與配水管是線（isLineTool436 62763）、分區與拆除與公園是框（isRectTool 62750：zr／zc／zi／doze／park，另有 tree、fill 還沒搬）、其他建築是點
 export const gestureOf = (tool: string): 'line' | 'rect' | 'tap' => roadToolToRc(tool) || tool === 'wpipe' ? 'line' : (tool in ZONE_OF || tool === 'doze' || tool === 'park') ? 'rect' : 'tap';
 

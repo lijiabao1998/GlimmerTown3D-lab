@@ -14,7 +14,7 @@ import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, acceptCommission, dropCommission, commissionOffers, commissionState, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, acceptCommission, dropCommission, commissionOffers, commissionState, ROAD_TOOLS, CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
 import { chronicleOf, depletedToastText } from './sim/decisions.ts';
 import { CMS_BY_ID385, NO_RIDERSHIP, cmsToast, type CmsDef } from './sim/rules/commission.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
@@ -724,7 +724,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     $('#rk .growthGuide h3').textContent = `${summary.available}／${summary.total} 項設施等級可選`;
     $('#rk .nextBuild').textContent = summary.next
       ? `下一個可建設施解鎖：Lv.${summary.next.unlockRank} ${summary.next.name}。其他升級不代表新增建造工具。`
-      : '本線現有18項設施已全部達到等級條件；實際落點與資金是否足夠，請看地圖預覽。';
+      : '本線現有25項設施已全部達到等級條件；實際落點與資金是否足夠，請看地圖預覽。';
   }
   function openRank() {
     if (!sim) return;
@@ -741,10 +741,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     growthModal.show(catalog.root, catalog.title);
   }
   function selectCatalogTool(id: string) {
-    if (!sim || !CIVIC_TOOLS.some(t => t.id === id) || !pickCivic(id)) return;
-    closeGrowth(false); setTool('civic');
+    if (!sim || !FACILITY_TOOLS.some(t => t.id === id) || !pickCivic(id)) return;
+    closeGrowth(false); setTool(FOOD_TOOLS.some(t => t.id === id) ? 'food' : 'civic');
     // Selected-tool focus is visible after the dialog and its inert lock close.
-    bui.root.querySelector<HTMLButtonElement>('#tools [data-t="civic"]')?.focus({ preventScroll: true });
+    bui.root.querySelector<HTMLButtonElement>(`#tools [data-t="${tool}"]`)?.focus({ preventScroll: true });
   }
 
   // D032：☰「政策與預算」（實驗線 ☰ 市政統計面板的稅率、服務預算、法規與政策開關的 3D 版）。按了馬上生效（實驗線回退設定：T504 治理關，policyApply504 直接轉給 mayorPolicyApply470A，保留冷卻），
@@ -1131,7 +1131,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function syncDock() {
     syncRes();
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS.map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
     const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
@@ -1172,6 +1172,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function setTool(t: ToolId | null, silent = false) {
     if (t && !sim) t = null;
+    if (t === 'food' && !FOOD_TOOLS.some(c => c.id === civicTool)) civicTool = 'farm';
+    if (t === 'civic' && !CIVIC_TOOLS.some(c => c.id === civicTool)) civicTool = 'police';
     tool = t; stroke = null; lastPreview = null; preview.clear(); bui.hideCost();
     syncPipes();
     // 拿著工具：一指（滑鼠左鍵）拿來蓋，兩指照舊縮放、平移；放下工具：一指照舊轉鏡頭
@@ -1278,7 +1280,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
     else if (e.key === ' ' && sim) { e.preventDefault(); setPlaying(!playing); }
-    else if (/^[1-7]$/.test(e.key) && sim) setTool(TOOLS[+e.key - 1].id);
+    else if (/^[1-8]$/.test(e.key) && sim) setTool(TOOLS[+e.key - 1].id);
   });
   // 這一格在目前檔位屬於哪個街區（plan 的索引；-1＝沒畫）
   const blockOfCell = (i: number) => {

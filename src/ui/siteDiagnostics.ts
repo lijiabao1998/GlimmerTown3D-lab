@@ -2,7 +2,7 @@
 // placement/cost authority, including its contextual rectangle protections.
 // No commit, resource extraction, cached-world writes, or RNG calls here.
 import type { Sim } from '../sim/day.ts';
-import { CIVIC_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, type EditOp, type OpPreview, type EditResult } from '../sim/edit.ts';
+import { FACILITY_TOOLS, ROAD_TOOLS, gestureOf, toolSize, previewOp, type EditOp, type OpPreview, type EditResult } from '../sim/edit.ts';
 import { DOZE_ARM_MS } from '../sim/rules/build.ts';
 import { RESOURCE_STOCK, RES_OIL, RES_ORE } from '../sim/rules/resource.ts';
 import { pipeComponents, facilityComps, WATER_HOPS472 } from '../sim/rules/sewer.ts';
@@ -19,12 +19,12 @@ const OTHER_TOOLS: Readonly<Record<string, { name: string; use: string; placemen
 // small lookup at module initialization rather than constructing the full guide
 // (two catalog searches, gesture/size lookup and explanatory strings) per move.
 const TOOL_NAMES: Readonly<Record<string, string>> = Object.fromEntries([
-  ...ROAD_TOOLS.map(t => [t.id, t.name]), ...CIVIC_TOOLS.map(t => [t.id, t.name]),
+  ...ROAD_TOOLS.map(t => [t.id, t.name]), ...FACILITY_TOOLS.map(t => [t.id, t.name]),
   ...Object.entries(OTHER_TOOLS).map(([id, note]) => [id, note.name]),
 ]);
 
 export function selectedToolGuide(tool: string) {
-  const civic = CIVIC_TOOLS.find(t => t.id === tool), road = ROAD_TOOLS.find(t => t.id === tool);
+  const civic = FACILITY_TOOLS.find(t => t.id === tool), road = ROAD_TOOLS.find(t => t.id === tool);
   const note = FACILITY_NOTES[tool] ?? OTHER_TOOLS[tool];
   const gesture = gestureOf(tool), size = toolSize(tool);
   return {
