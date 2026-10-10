@@ -140,7 +140,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let plan: DrawBlock[] | null = null;
   // D007：非住商工照造型表畫（街區模式才用）
   // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy'), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);

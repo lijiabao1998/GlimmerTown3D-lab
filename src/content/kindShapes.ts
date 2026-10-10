@@ -1,4 +1,5 @@
 import { BRITISH_KINDS } from './britishCivic.ts';
+import { BRITISH_HERITAGE_KINDS } from './britishHeritage.ts';
 // 非住商工的造型表（D007）：每一種用哪一個造型類型、帶什麼參數。純資料＋純函式：不 import three、不碰 DOM。
 // 造型參照 2D 實驗線 @ d23c18d 的精靈圖（tools/lab-extract.mjs --part=d007 拍的逐種小圖 scratch/lab/gallery/k*.png）；
 // 高度照 D003 量到的實驗線高度（lab-kinds.json），顏色照 D007 讀出的五色（lab-looks.json）。畫法在 src/render/kindArt.ts。
@@ -207,9 +208,9 @@ export const KIND_SHAPES: Record<number, Shape> = {
 };
 
 // Preserve the historical recipes for regression comparison; only these eleven opt in to D056.
-export const shapeOf = (k: number): Shape | null => {
+export const shapeOf = (k: number, heritage = true): Shape | null => {
   const shape = KIND_SHAPES[k];
-  return shape ? BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : shape : null;
+  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : shape : null;
 };
 
 export const PARK_GRASS = '#82c163';   // D018：實驗線公園精靈的草地底色（40610）

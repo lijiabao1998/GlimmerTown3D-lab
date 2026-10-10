@@ -1,3 +1,4 @@
+import { D057_LEGACY } from './d057-legacy.mjs';
 import * as THREE from 'three';
 import {drawKind} from '../src/render/kindArt.ts';
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {pathToFileURL} from 'node:url';
@@ -12,12 +13,12 @@ function clearOpening(r,s,u,front,back,y){
 const read=p=>JSON.parse(fs.readFileSync(path.join(ROOT,p),'utf8'));
 export async function d056Guards(log){
  const test=(name,f)=>{try{f();log(true,'D056 '+name)}catch(e){log(false,'D056 '+name,e.stack)}};
- const before=read('src/content/samples/d056-kinds-before.json'),now=kindHashes(),KT=kindTableFrom(read('src/content/lab-kinds.json')),looks=read('src/content/lab-looks.json').looks;
+ const before=read('src/content/samples/d056-kinds-before.json'),now=kindHashes(D057_LEGACY),KT=kindTableFrom(read('src/content/lab-kinds.json')),looks=read('src/content/lab-looks.json').looks;
  test('ai120 primary +3414 and shadow +758 derive the complete +4172 render budget',()=>{assertD056RenderBudget();});
  test('eight native and three bonus architectures; only these eleven × nine variants change',()=>{
   assert.equal(before.commit,'0e849a6f6322091863ab0c27b64a45c669e45444');assert.equal(BRITISH_CIVIC.length,11);assert.equal(BRITISH_NATIVE_KINDS.size,8);
   assert.equal(new Set(BRITISH_CIVIC.map(x=>x.silhouette)).size,11);assert.equal(BRITISH_KINDS.size,11);
-  assert.deepEqual(Object.keys(now),Object.keys(before.kinds));assert.deepEqual(kindHashes(D056_LEGACY),before.kinds);
+  assert.deepEqual(Object.keys(now),Object.keys(before.kinds));assert.deepEqual(kindHashes({...D057_LEGACY,...D056_LEGACY}),before.kinds);
   for(const k of Object.keys(now)){if(BRITISH_KINDS.has(+k)){for(let v=0;v<9;v++)assert.notEqual(now[k].h[v],before.kinds[k].h[v]);}else assert.deepEqual(now[k],before.kinds[k],'unchanged kind '+k);}
   assert.equal(new Set(BRITISH_CIVIC.map(({k})=>now[k].h[0])).size,11);
  });
@@ -37,7 +38,7 @@ export async function d056Guards(log){
    for(const c of [C.stone,C.slate])assert.ok(r.used.includes(c));assert.deepEqual(r.trees,[]);
   }
  });
- test('geometry is deterministic at every variant without editing the content inputs',()=>{const frozen=JSON.stringify([KT.data,looks]);assert.deepEqual(kindHashes(),now);assert.equal(JSON.stringify([KT.data,looks]),frozen)});
+ test('geometry is deterministic at every variant without editing the content inputs',()=>{const frozen=JSON.stringify([KT.data,looks]);assert.deepEqual(kindHashes(D057_LEGACY),now);assert.equal(JSON.stringify([KT.data,looks]),frozen)});
  test('market arcades and courthouse inter-column gaps are open across all three geometry arenas',()=>{
   const market=drawOne(KT,looks,87,1,0,2),court=drawOne(KT,looks,43,1,0,2);
   for(const u of [.24,.5,.76])assert.ok(clearOpening(market,2,u,.9,.74,.4),'market opening '+u);

@@ -23,3 +23,15 @@ Pending. This section is intentionally incomplete before implementation. No test
 ## Not completed
 
 Source/photo review, implementation, tests and previews are not completed. No real Android hardware test. No public branch, draft PR, main merge or production deployment.
+
+## Candidate preparation, 2026-10-10 UTC
+
+The owner separately authorized this round's review branch, draft PR and non-deploy CI after being shown the eight named buildings. Publication does not authorize merge or production deployment. Local pre-implementation acceptance was committed as `78de6b9`; its identical card tree was published through the connected GitHub account as `c47085462c46adfee5c7daa371635082f5d627e8` before the implementation commit. Shell git push had no credential; no credential or security configuration was changed.
+
+[Reference record](D057-reference-record.md) lists official sources and inspected photographs. Eight original recipes now exist. Their reference-scaled forms replace only the eight named generic recipes. Existing D056 eleven models and 175 unrelated kinds × nine saved variants remain byte-identical in geometry.
+
+Local typecheck/build and nine D057 focused guards pass. Six original D056 geometry guards also pass through an explicit D057 historical-art comparison. New guards retain exact current geometry pins, independent position/color mutations, parcel/height/owner/nondegenerate checks, all-arena Jumbo opening tests, and independent full-scene/shadow-pass counts. Each new model uses at most 1,300 primary triangles. Decoded ai120 submits 89,508 triangles at C density (D056 80,816 + independently derived 8,692), under its unchanged 106,365 budget. Seed516 is unchanged.
+
+Offline Blender renders of the actual emitted meshes were used only for local visual inspection, exposing coplanar surface and silhouette issues that were repaired. They are not game screenshots and do not demonstrate browser/native flow success. The non-deploy workflow will capture genuine same-fixture/same-camera before/after images at 1440×1000, 360×740 and 412×860, plus native build/undo/cancel checks for plant, water and greenhouse. The other five are existing/imported-save models.
+
+Full Node aggregate is running; genuine browser captures and full browser CI remain pending. The comparison retains the original deployed baseline rather than replacing historical goldens. Existing game names/functions are unchanged; the documentation identifies real-world art references without claiming current use. No measured-site accuracy, Android hardware validation, merge or deployment is claimed.

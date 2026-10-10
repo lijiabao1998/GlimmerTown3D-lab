@@ -1,3 +1,4 @@
+import { D057_LEGACY } from './d057-legacy.mjs';
 import { D056_LEGACY } from './d056-legacy.mjs';
 // D047 art-only contract. These factual guards do not claim visual or device QA.
 import assert from 'node:assert/strict';
@@ -22,7 +23,7 @@ export async function d047Guards(log) {
   const test = async (n, f) => { try { await f(); log(true, 'D047 '+n); } catch(e) { log(false, 'D047 '+n, e.stack); } };
   const before = JSON.parse(read('src/content/samples/d047-kinds-before.json'));
   const KT = kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), LOOKS = JSON.parse(read('src/content/lab-looks.json')).looks;
-  const now = kindHashes(D056_LEGACY);
+  const now = kindHashes({...D057_LEGACY,...D056_LEGACY});
   await test('only k51 changes: 182 other civic kinds × 9 variants match the pre-edit baseline', () => {
     assert.equal(before.commit, D047_BASELINE); assert.equal(Object.keys(before.kinds).length, 183);
     assert.deepEqual(Object.keys(now), Object.keys(before.kinds));
@@ -63,7 +64,7 @@ export async function d047Guards(log) {
   });
   await test('before comparison uses the unchanged legacy recipe and all nine baseline hashes', () => {
     assert.ok(read('src/render/kindArt.ts').includes(before.legacyRecipe));
-    assert.deepEqual(kindHashes({...D056_LEGACY,51:LEGACY}), before.kinds);
+    assert.deepEqual(kindHashes({...D057_LEGACY,...D056_LEGACY,51:LEGACY}), before.kinds);
   });
   await test('space center stays within its 3×3 plot, keeps source height/color, has finite nonempty geometry and ≤1600 triangles', () => {
     for (let v=0;v<9;v++) {

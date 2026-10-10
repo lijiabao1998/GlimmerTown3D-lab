@@ -8,6 +8,7 @@ import type { YardTree } from './blockArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { WIN_STYLE } from './windows.ts';
 import { drawBritishCivic } from './britishCivicArt.ts';
+import { drawBritishHeritage } from './britishHeritageArt.ts';
 
 export interface KindCtx {
   W: Geo; O: Geo; D: Geo; trees: YardTree[];
@@ -744,7 +745,7 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
-  try { const p = new Pen(a); if (!(shape?.p?.british === true && drawBritishCivic(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+  try { const p = new Pen(a); if (!(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
 }
 export const BUILDER_TYPES = Object.keys(BUILDERS);
 export const LANDMARK_KINDS = Object.keys(LANDMARKS);
