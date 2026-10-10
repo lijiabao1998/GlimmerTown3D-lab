@@ -1,0 +1,48 @@
+name: D057 real British heritage preview
+on:
+  push:
+    branches: ['codex/d057-real-british-heritage']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  heritage-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && node tools/unit-d057.mjs && node tools/unit-d056.mjs
+      - uses: actions/checkout@v4
+        with:
+          ref: 3330f0485cf8e37a40917f04ba16f7fa2d432639
+          path: scratch/d057-baseline-src
+      - name: Build exact deployed baseline
+        run: |
+          npm ci --prefix scratch/d057-baseline-src
+          npm run build --prefix scratch/d057-baseline-src
+          mkdir -p scratch/d057-before
+          cp scratch/d057-baseline-src/dist/index.html scratch/d057-before/index.html
+      - run: npm run build
+      - name: Same-city same-camera desktop and mobile captures
+        run: |
+          node tools/d057-capture.mjs --phase=before
+          node tools/d057-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d057-art-${{ github.sha }}
+          path: |
+            scratch/d057-before/*.png
+            scratch/d057-before/*.json
+            scratch/d057-before/*.code.txt
+            scratch/d057-after/*.png
+            scratch/d057-after/*.json
+            scratch/d057-after/*.code.txt
+          if-no-files-found: error
+          retention-days: 14

@@ -1,3 +1,4 @@
+import {D057_REQUIRED_COLORS} from './d057-palette.mjs';
 import { BRITISH_KINDS, BRITISH_PALETTE } from '../src/content/britishCivic.ts';
 // 煙霧測試：無頭 Chrome 開建置後的單檔頁面，逐條驗卡面的驗收（可斷言的事實，不是「看起來對」）。
 // D003 起預設是 2D 城市模式；300 年示範（D001／D002）改用 ?mode=history 開。
@@ -298,7 +299,8 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // D056: ai120 primary geometry +3414; shadow-casting W/O arenas submit +758 again.
   // 8 schools: 8*(202+34), 1 hospital: 178+66, 10 clinics: 10*(162+42) = +4172.
   // tools/d056-render-budget.mjs independently decodes/restyles and counts each arena.
-  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 76644 + 4172, b: 69682 + 4172 } }, D012_CALLS = 15;
+  const d057Budget = JSON.parse(fs.readFileSync(path.join(ROOT,'fixtures/d057-render-budget.json'),'utf8'));
+  const D012_TRI = { seed516: d057Budget.seed516.modes, ai120: d057Budget.ai120.modes }, D012_CALLS = 15;
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone(), mode: __gt.blockMode()})');
@@ -367,13 +369,13 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
         const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`];
         if (look) {
           const used = new Set(U[bid] || []), need = c => !c || used.has(c.toLowerCase()), any = [look.wallL, look.roof, look.accent, look.wallR].filter(Boolean);
-          const ok = BRITISH_KINDS.has(k) ? [BRITISH_PALETTE.stone, BRITISH_PALETTE.slate].every(need) : BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
+          const ok = D057_REQUIRED_COLORS[k] ? D057_REQUIRED_COLORS[k].every(need) : BRITISH_KINDS.has(k) ? [BRITISH_PALETTE.stone, BRITISH_PALETTE.slate].every(need) : BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
           if (!ok) cbad.push(`k${k}`);
         }
       }
       log(out.length === 0, `D007 ${id} 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）`, out.length ? out.slice(0, 4).join('；') : `${civ.length} 棟`);
       log(hbad.length === 0, `D007 ${id} 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格`, hbad.length ? hbad.slice(0, 4).join('；') : `${civ.length} 棟全對`);
-      log(cbad.length === 0, `D007 ${id} 顏色：既有模型保留來源色；D056 八棟明確改用石材與板岩`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
+      log(cbad.length === 0, `D007 ${id} 顏色：既有模型保留來源色；D056 與 D057 明確核對各自材質色`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
       // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）。沒有抽到色的缺省沙色；公園（k4）D018 起是實驗線公園精靈的草地 #82c163（src/content/kindShapes.ts kindColors）
       const Gd = await page.evaluate('__gt.groundData()'), rgb = Buffer.from(Gd.rgb, 'base64'), S = Gd.S, W = Gd.W, lay = await page.evaluate('__gt.layers()');
       let plateCells = 0, plateBad = 0;
@@ -401,7 +403,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     // A 檔一格一棟、每一棟照自己的 v 挑原型，幾何跟著換：釘改成 D012 量的值 121,606／78,424（沒有立面、飾條照舊）。
     // 注意：種子城 A 檔 121,606 超過 D004 驗收 8 的手機預算（三檔都 ≤ D003 基線 1.5 倍＝118,884）。D004 那一項的 A 檔三角形改成只量不判、照印超過多少；
     // 這裡的逐位釘照判，A 檔幾何再變就紅。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡）
-    const D012_A = { seed516: 121606, ai120: 80078 + 4172 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
+    const D012_A = { seed516: d057Budget.seed516.modes.a, ai120: d057Budget.ai120.modes.a }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
     for (const id of ['seed516', 'ai120']) {
       await open(`sample=${id}&clean=1&blocks=a`);
       const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');

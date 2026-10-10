@@ -79,7 +79,7 @@ export function assertD056RenderBudget() {
       facade:b=>facadePlan(recipeOf(b)),trim:b=>trimPlan(recipeOf(b))};
     const snapshots=[];
     for(const legacy of [true,false]) {
-      const civic={shape:k=>legacy?(D056_LEGACY[k]??shapeOf(k)):shapeOf(k),
+      const civic={shape:k=>legacy?(D056_LEGACY[k]??shapeOf(k,false)):shapeOf(k,false),
         colors:(k,lv)=>kindColors(looks,k,lv,kinds.catColor(kinds.cat(k)))};
       const con=new ConState(city.n);
       const built=buildCityScene(city,kinds,STYLES.A,blocks,'d',civic,con,true);
