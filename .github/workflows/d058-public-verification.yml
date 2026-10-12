@@ -1,0 +1,67 @@
+name: D058 public HTTPS verification
+on:
+  push:
+    branches: ['codex/d058-public-verification']
+    paths:
+      - '.github/workflows/d058-public-verification.yml'
+      - 'tools/d058-public-verification.mjs'
+permissions:
+  contents: read
+concurrency:
+  group: d058-public-verification-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  public-release:
+    if: github.ref == 'refs/heads/codex/d058-public-verification'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Check out isolated QA harness
+        uses: actions/checkout@v4
+        with:
+          path: qa
+          persist-credentials: false
+      - name: Check out exact approved source and model oracle
+        uses: actions/checkout@v4
+        with:
+          ref: feef2dddd0c1398f9074954ecba6873feb0ae0d8
+          path: release
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: release/package-lock.json
+      - name: Preserve provenance before setup
+        run: |
+          mkdir -p evidence
+          git -C qa rev-parse HEAD > evidence/harness-commit.txt
+          git -C release rev-parse HEAD 'HEAD^{tree}' > evidence/release-source.txt
+          sha256sum qa/tools/d058-public-verification.mjs qa/.github/workflows/d058-public-verification.yml > evidence/harness-sha256.txt
+          test "$(git -C qa rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git -C release rev-parse HEAD)" = feef2dddd0c1398f9074954ecba6873feb0ae0d8
+          test "$(git -C release rev-parse 'HEAD^{tree}')" = ea97761b4038c5825c23fab4eba5f5349a814ff5
+      - name: Static harness tests (no browser)
+        run: |
+          node --check qa/tools/d058-public-verification.mjs
+          node qa/tools/d058-public-verification.mjs --self-test
+      - run: npm ci --prefix release
+      - name: Same font support as approved Actions captures
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - name: Await exact live bytes, then test genuine public HTTPS release
+        timeout-minutes: 115
+        env:
+          D058_RELEASE_ROOT: ${{ github.workspace }}/release
+          D058_PUBLIC_OUT: ${{ github.workspace }}/evidence/public
+        shell: bash
+        run: |
+          set -o pipefail
+          node qa/tools/d058-public-verification.mjs 2>&1 | tee evidence/public-run.txt
+      - name: Preserve reports, failures, source/PNG hashes, and screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d058-public-https-${{ github.sha }}
+          path: evidence/
+          if-no-files-found: error
+          retention-days: 14
