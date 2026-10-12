@@ -74,7 +74,7 @@ export function assertD056RenderBudget() {
   const modes={},oldPins={a:80078,b:69682,c:76644};
   for(const mode of ['a','b','c']) {
     const recipeOf=b=>recipe(arche,b.k,b.lv,b.w,b.h,b.v);
-    const blocks={mode,plan:drawPlan(gridOf(city),arche,mode),recipe:recipeOf,
+    const blocks={mode,streetArt:false,plan:drawPlan(gridOf(city),arche,mode),recipe:recipeOf,
       dress:b=>dressing(recipeOf(b)),detail:mode!=='a',
       facade:b=>facadePlan(recipeOf(b)),trim:b=>trimPlan(recipeOf(b))};
     const snapshots=[];

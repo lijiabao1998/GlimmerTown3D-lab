@@ -5,7 +5,11 @@ import { BRITISH_KINDS, BRITISH_PALETTE } from '../src/content/britishCivic.ts';
 // 用法：npm run build && node tools/smoke.mjs      退出碼 0＝綠燈、1＝紅燈
 import fs from 'node:fs';
 import path from 'node:path';
-import { withBrowser, ROOT } from './cdp.mjs';
+import { withBrowser as currentArtBrowser, ROOT } from './cdp.mjs';
+// D058: historical assertions keep exact historical street geometry and goldens.
+// The current renderer runs separately at the end; no old expected value is refreshed.
+const withBrowser = (opt, fn) => currentArtBrowser(opt, ({page,open}) => fn({page,open:q=>open(q+(q?'&':'')+'streetArt=legacy')}));
+console.log('D058: complete historical suite uses streetArt=legacy; current-art native suite follows.');
 import { GROUND } from '../src/render/ground.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_DAYS } from '../src/content/starter.ts';
@@ -661,6 +665,7 @@ if (d044SkipNote()) console.log(d044SkipNote());
 if (d045SkipNote()) console.log(d045SkipNote());
 if (d048SkipNote()) console.log(d048SkipNote());
 
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await import('./d058-capture.mjs');
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);

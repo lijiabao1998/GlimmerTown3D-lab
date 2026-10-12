@@ -667,6 +667,7 @@ await guard("./unit-d055-native.mjs", "d055NativeGuards");
 
 await guard('./unit-d056.mjs', 'd056Guards');
 await guard('./unit-d057.mjs', 'd057Guards');
+await guard('./unit-d058.mjs', 'd058Guards');
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

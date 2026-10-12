@@ -1,0 +1,12 @@
+PASS D058 only four approved families, excluding hotel/core/US art 
+PASS D058 actual decoded/restyled review cities contain all four families and non-square rotated lots 
+PASS D058 all four street directions, deterministic tie, map edges and flyover exclusion 
+PASS D058 quarter-turn geometry stays inside original non-square parcel with correct side normals 
+PASS D058 target variants and rectangular/deep sizes: finite nondegenerate owner geometry, entrances and determinism 
+PASS D058 geometry negative controls detect invisible owner, NaN and degenerate roof mutations 
+PASS D058 chimneys intersect every actual roof footprint and semi driveway gaps have no floating eaves 
+PASS D058 partial street frontage joins every door path with an unobstructed flush transverse walk 
+PASS D058 three batches, old full-scene budgets unchanged; new B/C stay under existing phone limits 
+PASS D058 road edits invalidate only affected street geometry; fresh and incremental scene/picking agree 
+PASS D058 real detailed facade triangles pick their owner after all four road-facing rotations, including east 
+PASS D058 current source whitelist preserves all simulation, saves, D056 and D057 bytes; mutations rejected 
