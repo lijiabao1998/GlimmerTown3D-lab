@@ -1,0 +1,81 @@
+name: D058 British streets preview
+on:
+  push:
+    branches: ['codex/d058-british-streets-preview']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  complete-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && npm run unit && npm run build
+      - name: Complete historical suite plus current-art native capture
+        run: node tools/smoke.mjs 2>&1 | tee d058-smoke.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d058-complete-regression-${{ github.sha }}
+          path: |
+            d058-smoke.txt
+            scratch/d058-after/
+          if-no-files-found: warn
+          retention-days: 14
+  streets-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && node tools/unit-d058.mjs && node tools/unit-d057.mjs && node tools/unit-d056.mjs
+      - uses: actions/checkout@v4
+        with:
+          ref: 6f30f83faf4c4f4b02d1e3416d968a133f7da0b9
+          path: scratch/d058-baseline-src
+      - name: Build exact approved baseline for same-city comparison
+        run: |
+          npm ci --prefix scratch/d058-baseline-src
+          npm run build --prefix scratch/d058-baseline-src
+          mkdir -p scratch/d058-before
+          cp scratch/d058-baseline-src/dist/index.html scratch/d058-before/index.html
+      - run: npm run build
+      - name: Actual WebGL desktop/mobile before and after
+        run: |
+          node tools/d058-capture.mjs --phase=before
+          node tools/d058-capture.mjs --phase=after
+          node tools/d058-compare.mjs
+      - name: Current-art native construction, interrupted touch, save and desktop regressions
+        env:
+          D011_SMOKE_ONLY: build,sandbox,budget,switch,touch,desk
+        run: node tools/smoke-d011.mjs
+      - name: Current-art long-play, scripted rebuilding and identical-pixel rebuild regressions
+        env:
+          D015_SMOKE_ONLY: play,script,pixels
+        run: node tools/smoke-d015.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d058-streets-${{ github.sha }}
+          path: |
+            scratch/d058-before/*.png
+            scratch/d058-before/*.json
+            scratch/d058-before/*.code.txt
+            scratch/d058-after/*.png
+            scratch/d058-after/*.json
+            scratch/d058-after/*.code.txt
+          if-no-files-found: error
+          retention-days: 14

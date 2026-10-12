@@ -1,0 +1,21 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> glimmertown3d-lab@0.0.1 typecheck
+> tsc --noEmit
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> glimmertown3d-lab@0.0.1 build
+> vite build
+
+vite v8.3.1 building client environment for production...
+transforming...
+✓ 112 modules transformed.
+rendering chunks...
+[plugin vite:singlefile] 
+
+[plugin vite:singlefile] Inlining: index-B8OssROl.js
+computing gzip size...
+dist/index.html  1,224.71 kB │ gzip: 385.31 kB
+
+✓ built in 409ms

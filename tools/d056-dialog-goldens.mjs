@@ -20,7 +20,7 @@ export async function d056DialogGoldens(browser,log){
   preserved.push(target);
  }
  assert.ok(preserved.some(f=>f.endsWith('D049-evidence.json'))&&preserved.some(f=>f.endsWith('D050-evidence.json')),'current-art suites must run first');
- const legacyBrowser=(opt,fn)=>browser(opt,({page,open})=>fn({page,open:query=>open(query+(query?'&':'')+'britishArt=legacy')}));
+ const legacyBrowser=(opt,fn)=>browser(opt,({page,open})=>fn({page,open:query=>open(query+(query?'&':'')+'britishArt=legacy&streetArt=legacy')}));
  const legacyLog=(ok,name,detail)=>log(ok,'D056 historical-art '+name,detail);
  await d049Smoke(legacyBrowser,legacyLog);
  await d050Smoke(legacyBrowser,legacyLog);
@@ -35,7 +35,7 @@ export async function d056DialogGoldens(browser,log){
   finally{fs.writeFileSync(p,original);}
   negative.push({file,rejected});
  }
- fs.writeFileSync(path.join(OUT,'D056-dialog-goldens.json'),JSON.stringify({preservedCurrentArtEvidence:preserved,historicalArtQuery:'britishArt=legacy',originalGoldenHashesUnchanged:true,negativeControls:negative},null,2));
+ fs.writeFileSync(path.join(OUT,'D056-dialog-goldens.json'),JSON.stringify({preservedCurrentArtEvidence:preserved,historicalArtQuery:'britishArt=legacy&streetArt=legacy',originalGoldenHashesUnchanged:true,negativeControls:negative},null,2));
  log(true,'D056 current-art UI suites retained; historical dialog PNG guards reject mutations');
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
