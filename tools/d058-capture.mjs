@@ -19,14 +19,17 @@ try{
    assert.equal(await p.ev('__gt.sim().playing'),false);assert.ok(await p.waitFor(async()=>!(await p.toasts()).length,6000));
    const plan=await p.ev('__gt.blockInfo().plan'),facades=await p.ev('__gt.facadeBlocks()');
    for(const t of scene.targets){const b=facades.find(b=>b.x===t.x&&b.z===t.z);assert.ok(b);assert.equal(b.path,t.path);assert.equal(b.w,t.w);assert.equal(b.h,t.h);}
-   const zoom=scene.camera.zoom*(opt.mobile ? .50 : 1);await camera(p,scene.camera.x,scene.camera.z,zoom);
+   // Keep the entire elongated corner terrace inside both narrow review viewports.
+   const zoom=scene.camera.zoom*(opt.mobile ? (scene.id==='corner'?.42:.50) : 1);await camera(p,scene.camera.x,scene.camera.z,zoom);
    const initialWorld=await p.ev(world),render=await p.ev('__gt.renderInfo()');assert.ok(render.calls<=18);assert.ok(render.triangles<40000);item.render=render;
    const nonblank=await p.ev(`(()=>{const c=document.querySelector('canvas'),q=document.createElement('canvas');q.width=96;q.height=60;const x=q.getContext('2d');x.drawImage(c,0,0,96,60);const a=x.getImageData(0,0,96,60).data;let sum=0,sq=0,n=0;for(let i=0;i<a.length;i+=4){const v=(a[i]+a[i+1]+a[i+2])/3;sum+=v;sq+=v*v;n++;}return sq/n-(sum/n)**2})()`);assert.ok(nonblank>50);item.pixelVariance=nonblank;
    const take=async name=>{await p.frames(3);const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'),file=`D058-${phase}-${scene.id}-${name}-${opt.W}.png`;assert.equal(bytes.readUInt32BE(16),opt.W);assert.equal(bytes.readUInt32BE(20),opt.H);assert.ok(bytes.length>10000);fs.writeFileSync(path.join(out,file),bytes);item.shots.push({file,sha256:sha(bytes),bytes:bytes.length,camera:await p.ev('__gt.cam()'),worldSha256:sha(await p.ev(world))});};
    for(let turn=0;turn<4;turn++){await camera(p,scene.camera.x,scene.camera.z,zoom,turn);await take(['se','ne','nw','sw'][turn]);}
    await camera(p,scene.camera.x,scene.camera.z,zoom*.58);await take('far');
    const targets=scene.id==='highstreet'?scene.targets.slice(0,1):scene.targets;
-   for(const t of targets)for(let turn=0;turn<(opt.mobile?1:4);turn++){await camera(p,t.x+t.w/2,t.z+t.h/2,opt.mobile?5.2:11,turn);await take(t.path+'-'+['se','ne','nw','sw'][turn]);}
+   // Mobile SE alone hides the north-facing semi and west-facing terrace doors.
+   // Keep SE, and add the opposite face/corner without changing the production renderer.
+   for(const t of targets)for(const turn of (opt.mobile?[0,t.path==='ukHighStreet'||t.path==='ukTerrace'?1:2]:[0,1,2,3])){await camera(p,t.x+t.w/2,t.z+t.h/2,opt.mobile?5.2:11,turn);await take(t.path+'-'+['se','ne','nw','sw'][turn]);}
    assert.equal(await p.ev(world),initialWorld,'camera/visual changes never modify world');assert.equal(await p.ev(D057_SAME),true,'same actual scene from fresh and incremental build');
    item.checks.push('production fixture archetypes','zero world changes during all views','nonblank real WebGL','four camera directions','fresh/incremental scene equality');
    const picks=await p.ev('__gt.blockPickTest(100)');assert.deepEqual(picks.bad,[]);item.picks=picks;

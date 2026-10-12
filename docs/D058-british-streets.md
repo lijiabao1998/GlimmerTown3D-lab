@@ -57,3 +57,15 @@ D056／D057 獨立歷史預算仍逐項等於原 pin，沒有刷新黃金值。�
 ## 測試分支階段
 
 2026-10-12 04:56 UTC 再核遠端 main 仍為 6f30f83，獨立分支 `codex/d058-british-streets-preview` 尚不存在，沒有覆蓋他人改動。本輪進入已批准的預覽／CI 階段；正式 D057 保持不動。此前本地原始證據保存在 [evidence](D058/evidence/)，包括 649 項全綠完整 Node log、build log、12 專項及兩份獨立審查。歷史報告中的「本地／未執行」為其產生時間點狀態，遠端實跑結果另追加，不追改原證據。
+
+### 首輪 D056 歷史對話圖失敗（保留，不刷新 golden）
+
+[D056 run 38209610458](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38209610458) 的 60 張三尺寸建築擷取成功；歷史對話 PNG 守衛失敗，因此後段被跳過。現行 D058 與歷史模式 D049／D050 互動檢查已通過。獨立核對上一個成功 artifact：兩張首報 PNG 的差異只有 1703／777 像素、每通道最大 4，落在半透明對話框透出的受 D058 改畫房屋；環境／字型及 UI source 不變。完整數值及限制見 [失敗分析](D058/evidence/D058-D056-dialog-failure-analysis.md)。
+
+最小修正僅讓既有「historical」包裝補上 `streetArt=legacy`，使歷史 PNG 使用它原本的街屋背景；第一輪真正 D058 的互動測試、10 張原始 PNG SHA 及 byte-mutation 負向控制不變。這是測試包裝的缺口，不把失败改稱通過；修正後遠端重驗結果待補。
+
+### 首輪真實預覽與取景修正
+
+2026-10-12 06:11 UTC，[D058 run 38209604174](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38209604174) 的 `streets-preview` job 成功。實際產出 54 對／108 張 PNG，before 為 `6f30f83faf4c4f4b02d1e3416d968a133f7da0b9`，after 為 `d31f0e7e6de1dbde539ec1b5daebba714bca7676`。[原始 artifact 11729367880](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38209604174/artifacts/11729367880) ZIP SHA-256 為 `2048908ba0c71324cc164aa0c8e59a4b75539f0646aef142d269aa1f3ad7924a`。前後世界／鏡頭／PNG 核驗、當前畫法 D011 原生建造與打斷觸控、D015 長玩與相同像素重建通過；完整歷史 browser job 當時仍執行，未宣稱整體成功。
+
+實看首輪圖後，桌機四型四向可見新入口、側後立面與朝街關係；手機住宅角落 NE／SW 總覽的長排屋端部被視口裁掉，且唯一 SE 近景沒有正對半獨立屋與連棟屋入口。補拍只改驗收相機，不改生產美術：兩種手機的角落總覽 zoom 3.0→2.52；保留 SE，並補 highstreet NE、semi NW、terrace NE、Victorian NW 的近景。前後同改，相同世界／鏡頭精確核驗與 PNG 規格不變，新增後強制 62 對／124 張。新圖仍需逐張複核，不把取景修正當已驗證。
