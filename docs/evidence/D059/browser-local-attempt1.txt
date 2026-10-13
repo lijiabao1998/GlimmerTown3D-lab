@@ -1,0 +1,18 @@
+
+> glimmertown3d-lab@0.0.1 smoke
+> node tools/smoke.mjs
+
+D058: complete historical suite uses streetArt=legacy; current-art native suite follows.
+
+=== 微光小鎮 3D 煙霧測試 ===
+PASS D054 after mixed-pipe: 7 checks; 2 original PNGs
+PASS D054 after low-road: 8 checks; 2 original PNGs
+PASS D054 after low-rect: 8 checks; 2 original PNGs
+PASS D054 after depleted-oil: 7 checks; 1 original PNGs
+PASS D054 after depleted-mine: 7 checks; 1 original PNGs
+PASS D054 after sewage: 8 checks; 1 original PNGs
+  OK D054 six fixed native scenes and nine paired PNGs：
+  OK D054 direct original Chrome pairing incl native undo and six uninterrupted future days：
+  OK D054 layout focus and modal dismissal 360：
+  OK D054 layout focus and modal dismissal 360 genuine input：
+  OK D054 layout focus and modal dismissal 360 zero errors/external requests：[]

@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-13T14:38:21.5956432Z",
+  "pid": 34152,
+  "command": "\"C:\\Program Files\\GitHub CLI\\gh.exe\" run download 38405235975 --pattern smoke-* --dir scratch/d059-ci-run-38405235975/smoke-artifact",
+  "writeTransferBytes": 16941056,
+  "otherTransferBytes": 14728030,
+  "reason": "Bounded 8-minute artifact download stopped; raw job log and terminal CI already independently audited. ZIP not claimed downloaded or audited."
+}

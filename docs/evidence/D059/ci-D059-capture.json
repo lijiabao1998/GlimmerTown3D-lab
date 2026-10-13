@@ -1,0 +1,3180 @@
+{
+  "phase": "after",
+  "sourceRef": "9a930d180cb22872a5767089f22fb6b332168e71",
+  "htmlSha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+  "fixtureSha256": "147519095d131216802f750d2e45e945b35a93dd6400c74755d50008a0421109",
+  "fixture": {
+    "qualification": "Human-authored fixed-seed city, not a naturally played city; production loadCode/viewCode and restyle are active.",
+    "seed": 5162059,
+    "day": 150,
+    "restyled": 28,
+    "viewRestyled": 28,
+    "selectors": {
+      "b": [
+        {
+          "id": "cottage",
+          "x": 20,
+          "z": 23,
+          "w": 4,
+          "h": 1,
+          "k": 1,
+          "lv": 1,
+          "v": 4,
+          "arche": "town",
+          "path": "core",
+          "model": "cottage"
+        },
+        {
+          "id": "rows",
+          "x": 33,
+          "z": 22,
+          "w": 4,
+          "h": 2,
+          "k": 2,
+          "lv": 1,
+          "v": 4,
+          "arche": "townShop",
+          "path": "core",
+          "model": "rows"
+        },
+        {
+          "id": "inn",
+          "x": 21,
+          "z": 32,
+          "w": 4,
+          "h": 3,
+          "k": 2,
+          "lv": 2,
+          "v": 1,
+          "arche": "hotel",
+          "path": "ukHighStreet",
+          "model": "inn"
+        },
+        {
+          "id": "manor",
+          "x": 34,
+          "z": 32,
+          "w": 4,
+          "h": 2,
+          "k": 1,
+          "lv": 2,
+          "v": 11,
+          "arche": "courtyard",
+          "path": "core",
+          "model": "manor"
+        },
+        {
+          "id": "church",
+          "k": 16,
+          "x": 27,
+          "z": 27,
+          "w": 1,
+          "h": 1,
+          "owner": 13,
+          "model": "church",
+          "tool": "cemetery"
+        },
+        {
+          "id": "oast",
+          "k": 22,
+          "x": 39,
+          "z": 27,
+          "w": 2,
+          "h": 2,
+          "owner": 14,
+          "model": "oast",
+          "tool": "farm"
+        }
+      ],
+      "c": [
+        {
+          "id": "cottage",
+          "x": 20,
+          "z": 23,
+          "w": 4,
+          "h": 1,
+          "k": 1,
+          "lv": 1,
+          "v": 4,
+          "arche": "town",
+          "path": "core",
+          "model": "cottage"
+        },
+        {
+          "id": "rows",
+          "x": 33,
+          "z": 22,
+          "w": 4,
+          "h": 2,
+          "k": 2,
+          "lv": 1,
+          "v": 4,
+          "arche": "townShop",
+          "path": "core",
+          "model": "rows"
+        },
+        {
+          "id": "inn",
+          "x": 21,
+          "z": 32,
+          "w": 4,
+          "h": 3,
+          "k": 2,
+          "lv": 2,
+          "v": 1,
+          "arche": "hotel",
+          "path": "ukHighStreet",
+          "model": "inn"
+        },
+        {
+          "id": "manor",
+          "x": 34,
+          "z": 32,
+          "w": 4,
+          "h": 2,
+          "k": 1,
+          "lv": 2,
+          "v": 11,
+          "arche": "courtyard",
+          "path": "core",
+          "model": "manor"
+        },
+        {
+          "id": "church",
+          "k": 16,
+          "x": 27,
+          "z": 27,
+          "w": 1,
+          "h": 1,
+          "owner": 13,
+          "model": "church",
+          "tool": "cemetery"
+        },
+        {
+          "id": "oast",
+          "k": 22,
+          "x": 39,
+          "z": 27,
+          "w": 2,
+          "h": 2,
+          "owner": 14,
+          "model": "oast",
+          "tool": "farm"
+        }
+      ]
+    },
+    "bonus": [
+      {
+        "id": "church-large",
+        "model": "church",
+        "x": 27,
+        "z": 40,
+        "k": 66,
+        "lv": 1,
+        "v": 0,
+        "w": 2,
+        "h": 2,
+        "access": "existing/imported-save kind"
+      },
+      {
+        "id": "oast-large",
+        "model": "oast",
+        "x": 39,
+        "z": 40,
+        "k": 100,
+        "lv": 1,
+        "v": 0,
+        "w": 2,
+        "h": 2,
+        "access": "existing/imported-save kind"
+      }
+    ]
+  },
+  "qualification": "Human-authored city. Production save load/restyle/render. Real CDP PNG; Chrome software WebGL. Mobile touch emulation, not Android hardware.",
+  "cases": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "shots": [
+        {
+          "file": "D059-after-overview-1440.png",
+          "sha256": "5913dc2251dfb7856618f58c89d97b579337ee1c9b81d12a97ac869ccd6ee935",
+          "bytes": 137668,
+          "camera": {
+            "pos": [
+              146,
+              94.06040612287403,
+              147.5
+            ],
+            "target": [
+              30.799999999999994,
+              0,
+              32.3
+            ],
+            "zoom": 1.65
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 824.9839688200773
+        },
+        {
+          "file": "D059-after-cottage-se-1440.png",
+          "sha256": "5c042c3214b6fa51914066c2214310ecdd3c2bbbf99d2d2de3deb3a341a50ec2",
+          "bytes": 106038,
+          "camera": {
+            "pos": [
+              137.19999999999996,
+              94.06040612287404,
+              138.7
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 317.37801327357556
+        },
+        {
+          "file": "D059-after-cottage-nw-1440.png",
+          "sha256": "0ce0fe45d182377a897e028266df2c5331df935e843004691f57a685d6086d31",
+          "bytes": 99198,
+          "camera": {
+            "pos": [
+              -93.2000000000239,
+              94.06040612287407,
+              -91.6999999999762
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 280.27686993163115
+        },
+        {
+          "file": "D059-after-rows-se-1440.png",
+          "sha256": "be3f12bb5387b62d3e2f8da2ec1360eabe8b3a85755d4d637260ee763f3a556d",
+          "bytes": 106753,
+          "camera": {
+            "pos": [
+              150.19999999997697,
+              94.06040612287397,
+              138.2000000000229
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 396.07219262969375
+        },
+        {
+          "file": "D059-after-rows-nw-1440.png",
+          "sha256": "36df77cfba63d99142732d72f6904ff30ab79bf2a5cfdf370d8800fc4eab659f",
+          "bytes": 97782,
+          "camera": {
+            "pos": [
+              -80.20000000002625,
+              94.06040612287407,
+              -92.19999999997385
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 350.1614872672744
+        },
+        {
+          "file": "D059-after-inn-se-1440.png",
+          "sha256": "d3fb6b0ea300e5b72f9144700cebf60f3efe5401bba228587f38f42185f4dd2f",
+          "bytes": 105679,
+          "camera": {
+            "pos": [
+              138.1999999999743,
+              94.06040612287397,
+              148.70000000002557
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 7.942223366287302
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 566.8033912794308
+        },
+        {
+          "file": "D059-after-inn-nw-1440.png",
+          "sha256": "49811c6edd3e3994891402a4fd64efdd24cdee22da02397c911250a758ae043d",
+          "bytes": 102575,
+          "camera": {
+            "pos": [
+              -92.20000000002617,
+              94.06040612287407,
+              -81.69999999997394
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 7.942223366287302
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 472.8784911060284
+        },
+        {
+          "file": "D059-after-manor-se-1440.png",
+          "sha256": "f385f76b01cf7ca718fb6f3ce5cbb7a9efee845caf61a684a6c3e444c93d57b2",
+          "bytes": 107409,
+          "camera": {
+            "pos": [
+              151.1999999999743,
+              94.06040612287397,
+              148.20000000002557
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 567.6105447809114
+        },
+        {
+          "file": "D059-after-manor-nw-1440.png",
+          "sha256": "863ce640db09bdf5c6ec880985aed277b698fae2c87ce6ff676014129b2bc670",
+          "bytes": 102389,
+          "camera": {
+            "pos": [
+              -79.20000000002617,
+              94.06040612287407,
+              -82.19999999997394
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 487.2494593932115
+        },
+        {
+          "file": "D059-after-church-se-1440.png",
+          "sha256": "50909c5b415c719a2b34fc8bb34dd1cd0574c95bae86de247feebd96c585e14b",
+          "bytes": 104263,
+          "camera": {
+            "pos": [
+              142.6999999999742,
+              94.06040612287404,
+              142.70000000002577
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 453.008612382675
+        },
+        {
+          "file": "D059-after-church-nw-1440.png",
+          "sha256": "601718073b14f778d7759ff919993d1442bc9ce3f36eb633ae4b535b83720e1c",
+          "bytes": 105470,
+          "camera": {
+            "pos": [
+              -87.70000000002625,
+              94.06040612287407,
+              -87.69999999997385
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 433.2421231853059
+        },
+        {
+          "file": "D059-after-oast-se-1440.png",
+          "sha256": "9403eda7bfc6422d55200ca1a2615060c641d722799766f51a04b0c15de3b8e5",
+          "bytes": 103816,
+          "camera": {
+            "pos": [
+              155.1999999999738,
+              94.06040612287407,
+              143.2000000000263
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 563.4028748669571
+        },
+        {
+          "file": "D059-after-oast-nw-1440.png",
+          "sha256": "19c59541a12aa88dece641435a18919454c986e7a9590abefa282f3571f01613",
+          "bytes": 106115,
+          "camera": {
+            "pos": [
+              -75.20000000002493,
+              94.06040612287407,
+              -87.19999999997518
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 549.2923524162925
+        },
+        {
+          "file": "D059-after-church-large-se-1440.png",
+          "sha256": "e6630dbc35e9b34d2ab0e94930bf03197447efb9828cfd58104112be76b66265",
+          "bytes": 102146,
+          "camera": {
+            "pos": [
+              143.19999999997506,
+              94.06040612287396,
+              156.20000000002477
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 486.3099353635607
+        },
+        {
+          "file": "D059-after-church-large-nw-1440.png",
+          "sha256": "c55fcbff216b570ebb27a5ea56f2cac676ee5e1ef9936034f7643c54506e9481",
+          "bytes": 105380,
+          "camera": {
+            "pos": [
+              -87.20000000002617,
+              94.06040612287407,
+              -74.19999999997394
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 471.40940778894037
+        },
+        {
+          "file": "D059-after-oast-large-se-1440.png",
+          "sha256": "35ea4f88d6dd717f59bde0ac9d34dae347ac8f71101cce6edd68de9f1f311607",
+          "bytes": 96925,
+          "camera": {
+            "pos": [
+              155.19999999997418,
+              94.06040612287403,
+              156.200000000026
+            ],
+            "target": [
+              40,
+              0,
+              41.00000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 467.3673731361887
+        },
+        {
+          "file": "D059-after-oast-large-nw-1440.png",
+          "sha256": "0e1b9f57d9b7721b4ecc305ed9f5f6e65fe4474c63ff71a433185d2445f3d7c8",
+          "bytes": 102243,
+          "camera": {
+            "pos": [
+              -75.2000000000262,
+              94.06040612287407,
+              -74.1999999999739
+            ],
+            "target": [
+              40,
+              0,
+              41.00000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 487.2792537897567
+        }
+      ],
+      "checks": [
+        "six selectors after production decode/restyle",
+        "authored merged lots and large native/imported variants",
+        "se/nw real PNG per model",
+        "zero world changes during photography and mode switches",
+        "all cached/fresh scene geometry and owner picks",
+        "B/C selectors and A legacy evidence",
+        "genuine mouse/touch native cemetery/farm placement, cancellation, undo, save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "selectors": [
+        {
+          "id": "cottage",
+          "x": 20,
+          "z": 23,
+          "w": 4,
+          "h": 1,
+          "k": 1,
+          "lv": 1,
+          "v": 4,
+          "arche": "town",
+          "path": "core",
+          "model": "cottage"
+        },
+        {
+          "id": "rows",
+          "x": 33,
+          "z": 22,
+          "w": 4,
+          "h": 2,
+          "k": 2,
+          "lv": 1,
+          "v": 4,
+          "arche": "townShop",
+          "path": "core",
+          "model": "rows"
+        },
+        {
+          "id": "inn",
+          "x": 21,
+          "z": 32,
+          "w": 4,
+          "h": 3,
+          "k": 2,
+          "lv": 2,
+          "v": 1,
+          "arche": "hotel",
+          "path": "ukHighStreet",
+          "model": "inn"
+        },
+        {
+          "id": "manor",
+          "x": 34,
+          "z": 32,
+          "w": 4,
+          "h": 2,
+          "k": 1,
+          "lv": 2,
+          "v": 11,
+          "arche": "courtyard",
+          "path": "core",
+          "model": "manor"
+        },
+        {
+          "id": "church",
+          "k": 16,
+          "x": 27,
+          "z": 27,
+          "w": 1,
+          "h": 1,
+          "owner": 13,
+          "model": "church",
+          "tool": "cemetery"
+        },
+        {
+          "id": "oast",
+          "k": 22,
+          "x": 39,
+          "z": 27,
+          "w": 2,
+          "h": 2,
+          "owner": 14,
+          "model": "oast",
+          "tool": "farm"
+        }
+      ],
+      "restyled": 28,
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "render": {
+        "calls": 9,
+        "triangles": 14584,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "picks": {
+        "blocks": {
+          "pool": 4,
+          "tested": 4,
+          "multi": true,
+          "oblique": 4,
+          "bad": []
+        },
+        "native": [
+          {
+            "id": "church",
+            "kind": 16,
+            "probe": [
+              27.42,
+              27.81
+            ],
+            "want": 13,
+            "got": 13
+          },
+          {
+            "id": "oast",
+            "kind": 22,
+            "probe": [
+              39.58,
+              27.96
+            ],
+            "want": 14,
+            "got": 14
+          },
+          {
+            "id": "church-large",
+            "kind": 66,
+            "probe": [
+              27.84,
+              41.62
+            ],
+            "want": 35,
+            "got": 35
+          },
+          {
+            "id": "oast-large",
+            "kind": 100,
+            "probe": [
+              39.58,
+              40.96
+            ],
+            "want": 36,
+            "got": 36
+          }
+        ]
+      },
+      "modes": {
+        "a": {
+          "digestSha256": "95a9ebc27bd2b15989b4b071f4ab8e412ca2e368dee98622e820cbf3741ddce3",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": []
+        },
+        "b": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        },
+        "c": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        }
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "cemetery",
+            "kind": 16,
+            "cost": 350,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.42,
+              18.81
+            ],
+            "touchCancel": false
+          },
+          {
+            "tool": "farm",
+            "kind": 22,
+            "cost": 120,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.58,
+              18.96
+            ],
+            "touchCancel": false
+          }
+        ],
+        "inputs": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "mouse"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "mouse"
+          }
+        ],
+        "saveReload": true,
+        "modelCompared": true,
+        "oneDayCompared": true,
+        "oneDay": {
+          "from": 150,
+          "to": 151,
+          "money": 49979,
+          "worldSha256": "ffb09b6cee23870d81ac31f94adac4c926b1b52b88d2f218290f942ced0cb6f0"
+        },
+        "importOnlyKinds": [
+          66,
+          100
+        ]
+      },
+      "sceneStats": {
+        "pieces": 8,
+        "regen": 8,
+        "up": 2510232,
+        "upFull": 1787616,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 8,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 216,
+            "live": 216,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 676,
+            "live": 676,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2215,
+            "used": 1772,
+            "live": 1772,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "externalRequests": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D059-after-overview-360.png",
+          "sha256": "4b495ae7e6a961ca1d6c00e0783a9726ad393456c5a950ce98608bf11d89018f",
+          "bytes": 47912,
+          "camera": {
+            "pos": [
+              146,
+              94.06040612287403,
+              147.5
+            ],
+            "target": [
+              30.799999999999994,
+              0,
+              32.3
+            ],
+            "zoom": 0.7094999999999999
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 5057.640318913822
+        },
+        {
+          "file": "D059-after-cottage-se-360.png",
+          "sha256": "35932402d4a41d1e04c1635b9032b02f2aac702a2692d43083b0adca1c5f0259",
+          "bytes": 60755,
+          "camera": {
+            "pos": [
+              137.19999999999996,
+              94.06040612287404,
+              138.7
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 5.825397928536714
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 306.1340886478647
+        },
+        {
+          "file": "D059-after-cottage-nw-360.png",
+          "sha256": "fd7b76dd2f84ae8bc191cfd59d759c6c8e7e73edf939356410011dbdc0504913",
+          "bytes": 59763,
+          "camera": {
+            "pos": [
+              -93.20000000002779,
+              94.06040612287407,
+              -91.69999999997232
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 5.825397928536714
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 260.35411501077397
+        },
+        {
+          "file": "D059-after-rows-se-360.png",
+          "sha256": "9684c2a9561c5436dbfdb8ae39fd337c7760d289b2ab59aa1971619666aa758f",
+          "bytes": 62440,
+          "camera": {
+            "pos": [
+              150.19999999997287,
+              94.06040612287387,
+              138.20000000002716
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 4.854498273780595
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 409.6734108915625
+        },
+        {
+          "file": "D059-after-rows-nw-360.png",
+          "sha256": "f89ac89c735bef1819081c3ab305af54621c89a7162986add16265b6a9c32b7e",
+          "bytes": 60060,
+          "camera": {
+            "pos": [
+              -80.20000000002754,
+              94.06040612287407,
+              -92.19999999997258
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 4.854498273780595
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 382.9328074050645
+        },
+        {
+          "file": "D059-after-inn-se-360.png",
+          "sha256": "951285ec97e2ab15292a3ac537789544e88a4bfd85307d72816307daf6757788",
+          "bytes": 64683,
+          "camera": {
+            "pos": [
+              138.19999999997287,
+              94.06040612287387,
+              148.70000000002716
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 4.160998520383368
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 576.3748133640293
+        },
+        {
+          "file": "D059-after-inn-nw-360.png",
+          "sha256": "e935665d262f6a2213ec888f19508b3c04d4e2967835bb6eb43d94dc77235ec2",
+          "bytes": 62411,
+          "camera": {
+            "pos": [
+              -92.20000000002754,
+              94.06040612287407,
+              -81.69999999997258
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 4.160998520383368
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 484.753161137809
+        },
+        {
+          "file": "D059-after-manor-se-360.png",
+          "sha256": "b1d12efc07f3f5b18ed2e0adf0fe3eec2377e8eae2d5b76091ce5d2a78d7b598",
+          "bytes": 63476,
+          "camera": {
+            "pos": [
+              151.19999999997287,
+              94.06040612287387,
+              148.20000000002716
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 4.854498273780595
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 693.5704416224526
+        },
+        {
+          "file": "D059-after-manor-nw-360.png",
+          "sha256": "68710f22ece9dc4e02e0dc204b56abc134aa5c930ae692df7fa038afe03fc03d",
+          "bytes": 63138,
+          "camera": {
+            "pos": [
+              -79.20000000002754,
+              94.06040612287407,
+              -82.19999999997258
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 4.854498273780595
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 663.6826051002299
+        },
+        {
+          "file": "D059-after-church-se-360.png",
+          "sha256": "9ace000613a517d4231a4c772a170b2aecebc6ec58a054f78421f87448b2091b",
+          "bytes": 60067,
+          "camera": {
+            "pos": [
+              142.69999999997273,
+              94.06040612287404,
+              142.70000000002725
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 690.2353642576472
+        },
+        {
+          "file": "D059-after-church-nw-360.png",
+          "sha256": "eac4c9e4d6ac960806dbfd1137116b325623aeb73e742316c85706ea94e96889",
+          "bytes": 58934,
+          "camera": {
+            "pos": [
+              -87.70000000002759,
+              94.06040612287407,
+              -87.69999999997252
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 612.094055262356
+        },
+        {
+          "file": "D059-after-oast-se-360.png",
+          "sha256": "3b4517b3f93aa540f95e5761c61b45aae2ae548fe80ce8c7f8f258f3dfa8bf88",
+          "bytes": 58139,
+          "camera": {
+            "pos": [
+              155.19999999997276,
+              94.06040612287401,
+              143.20000000002716
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 762.114991074337
+        },
+        {
+          "file": "D059-after-oast-nw-360.png",
+          "sha256": "7e00e0734bb5b203ee266d21d3dc70fbd2dba4b4f8a9094a652d855c4aec7455",
+          "bytes": 60997,
+          "camera": {
+            "pos": [
+              -75.20000000002759,
+              94.06040612287407,
+              -87.19999999997252
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 727.3854836161063
+        },
+        {
+          "file": "D059-after-church-large-se-360.png",
+          "sha256": "5c3ec55cc85603dc904f51922e6861c882c4f3c9c3217c7d5bafb82c55716c4d",
+          "bytes": 56966,
+          "camera": {
+            "pos": [
+              143.19999999997236,
+              94.06040612287396,
+              156.2000000000275
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 610.5920584927317
+        },
+        {
+          "file": "D059-after-church-large-nw-360.png",
+          "sha256": "14a42e309f924e4fcaec6b6a3d49a84d268da0fd27f39a3c2a68558051236d2c",
+          "bytes": 60001,
+          "camera": {
+            "pos": [
+              -87.2000000000275,
+              94.06040612287407,
+              -74.19999999997262
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 508.8696467757327
+        },
+        {
+          "file": "D059-after-oast-large-se-360.png",
+          "sha256": "52ad2e93993059e94c644d9a9b27488a8a1687f3c79061997301b7746bf9581a",
+          "bytes": 54425,
+          "camera": {
+            "pos": [
+              155.19999999997276,
+              94.06040612287407,
+              156.20000000002736
+            ],
+            "target": [
+              40,
+              0,
+              41
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 534.8530666465194
+        },
+        {
+          "file": "D059-after-oast-large-nw-360.png",
+          "sha256": "87712aca7d30593b73ed5b68e26e03cbfc6bd43bc92c2bdd484930b67974f37c",
+          "bytes": 57758,
+          "camera": {
+            "pos": [
+              -75.20000000002759,
+              94.06040612287407,
+              -74.19999999997252
+            ],
+            "target": [
+              40,
+              0,
+              41
+            ],
+            "zoom": 7.281747410670892
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 578.3182960253907
+        }
+      ],
+      "checks": [
+        "six selectors after production decode/restyle",
+        "authored merged lots and large native/imported variants",
+        "se/nw real PNG per model",
+        "zero world changes during photography and mode switches",
+        "all cached/fresh scene geometry and owner picks",
+        "B/C selectors and A legacy evidence",
+        "genuine mouse/touch native cemetery/farm placement, cancellation, undo, save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "selectors": [
+        {
+          "id": "cottage",
+          "x": 20,
+          "z": 23,
+          "w": 4,
+          "h": 1,
+          "k": 1,
+          "lv": 1,
+          "v": 4,
+          "arche": "town",
+          "path": "core",
+          "model": "cottage"
+        },
+        {
+          "id": "rows",
+          "x": 33,
+          "z": 22,
+          "w": 4,
+          "h": 2,
+          "k": 2,
+          "lv": 1,
+          "v": 4,
+          "arche": "townShop",
+          "path": "core",
+          "model": "rows"
+        },
+        {
+          "id": "inn",
+          "x": 21,
+          "z": 32,
+          "w": 4,
+          "h": 3,
+          "k": 2,
+          "lv": 2,
+          "v": 1,
+          "arche": "hotel",
+          "path": "ukHighStreet",
+          "model": "inn"
+        },
+        {
+          "id": "manor",
+          "x": 34,
+          "z": 32,
+          "w": 4,
+          "h": 2,
+          "k": 1,
+          "lv": 2,
+          "v": 11,
+          "arche": "courtyard",
+          "path": "core",
+          "model": "manor"
+        },
+        {
+          "id": "church",
+          "k": 16,
+          "x": 27,
+          "z": 27,
+          "w": 1,
+          "h": 1,
+          "owner": 13,
+          "model": "church",
+          "tool": "cemetery"
+        },
+        {
+          "id": "oast",
+          "k": 22,
+          "x": 39,
+          "z": 27,
+          "w": 2,
+          "h": 2,
+          "owner": 14,
+          "model": "oast",
+          "tool": "farm"
+        }
+      ],
+      "restyled": 28,
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "render": {
+        "calls": 9,
+        "triangles": 14584,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "picks": {
+        "blocks": {
+          "pool": 4,
+          "tested": 4,
+          "multi": true,
+          "oblique": 4,
+          "bad": []
+        },
+        "native": [
+          {
+            "id": "church",
+            "kind": 16,
+            "probe": [
+              27.42,
+              27.81
+            ],
+            "want": 13,
+            "got": 13
+          },
+          {
+            "id": "oast",
+            "kind": 22,
+            "probe": [
+              39.58,
+              27.96
+            ],
+            "want": 14,
+            "got": 14
+          },
+          {
+            "id": "church-large",
+            "kind": 66,
+            "probe": [
+              27.84,
+              41.62
+            ],
+            "want": 35,
+            "got": 35
+          },
+          {
+            "id": "oast-large",
+            "kind": 100,
+            "probe": [
+              39.58,
+              40.96
+            ],
+            "want": 36,
+            "got": 36
+          }
+        ]
+      },
+      "modes": {
+        "a": {
+          "digestSha256": "95a9ebc27bd2b15989b4b071f4ab8e412ca2e368dee98622e820cbf3741ddce3",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": []
+        },
+        "b": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        },
+        "c": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        }
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "cemetery",
+            "kind": 16,
+            "cost": 350,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.42,
+              18.81
+            ],
+            "touchCancel": true
+          },
+          {
+            "tool": "farm",
+            "kind": 22,
+            "cost": 120,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.58,
+              18.96
+            ],
+            "touchCancel": true
+          }
+        ],
+        "inputs": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          }
+        ],
+        "saveReload": true,
+        "modelCompared": true,
+        "oneDayCompared": true,
+        "oneDay": {
+          "from": 150,
+          "to": 151,
+          "money": 49979,
+          "worldSha256": "ffb09b6cee23870d81ac31f94adac4c926b1b52b88d2f218290f942ced0cb6f0"
+        },
+        "importOnlyKinds": [
+          66,
+          100
+        ]
+      },
+      "sceneStats": {
+        "pieces": 8,
+        "regen": 8,
+        "up": 2510232,
+        "upFull": 1787616,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 8,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 216,
+            "live": 216,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 676,
+            "live": 676,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2215,
+            "used": 1772,
+            "live": 1772,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "externalRequests": [],
+      "errors": []
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D059-after-overview-412.png",
+          "sha256": "ffbcbceaba37f56635edd5b00a1e710d4c6948b78a452c4fc153811b77eafcd8",
+          "bytes": 50686,
+          "camera": {
+            "pos": [
+              146,
+              94.06040612287403,
+              147.5
+            ],
+            "target": [
+              30.799999999999994,
+              0,
+              32.3
+            ],
+            "zoom": 0.7094999999999999
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 5041.1180784295975
+        },
+        {
+          "file": "D059-after-cottage-se-412.png",
+          "sha256": "dae26ea0a86d863905f70d1ebc4da5788d1d19f3d1a8597fcf3c4f2782397c17",
+          "bytes": 66481,
+          "camera": {
+            "pos": [
+              137.19999999999996,
+              94.06040612287404,
+              138.7
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 5.736586952365225
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 337.6911351019735
+        },
+        {
+          "file": "D059-after-cottage-nw-412.png",
+          "sha256": "9fc114c63533ba7ceb0c0bc047911c9779872eab3f8c2ad08d57555c77be2032",
+          "bytes": 64990,
+          "camera": {
+            "pos": [
+              -93.20000000002779,
+              94.06040612287407,
+              -91.69999999997232
+            ],
+            "target": [
+              22,
+              0,
+              23.5
+            ],
+            "zoom": 5.736586952365225
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 296.469259093803
+        },
+        {
+          "file": "D059-after-rows-se-412.png",
+          "sha256": "548277ab20712a74e3ab4abc817efef47f9d81c51b88544901b43f4356eb5323",
+          "bytes": 67677,
+          "camera": {
+            "pos": [
+              150.19999999997287,
+              94.06040612287387,
+              138.20000000002716
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 4.78048912697102
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 402.39106433183224
+        },
+        {
+          "file": "D059-after-rows-nw-412.png",
+          "sha256": "2e219f854f7f8cf030bd950ca6420f35bc0b3f03f7f6271b830c1074ae3f0e8c",
+          "bytes": 65458,
+          "camera": {
+            "pos": [
+              -80.20000000002754,
+              94.06040612287407,
+              -92.19999999997258
+            ],
+            "target": [
+              35,
+              0,
+              23
+            ],
+            "zoom": 4.78048912697102
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 367.59029462531544
+        },
+        {
+          "file": "D059-after-inn-se-412.png",
+          "sha256": "d78d38708237b30f2c32fa1dc6884c0f5999ca48752606c715a2731ffc865a0d",
+          "bytes": 71516,
+          "camera": {
+            "pos": [
+              138.19999999997287,
+              94.06040612287387,
+              148.70000000002716
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 4.097562108832303
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 583.0664701446021
+        },
+        {
+          "file": "D059-after-inn-nw-412.png",
+          "sha256": "fd9dc8b1efa86f4b1184e34e8e94ff2ce8bcab06ab0c8aed9dccf860a7d0f9fa",
+          "bytes": 68538,
+          "camera": {
+            "pos": [
+              -92.20000000002754,
+              94.06040612287407,
+              -81.69999999997258
+            ],
+            "target": [
+              23,
+              0,
+              33.5
+            ],
+            "zoom": 4.097562108832303
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 508.95436725278887
+        },
+        {
+          "file": "D059-after-manor-se-412.png",
+          "sha256": "cba25aefa9231ae81bb4dc827e59c91ea68fb75376070456d74d3659f62a7706",
+          "bytes": 69413,
+          "camera": {
+            "pos": [
+              151.19999999997287,
+              94.06040612287387,
+              148.20000000002716
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 4.78048912697102
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 692.9534156236041
+        },
+        {
+          "file": "D059-after-manor-nw-412.png",
+          "sha256": "6ac0f2d74d49720cf42d55d5933c013bca61514d2be5714ebbb63c5c6154a9e2",
+          "bytes": 68373,
+          "camera": {
+            "pos": [
+              -79.20000000002754,
+              94.06040612287407,
+              -82.19999999997258
+            ],
+            "target": [
+              36,
+              0,
+              33
+            ],
+            "zoom": 4.78048912697102
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 657.0448662509152
+        },
+        {
+          "file": "D059-after-church-se-412.png",
+          "sha256": "c279803fa68f61e80566b95589ce50f04679a4c42fb92a52e3d157c4a6efbfa7",
+          "bytes": 65026,
+          "camera": {
+            "pos": [
+              142.69999999997273,
+              94.06040612287404,
+              142.70000000002725
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 696.2648469608557
+        },
+        {
+          "file": "D059-after-church-nw-412.png",
+          "sha256": "999a2b32d1b234849aab4041a1829b98756419c3aeb3873a29c60270fdb05414",
+          "bytes": 63602,
+          "camera": {
+            "pos": [
+              -87.70000000002759,
+              94.06040612287407,
+              -87.69999999997252
+            ],
+            "target": [
+              27.500000000000004,
+              0,
+              27.500000000000004
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 623.9697321046333
+        },
+        {
+          "file": "D059-after-oast-se-412.png",
+          "sha256": "e9ec5e658e43c19d74d2513d3cc120ff1b1990e31f3037930302e1f73840da35",
+          "bytes": 63201,
+          "camera": {
+            "pos": [
+              155.19999999997276,
+              94.06040612287401,
+              143.20000000002716
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 761.2914023779977
+        },
+        {
+          "file": "D059-after-oast-nw-412.png",
+          "sha256": "b031f12e69d2f0551d5844ea0760be1e7ca1945c8d1e22e868ea06cd285243b7",
+          "bytes": 65773,
+          "camera": {
+            "pos": [
+              -75.20000000002759,
+              94.06040612287407,
+              -87.19999999997252
+            ],
+            "target": [
+              40,
+              0,
+              28.000000000000004
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 712.6893097216471
+        },
+        {
+          "file": "D059-after-church-large-se-412.png",
+          "sha256": "571064e68c82e0ef5c65c510ba0234a910629f1ca4d098426043185e47db2c19",
+          "bytes": 61659,
+          "camera": {
+            "pos": [
+              143.19999999997236,
+              94.06040612287396,
+              156.2000000000275
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 621.4675359935627
+        },
+        {
+          "file": "D059-after-church-large-nw-412.png",
+          "sha256": "cea78616758324868cd489233686effcea0372a1ea1a9121d5908a546d79a384",
+          "bytes": 64662,
+          "camera": {
+            "pos": [
+              -87.2000000000275,
+              94.06040612287407,
+              -74.19999999997262
+            ],
+            "target": [
+              27.999999999999993,
+              0,
+              41
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 520.4520254321669
+        },
+        {
+          "file": "D059-after-oast-large-se-412.png",
+          "sha256": "505734430ad5bf7ccc66377585b9942d7cd9cead9e98988fb4cf09f7a1edc770",
+          "bytes": 58550,
+          "camera": {
+            "pos": [
+              155.19999999997276,
+              94.06040612287407,
+              156.20000000002736
+            ],
+            "target": [
+              40,
+              0,
+              41
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 523.3531616504406
+        },
+        {
+          "file": "D059-after-oast-large-nw-412.png",
+          "sha256": "532d04888d16bdcdabea58b367e553addb246403b3c865f8b7569dd150637bae",
+          "bytes": 62034,
+          "camera": {
+            "pos": [
+              -75.20000000002759,
+              94.06040612287407,
+              -74.19999999997252
+            ],
+            "target": [
+              40,
+              0,
+              41
+            ],
+            "zoom": 7.17073369045653
+          },
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "pixelVariance": 562.9001776263649
+        }
+      ],
+      "checks": [
+        "six selectors after production decode/restyle",
+        "authored merged lots and large native/imported variants",
+        "se/nw real PNG per model",
+        "zero world changes during photography and mode switches",
+        "all cached/fresh scene geometry and owner picks",
+        "B/C selectors and A legacy evidence",
+        "genuine mouse/touch native cemetery/farm placement, cancellation, undo, save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "selectors": [
+        {
+          "id": "cottage",
+          "x": 20,
+          "z": 23,
+          "w": 4,
+          "h": 1,
+          "k": 1,
+          "lv": 1,
+          "v": 4,
+          "arche": "town",
+          "path": "core",
+          "model": "cottage"
+        },
+        {
+          "id": "rows",
+          "x": 33,
+          "z": 22,
+          "w": 4,
+          "h": 2,
+          "k": 2,
+          "lv": 1,
+          "v": 4,
+          "arche": "townShop",
+          "path": "core",
+          "model": "rows"
+        },
+        {
+          "id": "inn",
+          "x": 21,
+          "z": 32,
+          "w": 4,
+          "h": 3,
+          "k": 2,
+          "lv": 2,
+          "v": 1,
+          "arche": "hotel",
+          "path": "ukHighStreet",
+          "model": "inn"
+        },
+        {
+          "id": "manor",
+          "x": 34,
+          "z": 32,
+          "w": 4,
+          "h": 2,
+          "k": 1,
+          "lv": 2,
+          "v": 11,
+          "arche": "courtyard",
+          "path": "core",
+          "model": "manor"
+        },
+        {
+          "id": "church",
+          "k": 16,
+          "x": 27,
+          "z": 27,
+          "w": 1,
+          "h": 1,
+          "owner": 13,
+          "model": "church",
+          "tool": "cemetery"
+        },
+        {
+          "id": "oast",
+          "k": 22,
+          "x": 39,
+          "z": 27,
+          "w": 2,
+          "h": 2,
+          "owner": 14,
+          "model": "oast",
+          "tool": "farm"
+        }
+      ],
+      "restyled": 28,
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "render": {
+        "calls": 9,
+        "triangles": 14584,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "picks": {
+        "blocks": {
+          "pool": 4,
+          "tested": 4,
+          "multi": true,
+          "oblique": 4,
+          "bad": []
+        },
+        "native": [
+          {
+            "id": "church",
+            "kind": 16,
+            "probe": [
+              27.42,
+              27.81
+            ],
+            "want": 13,
+            "got": 13
+          },
+          {
+            "id": "oast",
+            "kind": 22,
+            "probe": [
+              39.58,
+              27.96
+            ],
+            "want": 14,
+            "got": 14
+          },
+          {
+            "id": "church-large",
+            "kind": 66,
+            "probe": [
+              27.84,
+              41.62
+            ],
+            "want": 35,
+            "got": 35
+          },
+          {
+            "id": "oast-large",
+            "kind": 100,
+            "probe": [
+              39.58,
+              40.96
+            ],
+            "want": 36,
+            "got": 36
+          }
+        ]
+      },
+      "modes": {
+        "a": {
+          "digestSha256": "95a9ebc27bd2b15989b4b071f4ab8e412ca2e368dee98622e820cbf3741ddce3",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": []
+        },
+        "b": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        },
+        "c": {
+          "digestSha256": "de7b0b892c7d2d6d254b7665621ba2e5069ffb03ac6f23c7a797a37444ca8e3b",
+          "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+          "selectors": [
+            {
+              "id": "cottage",
+              "x": 20,
+              "z": 23,
+              "w": 4,
+              "h": 1,
+              "k": 1,
+              "lv": 1,
+              "v": 4,
+              "arche": "town",
+              "path": "core",
+              "model": "cottage"
+            },
+            {
+              "id": "rows",
+              "x": 33,
+              "z": 22,
+              "w": 4,
+              "h": 2,
+              "k": 2,
+              "lv": 1,
+              "v": 4,
+              "arche": "townShop",
+              "path": "core",
+              "model": "rows"
+            },
+            {
+              "id": "inn",
+              "x": 21,
+              "z": 32,
+              "w": 4,
+              "h": 3,
+              "k": 2,
+              "lv": 2,
+              "v": 1,
+              "arche": "hotel",
+              "path": "ukHighStreet",
+              "model": "inn"
+            },
+            {
+              "id": "manor",
+              "x": 34,
+              "z": 32,
+              "w": 4,
+              "h": 2,
+              "k": 1,
+              "lv": 2,
+              "v": 11,
+              "arche": "courtyard",
+              "path": "core",
+              "model": "manor"
+            },
+            {
+              "id": "church",
+              "k": 16,
+              "x": 27,
+              "z": 27,
+              "w": 1,
+              "h": 1,
+              "owner": 13,
+              "model": "church",
+              "tool": "cemetery"
+            },
+            {
+              "id": "oast",
+              "k": 22,
+              "x": 39,
+              "z": 27,
+              "w": 2,
+              "h": 2,
+              "owner": 14,
+              "model": "oast",
+              "tool": "farm"
+            }
+          ]
+        }
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "cemetery",
+            "kind": 16,
+            "cost": 350,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.42,
+              18.81
+            ],
+            "touchCancel": true
+          },
+          {
+            "tool": "farm",
+            "kind": 22,
+            "cost": 120,
+            "placement": true,
+            "undo": true,
+            "picking": true,
+            "pickProbe": [
+              30.58,
+              18.96
+            ],
+            "touchCancel": true
+          }
+        ],
+        "inputs": [
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointercancel",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerdown",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "pointerup",
+            "trusted": true,
+            "pointerType": "touch"
+          },
+          {
+            "type": "click",
+            "trusted": true,
+            "pointerType": "touch"
+          }
+        ],
+        "saveReload": true,
+        "modelCompared": true,
+        "oneDayCompared": true,
+        "oneDay": {
+          "from": 150,
+          "to": 151,
+          "money": 49979,
+          "worldSha256": "ffb09b6cee23870d81ac31f94adac4c926b1b52b88d2f218290f942ced0cb6f0"
+        },
+        "importOnlyKinds": [
+          66,
+          100
+        ]
+      },
+      "sceneStats": {
+        "pieces": 8,
+        "regen": 8,
+        "up": 2510232,
+        "upFull": 1787616,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 8,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 216,
+            "live": 216,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 676,
+            "live": 676,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2215,
+            "used": 1772,
+            "live": 1772,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "externalRequests": [],
+      "errors": []
+    }
+  ],
+  "passed": true
+}
