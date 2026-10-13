@@ -1,0 +1,1235 @@
+{
+  "passed": true,
+  "actualMode": {
+    "before": "c",
+    "after": "c",
+    "evidence": "No blocks query override. Actual hashed production bundles declare blocks query fallback."
+  },
+  "qualification": "51 actual same-camera/same-world pairs. Default C photography, separate A/B/C geometry proofs. Human visual review remains separate from hash/geometry gates. Mobile emulation is not a real Android device.",
+  "pairs": [
+    {
+      "name": "overview",
+      "before": "D059-before-overview-1440.png",
+      "after": "D059-after-overview-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          146,
+          94.06040612287403,
+          147.5
+        ],
+        "target": [
+          30.799999999999994,
+          0,
+          32.3
+        ],
+        "zoom": 1.65
+      }
+    },
+    {
+      "name": "cottage-se",
+      "before": "D059-before-cottage-se-1440.png",
+      "after": "D059-after-cottage-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          137.19999999999996,
+          94.06040612287404,
+          138.7
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "cottage-nw",
+      "before": "D059-before-cottage-nw-1440.png",
+      "after": "D059-after-cottage-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -93.20000000001444,
+          94.06040612287407,
+          -91.69999999998566
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "rows-se",
+      "before": "D059-before-rows-se-1440.png",
+      "after": "D059-after-rows-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          150.1999999999863,
+          94.06040612287407,
+          138.20000000001383
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "rows-nw",
+      "before": "D059-before-rows-nw-1440.png",
+      "after": "D059-after-rows-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -80.20000000002493,
+          94.06040612287399,
+          -92.19999999997498
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "inn-se",
+      "before": "D059-before-inn-se-1440.png",
+      "after": "D059-after-inn-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          138.1999999999756,
+          94.06040612287407,
+          148.70000000002452
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 7.942223366287302
+      }
+    },
+    {
+      "name": "inn-nw",
+      "before": "D059-before-inn-nw-1440.png",
+      "after": "D059-after-inn-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -92.20000000003752,
+          94.06040612287407,
+          -81.6999999999626
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 7.942223366287302
+      }
+    },
+    {
+      "name": "manor-se",
+      "before": "D059-before-manor-se-1440.png",
+      "after": "D059-after-manor-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          151.19999999996475,
+          94.06040612287399,
+          148.20000000003517
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "manor-nw",
+      "before": "D059-before-manor-nw-1440.png",
+      "after": "D059-after-manor-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -79.20000000001747,
+          94.06040612287407,
+          -82.19999999998264
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-se",
+      "before": "D059-before-church-se-1440.png",
+      "after": "D059-after-church-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          142.69999999998296,
+          94.06040612287404,
+          142.700000000017
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-nw",
+      "before": "D059-before-church-nw-1440.png",
+      "after": "D059-after-church-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.70000000002759,
+          94.06040612287397,
+          -87.6999999999723
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-se",
+      "before": "D059-before-oast-se-1440.png",
+      "after": "D059-after-oast-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999997276,
+          94.06040612287401,
+          143.20000000002716
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-nw",
+      "before": "D059-before-oast-nw-1440.png",
+      "after": "D059-after-oast-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000002258,
+          94.06040612287407,
+          -87.19999999997752
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-large-se",
+      "before": "D059-before-church-large-se-1440.png",
+      "after": "D059-after-church-large-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          143.1999999999777,
+          94.06040612287407,
+          156.20000000002238
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-large-nw",
+      "before": "D059-before-church-large-nw-1440.png",
+      "after": "D059-after-church-large-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.20000000002756,
+          94.06040612287407,
+          -74.19999999997258
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-large-se",
+      "before": "D059-before-oast-large-se-1440.png",
+      "after": "D059-after-oast-large-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999997276,
+          94.06040612287407,
+          156.20000000002736
+        ],
+        "target": [
+          40,
+          0,
+          41.00000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-large-nw",
+      "before": "D059-before-oast-large-nw-1440.png",
+      "after": "D059-after-oast-large-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000004366,
+          94.06040612287407,
+          -74.19999999995645
+        ],
+        "target": [
+          40,
+          0,
+          41.00000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "overview",
+      "before": "D059-before-overview-360.png",
+      "after": "D059-after-overview-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          146,
+          94.06040612287403,
+          147.5
+        ],
+        "target": [
+          30.799999999999994,
+          0,
+          32.3
+        ],
+        "zoom": 0.7094999999999999
+      }
+    },
+    {
+      "name": "cottage-se",
+      "before": "D059-before-cottage-se-360.png",
+      "after": "D059-after-cottage-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          137.19999999999996,
+          94.06040612287404,
+          138.7
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 5.825397928536714
+      }
+    },
+    {
+      "name": "cottage-nw",
+      "before": "D059-before-cottage-nw-360.png",
+      "after": "D059-after-cottage-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -93.2000000000239,
+          94.06040612287407,
+          -91.6999999999762
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 5.825397928536714
+      }
+    },
+    {
+      "name": "rows-se",
+      "before": "D059-before-rows-se-360.png",
+      "after": "D059-after-rows-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          150.19999999997697,
+          94.06040612287397,
+          138.2000000000229
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 4.854498273780595
+      }
+    },
+    {
+      "name": "rows-nw",
+      "before": "D059-before-rows-nw-360.png",
+      "after": "D059-after-rows-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -80.20000000006917,
+          94.06040612287407,
+          -92.19999999993094
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 4.854498273780595
+      }
+    },
+    {
+      "name": "inn-se",
+      "before": "D059-before-inn-se-360.png",
+      "after": "D059-after-inn-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          138.1999999999316,
+          94.06040612287407,
+          148.70000000006848
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 4.160998520383368
+      }
+    },
+    {
+      "name": "inn-nw",
+      "before": "D059-before-inn-nw-360.png",
+      "after": "D059-after-inn-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -92.20000000006866,
+          94.06040612287397,
+          -81.69999999993121
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 4.160998520383368
+      }
+    },
+    {
+      "name": "manor-se",
+      "before": "D059-before-manor-se-360.png",
+      "after": "D059-after-manor-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          151.1999999999316,
+          94.06040612287407,
+          148.20000000006848
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 4.854498273780595
+      }
+    },
+    {
+      "name": "manor-nw",
+      "before": "D059-before-manor-nw-360.png",
+      "after": "D059-after-manor-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -79.20000000002447,
+          94.06040612287399,
+          -82.19999999997543
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 4.854498273780595
+      }
+    },
+    {
+      "name": "church-se",
+      "before": "D059-before-church-se-360.png",
+      "after": "D059-after-church-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          142.69999999997572,
+          94.06040612287407,
+          142.7000000000244
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-nw",
+      "before": "D059-before-church-nw-360.png",
+      "after": "D059-after-church-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.70000000002499,
+          94.06040612287407,
+          -87.69999999997513
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-se",
+      "before": "D059-before-oast-se-360.png",
+      "after": "D059-after-oast-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999997526,
+          94.0604061228739,
+          143.20000000002506
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "oast-nw",
+      "before": "D059-before-oast-nw-360.png",
+      "after": "D059-after-oast-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000002258,
+          94.06040612287407,
+          -87.19999999997752
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "church-large-se",
+      "before": "D059-before-church-large-se-360.png",
+      "after": "D059-after-church-large-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          143.1999999999777,
+          94.06040612287407,
+          156.20000000002238
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "church-large-nw",
+      "before": "D059-before-church-large-nw-360.png",
+      "after": "D059-after-church-large-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.20000000002366,
+          94.06040612287407,
+          -74.19999999997646
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "oast-large-se",
+      "before": "D059-before-oast-large-se-360.png",
+      "after": "D059-after-oast-large-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999997674,
+          94.06040612287399,
+          156.20000000002318
+        ],
+        "target": [
+          40,
+          0,
+          41.00000000000001
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "oast-large-nw",
+      "before": "D059-before-oast-large-nw-360.png",
+      "after": "D059-after-oast-large-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000002625,
+          94.06040612287407,
+          -74.19999999997384
+        ],
+        "target": [
+          40,
+          0,
+          41.00000000000001
+        ],
+        "zoom": 7.281747410670892
+      }
+    },
+    {
+      "name": "overview",
+      "before": "D059-before-overview-412.png",
+      "after": "D059-after-overview-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          146,
+          94.06040612287403,
+          147.5
+        ],
+        "target": [
+          30.799999999999994,
+          0,
+          32.3
+        ],
+        "zoom": 0.7094999999999999
+      }
+    },
+    {
+      "name": "cottage-se",
+      "before": "D059-before-cottage-se-412.png",
+      "after": "D059-after-cottage-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          137.19999999999996,
+          94.06040612287404,
+          138.7
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 5.736586952365225
+      }
+    },
+    {
+      "name": "cottage-nw",
+      "before": "D059-before-cottage-nw-412.png",
+      "after": "D059-after-cottage-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -93.20000000002273,
+          94.06040612287407,
+          -91.69999999997738
+        ],
+        "target": [
+          22,
+          0,
+          23.5
+        ],
+        "zoom": 5.736586952365225
+      }
+    },
+    {
+      "name": "rows-se",
+      "before": "D059-before-rows-se-412.png",
+      "after": "D059-after-rows-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          150.1999999999781,
+          94.06040612287397,
+          138.20000000002176
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 4.78048912697102
+      }
+    },
+    {
+      "name": "rows-nw",
+      "before": "D059-before-rows-nw-412.png",
+      "after": "D059-after-rows-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -80.20000000005935,
+          94.06040612287407,
+          -92.19999999994076
+        ],
+        "target": [
+          35,
+          0,
+          23
+        ],
+        "zoom": 4.78048912697102
+      }
+    },
+    {
+      "name": "inn-se",
+      "before": "D059-before-inn-se-412.png",
+      "after": "D059-after-inn-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          138.1999999999412,
+          94.06040612287391,
+          148.70000000005882
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 4.097562108832303
+      }
+    },
+    {
+      "name": "inn-nw",
+      "before": "D059-before-inn-nw-412.png",
+      "after": "D059-after-inn-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -92.2000000000392,
+          94.06040612287407,
+          -81.69999999996091
+        ],
+        "target": [
+          23,
+          0,
+          33.5
+        ],
+        "zoom": 4.097562108832303
+      }
+    },
+    {
+      "name": "manor-se",
+      "before": "D059-before-manor-se-412.png",
+      "after": "D059-after-manor-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          151.1999999999611,
+          94.06040612287397,
+          148.20000000003876
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 4.78048912697102
+      }
+    },
+    {
+      "name": "manor-nw",
+      "before": "D059-before-manor-nw-412.png",
+      "after": "D059-after-manor-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -79.20000000005926,
+          94.06040612287407,
+          -82.19999999994084
+        ],
+        "target": [
+          36,
+          0,
+          33
+        ],
+        "zoom": 4.78048912697102
+      }
+    },
+    {
+      "name": "church-se",
+      "before": "D059-before-church-se-412.png",
+      "after": "D059-after-church-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          142.69999999994127,
+          94.06040612287404,
+          142.70000000005868
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "church-nw",
+      "before": "D059-before-church-nw-412.png",
+      "after": "D059-after-church-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.70000000003725,
+          94.06040612287407,
+          -87.69999999996286
+        ],
+        "target": [
+          27.500000000000004,
+          0,
+          27.500000000000004
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "name": "oast-se",
+      "before": "D059-before-oast-se-412.png",
+      "after": "D059-after-oast-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999996276,
+          94.06040612287407,
+          143.20000000003736
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 7.17073369045653
+      }
+    },
+    {
+      "name": "oast-nw",
+      "before": "D059-before-oast-nw-412.png",
+      "after": "D059-after-oast-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000004826,
+          94.06040612287407,
+          -87.19999999995186
+        ],
+        "target": [
+          40,
+          0,
+          28.000000000000004
+        ],
+        "zoom": 7.17073369045653
+      }
+    },
+    {
+      "name": "church-large-se",
+      "before": "D059-before-church-large-se-412.png",
+      "after": "D059-after-church-large-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          143.19999999995153,
+          94.06040612287396,
+          156.2000000000483
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 7.17073369045653
+      }
+    },
+    {
+      "name": "church-large-nw",
+      "before": "D059-before-church-large-nw-412.png",
+      "after": "D059-after-church-large-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -87.20000000004376,
+          94.06040612287407,
+          -74.19999999995636
+        ],
+        "target": [
+          27.999999999999993,
+          0,
+          41
+        ],
+        "zoom": 7.17073369045653
+      }
+    },
+    {
+      "name": "oast-large-se",
+      "before": "D059-before-oast-large-se-412.png",
+      "after": "D059-after-oast-large-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          155.19999999995656,
+          94.06040612287397,
+          156.2000000000433
+        ],
+        "target": [
+          40,
+          0,
+          41
+        ],
+        "zoom": 7.17073369045653
+      }
+    },
+    {
+      "name": "oast-large-nw",
+      "before": "D059-before-oast-large-nw-412.png",
+      "after": "D059-after-oast-large-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "worldSha256": "1d8eb90999db6584248da489c8be5edd52e4ac051f741854fce691fcaa35b327",
+      "camera": {
+        "pos": [
+          -75.20000000005086,
+          94.06040612287407,
+          -74.19999999994924
+        ],
+        "target": [
+          40,
+          0,
+          41
+        ],
+        "zoom": 7.17073369045653
+      }
+    }
+  ]
+}

@@ -12,7 +12,12 @@ import type { Style } from './styles.ts';
 import { Geo } from './scene.ts';
 import { windowTexture, toonRamp, PLAIN_UV } from './textures.ts';
 import type { BlockMode, DrawBlock } from '../content/blocks.ts';
+// D059-BEGIN village-imports
 import type { Recipe } from '../content/recipes.ts';
+import { PX_PER_CELL } from '../content/recipes.ts';
+import { villageBlock, villageKind } from '../content/britishVillage.ts';
+import { drawBritishVillage } from './britishVillageArt.ts';
+// D059-END village-imports
 import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
@@ -28,7 +33,9 @@ export interface KindLook { cat(k: number): string; catColor(cat: string): strin
 export interface CityHit { id: number; x: number; z: number; block?: number }
 // D004：住商工改用街區配方畫（?blocks=a|b|c）。plan＝要畫的街區（src/content/blocks.ts），recipe＝每個街區的配方（src/content/recipes.ts）
 // D058-BEGIN street-option
-export interface BlockRender { mode: BlockMode; streetArt?: boolean; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D059-BEGIN village-option
+export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D059-END village-option
 // D058-END street-option
   detail: boolean; facade(b: DrawBlock): FacadePlan | null; trim(b: DrawBlock): TrimPlan | null }   // D008：detail＝B、C 兩檔才畫英美立面逐戶造型與飾條
 // D007：非住商工照造型表畫（街區模式才有；?blocks=off 仍是 D003 的量體佔位）
@@ -150,7 +157,9 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   // D015 快取：一座城一份（施工資料裡）；畫法檔、地圖大小不同就從頭建
   const sc = con ? con.cache : new SceneCache(), stats = sc.stats;
 // D058-BEGIN street-mode-key
-  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}`;
+// D059-BEGIN village-mode-key
+  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}${blocks?.villageArt && blocks.detail ? '|D059' : ''}`;
+// D059-END village-mode-key
 // D058-END street-mode-key
   Object.assign(stats, { pieces: 0, regen: 0, up: 0, upFull: 0, grown: 0, moved: 0, relayout: 0, fresh: false, groundUp: 0, groundFull: 0, treesKept: false });
   if (fresh || sc.mode !== modeKey || !sc.arenas) { sc.reset(modeKey); stats.fresh = true; }
@@ -241,17 +250,25 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     if (b.goneDay !== undefined) continue;                     // D011：拆掉的（墓碑）不畫
     if (b.x + s > n || b.z + s > n) continue;                  // 出界的建築不畫（城市模型已計數）
     if (blocks && b.k >= 1 && b.k <= 3) continue;               // D004：住商工交給街區配方（下面）
+// D059-BEGIN village-civic
     const shape = civic && b.k > 3 ? civic.shape(b.k) : null, rect = [b.x, b.z, b.x + s, b.z + s];
+    const village = blocks?.villageArt && blocks.detail ? villageKind(b.k) : null;
     if (shape) {                                               // D007：非住商工照造型表畫
       let y0 = 0;
       for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) y0 = Math.max(y0, top[(b.z + dz) * n + b.x + dx]);
-      specs.push({ key: civicKey(b, s, y0), owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
+      specs.push({ key: civicKey(b, s, y0) + (village ? '|D059:' + village : ''), owner: b.id, block: -1, rect, gen: (W, O, D, m) => {
         const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
+        if (village) {
+          m.anchor = drawBritishVillage({ W, O, D, x0: b.x, z0: b.z, w: s, d: s, y0, H }, village);
+          m.kindUsed = [];
+        } else {
         m.kindUsed = [...drawKind({ W, O, D, trees: m.yard, x0: b.x, z0: b.z, s, y0, H, k: b.k, v: b.v, C: civic!.colors(b.k, b.lv) }, shape)];   // v：D018 公園照變體畫（鍵裡本來就有 v）
         m.anchor = new THREE.Vector3(b.x + s / 2, y0 + H / 2, b.z + s / 2);
+        }
       } });
       continue;
     }
+// D059-END village-civic
     const y0 = Math.max(0, top[root]);
     specs.push({ key: houseKey(b, s, y0), owner: b.id, block: -1, rect, gen: (Wg, Og, _D, mm) => {
       const H = Math.max(0.12, look.height(b.k, b.lv, b.v));
@@ -289,11 +306,27 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     let y0 = 0;
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
 // D058-BEGIN street-dispatch
+// D059-BEGIN village-blocks
     const street = blocks.streetArt && blocks.detail && isBritishStreet(blocks.recipe(bk)) ? streetFrame(c, bk) : null;
-    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+    const village = blocks.villageArt && blocks.detail ? villageBlock(blocks.recipe(bk)) : null;
+    const frame = village ? streetFrame(c, bk) : null;
+    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : '') + (village && frame ? '|D059:' + village + ':' + frame.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
       const fp = blocks.detail ? blocks.facade(bk) : null, nj: NearJob[] = [];
       m.counts = emptyCounts(); m.facade = !!fp;
-      if (street && fp) {
+      if (village && frame) {
+        const local = { ...bk, x: 0, z: 0, w: frame.turn % 2 ? bk.h : bk.w, h: frame.turn % 2 ? bk.w : bk.h };
+        const r = blocks.recipe(local), H = (r.wallPx + r.roof.risePx) / PX_PER_CELL;
+        m.anchor = drawBritishVillage({ W, O, D, x0: 0, z0: 0, w: local.w, d: local.h, y0, H, weather: r.path === 'core' }, village);
+        m.facade = r.path !== 'core';
+        for (const g of [W, O, D]) for (let i = 0; i < g.pos.length; i += 3) {
+          [g.pos[i], g.pos[i + 2]] = streetPoint(bk, frame.turn, g.pos[i], g.pos[i + 2]);
+          [g.nor[i], g.nor[i + 2]] = streetNormal(frame.turn, g.nor[i], g.nor[i + 2]);
+        }
+        [m.anchor.x, m.anchor.z] = streetPoint(bk, frame.turn, m.anchor.x, m.anchor.z);
+        // Keep the existing yard tree instances at their original world positions.
+        for (const p of blocks.dress(bk).props) if (p.kind === 'tree')
+          m.yard.push({ x: bk.x + p.u * bk.w, z: bk.z + p.v * bk.h, y: y0, s: .55 });
+      } else if (street && fp) {
         const local = { ...bk, x: 0, z: 0, w: street.turn % 2 ? bk.h : bk.w, h: street.turn % 2 ? bk.w : bk.h };
         m.anchor = drawBritishStreet(W, O, D, local, blocks.recipe(local), blocks.facade(local)!, y0, m.yard, m.counts, street.roads);
         // Rotate positions AND normals before piece bounds, construction attributes and pick ownership are derived.
@@ -306,6 +339,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       } else m.anchor = drawBlock(W, O, D, bk, blocks.recipe(bk), blocks.dress(bk), y0, m.yard, m.counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nj : null);
       m.near = nj[0] ?? null;
     } });
+// D059-END village-blocks
 // D058-END street-dispatch
   });
   // 高架路：路面抬高、每兩格一根橋墩（全部合成一件，沒有主人）
