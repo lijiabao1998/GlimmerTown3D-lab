@@ -1,0 +1,373 @@
+{
+  "conclusion": "success",
+  "event": "push",
+  "headSha": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+  "jobs": [
+    {
+      "completedAt": "2026-10-13T14:51:33Z",
+      "conclusion": "success",
+      "databaseId": 115360441923,
+      "name": "d059",
+      "startedAt": "2026-10-13T14:44:42Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-13T14:44:43Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-13T14:44:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:48Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-13T14:44:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:50Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-10-13T14:44:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:51Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-10-13T14:44:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:45:04Z",
+          "conclusion": "success",
+          "name": "Run sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei",
+          "number": 5,
+          "startedAt": "2026-10-13T14:44:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:45:05Z",
+          "conclusion": "success",
+          "name": "Run npm run build",
+          "number": 6,
+          "startedAt": "2026-10-13T14:45:04Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:51:28Z",
+          "conclusion": "success",
+          "name": "D059 six British village exteriors and native controls",
+          "number": 7,
+          "startedAt": "2026-10-13T14:45:05Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:51:29Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 8,
+          "startedAt": "2026-10-13T14:51:28Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:51:29Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 15,
+          "startedAt": "2026-10-13T14:51:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:51:30Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 16,
+          "startedAt": "2026-10-13T14:51:29Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:51:30Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "startedAt": "2026-10-13T14:51:30Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770/job/115360441923"
+    },
+    {
+      "completedAt": "2026-10-13T15:44:54Z",
+      "conclusion": "success",
+      "databaseId": 115360442254,
+      "name": "smoke",
+      "startedAt": "2026-10-13T14:44:41Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-13T14:44:43Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-13T14:44:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:46Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-13T14:44:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:47Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-10-13T14:44:46Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:49Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-10-13T14:44:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:59Z",
+          "conclusion": "success",
+          "name": "中文字型（履歷卡與樣張的版面才會跟手機一致）",
+          "number": 5,
+          "startedAt": "2026-10-13T14:44:49Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:59Z",
+          "conclusion": "success",
+          "name": "Run npm run typecheck",
+          "number": 6,
+          "startedAt": "2026-10-13T14:44:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:55:51Z",
+          "conclusion": "success",
+          "name": "Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）",
+          "number": 7,
+          "startedAt": "2026-10-13T14:44:59Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:55:52Z",
+          "conclusion": "success",
+          "name": "Run npm run build",
+          "number": 8,
+          "startedAt": "2026-10-13T14:55:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:39:45Z",
+          "conclusion": "success",
+          "name": "煙霧測試",
+          "number": 9,
+          "startedAt": "2026-10-13T14:55:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:48Z",
+          "conclusion": "success",
+          "name": "拍樣張（三畫風×三年份×兩個距離）",
+          "number": 10,
+          "startedAt": "2026-10-13T15:39:45Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:50Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 11,
+          "startedAt": "2026-10-13T15:44:48Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:51Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-pages-artifact@v3",
+          "number": 12,
+          "startedAt": "2026-10-13T15:44:50Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:51Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 23,
+          "startedAt": "2026-10-13T15:44:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:51Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 24,
+          "startedAt": "2026-10-13T15:44:51Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:44:51Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 25,
+          "startedAt": "2026-10-13T15:44:51Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770/job/115360442254"
+    },
+    {
+      "completedAt": "2026-10-13T14:46:38Z",
+      "conclusion": "success",
+      "databaseId": 115360442689,
+      "name": "d055",
+      "startedAt": "2026-10-13T14:44:41Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-13T14:44:43Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-13T14:44:42Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:47Z",
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "number": 2,
+          "startedAt": "2026-10-13T14:44:43Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:52Z",
+          "conclusion": "success",
+          "name": "Run actions/setup-node@v4",
+          "number": 3,
+          "startedAt": "2026-10-13T14:44:47Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:44:54Z",
+          "conclusion": "success",
+          "name": "Run npm ci",
+          "number": 4,
+          "startedAt": "2026-10-13T14:44:52Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:45:12Z",
+          "conclusion": "success",
+          "name": "Run sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei",
+          "number": 5,
+          "startedAt": "2026-10-13T14:44:54Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:45:12Z",
+          "conclusion": "success",
+          "name": "Run npm run build",
+          "number": 6,
+          "startedAt": "2026-10-13T14:45:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:46:34Z",
+          "conclusion": "success",
+          "name": "D055 native food trade capture",
+          "number": 7,
+          "startedAt": "2026-10-13T14:45:12Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:46:36Z",
+          "conclusion": "success",
+          "name": "Run actions/upload-artifact@v4",
+          "number": 8,
+          "startedAt": "2026-10-13T14:46:34Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:46:36Z",
+          "conclusion": "success",
+          "name": "Post Run actions/setup-node@v4",
+          "number": 15,
+          "startedAt": "2026-10-13T14:46:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:46:36Z",
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "number": 16,
+          "startedAt": "2026-10-13T14:46:36Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T14:46:36Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 17,
+          "startedAt": "2026-10-13T14:46:36Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770/job/115360442689"
+    },
+    {
+      "completedAt": "2026-10-13T15:45:07Z",
+      "conclusion": "success",
+      "databaseId": 115390902041,
+      "name": "pages",
+      "startedAt": "2026-10-13T15:44:58Z",
+      "status": "completed",
+      "steps": [
+        {
+          "completedAt": "2026-10-13T15:45:00Z",
+          "conclusion": "success",
+          "name": "Set up job",
+          "number": 1,
+          "startedAt": "2026-10-13T15:44:58Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:45:06Z",
+          "conclusion": "success",
+          "name": "Run actions/deploy-pages@v4",
+          "number": 2,
+          "startedAt": "2026-10-13T15:45:00Z",
+          "status": "completed"
+        },
+        {
+          "completedAt": "2026-10-13T15:45:06Z",
+          "conclusion": "success",
+          "name": "Complete job",
+          "number": 3,
+          "startedAt": "2026-10-13T15:45:06Z",
+          "status": "completed"
+        }
+      ],
+      "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770/job/115390902041"
+    }
+  ],
+  "status": "completed",
+  "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770"
+}

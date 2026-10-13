@@ -2,7 +2,7 @@
 
 ## 授權與開工基線
 
-2026-10-13，業主要求「漂亮，全部做完然後給我看圖片」，範圍為前一輪提案的六組建築外觀。開工前完整 fetch 與遠端 main 讀回均確認 `e8c0a9d0cad300e421fb3d3b7dc373b9493097c3`，工作樹乾淨；施工分支 `codex/d059-british-village`。本輪完成程序模型、實際遊戲預覽、驗證及可審閱提交；圖面交業主看後再決定正式發布。
+2026-10-13，業主要求「漂亮，全部做完然後給我看圖片」，範圍為前一輪提案的六組建築外觀。開工前完整 fetch 與遠端 main 讀回均確認 `e8c0a9d0cad300e421fb3d3b7dc373b9493097c3`，工作樹乾淨；施工分支 `codex/d059-british-village`。開工時計畫完成程序模型、實際遊戲預覽、驗證及可審閱提交；圖面交業主看後再決定正式發布。後續發布授權與結果見正式發布節。
 
 ## 先寫驗收，再施工
 
@@ -44,11 +44,21 @@
 
 最終建置 SHA256：`4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8`，1,237,602 bytes；型別、建置及 11 專項通過。[本機完整 Node 原始輸出](evidence/D059/unit-final.txt) **660 項／0 NG、退出 0、1483.4s**，包含原 649 項及 D059 新 11 項。遠端完整 Node **660 項／0 NG、629.2s**，完整 browser **850 項／0 NG、2638.1s**，皆有最終綠燈及成功步驟；[完整 CI 原始工作日誌](evidence/D059/ci-smoke-job-log.txt) 留存。本機 browser 的中斷與首樣本 NG 保留，不將遠端成功改寫成本機完整通過。預設 C 檔實拍，A／B／C 另切換驗證。CI 增加獨立 D059 實拍與原生操作工作，正式 Pages 需與既有 smoke、D055 一起通過。
 
-預覽來源已保存為 `484cf85bbc8f09192646068bce3617fe69b3e672`，四個美術來源檔的實際 bytes 與 Git committed blob SHA256 全等。[草稿 PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 供圖面審閱；[候選 CI 38405235975](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975) 已完整成功，`smoke`／`d055`／`d059` 全綠、`pages` 依候選 PR 規則略過。[既有 D056 美術回歸 38405236136](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405236136) 亦成功，來源 head 相同。main 保持 D058，這不是正式發布。
+預覽來源已保存為 `484cf85bbc8f09192646068bce3617fe69b3e672`，四個美術來源檔的實際 bytes 與 Git committed blob SHA256 全等。[當時的草稿 PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 供圖面審閱；[候選 CI 38405235975](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975) 已完整成功，`smoke`／`d055`／`d059` 全綠、`pages` 依候選 PR 規則略過。[既有 D056 美術回歸 38405236136](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405236136) 亦成功，來源 head 相同。該候選驗證時 main 為 D058；此候選 run 沒有部署，正式發布另列。
 
 [CI 獨立計數摘要](evidence/D059/ci-log-audit.json) 核對 D054 原有 105 項／0 NG，包括 CPU6 首次原生預覽的原 16ms 門檻；原始工作日誌實際 bytes 與 Git blob SHA256 `b8379e0be6ebee8b3b3bbcdc162e3a80814ddc101e175209ed3e49560fdc4cb1` 全等。25MB smoke artifact 的下載超過設定等候界限，於 14:38:21 UTC 只中止該自有下載；沒有解壓，未另外核十二次具體樣本值及 ZIP digest。[停止記錄](evidence/D059/smoke-artifact-download-stopped.json) 保留，未把部分傳輸寫成完整取得。此下載限制不改寫已完成的 CI 測試成功；下段 D059 圖片 artifact 是另一份已完整取得並核實的證據。
 
-遠端 D059 [artifact 11817173844](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975/artifacts/11817173844) 的 51 PNG／報告／固定城市碼已獨立下載：ZIP 實際 SHA256 `2fb1da6df119dda90352c56b2bed0f5a245fef83bf65f2a0c67b66cf864de699` 與 API digest 相同；所有圖片 bytes／SHA／尺寸吻合報告。[CI 拍攝原始報告](evidence/D059/ci-D059-capture.json) 與 [固定城市碼](evidence/D059/ci-D059-fixture.code.txt) 留存，遠端真正建置的 HTML 雜湊與本機定稿 `4515f6a8…` 全等；三尺寸 17 圖各通過，150→151／49,979 資金／最終城市摘要相同，可信輸入 45／49／49、拾取、存讀、零錯誤及零外部請求均通過。run 的來源 head 為 `484cf85…`，artifact 所用 PR 合併測試 SHA 為 `9a930d180cb22872a5767089f22fb6b332168e71`，兩者分列，未部署。
+遠端 D059 [artifact 11817173844](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975/artifacts/11817173844) 的 51 PNG／報告／固定城市碼已獨立下載：ZIP 實際 SHA256 `2fb1da6df119dda90352c56b2bed0f5a245fef83bf65f2a0c67b66cf864de699` 與 API digest 相同；所有圖片 bytes／SHA／尺寸吻合報告。[CI 拍攝原始報告](evidence/D059/ci-D059-capture.json) 與 [固定城市碼](evidence/D059/ci-D059-fixture.code.txt) 留存，遠端真正建置的 HTML 雜湊與本機定稿 `4515f6a8…` 全等；三尺寸 17 圖各通過，150→151／49,979 資金／最終城市摘要相同，可信輸入 45／49／49、拾取、存讀、零錯誤及零外部請求均通過。run 的來源 head 為 `484cf85…`，artifact 所用 PR 合併測試 SHA 為 `9a930d180cb22872a5767089f22fb6b332168e71`，兩者分列；此候選 run 未部署。
+
+## 正式發布與 HTTPS 複驗（2026-10-13）
+
+圖面交付後，業主於 2026-10-13 明確核准「直接發布吧」。[PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 於 2026-10-13 14:44:36 UTC／台灣時間 2026-10-13 22:44:36 合併。核准 head `284a2538f79d7d0097abbab55b80fa47995cfcb5`、發布提交 `b8954fcae4d3b80bc49b6512fb7622f69d711998` 的 tree 均為 `3ae57e351ccf117e72cb2c00063df4e0a877ee76`。核准 head 相對美術來源 `484cf85bbc8f09192646068bce3617fe69b3e672` 只補文件及證據；四個美術來源的 Git blob 與本機 bytes 雜湊全等，核准單檔 SHA256 `4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8`、1,237,602 bytes。原始 [發布版本核對](evidence/D059/release/release-identity.json) 留存；該核對只證版本身分，不單獨代表部署完成。
+
+[正式 main CI 38415988770](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770) 對同一發布 SHA 完整成功：Node **660 項／0 NG**、browser **850 項／0 NG**，smoke／d055／d059／pages 均成功；D054 原有 **105 項／0 NG**，CPU6 首次原生預覽保留原門檻。Pages deployment `7043063044` 指向發布提交，於 2026-10-13 15:45:08 UTC／台灣時間 2026-10-13 23:45:08 成功完成；[main 終局 CI／部署摘要](evidence/D059/release/ci-main-audit.json) 留存。這是正式 main 的實際計數，與候選 CI 分列。
+
+[正式網址](https://lijiabao1998.github.io/GlimmerTown3D-lab/) 於台灣時間 2026-10-13 23:49:29 完成 HTTPS 複驗。三尺寸 1440×1000、360×740、412×860，各三次真正文件載入，共 **9 次 HTTP 200／完整 HTML 雜湊全等**；另一次獨立 fetch 亦為 HTTP 200／同一完整 HTML。三尺寸各七張真實 PNG，合計 **21 張正式站實拍**，實際檔案雜湊／bytes／尺寸與報告全部吻合；預設 C、六組建築選型、世界不變、穩定相機、三個幾何批次、快取／fresh 幾何及四組 RCI／兩組設施實際 owner 均通過。三尺寸應用錯誤、資源失敗與意外請求皆為零；瀏覽器 favicon 依原套件例外獨立留存，不擴稱所有瀏覽器資源均零錯誤。原始 [正式 HTTPS 報告](evidence/D059/release/public/report.json) 留存。 [獨立核對](evidence/D059/release/public-independent-audit.md) 另驗 9 份完整 HTML、21 PNG、729 個發布 Git blob，並抽看六張桌機與兩張手機實拍，全部吻合。
+
+正式站桌機近景與總覽：[overview](img/D059/public/d059-1440-overview.png)、[cottage-se](img/D059/public/d059-1440-cottage-se.png)、[rows-se](img/D059/public/d059-1440-rows-se.png)、[inn-se](img/D059/public/d059-1440-inn-se.png)、[manor-se](img/D059/public/d059-1440-manor-se.png)、[church-se](img/D059/public/d059-1440-church-se.png)、[oast-se](img/D059/public/d059-1440-oast-se.png)。手機 [360px 總覽](img/D059/public/d059-360-overview.png)、[412px 總覽](img/D059/public/d059-412-overview.png)；全 21 張保存於 `docs/img/D059/public/`。此正式 QA 聚焦發布內容、渲染和拾取；原生放置／撤銷／存讀及一天對帳已由發布 CI 驗證，沒有在此重跑。Chrome 手機尺寸模擬不是 Android 實機驗收，Android 實機仍未測。
 
 ## 圖面交付與尚未完成
 
@@ -58,4 +68,4 @@ D059 改後三尺寸各有真正滑鼠／觸控公共設施目錄取消、墓園
 
 獨立只讀審查核 102 張 PNG 的實際雜湊／大小／尺寸，全部吻合；相機最大差 `4.4196e-11` 小於 `1e-7`。人工抽看 24 張新版與 6 張舊版，六組兩面和三尺寸沒有主體裁切、破面、浮件；修後 1,620 條屋面射線與風化專項皆通過。A 幾何摘要精確保留，B／C 真正換成新量體；來源 2 改／2 增的硬鎖、D059→D058 歷史還原與 mutation reader 均再次通過。此為候選審查，沒有正式發布聲稱。
 
-完整 Node、完整 browser 及候選 CI 已通過，圖片／配對與來源範圍的 [收尾只讀審查](evidence/D059/close-audit.md) 已保存。業主圖面審閱、Android 實機及正式發布尚未完成。候選與 main 分開，不把 D058 的已發布狀態寫成 D059 已上線。上述 CI 驗證的是來源提交 `484cf85…`；後續紀錄提交若只改文件及證據，產品來源與實際建置雜湊不變，新 head 的 checks 仍須以其實際狀態另讀。
+完整 Node、完整 browser 及候選 CI 已通過，圖片／配對與來源範圍的 [收尾只讀審查](evidence/D059/close-audit.md) 已保存。業主於 2026-10-13 核准直接發布；main 合併、正式 Pages 部署及 HTTPS 複驗均完成，原始終局證據見正式發布節。Android 實機仍未測。本機兩次完整 browser 未完成、首樣本 NG、拍攝與模型修正及停止下載的紀錄保留，遠端成功不改寫為本機完整通過。

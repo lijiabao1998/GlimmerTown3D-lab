@@ -1,0 +1,67 @@
+{
+  "checkedAt": "2026-10-13T14:57:29.029Z",
+  "source": "484cf85bbc8f09192646068bce3617fe69b3e672",
+  "approved": "284a2538f79d7d0097abbab55b80fa47995cfcb5",
+  "release": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+  "tree": "3ae57e351ccf117e72cb2c00063df4e0a877ee76",
+  "candidateClosureChangedPaths": [
+    "LOG.md",
+    "README.md",
+    "docs/D059-british-village.md",
+    "docs/evidence/D059/browser-local-attempt1.txt",
+    "docs/evidence/D059/browser-local-events.txt",
+    "docs/evidence/D059/browser-local-interrupted.txt",
+    "docs/evidence/D059/ci-D059-capture.json",
+    "docs/evidence/D059/ci-D059-fixture.code.txt",
+    "docs/evidence/D059/ci-log-audit.json",
+    "docs/evidence/D059/ci-run.json",
+    "docs/evidence/D059/ci-smoke-job-log.txt",
+    "docs/evidence/D059/close-audit.md",
+    "docs/evidence/D059/smoke-artifact-download-stopped.json",
+    "docs/evidence/D059/unit-final.txt"
+  ],
+  "sourceByteComparisons": {
+    "src/cityView.ts": {
+      "484cf85bbc8f09192646068bce3617fe69b3e672": "6026298e60d5d98af6d1a0f8ff347e3d0090a46d17e8be82e2e605767e8817f7",
+      "284a2538f79d7d0097abbab55b80fa47995cfcb5": "6026298e60d5d98af6d1a0f8ff347e3d0090a46d17e8be82e2e605767e8817f7",
+      "b8954fcae4d3b80bc49b6512fb7622f69d711998": "6026298e60d5d98af6d1a0f8ff347e3d0090a46d17e8be82e2e605767e8817f7",
+      "workingFile": "6026298e60d5d98af6d1a0f8ff347e3d0090a46d17e8be82e2e605767e8817f7"
+    },
+    "src/render/cityScene.ts": {
+      "484cf85bbc8f09192646068bce3617fe69b3e672": "347ea8d9b0005f765f87335e243c181ad76e354a03d9bfd096f11138f446c25f",
+      "284a2538f79d7d0097abbab55b80fa47995cfcb5": "347ea8d9b0005f765f87335e243c181ad76e354a03d9bfd096f11138f446c25f",
+      "b8954fcae4d3b80bc49b6512fb7622f69d711998": "347ea8d9b0005f765f87335e243c181ad76e354a03d9bfd096f11138f446c25f",
+      "workingFile": "347ea8d9b0005f765f87335e243c181ad76e354a03d9bfd096f11138f446c25f"
+    },
+    "src/content/britishVillage.ts": {
+      "484cf85bbc8f09192646068bce3617fe69b3e672": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705",
+      "284a2538f79d7d0097abbab55b80fa47995cfcb5": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705",
+      "b8954fcae4d3b80bc49b6512fb7622f69d711998": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705",
+      "workingFile": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705"
+    },
+    "src/render/britishVillageArt.ts": {
+      "484cf85bbc8f09192646068bce3617fe69b3e672": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
+      "284a2538f79d7d0097abbab55b80fa47995cfcb5": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
+      "b8954fcae4d3b80bc49b6512fb7622f69d711998": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
+      "workingFile": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a"
+    }
+  },
+  "localDist": {
+    "bytes": 1237602,
+    "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8"
+  },
+  "pullRequest": {
+    "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16",
+    "number": 16,
+    "merged": true,
+    "mergedAt": "2026-10-13T14:44:36Z",
+    "headSha": "284a2538f79d7d0097abbab55b80fa47995cfcb5",
+    "mergeCommitSha": "b8954fcae4d3b80bc49b6512fb7622f69d711998"
+  },
+  "local": {
+    "HEAD": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+    "originMain": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+    "clean": true
+  },
+  "qualification": "Exact merge and source identity only. CI, Pages and actual public HTTPS are separate evidence."
+}

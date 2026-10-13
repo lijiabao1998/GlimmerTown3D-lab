@@ -14,13 +14,13 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## D059 預覽候選：六組英式小鎮建築
+## 目前正式版：D059 六組英式小鎮建築
 
 [D059](docs/D059-british-village.md) 完成石屋、切斯特商屋、馬車旅館、方塔教堂、雙圓塔烘乾屋與石造莊園。沿用既有種類與遊戲規則；通廊、穿堂及內院是真正的幾何空間。保留原手機幾何預算、庭院樹及核心石牆的屋齡風化。
 
-[完整實拍圖集](docs/D059-gallery.md) 收錄 51 對／102 張同城市、同鏡頭的桌機與手機模擬前後圖。來源候選 `484cf85` 的 [完整 CI](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975) 已成功：Node 660 項／0 NG（含 11 項新守衛）、browser 850 項／0 NG、三尺寸原生操作／存讀／推進一天對帳，以及既有 D055／D056 回歸均通過。本機 browser 的中斷及首樣本 NG 照實保留在卡面。[草稿 PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 已保存候選，尚未正式發布，Android 實機未測。
+[完整實拍圖集](docs/D059-gallery.md) 收錄 51 對／102 張同城市、同鏡頭的桌機與手機模擬前後圖。業主於 2026-10-13 核准「直接發布吧」，[PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 於台灣時間 2026-10-13 22:44:36 合併至 `main`（`b8954fca`）；合併 tree 與核准候選 `284a253` 相同。[正式 main CI](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770) 的 smoke／d055／d059／pages 全成功，完整 Node **660 項／0 NG**、browser **850 項／0 NG**，保留原 D054 CPU6 首樣本門檻。Pages deployment `7043063044` 於台灣時間 2026-10-13 23:45:08 完成且指向同一發布 SHA。正式 HTTPS 桌機 1440×1000、手機模擬 360×740／412×860，共 **9 次完整文件載入／21 張實拍**；完整 HTML 均為核准成品雜湊，預設 C、六組選型、快取／fresh 幾何、實際拾取及零應用錯誤通過。原生施工／存讀／一天對帳依發布 CI，沒有在這份正式 QA 重跑。證據見 [main CI 摘要](docs/evidence/D059/release/ci-main-audit.json)、[發布版本核對](docs/evidence/D059/release/release-identity.json) 及 [正式 HTTPS 報告](docs/evidence/D059/release/public/report.json)。本機 browser 中斷與首樣本 NG 照實保留，Android 實機未測。
 
-## 目前正式版：D058 英式住宅與高街
+## 前一正式版：D058 英式住宅與高街
 
 [D058](docs/D058-british-streets.md) 更新連棟屋、半獨立屋、維多利亞排屋與一級高街店屋的逐戶入口、側後立面、屋頂煙囪及朝路關係。發布提交記錄業主於 2026-10-12 審閱 124 張前後圖並核准，由 [PR #15](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/15) 合併至 `main`（`feef2ddd`）。
 
