@@ -14,7 +14,13 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前狀態：D058 英式住宅與高街已正式發布
+## D059 預覽候選：六組英式小鎮建築
+
+[D059](docs/D059-british-village.md) 完成石屋、切斯特商屋、馬車旅館、方塔教堂、雙圓塔烘乾屋與石造莊園。沿用既有種類與遊戲規則；通廊、穿堂及內院是真正的幾何空間。保留原手機幾何預算、庭院樹及核心石牆的屋齡風化。
+
+[完整實拍圖集](docs/D059-gallery.md) 收錄 51 對／102 張同城市、同鏡頭的桌機與手機模擬前後圖。來源候選 `484cf85` 的 [完整 CI](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38405235975) 已成功：Node 660 項／0 NG（含 11 項新守衛）、browser 850 項／0 NG、三尺寸原生操作／存讀／推進一天對帳，以及既有 D055／D056 回歸均通過。本機 browser 的中斷及首樣本 NG 照實保留在卡面。[草稿 PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 已保存候選，尚未正式發布，Android 實機未測。
+
+## 目前正式版：D058 英式住宅與高街
 
 [D058](docs/D058-british-streets.md) 更新連棟屋、半獨立屋、維多利亞排屋與一級高街店屋的逐戶入口、側後立面、屋頂煙囪及朝路關係。發布提交記錄業主於 2026-10-12 審閱 124 張前後圖並核准，由 [PR #15](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/15) 合併至 `main`（`feef2ddd`）。
 

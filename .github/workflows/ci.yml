@@ -86,8 +86,30 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  d059:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D059 six British village exteriors and native controls
+        run: node tools/d059-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d059-preview-${{ github.sha }}
+          path: scratch/d059-after/
+          if-no-files-found: error
+          retention-days: 14
+
   pages:
-    needs: [smoke, d055]
+    needs: [smoke, d055, d059]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:

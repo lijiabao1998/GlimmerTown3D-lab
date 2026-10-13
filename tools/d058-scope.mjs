@@ -6,15 +6,17 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {D059_ADDED,assertD059Scope,d059HistoricalBytes} from './d059-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
 const M = JSON.parse(diskRead('fixtures/d058-art-scope.json'));
-export const D058_ADDED = new Set(M.added);
+const ownAdded = new Set(M.added);
+export const D058_ADDED = new Set([...M.added,...D059_ADDED]);
 const modified = new Set(M.modified);
 const expectedFiles = [...Object.keys(M.before),...M.added].sort();
 
-assert.equal(D058_ADDED.size,M.added.length,'D058 unique added source paths');
+assert.equal(ownAdded.size,M.added.length,'D058 unique added source paths');
 assert.equal(modified.size,M.modified.length,'D058 unique modified source paths');
 assert.deepEqual(Object.keys(M.replacements).sort(),[...modified].sort(),'D058 exact reversible source paths');
 for(const file of M.added)assert.ok(!(file in M.before),'D058 additions have no historical source: '+file);
@@ -22,11 +24,11 @@ for(const file of M.modified)assert.ok(file in M.before,'D058 modifications have
 for(const file of [...M.added,...M.modified])assert.ok(file in M.after,'D058 changed source has current SHA: '+file);
 for(const [file,pin] of Object.entries(M.after)) {
   assert.ok(expectedFiles.includes(file),'D058 SHA belongs to exact source inventory: '+file);
-  if(!D058_ADDED.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D058 unchanged source SHA: '+file);
+  if(!ownAdded.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D058 unchanged source SHA: '+file);
 }
 
 function historical(file,current) {
-  if(D058_ADDED.has(file))return ''; // The caller omits these absent historical files.
+  if(ownAdded.has(file))return ''; // The caller omits these absent historical files.
   const replacements = M.replacements[file]??[];
   const prior = new Map();
   for(const entry of replacements) {
@@ -56,19 +58,20 @@ function historical(file,current) {
 }
 
 export function d058HistoricalBytes(file,read=diskRead) {
-  const current=read(file);
+  const current=d059HistoricalBytes(file,read);
   assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
   return historical(file,current);
 }
 
 export function assertD058Scope(read=diskRead) {
+  assertD059Scope(read);
   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
+    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D059_ADDED.has(file)).sort();
   assert.deepEqual(files,expectedFiles,'D058 exact source inventory');
   const snapshot=new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d059HistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }
