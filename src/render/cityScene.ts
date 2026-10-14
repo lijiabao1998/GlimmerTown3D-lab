@@ -27,6 +27,9 @@ import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
 import { windowAtlas, patchWindowMaterial } from './windows.ts';
 import { paintGround, paintGroundInc, repaintTiles, groundCellPx, type GroundCity } from './ground.ts';
+// D062-BEGIN season-import
+import { seasonAt, seasonSetupOf, treeTint, type SeasonOption, type SeasonSetup } from './seasonArt.ts';
+// D062-END season-import
 import { drawKind } from './kindArt.ts';
 import type { Shape, KindColors } from '../content/kindShapes.ts';
 import { nearGate, nearHb } from '../content/construction.ts';
@@ -40,7 +43,9 @@ export interface CityHit { id: number; x: number; z: number; block?: number }
 // D059-BEGIN village-option
 // D060-BEGIN industry-option
 // D061-BEGIN land-option
-export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; landArt?: number; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D062-BEGIN season-option
+export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; landArt?: number; season?: SeasonOption; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D062-END season-option
 // D061-END land-option
 // D060-END industry-option
 // D059-END village-option
@@ -67,6 +72,9 @@ export interface BuiltCity {
   con: { top: Float32Array; base: Float32Array; wallTop: Float32Array; blockOf: Int32Array } | null;
   setTreeAges(ageAt: (i: number) => number): void;
   setTraffic(over: Uint8Array | undefined): number;   // D027：過載道路的暖色（每天負載在變，貼圖就地只重畫等級變了的路格；回重畫了幾格）。沒有施工資料（只能看的城）不做事、回 0
+// D062-BEGIN season-iface
+  setSeason(day: number): number;                    // D062：換日時把季節就地更新（只重畫季節索引變了的格與樹；回重畫了幾格）。沒有季節或沒有施工資料就不做事、回 0
+// D062-END season-iface
   setSites(specs: SiteSpec[], ageAt: (i: number) => number, live: boolean): { tris: number; perSite: Map<number, string[]> } | null;
   nearCounts(): { near: number; kinds: Record<string, number> };   // D014 近看小物畫了幾件（逐種）
   setNear(on: boolean): void;                          // D014 近看小物：實驗線縮放 ≥ 1.22 才畫
@@ -202,7 +210,10 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     }
   }
 // D061-BEGIN land-city
-  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over, land: blocks?.landArt ?? 0 };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）；D061：land＝地景檔位
+// D062-BEGIN season-city
+  const seasonOpt = blocks?.season && (blocks.landArt ?? 0) > 0 ? blocks.season : undefined;   // D062：地景關閉時季節一律關
+  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over, land: blocks?.landArt ?? 0, season: seasonOpt ? seasonSetupOf(seasonOpt, c.day) : undefined };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）；D061：land＝地景檔位
+// D062-END season-city
 // D061-END land-city
   let paintedOver: Uint8Array | undefined = over;                          // D027：現在貼圖上畫的是哪一份過載等級（setTraffic 拿它跟新的比）
   const gtex = groundTexture(gc, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
@@ -538,6 +549,9 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   mark('buildings');
 
   // ---- 樹：偶數樹種是針葉（錐形），奇數是闊葉（圓冠）；有建築、道路、水的格子不種 ----
+// D062-BEGIN season-trees-vars
+  let treeSeason: ((s: SeasonSetup, only: Set<number> | null) => void) | null = null, yardSeason: ((s: SeasonSetup, only: Set<number> | null) => void) | null = null;   // D062：樹冠與前庭樹依季節重新上色（只改實例色緩衝）
+// D062-END season-trees-vars
   const spots: [number, number, number, number][] = [];
   for (let i = 0; i < nn; i++) if (c.tree[i] && !c.occ[i] && !c.road[i] && c.ter[i] !== 0 && !c.rail[i]) spots.push([i % n, (i / n) | 0, c.tree[i], top[i]]);
   if (spots.length) {
@@ -580,6 +594,26 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       else disposables.push(tg, rg, cg, ...meshes);
     }
     meshes[1].count = round.length; meshes[2].count = cone.length;
+// D062-BEGIN season-trees
+    if (seasonOpt) {   // D062：樹冠依所在格的季節染色（春＝基準；3×3 內有路的闊葉＝櫻花）
+      const tint = new THREE.Color(), base = new THREE.Color();
+      const roadNear = (x: number, z: number) => { for (let dz = -1; dz <= 1; dz++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, zz = z + dz; if (xx >= 0 && zz >= 0 && xx < n && zz < n && c.road[zz * n + xx]) return true; } return false; };
+      treeSeason = (ss, only) => {
+        for (const [arr, mesh, coneShape] of [[round, meshes[1], false], [cone, meshes[2], true]] as const) {
+          arr.forEach(([x, z, sp], k) => {
+            if (only && !only.has(z * n + x)) return;
+            const h1 = (hash2(x, z, 16) + sp * 0.07) % 1;
+            base.setHSL((coneShape ? 0.33 : 0.27) + h1 * 0.06, 0.45, (coneShape ? 0.28 : 0.36) + h1 * 0.1, THREE.SRGBColorSpace);
+            const tt = treeTint(seasonAt(x, z, ss.view), ss.soft, coneShape, x, z, h1, roadNear(x, z));
+            if (tt) base.lerp(tint.set(tt.hex), tt.a);
+            mesh.setColorAt(k, base);
+          });
+          if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true;
+        }
+      };
+      treeSeason(gc.season!, null);
+    }
+// D062-END season-trees
     for (const m of meshes) stats.upFull += (m.instanceMatrix.array as Float32Array).byteLength + ((m.instanceColor?.array as Float32Array | undefined)?.byteLength ?? 0);
     for (const m of meshes) { m.castShadow = true; m.receiveShadow = true; scene.add(m); }
   } else if (con) sc.disposeTrees();
@@ -597,6 +631,24 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       yc.setColorAt(j, col.setHSL(0.29 + hash2(hx, hz, 16) * 0.05, 0.42, 0.3 + hash2(hx, hz, 17) * 0.08, THREE.SRGBColorSpace));
     });
     for (const m of [yt, yc]) { m.receiveShadow = true; scene.add(m); disposables.push(m); }
+// D062-BEGIN season-yard
+    if (seasonOpt) {   // D062：前庭樹跟著季節染色（春天不變櫻花：前庭的樹是裝飾，不吃「路邊」的規則）
+      const tint = new THREE.Color(), base = new THREE.Color();
+      yardSeason = (ss, only) => {
+        yard.forEach((t, j) => {
+          const tx = Math.min(n - 1, Math.max(0, Math.floor(t.x))), tz = Math.min(n - 1, Math.max(0, Math.floor(t.z)));
+          if (only && !only.has(tz * n + tx)) return;
+          const hx = Math.round(t.x * 64), hz = Math.round(t.z * 64);
+          base.setHSL(0.29 + hash2(hx, hz, 16) * 0.05, 0.42, 0.3 + hash2(hx, hz, 17) * 0.08, THREE.SRGBColorSpace);
+          const tt = treeTint(seasonAt(tx, tz, ss.view), ss.soft, false, tx, tz, hash2(hx, hz, 16), false);
+          if (tt) base.lerp(tint.set(tt.hex), tt.a);
+          yc.setColorAt(j, base);
+        });
+        if (yc.instanceColor) yc.instanceColor.needsUpdate = true;
+      };
+      yardSeason(gc.season!, null);
+    }
+// D062-END season-yard
     if (con) {   // D014：前庭的樹等完工才種（每棵一個實例屬性：它那一格的屋齡）
       const at = new THREE.InstancedBufferAttribute(new Float32Array(yard.length).fill(99), 1);
       for (const m of [yt, yc]) { m.geometry.setAttribute('aTreeT', at); patchTree(m.material as THREE.Material, con.uni); }
@@ -683,6 +735,27 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       }
       return ch.length;
     },
+// D062-BEGIN season-set
+    setSeason: day => {
+      if (!seasonOpt || !gc.season || !con) return 0;
+      const nv = seasonSetupOf(seasonOpt, day), ov = gc.season;
+      if (nv.view.a === ov.view.a && nv.view.b === ov.view.b && nv.view.t === ov.view.t) return 0;
+      const ch: number[] = [], all = new Set<number>();
+      for (let i = 0; i < nn; i++) { const x = i % n, z = (i / n) | 0; if (seasonAt(x, z, ov.view) !== seasonAt(x, z, nv.view)) { all.add(i); if (!(c.road[i] || c.rail[i] || c.dock[i])) ch.push(i); } }
+      gc.season = nv;
+      if (ch.length && con.ground && con.ground.data) {
+        repaintTiles(gc, k => look.cat(k), S, lots, plates, con.ground, ch);
+        const t = sc.groundTex, W = n * S;
+        if (t && t.image.data === con.ground.data) {
+          if (ch.length * 2 > nn) { t.clearUpdateRanges(); sc.stats.groundUp = W * W * 4; }
+          else { for (const i of ch) { const x = i % n, z = (i / n) | 0; for (let v = 0; v < S; v++) t.addUpdateRange(((z * S + v) * W + x * S) * 4, S * 4); } sc.stats.groundUp = ch.length * S * S * 4; }
+          t.needsUpdate = true;
+        }
+      }
+      if (all.size) { treeSeason?.(nv, all); yardSeason?.(nv, all); }
+      return ch.length;
+    },
+// D062-END season-set
     setTreeAges: ageAt => { if (!yardAges) return; const a = yardAges.attr.array as Float32Array; yardAges.tiles.forEach((i, j) => { a[j] = ageAt(i); }); yardAges.attr.needsUpdate = true; },
     setSites: (specs, ageAt, live) => {
       if (!con) return null;

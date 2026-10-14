@@ -1,10 +1,12 @@
-// D061 is an outer, SHA-pinned art allowance. Historical guards receive exactly
+// D061 is an outer, SHA-pinned art allowance. Since D062 it reads the tree through the D062 layer (d062-scope.mjs): this layer's fixtures are frozen at the D061 candidate 36e6935.
+// Historical guards receive exactly
 // the D060 source bytes after undoing only the named D061 regions (ground painter, post-pass sky, and the dispatch lines).
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {D062_ADDED,assertD062Scope,d062HistoricalBytes} from './d062-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -12,14 +14,15 @@ const M = JSON.parse(diskRead('fixtures/d061-art-scope.json'));
 const baseline = JSON.parse(diskRead('fixtures/d061-source-before.json'));
 const expectedFiles = [...Object.keys(M.before),...M.added].sort();
 const modified = new Set(M.modified);
-export const D061_ADDED = new Set(M.added);
+const ownAdded = new Set(M.added);
+export const D061_ADDED = new Set([...M.added,...D062_ADDED]);   // D062 起：包含更新的層新增的檔（舊層的檢查要把它們濾掉）
 
 assert.equal(M.baseline,'d4cef37ae05b1ab65c801e8f3b76a1a4d40a91e4','D061 fixed D060 candidate baseline');
 assert.equal(M.baseline,baseline.baseline,'D061 manifest uses the captured baseline');
 assert.deepEqual(M.before,baseline.before,'D061 original source SHA inventory is preserved');
 assert.deepEqual([...M.modified].sort(),['src/cityView.ts','src/render/cityScene.ts','src/render/ground.ts','src/render/post.ts'],'D061 only the four approved rendering sources may change');
 assert.deepEqual([...M.added].sort(),['src/render/landArt.ts'],'D061 only the one approved procedural landscape source may be added');
-assert.equal(D061_ADDED.size,M.added.length,'D061 unique added source paths');
+assert.equal(ownAdded.size,M.added.length,'D061 unique added source paths');
 assert.equal(modified.size,M.modified.length,'D061 unique modified source paths');
 assert.deepEqual(Object.keys(M.replacements).sort(),[...modified].sort(),'D061 exact reversible source paths');
 for(const file of M.added)assert.ok(!(file in M.before),'D061 additions were absent at baseline: '+file);
@@ -27,11 +30,11 @@ for(const file of M.modified)assert.ok(file in M.before,'D061 modifications have
 for(const file of [...M.added,...M.modified])assert.ok(file in M.after,'D061 changed source has current SHA: '+file);
 for(const [file,pin] of Object.entries(M.after)) {
   assert.ok(expectedFiles.includes(file),'D061 SHA belongs to exact source inventory: '+file);
-  if(!D061_ADDED.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D061 unchanged source SHA: '+file);
+  if(!ownAdded.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D061 unchanged source SHA: '+file);
 }
 
 function historical(file,current) {
-  if(D061_ADDED.has(file))return '';
+  if(ownAdded.has(file))return '';
   const replacements = M.replacements[file]??[];
   const prior = new Map();
   for(const entry of replacements) {
@@ -61,20 +64,21 @@ function historical(file,current) {
 }
 
 export function d061HistoricalBytes(file,read=diskRead) {
-  const current=read(file),pin=M.after[file]??M.before[file];
+  const current=d062HistoricalBytes(file,read),pin=M.after[file]??M.before[file];
   assert.ok(pin,file+' belongs to D061 source inventory');
   assert.equal(sha(current),pin,file+' exact allowed source');
   return historical(file,current);
 }
 
 export function assertD061Scope(read=diskRead) {
+  assertD062Scope(read);
   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
+    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D062_ADDED.has(file)).sort();
   assert.deepEqual(files,expectedFiles,'D061 exact source inventory');
   const snapshot = new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d062HistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }

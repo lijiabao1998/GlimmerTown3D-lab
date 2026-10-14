@@ -49,12 +49,16 @@ export const LAND_OUT = {
   // 住商工庭院地坪：住宅草坪兩色、商業鋪面兩色（磚縫）、工業碎石兩色（車位線黃）、別墅草坪
   lot: { 1: [0x6a9540, 0x80aa55, 0x559540], 2: [0x808080, 0x959595, 0x6a6a6a], 3: [0x6a6a55, 0x555555, 0xbfaa40], 4: [0x559540, 0x6a9540, 0x406a2a] } as Record<number, number[]>,
 };
-const TEX = {
-  grass: LAND_OUT.grass.map(P), flower: LAND_OUT.flower.map(P), stone: LAND_OUT.stone.map(P),
-  water: LAND_OUT.water.map(P), sand: LAND_OUT.sand.map(P), road: LAND_OUT.road.map(P),
-  zone: LAND_OUT.zone.map(z => z.map(P)),
-  lot: Object.fromEntries(Object.entries(LAND_OUT.lot).map(([k, v]) => [k, v.map(P)])) as Record<string, number[]>,
-};
+// D062-BEGIN season-pal
+export const makeLandPal = (o: typeof LAND_OUT) => ({   // D062：同一套結構可以用別的輸出色表再做一份（四季的調色盤）
+  grass: o.grass.map(P), flower: o.flower.map(P), stone: o.stone.map(P),
+  water: o.water.map(P), sand: o.sand.map(P), road: o.road.map(P),
+  zone: o.zone.map(z => z.map(P)),
+  lot: Object.fromEntries(Object.entries(o.lot).map(([k, v]) => [k, v.map(P)])) as Record<string, number[]>,
+});
+export type LandPal = ReturnType<typeof makeLandPal>;
+const TEX = makeLandPal(LAND_OUT), BASE_TEX = TEX;
+// D062-END season-pal
 // 草的色階（由深到淺）：每一檔用其中一段
 const GRASS_RAMP = [0, 1, 2, 3, 4, 5];
 
@@ -76,6 +80,9 @@ export interface LandTile {
   shore: number;                                        // 水格：離岸格數 0–3（0＝貼岸）；其他格 3
   nW: number; nE: number; nN: number; nS: number;       // 四鄰地形：0 水、1 沙、2 草（地圖外當水）；N＝z−1、S＝z+1、W＝x−1、E＝x+1
   high: boolean; flowers: number; tuftU: number; tuftV: number; tuft: number;
+// D062-BEGIN season-tile-pal
+  pal?: LandPal;                                        // D062：這一格的季節調色盤（沒有＝基準，春天）
+// D062-END season-tile-pal
 }
 const terAt = (c: LandCity, x: number, z: number) => x < 0 || z < 0 || x >= c.n || z >= c.n ? 0 : c.ter[z * c.n + x] === 0 ? 0 : c.ter[z * c.n + x] === 1 ? 1 : 2;
 export function landTile(c: LandCity, x: number, z: number, S: number, level: number): LandTile {
@@ -113,7 +120,9 @@ function edgeDist(t: LandTile, u: number, v: number, want: number): number {
 
 // ---- 草 ----
 // edge＝這個像素在格子最外一排（草皮格線的位置，ground.ts 原本拿它畫格線）
-export function landGrass(t: LandTile, u: number, v: number, edge: boolean): number {
+// D062-BEGIN season-grass-sig
+export function landGrass(t: LandTile, u: number, v: number, edge: boolean, TEX: LandPal = t.pal ?? BASE_TEX): number {   // D062：參數 TEX 蓋掉模組層的 TEX（預設＝這一格的季節調色盤，沒有就是基準），函式本體逐字不變
+// D062-END season-grass-sig
   const L = t.level, S = t.S, X = t.x * S + u, Z = t.z * S + v;
   const h2 = AT(t.x, t.z, u, v, S, 61), h3 = AT(t.x, t.z, u, v, S, 67);
   const f = bil(t, u, v) + (h2 - 0.5) * (L === 1 ? 0.12 : L === 2 ? 0.12 : 0.14) + (t.high ? 0.12 : 0);
@@ -147,7 +156,9 @@ export function landGrass(t: LandTile, u: number, v: number, edge: boolean): num
 }
 
 // ---- 水 ----
-export function landWater(t: LandTile, u: number, v: number, h: number): number {
+// D062-BEGIN season-water-sig
+export function landWater(t: LandTile, u: number, v: number, h: number, TEX: LandPal = t.pal ?? BASE_TEX): number {
+// D062-END season-water-sig
   const L = t.level, S = t.S, X = t.x * S + u, Z = t.z * S + v;
   const h2 = AT(t.x, t.z, u, v, S, 61);
   let tone: number;                        // LAND_OUT.water 的索引：0 深、1 中層、2 基底、3 淺灘
@@ -172,7 +183,9 @@ export function landWater(t: LandTile, u: number, v: number, h: number): number 
 }
 
 // ---- 沙 ----
-export function landSand(t: LandTile, u: number, v: number): number {
+// D062-BEGIN season-sand-sig
+export function landSand(t: LandTile, u: number, v: number, TEX: LandPal = t.pal ?? BASE_TEX): number {
+// D062-END season-sand-sig
   const L = t.level, S = t.S;
   const h2 = AT(t.x, t.z, u, v, S, 61), h3 = AT(t.x, t.z, u, v, S, 67);
   const f = bil(t, u, v);
@@ -190,7 +203,9 @@ export function landSand(t: LandTile, u: number, v: number): number {
 // 底下仍是自然草色（草甸、草叢照常），分區用「記號」疊上去：格線（邊）用邊框色，格內用疏點（住）、橫短線（商）、斜紋（工）。
 // 整塊實心色板在 ai120 這種有大片已劃區空地的城裡太吵（試過：滿城橘色）；第二版記號佔四分之一像素、邊框八成，近景仍像一張橘網（舊畫法是柔和的淡色塊）；
 // 第三版內部記號壓到八分之一、邊框隨機三到五成，近景像隨機撒的橘色碎屑；第四版邊框改成規律的虛線，整體像刻意畫的地圖填紋。顏色與草、水、沙、路各族至少 ΔE 20。
-export function landZone(zone: number, edge: boolean, u: number, v: number, x: number, z: number, S: number, base: number, level: number): number {
+// D062-BEGIN season-zone-sig
+export function landZone(zone: number, edge: boolean, u: number, v: number, x: number, z: number, S: number, base: number, level: number, TEX: LandPal = BASE_TEX): number {
+// D062-END season-zone-sig
   const Z = TEX.zone[zone];
   if (!Z) return base;
   const X = x * S + u, Y = z * S + v, h = hash2(X, Y, 1401);
@@ -219,7 +234,9 @@ export function landCrosswalk(u: number, v: number, S: number, ns: boolean, toEn
 }
 
 // ---- 地坪（街區底下的庭院）----
-export function landLot(level: number, lot: number, u: number, v: number, x: number, z: number, S: number, edge: boolean, legacy: number): number {
+// D062-BEGIN season-lot-sig
+export function landLot(level: number, lot: number, u: number, v: number, x: number, z: number, S: number, edge: boolean, legacy: number, TEX: LandPal = BASE_TEX): number {
+// D062-END season-lot-sig
   const T = TEX.lot[lot];
   if (!T) return legacy;
   const h = AT(x, z, u, v, S, 61);

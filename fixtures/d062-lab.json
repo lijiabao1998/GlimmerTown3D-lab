@@ -1,0 +1,190 @@
+{
+ "source": {
+  "repo": "lijiabao1998/GlimmerTown-lab",
+  "commit": "d23c18d8e24ecb1f7b9223907484729eebe9b3a0",
+  "file": "index.html",
+  "tool": "tools/lab-seasons.mjs"
+ },
+ "pieces": [
+  {
+   "kind": "decl",
+   "name": "inWinter",
+   "anchors": {
+    "start": "const inWinter="
+   },
+   "line": 38119,
+   "endLine": 38119,
+   "sha": "663ef679673a3b3d5e71943e2a515d38fc3c6675975178487914052e651cb455"
+  },
+  {
+   "kind": "decl",
+   "name": "season",
+   "anchors": {
+    "start": "const season="
+   },
+   "line": 38125,
+   "endLine": 38125,
+   "sha": "340763186c03daf6b64482ff45b7819028d83d9554a640f513472ccd1da6efa3"
+  },
+  {
+   "kind": "span",
+   "name": "遠景實色地面依季（T136）",
+   "anchors": {
+    "start": "gc.fillStyle= t.t===0?'#3671b6'",
+    "end": "(t.el?'#8aba58':'#74b258')"
+   },
+   "line": 60449,
+   "endLine": 60449,
+   "sha": "2766a3ba085a0ecb6bae3158620334d27fe539181eff8f7e6ded056ab39ce6aa"
+  },
+  {
+   "kind": "span",
+   "name": "夏秋疊色（T136：草 grassS/A、樹 treeS/A）",
+   "anchors": {
+    "start": "/* ===== T136 真四季循環：夏／秋地面色與樹色調",
+    "end": "SPR.treeA=SPR.tree.map(t=>({img:tintCanvas(t.img,40,48,'#c96a2c',.38)"
+   },
+   "line": 45091,
+   "endLine": 45108,
+   "sha": "4e943a8a0046622516fcc2a56ba961a986bc5d3fb13051e8615b02af6c2a8874"
+  },
+  {
+   "kind": "span",
+   "name": "冬天樹冠積雪（SPR.treeW 前四款）",
+   "anchors": {
+    "start": "SPR.treeW=[];",
+    "end": "/* ---------- 冬季公園（雪地／雪樹／結冰池塘） ---------- */"
+   },
+   "line": 40917,
+   "endLine": 40952,
+   "sha": "db6e9a0504d8b6d6ca0dd59495b1ddccdafdaac7f10e74e16b302eef55e6263d"
+  },
+  {
+   "kind": "span",
+   "name": "秋季落葉色（T249）",
+   "anchors": {
+    "start": "const LC=['#d8722c','#c0402a','#e0a030','#b06020','#d89040'];",
+    "end": "ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(lx,ly,lw,1.6*z,spin,0,6.283);ctx.fill();"
+   },
+   "line": 61445,
+   "endLine": 61449,
+   "sha": "39176ed06c7e343c2aea88dc2a3ed832a16f7d051698b78993771d7727cf4ac2"
+  },
+  {
+   "kind": "span",
+   "name": "櫻花道（春、非冬、路邊 1 格內的樹）",
+   "anchors": {
+    "start": "if(sea===0&&!win&&SPR.treeSakura&&!window.__noSakura&&hasRoadNear(o.x,o.y,1)",
+    "end": "SPR.treeSakura[(t.tree-1)%SPR.treeSakura.length]"
+   },
+   "line": 61414,
+   "endLine": 61414,
+   "sha": "3e1ed239cc00797ecc8e855b53b8c72f197c72032f81a90ac15274bfaf5cf870"
+  },
+  {
+   "kind": "span",
+   "name": "夏／秋水色（T187）",
+   "anchors": {
+    "start": "}else if(t.t===0&&(sea===1||sea===2)&&!window.__noSeaCol){",
+    "end": "gc.fillStyle= sea===1?'rgba(46,178,168,0.11)':'rgba(96,110,124,0.13)';"
+   },
+   "line": 60481,
+   "endLine": 60482,
+   "sha": "3d200b5874a0769b1058471d552f49e89921906dabea7868fa7ed96c71489421"
+  },
+  {
+   "kind": "span",
+   "name": "天氣狀態機（每天遞減、歸零擲骰、彩虹旗標、閃電旗標）",
+   "anchors": {
+    "start": "if(--wxT<=0){",
+    "end": "if(weather===2&&!inWinter()&&R()<.25){flashT=.4;sThunder();}"
+   },
+   "line": 54964,
+   "endLine": 54975,
+   "sha": "02f9d806b25cbda62e665c70043d0416bddff20a21f23ba416ffc907fa3be420"
+  },
+  {
+   "kind": "fn",
+   "name": "updRain",
+   "anchors": {
+    "start": "function updRain(",
+    "closure": "balanced-brace"
+   },
+   "line": 57264,
+   "endLine": 57278,
+   "sha": "c19f59b932ab9337b51fbb34177d8f404ea66d7bfcc51bf9b37690b7ddfdc7ed"
+  },
+  {
+   "kind": "fn",
+   "name": "drawRain",
+   "anchors": {
+    "start": "function drawRain(",
+    "closure": "balanced-brace"
+   },
+   "line": 57279,
+   "endLine": 57292,
+   "sha": "6bc45734fba86b2b7bae5a4c0d5d5fb8f2d46253e375fa7cf0660b997ef75ac6"
+  },
+  {
+   "kind": "span",
+   "name": "天氣色調（全畫面，含天空）",
+   "anchors": {
+    "start": "// ---- 天氣色調（雨天壓暗，晝夜 multiply 之前疊加；T17）----",
+    "end": "if(b>.5&&weather===0&&!lodMini&&!window.__noCloud){"
+   },
+   "line": 62168,
+   "endLine": 62172,
+   "sha": "416c5d375a4bbf7d9a9bbf509bc6f70e0fb2210da5bfc89741909b4aa89ac41b"
+  },
+  {
+   "kind": "span",
+   "name": "雨雪粒子的繪製呼叫（遠景不畫）",
+   "anchors": {
+    "start": "if(weather&&!lodFar)drawRain(z);",
+    "end": "if(weather&&!lodFar)drawRain(z);"
+   },
+   "line": 62514,
+   "endLine": 62514,
+   "sha": "ca3013527aab241752ff56fda392506a297e496be3a23274b012b97492962270"
+  },
+  {
+   "kind": "span",
+   "name": "雨後彩虹（T248）",
+   "anchors": {
+    "start": "if(rainbowT>0){ // T248 雨後彩虹",
+    "end": "rainbowT=Math.max(0,rainbowT-dt);"
+   },
+   "line": 60351,
+   "endLine": 60359,
+   "sha": "d3d0b75338a76297946359fc1f6e21fde474427522a4bb1b4f96905e9020f0fd"
+  },
+  {
+   "kind": "span",
+   "name": "閃電閃光（含電光線形）",
+   "anchors": {
+    "start": "if(flashT>0){\n    const flashA=Math.min(.85,flashT*2);",
+    "end": "flashT=Math.max(0,flashT-dt);"
+   },
+   "line": 62516,
+   "endLine": 62541,
+   "sha": "e63e02d41722d4233149de9cfe5cb08ca1ce4dc73f85e8ae449d2b10db1d3234"
+  }
+ ],
+ "text": {
+  "inWinter": "const inWinter=()=>((day-1)%360)>=300; // 冬季（T18）：每年第 300-360 天；由 day 導出，不進存檔",
+  "season": "const season=()=>{const doy=(day-1)%360;return doy>=300?3:doy>=200?2:doy>=100?1:0;};",
+  "lodGround": "        gc.fillStyle= t.t===0?'#3671b6' : t.t===1?(win?'#e4e2d8':'#d9c689') : (win?'#e8eef2':sea===1?'#8fce5e':sea===2?'#b8935a':(t.el?'#8aba58':'#74b258')); // T136：LOD 遠景實色地面依季，春季（sea===0）與改動前同一分支表達式",
+  "seasonTints": "  /* ===== T136 真四季循環：夏／秋地面色與樹色調，置於 buildSprites 絕對尾端（接在 T128 detailPass 之後）。\n     春（season()===0）沿用既有 SPR.grass/SPR.tree、冬沿用既有 SPR.grassW/SPR.treeW，兩者原有生成與亂數消耗序完全不動；\n     本區塊純由既有已完工的 SPR.grass（4 變體）/SPR.tree（含 T104 擴充後 7 款）逐張以 tintCanvas 疊加半透明色調衍生\n     SPR.grassS/grassA（長度 4）與 SPR.treeS/treeA（長度 7），陣列長度與日/冬版一致（冬季鐵律：季節切換陣列長度一致、不越界）；\n     tintCanvas 用 source-atop 只在既有不透明像素上疊色，不影響剪影／輪廓，且不呼叫 rand()，故對其後（已無其後）任何生成序零位移 ===== */\n  {\n    const tintCanvas=(src,w,h,col,a)=>{\n      const[c,g]=cv(w,h);\n      g.drawImage(src,0,0);\n      g.globalCompositeOperation='source-atop';\n      g.globalAlpha=a;g.fillStyle=col;g.fillRect(0,0,w,h);\n      g.globalAlpha=1;g.globalCompositeOperation='source-over';\n      return c;\n    };\n    SPR.grassS=SPR.grass.map(c=>tintCanvas(c,64,32,'#a8e070',.25));  // 夏：疊加嫩黃綠，草地更飽和茂盛\n    SPR.grassA=SPR.grass.map(c=>tintCanvas(c,64,32,'#b8863a',.42));  // 秋：疊加土黃橙，草地轉枯黃\n    SPR.treeS=SPR.tree.map(t=>({img:tintCanvas(t.img,40,48,'#a8e070',.18),ax:t.ax,ay:t.ay,w:t.w,h:t.h})); // 夏：樹冠偏濃綠\n    SPR.treeA=SPR.tree.map(t=>({img:tintCanvas(t.img,40,48,'#c96a2c',.38),ax:t.ax,ay:t.ay,w:t.w,h:t.h})); // 秋：樹冠偏暖橙",
+  "treeSnow": "  SPR.treeW=[];\n  for(let v=0;v<4;v++){\n    const[c,g]=cv(40,48),[s,sg]=cv(40,48);\n    dia(g,20,36,10,'rgba(90,110,140,.20)');             // 落影（雪地偏冷）\n    if(v===2){                                          // 松樹：每層頂 2 行雪白\n      sg.fillStyle='#6b4a2f';sg.fillRect(19,34,3,8);\n      sg.fillStyle='#57402a';sg.fillRect(21,34,1,8);\n      const tc=['#2f6b3f','#3a7d4b'];\n      for(let t=3;t>=0;t--){\n        const w=6+t*6,x=20-(w>>1),y=8+t*7;\n        sg.fillStyle=tc[t%2];sg.fillRect(x,y,w,7);\n        sg.fillStyle='#eef4f8';sg.fillRect(x,y,w,2);\n      }\n      sg.fillStyle='#eef4f8';sg.fillRect(18,4,5,3);sg.fillStyle='#2f6b3f';sg.fillRect(18,7,5,2);\n    }else if(v===3){                                    // 灌木叢：頂部積雪\n      sg.fillStyle='#3d7a3c';sg.fillRect(8,26,14,10);sg.fillRect(20,29,12,8);\n      sg.fillStyle='#4b8f45';sg.fillRect(9,24,11,7);sg.fillRect(21,27,9,6);\n      sg.fillStyle='#63ad55';sg.fillRect(11,25,6,4);sg.fillRect(23,28,5,3);\n      sg.fillStyle='#eef4f8';sg.fillRect(9,24,11,2);sg.fillRect(21,27,9,2);\n      sg.fillStyle='#ffffff';sg.fillRect(9,24,11,1);sg.fillRect(21,27,9,1);\n      sg.fillStyle='#2e5f2f';sg.fillRect(8,34,24,2);\n    }else{                                              // 闊葉樹：樹冠頂 40% 雪簷\n      const base=v?'#38713a':'#3d7a3c', mid=v?'#468747':'#4b8f45';\n      sg.fillStyle='#6b4a2f';sg.fillRect(18,30,4,11);\n      sg.fillStyle='#57402a';sg.fillRect(20,30,2,11);\n      sg.fillStyle=base;sg.fillRect(10,8,20,16);sg.fillRect(8,12,24,10);\n      sg.fillStyle=mid;sg.fillRect(12,6,16,8);sg.fillRect(13,7,14,13);\n      sg.fillStyle='#63ad55';sg.fillRect(14,7,10,7);\n      sg.fillStyle='#eef4f8';sg.fillRect(10,8,20,5);sg.fillRect(12,6,16,3);sg.fillRect(8,12,24,2);\n      sg.fillStyle='#ffffff';sg.fillRect(10,13,20,1);sg.fillRect(8,14,24,1);\n      sg.fillStyle='#2e5f2f';sg.fillRect(10,22,20,2);sg.fillRect(12,24,16,1);\n    }\n    outlineSprite(s,24,40,28);\n    g.drawImage(s,0,0);\n    SPR.treeW.push({img:c,ax:20,ay:45,w:40,h:48});\n  }",
+  "leafColours": "        const LC=['#d8722c','#c0402a','#e0a030','#b06020','#d89040'];\n        for(let lf=0;lf<3;lf++){\n          const ph=streetHash(o.x,o.y,781+lf), col=LC[Math.floor(ph*331)%LC.length], t2=(visT*.35+ph*3)%1;\n          const lx=o.sx+(10+ph*40)*z+Math.sin(visT*1.6+ph*10+t2*6)*7*z+lw443*9*z, ly=o.sy+(-4+t2*42)*z, spin=visT*3+ph*6.283, lw=(1.2+Math.abs(Math.sin(spin))*.9)*z;\n          ctx.fillStyle=col;ctx.beginPath();ctx.ellipse(lx,ly,lw,1.6*z,spin,0,6.283);ctx.fill();",
+  "sakura": "      if(sea===0&&!win&&SPR.treeSakura&&!window.__noSakura&&hasRoadNear(o.x,o.y,1)&&SPR.treeSakura.length)s=SPR.treeSakura[(t.tree-1)%SPR.treeSakura.length]; // T368d 櫻花道；T507 依實際長度安全取樣",
+  "seaWater": "        }else if(t.t===0&&(sea===1||sea===2)&&!window.__noSeaCol){ // T187 夏/秋水色（Opus 親手）——補齊季節調色一致性：草地(grassS/A)、樹木(treeS/A)皆有四季色，唯水面除冬季冰面外全年同藍。非冬水格依季疊薄色：夏(sea1)偏暖綠松、秋(sea2)偏冷灰（春為基準不疊）；併入 groundCache（季節為既有快取鍵，零每幀成本）；純疊色不消耗 R()，__noSeaCol 開關供回歸\n          gc.fillStyle= sea===1?'rgba(46,178,168,0.11)':'rgba(96,110,124,0.13)';",
+  "weatherMachine": "  if(--wxT<=0){\n    if(weather===0){if(R()<.12){weather=1;wxT=3+ri(6);}else wxT=3+ri(5);}\n    else if(weather===1){\n      if(R()<.20){weather=2;wxT=1+ri(2);}\n      else if(R()<.35){weather=0;wxT=4+ri(6);if(!inWinter())rainbowT=9;} // T248：雨→晴且非冬＝彩虹\n      else wxT=2+ri(3);\n    }else{\n      if(R()<.35){weather=0;wxT=4+ri(6);if(!inWinter())rainbowT=9;} // T248：暴雨→晴且非冬＝彩虹\n      else{weather=1;wxT=2+ri(4);}\n    }\n  }\n  if(weather===2&&!inWinter()&&R()<.25){flashT=.4;sThunder();} // 冬季不觸發閃電（T18）",
+  "updRain": "function updRain(dt){\n  if(!weather){if(rain.length)rain.length=0;return;}\n  const win=inWinter();                       // 冬季：雪花直落＋隨 visT 微擺；非冬季：斜雨（T18）\n  const cap=Math.floor((weather===2?240:120)*(quality===0?.5:quality===2?1.4:1)); // T97：雨/雪粒子上限依效能檔縮放\n  const f=dt*60;                              // 以 60fps 為基準的幀係數（後備迴圈 dt 大時等比加速）\n  const vy=(win?6:14)*cam.z*f;\n  while(rain.length<cap)rain.push({x:Math.random()*(W+240)-40,y:Math.random()*H});\n  if(rain.length>cap)rain.length=cap;         // 暴雨轉小雨→截斷\n  for(const p of rain){\n    const ww443=screenWorld443(p.x,p.y),lw443=inMap(ww443[0],ww443[1])?localWind443(ww443[0],ww443[1]):windX441;\n    const vx443=((win?Math.sin(visT*.8)*1.4:-1.2)+lw443*(win?2.2:4.2))*cam.z*f; /* T443：雨雪按所在城市格讀局部風；地圖外仍吃 T441 全局風 */\n    p.x+=vx443;p.y+=vy;\n    if(p.y>H||p.x<-40||p.x>W+200){p.x=Math.random()*(W+240)-40;p.y=-Math.random()*40;} // T443：強順風可向右出界，同樣回收\n  }\n}",
+  "drawRain": "function drawRain(z){\n  if(inWinter()){                             // 冬季雪花：2×2 白點（T18）\n    const s=Math.max(2,Math.round(2*z));\n    ctx.fillStyle='rgba(255,255,255,.85)';\n    for(const p of rain)ctx.fillRect(p.x,p.y,s,s);\n    return;\n  }\n  const w=z,L=Math.max(2,Math.round(2*z));\n  ctx.fillStyle='rgba(200,220,255,.5)';\n  for(const p of rain){                       // 2 段偏轉 fillRect＝斜向雨絲（配合 vx<0,vy>0）\n    ctx.fillRect(p.x,p.y,w,L);\n    ctx.fillRect(p.x-w,p.y+L,w,L);\n  }\n}",
+  "weatherTint": "  // ---- 天氣色調（雨天壓暗，晝夜 multiply 之前疊加；T17）----\n  if(weather){\n    ctx.fillStyle=win?'rgba(200,210,230,.14)':weather===2?'rgba(70,90,120,.3)':'rgba(70,90,120,.18)'; // 冬季雪天色調（T18）\n    ctx.fillRect(0,0,W,H);\n  }",
+  "rainCall": "  if(weather&&!lodFar)drawRain(z); // T107：z<1 不畫雨雪個體，全屏色調已由前段天氣色調段落涵蓋",
+  "rainbowDraw": "  if(rainbowT>0){ // T248 雨後彩虹（Opus 親手，天氣多樣化）——雨/暴雨轉晴且非冬時，天空出現七色彩虹弧，隨 rainbowT 淡出；圓心置螢幕下方＝弧橫跨上方天空(下緣被地形覆蓋＝從地平線起拱)，'lighter' 疊加於淺藍天；純渲染計時 dt 遞減(不進存檔、newWorld/load 重置)、weather!==0(再下雨)/遠景不繪、__noRainbow 開關\n    if(weather===0&&cam.z>=.5&&!window.__noRainbow){\n      const ra=clamp(rainbowT/9,0,1)*.46, RB=['#e0504a','#e8934a','#e8d24a','#54b858','#4a90d8','#5a5ac8','#9a54c8'];\n      const rcx=W*.5, rcy=H*1.08, rout=H*.92, lw=Math.max(2,H*.011);\n      ctx.save();ctx.globalAlpha=ra;ctx.lineWidth=lw; // source-over：半透明色帶顯真色（'lighter' 會把暖帶疊在藍天上洗白，同 T195/T207 飽和教訓）\n      for(let i=0;i<7;i++){ctx.strokeStyle=RB[i];ctx.beginPath();ctx.arc(rcx,rcy,Math.max(1,rout-i*lw),Math.PI*1.16,Math.PI*1.84);ctx.stroke();}\n      ctx.restore();\n    }\n    rainbowT=Math.max(0,rainbowT-dt);",
+  "flashDraw": "  if(flashT>0){\n    const flashA=Math.min(.85,flashT*2);\n    ctx.fillStyle=`rgba(255,255,255,${flashA.toFixed(3)})`;\n    ctx.fillRect(0,0,W,H);\n    if(fxOn&&wxUp){ // T154：沿用 T149 光影層 'lighter' 疊加手法，閃電瞬間額外疊一層暖白全域補光（一幀高亮，隨 flashT 同步衰減）；fxOn／wxUp 任一為假（z<0.5／quality===0／__noLight／__noWx）時維持改動前純白閃光，退回既有簡單版本\n      ctx.save();\n      ctx.globalCompositeOperation='lighter';\n      ctx.fillStyle=`rgba(255,250,225,${(flashA*.45).toFixed(3)})`;\n      ctx.fillRect(0,0,W,H);\n      ctx.restore();\n    }\n    if(flashT>.15&&!lodMini&&!window.__noBolt){ // T195 分岔閃電線形（Opus 親手，審計缺口）——原僅全屏白閃無電光形狀。flashT 高時畫螢幕空間鋸齒主幹+1 分岔電光，路徑由 streetHash(day) 決定性(同日同一形狀、隨 flashT 淡出)；'lighter' 藍白疊加+粗淡光暈；純幾何不消耗 R()、不改模擬。__noBolt 開關、遠景不繪\n      const sd=day, boltA=Math.min(1,(flashT-.15)*3.2);\n      let cx2=(.24+streetHash(sd,1,880)*.52)*W, cy2=0; const pts=[[cx2,cy2]];\n      for(let s=1;s<=7;s++){cx2+=(streetHash(sd,s,881)-.5)*W*.14;cy2=(s/7)*H*.74;pts.push([cx2,cy2]);}\n      const bi=3+Math.floor(streetHash(sd,0,882)*2); let fx=pts[bi][0],fy=pts[bi][1]; const fpts=[[fx,fy]];\n      for(let s=1;s<=3;s++){fx+=(streetHash(sd,s,883)-.32)*W*.11;fy+=H*.11;fpts.push([fx,fy]);}\n      const stroke=(ps,lw,col)=>{ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.beginPath();ctx.moveTo(ps[0][0],ps[0][1]);for(let k=1;k<ps.length;k++)ctx.lineTo(ps[k][0],ps[k][1]);ctx.stroke();};\n      ctx.save();ctx.lineCap='round';ctx.lineJoin='round'; // source-over：白閃已飽和至 255，電光以實色藍白覆蓋才可見（藍白色亦符合真實閃電通道）\n      stroke(pts,Math.max(5,8*z),`rgba(120,165,240,${(boltA*.5).toFixed(3)})`);  // 主幹光暈（偏藍）\n      stroke(fpts,Math.max(3,5*z),`rgba(120,165,240,${(boltA*.42).toFixed(3)})`); // 分岔光暈\n      stroke(pts,Math.max(1.6,2.4*z),`rgba(170,205,255,${boltA.toFixed(3)})`);    // 主幹芯（藍白）\n      stroke(fpts,Math.max(1.2,1.8*z),`rgba(170,205,255,${(boltA*.9).toFixed(3)})`); // 分岔芯\n      ctx.restore();\n    }\n    flashT=Math.max(0,flashT-dt);"
+ }
+}

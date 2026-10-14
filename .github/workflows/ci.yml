@@ -158,8 +158,30 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  d062:
+    runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D062 seasons, same-world photography in ten states over six views, and the production clock through the spring-to-summer window
+        run: node tools/d062-capture.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d062-preview-${{ github.sha }}
+          path: scratch/d062/
+          if-no-files-found: error
+          retention-days: 14
+
   pages:
-    needs: [smoke, d055, d059, d060, d061]
+    needs: [smoke, d055, d059, d060, d061, d062]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:

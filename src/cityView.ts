@@ -53,6 +53,9 @@ import { Pipeline } from './render/post.ts';
 // D061-BEGIN land-view-import
 import { landLevelOf, LAND_SKY } from './render/landArt.ts';
 // D061-END land-view-import
+// D062-BEGIN season-view-import
+import { seasonOptionOf } from './render/seasonArt.ts';
+// D062-END season-view-import
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
 import { ARCHE } from './content/arche.ts';
@@ -147,6 +150,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D061-BEGIN land-level
   const landLevel = landLevelOf(k => q.get(k));   // 地景檔位 0–3（旗標規則在 src/render/landArt.ts，Node 守衛直接測）
 // D061-END land-level
+// D062-BEGIN season-option
+  const seasonOpt = seasonOptionOf(k => q.get(k), landLevel);   // D062 四季：?season=auto|off|0|1|2|3、?seasonStyle=bold|soft、?seasonDay=N（規則在 src/render/seasonArt.ts，Node 守衛直接測）；地景關閉時一律關
+// D062-END season-option
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
@@ -154,7 +160,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D059-BEGIN village-enabled
 // D060-BEGIN industry-enabled
 // D061-BEGIN land-enabled
-    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D062-BEGIN season-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf, season: seasonOpt };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D062-END season-enabled
 // D061-END land-enabled
 // D060-END industry-enabled
 // D059-END village-enabled
@@ -227,6 +235,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     siteInfo = built.setSites(siteSpecs(city, con, built.con.blockOf, builtDay, (k, lv, v) => KINDS.height(k, lv, v)), i => con!.siteAge(i), !!sim) ?? siteInfo;
     timing.sites = performance.now() - t0;
     built.setTraffic(trafficOver());                                    // D027：過載的道路每天在變，貼圖就地只重畫等級變了的格
+// D062-BEGIN season-sync
+    built.setSeason(city.day);                                          // D062：換日時季節就地更新（只重畫季節索引變了的格與樹；下面的 invalidate 會重畫畫面）
+// D062-END season-sync
     syncHaz();
     invalidate();
   }

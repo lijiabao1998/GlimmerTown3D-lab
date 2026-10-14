@@ -1,0 +1,287 @@
+{
+ "baseline": "36e6935f4b28a8d5af59c964b91428c10a6882ba",
+ "levels": {
+  "1": {
+   "grounds": {
+    "newcity:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "7910a612a44680d613575bc70344d8f8a672fff2e9b723077fd9716360e21bae"
+    },
+    "newcity:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "7910a612a44680d613575bc70344d8f8a672fff2e9b723077fd9716360e21bae"
+    },
+    "seed516:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "bc6b101ed6ec23ee440e81070ae79002078eeb2224f145608254f443cfaedc8d"
+    },
+    "seed516:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "8d9970f20a681cfeade0217d6736331a6c9e6d3dbe5411bb0570c9cc22e57baf"
+    },
+    "ai120:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "d7ee704d5f995bc8504057dbd93ba7dabb9d2acf54adf7553f800922f5279afd"
+    },
+    "ai120:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "4580cd6523fd311a37759426f9cc290d3614949729027c0b633d191e98677835"
+    },
+    "starter:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "04c33f2f08c7b27164236cd1d2573f705606781f4edf02e8ecb1c8f6b7e9ad1e"
+    },
+    "starter:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "46521e8fd7fff96dbaa08d4f077d74307fcc225207be7a49af3150a3558b3772"
+    },
+    "zoned": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "95202666ec11a6dbc8bebce5f891b4155dff45ef52ebf9489a73a5d7498c8ba5"
+    }
+   },
+   "scenes": {
+    "seed516": {
+     "a": {
+      "signature": "0fad7ce09097596abe4283892c2e525592e43ed4317d30db208e07a9270bdccf",
+      "weighted": 121606,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "11396c5e84ffa4d0a19e1a366ffa899318e3a2f3da7dd7bd691244d10bf22b0d",
+      "weighted": 86156,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "bb8a4b95f2b88cf06fa5e48de158f39bd42ea20cc20bfb0074549e1969e1540c",
+      "weighted": 116227,
+      "meshes": 10
+     }
+    },
+    "ai120": {
+     "a": {
+      "signature": "9fbde0211adf779e6faecc8a0f7c65a845b5cdc6a881c9ce47fda0576af85735",
+      "weighted": 92942,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "2ffdb7777515da02afb84dddfaee8cbf7415ad1c0fcc190f680b05051fa7d096",
+      "weighted": 87611,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "93ad042b5c40bdd53a46604a15c3bd93d564a22e73b005722b1c937cf9959d13",
+      "weighted": 96607,
+      "meshes": 10
+     }
+    }
+   }
+  },
+  "2": {
+   "grounds": {
+    "newcity:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "25968df13c804f36d81082a3b6691fe31f80cec8efa6e244850d4cfae1a25795"
+    },
+    "newcity:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "25968df13c804f36d81082a3b6691fe31f80cec8efa6e244850d4cfae1a25795"
+    },
+    "seed516:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "c91112d19d25278f473e8151a3822d03bc2a0b30325410e7bd842b681d8a0a68"
+    },
+    "seed516:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "e9bfe4612860d7b8d89457c5c4e88757d938ce54256f9dcc7aa08e2b4b5d11de"
+    },
+    "ai120:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "404008d16a3532d5669497ffff2457ef4219b49de05ef601d6d428c93a1955ba"
+    },
+    "ai120:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "c5906a0921197c81e90c1aae5d0c382e728638a92f6dd5a9d1972e2eb59cef83"
+    },
+    "starter:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "e015c3b388a29cab0c60ceb17765a222763939f5072681b4bed5986cdf14b740"
+    },
+    "starter:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "4f874d09fea35237b6331b683136cf11f3e3b97fea098a9da10b6c5d85f4d58e"
+    },
+    "zoned": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "2491e35a4500f1b3511a8880308565d7574f5ebf4ae669e57a023d0f6aa7c6c0"
+    }
+   },
+   "scenes": {
+    "seed516": {
+     "a": {
+      "signature": "85eb8ce384f87ab906b9c4e745dab3a66524935cf3b18ac1f6bd93de486d0280",
+      "weighted": 121606,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "e2125057ccb3d1f1857254a9ed3f689abd78e42b7503c637144a139d6c737b08",
+      "weighted": 86156,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "67cc24779d75b62ecf9c51c8e4f9cca0dd94939b4bf369a6b6d7b9e2bf9953b7",
+      "weighted": 116227,
+      "meshes": 10
+     }
+    },
+    "ai120": {
+     "a": {
+      "signature": "b09bab9a0f2f265c64d435efbf4a09e770dc4189a91ae9189c8e6993309455e3",
+      "weighted": 92942,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "230d4820a987fb510de259b3d7520a955576b953f72d680ebb034035b1b7a2c4",
+      "weighted": 87611,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "b1db72fbb3fe46af0ed015759129e7ba51cecea9aa206b5c4678318525755a1d",
+      "weighted": 96607,
+      "meshes": 10
+     }
+    }
+   }
+  },
+  "3": {
+   "grounds": {
+    "newcity:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "d0602102a227fbac1e3128756c5926a63969d05fd17bdd7c0eabf9a888f7c718"
+    },
+    "newcity:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "d0602102a227fbac1e3128756c5926a63969d05fd17bdd7c0eabf9a888f7c718"
+    },
+    "seed516:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "c797cb7e82204e7e907a1e6a64bba6ba7c181c8230b4d7b0e94814223e82b40b"
+    },
+    "seed516:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "b8ab1c9c0c6557e7f8ffaebb6d4dd19ddf13d7dfa6d519abbc54cdafab03fe6f"
+    },
+    "ai120:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "7ae2406cd1995b982021e4a39f641c903007027a41490d70e97a43fb80caae41"
+    },
+    "ai120:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "ee86aad93d65061caf14641067c396b81a9695e1deb83019c948b51e943ec753"
+    },
+    "starter:lots": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "026bc716ebf1d30308041052249bc54ea4a531c6eccd29be77884b4294319982"
+    },
+    "starter:plain": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "61130e24f9f2078b71e921264484bb191cc816fadeaf4d4f8f831a117e6ad422"
+    },
+    "zoned": {
+     "n": 72,
+     "S": 8,
+     "bytes": 1327104,
+     "sha": "1578937805f2ab9b13e2b6c6b35f2898ce40c9cf0823d262222430c2bb393298"
+    }
+   },
+   "scenes": {
+    "seed516": {
+     "a": {
+      "signature": "ba4a1d815b72ead293cc30f54d506ba848d83b9d1ce90218ce9d82b00b90f148",
+      "weighted": 121606,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "be4d34f0e5661500085dd77552d92a697c57abad5e89ed6495bffe1a299c091e",
+      "weighted": 86156,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "beaa0b3c04370415a764d9dad8842224ecb8682a9bc65ea90445ff6dc4d8f925",
+      "weighted": 116227,
+      "meshes": 10
+     }
+    },
+    "ai120": {
+     "a": {
+      "signature": "68b25827c863b569582c66ed4fb2a2f3337f842000f053055d0c997fa378dcd7",
+      "weighted": 92942,
+      "meshes": 10
+     },
+     "b": {
+      "signature": "95fd2630640aee97192d12608b747273c1258ba7db107a3cf146fdb6bb80fbca",
+      "weighted": 87611,
+      "meshes": 10
+     },
+     "c": {
+      "signature": "0c54e8fe5e33c8ab73a6d9b14b9f3fedd135395499ddccc33f250b71e045161d",
+      "weighted": 96607,
+      "meshes": 10
+     }
+    }
+   }
+  }
+ }
+}

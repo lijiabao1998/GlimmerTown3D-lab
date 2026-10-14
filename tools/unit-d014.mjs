@@ -222,7 +222,7 @@ async function guards(log) {
     // 注入錯誤：鍵少了「四鄰有沒有路」（在記憶體裡另載 ground.ts）→ 旁邊鋪路時人行道不更新，增量要跟整張對不上
     {
       const { stripTypeScriptTypes } = await import('node:module'), { pathToFileURL } = await import('node:url');
-      const src = read('src/render/ground.ts'), mutated = src.replace(' | (nb << 21)', '').replace("from '../sim/rng.ts'", `from '${pathToFileURL(path.join(ROOT, 'src/sim/rng.ts')).href}'`).replace("from './landArt.ts'", `from '${pathToFileURL(path.join(ROOT, 'src/render/landArt.ts')).href}'`);   // D061：ground.ts 多了一條 import（地景調色盤），從 data: 網址載入的副本要改成檔案網址才解得開
+      const src = read('src/render/ground.ts'), mutated = src.replace(' | (nb << 21)', '').replace("from '../sim/rng.ts'", `from '${pathToFileURL(path.join(ROOT, 'src/sim/rng.ts')).href}'`).replace("from './landArt.ts'", `from '${pathToFileURL(path.join(ROOT, 'src/render/landArt.ts')).href}'`).replace("from './seasonArt.ts'", `from '${pathToFileURL(path.join(ROOT, 'src/render/seasonArt.ts')).href}'`);   // D061：ground.ts 多了一條 import（地景調色盤），從 data: 網址載入的副本要改成檔案網址才解得開；D062 又多一條（四季調色盤）
       const M = await import('data:text/javascript;base64,' + Buffer.from(stripTypeScriptTypes(mutated)).toString('base64'));
       const code = read('src/content/samples/seed516.code.txt').trim(), c = cityFromLab(decodeLabCode(code).save, KT, code), n = c.n;
       // 挑一格空地、右邊是一般道路：在它上面鋪路，右邊那格路朝它那一側的人行道要拿掉（只有四鄰鍵量得到）

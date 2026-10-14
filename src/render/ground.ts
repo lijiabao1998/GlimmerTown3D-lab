@@ -6,6 +6,9 @@ import { hash2 } from '../sim/rng.ts';
 import { landTile, landGrass, landWater, landSand, landZone, landRoad, landCrosswalk, landLot, LAND_MAX } from './landArt.ts';
 const landOf = (c: { land?: number }) => Math.max(0, Math.min(LAND_MAX, Math.floor(c.land ?? 0))) | 0;   // 檔位只認 0–3；不合法的當 0
 // D061-END land-import
+// D062-BEGIN season-import
+import { seasonAt, seasonPalAt, type SeasonSetup } from './seasonArt.ts';
+// D062-END season-import
 
 export const GROUND = {
   grass: [0x74b258, 0x73a959, 0x78aa59, 0x74ae59, 0x75ab5a],
@@ -44,6 +47,9 @@ export interface GroundCity {
 // D061-BEGIN land-city
   land?: number;   // D061 地景檔位 1–3（沒有或 0＝舊畫法，逐位元組同 D060；渲染層的輸入，不是世界狀態）
 // D061-END land-city
+// D062-BEGIN season-city
+  season?: SeasonSetup;   // D062 這一幀的季節（由 day 算出；沒有＝不畫季節，逐位元組同 D061；渲染層的輸入，不是世界狀態）
+// D062-END season-city
 }
 // D019：配水管的接頭（實驗線 recalcLocalWaterMask475 50925：上 1、右 2、下 4、左 8）。建築、路、鐵路、電車底下的不畫：實驗線先畫水管再畫路（60562→60563），被蓋住；回 −1＝這一格不畫水管
 const pipeMask = (c: GroundCity, x: number, z: number) => {
@@ -69,6 +75,15 @@ function crosswalkEnds(c: GroundCity, x: number, z: number): [boolean, boolean] 
 const crosswalkBits = (c: GroundCity, x: number, z: number) => { const [a, b] = crosswalkEnds(c, x, z); return (a ? 1 : 0) | (b ? 2 : 0); };
 
 // D061-END land-crosswalk
+// D062-BEGIN season-key
+// D062 四季：這一格的季節索引＋1，進增量重畫的鍵（換季才知道要重畫哪幾格）。0＝季節關閉，或這一格不吃季節（道路、鐵路、碼頭的柏油與鐵軌不隨季節變）
+const seasonKey = (c: GroundCity, x: number, z: number): number => {
+  if (!c.season || !landOf(c)) return 0;
+  const i = z * c.n + x;
+  return c.road[i] || c.rail[i] || c.dock[i] ? 0 : seasonAt(x, z, c.season.view) + 1;
+};
+const seaSig = (c: GroundCity): string => c.season && landOf(c) ? (c.season.soft ? 'soft' : 'bold') : '';   // 風格（全季／柔）變了，快取一定整張重畫
+// D062-END season-key
 const mix = (a: number, b: number, t: number) => {
   const ch = (sh: number) => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t);
   return (ch(16) << 16) | (ch(8) << 8) | ch(0);
@@ -89,44 +104,62 @@ export function paintGround(c: GroundCity, cat: (k: number) => string, S: number
 // D014 增量重畫：每一格的輸入（路、等級、鐵路、碼頭、電車、地形、高地、分區、建築分類、地坪、非住商工地坪、四鄰有沒有路）壓成兩個整數；
 // 跟上一次一樣的格直接沿用上一次的像素，不一樣的才重畫（同一個 paintTile，結果跟整張重畫逐位元組相同，守衛核對）
 // D061-BEGIN land-cache-type
-export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; k3: Int8Array; data: Uint8Array; land?: number }
+// D062-BEGIN season-cache-type
+export interface GroundCache { n: number; S: number; k1: Int32Array; k2: Int32Array; k3: Int8Array; k4?: Int8Array; data: Uint8Array; land?: number; sea?: string }
+// D062-END season-cache-type
 // D061-END land-cache-type
 const CATCODE = (ct: string) => ct === '' ? 0 : ct === 'R' || ct === 'C' || ct === 'I' ? 1 : ct === 'G' ? 2 : ct === 'F' ? 3 : 4;
 // 一格的三個鍵（groundKeys 逐格呼叫它；D027 的就地更新也用它，只重算一格）
-export function keysAt(c: GroundCity, cat: (k: number) => string, x: number, z: number, lots?: Uint8Array, plates?: Int32Array): [number, number, number] {
+// D062-BEGIN season-keys-sig
+export function keysAt(c: GroundCity, cat: (k: number) => string, x: number, z: number, lots?: Uint8Array, plates?: Int32Array): [number, number, number, number] {
+// D062-END season-keys-sig
   const n = c.n, i = z * n + x, b = c.occ[i] ? c.buildings[c.occ[i] - 1] : null;
   const isRoad = (xx: number, zz: number) => xx >= 0 && zz >= 0 && xx < n && zz < n && c.road[zz * n + xx] > 0;
   const nb = (isRoad(x, z - 1) ? 1 : 0) | (isRoad(x, z + 1) ? 2 : 0) | (isRoad(x - 1, z) ? 4 : 0) | (isRoad(x + 1, z) ? 8 : 0);
   const k1 = c.road[i] | (c.rclass[i] << 3) | (c.rail[i] ? 1 << 6 : 0) | (c.dock[i] ? 1 << 7 : 0) | (c.tram[i] ? 1 << 8 : 0) | (c.ter[i] << 9) | (c.el[i] ? 1 << 11 : 0)
     | (c.zone[i] << 12) | (CATCODE(b ? cat(b.k) : '') << 14) | ((b ? 1 : 0) << 17) | ((lots ? lots[i] : 0) << 18) | (nb << 21) | (lots ? 1 << 25 : 0) | (plates ? 1 << 26 : 0) | (c.ruin && c.ruin[i] && !b && !c.road[i] ? 1 << 27 : 0) | ((c.over && c.road[i] ? c.over[i] & 7 : 0) << 28);
 // D061-BEGIN land-keys
-  return [k1, plates ? plates[i] : -2, landOf(c) ? pipeMask(c, x, z) + 32 * crosswalkBits(c, x, z) : pipeMask(c, x, z)];   // D061：第三個鍵＝水管接頭＋32×斑馬線端點旗標（地景關閉時與舊鍵逐值相同）
+// D062-BEGIN season-keys
+  return [k1, plates ? plates[i] : -2, landOf(c) ? pipeMask(c, x, z) + 32 * crosswalkBits(c, x, z) : pipeMask(c, x, z), seasonKey(c, x, z)];   // D061：第三個鍵＝水管接頭＋32×斑馬線端點旗標（地景關閉時與舊鍵逐值相同）；D062：第四個鍵＝季節索引＋1
+// D062-END season-keys
 // D061-END land-keys
 }
-export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array, Int8Array] {
-  const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n), k3 = new Int8Array(n * n);   // k3（D019）：配水管的接頭，−1＝不畫
-  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) { const i = z * n + x, [a, b, q] = keysAt(c, cat, x, z, lots, plates); k1[i] = a; k2[i] = b; k3[i] = q; }
-  return [k1, k2, k3];
+// D062-BEGIN season-group-keys
+export function groundKeys(c: GroundCity, cat: (k: number) => string, lots?: Uint8Array, plates?: Int32Array): [Int32Array, Int32Array, Int8Array, Int8Array] {
+  const n = c.n, k1 = new Int32Array(n * n), k2 = new Int32Array(n * n), k3 = new Int8Array(n * n), k4 = new Int8Array(n * n);   // k3（D019）：配水管的接頭，−1＝不畫；k4（D062）：季節索引＋1
+  for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) { const i = z * n + x, [a, b, q, w] = keysAt(c, cat, x, z, lots, plates); k1[i] = a; k2[i] = b; k3[i] = q; k4[i] = w; }
+  return [k1, k2, k3, k4];
 }
+// D062-END season-group-keys
 // D027：就地重畫指定的幾格（過載暖色每天在變，只有等級變了的路格要重畫；不必把整張 72×72 的鍵重算一遍）。改的是 cache 裡的像素與鍵，跟 paintGroundInc 同一個 paintTile，結果逐位元組等於整張重畫（守衛核對）
 export function repaintTiles(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, cache: GroundCache, tiles: readonly number[]): void {
   const n = c.n;
-  for (const i of tiles) { const x = i % n, z = (i / n) | 0, [a, b, q] = keysAt(c, cat, x, z, lots, plates); cache.k1[i] = a; cache.k2[i] = b; cache.k3[i] = q; paintTile(c, cat, S, lots, plates, cache.data, x, z); }
+// D062-BEGIN season-repaint
+  for (const i of tiles) { const x = i % n, z = (i / n) | 0, [a, b, q, w] = keysAt(c, cat, x, z, lots, plates); cache.k1[i] = a; cache.k2[i] = b; cache.k3[i] = q; if (cache.k4) cache.k4[i] = w; paintTile(c, cat, S, lots, plates, cache.data, x, z); }
+// D062-END season-repaint
 }
 // D015：inPlace＝直接改上一次的像素（地面貼圖常駐、只上傳變動的格；tiles＝重畫了哪幾格）；不給就照 D014 另存一份
 export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null, inPlace = false): { cache: GroundCache; painted: number; tiles: number[] | null } {
-  const n = c.n, [k1, k2, k3] = groundKeys(c, cat, lots, plates);
+// D062-BEGIN season-inc-keys
+  const n = c.n, [k1, k2, k3, k4] = groundKeys(c, cat, lots, plates);
+// D062-END season-inc-keys
 // D061-BEGIN land-cache-full
-  if (!prev || prev.n !== n || prev.S !== S || (prev.land ?? 0) !== landOf(c)) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, k3, data, land: landOf(c) }, painted: n * n, tiles: null }; }   // 換檔位一定整張重畫
+// D062-BEGIN season-cache-full
+  if (!prev || prev.n !== n || prev.S !== S || (prev.land ?? 0) !== landOf(c) || (prev.sea ?? '') !== seaSig(c)) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, k3, k4, data, land: landOf(c), sea: seaSig(c) }, painted: n * n, tiles: null }; }   // 換檔位、換季節風格一定整張重畫
+// D062-END season-cache-full
 // D061-END land-cache-full
   const data = inPlace ? prev.data : prev.data.slice(), tiles: number[] = [];
   for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
     const i = z * n + x;
-    if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i] && k3[i] === prev.k3[i]) continue;
+// D062-BEGIN season-cache-cmp
+    if (k1[i] === prev.k1[i] && k2[i] === prev.k2[i] && k3[i] === prev.k3[i] && k4[i] === (prev.k4 ? prev.k4[i] : 0)) continue;
+// D062-END season-cache-cmp
     paintTile(c, cat, S, lots, plates, data, x, z); tiles.push(i);
   }
 // D061-BEGIN land-cache-inc
-  return { cache: { n, S, k1, k2, k3, data, land: landOf(c) }, painted: tiles.length, tiles };
+// D062-BEGIN season-cache-inc
+  return { cache: { n, S, k1, k2, k3, k4, data, land: landOf(c), sea: seaSig(c) }, painted: tiles.length, tiles };
+// D062-END season-cache-inc
 // D061-END land-cache-inc
 }
 
@@ -147,6 +180,9 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
 // D061-BEGIN land-tile
     const LT = landOf(c) ? landTile(c, x, z, S, landOf(c)) : null;
     const [cwStart, cwEnd] = LT ? crosswalkEnds(c, x, z) : [false, false];
+// D062-BEGIN season-tile
+    if (LT && c.season) { const sp = seasonPalAt(c.season, x, z); if (sp) LT.pal = sp; }   // D062：這一格的季節調色盤（春＝沒有表＝基準）
+// D062-END season-tile
 // D061-END land-tile
     for (let v = 0; v < S; v++) for (let u = 0; u < S; u++) {
       const h = hash2(x * S + u, z * S + v, 7), edge = u === 0 || v === 0 || u === S - 1 || v === S - 1;
@@ -177,7 +213,9 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
       else if (lots && lots[i]) {
 // D061-BEGIN land-lot
         if (lots[i] === 5) col = LT ? landGrass(LT, u, v, u === 0 || v === 0) : (u === 0 || v === 0) ? GROUND.grassLine : pick(GROUND.grass, h);
-        else { const L = GROUND.lot[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; if (LT) col = landLot(LT.level, lots[i], u, v, x, z, S, edge, col); }
+// D062-BEGIN season-lot
+        else { const L = GROUND.lot[lots[i]]; col = h < 0.09 ? L[1] : h > 0.91 ? L[2] : L[0]; if (LT) col = landLot(LT.level, lots[i], u, v, x, z, S, edge, col, LT.pal); }
+// D062-END season-lot
 // D061-END land-lot
       }
       else if (plates && plates[i] >= 0) { const pc = plates[i]; col = h < 0.08 ? mix(pc, 0x000000, 0.08) : h > 0.92 ? mix(pc, 0xffffff, 0.08) : pc; }
@@ -194,7 +232,9 @@ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: U
 // D061-BEGIN land-grass
         col = LT ? landGrass(LT, u, v, u === 0 || v === 0) : (u === 0 || v === 0) ? GROUND.grassLine : c.el[i] ? pick(GROUND.grassHigh, h) : pick(GROUND.grass, h);
         const zn = c.zone[i];
-        if (zn) col = LT ? landZone(zn, edge, u, v, x, z, S, col, LT.level) : mix(col, GROUND.zone[zn], edge ? 0.45 : 0.22);   // 劃了區還沒蓋：淡淡帶一點分區色，邊框深一點（實驗線也只是淡淡的）
+// D062-BEGIN season-zone
+        if (zn) col = LT ? landZone(zn, edge, u, v, x, z, S, col, LT.level, LT.pal) : mix(col, GROUND.zone[zn], edge ? 0.45 : 0.22);   // 劃了區還沒蓋：淡淡帶一點分區色，邊框深一點（實驗線也只是淡淡的）
+// D062-END season-zone
 // D061-END land-grass
       }
       if (c.tram[i] && (u === 1 || u === S - 2)) col = GROUND.tram;
