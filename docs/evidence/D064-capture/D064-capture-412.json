@@ -1,0 +1,1707 @@
+{
+  "sourceRef": "local uncommitted D064 candidate",
+  "htmlSha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+  "towers": [
+    {
+      "id": 172,
+      "k": 33,
+      "v": 2,
+      "lv": 1,
+      "x": 22,
+      "z": 7,
+      "size": 2,
+      "H": 4.32
+    },
+    {
+      "id": 182,
+      "k": 33,
+      "v": 0,
+      "lv": 1,
+      "x": 14,
+      "z": 8,
+      "size": 2,
+      "H": 8.07
+    },
+    {
+      "id": 191,
+      "k": 33,
+      "v": 1,
+      "lv": 1,
+      "x": 30,
+      "z": 8,
+      "size": 2,
+      "H": 7.39
+    },
+    {
+      "id": 215,
+      "k": 34,
+      "v": 1,
+      "lv": 1,
+      "x": 18,
+      "z": 9,
+      "size": 2,
+      "H": 7.39
+    },
+    {
+      "id": 219,
+      "k": 34,
+      "v": 3,
+      "lv": 1,
+      "x": 26,
+      "z": 9,
+      "size": 2,
+      "H": 7.76
+    },
+    {
+      "id": 290,
+      "k": 34,
+      "v": 2,
+      "lv": 1,
+      "x": 33,
+      "z": 11,
+      "size": 2,
+      "H": 4.32
+    },
+    {
+      "id": 374,
+      "k": 105,
+      "v": 0,
+      "lv": 1,
+      "x": 20,
+      "z": 15,
+      "size": 3,
+      "H": 5.65
+    },
+    {
+      "id": 406,
+      "k": 106,
+      "v": 0,
+      "lv": 1,
+      "x": 27,
+      "z": 16,
+      "size": 3,
+      "H": 9.15
+    }
+  ],
+  "expectedDelta": 1102,
+  "qualification": "Two decoded production samples (seed516 has eight merge towers; ai120 has none) plus the gallery sample for the single-building close-ups, production load and render, real CDP PNG, Chrome software WebGL. Mobile touch emulation is not Android hardware. Before = towerArt=legacy of the same build.",
+  "cases": [
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "before": {
+        "viewport": {
+          "W": 412,
+          "H": 860,
+          "mobile": true
+        },
+        "phase": "before",
+        "shots": [
+          {
+            "file": "D064-before-seed516-skyline-412.png",
+            "name": "seed516-skyline",
+            "sha256": "a4f3cfb579b6458b996f0b4e70fa2899209ea0675887259e3a49b554eabb5882",
+            "bytes": 44483,
+            "camera": {
+              "pos": [
+                140.07500000000002,
+                94.06040612287403,
+                126.70000000000002
+              ],
+              "target": [
+                24.875000000000004,
+                0,
+                11.500000000000002
+              ],
+              "zoom": 1.92
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2871.65541136677
+          },
+          {
+            "file": "D064-before-tower-172-k33-se-412.png",
+            "name": "tower-172-k33-se",
+            "sha256": "5276307357a2eb2ed9545b132092fb2bd1a5effdb01510f72b7b2d6bff226f50",
+            "bytes": 34899,
+            "camera": {
+              "pos": [
+                138.2,
+                94.06040612287403,
+                123.20000000000002
+              ],
+              "target": [
+                23,
+                0,
+                8
+              ],
+              "zoom": 4.268076109936574
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2410.8773526137757
+          },
+          {
+            "file": "D064-before-tower-182-k33-se-412.png",
+            "name": "tower-182-k33-se",
+            "sha256": "152b3ffad2bb35bc225f030fdc90148b96ec37d7ce9a622b0657f304e112663f",
+            "bytes": 42345,
+            "camera": {
+              "pos": [
+                130.2,
+                94.06040612287403,
+                124.20000000000002
+              ],
+              "target": [
+                15,
+                0,
+                9
+              ],
+              "zoom": 2.2847693674009912
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2905.83602175168
+          },
+          {
+            "file": "D064-before-tower-191-k33-se-412.png",
+            "name": "tower-191-k33-se",
+            "sha256": "d8a05196b9911375191a7c6510ab74f5031678f25c2cce3d059ab9fc16ea83df",
+            "bytes": 38321,
+            "camera": {
+              "pos": [
+                146.2,
+                94.06040612287403,
+                124.20000000000002
+              ],
+              "target": [
+                31,
+                0,
+                9
+              ],
+              "zoom": 2.4950052496516917
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2629.250153824076
+          },
+          {
+            "file": "D064-before-tower-215-k34-se-412.png",
+            "name": "tower-215-k34-se",
+            "sha256": "39e4f8507729b4a3b2370bcb8a0289c6e74874b1253bba8bc7a95163cc5b8eb7",
+            "bytes": 42998,
+            "camera": {
+              "pos": [
+                134.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                19,
+                0,
+                10
+              ],
+              "zoom": 2.4950052496516917
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2766.0118154643133
+          },
+          {
+            "file": "D064-before-tower-219-k34-se-412.png",
+            "name": "tower-219-k34-se",
+            "sha256": "a64c329ff799c5a28aebd4b7e1896bfe249b088ba6bc26f376051d698de0ac27",
+            "bytes": 41620,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                10
+              ],
+              "zoom": 2.376042370480155
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2816.6310953113953
+          },
+          {
+            "file": "D064-before-tower-290-k34-se-412.png",
+            "name": "tower-290-k34-se",
+            "sha256": "8e942cccc3180b6b15402f231d87f21ca09104c19244f03511435e82cf054836",
+            "bytes": 38842,
+            "camera": {
+              "pos": [
+                149.2,
+                94.06040612287403,
+                127.20000000000002
+              ],
+              "target": [
+                34,
+                0,
+                12
+              ],
+              "zoom": 4.268076109936574
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1975.6184950172792
+          },
+          {
+            "file": "D064-before-tower-374-k105-se-412.png",
+            "name": "tower-374-k105-se",
+            "sha256": "2162c5eaab61138e6cceb549716c1d306dde7c1763fd38549500ae4321a15229",
+            "bytes": 46469,
+            "camera": {
+              "pos": [
+                136.69999999999996,
+                94.06040612287404,
+                131.7
+              ],
+              "target": [
+                21.5,
+                0,
+                16.5
+              ],
+              "zoom": 3.263378547774513
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2151.3960341547718
+          },
+          {
+            "file": "D064-before-tower-406-k106-se-412.png",
+            "name": "tower-406-k106-se",
+            "sha256": "d94e51832dfad8d3cf11f16603ecf8c981c3421c8c045396b221785aa0331f0d",
+            "bytes": 50199,
+            "camera": {
+              "pos": [
+                143.69999999999996,
+                94.06040612287404,
+                132.7
+              ],
+              "target": [
+                28.500000000000007,
+                0,
+                17.5
+              ],
+              "zoom": 2.015091671576612
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2366.4292662824973
+          },
+          {
+            "file": "D064-before-ai120-default-412.png",
+            "name": "ai120-default",
+            "sha256": "91b704f9643988a30baa98348d2bd824f9071f872e8c6c710ffcb003758456b6",
+            "bytes": 29584,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "pixelVariance": 3107.7693553440968
+          },
+          {
+            "file": "D064-before-form-k33-v0-se-412.png",
+            "name": "form-k33-v0-se",
+            "sha256": "1f91b103946dcd91361a396450bcd6e3daaa1a7c2e46e8444a27cbfd76db0ab2",
+            "bytes": 12853,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.1415578801763635
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11044
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 873.2332082605462
+          },
+          {
+            "file": "D064-before-form-k33-v1-se-412.png",
+            "name": "form-k33-v1-se",
+            "sha256": "7a9c613cc7c5beb794d34e9138069011e272f7c2d05943238eefa3a62aea59e4",
+            "bytes": 13086,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.430632218271076
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11044
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 886.4703084620669
+          },
+          {
+            "file": "D064-before-form-k33-v2-se-412.png",
+            "name": "form-k33-v2-se",
+            "sha256": "04060bdf791fbd6545ee75f99ea4a58f9f43e02e5f3226d2e90928876a01c863",
+            "bytes": 11639,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 5.868604651162789
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11044
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1033.8485535089676
+          },
+          {
+            "file": "D064-before-form-k33-v3-se-412.png",
+            "name": "form-k33-v3-se",
+            "sha256": "c79090f0c923f9be7ca3fc1dbcb3940dcc44ef41ea09fe3a9173520b10f1dce8",
+            "bytes": 13252,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.267058259410213
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11044
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 880.2062141382958
+          },
+          {
+            "file": "D064-before-form-k34-v0-se-412.png",
+            "name": "form-k34-v0-se",
+            "sha256": "bba1aa2d25d2d6f03d3c3bb08790dc29f8d9bad80317395f2da27c92a733952f",
+            "bytes": 14189,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.1415578801763635
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11004
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 879.9370134009332
+          },
+          {
+            "file": "D064-before-form-k34-v1-se-412.png",
+            "name": "form-k34-v1-se",
+            "sha256": "51e5797bd8ff53e5dba351d36111af31c23c9efd044bc1563efd45f9f4498e5a",
+            "bytes": 13858,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.430632218271076
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11004
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 851.7537814832795
+          },
+          {
+            "file": "D064-before-form-k34-v2-se-412.png",
+            "name": "form-k34-v2-se",
+            "sha256": "a3a1a1fdb1f18185eb5fcff3916ecd7a4f3a3cc5136c09e83171c2b90c4c85f2",
+            "bytes": 12529,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 5.868604651162789
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11004
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 839.5818516004183
+          },
+          {
+            "file": "D064-before-form-k34-v3-se-412.png",
+            "name": "form-k34-v3-se",
+            "sha256": "7795d7c8b41330b8b648ad02d9fc0094ffffbaae35bb641cc153326b54ec371c",
+            "bytes": 14448,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.267058259410213
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11004
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 860.9348978749149
+          },
+          {
+            "file": "D064-before-form-k105-v0-se-412.png",
+            "name": "form-k105-v0-se",
+            "sha256": "e617f4bed9f6b38b1909f85bdd0009d5f1cdef5f924392eb8cafbfee3791fd7e",
+            "bytes": 14014,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 4.487145503189955
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11024
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1169.7719006744082
+          },
+          {
+            "file": "D064-before-form-k105-v1-se-412.png",
+            "name": "form-k105-v1-se",
+            "sha256": "e6223b73913351848c45d47129b13b7ea44631e8d7ca69bc879ab74437fd6364",
+            "bytes": 14982,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 3.86469086783891
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11024
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1117.7400504485267
+          },
+          {
+            "file": "D064-before-form-k105-v2-se-412.png",
+            "name": "form-k105-v2-se",
+            "sha256": "e617f4bed9f6b38b1909f85bdd0009d5f1cdef5f924392eb8cafbfee3791fd7e",
+            "bytes": 14014,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 4.487145503189955
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11024
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1169.7719006744082
+          },
+          {
+            "file": "D064-before-form-k106-v0-se-412.png",
+            "name": "form-k106-v0-se",
+            "sha256": "b6b857ab266533abfa1fb91fc4393f5f5b76a07eef257b2a9da345809f18e59e",
+            "bytes": 15738,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 2.770751048417842
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11136
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1132.500131373119
+          },
+          {
+            "file": "D064-before-form-k106-v1-se-412.png",
+            "name": "form-k106-v1-se",
+            "sha256": "b6b857ab266533abfa1fb91fc4393f5f5b76a07eef257b2a9da345809f18e59e",
+            "bytes": 15738,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 2.770751048417842
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11136
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1132.500131373119
+          },
+          {
+            "file": "D064-before-form-k106-v2-se-412.png",
+            "name": "form-k106-v2-se",
+            "sha256": "7010c2a5ecf75adfd13b65404679c188daab37d86f9aa744c5f5c91b51778832",
+            "bytes": 15080,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 3.0253427318643498
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11136
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1144.7844674738917
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "e163bd1bcb8d143cec4fd03e9b0f0f60a09357eaf542b6fc21cfe243840649bc"
+          },
+          "ai120": {
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "141c8fdf3438646c66b4fc6b606b838deeb65bc64f03871841d80020ed98a920"
+          }
+        },
+        "passed": true,
+        "picks": [
+          {
+            "id": 172,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 182,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 191,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 215,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 219,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 290,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 374,
+            "k": 105,
+            "hits": 16
+          },
+          {
+            "id": 406,
+            "k": 106,
+            "hits": 16
+          }
+        ],
+        "modes": {
+          "a": {
+            "digestSha256": "d32d81938587ddddd6c0fe5e567e8888b3e333e32c3aeca8ed94557f58f4b969"
+          },
+          "b": {
+            "digestSha256": "232614d574e27eaccddfa715212c36bb9d1e07e56044135ddb22f220c1367bc1"
+          },
+          "c": {
+            "digestSha256": "e163bd1bcb8d143cec4fd03e9b0f0f60a09357eaf542b6fc21cfe243840649bc"
+          }
+        },
+        "sceneStats": {
+          "pieces": 384,
+          "regen": 384,
+          "up": 14374848,
+          "upFull": 11777160,
+          "grown": 0,
+          "moved": 0,
+          "relayout": 0,
+          "fresh": true,
+          "groundUp": 1327104,
+          "groundFull": 1327104,
+          "treesKept": false,
+          "cached": 384,
+          "rebuildAll": null,
+          "arenas": [
+            {
+              "cap": 10870,
+              "used": 8696,
+              "live": 8696,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 10003,
+              "used": 8002,
+              "live": 8002,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 52555,
+              "used": 42044,
+              "live": 42044,
+              "holes": 0,
+              "free": 0
+            }
+          ]
+        },
+        "gl": {
+          "programs": 16,
+          "geometries": 12,
+          "textures": 8,
+          "hazardShown": false
+        },
+        "forms": [
+          {
+            "k": 33,
+            "v": 0,
+            "id": "k33-v0",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 1,
+            "id": "k33-v1",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 2,
+            "id": "k33-v2",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 3,
+            "id": "k33-v3",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 0,
+            "id": "k34-v0",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 1,
+            "id": "k34-v1",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 2,
+            "id": "k34-v2",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 3,
+            "id": "k34-v3",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 0,
+            "id": "k105-v0",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 1,
+            "id": "k105-v1",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 2,
+            "id": "k105-v2",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 0,
+            "id": "k106-v0",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 1,
+            "id": "k106-v1",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 2,
+            "id": "k106-v2",
+            "hits": 16
+          }
+        ]
+      },
+      "after": {
+        "viewport": {
+          "W": 412,
+          "H": 860,
+          "mobile": true
+        },
+        "phase": "after",
+        "shots": [
+          {
+            "file": "D064-after-seed516-skyline-412.png",
+            "name": "seed516-skyline",
+            "sha256": "b8a335bd272e3cffe7a59427ecd13f8fc323e122e796f94a38253e8cb9c77747",
+            "bytes": 45363,
+            "camera": {
+              "pos": [
+                140.07500000000002,
+                94.06040612287403,
+                126.70000000000002
+              ],
+              "target": [
+                24.875000000000004,
+                0,
+                11.500000000000002
+              ],
+              "zoom": 1.92
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2899.981555073231
+          },
+          {
+            "file": "D064-after-tower-172-k33-se-412.png",
+            "name": "tower-172-k33-se",
+            "sha256": "c41fa7f5122c4edc0844cff0f71072b912703694e48d9e34547758c4eb33d3e3",
+            "bytes": 37061,
+            "camera": {
+              "pos": [
+                138.2,
+                94.06040612287403,
+                123.20000000000002
+              ],
+              "target": [
+                23,
+                0,
+                8
+              ],
+              "zoom": 4.268076109936574
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2457.5772545132513
+          },
+          {
+            "file": "D064-after-tower-182-k33-se-412.png",
+            "name": "tower-182-k33-se",
+            "sha256": "838d371bbba17238e8b3639a868d50843c6037ac015e9029bfb39780d6e64129",
+            "bytes": 43402,
+            "camera": {
+              "pos": [
+                130.2,
+                94.06040612287403,
+                124.20000000000002
+              ],
+              "target": [
+                15,
+                0,
+                9
+              ],
+              "zoom": 2.2847693674009912
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2859.8581074410213
+          },
+          {
+            "file": "D064-after-tower-191-k33-se-412.png",
+            "name": "tower-191-k33-se",
+            "sha256": "c0057ba80804c468d18459d8c375a3ae890f3ddba12e6efb03b5e447f4596e99",
+            "bytes": 38795,
+            "camera": {
+              "pos": [
+                146.2,
+                94.06040612287403,
+                124.20000000000002
+              ],
+              "target": [
+                31,
+                0,
+                9
+              ],
+              "zoom": 2.4950052496516917
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2796.2898087508056
+          },
+          {
+            "file": "D064-after-tower-215-k34-se-412.png",
+            "name": "tower-215-k34-se",
+            "sha256": "97d690fb463eff8660d7041cfe420324ecb6e4028bc6126540ec03f4c0ce013e",
+            "bytes": 44267,
+            "camera": {
+              "pos": [
+                134.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                19,
+                0,
+                10
+              ],
+              "zoom": 2.4950052496516917
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2756.545137616171
+          },
+          {
+            "file": "D064-after-tower-219-k34-se-412.png",
+            "name": "tower-219-k34-se",
+            "sha256": "af381b35062e2ddf405c173406ec2a5c052a62150186c0c6cea2e9a85d133b16",
+            "bytes": 41682,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                10
+              ],
+              "zoom": 2.376042370480155
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2856.9613485108366
+          },
+          {
+            "file": "D064-after-tower-290-k34-se-412.png",
+            "name": "tower-290-k34-se",
+            "sha256": "728d4e437ba38a1418ae06dedccb2a176fb065fd2409268cb533182a0a0480a8",
+            "bytes": 37742,
+            "camera": {
+              "pos": [
+                149.2,
+                94.06040612287403,
+                127.20000000000002
+              ],
+              "target": [
+                34,
+                0,
+                12
+              ],
+              "zoom": 4.268076109936574
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2072.2705473913193
+          },
+          {
+            "file": "D064-after-tower-374-k105-se-412.png",
+            "name": "tower-374-k105-se",
+            "sha256": "baf3189fee34be89f6b0b96c650ace76475ac2400f67018a9481eefc02d91786",
+            "bytes": 47129,
+            "camera": {
+              "pos": [
+                136.69999999999996,
+                94.06040612287404,
+                131.7
+              ],
+              "target": [
+                21.5,
+                0,
+                16.5
+              ],
+              "zoom": 3.263378547774513
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2072.2818023816108
+          },
+          {
+            "file": "D064-after-tower-406-k106-se-412.png",
+            "name": "tower-406-k106-se",
+            "sha256": "8adbb8a842f822acf461b6b0ed8f07e33d3e687cda70929377c65e55e1cf5da3",
+            "bytes": 50932,
+            "camera": {
+              "pos": [
+                143.69999999999996,
+                94.06040612287404,
+                132.7
+              ],
+              "target": [
+                28.500000000000007,
+                0,
+                17.5
+              ],
+              "zoom": 2.015091671576612
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2419.0146222277617
+          },
+          {
+            "file": "D064-after-ai120-default-412.png",
+            "name": "ai120-default",
+            "sha256": "91b704f9643988a30baa98348d2bd824f9071f872e8c6c710ffcb003758456b6",
+            "bytes": 29584,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "pixelVariance": 3107.7693553440968
+          },
+          {
+            "file": "D064-after-form-k33-v0-se-412.png",
+            "name": "form-k33-v0-se",
+            "sha256": "890724eddc3ea512cf174573e061f9abe84251be8d9840582dcf60c0701649d8",
+            "bytes": 14423,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.1415578801763635
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11118
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 894.5322302082823
+          },
+          {
+            "file": "D064-after-form-k33-v1-se-412.png",
+            "name": "form-k33-v1-se",
+            "sha256": "f978f25d9cb3c004028a11dce4095cc975faedc53a6caf6ebb0a2fc334ba3357",
+            "bytes": 14001,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.430632218271076
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11216
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 965.4876150937162
+          },
+          {
+            "file": "D064-after-form-k33-v2-se-412.png",
+            "name": "form-k33-v2-se",
+            "sha256": "6178eadb494657a1564957b293adf60ee3164842bd426561b795e6a62401653e",
+            "bytes": 14227,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 5.868604651162789
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11244
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1383.3333502648602
+          },
+          {
+            "file": "D064-after-form-k33-v3-se-412.png",
+            "name": "form-k33-v3-se",
+            "sha256": "b722cc6841bffe19ae07e88b2d8b66715c4e6f6efc8030bfc2d3a98f3e829dca",
+            "bytes": 13580,
+            "camera": {
+              "pos": [
+                117.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                2,
+                0,
+                2
+              ],
+              "zoom": 3.267058259410213
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11184
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 883.4122615677588
+          },
+          {
+            "file": "D064-after-form-k34-v0-se-412.png",
+            "name": "form-k34-v0-se",
+            "sha256": "cf9eec899fc51f2dfbb4c8a72176d8ae12a6f46223ab148d7857267c12486958",
+            "bytes": 15333,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.1415578801763635
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11182
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1037.8342838758654
+          },
+          {
+            "file": "D064-after-form-k34-v1-se-412.png",
+            "name": "form-k34-v1-se",
+            "sha256": "3b53ac3ca7e33e4acd0c6dc3799d195b7948e2e87b16b23ac7210d232a40c0e0",
+            "bytes": 14402,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.430632218271076
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11176
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 936.6986633724191
+          },
+          {
+            "file": "D064-after-form-k34-v2-se-412.png",
+            "name": "form-k34-v2-se",
+            "sha256": "5693c3a6cc2f654b0d58a4b383e33c26b8c24e4d6da54f11dbefdc2134a87402",
+            "bytes": 13997,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 5.868604651162789
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11140
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 963.0643048636412
+          },
+          {
+            "file": "D064-after-form-k34-v3-se-412.png",
+            "name": "form-k34-v3-se",
+            "sha256": "14c62e31e2b84ad8de752ff737b6b20337717c5fd0a7109983e989a1db4db65d",
+            "bytes": 15737,
+            "camera": {
+              "pos": [
+                127.2,
+                94.06040612287403,
+                117.20000000000002
+              ],
+              "target": [
+                12,
+                0,
+                2
+              ],
+              "zoom": 3.267058259410213
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11144
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1023.4036468707709
+          },
+          {
+            "file": "D064-after-form-k105-v0-se-412.png",
+            "name": "form-k105-v0-se",
+            "sha256": "aa4bf9319c4617e296d33a7cdbb22b7ad7ee2ef5e646ec16b736c22012c74c85",
+            "bytes": 16440,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 4.487145503189955
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11164
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1115.5435377787035
+          },
+          {
+            "file": "D064-after-form-k105-v1-se-412.png",
+            "name": "form-k105-v1-se",
+            "sha256": "2e81b7f3f863e4f2cac2558d05857c6d951221ce22919b9869fc3f651ec77909",
+            "bytes": 14648,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 3.86469086783891
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11174
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1072.3571558128642
+          },
+          {
+            "file": "D064-after-form-k105-v2-se-412.png",
+            "name": "form-k105-v2-se",
+            "sha256": "8865beb80608222b546137b44c483dddef30493c63e1ba1ab852340406027550",
+            "bytes": 15596,
+            "camera": {
+              "pos": [
+                120.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                5.5,
+                0,
+                2.5
+              ],
+              "zoom": 4.487145503189955
+            },
+            "render": {
+              "calls": 6,
+              "triangles": 11220
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 1243.7747238378724
+          },
+          {
+            "file": "D064-after-form-k106-v0-se-412.png",
+            "name": "form-k106-v0-se",
+            "sha256": "ea899c7c95c0a6be2e41e98883213386242409b1d673b804443d92524b333473",
+            "bytes": 16577,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 2.770751048417842
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11204
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 981.6426989943393
+          },
+          {
+            "file": "D064-after-form-k106-v1-se-412.png",
+            "name": "form-k106-v1-se",
+            "sha256": "a5f8775d6f1b4eae6bb7f43ccbc0cd3268be564ff60f4759538b2481511d0873",
+            "bytes": 16388,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 2.770751048417842
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11292
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 977.6071658393557
+          },
+          {
+            "file": "D064-after-form-k106-v2-se-412.png",
+            "name": "form-k106-v2-se",
+            "sha256": "b3a2aabe9de056a4e8466346b41b36707896572814393cd77578910243de5056",
+            "bytes": 15324,
+            "camera": {
+              "pos": [
+                142.7,
+                94.06040612287403,
+                117.70000000000002
+              ],
+              "target": [
+                27.5,
+                0,
+                2.5
+              ],
+              "zoom": 3.0253427318643498
+            },
+            "render": {
+              "calls": 7,
+              "triangles": 11288
+            },
+            "worldSha256": "b3f73e6374144999b04646d1917f13afa197a0719d5a508038be4a51e9392336",
+            "pixelVariance": 864.9878846538377
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "69bf5da134d3022334a2044f62a6f6a9c57d9dfd2452991c9e512d5441bfc49f"
+          },
+          "ai120": {
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "141c8fdf3438646c66b4fc6b606b838deeb65bc64f03871841d80020ed98a920"
+          }
+        },
+        "passed": true,
+        "picks": [
+          {
+            "id": 172,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 182,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 191,
+            "k": 33,
+            "hits": 16
+          },
+          {
+            "id": 215,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 219,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 290,
+            "k": 34,
+            "hits": 16
+          },
+          {
+            "id": 374,
+            "k": 105,
+            "hits": 16
+          },
+          {
+            "id": 406,
+            "k": 106,
+            "hits": 16
+          }
+        ],
+        "modes": {
+          "a": {
+            "digestSha256": "a388cfd0cfbdda4b647b33250b35cb45ea5986d5908aba0ca829291345e9f9d0"
+          },
+          "b": {
+            "digestSha256": "f300025094c02b8a7b24b8b6de7544629af223b6baf8c9dee6bef30318f88a4a"
+          },
+          "c": {
+            "digestSha256": "69bf5da134d3022334a2044f62a6f6a9c57d9dfd2452991c9e512d5441bfc49f"
+          }
+        },
+        "sceneStats": {
+          "pieces": 384,
+          "regen": 384,
+          "up": 14561316,
+          "upFull": 11926368,
+          "grown": 0,
+          "moved": 0,
+          "relayout": 0,
+          "fresh": true,
+          "groundUp": 1327104,
+          "groundFull": 1327104,
+          "treesKept": false,
+          "cached": 384,
+          "rebuildAll": null,
+          "arenas": [
+            {
+              "cap": 11105,
+              "used": 8884,
+              "live": 8884,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 10119,
+              "used": 8095,
+              "live": 8095,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 53230,
+              "used": 42584,
+              "live": 42584,
+              "holes": 0,
+              "free": 0
+            }
+          ]
+        },
+        "gl": {
+          "programs": 16,
+          "geometries": 12,
+          "textures": 8,
+          "hazardShown": false
+        },
+        "forms": [
+          {
+            "k": 33,
+            "v": 0,
+            "id": "k33-v0",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 1,
+            "id": "k33-v1",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 2,
+            "id": "k33-v2",
+            "hits": 16
+          },
+          {
+            "k": 33,
+            "v": 3,
+            "id": "k33-v3",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 0,
+            "id": "k34-v0",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 1,
+            "id": "k34-v1",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 2,
+            "id": "k34-v2",
+            "hits": 16
+          },
+          {
+            "k": 34,
+            "v": 3,
+            "id": "k34-v3",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 0,
+            "id": "k105-v0",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 1,
+            "id": "k105-v1",
+            "hits": 16
+          },
+          {
+            "k": 105,
+            "v": 2,
+            "id": "k105-v2",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 0,
+            "id": "k106-v0",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 1,
+            "id": "k106-v1",
+            "hits": 16
+          },
+          {
+            "k": 106,
+            "v": 2,
+            "id": "k106-v2",
+            "hits": 16
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true,
+  "pairs": 24
+}

@@ -1,0 +1,1449 @@
+{
+ "card": "docs/D064-skyline.md",
+ "savedAt": "2026-10-14",
+ "provenance": {
+  "note": "本機（容器內 Chromium、Chrome 軟體 WebGL）對最終建置的擷取：tools/d064-capture.mjs 每個視窗各跑一次（1440、360、412），報告 JSON 在 docs/evidence/D064-capture/。單張前後圖（190 張）沒有入庫，只留並排圖（95 張）；單張的 SHA-256 在報告 JSON 裡。CI 的 d064 工作跑同一支工具（artifact 名稱 d064-preview-<寬度>-<sha>），但 gh api 不能下載 artifact，所以本檔的圖不是從 CI 下載的，來源是本機。",
+  "distSha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+  "parent": "bb828e148962cc071364bcb0878a16f7be9f5d6b",
+  "srcPins": "fixtures/d064-art-scope.json 的 after 欄是這份建置所對應的 src 逐檔 SHA-256；之後只改文件的提交不改 src，dist 雜湊不變",
+  "build": "vite build（npm run build）；建置是決定性的（工作樹重建的 dist 雜湊與擷取時相同）"
+ },
+ "crossChecks": [
+  "本機三個視窗的擷取全過（桌機每相 47 張、手機每相 24 張）：seed516 每張前後三角形差 +1,102（＝Node 算的八棟塔加權三角形差）、繪製呼叫前後相同（15）、ai120 前後 PNG 逐位元組相同、八棟塔與 14 個畫廊形各 16 條射線 16／16 命中、旗標串聯（桌機）、快取＝fresh、零頁面錯誤、零外部請求。",
+  "CI 結果補在卡面與 LOG（推送後）。"
+ ],
+ "limits": [
+  "業主看的是否是這些圖沒有紀錄",
+  "並排圖沒有獨立的來源雜湊；單張才有（在報告 JSON）",
+  "未涵蓋 Android 實機",
+  "seed516 的八棟真塔只涵蓋八個形（33／v0、v1、v2，34／v1、v2、v3，105／v0，106／v0）；33／v3、34／v0 與 105、106 的 v1、v2 只出現在畫廊圖，而且合併規則給 3×3 的變體恆為 0，所以 105、106 的 v1、v2 這四個形在正常遊戲裡不會出現（卡面「可達性」）",
+  "畫廊圖用 __gt.towerV 強制變體與隔出單一種類：這是拍照鉤，不是遊戲裡的路徑"
+ ],
+ "files": [
+  {
+   "file": "docs/img/D064/D064-pair-ai120-default-1440.png",
+   "sha256": "bd7080d49cf3f69887bc7ce4dd09c474c42c00c968daba7d39ad6077a2d8ca42",
+   "bytes": 116179,
+   "width": 2888,
+   "height": 1000,
+   "view": "ai120-default",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96607
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-ai120-default-360.png",
+   "sha256": "825d811194f0a9f82e11dc7cc1bcd87893b919292577483db69e01913f5f4869",
+   "bytes": 31629,
+   "width": 728,
+   "height": 740,
+   "view": "ai120-default",
+   "viewport": 360,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96607
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-ai120-default-412.png",
+   "sha256": "4b71a28c2bbbfa77fae6d4fe73a4f4a7d035a5c9e06f9c7c9c2009b84bb11608",
+   "bytes": 39966,
+   "width": 832,
+   "height": 860,
+   "view": "ai120-default",
+   "viewport": 412,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96607
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v0-nw-1440.png",
+   "sha256": "b16852ef1ac35e5ed5cf5aa7f113805db1f48a81f4afd9651c634c347cff5ed5",
+   "bytes": 57942,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v0-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11164
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v0-se-1440.png",
+   "sha256": "423bb760ea964f80b39aa111fde733cab014f655d6fcf1dfe29d37934f05059e",
+   "bytes": 69227,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v0-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11164
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v0-se-360.png",
+   "sha256": "69ad63afa1feb23bc65f90027da95f2e3e94ffcb12c451070b13b7f6ac5c9eeb",
+   "bytes": 23885,
+   "width": 728,
+   "height": 740,
+   "view": "form-k105-v0-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11164
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v0-se-412.png",
+   "sha256": "7c803d236058c20bf155bd7e7df6f34701b2f34aed38d494b41f351d3fca69f1",
+   "bytes": 27907,
+   "width": 832,
+   "height": 860,
+   "view": "form-k105-v0-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11164
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v1-nw-1440.png",
+   "sha256": "c7f5b7350bf516a1304e1d78d3396353be8ee3850b087128c42b6e5636af8ba0",
+   "bytes": 61698,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v1-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11174
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v1-se-1440.png",
+   "sha256": "bec202cc4621c53f3b541a51b61166917acd531348abe9cbe4dbd35baa51dc92",
+   "bytes": 64170,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v1-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11174
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v1-se-360.png",
+   "sha256": "a0ca839bd168c249814059c664dc8c80cd35df32818a7c57ed2fd255de794d97",
+   "bytes": 22807,
+   "width": 728,
+   "height": 740,
+   "view": "form-k105-v1-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11174
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v1-se-412.png",
+   "sha256": "32bef781d3fe20db7cbd17832b5b6e2bc12f0cd2a69650978b319d2180e3aef7",
+   "bytes": 26652,
+   "width": 832,
+   "height": 860,
+   "view": "form-k105-v1-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11174
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v2-nw-1440.png",
+   "sha256": "a3dee96e358283c2434ddc3cf992864b516ce49360c578ff0743114d1271b363",
+   "bytes": 58051,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v2-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11220
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v2-se-1440.png",
+   "sha256": "a5370d961ea3a82e3eb369d5fa2422954c00fb9aed2934f6d2ffc1bbfce6161f",
+   "bytes": 65438,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k105-v2-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11220
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v2-se-360.png",
+   "sha256": "9580375ba57e320e3cf6626d6bec31abc7be86c5a38ae773b6b460ef3a783b1c",
+   "bytes": 22889,
+   "width": 728,
+   "height": 740,
+   "view": "form-k105-v2-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11220
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k105-v2-se-412.png",
+   "sha256": "2526044ab1778c7f76d06bcd5dfbc89a27f90b043c8669163f4593e54502ef07",
+   "bytes": 27518,
+   "width": 832,
+   "height": 860,
+   "view": "form-k105-v2-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11024,
+    "after": 11220
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v0-nw-1440.png",
+   "sha256": "b2495d74553bdd800fb8594aa8f4eefc19b73cb773c3deac52f13c9e911f2a04",
+   "bytes": 71837,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v0-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11204
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v0-se-1440.png",
+   "sha256": "1c221523271887ce0424a1a97bb1a5786d485fc11afb97c893c2e314490f9789",
+   "bytes": 71101,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v0-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11204
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v0-se-360.png",
+   "sha256": "0bf657a828bf898871e9d34785f7453b19ee787bc7f655f68cf4a97bc0ae2cf3",
+   "bytes": 22535,
+   "width": 728,
+   "height": 740,
+   "view": "form-k106-v0-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11204
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v0-se-412.png",
+   "sha256": "83ea2ed8e2548dab6e8527947b75a86f1a91f03098f23738f493ac477868fdd4",
+   "bytes": 27382,
+   "width": 832,
+   "height": 860,
+   "view": "form-k106-v0-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11204
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v1-nw-1440.png",
+   "sha256": "4f7a2a441ff75ee488c4eadefee4e055ce23293242ec27b1d25cb1bb5bad140a",
+   "bytes": 69700,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v1-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11292
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v1-se-1440.png",
+   "sha256": "71c509fdb93867239423af67f14f9cc03d69bd25df2b207588d5031ec484455d",
+   "bytes": 69600,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v1-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11292
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v1-se-360.png",
+   "sha256": "a6ff6c1b0e9b2575275e51aa8746cde5af6d7b02c174a93262b1399934310eb1",
+   "bytes": 21724,
+   "width": 728,
+   "height": 740,
+   "view": "form-k106-v1-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11292
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v1-se-412.png",
+   "sha256": "099170c357de169e586d7ee9370456cc42353f7471b1203962874115b03f3715",
+   "bytes": 27558,
+   "width": 832,
+   "height": 860,
+   "view": "form-k106-v1-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11292
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v2-nw-1440.png",
+   "sha256": "c8a782ee306e005d09ef857222500573e73fc8f4c5de26d9bbd984fef8fa0b11",
+   "bytes": 65962,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v2-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11288
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v2-se-1440.png",
+   "sha256": "dbd9ad917800a9f90e9fd9487306cddabd1fc394e64b68ecd9a47d8181fe1632",
+   "bytes": 66265,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k106-v2-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11288
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v2-se-360.png",
+   "sha256": "16282bb596a46b9f9897829844307419481e5bbc0b4c8ca20055f8318bc48094",
+   "bytes": 21268,
+   "width": 728,
+   "height": 740,
+   "view": "form-k106-v2-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11288
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k106-v2-se-412.png",
+   "sha256": "dc3e686cc6ce9df9732afc153e2c9455286022a129cab18bd132faf39a37e161",
+   "bytes": 26099,
+   "width": 832,
+   "height": 860,
+   "view": "form-k106-v2-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11136,
+    "after": 11288
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v0-nw-1440.png",
+   "sha256": "faaec679984d12f130a5ead18bc108ed8a879f0fceb29ee3da15a3e9cebe4aef",
+   "bytes": 55562,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v0-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11118
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v0-se-1440.png",
+   "sha256": "5529662c25ecf2579fdd912ab52711c10dd07483e82581465f596633591b79bf",
+   "bytes": 54318,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v0-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11118
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v0-se-360.png",
+   "sha256": "bf05a9c4d8277ee8ab92ac5dfb90a8f9403f87b2435c62ff6be0165c8070c390",
+   "bytes": 19818,
+   "width": 728,
+   "height": 740,
+   "view": "form-k33-v0-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11118
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v0-se-412.png",
+   "sha256": "d45ee993334391a25b9fb97de07b959e87555d2278f5982941755e00bdaa07d8",
+   "bytes": 23388,
+   "width": 832,
+   "height": 860,
+   "view": "form-k33-v0-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11118
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v1-nw-1440.png",
+   "sha256": "f11779be04fdcaa337ea452be89565668ce6935e0e1dfb7eb45c6fa9070af7b3",
+   "bytes": 55605,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v1-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11216
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v1-se-1440.png",
+   "sha256": "81e794a4ebf6bfbdddd1e110ac97c5330c117a21edfbfb53be10a19fb00bbd33",
+   "bytes": 53601,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v1-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11216
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v1-se-360.png",
+   "sha256": "d94fd679422de88d735258ee5c477450c39aa0493013bdba76a92e32e21faa13",
+   "bytes": 19687,
+   "width": 728,
+   "height": 740,
+   "view": "form-k33-v1-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11216
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v1-se-412.png",
+   "sha256": "33300f185bd1544ca67d070380bb845abe8229314e2fff0ff35cce9ad8a6ab33",
+   "bytes": 23668,
+   "width": 832,
+   "height": 860,
+   "view": "form-k33-v1-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11216
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v2-nw-1440.png",
+   "sha256": "96eb25357480d81d821ff43624d79a0aedb9ac9dac2c53e375a60e2e27a3abf3",
+   "bytes": 57241,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v2-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11244
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v2-se-1440.png",
+   "sha256": "24aad8d9f95fb32e14fbb8617d7e7ac7a207047ac323d597d25af98427737049",
+   "bytes": 56629,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v2-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11244
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v2-se-360.png",
+   "sha256": "f887dfa25da471ae762b7898b680c9a07587c196e3c327db7fb22af97c4811da",
+   "bytes": 20962,
+   "width": 728,
+   "height": 740,
+   "view": "form-k33-v2-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11244
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v2-se-412.png",
+   "sha256": "38b0ab356ea4024ead37e0d6e6f0cf57840d5c1f3e839e07d662f8f52bf1d3ee",
+   "bytes": 24321,
+   "width": 832,
+   "height": 860,
+   "view": "form-k33-v2-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11244
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v3-nw-1440.png",
+   "sha256": "2b67a9fa53e95fc523e77690b3ecbdf65c2cde085bdb363fb9856fb0a1285f69",
+   "bytes": 56512,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v3-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11184
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v3-se-1440.png",
+   "sha256": "2d52ca0d0ff095e81bb3cfcdd9d035b2b00780b12fb370824894dced7cd9753e",
+   "bytes": 56032,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k33-v3-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11184
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v3-se-360.png",
+   "sha256": "23ee4e1797ef766556ec708ec1f7144ae49af435b9e98c332143f55e69ad5505",
+   "bytes": 19692,
+   "width": 728,
+   "height": 740,
+   "view": "form-k33-v3-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11184
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k33-v3-se-412.png",
+   "sha256": "f463aca15c4dd33f4b425cc6fc18ce024c13379ebebb7acea586a5db1c5e135f",
+   "bytes": 23690,
+   "width": 832,
+   "height": 860,
+   "view": "form-k33-v3-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11044,
+    "after": 11184
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v0-nw-1440.png",
+   "sha256": "29cc31f290c0e7c1510ccf205fadbe71460c48c58e671b9ca3e0d5db51213b5d",
+   "bytes": 64567,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v0-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11182
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v0-se-1440.png",
+   "sha256": "daecae2cae9a440d8779a5275200d4c7a46b42c9b68f1af7f8275f4bbaeceee2",
+   "bytes": 66302,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v0-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11182
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v0-se-360.png",
+   "sha256": "376fcbfdfffff50d1a8990534110360e017d3f2f9d331195a961517e54199d04",
+   "bytes": 21998,
+   "width": 728,
+   "height": 740,
+   "view": "form-k34-v0-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11182
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v0-se-412.png",
+   "sha256": "f7dee842c21792e4c937eb94f9d92d301299742672521b3aa45830211250329b",
+   "bytes": 25436,
+   "width": 832,
+   "height": 860,
+   "view": "form-k34-v0-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11182
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v1-nw-1440.png",
+   "sha256": "73aa090a1a6b9a261722e935d2c70a56ce51493cbd165c8fee7f80159ba47940",
+   "bytes": 60935,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v1-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11176
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v1-se-1440.png",
+   "sha256": "77b906bd70dd3c5123de16d14d825d09a72be78eeada86f2497c08062abd7801",
+   "bytes": 61860,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v1-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11176
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v1-se-360.png",
+   "sha256": "98291ab423021f14dfee6f481a10ff497c3295bfaafd4fc520873f0f2cbb277f",
+   "bytes": 20195,
+   "width": 728,
+   "height": 740,
+   "view": "form-k34-v1-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11176
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v1-se-412.png",
+   "sha256": "8b9304d34b45dc52d7cbeda05561bcbd91f79ea09139da853efb098bd2b0c61f",
+   "bytes": 24390,
+   "width": 832,
+   "height": 860,
+   "view": "form-k34-v1-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11176
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v2-nw-1440.png",
+   "sha256": "04746d6c8996246ac1319f86de8b105972402054b9c78e61972205c715545de3",
+   "bytes": 58129,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v2-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11140
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v2-se-1440.png",
+   "sha256": "c7377cdc8752b9885f3ce0f0b104c3dbd2497946678e93e5e5eeae17f0ccd9f0",
+   "bytes": 58804,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v2-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11140
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v2-se-360.png",
+   "sha256": "0f11e19e1ba2495bf82b693df95ad7c4e990e1d384671e67666d37492c1efd3b",
+   "bytes": 20336,
+   "width": 728,
+   "height": 740,
+   "view": "form-k34-v2-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11140
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v2-se-412.png",
+   "sha256": "58ffcce6bd1fdcaa49046e0bdfd8320ee08434a0093713d2d975ce575461aba2",
+   "bytes": 23967,
+   "width": 832,
+   "height": 860,
+   "view": "form-k34-v2-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11140
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v3-nw-1440.png",
+   "sha256": "189a387e357d190f21fc9617aa6cdf2f320434d83375588e7e6905516c8792c2",
+   "bytes": 62202,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v3-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11144
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v3-se-1440.png",
+   "sha256": "cefb4dc20320a5aa3fd1911e46952cced5faf7adb8438d5ee123a2925b115c14",
+   "bytes": 65971,
+   "width": 2888,
+   "height": 1000,
+   "view": "form-k34-v3-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11144
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v3-se-360.png",
+   "sha256": "400e11a5789c346c803397b1816958dd39f1c2ce11212692a4ca8f9c7ba13a51",
+   "bytes": 21378,
+   "width": 728,
+   "height": 740,
+   "view": "form-k34-v3-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11144
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-form-k34-v3-se-412.png",
+   "sha256": "bc7eb78a30e4691493210e200077b9743779cda0a8f02141efc7124c7ba34c05",
+   "bytes": 25931,
+   "width": 832,
+   "height": 860,
+   "view": "form-k34-v3-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；畫廊樣張城的單棟，用 __gt.towerV 強制變體；同相機",
+   "triangles": {
+    "before": 11004,
+    "after": 11144
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-seed516-far-1440.png",
+   "sha256": "ea033f3aeef44704286ee79233d81fe1aa0e82cbfb13364877fad478ac628451",
+   "bytes": 168578,
+   "width": 2888,
+   "height": 1000,
+   "view": "seed516-far",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-seed516-skyline-1440.png",
+   "sha256": "6e287ff483403f50b0b3cf4ea8cb391eafd1715f7d8fe4dda133f13ade3c30bf",
+   "bytes": 216332,
+   "width": 2888,
+   "height": 1000,
+   "view": "seed516-skyline",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-seed516-skyline-360.png",
+   "sha256": "86f5fa22e379fd218acceac4d8c48686ca5c4954ca1ac0a85a07a759f0cc2e85",
+   "bytes": 56029,
+   "width": 728,
+   "height": 740,
+   "view": "seed516-skyline",
+   "viewport": 360,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-seed516-skyline-412.png",
+   "sha256": "5dc6447c52736a6a79a834ef8f01610ed91cd9dd8ba5f79332cdd743a0a690ea",
+   "bytes": 68730,
+   "width": 832,
+   "height": 860,
+   "view": "seed516-skyline",
+   "viewport": 412,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝towerArt=legacy，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-172-k33-nw-1440.png",
+   "sha256": "e71aee3bb6e53bf810daf06f21f54ae9a554b7f1b655674d1ac699e9bf85499f",
+   "bytes": 137231,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-172-k33-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-172-k33-se-1440.png",
+   "sha256": "753e019730c872e762677a36cc6474181b5f17e3c42a4d6c3c3659d66927ba62",
+   "bytes": 169896,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-172-k33-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-172-k33-se-360.png",
+   "sha256": "94e0198fedda554b51877a9ba1bcefb4ffc3d9dfe9f0cd1a14b3db88ea6b5824",
+   "bytes": 49689,
+   "width": 728,
+   "height": 740,
+   "view": "tower-172-k33-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-172-k33-se-412.png",
+   "sha256": "40ec39f057fb84587326f8744dd1dcbf687076c90a09e397069b239cac16f6f2",
+   "bytes": 60129,
+   "width": 832,
+   "height": 860,
+   "view": "tower-172-k33-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-182-k33-nw-1440.png",
+   "sha256": "924a301642fafb1c16c59f7c5d6c7163915d13b038879b606c2f1899437372b6",
+   "bytes": 169968,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-182-k33-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-182-k33-se-1440.png",
+   "sha256": "42b2528b646b274942ec45e255e4234f489b8ad8c9d9c1ad576da03b1d653c47",
+   "bytes": 212016,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-182-k33-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-182-k33-se-360.png",
+   "sha256": "cb48e022106749bd56396a5ab65f47f702d45edba39977a37b894e694ae0087f",
+   "bytes": 52213,
+   "width": 728,
+   "height": 740,
+   "view": "tower-182-k33-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-182-k33-se-412.png",
+   "sha256": "f6160bc1d7c817f04fae2ace7c65474e55c4be2cba5bd5e391f0e6f85e6a63a6",
+   "bytes": 64684,
+   "width": 832,
+   "height": 860,
+   "view": "tower-182-k33-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-191-k33-nw-1440.png",
+   "sha256": "28a6998e9fdaa9a84667dc177dff45198369e2140068c9edd288e18c04f87d3e",
+   "bytes": 172964,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-191-k33-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-191-k33-se-1440.png",
+   "sha256": "5bd2aa5ce90b4bb930161b52ec5f09fc90c7370533c308f00303290b310f45e7",
+   "bytes": 189942,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-191-k33-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-191-k33-se-360.png",
+   "sha256": "45fd3582a047687f5a3f6ef5c5c38d02a1c22fcbe1d1b23759dc25d8277d812c",
+   "bytes": 47132,
+   "width": 728,
+   "height": 740,
+   "view": "tower-191-k33-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-191-k33-se-412.png",
+   "sha256": "6291b755a66b40d3e57fd58aec0f1874636f6b80d417064cb6bed66bd891657a",
+   "bytes": 57798,
+   "width": 832,
+   "height": 860,
+   "view": "tower-191-k33-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-215-k34-nw-1440.png",
+   "sha256": "6acc8ec0599fc2ee863572586c514b1499dfbfcdca6e6eb67b4e1ec0724e0e4b",
+   "bytes": 174268,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-215-k34-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-215-k34-se-1440.png",
+   "sha256": "ee8ef1561d8fd789a4e2fb5031c1c82b7d93a33b477f2cf87365b57a911a9248",
+   "bytes": 214291,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-215-k34-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-215-k34-se-360.png",
+   "sha256": "139ed40579c20d2de9c47532b66d416eb081cb66b34f47a20bea1b269d658d82",
+   "bytes": 56159,
+   "width": 728,
+   "height": 740,
+   "view": "tower-215-k34-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-215-k34-se-412.png",
+   "sha256": "d430f99e621b52f728a97c1fa03fc0e1eca5f34f139e70c6512c054f874c22e1",
+   "bytes": 68983,
+   "width": 832,
+   "height": 860,
+   "view": "tower-215-k34-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-219-k34-nw-1440.png",
+   "sha256": "d2c4b932c7f870e8902f9349155f53a04f628e3a0117352bc290afc830b06d56",
+   "bytes": 187561,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-219-k34-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-219-k34-se-1440.png",
+   "sha256": "4c833734ac31ab0571888d3251ef1ceb557c0c1b6875ba0e09fb0f42cdd4756c",
+   "bytes": 209077,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-219-k34-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-219-k34-se-360.png",
+   "sha256": "672c037c775f0ba83c37844f506b014edd0261f3c3fb821ad2b44855b3a50c14",
+   "bytes": 52790,
+   "width": 728,
+   "height": 740,
+   "view": "tower-219-k34-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-219-k34-se-412.png",
+   "sha256": "fd0516d676d05cc9f94dc290d63559d1485fa0bf566bd94d6d0aa6ce3aaedfd7",
+   "bytes": 65510,
+   "width": 832,
+   "height": 860,
+   "view": "tower-219-k34-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-290-k34-nw-1440.png",
+   "sha256": "54038aa53cb9de51a2db9e2f6564e8b5008f2ea05cc998def807fdad541e82d9",
+   "bytes": 142629,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-290-k34-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-290-k34-se-1440.png",
+   "sha256": "d6558db1c11e711d769e40216ebc0828d67bad756f00199bfad23f4028838d28",
+   "bytes": 142767,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-290-k34-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-290-k34-se-360.png",
+   "sha256": "7dec0201901ce3ea9e0aca09fa23b1fcc8f57c81e80c87d1411d38e0dda4d099",
+   "bytes": 48494,
+   "width": 728,
+   "height": 740,
+   "view": "tower-290-k34-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-290-k34-se-412.png",
+   "sha256": "cade112a781979426a885d0a044fa14033e429951ed4e95d0fc9af0c29fe188e",
+   "bytes": 59034,
+   "width": 832,
+   "height": 860,
+   "view": "tower-290-k34-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-374-k105-nw-1440.png",
+   "sha256": "8dee4248ec35cef438394b8988396ba70147e05d29a12e9a69aca5a9ca115775",
+   "bytes": 165825,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-374-k105-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-374-k105-se-1440.png",
+   "sha256": "89e7d39b6403d43e87192b5d85cf37c3ba1c102f2ecd8d00413c167f26ec3655",
+   "bytes": 181559,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-374-k105-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-374-k105-se-360.png",
+   "sha256": "e97784e5ba0b7d1272dcaafb838eeafeb022f7217942ef3957f7662d2cd1b4d9",
+   "bytes": 57263,
+   "width": 728,
+   "height": 740,
+   "view": "tower-374-k105-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-374-k105-se-412.png",
+   "sha256": "3d51a098f0ff78ef346c370661463c5a7fe8dbd13caa1da98f0f34fe44d3b5d1",
+   "bytes": 72190,
+   "width": 832,
+   "height": 860,
+   "view": "tower-374-k105-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-406-k106-nw-1440.png",
+   "sha256": "b4426a4e03ec2c7e5ff20dff9cee64bcd4350658eab2d242dd488f1c5b06c01e",
+   "bytes": 215947,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-406-k106-nw",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-406-k106-se-1440.png",
+   "sha256": "87c06263a60dd07bb456288f8eef2211928313249c4b24e26f6abd0a0d5f23c8",
+   "bytes": 225385,
+   "width": 2888,
+   "height": 1000,
+   "view": "tower-406-k106-se",
+   "viewport": 1440,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-406-k106-se-360.png",
+   "sha256": "c948503f3e23a85112dd9502fe21a23362aa49fda7c97c3e116880041dd44196",
+   "bytes": 61503,
+   "width": 728,
+   "height": 740,
+   "view": "tower-406-k106-se",
+   "viewport": 360,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  },
+  {
+   "file": "docs/img/D064/D064-pair-tower-406-k106-se-412.png",
+   "sha256": "f92b9cffad0b15f5fe66b26b434ece923493a9f88d031d10842c99b75cf3cc76",
+   "bytes": 75421,
+   "width": 832,
+   "height": 860,
+   "view": "tower-406-k106-se",
+   "viewport": 412,
+   "kind": "tower-pair",
+   "note": "前｜後並排；seed516 的真塔，同世界同相機",
+   "triangles": {
+    "before": 113668,
+    "after": 114770
+   }
+  }
+ ]
+}
