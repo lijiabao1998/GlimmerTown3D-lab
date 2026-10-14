@@ -1,0 +1,428 @@
+{
+ "head": "9f6eea56367096e300a89291cd858489c2635f72",
+ "target": [
+  33,
+  34,
+  105,
+  106
+ ],
+ "kinds": {
+  "33": {
+   "name": "住宅摩天樓",
+   "size": 2,
+   "target": true,
+   "shape": "tower",
+   "params": {
+    "tiers": 3,
+    "spire": 0.28,
+    "podium": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 8.07,
+     "top": 8.07,
+     "walls": 40,
+     "other": 10,
+     "dress": 0,
+     "weighted": 100
+    },
+    {
+     "variant": 1,
+     "H": 7.39,
+     "top": 7.39,
+     "walls": 40,
+     "other": 10,
+     "dress": 0,
+     "weighted": 100
+    },
+    {
+     "variant": 2,
+     "H": 4.32,
+     "top": 4.32,
+     "walls": 40,
+     "other": 10,
+     "dress": 0,
+     "weighted": 100
+    },
+    {
+     "variant": 3,
+     "H": 7.76,
+     "top": 7.76,
+     "walls": 40,
+     "other": 10,
+     "dress": 0,
+     "weighted": 100
+    }
+   ]
+  },
+  "34": {
+   "name": "商業摩天樓",
+   "size": 2,
+   "target": true,
+   "shape": "tower",
+   "params": {
+    "tiers": 2,
+    "spire": 0.35,
+    "glass": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 8.07,
+     "top": 8.07,
+     "walls": 20,
+     "other": 10,
+     "dress": 0,
+     "weighted": 60
+    },
+    {
+     "variant": 1,
+     "H": 7.39,
+     "top": 7.39,
+     "walls": 20,
+     "other": 10,
+     "dress": 0,
+     "weighted": 60
+    },
+    {
+     "variant": 2,
+     "H": 4.32,
+     "top": 4.32,
+     "walls": 20,
+     "other": 10,
+     "dress": 0,
+     "weighted": 60
+    },
+    {
+     "variant": 3,
+     "H": 7.76,
+     "top": 7.76,
+     "walls": 20,
+     "other": 10,
+     "dress": 0,
+     "weighted": 60
+    }
+   ]
+  },
+  "103": {
+   "name": "天際觀景餐廳",
+   "size": 1,
+   "target": false,
+   "shape": "tower",
+   "params": {
+    "tiers": 1,
+    "disk": 1,
+    "slim": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 1.49,
+     "top": 1.49,
+     "walls": 10,
+     "other": 130,
+     "dress": 0,
+     "weighted": 280
+    },
+    {
+     "variant": 1,
+     "H": 2.59,
+     "top": 2.59,
+     "walls": 10,
+     "other": 130,
+     "dress": 0,
+     "weighted": 280
+    },
+    {
+     "variant": 2,
+     "H": 1.82,
+     "top": 1.82,
+     "walls": 10,
+     "other": 130,
+     "dress": 0,
+     "weighted": 280
+    }
+   ]
+  },
+  "105": {
+   "name": "住宅巨廈",
+   "size": 3,
+   "target": true,
+   "shape": "tower",
+   "params": {
+    "tiers": 3,
+    "wide": 1,
+    "podium": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 5.65,
+     "top": 4.23,
+     "walls": 40,
+     "other": 0,
+     "dress": 0,
+     "weighted": 80
+    },
+    {
+     "variant": 1,
+     "H": 6.56,
+     "top": 4.91,
+     "walls": 40,
+     "other": 0,
+     "dress": 0,
+     "weighted": 80
+    },
+    {
+     "variant": 2,
+     "H": 5.65,
+     "top": 4.23,
+     "walls": 40,
+     "other": 0,
+     "dress": 0,
+     "weighted": 80
+    }
+   ]
+  },
+  "106": {
+   "name": "商業綜合體",
+   "size": 3,
+   "target": true,
+   "shape": "tower",
+   "params": {
+    "tiers": 4,
+    "spire": 0.18,
+    "deco": 1,
+    "podium": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 9.15,
+     "top": 9.15,
+     "walls": 50,
+     "other": 26,
+     "dress": 40,
+     "weighted": 192
+    },
+    {
+     "variant": 1,
+     "H": 9.15,
+     "top": 9.15,
+     "walls": 50,
+     "other": 26,
+     "dress": 40,
+     "weighted": 192
+    },
+    {
+     "variant": 2,
+     "H": 8.38,
+     "top": 8.38,
+     "walls": 50,
+     "other": 26,
+     "dress": 40,
+     "weighted": 192
+    }
+   ]
+  },
+  "123": {
+   "name": "造船廠",
+   "size": 3,
+   "target": false,
+   "shape": "port",
+   "params": {
+    "ship": 1,
+    "cranes": 1,
+    "water": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 2.44,
+     "top": 2.44,
+     "walls": 0,
+     "other": 92,
+     "dress": 34,
+     "weighted": 218
+    },
+    {
+     "variant": 1,
+     "H": 0.97,
+     "top": 0.97,
+     "walls": 0,
+     "other": 92,
+     "dress": 34,
+     "weighted": 218
+    },
+    {
+     "variant": 2,
+     "H": 1.79,
+     "top": 1.79,
+     "walls": 0,
+     "other": 92,
+     "dress": 34,
+     "weighted": 218
+    }
+   ]
+  },
+  "127": {
+   "name": "社會住宅",
+   "size": 2,
+   "target": false,
+   "shape": "tower",
+   "params": {
+    "tiers": 1,
+    "slab": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 1.61,
+     "top": 1.61,
+     "walls": 10,
+     "other": 0,
+     "dress": 0,
+     "weighted": 20
+    },
+    {
+     "variant": 1,
+     "H": 1.51,
+     "top": 1.51,
+     "walls": 10,
+     "other": 0,
+     "dress": 0,
+     "weighted": 20
+    },
+    {
+     "variant": 2,
+     "H": 0.7,
+     "top": 0.7,
+     "walls": 10,
+     "other": 0,
+     "dress": 0,
+     "weighted": 20
+    }
+   ]
+  },
+  "135": {
+   "name": "大型醫學中心",
+   "size": 5,
+   "target": false,
+   "shape": "hospital",
+   "params": {
+    "tall": 1,
+    "domes": 1,
+    "wide": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 3.16,
+     "top": 3.17,
+     "walls": 20,
+     "other": 160,
+     "dress": 40,
+     "weighted": 400
+    },
+    {
+     "variant": 1,
+     "H": 1.93,
+     "top": 1.94,
+     "walls": 20,
+     "other": 160,
+     "dress": 40,
+     "weighted": 400
+    },
+    {
+     "variant": 2,
+     "H": 0.85,
+     "top": 0.86,
+     "walls": 20,
+     "other": 160,
+     "dress": 40,
+     "weighted": 400
+    }
+   ]
+  },
+  "136": {
+   "name": "文化藝術中心",
+   "size": 5,
+   "target": false,
+   "shape": "campus",
+   "params": {
+    "plaza": 1,
+    "towers": 2,
+    "big": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 2.21,
+     "top": 2.21,
+     "walls": 40,
+     "other": 0,
+     "dress": 2,
+     "weighted": 82
+    },
+    {
+     "variant": 1,
+     "H": 0.4,
+     "top": 0.4,
+     "walls": 40,
+     "other": 0,
+     "dress": 2,
+     "weighted": 82
+    },
+    {
+     "variant": 2,
+     "H": 0.79,
+     "top": 0.79,
+     "walls": 40,
+     "other": 0,
+     "dress": 2,
+     "weighted": 82
+    }
+   ]
+  },
+  "174": {
+   "name": "大型貨櫃碼頭",
+   "size": 5,
+   "target": false,
+   "shape": "port",
+   "params": {
+    "cranes": 3,
+    "containers": 1
+   },
+   "variants": [
+    {
+     "variant": 0,
+     "H": 2.77,
+     "top": 2.77,
+     "walls": 0,
+     "other": 120,
+     "dress": 212,
+     "weighted": 452
+    },
+    {
+     "variant": 1,
+     "H": 1.63,
+     "top": 1.63,
+     "walls": 0,
+     "other": 120,
+     "dress": 212,
+     "weighted": 452
+    },
+    {
+     "variant": 2,
+     "H": 2.16,
+     "top": 2.16,
+     "walls": 0,
+     "other": 120,
+     "dress": 212,
+     "weighted": 452
+    }
+   ]
+  }
+ }
+}

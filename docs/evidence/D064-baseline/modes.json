@@ -1,0 +1,83 @@
+{
+ "head": "9f6eea56367096e300a89291cd858489c2635f72",
+ "flags": "villageArt industryArt on; commerceArt off = D062 candidate, on = D063",
+ "cities": {
+  "seed516": {
+   "towers": 8,
+   "byKind": {
+    "33": 3,
+    "34": 3,
+    "105": 1,
+    "106": 1
+   },
+   "modes": {
+    "a": {
+     "d062": {
+      "scene": 121606,
+      "towers": 752
+     },
+     "d063": {
+      "scene": 121606,
+      "towers": 752
+     }
+    },
+    "b": {
+     "d062": {
+      "scene": 86156,
+      "towers": 752
+     },
+     "d063": {
+      "scene": 84540,
+      "towers": 752
+     }
+    },
+    "c": {
+     "d062": {
+      "scene": 116227,
+      "towers": 752
+     },
+     "d063": {
+      "scene": 113668,
+      "towers": 752
+     }
+    }
+   }
+  },
+  "ai120": {
+   "towers": 0,
+   "byKind": {},
+   "modes": {
+    "a": {
+     "d062": {
+      "scene": 92942,
+      "towers": 0
+     },
+     "d063": {
+      "scene": 92942,
+      "towers": 0
+     }
+    },
+    "b": {
+     "d062": {
+      "scene": 87611,
+      "towers": 0
+     },
+     "d063": {
+      "scene": 87611,
+      "towers": 0
+     }
+    },
+    "c": {
+     "d062": {
+      "scene": 96607,
+      "towers": 0
+     },
+     "d063": {
+      "scene": 96607,
+      "towers": 0
+     }
+    }
+   }
+  }
+ }
+}
