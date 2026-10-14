@@ -160,7 +160,7 @@ jobs:
 
   d062:
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -172,6 +172,8 @@ jobs:
       - run: npm run build
       - name: D062 seasons, same-world photography in ten states over six views, and the production clock through the spring-to-summer window
         run: node tools/d062-capture.mjs
+      - name: D062 weather, same-world photography in ten states over three views, animation counters, and the production clock (a real rainbow, flash and snowfall from the simulation)
+        run: node tools/d062-weather-capture.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

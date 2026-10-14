@@ -20,6 +20,8 @@ const ANCHORS={
   'src/cityView.ts':{
     'season-view-import':null,'season-option':null,'season-sync':null,
     'season-enabled':{at:'    return { mode: blockMode, streetArt:',lines:1},
+    'weather-view-import':null,'weather-state':null,'weather-day':null,'weather-draw':null,'weather-reset':null,'weather-hook':null,
+    'weather-loop':{at:'  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); draw(); });',lines:1},
   },
   'src/render/cityScene.ts':{
     'season-import':null,'season-iface':null,'season-trees-vars':null,'season-trees':null,'season-yard':null,'season-set':null,
@@ -39,6 +41,9 @@ const ANCHORS={
     'season-cache-inc':{at:'  return { cache: { n, S, k1, k2, k3, data, land: landOf(c) }, painted: tiles.length',lines:1},
     'season-lot':{at:'        else { const L = GROUND.lot[lots[i]]; col = h < 0.09',lines:1},
     'season-zone':{at:'        if (zn) col = LT ? landZone(',lines:1},
+  },
+  'src/render/post.ts':{
+    'weather-import':null,'weather-glsl-decl':null,'weather-glsl-apply':null,'weather-prop':null,'weather-init':null,'weather-set':null,'weather-method':null,
   },
   'src/render/landArt.ts':{
     'season-tile-pal':null,

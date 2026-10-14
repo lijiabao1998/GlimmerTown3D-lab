@@ -1,7 +1,9 @@
 // D062 tests real painters and real production scenes in Node, without claiming browser rendering or Android hardware acceptance.
 // Seasons (docs/D062-seasons-weather.md): schedule, per-tile dissolve, palettes judged as OUTPUT colours (what the style-A post pass leaves on screen),
 // tree tints, incremental == full over a whole year, the production setSeason path, flags, cost and the source scope lock.
-// The browser side (draw calls, real pixels, console errors) is measured by the CI job `d062`; this file never reads a screenshot.
+// Weather (same card): the look mapping, the rainbow derived from two days against the simulation's own flag, lightning, the fx timers, the lab text run in a vm
+// (tint, particle colours and caps) against our constants with every deviation carrying a number, the sky tint, the CPU copy of the particle shader, flags and wiring.
+// The browser side (draw calls, real pixels, console errors, GPU = CPU copy) is measured by the CI job `d062` (tools/d062-capture.mjs, tools/d062-weather-capture.mjs); this file never reads a screenshot.
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -12,9 +14,11 @@ import {createScanner,SyntaxKind} from 'typescript/unstable/ast';
 import * as THREE from 'three';
 import {ROOT} from './cdp.mjs';
 import {paintGround,paintGroundInc,repaintTiles,groundKeys} from '../src/render/ground.ts';
-import {LAND_OUT,outputColor,texelFor,landLevelOf,LAND_LEGACY_KEYS} from '../src/render/landArt.ts';
+import {LAND_OUT,LAND_SKY,outputColor,texelFor,landLevelOf,LAND_LEGACY_KEYS} from '../src/render/landArt.ts';
 import {seasonView,seasonThr,seasonAt,seasonOptionOf,seasonSetupOf,seasonPal,treeTint,SEASON_BLEND_DAYS,SEASON_TABLES,SEASON_STYLE_DEFAULT} from '../src/render/seasonArt.ts';
-import {season,inWinter} from '../src/sim/rules/weather.ts';
+import {season,inWinter,weatherStep} from '../src/sim/rules/weather.ts';
+import {labRng} from '../src/sim/rules/lab.ts';
+import {weatherLook,WX_TINT,tintOf,FALL,RAIN_COLOR,SNOW_COLOR,RAINBOW,FLASH,ANIM_FPS,rainbowDay,lightningDay,rainbowStrength,flashAlpha,WeatherFx,tintSky,weatherOptionOf,WX_PINNED,WEATHER_GLSL_UNIFORMS,WEATHER_GLSL_FNS,WEATHER_GLSL_APPLY,fallHit} from '../src/render/weatherArt.ts';
 import {hasRoadNear} from '../src/sim/rules/grid.ts';
 import {hash2} from '../src/sim/rng.ts';
 import {buildCityScene} from '../src/render/cityScene.ts';
@@ -190,6 +194,71 @@ function seasonParity(lab,ours) {
   for(let i=0;i<60;i++){const t=ours.tint(2,false);if(!t||!lab.LC.includes(t.hex))bad.push('autumn leaf colour is not one of the lab\'s fall colours');}
   return [...new Set(bad)];
 }
+
+
+// ---- the weather half of the lab golden: the lab's own text is run in a vm (tint, particle colours, particle caps) or parsed (flash, rainbow), then compared with this line's constants ----
+const rgbaOf=str=>{const m=/^rgba\((\d+),(\d+),(\d+),(\.?\d*\.?\d+)\)$/.exec(String(str).replace(/\s+/g,''));return m?{rgb:[+m[1],+m[2],+m[3]],a:+m[4]}:null;};
+const hexList=str=>[...str.matchAll(/#([0-9a-f]{6})/gi)].map(m=>parseInt(m[1],16));
+const rgbInt=v=>(v[0]<<16)|(v[1]<<8)|v[2];
+function labWeatherOf(T) {
+  const tint=(weather,win)=>{const ctx={fillStyle:'',fillRect(){}};vm.runInNewContext(T.weatherTint,{weather,win,ctx,W:100,H:100});return rgbaOf(ctx.fillStyle);};
+  const particle=win=>{const ctx={fillStyle:'',fillRect(){}};vm.runInNewContext(T.drawRain+'\ndrawRain(1);',{inWinter:()=>win,ctx,rain:[{x:1,y:1}],Math});return rgbaOf(ctx.fillStyle);};
+  const cap=(weather,quality=1)=>{const sb={rain:[],weather,quality,cam:{z:1},W:1000,H:600,inWinter:()=>false,screenWorld443:()=>[0,0],inMap:()=>false,localWind443:()=>0,windX441:0,visT:0};vm.runInNewContext(T.updRain+'\nupdRain(1/60);',sb);return sb.rain.length;};
+  const num=(re,text,i=1)=>{const m=re.exec(text);if(!m)throw new Error('lab pattern not found: '+re);return +m[i];};
+  const fall=/vy=\(win\?(\d+):(\d+)\)\*cam\.z\*f/.exec(T.updRain);
+  const geo=/rcx=W\*(\.\d+), rcy=H\*(\d\.\d+), rout=H\*(\.\d+)/.exec(T.rainbowDraw),arc=/Math\.PI\*(\d\.\d+),Math\.PI\*(\d\.\d+)/.exec(T.rainbowDraw);
+  return {
+    tint,particle,cap,
+    snowSpeed:+fall[1],rainSpeed:+fall[2],   // 每個 60 fps 影格的像素（× 縮放 × 60 ＝ 每秒）
+    flashSeconds:num(/flashT=(\.\d+);sThunder/,T.weatherMachine),flashRate:num(/R\(\)<(\.\d+)\)\{flashT=/,T.weatherMachine),
+    flashCap:num(/flashA=Math\.min\((\.\d+),flashT\*\d+\)/,T.flashDraw),flashGain:num(/flashA=Math\.min\(\.\d+,flashT\*(\d+)\)/,T.flashDraw),
+    boltDrawn:/分岔閃電線形/.test(T.flashDraw),
+    rainbowTriggers:[...T.weatherMachine.matchAll(/!inWinter\(\)\)rainbowT=(\d+)/g)].map(m=>+m[1]),
+    rainbowSeconds:num(/clamp\(rainbowT\/(\d+),0,1\)/,T.rainbowDraw),rainbowAlpha:num(/clamp\(rainbowT\/\d+,0,1\)\*(\.\d+)/,T.rainbowDraw),
+    rainbowColors:hexList(/RB=\[([^\]]+)\]/.exec(T.rainbowDraw)[1]),
+    cx:+geo[1],cy:+geo[2],rOut:+geo[3],a0:+arc[1],a1:+arc[2],band:num(/lw=Math\.max\(\d+,H\*(\.\d+)\)/,T.rainbowDraw),clearOnly:/weather===0&&cam\.z>=\.5/.test(T.rainbowDraw),
+  };
+}
+const RT_H=333;   // the render target height at the 1440×1000 desktop views: the screen divided by three
+// Returns the list of problems. Relations: equal (tint, particle colours and counts, rainbow colours/seconds/alpha/geometry, flash seconds and rate) or documented deviation with its own number.
+function weatherParity(lab,ours) {
+  const bad=[],same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
+  for(const [look,weather,win] of [[1,1,false],[2,2,false],[3,1,true],[4,2,true]]) {
+    const t=lab.tint(weather,win),o=ours.tintOf(look);
+    if(!t||!o||!same(t.rgb,o.rgb)||Math.abs(t.a-o.a)>1e-9)bad.push(`tint look ${look}: lab ${JSON.stringify(t)} but ours ${JSON.stringify(o)}`);
+  }
+  const lr=lab.particle(false),ls=lab.particle(true);
+  if(!same(lr.rgb,ours.RAIN_COLOR.rgb)||lr.a!==ours.RAIN_COLOR.a)bad.push('rain colour is not the lab\'s');
+  if(!same(ls.rgb,ours.SNOW_COLOR.rgb)||ls.a!==ours.SNOW_COLOR.a)bad.push('snow colour is not the lab\'s');
+  for(const [look,weather] of [[1,1],[2,2],[3,1],[4,2]])if(lab.cap(weather)!==ours.FALL[look].count)bad.push(`particle count look ${look}: lab ${lab.cap(weather)} but ours ${ours.FALL[look].count}`);
+  if(!same(lab.rainbowColors,ours.RAINBOW.colors.map(rgbInt)))bad.push('rainbow colours are not the lab\'s');
+  if(lab.rainbowSeconds!==ours.RAINBOW.seconds)bad.push('rainbow duration is not the lab\'s');
+  if(lab.rainbowAlpha!==ours.RAINBOW.alphaSky)bad.push('rainbow sky alpha is not the lab\'s');
+  if(lab.cx!==ours.RAINBOW.cx||lab.cy!==ours.RAINBOW.cy||lab.rOut!==ours.RAINBOW.rOut||lab.a0!==ours.RAINBOW.a0||lab.a1!==ours.RAINBOW.a1)bad.push('rainbow circle or arc is not the lab\'s');
+  if(!same(lab.rainbowTriggers,[9,9]))bad.push('lab rainbow triggers are not two 9-second ones');
+  if(lab.flashSeconds!==ours.FLASH.seconds||lab.flashRate!==ours.FLASH.rate)bad.push('flash duration or rate is not the lab\'s');
+  // deviations, each with its reason as a number
+  if(!(lab.band*RT_H<4))bad.push(`rainbow band: the lab's ${lab.band}H is ${(lab.band*RT_H).toFixed(1)} render pixels, not under 4 — the widening has no reason`);
+  if(!(ours.RAINBOW.band*RT_H>=5))bad.push(`rainbow band: ours ${ours.RAINBOW.band}H is ${(ours.RAINBOW.band*RT_H).toFixed(1)} render pixels, not at least 5`);
+  const labPeak=Math.min(lab.flashCap,lab.flashSeconds*lab.flashGain);
+  if(!(ours.FLASH.peak<labPeak&&ours.FLASH.peak<=0.5))bad.push(`flash peak: ours ${ours.FLASH.peak} must be at most .5 and under the lab's ${labPeak}`);
+  if(!(ours.RAINBOW.alphaGround<ours.RAINBOW.alphaSky))bad.push('rainbow over ground must be fainter than over sky');
+  if(!lab.boltDrawn||!lab.clearOnly)bad.push('the lab text no longer shows the bolt shape and the clear-sky-only rainbow that the deviations list refers to');
+  for(const [look,labPerFrame] of [[1,lab.rainSpeed],[2,lab.rainSpeed],[3,lab.snowSpeed],[4,lab.snowSpeed]]) {
+    const labCss=labPerFrame*60,oursCss=ours.FALL[look].speed*3,ratio=oursCss/labCss;
+    if(!(ratio>0.15&&ratio<=1))bad.push(`fall speed look ${look}: ours ${oursCss} css px/s against the lab's ${labCss} (ratio ${ratio.toFixed(2)}) must be between .15 and 1`);
+  }
+  return bad;
+}
+const OURS_WX={tintOf,FALL,RAIN_COLOR,SNOW_COLOR,RAINBOW,FLASH};
+// Feed a WeatherFx (or a mutant of it) a list of [weather, day, winter] days, dtDay real seconds per day; returns the real times at which a flash started
+function fxFlashTimes(make,days,dtDay,calm=false) {
+  const fx=make(calm),out=[];let t=0;
+  for(const [weather,day,winter] of days){const before=fx.flashT;fx.day(weather,day,winter);if(fx.flashT>before)out.push(+t.toFixed(9));fx.step(dtDay);t+=dtDay;}
+  return out;
+}
+class NoGapFx extends WeatherFx { day(weather,day,winter){ if(rainbowDay(this.prev,weather,winter))this.rainbowT=RAINBOW.seconds; if(!this.calm&&lightningDay(day,weather,winter)){this.flashT=FLASH.seconds;this.gap=0;} this.prev=weather; } }   // mutant: ignores the 1 s minimum gap
+class NoCalmFx extends WeatherFx { day(weather,day,winter){ if(rainbowDay(this.prev,weather,winter))this.rainbowT=RAINBOW.seconds; if(lightningDay(day,weather,winter)&&this.gap>=FLASH.minGap){this.flashT=FLASH.seconds;this.gap=0;} this.prev=weather; } }   // mutant: flashes although the user asked for less motion
 
 export async function d062Guards(log) {
   let failed=0;
@@ -504,20 +573,20 @@ export async function d062Guards(log) {
     assert.match(ground,/const seaSig = /,'the style is part of the cache identity');
   });
 
-  test('cost: a season repaint is within 1.15× of a repaint without seasons (interleaved medians), single tiles too; texture size, triangles and mesh list unchanged',()=>{
+  test('cost: a season repaint is within 1.15× of a repaint without seasons (best of 15 interleaved runs: a busy machine only ever adds time), single tiles too; texture size, triangles and mesh list unchanged',()=>{
     const g=groundOf('seed516',2),{n,S,cat}=g,time=fn=>{const t=process.hrtime.bigint();fn();return Number(process.hrtime.bigint()-t)/1e6;};
     const off={...g.gc,season:undefined},on={...g.gc,season:{view:{a:1,b:1,t:0},soft:false}},mid={...g.gc,season:seasonSetupOf({mode:'auto',soft:false},dayOf(94))};
     time(()=>paintGround(off,cat,S,g.lots,g.plates));time(()=>paintGround(mid,cat,S,g.lots,g.plates));
     const t={off:[],on:[],mid:[]};
-    for(let i=0;i<9;i++){t.off.push(time(()=>paintGround(off,cat,S,g.lots,g.plates)));t.on.push(time(()=>paintGround(on,cat,S,g.lots,g.plates)));t.mid.push(time(()=>paintGround(mid,cat,S,g.lots,g.plates)));}
-    const m={off:median(t.off),on:median(t.on),mid:median(t.mid)};
+    for(let i=0;i<15;i++){t.off.push(time(()=>paintGround(off,cat,S,g.lots,g.plates)));t.on.push(time(()=>paintGround(on,cat,S,g.lots,g.plates)));t.mid.push(time(()=>paintGround(mid,cat,S,g.lots,g.plates)));}
+    const m={off:Math.min(...t.off),on:Math.min(...t.on),mid:Math.min(...t.mid)};
     assert.ok(m.on<=1.15*m.off+0.5,`summer repaint ${m.on.toFixed(1)} ms ≤ 1.15 × ${m.off.toFixed(1)} ms (+0.5 ms slack)`);
     assert.ok(m.mid<=1.15*m.off+0.5,`mid-window repaint ${m.mid.toFixed(1)} ms ≤ 1.15 × ${m.off.toFixed(1)} ms (+0.5 ms slack)`);
     const one=gc=>{const cache=paintGroundInc(gc,cat,S,g.lots,g.plates,null).cache,tiles=[36*n+36];const t0=process.hrtime.bigint();for(let i=0;i<400;i++)repaintTiles(gc,cat,S,g.lots,g.plates,cache,tiles);return Number(process.hrtime.bigint()-t0)/1e6/400;};
-    one(off);one(on);const single={off:median([one(off),one(off),one(off)]),on:median([one(on),one(on),one(on)])};
+    one(off);one(on);const single={off:Math.min(one(off),one(off),one(off)),on:Math.min(one(on),one(on),one(on))};
     assert.ok(single.on<=1.5*single.off+0.01,`single-tile repaint ${single.on.toFixed(3)} ms ≤ 1.5 × ${single.off.toFixed(3)} ms`);
     assert.equal(paintGround(on,cat,S,g.lots,g.plates).length,g.data.length,'texture bytes unchanged');
-    return `full repaint median ms: off ${m.off.toFixed(1)}, summer ${m.on.toFixed(1)}, mid-window ${m.mid.toFixed(1)}; one tile µs: off ${(single.off*1000).toFixed(1)}, on ${(single.on*1000).toFixed(1)}`;
+    return `full repaint best-of-15 ms: off ${m.off.toFixed(1)}, summer ${m.on.toFixed(1)}, mid-window ${m.mid.toFixed(1)}; one tile µs: off ${(single.off*1000).toFixed(1)}, on ${(single.on*1000).toFixed(1)}`;
   });
 
   test('lab parity (seasons, card acceptance 19): the stored lab source (d23c18d, 15 pieces, sha256 each) says what the card says; our season constants equal it, follow it through the output model, or deviate in exactly the documented way — each deviation carries its own number; mutated constants and a tampered source are caught',()=>{
@@ -575,15 +644,183 @@ export async function d062Guards(log) {
     return `grass bases equal lab→model (${[0,1,2,3].map(s=>hex(OURS.grassBase(s))).join(' ')}); deviations with numbers: winter sand ΔE lab ${dE(outputColor(lab.ground(1,3)),outputColor(lab.ground(2,3))).toFixed(1)}→ours ${dE(OURS.sandDry(3),OURS.grassBase(3)).toFixed(1)}, autumn sand ΔE lab ${dE(outputColor(lab.ground(1,2)),OURS.grassBase(2)).toFixed(1)}→ours ${dE(OURS.sandDry(2),OURS.grassBase(2)).toFixed(1)}; lab autumn recipe: broadleaf hue ${labRound[0].toFixed(3)} (L ${labRound[2].toFixed(3)} vs spring ${spring0[2].toFixed(3)}), conifer hue ${labCone[0].toFixed(3)}`;
   });
 
+  test('weather look (card acceptance 16): clear→clear; rain→rain and storm→storm outside winter; rain→snow and storm→blizzard in winter (doy ≥ 300); mutated mappings are rejected',()=>{
+    const table={0:[0,0],1:[1,3],2:[2,4]};   // [outside winter, in winter]
+    const lookProblems=fn=>{
+      const bad=[];
+      for(const w of [0,1,2])for(const winter of [false,true])if(fn(w,winter)!==table[w][winter?1:0])bad.push(`weather ${w} winter ${winter}`);
+      for(let day=1;day<=720;day++)for(const w of [0,1,2]){const win=inWinter(day);if(fn(w,win)!==table[w][win?1:0])bad.push(`day ${day} weather ${w}`);}
+      return bad;
+    };
+    assert.deepEqual(lookProblems(weatherLook),[],'the mapping meets the table, on all 720 days');
+    assert.equal(weatherLook(3,false),2,'anything above a storm counts as a storm (the simulation never gets there), never as clear');
+    const mutants={'storm and blizzard swapped':(w,win)=>win?(w===2?3:w===1?4:0):(w===2?2:w===1?1:0),'winter ignored':(w)=>w===2?2:w===1?1:0,'clear in winter snows':(w,win)=>w>=2?(win?4:2):w===1?(win?3:1):(win?3:0),'rain turns to storm in winter':(w,win)=>w>=2?(win?4:2):w===1?(win?4:1):0};
+    for(const [name,fn] of Object.entries(mutants))assert.ok(lookProblems(fn).length>0,`mutant "${name}" is detected`);
+    return 'table holds on 720 days; 4 mutants rejected';
+  });
+
+  test('rainbow and lightning days (card acceptance 17, 18): the rainbow derived from two consecutive weather days equals weatherStep\'s flag on 8 seeds × 20,000 days with zero mismatches; lightning only on non-winter storm days at about 25%, same day same answer; mutated derivations are rejected',()=>{
+    const flags=[];let rainbows=0,fromRain=0,fromStorm=0,winterClears=0;
+    for(let seed=1;seed<=8;seed++) {
+      const rng=labRng(seed*7919+13);let st={weather:0,wxT:3+rng.ri(5)},prev=0;
+      for(let day=2;day<=20001;day++) {
+        const r=weatherStep(st,day,rng);
+        flags.push([prev,r.weather,day,r.rainbow,r.lightning]);
+        if(r.rainbow){rainbows++;if(prev===1)fromRain++;else fromStorm++;}
+        if(!r.rainbow&&prev>=1&&r.weather===0&&inWinter(day))winterClears++;
+        assert.ok(!r.lightning||(r.weather===2&&!inWinter(day)),'the simulation flags lightning only on non-winter storm days');
+        st={weather:r.weather,wxT:r.wxT};prev=r.weather;
+      }
+    }
+    const mismatches=fn=>flags.filter(([prev,w,day,flag])=>fn(prev,w,inWinter(day))!==flag).length;
+    assert.equal(mismatches(rainbowDay),0,'derived rainbow = weatherStep rainbow flag, on every one of the 160,000 days');
+    assert.ok(rainbows>1000&&fromRain>300&&fromStorm>300&&winterClears>100,`not vacuous: ${rainbows} rainbow days (${fromRain} after rain, ${fromStorm} after a storm), ${winterClears} winter clearings without one`);
+    const mutants={'winter ignored':(prev,w)=>prev>=1&&w===0,'only after a storm':(prev,w,win)=>prev===2&&w===0&&!win,'only after rain':(prev,w,win)=>prev===1&&w===0&&!win,'every clear day':(prev,w,win)=>w===0&&!win,'one day late':(prev,w,win)=>prev===0&&w===0&&!win&&false};
+    for(const [name,fn] of Object.entries(mutants))if(name!=='one day late')assert.ok(mismatches(fn)>0,`mutant "${name}" is detected (${mismatches(fn)} mismatches)`);
+    // lightning (our own 25% draw): never in winter, never outside a storm, same day same answer, rate in [.20, .30] over 20,000 storm days
+    let n=0,hit=0;for(let day=1;n<20000;day++){if(inWinter(day))continue;n++;if(lightningDay(day,2,false))hit++;assert.equal(lightningDay(day,2,false),lightningDay(day,2,false));}
+    assert.ok(hit/n>=0.20&&hit/n<=0.30,`lightning rate ${(100*hit/n).toFixed(2)}% of ${n} non-winter storm days ∈ [20%, 30%]`);
+    for(let day=1;day<=720;day++){assert.ok(!lightningDay(day,0,false)&&!lightningDay(day,1,false),'no lightning without a storm');if(inWinter(day))assert.ok(!lightningDay(day,2,true),'no lightning in winter');}
+    let hit2=0;for(let day=1,m=0;m<20000;day++){if(inWinter(day))continue;m++;if(hash2(day,0,FLASH.salt)<0.5)hit2++;}
+    assert.ok(hit2/20000>0.30,'control: a 50% draw falls outside the range, and the range check says so');
+    return `${rainbows} rainbow days (${fromRain} after rain, ${fromStorm} after a storm) and ${winterClears} winter clearings without one, 0 mismatches in ${flags.length} days; lightning ${(100*hit/n).toFixed(2)}% of ${n} non-winter storm days`;
+  });
+
+  test('weather fx (card acceptance 18, 21): flashes at least 1 s apart even at 10 days per second, none when calm, peak ≤ .5 and linear decay; the rainbow lasts 9 s, linear, only after rain→clear outside winter; same calls same states; mutants are rejected',()=>{
+    const storm=[];for(let day=1;storm.length<3000;day++)if(!inWinter(day))storm.push([2,day,false]);
+    const times=fxFlashTimes(c=>new WeatherFx(c),storm,0.1);   // game speed 10: one day every 0.1 s
+    assert.ok(times.length>=30,`flashes happen (${times.length})`);
+    for(let i=1;i<times.length;i++)assert.ok(times[i]-times[i-1]>=FLASH.minGap-1e-9,`flash ${i}: ${(times[i]-times[i-1]).toFixed(2)} s after the previous one`);
+    assert.equal(fxFlashTimes(c=>new WeatherFx(c),storm,0.1,true).length,0,'no flash when the user asked for less motion');
+    const loose=fxFlashTimes(c=>new NoGapFx(c),storm,0.1);assert.ok(loose.some((t,i)=>i>0&&t-loose[i-1]<FLASH.minGap),'control: without the gap rule flashes come closer than 1 s');
+    assert.ok(fxFlashTimes(c=>new NoCalmFx(c),storm,0.1,true).length>0,'control: a machine that ignores "calm" flashes anyway, and the check says so');
+    assert.equal(flashAlpha(FLASH.seconds),FLASH.peak);assert.equal(flashAlpha(0),0);assert.equal(flashAlpha(5),FLASH.peak);assert.ok(FLASH.peak<=0.5);
+    assert.ok(Math.abs(flashAlpha(0.2)-FLASH.peak/2)<1e-12,'linear decay');
+    assert.equal(rainbowStrength(9),1);assert.equal(rainbowStrength(4.5),0.5);assert.equal(rainbowStrength(0),0);assert.equal(rainbowStrength(30),1);assert.equal(rainbowStrength(-1),0);
+    const a=new WeatherFx();a.day(1,10,false);assert.equal(a.rainbowT,0);a.day(0,11,false);assert.equal(a.rainbowT,9,'rain → clear outside winter starts the 9 s rainbow');
+    a.step(4.5);assert.equal(a.rainbowT,4.5);a.step(10);assert.equal(a.rainbowT,0);
+    const w=new WeatherFx();w.day(2,305,true);w.day(0,306,true);assert.equal(w.rainbowT,0,'rain → clear in winter has no rainbow');
+    const c0=new WeatherFx();c0.day(0,10,false);c0.day(0,11,false);assert.equal(c0.rainbowT,0,'clear → clear has none');
+    const r=new WeatherFx();r.day(2,10,false);r.reset(1);r.day(0,12,false);assert.equal(r.rainbowT,9,'reset(weather) sets the previous day: a city loaded in the rain clears into a rainbow');
+    const r2=new WeatherFx();r2.day(1,10,false);r2.reset(0);r2.day(0,12,false);assert.equal(r2.rainbowT,0,'a city loaded while clear has no rainbow, whatever happened before');
+    const seq=[[0,1,false],[1,2,false],[2,3,false],[0,4,false],[2,5,false],[2,6,false],[1,7,false],[0,8,false]],run=()=>{const f=new WeatherFx(),o=[];for(const d of seq){f.day(...d);o.push([f.rainbowT,f.flashT,f.gap,f.prev]);f.step(0.07);}return o;};
+    assert.deepEqual(run(),run(),'same calls, same states');
+    return `${times.length} flashes in 300 s, min gap ≥ 1 s`;
+  });
+
+  test('weather parity with the lab (card acceptance 19, weather half): the lab text is run in a vm for tint, particle colours and particle caps, parsed for flash and rainbow; ours equal it or deviate with a number; mutated constants are caught',()=>{
+    const F=read('fixtures/d062-lab.json'),lab=labWeatherOf(F.text);
+    // what the card quotes is what the lab text says (evaluated, not typed here)
+    assert.deepEqual([lab.tint(1,false),lab.tint(2,false),lab.tint(1,true),lab.tint(2,true)],[{rgb:[70,90,120],a:.18},{rgb:[70,90,120],a:.3},{rgb:[200,210,230],a:.14},{rgb:[200,210,230],a:.14}],'tint: rain, storm, winter rain, winter storm');
+    assert.deepEqual(lab.particle(false),{rgb:[200,220,255],a:.5});assert.deepEqual(lab.particle(true),{rgb:[255,255,255],a:.85});
+    assert.deepEqual([lab.cap(1),lab.cap(2),lab.cap(1,0),lab.cap(2,2)],[120,240,60,336],'particle caps: 120 / 240, ×.5 on the low quality tier, ×1.4 on the high one');
+    assert.equal(lab.rainSpeed,14);assert.equal(lab.snowSpeed,6);assert.equal(lab.flashSeconds,.4);assert.equal(lab.flashRate,.25);assert.equal(lab.flashCap,.85);assert.equal(lab.flashGain,2);
+    assert.equal(lab.rainbowSeconds,9);assert.equal(lab.rainbowAlpha,.46);assert.equal(lab.band,.011);assert.deepEqual([lab.cx,lab.cy,lab.rOut,lab.a0,lab.a1],[.5,1.08,.92,1.16,1.84]);
+    assert.deepEqual(lab.rainbowColors,[0xe0504a,0xe8934a,0xe8d24a,0x54b858,0x4a90d8,0x5a5ac8,0x9a54c8]);
+    assert.deepEqual(lab.rainbowTriggers,[9,9]);assert.ok(lab.boltDrawn&&lab.clearOnly);
+    assert.deepEqual(weatherParity(lab,OURS_WX),[],'our weather constants meet the lab (equal, or a deviation with its number)');
+    const mut=over=>weatherParity(lab,{...OURS_WX,...over}).join(' | ');
+    assert.match(mut({tintOf:look=>look===2?{rgb:[70,90,120],a:.2}:tintOf(look)}),/tint look 2/,'control: storm tint α .20');
+    assert.match(mut({tintOf:look=>look===3?{rgb:[200,210,240],a:.14}:tintOf(look)}),/tint look 3/,'control: snow tint colour');
+    assert.match(mut({FALL:{...FALL,2:{...FALL[2],count:200}}}),/particle count look 2/,'control: 200 storm streaks');
+    assert.match(mut({RAIN_COLOR:{rgb:[200,220,255],a:.6}}),/rain colour/,'control: rain α .6');
+    assert.match(mut({SNOW_COLOR:{rgb:[250,255,255],a:.85}}),/snow colour/,'control: snow colour');
+    assert.match(mut({RAINBOW:{...RAINBOW,seconds:8}}),/duration/,'control: rainbow 8 s');
+    assert.match(mut({RAINBOW:{...RAINBOW,colors:[...RAINBOW.colors.slice(1),RAINBOW.colors[0]]}}),/rainbow colours/,'control: rainbow colours rotated');
+    assert.match(mut({RAINBOW:{...RAINBOW,cy:1.0}}),/circle or arc/,'control: rainbow circle moved');
+    assert.match(mut({RAINBOW:{...RAINBOW,band:0.011}}),/rainbow band: ours/,'control: the lab\'s own band width brings back the 3.7-pixel stripes');
+    assert.match(mut({RAINBOW:{...RAINBOW,alphaGround:.5}}),/fainter/,'control: ground rainbow as strong as the sky one');
+    assert.match(mut({FLASH:{...FLASH,peak:.85}}),/flash peak/,'control: flash peak .85');
+    assert.match(mut({FLASH:{...FLASH,rate:.3}}),/flash duration or rate/,'control: flash rate .30');
+    assert.match(mut({FALL:{...FALL,1:{...FALL[1],speed:400}}}),/fall speed look 1/,'control: rain faster than the lab');
+    assert.match(mut({FALL:{...FALL,3:{...FALL[3],speed:2}}}),/fall speed look 3/,'control: snow almost frozen');
+    // deviation numbers for the card
+    const ratio=look=>(FALL[look].speed*3)/((look<3?lab.rainSpeed:lab.snowSpeed)*60);
+    return `fall speed vs lab (css px/s ratio): rain ${ratio(1).toFixed(2)}, storm ${ratio(2).toFixed(2)}, snow ${ratio(3).toFixed(2)}, blizzard ${ratio(4).toFixed(2)}; rainbow band lab ${(lab.band*RT_H).toFixed(1)} px vs ours ${(RAINBOW.band*RT_H).toFixed(1)} px; flash peak lab ${Math.min(lab.flashCap,lab.flashSeconds*lab.flashGain)} vs ours ${FLASH.peak}`;
+  });
+
+  test('sky tint: the four sky bands go through the same tint as the picture and snap back to the output grid; a clear sky is unchanged; the band structure survives; the shader text carries these constants; a tint without snapping is rejected',()=>{
+    const SKY=LAND_SKY[2],grid=v=>[...Array(13).keys()].some(k=>Math.abs(v-k*255/12)<=0.51);
+    assert.equal(SKY.length,4);
+    assert.deepEqual(tintSky(SKY,0,12),[...SKY],'clear: no change');
+    const out=[];
+    for(const look of [1,2,3,4]) {
+      const t=tintOf(look),got=tintSky(SKY,look,12);
+      got.forEach((hex,i)=>{
+        for(const [sh,k] of [[16,0],[8,1],[0,2]]) {
+          const base=(SKY[i]>>sh)&255,mixed=base*(1-t.a)+t.rgb[k]*t.a,v=(hex>>sh)&255;
+          assert.ok(grid(v),`look ${look} band ${i} channel ${k}: ${v} is on the output grid`);
+          assert.ok(Math.abs(v-mixed)<=255/12/2+1,`look ${look} band ${i} channel ${k}: ${v} is within half a step of the tinted ${mixed.toFixed(1)}`);
+        }
+      });
+      assert.ok(new Set(got).size>=3,`look ${look}: the four bands stay at least three distinct colours (${new Set(got).size})`);
+      out.push(new Set(got).size);
+    }
+    // unsnapped (style B and C draw a smooth sky and the shader mixes it itself): plain mix, rounded
+    const free=tintSky(SKY,2,0);assert.ok(free.some(hex=>[16,8,0].some(sh=>!grid((hex>>sh)&255))),'control: without snapping some channel is off the grid, and the grid check says so');
+    // the generated shader text carries the lab's numbers
+    const glsl=[WEATHER_GLSL_UNIFORMS,WEATHER_GLSL_FNS,WEATHER_GLSL_APPLY].join('\n');
+    for(const needle of ['vec3(70.0, 90.0, 120.0) / 255.0','vec3(200.0, 210.0, 230.0) / 255.0','0.14','0.3 :','0.18','vec3(200.0, 220.0, 255.0) / 255.0','pa = 0.5','pa = 0.85','fall(pp, wxT, 110.0, 3.0, 120.0, 0.35, 0.0, 1.0)','fall(pp, wxT, 140.0, 3.0, 240.0, 0.45, 0.0, 1.0)','fall(pp, wxT, 24.0, 1.0, 120.0, 0.0, 2.0, 1.0)','fall(pp, wxT, 30.0, 1.0, 240.0, 0.0, 2.0, 1.0)','0.016','0.46','0.32','vec3(224.0, 80.0, 74.0)','vec3(154.0, 84.0, 200.0)','mix(gl_FragColor.rgb, vec3(1.0), flash)'])assert.ok(glsl.includes(needle),'shader text has '+needle);
+    for(const name of ['wx','wxT','rainbow','flash','aspect','res'])assert.match(WEATHER_GLSL_UNIFORMS,new RegExp(`uniform \\w+ ${name};`),'uniform '+name);
+    const post=text('src/render/post.ts');
+    for(const splice of ['${WEATHER_GLSL_UNIFORMS}','${WEATHER_GLSL_FNS}','${WEATHER_GLSL_APPLY}'])assert.ok(post.includes(splice),'post.ts splices '+splice);
+    assert.ok(post.indexOf('${WEATHER_GLSL_APPLY}')>post.indexOf('#include <colorspace_fragment>')&&post.indexOf('${WEATHER_GLSL_APPLY}')<post.indexOf('if (quant > 0.5)'),'the overlay is applied after the colour space conversion and before the quantiser');
+    return `distinct sky colours per look: ${out.join('/')}`;
+  });
+
+  test('rain and snow statistics: the CPU copy of the shader\'s particle function gives about 120 / 240 streaks per screen at both render sizes, the pattern moves with time and repeats for the same time; the weather module is pure',()=>{
+    for(const [W,H] of [[480,333],[137,286]])for(const look of [1,2,3,4]) {
+      for(const t of [0,1.05,2.4,7.3]) {
+        let hits=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++)hits+=fallHit(x,y,t,look,W,H);
+        const est=hits/FALL[look].len,want=FALL[look].count;
+        assert.ok(est>=0.7*want&&est<=1.3*want,`${W}×${H} look ${look} t ${t}: ${est.toFixed(0)} streaks vs ${want} (±30%)`);
+      }
+    }
+    const frame=(t,look=1)=>{let h=0;for(let y=0;y<80;y++)for(let x=0;x<80;x++)h=(h*31+fallHit(x,y,t,look,480,333))>>>0;return h;};
+    assert.equal(frame(1.2),frame(1.2),'same time, same pattern');assert.notEqual(frame(1.2),frame(1.25),'the pattern moves between two animation frames');
+    const src=text('src/render/weatherArt.ts'),r=violations(src);
+    assert.deepEqual(r.bad,[],'no forbidden identifiers or imports');assert.deepEqual([...r.imports].sort(),['../sim/rng.ts'],'imports exactly the seeded hash');
+    for(const f of fs.readdirSync(path.join(ROOT,'src/sim'),{recursive:true}).filter(f=>String(f).endsWith('.ts')))assert.ok(!/weatherArt|WeatherFx|weatherLook/.test(text('src/sim/'+f)),'the simulation never mentions the weather painters: '+f);
+  });
+
+  test('weather flags: ?weather=auto|off|clear|rain|storm (default auto), ?wxTime, ?wxRainbow, ?wxFlash for photographs; off without a sky (outside block mode, landArt=0, any older legacy flag); only whitelisted values; the wiring is in place',()=>{
+    const q=obj=>k=>Object.hasOwn(obj,k)?obj[k]:null;
+    assert.equal(weatherOptionOf(q({}),false),undefined,'no sky, no weather');
+    assert.deepEqual(weatherOptionOf(q({}),true),{mode:'auto'});assert.deepEqual(weatherOptionOf(q({weather:'auto'}),true),{mode:'auto'});
+    assert.equal(weatherOptionOf(q({weather:'off'}),true),undefined);
+    for(const m of ['clear','rain','storm'])assert.deepEqual(weatherOptionOf(q({weather:m}),true),{mode:m});
+    assert.deepEqual(WX_PINNED,{clear:0,rain:1,storm:2});
+    for(const raw of ['constructor','__proto__','toString','hasOwnProperty','Rain','OFF',' rain','1','','snow','blizzard'])assert.deepEqual(weatherOptionOf(q({weather:raw}),true),{mode:'auto'},`"${raw}" falls to auto`);
+    for(const [raw,v] of [['3.2',3.2],['0',0],['9999',9999],['12.345',12.345]])assert.equal(weatherOptionOf(q({wxTime:raw}),true).time,v);
+    for(const raw of ['10000','-1','1e3','abc','1.2345','','.5',' 1','1.'])assert.equal(weatherOptionOf(q({wxTime:raw}),true).time,undefined,`wxTime "${raw}" is ignored`);
+    for(const [raw,v] of [['0',0],['1',1],['.5',.5],['0.5',.5],['0.123',.123]]){assert.equal(weatherOptionOf(q({wxRainbow:raw}),true).rainbow,v);assert.equal(weatherOptionOf(q({wxFlash:raw}),true).flash,v);}
+    for(const raw of ['1.5','2','-0.1','1.0','abc','','0.1234','5e-1'])assert.ok(weatherOptionOf(q({wxRainbow:raw,wxFlash:raw}),true).rainbow===undefined&&weatherOptionOf(q({wxRainbow:raw,wxFlash:raw}),true).flash===undefined,`wx values "${raw}" are ignored`);
+    const flagProblems=fn=>['constructor','__proto__','toString','hasOwnProperty','Rain','OFF','1',' rain'].filter(raw=>JSON.stringify(fn(q({weather:raw}),true))!==JSON.stringify({mode:'auto'}));
+    assert.deepEqual(flagProblems(weatherOptionOf),[],'the real parser sends every odd value to auto');
+    const naive=(get,sky)=>{if(!sky)return undefined;const raw=get('weather')??'';if(raw==='off')return undefined;return {mode:({clear:'clear',rain:'rain',storm:'storm'})[raw]??'auto'};};
+    assert.ok(flagProblems(naive).length>=3,'control: a plain-object lookup lets constructor/__proto__/toString through, and the check says so');
+    // wiring
+    const view=text('src/cityView.ts'),post=text('src/render/post.ts');
+    assert.match(view,/const weatherOpt = weatherOptionOf\(k => q\.get\(k\), !!pipe\.sky\);/,'the weather needs the sky bands (block mode and a landscape level)');
+    assert.match(view,/wxFx\.day\(rep\.weather, rep\.day, wxWinter\(rep\.day\)\);/,'every simulated day feeds the rainbow and lightning timers');
+    assert.match(view,/pipe\.weather = weatherNow\(\);/,'a full render takes the current weather');
+    assert.match(view,/weatherTick\(frames !== f0\)/,'the animation loop runs the post-only frames');
+    assert.match(view,/wxFx\.reset\(sim \? sim\.weather\.weather : 0\);/,'a loaded city starts without a pending rainbow');
+    assert.match(view,/pipe\.renderPost\(renderer\)/,'animation re-runs the post pass only');
+    assert.match(view,/now - wxPostT >= 1000 \/ ANIM_FPS - 1/,'the animation is capped at ANIM_FPS');
+    assert.match(post,/renderPost\(renderer: THREE\.WebGLRenderer\)/);
+    assert.equal(ANIM_FPS,20);
+  });
+
   test('exact source scope reconstructs D061 and rejects injected mutations before historical reversal',()=>{
     assertD062Scope();
     const manifest=read('fixtures/d062-art-scope.json');
-    assert.deepEqual(manifest.added,['src/render/seasonArt.ts']);
-    assert.deepEqual([...manifest.modified].sort(),['src/cityView.ts','src/render/cityScene.ts','src/render/ground.ts','src/render/landArt.ts']);
+    assert.deepEqual(manifest.added,['src/render/seasonArt.ts','src/render/weatherArt.ts']);
+    assert.deepEqual([...manifest.modified].sort(),['src/cityView.ts','src/render/cityScene.ts','src/render/ground.ts','src/render/landArt.ts','src/render/post.ts']);
     for(const file of manifest.modified)assert.equal(sha(d062HistoricalBytes(file)),manifest.before[file],'historical bytes '+file);
     for(const file of Object.keys(manifest.after))if(!manifest.modified.includes(file)&&!manifest.added.includes(file))assert.equal(manifest.after[file],manifest.before[file],file+' is byte-identical to the D061 candidate');
-    for(const file of ['src/sim/day.ts','src/sim/rng.ts','src/sim/rules/weather.ts','src/io/save.ts','src/content/lab-kinds.json','src/render/post.ts','src/render/styles.ts','src/render/windows.ts'])assert.equal(manifest.after[file],manifest.before[file],'untouched by D062: '+file);
-    for(const target of ['src/sim/day.ts','src/sim/rules/weather.ts','src/io/save.ts','src/render/post.ts','src/render/styles.ts','src/render/landArt.ts','src/render/ground.ts','src/render/cityScene.ts','src/cityView.ts','src/render/seasonArt.ts']) {
+    for(const file of ['src/sim/day.ts','src/sim/rng.ts','src/sim/rules/weather.ts','src/io/save.ts','src/content/lab-kinds.json','src/render/styles.ts','src/render/windows.ts'])assert.equal(manifest.after[file],manifest.before[file],'untouched by D062: '+file);
+    for(const target of ['src/sim/day.ts','src/sim/rules/weather.ts','src/io/save.ts','src/render/post.ts','src/render/styles.ts','src/render/landArt.ts','src/render/ground.ts','src/render/cityScene.ts','src/cityView.ts','src/render/seasonArt.ts','src/render/weatherArt.ts']) {
       const mutation=file=>fs.readFileSync(path.join(ROOT,file),'utf8')+(file===target?'\n// unauthorized D062 mutation':'');
       assert.throws(()=>assertD062Scope(mutation),/exact allowed source/,target+' source mutation');
       assert.throws(()=>d062HistoricalBytes(target,mutation),/exact allowed source/,target+' historical-reader mutation');

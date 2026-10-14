@@ -56,6 +56,10 @@ import { landLevelOf, LAND_SKY } from './render/landArt.ts';
 // D062-BEGIN season-view-import
 import { seasonOptionOf } from './render/seasonArt.ts';
 // D062-END season-view-import
+// D062-BEGIN weather-view-import
+import { weatherOptionOf, weatherLook, WeatherFx, WX_PINNED, rainbowStrength, flashAlpha, FLASH, ANIM_FPS, type WeatherLook } from './render/weatherArt.ts';
+import { inWinter } from './sim/rules/weather.ts';
+// D062-END weather-view-import
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
 import { ARCHE } from './content/arche.ts';
@@ -189,6 +193,35 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let city: City | null = null, built: BuiltCity | null = null, label = '', needsRender = true, frames = 0;
   // D010 逐日模擬
   let sim: Sim | null = null, playing = false, speed = 0, simAcc = 0, lastT = 0, daysSinceBuild = 0, dirtyScene = false, urgentRebuild = false, rebuilds = 0;
+// D062-BEGIN weather-state
+  // D062 天氣：?weather=auto|off|clear|rain|storm（規則在 src/render/weatherArt.ts，Node 守衛直接測）；沒有天空色階（街區模式之外、地景關閉）時一律關。模擬的天氣只讀不改
+  const weatherOpt = weatherOptionOf(k => q.get(k), !!pipe.sky);
+  const reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;   // 使用者要求減少動態：降水凍成一格、不放閃電
+  const wxFx = new WeatherFx(reducedMotion);
+  let wxLastT = 0, wxPostT = 0;
+  const wxWinter = (day: number): boolean => seasonOpt ? (seasonOpt.mode === 'auto' ? inWinter(seasonOpt.day ?? day) : seasonOpt.mode === 3) : inWinter(day);   // 季節旗標釘住冬天，天氣就畫成雪
+  const wxWeather = (): number => !weatherOpt ? 0 : weatherOpt.mode === 'auto' ? (sim ? sim.weather.weather : 0) : WX_PINNED[weatherOpt.mode];
+  function weatherNow(): { look: WeatherLook; time: number; rainbow: number; flash: number } | null {
+    if (!weatherOpt) return null;
+    const look = weatherLook(wxWeather(), wxWinter(city?.day ?? 1));
+    const rainbow = weatherOpt.rainbow ?? (look === 0 ? rainbowStrength(wxFx.rainbowT) : 0);
+    const flash = weatherOpt.flash !== undefined ? weatherOpt.flash * FLASH.peak : flashAlpha(wxFx.flashT);
+    if (look === 0 && rainbow === 0 && flash === 0) return null;
+    const time = weatherOpt.time ?? (reducedMotion ? 0 : (performance.now() / 1000) % 600);   // 600 秒一輪：時間乘速度會累積成很大的浮點數，float32 的像素位置會糊掉
+    return { look, time: Math.floor(time * ANIM_FPS) / ANIM_FPS, rainbow, flash };
+  }
+  // 動畫：降水每秒最多 ANIM_FPS 格，只重跑後製那一趟（場景不重畫）；這一輪已經整張重畫過就不再補
+  function weatherTick(fullRender: boolean) {
+    if (!weatherOpt || !built) return;
+    const now = performance.now(), dt = wxLastT ? Math.min(0.25, (now - wxLastT) / 1000) : 0;
+    wxLastT = now; wxFx.step(dt);
+    if (fullRender) { wxPostT = now; return; }
+    const w = weatherNow();
+    if (!w) return;
+    const moving = weatherOpt.time === undefined && !reducedMotion && w.look > 0, fading = weatherOpt.rainbow === undefined && wxFx.rainbowT > 0 || weatherOpt.flash === undefined && wxFx.flashT > 0;
+    if ((moving || fading) && now - wxPostT >= 1000 / ANIM_FPS - 1) { wxPostT = now; pipe.weather = w; pipe.renderPost(renderer); }
+  }
+// D062-END weather-state
   // D011 建造：存檔樣板（讀進來那份存檔 JSON）、起始碼、目前的工具、路的等級、最近一天的回報、存檔
   let template: Record<string, unknown> = {}, startCode = '', tool: ToolId | null = null, roadTool = 'road', civicTool = 'police', lastRep: DayReport | null = null, daysSinceSave = 0;
   let loadNote = '', loadDay = -1, restyled = 0;   // restyled：這一次讀檔照實驗線重挑外觀換了幾棟（D012）
@@ -322,6 +355,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     retire(built);
     city = c; built = b; label = name; lastCode = code;
     built.scene.add(preview.mesh, haz.mesh); attachRes();
+// D062-BEGIN weather-reset
+    wxFx.reset(sim ? sim.weather.weather : 0);                            // D062：換了城，沒有進行中的彩虹與閃電（前一天的天氣＝現在的天氣，讀檔那一刻不算「雨剛停」）
+// D062-END weather-reset
     syncCon();
     delete timing.rebuild;
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
@@ -405,6 +441,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t0 = performance.now(), rep = stepDay(sim!);
     timing.step = performance.now() - t0;                              // D030 補：stepDay（含結算）自己的牆上時間；煙霧測試 D011 驗收 8 讀它（不含畫面同步、不含存檔）
     lastRep = rep;
+// D062-BEGIN weather-day
+    wxFx.day(rep.weather, rep.day, wxWinter(rep.day));                   // D062：這一天的彩虹與閃電計時（天氣是模擬的、只讀；畫面端自己抽閃電）
+// D062-END weather-day
     if (rep.grown || rep.upgraded) dirtyScene = true;
     if (rep.merges.length) { dirtyScene = true; urgentRebuild = true; }   // D034：被吸收的建築要馬上從場景拿掉、新的塔與巨廈馬上長出來
     if (rep.hazard.burned.length || rep.hazard.abandons.length) { dirtyScene = true; urgentRebuild = true; }   // D027：燒毀的建築要馬上從場景拿掉、廢棄的要換牆色（D026 只在生長或升級時才重建，燒掉的房子會多站好幾天，煙霧測試在劇本城第 121 天抓到）
@@ -512,10 +551,15 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     needsRender = false;
     frames++;
     updateDetail();
+// D062-BEGIN weather-draw
+    pipe.weather = weatherNow();
+// D062-END weather-draw
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
     if (retired.length) { for (const b of retired) b.dispose(); retired = []; }
   }
-  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); draw(); });
+// D062-BEGIN weather-loop
+  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); const f0 = frames; draw(); weatherTick(frames !== f0); });
+// D062-END weather-loop
 
   // ---- 介面（D011：上方狀態列＋☰ 選單、下方播放列＋工具列，src/ui/buildUi.ts；建築卡與分享碼對話框沿用）----
   const ui = document.createElement('div');
@@ -1742,6 +1786,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     noClip: (on: boolean) => { if (con) con.uni.uNoClip.value = on ? 1 : 0; needsRender = true; draw(); return on; },
     conBuildings: () => city ? city.buildings.map(b => ({ id: b.id, k: b.k, lv: b.lv, x: b.x, z: b.z, s: b.size, age: b.age, gone: b.goneDay !== undefined })) : [],
     groundCheck: () => built?.groundCheck() ?? null,
+// D062-BEGIN weather-hook
+    weather: () => ({ option: weatherOpt ?? null, reduced: reducedMotion, now: weatherNow(), fx: { prev: wxFx.prev, rainbowT: wxFx.rainbowT, flashT: wxFx.flashT, gap: wxFx.gap }, frames: { scene: pipe.sceneFrames, post: pipe.postFrames }, sim: sim ? { weather: sim.weather.weather, wxT: sim.weather.wxT, day: sim.day } : null }),   // D062：天氣的狀態與兩種畫面的次數（守衛量「動畫只重跑後製」用；純讀取）
+// D062-END weather-hook
     forceNear: (v: boolean | null) => { nearOverride = v; needsRender = true; draw(); return v; },
     // 暫停中直接設當天已過的比例（拍照用：不播放就能拍天與天之間；下一次 simStep 歸零）
     setDayFrac: (f: number) => { simAcc = Math.max(0, Math.min(.999, f)); if (con) con.uni.uDayFrac.value = sim ? simAcc : 0; needsRender = true; draw(); return simAcc; },

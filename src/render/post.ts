@@ -2,6 +2,9 @@
 // 描邊＝深度跳變；量化＝在 sRGB 空間把每個色版壓成有限階數。三種畫風只是參數不同。
 import * as THREE from 'three';
 import type { Style } from './styles.ts';
+// D062-BEGIN weather-import
+import { WEATHER_GLSL_UNIFORMS, WEATHER_GLSL_FNS, WEATHER_GLSL_APPLY, tintSky, type WeatherLook } from './weatherArt.ts';
+// D062-END weather-import
 
 const FRAG = /* glsl */ `
 uniform sampler2D tColor;
@@ -17,6 +20,10 @@ uniform vec3 skyB;
 uniform vec3 skyC;
 uniform vec3 skyD;
 // D061-END land-sky-uniforms
+// D062-BEGIN weather-glsl-decl
+${WEATHER_GLSL_UNIFORMS}
+${WEATHER_GLSL_FNS}
+// D062-END weather-glsl-decl
 varying vec2 vUv;
 void main() {
   vec4 c = texture2D(tColor, vUv);
@@ -43,6 +50,9 @@ void main() {
   }
   gl_FragColor = c;
   #include <colorspace_fragment>
+// D062-BEGIN weather-glsl-apply
+  ${WEATHER_GLSL_APPLY}
+// D062-END weather-glsl-apply
   if (quant > 0.5) gl_FragColor.rgb = floor(gl_FragColor.rgb * quant + 0.5) / quant;
 }`;
 
@@ -55,6 +65,11 @@ export class Pipeline {
 // D061-BEGIN land-sky-prop
   sky: THREE.Color[] | null = null;   // D061：天空四階色帶，由上到下（零幾何；null＝舊的平色背景，畫面逐位元組不變）
 // D061-END land-sky-prop
+// D062-BEGIN weather-prop
+  weather: { look: WeatherLook; time: number; rainbow: number; flash: number } | null = null;   // D062：這一幀的天氣（null＝晴；著色器那一段整個跳過，畫面逐位元組不變）
+  sceneFrames = 0; postFrames = 0;                                                               // 守衛量「動畫只重跑後製」：場景那趟與後製那趟各跑了幾次
+  private last: { w: number; h: number; quant: number } | null = null;
+// D062-END weather-prop
 
   constructor() {
     this.rt = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: true });
@@ -68,6 +83,9 @@ export class Pipeline {
 // D061-BEGIN land-sky-init
         sky: { value: 0 }, skyA: { value: new THREE.Color() }, skyB: { value: new THREE.Color() }, skyC: { value: new THREE.Color() }, skyD: { value: new THREE.Color() },
 // D061-END land-sky-init
+// D062-BEGIN weather-init
+        wx: { value: 0 }, wxT: { value: 0 }, rainbow: { value: 0 }, flash: { value: 0 }, aspect: { value: 1 }, res: { value: new THREE.Vector2(1, 1) },
+// D062-END weather-init
       },
       vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
       fragmentShader: FRAG,
@@ -95,8 +113,32 @@ export class Pipeline {
     u.sky.value = this.sky ? (style.quant > 0 ? 1 : 2) : 0;   // 1＝量化畫風的色帶、2＝不量化畫風的漸層、0＝舊的平色背景
     if (this.sky) { u.skyA.value.copy(this.sky[0]); u.skyB.value.copy(this.sky[1]); u.skyC.value.copy(this.sky[2]); u.skyD.value.copy(this.sky[3]); }
 // D061-END land-sky-set
+// D062-BEGIN weather-set
+    this.last = { w, h, quant: style.quant }; this.sceneFrames++;
+    this.setWeather();
+// D062-END weather-set
     renderer.render(this.quadScene, this.quadCam);
   }
+// D062-BEGIN weather-method
+  // 天氣的 uniform（render 與 renderPost 共用）。量化畫風（A）的天空色階事先套同一個色調、貼回輸出色格子；不量化的畫風（B、C）由著色器直接混
+  private setWeather() {
+    if (!this.last) return;
+    const u = this.mat.uniforms, wx = this.weather;
+    u.wx.value = wx ? wx.look : 0; u.wxT.value = wx ? wx.time : 0; u.rainbow.value = wx ? wx.rainbow : 0; u.flash.value = wx ? wx.flash : 0;
+    u.aspect.value = this.last.w / this.last.h; u.res.value.set(this.last.w, this.last.h);
+    if (this.sky) {   // 沒有色調時照 D061 的做法 copy（逐位元組同 D061）；有色調才用事先算好的四個色
+      if (wx && wx.look > 0 && this.last.quant > 0) { const c = tintSky(this.sky.map(k => k.getHex()), wx.look, this.last.quant); u.skyA.value.set(c[0]); u.skyB.value.set(c[1]); u.skyC.value.set(c[2]); u.skyD.value.set(c[3]); }
+      else { u.skyA.value.copy(this.sky[0]); u.skyB.value.copy(this.sky[1]); u.skyC.value.copy(this.sky[2]); u.skyD.value.copy(this.sky[3]); }
+    }
+  }
+  // 只重跑後製這一趟（場景不重畫；降水動畫、彩虹淡出、閃光消退用）。沒有畫過場景就什麼都不做
+  renderPost(renderer: THREE.WebGLRenderer) {
+    if (!this.last) return;
+    this.setWeather(); this.postFrames++;
+    renderer.setRenderTarget(null);
+    renderer.render(this.quadScene, this.quadCam);
+  }
+// D062-END weather-method
 
   get size() { return [this.rt.width, this.rt.height]; }
 }

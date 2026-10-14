@@ -1,5 +1,5 @@
 // D062 is an outer, SHA-pinned art allowance (newest layer). Historical guards receive exactly
-// the D061 source bytes after undoing only the named D062 regions (seasons: palette selection, keys, tree colours, flags).
+// the D061 source bytes after undoing only the named D062 regions (seasons: palette selection, keys, tree colours, flags; weather: the post pass overlay and its wiring).
 import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
@@ -19,8 +19,8 @@ const D061M = JSON.parse(diskRead('fixtures/d061-art-scope.json'));
 assert.deepEqual(M.before,D061M.after,'D062 baseline inventory is exactly the D061 candidate state');
 assert.equal(M.baseline,baseline.baseline,'D062 manifest uses the captured baseline');
 assert.deepEqual(M.before,baseline.before,'D062 original source SHA inventory is preserved');
-assert.deepEqual([...M.modified].sort(),['src/cityView.ts','src/render/cityScene.ts','src/render/ground.ts','src/render/landArt.ts'],'D062 only the four approved rendering sources may change');
-assert.deepEqual([...M.added].sort(),['src/render/seasonArt.ts'],'D062 only the one approved procedural season source may be added');
+assert.deepEqual([...M.modified].sort(),['src/cityView.ts','src/render/cityScene.ts','src/render/ground.ts','src/render/landArt.ts','src/render/post.ts'],'D062 only the five approved rendering sources may change');
+assert.deepEqual([...M.added].sort(),['src/render/seasonArt.ts','src/render/weatherArt.ts'],'D062 only the two approved procedural sources (seasons, weather) may be added');
 assert.equal(D062_ADDED.size,M.added.length,'D062 unique added source paths');
 assert.equal(modified.size,M.modified.length,'D062 unique modified source paths');
 assert.deepEqual(Object.keys(M.replacements).sort(),[...modified].sort(),'D062 exact reversible source paths');

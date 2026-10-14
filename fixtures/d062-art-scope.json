@@ -192,18 +192,24 @@
   "src/vite-env.d.ts": "f64d434e5a812df2fd28a4c070dc4d1dc1b4c8c238773b75bf0ded511ddfd9fd"
  },
  "added": [
-  "src/render/seasonArt.ts"
+  "src/render/seasonArt.ts",
+  "src/render/weatherArt.ts"
  ],
  "modified": [
   "src/cityView.ts",
   "src/render/cityScene.ts",
   "src/render/ground.ts",
-  "src/render/landArt.ts"
+  "src/render/landArt.ts",
+  "src/render/post.ts"
  ],
  "replacements": {
   "src/cityView.ts": [
    {
     "name": "season-view-import",
+    "before": ""
+   },
+   {
+    "name": "weather-view-import",
     "before": ""
    },
    {
@@ -215,7 +221,31 @@
     "before": "    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）\n"
    },
    {
+    "name": "weather-state",
+    "before": ""
+   },
+   {
     "name": "season-sync",
+    "before": ""
+   },
+   {
+    "name": "weather-reset",
+    "before": ""
+   },
+   {
+    "name": "weather-day",
+    "before": ""
+   },
+   {
+    "name": "weather-draw",
+    "before": ""
+   },
+   {
+    "name": "weather-loop",
+    "before": "  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); draw(); });\n"
+   },
+   {
+    "name": "weather-hook",
     "before": ""
    }
   ],
@@ -344,10 +374,40 @@
     "name": "season-lot-sig",
     "before": "export function landLot(level: number, lot: number, u: number, v: number, x: number, z: number, S: number, edge: boolean, legacy: number): number {\n"
    }
+  ],
+  "src/render/post.ts": [
+   {
+    "name": "weather-import",
+    "before": ""
+   },
+   {
+    "name": "weather-glsl-decl",
+    "before": ""
+   },
+   {
+    "name": "weather-glsl-apply",
+    "before": ""
+   },
+   {
+    "name": "weather-prop",
+    "before": ""
+   },
+   {
+    "name": "weather-init",
+    "before": ""
+   },
+   {
+    "name": "weather-set",
+    "before": ""
+   },
+   {
+    "name": "weather-method",
+    "before": ""
+   }
   ]
  },
  "after": {
-  "src/cityView.ts": "acf90b20dbdda43bc52d4a1c53564817c07e6fba4cbe80b4b905e5e9fe85e5fe",
+  "src/cityView.ts": "a5183fccc51d2479a73c5ff3044f6bf6db3bb2ab400b3d768935380849180333",
   "src/content/arche.ts": "df8fdee42742fe60005cc8a91099a913b14dc91f508b31760879ef8254715bf6",
   "src/content/blocks.ts": "8c634dc1cc3931e18d91fa97d799ec4799240204e52486c8d992af05760ce271",
   "src/content/britishCivic.ts": "d710d6ce7420c893c7edda4a21651822249d7bfd9099c3578b4dda6c7cf21a23",
@@ -471,13 +531,14 @@
   "src/render/kindArt.ts": "7ddc521872dc29de39c6b7ac5950ec42ae84d3444248fabaea8bd33b58b679ef",
   "src/render/landArt.ts": "c3399aa411e90cb8bb90a2f50098114fcd2bba785e5272304fd3b463ea5c74d0",
   "src/render/pieces.ts": "d749db4c02804703be91b290b9229e8c84636bcf2a27dce02a78099d408bbf2e",
-  "src/render/post.ts": "0c0d4b5ccf1d1e4df9f1ae4c6cd3d6ad82aa1c7669796120a406a0f3ab3709ab",
+  "src/render/post.ts": "e30b91b4ad1a60feb489ec3df04052b574d752f7c002baf0e00a1b34c516fa5c",
   "src/render/preview.ts": "ae1804013c200f255cc73b479e90d9aa94ddb5dd1757a6eb1f320218d4a18511",
   "src/render/resource.ts": "83d332cfc35e9405c9ff6035969301f1097fdd34159036796a0822c77a563b46",
   "src/render/scene.ts": "419333c5aadc810eb850eae79d27fd0dcf6ece353df2e4dc5880393a7e234892",
   "src/render/seasonArt.ts": "bf77a0a01ae49f781938c2efe646f1ee2ab535598d3717df88445cb4d6fac303",
   "src/render/styles.ts": "5ff2ca92e9feec166217641145f35b46557bbab381f00a0c4c9bca6181b4c21d",
   "src/render/textures.ts": "559dd2a5e577991fdc20011a412628fd0a121d36759647f05ed3a2efe841240b",
+  "src/render/weatherArt.ts": "490e0ef8fd3fc807fb23beef6e658b75e356f14731b1f9da48f5fd88184befb0",
   "src/render/windows.ts": "590499c829a9c19d329690acd660cd9be53422af2530aa5d042a3dd9aa2f10ee",
   "src/sim/act.ts": "45ddd6e3656259192cdbe0d519934703f48ba9790049355ea6b644755f1d1bcf",
   "src/sim/city.ts": "02cba2d17e38d873fbc5738d35a03989ecba7afafa57220c2246fbc088ce9e13",
