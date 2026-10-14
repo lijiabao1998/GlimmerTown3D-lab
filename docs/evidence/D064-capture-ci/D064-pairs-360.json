@@ -1,0 +1,365 @@
+{
+  "passed": true,
+  "pairs": [
+    {
+      "name": "seed516-skyline",
+      "before": "D064-before-seed516-skyline-360.png",
+      "after": "D064-after-seed516-skyline-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-seed516-skyline-360.png"
+    },
+    {
+      "name": "tower-172-k33-se",
+      "before": "D064-before-tower-172-k33-se-360.png",
+      "after": "D064-after-tower-172-k33-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-172-k33-se-360.png"
+    },
+    {
+      "name": "tower-182-k33-se",
+      "before": "D064-before-tower-182-k33-se-360.png",
+      "after": "D064-after-tower-182-k33-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-182-k33-se-360.png"
+    },
+    {
+      "name": "tower-191-k33-se",
+      "before": "D064-before-tower-191-k33-se-360.png",
+      "after": "D064-after-tower-191-k33-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-191-k33-se-360.png"
+    },
+    {
+      "name": "tower-215-k34-se",
+      "before": "D064-before-tower-215-k34-se-360.png",
+      "after": "D064-after-tower-215-k34-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-215-k34-se-360.png"
+    },
+    {
+      "name": "tower-219-k34-se",
+      "before": "D064-before-tower-219-k34-se-360.png",
+      "after": "D064-after-tower-219-k34-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-219-k34-se-360.png"
+    },
+    {
+      "name": "tower-290-k34-se",
+      "before": "D064-before-tower-290-k34-se-360.png",
+      "after": "D064-after-tower-290-k34-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-290-k34-se-360.png"
+    },
+    {
+      "name": "tower-374-k105-se",
+      "before": "D064-before-tower-374-k105-se-360.png",
+      "after": "D064-after-tower-374-k105-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-374-k105-se-360.png"
+    },
+    {
+      "name": "tower-406-k106-se",
+      "before": "D064-before-tower-406-k106-se-360.png",
+      "after": "D064-after-tower-406-k106-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        113668,
+        114770
+      ],
+      "composite": "D064-pair-tower-406-k106-se-360.png"
+    },
+    {
+      "name": "ai120-default",
+      "before": "D064-before-ai120-default-360.png",
+      "after": "D064-after-ai120-default-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        96607
+      ],
+      "composite": "D064-pair-ai120-default-360.png"
+    },
+    {
+      "name": "form-k33-v0-se",
+      "before": "D064-before-form-k33-v0-se-360.png",
+      "after": "D064-after-form-k33-v0-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11044,
+        11118
+      ],
+      "composite": "D064-pair-form-k33-v0-se-360.png"
+    },
+    {
+      "name": "form-k33-v1-se",
+      "before": "D064-before-form-k33-v1-se-360.png",
+      "after": "D064-after-form-k33-v1-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11044,
+        11216
+      ],
+      "composite": "D064-pair-form-k33-v1-se-360.png"
+    },
+    {
+      "name": "form-k33-v2-se",
+      "before": "D064-before-form-k33-v2-se-360.png",
+      "after": "D064-after-form-k33-v2-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11044,
+        11244
+      ],
+      "composite": "D064-pair-form-k33-v2-se-360.png"
+    },
+    {
+      "name": "form-k33-v3-se",
+      "before": "D064-before-form-k33-v3-se-360.png",
+      "after": "D064-after-form-k33-v3-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11044,
+        11184
+      ],
+      "composite": "D064-pair-form-k33-v3-se-360.png"
+    },
+    {
+      "name": "form-k34-v0-se",
+      "before": "D064-before-form-k34-v0-se-360.png",
+      "after": "D064-after-form-k34-v0-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11004,
+        11182
+      ],
+      "composite": "D064-pair-form-k34-v0-se-360.png"
+    },
+    {
+      "name": "form-k34-v1-se",
+      "before": "D064-before-form-k34-v1-se-360.png",
+      "after": "D064-after-form-k34-v1-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11004,
+        11176
+      ],
+      "composite": "D064-pair-form-k34-v1-se-360.png"
+    },
+    {
+      "name": "form-k34-v2-se",
+      "before": "D064-before-form-k34-v2-se-360.png",
+      "after": "D064-after-form-k34-v2-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11004,
+        11140
+      ],
+      "composite": "D064-pair-form-k34-v2-se-360.png"
+    },
+    {
+      "name": "form-k34-v3-se",
+      "before": "D064-before-form-k34-v3-se-360.png",
+      "after": "D064-after-form-k34-v3-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11004,
+        11144
+      ],
+      "composite": "D064-pair-form-k34-v3-se-360.png"
+    },
+    {
+      "name": "form-k105-v0-se",
+      "before": "D064-before-form-k105-v0-se-360.png",
+      "after": "D064-after-form-k105-v0-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11024,
+        11164
+      ],
+      "composite": "D064-pair-form-k105-v0-se-360.png"
+    },
+    {
+      "name": "form-k105-v1-se",
+      "before": "D064-before-form-k105-v1-se-360.png",
+      "after": "D064-after-form-k105-v1-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11024,
+        11174
+      ],
+      "composite": "D064-pair-form-k105-v1-se-360.png"
+    },
+    {
+      "name": "form-k105-v2-se",
+      "before": "D064-before-form-k105-v2-se-360.png",
+      "after": "D064-after-form-k105-v2-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11024,
+        11220
+      ],
+      "composite": "D064-pair-form-k105-v2-se-360.png"
+    },
+    {
+      "name": "form-k106-v0-se",
+      "before": "D064-before-form-k106-v0-se-360.png",
+      "after": "D064-after-form-k106-v0-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11136,
+        11204
+      ],
+      "composite": "D064-pair-form-k106-v0-se-360.png"
+    },
+    {
+      "name": "form-k106-v1-se",
+      "before": "D064-before-form-k106-v1-se-360.png",
+      "after": "D064-after-form-k106-v1-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11136,
+        11292
+      ],
+      "composite": "D064-pair-form-k106-v1-se-360.png"
+    },
+    {
+      "name": "form-k106-v2-se",
+      "before": "D064-before-form-k106-v2-se-360.png",
+      "after": "D064-after-form-k106-v2-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        11136,
+        11288
+      ],
+      "composite": "D064-pair-form-k106-v2-se-360.png"
+    }
+  ]
+}

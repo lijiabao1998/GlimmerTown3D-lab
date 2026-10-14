@@ -1,0 +1,86 @@
+{
+ "note": "雲端與本機的 D064 擷取報告逐項對帳：所有斷言都通過才會寫出這份；pngSha256EqualAcrossMachines 只回報（見檔頭）",
+ "result": {
+  "360": {
+   "ciCommit": "31e31192a50017324e096981ca32a4f8b0f655ca",
+   "htmlSha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+   "expectedDelta": 1102,
+   "before": {
+    "shots": 24,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "after": {
+    "shots": 24,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "ciRealRendererTriangles": {
+    "before": [
+     113668
+    ],
+    "after": [
+     114770
+    ],
+    "delta": [
+     1102
+    ]
+   },
+   "ciDrawCallsOutsideGallery": [
+    15
+   ]
+  },
+  "412": {
+   "ciCommit": "31e31192a50017324e096981ca32a4f8b0f655ca",
+   "htmlSha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+   "expectedDelta": 1102,
+   "before": {
+    "shots": 24,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "after": {
+    "shots": 24,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "ciRealRendererTriangles": {
+    "before": [
+     113668
+    ],
+    "after": [
+     114770
+    ],
+    "delta": [
+     1102
+    ]
+   },
+   "ciDrawCallsOutsideGallery": [
+    15
+   ]
+  },
+  "1440": {
+   "ciCommit": "31e31192a50017324e096981ca32a4f8b0f655ca",
+   "htmlSha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+   "expectedDelta": 1102,
+   "before": {
+    "shots": 47,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "after": {
+    "shots": 47,
+    "pngSha256EqualAcrossMachines": 0
+   },
+   "ciRealRendererTriangles": {
+    "before": [
+     113668
+    ],
+    "after": [
+     114770
+    ],
+    "delta": [
+     1102
+    ]
+   },
+   "ciDrawCallsOutsideGallery": [
+    15
+   ]
+  }
+ }
+}
