@@ -1,0 +1,921 @@
+{
+ "baseline": "0bef78f76daa1edbbc7b2b8f80d49f0a13dc7f63",
+ "tool": "tools/d060-baseline.mjs",
+ "flags": {
+  "streetArt": true,
+  "villageArt": true
+ },
+ "vocabulary": {
+  "roofKinds": [
+   "flat",
+   "saw"
+  ],
+  "windowStyles": [
+   "punch"
+  ],
+  "wallColors": [
+   "#8fa6aa",
+   "#a49b92",
+   "#a6b8ad",
+   "#a7adb0",
+   "#a8aab0",
+   "#abb0bd",
+   "#b0b4b0",
+   "#b2a68f",
+   "#b8a090"
+  ],
+  "roofColors": 12,
+  "wallSaturation": [
+   0.03,
+   0.22
+  ],
+  "tallStackArchetypes": [
+   "chimneyHall",
+   "stack"
+  ],
+  "formCombosPerArchetype": {
+   "lv1:sawShed": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv1:shed": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv1:workshop": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv1:yard": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv2:factory": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv2:mill": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv2:stack": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv2:warehouse": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv3:chimneyHall": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv3:heavy": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv3:mill3": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ],
+   "lv3:tankfarm": [
+    "flat/punch/upper",
+    "saw/punch/flat"
+   ]
+  }
+ },
+ "cities": {
+  "seed516": {
+   "n": 72,
+   "modes": {
+    "a": {
+     "weighted": 121606,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 1804,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 11184,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 9622,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 37608,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 4260,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 4240,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 2568,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 3462,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 4616,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 282,
+      "weighted": 26292,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 52,
+        "walls": 416,
+        "other": 624,
+        "dress": 2108,
+        "weighted": 4188,
+        "sizes": {
+         "1x1": 52
+        }
+       },
+       "lv1:shed": {
+        "blocks": 42,
+        "walls": 336,
+        "other": 504,
+        "dress": 1778,
+        "weighted": 3458,
+        "sizes": {
+         "1x1": 42
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 29,
+        "walls": 232,
+        "other": 348,
+        "dress": 566,
+        "weighted": 1726,
+        "sizes": {
+         "1x1": 29
+        }
+       },
+       "lv1:yard": {
+        "blocks": 33,
+        "walls": 264,
+        "other": 396,
+        "dress": 1862,
+        "weighted": 3182,
+        "sizes": {
+         "1x1": 33
+        }
+       },
+       "lv2:factory": {
+        "blocks": 49,
+        "walls": 882,
+        "other": 588,
+        "dress": 2156,
+        "weighted": 5096,
+        "sizes": {
+         "1x1": 49
+        }
+       },
+       "lv2:mill": {
+        "blocks": 31,
+        "walls": 248,
+        "other": 372,
+        "dress": 1224,
+        "weighted": 2464,
+        "sizes": {
+         "1x1": 31
+        }
+       },
+       "lv2:stack": {
+        "blocks": 27,
+        "walls": 216,
+        "other": 1620,
+        "dress": 1248,
+        "weighted": 4920,
+        "sizes": {
+         "1x1": 27
+        }
+       },
+       "lv2:warehouse": {
+        "blocks": 17,
+        "walls": 136,
+        "other": 204,
+        "dress": 238,
+        "weighted": 918,
+        "sizes": {
+         "1x1": 17
+        }
+       },
+       "lv3:chimneyHall": {
+        "blocks": 2,
+        "walls": 16,
+        "other": 120,
+        "dress": 68,
+        "weighted": 340,
+        "sizes": {
+         "1x1": 2
+        }
+       }
+      }
+     }
+    },
+    "b": {
+     "weighted": 86908,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 1804,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 4504,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 5236,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 30250,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 4260,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 4240,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 2568,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 1230,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 1640,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 49,
+      "weighted": 5972,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 5,
+        "walls": 106,
+        "other": 24,
+        "dress": 460,
+        "weighted": 720,
+        "sizes": {
+         "2x2": 3,
+         "1x1": 1,
+         "1x2": 1
+        }
+       },
+       "lv1:shed": {
+        "blocks": 9,
+        "walls": 116,
+        "other": 84,
+        "dress": 616,
+        "weighted": 1016,
+        "sizes": {
+         "1x2": 3,
+         "2x2": 2,
+         "1x1": 3,
+         "2x1": 1
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 6,
+        "walls": 92,
+        "other": 48,
+        "dress": 234,
+        "weighted": 514,
+        "sizes": {
+         "2x2": 2,
+         "1x1": 4
+        }
+       },
+       "lv1:yard": {
+        "blocks": 8,
+        "walls": 86,
+        "other": 84,
+        "dress": 582,
+        "weighted": 922,
+        "sizes": {
+         "1x2": 2,
+         "1x1": 3,
+         "2x1": 2,
+         "2x2": 1
+        }
+       },
+       "lv2:factory": {
+        "blocks": 7,
+        "walls": 150,
+        "other": 60,
+        "dress": 408,
+        "weighted": 828,
+        "sizes": {
+         "1x2": 2,
+         "2x2": 2,
+         "1x1": 3
+        }
+       },
+       "lv2:mill": {
+        "blocks": 4,
+        "walls": 54,
+        "other": 36,
+        "dress": 266,
+        "weighted": 446,
+        "sizes": {
+         "1x2": 2,
+         "2x2": 1,
+         "1x1": 1
+        }
+       },
+       "lv2:stack": {
+        "blocks": 5,
+        "walls": 62,
+        "other": 288,
+        "dress": 360,
+        "weighted": 1060,
+        "sizes": {
+         "1x2": 2,
+         "2x2": 1,
+         "2x1": 1,
+         "1x1": 1
+        }
+       },
+       "lv2:warehouse": {
+        "blocks": 4,
+        "walls": 54,
+        "other": 36,
+        "dress": 116,
+        "weighted": 296,
+        "sizes": {
+         "1x2": 2,
+         "2x2": 1,
+         "1x1": 1
+        }
+       },
+       "lv3:chimneyHall": {
+        "blocks": 1,
+        "walls": 8,
+        "other": 60,
+        "dress": 34,
+        "weighted": 170,
+        "sizes": {
+         "1x2": 1
+        }
+       }
+      }
+     }
+    },
+    "c": {
+     "weighted": 118007,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 1804,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 7534,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 7792,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 49127,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 4260,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 4240,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 2568,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 1680,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 2240,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 125,
+      "weighted": 14848,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 17,
+        "walls": 334,
+        "other": 96,
+        "dress": 1438,
+        "weighted": 2298,
+        "sizes": {
+         "2x2": 9,
+         "1x1": 2,
+         "1x2": 2,
+         "2x1": 4
+        }
+       },
+       "lv1:shed": {
+        "blocks": 18,
+        "walls": 232,
+        "other": 168,
+        "dress": 1202,
+        "weighted": 2002,
+        "sizes": {
+         "1x2": 7,
+         "2x2": 4,
+         "1x1": 4,
+         "2x1": 3
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 19,
+        "walls": 218,
+        "other": 192,
+        "dress": 556,
+        "weighted": 1376,
+        "sizes": {
+         "2x2": 3,
+         "1x1": 7,
+         "2x1": 6,
+         "1x2": 3
+        }
+       },
+       "lv1:yard": {
+        "blocks": 13,
+        "walls": 170,
+        "other": 120,
+        "dress": 1102,
+        "weighted": 1682,
+        "sizes": {
+         "1x2": 4,
+         "1x1": 4,
+         "2x1": 2,
+         "2x2": 3
+        }
+       },
+       "lv2:factory": {
+        "blocks": 21,
+        "walls": 450,
+        "other": 180,
+        "dress": 1244,
+        "weighted": 2504,
+        "sizes": {
+         "1x2": 3,
+         "2x2": 6,
+         "1x1": 10,
+         "2x1": 2
+        }
+       },
+       "lv2:mill": {
+        "blocks": 11,
+        "walls": 154,
+        "other": 96,
+        "dress": 764,
+        "weighted": 1264,
+        "sizes": {
+         "1x2": 5,
+         "2x2": 3,
+         "1x1": 2,
+         "2x1": 1
+        }
+       },
+       "lv2:stack": {
+        "blocks": 12,
+        "walls": 162,
+        "other": 684,
+        "dress": 918,
+        "weighted": 2610,
+        "sizes": {
+         "1x2": 3,
+         "2x2": 3,
+         "2x1": 3,
+         "1x1": 3
+        }
+       },
+       "lv2:warehouse": {
+        "blocks": 13,
+        "walls": 170,
+        "other": 120,
+        "dress": 362,
+        "weighted": 942,
+        "sizes": {
+         "1x2": 3,
+         "2x2": 3,
+         "1x1": 4,
+         "2x1": 3
+        }
+       },
+       "lv3:chimneyHall": {
+        "blocks": 1,
+        "walls": 8,
+        "other": 60,
+        "dress": 34,
+        "weighted": 170,
+        "sizes": {
+         "1x2": 1
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "ai120": {
+   "n": 72,
+   "modes": {
+    "a": {
+     "weighted": 92942,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 2686,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 3128,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 10314,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 20816,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 5250,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 5340,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 3096,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 2064,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 2752,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 184,
+      "weighted": 15076,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 50,
+        "walls": 400,
+        "other": 600,
+        "dress": 1910,
+        "weighted": 3910,
+        "sizes": {
+         "1x1": 50
+        }
+       },
+       "lv1:shed": {
+        "blocks": 67,
+        "walls": 536,
+        "other": 804,
+        "dress": 3068,
+        "weighted": 5748,
+        "sizes": {
+         "1x1": 67
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 33,
+        "walls": 264,
+        "other": 396,
+        "dress": 612,
+        "weighted": 1932,
+        "sizes": {
+         "1x1": 33
+        }
+       },
+       "lv1:yard": {
+        "blocks": 34,
+        "walls": 272,
+        "other": 408,
+        "dress": 2126,
+        "weighted": 3486,
+        "sizes": {
+         "1x1": 34
+        }
+       }
+      }
+     }
+    },
+    "b": {
+     "weighted": 88205,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 2686,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 2358,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 8534,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 23615,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 5250,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 5340,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 3096,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 1020,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 1360,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 57,
+      "weighted": 6078,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 18,
+        "walls": 210,
+        "other": 180,
+        "dress": 1082,
+        "weighted": 1862,
+        "sizes": {
+         "1x1": 7,
+         "1x2": 4,
+         "2x1": 4,
+         "2x2": 3
+        }
+       },
+       "lv1:shed": {
+        "blocks": 18,
+        "walls": 232,
+        "other": 168,
+        "dress": 1352,
+        "weighted": 2152,
+        "sizes": {
+         "1x2": 3,
+         "2x2": 4,
+         "1x1": 6,
+         "2x1": 5
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 12,
+        "walls": 140,
+        "other": 120,
+        "dress": 388,
+        "weighted": 908,
+        "sizes": {
+         "2x1": 4,
+         "1x1": 3,
+         "1x2": 3,
+         "2x2": 2
+        }
+       },
+       "lv1:yard": {
+        "blocks": 9,
+        "walls": 94,
+        "other": 96,
+        "dress": 776,
+        "weighted": 1156,
+        "sizes": {
+         "2x1": 1,
+         "1x1": 3,
+         "1x2": 4,
+         "2x2": 1
+        }
+       }
+      }
+     }
+    },
+    "c": {
+     "weighted": 97121,
+     "meshes": [
+      {
+       "name": "ground",
+       "tris": 10368,
+       "shadow": false
+      },
+      {
+       "name": "cliff",
+       "tris": 2686,
+       "shadow": false
+      },
+      {
+       "name": "walls",
+       "tris": 3126,
+       "shadow": true
+      },
+      {
+       "name": "other",
+       "tris": 9316,
+       "shadow": true
+      },
+      {
+       "name": "dress",
+       "tris": 28787,
+       "shadow": false
+      },
+      {
+       "name": "inst10",
+       "tris": 5250,
+       "shadow": true
+      },
+      {
+       "name": "inst20",
+       "tris": 5340,
+       "shadow": true
+      },
+      {
+       "name": "inst12",
+       "tris": 3096,
+       "shadow": true
+      },
+      {
+       "name": "inst6",
+       "tris": 1296,
+       "shadow": false
+      },
+      {
+       "name": "inst8",
+       "tris": 1728,
+       "shadow": false
+      }
+     ],
+     "industry": {
+      "blocks": 100,
+      "weighted": 10220,
+      "byArche": {
+       "lv1:sawShed": {
+        "blocks": 28,
+        "walls": 312,
+        "other": 288,
+        "dress": 1642,
+        "weighted": 2842,
+        "sizes": {
+         "1x1": 12,
+         "1x2": 6,
+         "2x1": 6,
+         "2x2": 4
+        }
+       },
+       "lv1:shed": {
+        "blocks": 38,
+        "walls": 414,
+        "other": 396,
+        "dress": 2442,
+        "weighted": 4062,
+        "sizes": {
+         "1x2": 10,
+         "2x2": 5,
+         "1x1": 15,
+         "2x1": 8
+        }
+       },
+       "lv1:workshop": {
+        "blocks": 17,
+        "walls": 180,
+        "other": 180,
+        "dress": 488,
+        "weighted": 1208,
+        "sizes": {
+         "2x1": 4,
+         "1x1": 7,
+         "1x2": 4,
+         "2x2": 2
+        }
+       },
+       "lv1:yard": {
+        "blocks": 17,
+        "walls": 180,
+        "other": 180,
+        "dress": 1388,
+        "weighted": 2108,
+        "sizes": {
+         "2x1": 2,
+         "1x1": 8,
+         "1x2": 5,
+         "2x2": 2
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}
