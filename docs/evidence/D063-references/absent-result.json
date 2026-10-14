@@ -1,0 +1,232 @@
+[
+ {
+  "model": "market (Grainger Market, main entry)",
+  "entry": 1024866,
+  "absentOk": [
+   "parapet",
+   "low",
+   "wide"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "cast iron"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "market (Grainger east front)",
+  "entry": 1355243,
+  "absentOk": [
+   "low",
+   "wide"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "parapet",
+   "pilasters",
+   "4 storeys"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "modernShop (1-8 Station Parade)",
+  "entry": 1079481,
+  "absentOk": [
+   "flat roof",
+   "art deco",
+   "moderne",
+   "ribbon",
+   "small"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "parapets",
+   "strip of glazing",
+   "ten units",
+   "clerestor"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "dept (Harrods)",
+  "entry": 1294346,
+  "absentOk": [
+   "wing"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "terracotta",
+   "mansard",
+   "cupolas",
+   "balustraded parapet",
+   "display windows"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "modernOffice (Space House)",
+  "entry": 1421847,
+  "absentOk": [
+   "flat roof",
+   "ribbon",
+   "curtain wall",
+   "parapet"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "eight-storey slab",
+   "17-storey cylindrical tower",
+   "pilotis",
+   "granite"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "stoneHotel (St Pancras / Midland Grand)",
+  "entry": 1342037,
+  "absentOk": [
+   "ashlar"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "brick",
+   "ancaster stone",
+   "gabled dormers",
+   "towers",
+   "curved"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "podTower (Centre Point)",
+  "entry": 1113172,
+  "absentOk": [
+   "podium"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "33-storey",
+   "pilotis",
+   "convex",
+   "9-storey"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "podTower alt (Millbank Tower)",
+  "entry": 1242617,
+  "absentOk": [
+   "slender"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "podium",
+   "31-storey"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "setback (Shell Mex House)",
+  "entry": 1236752,
+  "absentOk": [
+   "art deco",
+   "grid"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "stepped inwards",
+   "portland stone",
+   "flat roof",
+   "clock",
+   "arcade"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "slabC (Metro Central Heights)",
+  "entry": 1405570,
+  "absentOk": [
+   "wing"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "courtyard",
+   "18 and 12 storeys",
+   "9 storeys",
+   "grid"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "stoneTower (Royal Liver Building)",
+  "entry": 1356370,
+  "absentOk": [
+   "podium"
+  ],
+  "absentFound": [],
+  "explainedHits": [],
+  "presentOk": [
+   "granite",
+   "colonnade",
+   "domes",
+   "clock towers",
+   "attics"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "modernNeedle (BT Communication Tower)",
+  "entry": 1350342,
+  "absentOk": [
+   "flat top",
+   "flat roof"
+  ],
+  "absentFound": [],
+  "explainedHits": [
+   {
+    "term": "needle",
+    "why": "only in the sentence about 'the Space Needle at the Seattle World's Fair' (a comparison; the BT Tower is never called a needle)"
+   }
+  ],
+  "presentOk": [
+   "cylinder",
+   "582 feet",
+   "mast",
+   "curtain wall"
+  ],
+  "presentMissing": []
+ },
+ {
+  "model": "courtC (The Albany)",
+  "entry": 1208630,
+  "absentOk": [
+   "c-shaped",
+   "u-shaped",
+   "l-shaped"
+  ],
+  "absentFound": [],
+  "explainedHits": [
+   {
+    "term": "plan",
+    "why": "matches 'planning permission' in the site's footer text, which follows the listing text; the listing itself never says 'plan'"
+   }
+  ],
+  "presentOk": [
+   "courtyard",
+   "iron bridges",
+   "spiral stair",
+   "3 storeys and basement"
+  ],
+  "presentMissing": []
+ }
+]
