@@ -72,3 +72,13 @@ Release gates: final full CI, owner's art-preview decision, explicit merge/deplo
 Owner approved the displayed art and release on 2026-10-09. Full run37929826961 passed all Node guards but exposed four browser test expectations requiring reconciliation. No runtime product files changed. The ai120 renderInfo pins previously counted only primary geometry; the independently decoded/restyled per-arena calculation now includes W/O shadow submissions: +3414 primary +758 shadow = +4172. Exact C/B/A totals are 80816/73854/84250; old draw-call and performance limits stay unchanged.
 
 The complete D049/D050 suites still run with current art, preserving their PNG/JSON evidence as D056-current-* files. They then run again through the explicit britishArt=legacy option solely to compare original dialog goldens. All ten original hashes remain unchanged; corrupted-file negative controls must fail both original PNG guards. The revised full CI and targeted workflow are required before merge.
+
+## Release record (added 2026-10-14, reconstructed)
+
+The paragraph above is written in the pre-merge voice and is kept as written. Afterwards, from [PR #13](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/13), the release commit and the Actions results (nothing re-run):
+
+- Owner approval of the displayed art and release: 2026-10-09 12:47 UTC (「3D沒問題，上線吧」, PR body). Approved head `422647c`; the runtime product is identical to it, and `e411bdc` changed only the test side (the shadow-pass budget pins and the historical dialog goldens described above).
+- Candidate `e411bdc`: full CI [37937676319](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37937676319) and art/dialog CI [37937676297](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37937676297) succeeded.
+- PR #13 merged 2026-10-09 14:27:29 UTC as `3330f04`. Main CI [37944319875](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/37944319875): `smoke`, `d055` and `pages` succeeded (Pages finished 15:32 UTC).
+- The 60 original screenshots are now stored in the repository under [`docs/img/D056/before/`](img/D056/before/) and [`docs/img/D056/after/`](img/D056/after/). The PR names the final-candidate artifact `11615164268`; this card names the art-source artifact `11614967647`; the 60 PNGs in the two are byte-identical (checked 2026-10-14). Provenance and limits: [approval-images-D056-D058](evidence/approval-images-D056-D058.md).
+- Not verified in this record: the QA-only commit `df83fb3` ("verify D056 production bytes, approved pixels and native save flows") was not read for its result; Android hardware is untested; the `native-district` and `mobile-district` composites have no recorded source hashes.

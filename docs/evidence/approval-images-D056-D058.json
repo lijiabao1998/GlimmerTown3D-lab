@@ -341,7 +341,23 @@
      "sha256": "ccb422836f5b7cddccf52769616e55be33f4dc0c8aecbae956b9bb048f9b9ff9",
      "status": "已在 repo（與 artifact 原件逐位元組相同）"
     }
-   ]
+   ],
+   "crossCheckedArtifact": {
+    "note": "D056 的 PR #13 內文指名的是最終候選（head 422647c）的 artifact，而存入 repo 的是卡面指名的美術來源（b7a74ea）那一份。2026-10-14 兩份都下載比對。",
+    "id": 11615164268,
+    "name": "d056-art-422647c77f51b07fd53a1fa26d35799cd7b33ef8",
+    "zipSha256": "7a21921427e4a530a8cbc13b6f1f35a2fb36b6a2cc8a7e5bf4f9c6b5c7ab5ce0",
+    "zipSha256MatchesPrBody": true,
+    "zipBytes": 6277611,
+    "workflowRun": {
+     "id": 37929826940,
+     "headSha": "422647c77f51b07fd53a1fa26d35799cd7b33ef8",
+     "headBranch": "codex/d056-british-civic-eight"
+    },
+    "pngsByteIdenticalToSaved": 60,
+    "pngsDifferent": 0,
+    "reportsDifferFromSaved": "兩份 D056-capture.json 與存入的不同（內含來源 ref、HTML 雜湊等執行當下的欄位）；PNG 逐位元組相同"
+   }
   },
   "D057": {
    "artifact": {

@@ -133,7 +133,7 @@
 - **業主還沒看過定稿圖，也還沒核准。** 美術好不好由業主判；核准前不合併 main、不部署。第一版畫面（2026-10-14 傳給業主的 7 張）是開發中的樣子，不是定稿。
 - **完整 Node 套件與 browser 套件沒有在本機跑完：** 本機只跑了會穿過範圍守衛鏈的守衛（D053–D060，75 項 0 NG）；整套 Node 開跑後為了先接手守衛鏈而中止，不算通過。完整 Node 與 browser 交給推送後的 CI，結果另列。
 - 第一版圖面尚未拍手機尺寸的定稿對照；`tools/d060-capture.mjs` 與 CI 工作 `d060` 已就緒，但本機完整三尺寸拍攝尚未跑完。
-- D056–D058 核准圖存檔已完成，但有兩處沒存、一處沒核對（逐項見 [存證說明](evidence/approval-images-D056-D058.md)）：D058 同一個 run 的 `d058-complete-regression` artifact（11733635908，2026-10-26 到期）沒有下載；D056 ZIP 內屬於 D055 的 `d055-after/` 沒有存；D056 的 `native-district`、`mobile-district` 兩張合成圖沒有來源雜湊，沒核對。D057／D058 的核准紀錄只寫候選 SHA（D058 另寫 124 張），沒列檔名，「業主看的就是這批圖」是推論。（下載方式：`gh api` 的轉址會被代理擋下，不繞過；改用 GitHub MCP 的 `actions_get download_workflow_run_artifact` 取得簽名網址，再經代理允許的 blob 主機下載，ZIP 雜湊與 API digest 逐字相同。）
+- D056–D058 核准圖存檔已完成，但有兩處沒存、一處沒核對（逐項見 [存證說明](evidence/approval-images-D056-D058.md)）：D058 同一個 run 的 `d058-complete-regression` artifact（11733635908，2026-10-26 到期）沒有下載；D056 ZIP 內屬於 D055 的 `d055-after/` 沒有存；D056 的 `native-district`、`mobile-district` 兩張合成圖沒有來源雜湊，沒核對。D057 的 PR #14 指名了 54 張原圖的 artifact，但業主看的是由它們衍生的圖；D058 只有發布 commit 的「124 張圖審閱」與卡面的最終 artifact 連結；這兩批「業主逐張看過」是推論（D056 已用 PR #13 指名的第二份 artifact 逐位元組比對補上，60／60 相同）。（下載方式：`gh api` 的轉址會被代理擋下，不繞過；改用 GitHub MCP 的 `actions_get download_workflow_run_artifact` 取得簽名網址，再經代理允許的 blob 主機下載，ZIP 雜湊與 API digest 逐字相同。）
 - Android 實機從未測；`?bench=1` 實機量測未做。預算上限 118,884／106,365 仍是相對啟發值。
 - D014「近看小物」在 D060 街區不畫（條件 17，已知的視覺退步）；貼花窗改圖集（換出預算）、地景繪製波次都排在 D060 之後。
 - 參照紀錄只讀了名單條文（官方站對自動抓取回 403，改讀鏡像），沒有檢視參照照片像素，見 [參照紀錄](D060-reference-record.md)。
