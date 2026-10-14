@@ -8,7 +8,7 @@
 
 - 基線：main `0bef78f76daa1edbbc7b2b8f80d49f0a13dc7f63`（D059 正式版）。
 - 施工分支：`claude/3d-claude-reading-o11uvs`，已合併 main（`a6c626d`，tree 與 main 相同）。
-- 有日期的項目先做：runner 釘成 `ubuntu-24.04`（`ubuntu-latest` 2026-10-19 起改指 Ubuntu 26），已獨立提交 `7d3a507`，只改八處 `runs-on` 標籤。D056–D058 核准圖存檔未完成，見末節。
+- 有日期的項目先做：runner 釘成 `ubuntu-24.04`（`ubuntu-latest` 2026-10-19 起改指 Ubuntu 26），已獨立提交 `7d3a507`，只改八處 `runs-on` 標籤。D056–D058 核准圖已於 2026-10-14 存進 repo（238 張 PNG，18.56 MiB，附清單與守衛），見 [存證說明](evidence/approval-images-D056-D058.md)。
 - 本卡提交時只有卡面、基線量測工具與基線數字，沒有任何 `src/` 變動；驗收條件在動手之前定下。
 
 ## 為什麼先做工業
@@ -133,7 +133,7 @@
 - **業主還沒看過定稿圖，也還沒核准。** 美術好不好由業主判；核准前不合併 main、不部署。第一版畫面（2026-10-14 傳給業主的 7 張）是開發中的樣子，不是定稿。
 - **完整 Node 套件與 browser 套件沒有在本機跑完：** 本機只跑了會穿過範圍守衛鏈的守衛（D053–D060，75 項 0 NG）；整套 Node 開跑後為了先接手守衛鏈而中止，不算通過。完整 Node 與 browser 交給推送後的 CI，結果另列。
 - 第一版圖面尚未拍手機尺寸的定稿對照；`tools/d060-capture.mjs` 與 CI 工作 `d060` 已就緒，但本機完整三尺寸拍攝尚未跑完。
-- D056–D058 核准圖存檔未完成：`gh api` 下載 Actions artifact 會被轉址到非 `api.github.com` 的主機而被代理擋下，不繞過；依 14 天保留期，前一輪查得 D056 artifact 2026-10-23、D057 2026-10-24、D058 2026-10-26 到期（本輪未重查）。需用 MCP 的 artifact 下載或業主環境處理。
+- D056–D058 核准圖存檔已完成，但有兩處沒存、一處沒核對（逐項見 [存證說明](evidence/approval-images-D056-D058.md)）：D058 同一個 run 的 `d058-complete-regression` artifact（11733635908，2026-10-26 到期）沒有下載；D056 ZIP 內屬於 D055 的 `d055-after/` 沒有存；D056 的 `native-district`、`mobile-district` 兩張合成圖沒有來源雜湊，沒核對。D057／D058 的核准紀錄只寫候選 SHA（D058 另寫 124 張），沒列檔名，「業主看的就是這批圖」是推論。（下載方式：`gh api` 的轉址會被代理擋下，不繞過；改用 GitHub MCP 的 `actions_get download_workflow_run_artifact` 取得簽名網址，再經代理允許的 blob 主機下載，ZIP 雜湊與 API digest 逐字相同。）
 - Android 實機從未測；`?bench=1` 實機量測未做。預算上限 118,884／106,365 仍是相對啟發值。
 - D014「近看小物」在 D060 街區不畫（條件 17，已知的視覺退步）；貼花窗改圖集（換出預算）、地景繪製波次都排在 D060 之後。
 - 參照紀錄只讀了名單條文（官方站對自動抓取回 403，改讀鏡像），沒有檢視參照照片像素，見 [參照紀錄](D060-reference-record.md)。
