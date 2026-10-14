@@ -1,6 +1,8 @@
 # D062 四季與天氣：把模擬早就有的季節與天氣畫出來（零三角形）
 
-**狀態（2026-10-14）：A 季節與 B 天氣都已施工（未合併、未部署）。** 程式、守衛與驗證在「卡面原條件的實測與更正」「施工 A 的驗證」「施工 B 的驗證」三節：新增 `src/render/seasonArt.ts`、`src/render/weatherArt.ts`，改 `landArt.ts`／`ground.ts`／`cityScene.ts`／`cityView.ts`／`post.ts` 的具名區段（`D062-BEGIN 名稱 … D062-END 名稱`，可逆；`src/sim/` 零差異）；`tools/unit-d062.mjs` 22 項守衛（含負向控制）、範圍鎖鏈穿過 D062、實驗線黃金樣本 `fixtures/d062-lab.json`（季節與天氣各項已逐項對拍）、CI `d062` 工作（`tools/d062-capture.mjs` 與 `tools/d062-weather-capture.mjs`，真瀏覽器）。探索圖（`CLAUDE.md` 規則 1）已拍、v4 版另傳業主，原型只存在隔離的 git worktree、以 patch 存證（`docs/evidence/D062-explore/D062-prototype.patch`）；業主尚未挑強度。D061 候選的完整 CI 已於 2026-10-14 12:06 UTC 全綠（[run 38551785950](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38551785950)，見 [D061 卡面](D061-landscape.md)）。不合併、不部署，直到業主核准。
+**狀態（2026-10-14）：A 季節與 B 天氣都已施工；業主已核准發布（見下面「核准」），合併與部署的結果見 `LOG.md` 的正式發布列。** 程式、守衛與驗證在「卡面原條件的實測與更正」「施工 A 的驗證」「施工 B 的驗證」三節：新增 `src/render/seasonArt.ts`、`src/render/weatherArt.ts`，改 `landArt.ts`／`ground.ts`／`cityScene.ts`／`cityView.ts`／`post.ts` 的具名區段（`D062-BEGIN 名稱 … D062-END 名稱`，可逆；`src/sim/` 零差異）；`tools/unit-d062.mjs` 22 項守衛（含負向控制）、範圍鎖鏈穿過 D062、實驗線黃金樣本 `fixtures/d062-lab.json`（季節與天氣各項已逐項對拍）、CI `d062` 工作（`tools/d062-capture.mjs` 與 `tools/d062-weather-capture.mjs`，真瀏覽器）。探索圖（`CLAUDE.md` 規則 1）已拍、v4 版另傳業主，原型只存在隔離的 git worktree、以 patch 存證（`docs/evidence/D062-explore/D062-prototype.patch`）；業主尚未挑強度。D061 候選的完整 CI 已於 2026-10-14 12:06 UTC 全綠（[run 38551785950](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38551785950)，見 [D061 卡面](D061-landscape.md)）。業主 2026-10-14 已核准合併與部署（驗收第 25 條的原文留在下面）。
+
+**核准（2026-10-14）**：業主看過 D062 的真瀏覽器圖後說：「你可以合并且部署，沒問題的Claude，非常好看」。我當成對整串候選的合併與部署核准——D060 工業、D061 地景、D062 四季與天氣疊在同一條分支上，一次合併。沒有逐項挑：D060 的屋頂色（V1）、D061 的地景檔位（2）、D062 的強度（全季）與天氣預設（開）都是我先選的預設，業主沒有改，所以照預設發布；看了不喜歡就改回來，改法都在各卡面（旗標 `industryArt=legacy`、`landArt=0..3`、`seasonStyle=soft`、`season=off`、`weather=off`）。合併前先等這一輪 CI 全綠（D059 的發布先例：核准候選的完整 CI 成功在前）；合併後由 `main` 的 CI 綠燈把關 Pages 部署。合併與部署的結果見 `LOG.md` 的正式發布列。
 
 ## 授權與開工基線
 
@@ -213,6 +215,8 @@
 - 還沒做、也不是這一輪的範圍：Android 實機；降水動畫在真 GPU 與手機上的耗時（軟體 WebGL 下 1440×1000 每秒只跑得到 6–8 次後製）；無 `sin` 的雜湊在真 GPU 上的驗證（SwiftShader 與 CPU 副本一致，但 SwiftShader 不是手機 GPU）。
 
 ## 要業主定的事（我先選的放第一）
+
+**（2026-10-14 補記）業主回「你可以合并且部署，沒問題的Claude，非常好看」，沒有改這兩項，所以照我先選的預設發布；以下兩項仍可隨時改回。**
 
 1. **強度**：**全季**（＝實驗線自己的色；我先選，預設值 `SEASON_STYLE_DEFAULT = 'bold'`）或柔（我自己的折衷，只挪半格色階、冬天只是霜；`?seasonStyle=soft`）。探索圖已傳；實作後的真瀏覽器圖（十種狀態 × 六個畫面）隨施工 A 的推送另傳。**業主 2026-10-14 說「太好看了」不算選擇**（見上面「授權」）。
 2. **天氣疊層預設開**（我先選）或關：開的話新城的雨天會讓場景色調變暗、下雨下雪，雨後有彩虹、暴雨偶爾閃一下；旗標 `?weather=off` 隨時關（樣本城沒有模擬，永遠是晴天，除非用 `?weather=rain` 之類固定）。
