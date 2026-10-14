@@ -807,6 +807,8 @@ export async function d062Guards(log) {
     assert.match(view,/weatherTick\(frames !== f0\)/,'the animation loop runs the post-only frames');
     assert.match(view,/wxFx\.reset\(sim \? sim\.weather\.weather : 0\);/,'a loaded city starts without a pending rainbow');
     assert.match(view,/pipe\.renderPost\(renderer\)/,'animation re-runs the post pass only');
+    assert.match(view,/if \(!w\) \{ if \(wxShown\) \{ wxShown = false; pipe\.weather = null; pipe\.renderPost\(renderer\); \} return; \}/,'when the weather stops, one clean post pass replaces the last animated frame (no veil of the flash is left on the screen)');
+    assert.match(view,/pipe\.weather = weatherNow\(\); wxShown = pipe\.weather !== null;/,'a full render records whether it carried weather');
     assert.match(view,/now - wxPostT >= Math\.min\(1000, Math\.max\(1000 \/ ANIM_FPS - 1, 4 \* wxPostCost\)\)/,'the animation is capped at ANIM_FPS and backs off when a pass is expensive (software WebGL)');
     assert.match(post,/renderPost\(renderer: THREE\.WebGLRenderer\)/);
     assert.equal(ANIM_FPS,20);

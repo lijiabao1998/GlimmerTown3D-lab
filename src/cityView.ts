@@ -198,7 +198,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const weatherOpt = weatherOptionOf(k => q.get(k), !!pipe.sky);
   const reducedMotion = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;   // 使用者要求減少動態：降水凍成一格、不放閃電
   const wxFx = new WeatherFx(reducedMotion);
-  let wxLastT = 0, wxPostT = 0, wxPostCost = 0;   // wxPostCost：上一次只重跑後製花了幾毫秒（軟體 WebGL 會卡住呼叫端、看得到真實成本；GPU 只看得到送出的時間，≈ 0）
+  let wxLastT = 0, wxPostT = 0, wxPostCost = 0, wxShown = false;   // wxShown：畫面上現在是不是帶著天氣的那一幀（天氣停了要補一趟乾淨的，不然閃光的最後一幀會留在畫面上）；wxPostCost：上一次只重跑後製花了幾毫秒（軟體 WebGL 會卡住呼叫端、看得到真實成本；GPU 只看得到送出的時間，≈ 0）
   const wxWinter = (day: number): boolean => seasonOpt ? (seasonOpt.mode === 'auto' ? inWinter(seasonOpt.day ?? day) : seasonOpt.mode === 3) : inWinter(day);   // 季節旗標釘住冬天，天氣就畫成雪
   const wxWeather = (): number => !weatherOpt ? 0 : weatherOpt.mode === 'auto' ? (sim ? sim.weather.weather : 0) : WX_PINNED[weatherOpt.mode];
   function weatherNow(): { look: WeatherLook; time: number; rainbow: number; flash: number } | null {
@@ -217,11 +217,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     wxLastT = now; wxFx.step(dt);
     if (fullRender) { wxPostT = now; return; }
     const w = weatherNow();
-    if (!w) return;
+    if (!w) { if (wxShown) { wxShown = false; pipe.weather = null; pipe.renderPost(renderer); } return; }
     const moving = weatherOpt.time === undefined && !reducedMotion && w.look > 0, fading = weatherOpt.rainbow === undefined && wxFx.rainbowT > 0 || weatherOpt.flash === undefined && wxFx.flashT > 0;
     // 間隔至少 1/ANIM_FPS 秒，而且至少是上一次成本的 4 倍（最多 1 秒）：沒有 GPU 的機器（軟體 WebGL）不會被降水動畫佔滿主執行緒
     if ((moving || fading) && now - wxPostT >= Math.min(1000, Math.max(1000 / ANIM_FPS - 1, 4 * wxPostCost))) {
-      wxPostT = now; pipe.weather = w; pipe.renderPost(renderer);
+      wxPostT = now; wxShown = true; pipe.weather = w; pipe.renderPost(renderer);
       wxPostCost = 0.5 * wxPostCost + 0.5 * (performance.now() - now);
     }
   }
@@ -556,7 +556,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     frames++;
     updateDetail();
 // D062-BEGIN weather-draw
-    pipe.weather = weatherNow();
+    pipe.weather = weatherNow(); wxShown = pipe.weather !== null;
 // D062-END weather-draw
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
     if (retired.length) { for (const b of retired) b.dispose(); retired = []; }
