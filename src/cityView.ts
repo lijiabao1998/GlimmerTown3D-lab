@@ -7,31 +7,48 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityStats, buildingAt, liveBuildings, type ActKind, type City, type CityEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type CmsEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { CITY_EVENTS } from './sim/rules/events.ts';
 import { RANKS } from './sim/rules/rank.ts';
 import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
-import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, gestureOf, labToolOf, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, acceptCommission, dropCommission, commissionOffers, commissionState, ROAD_TOOLS, CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { chronicleOf, depletedToastText } from './sim/decisions.ts';
+import { CMS_BY_ID385, NO_RIDERSHIP, cmsToast, type CmsDef } from './sim/rules/commission.ts';
+import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
 import { POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax } from './sim/rules/policy.ts';
 import { upRegOf } from './sim/rules/money.ts';
-import { mergeToastText } from './sim/rules/merge.ts';
+import { mergesToastText } from './sim/rules/merge.ts';
 import { MEGA_POP, MEGA_JOBS } from './sim/rules/jobs.ts';
 import { SEWAGE_THRESHOLD442, WATER_HOPS472, SEWER_OK, SEWER_NO_PIPE, SEWER_NO_PLANT, SEWER_TOO_FAR, SEWER_NA, sewerServed } from './sim/rules/sewer.ts';
+import { RES_OIL, RES_ORE, OIL_RATE, ORE_RATE, RESOURCE_STOCK } from './sim/rules/resource.ts';
 import { labRng, type Bld } from './sim/rules/lab.ts';
 import { roadCap475, hashBytes, COMMUTE_FAR, COMMUTE_PEN_STEP, COMMUTE_PEN_MAX, COMMUTE_PEN_UNREACH, COMMUTE_PERIOD } from './sim/rules/commute.ts';
 import { HAPPY_NAMES } from './sim/rules/happy.ts';
 import { actAt, ACT_DONE } from './sim/act.ts';
 import { computeSanitation445, prepareSanitationLoad452, sanitationAtRoot452, garbLegacyDist, garbLegacyAt, isSanFacility445, SAN_CAP445, SAN_LONG_DIST445, SAN_FORMAL_POP445 } from './sim/rules/garbage.ts';
 import { createBuildUi, TOOLS, type ToolId, type MenuSection } from './ui/buildUi.ts';
+import { createSaveStatus, createSaveModalAccess } from './ui/saveStatus.ts';
+import { createCopyFeedback, COPY_TEXT } from './ui/copyFeedback.ts';
+import { createImportFeedback } from './ui/importFeedback.ts';
+import { updatePanelContent } from './ui/panelContent.ts';
+import { createPanelUpdateGate } from './ui/panelPress.ts';
+import { rankBuildNote, facilitySummary } from './ui/growthGuide.ts';
+import { createFacilityCatalog } from './ui/facilityCatalog.ts';
+import { createMapClickGuard } from './ui/mapClickGuard.ts';
+import growthGuideCss from './ui/growthGuide.css?raw';
+import { diagnoseSite, diagnoseSiteResult, selectedToolGuide, formatSiteMoney, type SiteDiagnosis, type SiteResultDiagnosis } from './ui/siteDiagnostics.ts';
+import { createSitePanel, siteCostText } from './ui/sitePanel.ts';
+import siteDiagnosticsCss from './ui/siteDiagnostics.css?raw';
 import { Preview } from './render/preview.ts';
+import { ResourceHints } from './render/resource.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
 import { overLevel } from './render/ground.ts';
 import { LOOKS } from './content/looks.ts';
-import { shapeOf, kindColors } from './content/kindShapes.ts';
+import { shapeOf, kindColors, KIND_SHAPES } from './content/kindShapes.ts';
 import { Pipeline } from './render/post.ts';
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
@@ -122,11 +139,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const trimOf = (b: DrawBlock) => { const k = keyOf(b); if (!trims.has(k)) trims.set(k, trimPlan(recipeOf(b))); return trims.get(k)!; };
   let plan: DrawBlock[] | null = null;
   // D007：非住商工照造型表畫（街區模式才用）
-  const civic: CivicRender = { shape: shapeOf, colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+  // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy'), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
-    return { mode: blockMode, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D058-BEGIN street-default
+// D059-BEGIN village-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D059-END village-enabled
+// D058-END street-default
   };
 
   const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
@@ -160,6 +182,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const newJid = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 2 ** 32).toString(36);   // 介面層：日誌編號只要不撞
   const dropJournal = (id: string) => { if (!id) return; dropped.add(id); if (mineRows?.id === id) mineRows = null; jstore?.drop(id).catch(() => { /* 刪不掉就留著，不影響新城 */ }); };
   const preview = new Preview();
+  const resHints = new ResourceHints();                                     // D040：資源圖（油田黃、礦藏藍）；選了油井、礦場工具或 ☰「顯示資源圖」才畫
+  let showRes = false;
   const haz = new HazardMarks();                                            // D026：災禍標記（一個 InstancedMesh，空的不畫）
   const timing: Record<string, number> = {};
   // D014 施工：一座城一份施工資料（屋齡、每格最高點）；builtDay＝目前場景是哪一天建的；visT＝動畫時間（只在播放時走）
@@ -237,7 +261,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     cam.updateProjectionMatrix();
     invalidate();
   }
-  addEventListener('resize', resize);
+  addEventListener('resize', () => { interruptBuild(); resize(); });
 
   // 匯入一個碼：解碼 → 城市 → 場景。失敗就回傳原因，不動目前的城市
   // simulate：逐日模擬、可以蓋（D011：走 src/io/save.ts 的讀檔，帶 d3 的碼會把本線的歷史接回來）；saves：這座城自動存檔。
@@ -254,6 +278,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (L && !L.ok) return L;
     const V = simulate ? null : viewCode(code, KINDS, VRANK);             // D012：只能看的城也照實驗線重挑外觀（要讀檔時的地價，所以也建一次格子與場）
     if (V && !V.ok) return V;
+    closeDecisionPanels();
+    closeGrowth(false);
+    siteEstimate = null; siteResult = null; siteNotice = '';
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
@@ -270,13 +297,13 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t3 = performance.now();
     retire(built);
     city = c; built = b; label = name; lastCode = code;
-    built.scene.add(preview.mesh, haz.mesh);
+    built.scene.add(preview.mesh, haz.mesh); attachRes();
     syncCon();
     delete timing.rebuild;
     Object.assign(timing, { decode: t1 - t0, city: t2 - t1, scene: t3 - t2, total: t3 - t0 }, b.timing);
     frameCamera(c.n, first);
     closeCard();
-    dlg.hidden = true;                                                    // 換了城，分享碼對話框不留在新城上
+    closeSavePanels();                                                    // 換了城，分享碼／存檔狀態與背景焦點鎖都不留在新城上
     syncUi();
     if (sim) warmEdit();
     return { ok: true, replayed: !!L?.replayed };
@@ -286,14 +313,21 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function warmEdit() {
     const run = () => {
       if (!sim || !city || stroke) return;                                 // 已經在拖了就不動
-      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, t = performance.now();
-      for (const w of ['road', 'zr', 'plant', 'doze'] as const) {
-        tool = w;
-        stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: w !== 'plant' };
-        updatePreview();
+      const c = siteCenter(city) ?? [city.n / 2, city.n / 2], x = Math.floor(c[0]), z = Math.floor(c[1]), t0 = tool, civic0 = civicTool, t = performance.now();
+      // D054: warm the actual read-only diagnosis + multiline label path in the
+      // existing idle task, including the first current sewage-network scan.
+      // Local diagnoses are discarded; fake strokes never become site records.
+      try {
+        for (const [w, civic] of [['road', null], ['zr', null], ['plant', null], ['doze', null], ['civic', 'sewage'], ['civic', 'wpipe'], ['civic', 'oilwell'], ['civic', 'mine']] as const) {
+          tool = w; if (civic) civicTool = civic;
+          const gesture = gestureOf(labToolOf(w, roadTool, civicTool));
+          stroke = { pid: -1, a: [x, z], b: [x + 3, z + 1], x: 0, y: 0, moved: gesture !== 'tap' };
+          updatePreview();
+        }
+      } finally {
+        stroke = null; lastPreview = null; tool = t0; civicTool = civic0; preview.clear(); bui.hideCost(); invalidate();
+        timing.warm = performance.now() - t; delete timing.preview;
       }
-      stroke = null; lastPreview = null; tool = t0; preview.clear(); bui.hideCost(); invalidate();
-      timing.warm = performance.now() - t; delete timing.preview;
     };
     const ric = (window as unknown as { requestIdleCallback?: (f: () => void) => void }).requestIdleCallback;
     if (ric) ric(run); else setTimeout(run, 300);
@@ -320,7 +354,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t0 = performance.now(), b = makeScene(city, true), t1 = performance.now();
     retire(built);
     built = b;
-    built.scene.add(preview.mesh, haz.mesh);
+    built.scene.add(preview.mesh, haz.mesh); attachRes();
     syncCon();
     Object.assign(timing, { scene: t1 - t0 }, b.timing);
     const u = new URL(location.href);
@@ -336,7 +370,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const t0 = performance.now(), b = makeScene(city, fresh), t1 = performance.now();
     retire(built);
     built = b;
-    built.scene.add(preview.mesh, haz.mesh);                             // D011：施工預覽跟著搬到新場景（D026：災禍標記也是）
+    built.scene.add(preview.mesh, haz.mesh); attachRes();                             // D011：施工預覽跟著搬到新場景（D026：災禍標記也是）
     syncCon();
     Object.assign(timing, { scene: t1 - t0, rebuild: t1 - t0, rebuildAll: performance.now() - t0 }, b.timing);   // rebuildAll＝建場景＋同步工地（D015 判這一段）
     rebuilds++; daysSinceBuild = 0; dirtyScene = false; urgentRebuild = false;
@@ -358,9 +392,13 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (const a of rep.hazard.alerts) bui.toast(ALERT_TEXT[a.kind](city?.name ?? '微光小鎮'), 'bad', () => focusTile(a.x, a.z));   // D026：每種災禍當天第一件發一則（55774、55819、55831、55852、55863）；點一下鏡頭過去、開那一格的卡
     if (rep.cityEvent.started >= 0) { const e = CITY_EVENTS[rep.cityEvent.started]; bui.toast(`✨ ${e.name}！${e.desc}`, 'gold'); }   // D030：城市活動開始（54953）；名稱與說明照實驗線（表的字原樣）
     if (rep.cityEvent.ended >= 0) bui.toast(`🎏 活動結束：${CITY_EVENTS[rep.cityEvent.ended].name}`);
-    for (const m of rep.merges) bui.toast(mergeToastText(m.k, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(m.x, m.z));   // D034：合併一筆一則（55726、55753）；點一下鏡頭過去
+    if (rep.commission) { const c = CMS_BY_ID385[rep.commission.id]; if (c) { const t = cmsToast(rep.commission.t === 'done' ? 'done' : 'expire', c, rep.commission.t === 'done' ? rep.commission.bonus : undefined); bui.toast(t.text, t.tone); } }   // D045：市長委託完成（獎金已進資金）／過期，當天結算的結果
+    if (!cm.hidden) renderCommission();   // D045：面板開著、過了一天：進度、剩餘天數、三選一跟著換
+    if (!tc.hidden) renderTech();         // D052：同一筆結算也更新開著的科技面板，保留原控件
+    if (rep.depleted.length) bui.toast(depletedToastText(rep.depleted), 'gold', () => focusTile(rep.depleted[0].x, rep.depleted[0].z));   // D040：井枯竭，當天合成一則；點一下鏡頭過去（第一口）
+    if (rep.merges.length) bui.toast(mergesToastText(rep.merges, MEGA_POP, MEGA_JOBS), 'gold', () => focusTile(rep.merges[0].x, rep.merges[0].z));   // D034：一筆的字照實驗線（55726、55753）；D042：同一天多筆合成一則；點一下鏡頭過去（第一筆）
     if (rep.hazard.insured > 0) bui.toast(INSURANCE_TOAST, 'gold');   // D032：災害保險理賠（53049；同一天只報一次，每棟 +$35 已經加進資金）
-    for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (RANKS[q].unlock ? `　${RANKS[q].unlock}` : ''), 'gold');   // D031：城市等級升級（56138）；一天可以連升好幾級，每一級一則；名稱與預告照實驗線的字
+    for (const q of rep.rank.promoted) bui.toast(`🏙️ ${city?.name ?? '微光小鎮'}升至 Lv.${q + 1} ${RANKS[q].name}！` + (rankBuildNote(q) ? `　${rankBuildNote(q)}` : ''), 'gold');   // D053：數值與晉升照舊；預告只承諾本線已有的建造工具
     if (daysSinceSave >= SAVE_DAYS) saveNow();
     return rep;
   }
@@ -453,51 +491,108 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     pipe.render(renderer, built.scene, cam, style, innerWidth, innerHeight, Math.min(devicePixelRatio || 1, 2));
     if (retired.length) { for (const b of retired) b.dispose(); retired = []; }
   }
-  renderer.setAnimationLoop(() => { advance(); draw(); });
+  renderer.setAnimationLoop(() => { advance(); refreshSaveWarnings(); draw(); });
 
   // ---- 介面（D011：上方狀態列＋☰ 選單、下方播放列＋工具列，src/ui/buildUi.ts；建築卡與分享碼對話框沿用）----
   const ui = document.createElement('div');
   ui.innerHTML = `
     <div id="bio" hidden><button class="x" aria-label="關閉">✕</button><h2></h2><p class="sub"></p><ol></ol><div class="acts"></div></div>
-    <div id="dlg" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
-      <textarea spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p class="err"></p>
+    <div id="dlg" role="dialog" aria-modal="true" aria-labelledby="dlgTitle" aria-describedby="dlgSub" hidden><div class="card"><h2 id="dlgTitle">貼上分享碼</h2><p class="sub" id="dlgSub"></p>
+      <textarea aria-label="分享碼" aria-describedby="dlgSub dlgError" spellcheck="false" autocomplete="off" placeholder="eyJ2IjoxLC…"></textarea><p id="dlgError" class="err" role="alert"></p>
+      <p id="copyStatus" role="status" aria-live="polite" aria-atomic="true" hidden></p>
       <div class="row"><button id="dlgOk">匯入</button><button id="dlgNo">取消</button></div></div></div>
     <div id="hs" hidden><div class="card"><h2>😊 幸福構成（全城平均）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="hsX">關閉</button></div></div></div>
     <div id="fin" hidden><div class="card"><h2>💰 收支明細（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="finX">關閉</button></div></div></div>
     <div id="nc" hidden><div class="card"><h2>🌙 夜間城市（最近一天）</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="ncX">關閉</button></div></div></div>
-    <div id="rk" hidden><div class="card"><h2>🏙️ 城市等級</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><div class="row"><button id="rkX">關閉</button></div></div></div>
-    <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>`;
+    <div id="rk" role="dialog" aria-modal="true" aria-labelledby="rankTitle" hidden><div class="card"><h2 id="rankTitle" tabindex="-1">🏙️ 城市成長</h2><p class="sub"></p><div class="bar"><i></i></div><ol></ol><section class="growthGuide"><h3></h3><p class="nextBuild"></p><p>道路、住商工分區與電廠仍在下方工具列。設施導覽列出本線已有的公共設施、管線與資源工具。</p><button id="rkCatalog" type="button">查看可建設施</button></section><div class="row"><button id="rkX">返回城市</button></div></div></div>
+    <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
+    <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
+    <div id="cm" hidden><div class="card"><div class="head"><h2>📋 市長委託</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="cmX">關閉</button></div></div></div>
+    <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>`;
   const bui = createBuildUi({
-    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { civicTool = id; syncPipes(); syncDock(); updatePreview(); },
+    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
-    menu: id => onMenu(id), menuOpen: () => bui.setMenu(menuSections()), startBuild: () => menuCity('newcity'),
+    menu: id => onMenu(id), menuOpen: () => { interruptBuild(); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
+  bui.style.textContent += growthGuideCss + siteDiagnosticsCss;
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
-  let dlgMode: 'paste' | 'export' = 'paste', lastCode = '';
+  let dlgMode: 'paste' | 'export' = 'paste', lastCode = '', dlgFromStatus = false;
+  const importFeedback = createImportFeedback(ta, err as HTMLElement);
+  const copyStatus = $<HTMLElement>('#copyStatus');
+  const copyFeedback = createCopyFeedback({
+    clipboard: () => navigator.clipboard,
+    select: () => ta.select(),
+    render: phase => {
+      copyStatus.hidden = phase === 'hidden'; copyStatus.dataset.phase = phase; copyStatus.textContent = COPY_TEXT[phase];
+      dlgOk.setAttribute('aria-disabled', String(phase === 'pending'));
+      if (phase !== 'hidden') dlgOk.textContent = phase === 'pending' ? '複製中…' : '複製';
+    },
+  });
+  const saveWarnings = () => ({ unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '' });
+  const saveStatus = createSaveStatus({ export: () => onMenu('export'), close: () => closeSavePanels() });
+  ui.appendChild(saveStatus.root);
+  const saveModal = createSaveModalAccess(ui, [bui.root, renderer.domElement], () =>
+    bui.root.querySelector<HTMLElement>('.saveWarning:not([hidden])') ?? bui.root.querySelector<HTMLElement>('#menuBtn'));
+  function refreshSaveWarnings() {
+    if (!saveModal.isOpen()) return;
+    const shown = saveStatus.state(), current = saveWarnings();
+    // Journal failure can settle asynchronously while paused. Only read the same
+    // warning sources; do not retry saving, pause time, or change fallback rules.
+    if (shown.unsaved !== current.unsaved || shown.journal !== current.journal) syncUi();
+  }
+  function openSaveStatus() {
+    if (!dlg.hidden) return;
+    const warnings = saveWarnings();
+    if (saveStatus.root.hidden && !warnings.unsaved && !warnings.journal) return;
+    saveStatus.setState(warnings); saveStatus.setError(''); bui.menuOpen(false);
+    saveModal.show(saveStatus.root, saveStatus.title);
+  }
+  function closeSavePanels(restoreFocus = true) {
+    importFeedback.reset(false);
+    copyFeedback.reset(false);
+    dlgFromStatus = false; saveModal.close(restoreFocus); dlg.hidden = true; saveStatus.root.hidden = true;
+  }
+  function closeDlg() {
+    copyFeedback.reset(false);
+    if (dlgFromStatus) {
+      dlgFromStatus = false; saveStatus.setState(saveWarnings());
+      saveModal.show(saveStatus.root, saveStatus.exportButton);
+    } else closeSavePanels();
+  }
+  // No history entries or URL changes for panel navigation; native page navigation
+  // releases focus locks so a back-forward-cache restore cannot leave the city inert.
+  addEventListener('pagehide', () => closeSavePanels(false));
   function openDlg(mode: 'paste' | 'export', text = '', note = '') {
+    if (!dlg.hidden && dlgMode === mode) return;
+    dlgFromStatus = mode === 'export' && !saveStatus.root.hidden;
     dlgMode = mode;
     $('#dlgTitle').textContent = mode === 'paste' ? '貼上分享碼' : '匯出分享碼';
     $('#dlgSub').textContent = note || (mode === 'paste' ? '2D 實驗線或本線匯出的整串分享碼（可以帶 GVX1: 前綴）。本線匯出、帶建造歷史的碼可以接著蓋；其他碼只能看。'
       : '實驗線的存檔格式：貼進 2D 實驗線的「匯入分享碼」就能開。本線的建造歷史在附加欄位 d3，實驗線不讀它。');
     ta.value = text; ta.readOnly = mode === 'export'; dlgOk.textContent = mode === 'paste' ? '匯入' : '複製'; err.textContent = '';
-    dlg.hidden = false;
-    if (mode === 'export') ta.select(); else ta.focus();
+    importFeedback.reset(mode === 'paste');
+    copyFeedback.reset(mode === 'export');
+    $('#dlgNo').textContent = dlgFromStatus ? '返回存檔狀態' : '取消';
+    saveModal.show(dlg, ta);
+    if (mode === 'export') ta.select();
   }
-  $<HTMLButtonElement>('#dlgNo').onclick = () => { dlg.hidden = true; };
+  $<HTMLButtonElement>('#dlgNo').onclick = closeDlg;
+  dlg.onclick = e => { if (e.target === dlg) closeDlg(); };
   dlgOk.onclick = () => {
-    if (dlgMode === 'export') { ta.select(); navigator.clipboard?.writeText(ta.value).then(() => bui.toast('已複製分享碼', 'good'), () => bui.toast('請手動複製')); return; }
+    if (dlgMode === 'export') { void copyFeedback.copy(ta.value); return; }
+    importFeedback.clear();
     const code = ta.value, r = decodeLabCode(code);
-    if (!r.ok) { err.textContent = r.error; return; }
+    if (!r.ok) { importFeedback.show(r.error); return; }
     const mine = !!r.save.raw.d3;                                         // 本線匯出、帶歷史的碼：接著蓋，存成我的城
     if (mine && readSave() && !confirm('貼上的城會蓋掉目前的「我的城」，要繼續嗎？')) return;
     saveNow();                                                            // 舊城先用它自己的身分存（同 openSample）
     const res = load(code, mine ? '我的城' : '貼上的城市', false, mine, mine);
-    if (!res.ok) { err.textContent = res.error; return; }
+    if (!res.ok) { importFeedback.show(res.error); return; }
     sampleId = mine ? 'mine' : '';
     if (mine) { saveNow(); if (!res.replayed) bui.toast(loadNote, 'bad'); }   // 歷史接不回來：講原因（歷史從這張碼重新起算）
-    dlg.hidden = true; ta.value = '';
+    closeSavePanels(); ta.value = '';
   };
   $<HTMLButtonElement>('#bio .x').onclick = () => closeCard();
   // D027：☰「幸福構成」——城市平均每一項幸福（DayReport.happyAgg，跟實驗線 happyAgg 55255 同一份）。照實驗線 showStats 面板（65487–65520、66360–66365 @ d23c18d）：
@@ -583,32 +678,86 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     nc.hidden = false;
   }
 
-  // D031：☰「城市等級」（實驗線 T133 的等級面板 65532 的 3D 版）：等級與名稱、城市點數、下一級與進度（進度條與百分比＝(點數−這一級門檻)÷(下一級門檻−這一級門檻)，夾在 0–100）、這一級的預告。讀 Sim.rankIdx／cityPoints（讀檔當下就有），不另存任何東西
-  const rk = $<HTMLElement>('#rk');
-  $<HTMLButtonElement>('#rkX').onclick = () => { rk.hidden = true; };
-  rk.onclick = e => { if (e.target === rk) rk.hidden = true; };
+  // D054: ephemeral UI snapshots only, never included in saved city state.
+  let siteEstimate: SiteDiagnosis | null = null, siteResult: SiteResultDiagnosis | null = null, siteNotice = '';
+  const sitePanel = createSitePanel({ close: () => closeGrowth() });
+  ui.appendChild(sitePanel.root);
+  function renderSite() {
+    if (!sim) return;
+    sitePanel.update({ tool: tool ? labToolOf(tool, roadTool, civicTool) : null, day: sim.day, funds: sim.money, sandbox: sim.diff === 3, estimate: siteEstimate, result: siteResult, notice: siteNotice });
+  }
+  function syncSite() {
+    const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
+    bui.setSiteGuide(selected ? selectedToolGuide(selected).name : '', siteResult?.summary ?? null);
+    if (stroke) updatePreview();
+    if (!sitePanel.root.hidden) renderSite();
+  }
+  function openSite() {
+    if (!sim) return;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset(); sitePanel.reset(); renderSite(); growthModal.show(sitePanel.root, sitePanel.title);
+  }
+
+  // D053: keep imported rank rules intact; provide a truthful route to existing
+  // build tools. The guide is read-only until original selection/placement runs.
+  const rk = $<HTMLElement>('#rk'), rkGate = createPanelUpdateGate(rk);
+  const catalog = createFacilityCatalog({ select: selectCatalogTool, close: () => closeGrowth(), rank: () => openRank() });
+  ui.appendChild(catalog.root);
+  const growthModal = createSaveModalAccess(ui, [bui.root, renderer.domElement], () =>
+    bui.root.querySelector<HTMLElement>('#civicGuide:not([hidden])') ?? bui.root.querySelector<HTMLElement>('#menuBtn'));
+  function closeGrowth(restoreFocus = true) { rkGate.cancel(); catalog.reset(); sitePanel.reset(); growthModal.close(restoreFocus); }
+  $<HTMLButtonElement>('#rkX').onclick = () => closeGrowth();
+  $<HTMLButtonElement>('#rkCatalog').onclick = () => openCatalog();
+  rk.onclick = e => { if (e.target === rk) closeGrowth(); };
+  addEventListener('pagehide', () => closeGrowth(false));
   function rankList(): { rows: FinRow[]; pct: number } {
     const idx = sim!.rankIdx, pts = sim!.cityPoints, cur = RANKS[idx], next = RANKS[idx + 1] ?? null, pct = next ? Math.min(100, Math.max(0, (pts - cur.threshold) / (next.threshold - cur.threshold) * 100)) : 100;
     const rows: FinRow[] = [{ name: '等級', text: `Lv.${idx + 1} ${cur.name}`, tone: '', sum: true }, { name: '城市點數', text: pts.toLocaleString('en-US'), tone: '', sum: false },
       { name: '下一級', text: next ? `Lv.${idx + 2} ${next.name}（${next.threshold.toLocaleString('en-US')} 點）` : '已達最高等級', tone: '', sum: false }, { name: '進度', text: `${Math.round(pct)}%`, tone: '', sum: false }];
-    if (cur.unlock) rows.push({ name: '這一級的預告', text: cur.unlock, tone: '', sum: false });
+    const note = rankBuildNote(idx);
+    if (note) rows.push({ name: '本線說明', text: note, tone: '', sum: false });
     return { rows, pct };
+  }
+  function renderRank() {
+    if (!sim || rkGate.defer(renderRank)) return;
+    const { rows, pct } = rankList(), summary = facilitySummary(sim.rankIdx);
+    $('#rk .sub').textContent = `第 ${sim.day.toLocaleString()} 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降`;
+    $<HTMLElement>('#rk .bar i').style.width = pct + '%';
+    updatePanelContent($('#rk ol'), ...rows.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
+    $('#rk .growthGuide h3').textContent = `${summary.available}／${summary.total} 項設施等級可選`;
+    $('#rk .nextBuild').textContent = summary.next
+      ? `下一個可建設施解鎖：Lv.${summary.next.unlockRank} ${summary.next.name}。其他升級不代表新增建造工具。`
+      : '本線現有25項設施已全部達到等級條件；實際落點與資金是否足夠，請看地圖預覽。';
   }
   function openRank() {
     if (!sim) return;
-    const { rows, pct } = rankList();
-    $('#rk .sub').textContent = `第 ${sim.day.toLocaleString()} 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降（點數暫時掉下去也不降級）`;
-    $<HTMLElement>('#rk .bar i').style.width = pct + '%';
-    $('#rk ol').replaceChildren(...rows.map(r => { const li = document.createElement('li'), b = document.createElement('b'), v = document.createElement('span'); b.textContent = r.name; v.textContent = r.text; v.className = r.tone; if (r.sum) li.className = 'sum'; li.append(b, v); return li; }));
-    rk.hidden = false;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset(); renderRank(); growthModal.show(rk, $<HTMLElement>('#rankTitle'));
+  }
+  function openCatalog() {
+    if (!sim) return;
+    interruptBuild(); bui.menuOpen(false); closeDecisionPanels();
+    if (saveModal.isOpen()) closeSavePanels(false);
+    rkGate.cancel(); catalog.reset();
+    catalog.update({ rankIdx: sim.rankIdx, sandbox: sim.diff === 3, day: sim.day });
+    growthModal.show(catalog.root, catalog.title);
+  }
+  function selectCatalogTool(id: string) {
+    if (!sim || !FACILITY_TOOLS.some(t => t.id === id) || !pickCivic(id)) return;
+    closeGrowth(false); setTool(FOOD_TOOLS.some(t => t.id === id) ? 'food' : 'civic');
+    // Selected-tool focus is visible after the dialog and its inert lock close.
+    bui.root.querySelector<HTMLButtonElement>('#tools [data-t="civic"]')?.focus({ preventScroll: true });
   }
 
   // D032：☰「政策與預算」（實驗線 ☰ 市政統計面板的稅率、服務預算、法規與政策開關的 3D 版）。按了馬上生效（實驗線回退設定：T504 治理關，policyApply504 直接轉給 mayorPolicyApply470A，保留冷卻），
   // 下一天的結算、幸福、災禍、電力、垃圾……讀新的設定；冷卻（稅率 40 天、其餘 35–60 天）中再按，講還剩幾天（實驗線是靜默不動）。只列本線有效果的 11 個開關；其餘 15 個沒有對應的系統
   // （存讀照舊、日費照付），最底下一列講。面板只讀、開著不建預設物件（實驗線 65449 打開面板就建：行為一樣，只差存檔裡多一個 pol 欄位）。不寫世界歷史（不加事件種類）
   const pl = $<HTMLElement>('#pl');
-  $<HTMLButtonElement>('#plX').onclick = () => { pl.hidden = true; };
-  pl.onclick = e => { if (e.target === pl) pl.hidden = true; };
+  const plGate = createPanelUpdateGate(pl);
+  $<HTMLButtonElement>('#plX').onclick = () => { plGate.cancel(); pl.hidden = true; };
+  pl.onclick = e => { if (e.target === pl) { plGate.cancel(); pl.hidden = true; } };
   const TAX_ROWS = [['taxR', '住宅稅', '住宅稅收 ×倍率；高過 1.0× 會壓低購買力（每多 0.1× 約 −1.8%），商業營業額跟著降'], ['taxC', '商業稅', '商業稅收 ×倍率'], ['taxI', '工業稅', '工業稅收 ×倍率']] as const;
   const BUDGET_NOTE: Record<string, string> = { police: '警察局、派出所、法院的覆蓋半徑與維護費 ×倍率', fire: '消防局、消防站、消防總部的覆蓋半徑與維護費 ×倍率', health: '醫院、診所、救護站的覆蓋半徑與維護費 ×倍率', edu: '學校、大學、圖書館的覆蓋半徑與維護費 ×倍率' };
   const POLICY_NOTE: Record<string, string> = { curfew: '夜間犯罪機率 ×0.6；住宅幸福 −0.02', recycle: '垃圾產量 ×0.85', tourPromo: '遊客帶來的商業稅加成 ×1.1', ecoReg: '商業稅 ×0.95；每座發電廠容量 +5',
@@ -642,10 +791,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function renderPolicy() {
     if (!sim) return;
+    if (plGate.defer(renderPolicy)) return;
     const box = $('#pl .body'), sec = (title: string, rows: HTMLLIElement[]) => { const h = document.createElement('h3'), ol = document.createElement('ol'); h.textContent = title; ol.append(...rows); return [h, ol]; };
     const hidden = Object.keys(POLICY_CATALOG).filter(k => POLICY_CATALOG[k].type === 'toggle' && !(POLICY_SHOWN.law as readonly string[]).includes(k) && !(POLICY_SHOWN.policy as readonly string[]).includes(k) && sim!.pol && (sim!.pol as Record<string, unknown>)[k]);
     const hidFee = hidden.reduce((a, k) => a + upRegOf({ [k]: true }, [], null, 0, 0), 0);
-    box.replaceChildren(
+    updatePanelContent(box,
       ...sec('稅率', TAX_ROWS.map(([k, n, note]) => plRow('tax', k, n, note))), ...sec('服務預算', BUDGET_CATS.map(c => plRow('budget', c.id, c.nm, BUDGET_NOTE[c.id]))),
       ...sec('法規', POLICY_SHOWN.law.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))), ...sec('政策', POLICY_SHOWN.policy.map(k => plRow('toggle', k, POLICY_CATALOG[k].nm, POLICY_NOTE[k]))));
     const fees = POLICY_SHOWN.law.concat(POLICY_SHOWN.policy as never).reduce((a, k) => a + (polVal(k) ? POLICY_FEE[k] ?? 0 : 0), 0) + hidFee;
@@ -661,20 +811,212 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       bui.toast(`📜 ${cfg.nm}：${cfg.type === 'tax' ? `${(old as number).toFixed(1)}× → ${(now as number).toFixed(1)}×` : now ? '開啟' : '關閉'}`, 'gold');
       saveNow();
     } else plTip = left > 0 ? `${cfg.nm}：冷卻中，還剩 ${left} 天才能再調（防止每天開關；實驗線是靜默不動）` : cfg.type === 'tax' ? `${cfg.nm}已經是 ${(old as number).toFixed(1)}×（範圍 0.5–2.0×）` : '';
-    renderPolicy();
+    renderPolicy(); syncUi();
     return r;
   }
   // 服務預算 ±0.1（0.5–1.5，實驗線 setSvcBudget 52968；沒有冷卻）：覆蓋半徑立刻重算。提示字照實驗線 65800
   function uiBudget(cat: string, dir: 1 | -1) {
     if (!sim) return false;
-    const c = BUDGET_CATS.find(q => q.id === cat); if (!c || !setBudget(sim, cat, dir * BUDGET_STEP)) return false;
-    bui.toast(`🎚️ ${c.nm}預算 ×${sim.budget[c.id].toFixed(1)}${dir > 0 ? '（覆蓋更廣、更貴）' : '（省錢、覆蓋縮水）'}`); plTip = '';
+    const c = BUDGET_CATS.find(q => q.id === cat); if (!c) return false;
+    const before = sim.budget[c.id]; if (!setBudget(sim, cat, dir * BUDGET_STEP)) return false;
+    const unchanged = sim.budget[c.id] === before;
+    bui.toast(`🎚️ ${c.nm}預算 ×${sim.budget[c.id].toFixed(1)}${unchanged ? dir > 0 ? '（預算已是上限）' : '（預算已是下限）' : dir > 0 ? '（覆蓋更廣、更貴）' : '（省錢、覆蓋縮水）'}`); plTip = '';
     saveNow(); renderPolicy();
     return true;
   }
   function openPolicy() {
     if (!sim) return;
-    plTip = ''; renderPolicy(); pl.hidden = false;
+    plGate.cancel(); plTip = ''; renderPolicy(); pl.hidden = false;
+  }
+
+  // D038：☰「科技與專精」（實驗線 T343 科技樹與 T386 城市方向的 3D 版；實驗線畫一張節點圖，這裡照手機改成一條路線一張清單）。四條路線 36 個節點：做完的、進行中的（進度條與還要幾天）、
+  // 開得了的（按「開始」，錢現在扣；已有進度的免費）、開不了的（講原因：前置、二選一、要先做完幾個）。城市方向四選一、永久：要城市等級 Lv.9，按一下選、再按一下才定。
+  // 按了馬上生效、存檔；進度每天由 stepDay 推。不寫世界歷史（同政策，D038 卡「要業主定的事」1）
+  const tc = $<HTMLElement>('#tc');
+  const tcGate = createPanelUpdateGate(tc);
+  $<HTMLButtonElement>('#tcX').onclick = () => { tcGate.cancel(); tc.hidden = true; tcPick = -1; };
+  tc.onclick = e => { if (e.target === tc) { tcGate.cancel(); tc.hidden = true; tcPick = -1; } };
+  const TECH_ROUTES = [['A', '🏭', '產業線'], ['B', '🏘️', '民生線'], ['C', '🎓', '文教線'], ['D', '🔭', '遠望線']] as const;   // 65119 TECH_ROUTE_META343、65432 路線鈕
+  type TechRoute = (typeof TECH_ROUTES)[number][0];
+  let tcRoute: TechRoute = 'A', tcTip = '', tcPick = -1;   // tcPick：城市方向按過一下、等第二下確定的編號
+  function techEta(n: { id: string; points: number }): string {
+    if (!lastRep) return '推進一天後顯示速度與估計天數';
+    const left = n.points - (sim!.tech.prog[n.id] ?? 0), v = Math.max(1, sim!.techSpeed);
+    return `按最近速度估計還要 ${Math.max(1, Math.ceil(left / v)).toLocaleString()} 天`;
+  }
+  function renderTech() {
+    if (!sim) return;
+    if (tcGate.defer(renderTech)) return;
+    const s = sim, done = s.edu.tech, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+    const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
+    const box = $('#tc .body'), specKids: HTMLElement[] = [], actKids: HTMLElement[] = [], routeKids: HTMLElement[] = [];   // 順序：研究（最常看）→ 路線與節點 → 城市方向（永久、一生選一次，放最下面）
+    // 城市方向
+    {
+      const h = mk('h3', '', `城市方向（永久，城市等級 Lv.${SPEC_MIN_RANK} 起；現在 Lv.${s.rankIdx + 1}）`), ol = mk('ol');
+      if (s.edu.spec) {
+        const d = SPEC386[s.edu.spec], li = mk('li'), head = mk('div', 'h'), b = mk('b', '', `${d.ic} ${d.nm}`), tag = mk('span', 'val', '已選定');
+        li.dataset.k = s.edu.spec; li.dataset.kind = 'spec'; li.dataset.st = 'done'; head.append(b, tag); li.append(head, mk('small', 'note', d.fx)); ol.append(li);
+      } else SPEC_IDS386.forEach((id, i) => {
+        const d = SPEC386[id], li = mk('li'), head = mk('div', 'h'), b = mk('b', '', `${d.ic} ${d.nm}`);
+        const can = s.diff !== 3 && s.rankIdx + 1 >= SPEC_MIN_RANK, armed = tcPick === i;
+        li.dataset.k = id; li.dataset.kind = 'spec'; li.dataset.st = can ? (armed ? 'armed' : 'can') : 'lock';
+        const t = btn(armed ? '再按一次確定' : '選這個', `${d.nm}：${armed ? '再按一次就永久選定' : '選為城市方向（要再按一次確定）'}`, can ? () => uiSpec(i) : null); if (armed) t.className = 'on';
+        head.append(b, t); li.append(head, mk('small', 'note', d.fx + (s.diff === 3 ? '　沙盒不能選' : !can ? `　要城市等級 Lv.${SPEC_MIN_RANK}` : '')));
+        ol.append(li);
+      });
+      specKids.push(h, ol);
+    }
+    // 研究中
+    {
+      const rate = lastRep ? `最近結算 +${s.techSpeed}／天` : '速度待結算';
+      const h = mk('h3', '', `研究（${rate}，研究院、大學、科技園區、數據中心等加快；已完成 ${done.length}／${TECH343.length}）`), ol = mk('ol'), a = s.tech.act ? TECH343_BY_ID[s.tech.act] : null;
+      const li = mk('li'), head = mk('div', 'h');
+      li.dataset.kind = 'act'; li.dataset.k = a?.id ?? ''; li.dataset.st = a ? 'act' : 'idle';
+      if (a) {
+        const p = s.tech.prog[a.id] ?? 0;
+        head.append(mk('b', '', `▶ ${a.id} ${a.nm}`), mk('span', 'val', `${p}／${a.points}`));
+        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.min(100, Math.round(p / a.points * 100)) + '%'; bar.append(i);
+        li.append(head, bar, mk('small', 'note', `${a.effect}｜${techEta(a)}`));
+      } else { head.append(mk('b', '', '沒有進行中的研究'), mk('span', 'val', '')); li.append(head, mk('small', 'note', '下面挑一個節點按「開始」；做完一個才會停，不會自動接著做下一個')); }
+      ol.append(li); actKids.push(h, ol);
+    }
+    // 路線與節點
+    {
+      const bar = mk('div', 'tabs');
+      for (const [r, ic, nm] of TECH_ROUTES) {
+        const n = TECH343.filter(q => q.route === r), d = n.filter(q => done.includes(q.id)).length, b = btn(`${ic} ${nm} ${d}／${n.length}`, `${nm}：做完 ${d} 個，共 ${n.length} 個`, () => { tcRoute = r; tcTip = ''; renderTech(); });
+        b.setAttribute('aria-pressed', String(tcRoute === r)); if (tcRoute === r) b.className = 'on'; b.dataset.route = r; bar.append(b);
+      }
+      const ol = mk('ol');
+      for (const n of TECH343.filter(q => q.route === tcRoute)) {
+        const li = mk('li'), head = mk('div', 'h'), isDone = done.includes(n.id), isAct = s.tech.act === n.id, why = isDone ? '已完成' : techWhy(n, s.tech, done), p = s.tech.prog[n.id] ?? 0;
+        const st = isDone ? 'done' : isAct ? 'act' : why ? 'lock' : 'can', fee = techFee(n, s.tech, s.diff);
+        li.dataset.k = n.id; li.dataset.kind = 'tech'; li.dataset.st = st;
+        head.append(mk('b', '', `${n.id} ${n.nm}`));
+        head.append(isDone ? btn('✔', `${n.nm}：已完成`, null) : isAct ? btn('研究中', `${n.nm}：研究中`, null) : why ? btn('🔒', `${n.nm}：開始不了：${why}`, null)
+          : btn(fee > 0 ? `開始 $${fee.toLocaleString()}` : p > 0 ? '繼續（免費）' : '開始（免費）', `${n.nm}：開始研究${fee > 0 ? `，花 $${fee.toLocaleString()}` : '，免費'}`, () => uiTech(n.id)));
+        const cost = fee > 0 ? `本次 $${fee.toLocaleString()}` : s.diff === 3 ? '沙盒免費' : '已有進度，續研免費';
+        const parts = [n.effect, `第 ${n.tier} 層`, `${n.points} 點`, ...(isDone || isAct ? [] : [cost]), ...(p > 0 && !isDone ? [`已有進度 ${p}／${n.points}`] : []), ...(why && !isDone ? [why] : [])];
+        li.append(head, mk('small', 'note', parts.join('　'))); if (why && !isDone) li.classList.add('lock');
+        ol.append(li);
+      }
+      routeKids.push(bar, ol);
+    }
+    updatePanelContent(box, ...actKids, ...routeKids, ...specKids);
+    const specNote = s.edu.spec ? `${SPEC386[s.edu.spec].ic} ${SPEC386[s.edu.spec].nm}` : s.diff === 3 ? '沙盒不能選' : s.rankIdx + 1 >= SPEC_MIN_RANK ? '還沒選（在最下面）' : `Lv.${SPEC_MIN_RANK} 起可選`;
+    $('#tc .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒：研究免費' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市方向：${specNote}`;
+    $('#tc .tip').textContent = tcTip;
+  }
+  // 開始研究：成功就講、存檔；不行講原因（前置、二選一、錢不夠），不動狀態
+  function uiTech(id: string) {
+    if (!sim || !own(TECH343_BY_ID, id)) return null;
+    const n = TECH343_BY_ID[id], was = sim.tech.act, r = startResearch(sim, id);
+    if (r.ok) {
+      tcTip = ''; if (was !== id) bui.toast(`🔬 開始研究：${n.nm}${r.fee > 0 ? `（−$${r.fee.toLocaleString()}）` : ''}`, 'gold');
+      saveNow();
+    } else tcTip = `${n.nm}：${r.why ?? '開始不了'}`;
+    renderTech(); syncUi(); return r;
+  }
+  // 選城市方向：第一下只是標起來（永久，不給手滑）、第二下對同一個才定。定了：教育科技城整張重建覆蓋場（教育場 ×1.08）、研究速度 +1
+  function uiSpec(i: number) {
+    if (!sim) return null;
+    if (tcPick !== i) { tcPick = i; tcTip = `${SPEC386[SPEC_IDS386[i]]?.nm ?? ''}：永久、選了不能改——再按一次確定`; renderTech(); return { ok: false, armed: true }; }
+    tcPick = -1;
+    const r = chooseSpec(sim, i);
+    if (r.ok) { tcTip = ''; bui.toast(`${SPEC386[r.id!].ic} 城市方向：${SPEC386[r.id!].nm}`, 'gold'); saveNow(); } else tcTip = r.why ?? '選不了';
+    renderTech(); return r;
+  }
+  // D039：☰「大事記」——玩家的決策（政策、預算、開始研究、城市方向）與科技完成，世界歷史格式 8 的五種事件，新到舊一行一筆。只讀，不動狀態
+  const ch = $<HTMLElement>('#ch');
+  $<HTMLButtonElement>('#chX').onclick = () => { ch.hidden = true; };
+  ch.onclick = e => { if (e.target === ch) ch.hidden = true; };
+  const CHRON_MAX = 300;   // 最多列最近 300 筆（手機 DOM 不要太長）；總數照實講
+  function renderChronicle() {
+    if (!sim) return;
+    const all = chronicleOf(sim.city.history), shown = all.slice(-CHRON_MAX).reverse(), ol = $('#ch ol');
+    ol.replaceChildren(...shown.map(l => { const li = document.createElement('li'), b = document.createElement('b'), t = document.createElement('span'); li.dataset.kind = l.kind; b.textContent = `第 ${l.day.toLocaleString()} 天`; t.textContent = l.text; li.append(b, t); return li; }));
+    $('#ch .sub').textContent = all.length ? `共 ${all.length.toLocaleString()} 筆大事（決策、科技完成、井枯竭），新到舊${all.length > CHRON_MAX ? `（只列最近 ${CHRON_MAX} 筆）` : ''}` : '還沒有——調個稅率、開一項政策、開始一項研究，就會記在這裡';
+    $('#ch .tip').textContent = '';
+  }
+  function openChronicle() { if (!sim) return; renderChronicle(); ch.hidden = false; }
+  function openTech() {
+    if (!sim) return;
+    tcGate.cancel(); tcTip = ''; tcPick = -1; renderTech(); tc.hidden = false;
+  }
+
+  // D045：☰「委託」（實驗線 T385 市長委託面板 showCommPanel385 65155 的 3D 版）——三選一（決定性：世界種子＋輪次）、進行中的進度與放棄、已完成的紀錄。接受、放棄馬上生效（實驗線 cmsAccept385、cmsDrop385）、
+  // 存檔、記世界歷史（cms 事件，城市格式 10）；完成、過期由每天的結算發通知。狀態的順序照實驗線：沙盒 → 進行中 → 城市等級不到 3 → 人口不到 51 → 三選一。
+  // D046：新委託排除未實作的公共運量；舊檔正在進行的運量委託仍可無懲罰放棄。
+  const cm = $<HTMLElement>('#cm');
+  const cmGate = createPanelUpdateGate(cm);
+  $<HTMLButtonElement>('#cmX').onclick = () => { cmGate.cancel(); cm.hidden = true; };
+  cm.onclick = e => { if (e.target === cm) { cmGate.cancel(); cm.hidden = true; } };
+  let cmTip = '';
+  const NO_RIDE_NOTE = '　⚠ 本線還沒有公共運量：這份舊委託可無懲罰放棄，新委託不再提供運量目標';
+  function cmProgress(c: CmsDef): { cur: string; p: number } {
+    const s = sim!, st = s.cms, stock = c.type === 'stock' ? Math.floor(c.src === 'steel' ? s.econ.steel : c.src === 'fuel' ? s.econ.fuel : 0) : 0, has = s.edu.tech.includes(c.src), r2 = (v: number, target: number) => Math.min(Math.round(Math.min(v, target) * 100) / 100, v < target ? target - .01 : target);
+    const p = c.type === 'acc' ? Math.min(1, st.acc / (c.target as number)) : c.type === 'hold' ? Math.min(1, st.hold / (c.holdN as number)) : c.type === 'stock' ? Math.min(1, stock / (c.target as number)) : has ? 1 : 0;
+    const cur = c.type === 'acc' ? `${r2(st.acc, c.target as number)} / ${c.target}` : c.type === 'hold' ? `${st.hold} / ${c.holdN} 天` : c.type === 'stock' ? `${stock} / ${c.target}（期末驗收）` : has ? '已研究' : s.tech.act === c.src ? '研究中' : (s.tech.prog[c.src] ?? 0) > 0 ? '待繼續' : '尚未開始';
+    return { cur, p };
+  }
+  // D051: starting/switching research while paused must refresh this read-only
+  // status immediately; accepting a commission never starts research for us.
+  function syncCommissionHud() {
+    const activeCommission = sim && sim.diff !== 3 ? CMS_BY_ID385[sim.cms.act] : null;
+    const progress = activeCommission ? cmProgress(activeCommission) : null;
+    bui.setCommission(activeCommission && progress && sim ? { label: activeCommission.ic + ' ' + activeCommission.nm, progress: progress.cur, fraction: progress.p, days: Math.max(0, activeCommission.days - (sim.day - sim.cms.st)) } : null);
+  }
+  function renderCommission() {
+    if (!sim) return;
+    if (cmGate.defer(renderCommission)) return;
+    const s = sim, mk = <K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+    const btn = (label: string, aria: string, on: (() => void) | null) => { const b = mk('button', '', label); b.type = 'button'; b.setAttribute('aria-label', aria); if (on) b.onclick = on; else b.disabled = true; return b; };
+    const note = (k: string, st: string, name: string, val: string, text: string) => { const li = mk('li'), head = mk('div', 'h'); li.dataset.k = k; li.dataset.kind = 'note'; li.dataset.st = st; head.append(mk('b', '', name), mk('span', 'val', val)); li.append(head); if (text) li.append(mk('small', 'note', text)); return li; };
+    const state = commissionState(s), kids: HTMLElement[] = [];
+    if (state === 'sandbox') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '沙盒模式無委託', '自由建造不設目標'));
+    else if (state === 'active') {
+      const c = CMS_BY_ID385[s.cms.act], el = s.day - s.cms.st;
+      if (!c) kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '這一條委託不認得', ''));
+      else {
+        const { cur, p } = cmProgress(c), left = Math.max(0, c.days - el), li = mk('li'), head = mk('div', 'h');
+        li.dataset.k = c.id; li.dataset.kind = 'act'; li.dataset.st = 'act';
+        head.append(mk('b', '', `${c.ic} ${c.nm}`), mk('span', 'val', cur));
+        const bar = mk('div', 'bar'), i = mk('i'); i.style.width = Math.floor(p * 100) + '%'; bar.append(i);
+        const researchNote = c.type === 'tech' && p < 1 && s.tech.act !== c.src ? `　接受委託不會自動開始研究；請到「科技與專精」選 ${c.src} 開始或繼續研究。` : '';
+        li.append(head, bar, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜剩餘 ${left} 天（共 ${c.days} 天）${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}${researchNote}`));
+        const act = mk('div', 'h'); act.append(mk('span', 'val', ''), btn('🗑 放棄委託', `放棄委託：${c.nm}（輪次加一、換一批，沒有懲罰）`, () => uiCommission('drop')));
+        if (c.src === 'trade') { li.append(mk('small', 'note', '每日結算的外貿收入累計進度；先建立糧食盈餘與外貿設施。選取工具不會自動施工或花錢。')); act.append(btn('查看農業外貿', '開啟農業外貿設施導覽', () => { openCatalog(); catalog.selectGroup('food'); })); }
+        li.append(act);
+        kids.push(mk('h3', '', '進行中'), li);
+      }
+    } else if (state === 'rank') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '城市等級 3 解鎖', `目前 Lv.${s.rankIdx + 1}`));
+    else if (state === 'pop') kids.push(mk('h3', '', '委託'), note('state', 'lock', '狀態', '人口超過 50 解鎖', `目前 ${s.pop}`));
+    else {
+      const ol = mk('ol');
+      commissionOffers(s).forEach(c => {
+        const li = mk('li'), head = mk('div', 'h'); li.dataset.k = c.id; li.dataset.kind = 'offer'; li.dataset.st = 'can';
+        head.append(mk('b', '', `${c.ic} ${c.nm}`), btn('接受', `接受委託：${c.nm}（獎金 $${c.bonus.toLocaleString()}、限 ${c.days} 天）`, () => uiCommission('accept', sim ? commissionOffers(sim).findIndex(now => now.id === c.id) : -1)));
+        li.append(head, mk('small', 'note', `獎金 $${c.bonus.toLocaleString()}｜限 ${c.days} 天${NO_RIDERSHIP(c) ? NO_RIDE_NOTE : ''}`));
+        ol.append(li);
+      });
+      kids.push(mk('h3', '', `${commissionOffers(s).length} 選一（第 ${s.cms.n + 1} 輪）`), ol);
+    }
+    kids.push(mk('h3', '', '紀錄'), note('done', 'rec', '已完成委託', String(s.cms.done.length), s.cms.done.length ? s.cms.done.map(id => CMS_BY_ID385[id]?.ic ?? '?').join(' ') : '—'));
+    updatePanelContent($('#cm .body'), ...kids);
+    $('#cm .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市 Lv.${s.rankIdx + 1}・已完成 ${s.cms.done.length} 條`;
+    $('#cm .tip').textContent = cmTip;
+  }
+  // 接受第 i 張／放棄進行中的：成功就發通知（實驗線的字）、存檔；不行講原因，不動狀態
+  function uiCommission(kind: 'accept' | 'drop', i = 0) {
+    if (!sim) return null;
+    const c = kind === 'accept' ? acceptCommission(sim, i) : dropCommission(sim);
+    if (c) { const t = cmsToast(kind, c); cmTip = ''; bui.toast(t.text, t.tone); saveNow(); } else cmTip = kind === 'accept' ? '接不了這一條（已有進行中的委託，或城市還沒到條件）' : '沒有進行中的委託';
+    renderCommission(); syncUi(); return c ? c.id : null;
+  }
+  function openCommission() { if (!sim) return; cmGate.cancel(); cmTip = ''; renderCommission(); cm.hidden = false; }
+  function closeDecisionPanels() {
+    plGate.cancel(); tcGate.cancel(); cmGate.cancel();
+    pl.hidden = tc.hidden = cm.hidden = true; tcPick = -1;
   }
 
   // ☰ 選單：城市、分享碼、住商工的畫法、300 年示範（「D003 現況」只留網址 ?blocks=off 給守衛）
@@ -695,26 +1037,47 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'fin', label: '收支明細', note: '稅收、其他收入、維護費、淨額（D028）', icon: 'coin' as const }] : []),
         ...(sim ? [{ id: 'happy', label: '幸福構成', note: '全城平均每一項加減（D027）', icon: 'people' as const }] : []),
         ...(sim ? [{ id: 'night', label: '夜間城市', note: '安全、晚間活力與夜間收入（D029）', icon: 'moon' as const }] : []),
-        ...(sim ? [{ id: 'rank', label: '城市等級', note: '26 級階梯、城市點數與進度（D031）', icon: 'crown' as const }] : []),
+        ...(sim ? [{ id: 'rank', label: '城市成長', note: '城市點數、成長進度與可建設施', icon: 'crown' as const }] : []),
         ...(sim ? [{ id: 'policy', label: '政策與預算', note: '稅率、服務預算、法規與政策開關（D032）', icon: 'sliders' as const }] : []),
+        ...(sim ? [{ id: 'resview', label: showRes ? '隱藏資源圖' : '顯示資源圖', note: '油田（黃）與礦藏（藍）；選油井、礦場工具時自動顯示（D040）', icon: 'layers' as const }] : []),
+        ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
+        ...(sim ? [{ id: 'commission', label: '委託', note: '市長委託三選一、進度與放棄（D045）', icon: 'paste' as const }] : []),
+        ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
     ];
   }
   function onMenu(id: string) {
+    interruptBuild();   // A panel can open while the canvas still owns pointer capture.
+    if (id !== 'rank' && id !== 'catalog') closeGrowth(false);
     if (id.startsWith('city:')) menuCity(id.slice(5));
+    else if (id === 'save-status') openSaveStatus();
     else if (id === 'export') {
+      if (!dlg.hidden && dlgMode === 'export') return;
+      saveStatus.setError('');
       let full = lastCode;
-      if (sim) try { full = saveCode(sim, template, startCode); } catch (e) { bui.toast('⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e)), 'bad'); return; }   // 同 saveNow（D012 審查）
-      if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
-      else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+      try {
+        if (sim) full = saveCode(sim, template, startCode);
+        if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
+        else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+      } catch (e) {
+        const message = '⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e));
+        if (!saveStatus.root.hidden) saveStatus.setError(message);  // 留在面板中可讀，不只靠短暫通知
+        else bui.toast(message, 'bad');
+      }
     }
     else if (id === 'paste') openDlg('paste');
     else if (id === 'happy') openHappy();
     else if (id === 'fin') openFin();
     else if (id === 'night') openNight();
     else if (id === 'rank') openRank();
+    else if (id === 'catalog') openCatalog();
+    else if (id === 'site') openSite();
     else if (id === 'policy') openPolicy();
+    else if (id === 'tech') openTech();
+    else if (id === 'commission') openCommission();
+    else if (id === 'chronicle') openChronicle();
+    else if (id === 'resview') { showRes = !showRes; syncRes(); invalidate(); bui.toast(showRes ? '資源圖：油田（黃）、礦藏（藍）' : '資源圖已隱藏'); }   // D040
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
   }
@@ -728,6 +1091,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 
   function syncUi() {
     if (!city) return;
+    syncRes();                                                            // D040：蓋了井、場景重建、換城之後，資源圖要跟著（只畫還能蓋的格子）
     const c = city, live = liveBuildings(c), kinds = new Set(live.map(b => b.k)).size, pw = sim ? powerStatus(sim) : null;
     const k = sim ? simCounts(sim) : null;
     // 讀檔後、過第一天之前，人口與幸福還沒算（實驗線 load 也不重算，模擬照它；審查：之前狀態列直接顯示 0）：有住宅就先顯示「—」
@@ -739,12 +1103,44 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       money: sim ? sim.money : null, sandbox: sim?.diff === 3, day: sim ? sim.day : null, pop: sim ? (pending ? '—' : sim.pop) : null,
       power: pw ? [pw.powered + pw.unpowered, pw.cap] : null, unsaved: autosaves() ? saveErr : '', journal: autosaves() && !jstore ? jwhy || '沒有日誌' : '',
     });
+    saveStatus.setState(saveWarnings());
+    syncCommissionHud();
     syncDock();
+    syncSite();
+    if (!rk.hidden) renderRank();
+    if (!catalog.root.hidden && sim) catalog.update({ rankIdx: sim.rankIdx, sandbox: sim.diff === 3, day: sim.day });
+  }
+  // D040：資源圖。要看哪幾種：☰「顯示資源圖」＝兩種；否則拿著油井（油田）或礦場（礦藏）的工具才畫對應的那一種。只畫還能蓋井的格子（陸地、沒路、沒建築）
+  // 資源圖只有「有畫」的時候才在場景裡（沒畫時不佔場景：D015 的黃金樣本逐位元組比場景裡的實例網格，多一個空的也會不同）
+  function attachRes() {
+    if (!built) return;
+    if (resHints.shown) { if (resHints.mesh.parent !== built.scene) built.scene.add(resHints.mesh); } else resHints.mesh.removeFromParent();
+  }
+  function syncRes() {
+    if (!sim || !city) { resHints.clear(); attachRes(); return; }
+    const kinds = showRes ? [1, 2] : tool === 'civic' && (civicTool === 'oilwell' || civicTool === 'gaswell') ? [1] : tool === 'civic' && civicTool === 'mine' ? [2] : [];   // D044：天然氣井也站在油田格上
+    if (!kinds.length) { resHints.clear(); attachRes(); return; }
+    const w = sim.w, n = w.N, cells: { x: number; z: number; y: number; kind: number }[] = [], rs = sim.res.resource;
+    for (let i = 0; i < n * n; i++) {
+      const r = rs[i]; if (!r || !kinds.includes(r)) continue;
+      const t = w.tiles[i]; if (t.t === 0 || t.road || t.bld) continue;
+      cells.push({ x: i % n, z: (i / n) | 0, y: Math.max(0, tileTop(city, i)), kind: r });
+    }
+    resHints.set(cells); attachRes(); needsRender = true;
+  }
+  // 選公共設施的一種：城市等級不夠的選不起來，提示解鎖等級（D044，實驗線 selectCatalogTool458 63932）
+  function pickCivic(id: string): boolean {
+    const lk = sim ? toolLock(sim, id) : null;
+    if (lk) { bui.toast(lk, 'bad'); return false; }
+    civicTool = id; return true;
   }
   function syncDock() {
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: CIVIC_TOOLS, prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    syncRes();
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
+    const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
+    bui.setSiteGuide(selected ? selectedToolGuide(selected).name : '', siteResult?.summary ?? null);
   }
   const syncSim = syncUi;   // D010 的呼叫點（播放、速度）沿用
   // 開局提示：照實驗線教練列的順序（checkHints 66640–66645）：先鋪路 → 路邊劃住宅 → 蓋電廠；本線開局暫停，多一步「按 ▶」
@@ -776,11 +1172,13 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // D019：拿著水塔、配水管時地面畫出配水管（實驗線平常埋在地下，utilityLineMode485C 50907）；換了就重建一次（只重畫有水管的格）
   let pipesShown = false;
   function syncPipes() {
-    const want = tool === 'civic' && (civicTool === 'wpipe' || civicTool === 'water');
+    const want = tool === 'civic' && (civicTool === 'wpipe' || civicTool === 'water' || civicTool === 'sewage');
     if (want !== pipesShown) { pipesShown = want; if (city && city.wp.some(Boolean)) rebuildScene(); }
   }
   function setTool(t: ToolId | null, silent = false) {
     if (t && !sim) t = null;
+    if (t === 'food' && !FOOD_TOOLS.some(c => c.id === civicTool)) civicTool = 'farm';
+    if (t === 'civic' && !CIVIC_TOOLS.some(c => c.id === civicTool)) civicTool = 'police';
     tool = t; stroke = null; lastPreview = null; preview.clear(); bui.hideCost();
     syncPipes();
     // 拿著工具：一指（滑鼠左鍵）拿來蓋，兩指照舊縮放、平移；放下工具：一指照舊轉鏡頭
@@ -804,18 +1202,21 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const pv = previewOp(sim, op);
     preview.set(pv.cells.map(q => ({ x: q.x, z: q.z, y: Math.max(0, tileTop(city!, q.z * n + q.x)), ok: q.ok })), toolColor());
     lastPreview = pv;
-    placeCostTag();
+    const diagnosis = diagnoseSite(sim, op, pv);
+    if (stroke.pid >= 0) siteEstimate = diagnosis;
+    placeCostTag(diagnosis);
     timing.preview = performance.now() - t0;
     invalidate();
   }
-  function placeCostTag() {
+  function placeCostTag(diagnosis: SiteDiagnosis | null = stroke && stroke.pid >= 0 ? siteEstimate : null) {
     if (!stroke || !lastPreview || !city || !sim) return;
     const pv = lastPreview, [x, z] = opOf(stroke).k === 'tap' ? stroke.a : stroke.b, n = city.n;
     const [sx, sy] = screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city, z * n + x)), z + .5));
-    const text = pv.count === 0 ? (pv.reason ?? '這裡不能蓋') : `${sim.diff === 3 ? '免費' : '$' + pv.total.toLocaleString()}${pv.count > 1 ? `・${pv.count} 格` : ''}`;
+    const text = diagnosis ? siteCostText(diagnosis) : pv.count === 0 ? (pv.reason ?? '這裡不能蓋') : `${sim.diff === 3 ? '免費' : '$' + pv.total.toLocaleString()}${pv.count > 1 ? `・${pv.count} 格` : ''}`;
     bui.showCost(sx, sy, text, pv.count === 0 || !pv.affordable);
   }
   function cancelStroke() { stroke = null; lastPreview = null; preview.clear(); bui.hideCost(); invalidate(); }
+  function interruptBuild() { down = null; if (stroke) cancelStroke(); }
   function commitStroke(s: NonNullable<typeof stroke>) {
     preview.clear(); bui.hideCost(); lastPreview = null;
     if (!sim || !tool) return null;
@@ -826,13 +1227,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 手勢和測試出口共用同一條路：規則照實驗線（src/sim/edit.ts → src/sim/rules/build.ts）、事件記進歷史、場景重建、自動存檔
   function runOp(op: EditOp) {
     const t0 = performance.now();
+    const before = diagnoseSite(sim!, op);
     const res = commitOp(sim!, op, performance.now());
+    siteEstimate = before; siteResult = diagnoseSiteResult(before, res); siteNotice = '';
     if (res.arm) bui.toast(`⚠️ 再點一次確認拆除 Lv${res.arm.lv} ${KINDS.name(res.arm.k)}`, 'gold');   // 實驗線原句（62987）
     else if (!res.placed && res.reason) bui.toast(res.reason, 'bad');
     if (res.skipped) bui.toast(`已跳過 ${res.skipped} 棟 Lv2+ 建築（單獨點兩次可拆）`);             // 實驗線原句（63004）
     if (res.placed || res.spent) {
       rebuildScene();
       saveNow();
+      // Keep the original compact debit footprint: a wider transient result
+      // toast can steal a subsequent map press. Original number formatting also
+      // bounds fractional notices; exact actual amounts persist in
+      // the existing site entry/dialog, without making notices click-through.
       if (res.spent && sim!.diff !== 3) bui.toast(`−$${res.spent.toLocaleString()}${res.placed > 1 ? `（${res.placed} 格）` : ''}`);
     }
     syncUi();
@@ -841,9 +1248,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     return res;
   }
   function doUndo() {
+    interruptBuild();
     if (!sim) return null;
     const r = undoOp(sim);
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
+    siteEstimate = null; siteResult = null; siteNotice = `上一筆施工已復原，退回 ${formatSiteMoney(r.refund)}。`;
     rebuildScene(); saveNow();
     bui.toast(`↩ 已復原${r.refund ? `，退回 $${r.refund.toLocaleString()}` : ''}`, 'good');
     syncUi();
@@ -852,13 +1261,26 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 鍵盤：對話框或選單開著時，Esc 只關它、其他鍵不作用（審查：之前選單後面照樣換工具、播放，Esc 關不掉對話框）
   addEventListener('keydown', e => {
     if (clean) return;
-    if (!dlg.hidden) { if (e.key === 'Escape') { e.preventDefault(); dlg.hidden = true; } return; }
+    interruptBuild();   // No held preview survives a keyboard tool/menu/undo action.
+    if (saveModal.isOpen()) {
+      if (e.key === 'Escape') { e.preventDefault(); if (!dlg.hidden) closeDlg(); else closeSavePanels(); }
+      else saveModal.keydown(e);
+      return;
+    }
     if (!hs.hidden) { if (e.key === 'Escape') { e.preventDefault(); hs.hidden = true; } return; }
     if (!fin.hidden) { if (e.key === 'Escape') { e.preventDefault(); fin.hidden = true; } return; }
     if (!nc.hidden) { if (e.key === 'Escape') { e.preventDefault(); nc.hidden = true; } return; }
-    if (!rk.hidden) { if (e.key === 'Escape') { e.preventDefault(); rk.hidden = true; } return; }
-    if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); pl.hidden = true; } return; }   // D032：政策與預算
+    if (growthModal.isOpen()) {
+      if (e.key === 'Escape') { e.preventDefault(); closeGrowth(); }
+      else growthModal.keydown(e);
+      return;
+    }
+    if (!pl.hidden) { if (e.key === 'Escape') { e.preventDefault(); plGate.cancel(); pl.hidden = true; } return; }   // D032：政策與預算
+    if (!tc.hidden) { if (e.key === 'Escape') { e.preventDefault(); tcGate.cancel(); tc.hidden = true; tcPick = -1; } return; }   // D038：科技與專精
+    if (!ch.hidden) { if (e.key === 'Escape') { e.preventDefault(); ch.hidden = true; } return; }   // D039：大事記
+    if (!cm.hidden) { if (e.key === 'Escape') { e.preventDefault(); cmGate.cancel(); cm.hidden = true; } return; }   // D045：市長委託
     if (bui.isMenuOpen()) { if (e.key === 'Escape') { e.preventDefault(); bui.menuOpen(false); } return; }
+    if ((e.key === ' ' || e.key === 'Enter') && (e.target as HTMLElement | null)?.closest('.saveWarning, #civicGuide, #siteGuide')) return;   // Native activation must not toggle playback.
     if ((e.target as HTMLElement | null)?.tagName === 'TEXTAREA') return;
     if (e.key === 'Escape') { if (tool) setTool(null); else closeCard(); }
     else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); doUndo(); }
@@ -878,9 +1300,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
   // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）。
   // D012：讀檔時照實驗線重挑外觀（restyle）不列——那是讀檔的視覺遷移，不是城裡發生的事；歷史照記
-  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent>;
+  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent | CmsEvent>;   // D039：決策與科技完成沒有座標、不屬於哪一格（☰「大事記」列它們）
   function lotEvents(c: City, x: number, z: number) {
-    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.x === x && e.z === z);
+    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.t !== 'cms' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
   }
   // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
   type Row = [string, string];
@@ -906,6 +1328,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         const n = new Map<string, number>(); for (const id of e.from) { const b = c.buildings[id - 1]; const nm = b ? KINDS.name(b.k) : '?'; n.set(nm, (n.get(nm) ?? 0) + 1); }
         return [d, `${e.from.length} 棟合併成${KINDS.name(e.k)}（${e.size}×${e.size}）：吸收${[...n].map(([nm, q]) => `${nm} ×${q}`).join('、')}`];
       }
+      case 'depleted': return [d, `資源耗盡，停產（已開採 240／240）`];   // D040
       case 'act': return [d, e.what === 'fire' ? `現場滅火${e.cost ? `（$${e.cost}）` : ''}` : e.what === 'crime' ? '處理了犯罪' : `治療${e.cost ? `（$${e.cost}）` : ''}`];
     }
   }
@@ -964,6 +1387,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const reason = why === SEWER_NO_PIPE ? '沒有貼著水管（腳印與四邊外一圈要碰到水管）' : why === SEWER_NO_PLANT ? '貼著的水管網裡沒有污水廠' : why === SEWER_TOO_FAR ? (res.hops[i] < 65535 ? `離污水廠太遠：沿水管 ${res.hops[i]} 格，超過 ${WATER_HOPS472}` : `離污水廠太遠：沿水管超過 ${WATER_HOPS472 + 32} 格（上限 ${WATER_HOPS472}）`) : '';   // 距離只查到 122 格（52877），再遠就是 65535
     const eff = [b.lv === 2 ? '二級升不到三級' : '', b.k === 1 && b.lv >= 3 ? '高密度污水：幸福 −4%' : ''].filter(Boolean);
     return [['污水', `沒接管：${reason}${eff.length ? `；${eff.join('；')}` : ''}`]];
+  }
+  // D036：油井與礦場的「開採」一列。資源格種類、這一格的耗損與餘量、每天的抽取量；種類對不上（礦場在油田上、油井在沒有資源的格子）照實講不產出
+  function wellRow(b: { k: number; x: number; z: number }): Row | null {
+    if (!sim || (b.k !== 49 && b.k !== 50)) return null;
+    const i = b.z * sim.w.N + b.x, res = sim.res.resource[i], used = sim.res.rdep[i], want = b.k === 49 ? RES_OIL : RES_ORE, name = b.k === 49 ? '油井' : '礦場', rate = b.k === 49 ? OIL_RATE : ORE_RATE;
+    const kindName = (v: number) => v === RES_OIL ? '油田' : v === RES_ORE ? '礦藏' : '沒有資源';
+    if (res !== want) return ['開採', `這一格${res === 0 ? '沒有資源' : '是' + kindName(res)}，${name}要站在${kindName(want)}上才有產出（目前不產出；沒有電也一樣照抽，抽取不看電）`];
+    if (used >= RESOURCE_STOCK) return ['開採', `已耗盡（開採 ${used}／${RESOURCE_STOCK}），不再產出`];
+    const rep = lastRep ? `；最近一天全城開採：油 ${lastRep.resource.oil}、礦 ${lastRep.resource.ore}` : '';
+    return ['開採', `站在${kindName(res)}上，已開採 ${used}／${RESOURCE_STOCK}（餘量 ${RESOURCE_STOCK - used}），每天抽 ${Math.min(rate, RESOURCE_STOCK - used)} 供應品${b.k === 49 ? '（油：煉油廠有的話煉成燃料）' : '（礦：鋼鐵廠有的話煉成鋼材）'}${rep}`];
   }
   // D025：商業與工業建築卡的「市場」一列。讀最近一天的經濟快照（購買力、零售利用率、銷售乘數；工業的市場乘數、缺貨、原料）；讀檔之後還沒推進過就不知道，照實講
   function marketRow(b: { k: number }): Row | null {
@@ -1059,6 +1492,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       const gr = b.goneDay === undefined ? garbRow(b) : null; if (gr) rows.push(gr);   // D020
       const fr = b.goneDay === undefined ? foodRow(b) : null; if (fr) rows.push(fr);   // D022
       if (b.goneDay === undefined) rows.push(...sewerRows(b));                          // D033
+      { const wr = b.goneDay === undefined ? wellRow(b) : null; if (wr) rows.push(wr); }   // D036
       const mr = b.goneDay === undefined ? marketRow(b) : null; if (mr) rows.push(mr);   // D025
       if (b.goneDay === undefined) rows.push(...chainRows(b));                          // D028
       if (b.goneDay === undefined) rows.push(...commuteRows(b));                        // D027
@@ -1077,7 +1511,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     } else {
       title = `${c.ruin[i] ? '焦土' : ROAD[c.road[i]] || ZONE[c.zone[i]] || TER[c.ter[i]] || '地塊'}（${x}, ${z}）`;
       const pipe = c.wp[i] ? (sim ? (sim.w.tiles[i].wr ? '配水管（接通水源）' : '配水管（沒接到水塔）') : '配水管') : '';   // D019
-      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', c.ruin[i] ? '燒毀的建築留下的空地，要用拆除清掉才能再蓋' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + (c.ruin[i] ? '（清掉焦土時一起清掉）' : '（還沒蓋）') : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe].filter(Boolean);
+      // D035：讀進來的城帶的、本線沒有畫的幾層（模擬看得到它們：公車站與路旁裝飾進覆蓋場、輕軌進夜間城市、高壓線接力、污水幹管連管網）。拆路時公車站、路旁裝飾一起拆
+      const lt = sim ? sim.w.tiles[i] : null, extra = lt ? [lt.bus ? '公車站' : '', lt.rdec ? '路旁裝飾' : '', lt.tram ? '輕軌' : '', lt.hv471 ? '高壓輸電線' : '', lt.ug471 ? '地下高壓線' : '', lt.wm472 ? '水幹管' : '', lt.sm472 ? '污水幹管' : ''].filter(Boolean) : [];
+      const bits = [TER[c.ter[i]], c.el[i] ? '高地' : '', c.ruin[i] ? '燒毀的建築留下的空地，要用拆除清掉才能再蓋' : '', ZONE[c.zone[i]] ? ZONE[c.zone[i]] + (c.ruin[i] ? '（清掉焦土時一起清掉）' : '（還沒蓋）') : '', c.tree[i] ? '有樹' : '', c.rail[i] ? '鐵路' : '', c.fly[i] ? '高架' : '', pipe, ...extra].filter(Boolean);
       $('#bio .sub').textContent = bits.join('・');
       const tr = trafficRow(i); if (tr) rows.push(tr);                  // D027
       for (const e of lotEvents(c, x, z)) rows.push(lotRow(c, e));      // D011：這一格的施工與拆掉的建築
@@ -1124,14 +1560,24 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   let down: { x: number; y: number; t: number } | null = null;
   const canvas = renderer.domElement;
-  // 畫布上按著的指標（實驗線 pointers，62783–62799）：每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
+  // 畫面上按著的指標（實驗線 pointers，62783–62799）：畫布上的每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
   // 只剩一根也不再蓋，全部放開之後的下一筆才是新的施工（審查：之前第一指落在地圖外、或抬起一指再放回去，照樣蓋了一條路）
-  const ptrs = new Set<number>();
+  const ptrs = new Set<number>(), mapClicks = createMapClickGuard(canvas);
   const lift = (id: number) => { ptrs.delete(id); };
-  canvas.addEventListener('pointerdown', e => {
+  const mapPoint = (x: number, y: number) => document.visibilityState !== 'hidden'
+    && !bui.isMenuOpen() && [dlg, saveStatus.root, hs, fin, nc, rk, pl, tc, ch, cm].every(p => p.hidden)
+    && catalog.root.hidden && sitePanel.root.hidden && document.elementFromPoint(x, y) === canvas;
+  // D047: count touches on UI too. A second finger on a toolbar/notice/panel
+  // interrupts immediately, before its click changes a tool or opens an overlay.
+  addEventListener('pointerdown', e => {
+    mapClicks.down(e);
     ptrs.add(e.pointerId);
+    if (e.target !== canvas || ptrs.size > 1) interruptBuild();
+  }, true);
+  addEventListener('click', e => { mapClicks.click(e); if (e.target !== canvas) interruptBuild(); }, true);
+  canvas.addEventListener('pointerdown', e => {
     try { canvas.setPointerCapture(e.pointerId); } catch { /* 沒有也行：放開另由 window 收 */ }
-    if (ptrs.size > 1) { down = null; if (stroke) cancelStroke(); return; }
+    if (ptrs.size > 1 || !mapPoint(e.clientX, e.clientY)) { interruptBuild(); return; }
     down = { x: e.clientX, y: e.clientY, t: performance.now() };
     if (!tool || !sim) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
@@ -1142,6 +1588,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   });
   canvas.addEventListener('pointermove', e => {
     if (!stroke || e.pointerId !== stroke.pid) return;
+    // Keep the existing captured road/zone preview when dragged toward the dock;
+    // release over UI is rejected below, and a separate UI touch cancels at once.
     if (!stroke.moved && Math.hypot(e.clientX - stroke.x, e.clientY - stroke.y) > 8) stroke.moved = true;
     const k = opOf(stroke).k;
     if (k === 'tap') { if (stroke.moved && lastPreview) updatePreview(); return; }   // 點的工具：拖了就取消（實驗線 T436）
@@ -1151,6 +1599,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   });
   canvas.addEventListener('pointerup', e => {
     lift(e.pointerId);
+    if (!mapPoint(e.clientX, e.clientY)) { interruptBuild(); return; }
     if (stroke && e.pointerId === stroke.pid) { const s0 = stroke; stroke = null; down = null; commitStroke(s0); return; }
     if (!down || tool) { down = null; return; }
     const tap = Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6 && performance.now() - down.t < 400;
@@ -1159,8 +1608,19 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const h = pickAt(e.clientX, e.clientY);
     if (h) showTile(h.x, h.z);
   });
-  canvas.addEventListener('pointercancel', e => { lift(e.pointerId); if (stroke && e.pointerId === stroke.pid) cancelStroke(); });   // 實驗線取消時照蓋（62934），本線不照搬：取消就是取消
-  for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => lift(e.pointerId));   // 萬一沒抓住：在畫布外放開也要收掉
+  canvas.addEventListener('pointercancel', e => { lift(e.pointerId); interruptBuild(); });   // 取消就是取消，不提交
+  canvas.addEventListener('lostpointercapture', e => { if (stroke?.pid === e.pointerId || down) interruptBuild(); });
+  for (const ev of ['pointerup', 'pointercancel'] as const) addEventListener(ev, e => {
+    if (ev === 'pointercancel') mapClicks.cancel(e); else mapClicks.up(e);
+    lift(e.pointerId);
+    // Capture can fail or be lost. An outside release must clear the pending
+    // stroke, rather than leave it armed for a later pointer event.
+    if (e.target !== canvas && stroke?.pid === e.pointerId) interruptBuild();
+  });
+  const abandonPointers = () => { ptrs.clear(); mapClicks.clear(); interruptBuild(); };
+  addEventListener('blur', abandonPointers);
+  addEventListener('pagehide', abandonPointers);
+  addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') abandonPointers(); });
 
   const resumed = sampleId === 'mine';                                   // 開頁時就有存檔：接著上次的城（第一次開新城不提示）
   let first = openSample(sampleId, true), bootNote = '';
@@ -1272,8 +1732,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       if (!city || !con) return null;
       const br = blockRenderFor(city), st = new ConState(city.n), b = buildCityScene(city, KINDS, style, br, tone, br ? civic : undefined, st, true, pipesShown, trafficOver()), live = con;   // D019：地面畫不畫水管跟真的一樣
       b.setTreeAges(i => live.siteAge(i));
-      b.scene.add(preview.mesh, haz.mesh);                                // 場景結構跟真的一樣（施工預覽、災禍標記也在場景裡），摘要完放回去
-      const d = sceneDigest(b); built?.scene.add(preview.mesh, haz.mesh); b.dispose(); st.dispose();
+      b.scene.add(preview.mesh, haz.mesh); if (resHints.shown) b.scene.add(resHints.mesh);   // 場景結構跟真的一樣（施工預覽、災禍標記在場景裡；資源圖有畫的時候才在），摘要完放回去
+      const d = sceneDigest(b); built?.scene.add(preview.mesh, haz.mesh); attachRes(); b.dispose(); st.dispose();
       return d;
     },
     // 上一次建場景：件數、重做幾件、上傳位元組（建築三個網格＋地面＋野樹）、放大幾次、搬了幾件、整份重排幾次、是不是從頭建；三個網格的容量、要畫的範圍、真的有東西的、空洞
@@ -1283,7 +1743,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     // ---- D011 建造 ----
     ui: () => ({ tool, roadTool, civicTool, coach: coachText(), dock: sim ? 'build' : 'view', saved: !!readSave(), autosaves: autosaves(), saveError: saveErr, pointers: ptrs.size }),
     // rc：路的那一級（t＝'road'）或公共設施的那一種（t＝'civic'）
-    tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') civicTool = rc; else roadTool = rc; } setTool(t); return tool; },
+    tool: (t: ToolId | null, rc?: string) => { if (rc) { if (t === 'civic') pickCivic(rc); else roadTool = rc; } setTool(t); return tool; },
     pipesShown: () => pipesShown,   // D019
     tileWa: (x: number, z: number) => sim ? !!sim.w.tiles[z * sim.w.N + x]?.bld?.wa : null,   // D019：那一格的建築（根格）有沒有水
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
@@ -1291,6 +1751,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     undo: () => doUndo(),
     // 對拍劇本的「資金設定」（兩邊設成同一個數，把建造規則跟每日結算分開；實驗線那邊是注入的 setMoney）：只給守衛與拍照用，介面沒有這個鈕
     simMoney: (v: number) => { if (!sim) return null; sim.money = v; syncUi(); return sim.money; },
+    // D044：城市等級（工具列的鎖）——只給守衛與拍照用；等級本來只升不降，所以這裡只准往上調
+    simRank: (idx: number) => { if (!sim) return null; sim.rankIdx = Math.max(sim.rankIdx, idx | 0); syncDock(); return sim.rankIdx; },
     // 對拍劇本的「亂數對齊」：兩邊的全域亂數都換成 mulberry32(v)（實驗線第 1 天比本線多抽 6 次（第 2 類系統），B 段要比會抽亂數的施工就先對齊）；只給守衛與拍照用
     simSeed: (v: number) => { if (!sim) return null; const g = labRng(v); sim.rng.R = g.R; sim.rng.ri = g.ri; return true; },
     cellScreen: (x: number, z: number) => { const n = city!.n; return screenOf(new THREE.Vector3(x + .5, Math.max(0, tileTop(city!, z * n + x)), z + .5)); },
@@ -1323,7 +1785,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     sewerRows: (x: number, z: number) => { if (!city || !sim) return null; const b = buildingAt(city, x, z); return b ? sewerRows(b) : null; },   // D033：這一格建築的「污水」列（守衛與拍照用）
     sewerRep: () => lastRep ? lastRep.sewer : null,
     mergeRep: () => lastRep ? lastRep.merges.map(m => ({ x: m.x, z: m.z, k: m.k, size: m.size, absorbed: m.from.length })) : null,   // D034：最近一天的合併（新建築的根格、種類、邊長、吸收了幾棟）   // D033：最近一天的污水回報 { need, served, unserved, plants }
-    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade } : null,   // D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
+    lastDay: () => lastRep ? { day: lastRep.day, pop: lastRep.pop, cityHappy: lastRep.cityHappy, happyAgg: lastRep.happyAgg, garb: lastRep.garb, food: lastRep.food, econ: lastRep.econ.sn.economy481, trade: lastRep.econ.sn.economy482.trade, resource: lastRep.resource } : null,   // D036：開採量；D020：最近一天的回報（垃圾：量、容量、比例、懲罰、太遠的棟數……）；D022：糧食（需求、進口、供糧率、每天的加減）
     // ---- D026 災禍（守衛與拍照用）：標記數與焦土格數、一格的旗標、卡上的按鈕、把一格的旗標直接設好（造情境用，介面沒有這個鈕）----
     // ---- D027 交通（守衛與拍照用）：過載道路格（讀模擬的負載，不讀畫面）、貼圖上暖色的等級、幸福構成面板的列 ----
     traffic: () => {
@@ -1358,6 +1820,24 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     policyApply: (k: string, v: unknown) => { const r = uiPolicy(k, v); return r ? { ok: r.ok } : null; },
     budgetApply: (cat: string, dir: 1 | -1) => uiBudget(cat, dir),
     policyState: () => sim ? { pol: sim.pol ? { ...sim.pol } : null, last: { ...sim.polLast }, budget: { ...sim.budget }, day: sim.day, schoolLunch: sim.edu.schoolLunch, edu: hashBytes(sim.g.EDU), money: sim.money, insured: lastRep ? lastRep.hazard.insured : 0 } : null,
+    // ---- D040 資源圖（守衛與拍照用）：畫了幾格、各種幾格、是不是 ☰ 打開的、方塊的位置（x,z,kind）----
+    resourceHints: () => { const m = resHints.mesh, out: [number, number, number][] = [], mt = new THREE.Matrix4(), c = new THREE.Color(); for (let k = 0; k < m.count; k++) { m.getMatrixAt(k, mt); m.getColorAt(k, c); out.push([Math.floor(mt.elements[12]), Math.floor(mt.elements[14]), c.getHexString() === 'ffd36d' ? 1 : 2]); } return { shown: m.count, toggle: showRes, cells: out }; },
+    // ---- D039 大事記（守衛與拍照用）：☰「大事記」面板的列（新到舊）與面板狀態 ----
+    chronicleRows: () => [...ui.querySelectorAll<HTMLElement>('#ch li')].map(li => ({ kind: li.dataset.kind ?? '', day: li.querySelector('b')?.textContent ?? '', text: li.querySelector('span')?.textContent ?? '' })),
+    chroniclePanel: () => ({ open: !ch.hidden, sub: $('#ch .sub').textContent }),
+    // ---- D038 科技與專精（守衛與拍照用）：☰「科技與專精」面板的列、按面板上真的按鈕、目前的研究狀態 ----
+    techRows: () => [...ui.querySelectorAll<HTMLElement>('#tc li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('.note')?.textContent ?? '' })),
+    techPanel: () => ({ open: !tc.hidden, sub: $('#tc .sub').textContent, tip: $('#tc .tip').textContent, route: tcRoute, pick: tcPick, tabs: [...ui.querySelectorAll<HTMLButtonElement>('#tc .tabs button')].map(b => b.textContent ?? '') }),
+    // D045 市長委託：面板的狀態與每一列、點某一列的按鈕（接受／放棄）、模擬裡的委託狀態
+    cmPanel: () => ({ open: !cm.hidden, sub: $('#cm .sub').textContent, tip: $('#cm .tip').textContent, state: sim ? commissionState(sim) : null }),
+    cmRows: () => [...ui.querySelectorAll<HTMLElement>('#cm li')].map(li => ({ k: li.dataset.k ?? '', kind: li.dataset.kind ?? '', st: li.dataset.st ?? '', name: li.querySelector('b')?.textContent ?? '', val: li.querySelector('.val')?.textContent ?? '', btn: li.querySelector('button')?.textContent ?? '', note: li.querySelector('small.note')?.textContent ?? '', bar: li.querySelector<HTMLElement>('.bar i')?.style.width ?? '' })),
+    cmClick: (k: string) => { const b = cm.hidden ? null : ui.querySelector<HTMLButtonElement>(`#cm li[data-k="${k}"] button`); if (!b || b.disabled) return false; b.click(); return true; },
+    simCms: () => sim ? JSON.parse(JSON.stringify(sim.cms)) : null,
+    techRoute: (r: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc .tabs button[data-route="${r}"]`); if (!b) return false; b.click(); return true; },
+    techClick: (k: string) => { const b = tc.hidden ? null : ui.querySelector<HTMLButtonElement>(`#tc li[data-k="${k}"] button`); if (!b || b.disabled) return false; b.click(); return true; },   // 按面板上那一列的按鈕（節點或城市方向）；沒開、沒這一列、鈕是灰的回 false
+    techApply: (id: string) => { const r = uiTech(id); return r ? { ok: r.ok } : null; },
+    specApply: (i: number) => { const r = uiSpec(i); return r ? { ok: r.ok } : null; },
+    techState: () => sim ? { day: sim.day, act: sim.tech.act, prog: { ...sim.tech.prog }, done: [...sim.edu.tech], spec: sim.edu.spec ?? '', speed: sim.techSpeed, money: sim.money, rank: sim.rankIdx, diff: sim.diff } : null,
     cityEventRep: () => lastRep ? { day: lastRep.day, ...lastRep.cityEvent, active: sim?.cityEvent ? { ...sim.cityEvent, ...CITY_EVENTS[sim.cityEvent.i] } : null } : null,   // D030：今天剛開始／剛結束的活動編號，與進行中的活動
     nightRep: () => lastRep ? { day: lastRep.day, night: lastRep.night, simReady: sim ? sim.night.ready : null } : null,
     dayRep: () => lastRep ? { day: lastRep.day, tax: lastRep.settle.tax, other: lastRep.settle.other, imports: lastRep.settle.imports, upkeep: lastRep.settle.upkeep, income: lastRep.settle.income, net: lastRep.settle.net, bonus: (lastRep.settle.milestone?.reward ?? 0) + (lastRep.settle.star?.bonus ?? 0) + (lastRep.settle.bailout ?? 0) - (lastRep.settle.loanPaid ?? 0), chain: lastRep.chain346, night: lastRep.night.finance, gasImport: lastRep.econ.ec.gasImport482, money: sim ? sim.money : null, sandbox: sim?.diff === 3 } : null,

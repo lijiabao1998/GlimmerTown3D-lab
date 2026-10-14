@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "65507654be94d0971fe7b0d9b06d657d58b0553d",
+  "note": "Exact k51 geometry from the first real Chrome before/after candidate, visually reviewed; every vertex attribute/color/tree/height digest for variants 0–8. Legacy golden remains separately required.",
+  "triangles": 636,
+  "k51": {
+    "s": 3,
+    "lv": 1,
+    "h": [
+      "cd428a4fba765e09",
+      "cd428a4fba765e09",
+      "5debbc263eaec406",
+      "cd428a4fba765e09",
+      "cd428a4fba765e09",
+      "cd428a4fba765e09",
+      "cd428a4fba765e09",
+      "cd428a4fba765e09",
+      "cd428a4fba765e09"
+    ]
+  }
+}

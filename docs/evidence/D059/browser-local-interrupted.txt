@@ -1,0 +1,411 @@
+D058: complete historical suite uses streetArt=legacy; current-art native suite follows.
+
+=== 微光小鎮 3D 煙霧測試 ===
+PASS D054 after mixed-pipe: 7 checks; 2 original PNGs
+PASS D054 after low-road: 8 checks; 2 original PNGs
+PASS D054 after low-rect: 8 checks; 2 original PNGs
+PASS D054 after depleted-oil: 7 checks; 1 original PNGs
+PASS D054 after depleted-mine: 7 checks; 1 original PNGs
+PASS D054 after sewage: 8 checks; 1 original PNGs
+  OK D054 six fixed native scenes and nine paired PNGs：
+  OK D054 direct original Chrome pairing incl native undo and six uninterrupted future days：
+  OK D054 layout focus and modal dismissal 360：
+  OK D054 layout focus and modal dismissal 360 genuine input：
+  OK D054 layout focus and modal dismissal 360 zero errors/external requests：[]
+  OK D054 layout focus and modal dismissal 412：
+  OK D054 layout focus and modal dismissal 412 genuine input：
+  OK D054 layout focus and modal dismissal 412 zero errors/external requests：[]
+  OK D054 layout focus and modal dismissal 1280：
+  OK D054 layout focus and modal dismissal 1280 genuine input：
+  OK D054 layout focus and modal dismissal 1280 zero errors/external requests：[]
+  NG D054 native sewage first preview CPU6 budget：AssertionError [ERR_ASSERTION]: same original CPU6 preview16ms budget, including first genuine input: [16.69999998807907,5.100000023841858,3.899999976158142,5.099999964237213,4.699999988079071,3.699999988079071,3.200000047683716,2.699999988079071,4.900000035762787,2,3.300000011920929,3.300000011920929]
+    at file:///C:/dev/GlimmerTown3D-lab/tools/smoke-d054.mjs:60:430
+    at async file:///C:/dev/GlimmerTown3D-lab/tools/smoke-d054.mjs:46:311
+    at async withBrowser (file:///C:/dev/GlimmerTown3D-lab/tools/cdp.mjs:130:12)
+    at async run (file:///C:/dev/GlimmerTown3D-lab/tools/smoke-d054.mjs:46:118)
+    at async d054Smoke (file:///C:/dev/GlimmerTown3D-lab/tools/smoke-d054.mjs:56:2)
+    at async file:///C:/dev/GlimmerTown3D-lab/tools/smoke.mjs:73:67
+  OK D054 native sewage first preview CPU6 budget genuine input：
+  OK D054 native sewage first preview CPU6 budget zero errors/external requests：[]
+  OK D054 hidden guide Escape restores native Space playback：
+  OK D054 hidden guide Escape restores native Space playback genuine input：
+  OK D054 hidden guide Escape restores native Space playback zero errors/external requests：[]
+  OK D054 all tool instructions and sewage layer transitions：
+  OK D054 all tool instructions and sewage layer transitions genuine input：
+  OK D054 all tool instructions and sewage layer transitions zero errors/external requests：[]
+  OK D054 actual result survives details mixed-pipe：
+  OK D054 actual result survives details mixed-pipe genuine input：
+  OK D054 actual result survives details mixed-pipe zero errors/external requests：[]
+  OK D054 actual result survives details low-road：
+  OK D054 actual result survives details low-road genuine input：
+  OK D054 actual result survives details low-road zero errors/external requests：[]
+  OK D054 actual result survives details low-rect：
+  OK D054 actual result survives details low-rect genuine input：
+  OK D054 actual result survives details low-rect zero errors/external requests：[]
+  OK D054 exact original funds fractional-exact：
+  OK D054 exact original funds fractional-exact genuine input：
+  OK D054 exact original funds fractional-exact zero errors/external requests：[]
+  OK D054 exact original funds fractional-short：
+  OK D054 exact original funds fractional-short genuine input：
+  OK D054 exact original funds fractional-short zero errors/external requests：[]
+  OK D054 exact original funds sandbox-zero：
+  OK D054 exact original funds sandbox-zero genuine input：
+  OK D054 exact original funds sandbox-zero zero errors/external requests：[]
+  OK D054 exact original funds sandbox-negative：
+  OK D054 exact original funds sandbox-negative genuine input：
+  OK D054 exact original funds sandbox-negative zero errors/external requests：[]
+  OK D054 held preview refreshes actual funds across day：
+  OK D054 held preview refreshes actual funds across day genuine input：
+  OK D054 held preview refreshes actual funds across day zero errors/external requests：[]
+  OK D054 retained guide held across day touch：
+  OK D054 retained guide held across day touch genuine input：
+  OK D054 retained guide held across day touch zero errors/external requests：[]
+  OK D054 retained guide held across day space：
+  OK D054 retained guide held across day space genuine input：
+  OK D054 retained guide held across day space zero errors/external requests：[]
+  OK D054 retained close held across day touch：
+  OK D054 retained close held across day touch genuine input：
+  OK D054 retained close held across day touch zero errors/external requests：[]
+  OK D054 retained close held across day space：
+  OK D054 retained close held across day space genuine input：
+  OK D054 retained close held across day space zero errors/external requests：[]
+  OK D054 details captures held area and cancels map gesture：
+  OK D054 details captures held area and cancels map gesture genuine input：
+  OK D054 details captures held area and cancels map gesture zero errors/external requests：[]
+  OK D054 native interruption Escape：
+  OK D054 native interruption Escape genuine input：
+  OK D054 native interruption Escape zero errors/external requests：[]
+  OK D054 native interruption tool：
+  OK D054 native interruption tool genuine input：
+  OK D054 native interruption tool zero errors/external requests：[]
+  OK D054 native interruption details：
+  OK D054 native interruption details genuine input：
+  OK D054 native interruption details zero errors/external requests：[]
+  OK D054 native interruption resize：
+  OK D054 native interruption resize genuine input：
+  OK D054 native interruption resize zero errors/external requests：[]
+  OK D054 native interruption second-finger：
+  OK D054 native interruption second-finger genuine input：
+  OK D054 native interruption second-finger zero errors/external requests：[]
+  OK D054 native interruption cancel：
+  OK D054 native interruption cancel genuine input：
+  OK D054 native interruption cancel zero errors/external requests：[]
+  OK D054 second finger cancels held details close：
+  OK D054 second finger cancels held details close genuine input：
+  OK D054 second finger cancels held details close zero errors/external requests：[]
+  OK D054 native blur abandons held gesture：
+  OK D054 native blur abandons held gesture genuine input：
+  OK D054 native blur abandons held gesture zero errors/external requests：[]
+  OK D054 pagehide closes details and releases inert：
+  OK D054 pagehide closes details and releases inert genuine input：
+  OK D054 pagehide closes details and releases inert zero errors/external requests：[]
+  OK D054 cross-surface old mouse release never builds：
+  OK D054 cross-surface old mouse release never builds genuine input：
+  OK D054 cross-surface old mouse release never builds zero errors/external requests：[]
+  OK D054 resource fresh partial exhausted wrong and gas distinction：
+  OK D054 resource fresh partial exhausted wrong and gas distinction genuine input：
+  OK D054 resource fresh partial exhausted wrong and gas distinction zero errors/external requests：[]
+  OK D054 native grouped 3x3 demolition and undo：
+  OK D054 native grouped 3x3 demolition and undo genuine input：
+  OK D054 native grouped 3x3 demolition and undo zero errors/external requests：[]
+  OK D054 native level2 demolition confirmation expiration：
+  OK D054 native level2 demolition confirmation expiration genuine input：
+  OK D054 native level2 demolition confirmation expiration zero errors/external requests：[]
+  OK D054 paired navigation future false：
+  OK D054 paired navigation future false genuine input：
+  OK D054 paired navigation future false zero errors/external requests：[]
+  OK D054 paired navigation future true：
+  OK D054 paired navigation future true genuine input：
+  OK D054 paired navigation future true zero errors/external requests：[]
+  OK D054 navigation leaves future full exposed stochastic trajectory unchanged：
+PASS rank6: 8 groups PNG D053-after-rank6-current-line-412.png sha256=c11d97b20ea15c531aed31bd8516e736ca5af238794cfcfa4a3271388786359a
+PASS catalog: 6 groups PNG D053-after-civic-navigation-360.png sha256=5cfb806755f40ab77a4329d8423f699a58e42b2555ae7851a1135ec1f8f7dd88
+PASS rank8: 8 groups
+PASS rank12: 8 groups
+PASS rank17: 9 groups
+PASS rank21: 6 groups
+PASS space-rank: 8 groups PNG D053-after-rank22-space-entry-412.png sha256=7c784329850013a0e144abc0f7d7c3cd2068addf59658a0fb50bb24f0d2e5e3a
+PASS space-catalog: 6 groups PNG D053-after-space-tool-detail-412.png sha256=33d01f8f50e9ce21918a89523d9aa5aefb47bd5f9f5c418b8c37dda10331f90c
+PASS space-build: 8 groups PNG D053-after-space-build-result-412.png sha256=941b124faf5784f7ee879dd45a6857192aaca8bbd8a526845f84ee411e631f21
+PASS rank-live: 6 groups PNG D053-after-open-rank-after-day-360.png sha256=47275cef459ca888aa2a11ca34f334a8fee04a93477057404660319622af3900
+PASS D053 after: 6 screenshots; 10/10 scenarios.
+  OK D053 all 10 fixed scenes and six comparison PNGs：
+  OK D053 layout accessibility 360：
+  OK D053 layout accessibility 360 genuine native input：{"events":266}
+  OK D053 layout accessibility 360 zero console errors/external requests：[]
+  OK D053 layout accessibility 412：
+  OK D053 layout accessibility 412 genuine native input：{"events":266}
+  OK D053 layout accessibility 412 zero console errors/external requests：[]
+  OK D053 layout accessibility 1280：
+  OK D053 layout accessibility 1280 genuine native input：{"events":226}
+  OK D053 layout accessibility 1280 zero console errors/external requests：[]
+  OK D053 all 25 selectors, unchanged 18 civic tools and exact seven-food category：
+  OK D053 all 25 selectors, unchanged 18 civic tools and exact seven-food category genuine native input：{"events":407}
+  OK D053 all 25 selectors, unchanged 18 civic tools and exact seven-food category zero console errors/external requests：[]
+  OK D053 rank 21 lock normal：
+  OK D053 rank 21 lock normal genuine native input：{"events":30}
+  OK D053 rank 21 lock normal zero console errors/external requests：[]
+  OK D053 rank 21 lock sandbox：
+  OK D053 rank 21 lock sandbox genuine native input：{"events":30}
+  OK D053 rank 21 lock sandbox zero console errors/external requests：[]
+  OK D053 held promotion selection：
+  OK D053 held promotion selection genuine native input：{"events":27}
+  OK D053 held promotion selection zero console errors/external requests：[]
+  OK D053 held promotion rank-button：
+  OK D053 held promotion rank-button genuine native input：{"events":27}
+  OK D053 held promotion rank-button zero console errors/external requests：[]
+  OK D053 held promotion rank-catalog-button：
+  OK D053 held promotion rank-catalog-button genuine native input：{"events":17}
+  OK D053 held promotion rank-catalog-button zero console errors/external requests：[]
+  OK D053 catalog cancel and hidden live update：
+  OK D053 catalog cancel and hidden live update genuine native input：{"events":32}
+  OK D053 catalog cancel and hidden live update zero console errors/external requests：[]
+  OK D053 normal playback refreshes both growth dialogs：
+  OK D053 normal playback refreshes both growth dialogs genuine native input：{"events":27}
+  OK D053 normal playback refreshes both growth dialogs zero console errors/external requests：[]
+  OK D053 space native interruption cancellations：
+  OK D053 space native interruption cancellations genuine native input：{"events":174}
+  OK D053 space native interruption cancellations zero console errors/external requests：[]
+  OK D053 space original model build undo persistence：
+  OK D053 space original model build undo persistence genuine native input：{"events":47}
+  OK D053 space original model build undo persistence zero console errors/external requests：[]
+  OK D053 sandbox rank22 original free placement：
+  OK D053 sandbox rank22 original free placement genuine native input：{"events":27}
+  OK D053 sandbox rank22 original free placement zero console errors/external requests：[]
+  OK D053 original pipe park resource and shore restrictions：
+  OK D053 original pipe park resource and shore restrictions genuine native input：{"events":202}
+  OK D053 original pipe park resource and shore restrictions zero console errors/external requests：[]
+  OK D053 native pagehide and city switch release inert：
+  OK D053 native pagehide and city switch release inert genuine native input：{"events":39}
+  OK D053 native pagehide and city switch release inert zero console errors/external requests：[]
+  OK D053 paired future trajectory control：
+  OK D053 paired future trajectory control genuine native input：{"events":7}
+  OK D053 paired future trajectory control zero console errors/external requests：[]
+  OK D053 paired future trajectory all tools：
+  OK D053 paired future trajectory all tools genuine native input：{"events":397}
+  OK D053 paired future trajectory all tools zero console errors/external requests：[]
+  OK D053 paired six-day full exposed state/code/history trajectory：
+  （Chrome 可連線 427 ms，第 1 次啟動；Chrome/155.0.8059.39）
+  OK WebGL2 可用
+  OK 事件雜湊沒變（生成規則沒被順手改掉）：1750cc89，格式 v1
+  OK 決定性：同種子兩次生成相同
+  OK 換種子歷史就不同
+  OK 歷史只增不改：只生成到第 80 年＝300 年版的前 80 年
+  OK 第 80 年比第 0 年多且高：建築 5→379、樓層 1→2.491
+  OK 第 300 年破敗、植被多、路長草：完好 1→0.053、樹 405→1032、長草路 430
+     繪製：11 次呼叫、48794 個三角形、渲染目標 320×200
+  OK 地塊履歷逐條對得上事件、年份遞增：30 格 170 條、錯 0
+  OK 至少一格同時有「蓋起／遭遺棄／倒塌」：6
+  OK 第 60 年點 (26,21)：標題是當年那棟商店、之後的事變灰：商店（26, 21）、灰 6 行
+  OK 第 300 年 (26,21) 是瓦礫；拆除與改建併成一句：瓦礫（26, 21）、10 行
+  OK 第 80 年點最高的樓，點到的是那一格：{"want":[24,26],"got":{"id":339,"x":24,"z":26}}
+  OK 第 300 年點瓦礫，點到的是那棟倒塌建築：{"want":[43,35],"got":{"id":488,"x":43,"z":35}}
+  OK 時間軸 31 幀（每 10 年）畫面都非空白：全部通過
+  OK 重建一年的場景夠快（履歷卡開著，第 25 百分位 < 40ms）：P25 6.1、中位數 6.8、最慢 21.1 ms（35 次；中位數拆解：釋放 0.2／推狀態 0.2／建場景 6.3〔地面 1.6、幾何 3.2、網格 0.7、樹 0.6〕／介面 0.1）
+  OK 畫面靜止時不重畫（省電）：一秒內畫了 0 幀
+  OK 轉動鏡頭時會重畫：轉動後多畫 4 幀
+  OK 手機上履歷卡：最近發生的事看得見，標題與關閉鈕留在原位：{"cardTop":327,"titleTop":340,"closeTop":336,"cardScroll":0,"listScroll":78,"overflow":true,"latestVisible":true}
+  OK 對照畫風 B 仍畫得出來：變異量 2947.4
+  OK 對照畫風 C 仍畫得出來：變異量 3136.5
+  OK D003 seed516：瀏覽器解碼對帳與實驗線逐項相等：建築 945、19 種
+  OK D003 seed516：場景畫出的建築數＝城市建築數：945／945
+  OK D003／D012 seed516：匯入記成世界歷史第一筆事件；之後只有讀檔時照實驗線重挑外觀的 restyle（同一天），筆數＝__gt.restyled()＝實驗線重挑的棟數，逐棟（格、換成的 v）＝實驗線：import 第 210963 天 v13.43；restyle 848 筆、__gt.restyled() 848、實驗線 848 棟、逐棟相同
+  OK D012 seed516：讀檔之後每一棟住商工的 v＝實驗線讀檔之後的 v（逐棟，k、lv 也相同）：924 棟（實驗線 924），不同 0；讀檔時換了 848 棟
+  OK D003 seed516：畫面非空白：變異量 5428
+  OK D003 seed516：解碼＋建城市＋建場景 < 1,500 ms：110 ms（解碼 1.9、城市 19.0、場景 90）；繪製 12 次、79256 個三角形
+  OK D003 seed516：點最大的那棟建築，點到的是它，卡片名稱正確：{"want":[2,15,364],"got":{"id":364,"x":2,"z":15},"title":"大型醫學中心（2, 15）"}
+  OK D003 seed516：地塊卡顯示「約第 N 天蓋起」：約第 210,943 天蓋起（由 2D 存檔的 age=20 推算，只是估計）
+  OK D003 ai120：瀏覽器解碼對帳與實驗線逐項相等：建築 399、24 種
+  OK D003 ai120：場景畫出的建築數＝城市建築數：399／399
+  OK D003／D012 ai120：匯入記成世界歷史第一筆事件；之後只有讀檔時照實驗線重挑外觀的 restyle（同一天），筆數＝__gt.restyled()＝實驗線重挑的棟數，逐棟（格、換成的 v）＝實驗線：import 第 121 天 v13.43；restyle 132 筆、__gt.restyled() 132、實驗線 132 棟、逐棟相同
+  OK D012 ai120：讀檔之後每一棟住商工的 v＝實驗線讀檔之後的 v（逐棟，k、lv 也相同）：312 棟（實驗線 312），不同 0；讀檔時換了 132 棟
+  OK D003 ai120：畫面非空白：變異量 5092.2
+  OK D003 ai120：解碼＋建城市＋建場景 < 1,500 ms：118 ms（解碼 2.2、城市 27.1、場景 89）；繪製 12 次、70910 個三角形
+  OK D003 ai120：點最大的那棟建築，點到的是它，卡片名稱正確：{"want":[21,23,7],"got":{"id":7,"x":21,"z":23},"title":"大農場（21, 23）"}
+  OK D003 ai120：地塊卡顯示「約第 N 天蓋起」：約第 75 天蓋起（由 2D 存檔的 age=46 推算，只是估計）
+  OK D003 壞碼 4 種都回傳原因、目前的城市不變：分享碼是空的｜不是有效的分享碼：含有 base64 以外的字元｜不是有效的分享碼：內容不是完整的 JSON（可能被截斷）｜分享碼太長（2,000,004 字元，上限 2,000,000）
+  OK D003 城市模式：靜止不重畫、轉鏡頭會畫：靜止 1 秒 0 幀、轉動後 5 幀
+  OK D003 手機直式：卡片在畫面內、標題與關閉鈕在卡內；D011 起城市切換收進 ☰ 選單：新城、起步城、種子城、AI 城、全種類、分享碼、300 年示範都在：{"title":"大型醫學中心（2, 15）","inView":true,"titleIn":true,"closeIn":true,"menu":["city:newcity","city:starter","city:seed516","city:ai120","city:gallery","export","paste","blocks:b","blocks:c","history"]}
+  OK D004 seed516 ?blocks=off＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同：79,256 三角形（基線 79,256）、12 次（基線 12）、畫到 945／945
+  OK D004／D012 seed516 切分對拍（瀏覽器裡跑同一份 blocks.ts，讀檔重挑之後的城）：逐格＝實驗線讀檔之後自己算的切分：924 格、差 0（實驗線 D0 360、被吸收 7）
+  OK D004 seed516 A 檔畫得出來、該畫的格都畫到、非住商工全數畫到：畫到 945／945 棟、街區 924 個全是 1×1；非住商工 21 棟全畫 true；變異量 5239.8
+  OK D004 seed516 A 檔手機預算：三角形只量不判（D012）、draw call ≤ 18：121,606（上限 118,884，1.53 倍，超過 2,722）、15 次；建場景 152 ms（其中切分 1.1 ms）
+  OK D004 seed516 A 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個（A 檔全是 1×1）全對（候選 924）；斜視角直接點中 18／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D004 seed516 B 檔畫得出來、該畫的格都畫到、非住商工全數畫到：畫的格＝實驗線 557 格（少 0、多 0）；沒畫：吸收 7（樣本 7）、D0 360（樣本 360）；非住商工 21 棟全畫 true；變異量 5080.5
+  OK D004 seed516 B 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：71,690（上限 118,884，0.90 倍）、15 次；建場景 130 ms（其中切分 2.7 ms）
+  OK D004 seed516 B 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個多格街區全對（候選 119）；斜視角直接點中 18／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D004 seed516 C 檔畫得出來、該畫的格都畫到、非住商工全數畫到：住商工 924 格全蓋到（924）、重疊 0、補切 152 塊；非住商工 21 棟全畫 true；變異量 5186.3
+  OK D004 seed516 C 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：94,002（上限 118,884，1.19 倍）、15 次；建場景 140 ms（其中切分 5.7 ms）
+  OK D004 seed516 C 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個多格街區全對（候選 229）；斜視角直接點中 19／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D004 ai120 ?blocks=off＝D003 現況：三角形、draw call、畫到的建築數都跟基線相同：70,910 三角形（基線 70,910）、12 次（基線 12）、畫到 399／399
+  OK D004／D012 ai120 切分對拍（瀏覽器裡跑同一份 blocks.ts，讀檔重挑之後的城）：逐格＝實驗線讀檔之後自己算的切分：312 格、差 0（實驗線 D0 93、被吸收 5）
+  OK D004 ai120 A 檔畫得出來、該畫的格都畫到、非住商工全數畫到：畫到 399／399 棟、街區 312 個全是 1×1；非住商工 87 棟全畫 true；變異量 5056.7
+  OK D004 ai120 A 檔手機預算：三角形只量不判（D012）、draw call ≤ 18：92,942（上限 106,365，1.31 倍）、15 次；建場景 127 ms（其中切分 0.9 ms）
+  OK D004 ai120 A 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個（A 檔全是 1×1）全對（候選 312）；斜視角直接點中 19／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D004 ai120 B 檔畫得出來、該畫的格都畫到、非住商工全數畫到：畫的格＝實驗線 214 格（少 0、多 0）；沒畫：吸收 5（樣本 5）、D0 93（樣本 93）；非住商工 87 棟全畫 true；變異量 5023
+  OK D004 ai120 B 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：82,546（上限 106,365，1.16 倍）、15 次；建場景 118 ms（其中切分 2.4 ms）
+  OK D004 ai120 B 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個多格街區全對（候選 59）；斜視角直接點中 20／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D004 ai120 C 檔畫得出來、該畫的格都畫到、非住商工全數畫到：住商工 312 格全蓋到（312）、重疊 0、補切 59 塊；非住商工 87 棟全畫 true；變異量 5053.6
+  OK D004 ai120 C 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：89,508（上限 106,365，1.26 倍）、15 次；建場景 130 ms（其中切分 2.5 ms）
+  OK D004 ai120 C 檔點街區中心（正上方）：回到該街區裡的建築、建築卡打得開：20 個多格街區全對（候選 85）；斜視角直接點中 20／20（其餘被前面較高的建築擋住，點到的是前面那棟）
+  OK D005 窗磚圖集第 0 格＝D003 窗磚（逐像素）：不同 0 個像素
+  OK D005／D012 seed516 不帶參數＝C（D012 起；D005–D011 是 B）：每一棟都畫到（沒有 D0 草坪、沒有被吸收的 1×1），街區計畫逐塊＝Node 用實驗線讀檔之後的 v 算的 C 檔：畫到 945／945 棟；街區 362 塊（實驗線切的 210＋補切 D0 152）＝ Node；本線切分＝實驗線讀檔之後的切分
+  OK D005／D012 seed516 C 檔地坪：每一格住商工都依 k 上色、villa 是庭院（看讀檔重挑之後的 v），沒有草坪；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）：住宅 218、商業 377、工業 282、villa 47、草坪 0 格；不對 0 格；非住商工 相同
+  OK D005 seed516 點綴全畫出來（場景件數＝擺放計畫，逐項；預設 C）：{"props":1224,"edges":188,"kits":656,"awnings":179,"doors":198,"docks":125,"shopBands":70,"plainBands":125,"units":149,"rows":99,"parts":429,"trims":414,"partKinds":{"bay":28,"bay2":44,"canopy":20,"chimney":77,"dormer":40,"flag":18,"pier":129,"porch":32,"sign":20,"stoop":20,"turret":1}}
+  OK D005 seed516 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚；預設 C）：街區牆面三角形 7334、有窗 6256、用第 0 格 0
+  OK D005 seed516 點前庭道具、屋頂設備（正上方）：回到該街區的建築（預設 C）：道具 20、設備 20 件全對
+  OK D005／D012 seed516 ?blocks=b＝B（照實驗線）：D0 與被吸收的沒畫：畫到 578／945 棟（沒畫的＝實驗線讀檔之後的 D0 360＋被吸收 7）
+  OK D005 seed516 B 檔地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪（D012 起比實驗線讀檔之後的切分）；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）：住宅 132、商業 278、工業 107、villa 40、草坪 367 格；不對 0 格；非住商工 相同
+  OK D005 seed516 B 檔點綴全畫出來、窗型正確：道具 771、屋頂設備 349、雨遮 105、門 148、裝卸口 49
+  OK D005 seed516 A 檔點綴全畫出來、窗型正確：道具 2228、屋頂設備 1101、雨遮 516、門 270、裝卸口 282
+  OK D005／D012 ai120 不帶參數＝C（D012 起；D005–D011 是 B）：每一棟都畫到（沒有 D0 草坪、沒有被吸收的 1×1），街區計畫逐塊＝Node 用實驗線讀檔之後的 v 算的 C 檔：畫到 399／399 棟；街區 190 塊（實驗線切的 131＋補切 D0 59）＝ Node；本線切分＝實驗線讀檔之後的切分
+  OK D005／D012 ai120 C 檔地坪：每一格住商工都依 k 上色、villa 是庭院（看讀檔重挑之後的 v），沒有草坪；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）：住宅 91、商業 0、工業 184、villa 37、草坪 0 格；不對 0 格；非住商工 相同
+  OK D005 ai120 點綴全畫出來（場景件數＝擺放計畫，逐項；預設 C）：{"props":715,"edges":148,"kits":102,"awnings":0,"doors":145,"docks":100,"shopBands":0,"plainBands":100,"units":62,"rows":24,"parts":123,"trims":100,"partKinds":{"bay":38,"bay2":24,"chimney":49,"porch":12}}
+  OK D005 ai120 街區牆面有窗的三角形都用原型的窗型（不是 D003 窗磚；預設 C）：街區牆面三角形 2994、有窗 2664、用第 0 格 0
+  OK D005 ai120 點前庭道具、屋頂設備（正上方）：回到該街區的建築（預設 C）：道具 20、設備 20 件全對
+  OK D005／D012 ai120 ?blocks=b＝B（照實驗線）：D0 與被吸收的沒畫：畫到 301／399 棟（沒畫的＝實驗線讀檔之後的 D0 93＋被吸收 5）
+  OK D005 ai120 B 檔地坪：街區格依 k 上色、villa 是庭院、D0 與被吸收的是草坪（D012 起比實驗線讀檔之後的切分）；沒有建築的格跟 D003 逐像素相同（D007 起非住商工建築格鋪實驗線地坪，另驗）：住宅 67、商業 0、工業 115、villa 32、草坪 98 格；不對 0 格；非住商工 相同
+  OK D005 ai120 B 檔點綴全畫出來、窗型正確：道具 500、屋頂設備 72、雨遮 0、門 107、裝卸口 57
+  OK D005 ai120 A 檔點綴全畫出來、窗型正確：道具 899、屋頂設備 32、雨遮 0、門 172、裝卸口 184
+  OK D006 300 年示範不動：三角形、draw call 跟 D005 前相同：48794 個、11 次
+  OK D006～D008／D012 seed516 幾何釘住（預設 C、?blocks=b 的三角形與 draw call＝D012 定稿的值；預設 C 仍 ≤ D003 基線 1.5 倍、draw call ≤ 18）、預設明暗 d：預設 C 94,002（釘 94,002，上限 118,884，1.19 倍）／15 次；B 71,690（釘 71,690）／15 次；明暗 d
+  OK D006 seed516 地面色：草、水、沙每格都在實驗線色族裡；貼圖 ≤1,024：貼圖 576×576（每格 8）；草 2300、水 923、沙 304 格，不對 0／0／0
+  OK D006 seed516 道路：面向非道路的邊全是人行道／護欄／黃邊，直路都有車道線，路口不畫：路 451 格、直路 369（有車道線 369）、路口 38（畫了車道線 0）；邊色不對 0 像素、路面色不對 0
+  OK D006～D008／D012 ai120 幾何釘住（預設 C、?blocks=b 的三角形與 draw call＝D012 定稿的值；預設 C 仍 ≤ D003 基線 1.5 倍、draw call ≤ 18）、預設明暗 d：預設 C 89,508（釘 89,508，上限 106,365，1.26 倍）／15 次；B 82,546（釘 82,546）／15 次；明暗 d
+  OK D006 ai120 地面色：草、水、沙每格都在實驗線色族裡；貼圖 ≤1,024：貼圖 576×576（每格 8）；草 2548、水 1026、沙 501 格，不對 0／0／0
+  OK D006 ai120 道路：面向非道路的邊全是人行道／護欄／黃邊，直路都有車道線，路口不畫：路 425 格、直路 349（有車道線 349）、路口 42（畫了車道線 0）；邊色不對 0 像素、路面色不對 0
+  OK D007 gallery 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）：183 棟
+  OK D007 gallery 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格：183 棟全對
+  OK D007 gallery 顏色：既有模型保留來源色；D056 與 D057 明確核對各自材質色：176 棟有實驗線色、全用上
+  OK D007 gallery 地坪：非住商工建築的格子鋪該種的實驗線地坪色：1004 格、不對 0
+  OK D007 樣張城：從正上方點每一棟的中心，都回到那一棟：183 棟全對
+  OK D007 seed516 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）：21 棟
+  OK D007 seed516 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格：21 棟全對
+  OK D007 seed516 顏色：既有模型保留來源色；D056 與 D057 明確核對各自材質色：21 棟有實驗線色、全用上
+  OK D007 seed516 地坪：非住商工建築的格子鋪該種的實驗線地坪色：236 格、不對 0
+  OK D007 ai120 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）：87 棟
+  OK D007 ai120 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格：87 棟全對
+  OK D007 ai120 顏色：既有模型保留來源色；D056 與 D057 明確核對各自材質色：40 棟有實驗線色、全用上
+  OK D007 ai120 地坪：非住商工建築的格子鋪該種的實驗線地坪色：222 格、不對 0
+  OK D008／D012 seed516 A 檔沒有立面、飾條；三角形、draw call＝D012 定稿（讀檔重挑 v 之後；D007 定稿是存檔 v）：121,606（釘 121,606）／15 次、立面街區 0
+  OK D008 seed516 B 檔畫出來＝計畫：戶數、排數、小件（逐種）、帶與飾條圈都跟計畫相同：立面街區 51（usMainStreet、ukHighStreet、ukSemi、ukMansion、ukTerrace、usBrownstone）、飾條街區 54；戶 98、排 61、小件 266（bay 20、bay2 32、canopy 14、chimney 46、dormer 9、flag 12、pier 86、porch 19、sign 14、stoop 13、turret 1）、帶＋飾條 239
+  OK D008 seed516 B 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：71,690（上限 118,884，0.90 倍）、15 次
+  OK D008 seed516 B 檔從正上方點正面突出的凸窗、門廊、石階：回到那個街區裡的建築：23 個全對（bay2 9、porch 3、bay 7、stoop 4）
+  OK D008 seed516 C 檔畫出來＝計畫：戶數、排數、小件（逐種）、帶與飾條圈都跟計畫相同：立面街區 82（usMainStreet、ukHighStreet、ukSemi、ukMansion、ukTerrace、usBrownstone、ukVictorian）、飾條街區 92；戶 149、排 99、小件 429（bay 28、bay2 44、canopy 20、chimney 77、dormer 40、flag 18、pier 129、porch 32、sign 20、stoop 20、turret 1）、帶＋飾條 414
+  OK D008 seed516 C 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：94,002（上限 118,884，1.19 倍）、15 次
+  OK D008 seed516 C 檔從正上方點正面突出的凸窗、門廊、石階：回到那個街區裡的建築：40 個全對（bay2 15、porch 10、bay 10、stoop 5）
+  OK D008／D012 ai120 A 檔沒有立面、飾條；三角形、draw call＝D012 定稿（讀檔重挑 v 之後；D007 定稿是存檔 v）：92,942（釘 92,942）／15 次、立面街區 0
+  OK D008 ai120 B 檔畫出來＝計畫：戶數、排數、小件（逐種）、帶與飾條圈都跟計畫相同：立面街區 19（ukSemi、ukTerrace）、飾條街區 18；戶 56、排 21、小件 111（bay 34、bay2 22、chimney 44、porch 11）、帶＋飾條 60
+  OK D008 ai120 B 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：82,546（上限 106,365，1.16 倍）、15 次
+  OK D008 ai120 B 檔從正上方點正面突出的凸窗、門廊、石階：回到那個街區裡的建築：19 個全對（bay2 7、bay 12）
+  OK D008 ai120 C 檔畫出來＝計畫：戶數、排數、小件（逐種）、帶與飾條圈都跟計畫相同：立面街區 22（ukSemi、ukTerrace）、飾條街區 31；戶 62、排 24、小件 123（bay 38、bay2 24、chimney 49、porch 12）、帶＋飾條 100
+  OK D008 ai120 C 檔手機預算：三角形 ≤ D003 基線 1.5 倍、draw call ≤ 18：89,508（上限 106,365，1.26 倍）、15 次
+  OK D008 ai120 C 檔從正上方點正面突出的凸窗、門廊、石階：回到那個街區裡的建築：22 個全對（bay2 8、bay 14）
+  OK D004／D005／D012／D014 手機直式：☰ 選單在畫面內，街區 B／C 兩檔（D014 起沒有 A）；D012 起預設 C（選單上 C 亮著）；點 B 換檔、網址帶 blocks=b，再點 C 回預設、網址拿掉 blocks；鏡頭不動；面板上沒有「D003 現況」：{"n":2,"labels":["B 照實驗線","C 超街區補滿"],"inView":true,"on0":"C 超街區補滿","m0":"c","m1":"b","url1":"?sample=seed516&at=36%2C36&zoom=2.4&streetArt=legacy&blocks=b","menuClosed":true,"on1":["city:seed516","blocks:b"],"m2":"c","url2":"?sample=seed516&at=36%2C36&zoom=2.4&streetArt=legacy","closed2":true,"on2":["city:seed516","blocks:c"],"camSame":true,"d003":false}
+  OK D011：「D003 現況」只剩網址 ?blocks=off（守衛用）：blockMode null
+  OK D010 起步城：第 1 天、電廠與警察局 2 棟、歷史只有匯入一筆（讀檔重挑外觀 0 棟）；載入時不自動播放、靜止不重畫：第 1 天、2 棟、1 筆、重挑 0 棟、播放 false、靜止 1 秒 0 幀
+  OK D010 瀏覽器推 120 天的狀態雜湊＝Node 跑的（同一份程式、同一個種子）：瀏覽器 23c97f48、Node 23c97f48；第 121 天 人口 371、住商工 56／0／29
+  OK D010／D012 手機預算：起步城第 121 天（預設 C 檔）三角形 ≤ 118,884（D003 種子城基線 1.5 倍）、draw call ≤ 18；住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）；畫面非空白：45,092 個、16 次；C 檔 住商工 85 格、沒畫 0、重疊 0、街區 60 塊（補切 9）、畫到 87 棟；變異數 694.3
+  OK D010 重建一次場景：CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D012 起是 C 檔；D015 起量整張重建）：181、23、23 ms，中位數 23
+  OK D010 播放：10 天／秒播 1.5 秒會推進、畫面會畫、會重建；按暫停就停：{"day":15,"f":29,"rebuilds":5,"playing":false,"speed":10}
+  OK D010 建築卡：逐日模擬長出來的建築，卡上列出它哪一天長出來：清運全城沒有垃圾場；容量不夠，每棟幸福 −15.0；離垃圾場沿路太遠，幸福 −4.5／糧食供糧率 9%（需求 33：本地 0＋進口 3，進口額度 3）；每天幸福 −4.5
+  OK D010 建築卡：模擬推進 30 天後，匯入建築的匯入日與存檔屋齡不變：第 1 天從 2D 實驗線 v13.43 匯入 3D（這之前的歷史 2D 存檔沒有記）／約第 1 天蓋起（由 2D 存檔的 age=0 推算，只是估計）
+  OK D010 建築卡：卡片開著時升級，逐日重建後卡上的等級跟著變（D025 起用 AI 城當「我的城」：起步城 120 天沒有升級，跟實驗線一致）：(35,38) 住宅・1 級・佔地 1×1・有電・沒水 → 住宅・2 級・佔地 1×1・有電・有水・施工中，第 1／9 天
+  OK D010 播放中切換城市：模擬停掉、不替丟掉的場景重建：{"rebuild":false,"sim":null,"sample":"seed516"}
+  OK D010 手機直式：播放鈕、三檔速度都在畫面內；顯示第幾天（D011 起在下方工具列）：{"dock":true,"play":true,"speeds":3,"speedsIn":true,"label":"第 1 天"}
+  OK D012 測試出口 __gt.loadSample('constructor')、__gt.menu('blocks:constructor'／'blocks:__proto__')：不認得就不動（審查：之前 in 檢查會放行）：{"ls":{"ok":false,"error":"沒有這座城"},"sample":"mine","m0":"c","mode":"c","sameUrl":true}
+  OK D012 產生存檔碼丟例外（歷史裡塞一筆不認得的事件）：自動存檔不寫、講原因，匯出不開對話框、講原因，頁面沒有錯誤；拿掉之後恢復自動存檔：{"r1":false,"kept":true,"t1":"⚠️ 沒辦法自動存檔：存檔碼產生失敗（存檔：不認得的事件 bogus）。請從 ☰ 匯出分享碼備份","dlg":false,"t2":"⚠️ 匯出失敗：存檔：不認得的事件 bogus","r2":true,"t3":"已恢復自動存檔","had":true}；頁面錯誤 0
+  OK D012 網址 ?blocks=constructor、?blocks=__proto__：照預設開 C 檔（選單上 C 亮著、建築卡寫「C 檔」），頁面沒有錯誤：constructor：檔位 c、選單亮 ["blocks:c"]、網址「?sample=seed516&blocks=constructor&streetArt=legacy」、卡片「街區 1×1C 檔・原型 villa・起點 (2」、變異量 4335.1｜__proto__：檔位 c、選單亮 ["blocks:c"]、網址「?sample=seed516&blocks=__proto__&streetArt=legacy」、卡片「街區 1×1C 檔・原型 villa・起點 (2」、變異量 4335.1；頁面沒有錯誤
+  OK D012 網址 ?sample=constructor：照預設開（沒有存檔＝新城，一開就是我的城），頁面沒有錯誤（D012 之前開頁就丟例外、停在載入）：樣本 mine、第 1 天、1 筆、檔位 c；頁面沒有錯誤
+  OK D012 網址 ?tone=constructor、?style=constructor（城市模式、300 年示範）：照預設開、畫得出來，頁面沒有錯誤：tone：明暗 d、變異量 4335.1；style：變異量 4335.1；300 年示範 style：變異量 3722.4；頁面沒有錯誤
+  OK D012 網址 ?blocks=b 照樣是 B（照實驗線）：選單上 B 亮著、網址留著 blocks=b、建築卡寫「B 檔」：檔位 b、選單亮 ["blocks:b"]、網址「?sample=seed516&blocks=b&streetArt=legacy」、卡片「街區 1×1B 檔・原型 villa・起點 (3」、變異量 4268.2
+  OK 零外部請求：所有網路請求都只連 127.0.0.1：共 53 個請求
+  OK console 零錯誤：0
+  OK D011 開局：沒有存檔時進新城（標準難度、$3000、第 1 天、暫停；歷史只有匯入一筆，讀檔重挑外觀 0 棟），立刻存成「我的城」；提示第一步「選路」：{"day":1,"seed":5162026,"pop":0,"jobs":0,"happy":0.6,"dem":[0.5,0,0],"events":1,"rebuilds":0,"playing":false,"speed":1,"buildings":0,"money":3000,"diff":1,"msIdx":0,"bestStar":0,"coach":"① 選「路」，在草地上按住拖出一條路","restyled":0}
+  OK D011 手機直式 412×860：狀態列、工具列（7 種工具、播放、速度、復原）、☰ 選單都在畫面內，每顆按鈕 ≥ 44×44 px：{"buttons":13,"tools":7,"small":[],"out":[],"hud":true,"dock":true,"menuIn":true,"menuItems":20,"itemsSmall":0}
+  OK D011 一指拖路：拖曳中逐格預覽與總價、鏡頭不動；放開才蓋，扣的錢＝預覽總價；五級路按鈕都在畫面內、≥ 44 px；預覽只多 1 個 draw call：拖 12 格（第 27 列）、預覽 $180、實扣 $180、事件 +12、draw call 12→13；鏡頭 沒動
+  OK D011 選著工具時：兩指捏合縮放、兩指拖平移（實驗線兩指不能平移，本線加上），都不蓋東西：縮放 2.20→7.48、平移 0.80 格、資金與事件不變
+  OK D011 點一下蓋電廠扣 $550；拆除點一下拆一格路扣 $2；按 ↩ 路回來、退 $2、歷史多一筆 undo：電廠 2820→2270（1 棟）、拆 →2268、復原 →2270
+  OK D011 空地卡：列出這一格第幾天鋪了什麼路、花多少：交通容量 2；讀檔之後第 4 天才有通勤車流（每 4 天算一次路徑）／第 1 天鋪了支路（$15）
+  OK D011 路的等級：點「快速路」拉 12 格扣 $1,440；錢只夠幾格時只蓋前段：2270→830；第二條只蓋 6 格（夠 6 格）→ $110
+  OK D011 框選分區：總價超過資金整塊不蓋（實驗線原句「資金不足」）；夠就逐格蓋、扣的錢＝預覽總價：4×4 格 $128 > $110：沒蓋（資金不足！需要 $128）；3 格 $24：蓋了
+  OK D011 存檔：重新整理後「我的城」還在（讀檔前的歷史逐筆是讀回來的前綴、多出來的只有讀檔重挑外觀的 restyle〔D012〕；天數、建築、資金照實驗線取整），歷史重播成功；清掉存檔回到新城：37 筆 → 37 筆（restyle 0、__gt.restyled() 0）、第 1 天、$86；歷史 37 筆重播成功（日誌 37 列＋存檔 0 列）
+  OK D011 建造流程與存檔：零外部請求、console 零錯誤：共 7 個請求；這一段 80.1 s
+  OK D011 沙盒（起步城 df 3）：蓋東西不扣錢（實驗線 51505）：快速路 3 格、資金 99999999→99999999
+  OK D011 沙盒：零外部請求、console 零錯誤：共 2 個請求；這一段 3.9 s
+  OK D011 手機預算：放開手指到畫出結果（規則＋事件＋重建場景＋存檔＋畫一幀）CPU 降速 6 倍下 ≤ 400 ms（三次取中位數）：129、118、80 ms
+  OK D011 手機預算：拖曳中每次更新預覽（算格子、預覽實例、總價標籤）CPU 降速 6 倍下 ≤ 16 ms（只取真的重算的那幾次，判最大值）：24 次：中位數 2.90、P90 3.70、最大 4.00 ms；依序 0.9 0.6 2.1 3.1 2.7 3.5 2.8 2.7 2.9 4.0 2.5 3.7 3.1 3.4 3.5 2.4 2.9 2.2 3.6 3.7 3.0 2.8 2.9 2.6
+  OK D011 手機預算：零外部請求、console 零錯誤：共 3 個請求；這一段 12.2 s
+  OK D011 劇本城在瀏覽器重演（58 筆施工、9 筆復原、1 次亂數對齊、120 天）：狀態雜湊＝Node 跑的（重演四次：不降速三次、CPU 降速 6 倍，四次都相同）：瀏覽器 6d5722e4（不降速三次 6d5722e4、6d5722e4、6d5722e4）、Node 6d5722e4；第 121 天、人口 662、$3203、事件 689
+  OK D011／D012 手機預算：劇本城第 121 天（預設 C 檔）三角形 ≤ 118,884、draw call ≤ 18；住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）；畫面非空白：51,442 個、16 次；C 檔 住商工 129 格、沒畫 0、重疊 0、街區 82 塊（補切 20）、畫了 82／計畫 82、不在住商工上的 0 格；變異數 955.2
+  OK D014 每天同步工地（施工資料、工地網格、前庭樹；沒重建的日子）：劇本城第 61–120 天，不降速平均 ≤ 5 ms；6 倍降速只量：不降速 20 天：平均 0.66、中位數 0.50、最大 1.40 ms｜6 倍降速：平均 1.19、最大 9.20 ms
+  OK D011 驗收 8「推進一天（含結算）≤ 5 ms」：stepDay 自己的牆上時間（src/cityView.ts simDay 量，含結算、不含畫面同步與存檔），瀏覽器不降速（驗收 8 沒寫降速，D010 卡同一條預算在桌機上量；規則 5 的手機代理見下一項）：劇本城第 61–120 天一天一天推，60 天平均，不降速重演三次取最低的一次：平均 3.24 ms（不降速重演三次，各 3.24、3.90、3.48 ms，取最低）；stepDay 自己 60 天：平均 3.24、中位數 3.00、P95 6.50、最大 8.00 ms｜同一套量法 CPU 降速 6 倍：平均 7.92 ms（只量不判，見下下項）
+  OK D011 驗收 8 的寬量法（含畫面同步與重畫的差）：劇本城第 61–120 天一天一天推；量 __gt.simStep(1) 減同一刻的 __gt.simStep(0)，判沒有重建、沒有自動存檔那幾天的平均（不降速重演三次取最低的一次），≤ 8 ms（D030 補：原本判 5 ms，見上面的說明）：平均 3.65 ms（不降速重演三次，各 4.50、5.06、3.65 ms，取最低）；60 天（第 61–120 天）；沒有重建、沒有存檔的 17 天：平均 3.65、中位數 3.60、P95 10.00、最大 10.00 ms；全部 60 天扣重建：平均 7.80 ms（重建 40 天、重建平均 3.48 ms；自動存檔 12 天）；simStep(1) 原始耗時平均 14.26 ms、simStep(0) 平均 3.95 ms｜同一套量法 CPU 降速 6 倍：平均 11.28 ms（只量不判）
+  OK D011 手機預算：推進一天（含結算）CPU 降速 6 倍——只量不判（規則 5 以中階手機為準：這個數沒壓到 5 ms 是已知的缺口，記在卡面「沒做成的事」；判的是上一項不降速的）：寬量法平均 11.28 ms、stepDay 自己 7.92 ms（stepDay 超過 5 ms，見卡面「沒做成的事」）；60 天（第 61–120 天）；沒有重建、沒有存檔的 17 天：平均 11.28、中位數 7.20、P95 43.60、最大 43.60 ms；全部 60 天扣重建：平均 18.10 ms（重建 40 天、重建平均 6.41 ms；自動存檔 12 天）；simStep(1) 原始耗時平均 31.43 ms、simStep(0) 平均 8.67 ms｜stepDay 自己 60 天：平均 7.92、中位數 4.00、P95 27.70、最大 53.70 ms｜不降速：寬量法 3.65 ms、stepDay 3.24 ms
+  OK D011 電不夠：要用電的住商工多過電廠容量時提示「⚡ 電不夠了」、狀態列的電變紅；容量夠了兩個都消失（一座燃煤電廠約供 75 棟，實驗線 52473、55008）：劇本城第 121 天 129/135（電廠 2 座）→ 拆掉 1 座：129/135（沒紅）「沒有提示」 → 129/67（紅）「⚡ 電不夠了：129 棟要用電、電廠只供 67 棟，再蓋一座電廠（一座約供 75 棟）」；復原後 129/135
+  OK D012 劇本城重新整理（第一次讀檔）：照實驗線重挑外觀——歷史＝讀檔前的歷史逐筆＋restyle，筆數＝__gt.restyled() > 0；restyle 逐筆（日子、格、v）與每一棟住商工的 v＝Node 存檔再讀檔算的：歷史 691 → 757 筆（restyle 66）、__gt.restyled() 66、Node 66 筆逐筆相同；住商工 129 棟的 v ＝ Node；「歷史 691 筆重播成功（日誌 691 列＋存檔 0 列）」
+  OK D012 劇本城讀檔重挑之後，預設 C（網址沒帶 blocks）：住商工每一格剛好一個街區畫（沒畫 0 格、重疊 0）、每一棟都畫到，街區計畫逐塊＝Node；手機預算：三角形 ≤ 118,884、draw call ≤ 18：C 檔 住商工 129 格、沒畫 0、重疊 0、街區 85 塊（補切 20）＝ Node；畫到 133／133 棟；51,378 個三角形、16 次
+  OK D012 建築卡不列 restyle：讀檔時被重挑外觀的每一棟，卡片跟讀檔前逐列相同（只有街區那一列會變：v 換了原型；D020 的清運、D022 的糧食、D025 的市場、D027 的通勤與交通壅堵五列是當下狀態、不比），沒有一列講重挑外觀：66 棟，不對 0；例 (34,24)：清運不貼路，垃圾車到不了：幸福 −6／糧食推進一天之後才算得出來（供糧率看全城的食物與進口）／污水沒接管：沒有貼著水管（腳印與四邊外一圈要碰到水管）／通勤讀檔之後第 124 天才算得出來（每 4 天重算一次住宅到最近商業或工業的路距）／交通壅堵半徑 2 格內沒有過載的道路，不扣分／第 1 天劃成住宅區（$8）／第 8 天長出來（逐日模擬，1 級）／街區 1×1C 檔・原型 town・起點 (34, 24)・畫法用起點的 1 級／第 1 天從 2D 實驗線 v13.43 匯入 3D（這之前的歷史 2D 存檔沒有記）
+  OK D012 劇本城從 ☰ 選單切 B（照實驗線）：網址帶 blocks=b，街區計畫＝Node 照實驗線切分算的，實驗線沒畫的住商工格（D0＋被吸收）又鋪回草坪、其他依 k 上色；再點 C：網址拿掉 blocks，每一格住商工都依 k 上色（villa 看重挑之後的 v），沒有草坪：B：網址「?streetArt=legacy&blocks=b」、街區 59 塊＝ Node、草坪 43 格（D0 37＋被吸收 6）、畫到 90／133 棟、地坪不對 0 格；C：網址「?streetArt=legacy」、住商工 129 格、地坪不對 0 格
+  OK D012 手機預算：劇本城第 121 天讀檔重挑之後（C 檔）重建一次場景，CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；同 D010 起步城那一項；D015 起量整張重建）：164、28、31 ms，中位數 31
+  OK D012 劇本城再重新整理一次（第二次讀檔）：重挑 0 棟、歷史逐筆不變、存檔碼逐字相同（實驗線讀檔、存檔、再讀一次也是 0 棟）；網址沒帶 blocks＝預設 C：__gt.restyled() 0；歷史 757 筆相同；存檔碼 33,536 字元逐字相同；C 檔；「歷史 757 筆重播成功（日誌 691 列＋存檔 66 列）」
+  OK D011 讀檔後過第一天之前：狀態列人口「—」、幸福「—」（不顯示還沒算的 0）；推一天之後是數字：住宅 89 棟；讀檔後 人口「—」「幸福 —」→ 推一天 人口「662」「幸福 0.33」
+  OK D012 手機預算：劇本城（C 檔、有住商工）放開手指到畫出結果，CPU 降速 6 倍下 ≤ 400 ms（三次取中位數；D011 那一項在空的新城量）：C 檔、住商工 131 格；171、117、119 ms，中位數 119
+  OK D012 手機預算：劇本城（C 檔）拖曳中每次更新預覽，CPU 降速 6 倍下 ≤ 16 ms（只取真的重算的那幾次，判最大值）：23 次：中位數 3.30、P90 5.10、最大 6.10 ms
+  OK D011 劇本城：零外部請求、console 零錯誤：共 11 個請求；這一段 72.1 s
+  OK D011 換城（審查阻斷）：我的城有還沒存的 3 天，從選單 我的城→起步城→我的城→種子城、再重新整理：存檔還是玩家的城（df 1、歷史、天數、資金），那 3 天也在（讀檔多出來的只有重挑外觀的 restyle，D012）；開頁提示「已接著上次的城繼續」：我的城第 4 天（存檔停在第 1 天）、8 筆、$2867.58；選單 true/true/true；換回我的城第 4 天、df 1、8 筆（restyle 0）；重新整理：mine 第 4 天、8 筆（restyle 0）、$2868、df 1、存檔 8 筆；「已接著上次的城繼續」
+  OK D011 播放中換城：10 倍速播著、存檔落後幾天時換到起步城再換回來，天數不倒退、歷史沒少（換城前先用舊城自己的身分存；讀檔多出來的只有 restyle，D012）：換城那一刻第 26 天（存檔停在第 24 天）、8 筆 → 換回來第 26 天、8 筆（restyle 0）、存檔第 26 天
+  OK D011 已經在我的城又從選單選我的城：不重讀——天數、資金不倒退，歷史逐字相同（沒有多 restyle），存檔跟上：第 29 天（存檔第 26 天）、8 筆 → 選了之後第 29 天、8 筆（相同）、$2855.58、存檔第 29 天
+  OK D011 自動存檔失敗（空間滿了）：跳通知「沒辦法自動存檔」、狀態列掛「⚠ 未存檔」、存檔不動；恢復之後下一筆就存上、通知「已恢復自動存檔」、標記拿掉：失敗：「⚠️ 沒辦法自動存檔：瀏覽器的儲存空間滿了。請從 ☰ 匯出分享碼備份」、標記「⚠ 未存檔」78×44、存檔沒動；恢復：「已恢復自動存檔」、標記拿掉了、存檔 17 筆＝17
+  OK D011 讀檔時歷史跟存檔對不上（存檔裡一筆路的等級被改過）：開頁提示講原因「歷史跟存檔對不上…」，不說「已接著上次的城繼續」：改第 2 筆（第 1970 格）；提示「歷史跟存檔對不上，只用存檔：第 1970 格的地面不同」
+  OK D011 開頁時存檔讀不出來：頁面沒有例外；原檔原樣另存 gt3d.v1.save.bad、開一座新城（第 1 天、$3000）並存成我的城；提示「存檔讀不出來…」：__gt.sample＝mine、.bad＝"not-a-code"、新城第 1 天 $3000 1 筆、存檔 第 1 天 1 筆；「「我的城」存檔讀不出來（不是有效的分享碼：含有 base64 以外的字元）；原檔另存在 gt3d.v1.save.bad，先開一座新城」；頁面錯誤 +0
+  OK D011 網址 ?sample=newcity 而且已經有我的城：先問「會蓋掉目前的我的城」；回答不要＝開我的城（歷史＝存檔那份逐筆＋讀檔重挑外觀的 restyle，D012）、存檔一個字都沒動；回答要＝開新城、立刻存成我的城（1 筆、$3000）：不要：問了 1 次、開 mine（存檔 6 筆 → 6 筆，restyle 0）、存檔沒動；要：問了 1 次、開 mine、存檔 1 筆 $3000
+  OK D011 localStorage 隔離（卡面第 7 節）：先放好的實驗線鍵 glimmerville.v1、glimmerville.v1.slot 整段做完逐字沒變；本線寫進去的鍵都是 gt3d. 開頭：本線的鍵：gt3d.v1.save.bad、gt3d.v1.save；實驗線的鍵沒動
+  OK D011 換城與存檔：零外部請求、console 零錯誤：共 12 個請求；這一段 76.7 s
+  OK D011 介面不穿透：選著「電」，點在通知、天數、播放列空白／現場內邊距、兩顆工具鈕之間、提示列、資金上：底下都是介面（不是畫布），真的點下去什麼都不蓋（底下那一格本來蓋得了電廠）：通知 DIV 底下 [12,4]；天數 SPAN#siteDay 底下 [43,32]；播放列空白／現場內邊距 BUTTON#siteGuide 底下 [41,33]；工具鈕之間 DIV#tools 底下 [42,38]（工具變成 zc）；提示列 DIV#coach 底下 [39,31]；資金 SPAN 底下 [7,5]；資金 3000→3000
+  OK D011 狀態列資金往下取整（實驗線 64849）：$549.6 顯示「$549」，點一下蓋電廠（$550）不蓋、提示「錢不夠」；−$0.4 顯示「−$1」、變紅：「$549」；點 [17,2]（預覽 1 格 $550）：事件 +0、資金 549.6、「錢不夠」；−0.4 →「−$1」stat money bad
+  OK D011 路的點一下：手指抖 6 px 跨過格線，放開只蓋按下那一格（實驗線 8 px 才跟手）；框選分區同樣動 6 px 就跟到第二格（實驗線立刻跟）：路 [21,8]→[22,8] 動 6.0 px：[["road",21,8]]；住宅區 [20,9]→[21,9]：拖曳中 b＝[21,9]、預覽 2 格，放開 [["zone",20,9],["zone",21,9]]
+  OK D011 總價標籤：一指拖路拖進下方工具列時，標籤收在工具列上緣之上、整個看得到（不被蓋住）；錢不夠（$10）時標籤變紅：手指那一格在 y＝828、工具列上緣 635；標籤「支路・可建 25／略過 0
+估價 $375・現有 $2,969」579–629；錢不夠：「支路・可建 24／略過 0
+估價 $360・現有 $10・缺 $350
+逐格嘗試，後面的便宜格仍可能完成」紅、下緣 629
+  OK D011 兩指捏合、抬起一指、再放一指下去拖、全部放開：什麼都不蓋（實驗線第二指一落下就取消，62787–62799；全部放開之前不開新的一筆）：抬起一指後按著 1 指；放回去那一指按在 [26,19]（蓋得了路）、拖曳中 stroke＝null、按著 2 指；事件 +0、資金 3000→3000
+  OK D011 第一指落在地圖外、第二指落在地上，兩指捏合：什麼都不蓋、鏡頭照樣縮放（審查：之前第二指那一格蓋了一條路）：第一指 (24,180) 格子 null、第二指 (152,308) 格 [1,2]（蓋得了路）；事件 +0、資金 3000→3000、縮放 0.60→0.92
+  OK D011 360×740：七顆工具鈕、五級路的鈕、建築卡的 ✕、對話框的匯出／取消都 ≥ 44×44 px；點 ✕ 關得掉卡片：工具 45.7×58、路 64×44、✕ 44×44、對話框 72×44／72×44；點 ✕ 之後卡片關了
+  OK D011 360×740 對話框（審查：.sub 樣式外漏、取消被播放列蓋住）：建築卡與對話框的副標題不是 grid；「匯出」「取消」正中間點到的就是鈕本身；對話框開著時播放鈕的位置點到的不是播放鈕（對話框在介面之上）；點「取消」關得掉：對話框開了；副標題 display block／block；匯出 self、取消 self；播放鈕那一點 DIV#dlg；取消之後關了
+  OK D011 整頁不縮放：兩指從工具列開始捏合，整頁留在原本大小（visualViewport.scale＝1）；對照：一樣的捏合在 touch-action:auto 的方塊上會把整頁放大（對照在這一段最後做）：工具列上捏合：之前 1、之後 1（工具 plant→plant）；對照 1 → 5.00 倍
+  OK D011 觸控與版面：零外部請求、console 零錯誤：共 3 個請求；這一段 21.4 s
+  OK D011 鍵盤：☰ 選單開著時按 3 不換工具、空白鍵不播放，Esc 關掉選單；貼上分享碼的對話框開著時 Esc 關掉它（對照：什麼都沒開時 3＝選「商」、空白鍵播放／暫停、Esc 放下工具）：對照 3→zc、空白鍵→true/false、Esc→null；選單開著 3、空白鍵之後 工具 null、播放 false、選單開著，Esc→選單關了；對話框開著（焦點 TEXTAREA），Esc→關了
+  OK D011 桌機 1280×800 播放中（10 倍速）用滑鼠點（按下與放開隔 100 ms）：點播放鈕正中間 10／10 次暫停；路的等級 10／10 次換到：暫停 10／10（第 1→40 天）；路的等級 10／10（還在播，到第 73 天）
+  OK D011 分享碼裡的 HTML（存放型 XSS）：從對話框貼上三張動過手腳的碼、打開那一格的卡片，頁面上沒有注入的元素、onerror 沒跑；歷史欄位裡的 HTML（hv 1 的 day、hv 2 的數字欄）擋下、提示「歷史重播失敗…」；gameVer 的 HTML 歷史接得上、卡片當字照印：hv 2 改第 2 列 [4,72,27,23,1,8,1]（是劃區那一筆）；(a) mine、注入元素 沒有、img 0、__pwned null、「歷史重播失敗，只用存檔：歷史第 2 筆的日子不對」、提示「歷史重播失敗，只用存檔：歷史第 2 筆的日子不對」；(b) mine、注入元素 沒有、img 0、__pwned null、「歷史重播失敗，只用存檔：歷史第 2 筆的座標不對」、提示「歷史重播失敗，只用存檔：歷史第 2 筆的座標不對」；(c) mine、注入元素 沒有、img 0、__pwned null、「歷史 4 筆重播成功」、卡片：第 1 天從 2D 實驗線 v<img id=pwn2 src=x onerror="window.__pwned=2"> 匯入 3D
+  OK D011 桌機滑鼠鍵盤與分享碼：零外部請求、console 零錯誤：共 3 個請求；這一段 19.2 s
+  OK D014 驗收 2：樓體照屋齡露出（只畫那一格的建築、從側面量最高點）：屋齡 0–2 沒有任何像素；4–8＝地基＋實驗線 riseF×樓高（±1 像素）；完工的＝幾何最高點：0：全藏、1：全藏、2：全藏、3：沒有、4：0.30／0.30、5：0.50／0.50、6：0.68／0.68、7：0.84／0.84、8：0.96／0.96；完工 #3 0.71／0.71
+  OK D014：建築卡寫「施工中，第 N／9 天」：住宅・1 級・佔地 1×1・有電・沒水・施工中，第 9／9 天
+  OK D014 驗收 2：沒有工地的城（種子城，屋齡 18–59）加了裁切＝整個關掉裁切，逐像素相同（預設縮放，風化不畫）：354,320 像素、不同 0；工地 0、風化 0
+  OK D014 驗收 3：工地天天跟著城市走（起步城走播放那條路、一天切四步、60 天）：每一步工地集合＝屋齡 < 9 的建築；t ≥ 3.05 的一定已經有樓體；同一棟的露出比例不下降：240 步、工地最多 26 座、露出比例下降 0 次
+  OK D014 驗收 8：每一次重建，地面增量結果＝同一組輸入整張重畫（瀏覽器，起步城播放 60 天）：重建 18 次、相同 18 次
+  OK D014 驗收 4：沒有突然冒出來——1 倍速真的播放 20 秒（CPU 降速 6 倍），每一幀檢查：每一棟樓體第一次出現在場景裡時 t < 3.05（露出 < 5%）；t ≥ 3.05 的都已經有樓體：310 幀、推到第 23 天、第一次出現 49 棟；太晚出現 0（[]）；沒有樓體 0 幀
+  OK D014 驗收 7：動畫只在播放時走：暫停 0.8 秒動畫時間不變（播放 20 秒後 > 0）：19.77 → 19.77
+  OK D014 驗收 5：手機預算——起步城工地最多的那一天（C 檔、預設縮放）全部三角形 ≤ 118,884、draw call ≤ 20（D012 的 18＋工地的主畫面與影子各一）：第 9 天、工地 26 座（12,990 個三角形）：全部 64,552 個、17 次；不含工地 38,572 個、15 次
+  OK D014 驗收 5：手機預算——AI 城（只能看、29 座工地、預設 C）全部三角形 ≤ 118,884、draw call ≤ 20：工地 29 座（12,630 個三角形）：全部 114,768 個、17 次；不含工地 89,508 個、15 次
+  OK D014 驗收 9：風化——種子城拉近（實驗線縮放 ≥ .9）：屋齡 13→300 受光面、側面的牆變暗；屋齡 13（差一天到門檻）＝整個關掉風化，屋齡 14 起就畫（門檻照實驗線 age>=14）；縮放 < .9 不畫；英美立面街區沒有風化牆（conAgeShift(-s) 把屋齡設成 s−1）：縮放 2.51：13→300 26,391 像素、平均亮度 -35.74；13＝關掉 相同；13→14 15,009 像素；縮放 0.85（< .9）13→300 0 像素；風化牆三角形 核心 2,466、英美立面 0
+  OK D014 驗收 10：近看小物只在實驗線縮放 ≥ 1.22 時畫；種子城畫了、9 種都有（花台、花、垃圾桶、立牌、冷氣機、工安斜紋、棧板、貨箱、立管）：縮放 1.10 不畫、1.30 畫；762 件：ac 127、bin 67、crate 54、flower 37、pallet 149、pipe 80、planter 96、sign 64、stripe 88
+  OK D047 current full gallery: fresh/incremental geometry match; only intentional D047/D056 art changes, exact triangle golden and city/ground/tree counts retained：{"diff":[],"k51":125,"triangles":636,"expected":636}
+  OK D015 驗收 1：首次建逐位元組＝黃金樣本（8c6ccf6 整張建錄的；三個建築網格每一種頂點屬性照畫的順序、主人、地面、樹、包圍盒、點綴件數、窗樣式、風化牆、施工資料……；gallery 明確使用 D047 保留舊 k51 配方，現行造型另驗）：10 個情境：seed516-a、seed516-b、seed516-c、seed516-off、ai120、gallery、newcity、starter-d0、starter-d60、starter-d120
+  OK D015 驗收 2：增量建＝整張重建——起步城走播放那條路 60 天，每一次重建之後，跟旁邊另建一份（自己的快取、從頭建）比：三個網格照主人分組的三角形（不分順序、空洞不算）、查詢結果、地面貼圖、樹都一樣；快取只留這一次的件：重建 18 次，全部一樣；最後一次 61 件、空洞 58/1278、6/1000、346/4268 個三角形；搬了 6 件、整份重排 0 次
+  OK D015 驗收 4：只做變動的部分——每一次重建重做的件數中位數 ≤ 全部的 20%、上傳的位元組（建築三個網格＋地面＋野樹）中位數 ≤ D015 之前整份的 15%：重做 13.2%（9、8、9、7、5、5、3、4、9、11、9、7、5、3、1、0、0、0 件）；上傳 4.4%（中位數 89 KB，整份 2330 KB）；容量放大 2 次（第 13 天 778 KB、第 39 天 1136 KB）；野樹沿用 18／18 次
+  OK D015 驗收 7：不漏——起步城 60 天，最後五次重建的幾何、貼圖、著色器程式數不多於最前面五次（renderer.info；災禍標記的寶石網格第一次畫時多的一個幾何與一個程式扣掉）：幾何 13/13/13/13/13 → 14/14/14/14/14；貼圖 8 → 8；程式 18 → 18（扣掉寶石網格之後）；最後五次寶石畫過 5 次
+  OK D015 驗收 5：同一頁裡，增量重建的 JS（建場景＋同步工地，不含容量放大那幾次）≤ 整張重建的一半（不看機器快慢；成對量、每對算比值、取中位數，≥ 10 對；D025 起量在 AI 城 399 棟上）：18 對，比值中位數 0.15（最小 0.10、最大 0.34）；增量 9.4 ms、整張 63.1 ms（各取中位數）
+  OK D015 驗收 2：增量建＝整張重建——D011 劇本城重演 120 天（施工、拆除、復原、推進），每一次重建之後都比：到第 121 天、58 筆施工、重建 136 次，全部一樣；上傳合計 8558 KB（D015 之前 320312 KB，2.7%）
+  OK D015 驗收 3：畫面逐像素相同——起步城播放到第 30、60 天，增量建的畫面＝當場整張重建的畫面（整張地圖、拉近到建築中心讓近看小物開；兩個鏡頭都先拍增量那一份）：第 30 天整張地圖：354,320 像素、不同 0（增量那一份空洞 64 個三角形）；第 30 天拉近（近看小物開）：354,320 像素、不同 0（增量那一份空洞 64 個三角形、近看小物開）；第 60 天整張地圖：354,320 像素、不同 0（增量那一份空洞 524 個三角形）；第 60 天拉近（近看小物開）：354,320 像素、不同 0（增量那一份空洞 524 個三角形、近看小物開）
+  OK D016 驗收 4：手機 360×740 按「公共設施」跳出 18 種可選（D019 起多了水塔、配水管），名稱與造價照實驗線工具列（CIVIC_TOOLS）；18 顆設施鈕與 7 顆工具鈕都 ≥ 44×44、在畫面內；設施那一排在播放列上面、不蓋住它；組按鈕預設「警 $500」：360×740；公園 $60、水塔 $400、配水管 $10、消防局 $400、警察局 $500、派出所 $250、醫院 $600、診所 $250、學校 $350、圖書館 $280、郵局 $320、墓園 $350、垃圾場 $300、污水廠 $500、油井 $1300、礦場 $1500、氣井 $1400、太空 🔒Lv.22；設施那一排底 610.0 ≤ 播放列頂 618.0；工具鈕 45.7×58、設施鈕 45.7×44
+  OK D016 驗收 4：十種每一種真的點一下（觸控），選到的就是那一種；組按鈕上的字（警、派、消、醫、診、學、圖、郵、墓、園）、價錢、亮起來的那一顆都跟著換：園水管消警派醫診學圖郵墓垃污油礦氣太
+  OK D016 驗收 4：真的觸控從按鈕到蓋好一種設施——選「醫院」、點一下空地：資金 −600、歷史多一筆 place（k 12、那一格、$600）；放下工具點那一格，建築卡寫「醫院」：(28,16)：$3000→$2400、事件 {"day":1,"t":"place","x":28,"z":16,"k":12,"lv":1,"v":0,"id":1,"cost":600,"g":1}；建築卡「醫院（28, 16）」醫療・1 級・佔地 1×1・施工中，第 1／9 天
+  OK D016 驗收 4：公園照實驗線走框（isRectTool 62750）——一指拖出 2×2，蓋 4 座、扣 $240：4 座公園、$2400→$2160、事件 +4
+  OK D016 驗收 4：沙盒（起步城 df 3）18 種（D019 起多了水塔、配水管）都寫「免費」（城市等級還沒到的寫「🔒Lv.22」）、組按鈕也寫「免費」：{"sub":["免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","免費","🔒Lv.22"],"g":"免費"}
+  OK D016 手機介面（360×740）：零外部請求、console 零錯誤：共 4 個請求；這一段 75.3 s
+  OK D016 驗收 5：起步城（沙盒）空地上蓋九種各一棟（跟手勢同一條路），每一種場景裡都有它（主人三角形數 > 0）：park(0,0) 10、fire(2,0) 180、policeBox(4,0) 36、hospital(17,0) 228、clinic(19,0) 212、school(22,0) 260、library(24,0) 134、post(26,0) 178、cemetery(28,0) 94
+  OK D016 驗收 5：公園不施工、其他 8 種蓋下去就是工地（D014 的 9 天工期）；推 9 天之後工地都收掉、九棟都還在場景裡：蓋下去當天在工地上的：fire、policeBox、hospital、clinic、school、library、post、cemetery；9 天後還在工地的 0 棟
+  OK D016 驗收 5：蓋完那一次與往後 9 天每一次重建，增量重建的場景＝旁邊整張重建的（D015 的比法：照主人分組、查詢、地面、樹）；至少比 3 次：＝＝＝＝＝＝＝＝＝＝（＝一樣、·這一天沒重建；比了 10 次）
+  OK D016 驗收 6：手機預算——蓋了九種之後全部三角形 ≤ 118,884、draw call 跟蓋之前一樣：三角形 47,994 → 60,304、draw call 17 → 17（蓋之前工地 8 座）
+  OK D016 九種都畫得出來：零外部請求、console 零錯誤：共 2 個請求；這一段 4.9 s

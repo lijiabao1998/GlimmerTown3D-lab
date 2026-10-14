@@ -5,6 +5,8 @@
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
 import { fnv1a } from './rng.ts';
+import { CITY_FORMAT } from './eventRegistry.ts';
+export { CITY_FORMAT, eventFormat } from './eventRegistry.ts';
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
 // 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
@@ -12,10 +14,13 @@ import { fnv1a } from './rng.ts';
 // 格式 5（D019）：多了鋪配水管的事件 pipe，拆除多了水管那一層（layer 'wp'）。格式 1–4 照讀；比 5 新的不猜（src/io/save.ts）
 // 格式 6（D026）：多了每天的災禍與玩家的處置——起火 fire、燒毀 burn、犯罪 crime、廢棄 abandon、生病 sick、死亡 death、處置 act（滅火、處理犯罪、治療），拆除多了焦土那一層（layer 'ruin'）。格式 1–5 照讀；比 6 新的不猜
 // 格式 7（D034）：多了合併事件 merge——四棟相鄰同類二級以上住宅或商業合併成 2×2 摩天樓（k33、k34），更快樂的城九格合併成 3×3 巨廈（k105、k106）；吸收的建築成了墓碑。格式 1–6 照讀
-export const CITY_FORMAT = 7;
+// 格式 8（D039）：多了玩家決策與科技完成——政策 policy、服務預算 budget、開始研究 research、選城市方向 spec、研究完成 techdone；沒有座標，是整座城的事（碼表在下面，只往後加）。格式 1–7 照讀
+// 格式 9（D040）：多了資源耗盡事件 depleted——油井、礦場的耗損累積到 240（一口井只記一次）。格式 1–8 照讀
+// 格式 10（D045）：多了市長委託事件 cms——接受 accept、放棄 drop、完成 done（帶獎金）、過期 expire；沒有座標，是整座城的事（碼 24，委託碼表在下面，只往後加）。格式 1–9 照讀
 // 存檔寫的格式看歷史裡有什麼（D019、D026）：有災禍事件、拆焦土才寫 6；有鋪水管、拆水管的事件寫 5；都沒有就寫 4——比這一版舊的程式（認到 4 或 5）照樣讀得回來，
 // 沒有水管、沒有災禍的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
-export const eventFormat = (e: CityEvent) => e.t === 'merge' ? 7 : HAZARD_EVENTS.includes(e.t) || (e.t === 'doze' && e.layer === 'ruin') ? 6 : e.t === 'pipe' || (e.t === 'doze' && e.layer === 'wp') ? 5 : 4;
+// D046：事件碼、列欄位與最早格式統一登記在 eventRegistry.ts；這裡保留既有匯出介面。
+export const DECISION_EVENTS: readonly string[] = ['policy', 'budget', 'research', 'spec', 'techdone'];
 export const HAZARD_EVENTS: readonly string[] = ['fire', 'burn', 'crime', 'abandon', 'sick', 'death', 'act'];
 
 // 體育場（k 9）的大小存在建築那筆的第 6 位（實驗線 load 66900），沒有就是 2。實驗線只會放 2×2（51728），
@@ -69,7 +74,31 @@ export type HazardEvent = FireEvent | BurnEvent | CrimeEvent | AbandonEvent | Si
 // 都成了墓碑（goneDay＝這一天）；巨廈另外清掉九格的分區。新建築的編號＝建築清單長度 + 1。只增不改（規則 4）
 export interface MergeEvent { day: number; t: 'merge'; x: number; z: number; k: number; size: number; v: number; from: number[] }
 export const MERGE_SIZE: Readonly<Record<number, number>> = { 33: 2, 34: 2, 105: 3, 106: 3 };
-export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent;
+// 玩家的決策與科技完成（D039，城市格式 8）。沒有座標：整座城的事。只增不改（規則 4）。
+// 碼表是寫死的字面量（緊湊列存的是碼）：**只往後加，既有的號不改**；守衛核對它們跟政策目錄、預算類別、科技表、專精表現在的順序一致
+export const POLICY_CODES: readonly string[] = ['taxR', 'taxC', 'taxI', 'curfew', 'recycle', 'tourPromo', 'ecoReg', 'freeTransit', 'schoolLunch', 'smokeDetect', 'indSubsidy', 'nightMarket', 'parkNight', 'insurance', 'integratedTransit', 'housingSubsidy', 'inclusionaryHousing', 'stationHousing', 'waterConserve', 'reclaimPriority', 'industrialPretreat', 'spongeCity', 'infrastructureStimulus', 'consumptionSupport', 'industrialRelief', 'completeStreets', 'parkingManagement', 'criticalReserve492', 'emergencyStockpile492'];
+export const BUDGET_CODES: readonly string[] = ['police', 'fire', 'health', 'edu'];
+export const TECH_CODES: readonly string[] = ['A1', 'A2', 'A3', 'A4a', 'A4b', 'A5', 'A6', 'A7', 'A8', 'B1', 'B2', 'B3', 'B4a', 'B4b', 'B5', 'B6', 'B7', 'B8', 'C1', 'C2', 'C3', 'C4a', 'C4b', 'C5', 'C6', 'C7', 'C8', 'D1', 'D2', 'D3', 'D4a', 'D4b', 'D5', 'D6', 'D7', 'D8'];
+export const SPEC_CODES: readonly string[] = ['ind', 'green', 'edu', 'hub'];
+export const CMS_EVENTS: readonly string[] = ['accept', 'drop', 'done', 'expire'];   // D045：緊湊列的委託事件碼（只往後加）
+export const CMS_CODES: readonly string[] = ['steel40', 'steel80', 'trade1200', 'trade3000', 'transit150', 'transit400', 'happy70', 'happy80', 'techC6', 'ct_steel60', 'ct_fuel80'];   // D045：委託碼（＝rules/commission.ts 表的順序，只往後加）
+// 政策或稅率真的改了：稅率值 .5–2（一位小數）；開關 1＝開、0＝關。冷卻中、同值不記；from＝改之前的值
+export interface PolicyEvent { day: number; t: 'policy'; key: string; from: number; value: number }   // from＝改之前的值（歷史不靠起點也讀得出「從多少調到多少」）
+// 服務預算真的改了：值 .5–1.5（兩位小數）
+export interface BudgetEvent { day: number; t: 'budget'; cat: string; from: number; value: number }
+// 開始研究：fee＝這一次扣的錢（已有進度的免費、沙盒免費＝0）；再按正在做的節點不記
+export interface ResearchEvent { day: number; t: 'research'; id: string; fee: number }
+// 選定城市方向（永久、一生一次）
+export interface SpecEvent { day: number; t: 'spec'; id: string }
+// 研究完成（每天研究推進的結果，不是玩家按的）
+export interface TechDoneEvent { day: number; t: 'techdone'; id: string }
+export type DecisionEvent = PolicyEvent | BudgetEvent | ResearchEvent | SpecEvent | TechDoneEvent;
+// 資源耗盡（D040，城市格式 9）：x、z＝井的格子，k＝49（油井）或 50（礦場）。一口井一生只有一筆（耗損不會下降）；讀進來就已經耗盡的井沒有事件
+export interface DepletedEvent { day: number; t: 'depleted'; x: number; z: number; k: number }
+// 市長委託（D045，城市格式 10）：ev＝接受／放棄／完成／過期，id＝委託的 id（碼表 CMS_CODES，同 rules/commission.ts 的表）；bonus 只有完成才有（這一次入帳的獎金）。
+// 接受、放棄是玩家按的，完成、過期是每天結算的結果；沒有座標
+export interface CmsEvent { day: number; t: 'cms'; ev: 'accept' | 'drop' | 'done' | 'expire'; id: string; bonus?: number }
+export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent | DecisionEvent | DepletedEvent | CmsEvent;
 
 export interface City {
   format: number;

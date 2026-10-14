@@ -29,6 +29,10 @@ export interface Tile {
   wr?: boolean;                                         // D019：這一格水管接得到水源（舊式供水網 computeWaterLegacy449 53270／53287 每次重算整張，不存檔）
 }
 export interface World { N: number; tiles: Tile[] }
+// D035：實驗線 load() 66881–66891 讀進格子的旗標層——[存檔欄位, 格子欄位]。讀檔進格子（src/sim/day.ts simFromSave）、本線的施工清掉之後寫回存檔（src/io/save.ts saveCode）、
+// 拆除保護（src/sim/rules/build.ts FOREIGN_LAYERS）共用這張表。沒有進來的：高程 el、鐵路橋 rb、碼頭 dk、路邊停車 pm、洪水 fl、堤防 le、隕石坑 ctr（卡 D035「施工前查到的事」3）
+export const FLAG_LAYERS = [['rc', 'rdec'], ['bs', 'bus'], ['tr', 'tram'], ['bln', 'busLane'], ['ow', 'oneway'], ['tl', 'light'], ['dc', 'deco'],
+  ['hvl471', 'hv471'], ['ugc471', 'ug471'], ['wmn472', 'wm472'], ['smn472', 'sm472']] as const;
 export const idx = (w: World, x: number, y: number) => y * w.N + x;                         // 39731
 export const inMap = (w: World, x: number, y: number) => x >= 0 && y >= 0 && x < w.N && y < w.N;   // 39732
 

@@ -34,14 +34,14 @@ const MUTANTS = [
   ['造價漏了污水廠', 'placeCost', "case 'sewage':c=COST.sewage;break;", "case 'sewage':c=0;break;"],
 ];
 const MUTANTS_3D = [
-  ['污水廠造價 500→501', 'sewage: 500 };', 'sewage: 501 };'],
+  ['污水廠造價 500→501', 'sewage: 500,', 'sewage: 501,'],
   ['污水廠變體 ri(3)→ri(4)', 'k: 27, lv: 1, v: st.rng.ri(3)', 'k: 27, lv: 1, v: st.rng.ri(4)'],
   ['污水廠不清樹', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0;', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.zone = 0;'],
   ['污水廠不清分區', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0; t.zone = 0;', 'k: 27, lv: 1, v: st.rng.ri(3), age: 0, pw: true, h: 1 }; t.tree = 0;'],
   ['鄰水門檻 2→3', "(tt: Tile) => tt.t === 0) < 2) return '需鄰近水域(≥2格)';", "(tt: Tile) => tt.t === 0) < 3) return '需鄰近水域(≥2格)';"],
   ['鄰水範圍 3×3→5×5', 'countNear(w, x, y, 1, (tt: Tile) => tt.t === 0)', 'countNear(w, x, y, 2, (tt: Tile) => tt.t === 0)'],
   ['造價漏了污水廠', "case 'sewage': c = COST.sewage; break;", "case 'sewage': c = 0; break;"],
-  ['canPlace 漏了「只能蓋在陸地上」', "      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';\n      if (t.road || q.rail || t.tram)", "      if (t.road || q.rail || t.tram)"],
+  ['canPlace 漏了「只能蓋在陸地上」', "      const q = seen(t, st.protect);\n      if (t.t !== 2 && t.t !== 1) return '只能蓋在陸地上';\n      if (t.road || q.rail || t.tram)", "      const q = seen(t, st.protect);\n      if (t.road || q.rail || t.tram)"],   // D040：油井、礦場的 case 也有同樣三行（第一行不同），錨點帶上第一行才剛好一處
 ];
 const NEED = {
   'build:sewage': 40, 'civic-reason:需鄰近水域(≥2格)': 30, 'civic-reason:只能蓋在陸地上': 10, 'civic-reason:交通線上不能建造': 5, 'civic-reason:已有建築': 15, 'civic-reason:焦土需先清理': 2, 'civic-reason:隕石坑需先剷除': 2,
@@ -148,10 +148,14 @@ export async function d033BuildGuards(log) {
     catch (e) { baseline = `沒改的 build.ts 在 vm 裡載入失敗：${e.message}`; }
     for (const [name, from, to] of MUTANTS_3D) {
       try {
-        const parts = source.split(from);
+        // D055 adds a second identical terrain sequence; mutate only the original sewage case.
+        const start = name.startsWith('canPlace 漏了') ? source.indexOf("    case 'sewage': {") : 0;
+        const end = name.startsWith('canPlace 漏了') ? source.indexOf('      return null; }', start) + '      return null; }'.length : source.length;
+        if (start < 0 || end <= start) throw new Error('污水廠 case 範圍不存在');
+        const parts = source.slice(start, end).split(from);
         if (parts.length !== 2) throw new Error(`突變錨點不是剛好一處（${parts.length - 1} 處）`);
         let M;
-        try { M = buildModule(parts.join(to)); } catch (e) { throw new Error(`突變後載入失敗：${e.message}`); }
+        try { M = buildModule(source.slice(0, start) + parts.join(to) + source.slice(end)); } catch (e) { throw new Error(`突變後載入失敗：${e.message}`); }
         let d;
         try { d = implAgainst(M, want, ORDER, cases33); } catch (e) { d = { k: -1, text: `執行時例外 ${String(e.message).slice(0, 60)}` }; }
         if (d) detected.push(`${name}：${d.k >= 0 ? `第 ${d.k} 張（${d.c.family}）第 ${d.j} 筆` : d.text}`);

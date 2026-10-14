@@ -1,0 +1,517 @@
+// D048 real Chrome CDP touch (360×740 / 412×860) and desktop keyboard.
+// Android-like emulation only. Storage/IndexedDB failures below are explicit test injections.
+// Run after build: node tools/smoke-d048.mjs. No product source or persistence format is patched.
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
+import { pathToFileURL } from 'node:url';
+import { ROOT, withBrowser, sleep } from './cdp.mjs';
+import { pageSession, grew } from './smoke-d011.mjs';
+import { decodeLabCode } from '../src/io/labcode.ts';
+import { SAVE_LIMIT, loadCode, saveCode } from '../src/io/save.ts';
+import { kindTableFrom } from '../src/content/kindTable.ts';
+import { stepDay } from '../src/sim/day.ts';
+import { cmsLoad3d } from '../src/sim/rules/commissionSave.ts';
+import {
+  d048ReviewCode, d048FixtureManifest, D048_CAMERA, D048_BASELINE_CAMERA, D048_VIEWS, D048_SAVE_KEY,
+  D048_COMMISSION, D048_QUOTA, D048_DENIED, D048_IDB_REASON, D048_IDB_BLOCK,
+} from './d048-scenes.mjs';
+
+const J = JSON.stringify, OUT = path.join(ROOT, 'scratch/shots');
+const UNSAVED = '#stats [data-k="unsaved"]', JOURNAL = '#stats [data-k="journal"]';
+const SECTIONS = ['portrait360', 'portrait412', 'keyboard', 'journal', 'export', 'rng'];
+const ONLY = (process.env.D048_SMOKE_ONLY ?? '').split(',').map(x => x.trim()).filter(Boolean);
+export const d048SkipNote = () => ONLY.length ? `D048 smoke partial: not run ${SECTIONS.filter(x => !ONLY.includes(x)).join(', ') || '(none)'}` : '';
+const sha = x => createHash('sha256').update(typeof x === 'string' || Buffer.isBuffer(x) ? x : J(x)).digest('hex');
+// Exact comparisons, with short failure diagnostics rather than megabytes of city arrays.
+function same(actual, expected, what) {
+  assert.ok(isDeepStrictEqual(actual, expected), `${what}: expected SHA256 ${sha(expected)}, got ${sha(actual)}`);
+}
+const STORAGE_PROBE = `(()=>{
+  const original=Storage.prototype.setItem;
+  window.__d048Storage={original,fault:'',attempts:[],writes:[]};
+  Storage.prototype.setItem=function(k,v){
+    const p=window.__d048Storage;
+    if(this===localStorage&&k===${J(D048_SAVE_KEY)}){
+      p.attempts.push(k);
+      if(p.fault)throw new DOMException(p.fault==='quota'?${J(D048_QUOTA)}:${J(D048_DENIED)},p.fault==='quota'?'QuotaExceededError':'SecurityError');
+      p.writes.push(k);
+    }
+    return original.call(this,k,v);
+  };
+  window.__d048Touches=[];
+  addEventListener('pointerdown',e=>window.__d048Touches.push({type:e.pointerType,trusted:e.isTrusted}),true);
+})()`;
+// save() is the complete ordinary share serialization, including all history. saved is
+// the actual localStorage bytes. Neither simHash nor these bytes contain RNG state;
+// the matched no-reload future trajectory below is the separate RNG regression guard.
+const SNAPSHOT = `(()=>({
+  sim:__gt.sim(),layers:__gt.layers(),buildings:__gt.buildingList(),history:__gt.history(),
+  commission:__gt.simCms(),code:__gt.save(),saved:__gt.saved(),
+  attempts:window.__d048Storage.attempts.length,writes:window.__d048Storage.writes.length,
+  url:location.href,historyLength:history.length
+}))()`;
+const WORLD = `(()=>({sim:__gt.sim(),layers:__gt.layers(),buildings:__gt.buildingList(),
+  history:__gt.history(),commission:__gt.simCms(),code:__gt.save(),lastDay:__gt.lastDay(),dayReport:__gt.dayRep()}))()`;
+// Both rectangles are read synchronously in each browser RAF callback. Export the
+// exact evaluated source so Node/mutation guards can exercise the same bounded loop.
+export const D048_TOAST_LAYOUT_SOURCE = `new Promise(resolve=>{
+  const read=()=>{
+    const rect=sel=>{const e=document.querySelector(sel),r=e.getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height,hidden:!!e.closest('[hidden]')};};
+    return {toast:rect('#toasts'),commission:rect('#commissionHud')};
+  };
+  const before=read(),measurements=[];
+  const sample=()=>{
+    const measurement={frame:measurements.length+1,...read()};measurements.push(measurement);
+    const {toast,commission}=measurement;
+    if((toast.h>0&&toast.t>=commission.b+6)||measurements.length===4)resolve({viewport:[innerWidth,innerHeight],maxFrames:4,before,measurements});
+    else requestAnimationFrame(sample);
+  };
+  requestAnimationFrame(sample);
+})`;
+
+// Also runnable without Chromium: verifies the frozen review bytes and demonstrates
+// that this fixture's subsequent simulation notices a single extra RNG draw.
+export function verifyD048Fixture() {
+  const fixture = d048FixtureManifest();
+  assert.equal(fixture.codeSha256, '7413aadbe93ec7383a82768eb7db9b85b09e7cb2421d18c0396b8b90804b00d5');
+  const KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT,'src/content/lab-kinds.json'),'utf8')));
+  const vrank = JSON.parse(fs.readFileSync(path.join(ROOT,'src/content/samples/d009-live.json'),'utf8')).vrank;
+  const load = () => { const r=loadCode(d048ReviewCode(),KT,vrank); assert.ok(r.ok); return r; };
+  const control=load(), mutation=load();
+  same(control.sim.cms,D048_COMMISSION,'saved legacy fractional commission fixture');
+  const raw=decodeLabCode(saveCode(control.sim,control.template,control.start)).save.raw;
+  assert.equal(raw.cms385.acc,12); assert.equal(raw.cms3d.acc,12.5);
+  same(cmsLoad3d(raw.cms385,raw.cms3d),D048_COMMISSION,'D046 exact precision and 2D-compatible integer');
+  mutation.sim.rng.R(); // deliberate test-only single-draw corruption; no production hook.
+  let detectedAfterDays=null;
+  for(let day=1;day<=20;day++){
+    stepDay(control.sim); stepDay(mutation.sim);
+    if(detectedAfterDays===null&&saveCode(control.sim,control.template,control.start)!==saveCode(mutation.sim,mutation.template,mutation.start))detectedAfterDays=day;
+  }
+  assert.notEqual(detectedAfterDays,null,'fixture must detect one extra RNG draw within the browser trajectory window');
+  return {codeSha256:fixture.codeSha256,fractionalCompatibility:{cms385:12,cms3d:12.5},singleExtraRngDrawDetectedAfterDays:detectedAfterDays};
+}
+
+async function loadFixture(p) {
+  await p.open('sample=seed516&clean=1');
+  await p.ev(`__gt.clearSave();localStorage.setItem(${J(D048_SAVE_KEY)},${J(d048ReviewCode())})`);
+  await p.open('');
+  await p.ev(`__gt.view(${D048_CAMERA.x},${D048_CAMERA.z},${D048_CAMERA.zoom});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
+  assert.equal((await p.ev('__gt.sim()')).playing, false, 'fixture must stay paused');
+  assert.equal((await p.ev('__gt.simCms()')).acc, D048_COMMISSION.acc, 'D046 fractional saved progress must survive load');
+  assert.match(await p.ev("document.querySelector('#commissionHud').textContent"), /12\.5 \/ 40/);
+  await p.ev('__gt.saveNow()'); await p.ev('__gt.journalFlush()'); await p.ev('__gt.saveNow()');
+  assert.ok(await p.waitFor(async () => !(await p.toasts()).length, 4500), 'load notices must fully expire');
+  await p.ev(STORAGE_PROBE);
+}
+async function failSave(p, kind = 'quota') {
+  await p.ev(`window.__d048Storage.fault=${J(kind)}`);
+  assert.equal(await p.ev('__gt.saveNow()'), false, `${kind} injection must reject the actual save`);
+}
+async function settleToasts(p) {
+  assert.ok(await p.waitFor(async () => !(await p.toasts()).length, 4500), 'toast nodes must expire, not only become transparent');
+}
+export function d048KeyEvents(value, shift = false) {
+  const map = { Enter: ['Enter',13], ' ': ['Space',32], Tab: ['Tab',9], Escape: ['Escape',27] };
+  assert.ok(map[value], `unsupported D048 key ${J(value)}`);
+  const [code, kc] = map[value], modifiers = shift ? 8 : 0;
+  // Match native CDP character dispatch, as in Puppeteer's CdpKeyboard. Chromium
+  // activates a button on Enter keypress charCode 13, not keydown alone.
+  // https://github.com/puppeteer/puppeteer/blob/main/packages/puppeteer-core/src/cdp/Input.ts
+  // https://github.com/chromium/chromium/blob/main/third_party/blink/renderer/core/html/html_element.cc
+  const text = value === 'Enter' ? '\r' : value === ' ' ? ' ' : '';
+  return [
+    { type: text ? 'keyDown' : 'rawKeyDown', key: value, code, windowsVirtualKeyCode: kc, modifiers, text, unmodifiedText:text },
+    { type: 'keyUp', key: value, code, windowsVirtualKeyCode: kc, modifiers },
+  ];
+}
+async function key(page, value, shift = false) {
+  for(const event of d048KeyEvents(value,shift)) await page.send('Input.dispatchKeyEvent', event);
+  await sleep(100);
+}
+async function visible(p, sel) { const r = await p.rectOf(sel); return !!r && !r.hidden; }
+async function assertButton(p, sel) {
+  const b = await p.ev(`(()=>{const e=document.querySelector(${J(sel)}),r=e.getBoundingClientRect();return {tag:e.tagName,w:r.width,h:r.height,l:r.left,r:r.right,t:r.top,b:r.bottom,hidden:!!e.closest('[hidden]')};})()`);
+  assert.equal(b.tag, 'BUTTON', `${sel} must be a real button`);
+  assert.ok(!b.hidden && b.w >= 44 && b.h >= 44 && b.l >= 0 && b.r <= p.W + .5 && b.t >= 0 && b.b <= p.H + .5, `${sel} touch target: ${J(b)}`);
+}
+async function noHorizontalOverflow(p, sel = '#saveStatus') {
+  const out = await p.ev(`(()=>{const e=document.querySelector(${J(sel)});return {page:document.documentElement.scrollWidth,viewport:innerWidth,panel:e.scrollWidth,client:e.clientWidth};})()`);
+  assert.ok(out.page <= out.viewport && out.panel <= out.client + 1, `horizontal overflow ${J(out)}`);
+}
+async function assertModal(p, sel) {
+  const m = await p.ev(`(()=>{const e=document.querySelector(${J(sel)}),lab=e.getAttribute('aria-labelledby');return {hidden:e.hidden,role:e.getAttribute('role'),modal:e.getAttribute('aria-modal'),label:lab&&document.getElementById(lab)?.textContent,focus:e.contains(document.activeElement),visible:document.activeElement?.getClientRects().length>0};})()`);
+  assert.equal(m.hidden, false); assert.equal(m.role, 'dialog'); assert.equal(m.modal, 'true');
+  assert.ok(m.label && m.focus && m.visible, `accessible visible dialog focus ${J(m)}`);
+  await noHorizontalOverflow(p, sel);
+}
+async function focusCycle(p, page, sel) {
+  const controls = await p.ev(`(()=>{const d=document.querySelector(${J(sel)});return [...d.querySelectorAll('button,textarea,input,select,a[href],[tabindex]')].filter(e=>!e.disabled&&e.tabIndex>=0&&e.getClientRects().length&&!e.closest('[hidden]')).length;})()`);
+  assert.ok(controls >= 2, 'must exercise multiple visible dialog controls');
+  for (const shift of [false, true]) for (let n = 0; n < controls + 2; n++) {
+    await key(page, 'Tab', shift);
+    assert.equal(await p.ev(`document.querySelector(${J(sel)}).contains(document.activeElement)&&document.activeElement.getClientRects().length>0&&!document.activeElement.closest('[hidden]')`), true, `${shift?'Shift+Tab':'Tab'} focus must remain in ${sel}`);
+  }
+}
+async function noFalseSuccess(p) {
+  assert.ok(!(await p.toasts()).some(t => /已恢復自動存檔|已備份|備份成功/.test(t)), 'UI-only export must not claim backup or autosave recovery');
+  assert.ok(await p.ev('__gt.ui().saveError'), 'opening/copying/cancelling export does not restore autosave');
+}
+async function exportReturn(p, page, how = 'button') {
+  await p.tapBtn('#saveStatusExport'); await assertModal(p, '#dlg');
+  assert.equal(await visible(p, '#saveStatus'), false);
+  const code = await p.ev("document.querySelector('#dlg textarea').value"), parsed = decodeLabCode(code);
+  assert.ok(parsed.ok && parsed.save.raw.d3?.hv === 2, 'ordinary export retains complete history');
+  assert.equal(parsed.save.raw.d3.r.length, await p.ev('__gt.history().length'));
+  assert.equal(parsed.save.raw.cms385.acc, Math.floor(D048_COMMISSION.acc), '2D-compatible commission stays integer');
+  assert.equal(parsed.save.raw.cms3d.acc, D048_COMMISSION.acc, 'D046 precision extension stays exact');
+  same(cmsLoad3d(parsed.save.raw.cms385, parsed.save.raw.cms3d), D048_COMMISSION, 'D046 fractional commission round-trips through existing code');
+  assert.match(await p.ev("document.querySelector('#dlgNo').textContent"), /返回/);
+  if (how === 'escape') await key(page, 'Escape');
+  else if (how === 'backdrop') await p.tapAt([2, 2]);
+  else await p.tapBtn('#dlgNo');
+  await assertModal(p, '#saveStatus'); assert.equal(await visible(p, '#dlg'), false);
+  await noFalseSuccess(p);
+}
+async function heldPreviewCancelled(p, page) {
+  await p.tapBtn('[data-t="road"]');
+  // D011's generic findBox assumes y>150 is unobscured. Here the active commission
+  // plus 44px warning can cover that band, especially at 360px. Select against
+  // actual HUD/dock rectangles and hit-test both endpoints plus every CDP move.
+  const target = await p.ev(`(()=>{
+    const L=__gt.layers(),canvas=document.querySelector('canvas');
+    const rect=sel=>{const r=document.querySelector(sel).getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom,w:r.width,h:r.height};};
+    const hud=rect('#hud'),dock=rect('#dock');
+    const free=i=>!L.road[i]&&!L.zone[i]&&!L.occ[i]&&!L.tree[i]&&L.ter[i]!==0;
+    const inside=p=>p[0]>16&&p[0]<innerWidth-16&&p[1]>hud.b+12&&p[1]<dock.t-12;
+    const hit=p=>{const e=document.elementFromPoint(p[0],p[1]);return e===canvas?'CANVAS':e?e.tagName+(e.id?'#'+e.id:''):null;};
+    for(let z=0;z<L.n;z++)for(let x=0;x<L.n-1;x++){
+      const i=z*L.n+x;if(!free(i)||!free(i+1))continue;
+      const a=__gt.cellScreen(x,z),b=__gt.cellScreen(x+1,z);if(!inside(a)||!inside(b))continue;
+      const path=Array.from({length:9},(_,k)=>[a[0]+(b[0]-a[0])*k/8,a[1]+(b[1]-a[1])*k/8]);
+      const hits=path.map(hit);if(hits.every(h=>h==='CANVAS'))return {hud,dock,cells:[[x,z],[x+1,z]],points:[a,b],path,hits};
+    }
+    return {hud,dock,cells:null,points:null,path:[],hits:[]};
+  })()`);
+  assert.ok(target.points, `fixture needs two free canvas-hit tiles and an unobscured drag path: ${J(target)}`);
+  assert.equal(target.hits.length,9); assert.ok(target.hits.every(hit=>hit==='CANVAS'));
+  const before = await p.ev(SNAPSHOT);
+  await p.drag(target.points[0], target.points[1],8);
+  const held = await p.ev('__gt.stroke()');
+  if(!held?.preview?.count){
+    const after=await p.ev(`(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {l:r.left,t:r.top,r:r.right,b:r.bottom};};return {
+      hud:rect('#hud'),dock:rect('#dock'),ui:__gt.ui(),stroke:__gt.stroke(),preview:__gt.previewCount(),events:window.__gtEv,
+      hits:${J(target.path)}.map(p=>{const e=document.elementFromPoint(...p);return e?e.tagName+(e.id?'#'+e.id:''):null;})};})()`);
+    assert.fail(`real held drag must show a preview before interruption; target ${J(target)}; after ${J(after)}`);
+  }
+  // Assistive/keyboard activation while a genuine canvas touch remains captured.
+  await p.ev("__gt.menu('save-status')");
+  assert.equal(await p.ev('__gt.stroke()'), null); assert.equal(await p.ev('__gt.previewCount()'), 0);
+  assert.equal(await p.ev("document.querySelector('#costTag').hidden"), true);
+  await key(page, 'Escape'); await p.release();
+  same(await p.ev(SNAPSHOT), before, 'closing and releasing interrupted preview must not build/save');
+  await p.ev('__gt.tool(null)');
+}
+
+export async function d048Smoke(browser, log) {
+  fs.mkdirSync(OUT, { recursive: true });
+  const unknown = ONLY.filter(x => !SECTIONS.includes(x));
+  if (unknown.length) log(false, 'D048 recognized section selection', unknown.join(', '));
+  const fixtureChecks = verifyD048Fixture();
+  log(true,'D048 fixture: frozen bytes, D046 exact fractional compatibility, single RNG-draw sensitivity',J(fixtureChecks));
+  const manifest = { ...d048FixtureManifest(), fixtureChecks, candidateHtmlSha256: fs.existsSync(path.join(ROOT,'dist/index.html')) ? sha(fs.readFileSync(path.join(ROOT,'dist/index.html'),'utf8')) : null, screenshots: [], sections: {}, layouts:[], keyboard:[], rng: null };
+  const run = async (section, options, fn) => {
+    if (ONLY.length && !ONLY.includes(section)) return;
+    try {
+      await browser({ width: 1280, height: 900 }, async ({ open, page }) => {
+        const p = await pageSession(page, open, options);
+        const shot = async name => {
+          // The same camera and fixed render time are used for deployed-baseline and candidate.
+          const cam = await p.ev('__gt.cam()');
+          same(cam, D048_BASELINE_CAMERA, `exact realized before/after review camera; actual ${J(cam)}`);
+          const response = await page.send('Page.captureScreenshot', { format: 'png' });
+          const file = `D048-${name}-${p.W}x${p.H}.png`, bytes = Buffer.from(response.data,'base64');
+          fs.writeFileSync(path.join(OUT,file), bytes);
+          manifest.screenshots.push({ file, sha256: sha(bytes), width:p.W, height:p.H, camera:cam, fixtureCodeSha256:manifest.codeSha256, simulatedAndroid:true });
+        };
+        let pass = false;
+        try { await fn(p, page, shot); pass = true; log(true, `D048 ${section}`); }
+        catch (error) { log(false, `D048 ${section}`, error.stack); manifest.sections[section] = { pass:false, error:error.message }; }
+        const external = page.requests.filter(u=>!/^(http:\/\/127\.0\.0\.1:\d+\/|data:|blob:|about:)/.test(u));
+        log(page.errors.length === 0 && external.length === 0, `D048 ${section}: zero console errors / external assets`, [...page.errors,...external].join('\n'));
+        if (options.mobile !== false) {
+          const touches = await p.ev('window.__d048Touches??[]');
+          const trusted = touches.length > 0 && touches.every(t=>t.type==='touch'&&t.trusted);
+          log(trusted, `D048 ${section}: genuine trusted CDP touch`, `${touches.length} pointerdown events; Android emulation, not device`);
+          pass &&= trusted;
+        }
+        manifest.sections[section] ??= { pass:pass && !page.errors.length && !external.length };
+      });
+    } catch (error) { log(false, `D048 ${section}: browser session`, error.stack); manifest.sections[section] = { pass:false, error:error.message }; }
+    fs.writeFileSync(path.join(OUT,'D048-evidence.json'), J(manifest,null,2)+'\n');
+  };
+
+  for (const { width:W,height:H } of D048_VIEWS) await run(`portrait${W}`, { W,H }, async (p,page,shot) => {
+    await loadFixture(p);
+    assert.equal(await visible(p, UNSAVED), false); assert.equal(await visible(p, JOURNAL), false);
+    await failSave(p);
+    await assertButton(p, UNSAVED);
+    // The new 44px warning changes HUD height; the existing ResizeObserver places
+    // toasts after rendering. The single browser-side promise collects atomic
+    // geometry in at most four RAF callbacks, with no interleaved CDP reads.
+    const layout=await p.ev(D048_TOAST_LAYOUT_SOURCE);
+    const {toast,commission}=layout.measurements.at(-1);
+    manifest.layouts.push(layout);
+    assert.ok(toast.h>0&&toast.t >= commission.b + 6, `rendered toast must not cover active commission: ${J(layout)}`);
+    log(true,`D048 portrait${W}: rendered HUD/toast measurement`,J(layout));
+    await settleToasts(p);
+    await assertButton(p, UNSAVED);
+    await shot('warning-after');
+    const before = await p.ev(SNAPSHOT), cam = await p.ev('__gt.cam()');
+    for (const how of ['button','escape','backdrop']) {
+      await p.tapBtn(UNSAVED); await assertModal(p,'#saveStatus');
+      assert.equal(await visible(p,'#saveStatusUnsaved'),true); assert.equal(await visible(p,'#saveStatusJournal'),false);
+      assert.ok(await p.ev("document.querySelector('#saveStatusUnsaved').textContent.includes(__gt.ui().saveError)"), 'persistent dialog shows current full cause after toast expiry');
+      await assertButton(p,'#saveStatusExport'); await assertButton(p,'#saveStatusClose');
+      await exportReturn(p,page,how);
+      if (W === 412 && how === 'button') await shot('details-export-return-after');
+      if (how === 'button') await p.tapBtn('#saveStatusClose');
+      else if (how === 'escape') await key(page,'Escape');
+      else await p.tapAt([2,2]);
+      assert.equal(await visible(p,'#saveStatus'),false);
+      assert.equal(await p.ev(`document.activeElement===document.querySelector(${J(UNSAVED)})`),true,'focus returns to warning');
+    }
+    await p.ev("document.activeElement?.blur();__gt.menu('save-status');__gt.menu('save-status')");
+    await assertModal(p,'#saveStatus');
+    assert.equal(await p.ev("document.querySelectorAll('#saveStatus').length"),1,'repeated activation must not duplicate a dialog');
+    await p.tapBtn('#saveStatusClose');
+    assert.equal(await p.ev(`document.activeElement===document.querySelector(${J(UNSAVED)})`),true,'body is not a useful opener; restore actual warning focus');
+    same(await p.ev(SNAPSHOT),before,'repeated warning/export/cancel/backdrop/Escape navigation is read-only');
+    same(await p.ev('__gt.cam()'),cam,'UI navigation leaves camera unchanged');
+    await heldPreviewCancelled(p,page);
+    await p.tapBtn(UNSAVED);
+    await failSave(p,'denied');
+    const current = await p.ev('__gt.ui().saveError'); assert.match(current,/不讓/);
+    assert.ok(await p.ev("document.querySelector('#saveStatusUnsaved').textContent.includes(__gt.ui().saveError)"),'open panel updates generic storage denial immediately');
+    assert.ok(!await p.ev("document.querySelector('#saveStatusUnsaved').textContent.includes('儲存空間滿了')"),'old quota cause must disappear');
+    const afterChange = await p.ev(SNAPSHOT);
+    await p.tapBtn('#saveStatusClose'); await p.tapBtn(UNSAVED);
+    same(await p.ev(SNAPSHOT),afterChange,'reopening changed failure remains read-only');
+    await settleToasts(p);
+    // Repeated same failure should not repeat a toast, but the persistent cause remains.
+    await failSave(p,'denied'); assert.deepEqual(await p.toasts(),[]);
+    assert.ok(await p.ev("document.querySelector('#saveStatusUnsaved').textContent.includes(__gt.ui().saveError)"));
+    await p.ev("window.__d048Storage.fault=''");
+    const world = await p.ev(WORLD);
+    assert.equal(await p.ev('__gt.saveNow()'),true); await p.ev('__gt.journalFlush()');
+    same(await p.ev(WORLD),world,'successful persistence retry changes no simulation/history');
+    assert.equal(await p.ev('__gt.ui().saveError'),''); assert.equal(await visible(p,UNSAVED),false);
+    assert.ok(!await p.ev("!document.querySelector('#saveStatusUnsaved').hidden&&document.querySelector('#saveStatusUnsaved').textContent.includes('不讓')"),'recovered open panel must not show stale refusal');
+    if (await visible(p,'#saveStatus')) await p.tapBtn('#saveStatusClose');
+    assert.equal(await p.ev("document.activeElement?.getClientRects().length>0&&!document.activeElement.closest('[hidden]')"),true,'recovery focus fallback is visible');
+    await settleToasts(p);
+    if (W === 412) await shot('recovered-after');
+    await failSave(p); await settleToasts(p); await p.tapBtn(UNSAVED);
+    assert.ok(await p.ev("document.querySelector('#saveStatusUnsaved').textContent.includes('儲存空間滿了')"),'new failure after recovery is current');
+    await p.tapBtn('#saveStatusClose');
+  });
+
+  await run('keyboard',{W:1280,H:800,mobile:false},async(p,page)=>{
+    await loadFixture(p); await failSave(p); await settleToasts(p);
+    const before = await p.ev(SNAPSHOT);
+    await p.ev(`(()=>{
+      window.__d048KeyPhase='setup';window.__d048Keys=[];
+      const label=e=>e instanceof Element?(e.id||e.getAttribute('data-k')||e.tagName):'';
+      for(const type of ['keydown','keypress','keyup','click','focusin','focusout'])addEventListener(type,e=>{
+        window.__d048Keys.push({phase:window.__d048KeyPhase,type,key:e.key??null,code:e.code??null,charCode:e.charCode??null,
+          trusted:e.isTrusted,prevented:e.defaultPrevented,target:label(e.target),active:label(document.activeElement)});
+        if(window.__d048Keys.length>200)window.__d048Keys.shift();
+      });
+    })()`);
+    await p.ev(`document.querySelector(${J(UNSAVED)}).focus()`);
+    // Real Tab creates keyboard modality; Shift+Tab comes back to the warning button.
+    await key(page,'Tab'); await key(page,'Tab',true);
+    const focus = await p.ev(`(()=>{const e=document.querySelector(${J(UNSAVED)}),s=getComputedStyle(e);return {active:document.activeElement===e,visible:e.matches(':focus-visible'),outline:s.outlineStyle,width:parseFloat(s.outlineWidth),shadow:s.boxShadow};})()`);
+    assert.ok(focus.active&&focus.visible&&((focus.outline!=='none'&&focus.width>0)||focus.shadow!=='none'),`warning needs visible keyboard focus ${J(focus)}`);
+    for (const opener of ['Enter',' ']) {
+      const phase=opener==='Enter'?'warning Enter':'warning Space';
+      await p.ev(`window.__d048KeyPhase=${J(phase)}`);
+      assert.equal(await p.ev(`document.activeElement===document.querySelector(${J(UNSAVED)})`),true,`${phase}: warning must be focused before native activation`);
+      await key(page,opener);
+      const events=await p.ev(`window.__d048Keys.filter(e=>e.phase===${J(phase)})`);
+      manifest.keyboard.push({phase,events});
+      try {
+        assert.ok(events.some(e=>e.type==='keydown'&&e.key===opener&&e.target==='unsaved'&&e.trusted),`${phase}: trusted keydown`);
+        assert.ok(events.some(e=>e.type==='keypress'&&e.charCode===(opener==='Enter'?13:32)&&e.target==='unsaved'&&e.trusted),`${phase}: native character event`);
+        assert.equal(events.filter(e=>e.type==='click'&&e.target==='unsaved'&&e.trusted).length,1,`${phase}: exactly one trusted native click`);
+        await assertModal(p,'#saveStatus');
+      } catch(error) { throw new Error(`${phase}: ${error.message}; trusted key/click/focus trace ${J(events)}`,{cause:error}); }
+      log(true,`D048 keyboard: ${phase} native activation`,J(events));
+      await p.ev(`window.__d048KeyPhase=${J(phase+' modal navigation')}`);
+      await focusCycle(p,page,'#saveStatus');
+      await p.ev("document.querySelector('#saveStatusExport').focus()"); await key(page,'Enter');
+      await assertModal(p,'#dlg'); await focusCycle(p,page,'#dlg');
+      // Both modal layers must reject ordinary simulation shortcuts.
+      await p.ev("document.querySelector('#dlg textarea').focus()");
+      await key(page,' '); assert.equal((await p.ev('__gt.sim()')).playing,false);
+      await key(page,'Escape'); await assertModal(p,'#saveStatus');
+      await key(page,'Escape'); assert.equal(await visible(p,'#saveStatus'),false);
+      assert.equal(await p.ev(`document.activeElement===document.querySelector(${J(UNSAVED)})`),true);
+    }
+    same(await p.ev(SNAPSHOT),before,'keyboard navigation/Escape cannot change city, save bytes, or URL history');
+  });
+
+  await run('journal',{W:360,H:740},async(p,page,shot)=>{
+    const block = await page.send('Page.addScriptToEvaluateOnNewDocument',{source:D048_IDB_BLOCK});
+    await loadFixture(p); assert.equal((await p.ev('__gt.journal()')).kind,null);
+    assert.equal(await visible(p,UNSAVED),false); await assertButton(p,JOURNAL);
+    const fallback = decodeLabCode(await p.ev('__gt.saved()'));
+    assert.ok(fallback.ok&&fallback.save.raw.d3?.hv===2,'existing fallback persists full history in ordinary save');
+    assert.equal(fallback.save.raw.d3.r.length,await p.ev('__gt.history().length'));
+    const before = await p.ev(SNAPSHOT);
+    await p.tapBtn(JOURNAL); await assertModal(p,'#saveStatus');
+    assert.equal(await visible(p,'#saveStatusUnsaved'),false); assert.equal(await visible(p,'#saveStatusJournal'),true);
+    assert.ok(await p.ev("document.querySelector('#saveStatusJournal').textContent.includes(__gt.journal().why)"));
+    assert.match(await p.ev("document.querySelector('#saveStatusJournal').textContent"),/上限/);
+    await p.tapBtn('#saveStatusClose'); same(await p.ev(SNAPSHOT),before,'journal-only details do not alter fallback or city');
+    await failSave(p); await settleToasts(p);
+    await assertButton(p,UNSAVED); assert.equal(await visible(p,JOURNAL),false,'unsaved warning keeps priority when both conditions exist');
+    await p.tapBtn(UNSAVED); await assertModal(p,'#saveStatus');
+    assert.equal(await visible(p,'#saveStatusUnsaved'),true); assert.equal(await visible(p,'#saveStatusJournal'),true);
+    await shot('both-details-after'); await exportReturn(p,page); await p.tapBtn('#saveStatusClose');
+    // Recover storage independently: history warning remains because IDB is still blocked.
+    await p.ev("window.__d048Storage.fault=''"); assert.equal(await p.ev('__gt.saveNow()'),true);
+    assert.equal(await visible(p,UNSAVED),false); await assertButton(p,JOURNAL);
+    const hist = await p.ev('__gt.history()'), cms = await p.ev('__gt.simCms()');
+    await page.send('Page.removeScriptToEvaluateOnNewDocument',{identifier:block.identifier});
+    await p.open('');
+    assert.equal((await p.ev('__gt.journal()')).kind,'indexeddb');
+    assert.ok(grew(hist,await p.ev('__gt.history()'),await p.ev('__gt.restyled()')).ok,'restored IDB reload preserves history plus legitimate restyle only');
+    same(await p.ev('__gt.simCms()'),cms,'fractional D046 commission survives fallback save and real reload');
+    assert.equal(await visible(p,JOURNAL),false); assert.equal(await visible(p,UNSAVED),false);
+    // Long unbroken injected detail must wrap; panel may scroll vertically, never the page horizontally.
+    const longReason = D048_IDB_REASON+'／測試長原因：'+'INDEXEDDB_DENIED_'.repeat(35);
+    const longBlock = await page.send('Page.addScriptToEvaluateOnNewDocument',{source:D048_IDB_BLOCK.replace(J(D048_IDB_REASON),J(longReason))});
+    await p.open(''); await p.ev(STORAGE_PROBE); await settleToasts(p); await p.tapBtn(JOURNAL);
+    await assertModal(p,'#saveStatus');
+    assert.ok(await p.ev(`document.querySelector('#saveStatusJournal').textContent.includes(${J(longReason)})`),'complete long reason retained');
+    const scroll = await p.ev("(()=>{const e=document.querySelector('#saveStatus .saveBody'),r=e.getBoundingClientRect();e.scrollTop=0;return {l:r.left,t:r.top,w:r.width,h:r.height,content:e.scrollHeight,viewport:e.clientHeight};})()");
+    assert.ok(scroll.content>scroll.viewport+40&&scroll.h>80,'long reason must genuinely need a scrollable body');
+    const sx=scroll.l+scroll.w/2, from=[sx,scroll.t+scroll.h*.78], to=[sx,scroll.t+scroll.h*.22];
+    await p.drag(from,to); await p.release(); await p.frames(3);
+    assert.ok(await p.ev("document.querySelector('#saveStatus .saveBody').scrollTop")>20,'genuine CDP touch drag must scroll the long reason');
+    await noHorizontalOverflow(p);
+    await p.ev("document.querySelector('#saveStatusExport').scrollIntoView({block:'nearest'})");
+    await assertButton(p,'#saveStatusExport'); await p.tapBtn('#saveStatusExport'); await assertModal(p,'#dlg');
+    await p.tapBtn('#dlgNo'); await key(page,'Escape');
+    await page.send('Page.removeScriptToEvaluateOnNewDocument',{identifier:longBlock.identifier});
+  });
+
+  await run('export',{W:412,H:860},async(p,page)=>{
+    await loadFixture(p); await failSave(p); await settleToasts(p);
+    const genericBefore = await p.ev(SNAPSHOT);
+    for(const mode of ['export','paste']){
+      await p.tapBtn('#menuBtn');
+      await p.ev(`document.querySelector('#menu [data-m="${mode}"]').scrollIntoView({block:'center'})`);
+      await p.tapBtn(`#menu [data-m="${mode}"]`); await assertModal(p,'#dlg');
+      assert.equal(await visible(p,'#saveStatus'),false,'ordinary menu dialogs must not invent a status-return flow');
+      assert.equal(await p.ev("document.querySelector('#dlgNo').textContent"),'取消');
+      assert.equal(await p.ev("document.querySelector('#dlg textarea').readOnly"),mode==='export');
+      if(mode==='export')await p.tapBtn('#dlgNo');else await key(page,'Escape');
+      assert.equal(await visible(p,'#dlg'),false); assert.equal(await visible(p,'#saveStatus'),false);
+    }
+    same(await p.ev(SNAPSHOT),genericBefore,'ordinary export/import cancel regression');
+    await p.tapBtn(UNSAVED);
+    const pristine = await p.ev(SNAPSHOT);
+    // Save/share limit is exercised through the real legacy export path; synthetic
+    // history is always restored before another save, day step, or page navigation.
+    const count = await p.ev(`(()=>{const h=__gt.history(),n=h.length,d=h.at(-1).day;for(let i=0;i<130000;i++)h.push({day:d,t:'restyle',x:i%50,z:(i/50|0)%50,v:i%7});return n;})()`);
+    try {
+      assert.ok(await p.ev('__gt.save().length') > SAVE_LIMIT,'fixture really exceeds SAVE_LIMIT');
+      await p.tapBtn('#saveStatusExport'); await assertModal(p,'#dlg');
+      const data = await p.ev("({code:document.querySelector('#dlg textarea').value,note:document.querySelector('#dlgSub').textContent})");
+      const parsed=decodeLabCode(data.code); assert.ok(parsed.ok); assert.equal(parsed.save.raw.d3,undefined);
+      assert.ok(data.code.length<=SAVE_LIMIT); assert.match(data.note,/歷史太長/); assert.match(data.note,/歷史沒有帶/); assert.match(data.note,/只能看/);
+      await noFalseSuccess(p); await p.tapBtn('#dlgNo'); await assertModal(p,'#saveStatus');
+    } finally { await p.ev(`__gt.history().length=${count}`); }
+    same(await p.ev(SNAPSHOT),pristine,'oversize export preserves actual saved bytes and restores injected history');
+    // Export generation failure must stay readable after its temporary toast.
+    // This injection does not change a registered event or any production file.
+    const invalid = 'D048_TEST_UNKNOWN_EVENT';
+    await p.ev(`__gt.history().push({day:__gt.sim().day,t:${J(invalid)}})`);
+    try {
+      await p.tapBtn('#saveStatusExport');
+      assert.equal(await visible(p,'#dlg'),false,'failed generation must not leave a successful-looking export');
+      await assertModal(p,'#saveStatus');
+      assert.match(await p.ev("document.querySelector('#saveStatus').textContent"),/匯出失敗/);
+      assert.ok(await p.ev(`document.querySelector('#saveStatus').textContent.includes(${J(invalid)})`));
+      await settleToasts(p);
+      assert.match(await p.ev("document.querySelector('#saveStatus').textContent"),/匯出失敗/);
+      await noFalseSuccess(p);
+    } finally { await p.ev(`__gt.history().length=${count}`); }
+    await exportReturn(p,page,'escape'); await p.tapBtn('#saveStatusClose');
+    same(await p.ev(SNAPSHOT),pristine,'export failure, retry, and cancellation preserve original city/history/save');
+    // Copy target is intercepted locally; never touches an external sharing service.
+    await p.tapBtn(UNSAVED); await p.tapBtn('#saveStatusExport');
+    await p.ev("window.__d048Copies=[];Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:async text=>{window.__d048Copies.push(text)}}})");
+    await p.tapBtn('#dlgOk'); await p.tapBtn('#dlgOk');
+    assert.equal(await p.ev('window.__d048Copies.length'),2); await noFalseSuccess(p);
+    await p.tapBtn('#dlgNo'); await p.tapBtn('#saveStatusClose');
+    same(await p.ev(SNAPSHOT),pristine,'repeated local copying is not autosave or destructive navigation');
+    const inertState=()=>p.ev("[...document.querySelectorAll('[inert]')].map(e=>e.id||e.tagName+'.'+e.className).sort()");
+    const inertBefore=await inertState();
+    for(const panel of ['status','export']){
+      await p.tapBtn(UNSAVED); if(panel==='export')await p.tapBtn('#saveStatusExport');
+      assert.ok((await inertState()).length>inertBefore.length,'modal actually locks background before lifecycle test');
+      // Explicit lifecycle injection, not a claim of actual device/browser Back.
+      // No pushState/URL change is introduced by the product; those were compared above.
+      await p.ev("window.dispatchEvent(new PageTransitionEvent('pagehide',{persisted:true}))");
+      assert.equal(await visible(p,'#saveStatus'),false); assert.equal(await visible(p,'#dlg'),false);
+      same(await inertState(),inertBefore,'pagehide releases every temporary background inert lock');
+      await p.ev("window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}))");
+    }
+    same(await p.ev(SNAPSHOT),pristine,'synthetic pagehide/pageshow closes panels without replaying export or changing city');
+    await p.tapBtn(UNSAVED); await assertModal(p,'#saveStatus'); await p.tapBtn('#saveStatusClose');
+
+  });
+
+  if (!ONLY.length || ONLY.includes('rng')) {
+    const trajectories=[];
+    // Each arm gets exactly one fixture load. Never reload between UI actions and
+    // stepping the next 20 days: reloading would reset seed^day and hide RNG use.
+    for (const interactive of [false,true]) await run('rng',{W:412,H:860},async(p,page)=>{
+      await loadFixture(p); await failSave(p); await settleToasts(p);
+      const before=await p.ev(SNAPSHOT);
+      if(interactive){
+        for(let i=0;i<3;i++){await p.tapBtn(UNSAVED);await exportReturn(p,page,i%2?'escape':'button');await p.tapBtn('#saveStatusClose');}
+        await heldPreviewCancelled(p,page);
+      }else{
+        // A neutral genuine touch on the warning-free city heading neither builds
+        // nor opens a panel. Both arms still prove real mobile touch is enabled.
+        await p.tapBtn('#cityName');
+      }
+      same(await p.ev(SNAPSHOT),before,'paired UI arm leaves present city/history/save bytes exactly equal');
+      const trajectory=[await p.ev(WORLD)];
+      for(let d=0;d<20;d++){await p.ev('__gt.simStep(1)');trajectory.push(await p.ev(WORLD));}
+      trajectories.push(trajectory);
+    });
+    if(trajectories.length===2){
+      try{
+        for(let d=0;d<trajectories[0].length;d++)same(trajectories[1][d],trajectories[0][d],`no-reload matched RNG trajectory day offset ${d}`);
+        manifest.rng={pass:true,method:'matched control versus repeated warning/export/interrupted-preview UI; no reload within either arm',days:20,fullFieldComparisons:trajectories[0].length,digest:sha(trajectories[0])};
+        log(true,'D048 RNG: same full future-day city/history/economy trajectory, not simHash alone');
+      }catch(error){manifest.rng={pass:false,error:error.message};log(false,'D048 RNG trajectory',error.stack);}
+    }else{manifest.rng={pass:false,error:'one or both trajectory arms failed'};log(false,'D048 RNG trajectory','one or both trajectory arms failed');}
+  }
+  fs.writeFileSync(path.join(OUT,'D048-evidence.json'),JSON.stringify(manifest,null,2)+'\n');
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  let fails=0;
+  await d048Smoke(withBrowser,(ok,name,detail)=>{console.log(ok?'OK':'NG',name,detail??'');if(!ok)fails++;});
+  if(d048SkipNote())console.log(d048SkipNote());
+  process.exitCode=fails?1:0;
+}

@@ -1,0 +1,231 @@
+{
+  "archivedAt": "2026-10-13T15:50:02.451Z",
+  "release": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+  "sourceDirectory": "scratch/d059-release",
+  "documentsVerified": 9,
+  "screenshotsVerified": 21,
+  "originalManifest": "public/artifact-manifest.json",
+  "qualifications": [
+    "All nine original complete HTTPS document bodies were read and SHA-verified before archival. The duplicate HTML bodies remain in ignored project scratch; their original file hashes and byte lengths are retained in the original manifest and report.",
+    "All 21 public screenshots are archived in docs/img/D059/public; report shot file basenames resolve there.",
+    "Raw network events, world snapshots, source manifest, fixture and original reports are archived. Favicon decoration remains separate from application errors.",
+    "The verifier is archived as exact historical evidence. To rerun, use the pinned release checkout and explicit D059_RELEASE_ROOT/D059_PUBLIC_OUT environment paths. Later documentation-only HEADs do not satisfy its release pin."
+  ],
+  "files": [
+    {
+      "file": "docs/evidence/D059/release/release-identity.json",
+      "bytes": 3570,
+      "sha256": "b21cb72ba79ed7ad4630c95b3f003cd2c0d6ba50c8d5c356a1cbc9f0e8b830a9"
+    },
+    {
+      "file": "docs/evidence/D059/release/ci-main-run.json",
+      "bytes": 12010,
+      "sha256": "19008d06d245d649dde9ee37b5c30c2f4013e191ccde0ee498ae7ad983f7bfa7"
+    },
+    {
+      "file": "docs/evidence/D059/release/ci-main-audit.json",
+      "bytes": 1745,
+      "sha256": "2d537ac39aaa41aca69dbc2af371a39f2c662de87149fa4e34ef638e2bc7e6f3"
+    },
+    {
+      "file": "docs/evidence/D059/release/ci-main-smoke-job-log.txt",
+      "bytes": 642715,
+      "sha256": "5e9882e181039a58b3fff3f091e9944d94b3dc541a9062f0048fb35e435a4a8c"
+    },
+    {
+      "file": "docs/evidence/D059/release/ci-main-pages-job-log.txt",
+      "bytes": 5218,
+      "sha256": "684637ff1a5382935a000df838bbc1dda986b1d760c702730facc1db495f393a"
+    },
+    {
+      "file": "docs/evidence/D059/release/ci-main-unit-original-lines.txt",
+      "bytes": 268144,
+      "sha256": "1ae35f2c572f45f0184b61dadb73035a097b37958cd711f4fab7250ad5c14e92"
+    },
+    {
+      "file": "docs/evidence/D059/release/pages-main-deployments.json",
+      "bytes": 4997,
+      "sha256": "fce5ad67908e4a2b225d9018fd1906da82c08b26b4f738e0f850cfb1d3089316"
+    },
+    {
+      "file": "docs/evidence/D059/release/public-before-deploy.json",
+      "bytes": 303,
+      "sha256": "0dae37da80446f221975df7ec3870944adff3db9da9dbe84cbf1919216749bc4"
+    },
+    {
+      "file": "docs/evidence/D059/release/d059-public-verification.mjs",
+      "bytes": 32691,
+      "sha256": "17677d06e987622c61c1e42847ee3de17d5d51572f870cb2d68341fef003a2fa"
+    },
+    {
+      "file": "docs/evidence/D059/release/pin-release.mjs",
+      "bytes": 2818,
+      "sha256": "06fb75414effa1be4fca77e5cca6809ac8fda1071a56a925007e6269abb33d55"
+    },
+    {
+      "file": "docs/evidence/D059/release/archive-release.mjs",
+      "bytes": 6350,
+      "sha256": "5207fc07ad3db3322cb6d0508dc125d9ab2390332749b77b93c04e9da86ab03a"
+    },
+    {
+      "file": "docs/evidence/D059/release/pages-main-deployment-7043063044-statuses.json",
+      "bytes": 10004,
+      "sha256": "2d1e60d9f46ac09ab2fbb68c513a6e645a372fd3f71717856d7818b02a6d5a5e"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/artifact-manifest.json",
+      "bytes": 6368,
+      "sha256": "1c5c58a2ce56de6397e1ed5fc9228a5f812c86f9e4b10bdac88b7071ee7e41a7"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-1440-network.json",
+      "bytes": 18451,
+      "sha256": "de0aa92c751f766440549b0f0c3d0646a28f78cf95cd4cdd4e09743af2c489d1"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-1440-world.json",
+      "bytes": 13448,
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-360-network.json",
+      "bytes": 18462,
+      "sha256": "d254a1e6e0188647cf015eb56f2b9fc14c4af9a5870872dd89e8eb3e0cfc04fe"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-360-world.json",
+      "bytes": 13448,
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-412-network.json",
+      "bytes": 18448,
+      "sha256": "aaffdebff0e5584ff0ffb0112ffaa383a0caa8fcca80ff438c8fbe3e850a92c8"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/d059-412-world.json",
+      "bytes": 13448,
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/fixture.code.txt",
+      "bytes": 2912,
+      "sha256": "147519095d131216802f750d2e45e945b35a93dd6400c74755d50008a0421109"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/report.json",
+      "bytes": 218400,
+      "sha256": "9ae2353793ea4f2dc40078580a27610dbb2c8420164c5cd7018d9665d5d6de86"
+    },
+    {
+      "file": "docs/evidence/D059/release/public/source-manifest.json",
+      "bytes": 76396,
+      "sha256": "03b10ea03d8c2e5b9637b7e613886a1a9aca80c3d5d1286f4377f36bcf9c5865"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-overview.png",
+      "bytes": 131982,
+      "sha256": "6f619773f3431a6f55610149bfa1b27055f9eb088b3ef182eca6af03fcc71687"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-cottage-se.png",
+      "bytes": 99718,
+      "sha256": "4407935d6da74d2177b756d5ef61b721fb46074777d4bf00a8ddb5d3f9748768"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-rows-se.png",
+      "bytes": 100730,
+      "sha256": "a5b79b662e2f03ecb0b1a465dd486a36b8d7b1b413c6388dc57afeb36f935793"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-inn-se.png",
+      "bytes": 99546,
+      "sha256": "ba9efb336913bb34dccf456663b1f744df3fb43a020c10e5c7686e73cc3d7b88"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-manor-se.png",
+      "bytes": 101178,
+      "sha256": "9069118b0f6d62dbddbc789eb225d57aa172654c0592fe8c982010dd0907ee9e"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-church-se.png",
+      "bytes": 97987,
+      "sha256": "6400bd5282e3795008db6d4066c010728301add77cb891c3f34ea9ff52232ae2"
+    },
+    {
+      "file": "docs/img/D059/public/d059-1440-oast-se.png",
+      "bytes": 98048,
+      "sha256": "9f4703f7d4028de8c561031de757c2874335e8a63610079cfe576c0c44b63d9a"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-overview.png",
+      "bytes": 43741,
+      "sha256": "71a5c72244a6b1d1476cb249801850160d8fea5c3fa0990c3a3b40e051a8e221"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-cottage-se.png",
+      "bytes": 57337,
+      "sha256": "1bbe926e0f3b7c4e620a6ec303551878e96a75d1ee4a96e67d16f7d8a119ef6e"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-rows-se.png",
+      "bytes": 58798,
+      "sha256": "18652ae4d34de0fa92f66df90c9bca2b8a336afe10f95c54a2f97135ebe328ac"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-inn-se.png",
+      "bytes": 60841,
+      "sha256": "6fec57da7980d4113e7b7402d21038e485645b05ed54cee0b0328f392ba08314"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-manor-se.png",
+      "bytes": 59546,
+      "sha256": "990d9053382d5c655e2691d50ac6fc974a83eb1a13c3f80d5c6d9be012709512"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-church-se.png",
+      "bytes": 56633,
+      "sha256": "e352a238b64cd0562786172a241ccb5f809f04634d163742f1213785759c4428"
+    },
+    {
+      "file": "docs/img/D059/public/d059-360-oast-se.png",
+      "bytes": 54323,
+      "sha256": "3600ec4ec36d08de18190b40643b6f3a2c29f2bb49f80f77a4fdd978f53e1956"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-overview.png",
+      "bytes": 46507,
+      "sha256": "a77edd99e7573b3dc15eaa121fe9a3ff2b3b38d591e4cd0ef5895e0804a69670"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-cottage-se.png",
+      "bytes": 62401,
+      "sha256": "0087194fc3df4950a5e49e7c3f89e5cf0892b31e32a8044de759b39d3b5ac5a1"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-rows-se.png",
+      "bytes": 63738,
+      "sha256": "a73b0c388f0571519c8d189ed41f6324ba49c74dfcc084071ed46fd3df9fc188"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-inn-se.png",
+      "bytes": 67367,
+      "sha256": "6530c4a21d1570af2496ba10a8bcd54188ceaeca2c2150ed8e7a8ab96477b3b1"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-manor-se.png",
+      "bytes": 65218,
+      "sha256": "43e53bd19095606ca4f6eedd30ff776745110dbd6527e997d9207f2b893eb569"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-church-se.png",
+      "bytes": 61477,
+      "sha256": "c8eb21f62973d84cdaee8e73199a3ead9790605d7d69766b213937ee698e735a"
+    },
+    {
+      "file": "docs/img/D059/public/d059-412-oast-se.png",
+      "bytes": 58996,
+      "sha256": "015fa58cec06a5d956a5d5d2a60157236c6bcca2fc4387376808b7e066705d40"
+    }
+  ]
+}

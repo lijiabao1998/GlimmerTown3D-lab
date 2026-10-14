@@ -551,6 +551,39 @@ await guard('./unit-d033-live.mjs', 'd033LiveGuards');   // D033：污水的實�
 await guard('./unit-d033-build.mjs', 'd033BuildGuards');   // D033：污水廠的建造規則黃金樣本（d033-build.json，tools/lab-build.mjs --set=d033）、鄰水判定、原碼突變
 await guard('./unit-d034.mjs', 'd034Guards');   // D034：摩天樓與巨廈合併的實驗線原文（15 段 sha256）逐項＝merge.ts（vm：3000 張隨機小圖、亂數呼叫序列、突變 45）
 await guard('./unit-d034-live.mjs', 'd034LiveGuards');   // D034：合併的實驗線頁面實跑（M 系列 15 座連推 13 天逐欄、每格建築雜湊、實驗線讀本線存的碼）、day.ts 接線突變、歷史重播與存檔格式 7（d034-lab.json，tools/d034-lab.mjs 錄）
+await guard('./unit-d035.mjs', 'd035Guards');   // D035：讀檔圖層補齊（十一層進格子；L 系列 8 座連推 13 天逐欄加圖層／有電道路／覆蓋場；污水幹管佈局 170 個；本線拆路蓋東西之後存的碼給實驗線讀；拆除與寫回；存讀；接線突變）
+await guard('./unit-d036.mjs', 'd036Guards');   // D036：資源開採的實驗線原文（17 段 sha256）逐項＝resource.ts、count.ts（vm：400 個種子的資源圖、400 張小圖的抽取、亂寫的 rdep 還原、存檔配對、噪聲值逐位；突變 56）
+await guard('./unit-d036-live.mjs', 'd036LiveGuards');   // D036：實驗線頁面實跑（W 系列 5 座連推 13／60 天逐欄含耗損與庫存分流、60 個種子的資源圖、本線存的碼給實驗線讀）、day.ts 與 saveCode 接線突變、耗損存讀
+await guard('./unit-d037.mjs', 'd037Guards');   // D037：公車路線（bus_rt／bop468）本線沒搬——缺口量出來並鎖住（實驗線頁面實跑 T1 一條路線、T2 兩條路線＋營運設定、T3 對照；T3 全等、T1／T2 的殘差有範圍、本線完全不看路線、存檔不弄丟路線）
+await guard('./unit-d038.mjs', 'd038Guards');   // D038：科技與專精的實驗線原文（22 段 sha256）逐項＝tech.ts（vm：36 個節點逐欄、300 個隨機狀態 × 36 節點的 canStart、研究連推、400 個亂寫的存檔欄位、專精驗型；突變 91）
+await guard('./unit-d038-live.mjs', 'd038LiveGuards');   // D038：實驗線頁面實跑（T 系列 18 座連推 13 天逐欄含科技狀態、P 動作劇本 6 個 27 個動作、本線存的碼給實驗線讀 6 筆）、day.ts 與 saveCode 接線突變、存讀、效能
+await guard('./unit-d040-build.mjs', 'd040BuildGuards');   // D040：油井、礦場的建造規則黃金樣本（d040-build.json，tools/lab-build.mjs --set=d040）、資源格判定、原碼突變
+await guard('./unit-d044-build.mjs', 'd044BuildGuards');   // D044：天然氣井、太空研究中心的建造規則黃金樣本（d044-build.json，tools/lab-build.mjs --set=d044）、資源格判定、3×3 逐格判定、原碼突變
+await guard('./unit-d044.mjs', 'd044Guards');   // D044：天然氣井、太空研究中心的工具與拒絕、3×3 預覽、玩家蓋（一座一筆事件、整塊清樹清分區）、重播＝模擬、復原與拆、污染源、同一批東西用 2D 存檔寫法擺進去推 30 天逐欄相同、每 24 天一輪、接線突變
+await guard('./unit-d045.mjs', 'd045Guards');   // D045：市長委託（T385）的實驗線原文（14 段 sha256）逐項＝commission.ts（vm：11 條表、cmsHash 20,000 組、cmsOffers 6,000 個狀態、讀存 1,500 組、接單放棄 4,000 組、結算 500 段 × 40 天；突變 46＋47）
+await guard('./unit-d045-live.mjs', 'd045LiveGuards');   // D045：實驗線頁面實跑（11 個劇本逐列：三選一、接單、過期、完成、期末驗收、沙盒；D043 起步城 8 座 × 6 段 200 天）、day.ts 接線突變
+await guard('./unit-d045-wire.mjs', 'd045WireGuards');   // D045：動作與狀態順序、完成／過期結算、零副作用、存讀（cms385 實驗線格式）、世界歷史格式 10、大事記與通知、接線突變
+await guard('./unit-d040.mjs', 'd040Guards');   // D040：油井、礦場的工具與拒絕、玩家蓋井、枯竭事件時間軸、預先帶耗損的存檔、格式 9 編解碼與存讀、玩家蓋的＝存檔裡本來有的、大事記、資源圖圖層、接線突變
+await guard('./unit-d041.mjs', 'd041Guards');   // D041：緊急車輛——量缺口、鎖住、不搬：實驗線原文（車到了現場清旗標、只在 advance 裡動）、本線＝GV.step（V 系列 5 座 × 30 天逐日逐座）、車輛的量（處理件數、站、車上限）、逐幀迴圈本身不改模擬、本線沒有車
+await guard('./unit-d042.mjs', 'd042Guards');   // D042：合併提示一天多筆合成一則——一筆＝實驗線的字、多筆＝「今天 N 處合併」（2,000 個隨機清單、M1b／M2b 真的城）、cityView 接線、突變
+await guard('./unit-d043.mjs', 'd043Guards');   // D043：市長委託（T385）與政策實驗室（T504）——量缺口、鎖住、不搬：實驗線原文事實、起步城 24 次接單 0 次完成且零模擬副作用、完成的那一次 +$1,800、T504 生效日＝ceil(天數／量能)、資金差、本線立即生效且沒有這兩個系統
+await guard('./unit-d039.mjs', 'd039Guards');   // D039：玩家決策進世界歷史（城市格式 8）——碼表字面量＝目錄、記錄只在真的改了時記、200 段隨機劇本重播＝模擬、編解碼與只增不改、壞資料與突變、存讀與舊檔、大事記白話
+
+await guard('./unit-d046.mjs', 'd046Guards');
+await guard('./unit-d046-save.mjs', 'd046SaveGuards');
+await guard('./unit-d046-history.mjs', 'd046HistoryGuards');
+await guard('./unit-d046-fallback.mjs', 'd046FallbackGuards');
+await guard('./unit-d047.mjs', 'd047Guards');
+await guard('./unit-d047-mobile.mjs', 'd047MobileUnit');
+await guard('./unit-d048.mjs', 'd048Guards');
+await guard('./unit-d048-harness.mjs', 'd048HarnessGuards');
+await guard('./unit-d049.mjs', 'd049Guards');
+await guard('./unit-d050.mjs', 'd050Guards');
+await guard('./unit-d051.mjs', 'd051Guards');
+await guard('./unit-d052.mjs', 'd052Guards');
+await guard('./unit-d053.mjs', 'd053Guards');
+await guard('./unit-d054.mjs', 'd054Guards');
+await guard('./unit-d054-ui.mjs', 'd054UiGuards');
 
 // ---- 模擬層純度（規則 2、3）：sim／io 不碰 three、DOM、現實時間、Math.random ----
 {
@@ -628,6 +661,14 @@ await guard('./unit-d034-live.mjs', 'd034LiveGuards');   // D034：合併的實�
   read('index.html').split('\n').forEach((l, i) => { if (/(src|href)\s*=\s*["']https?:/.test(l)) urls.push(`index.html:${i + 1}`); });
   log(assets.length === 0 && urls.length === 0, '零外部素材：src 沒有圖片／字型／模型／音效檔，也不引用外部網址', [...assets, ...urls].join(' ') || '乾淨');
 }
+
+await guard("./unit-d055-build.mjs", "d055BuildGuards");
+await guard("./unit-d055-native.mjs", "d055NativeGuards");
+
+await guard('./unit-d056.mjs', 'd056Guards');
+await guard('./unit-d057.mjs', 'd057Guards');
+await guard('./unit-d058.mjs', 'd058Guards');
+await guard('./unit-d059.mjs', 'd059Guards');
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }

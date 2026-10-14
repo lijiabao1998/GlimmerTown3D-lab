@@ -36,9 +36,9 @@ export async function d033LiveGuards(log) {
 
 const lvCount = s => { const a = [0, 0]; for (const t of s.w.tiles) { const b = t.bld; if (b && !b.ref && b.k === 1) { if (b.lv === 2) a[0]++; else if (b.lv === 3) a[1]++; } } return a; };
 // 一座 Q 城連推 rec.days 天，逐天跟實驗線比（D032 的全部欄位）加這一張的兩欄（sw、lv）。mod＝day.ts（真的或改壞的）
-export function compareCity33(mod, code, rec, KT, vrank, { stopAtFirst = true, onDay } = {}) {
+export function compareCity33(mod, code, rec, KT, vrank, { stopAtFirst = true, onDay, noInject = false, before } = {}) {
   const extra = [];
-  const r = compareCity32(mod, code, rec, KT, vrank, { stopAtFirst, onDay: (day, mine, row, rep, s) => {
+  const r = compareCity32(mod, code, rec, KT, vrank, { stopAtFirst, noInject, before, onDay: (day, mine, row, rep, s) => {
     const lv = lvCount(s), dd = [];
     if (rep.sewer.served !== row.sw) dd.push(`接管棟數 本線 ${rep.sewer.served} ≠ 實驗線 ${row.sw}`);
     if (J(lv) !== J(row.lv)) dd.push(`lv2／lv3 住宅數 本線 ${J(lv)} ≠ 實驗線 ${J(row.lv)}`);

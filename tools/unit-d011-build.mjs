@@ -58,7 +58,7 @@ export function impl3d(Bm = B, water = null) {
       rebuildCov(w, g, c.budget, edu);
       const rng = labRng(c.seed, true);
       st = { w, g, budget: { ...c.budget }, rng, money: c.money0, diff: c.diff, tech: c.tech, spec: c.spec, landDirty: c.land[0], landBox: c.land[1] ? [...c.land[1]] : null,
-        txn: null, dozeArm: null, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]), ...(water ? { onWater: () => water(w) } : {}) };
+        txn: null, dozeArm: null, resource: c.resource ?? undefined, onPower: () => rng.log.push(['P']), onPlace: (tool, x, y, ok) => calls.push([x, y, ok ? 1 : 0]), ...(water ? { onWater: () => water(w) } : {}) };
       stack = [];
     },
     canPlace: (t, x, y) => Bm.canPlace(st, t, x, y), placeCost: (t, x, y) => Bm.placeCost(st, t, x, y), path: op => Bm.roadDraftTiles(op.x0, op.y0, op.x1, op.y1),
@@ -188,7 +188,7 @@ const MUTANTS_3D = [
   ['升級不當場重算供電', 'if (wasRoad) st.onPower?.();', ''],
   ['復原不清地價框', 'st.landDirty = false; st.landBox = null;', ''],
   ['拆除順序：路飾與公車站對調', "if (t.rdec) return 'rdec';\n  if (t.bus) return 'bus';", "if (t.bus) return 'bus';\n  if (t.rdec) return 'rdec';"],
-  ['多格拆除占地迴圈不記 seen', 'txn.seen[j] = 1; ', ''],
+  ['多格拆除占地迴圈不記 seen', 'txn.seen[j] = 1; txn.snaps.push({ i: j, s: JSON.stringify(ct) }); }   // 51789', 'txn.snaps.push({ i: j, s: JSON.stringify(ct) }); }   // 51789'],
   ['目標格快照不看 seen', 'if (txn && !txn.seen[i]) {', 'if (txn) {'],
 ];
 const BUILD_EXPORTS = ['ROAD_COST', 'COST', 'UNDO_MAX', 'DOZE_ARM_MS', 'D011_TOOLS', 'roadToolToRc', 'roadCostAt', 'markLandDirty', 'canPlace', 'placeCost', 'dozeLayer', 'doPlace',

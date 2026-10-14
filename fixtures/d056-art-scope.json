@@ -1,0 +1,26 @@
+{
+  "src/render/kindArt.ts": {
+    "after": "148b03b7c3edbc61eed0ca5067215e252e0157ec4c58b454071c720ada4ea387",
+    "before": "14b8bf0eeb5f1bb5af258ce772b272b7106f5f468d7e592e8af1173ad1602cf7"
+  },
+  "src/content/kindShapes.ts": {
+    "after": "c233d040b5bf625fdba1a6ce34d08ce9441282ec78620210e038266e648ae32e",
+    "before": "2ae8ef27f5e4f17d705bc0e6a48e03625b238abb790df4d57b3fd0b72bb6ecdc"
+  },
+  "src/render/britishCivicArt.ts": {
+    "after": "f31fbd360c23a6096227e4399293a8c8521b10ab0f89c78792d5844d60aed91f",
+    "added": true
+  },
+  "src/content/britishCivic.ts": {
+    "after": "d710d6ce7420c893c7edda4a21651822249d7bfd9099c3578b4dda6c7cf21a23",
+    "added": true
+  },
+  "src/content/samples/d056-kinds-before.json": {
+    "after": "c92384c2ed6d9a058c8d0676b7e99ccfdc6edc29e86f1155e978cdb43a32937e",
+    "added": true
+  },
+  "src/content/samples/d056-current-art.json": {
+    "after": "b54a8b23e92b276be715bff012348c339f350da03537b8d037347b5d1064c04f",
+    "added": true
+  }
+}

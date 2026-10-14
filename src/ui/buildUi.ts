@@ -4,9 +4,11 @@
 // 每天都會更新的元素（播放鈕圖示、路的等級、狀態列數字）只改文字與樣式、不重建節點（審查：播放中每天重建，滑鼠按下與放開之間節點換掉，點擊就掉了）。
 // 文字一律用 textContent 寫（選單的註記、城市名都可能來自分享碼）。
 import { ICONS, type IconName } from './icons.ts';
+import { costTagPosition } from './costTag.ts';
+import { createPanelUpdateGate } from './panelPress.ts';
 
 // civic＝公共設施一組（D016）：按下去跟「路」一樣跳出一排可選（警察局、派出所、消防局、醫院……），按鈕上的字跟著選到的那一種
-export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'civic' | 'doze';
+export type ToolId = 'road' | 'zr' | 'zc' | 'zi' | 'plant' | 'civic' | 'food' | 'doze';
 // 工具顏色：住商工跟地面的分區色一致（src/render/ground.ts GROUND.zone）
 export const TOOLS: { id: ToolId; label: string; name: string; color: string }[] = [
   { id: 'road', label: '路', name: '道路', color: '#c9ced8' },
@@ -24,7 +26,7 @@ export const TOOLS: { id: ToolId; label: string; name: string; color: string }[]
 export interface HudState { name: string; sub: string; money: number | null; sandbox: boolean; day: number | null; pop: number | '—' | null; power: [number, number] | null; unsaved?: string; journal?: string }
 export interface DockState {
   mode: 'build' | 'view'; tool: ToolId | null; roadTool: string; roadTools: { id: string; name: string; cost: number }[];
-  civicTool: string; civicTools: { id: string; name: string; short: string; cost: number }[];
+  civicTool: string; civicTools: { id: string; name: string; short: string; cost: number; label?: string; lock?: number }[];   // lock：還沒解鎖要的城市等級（D044）
   prices: Partial<Record<ToolId, number>>; playing: boolean; speed: number; speeds: number[]; canUndo: boolean; sandbox: boolean;
 }
 export interface MenuItem { id: string; label: string; note?: string; icon?: IconName; on?: boolean }
@@ -49,6 +51,13 @@ const CSS = `
 #hud .name { display: flex; flex-direction: column; min-width: 0; flex: 1 1 150px; text-shadow: 0 1px 3px #000c; }
 #hud .name b { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #hud .name small { font-size: 11.5px; color: #d6dbe6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#commissionHud { min-height: 44px; flex: 0 1 100%; max-width: 390px; min-width: 0; padding: 6px 10px; display: flex; flex-direction: column; align-items: stretch; gap: 3px; text-align: left; background: #141a30ed; border-color: #e8b74a66; border-radius: 12px; touch-action: none; }
+#commissionHud[hidden] { display: none; }
+#commissionHud .summary { display: flex; align-items: center; gap: 8px; justify-content: space-between; }
+#commissionHud .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; }
+#commissionHud .progressText { white-space: nowrap; font-size: 11px; color: #ffe7b0; }
+#commissionHud .meter { height: 3px; background: #ffffff20; border-radius: 2px; overflow: hidden; }
+#commissionHud .meter i { display: block; height: 100%; background: #e8b74a; }
 #hud .stats { display: flex; gap: 6px; flex-wrap: wrap; }
 .stat { display: inline-flex; align-items: center; gap: 5px; height: 30px; padding: 0 10px; border-radius: 999px; background: #141a30e6; border: 1px solid #ffffff26; font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .stat[hidden] { display: none; }
@@ -56,6 +65,29 @@ const CSS = `
 .stat.money { color: #ffd98a; }
 .stat.bad { color: #ff9a9a; border-color: #ff8a8a77; }
 .stat.warn { color: #ffd98a; border-color: #ffd98a66; }
+.stat.saveWarning { min-width: 44px; min-height: 44px; height: auto; white-space: normal; text-align: left; }
+.stat.saveWarning:focus-visible, #saveStatus :focus-visible, #dlg :focus-visible { outline: 2px solid #ffe7b0; outline-offset: 3px; }
+#saveStatus { position: fixed; inset: 0; z-index: 20; background: #0008; display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); touch-action: pan-y; }
+#saveStatus[hidden] { display: none; }
+#saveStatus .card { width: min(460px, 100%); min-width: 0; box-sizing: border-box; max-height: 100%; display: flex; flex-direction: column; background: #141a30f5; border: 1px solid #ffffff26; border-radius: 12px; padding: 16px; box-shadow: 0 10px 30px #0008; overflow-wrap: anywhere; }
+#saveStatus h2 { flex: none; margin: 0 0 10px; font-size: 17px; }
+#saveStatus .saveBody { min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; }
+#saveStatus section { padding: 10px 12px; margin-bottom: 10px; border: 1px solid #ffd98a66; border-radius: 10px; }
+#saveStatus #saveStatusUnsaved { border-color: #ff8a8a77; }
+#saveStatus h3 { margin: 0 0 6px; color: #ffd98a; font-size: 15px; }
+#saveStatusUnsaved h3, #saveStatusError { color: #ff9a9a; }
+#saveStatus p { margin: 6px 0; font-size: 14px; line-height: 1.55; }
+#saveStatus .reason { font-weight: 600; }
+#saveStatus .note { color: #aab3c6; font-size: 12.5px; }
+#saveStatus .row { flex: none; margin-top: 14px; }
+#saveStatus button { min-width: 72px; min-height: 44px; }
+#saveStatusExport { background: #e8b74a; border-color: #e8b74a; color: #1c1a14; font-weight: 700; }
+#dlg .card { box-sizing: border-box; max-height: 100%; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; overflow-wrap: anywhere; }
+#copyStatus { margin: 10px 0; padding: 10px 12px; border: 1px solid #aab3c644; border-radius: 8px; color: #d5dcec; font-size: 13px; line-height: 1.55; }
+#copyStatus[data-phase="success"] { color: #b4e8bc; border-color: #b4e8bc66; }
+#copyStatus[data-phase="unsupported"], #copyStatus[data-phase="failed"] { color: #ffd98a; border-color: #ffd98a66; }
+#dlgOk[aria-disabled="true"] { opacity: .65; cursor: wait; }
+#dlg textarea[aria-invalid="true"] { border-color: #ff9a9a; box-shadow: 0 0 0 1px #ff9a9a66; }
 #dock { position: absolute; left: 0; right: 0; bottom: 0; padding: 8px 10px calc(10px + env(safe-area-inset-bottom)); background: linear-gradient(#0d122600, #0d1226ee 30%); display: flex; flex-direction: column; gap: 8px; }
 #dock[hidden] { display: none; }
 #dock .bar { display: flex; align-items: center; gap: 6px; min-height: 44px; }
@@ -79,13 +111,14 @@ const CSS = `
 #roadSub button, #civicSub button { min-height: 44px; padding: 3px 0; font-size: 12.5px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.15; }
 #roadSub button small, #civicSub button small { color: #aab3c6; font-size: 10.5px; }
 #roadSub button.on small, #civicSub button.on small { color: #3a2e10; }
+#civicSub button.locked { opacity: .55; }   /* D044：城市等級還沒到：看得到、點了只提示解鎖等級 */
 .coach { align-self: center; max-width: min(560px, 100%); background: #141a30f2; border: 1px solid #e8b74a99; color: #ffe7b0; border-radius: 12px; padding: 7px 12px; font-size: 13px; text-align: center; }
 .coach[hidden] { display: none; }
 .viewNote { display: flex; align-items: center; gap: 10px; justify-content: center; flex-wrap: wrap; font-size: 13px; color: #d6dbe6; }
 .viewNote[hidden] { display: none; }
 .viewNote button { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; min-height: 44px; border-radius: 12px; background: #e8b74a; color: #1c1a14; border-color: #e8b74a; font-weight: 700; }
 .viewNote button svg { width: 18px; height: 18px; }
-#costTag { position: absolute; transform: translate(-50%, -150%); padding: 4px 9px; border-radius: 999px; background: #141a30f2; border: 1px solid #ffffff55; font-weight: 700; font-size: 13px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+#costTag { position: absolute; transform: translateX(-50%); box-sizing: border-box; width: max-content; max-width: calc(100vw - 16px); padding: 4px 9px; border-radius: 999px; background: #141a30f2; border: 1px solid #ffffff55; font-weight: 700; font-size: 13px; line-height: 18px; text-align: center; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 #costTag[hidden] { display: none; }
 #costTag.bad { color: #ff9a9a; border-color: #ff8a8a99; }
 #toasts { position: absolute; top: calc(98px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 6px; align-items: center; width: max-content; max-width: calc(100vw - 24px); }
@@ -126,14 +159,14 @@ export function createBuildUi(on: BuildUiEvents) {
   root.innerHTML = `
     <div id="hud"><button class="menuBtn" id="menuBtn" aria-label="選單">${ICONS.menu}</button>
       <div class="name"><b id="cityName"></b><small id="citySub"></small></div>
-      <div class="stats" id="stats"></div></div>
+      <div class="stats" id="stats"></div><button id="commissionHud" type="button" hidden><span class="summary"><span class="label"></span><span class="progressText"></span></span><span class="meter"><i></i></span></button></div>
     <div id="toasts"></div>
     <div id="dock">
       <div class="coach" id="coach" hidden></div>
       <div class="viewNote" id="viewNote" hidden><span>這座城只能看。</span><button id="startBuild">${ICONS.build}開一座新城</button></div>
       <div id="roadSub" hidden></div>
-      <div id="civicSub" hidden></div>
-      <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow"></span>
+      <div id="civicWrap" hidden><div id="civicSub" hidden></div><button id="civicGuide" type="button" aria-haspopup="dialog" aria-controls="catalog" hidden>設施導覽 ↗</button></div>
+      <div class="bar" id="playBar"><button class="icoBtn" id="play" aria-label="播放">${ICONS.play}</button><div class="seg" id="spd"></div><span id="dayLbl"></span><span class="grow" id="dayGrow"></span><button id="siteGuide" type="button" aria-haspopup="dialog" aria-controls="sitePanel" hidden><span id="siteToolName">建造現場 ↗</span><span id="siteDay"></span></button>
         <button class="icoBtn" id="undo" aria-label="復原">${ICONS.undo}</button></div>
       <div class="tools" id="tools"></div>
     </div>
@@ -146,7 +179,7 @@ export function createBuildUi(on: BuildUiEvents) {
   for (const t of TOOLS) {
     const b = document.createElement('button');
     b.className = 'tool'; b.dataset.t = t.id; b.style.setProperty('--c', t.color); b.setAttribute('aria-label', t.name);
-    b.innerHTML = `${ICONS[t.id]}<span>${t.label}</span><span class="price"></span>`;
+    b.innerHTML = `${ICONS[t.id === 'food' ? 'zi' : t.id]}<span>${t.label}</span><span class="price"></span>`;
     b.onclick = () => on.tool(b.classList.contains('on') ? null : t.id);   // 再按一次＝放下工具（回到看的模式）
     toolsEl.appendChild(b);
   }
@@ -154,26 +187,60 @@ export function createBuildUi(on: BuildUiEvents) {
   $<HTMLButtonElement>('undo').onclick = () => on.undo();
   $<HTMLButtonElement>('menuBtn').onclick = () => { on.menuOpen(); menu.hidden = false; };
   $<HTMLButtonElement>('menuX').onclick = () => { menu.hidden = true; };
+  $<HTMLButtonElement>('civicGuide').onclick = () => on.menu('catalog');
+  $<HTMLButtonElement>('siteGuide').onclick = () => on.menu('site');
+  const siteGate = createPanelUpdateGate($('siteGuide'));
   $<HTMLButtonElement>('startBuild').onclick = () => on.startBuild();
+  $<HTMLButtonElement>('commissionHud').onclick = () => on.menu('commission');
   menu.onclick = e => { if (e.target === menu) menu.hidden = true; };
 
   // 狀態列的晶片：建一次，之後只改文字、樣式、藏不藏
-  const chip = (icon: IconName | null, title: string) => {
-    const s = document.createElement('span'), t = document.createElement('span');
+  const chip = (icon: IconName | null, title: string, warning = false) => {
+    const s = document.createElement(warning ? 'button' : 'span'), t = document.createElement('span');
     s.className = 'stat'; s.title = title; s.hidden = true;
+    if (warning) { (s as HTMLButtonElement).type = 'button'; s.setAttribute('aria-haspopup', 'dialog'); s.setAttribute('aria-controls', 'saveStatus'); s.onclick = () => on.menu('save-status'); }
     if (icon) s.innerHTML = ICONS[icon];
     s.appendChild(t); stats.appendChild(s);
     return { s, t };
   };
-  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, ''), chJ = chip(null, '');
+  const chMoney = chip('coin', '資金'), chPop = chip('people', '人口'), chPower = chip('bolt', '要用電的住商工／電廠容量（一座燃煤電廠約供 75 棟）'), chSave = chip(null, '', true), chJ = chip(null, '', true);
   chMoney.s.dataset.k = 'money'; chPop.s.dataset.k = 'pop'; chPower.s.dataset.k = 'power'; chSave.s.dataset.k = 'unsaved'; chJ.s.dataset.k = 'journal';
   // 資金照實驗線 updHud 取整：往下取（64849 Math.floor；審查：之前四捨五入，會顯示一個其實花不起的數），負號跟著取整後的值
   const money = (v: number) => { const m = Math.floor(v); return (m < 0 ? '−$' : '$') + Math.abs(m).toLocaleString(); };
-  let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight;
-  // 下方整塊的上緣：排版之後才量（ResizeObserver 在排版後、畫之前呼叫，讀位置不會逼瀏覽器多排一次）；拖曳中只讀這個數
-  const measureDock = () => { dockTop = dock.getBoundingClientRect().top; };
-  if (typeof ResizeObserver !== 'undefined') new ResizeObserver(measureDock).observe(dock);
-  addEventListener('resize', () => requestAnimationFrame(measureDock));
+  let playShown: boolean | null = null, roadKey = '', civicKey = '', dockTop = innerHeight, hudBottom = 8, noticesBottom = 8;
+  let cost: { x: number; y: number; text: string } | null = null;
+  let measuredCost = { text: '', w: 0, h: 0, viewportWidth: 0 };
+  const positionCost = () => {
+    if (!cost) return;
+    const lines = cost.text.split('\n'), widths = lines.map(line => { let width = 20; for (const ch of line) width += ch.charCodeAt(0) > 0x2e7f ? 13 : 8; return width; });
+    const estimate = Math.max(...widths);
+    const maxWidth = Math.max(1, innerWidth - 16), measured = measuredCost.text === cost.text && measuredCost.viewportWidth === innerWidth;
+    const w = measured ? measuredCost.w : Math.min(estimate, maxWidth);
+    const h = measured ? measuredCost.h : 12 + 18 * widths.reduce((rows, width) => rows + Math.ceil(width / maxWidth), 0);
+    const p = costTagPosition(cost.x, cost.y, w, h, innerWidth, innerHeight, Math.max(hudBottom, noticesBottom) + 8, dockTop - 8);
+    costTag.hidden = !p;   // A tiny viewport with no free strip must never cover an interactive control.
+    if (p) { costTag.style.left = p.left + 'px'; costTag.style.top = p.top + 'px'; }
+  };
+  // ResizeObserver caches chrome geometry after layout. Pointer movement only reads
+  // these numbers; HUD wrapping, live commission rows and expiring notices also
+  // reposition an already-visible tag without waiting for another finger movement.
+  const measureChrome = () => {
+    hudBottom = $('hud').getBoundingClientRect().bottom;
+    toasts.style.top = Math.ceil(hudBottom + 8) + 'px';
+    noticesBottom = toasts.childElementCount ? toasts.getBoundingClientRect().bottom : hudBottom;
+    dockTop = dock.hidden ? innerHeight : dock.getBoundingClientRect().top;
+    positionCost();
+  };
+  if (typeof ResizeObserver !== 'undefined') {
+    const chromeObserver = new ResizeObserver(measureChrome);
+    for (const el of [$('hud'), dock, toasts]) chromeObserver.observe(el);
+    new ResizeObserver(() => {
+      if (!cost || costTag.hidden) return;
+      const r = costTag.getBoundingClientRect();
+      measuredCost = { text: cost.text, w: r.width, h: r.height, viewportWidth: innerWidth }; positionCost();
+    }).observe(costTag);
+  }
+  addEventListener('resize', () => requestAnimationFrame(measureChrome));
   return {
     root, style,
     setHud(h: HudState) {
@@ -185,10 +252,19 @@ export function createBuildUi(on: BuildUiEvents) {
       chPower.s.hidden = !h.power;
       if (h.power) { setText(chPower.t, `${h.power[0]}/${h.power[1]}`); chPower.s.className = 'stat' + (h.power[0] > h.power[1] ? ' bad' : ''); }
       chSave.s.hidden = !h.unsaved;
-      if (h.unsaved) { setText(chSave.t, '⚠ 未存檔'); chSave.s.className = 'stat bad'; chSave.s.title = `自動存檔失敗：${h.unsaved}。請從 ☰ 匯出分享碼備份`; }
+      if (h.unsaved) { setText(chSave.t, '⚠ 未存檔'); chSave.s.className = 'stat bad saveWarning'; chSave.s.title = `自動存檔失敗：${h.unsaved}。點擊查看原因與匯出分享碼`; chSave.s.setAttribute('aria-label', '未存檔：查看原因與匯出分享碼'); }
       chJ.s.hidden = !h.journal || !!h.unsaved;                          // 存不進去的那一顆比較要緊，同時只亮一顆
-      if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下`; }
+      if (h.journal && !h.unsaved) { setText(chJ.t, '⚠ 歷史有上限'); chJ.s.className = 'stat warn saveWarning'; chJ.s.title = `世界歷史的日誌不能用（${h.journal}）：歷史整份存在瀏覽器的存檔裡，約 8 萬筆之後就存不下。點擊查看原因與匯出分享碼`; chJ.s.setAttribute('aria-label', '歷史有上限：查看原因與匯出分享碼'); }
       stats.dataset.money = h.money === null ? '' : String(h.money);
+    },
+    setCommission(c: { label: string; progress: string; fraction: number; days: number } | null) {
+      const b = $('commissionHud'); b.hidden = !c;
+      if (!c) return;
+      setText(b.querySelector('.label')!, c.label);
+      setText(b.querySelector('.progressText')!, c.progress + ' · ' + c.days + '天');
+      b.setAttribute('aria-label', '查看進行中的委託：' + c.label + '，' + c.progress + '，剩餘 ' + c.days + ' 天');
+      b.title = '點擊查看委託詳情';
+      (b.querySelector('.meter i') as HTMLElement).style.width = Math.floor(Math.max(0, Math.min(1, c.fraction)) * 100) + '%';
     },
     setDock(d: DockState) {
       const build = d.mode === 'build';
@@ -204,10 +280,10 @@ export function createBuildUi(on: BuildUiEvents) {
       $<HTMLButtonElement>('undo').disabled = !d.canUndo;
       const civ = d.civicTools.find(c => c.id === d.civicTool);
       toolsEl.querySelectorAll<HTMLElement>('.tool').forEach(b => {
-        const id = b.dataset.t as ToolId, p = id === 'road' ? d.roadTools.find(r => r.id === d.roadTool)?.cost : id === 'civic' ? civ?.cost : d.prices[id];
-        b.classList.toggle('on', d.tool === id);
+        const id = b.dataset.t as ToolId, p = id === 'road' ? d.roadTools.find(r => r.id === d.roadTool)?.cost : (id === 'civic' || id === 'food') ? civ?.cost : d.prices[id];
+        b.classList.toggle('on', d.tool === id || (id === 'civic' && d.tool === 'food'));
         setText(b.querySelector('.price')!, d.sandbox ? '免費' : p !== undefined ? '$' + p : '');
-        if (id === 'civic' && civ) { setText(b.querySelector('span')!, civ.short); b.setAttribute('aria-label', `公共設施：${civ.name}`); }   // 組按鈕的字跟著選到的那一種
+        if (id === 'civic' && civ) { setText(b.querySelector('span')!, civ.short); b.setAttribute('aria-label', `${d.tool === 'food' ? '農業外貿' : '公共設施'}：${civ.name}`); }   // 組按鈕的字跟著選到的那一種
       });
       roadSub.hidden = d.tool !== 'road' || !build;
       const key = d.roadTools.map(r => `${r.id}:${r.name}:${r.cost}`).join() + (d.sandbox ? '|free' : '');
@@ -220,18 +296,28 @@ export function createBuildUi(on: BuildUiEvents) {
       }
       roadSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.r === d.roadTool));
       // 公共設施一組（D016）：十種，名稱與造價照實驗線；清單或沙盒變了才重建
-      civicSub.hidden = d.tool !== 'civic' || !build;
-      const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}`).join() + (d.sandbox ? '|free' : '');
+      $('civicWrap').dataset.group = d.tool === 'food' ? 'food' : 'civic';
+      $('civicWrap').hidden = d.mode !== 'build' || (d.tool !== 'civic' && d.tool !== 'food');
+      $('civicGuide').hidden = d.mode !== 'build' || (d.tool !== 'civic' && d.tool !== 'food');
+      civicSub.hidden = (d.tool !== 'civic' && d.tool !== 'food') || !build;
+      const ck = d.civicTools.map(c => `${c.id}:${c.name}:${c.cost}:${c.lock ?? 0}`).join() + (d.sandbox ? '|free' : '');
       if (ck !== civicKey) {
         civicKey = ck; civicSub.replaceChildren();
         for (const c of d.civicTools) {
           const b = document.createElement('button'), sm = document.createElement('small'); b.dataset.c = c.id;
-          sm.textContent = d.sandbox ? '免費' : '$' + c.cost; b.append(c.name, sm); b.onclick = () => on.civicTool(c.id); civicSub.appendChild(b);
+          sm.textContent = c.lock ? `🔒Lv.${c.lock}` : d.sandbox ? '免費' : '$' + c.cost; b.append(c.label ?? c.name, sm); b.onclick = () => on.civicTool(c.id);
+          b.setAttribute('aria-label', c.lock ? `${c.name}（城市 Lv.${c.lock} 解鎖）` : `${c.name} ${d.sandbox ? '免費' : '$' + c.cost}`);   // D044：名字縮成按鈕放得下的字，完整的名字給讀屏
+          if (c.lock) { b.classList.add('locked'); b.setAttribute('aria-disabled', 'true'); }
+          civicSub.appendChild(b);
         }
       }
       civicSub.querySelectorAll<HTMLElement>('button').forEach(b => b.classList.toggle('on', b.dataset.c === d.civicTool));
     },
-    setDay(text: string) { setText($('dayLbl'), text); },
+    setSiteGuide(name: string, result: string | null) {
+      const render = () => { const b = $('siteGuide'), shown = !!name || !!result; b.hidden = !shown; $('dayLbl').hidden = shown; $('dayGrow').hidden = shown; setText($('siteToolName'), name ? name + '・現場' : '建造現場 ↗'); b.dataset.result = String(!!result); b.setAttribute('aria-label', (name ? name + '：操作與選址指引' : '建造現場指引') + (result ? '；' + result : '')); b.title = b.getAttribute('aria-label')!; };
+      if (!siteGate.defer(render)) render();
+    },
+    setDay(text: string) { setText($('dayLbl'), text); setText($('siteDay'), text); },
     setCoach(text: string | null) { const c = $('coach'); c.hidden = !text; setText(c, text ?? ''); },
     // onTap（D026）：災禍的提示點一下跳到那棟建築（實驗線 toast 的 x、y，點了鏡頭過去），沒給就只是提示
     toast(text: string, tone: 'good' | 'bad' | 'gold' | '' = '', onTap?: () => void) {
@@ -240,17 +326,13 @@ export function createBuildUi(on: BuildUiEvents) {
       while (toasts.childElementCount > 3) toasts.firstElementChild!.remove();
       setTimeout(() => { t.style.opacity = '0'; }, 2200); setTimeout(() => t.remove(), 2700);
     },
-    // 總價標籤掛在手指那一格上方；靠近畫面邊緣時往內收，整個標籤留在畫面裡，也不壓到下方整塊（審查：之前被工具列蓋住）。
-    // 寬度用字數估（全形約 13 px、其他約 8 px，加左右留白），不讀 offsetWidth：拖曳中每次更新都讀會逼瀏覽器同步排版（預算 16 ms）；
-    // 下方整塊的上緣也不在這裡量（見 measureDock）
+    // D047: fit the complete tag between the HUD/notices and dock, using cached
+    // measured size (a conservative text estimate until its first layout).
     showCost(x: number, y: number, text: string, bad: boolean) {
       costTag.hidden = false; setText(costTag, text); costTag.classList.toggle('bad', bad);
-      let w = 20; for (const ch of text) w += ch.charCodeAt(0) > 0x2e7f ? 13 : 8;
-      const h = 26, m = 8;
-      costTag.style.left = Math.max(m + w / 2, Math.min(innerWidth - m - w / 2, x)) + 'px';
-      costTag.style.top = Math.max(m + h * 1.5, Math.min(innerHeight - m, dockTop - 4 + h / 2, y)) + 'px';
+      cost = { x, y, text }; positionCost();
     },
-    hideCost() { costTag.hidden = true; },
+    hideCost() { cost = null; costTag.hidden = true; },
     setMenu(sections: MenuSection[]) {
       menuBody.replaceChildren();
       for (const s of sections) {

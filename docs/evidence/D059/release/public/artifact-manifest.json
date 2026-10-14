@@ -1,0 +1,176 @@
+{
+  "expected": {
+    "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+    "commit": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+    "tree": "3ae57e351ccf117e72cb2c00063df4e0a877ee76",
+    "htmlSha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8"
+  },
+  "harness": {
+    "file": "C:\\dev\\GlimmerTown3D-lab\\scratch\\d059-release\\d059-public-verification.mjs",
+    "sha256": "17677d06e987622c61c1e42847ee3de17d5d51572f870cb2d68341fef003a2fa",
+    "adaptedFrom": "eeadaccdb527e1e8c0f598f964632cc87ef3a5f1:tools/d058-public-verification.mjs"
+  },
+  "passed": true,
+  "files": {
+    "d059-1440-church-se.png": {
+      "sha256": "6400bd5282e3795008db6d4066c010728301add77cb891c3f34ea9ff52232ae2",
+      "bytes": 97987
+    },
+    "d059-1440-cottage-se.png": {
+      "sha256": "4407935d6da74d2177b756d5ef61b721fb46074777d4bf00a8ddb5d3f9748768",
+      "bytes": 99718
+    },
+    "d059-1440-document-1.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-1440-document-2.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-1440-document-3.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-1440-inn-se.png": {
+      "sha256": "ba9efb336913bb34dccf456663b1f744df3fb43a020c10e5c7686e73cc3d7b88",
+      "bytes": 99546
+    },
+    "d059-1440-manor-se.png": {
+      "sha256": "9069118b0f6d62dbddbc789eb225d57aa172654c0592fe8c982010dd0907ee9e",
+      "bytes": 101178
+    },
+    "d059-1440-network.json": {
+      "sha256": "de0aa92c751f766440549b0f0c3d0646a28f78cf95cd4cdd4e09743af2c489d1",
+      "bytes": 18451
+    },
+    "d059-1440-oast-se.png": {
+      "sha256": "9f4703f7d4028de8c561031de757c2874335e8a63610079cfe576c0c44b63d9a",
+      "bytes": 98048
+    },
+    "d059-1440-overview.png": {
+      "sha256": "6f619773f3431a6f55610149bfa1b27055f9eb088b3ef182eca6af03fcc71687",
+      "bytes": 131982
+    },
+    "d059-1440-rows-se.png": {
+      "sha256": "a5b79b662e2f03ecb0b1a465dd486a36b8d7b1b413c6388dc57afeb36f935793",
+      "bytes": 100730
+    },
+    "d059-1440-world.json": {
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4",
+      "bytes": 13448
+    },
+    "d059-360-church-se.png": {
+      "sha256": "e352a238b64cd0562786172a241ccb5f809f04634d163742f1213785759c4428",
+      "bytes": 56633
+    },
+    "d059-360-cottage-se.png": {
+      "sha256": "1bbe926e0f3b7c4e620a6ec303551878e96a75d1ee4a96e67d16f7d8a119ef6e",
+      "bytes": 57337
+    },
+    "d059-360-document-1.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-360-document-2.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-360-document-3.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-360-inn-se.png": {
+      "sha256": "6fec57da7980d4113e7b7402d21038e485645b05ed54cee0b0328f392ba08314",
+      "bytes": 60841
+    },
+    "d059-360-manor-se.png": {
+      "sha256": "990d9053382d5c655e2691d50ac6fc974a83eb1a13c3f80d5c6d9be012709512",
+      "bytes": 59546
+    },
+    "d059-360-network.json": {
+      "sha256": "d254a1e6e0188647cf015eb56f2b9fc14c4af9a5870872dd89e8eb3e0cfc04fe",
+      "bytes": 18462
+    },
+    "d059-360-oast-se.png": {
+      "sha256": "3600ec4ec36d08de18190b40643b6f3a2c29f2bb49f80f77a4fdd978f53e1956",
+      "bytes": 54323
+    },
+    "d059-360-overview.png": {
+      "sha256": "71a5c72244a6b1d1476cb249801850160d8fea5c3fa0990c3a3b40e051a8e221",
+      "bytes": 43741
+    },
+    "d059-360-rows-se.png": {
+      "sha256": "18652ae4d34de0fa92f66df90c9bca2b8a336afe10f95c54a2f97135ebe328ac",
+      "bytes": 58798
+    },
+    "d059-360-world.json": {
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4",
+      "bytes": 13448
+    },
+    "d059-412-church-se.png": {
+      "sha256": "c8eb21f62973d84cdaee8e73199a3ead9790605d7d69766b213937ee698e735a",
+      "bytes": 61477
+    },
+    "d059-412-cottage-se.png": {
+      "sha256": "0087194fc3df4950a5e49e7c3f89e5cf0892b31e32a8044de759b39d3b5ac5a1",
+      "bytes": 62401
+    },
+    "d059-412-document-1.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-412-document-2.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-412-document-3.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "d059-412-inn-se.png": {
+      "sha256": "6530c4a21d1570af2496ba10a8bcd54188ceaeca2c2150ed8e7a8ab96477b3b1",
+      "bytes": 67367
+    },
+    "d059-412-manor-se.png": {
+      "sha256": "43e53bd19095606ca4f6eedd30ff776745110dbd6527e997d9207f2b893eb569",
+      "bytes": 65218
+    },
+    "d059-412-network.json": {
+      "sha256": "aaffdebff0e5584ff0ffb0112ffaa383a0caa8fcca80ff438c8fbe3e850a92c8",
+      "bytes": 18448
+    },
+    "d059-412-oast-se.png": {
+      "sha256": "015fa58cec06a5d956a5d5d2a60157236c6bcca2fc4387376808b7e066705d40",
+      "bytes": 58996
+    },
+    "d059-412-overview.png": {
+      "sha256": "a77edd99e7573b3dc15eaa121fe9a3ff2b3b38d591e4cd0ef5895e0804a69670",
+      "bytes": 46507
+    },
+    "d059-412-rows-se.png": {
+      "sha256": "a73b0c388f0571519c8d189ed41f6324ba49c74dfcc084071ed46fd3df9fc188",
+      "bytes": 63738
+    },
+    "d059-412-world.json": {
+      "sha256": "62ec1067898a42bd34f4c5e62efd8e18926bf8b84ccbb9556bdbca545fbaf4d4",
+      "bytes": 13448
+    },
+    "fixture.code.txt": {
+      "sha256": "147519095d131216802f750d2e45e945b35a93dd6400c74755d50008a0421109",
+      "bytes": 2912
+    },
+    "public-index.html": {
+      "sha256": "4515f6a815d3450a1b7b271000955d4ed57fe6a8b2f694cbc73e0b4d8b24a8a8",
+      "bytes": 1237602
+    },
+    "report.json": {
+      "sha256": "9ae2353793ea4f2dc40078580a27610dbb2c8420164c5cd7018d9665d5d6de86",
+      "bytes": 218400
+    },
+    "source-manifest.json": {
+      "sha256": "03b10ea03d8c2e5b9637b7e613886a1a9aca80c3d5d1286f4377f36bcf9c5865",
+      "bytes": 76396
+    }
+  }
+}

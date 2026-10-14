@@ -17,7 +17,7 @@ concurrency:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 30   # D027：守衛＋煙霧＋樣張約 20 分鐘（r26 是 18 分 40 秒，D027 加了實跑守衛與煙霧約 2 分鐘），25 分鐘的餘裕太薄；D022 那次是 15→25
+    timeout-minutes: 90   # D054：完整保留舊套件，再加原生現場診斷／原版未中斷配對；僅增加總時間預算，性能及像素門檻不變。
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,6 +44,19 @@ jobs:
           path: |
             smoke-run.txt
             scratch/shots/*.png
+            scratch/shots/D048-evidence.json
+            scratch/shots/D049-evidence.json
+            scratch/shots/D050-evidence.json
+            scratch/shots/D051-evidence.json
+            scratch/shots/D052-*.json
+            scratch/shots/D052-*.code.txt
+            scratch/shots/D053-*.json
+            scratch/shots/D053-*.code.txt
+            scratch/shots/D053-*.html
+            scratch/shots/D054-*.json
+            scratch/shots/D054-*.code.txt
+            scratch/shots/D054-*.html
+            scratch/shots/D056-*.json
           if-no-files-found: warn
           retention-days: 14
       - uses: actions/upload-pages-artifact@v3
@@ -51,8 +64,52 @@ jobs:
         with:
           path: dist
 
+  d055:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D055 native food trade capture
+        run: node tools/d055-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d055-quick-${{ github.sha }}
+          path: scratch/d055-after/
+          if-no-files-found: error
+          retention-days: 14
+
+  d059:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D059 six British village exteriors and native controls
+        run: node tools/d059-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d059-preview-${{ github.sha }}
+          path: scratch/d059-after/
+          if-no-files-found: error
+          retention-days: 14
+
   pages:
-    needs: smoke
+    needs: [smoke, d055, d059]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:

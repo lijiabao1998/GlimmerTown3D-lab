@@ -1,10 +1,12 @@
+import { BRITISH_KINDS } from './britishCivic.ts';
+import { BRITISH_HERITAGE_KINDS } from './britishHeritage.ts';
 // 非住商工的造型表（D007）：每一種用哪一個造型類型、帶什麼參數。純資料＋純函式：不 import three、不碰 DOM。
 // 造型參照 2D 實驗線 @ d23c18d 的精靈圖（tools/lab-extract.mjs --part=d007 拍的逐種小圖 scratch/lab/gallery/k*.png）；
 // 高度照 D003 量到的實驗線高度（lab-kinds.json），顏色照 D007 讀出的五色（lab-looks.json）。畫法在 src/render/kindArt.ts。
 export type ShapeType =
   | 'tower' | 'hall' | 'classic' | 'brick' | 'hospital' | 'church' | 'station' | 'port' | 'airport' | 'plant' | 'refinery'
   | 'solar' | 'wind' | 'dam' | 'substation' | 'basins' | 'watertower' | 'dump' | 'park' | 'court' | 'stadium' | 'ride'
-  | 'landmark' | 'farm' | 'house' | 'hotel' | 'parking' | 'campus' | 'prison';
+  | 'spacecenter' | 'landmark' | 'farm' | 'house' | 'hotel' | 'parking' | 'campus' | 'prison';
 export interface Shape { type: ShapeType; p?: Record<string, number | string | boolean> }
 
 const S = (type: ShapeType, p?: Shape['p']): Shape => ({ type, p });
@@ -142,7 +144,7 @@ export const KIND_SHAPES: Record<number, Shape> = {
   40: S('hall', { roof: 'flat', sign: 1, small: 1 }),                   // 電影院
   44: S('hall', { roof: 'barrel', halls: 3 }),                          // 會展中心
   46: S('landmark', { which: 'weather' }),                              // 氣象站
-  51: S('landmark', { which: 'rocket' }),                               // 太空研究中心
+  51: S('spacecenter'),                                                // D047：整合測試館＋任務控制翼＋測控設備場
   56: S('stadium', { dome: 1 }),                                        // 體育園區
   66: S('church', { spire: 1 }),                                        // 信仰中心
   67: S('landmark', { which: 'clock' }),                                // 鐘樓
@@ -205,7 +207,11 @@ export const KIND_SHAPES: Record<number, Shape> = {
   169: S('plant', { silos: 4, halls: 0 }),                              // 糧食筒倉
 };
 
-export const shapeOf = (k: number): Shape | null => KIND_SHAPES[k] ?? null;
+// Preserve the historical recipes for regression comparison; only these eleven opt in to D056.
+export const shapeOf = (k: number, heritage = true): Shape | null => {
+  const shape = KIND_SHAPES[k];
+  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : shape : null;
+};
 
 export const PARK_GRASS = '#82c163';   // D018：實驗線公園精靈的草地底色（40610）
 // 五色（lab-looks.json 讀出的實驗線精靈色）；缺的用分類色補。純函式，looks 由呼叫端傳入

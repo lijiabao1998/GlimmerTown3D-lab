@@ -1,0 +1,57 @@
+name: D056 British art candidate
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  british-art:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && node tools/unit-d056.mjs
+      - uses: actions/checkout@v4
+        with:
+          ref: 0e849a6f6322091863ab0c27b64a45c669e45444
+          path: scratch/d056-baseline-src
+      - name: Build verified D055 baseline for same-camera comparison
+        run: |
+          npm ci --prefix scratch/d056-baseline-src
+          npm run build --prefix scratch/d056-baseline-src
+          mkdir -p scratch/d056-before
+          cp scratch/d056-baseline-src/dist/index.html scratch/d056-before/index.html
+      - run: npm run build
+      - name: Capture before and after, desktop and mobile
+        run: |
+          node tools/d056-capture.mjs --phase=before
+          node tools/d056-capture.mjs --phase=after
+      - name: Current and historical dialog UI regression
+        run: node tools/d056-dialog-goldens.mjs
+      - name: Existing D055 native placement and interruption regression
+        run: node tools/d055-capture.mjs --phase=after
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d056-art-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            scratch/d056-before/*.png
+            scratch/d056-before/*.json
+            scratch/d056-before/*.code.txt
+            scratch/d056-after/*.png
+            scratch/d056-after/*.json
+            scratch/d056-after/*.code.txt
+            scratch/d055-after/*.png
+            scratch/d055-after/*.json
+            scratch/shots/D049-*.png
+            scratch/shots/D050-*.png
+            scratch/shots/D056-*.png
+            scratch/shots/D056-*.json
+          if-no-files-found: error
+          retention-days: 14

@@ -1,9 +1,15 @@
+import {D057_REQUIRED_COLORS} from './d057-palette.mjs';
+import { BRITISH_KINDS, BRITISH_PALETTE } from '../src/content/britishCivic.ts';
 // 煙霧測試：無頭 Chrome 開建置後的單檔頁面，逐條驗卡面的驗收（可斷言的事實，不是「看起來對」）。
 // D003 起預設是 2D 城市模式；300 年示範（D001／D002）改用 ?mode=history 開。
 // 用法：npm run build && node tools/smoke.mjs      退出碼 0＝綠燈、1＝紅燈
 import fs from 'node:fs';
 import path from 'node:path';
-import { withBrowser, ROOT } from './cdp.mjs';
+import { withBrowser as currentArtBrowser, ROOT } from './cdp.mjs';
+// D058: historical assertions keep exact historical street geometry and goldens.
+// The current renderer runs separately at the end; no old expected value is refreshed.
+const withBrowser = (opt, fn) => currentArtBrowser(opt, ({page,open}) => fn({page,open:q=>open(q+(q?'&':'')+'streetArt=legacy')}));
+console.log('D058: complete historical suite uses streetArt=legacy; current-art native suite follows.');
 import { GROUND } from '../src/render/ground.ts';
 import { kindTableFrom } from '../src/content/kindTable.ts';
 import { STARTER_DAYS } from '../src/content/starter.ts';
@@ -29,6 +35,24 @@ import { d031Smoke, d031SkipNote } from './smoke-d031.mjs';
 import { d032Smoke, d032SkipNote } from './smoke-d032.mjs';
 import { d033Smoke, d033SkipNote } from './smoke-d033.mjs';
 import { d034Smoke, d034SkipNote } from './smoke-d034.mjs';
+import { d035Smoke, d035SkipNote } from './smoke-d035.mjs';
+import { d036Smoke, d036SkipNote } from './smoke-d036.mjs';
+import { d038Smoke, d038SkipNote } from './smoke-d038.mjs';
+import { d039Smoke, d039SkipNote } from './smoke-d039.mjs';
+import { d040Smoke, d040SkipNote } from './smoke-d040.mjs';
+import { d044Smoke, d044SkipNote } from './smoke-d044.mjs';
+import { d045Smoke, d045SkipNote } from './smoke-d045.mjs';
+import { d046Smoke } from './smoke-d046.mjs';
+import { d047ArtSmoke } from './smoke-d047-art.mjs';
+import { d047MobileSmoke } from './smoke-d047-mobile.mjs';
+import { d048Smoke, d048SkipNote } from './smoke-d048.mjs';
+import { d056DialogGoldens } from './d056-dialog-goldens.mjs';
+import { d049Smoke } from './smoke-d049.mjs';
+import { d050Smoke, d050CopyImageGuard } from './smoke-d050.mjs';
+import { d051Smoke, d051ImportImageGuard } from './smoke-d051.mjs';
+import { d052Smoke } from './smoke-d052.mjs';
+import { d053Smoke } from './smoke-d053.mjs';
+import { d054Smoke } from './smoke-d054.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）
 const J = JSON.stringify;
@@ -45,6 +69,10 @@ const blankCheck = `(()=>{const c=document.querySelector('canvas'),k=document.cr
   for(let i=0;i<d.length;i+=4){const v=(d[i]+d[i+1]+d[i+2])/3;s+=v;s2+=v*v;n++;}const m=s/n;return +(s2/n-m*m).toFixed(1);})()`;
 
 console.log('\n=== 微光小鎮 3D 煙霧測試 ===');
+// D054 new native acceptance runs first; all original suites and gates remain intact.
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d054Smoke(withBrowser, log);
+// D053 runs early for actionable candidate feedback. Every original suite below still runs.
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d053Smoke(withBrowser, log);
 await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // 版本也印出來：本機與雲端的 Chrome 不同（本機 Chromium 141、雲端是 runner 內建的 Google Chrome），觸控模擬這類問題要知道是哪一版
   const product = await page.send('Browser.getVersion').then(v => v.product).catch(() => '版本讀不到');
@@ -272,7 +300,11 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
   // ?blocks=b 71,690／68,028（D008 的 69,598／67,396 是存檔 v）。預設 C 另驗仍在手機預算內（≤ D003 基線 1.5 倍、draw call ≤ 18）
   // D018 故意改了公園（k4）照實驗線九種設計畫：AI 城有 17 座公園，三檔都多 1,654 個三角形（C 74,990 → 76,644、B 68,028 → 69,682）；種子城沒有公園、不變。
   // 公園以外的幾何沒變由 Node 守衛證（tools/unit-d018.mjs：183 種 × 9 個變體逐位＝動手前）
-  const D012_TRI = { seed516: { c: 94002, b: 71690 }, ai120: { c: 76644, b: 69682 } }, D012_CALLS = 15;
+  // D056: ai120 primary geometry +3414; shadow-casting W/O arenas submit +758 again.
+  // 8 schools: 8*(202+34), 1 hospital: 178+66, 10 clinics: 10*(162+42) = +4172.
+  // tools/d056-render-budget.mjs independently decodes/restyles and counts each arena.
+  const d057Budget = JSON.parse(fs.readFileSync(path.join(ROOT,'fixtures/d057-render-budget.json'),'utf8'));
+  const D012_TRI = { seed516: d057Budget.seed516.modes, ai120: d057Budget.ai120.modes }, D012_CALLS = 15;
   for (const id of ['seed516', 'ai120']) {
     await open(`sample=${id}&clean=1`);
     const L = await page.evaluate('__gt.layers()'), G = await page.evaluate('__gt.groundData()'), info = await page.evaluate('({i: __gt.renderInfo(), tone: __gt.tone(), mode: __gt.blockMode()})');
@@ -341,13 +373,13 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
         const look = LK[`${k}_${lv}`] ?? LK[`${k}_1`];
         if (look) {
           const used = new Set(U[bid] || []), need = c => !c || used.has(c.toLowerCase()), any = [look.wallL, look.roof, look.accent, look.wallR].filter(Boolean);
-          const ok = BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
+          const ok = D057_REQUIRED_COLORS[k] ? D057_REQUIRED_COLORS[k].every(need) : BRITISH_KINDS.has(k) ? [BRITISH_PALETTE.stone, BRITISH_PALETTE.slate].every(need) : BLD.has(KIND_SHAPES[k].type) ? need(look.wallL) && need(look.roof) : any.length === 0 || any.some(c => used.has(c.toLowerCase()));
           if (!ok) cbad.push(`k${k}`);
         }
       }
       log(out.length === 0, `D007 ${id} 非住商工每一棟都有造型、不出界（外挑 ≤0.1 格）`, out.length ? out.slice(0, 4).join('；') : `${civ.length} 棟`);
       log(hbad.length === 0, `D007 ${id} 高度：實驗線 ≥0.35 格的在 0.7～1.3 倍、貼地的不高過 0.45 格`, hbad.length ? hbad.slice(0, 4).join('；') : `${civ.length} 棟全對`);
-      log(cbad.length === 0, `D007 ${id} 顏色：模型用上實驗線精靈讀出的色（建築類受光牆＋屋頂，設施類至少一色）`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
+      log(cbad.length === 0, `D007 ${id} 顏色：既有模型保留來源色；D056 與 D057 明確核對各自材質色`, cbad.length ? cbad.join(',') : `${civ.filter(r => LK[`${r[1]}_1`]).length} 棟有實驗線色、全用上`);
       // 地坪：非住商工建築的格子是該種的地坪色（±8% 明暗）。沒有抽到色的缺省沙色；公園（k4）D018 起是實驗線公園精靈的草地 #82c163（src/content/kindShapes.ts kindColors）
       const Gd = await page.evaluate('__gt.groundData()'), rgb = Buffer.from(Gd.rgb, 'base64'), S = Gd.S, W = Gd.W, lay = await page.evaluate('__gt.layers()');
       let plateCells = 0, plateBad = 0;
@@ -375,7 +407,7 @@ await withBrowser({ width: 960, height: 600 }, async ({ open, page }) => {
     // A 檔一格一棟、每一棟照自己的 v 挑原型，幾何跟著換：釘改成 D012 量的值 121,606／78,424（沒有立面、飾條照舊）。
     // 注意：種子城 A 檔 121,606 超過 D004 驗收 8 的手機預算（三檔都 ≤ D003 基線 1.5 倍＝118,884）。D004 那一項的 A 檔三角形改成只量不判、照印超過多少；
     // 這裡的逐位釘照判，A 檔幾何再變就紅。A 檔拿掉、簡化、還是改預算，由業主定（D012 卡）
-    const D012_A = { seed516: 121606, ai120: 80078 }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
+    const D012_A = { seed516: d057Budget.seed516.modes.a, ai120: d057Budget.ai120.modes.a }, D003_TRI = { seed516: 79256, ai120: 70910 };   // 預算基線＝D003；ai120 D018 公園 +1,654（78,424 → 80,078）
     for (const id of ['seed516', 'ai120']) {
       await open(`sample=${id}&clean=1&blocks=a`);
       const a = await page.evaluate('({i: __gt.renderInfo(), fb: __gt.facadeBlocks(), art: __gt.artCounts()})');
@@ -583,6 +615,28 @@ if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d032Smok
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d033Smoke(withBrowser, log);
 // ===== D034：摩天樓與巨廈合併（tools/smoke-d034.mjs：M1b／M2b 推進一天的合併提示與歷史事件、塔與巨廈的建築卡、增量＝整張重建、手機預算；自己開四個 Chrome）=====
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d034Smoke(withBrowser, log);
+// ===== D035：讀檔圖層補齊（tools/smoke-d035.mjs：L5 的格子卡片講得出十一層、拆有公車站的路一下拆到路、看不見的層拆不到、畫面沒有變；自己開三個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d035Smoke(withBrowser, log);
+// ===== D036：資源開採（tools/smoke-d036.mjs：W1 油井礦場的「開採」列、推進一天的開採量＝Node 端、站錯的井不產出、耗盡、畫面沒有變；自己開三個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d036Smoke(withBrowser, log);
+// ===== D038：科技與專精（tools/smoke-d038.mjs：☰「科技與專精」面板、開始研究扣款與進度＝Node 端、城市方向兩下確定、存檔重新整理接得上、手機 412×860 與 360×740 的版面與按鈕大小、畫面沒有變；自己開六個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d038Smoke(withBrowser, log);
+// ===== D039：大事記（tools/smoke-d039.mjs：☰「大事記」面板的列＝Node 端、研究完成多一行、存檔重新整理還在、關著不在畫面上、手機 412×860 與 360×740 的版面、畫面沒有變；自己開四個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d039Smoke(withBrowser, log);
+// ===== D040：油井、礦場（tools/smoke-d040.mjs：手機 360×740「公共設施」16 顆三排、資源圖＝Node 端算的資源空格、☰「顯示資源圖」、點油田蓋成油井、錯的格子被擋、井枯竭的事件／通知／大事記／建築卡、重新整理還在、手機預算；自己開幾個 Chrome）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d040Smoke(withBrowser, log);
+// ===== D044：天然氣井、太空研究中心（tools/smoke-d044.mjs：手機 360×740「公共設施」18 顆三排、太空研究中心 Lv.22 才解鎖（點了只跳提示）、天然氣井站在油田格上、按住畫整塊 3×3、蓋下去整塊清分區與樹、復原整塊還原、拆附屬格＝整棟拆、重新整理接得上、效能預算）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d044Smoke(withBrowser, log);
+// ===== D045：市長委託（tools/smoke-d045.mjs：☰「委託」面板的三選一＝Node 端、接受與放棄的通知與歷史、進行中的進度、完成／過期的每天結算與通知、沙盒／等級／人口三種不能接的狀態、重新整理接得上、效能預算）=====
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d045Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d046Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047ArtSmoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d047MobileSmoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d048Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d049Smoke(withBrowser, log);
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) { await d050Smoke(withBrowser, log); await d056DialogGoldens(withBrowser, log); }
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) { await d051Smoke(withBrowser, log); d051ImportImageGuard(log); }
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await d052Smoke(withBrowser, log);
 // D011_SMOKE_ONLY／D015_SMOKE_ONLY（突變測試用）只跑了幾段：結論前講明哪幾段沒跑，部分跑的結果不能看起來像完整的一輪
 if (d011SkipNote()) console.log(d011SkipNote());
 if (d015SkipNote()) console.log(d015SkipNote());
@@ -602,7 +656,16 @@ if (d031SkipNote()) console.log(d031SkipNote());
 if (d032SkipNote()) console.log(d032SkipNote());
 if (d033SkipNote()) console.log(d033SkipNote());
 if (d034SkipNote()) console.log(d034SkipNote());
+if (d035SkipNote()) console.log(d035SkipNote());
+if (d036SkipNote()) console.log(d036SkipNote());
+if (d038SkipNote()) console.log(d038SkipNote());
+if (d039SkipNote()) console.log(d039SkipNote());
+if (d040SkipNote()) console.log(d040SkipNote());
+if (d044SkipNote()) console.log(d044SkipNote());
+if (d045SkipNote()) console.log(d045SkipNote());
+if (d048SkipNote()) console.log(d048SkipNote());
 
+if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await import('./d058-capture.mjs');
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);

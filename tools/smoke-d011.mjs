@@ -264,12 +264,14 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     await tapBtn('#roadSub button[data-r="hwy"]');
     const s0 = await sim();
     const r1 = await findBox(12, 1, free);
-    await drag(r1[0][1], r1.at(-1)[1]); await release();
+    if (r1.length === 12) { await drag(r1[0][1], r1.at(-1)[1]); await release(); }
+    else log(false, 'D011 快速路第一條：找到12格原生拖曳目標', `只找到 ${r1.length} 格；保留失敗，繼續其他獨立驗收`);
     const s1 = await sim();
     const r2 = await findBox(12, 1, free);
-    await drag(r2[0][1], r2.at(-1)[1]); await release();
+    if (r2.length === 12) { await drag(r2[0][1], r2.at(-1)[1]); await release(); }
+    else log(false, 'D011 快速路第二條：找到12格原生拖曳目標', `只找到 ${r2.length} 格；保留失敗，繼續其他獨立驗收`);
     const s2 = await sim(), want = Math.floor(s1.money / 120);
-    log((await ev('__gt.ui()')).roadTool === 'hwy' && s1.money === s0.money - 12 * 120 && s2.events - s1.events === want && s2.money === s1.money - want * 120,
+    log(r1.length === 12 && r2.length === 12 && (await ev('__gt.ui()')).roadTool === 'hwy' && s1.money === s0.money - 12 * 120 && s2.events - s1.events === want && s2.money === s1.money - want * 120,
       'D011 路的等級：點「快速路」拉 12 格扣 $1,440；錢只夠幾格時只蓋前段', `${s0.money}→${s1.money}；第二條只蓋 ${s2.events - s1.events} 格（夠 ${want} 格）→ $${s2.money}`);
   }
 
@@ -281,16 +283,16 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     const toolNow = (await ev('__gt.ui()')).tool, evZ = toolNow === 'zr' ? [] : await ev('window.__gtEv');
     const s0 = await sim();
     const side = Math.ceil(Math.sqrt(s0.money / 8 + 1)), big = await findBox(side, side, free), zones0 = (await ev('__gt.layers()')).zone.filter(Boolean).length;
-    await drag(big[0][1], big.at(-1)[1]);
-    const pv = (await ev('__gt.stroke()'))?.preview;
-    await release();
+    let pv = null;
+    if (big.length === side * side) { await drag(big[0][1], big.at(-1)[1]); pv = (await ev('__gt.stroke()'))?.preview; await release(); }
+    else log(false, 'D011 大框選：找到完整原生選區', `${side}×${side} 只找到 ${big.length} 格；不以缺失目標拋例外中止後續驗收`);
     const s1 = await sim(), zones1 = (await ev('__gt.layers()')).zone.filter(Boolean).length, toast = await ev(`[...document.querySelectorAll('.toast')].map(t=>t.textContent).join('|')`);
     const small = await findBox(3, 1, free);
-    await drag(small[0][1], small.at(-1)[1], 4);
-    const pv2 = (await ev('__gt.stroke()'))?.preview;
-    await release();
+    let pv2 = null;
+    if (small.length === 3) { await drag(small[0][1], small.at(-1)[1], 4); pv2 = (await ev('__gt.stroke()'))?.preview; await release(); }
+    else log(false, 'D011 小框選：找到3格原生選區', `只找到 ${small.length} 格；保留失敗，繼續存檔驗收`);
     const s2 = await sim(), zones2 = (await ev('__gt.layers()')).zone.filter(Boolean).length;
-    log(toolNow === 'zr' && big.length === side * side && !!pv && pv.total > s0.money && s1.money === s0.money && zones1 === zones0 && /資金不足/.test(toast) && !!pv2 && pv2.count === 3 && s2.money === s0.money - pv2.total && zones2 === zones0 + 3,
+    log(toolNow === 'zr' && big.length === side * side && small.length === 3 && !!pv && pv.total > s0.money && s1.money === s0.money && zones1 === zones0 && /資金不足/.test(toast) && !!pv2 && pv2.count === 3 && s2.money === s0.money - pv2.total && zones2 === zones0 + 3,
       'D011 框選分區：總價超過資金整塊不蓋（實驗線原句「資金不足」）；夠就逐格蓋、扣的錢＝預覽總價',
       (toolNow === 'zr' ? '' : `點「住」之後工具是 ${toolNow}，沒換到；頁面收到的事件：${evZ.length ? evZ.join('｜') : '沒有'}；`)
       + `${side}×${side} 格 $${pv?.total} > $${s0.money}：${zones1 === zones0 ? '沒蓋' : `蓋了 ${zones1 - zones0} 格`}（${toast.split('|').find(t => /資金不足/.test(t)) ?? '沒有提示'}）；3 格 $${pv2?.total}：${zones2 - zones1 === 3 ? '蓋了' : `分區多了 ${zones2 - zones1} 格`}`);
@@ -742,22 +744,33 @@ export async function d011Smoke(withBrowser, log, blankCheck = BLANK) {
     {
       await tapBtn('.tool[data-t="plant"]');
       await ev('__gt.undo()');                                            // 今天還沒施工：跳一則「沒有可以復原的」通知（拿它來點）
-      // 播放列空白＝天數與復原鈕之間那段（.grow 本身高度 0，取播放列的垂直中線）
-      const pts = await ev(`(()=>{const c=s=>{const e=document.querySelector(s);if(!e||e.closest('[hidden]'))return null;const b=e.getBoundingClientRect();return b.width>0&&b.height>0?[b.left+b.width/2,b.top+b.height/2]:null;};
+      // D054 拿工具時，原天數／grow 由同高度 siteGuide 承接。
+      // 六種表面都照樣真點：天數文字＋原空白位置的現場按鈕內邊距；
+      // 不拿隱藏的舊節點當點位，也不刪掉任一個防穿透案例。
+      const pts = await ev(`(()=>{const visible=e=>!!e&&!e.closest('[hidden]'),c=s=>{const e=document.querySelector(s);if(!visible(e))return null;const b=e.getBoundingClientRect();return b.width>0&&b.height>0?[b.left+b.width/2,b.top+b.height/2]:null;};
         const a=document.querySelector('.tool[data-t="zr"]').getBoundingClientRect(),b=document.querySelector('.tool[data-t="zc"]').getBoundingClientRect();
-        const g=document.querySelector('#playBar .grow').getBoundingClientRect(),bar=document.getElementById('playBar').getBoundingClientRect();
-        return [['通知',c('.toast')],['天數',c('#dayLbl')],['播放列空白',g.width>8?[g.left+g.width/2,bar.top+bar.height/2]:null],['工具鈕之間',[(a.right+b.left)/2,(a.top+a.bottom)/2]],['提示列',c('#coach')],['資金',c('#stats [data-k=money]')]];})()`);
+        const grow=document.querySelector('#playBar .grow'),g=grow?.getBoundingClientRect(),bar=document.getElementById('playBar').getBoundingClientRect(),guide=document.querySelector('#siteGuide'),q=guide?.getBoundingClientRect();
+        const blank=visible(grow)&&g.width>8?[g.left+g.width/2,bar.top+bar.height/2]:visible(guide)&&q.width>8?[q.left+4,q.top+q.height/2]:null;
+        return [['通知',c('.toast')],['天數',c('#dayLbl')??c('#siteDay')],['播放列空白／現場內邊距',blank],['工具鈕之間',[(a.right+b.left)/2,(a.top+a.bottom)/2]],['提示列',c('#coach')],['資金',c('#stats [data-k=money]')]];})()`);
       const s0 = await sim(), rows = [];
       for (const [name, p] of pts) {
         if (!p) { rows.push({ name, missing: true }); continue; }
         await ev(`__gt.tool('plant')`);
         const el = await hit(p), t = await tileAt(p), can = await buildable('plant', t), n0 = (await sim()).events;
         await tapAt(p);
-        rows.push({ name, el, t, can, built: (await sim()).events - n0, tool: await tool() });
+        const row = { name, el, t, can, built: (await sim()).events - n0, tool: await tool() };
+        // New real guide surfaces legitimately open details. Close natively
+        // before checking the next intended surface, rather than letting a
+        // modal shield every subsequent point and accidentally pass the test.
+        if (await ev("!!document.querySelector('#sitePanel')&&!document.querySelector('#sitePanel').hidden")) {
+          row.siteOpened = true; await tapBtn('#siteClose');
+          row.siteClosed = await ev("document.querySelector('#sitePanel').hidden&&document.querySelectorAll('[inert]').length===0");
+        }
+        rows.push(row);
       }
       const s1 = await sim();
-      log(rows.length === 6 && rows.every(r => !r.missing && r.el && !r.el.startsWith('CANVAS') && r.can === 1 && r.built === 0) && s1.events === s0.events && s1.money === s0.money,
-        'D011 介面不穿透：選著「電」，點在通知、天數、播放列空白、兩顆工具鈕之間、提示列、資金上：底下都是介面（不是畫布），真的點下去什麼都不蓋（底下那一格本來蓋得了電廠）',
+      log(rows.length === 6 && rows.every(r => !r.missing && r.el && !r.el.startsWith('CANVAS') && r.can === 1 && r.built === 0 && r.siteClosed !== false) && s1.events === s0.events && s1.money === s0.money,
+        'D011 介面不穿透：選著「電」，點在通知、天數、播放列空白／現場內邊距、兩顆工具鈕之間、提示列、資金上：底下都是介面（不是畫布），真的點下去什麼都不蓋（底下那一格本來蓋得了電廠）',
         rows.map(r => r.missing ? `${r.name}：找不到` : `${r.name} ${r.el} 底下 ${J(r.t)}${r.can ? '' : '（蓋不了）'}${r.built ? ` 蓋了 ${r.built}` : ''}${r.tool !== 'plant' ? `（工具變成 ${r.tool}）` : ''}`).join('；') + `；資金 ${s0.money}→${s1.money}`);
     }
 

@@ -1,0 +1,11 @@
+{
+  "qualification": "Numerical triangle-ray and source checks only. Not a WebGL or visual pass.",
+  "artSha256": "13d1e9d1241cd3056e1c31f2c68a427c8c75df516627504a11dd6bba05969172",
+  "entranceRays": 504,
+  "sideShopRays": 40,
+  "chimneyRays": 38416,
+  "drivewayRays": 720,
+  "frontageRays": 31605,
+  "partialFrontageCases": 70,
+  "failures": []
+}

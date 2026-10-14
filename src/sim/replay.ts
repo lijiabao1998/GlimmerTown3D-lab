@@ -9,7 +9,7 @@
 //   格式 7（D034）再套用 merge：吸收的建築埋掉、蓋 2×2 塔或 3×3 巨廈（巨廈清九格分區）。
 // 未知的事件種類直接丟例外（不猜）。純邏輯。
 import { decodeLabCode } from '../io/labcode.ts';
-import { cityFromLab, roadCode, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
+import { cityFromLab, roadCode, DECISION_EVENTS, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
 
 interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
@@ -34,7 +34,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
     footprint(b, j => { if (c.occ[j] === b.id) c.occ[j] = 0; });
   };
   for (let k = 1; k < events.length; k++) {
-    const e = events[k], i = e.t === 'undo' || e.t === 'import' ? -1 : e.z * n + e.x;
+    const e = events[k], i = e.t === 'undo' || e.t === 'import' || e.t === 'cms' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
     switch (e.t) {
       case 'import': throw new Error('重播：匯入事件只能是第一筆');
       case 'grow': {
@@ -63,7 +63,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         c.zone[i] = e.zone; c.tree[i] = 0;
         break;
       }
-      case 'place': {  // 51672／51687：新建築 lv 1、age 0；清掉樹、分區
+      case 'place': {  // 51672／51687：新建築 lv 1、age 0；清掉樹、分區（整塊占地）
         if (c.occ[i]) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 已經有建築，不能放`);
         if (e.id !== c.buildings.length + 1) throw new Error(`重播：第 ${e.day} 天放的建築編號 ${e.id} ≠ ${c.buildings.length + 1}`);
         const s = strokeOf(e.g), size = kinds.size(e.k);
@@ -71,7 +71,7 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         footprint(b, j => touch(s, j));
         c.buildings.push(b);
         footprint(b, j => { c.occ[j] = b.id; });
-        c.tree[i] = 0; c.zone[i] = 0;
+        footprint(b, j => { c.tree[j] = 0; c.zone[j] = 0; });   // D044：多格建築（太空研究中心 3×3）整塊占地都清樹、清分區（52331–52338）；1×1 就是根格自己
         base.set(b.id, { age: 0, from: e.day });
         s.created.push(b.id);
         break;
@@ -141,6 +141,16 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         c.buildings.push(nb);
         footprint(nb, j => { if (c.occ[j]) throw new Error(`重播：第 ${e.day} 天合併的格子 ${j} 還被 #${c.occ[j]} 佔著（歷史第 ${k + 1} 筆）`); c.occ[j] = nb.id; if (e.k === 105 || e.k === 106) c.zone[j] = 0; });
         base.set(nb.id, { age: 0, from: e.day });
+        break;
+      }
+      // D039（城市格式 8）：玩家的決策與科技完成——整座城的事，不改城市的樣子（政策、預算、研究、方向在模擬的狀態裡，不在城市模型裡）；`decisionsOf` 讀它們
+      case 'policy': case 'budget': case 'research': case 'spec': case 'techdone': break;
+      // D045（城市格式 10）：市長委託——整座城的事，不改城市的樣子（委託的狀態在模擬的 cms385 裡）
+      case 'cms': break;
+      // D040（城市格式 9）：資源耗盡——不改城市的樣子，只確認那一格有那一種井（歷史壞了要講出來）
+      case 'depleted': {
+        const b = c.buildings[c.occ[i] - 1];
+        if (!b || b.x !== e.x || b.z !== e.z || b.k !== e.k) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有 ${e.k === 49 ? '油井' : '礦場'}，不會耗盡（歷史第 ${k + 1} 筆）`);
         break;
       }
       case 'abandon': {

@@ -1,0 +1,20 @@
+{
+  "source": {
+    "repo": "lijiabao1998/GlimmerTown-lab",
+    "commit": "10bc4115f119498b4cc5836695348982b85fa9d1"
+  },
+  "kind": "extracted real reader executed in vm, not whole browser",
+  "cases": 105,
+  "sha256": {
+    "table": "7f612e266ac994dc7a44768cb0438fc9ca93b2158a3a856c0c56ec57ea3f10d2",
+    "byId": "824ea33bd3718628df539be7644f4b1b1f1486507b830f2a8e16dd6a5f46492f",
+    "empty": "c4885e6320da923261b3466c825f069240ed5f6eeb24c6bb5b1e19b1b34453a0",
+    "load": "54180ae741fd47a867c9a7dcc4be380381eea051ac4e2b71990d2beba5334737"
+  },
+  "text": {
+    "table": "const CMS385=[\n {id:'steel40', nm:'造船用鋼 40', ic:'⚓', type:'acc', src:'steel', target:40, days:90, bonus:1500, minRank:4},\n {id:'steel80', nm:'造船用鋼 80', ic:'⚓', type:'acc', src:'steel', target:80, days:120, bonus:2500, minRank:6},\n {id:'trade1200', nm:'糧食出口 $1200', ic:'🚢', type:'acc', src:'trade', target:1200, days:90, bonus:1200, minRank:3},\n {id:'trade3000', nm:'糧食出口 $3000', ic:'🚢', type:'acc', src:'trade', target:3000, days:120, bonus:2200, minRank:5},\n {id:'transit150', nm:'公共運量 150×30 天', ic:'🚌', type:'hold', src:'transit', target:150, holdN:30, days:90, bonus:1000, minRank:3},\n {id:'transit400', nm:'公共運量 1200×45 天', ic:'🚇', type:'hold', src:'transit', target:1200, holdN:45, days:150, bonus:2000, minRank:6} /* T394b：400→1200——實測有公交種子運量峰 1128-1935，150/400 兩檔完成率幾乎相同（26.8%/26.5%）＝階梯失效；id 'transit400' 不改（入存檔），值-名分離在此披露 */,\n {id:'happy70', nm:'幸福 70%×30 天', ic:'😊', type:'hold', src:'happy', target:.70, holdN:30, days:90, bonus:1000, minRank:2},\n {id:'happy80', nm:'幸福 78%×45 天', ic:'🥰', type:'hold', src:'happy', target:.78, holdN:45, days:150, bonus:2000, minRank:5} /* T394b：.80→.78——12種子×400天幸福峰值最高 0.75，.80 在觀測天花板之上＝無解委託；id 不改（入存檔 done[]） */,\n {id:'techC6', nm:'研究「學術網絡」', ic:'🔬', type:'tech', src:'C6', days:200, bonus:1800, minRank:4},\n /* T386b 外貿合約：stock 期末驗收型——到期日驗庫存（steel/fuel CAP 皆 120，target<CAP）；\n    純讀零模擬寫入（「驗收庫存」非「運走」，扣庫存方案否決見卡面）；bonus 攤提 <$30/天防通脹 */\n {id:'ct_steel60', nm:'外貿合約：鋼材庫存驗收 60', ic:'🚢', type:'stock', src:'steel', target:60, days:120, bonus:3200, minRank:6},\n {id:'ct_fuel80', nm:'外貿合約：燃料庫存驗收 80', ic:'⛽', type:'stock', src:'fuel', target:80, days:120, bonus:3000, minRank:5},\n];",
+    "byId": "const CMS_BY_ID385={};for(const c of CMS385)CMS_BY_ID385[c.id]=c;",
+    "empty": "function emptyCms385(){return {act:'',st:0,acc:0,hold:0,n:0,done:[]};}",
+    "load": "function cmsLoad385(raw){ // 驗型失敗整欄棄用回零、任何路徑不拋（load 外層 try 會吞→蓋城）\n  try{\n    if(raw===undefined||raw===null)return emptyCms385();\n    if(typeof raw!=='object'||Array.isArray(raw))return emptyCms385();\n    const act=raw.act===undefined?'':raw.act;\n    if(typeof act!=='string'||(act!==''&&!CMS_BY_ID385[act]))return emptyCms385();\n    const o=emptyCms385();\n    for(const k of ['st','acc','hold','n']){const v=raw[k]===undefined?0:raw[k];if(!Number.isInteger(v)||v<0)return emptyCms385();o[k]=v;}\n    if(act!==''&&o.st<1)return emptyCms385();\n    const rd=raw.done===undefined?[]:raw.done;\n    if(!Array.isArray(rd))return emptyCms385();\n    const seen={};\n    for(const d2 of rd){if(typeof d2!=='string'||!CMS_BY_ID385[d2]||seen[d2])return emptyCms385();seen[d2]=1;o.done.push(d2);}\n    if(act!==''&&seen[act])return emptyCms385(); // 語意非法：進行中不可已在完成清單\n    o.act=act;return o;\n  }catch(e){return emptyCms385();}\n}"
+  }
+}

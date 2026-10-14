@@ -1,0 +1,71 @@
+{
+  "auditAt": "2026-10-13T15:47:52.992Z",
+  "runId": 38415988770,
+  "runUrl": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770",
+  "headSha": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+  "event": "push",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "d059",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "d055",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "pages",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "unit": {
+    "ok": 660,
+    "ng": 0,
+    "final": [
+      "OK 綠燈（651.3s）"
+    ]
+  },
+  "browser": {
+    "ok": 850,
+    "ng": 0,
+    "final": [
+      "OK 綠燈（2632.0s）"
+    ]
+  },
+  "d054": {
+    "ok": 105,
+    "ng": 0,
+    "cpu6FirstPreviewPassedInOriginalLog": true,
+    "exactTwelveSampleValues": "not downloaded; no ZIP or artifact JSON audit claimed"
+  },
+  "originalJobLog": {
+    "path": "ci-main-smoke-job-log.txt",
+    "bytes": 642715,
+    "sha256": "5e9882e181039a58b3fff3f091e9944d94b3dc541a9062f0048fb35e435a4a8c"
+  },
+  "pages": {
+    "jobId": 115390902041,
+    "jobConclusion": "success",
+    "deployments": [
+      {
+        "deploymentId": 7043063044,
+        "sha": "b8954fcae4d3b80bc49b6512fb7622f69d711998",
+        "environment": "github-pages",
+        "state": "success",
+        "createdAt": "2026-10-13T15:45:08Z",
+        "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+        "logUrl": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770/job/115390902041"
+      }
+    ]
+  }
+}

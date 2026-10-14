@@ -428,7 +428,7 @@ async function guards(log) {
       ['讀檔不讀地下線', 'if (udl475 && udl475.charCodeAt(i) === 49) tiles[i].ud475 = 1;', ''],
       ['讀檔不讀高架', 'if (city.fly[i]) tiles[i].fly475 = 1;', ''],
       ['讀檔不讀立交', 'tiles[i].ix475 = q;', 'void q;'],
-      ['主計數迴圈什麼都不數', 'tallyBuildings(w, tickBld, fert)', 'tallyBuildings(w, [], fert)'],
+      ['主計數迴圈什麼都不數', 'tallyBuildings(w, tickBld, fert, s.res)', 'tallyBuildings(w, [], fert, s.res)'],
       ['名目就業不算商業職位', 'jobCountsOf(tally, w, tickBld, jobsC, jobsI)', 'jobCountsOf(tally, w, tickBld, 0, jobsI)'],
       ['維護費不餵計數', 'upkeepIn(w, tickBld, cnt, c,', 'upkeepIn(w, tickBld, {}, c,'],
     ];
