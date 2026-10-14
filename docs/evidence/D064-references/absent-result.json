@@ -1,0 +1,998 @@
+{
+ "checkedAt": "2026-10-14",
+ "total": 122,
+ "agree": 122,
+ "disagree": [],
+ "rows": [
+  {
+   "entry": 1246688,
+   "word": "detached",
+   "regex": "\\bdetached\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246688,
+   "word": "bridge",
+   "regex": "\\bbridg",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246688,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246688,
+   "word": "concrete colour (white / grey)",
+   "regex": "\\b(white|grey|gray)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246688,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246688,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "Cromwell (tower name)",
+   "regex": "\\bcromwell\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "Shakespeare Tower",
+   "regex": "\\bshakespeare tower\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "42 storeys",
+   "regex": "\\b42\\b|\\bforty-two\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "pitched roof",
+   "regex": "\\bpitched\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1352667,
+   "word": "colour of the concrete (grey / brown)",
+   "regex": "\\b(grey|gray|brown)\\b",
+   "claimedAbsent": false,
+   "hits": 2,
+   "agree": true,
+   "context": "erved by angled rooflights, covered over in the 1980s by round-arched brown perspex glazing. Houses accessed in groups of four or five via walkways off the publ"
+  },
+  {
+   "entry": 1469965,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1469965,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1469965,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1469965,
+   "word": "set back / stepped",
+   "regex": "\\bset[- ]?backs?\\b|\\bstepped\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1469965,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1469965,
+   "word": "Brutalist / Modernist",
+   "regex": "\\bbrutal|\\bmodernis",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242108,
+   "word": "cruciform / pinwheel / cross-shaped",
+   "regex": "\\bcruciform\\b|\\bpinwheel\\b|\\bcross[- ]shaped\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242108,
+   "word": "detached",
+   "regex": "\\bdetached\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "core containing stairs, lifts and activity areas. The pattern of semi-detached maisonettes is clearly expressed in the rhythm of the elevations, in which solid "
+  },
+  {
+   "entry": 1242108,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242108,
+   "word": "any colour word (white / grey / red / brown / yellow / blue / cream / buff)",
+   "regex": "\\b(white|grey|gray|red|brown|yellow|blue|cream|buff)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242108,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242108,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1334931,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1334931,
+   "word": "bridge",
+   "regex": "\\bbridg",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": " built. The main, west entrance, approached by a concrete walkway and bridge with a tiled surface, is in a projecting pod and has a hardwood door with vertical "
+  },
+  {
+   "entry": 1334931,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1334931,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1334931,
+   "word": "concrete colour (white / grey)",
+   "regex": "\\b(white|grey|gray)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1334931,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "pilotis",
+   "regex": "\\bpiloti",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "Y-shaped / Y-plan",
+   "regex": "\\by[- ](shaped|plan)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1271496,
+   "word": "glass",
+   "regex": "\\bglass|\\bglazed",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1270494,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1270494,
+   "word": "antenna / mast / aerial",
+   "regex": "\\bantenna|\\bmast\\b|\\baerial",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1270494,
+   "word": "flat roof (of the tower)",
+   "regex": "\\bflat[- ]roofs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1270494,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1270494,
+   "word": "blue",
+   "regex": "\\bblue\\b",
+   "claimedAbsent": false,
+   "hits": 2,
+   "agree": true,
+   "context": " white formica and teak-veneer panelled walls incorporating vertical, blue-green coloured, roughcast-glass strips adjacent to original doors, which act as side "
+  },
+  {
+   "entry": 1270494,
+   "word": "dome",
+   "regex": "\\bdome",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "bition, as the architect and designer of several areas, including the Dome of Discovery, the Regatta restaurant and the Bailey Bridge, and he also co-designed t"
+  },
+  {
+   "entry": 1420049,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1420049,
+   "word": "antenna / mast",
+   "regex": "\\bantenna|\\bmast\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1420049,
+   "word": "Y-shaped / three-lobed / star",
+   "regex": "\\by[- ]shaped\\b|\\blobed\\b|\\bstar\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1420049,
+   "word": "taper (any form)",
+   "regex": "\\btaper",
+   "claimedAbsent": false,
+   "hits": 6,
+   "agree": true,
+   "context": "ling has pre-cast concrete panels with bronzed aluminium windows with tapered sides. The ground-floor walling and piloti are covered with white, square tesserae"
+  },
+  {
+   "entry": 1420049,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1420049,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "site, north-western end it drops down to the level of the surrounding podium, both angles indicating the staircases housed at these two ends of the building. Wa"
+  },
+  {
+   "entry": 1381413,
+   "word": "spire / antenna",
+   "regex": "\\bspire\\b|\\bantenna",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1381413,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1381413,
+   "word": "revolving (restaurant)",
+   "regex": "\\brevolving\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "sed revised to be twenty-four floors. There had also been plans for a revolving restaurant at the top, however this never occurred. In 2004 permission was grant"
+  },
+  {
+   "entry": 1381413,
+   "word": "white / grey / blue",
+   "regex": "\\b(white|grey|gray|blue)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1381413,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1381413,
+   "word": "year of completion (196x)",
+   "regex": "\\b196\\d\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242617,
+   "word": "spire / antenna",
+   "regex": "\\bspire\\b|\\bantenna",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242617,
+   "word": "slender (D063 noted it absent)",
+   "regex": "\\bslender\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242617,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": ". At the far north end, the ground floor is fully glazed and slightly set back so that the podium overhangs; this houses a restaurant with service areas along i"
+  },
+  {
+   "entry": 1242617,
+   "word": "32 storeys for the tower (Exterior says 31)",
+   "regex": "\\b32 storeys\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "y the Royal Fine Art Commission in 1958. At 387 feet (118 metres) and 32 storeys, it was briefly the tallest building in London, until 1965 when it was surpasse"
+  },
+  {
+   "entry": 1242617,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1242617,
+   "word": "red / brown / grey",
+   "regex": "\\b(red|brown|grey|gray)\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "apezoidal cinema/conference hall and restaurants. This end is clad in grey slate panels at the ground floor and features a cantilevered concrete staircase to th"
+  },
+  {
+   "entry": 1247655,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1247655,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1247655,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1247655,
+   "word": "19 storeys",
+   "regex": "\\b19\\b|\\bnineteen\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1247655,
+   "word": "plant room",
+   "regex": "\\bplant\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1247655,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "stepped",
+   "regex": "\\bstepped\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "tower",
+   "regex": "\\btowers?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246881,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "colour of the concrete (white / cream / grey)",
+   "regex": "\\b(white|cream|grey|gray)\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "brick",
+   "regex": "\\bbrick",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "pitched roof",
+   "regex": "\\bpitched\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1246230,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "Byker Wall (the name)",
+   "regex": "\\bbyker wall\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "pitched roof",
+   "regex": "\\bpitched\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1392166,
+   "word": "spire (flats)",
+   "regex": "\\bspire",
+   "claimedAbsent": false,
+   "hits": 3,
+   "agree": true,
+   "context": " FELTON WALK, 1-81 (consec), with attached walls, fences and pergolas SPIRES LANE / BYKER CRESCENT, St Lawrence RC Church, Spires Lane, and attached church hall"
+  },
+  {
+   "entry": 1130403,
+   "word": "crescent",
+   "regex": "\\bcrescent\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1130403,
+   "word": "curve / curved",
+   "regex": "\\bcurv",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "ed concrete walls and planting boxes, often diagonally set, sometimes curved and some with inset seats. INTERIORS not inspected. SUBSIDIARY FEATURES: the 3 bloc"
+  },
+  {
+   "entry": 1130403,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1130403,
+   "word": "brick",
+   "regex": "\\bbrick",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1130403,
+   "word": "tower",
+   "regex": "\\btowers?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1130403,
+   "word": "Brutalist",
+   "regex": "\\bbrutal",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "15 storeys",
+   "regex": "\\b15\\b|\\bfifteen\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1264050,
+   "word": "Art Deco",
+   "regex": "\\bart deco\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "Art Deco",
+   "regex": "\\bart deco\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "clock",
+   "regex": "\\bclock\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "set back",
+   "regex": "\\bset[- ]?backs?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "stripped classical",
+   "regex": "\\bstripped\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1113107,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "curtain wall",
+   "regex": "\\bcurtain[- ]wall",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "podium",
+   "regex": "\\bpodium\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "symmetrical (asymmetric is stated)",
+   "regex": "\\bsymmetric",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1405493,
+   "word": "Art Deco",
+   "regex": "\\bart deco\\b",
+   "claimedAbsent": false,
+   "hits": 1,
+   "agree": true,
+   "context": "that combines classical detailing with a sunrise motif that is almost art deco in inspiration. In a corridor outside the library is a re-sited (and lit from beh"
+  },
+  {
+   "entry": 1265570,
+   "word": "prow",
+   "regex": "\\bprow\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1265570,
+   "word": "ship",
+   "regex": "\\bship",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1265570,
+   "word": "Art Deco",
+   "regex": "\\bart deco\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1265570,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1265570,
+   "word": "curved (the listing says rounded)",
+   "regex": "\\bcurv",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1265570,
+   "word": "flat roof",
+   "regex": "\\bflat[- ]roof",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "spire",
+   "regex": "\\bspire\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "clock",
+   "regex": "\\bclock\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "antenna",
+   "regex": "\\bantenna|\\baerial",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "lift (in the tower)",
+   "regex": "\\blifts?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "neon / lights (illumination)",
+   "regex": "\\bneon\\b|\\billuminat|\\blights?\\b",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  },
+  {
+   "entry": 1205810,
+   "word": "symmetrical",
+   "regex": "\\bsymmetr",
+   "claimedAbsent": true,
+   "hits": 0,
+   "agree": true
+  }
+ ]
+}

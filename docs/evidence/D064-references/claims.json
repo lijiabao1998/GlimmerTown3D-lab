@@ -1,0 +1,2071 @@
+{
+ "source": "research draft by a subagent (scratchpad d064-references-draft.json); the verification in verify.mjs / absent.mjs is a separate re-fetch and re-check by the lead",
+ "candidates": [
+  {
+   "nhle": 1246688,
+   "name": "Trellick Tower (Cheltenham Estate)",
+   "town": "Kensal Town, Kensington and Chelsea, London",
+   "grade": "II*",
+   "listed": "1998-12-22",
+   "amended": null,
+   "architect": "Ernö Goldfinger (listing spells it \"Erno Goldfinger\")",
+   "built": "1968-72",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1968-72 by Erno Goldfinger.",
+     "kind": 33
+    },
+    {
+     "q": "Trellick Tower comprises 217 flats, six shops, an office, youth and women's centres.",
+     "kind": 33
+    },
+    {
+     "q": "Bush-hammered in-situ reinforced concrete with some pre-cast pebble-finished panels, and timber cladding to balconies.",
+     "kind": 33
+    },
+    {
+     "q": "L-shaped block linked by 35 storey service tower semi-freestanding at corner, the main range of 31 storeys and the lower of seven linked to core every third floor.",
+     "kind": 33
+    },
+    {
+     "q": "The service core incorporates lifts, stairs and refuse shutes, with a projecting boiler house on the 32nd and 33rd floors.",
+     "kind": 33
+    },
+    {
+     "q": "The service tower is a slim and very sculptural composition with narrow, slit windows except to the fully glazed boiler house, its form a contrast to the highly glazed, trabeated grid of the main blocks.",
+     "kind": 33
+    },
+    {
+     "q": "All the living rooms, and the kitchens to the two-bedroom flats, have balconies forming a distinctive pattern across the main facades that is interupted by the maisonette floor.",
+     "kind": 33
+    },
+    {
+     "q": "Varnished timber sidings to these balconies.",
+     "kind": 33
+    },
+    {
+     "q": "The 23rd and 24th floors contain five two-storey maisonettes and two flats.",
+     "kind": 33
+    },
+    {
+     "q": "The corridors on the north face are distinguished by pre-cast panels.",
+     "kind": 33
+    }
+   ],
+   "absent": [
+    {
+     "word": "detached",
+     "regex": "\\bdetached\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單用的是 \"semi-freestanding\"，不是 detached：建模時別把服務塔畫成完全分開的另一棟。"
+    },
+    {
+     "word": "bridge",
+     "regex": "\\bbridg",
+     "absent": true,
+     "kind": 33,
+     "note": "名單只說兩翼 \"linked to core every third floor\"，沒有 bridge 這個字。"
+    },
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "concrete colour (white / grey)",
+     "regex": "\\b(white|grey|gray)\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "混凝土是 \"Bush-hammered in-situ reinforced concrete\"，沒有給顏色。"
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 33,
+     "note": "清單正文沒有這個詞；鏡像網頁的標籤欄有 Brutalism，那是網站加的，不是名單文字。"
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "沒有 podium；底下只提到 \"broad raised terrace\"。"
+    }
+   ]
+  },
+  {
+   "nhle": 1352667,
+   "name": "Barbican (the three towers: Blocks I, II and III)",
+   "town": "City of London, London",
+   "grade": "II",
+   "listed": "2001-09-05",
+   "amended": null,
+   "architect": "Chamberlin, Powell and Bon (engineers Ove Arup and Partners)",
+   "built": "designed 1955-59; housing built 1964-75; whole estate built 1962-82",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "pin"
+    },
+    {
+     "kind": 105,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Designed 1955-59, arts centre element redesigned 1964-8; built with modifications in 1962-82 to the designs of Chamberlin, Powell and Bon",
+     "kind": 33
+    },
+    {
+     "q": "Housing built 1964-75.",
+     "kind": 33
+    },
+    {
+     "q": "35-acre rectangular site developed with seven-storey blocks set on raised pedestrian podium with mews housing, basement storage and car parking below, for 2,500 cars, and with three triangular towers of 44, 44 and 43 storeys rising above.",
+     "kind": 33
+    },
+    {
+     "q": "Blocks I, II and 111: Triangular plan with upswept balconies running round, jagged stepped tops containing penthouses, of up to three storeys with roof gardens.",
+     "kind": 33
+    },
+    {
+     "q": "Below penthouse level there are three large flats per floor, the living rooms in the prows, served by a central triangular well with a lift on each side, which can be ordered from a common central control panel.",
+     "kind": 33
+    },
+    {
+     "q": "The tower blocks' main structure is formed by a central lift shaft and stairwells with a peripheral framework of beams and split piers rising from exposed columns;",
+     "kind": 33
+    },
+    {
+     "q": "Podium and the tower blocks have thick upswept concrete balustrades developed by Ove Arup and Partners in consultation with the architects in 1961.",
+     "kind": 33
+    },
+    {
+     "q": "Poured in situ reinforced concrete with exposed surfaces largely pick hammered and with smaller areas bush hammered, exposing Pen Lee granite aggregate",
+     "kind": 33
+    },
+    {
+     "q": "Double-height glazed entrances, Lauderdale House also incorporating two ground-floor shops.",
+     "kind": 33
+    },
+    {
+     "q": "Flats in the towers are larger, and with penthouse units that are larger still.",
+     "kind": 33
+    },
+    {
+     "q": "35-acre rectangular site developed with seven-storey blocks set on raised pedestrian podium with mews housing, basement storage and car parking below",
+     "kind": 105
+    },
+    {
+     "q": "Block IV: Nos. 1-178 Defoe House. Seven storeys above podium with two storeys under. Twelve broad bays between giant concrete columns supporting cross beams",
+     "kind": 105
+    },
+    {
+     "q": "The podium is open, but with glazed entrances to the flats in each of the twelve bays.",
+     "kind": 105
+    },
+    {
+     "q": "Sliding varnished timber windows set behind paved balconies, with metal and glass balustrades and many with concrete window boxes, painted undersides of roof.",
+     "kind": 105
+    },
+    {
+     "q": "24 rooftop penthouses, with double height fully-glazed ends under rounded tops, given a distinctive white finish.",
+     "kind": 105
+    },
+    {
+     "q": "The seventh-floor flats have high ceilings into distinctive round-arched roof spaces.",
+     "kind": 105
+    },
+    {
+     "q": "Flat asphalted roofs, paved with concrete tiles in keeping with the wall finishes.",
+     "kind": 105
+    },
+    {
+     "q": "Poured in situ reinforced concrete with exposed surfaces largely pick hammered",
+     "kind": 105
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "Cromwell (tower name)",
+     "regex": "\\bcromwell\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單沒有 Cromwell Tower 這個名字；三塔稱 \"Blocks I, II and 111\"（原文把 III 打成 111）。"
+    },
+    {
+     "word": "Shakespeare Tower",
+     "regex": "\\bshakespeare tower\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單沒有 Shakespeare Tower；Shakespeare 只出現在劇團、劇院等其他語境。"
+    },
+    {
+     "word": "42 storeys",
+     "regex": "\\b42\\b|\\bforty-two\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單寫 \"44, 44 and 43 storeys\"；我印象中一般資料常寫 42 層，但沒有查證出處，這裡只採名單的數字。"
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 33,
+     "note": "名單裡只有劇場的 \"house curtains\"；塔的外牆沒說 curtain wall。"
+    },
+    {
+     "word": "pitched roof",
+     "regex": "\\bpitched\\b",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "colour of the concrete (grey / brown)",
+     "regex": "\\b(grey|gray|brown)\\b",
+     "absent": false,
+     "kind": 105,
+     "note": "有 2 處，都指別的建築（\"round-arched brown perspex glazing\"、學校的 \"in grey brick\"），不是住宅塊的混凝土。"
+    }
+   ]
+  },
+  {
+   "nhle": 1469965,
+   "name": "Sivill House",
+   "town": "Haggerston, Tower Hamlets, London (History: \"the new Columbia Square site\")",
+   "grade": "II",
+   "listed": "2020-06-04",
+   "amended": null,
+   "architect": "Skinner, Bailey and Lubetkin",
+   "built": "1964-1966",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Twenty-storey residential point block built to designs by Skinner, Bailey and Lubetkin, 1964-1966.",
+     "kind": 33
+    },
+    {
+     "q": "reinforced concrete clad in 'Primrose' Himley golden russet bricks and concrete.",
+     "kind": 33
+    },
+    {
+     "q": "The flats are arranged in two parallel stacks linked by a circular stair tower.",
+     "kind": 33
+    },
+    {
+     "q": "The stacks are cranked along their centre line, forming shallow arrow-heads pointing south.",
+     "kind": 33
+    },
+    {
+     "q": "the basement and ground floor are set in from the face of the building, creating an undercroft, or loggia, sheltering the elevated main entrance",
+     "kind": 33
+    },
+    {
+     "q": "The pattern is formed of vertical bands of brick running down the building, interrupted by rows of wide, square, concrete 'C's facing forwards or backwards and framing three sides of each window.",
+     "kind": 33
+    },
+    {
+     "q": "The pattern is interrupted by a regular row of narrow windows set in brick every fifth floor.",
+     "kind": 33
+    },
+    {
+     "q": "The stair tower is lit by windows at every level, but every fifth floor is fully glazed.",
+     "kind": 33
+    },
+    {
+     "q": "The building is topped by a concrete 'crown' - a band of flat concrete which projects out over the face of the building, held by cranked concrete arms mounted on the roof, punctuating the top of the building like a cornice.",
+     "kind": 33
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 33,
+     "note": "頂部寫的是 \"crown\"（混凝土帶加斜撐臂），沒有說屋頂型式。"
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單用 \"undercroft, or loggia\"，沒有 podium。"
+    },
+    {
+     "word": "set back / stepped",
+     "regex": "\\bset[- ]?backs?\\b|\\bstepped\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "塔身沒有退階；折線（\"cranked\"）才是它的造型語言。"
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "Brutalist / Modernist",
+     "regex": "\\bbrutal|\\bmodernis",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1242108,
+   "name": "Keeling House",
+   "town": "Bethnal Green, Tower Hamlets, London",
+   "grade": "II*",
+   "listed": "1993-11-23",
+   "amended": null,
+   "architect": "Sir Denys Lasdun (listing: \"sir Denys Lasdun\")",
+   "built": "designed 1955, built 1957-1959",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Designed in 1955, built between 1957 and 1959.",
+     "kind": 33
+    },
+    {
+     "q": "Designed by sir Denys Lasdun.",
+     "kind": 33
+    },
+    {
+     "q": "Residential 'cluster' block.",
+     "kind": 33
+    },
+    {
+     "q": "Reinforced concrete, partly site-cast and partly faced in Portland stone aggregate pre-cast panels.",
+     "kind": 33
+    },
+    {
+     "q": "Surface now painted.",
+     "kind": 33
+    },
+    {
+     "q": "sixteen storeys, comprising 56 two-storey maisonettes and 8 single storey studio flats.",
+     "kind": 33
+    },
+    {
+     "q": "Plan comprises four subsidiary towers, linked to a core containing stairs, lifts and activity areas.",
+     "kind": 33
+    },
+    {
+     "q": "The pattern of semi-detached maisonettes is clearly expressed in the rhythm of the elevations, in which solid balconies alternate with the narrower horizontals of the bedroom floors between.",
+     "kind": 33
+    },
+    {
+     "q": "The fifth residential floor is occupied by flats, and this is also reflected in the rhythm of the elevations.",
+     "kind": 33
+    }
+   ],
+   "absent": [
+    {
+     "word": "cruciform / pinwheel / cross-shaped",
+     "regex": "\\bcruciform\\b|\\bpinwheel\\b|\\bcross[- ]shaped\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單只說 \"four subsidiary towers, linked to a core\"；十字或風車是我的讀法。"
+    },
+    {
+     "word": "detached",
+     "regex": "\\bdetached\\b",
+     "absent": false,
+     "kind": 33,
+     "note": "有，但只在 \"semi-detached maisonettes\"（住宅單元的型式），不是獨立的塔。"
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "any colour word (white / grey / red / brown / yellow / blue / cream / buff)",
+     "regex": "\\b(white|grey|gray|red|brown|yellow|blue|cream|buff)\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "只有 \"Surface now painted\"，沒有顏色。"
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1334931,
+   "name": "Balfron Tower",
+   "town": "Poplar, Tower Hamlets, London",
+   "grade": "II*",
+   "listed": "1996-03-14",
+   "amended": "2015-10-15",
+   "architect": "Ernö Goldfinger",
+   "built": "1965-7 (topping out 22 February 1968)",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "High-rise block of flats and maisonettes, 1965-7 by Ernö Goldfinger, built as phase 1 of the LCC Brownfield Estate",
+     "kind": 33
+    },
+    {
+     "q": "reinforced concrete, with timber cladding to balconies, and an asphalt flat roof.",
+     "kind": 33
+    },
+    {
+     "q": "136 one- and two-bedroomed flats and ten maisonettes arranged on 26 storeys, with six units per floor and five maisonettes on floors 1 and 2 and 15 and 16 - the latter forming a distinctive break in the pattern of the fenestration and balconies.",
+     "kind": 33
+    },
+    {
+     "q": "The units are served at every third floor by enclosed corridors or access galleries linking them to an otherwise detached service tower containing lifts, rubbish chutes, laundry rooms and former games, music and hobby rooms, and topped by a boiler tower with a stepped profile and chimneys.",
+     "kind": 33
+    },
+    {
+     "q": "On the rear, east, elevation access corridors are expressed at every third floor by a continuous band.",
+     "kind": 33
+    },
+    {
+     "q": "Originally the block was topped by a thick cornice which was removed some years ago.",
+     "kind": 33
+    },
+    {
+     "q": "The iconic service tower is lit by vertical slit lights, arranged in groups of five, ten or fifteen on the west face in three or five on the other faces.",
+     "kind": 33
+    },
+    {
+     "q": "the west facing elevation, to St Leonard's Road, has balconies to every flat, those to the maisonettes set on the upper floor are cuboid in form, projecting from the centre of the unit and forming a distinctive pattern.",
+     "kind": 33
+    },
+    {
+     "q": "Bush hammered concrete is well detailed, with fair margins and radiused (rounded) corners and executed to a high standard.",
+     "kind": 33
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "bridge",
+     "regex": "\\bbridg",
+     "absent": false,
+     "kind": 33,
+     "note": "有一處，但是主入口的走道 \"approached by a concrete walkway and bridge with a tiled surface\"，不是塔與板之間的連橋；連接用的是 \"enclosed corridors or access galleries\"。"
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "沒有 set back；塔頂的階梯感來自 \"a stepped profile\" 的鍋爐塔。"
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "concrete colour (white / grey)",
+     "regex": "\\b(white|grey|gray)\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1271496,
+   "name": "The Lawn (Nos. 1-36), attached walls and terrace",
+   "town": "Mark Hall North, Harlow, Essex",
+   "grade": "II",
+   "listed": "1998-12-22",
+   "amended": null,
+   "architect": "Frederick Gibberd",
+   "built": "1950-51",
+   "roles": [
+    {
+     "kind": 33,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1950-51, by Frederick Gibberd.",
+     "kind": 33
+    },
+    {
+     "q": "Ten storey block of flats, attached walls and terrace.",
+     "kind": 33
+    },
+    {
+     "q": "Irregular trapezoid plan, with tapering circulation core, angled wings and gently convex south front.",
+     "kind": 33
+    },
+    {
+     "q": "with the projecting ends of each wing used to secure a south-facing balcony for each apartment",
+     "kind": 33
+    },
+    {
+     "q": "the balconies and recesses are used to throw the centre panel of the curved south front, in light buff brick, into bold relief.",
+     "kind": 33
+    },
+    {
+     "q": "A warm red brick was used as the main cladding material of the reinforced concrete structure",
+     "kind": 33
+    },
+    {
+     "q": "The grouped bathrooms and kitchens on the east and west flanks account for the regular pattern of four small square windows on each elevation",
+     "kind": 33
+    },
+    {
+     "q": "The Lawn was the first residential tower block in Britain and received a Ministry of Health Housing medal in 1952.",
+     "kind": 33
+    }
+   ],
+   "absent": [
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 33,
+     "note": "這個條目沒說；同一處的另一條目 1246029（低矮板）才寫 「flat roofed」。"
+    },
+    {
+     "word": "pilotis",
+     "regex": "\\bpiloti",
+     "absent": true,
+     "kind": 33,
+     "note": "這個條目沒說；另一條目 1246029（低矮板）才有 pilotis。"
+    },
+    {
+     "word": "Y-shaped / Y-plan",
+     "regex": "\\by[- ](shaped|plan)\\b",
+     "absent": true,
+     "kind": 33,
+     "note": "名單寫 \"Irregular trapezoid plan\"，不是 Y 形。"
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 33,
+     "note": null
+    },
+    {
+     "word": "glass",
+     "regex": "\\bglass|\\bglazed",
+     "absent": true,
+     "kind": 33,
+     "note": "沒有 glass／glazed；名單說 \"the original metal windows have been replaced in UPVC\"。"
+    }
+   ]
+  },
+  {
+   "nhle": 1270494,
+   "name": "Co-operative Insurance Society (CIS) Building",
+   "town": "City Centre, Manchester",
+   "grade": "II",
+   "listed": "1995-11-24",
+   "amended": "2013-04-26",
+   "architect": "George S. Hay (CWS Chief Architect) with Gordon Thomas Tait of Sir John Burnet, Tait and Partners",
+   "built": "1959-62",
+   "roles": [
+    {
+     "kind": 34,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "The Co-operative Insurance Society (CIS) Building was constructed in 1959-62 to the designs of George S. Hay, Chief Architect to the Co-operative Wholesale Society Ltd (CWS) with Gordon Thomas Tait of Sir John Burnet, Tait and Partners.",
+     "kind": 34
+    },
+    {
+     "q": "the CIS Building consists of a 26-storey tower with a steel frame construction and an adjacent 28-storey service tower and 5-storey podium block constructed of reinforced concrete.",
+     "kind": 34
+    },
+    {
+     "q": "Both the tower and podium block have glass curtain-walling incorporating black vitreous enamelled-steel panels between the floor levels and anodised aluminium mullions.",
+     "kind": 34
+    },
+    {
+     "q": "The service tower is clad with grey vitreous mosaic, which has been overlaid with photovoltaic panels, which are not of special interest.",
+     "kind": 34
+    },
+    {
+     "q": "It has a symmetrical plan with the main tower rising up from the north-eastern end of the podium block and projecting at the front over the first two floors and the main entrance.",
+     "kind": 34
+    },
+    {
+     "q": "The service tower is attached to the centre of the main tower's south-west side, forming a squat T-shape.",
+     "kind": 34
+    },
+    {
+     "q": "The 400ft high blank service tower is clad with 14 million grey-coloured Italian mosaic tiles",
+     "kind": 34
+    },
+    {
+     "q": "The service tower incorporates two deep bands of vents",
+     "kind": 34
+    },
+    {
+     "q": "Occupying most of the roof of the podium block is a large plant room.",
+     "kind": 34
+    },
+    {
+     "q": "The main entrance is set to the north-east side of the main tower and is canopied by the tower itself, which is supported by six columns.",
+     "kind": 34
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "antenna / mast / aerial",
+     "regex": "\\bantenna|\\bmast\\b|\\baerial",
+     "absent": true,
+     "kind": 34,
+     "note": "塔頂只有 \"large, later signage letters\"，沒有天線或桅桿。"
+    },
+    {
+     "word": "flat roof (of the tower)",
+     "regex": "\\bflat[- ]roofs?\\b",
+     "absent": true,
+     "kind": 34,
+     "note": "塔的屋頂型式沒說；只有入口的 \"flat-roofed canopy\"。"
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "blue",
+     "regex": "\\bblue\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "有，但只在室內行政樓層的 \"blue-green coloured\" 玻璃條，不是外牆顏色。"
+    },
+    {
+     "word": "dome",
+     "regex": "\\bdome",
+     "absent": false,
+     "kind": 34,
+     "note": "有，但只出現在設計師 Misha Black 的履歷（\"Dome of Discovery\"），與本建築無關。"
+    }
+   ]
+  },
+  {
+   "nhle": 1420049,
+   "name": "Alpha Tower",
+   "town": "Birmingham, West Midlands",
+   "grade": "II",
+   "listed": "2014-07-31",
+   "amended": null,
+   "architect": "George Marsh of Richard Seifert & Partners (engineers Oscar Faber & Partners)",
+   "built": "1970-72 (History: \"erected between 1970 and 1973\")",
+   "roles": [
+    {
+     "kind": 34,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "An office block of twenty-eight storeys, designed by George Marsh of Richard Seifert & Partners and built in 1970-72.",
+     "kind": 34
+    },
+    {
+     "q": "The Alpha Tower was one part of the ATV development, erected between 1970 and 1973 for Associated Television",
+     "kind": 34
+    },
+    {
+     "q": "The curtain walling has pre-cast concrete panels with bronzed aluminium windows with tapered sides.",
+     "kind": 34
+    },
+    {
+     "q": "The shape of the plan is cranked, with wedge-shaped ends to the south-east and north-west ends.",
+     "kind": 34
+    },
+    {
+     "q": "Viewed on plan, the outline of the building looks somewhat like a boomerang.",
+     "kind": 34
+    },
+    {
+     "q": "The building is supported at ground-floor level by a series of pillars.",
+     "kind": 34
+    },
+    {
+     "q": "The wedge shapes at the north-western and south-eastern ends have blank walling at either side of a vertical channel which rises for the full height of the building at the corner.",
+     "kind": 34
+    },
+    {
+     "q": "At the top of the building service rooms for air conditioning plant are set back from the edge.",
+     "kind": 34
+    },
+    {
+     "q": "To the west of the office block, and free-standing in the paved plaza which surrounds it, is a low service block.",
+     "kind": 34
+    },
+    {
+     "q": "This is covered in white tesserae and consists of two circular turrets, obliquely cut at their tops, and a square block with rounded corners which is also cut at an oblique angle to its top.",
+     "kind": 34
+    },
+    {
+     "q": "The tapered profile of the original design was also altered.",
+     "kind": 34
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "antenna / mast",
+     "regex": "\\bantenna|\\bmast\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "Y-shaped / three-lobed / star",
+     "regex": "\\by[- ]shaped\\b|\\blobed\\b|\\bstar\\b",
+     "absent": true,
+     "kind": 34,
+     "note": "名單用 \"cranked\" 與 \"boomerang\"，不是 Y 形或星形。"
+    },
+    {
+     "word": "taper (any form)",
+     "regex": "\\btaper",
+     "absent": false,
+     "kind": 34,
+     "note": "有 6 處：4 處用在柱腳、窗框與 mullion；另 2 處在 History，說原設計 \"planned to taper from a splayed base\"，後來 \"The tapered profile of the original design was also altered\"；Exterior 沒有描述塔身漸縮。"
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "有 1 處：西北端 \"drops down to the level of the surrounding podium\"，指周邊基座，不是塔下的裙樓。"
+    }
+   ]
+  },
+  {
+   "nhle": 1381413,
+   "name": "The Rotunda (including the shops in the podium below the tower)",
+   "town": "Birmingham, West Midlands",
+   "grade": "II",
+   "listed": "2000-08-09",
+   "amended": "2013-04-29",
+   "architect": "James Roberts (conversion 2005-2008 by Glenn Howells Architects for Urban Splash)",
+   "built": "the listing body gives no year range, only \"the 1960s\"",
+   "roles": [
+    {
+     "kind": 34,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "James Roberts (b. 1922), was a local architect",
+     "kind": 34
+    },
+    {
+     "q": "The Rotunda is the most noted landmark of central Birmingham's wholehearted redevelopment in the 1960s.",
+     "kind": 34
+    },
+    {
+     "q": "a reinforced concrete tower, clad in textured glass spandrel panels and a podium partly clad in mosaic strips.",
+     "kind": 34
+    },
+    {
+     "q": "twenty-four storey circular office tower on first-floor single-storey cuneiform podium raised on pilotis and with ground-floor shops on the New Street and St Martins Circus sides.",
+     "kind": 34
+    },
+    {
+     "q": "the first-floor podium at the base of the tower has set-back vertical windows within a wall clad in mosaic strips.",
+     "kind": 34
+    },
+    {
+     "q": "the concave south-west elevation maintains the original relationship between the first two floors and creates an interesting contrast to the curve of the tower.",
+     "kind": 34
+    },
+    {
+     "q": "The twenty-four storey circular tower has continuous bands of glazing contrasting with smooth panels.",
+     "kind": 34
+    },
+    {
+     "q": "The tower is topped by a steel frame parapet.",
+     "kind": 34
+    },
+    {
+     "q": "it is unique in Britain to find an office building in such a simple form",
+     "kind": 34
+    },
+    {
+     "q": "maintains its distinctive appearance as a cylindrical tower with horizontal banding",
+     "kind": 34
+    },
+    {
+     "q": "There had also been plans for a revolving restaurant at the top, however this never occurred.",
+     "kind": 34
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire / antenna",
+     "regex": "\\bspire\\b|\\bantenna",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 34,
+     "note": "頂部寫的是 \"steel frame parapet\"，沒有說屋頂型式。"
+    },
+    {
+     "word": "revolving (restaurant)",
+     "regex": "\\brevolving\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "有，但是否定句：\"plans for a revolving restaurant at the top, however this never occurred\"。"
+    },
+    {
+     "word": "white / grey / blue",
+     "regex": "\\b(white|grey|gray|blue)\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "year of completion (196x)",
+     "regex": "\\b196\\d\\b",
+     "absent": true,
+     "kind": 34,
+     "note": "清單正文沒有落成年份，只有 \"the 1960s\"。"
+    }
+   ]
+  },
+  {
+   "nhle": 1242617,
+   "name": "Millbank Tower",
+   "town": "Victoria, City of Westminster, London",
+   "grade": "II",
+   "listed": "1995-11-24",
+   "amended": "2013-04-26",
+   "architect": "Ronald Ward & Partners (Douglas Marriott, job architect)",
+   "built": "1959-63",
+   "roles": [
+    {
+     "kind": 34,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "The Milbank Tower of 1959-63 by Ronald Ward and Partners",
+     "kind": 34
+    },
+    {
+     "q": "It was designed by Ronald Ward & Partners (Douglas Marriott, job architect)",
+     "kind": 34
+    },
+    {
+     "q": "Reinforced concrete frame and core on piled foundations, with glass curtain walling and projecting stainless steel mullions.",
+     "kind": 34
+    },
+    {
+     "q": "The listed building comprises three main sections: a 31-storey TOWER on a 2-storey PODIUM on columns, with 8-storey curved office BLOCK.",
+     "kind": 34
+    },
+    {
+     "q": "Four-sided TOWER with curved sides, two concave (to east and west) and two convex (to north and south), crudely resembling a butterfly or diabolo on plan.",
+     "kind": 34
+    },
+    {
+     "q": "The tower has glass curtain-walling, which reflects the constantly moving river below, with opaque panels of blue glass below windows and black panels to narrow storey bands",
+     "kind": 34
+    },
+    {
+     "q": "The top floor of the tower, which mostly contains plant, also features a narrow perimeter viewing platform to all sides with magnificent views.",
+     "kind": 34
+    },
+    {
+     "q": "The tower is set on a long 2-storey PODIUM raised on pilotis or columns",
+     "kind": 34
+    },
+    {
+     "q": "At the north-west end of the site, the podium is surmounted by a Y-shaped, 8-storey BLOCK with complementary concave curved sides",
+     "kind": 34
+    },
+    {
+     "q": "Its western corner features a full-height curved rendered corner tower.",
+     "kind": 34
+    },
+    {
+     "q": "Most areas of horizontal concrete banding throughout the site are clad in small white mosaic tiles.",
+     "kind": 34
+    },
+    {
+     "q": "At 387 feet (118 metres) and 32 storeys, it was briefly the tallest building in London, until 1965 when it was surpassed by the GPO tower.",
+     "kind": 34
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire / antenna",
+     "regex": "\\bspire\\b|\\bantenna",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "slender (D063 noted it absent)",
+     "regex": "\\bslender\\b",
+     "absent": true,
+     "kind": 34,
+     "note": "沒有 slender；形容詞是 \"butterfly or diabolo\"。"
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "有 1 處，但只指裙樓北端底層 \"slightly set back so that the podium overhangs\"，不是塔身退縮。"
+    },
+    {
+     "word": "32 storeys for the tower (Exterior says 31)",
+     "regex": "\\b32 storeys\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "名單前後不一致：Exterior 寫 \"31-storey TOWER\"，History 寫 \"32 storeys\"。"
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "red / brown / grey",
+     "regex": "\\b(red|brown|grey|gray)\\b",
+     "absent": false,
+     "kind": 34,
+     "note": "有 1 處，只在裙樓南端的 \"grey slate panels\"。"
+    }
+   ]
+  },
+  {
+   "nhle": 1247655,
+   "name": "Library and Arts Tower, University of Sheffield",
+   "town": "Crookesmoor, Sheffield, South Yorkshire",
+   "grade": "II*",
+   "listed": "1993-03-30",
+   "amended": null,
+   "architect": "Gollins, Melvin Ward and Partners",
+   "built": "1959 (library) and 1962-5 (arts tower)",
+   "roles": [
+    {
+     "kind": 34,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1959 (library) and 1962-5 (arts tower). By Gollins, Melvin Ward and Partners.",
+     "kind": 34
+    },
+    {
+     "q": "University library and linked arts tower.",
+     "kind": 34
+    },
+    {
+     "q": "Library clad in Portland stone on brick base; glazing with turquoise tint; flat roof.",
+     "kind": 34
+    },
+    {
+     "q": "Arts tower fully glazed in transparent and obscure glass panels with metal mullions.",
+     "kind": 34
+    },
+    {
+     "q": "Arts tower of rectangular plan, lecture theatres in basement; departments above.",
+     "kind": 34
+    },
+    {
+     "q": "18 storeys high.",
+     "kind": 34
+    },
+    {
+     "q": "Curtain walling with solid panels below window sill height.",
+     "kind": 34
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "19 storeys",
+     "regex": "\\b19\\b|\\bnineteen\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "plant room",
+     "regex": "\\bplant\\b",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 34,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1246881,
+   "name": "Park Hill",
+   "town": "Park Hill, Sheffield, South Yorkshire",
+   "grade": "II*",
+   "listed": "1998-12-22",
+   "amended": null,
+   "architect": "Sheffield Corporation City Architect's Department under J L Womersley; designed by Jack Lynn and Ivor Smith with F E Nicklin and John Forrester (artist); engineer Ronald Jenkins of Ove Arup and Partners",
+   "built": "1957-60",
+   "roles": [
+    {
+     "kind": 105,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Flats and maisonettes. 1957-60 by Sheffield Corporation City Architect's Department under J L Womersley, designed by Jack Lynn and Ivor Smith with F E Nicklin and John Forrester (artist)",
+     "kind": 105
+    },
+    {
+     "q": "Reinforced concrete frame, partly board marked, with concrete balcony fronts and brick infill in four shades - a progression of purple, terracotta, light red and cream.",
+     "kind": 105
+    },
+    {
+     "q": "Continuous flat roof of even height throughout the estate.",
+     "kind": 105
+    },
+    {
+     "q": "The flats and maisonettes were designed on a steeply sloping site (gradient 1 in 10) keeping a constant roof level, so that the height of the blocks range from four to thirteen storeys.",
+     "kind": 105
+    },
+    {
+     "q": "Access decks at every third floor serve maisonettes on and above the deck and one-storey flats set below.",
+     "kind": 105
+    },
+    {
+     "q": "Park Hill is formed of four ranges linked by bridges across the upper decks, all cranked at obtuse angles (between 112 and 135 degrees) to maximise the site aspect and panoramic views.",
+     "kind": 105
+    },
+    {
+     "q": "Elevations treated as a regular exposed grid of the board-marked concrete frame.",
+     "kind": 105
+    },
+    {
+     "q": "Balconies on those elevations not served by decks give to a rhythmic 2:1 pattern in both directions across facades, varied only at corners.",
+     "kind": 105
+    },
+    {
+     "q": "995 flats on 17 acres (total site 32 acres)",
+     "kind": 105
+    },
+    {
+     "q": "the impact of the long, flat-topped structure rising above the city centre makes for one of Sheffield's most impressive landmarks.",
+     "kind": 105
+    }
+   ],
+   "absent": [
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "stepped",
+     "regex": "\\bstepped\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "沒有 stepped；屋頂是 \"Continuous flat roof of even height\"，高低差來自坡地。"
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "tower",
+     "regex": "\\btowers?\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "名單沒有 tower 這個字；它是 \"ranges\"。"
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1246230,
+   "name": "The Brunswick Centre (O'Donnell Court, Foundling Court, Renoir Cinema and shops)",
+   "town": "Bloomsbury, Camden, London",
+   "grade": "II",
+   "listed": "2000-09-14",
+   "amended": null,
+   "architect": "Patrick Hodgkinson (completed by L Brian Ingram and T P Bennett and Partners)",
+   "built": "1967-72",
+   "roles": [
+    {
+     "kind": 105,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1967-72 by Patrick Hodgkinson for Marchmont Properties and LB Camden",
+     "kind": 105
+    },
+    {
+     "q": "Two linked blocks of 560 flats, incorporating rows of shops at raised ground level",
+     "kind": 105
+    },
+    {
+     "q": "Reinforced concrete, some now painted as was always intended, glazed roofs to part of each flat, otherwise roofs are flat.",
+     "kind": 105
+    },
+    {
+     "q": "Flat roofs over shops form terraces serving the flats, on which are placed small 'professional studios'.",
+     "kind": 105
+    },
+    {
+     "q": "Complex megastructure of two 'A-framed' blocks, O'Donnell Court and Foundling Court, linked by a raised podium containing shops and a cinema and set over a basement car park on two levels.",
+     "kind": 105
+    },
+    {
+     "q": "The outer or perimeter range of five storeys, the inner or main range of eight storeys.",
+     "kind": 105
+    },
+    {
+     "q": "all with glazed living room extending on to balcony, which form a stepped profile down the side of the building.",
+     "kind": 105
+    },
+    {
+     "q": "Regularly spaced lift-shafts, staircases and ventilator towers reminiscent of Antonio Sant'Elia's scheme of 1914 for Milan Railway Station",
+     "kind": 105
+    },
+    {
+     "q": "The elevations are determined by the plan, with metal windows, and metal balustrading to concrete balconies.",
+     "kind": 105
+    }
+   ],
+   "absent": [
+    {
+     "word": "colour of the concrete (white / cream / grey)",
+     "regex": "\\b(white|cream|grey|gray)\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "只說 \"some now painted as was always intended\"，沒有給顏色。"
+    },
+    {
+     "word": "brick",
+     "regex": "\\bbrick",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "pitched roof",
+     "regex": "\\bpitched\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "名單寫 \"glazed roofs to part of each flat, otherwise roofs are flat\"。"
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1392166,
+   "name": "Byker: Long Headlam, Felton Walk, Byker Crescent, Headlam House, Felton House and St Lawrence RC Church",
+   "town": "Byker, Newcastle upon Tyne, Tyne and Wear",
+   "grade": "II*",
+   "listed": "2007-01-22",
+   "amended": "2010-01-08",
+   "architect": "Ralph Erskine's Arkitektkontor (site architect Vernon Gracie)",
+   "built": "1972-5",
+   "roles": [
+    {
+     "kind": 105,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1972-5 by Ralph Erskine's Arkitektkontor",
+     "kind": 105
+    },
+    {
+     "q": "Perimeter block of maisonettes, with two link blocks and attached church and church hall.",
+     "kind": 105
+    },
+    {
+     "q": "In situ concrete cross wall construction, with concrete strip foundations and ground beams, clad in strong brown, red, orange and buff patterned metric modular brick patterning to road elevations, red and buff brick to inner face, with white Eternit panels to upper floors and elaborate timber detailing at all levels.",
+     "kind": 105
+    },
+    {
+     "q": "Pale blue sheet metal roofs, with projecting lift and stair towers rising to metal-clad points and forming important townscape features.",
+     "kind": 105
+    },
+    {
+     "q": "Five-eight storeys, with carriageway openings on to main road (Conyers Road), and one-and two-storey infill linking Felton Walk, St Lawrence's church and Byker Crescent.",
+     "kind": 105
+    },
+    {
+     "q": "Two-storey family maisonettes at ground-floor level, set within walled gardens on inner face, with smaller maisonettes above accessed from balconies on every third level.",
+     "kind": 105
+    },
+    {
+     "q": "These balconies are semi-independent structures to reduce noise, with a seat or planting box covering the gap between the balcony and the building.",
+     "kind": 105
+    },
+    {
+     "q": "Byker Crescent is of five storeys and forms a prominent semi-circle at the north-east corner of the estate.",
+     "kind": 105
+    },
+    {
+     "q": "Double-glazed units to the tiny north side windows (kitchens, stairs and bathrooms only), with yellow and red projecting ventilators a prominent feature.",
+     "kind": 105
+    }
+   ],
+   "absent": [
+    {
+     "word": "Byker Wall (the name)",
+     "regex": "\\bbyker wall\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "條目從頭到尾沒有用「Byker Wall」這個名稱。"
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "pitched roof",
+     "regex": "\\bpitched\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "名單寫 \"Pale blue sheet metal roofs\"，沒有說斜或平。"
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "spire (flats)",
+     "regex": "\\bspire",
+     "absent": false,
+     "kind": 105,
+     "note": "有 3 處，但是街名 \"Spires Lane\" 與教堂的 \"corner spirelet\"，不是住宅塊；住宅塊的尖頂是樓梯塔的 \"metal-clad points\"。"
+    }
+   ]
+  },
+  {
+   "nhle": 1130403,
+   "name": "Alexandra Road Estate",
+   "town": "South Hampstead, Camden, London",
+   "grade": "II*",
+   "listed": "1993-08-18",
+   "amended": "1999-01-11",
+   "architect": "Neave Brown of Camden Architects' Department",
+   "built": "designed 1968; built 1972-78",
+   "roles": [
+    {
+     "kind": 105,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Designed 1968; built 1972-78.",
+     "kind": 105
+    },
+    {
+     "q": "Designed by Neave Brown of Camden Architects' Department.",
+     "kind": 105
+    },
+    {
+     "q": "Site-cast board-marked white, unpainted reinforced concrete. Flat roofs.",
+     "kind": 105
+    },
+    {
+     "q": "Three parallel east-west blocks, the northern forming an acoustic wall to shield the estate from the adjacent railway line.",
+     "kind": 105
+    },
+    {
+     "q": "organised with stepped elevations facing in towards Rowley Way, each level providing private outdoor areas for every home.",
+     "kind": 105
+    },
+    {
+     "q": "block A is of 7 storeys, Block B of 4 storeys.",
+     "kind": 105
+    },
+    {
+     "q": "Block A, Rowley Way comprises 2-storey, 2-bed flats at the top and 2-storey, 3-bed flats at the bottom with 3 layers of single storey 1-bed flats between.",
+     "kind": 105
+    },
+    {
+     "q": "Balconies to Blocks A and B have thick reinforced concrete handrails with glass panels beneath; floor to ceiling glazing to Rowley Way with thick dark-stained window frames.",
+     "kind": 105
+    },
+    {
+     "q": "has the boiler house below, with its tall 3-shafted metal chimney.",
+     "kind": 105
+    }
+   ],
+   "absent": [
+    {
+     "word": "crescent",
+     "regex": "\\bcrescent\\b",
+     "absent": true,
+     "kind": 105,
+     "note": "這個條目自己沒有 crescent（寫的是 \"Three parallel east-west blocks\"）；Brunswick 條目才把它形容成新月形。"
+    },
+    {
+     "word": "curve / curved",
+     "regex": "\\bcurv",
+     "absent": false,
+     "kind": 105,
+     "note": "有 1 處，只指遊戲場的牆 \"sometimes curved\"。"
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "brick",
+     "regex": "\\bbrick",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "tower",
+     "regex": "\\btowers?\\b",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    },
+    {
+     "word": "Brutalist",
+     "regex": "\\bbrutal",
+     "absent": true,
+     "kind": 105,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1264050,
+   "name": "The Economist group (office tower, residential block, former bank and podium)",
+   "town": "St James's, City of Westminster, London",
+   "grade": "II*",
+   "listed": "1988-06-13",
+   "amended": "2013-04-26",
+   "architect": "Alison and Peter Smithson",
+   "built": "1960-64",
+   "roles": [
+    {
+     "kind": 106,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "The Economist group, of 1960-64 by Alison and Peter Smithson",
+     "kind": 106
+    },
+    {
+     "q": "Construction, carried out by McAlpine's, took place between mid 1962 and late 1964.",
+     "kind": 106
+    },
+    {
+     "q": "It comprises three main buildings - the Economist office tower, a residential block and a bank - plus a small extension to Boodle's, linked together by a raised podium element which forms in effect a small, irregularly-shaped piazza.",
+     "kind": 106
+    },
+    {
+     "q": "The plan of each building is based on a square with canted corners.",
+     "kind": 106
+    },
+    {
+     "q": "The four-storey bank building stands at the south-west corner of the site.",
+     "kind": 106
+    },
+    {
+     "q": "The sixteen-storey office tower is the tallest of the three buildings and the largest on plan.",
+     "kind": 106
+    },
+    {
+     "q": "The 8-storey residential block is at the north-east corner",
+     "kind": 106
+    },
+    {
+     "q": "The concrete frame is sheathed in grey enamelled metal, with narrow slabs of Portland roach attached to the mullion-columns and larger rectangular slabs in the storey panels.",
+     "kind": 106
+    },
+    {
+     "q": "Atop each building is a set-back plant room, also clad in vertical stone strips.",
+     "kind": 106
+    },
+    {
+     "q": "The residential tower is in effect a scale model of the office building, with eight floors to the latter's sixteen",
+     "kind": 106
+    },
+    {
+     "q": "MATERIALS: Aluminium-clad reinforced concrete frame with roachbed Portland stone facings.",
+     "kind": 106
+    },
+    {
+     "q": "The three buildings are given a uniform external treatment.",
+     "kind": 106
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 106,
+     "note": "外牆寫的是 \"sheathed in grey enamelled metal\"，沒有 curtain wall。"
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "15 storeys",
+     "regex": "\\b15\\b|\\bfifteen\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "名單寫 \"sixteen-storey office tower\"。"
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "Art Deco",
+     "regex": "\\bart deco\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1113107,
+   "name": "Senate House and Institute of Education (University of London)",
+   "town": "Bloomsbury, Camden, London",
+   "grade": "II*",
+   "listed": "1969-03-28",
+   "amended": null,
+   "architect": "Charles Holden",
+   "built": "1932-1938",
+   "roles": [
+    {
+     "kind": 106,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Senate House and Institute of Education. 1932-1938. By Charles Holden, built with funding from the Rockefeller Foundation.",
+     "kind": 106
+    },
+    {
+     "q": "Brick load-bearing construction with Portland stone facing.",
+     "kind": 106
+    },
+    {
+     "q": "Symmetrical design, not completed, comprising central tower flanked by two courtyard ranges to either side.",
+     "kind": 106
+    },
+    {
+     "q": "the formal 18-storey tower built in recessed stages with broad central buttresses on the east and west sides.",
+     "kind": 106
+    },
+    {
+     "q": "Four and five storey wings with ten-window forward return and 14 windows width each.",
+     "kind": 106
+    },
+    {
+     "q": "From the second floor to the 18th, small vertically set windows, in groups of three until the penultimate stage when they are continuous.",
+     "kind": 106
+    },
+    {
+     "q": "Flat roofs with plain bands at parapet levels.",
+     "kind": 106
+    },
+    {
+     "q": "Square-headed, recessed windows with metal frames, those at first floor level on the tower being elongated with enriched spandrel panels and flanked by medium sized windows at the angles, with balconies, culminating in lunettes at sixth floor level.",
+     "kind": 106
+    },
+    {
+     "q": "north-east wing not completed.",
+     "kind": 106
+    },
+    {
+     "q": "HISTORICAL NOTE: built as a landmark, in 1937 this was the tallest building in London apart from St Paul's Cathedral.",
+     "kind": 106
+    }
+   ],
+   "absent": [
+    {
+     "word": "Art Deco",
+     "regex": "\\bart deco\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "名單沒有 Art Deco 這個詞。"
+    },
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "clock",
+     "regex": "\\bclock\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "set back",
+     "regex": "\\bset[- ]?backs?\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "名單用 \"recessed stages\"，不是 set back。"
+    },
+    {
+     "word": "stripped classical",
+     "regex": "\\bstripped\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1405493,
+   "name": "Lloyd's Building",
+   "town": "City of London, London",
+   "grade": "I",
+   "listed": "2011-12-19",
+   "amended": null,
+   "architect": "Richard Rogers Partnership (engineers Ove Arup and Partners)",
+   "built": "work began June 1981; occupied May 1986 (listing History)",
+   "roles": [
+    {
+     "kind": 106,
+     "role": "pin"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "the new Richard Rogers Partnership building",
+     "kind": 106
+    },
+    {
+     "q": "Work on the new building began in June 1981.",
+     "kind": 106
+    },
+    {
+     "q": "The building was finally occupied in May 1986.",
+     "kind": 106
+    },
+    {
+     "q": "Six perimeter towers with stainless steel services (toilet pods, staircases, external lifts, pipes and ducts) dramatically expressed externally.",
+     "kind": 106
+    },
+    {
+     "q": "The building comprises a rectangular block of offices, 67m x 45.5m, set back within a cobbled well with walkways linking the building to the pavement.",
+     "kind": 106
+    },
+    {
+     "q": "the 'satellite' stair and service towers project in a pinwheel fashion around the perimeter.",
+     "kind": 106
+    },
+    {
+     "q": "Up to 16 storeys of offices, or galleries in Lloyd's parlance (the stepped profile of the building means that not all the building is the same height) with a further two floors below ground.",
+     "kind": 106
+    },
+    {
+     "q": "The highest towers are to Leadenhall Street (Towers 1, 5 and 6) and are graduated back to where the street grain is lower (next to Leadenhall Market) at Towers 3 and 4.",
+     "kind": 106
+    },
+    {
+     "q": "Four of the towers are topped by major three-tiered plant rooms",
+     "kind": 106
+    },
+    {
+     "q": "Steel cranes, painted blue, are permanently sited on upper levels for cleaning and maintenance.",
+     "kind": 106
+    },
+    {
+     "q": "Stainless steel was preferred to aluminium for the external cladding, again at the behest of the fire authority, with a fine textured finish to give a bright sheen.",
+     "kind": 106
+    },
+    {
+     "q": "The central atrium is defined by a painted latticed steel and glass barrel-vaulted roof and tall window, similarly detailed, facing Leadenhall Place.",
+     "kind": 106
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "curtain wall",
+     "regex": "\\bcurtain[- ]wall",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "podium",
+     "regex": "\\bpodium\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "symmetrical (asymmetric is stated)",
+     "regex": "\\bsymmetric",
+     "absent": true,
+     "kind": 106,
+     "note": "名單說的是 \"asymmetric\"（\"The asymmetric and soaring expressed towers\"）。"
+    },
+    {
+     "word": "Art Deco",
+     "regex": "\\bart deco\\b",
+     "absent": false,
+     "kind": 106,
+     "note": "有 1 處，但是室內舊圖書館的裝飾 \"almost art deco in inspiration\"，與外觀無關。"
+    }
+   ]
+  },
+  {
+   "nhle": 1265570,
+   "name": "Broadcasting House",
+   "town": "Marylebone, City of Westminster, London",
+   "grade": "II*",
+   "listed": "1981-01-16",
+   "amended": null,
+   "architect": "Col. G Val Myer and Watson Hart (relief panels by Eric Gill and Gilbert Bayes)",
+   "built": "1930-32",
+   "roles": [
+    {
+     "kind": 106,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "1930-32 by Col. G Val Myer and Watson Hart, relief panels by Eric Gill and Gilbert Bayes, etc.",
+     "kind": 106
+    },
+    {
+     "q": "Offices and studios for the British Broadcasting Corporation (north extension not of special interest).",
+     "kind": 106
+    },
+    {
+     "q": "Portland stone on steel frame.",
+     "kind": 106
+    },
+    {
+     "q": "Long frontage to Portland Place, rounded end with main entrance to Langham Place and eastern return.",
+     "kind": 106
+    },
+    {
+     "q": "Shallow modelling to stepped facades in mixed Modernist-Georgian monumental style.",
+     "kind": 106
+    },
+    {
+     "q": "Nine storeys with four to six storey corner clock tower pavilion massing.",
+     "kind": 106
+    },
+    {
+     "q": "35-window range to Portland Place and seven window wide rounded clock tower end.",
+     "kind": 106
+    },
+    {
+     "q": "Upper storeys recessed at various levels with metal balustrades at set-backs.",
+     "kind": 106
+    },
+    {
+     "q": "Latticework masts over clock tower and behind.",
+     "kind": 106
+    },
+    {
+     "q": "Vertically proportioned shallow recessed metal glazing bar casements.",
+     "kind": 106
+    }
+   ],
+   "absent": [
+    {
+     "word": "prow",
+     "regex": "\\bprow\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "名單寫 \"rounded end\"，沒有 prow（船首）。"
+    },
+    {
+     "word": "ship",
+     "regex": "\\bship",
+     "absent": true,
+     "kind": 106,
+     "note": "沒有 ship。"
+    },
+    {
+     "word": "Art Deco",
+     "regex": "\\bart deco\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "名單寫的是 \"mixed Modernist-Georgian monumental style\"。"
+    },
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "curved (the listing says rounded)",
+     "regex": "\\bcurv",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "flat roof",
+     "regex": "\\bflat[- ]roof",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    }
+   ]
+  },
+  {
+   "nhle": 1205810,
+   "name": "Tower Buildings (Blackpool Tower)",
+   "town": "Blackpool, Lancashire",
+   "grade": "I",
+   "listed": "1973-10-10",
+   "amended": "1983-10-20",
+   "architect": "Maxwell and Tuke (engineer R.J.G. Reade; contractors Heenan and Froude)",
+   "built": "1891-94",
+   "roles": [
+    {
+     "kind": 106,
+     "role": "reserve"
+    }
+   ],
+   "quotes": [
+    {
+     "q": "Entertainment complex 1891-94; architects Maxwell and Tuke, engineer R.J.G. Reade, contractors Heenan and Froude.",
+     "kind": 106
+    },
+    {
+     "q": "Consists of imitation of Eiffel Tower, surrounded by brick-faced quadrilateral block of three unequal storeys",
+     "kind": 106
+    },
+    {
+     "q": "Tower of open steel girders. Square plan;",
+     "kind": 106
+    },
+    {
+     "q": "each consisting of four pillars braced together with lattice girders, tapering in the height from 100 feet width at base to 30 feet width under main gallery, which is enclosed in glass, with three open galleries above.",
+     "kind": 106
+    },
+    {
+     "q": "Ogee shaped cap, topped with flagmast terminating 518 feet above ground.",
+     "kind": 106
+    },
+    {
+     "q": "Ballroom over ground floor cafe at north end; Circus in centre; and aquarium (altered) on ground floor and Roof Gardens on top floor of south end.",
+     "kind": 106
+    },
+    {
+     "q": "Two parallel and adjoining pitched roofs of glass on iron frame, on south side of roof of Tower buildings.",
+     "kind": 106
+    }
+   ],
+   "absent": [
+    {
+     "word": "spire",
+     "regex": "\\bspire\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "塔頂寫的是 \"Ogee shaped cap, topped with flagmast\"，沒有 spire。"
+    },
+    {
+     "word": "clock",
+     "regex": "\\bclock\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "antenna",
+     "regex": "\\bantenna|\\baerial",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "lift (in the tower)",
+     "regex": "\\blifts?\\b",
+     "absent": true,
+     "kind": 106,
+     "note": "塔的電梯沒寫。"
+    },
+    {
+     "word": "neon / lights (illumination)",
+     "regex": "\\bneon\\b|\\billuminat|\\blights?\\b",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    },
+    {
+     "word": "symmetrical",
+     "regex": "\\bsymmetr",
+     "absent": true,
+     "kind": 106,
+     "note": null
+    }
+   ]
+  }
+ ]
+}

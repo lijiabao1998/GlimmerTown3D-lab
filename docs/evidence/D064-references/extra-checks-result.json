@@ -1,0 +1,120 @@
+{
+ "checkedAt": "2026-10-14",
+ "out": {
+  "spire": {
+   "entries": 1,
+   "ids": [
+    1392166
+   ]
+  },
+  "podium": {
+   "entries": 7,
+   "ids": [
+    1242617,
+    1246230,
+    1264050,
+    1270494,
+    1352667,
+    1381413,
+    1420049
+   ]
+  },
+  "curtain wall": {
+   "entries": 4,
+   "ids": [
+    1242617,
+    1247655,
+    1270494,
+    1420049
+   ]
+  },
+  "flat roof": {
+   "entries": 9,
+   "ids": [
+    1113107,
+    1130403,
+    1242617,
+    1246230,
+    1246881,
+    1247655,
+    1270494,
+    1334931,
+    1352667
+   ]
+  },
+  "pilotis": {
+   "entries": 2,
+   "ids": [
+    1242617,
+    1381413
+   ]
+  },
+  "Art Deco": {
+   "entries": 1,
+   "ids": [
+    1405493
+   ]
+  },
+  "brutalis": {
+   "entries": 1,
+   "ids": [
+    1264050
+   ]
+  },
+  "concrete": {
+   "entries": 18,
+   "ids": [
+    1113107,
+    1130403,
+    1205810,
+    1242108,
+    1242617,
+    1246230,
+    1246688,
+    1246881,
+    1264050,
+    1270494,
+    1271496,
+    1334931,
+    1352667,
+    1381413,
+    1392166,
+    1405493,
+    1420049,
+    1469965
+   ]
+  },
+  "service tower": {
+   "entries": 5,
+   "ids": [
+    1246688,
+    1270494,
+    1334931,
+    1352667,
+    1405493
+   ]
+  },
+  "barbicanNames": {
+   "Cromwell": 0,
+   "Shakespeare": 3,
+   "Lauderdale": 1,
+   "Blocks I": 2
+  },
+  "storeyMentions": {
+   "1242617": [
+    "31-storey",
+    "11-storey",
+    "32 storey"
+   ],
+   "1381413": [
+    "twenty-four storey",
+    "twenty-four storey"
+   ],
+   "1420049": [
+    "twenty-eight storey",
+    "thirty-five storey",
+    "twenty-eight storey"
+   ]
+  }
+ }
+}
