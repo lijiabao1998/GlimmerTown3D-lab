@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   british-art:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
