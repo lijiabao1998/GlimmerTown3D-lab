@@ -2,7 +2,7 @@
 //   node tools/art-coverage.mjs            印出兩座基準城（seed516、ai120）C 檔的覆蓋，以及住宅、商業原型的詞彙
 //   node tools/art-coverage.mjs --json     只印 JSON（存證用：docs/evidence/art-coverage-*.json）
 // 覆蓋＝照 D058（英式街屋）／D059（村莊）／D060（工業）的選擇器把每個街區分類，沒被任何一波接手的算「通用」；
-//       非住商工的市政／特殊建築另算（D056 市政、D057 遺產、D059 村莊 vs 通用）。
+//       非住商工的市政／特殊建築另算（D056 市政、D057 遺產、D064 合併塔、D059 村莊 vs 通用；D064 之前的存證沒有「D064 合併塔」這一列，那四種當時算通用）。
 // 權重＝街區自己的加權三角形（牆與其他兩個會投影的網格各算兩次，點綴算一次），跟 d060-baseline 同一個式子。
 // 詞彙＝24 個變體 × 四種街區尺寸，recipe 實際給出的屋頂種類、窗型、牆色、屋色；「形式組合」＝（屋頂／窗型／有無上層量體）的相異數，
 //       1 代表同一原型的變體只差顏色、沒有結構差異（實驗線的規矩是變體要結構不同）。
@@ -23,6 +23,7 @@ import {industryBlock} from '../src/content/britishIndustry.ts';
 import {commerceBlock} from '../src/content/britishCommerce.ts';
 import {BRITISH_KINDS} from '../src/content/britishCivic.ts';
 import {BRITISH_HERITAGE_KINDS} from '../src/content/britishHeritage.ts';
+import {TOWER_KINDS} from '../src/content/britishTowers.ts';
 import {d058Blocks,d058City} from './unit-d058.mjs';
 
 const read=file=>JSON.parse(fs.readFileSync(path.join(ROOT,file),'utf8'));
@@ -30,7 +31,8 @@ const KT=kindTableFrom(read('src/content/lab-kinds.json'));
 const LOOKS=read('src/content/lab-looks.json').looks;
 const ARCHE=read('src/content/lab-arche.json').arche;
 const KIND_NAME=new Map(read('src/content/lab-kinds.json').kinds.map(r=>[r.k,r.name??r.n??`k${r.k}`]));
-const civic={shape:shapeOf,colors:(k,lv)=>kindColors(LOOKS,k,lv,KT.catColor(KT.cat(k)))};
+const civic={shape:k=>shapeOf(k,true,true),colors:(k,lv)=>kindColors(LOOKS,k,lv,KT.catColor(KT.cat(k)))};
+// D064：四種合併塔照新畫法量（shapeOf 的塔旗標預設是關的，由呼叫端明講）
 const LAND_USE={1:'住宅',2:'商業',3:'工業'};
 const SIZES=[[1,1],[1,2],[2,1],[2,2]];
 
@@ -52,7 +54,7 @@ export function coverage(id) {
     const special={},genericKinds={};
     for(const b of city.buildings) {
       if(b.goneDay!==undefined||b.k<=3||!civic.shape(b.k))continue;
-      const cat=BRITISH_KINDS.has(b.k)?'D056 市政':BRITISH_HERITAGE_KINDS.has(b.k)?'D057 遺產':villageKind(b.k)?'D059 村莊':'通用';
+      const cat=BRITISH_KINDS.has(b.k)?'D056 市政':BRITISH_HERITAGE_KINDS.has(b.k)?'D057 遺產':TOWER_KINDS.has(b.k)?'D064 合併塔':villageKind(b.k)?'D059 村莊':'通用';
       special[cat]=(special[cat]??0)+1;
       if(cat==='通用'){const key=`${b.k} ${KIND_NAME.get(b.k)??''}`.trim();genericKinds[key]=(genericKinds[key]??0)+1;}
     }

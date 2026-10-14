@@ -17,7 +17,8 @@ const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||B
 const out=path.join(ROOT,'scratch/d063');
 const selectedWidths=(process.env.D063_WIDTHS??'').split(',').filter(Boolean).map(Number);
 const viewports=D063_VIEWPORTS.filter(v=>!selectedWidths.length||selectedWidths.includes(v.W));assert.ok(viewports.length);
-const PHASES={before:'commerceArt=legacy',after:''};
+// D064 起：after 要帶 towerArt=legacy，這支工具量的是 D063 單獨的效果（before 的 commerceArt=legacy 透過旗標串聯本來就關掉 D064）；D064 的前後對照在 tools/d064-capture.mjs
+const PHASES={before:'commerceArt=legacy',after:'towerArt=legacy'};
 const OLDER=['industryArt','villageArt','streetArt','britishArt','heritageArt'];   // every older legacy flag must switch D063 off with it
 const D61=JSON.parse(fs.readFileSync(path.join(ROOT,'docs/evidence/D061-review-images.json'),'utf8')).captureReport;   // committed D061 capture: the draw calls and triangles of the same cameras (D062 is identical, see its card)
 const html=fs.readFileSync(path.join(ROOT,'dist/index.html'));

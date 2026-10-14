@@ -210,8 +210,36 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  d064:
+    runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
+    timeout-minutes: 90   # 桌機每相 47 張，其中 22 張是西北向，要等相機轉過去；本機（無其他負載）約 45 分鐘，所以比 d063 的 60 寬
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 360, 412]   # 三種視窗各一個工作，平行拍（桌機每相 47 張、手機每相 24 張）
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D064 British merge towers, same-world before/after photography (seed516 holds eight real towers; the fourteen forms in the gallery sample; ai120 has none and must not change)
+        run: node tools/d064-capture.mjs
+        env:
+          D064_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d064-preview-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d064/
+          if-no-files-found: error
+          retention-days: 14
+
   pages:
-    needs: [smoke, d055, d059, d060, d061, d062, d063]
+    needs: [smoke, d055, d059, d060, d061, d062, d063, d064]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:

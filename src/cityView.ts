@@ -49,6 +49,9 @@ import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRen
 import { overLevel } from './render/ground.ts';
 import { LOOKS } from './content/looks.ts';
 import { shapeOf, kindColors, KIND_SHAPES } from './content/kindShapes.ts';
+// D064-BEGIN tower-import
+import { towerBuildings } from './content/britishTowers.ts';
+// D064-END tower-import
 import { Pipeline } from './render/post.ts';
 // D061-BEGIN land-view-import
 import { landLevelOf, LAND_SKY } from './render/landArt.ts';
@@ -150,7 +153,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let plan: DrawBlock[] | null = null;
   // D007：非住商工照造型表畫（街區模式才用）
   // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy'), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D064-BEGIN tower-flag
+  const towerOn = !['towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');   // D064：四種合併塔的英式畫法（旗標串聯：較舊的 legacy 旗標一起關掉）
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D064-END tower-flag
 // D061-BEGIN land-level
   const landLevel = landLevelOf(k => q.get(k));   // 地景檔位 0–3（旗標規則在 src/render/landArt.ts，Node 守衛直接測）
 // D061-END land-level
@@ -258,8 +264,14 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     for (let i = 0; i < o.length; i++) { const t = w.tiles[i]; if (t.road && rl[i] > 0) { const q = overLevel(rl[i], roadCap475(t)); if (q) { o[i] = q; any = true; } } }
     return any ? o : undefined;
   }
+// D064-BEGIN tower-variant
+  let towerV: number | null = null, towerOnly: number | null = null;   // 拍照用（__gt.towerV）：把每一棟合併塔都當成這個變體畫、並可只畫某一種；只動畫面，不動城市
+  const towerView = (c: City): City => towerV === null && towerOnly === null ? c : { ...c, buildings: towerBuildings(c.buildings, towerV, towerOnly) };
+// D064-END tower-variant
   function makeScene(c: City, fresh: boolean): BuiltCity {
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(c, KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D064-BEGIN tower-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(towerView(c), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D064-END tower-scene
     b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
     builtDay = c.day;
     if (b.con) st.setGeometry(b.con.top, b.con.base, b.con.wallTop);
@@ -1757,6 +1769,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D064-BEGIN tower-gt
+    towerV(v: number | null, only: number | null = null) { towerV = v; towerOnly = only; rebuildScene(true); needsRender = true; draw(); return [towerV, towerOnly]; },   // 拍照用：v＝null 照城市本來的變體；only＝只畫這一種建築（其餘不畫）
+// D064-END tower-gt
     advanceBy(dt: number) { advance(dt); needsRender = true; draw(); return (window as unknown as { __gt: { conCheck(): unknown } }).__gt.conCheck(); },
     // 每一座工地此刻的 t（屋齡＋當天比例）、露出比例、場景裡有沒有它的樓體；bad＝t ≥ 3.05（已經該長高）卻還沒有樓體的
     conCheck: () => {
