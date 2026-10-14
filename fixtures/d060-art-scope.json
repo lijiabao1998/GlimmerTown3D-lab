@@ -336,7 +336,7 @@
   "src/render/blockArt.ts": "de6fc6d37698dbc45e8eab6685c92f34d7f2141682b21acd17bbe6fc7548f427",
   "src/render/britishCivicArt.ts": "f31fbd360c23a6096227e4399293a8c8521b10ab0f89c78792d5844d60aed91f",
   "src/render/britishHeritageArt.ts": "f349c649383e00557873f6b4311b2a74cc0522c0f1621c00bb731a41375d2167",
-  "src/render/britishIndustryArt.ts": "35efddf6e84323e8234505edd5bfca2be8a22b2a5a621b4cbaa74a081ee860c0",
+  "src/render/britishIndustryArt.ts": "09827711b57091f17bfed9ef1c50168355390885a6ae50ee6123205937334219",
   "src/render/britishStreetArt.ts": "13d1e9d1241cd3056e1c31f2c68a427c8c75df516627504a11dd6bba05969172",
   "src/render/britishVillageArt.ts": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
   "src/render/cityScene.ts": "0dfe9f790bbf21b3b3e03134c12ad4c56d1b28fcce3cd29d414d2a2bc4fc5a94",

@@ -37,7 +37,8 @@ const BRICK: Mat[] = [
   { wall: '#8c6248', dark: '#58402f', trim: '#cdbf9f' },
   { wall: '#9c5a48', dark: '#6b3a2e', trim: '#dccfb2' },
 ];
-const ROOF = ['#4f5a64', '#b4593f', '#3f4a56', '#a05a3e', '#8f979a', '#6f9b8a'];
+// Roofs: two sooty-clay tones instead of terracotta. The first draft's '#b4593f' and '#a05a3e' sat within CIE76 ΔE 6.8 and 14.1 of the residential TERRA roofs, so colour alone could no longer tell an industrial roof from a house; these two are ΔE ≥ 23 away.
+const ROOF = ['#4f5a64', '#7a4a3c', '#3f4a56', '#6a4034', '#8f979a', '#6f9b8a'];
 const C = { glass: '#2c3f56', door: '#34302b', doorGreen: '#2f5242', timber: '#3d3a34', oak: '#7a5a3c', stone: '#9b968a', stoneLight: '#b8b3a6',
   iron: '#4b5158', ironLight: '#7d868d', coal: '#2d2d30', sand: '#c9b27a', lumber: '#a07a4a', lumberLight: '#c19a62' };
 const color = (c: string) => new THREE.Color(c);
