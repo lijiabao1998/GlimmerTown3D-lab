@@ -176,7 +176,7 @@
 
 **圖面。** 2026-10-14 已把第一版（開發中）7 張真實遊戲畫面傳給業主：兩座基準城工業區前後各一、十二原型 2×2 前後、十二個 1×1。定稿對照由 `node tools/d060-capture.mjs`（桌機 41 張／相、手機 17 張／相，同世界同相機，另輸出前｜後拼圖）與 CI 工作 `d060`（三種視窗平行）產出；業主核准前不合併、不部署。
 
-**CI 實拍結果（2026-10-14，[run 38520485640](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38520485640)，head `3e8fff2`）。**
+**CI 實拍結果（2026-10-14，[run 38520485640](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38520485640)，head `3e8fff2`，V0 配色；這一輪後來被 d4cef37 的推送取消，最終結果見末節「CI 全套結果」）。**
 
 - 工作：`d055`、`d059`、`d060`×3（1440／360／412）成功；`smoke`（完整 Node＋browser）撰寫時**仍在跑**，結果見末節「CI 全套結果」（待補，沒補之前不算通過）。
 - 三份 artifact（ZIP SHA-256 與 GitHub 回報的 digest 逐字相同，2026-10-28 到期）：`d060-preview-1440-…`（11873673599，`d8f538c5…`）、`-412-`（11873527324，`aa43e395…`）、`-360-`（11873442580，`088b056c…`）。三個視窗用同一份建置（HTML SHA-256 `b12ad3a1…`）與同一個固定件（`2cb275ae…`）；前後對照是同建置的 `industryArt=legacy` 對預設。
@@ -205,4 +205,12 @@
 
 ## CI 全套結果
 
-待補。[run 38520485640](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38520485640) 的 `smoke`（完整 Node＋browser）在撰寫時仍在跑；結果出來之前，本卡**不宣稱**完整 Node 或 browser 通過。
+**最終 head `d4cef37`（V1 屋頂配色）：[run 38523419212](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38523419212) 全部成功**（2026-10-14 06:38–07:57 UTC；`pages` 依工作流程在分支上略過）。
+
+- `smoke`：typecheck 通過；Node 端守衛 **675 項、0 NG**（1,104.9 s，其中 D060 12 項、存證 3 項）；建置；瀏覽器煙霧測試 **850 項、0 NG**（3,142.0 s）；樣張擷取。
+- `d055`、`d059`、`d060`×3（1440／360／412）成功。`d060` 三份報告 `passed: true`（桌機 41 對、手機各 17 對），各 0 瀏覽器錯誤、0 外部請求；12 個街區池全以斜射線命中、24 站各至少 3 次命中；四個串聯旗標的場景摘要彼此相同。
+- 瀏覽器實測提交三角形與 Node 量測逐字相同：seed516 C 118,007 → 116,227、ai120 C 97,121 → 96,607，繪製呼叫數不變（桌機 15／15；手機 seed516 13）。V1 只改顏色，三角形與 V0 一輪完全相同。
+- artifacts（ZIP SHA-256 與 GitHub 回報的 digest 逐字相同，2026-10-28 到期）：`d060-preview-1440-…`（11875083709，`dfc94e19…`）、`-412-`（11875296729，`8572b42f…`）、`-360-`（11874363792，`3867f861…`）。建置 HTML SHA-256 `8674aa50…`；本機重建的 HTML 與它**逐位元組相同**（建置在 Node 22 與 CI 的 Node 24 之間是決定性的）。
+- 先前的 [run 38520485640](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38520485640)（head `3e8fff2`，V0 配色）：d055／d059／d060×3 成功、Node 守衛步驟成功，但在 smoke 的瀏覽器步驟中被 d4cef37 的推送取消（工作流程的並行群組是 cancel-in-progress），不算結果。
+
+**沒有的**：Android 實機；`pages`／正式站（分支不部署）；`?bench=1` 實機量測；業主核准。
