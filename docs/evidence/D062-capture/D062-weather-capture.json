@@ -1,0 +1,1291 @@
+{
+  "sourceRef": "local uncommitted D062 candidate",
+  "htmlSha256": "186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2",
+  "qualification": "Production page, real CDP PNG, Chrome software WebGL; fixed animation time; camera settled; mobile emulation is not Android hardware.",
+  "views": [
+    {
+      "view": {
+        "id": "newcity-far",
+        "sample": "newcity",
+        "x": 32,
+        "z": 32,
+        "zoom": 1.2,
+        "W": 1440,
+        "H": 1000,
+        "mobile": false,
+        "sky": true
+      },
+      "states": {
+        "base": {
+          "file": "D062-wx-newcity-far-base.png",
+          "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+          "bytes": 77689,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 78
+        },
+        "clear": {
+          "file": "D062-wx-newcity-far-clear.png",
+          "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+          "bytes": 77689,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 78
+        },
+        "rain": {
+          "file": "D062-wx-newcity-far-rain.png",
+          "sha256": "5b9a16338b0122bd10df01c09a58e30361c0bd9c1eb5cd7f704229c560dc45b7",
+          "bytes": 78527,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 84
+        },
+        "rain2": {
+          "file": "D062-wx-newcity-far-rain2.png",
+          "sha256": "5b9a16338b0122bd10df01c09a58e30361c0bd9c1eb5cd7f704229c560dc45b7",
+          "bytes": 78527,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 84
+        },
+        "storm": {
+          "file": "D062-wx-newcity-far-storm.png",
+          "sha256": "8b075bd9a2eb0ffff2d45190ade11039bf670f6b51b31ef6e319d002c201399d",
+          "bytes": 65167,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 71
+        },
+        "rainbow": {
+          "file": "D062-wx-newcity-far-rainbow.png",
+          "sha256": "5055000a4d84973d9ce903c8187a51484da3339470a3511672fbe433eebc252e",
+          "bytes": 90647,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 197
+        },
+        "flash": {
+          "file": "D062-wx-newcity-far-flash.png",
+          "sha256": "9591301066a92cd5fc04275ddcc4ed8346e3c2e83113a6d6d0a8962bd318420a",
+          "bytes": 56892,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 29
+        },
+        "snowbase": {
+          "file": "D062-wx-newcity-far-snowbase.png",
+          "sha256": "c4742f59b5de5e4a15bc88ff2e07d558cf3c3d998f42d10282fa8a5894dc63bd",
+          "bytes": 74714,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 57
+        },
+        "snow": {
+          "file": "D062-wx-newcity-far-snow.png",
+          "sha256": "6dc0b2c7e2d25cc5ab790b6465dcb899d7ca83c3b20e0fe3f075a7e4026b9bb8",
+          "bytes": 73033,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 54
+        },
+        "blizzard": {
+          "file": "D062-wx-newcity-far-blizzard.png",
+          "sha256": "f59df16b4a8123d7087bf0f02be83a0a6c1dc10bfe67395778a92de5862ba5be",
+          "bytes": 73530,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 56
+        },
+        "legacyBase": {
+          "file": "D062-wx-newcity-far-legacyBase.png",
+          "sha256": "bf92a5c8f9b0578bf60bfe26bedb75deb9d29aded707e0464f28f22ac6f6fb2e",
+          "bytes": 74514,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 52
+        },
+        "legacyStorm": {
+          "file": "D062-wx-newcity-far-legacyStorm.png",
+          "sha256": "bf92a5c8f9b0578bf60bfe26bedb75deb9d29aded707e0464f28f22ac6f6fb2e",
+          "bytes": 74514,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "unique": 52
+        }
+      },
+      "passed": true,
+      "tint": {
+        "rain": {
+          "dE": 8.98,
+          "share": 0.658,
+          "errRgb": 8.2
+        },
+        "storm": {
+          "dE": 12.35,
+          "share": 0.658,
+          "errRgb": 6.85
+        },
+        "snow": {
+          "dE": 1.04,
+          "share": 0.598,
+          "errRgb": 2.87
+        },
+        "blizzard": {
+          "dE": 1.04,
+          "share": 0.598,
+          "errRgb": 2.87
+        }
+      },
+      "skyShare": 0.342,
+      "particles": {
+        "rain": {
+          "streakPixels": 1314,
+          "expected": 1108,
+          "ratio": 1.19,
+          "bandShare": 0.9973,
+          "replica": 1314,
+          "overlap": 1
+        },
+        "storm": {
+          "streakPixels": 2403,
+          "expected": 2216,
+          "ratio": 1.08,
+          "bandShare": 0.9951,
+          "replica": 2403,
+          "overlap": 1
+        },
+        "snow": {
+          "streakPixels": 270,
+          "expected": 369,
+          "ratio": 0.73,
+          "bandShare": 0.9995,
+          "replica": 270,
+          "overlap": 1
+        },
+        "blizzard": {
+          "streakPixels": 702,
+          "expected": 739,
+          "ratio": 0.95,
+          "bandShare": 0.9986,
+          "replica": 702,
+          "overlap": 1
+        }
+      },
+      "rainbow": {
+        "changedShare": 0.1205,
+        "insideShare": 1
+      },
+      "flash": {
+        "lift": [
+          0.504,
+          0.444,
+          0.468
+        ]
+      },
+      "sheets": {
+        "rain": "D062-wx-sheet-newcity-far-rain.png",
+        "sky": "D062-wx-sheet-newcity-far-sky.png"
+      }
+    },
+    {
+      "view": {
+        "id": "seed516-district",
+        "sample": "seed516",
+        "x": 40.4,
+        "z": 6.7,
+        "zoom": 2.56,
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "states": {
+        "base": {
+          "file": "D062-wx-seed516-district-base.png",
+          "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+          "bytes": 29328,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 156
+        },
+        "clear": {
+          "file": "D062-wx-seed516-district-clear.png",
+          "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+          "bytes": 29328,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 156
+        },
+        "rain": {
+          "file": "D062-wx-seed516-district-rain.png",
+          "sha256": "91a39857dc010bd9850770acddd6ae566b6ee9fe14098114bef1c8c9b7ebe306",
+          "bytes": 29661,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 131
+        },
+        "rain2": {
+          "file": "D062-wx-seed516-district-rain2.png",
+          "sha256": "91a39857dc010bd9850770acddd6ae566b6ee9fe14098114bef1c8c9b7ebe306",
+          "bytes": 29661,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 131
+        },
+        "storm": {
+          "file": "D062-wx-seed516-district-storm.png",
+          "sha256": "b43f6597369f0117ab5d4d56c35560426db2c90c779c211dcb9c4511a81dbac5",
+          "bytes": 27865,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 109
+        },
+        "rainbow": {
+          "file": "D062-wx-seed516-district-rainbow.png",
+          "sha256": "bdba2c71162e4f46bea000b701b5b8f212ec9bcc9793200f4f79b025080396a5",
+          "bytes": 30771,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 202
+        },
+        "flash": {
+          "file": "D062-wx-seed516-district-flash.png",
+          "sha256": "e56527a28dbb2e3e2db2df9f65b3299973d3d5c54a7cab6fe808bdcb2812b260",
+          "bytes": 22983,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 31
+        },
+        "snowbase": {
+          "file": "D062-wx-seed516-district-snowbase.png",
+          "sha256": "f0b7c2eca92d6f5b6d8d33d9d3c83e89dfe102cbc5f5c0fd041fc8d96b957ca0",
+          "bytes": 28786,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 139
+        },
+        "snow": {
+          "file": "D062-wx-seed516-district-snow.png",
+          "sha256": "5bcb735173dcc961e5dd81ca39e8f41f9707692354de2ef6673502c617e1ecf3",
+          "bytes": 28154,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 114
+        },
+        "blizzard": {
+          "file": "D062-wx-seed516-district-blizzard.png",
+          "sha256": "b658a5e4d24df0abba5e3ee85935e5829f9c46385c3218d1c2078c10fc2c7fdb",
+          "bytes": 28412,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 116
+        },
+        "legacyBase": {
+          "file": "D062-wx-seed516-district-legacyBase.png",
+          "sha256": "02adffa2e3e60febe015291f21801eb157e852e79dd49cf68d93abc15733cd43",
+          "bytes": 28097,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 145
+        },
+        "legacyStorm": {
+          "file": "D062-wx-seed516-district-legacyStorm.png",
+          "sha256": "02adffa2e3e60febe015291f21801eb157e852e79dd49cf68d93abc15733cd43",
+          "bytes": 28097,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "unique": 145
+        }
+      },
+      "passed": true,
+      "tint": {
+        "rain": {
+          "dE": 7.37,
+          "share": 0.704,
+          "errRgb": 5.8
+        },
+        "storm": {
+          "dE": 9.14,
+          "share": 0.704,
+          "errRgb": 5.31
+        },
+        "snow": {
+          "dE": 4.15,
+          "share": 0.673,
+          "errRgb": 1.92
+        },
+        "blizzard": {
+          "dE": 4.17,
+          "share": 0.673,
+          "errRgb": 2.42
+        }
+      },
+      "rainbow": {
+        "changedShare": 0.1134,
+        "insideShare": 1
+      },
+      "flash": {
+        "lift": [
+          0.494,
+          0.472,
+          0.474
+        ]
+      },
+      "sheets": {
+        "rain": "D062-wx-sheet-seed516-district-rain.png",
+        "sky": "D062-wx-sheet-seed516-district-sky.png"
+      }
+    },
+    {
+      "view": {
+        "id": "ai120-default",
+        "sample": "ai120",
+        "x": null,
+        "z": null,
+        "zoom": null,
+        "W": 1440,
+        "H": 1000,
+        "mobile": false,
+        "sky": true
+      },
+      "states": {
+        "base": {
+          "file": "D062-wx-ai120-default-base.png",
+          "sha256": "cbecdaa08fe5e53bde481a922fce77f35cc9aef6843c0145ceac7008f5dd77d4",
+          "bytes": 94015,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 235
+        },
+        "clear": {
+          "file": "D062-wx-ai120-default-clear.png",
+          "sha256": "cbecdaa08fe5e53bde481a922fce77f35cc9aef6843c0145ceac7008f5dd77d4",
+          "bytes": 94015,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 235
+        },
+        "rain": {
+          "file": "D062-wx-ai120-default-rain.png",
+          "sha256": "ddc6c8855789a04f4af7341eb28107d61a2ed57c7ba43a97c8aeccb3e65dd7ee",
+          "bytes": 92813,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 188
+        },
+        "rain2": {
+          "file": "D062-wx-ai120-default-rain2.png",
+          "sha256": "ddc6c8855789a04f4af7341eb28107d61a2ed57c7ba43a97c8aeccb3e65dd7ee",
+          "bytes": 92813,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 188
+        },
+        "storm": {
+          "file": "D062-wx-ai120-default-storm.png",
+          "sha256": "9d49b21ad54c3a243ed1595d407fed234fa992539f4c2b550f06f3e4f12911c5",
+          "bytes": 85654,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 147
+        },
+        "rainbow": {
+          "file": "D062-wx-ai120-default-rainbow.png",
+          "sha256": "6e8c4030709751ebe0b8021b988d356e4718005e3eab21f8f97a51c2329cd4bd",
+          "bytes": 108290,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 326
+        },
+        "flash": {
+          "file": "D062-wx-ai120-default-flash.png",
+          "sha256": "98ca194842c3dc37af37e0a4e83ddc95410748d8c969c05ee5e6a55dc2c38807",
+          "bytes": 65063,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 42
+        },
+        "snowbase": {
+          "file": "D062-wx-ai120-default-snowbase.png",
+          "sha256": "0dd8406f4b93a480a547fbc711e8cd266b2b0dd1a9df92dcf507ef788d4aa2ea",
+          "bytes": 92682,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 200
+        },
+        "snow": {
+          "file": "D062-wx-ai120-default-snow.png",
+          "sha256": "224b4288623f37ca7d2a445f916119e5de59602b408f92a27f9d8c5763f5da25",
+          "bytes": 89926,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 165
+        },
+        "blizzard": {
+          "file": "D062-wx-ai120-default-blizzard.png",
+          "sha256": "9e40790fc960e1f21bf25facf227cfb22ff8597c76e1cb7b8aed2a2921ee67f7",
+          "bytes": 90506,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 165
+        },
+        "legacyBase": {
+          "file": "D062-wx-ai120-default-legacyBase.png",
+          "sha256": "45250b237aec459054e85cf27a2502e6b8ea1a02abc26539425b57bf1c409026",
+          "bytes": 86589,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 211
+        },
+        "legacyStorm": {
+          "file": "D062-wx-ai120-default-legacyStorm.png",
+          "sha256": "45250b237aec459054e85cf27a2502e6b8ea1a02abc26539425b57bf1c409026",
+          "bytes": 86589,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "unique": 211
+        }
+      },
+      "passed": true,
+      "tint": {
+        "rain": {
+          "dE": 7.08,
+          "share": 0.496,
+          "errRgb": 5.6
+        },
+        "storm": {
+          "dE": 10.22,
+          "share": 0.496,
+          "errRgb": 4.7
+        },
+        "snow": {
+          "dE": 2.79,
+          "share": 0.45,
+          "errRgb": 3.29
+        },
+        "blizzard": {
+          "dE": 2.79,
+          "share": 0.45,
+          "errRgb": 3.29
+        }
+      },
+      "skyShare": 0.504,
+      "particles": {
+        "rain": {
+          "streakPixels": 1926,
+          "expected": 1634,
+          "ratio": 1.18,
+          "bandShare": 0.9973,
+          "replica": 1926,
+          "overlap": 1
+        },
+        "storm": {
+          "streakPixels": 3087,
+          "expected": 3267,
+          "ratio": 0.94,
+          "bandShare": 0.9957,
+          "replica": 3087,
+          "overlap": 1
+        },
+        "snow": {
+          "streakPixels": 360,
+          "expected": 545,
+          "ratio": 0.66,
+          "bandShare": 0.9995,
+          "replica": 360,
+          "overlap": 1
+        },
+        "blizzard": {
+          "streakPixels": 999,
+          "expected": 1089,
+          "ratio": 0.92,
+          "bandShare": 0.9986,
+          "replica": 1017,
+          "overlap": 1
+        }
+      },
+      "rainbow": {
+        "changedShare": 0.1253,
+        "insideShare": 1
+      },
+      "flash": {
+        "lift": [
+          0.521,
+          0.453,
+          0.448
+        ]
+      },
+      "sheets": {
+        "rain": "D062-wx-sheet-ai120-default-rain.png",
+        "sky": "D062-wx-sheet-ai120-default-sky.png"
+      }
+    }
+  ],
+  "animation": {
+    "rain": {
+      "reduced": false,
+      "option": {
+        "mode": "rain"
+      },
+      "scene": 0,
+      "post": 13,
+      "ms": 3000
+    },
+    "storm": {
+      "reduced": false,
+      "option": {
+        "mode": "storm"
+      },
+      "scene": 0,
+      "post": 16,
+      "ms": 3000
+    },
+    "clear": {
+      "reduced": false,
+      "option": {
+        "mode": "clear"
+      },
+      "scene": 0,
+      "post": 0,
+      "ms": 3000
+    },
+    "off": {
+      "reduced": false,
+      "option": null,
+      "scene": 0,
+      "post": 0,
+      "ms": 3000
+    },
+    "pinned": {
+      "reduced": false,
+      "option": {
+        "mode": "rain",
+        "time": 3.2
+      },
+      "scene": 0,
+      "post": 0,
+      "ms": 3000
+    },
+    "reduced": {
+      "reduced": true,
+      "option": {
+        "mode": "rain"
+      },
+      "scene": 0,
+      "post": 0,
+      "ms": 3000
+    }
+  },
+  "clock": {
+    "rainbow": {
+      "day": 19,
+      "doy": 18,
+      "rainbowT": 9,
+      "prev": 0,
+      "simWeather": 0,
+      "differsFromPinned": 0
+    },
+    "flash": {
+      "day": 645,
+      "doy": 284,
+      "flashT": 0.4,
+      "alpha": 0.5,
+      "simWeather": 2,
+      "meanRgb": [
+        191.3,
+        196.9,
+        189.2
+      ]
+    },
+    "snow": {
+      "day": 661,
+      "doy": 300,
+      "simWeather": 1,
+      "look": 3
+    }
+  },
+  "passed": true
+}

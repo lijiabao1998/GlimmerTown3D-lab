@@ -1,0 +1,3976 @@
+{
+  "sourceRef": "local uncommitted D062 candidate",
+  "htmlSha256": "186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2",
+  "qualification": "Production page, real CDP PNG, Chrome software WebGL; in-day simulation progress fixed with setDayFrac(0); camera settled before every shot. Mobile touch emulation is not Android hardware.",
+  "views": [
+    {
+      "view": {
+        "id": "newcity-far",
+        "sample": "newcity",
+        "x": 32,
+        "z": 32,
+        "zoom": 1.2,
+        "W": 1440,
+        "H": 1000,
+        "mobile": false,
+        "sky": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-newcity-far-0.png",
+          "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+          "bytes": 77689,
+          "pixelVariance": 2042.858336197085,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 78,
+            "modelHit": 0.9331,
+            "top": [
+              [
+                "#6aaa55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#80aa55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#6a9540",
+                5.89
+              ],
+              [
+                "#55aad4",
+                3.89
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-newcity-far-1.png",
+          "sha256": "319c3662491298837423e8b3c2ba78137f6574250e04a4e9b57e3f5eba5b75c0",
+          "bytes": 73788,
+          "pixelVariance": 1635.0547960051153,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 71,
+            "modelHit": 0.9315,
+            "top": [
+              [
+                "#80bf55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#95bf55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#80aa40",
+                5.89
+              ],
+              [
+                "#4095bf",
+                5.56
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-newcity-far-2.png",
+          "sha256": "979ea2f07c51b3c44feac662e7e9c8273850f09a21e46cd19c57397851f47d56",
+          "bytes": 77499,
+          "pixelVariance": 1750.2652197890238,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 83,
+            "modelHit": 0.9226,
+            "top": [
+              [
+                "#aa9555",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#aaaa55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#958055",
+                5.94
+              ],
+              [
+                "#4080aa",
+                5.56
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-newcity-far-3.png",
+          "sha256": "c4742f59b5de5e4a15bc88ff2e07d558cf3c3d998f42d10282fa8a5894dc63bd",
+          "bytes": 74714,
+          "pixelVariance": 1140.0139127313232,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 57,
+            "modelHit": 0.9479,
+            "top": [
+              [
+                "#d4eaea",
+                22.36
+              ],
+              [
+                "#95bfea",
+                21.26
+              ],
+              [
+                "#eaeaea",
+                15.54
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#aad4ea",
+                7.38
+              ],
+              [
+                "#bfd4d4",
+                5.89
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-newcity-far-off.png",
+          "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+          "bytes": 77689,
+          "pixelVariance": 2042.858336197085,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 78,
+            "modelHit": 0.9331,
+            "top": [
+              [
+                "#6aaa55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#80aa55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#6a9540",
+                5.89
+              ],
+              [
+                "#55aad4",
+                3.89
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-newcity-far-auto.png",
+          "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+          "bytes": 77689,
+          "pixelVariance": 2042.858336197085,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 78,
+            "modelHit": 0.9331,
+            "top": [
+              [
+                "#6aaa55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#80aa55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#6a9540",
+                5.89
+              ],
+              [
+                "#55aad4",
+                3.89
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-newcity-far-s1.png",
+          "sha256": "f8da4abb8a303a9f3979ec5904885a8c21118ec175b22a590c45cb29ef52fe8e",
+          "bytes": 78347,
+          "pixelVariance": 1788.0517827262374,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 76,
+            "modelHit": 0.9299,
+            "top": [
+              [
+                "#80aa55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#80bf55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#6aaa55",
+                5.89
+              ],
+              [
+                "#55aad4",
+                3.89
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-newcity-far-s2.png",
+          "sha256": "46aa72093df83e3d7ad363b0df88d1ea95b246d2d537225bba5b781d3a45534a",
+          "bytes": 76742,
+          "pixelVariance": 1764.3141988051866,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 82,
+            "modelHit": 0.9195,
+            "top": [
+              [
+                "#95aa55",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#aaaa55",
+                12.34
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#809540",
+                5.89
+              ],
+              [
+                "#4080aa",
+                5.56
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-newcity-far-s3.png",
+          "sha256": "95b8bd9200fbae637feed542bbd0d17ce646de088d0ecfc8607a5fd769662c80",
+          "bytes": 79430,
+          "pixelVariance": 1351.27957067651,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 63,
+            "modelHit": 0.9435,
+            "top": [
+              [
+                "#bfd4bf",
+                22.34
+              ],
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#d4eaea",
+                12.36
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#aad4ea",
+                7.38
+              ],
+              [
+                "#aabfaa",
+                6.35
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-newcity-far-mid.png",
+          "sha256": "2fef60823c573d61f4bfc2448e481300670e8c6e337ac8e60f9b7592c9b9b074",
+          "bytes": 80839,
+          "pixelVariance": 1811.3512538053365,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 90,
+            "modelHit": 0.9322,
+            "top": [
+              [
+                "#95bfea",
+                19.18
+              ],
+              [
+                "#80bf55",
+                13.68
+              ],
+              [
+                "#bfeaea",
+                11.31
+              ],
+              [
+                "#6aaa55",
+                11.07
+              ],
+              [
+                "#80aa55",
+                10.1
+              ],
+              [
+                "#80aa40",
+                5.69
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 14,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 0,
+        "share": 0
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 11.99,
+            "share": 0.4426
+          },
+          {
+            "dE": 30.26,
+            "share": 0.4426
+          },
+          {
+            "dE": 56.27,
+            "share": 0.4426
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4.2,
+            "share": 0.4426
+          },
+          {
+            "dE": 17.02,
+            "share": 0.4426
+          },
+          {
+            "dE": 46.71,
+            "share": 0.4426
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.1965,
+        "springKept": 0.8035,
+        "summerEnd": 1
+      },
+      "sheets": {
+        "bold": "D062-sheet-newcity-far-bold.png",
+        "soft": "D062-sheet-newcity-far-soft.png"
+      }
+    },
+    {
+      "view": {
+        "id": "newcity-near",
+        "sample": "newcity",
+        "x": 32,
+        "z": 32,
+        "zoom": 4,
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-newcity-near-0.png",
+          "sha256": "9971115dd2f2a117da2555cd839928ee92ab0c784b3fcb1852cbf39f49f5206f",
+          "bytes": 16635,
+          "pixelVariance": 110.73937623188431,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 15,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#6aaa55",
+                34.3
+              ],
+              [
+                "#80aa55",
+                30.92
+              ],
+              [
+                "#80bf55",
+                17.02
+              ],
+              [
+                "#6a9540",
+                12.06
+              ],
+              [
+                "#95bf6a",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-newcity-near-1.png",
+          "sha256": "79036dd1231110246bc189b8dbbc1656eafef665ccafc5d7e1165a9549be0665",
+          "bytes": 16131,
+          "pixelVariance": 95.93296882922004,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 14,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#80bf55",
+                34.3
+              ],
+              [
+                "#95bf55",
+                30.92
+              ],
+              [
+                "#95d455",
+                17.02
+              ],
+              [
+                "#80aa40",
+                12.06
+              ],
+              [
+                "#aad46a",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-newcity-near-2.png",
+          "sha256": "311a822567f150901ac0b6465555fc46d4d93dfbf8d6efe1da647076cc8193c1",
+          "bytes": 16051,
+          "pixelVariance": 102.56046038989734,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 14,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#aa9555",
+                34.3
+              ],
+              [
+                "#aaaa55",
+                30.92
+              ],
+              [
+                "#bfaa55",
+                17.02
+              ],
+              [
+                "#958055",
+                12.06
+              ],
+              [
+                "#d4bf6a",
+                2.58
+              ],
+              [
+                "#5595bf",
+                1.34
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-newcity-near-3.png",
+          "sha256": "3691f8d24afe8957aadf19aad75adc3ab0b340fe647b86a06303d80484e58c6c",
+          "bytes": 10542,
+          "pixelVariance": 145.44482220589998,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 9,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#eaeaea",
+                50.75
+              ],
+              [
+                "#d4eaea",
+                34.32
+              ],
+              [
+                "#bfd4d4",
+                12.06
+              ],
+              [
+                "#aad4ea",
+                1.34
+              ],
+              [
+                "#aabfaa",
+                0.77
+              ],
+              [
+                "#80aad4",
+                0.56
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-newcity-near-off.png",
+          "sha256": "9971115dd2f2a117da2555cd839928ee92ab0c784b3fcb1852cbf39f49f5206f",
+          "bytes": 16635,
+          "pixelVariance": 110.73937623188431,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 15,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#6aaa55",
+                34.3
+              ],
+              [
+                "#80aa55",
+                30.92
+              ],
+              [
+                "#80bf55",
+                17.02
+              ],
+              [
+                "#6a9540",
+                12.06
+              ],
+              [
+                "#95bf6a",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-newcity-near-auto.png",
+          "sha256": "9971115dd2f2a117da2555cd839928ee92ab0c784b3fcb1852cbf39f49f5206f",
+          "bytes": 16635,
+          "pixelVariance": 110.73937623188431,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 15,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#6aaa55",
+                34.3
+              ],
+              [
+                "#80aa55",
+                30.92
+              ],
+              [
+                "#80bf55",
+                17.02
+              ],
+              [
+                "#6a9540",
+                12.06
+              ],
+              [
+                "#95bf6a",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-newcity-near-s1.png",
+          "sha256": "df06a0c5bc3fce4737dcebd211568d277c10f5c344b6bd702e2f82a02cc8ec14",
+          "bytes": 16437,
+          "pixelVariance": 126.22847647874369,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 15,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#80aa55",
+                34.3
+              ],
+              [
+                "#80bf55",
+                30.92
+              ],
+              [
+                "#95bf6a",
+                17.02
+              ],
+              [
+                "#6aaa55",
+                12.06
+              ],
+              [
+                "#aad480",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-newcity-near-s2.png",
+          "sha256": "52c20d5cf64600b82fafa4235ddf6b4c5696953ef4da5546d815a6289b2091bc",
+          "bytes": 15884,
+          "pixelVariance": 137.28768646009485,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 14,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#95aa55",
+                34.3
+              ],
+              [
+                "#aaaa55",
+                30.92
+              ],
+              [
+                "#bfaa55",
+                17.02
+              ],
+              [
+                "#809540",
+                12.06
+              ],
+              [
+                "#bfbf6a",
+                2.58
+              ],
+              [
+                "#55aad4",
+                1.34
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-newcity-near-s3.png",
+          "sha256": "1306e21d967d3e9a447e99a16a61406e9635c6b49864a5f7e6e99a8982ce8b16",
+          "bytes": 14202,
+          "pixelVariance": 455.18401470668323,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 10,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#bfd4bf",
+                34.3
+              ],
+              [
+                "#d4eaea",
+                30.94
+              ],
+              [
+                "#eaeaea",
+                19.83
+              ],
+              [
+                "#aabfaa",
+                12.06
+              ],
+              [
+                "#aad4ea",
+                1.34
+              ],
+              [
+                "#95aa95",
+                0.77
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-newcity-near-mid.png",
+          "sha256": "2f42ff71f0680e965323ee523c63687d1b503fbf3ce4ab0a54b7c1dd20bbaa59",
+          "bytes": 17174,
+          "pixelVariance": 68.10901756687235,
+          "render": {
+            "calls": 12,
+            "triangles": 34308,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 4
+          },
+          "stats": {
+            "unique": 19,
+            "modelHit": 0.9985,
+            "top": [
+              [
+                "#80bf55",
+                41.06
+              ],
+              [
+                "#80aa55",
+                26.32
+              ],
+              [
+                "#80aa40",
+                11.78
+              ],
+              [
+                "#6aaa55",
+                10.22
+              ],
+              [
+                "#95bf55",
+                4.6
+              ],
+              [
+                "#95bf6a",
+                2.58
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 14,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 0,
+        "share": 0
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 11.94,
+            "share": 0.9764
+          },
+          {
+            "dE": 29.17,
+            "share": 0.9764
+          },
+          {
+            "dE": 56.85,
+            "share": 0.9764
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4,
+            "share": 0.9764
+          },
+          {
+            "dE": 18.79,
+            "share": 0.9764
+          },
+          {
+            "dE": 49.7,
+            "share": 0.9764
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.1735,
+        "springKept": 0.8265,
+        "summerEnd": 1
+      },
+      "sheets": {
+        "bold": "D062-sheet-newcity-near-bold.png",
+        "soft": "D062-sheet-newcity-near-soft.png"
+      }
+    },
+    {
+      "view": {
+        "id": "seed516-district",
+        "sample": "seed516",
+        "x": 40.4,
+        "z": 6.7,
+        "zoom": 2.56,
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-seed516-district-0.png",
+          "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+          "bytes": 29328,
+          "pixelVariance": 2509.0867621379366,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 156,
+            "modelHit": 0.7357,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#6aaa55",
+                14.83
+              ],
+              [
+                "#80aa55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-seed516-district-1.png",
+          "sha256": "b3f896208a20e3dc4abf27daa5e8d50fa2c262e7ec8f1dcba31bbf3a1f78cf6a",
+          "bytes": 29175,
+          "pixelVariance": 2438.8481431627442,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 152,
+            "modelHit": 0.7336,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#80bf55",
+                14.83
+              ],
+              [
+                "#95bf55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-seed516-district-2.png",
+          "sha256": "4dcc0921942ad3443bbfb02739fcdfcbacaf5503c7d80a47ca240cbe99ff9ffe",
+          "bytes": 29251,
+          "pixelVariance": 2442.1321047649362,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 145,
+            "modelHit": 0.7291,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#aa9555",
+                14.91
+              ],
+              [
+                "#aaaa55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#958055",
+                3.23
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-seed516-district-3.png",
+          "sha256": "f0b7c2eca92d6f5b6d8d33d9d3c83e89dfe102cbc5f5c0fd041fc8d96b957ca0",
+          "bytes": 28786,
+          "pixelVariance": 3874.267357948702,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 139,
+            "modelHit": 0.7385,
+            "top": [
+              [
+                "#95bfea",
+                23.93
+              ],
+              [
+                "#d4eaea",
+                14.83
+              ],
+              [
+                "#aad4ea",
+                8.79
+              ],
+              [
+                "#eaeaea",
+                8.17
+              ],
+              [
+                "#555555",
+                5.59
+              ],
+              [
+                "#bfd4d4",
+                3
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-seed516-district-off.png",
+          "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+          "bytes": 29328,
+          "pixelVariance": 2509.0867621379366,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 156,
+            "modelHit": 0.7357,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#6aaa55",
+                14.83
+              ],
+              [
+                "#80aa55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-seed516-district-auto.png",
+          "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+          "bytes": 29328,
+          "pixelVariance": 2509.0867621379366,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 156,
+            "modelHit": 0.7357,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#6aaa55",
+                14.83
+              ],
+              [
+                "#80aa55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-seed516-district-s1.png",
+          "sha256": "878c009708cac36f25090991ef17323ebed0e1154ed40c18db4726643d2c5916",
+          "bytes": 29334,
+          "pixelVariance": 2453.9117039484227,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 158,
+            "modelHit": 0.7322,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#80aa55",
+                14.83
+              ],
+              [
+                "#80bf55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-seed516-district-s2.png",
+          "sha256": "cf501300ccb48a533e01e9e4a68bb0d5cb4f9affa11ab9bf8d4ff8271ca8e213",
+          "bytes": 29231,
+          "pixelVariance": 2452.783291324751,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 154,
+            "modelHit": 0.7289,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#95aa55",
+                14.83
+              ],
+              [
+                "#aaaa55",
+                6.83
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#55aad4",
+                3.06
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-seed516-district-s3.png",
+          "sha256": "13eb0dc20385e423a5080b4ea0e6531c93af48e4aed9f40264bf8de3cf998fa2",
+          "bytes": 29211,
+          "pixelVariance": 3335.6981770538005,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 140,
+            "modelHit": 0.7375,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#bfd4bf",
+                14.83
+              ],
+              [
+                "#aad4ea",
+                8.79
+              ],
+              [
+                "#d4eaea",
+                6.83
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#aabfaa",
+                3.25
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-seed516-district-mid.png",
+          "sha256": "f65628a9775b8f10211e5c4a2e9360711ac6b98b67dcb0b8d798a4f50ac8bffc",
+          "bytes": 29763,
+          "pixelVariance": 2467.294646960341,
+          "render": {
+            "calls": 13,
+            "triangles": 112307,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              155.6,
+              94.06040612287403,
+              121.90000000000002
+            ],
+            "target": [
+              40.4,
+              0,
+              6.700000000000001
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 159,
+            "modelHit": 0.735,
+            "top": [
+              [
+                "#95bfea",
+                23.91
+              ],
+              [
+                "#80bf55",
+                7.98
+              ],
+              [
+                "#6aaa55",
+                7.68
+              ],
+              [
+                "#aad4ea",
+                5.73
+              ],
+              [
+                "#555555",
+                5.56
+              ],
+              [
+                "#80aa55",
+                5.43
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 16,
+        "geometries": 12,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 0,
+        "share": 0
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 11.99,
+            "share": 0.2595
+          },
+          {
+            "dE": 30.62,
+            "share": 0.2595
+          },
+          {
+            "dE": 56.47,
+            "share": 0.2595
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4.07,
+            "share": 0.2595
+          },
+          {
+            "dE": 16.56,
+            "share": 0.2595
+          },
+          {
+            "dE": 46.27,
+            "share": 0.2595
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.1764,
+        "springKept": 0.8236,
+        "summerEnd": 1
+      },
+      "sheets": {
+        "bold": "D062-sheet-seed516-district-bold.png",
+        "soft": "D062-sheet-seed516-district-soft.png"
+      }
+    },
+    {
+      "view": {
+        "id": "seed516-far",
+        "sample": "seed516",
+        "x": 36,
+        "z": 36,
+        "zoom": 1.2,
+        "W": 1440,
+        "H": 1000,
+        "mobile": false,
+        "sky": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-seed516-far-0.png",
+          "sha256": "d6262e347279732db8888d1a8130d53845e22469ba555ce6e5b0559f8a44acc0",
+          "bytes": 128755,
+          "pixelVariance": 3199.8387229650434,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 258,
+            "modelHit": 0.7651,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#6aaa55",
+                10.34
+              ],
+              [
+                "#80aa55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ],
+              [
+                "#4095bf",
+                3.6
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-seed516-far-1.png",
+          "sha256": "e72e78cf8031701d7aa02c4580528257bb3d212768b9ee7114e074df3a1def4a",
+          "bytes": 125312,
+          "pixelVariance": 2994.102488397304,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 251,
+            "modelHit": 0.7634,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#80bf55",
+                10.34
+              ],
+              [
+                "#4095bf",
+                5.59
+              ],
+              [
+                "#95bf55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-seed516-far-2.png",
+          "sha256": "7501425a60e68490ce1e9aaa6413ead32ce3f652703b954a7dcf77403b420508",
+          "bytes": 127812,
+          "pixelVariance": 3068.6918398745256,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 242,
+            "modelHit": 0.7525,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#aa9555",
+                10.38
+              ],
+              [
+                "#4080aa",
+                5.59
+              ],
+              [
+                "#aaaa55",
+                5.39
+              ],
+              [
+                "#5595bf",
+                3.88
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-seed516-far-3.png",
+          "sha256": "1073d829b868691abfeb4503ca309252f5f622b0a102e48165ca577ff8b38bd3",
+          "bytes": 127843,
+          "pixelVariance": 3441.5906123434106,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 220,
+            "modelHit": 0.7832,
+            "top": [
+              [
+                "#95bfea",
+                17.61
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#d4eaea",
+                10.35
+              ],
+              [
+                "#eaeaea",
+                7.14
+              ],
+              [
+                "#aad4ea",
+                5.33
+              ],
+              [
+                "#80aad4",
+                3.6
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-seed516-far-off.png",
+          "sha256": "d6262e347279732db8888d1a8130d53845e22469ba555ce6e5b0559f8a44acc0",
+          "bytes": 128755,
+          "pixelVariance": 3199.8387229650434,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 258,
+            "modelHit": 0.7651,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#6aaa55",
+                10.34
+              ],
+              [
+                "#80aa55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ],
+              [
+                "#4095bf",
+                3.6
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-seed516-far-auto.png",
+          "sha256": "d6262e347279732db8888d1a8130d53845e22469ba555ce6e5b0559f8a44acc0",
+          "bytes": 128755,
+          "pixelVariance": 3199.8387229650434,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 258,
+            "modelHit": 0.7651,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#6aaa55",
+                10.34
+              ],
+              [
+                "#80aa55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ],
+              [
+                "#4095bf",
+                3.6
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-seed516-far-s1.png",
+          "sha256": "0d80ceac10799d4d58cee0aa11b0191b45e47c49a7a0bf544a47d5e6e2ca2d0f",
+          "bytes": 129102,
+          "pixelVariance": 3070.47337770183,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 256,
+            "modelHit": 0.7613,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#80aa55",
+                10.34
+              ],
+              [
+                "#80bf55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ],
+              [
+                "#4095bf",
+                3.6
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-seed516-far-s2.png",
+          "sha256": "51295a9df05c83f1848be12acbb83d845b55b9111a770a878f9d856031419e60",
+          "bytes": 127952,
+          "pixelVariance": 3072.8929578173083,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 253,
+            "modelHit": 0.7497,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#95aa55",
+                10.34
+              ],
+              [
+                "#4080aa",
+                5.59
+              ],
+              [
+                "#aaaa55",
+                5.39
+              ],
+              [
+                "#55aad4",
+                3.88
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-seed516-far-s3.png",
+          "sha256": "d5d12de9dc677de67ff7013a2b68d07be3c91c04844bbee911f98487a9fac97e",
+          "bytes": 129864,
+          "pixelVariance": 3302.811288529032,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 227,
+            "modelHit": 0.7767,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#bfd4bf",
+                10.37
+              ],
+              [
+                "#d4eaea",
+                5.4
+              ],
+              [
+                "#aad4ea",
+                5.33
+              ],
+              [
+                "#4080aa",
+                3.6
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-seed516-far-mid.png",
+          "sha256": "161d7ff6b3a480d77faf7a09507b990fbc24c3b2c4112cd8b7785c19e2820dc3",
+          "bytes": 129894,
+          "pixelVariance": 3069.8841968056076,
+          "render": {
+            "calls": 15,
+            "triangles": 116227,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "stats": {
+            "unique": 264,
+            "modelHit": 0.7645,
+            "top": [
+              [
+                "#95bfea",
+                15.62
+              ],
+              [
+                "#bfeaea",
+                15.17
+              ],
+              [
+                "#80bf55",
+                6.13
+              ],
+              [
+                "#6aaa55",
+                5.15
+              ],
+              [
+                "#80aa55",
+                4.29
+              ],
+              [
+                "#4095bf",
+                4.15
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 16,
+        "geometries": 12,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 0,
+        "share": 0
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 12.03,
+            "share": 0.2043
+          },
+          {
+            "dE": 30.76,
+            "share": 0.2043
+          },
+          {
+            "dE": 55.84,
+            "share": 0.2043
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4.36,
+            "share": 0.2043
+          },
+          {
+            "dE": 16.95,
+            "share": 0.2043
+          },
+          {
+            "dE": 46.1,
+            "share": 0.2043
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.2082,
+        "springKept": 0.7918,
+        "summerEnd": 1
+      },
+      "sheets": {
+        "bold": "D062-sheet-seed516-far-bold.png",
+        "soft": "D062-sheet-seed516-far-soft.png"
+      }
+    },
+    {
+      "view": {
+        "id": "ai120-district",
+        "sample": "ai120",
+        "x": 27.4,
+        "z": 53.3,
+        "zoom": 2.56,
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-ai120-district-0.png",
+          "sha256": "b8d916d98adfd4240021823354c2c7a845115d7cd4f6dff831c4ecc42e849276",
+          "bytes": 41636,
+          "pixelVariance": 1603.8174933250993,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 185,
+            "modelHit": 0.7166,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#6aaa55",
+                12.06
+              ],
+              [
+                "#6a9540",
+                9.84
+              ],
+              [
+                "#80aa55",
+                5.56
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-ai120-district-1.png",
+          "sha256": "f7bf607a6a618fad6d44b2cf42028dc8b16f8cbdc8f07b959739f939149b5161",
+          "bytes": 41229,
+          "pixelVariance": 1624.9148943336768,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 166,
+            "modelHit": 0.7267,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#80bf55",
+                12.07
+              ],
+              [
+                "#80aa40",
+                9.84
+              ],
+              [
+                "#95bf55",
+                5.55
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-ai120-district-2.png",
+          "sha256": "38ead32602764fe5211758b6ed4a9f4cc21c76e04fdd3bd0c0382ee99913ca45",
+          "bytes": 41642,
+          "pixelVariance": 1781.992506859233,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 167,
+            "modelHit": 0.6936,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#aa9555",
+                12.09
+              ],
+              [
+                "#958055",
+                10.28
+              ],
+              [
+                "#aaaa55",
+                5.55
+              ],
+              [
+                "#ead495",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-ai120-district-3.png",
+          "sha256": "60567c0d52c195030a64306764694b1a9a403c60654649dfe147ccfc9b222538",
+          "bytes": 41848,
+          "pixelVariance": 3839.056986829848,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 147,
+            "modelHit": 0.7363,
+            "top": [
+              [
+                "#555555",
+                14.18
+              ],
+              [
+                "#d4eaea",
+                12.07
+              ],
+              [
+                "#bfd4d4",
+                9.84
+              ],
+              [
+                "#eaeaea",
+                7.43
+              ],
+              [
+                "#d4bf95",
+                4.83
+              ],
+              [
+                "#bfbfaa",
+                3.93
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-ai120-district-off.png",
+          "sha256": "68246ec3650b02e5061710e43ae9a74c17ad12800d079a2e61ab37e497a910b3",
+          "bytes": 41522,
+          "pixelVariance": 1614.8553665086474,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 173,
+            "modelHit": 0.7169,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#6aaa55",
+                12.06
+              ],
+              [
+                "#6a9540",
+                9.84
+              ],
+              [
+                "#80aa55",
+                5.56
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-ai120-district-auto.png",
+          "sha256": "f7bf607a6a618fad6d44b2cf42028dc8b16f8cbdc8f07b959739f939149b5161",
+          "bytes": 41229,
+          "pixelVariance": 1624.9148943336768,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 166,
+            "modelHit": 0.7267,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#80bf55",
+                12.07
+              ],
+              [
+                "#80aa40",
+                9.84
+              ],
+              [
+                "#95bf55",
+                5.55
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-ai120-district-s1.png",
+          "sha256": "1f1fc8a4ac18b235ee6505be962d8d1ef5c06e781644fc949a05038f7ae8c5d1",
+          "bytes": 41553,
+          "pixelVariance": 1612.7759008449702,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 169,
+            "modelHit": 0.718,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#80aa55",
+                12.07
+              ],
+              [
+                "#6aaa55",
+                9.84
+              ],
+              [
+                "#80bf55",
+                5.56
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-ai120-district-s2.png",
+          "sha256": "f819efba6e3684a2fbc60b5c33851ca2d8a8ae2ba48a9430a4bdbe1f16fde652",
+          "bytes": 41572,
+          "pixelVariance": 1649.610121015654,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 172,
+            "modelHit": 0.6918,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#95aa55",
+                12.06
+              ],
+              [
+                "#809540",
+                9.84
+              ],
+              [
+                "#aaaa55",
+                5.55
+              ],
+              [
+                "#d4bf80",
+                4.75
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-ai120-district-s3.png",
+          "sha256": "2dd68ad0409ed470596ff70fb6043eea7ad7a697c167e8ba0a44485ab6b07602",
+          "bytes": 42240,
+          "pixelVariance": 3079.8952825969754,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 153,
+            "modelHit": 0.7178,
+            "top": [
+              [
+                "#555555",
+                13.5
+              ],
+              [
+                "#bfd4bf",
+                12.06
+              ],
+              [
+                "#aabfaa",
+                10.49
+              ],
+              [
+                "#d4eaea",
+                5.56
+              ],
+              [
+                "#d4bf95",
+                4.83
+              ],
+              [
+                "#bfbfaa",
+                3.59
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-ai120-district-mid.png",
+          "sha256": "f990ef4de398c1c9543e038f40e8d669a6153fe50b8c65d6fa1c02578916fcce",
+          "bytes": 41850,
+          "pixelVariance": 1608.899294434248,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              137,
+              286
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              142.6,
+              94.06040612287403,
+              168.50000000000003
+            ],
+            "target": [
+              27.400000000000002,
+              0,
+              53.300000000000004
+            ],
+            "zoom": 2.56
+          },
+          "stats": {
+            "unique": 185,
+            "modelHit": 0.7261,
+            "top": [
+              [
+                "#555555",
+                13.12
+              ],
+              [
+                "#80aa40",
+                9.75
+              ],
+              [
+                "#80bf55",
+                8.47
+              ],
+              [
+                "#d4bf80",
+                4.74
+              ],
+              [
+                "#6aaa55",
+                4.42
+              ],
+              [
+                "#80aa55",
+                4.35
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 18,
+        "geometries": 13,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 1569,
+        "share": 0.004428200496726123
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 12.02,
+            "share": 0.3001
+          },
+          {
+            "dE": 31.24,
+            "share": 0.3001
+          },
+          {
+            "dE": 54.9,
+            "share": 0.3001
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4.15,
+            "share": 0.3001
+          },
+          {
+            "dE": 15.05,
+            "share": 0.3001
+          },
+          {
+            "dE": 44.53,
+            "share": 0.3001
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.4165,
+        "springKept": 0.5835,
+        "summerEnd": 0.9997
+      },
+      "sheets": {
+        "bold": "D062-sheet-ai120-district-bold.png",
+        "soft": "D062-sheet-ai120-district-soft.png"
+      }
+    },
+    {
+      "view": {
+        "id": "ai120-default",
+        "sample": "ai120",
+        "x": null,
+        "z": null,
+        "zoom": null,
+        "W": 1440,
+        "H": 1000,
+        "mobile": false,
+        "sky": true
+      },
+      "states": {
+        "0": {
+          "file": "D062-ai120-default-0.png",
+          "sha256": "cbecdaa08fe5e53bde481a922fce77f35cc9aef6843c0145ceac7008f5dd77d4",
+          "bytes": 94015,
+          "pixelVariance": 2930.3961520210214,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 235,
+            "modelHit": 0.8773,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#6aaa55",
+                9.36
+              ],
+              [
+                "#80aa55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "1": {
+          "file": "D062-ai120-default-1.png",
+          "sha256": "a556400fba24d65957368fd6802db49d51c76c80c67a06f844ae2395e512347c",
+          "bytes": 91261,
+          "pixelVariance": 2636.401692439311,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 222,
+            "modelHit": 0.8726,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#80bf55",
+                9.38
+              ],
+              [
+                "#95bf55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "2": {
+          "file": "D062-ai120-default-2.png",
+          "sha256": "0249e3d882e2ba8c3b8e2ea9b688cda16d805c293b15d1de01b33c407e289424",
+          "bytes": 93689,
+          "pixelVariance": 2757.604002673288,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 218,
+            "modelHit": 0.8666,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#aa9555",
+                9.37
+              ],
+              [
+                "#aaaa55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "3": {
+          "file": "D062-ai120-default-3.png",
+          "sha256": "0dd8406f4b93a480a547fbc711e8cd266b2b0dd1a9df92dcf507ef788d4aa2ea",
+          "bytes": 92682,
+          "pixelVariance": 2260.6811910469114,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 200,
+            "modelHit": 0.8943,
+            "top": [
+              [
+                "#95bfea",
+                21.92
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#d4eaea",
+                9.37
+              ],
+              [
+                "#aad4ea",
+                8.2
+              ],
+              [
+                "#eaeaea",
+                7.2
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "off": {
+          "file": "D062-ai120-default-off.png",
+          "sha256": "7b918aebc7bc6800515328f3c61fa0a79b26b658ef1da9ce3a4422065e73e971",
+          "bytes": 93968,
+          "pixelVariance": 2931.331774770504,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 226,
+            "modelHit": 0.8773,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#6aaa55",
+                9.36
+              ],
+              [
+                "#80aa55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "auto": {
+          "file": "D062-ai120-default-auto.png",
+          "sha256": "a556400fba24d65957368fd6802db49d51c76c80c67a06f844ae2395e512347c",
+          "bytes": 91261,
+          "pixelVariance": 2636.401692439311,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 222,
+            "modelHit": 0.8726,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#80bf55",
+                9.38
+              ],
+              [
+                "#95bf55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "s1": {
+          "file": "D062-ai120-default-s1.png",
+          "sha256": "45d6ad6cc07aa337a3eef3c50837fabb1fdbd84530a3b33f03ca7cd26e7354fb",
+          "bytes": 94308,
+          "pixelVariance": 2751.6338348483623,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 225,
+            "modelHit": 0.8719,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#80aa55",
+                9.36
+              ],
+              [
+                "#80bf55",
+                5.67
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "s2": {
+          "file": "D062-ai120-default-s2.png",
+          "sha256": "d24d7c83d3885e3b5efd8d684d6f0a920765296ffc1515853814f216dc938d10",
+          "bytes": 93764,
+          "pixelVariance": 2738.900646218277,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 224,
+            "modelHit": 0.8628,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#95aa55",
+                9.36
+              ],
+              [
+                "#aaaa55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "s3": {
+          "file": "D062-ai120-default-s3.png",
+          "sha256": "26cc5983a0db68ce9a39532b242da0346ded7b9e209e9be6787d81d8031f9cdd",
+          "bytes": 95483,
+          "pixelVariance": 2360.4654692053628,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 206,
+            "modelHit": 0.8905,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#bfd4bf",
+                9.37
+              ],
+              [
+                "#aad4ea",
+                8.2
+              ],
+              [
+                "#d4eaea",
+                5.65
+              ],
+              [
+                "#bfd4ea",
+                4.46
+              ]
+            ]
+          }
+        },
+        "mid": {
+          "file": "D062-ai120-default-mid.png",
+          "sha256": "39e5039d83c802d60a0827a486646ea831d28cbcb2b1a7b3bcce5fdbd410aae4",
+          "bytes": 95620,
+          "pixelVariance": 2767.1042643217916,
+          "render": {
+            "calls": 15,
+            "triangles": 96607,
+            "rt": [
+              480,
+              333
+            ]
+          },
+          "groundCheck": true,
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1
+          },
+          "stats": {
+            "unique": 239,
+            "modelHit": 0.8744,
+            "top": [
+              [
+                "#95bfea",
+                20.7
+              ],
+              [
+                "#bfeaea",
+                20.44
+              ],
+              [
+                "#80bf55",
+                5.65
+              ],
+              [
+                "#aad4ea",
+                4.82
+              ],
+              [
+                "#80aa55",
+                4.67
+              ],
+              [
+                "#6aaa55",
+                4.66
+              ]
+            ]
+          }
+        }
+      },
+      "passed": true,
+      "gl": {
+        "programs": 18,
+        "geometries": 13,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "d061": {
+        "pixels": 0,
+        "share": 0
+      },
+      "spring": {
+        "pixels": 573,
+        "share": 0.00039791666666666664
+      },
+      "delta": {
+        "bold": [
+          {
+            "dE": 11.99,
+            "share": 0.1903
+          },
+          {
+            "dE": 29.24,
+            "share": 0.1903
+          },
+          {
+            "dE": 55.66,
+            "share": 0.1903
+          }
+        ],
+        "soft": [
+          {
+            "dE": 4.61,
+            "share": 0.1903
+          },
+          {
+            "dE": 17.08,
+            "share": 0.1903
+          },
+          {
+            "dE": 46.56,
+            "share": 0.1903
+          }
+        ]
+      },
+      "mid": {
+        "summerOnly": 0.188,
+        "springKept": 0.812,
+        "summerEnd": 0.9999
+      },
+      "sheets": {
+        "bold": "D062-sheet-ai120-default-bold.png",
+        "soft": "D062-sheet-ai120-default-soft.png"
+      }
+    }
+  ],
+  "clock": {
+    "view": "newcity-far",
+    "days": [
+      {
+        "doy": 87,
+        "day": 88,
+        "file": "D062-clock-87.png",
+        "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+        "summerOnly": 0,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 88,
+        "day": 89,
+        "file": "D062-clock-88.png",
+        "sha256": "e38ace09847904cd474e2680e0fdef00f908c4e7811486d043d876dc25713624",
+        "summerOnly": 0.0132,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 91,
+        "day": 92,
+        "file": "D062-clock-91.png",
+        "sha256": "3b9e1251dfd2df6305f1f6182e498388dbdf6f347da92131cebb3263f0c5afaf",
+        "summerOnly": 0.1276,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 93,
+        "day": 94,
+        "file": "D062-clock-93.png",
+        "sha256": "2fef60823c573d61f4bfc2448e481300670e8c6e337ac8e60f9b7592c9b9b074",
+        "summerOnly": 0.1965,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 97,
+        "day": 98,
+        "file": "D062-clock-97.png",
+        "sha256": "bfd2843733ae1742189aa8ad9faa942547a254888c2a25e94d8a6f2c93fdaf27",
+        "summerOnly": 0.4287,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 99,
+        "day": 100,
+        "file": "D062-clock-99.png",
+        "sha256": "6ccf79b28f1304a421ba2d52890eaa570bd4c48f0d5bed286c40bdead03a4274",
+        "summerOnly": 0.49,
+        "calls": 12,
+        "tris": 34308
+      },
+      {
+        "doy": 100,
+        "day": 101,
+        "file": "D062-clock-100.png",
+        "sha256": "319c3662491298837423e8b3c2ba78137f6574250e04a4e9b57e3f5eba5b75c0",
+        "summerOnly": 0.4952,
+        "calls": 12,
+        "tris": 34308
+      }
+    ],
+    "fresh": {
+      "file": "D062-clock-94-fresh.png",
+      "sha256": "2fef60823c573d61f4bfc2448e481300670e8c6e337ac8e60f9b7592c9b9b074"
+    },
+    "stepped93": {
+      "file": "D062-clock-93.png",
+      "sha256": "2fef60823c573d61f4bfc2448e481300670e8c6e337ac8e60f9b7592c9b9b074",
+      "world": true
+    }
+  },
+  "passed": true
+}

@@ -1,0 +1,298 @@
+{
+ "card": "docs/D062-seasons-weather.md",
+ "savedAt": "2026-10-14",
+ "provenance": {
+  "note": "本機（容器內 Chromium、軟體 WebGL）對最終建置的擷取：tools/d062-capture.mjs（季節）與 tools/d062-weather-capture.mjs（天氣），兩支都在同一份建置上重跑過一次，圖與報告 JSON 來自這一次。報告 JSON 在 docs/evidence/D062-capture/。CI 的 d062 工作跑同一批工具（artifact 名稱 d062-preview-<sha>），但 gh api 不能下載 artifact，所以本檔的圖不是從 CI 下載的，來源是本機。",
+  "headCommit": "905939e07e032cc3e4573c4602ebd87cfa17d25e",
+  "distSha256": "186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2",
+  "build": "vite build（npm run build）；連續兩次建置的輸出逐位元組相同（本機核對），所以 dist 雜湊對應 headCommit 的原始碼"
+ },
+ "crossChecks": [
+  "CI run 38577896523（最終版 905939e 的推送）：d062 工作成功（同一批斷言在 CI 的 Chrome 上全過，包含 season=off 的六張圖與已提交的 D061 預設圖逐像素相同）；d055、d059、d060×3、d061 也成功。smoke 的結果看卡面與日誌。",
+  "CI run 38574765493（A 單獨推送）：d062 工作成功（季節部分）；d061 工作紅（已修，見卡面「施工中遇到的」6）。",
+  "本機：舊建置與最終建置各跑一次天氣擷取，45 張天氣圖裡 43 張逐位元組相同；不同的兩張是生產時鐘的單張（雪與閃電那兩張，降水位置取真實時間，本來就不能逐位元組重現）。"
+ ],
+ "limits": [
+  "業主看的是否是這些圖沒有紀錄",
+  "拼圖沒有獨立的來源雜湊；單張才有（clock-frame）",
+  "未涵蓋 Android 實機",
+  "動畫計數隨機器忙碌程度而變：本次重擷取時機器同時在跑完整 Node 套件，雨 13 次／3 秒、暴雨 16 次／3 秒（空閒時 21 次；斷言下限 2 次，降水動畫依成本退讓）"
+ ],
+ "files": [
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-newcity-far-bold.png",
+   "sha256": "32ba8f6ed11504bdfb55bfa798c64c9890c3d8793f435b351b1809284c8d9915",
+   "bytes": 308462,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "newcity-far",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-newcity-far-soft.png",
+   "sha256": "8d7bdf99b18c14f316ebe1d83a06008742b75b8bba708479a9820e87acaf0fef",
+   "bytes": 331797,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "newcity-far",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-newcity-near-bold.png",
+   "sha256": "926aad851ce5069fda532c55a8ac76fc5ee0e3eae1f7d25c2d52550d38b55761",
+   "bytes": 57799,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "newcity-near",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-newcity-near-soft.png",
+   "sha256": "4355508ab5dd9608365596ab985ca18a19fc1162ac3d225536f68b9dec989a9c",
+   "bytes": 78986,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "newcity-near",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-seed516-district-bold.png",
+   "sha256": "269a05cfa1741d3491904ff743dc452ae8ba96853ac670b59188c564f6f55bcb",
+   "bytes": 71829,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "seed516-district",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-seed516-district-soft.png",
+   "sha256": "2c6ad2e4286178c1a04bc7a1227b67f58feb9fe1c6333e13ea18721b3946218c",
+   "bytes": 83199,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "seed516-district",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-seed516-far-bold.png",
+   "sha256": "c777b736e392346da878277b4818d1f219c4d2151f5f8264d468b26e845f0d22",
+   "bytes": 417334,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "seed516-far",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-seed516-far-soft.png",
+   "sha256": "16f60ce3cb31d7a161a44bbf5870b1ec1553a86617802d1fa813f5c54a7c9c51",
+   "bytes": 434682,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "seed516-far",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-ai120-district-bold.png",
+   "sha256": "a662413d5e132481b03ec399df7ba8f794c446644b9dd8d565f44813f0b5bd72",
+   "bytes": 123950,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "ai120-district",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-ai120-district-soft.png",
+   "sha256": "2f6c1eac724e67291a40802db5a3c3d0175a51403cb8d6222d81f64f135d166d",
+   "bytes": 130599,
+   "width": 1672,
+   "height": 860,
+   "kind": "season-sheet",
+   "view": "ai120-district",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-ai120-default-bold.png",
+   "sha256": "dfc991440b2b91b41649b3f04c16eddb4bb7a73f4d58adb928a1095be6325617",
+   "bytes": 333328,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "ai120-default",
+   "note": "春／夏／秋／冬（全季）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-sheet-ai120-default-soft.png",
+   "sha256": "6541569d32a60ecba309b2196c820436072fe7e2065e2522f773634aee3faae9",
+   "bytes": 351089,
+   "width": 2888,
+   "height": 2008,
+   "kind": "season-sheet",
+   "view": "ai120-default",
+   "note": "柔：夏／秋／冬＋轉季中途（第 94 天）",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-newcity-far-rain.png",
+   "sha256": "ca6e2232f3e569281a84f0bd0328192dc746626c97f10c84c963e1121e84cbb9",
+   "bytes": 251110,
+   "width": 2888,
+   "height": 2008,
+   "kind": "weather-sheet",
+   "view": "newcity-far",
+   "note": "雨／暴雨／雪／暴雪",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-newcity-far-sky.png",
+   "sha256": "3c209fc9678423c506d88c724e835e3366313cc519ecb4d6565d195a503b32f6",
+   "bytes": 284762,
+   "width": 2888,
+   "height": 2008,
+   "kind": "weather-sheet",
+   "view": "newcity-far",
+   "note": "晴／彩虹／暴雨加閃光／無天氣",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-seed516-district-rain.png",
+   "sha256": "c1989a619cf0360e612099fb505ec3fd6463720414abd7313958406ebc926ab4",
+   "bytes": 101021,
+   "width": 1672,
+   "height": 860,
+   "kind": "weather-sheet",
+   "view": "seed516-district",
+   "note": "雨／暴雨／雪／暴雪",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-seed516-district-sky.png",
+   "sha256": "905c5af630648ee457dedb271d4138c45548a7e32c58b271531f5e045bd283af",
+   "bytes": 88434,
+   "width": 1672,
+   "height": 860,
+   "kind": "weather-sheet",
+   "view": "seed516-district",
+   "note": "晴／彩虹／暴雨加閃光／無天氣",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-ai120-default-rain.png",
+   "sha256": "a337426a14d52ab2e65955682f53c90e61b5fd4e28b82016cd83177e740de2ed",
+   "bytes": 297992,
+   "width": 2888,
+   "height": 2008,
+   "kind": "weather-sheet",
+   "view": "ai120-default",
+   "note": "雨／暴雨／雪／暴雪",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-sheet-ai120-default-sky.png",
+   "sha256": "49f4147cc36e7bef21832e2a896d7b892ca849a70e34c6203b99b6d1df6f44b5",
+   "bytes": 331059,
+   "width": 2888,
+   "height": 2008,
+   "kind": "weather-sheet",
+   "view": "ai120-default",
+   "note": "晴／彩虹／暴雨加閃光／無天氣",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-clock-87.png",
+   "sha256": "deb024393851b59b0db80ee01faaea6cdd61494933f5a9163f5ab174530e3d18",
+   "bytes": 77689,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘（simStep）走過春→夏轉季窗的單張",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-clock-91.png",
+   "sha256": "3b9e1251dfd2df6305f1f6182e498388dbdf6f347da92131cebb3263f0c5afaf",
+   "bytes": 80025,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘（simStep）走過春→夏轉季窗的單張",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-clock-93.png",
+   "sha256": "2fef60823c573d61f4bfc2448e481300670e8c6e337ac8e60f9b7592c9b9b074",
+   "bytes": 80839,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘（simStep）走過春→夏轉季窗的單張",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-season/D062-clock-100.png",
+   "sha256": "319c3662491298837423e8b3c2ba78137f6574250e04a4e9b57e3f5eba5b75c0",
+   "bytes": 73788,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘（simStep）走過春→夏轉季窗的單張",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-clock-rainbow.png",
+   "sha256": "3230aab1a8cf65c9fd95bc369ea5bd50b93179e2e811980e51d95c0d2e5ebb6a",
+   "bytes": 219648,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘走到模擬的第一個彩虹日／閃電日／冬天降雪日",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-clock-flash.png",
+   "sha256": "6d644e62d25993834b0077083edbaa935f38eab9b2c7e4f841673d0d7ce87fb5",
+   "bytes": 124979,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘走到模擬的第一個彩虹日／閃電日／冬天降雪日",
+   "origin": "local-chromium-capture"
+  },
+  {
+   "file": "docs/img/D062/production-weather/D062-wx-clock-snow.png",
+   "sha256": "a2db8d9a96ef1d89813dcf032c2f75f4f1d97db9f7f6ea72bac64ac636c0a652",
+   "bytes": 174719,
+   "width": 1440,
+   "height": 1000,
+   "kind": "clock-frame",
+   "view": "newcity-far",
+   "note": "生產時鐘走到模擬的第一個彩虹日／閃電日／冬天降雪日",
+   "origin": "local-chromium-capture"
+  }
+ ]
+}
