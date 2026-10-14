@@ -14,13 +14,19 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前正式版：D059 六組英式小鎮建築
+## 目前正式版：D060–D062 英式工業、地景、四季與天氣
+
+[D060](docs/D060-british-industry.md) 把十二個工業原型換成十二組程序化英式工業建築（貨棚、織布棚、磚造工廠、棉紡廠、碼頭倉庫、鍋爐房、重工廠、煤氣廠儲氣櫃、瓶形窯…）；[D061](docs/D061-landscape.md) 重畫地面、水、沙、道路、地坪與天空；[D062](docs/D062-seasons-weather.md) 把模擬早就有的四季與天氣畫出來（地面逐格轉季、雨雪霧閃電彩虹）。D061 與 D062 不增加任何三角形與繪製呼叫，D060 讓整座城的三角形更少（種子城 C 檔 118,007 → 116,227）；三波都不動模擬與存檔，旗標都能還原。
+
+業主 2026-10-14 看過真瀏覽器圖後核准「你可以合并且部署」；`main` 於台灣時間 2026-10-14 23:55 快進到 `b8a75d2`（`0bef78f` 之上 56 個提交，無 PR）。[正式 main CI](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38593631444) 的 smoke／d055／d059／d060（三個視窗）／d061／d062／pages 全成功；完整 Node **712 項／0 NG**（924.7 秒）、browser **850 項／0 NG**（3,395.5 秒）。Pages deployment `7072160304` 於台灣時間 2026-10-15 01:15:25 完成且指向同一發布 SHA。[正式網址複驗](docs/evidence/D060-D062-release/public/report.json)：已部署的 HTML SHA-256 與本機從 `b8a75d2` 建出來的逐位元組相同；三個視窗載入同一份位元組，預設與全部 legacy 旗標各一，繪製呼叫 15 ≤ 18、零頁面錯誤、零外部請求，全部 legacy 旗標的 118,007 三角形與 D059 正式版逐字相同（沙箱的瀏覽器信任不了出口代理憑證，所以載入的是從公開網址下載後本機伺服的位元組）。預設照卡面（D060 屋頂色 V1、D061 檔位 2、D062 全季強度、天氣開）；要舊畫面：`?industryArt=legacy&landArt=legacy&season=off&weather=off`。Android 實機未測。
+
+## 前一正式版：D059 六組英式小鎮建築
 
 [D059](docs/D059-british-village.md) 完成石屋、切斯特商屋、馬車旅館、方塔教堂、雙圓塔烘乾屋與石造莊園。沿用既有種類與遊戲規則；通廊、穿堂及內院是真正的幾何空間。保留原手機幾何預算、庭院樹及核心石牆的屋齡風化。
 
 [完整實拍圖集](docs/D059-gallery.md) 收錄 51 對／102 張同城市、同鏡頭的桌機與手機模擬前後圖。業主於 2026-10-13 核准「直接發布吧」，[PR #16](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/16) 於台灣時間 2026-10-13 22:44:36 合併至 `main`（`b8954fca`）；合併 tree 與核准候選 `284a253` 相同。[正式 main CI](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38415988770) 的 smoke／d055／d059／pages 全成功，完整 Node **660 項／0 NG**、browser **850 項／0 NG**，保留原 D054 CPU6 首樣本門檻。Pages deployment `7043063044` 於台灣時間 2026-10-13 23:45:08 完成且指向同一發布 SHA。正式 HTTPS 桌機 1440×1000、手機模擬 360×740／412×860，共 **9 次完整文件載入／21 張實拍**；完整 HTML 均為核准成品雜湊，預設 C、六組選型、快取／fresh 幾何、實際拾取及零應用錯誤通過。原生施工／存讀／一天對帳依發布 CI，沒有在這份正式 QA 重跑。證據見 [main CI 摘要](docs/evidence/D059/release/ci-main-audit.json)、[發布版本核對](docs/evidence/D059/release/release-identity.json) 及 [正式 HTTPS 報告](docs/evidence/D059/release/public/report.json)。本機 browser 中斷與首樣本 NG 照實保留，Android 實機未測。
 
-## 前一正式版：D058 英式住宅與高街
+## 更早的正式版：D058 英式住宅與高街
 
 [D058](docs/D058-british-streets.md) 更新連棟屋、半獨立屋、維多利亞排屋與一級高街店屋的逐戶入口、側後立面、屋頂煙囪及朝路關係。發布提交記錄業主於 2026-10-12 審閱 124 張前後圖並核准，由 [PR #15](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/15) 合併至 `main`（`feef2ddd`）。
 

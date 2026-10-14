@@ -1,0 +1,199 @@
+{
+  "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+  "started": "2026-10-14T17:18:30.275Z",
+  "commit": "b8a75d2cc3b1c3a243e70ad45180185881fa059b",
+  "viewports": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "file": "public-default-1440.png",
+          "sha256": "d6262e347279732db8888d1a8130d53845e22469ba555ce6e5b0559f8a44acc0",
+          "bytes": 128755,
+          "render": {
+            "calls": 15,
+            "triangles": 116227
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "industryArt=legacy&landArt=legacy&season=off&weather=off",
+          "file": "public-legacy-1440.png",
+          "sha256": "f11f47cbe5b0a3400d0f565969f4a77617c3764985d57536d6ce80e85b118b96",
+          "bytes": 124295,
+          "render": {
+            "calls": 15,
+            "triangles": 118007
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "file": "public-default-360.png",
+          "sha256": "887b6c1c7a4d732143b342d46c5c96df5ddb9c567c918e08eb506da9c973923f",
+          "bytes": 36429,
+          "render": {
+            "calls": 15,
+            "triangles": 116227
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "industryArt=legacy&landArt=legacy&season=off&weather=off",
+          "file": "public-legacy-360.png",
+          "sha256": "f2d241ed6c721bf6d8397ee3d7c7c21fe0bd581da7287723ea1c499a45b23ce6",
+          "bytes": 33550,
+          "render": {
+            "calls": 15,
+            "triangles": 118007
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "file": "public-default-412.png",
+          "sha256": "ee4f8d25028e0f9ff00e4d49cf9b4faf8fe69f5057e8f2baa7f7ba53f6e921a8",
+          "bytes": 47887,
+          "render": {
+            "calls": 15,
+            "triangles": 116227
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "industryArt=legacy&landArt=legacy&season=off&weather=off",
+          "file": "public-legacy-412.png",
+          "sha256": "8d3b2e72bf8af88ae966c3070d93795e27c1cc0a772be85120484094f6c4e35d",
+          "bytes": 47243,
+          "render": {
+            "calls": 15,
+            "triangles": 118007
+          },
+          "camera": {
+            "pos": [
+              151.19999999999996,
+              94.06040612287404,
+              151.2
+            ],
+            "target": [
+              35.99999999999999,
+              0,
+              35.99999999999999
+            ],
+            "zoom": 1.2
+          },
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "deployed": {
+    "bytes": 1271354,
+    "sha256": "186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2",
+    "etag": "W/\"6acfb8a7-13663a\"",
+    "lastModified": "Wed, 14 Oct 2026 17:15:19 GMT"
+  },
+  "localBuild": {
+    "bytes": 1271354,
+    "sha256": "186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2",
+    "builtFrom": "b8a75d2cc3b1c3a243e70ad45180185881fa059b"
+  },
+  "sameBytes": true,
+  "browserSource": "the HTML downloaded from https://lijiabao1998.github.io/GlimmerTown3D-lab/ (sha256 186852927223a44375158a95b9e3067a129b92179cda450a7b0d810e55a9baf2), served from 127.0.0.1",
+  "finished": "2026-10-14T17:19:03.352Z"
+}
