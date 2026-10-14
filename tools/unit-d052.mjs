@@ -276,6 +276,8 @@ function harness(fixture, source = city, options = {}) {
     const siteResult = null, syncSite = () => {};
     // D053 unrelated closed navigation surfaces are DOM boundary doubles.
     const rk = { hidden: true }, catalog = { root: { hidden: true } }, renderRank = () => {};
+    // D062 weather timers are a render-side boundary double: simDay hands each day's report to them, and nothing in these panels reads anything back.
+    const wxFx = { day: () => {} }, wxWinter = () => false;
     const syncRes = () => x.calls.push('resources'), timing = {}, focusTile = () => {};
     const ALERT_TEXT = new Proxy({}, { get: () => () => 'unrelated hazard notification' });
     let playing = true, lastT = 0, simAcc = 0, visT = 0, speed = 0, dirtyScene = false, urgentRebuild = false, daysSinceBuild = 0;
