@@ -1,0 +1,455 @@
+{
+  "passed": true,
+  "pairs": [
+    {
+      "name": "seed516-far",
+      "before": "D063-before-seed516-far-1440.png",
+      "after": "D063-after-seed516-far-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-seed516-far-1440.png"
+    },
+    {
+      "name": "seed516-downtown",
+      "before": "D063-before-seed516-downtown-1440.png",
+      "after": "D063-after-seed516-downtown-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-seed516-downtown-1440.png"
+    },
+    {
+      "name": "seed516-downtown-close",
+      "before": "D063-before-seed516-downtown-close-1440.png",
+      "after": "D063-after-seed516-downtown-close-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-seed516-downtown-close-1440.png"
+    },
+    {
+      "name": "marketHall-main-se",
+      "before": "D063-before-marketHall-main-se-1440.png",
+      "after": "D063-after-marketHall-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-marketHall-main-se-1440.png"
+    },
+    {
+      "name": "shopParade-main-se",
+      "before": "D063-before-shopParade-main-se-1440.png",
+      "after": "D063-after-shopParade-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-shopParade-main-se-1440.png"
+    },
+    {
+      "name": "greatStore-main-se",
+      "before": "D063-before-greatStore-main-se-1440.png",
+      "after": "D063-after-greatStore-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-greatStore-main-se-1440.png"
+    },
+    {
+      "name": "slabDrum-main-se",
+      "before": "D063-before-slabDrum-main-se-1440.png",
+      "after": "D063-after-slabDrum-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-slabDrum-main-se-1440.png"
+    },
+    {
+      "name": "gothicHotel-main-se",
+      "before": "D063-before-gothicHotel-main-se-1440.png",
+      "after": "D063-after-gothicHotel-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-gothicHotel-main-se-1440.png"
+    },
+    {
+      "name": "pilotisTower-main-se",
+      "before": "D063-before-pilotisTower-main-se-1440.png",
+      "after": "D063-after-pilotisTower-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-pilotisTower-main-se-1440.png"
+    },
+    {
+      "name": "steppedOffice-main-se",
+      "before": "D063-before-steppedOffice-main-se-1440.png",
+      "after": "D063-after-steppedOffice-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-steppedOffice-main-se-1440.png"
+    },
+    {
+      "name": "gridCourt-main-se",
+      "before": "D063-before-gridCourt-main-se-1440.png",
+      "after": "D063-after-gridCourt-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-gridCourt-main-se-1440.png"
+    },
+    {
+      "name": "domedTower-main-se",
+      "before": "D063-before-domedTower-main-se-1440.png",
+      "after": "D063-after-domedTower-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-domedTower-main-se-1440.png"
+    },
+    {
+      "name": "telecomTower-main-se",
+      "before": "D063-before-telecomTower-main-se-1440.png",
+      "after": "D063-after-telecomTower-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-telecomTower-main-se-1440.png"
+    },
+    {
+      "name": "bridgedCourt-main-se",
+      "before": "D063-before-bridgedCourt-main-se-1440.png",
+      "after": "D063-after-bridgedCourt-main-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-bridgedCourt-main-se-1440.png"
+    },
+    {
+      "name": "ai120-default",
+      "before": "D063-before-ai120-default-1440.png",
+      "after": "D063-after-ai120-default-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "triangles": [
+        96607,
+        96607
+      ],
+      "composite": "D063-pair-ai120-default-1440.png"
+    },
+    {
+      "name": "seed516-downtown",
+      "before": "D063-before-seed516-downtown-360.png",
+      "after": "D063-after-seed516-downtown-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-seed516-downtown-360.png"
+    },
+    {
+      "name": "seed516-downtown-close",
+      "before": "D063-before-seed516-downtown-close-360.png",
+      "after": "D063-after-seed516-downtown-close-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-seed516-downtown-close-360.png"
+    },
+    {
+      "name": "seed516-district",
+      "before": "D063-before-seed516-district-360.png",
+      "after": "D063-after-seed516-district-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        112307,
+        109748
+      ],
+      "composite": "D063-pair-seed516-district-360.png"
+    },
+    {
+      "name": "marketHall-main-se",
+      "before": "D063-before-marketHall-main-se-360.png",
+      "after": "D063-after-marketHall-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-marketHall-main-se-360.png"
+    },
+    {
+      "name": "shopParade-main-se",
+      "before": "D063-before-shopParade-main-se-360.png",
+      "after": "D063-after-shopParade-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-shopParade-main-se-360.png"
+    },
+    {
+      "name": "greatStore-main-se",
+      "before": "D063-before-greatStore-main-se-360.png",
+      "after": "D063-after-greatStore-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-greatStore-main-se-360.png"
+    },
+    {
+      "name": "slabDrum-main-se",
+      "before": "D063-before-slabDrum-main-se-360.png",
+      "after": "D063-after-slabDrum-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-slabDrum-main-se-360.png"
+    },
+    {
+      "name": "gothicHotel-main-se",
+      "before": "D063-before-gothicHotel-main-se-360.png",
+      "after": "D063-after-gothicHotel-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-gothicHotel-main-se-360.png"
+    },
+    {
+      "name": "pilotisTower-main-se",
+      "before": "D063-before-pilotisTower-main-se-360.png",
+      "after": "D063-after-pilotisTower-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-pilotisTower-main-se-360.png"
+    },
+    {
+      "name": "steppedOffice-main-se",
+      "before": "D063-before-steppedOffice-main-se-360.png",
+      "after": "D063-after-steppedOffice-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-steppedOffice-main-se-360.png"
+    },
+    {
+      "name": "gridCourt-main-se",
+      "before": "D063-before-gridCourt-main-se-360.png",
+      "after": "D063-after-gridCourt-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-gridCourt-main-se-360.png"
+    },
+    {
+      "name": "domedTower-main-se",
+      "before": "D063-before-domedTower-main-se-360.png",
+      "after": "D063-after-domedTower-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-domedTower-main-se-360.png"
+    },
+    {
+      "name": "telecomTower-main-se",
+      "before": "D063-before-telecomTower-main-se-360.png",
+      "after": "D063-after-telecomTower-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-telecomTower-main-se-360.png"
+    },
+    {
+      "name": "bridgedCourt-main-se",
+      "before": "D063-before-bridgedCourt-main-se-360.png",
+      "after": "D063-after-bridgedCourt-main-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        116227,
+        113668
+      ],
+      "composite": "D063-pair-bridgedCourt-main-se-360.png"
+    },
+    {
+      "name": "ai120-district",
+      "before": "D063-before-ai120-district-360.png",
+      "after": "D063-after-ai120-district-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        96607
+      ],
+      "composite": "D063-pair-ai120-district-360.png"
+    }
+  ]
+}

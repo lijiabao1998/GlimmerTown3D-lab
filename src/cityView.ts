@@ -165,7 +165,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D060-BEGIN industry-enabled
 // D061-BEGIN land-enabled
 // D062-BEGIN season-enabled
-    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf, season: seasonOpt };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D063-BEGIN commerce-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), commerceArt: !['commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf, season: seasonOpt };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D063-END commerce-enabled
 // D062-END season-enabled
 // D061-END land-enabled
 // D060-END industry-enabled

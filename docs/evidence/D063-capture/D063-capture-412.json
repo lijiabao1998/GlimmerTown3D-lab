@@ -1,0 +1,1332 @@
+{
+  "sourceRef": "local uncommitted D063 candidate",
+  "htmlSha256": "625b5db080f017ae9a234f6d5bb83297ba405bf8feb33cbec3188a7a3ce6b6e0",
+  "sites": [
+    {
+      "id": "marketHall-main",
+      "model": "marketHall",
+      "x": 17,
+      "z": 35,
+      "w": 1,
+      "h": 2
+    },
+    {
+      "id": "marketHall-small",
+      "model": "marketHall",
+      "x": 34,
+      "z": 38,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "shopParade-main",
+      "model": "shopParade",
+      "x": 16,
+      "z": 38,
+      "w": 2,
+      "h": 1
+    },
+    {
+      "id": "greatStore-main",
+      "model": "greatStore",
+      "x": 26,
+      "z": 5,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "greatStore-small",
+      "model": "greatStore",
+      "x": 22,
+      "z": 30,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "slabDrum-main",
+      "model": "slabDrum",
+      "x": 22,
+      "z": 9,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "slabDrum-small",
+      "model": "slabDrum",
+      "x": 31,
+      "z": 2,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "gothicHotel-main",
+      "model": "gothicHotel",
+      "x": 23,
+      "z": 32,
+      "w": 1,
+      "h": 4
+    },
+    {
+      "id": "gothicHotel-small",
+      "model": "gothicHotel",
+      "x": 21,
+      "z": 29,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "pilotisTower-main",
+      "model": "pilotisTower",
+      "x": 25,
+      "z": 10,
+      "w": 1,
+      "h": 3
+    },
+    {
+      "id": "pilotisTower-small",
+      "model": "pilotisTower",
+      "x": 25,
+      "z": 8,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "steppedOffice-main",
+      "model": "steppedOffice",
+      "x": 21,
+      "z": 14,
+      "w": 3,
+      "h": 1
+    },
+    {
+      "id": "steppedOffice-small",
+      "model": "steppedOffice",
+      "x": 23,
+      "z": 12,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "gridCourt-main",
+      "model": "gridCourt",
+      "x": 31,
+      "z": 22,
+      "w": 1,
+      "h": 3
+    },
+    {
+      "id": "gridCourt-small",
+      "model": "gridCourt",
+      "x": 34,
+      "z": 18,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "domedTower-main",
+      "model": "domedTower",
+      "x": 26,
+      "z": 11,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "domedTower-small",
+      "model": "domedTower",
+      "x": 16,
+      "z": 17,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "telecomTower-main",
+      "model": "telecomTower",
+      "x": 20,
+      "z": 18,
+      "w": 3,
+      "h": 1
+    },
+    {
+      "id": "telecomTower-small",
+      "model": "telecomTower",
+      "x": 23,
+      "z": 24,
+      "w": 1,
+      "h": 1
+    },
+    {
+      "id": "bridgedCourt-main",
+      "model": "bridgedCourt",
+      "x": 31,
+      "z": 17,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "id": "bridgedCourt-small",
+      "model": "bridgedCourt",
+      "x": 19,
+      "z": 14,
+      "w": 1,
+      "h": 1
+    }
+  ],
+  "qualification": "Two decoded production samples (seed516 has all eleven models; ai120 has no commercial block), production load and render, real CDP PNG, Chrome software WebGL. Mobile touch emulation is not Android hardware. Before = commerceArt=legacy of the same build.",
+  "cases": [
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "before": {
+        "viewport": {
+          "W": 412,
+          "H": 860,
+          "mobile": true
+        },
+        "phase": "before",
+        "shots": [
+          {
+            "file": "D063-before-seed516-downtown-412.png",
+            "name": "seed516-downtown",
+            "sha256": "0307310f9b29e217509885445f6868aabe6b622d8304f6f64d0f42192dfcd087",
+            "bytes": 53489,
+            "camera": {
+              "pos": [
+                137.97966101694917,
+                94.06040612287403,
+                139.0135593220339
+              ],
+              "target": [
+                22.779661016949152,
+                0,
+                23.8135593220339
+              ],
+              "zoom": 2.08
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2113.5020177436745
+          },
+          {
+            "file": "D063-before-seed516-downtown-close-412.png",
+            "name": "seed516-downtown-close",
+            "sha256": "f059978f67ee53f626481d2008ce51d22862f03228012cb0a7580fe698ea495e",
+            "bytes": 44161,
+            "camera": {
+              "pos": [
+                137.97966101694917,
+                94.06040612287403,
+                139.0135593220339
+              ],
+              "target": [
+                22.779661016949152,
+                0,
+                23.8135593220339
+              ],
+              "zoom": 3.5200000000000005
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2400.5931544750383
+          },
+          {
+            "file": "D063-before-seed516-district-412.png",
+            "name": "seed516-district",
+            "sha256": "3ac71c4e78c107a44de7f9db951017c9cae331866aac109944cf72423ac10673",
+            "bytes": 29328,
+            "camera": {
+              "pos": [
+                155.6,
+                94.06040612287403,
+                121.90000000000002
+              ],
+              "target": [
+                40.4,
+                0,
+                6.700000000000001
+              ],
+              "zoom": 2.56
+            },
+            "render": {
+              "calls": 13,
+              "triangles": 112307
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2207.1506122454884
+          },
+          {
+            "file": "D063-before-marketHall-main-se-412.png",
+            "name": "marketHall-main-se",
+            "sha256": "7334660dd4a2aac1bba2ff4d52b586ddd90383519aa202129352f5e9e456df57",
+            "bytes": 19587,
+            "camera": {
+              "pos": [
+                132.69999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                17.5,
+                0,
+                36
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1708.40999539324
+          },
+          {
+            "file": "D063-before-shopParade-main-se-412.png",
+            "name": "shopParade-main-se",
+            "sha256": "6c84996dede77805eec3c060bac0e54fe494af1b65844c53600dc7eb464baa82",
+            "bytes": 19201,
+            "camera": {
+              "pos": [
+                132.19999999999996,
+                94.06040612287404,
+                153.7
+              ],
+              "target": [
+                17,
+                0,
+                38.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1486.0046224824764
+          },
+          {
+            "file": "D063-before-greatStore-main-se-412.png",
+            "name": "greatStore-main-se",
+            "sha256": "ca8600659296f028e45945b66215bfb24dfdb5b43a217ab85e62e387b7ca4839",
+            "bytes": 24527,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                121.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                6
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2563.5488567660977
+          },
+          {
+            "file": "D063-before-slabDrum-main-se-412.png",
+            "name": "slabDrum-main-se",
+            "sha256": "e828281e305d0fc7267bbb6c96eab507bc1018d05ca58b69dc133fe83a440e31",
+            "bytes": 29102,
+            "camera": {
+              "pos": [
+                138.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                23,
+                0,
+                10
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2368.3195736212147
+          },
+          {
+            "file": "D063-before-gothicHotel-main-se-412.png",
+            "name": "gothicHotel-main-se",
+            "sha256": "61f9e7b04d79e3013837bd3648f7c5efd2686bc1d945eed8bd51b9b9a365ff4a",
+            "bytes": 30998,
+            "camera": {
+              "pos": [
+                138.69999999999996,
+                94.06040612287404,
+                149.2
+              ],
+              "target": [
+                23.500000000000004,
+                0,
+                34
+              ],
+              "zoom": 5.736586952365225
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2029.9054369816786
+          },
+          {
+            "file": "D063-before-pilotisTower-main-se-412.png",
+            "name": "pilotisTower-main-se",
+            "sha256": "dbc6271e0a8e7b1c0e8b74d759d2fa5325c5c13c8f4f5d7ad33ed42cbf672bad",
+            "bytes": 32687,
+            "camera": {
+              "pos": [
+                140.70000000000002,
+                94.06040612287403,
+                126.70000000000002
+              ],
+              "target": [
+                25.500000000000004,
+                0,
+                11.500000000000002
+              ],
+              "zoom": 5.794827906976744
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2393.119777349484
+          },
+          {
+            "file": "D063-before-steppedOffice-main-se-412.png",
+            "name": "steppedOffice-main-se",
+            "sha256": "322cc34b91491eaa753289352842dc9c803c087f4399c9c71331d76b11fa0a92",
+            "bytes": 26329,
+            "camera": {
+              "pos": [
+                137.69999999999996,
+                94.06040612287404,
+                129.7
+              ],
+              "target": [
+                22.5,
+                0,
+                14.499999999999998
+              ],
+              "zoom": 6.760632558139535
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2367.106287533801
+          },
+          {
+            "file": "D063-before-gridCourt-main-se-412.png",
+            "name": "gridCourt-main-se",
+            "sha256": "c2fbdcd1539eaa878fe997734c8154dcd200327a5c48d14c40a8b74323dc8482",
+            "bytes": 26484,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                138.7
+              ],
+              "target": [
+                31.5,
+                0,
+                23.5
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2196.0525357647275
+          },
+          {
+            "file": "D063-before-domedTower-main-se-412.png",
+            "name": "domedTower-main-se",
+            "sha256": "1e7980d5c290f1eca194dd17696b6b9f681098af22e78a94091af11673035177",
+            "bytes": 32624,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                127.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                12
+              ],
+              "zoom": 6.009451162790697
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2321.128622974511
+          },
+          {
+            "file": "D063-before-telecomTower-main-se-412.png",
+            "name": "telecomTower-main-se",
+            "sha256": "ea31cb9516477282ce61149ad6f53ac7264577cc07a9860be8ddc55af513d321",
+            "bytes": 36754,
+            "camera": {
+              "pos": [
+                136.69999999999996,
+                94.06040612287404,
+                133.7
+              ],
+              "target": [
+                21.5,
+                0,
+                18.499999999999996
+              ],
+              "zoom": 5.07047441860465
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2679.5799200753936
+          },
+          {
+            "file": "D063-before-bridgedCourt-main-se-412.png",
+            "name": "bridgedCourt-main-se",
+            "sha256": "1c6cea48f856f6f787a39c76917cff663e535447f0d2d202201a6295c7dedcc6",
+            "bytes": 28305,
+            "camera": {
+              "pos": [
+                147.19999999999996,
+                94.06040612287404,
+                133.2
+              ],
+              "target": [
+                32,
+                0,
+                18
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 116227
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2075.4730457213045
+          },
+          {
+            "file": "D063-before-ai120-district-412.png",
+            "name": "ai120-district",
+            "sha256": "f7bf607a6a618fad6d44b2cf42028dc8b16f8cbdc8f07b959739f939149b5161",
+            "bytes": 41229,
+            "camera": {
+              "pos": [
+                142.6,
+                94.06040612287403,
+                168.50000000000003
+              ],
+              "target": [
+                27.400000000000002,
+                0,
+                53.300000000000004
+              ],
+              "zoom": 2.56
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "pixelVariance": 1997.9150705771426
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "centre": {
+              "c": 59,
+              "x": 22.779661016949152,
+              "z": 23.8135593220339
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "98fc39d687cc52d9656aab3824067da9690af15531c0dd84083ab83ce5759827"
+          },
+          "ai120": {
+            "centre": null,
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "141c8fdf3438646c66b4fc6b606b838deeb65bc64f03871841d80020ed98a920"
+          }
+        },
+        "passed": true,
+        "picks": {
+          "blocks": {
+            "pool": 229,
+            "tested": 100,
+            "multi": true,
+            "oblique": 96,
+            "bad": []
+          },
+          "sites": [
+            {
+              "id": "marketHall-main",
+              "block": 177,
+              "hits": 65
+            },
+            {
+              "id": "marketHall-small",
+              "block": 206,
+              "hits": 65
+            },
+            {
+              "id": "shopParade-main",
+              "block": 197,
+              "hits": 43
+            },
+            {
+              "id": "greatStore-main",
+              "block": 222,
+              "hits": 65
+            },
+            {
+              "id": "greatStore-small",
+              "block": 151,
+              "hits": 65
+            },
+            {
+              "id": "slabDrum-main",
+              "block": 65,
+              "hits": 35
+            },
+            {
+              "id": "slabDrum-small",
+              "block": 13,
+              "hits": 41
+            },
+            {
+              "id": "gothicHotel-main",
+              "block": 162,
+              "hits": 37
+            },
+            {
+              "id": "gothicHotel-small",
+              "block": 332,
+              "hits": 44
+            },
+            {
+              "id": "pilotisTower-main",
+              "block": 72,
+              "hits": 65
+            },
+            {
+              "id": "pilotisTower-small",
+              "block": 54,
+              "hits": 65
+            },
+            {
+              "id": "steppedOffice-main",
+              "block": 88,
+              "hits": 38
+            },
+            {
+              "id": "steppedOffice-small",
+              "block": 81,
+              "hits": 39
+            },
+            {
+              "id": "gridCourt-main",
+              "block": 115,
+              "hits": 55
+            },
+            {
+              "id": "gridCourt-small",
+              "block": 99,
+              "hits": 59
+            },
+            {
+              "id": "domedTower-main",
+              "block": 249,
+              "hits": 34
+            },
+            {
+              "id": "domedTower-small",
+              "block": 271,
+              "hits": 65
+            },
+            {
+              "id": "telecomTower-main",
+              "block": 278,
+              "hits": 65
+            },
+            {
+              "id": "telecomTower-small",
+              "block": 310,
+              "hits": 65
+            },
+            {
+              "id": "bridgedCourt-main",
+              "block": 272,
+              "hits": 48
+            },
+            {
+              "id": "bridgedCourt-small",
+              "block": 87,
+              "hits": 52
+            }
+          ]
+        },
+        "modes": {
+          "a": {
+            "digestSha256": "d32d81938587ddddd6c0fe5e567e8888b3e333e32c3aeca8ed94557f58f4b969"
+          },
+          "b": {
+            "digestSha256": "d0728b0dbefb08c6748f90c6ac57402e3987865f7bf03ce8600561600c8dcd33"
+          },
+          "c": {
+            "digestSha256": "98fc39d687cc52d9656aab3824067da9690af15531c0dd84083ab83ce5759827"
+          }
+        },
+        "sceneStats": {
+          "pieces": 384,
+          "regen": 384,
+          "up": 15061164,
+          "upFull": 12326088,
+          "grown": 0,
+          "moved": 0,
+          "relayout": 0,
+          "fresh": true,
+          "groundUp": 1327104,
+          "groundFull": 1327104,
+          "treesKept": false,
+          "cached": 384,
+          "rebuildAll": null,
+          "arenas": [
+            {
+              "cap": 10053,
+              "used": 8042,
+              "live": 8042,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 9643,
+              "used": 7714,
+              "live": 7714,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 58109,
+              "used": 46487,
+              "live": 46487,
+              "holes": 0,
+              "free": 0
+            }
+          ]
+        },
+        "gl": {
+          "programs": 16,
+          "geometries": 13,
+          "textures": 8,
+          "hazardShown": false
+        }
+      },
+      "after": {
+        "viewport": {
+          "W": 412,
+          "H": 860,
+          "mobile": true
+        },
+        "phase": "after",
+        "shots": [
+          {
+            "file": "D063-after-seed516-downtown-412.png",
+            "name": "seed516-downtown",
+            "sha256": "6d935101097ec02ef8a16fd0efc388971c96fd4bc28f6c169c5baf7d0f70ba8b",
+            "bytes": 52646,
+            "camera": {
+              "pos": [
+                137.97966101694917,
+                94.06040612287403,
+                139.0135593220339
+              ],
+              "target": [
+                22.779661016949152,
+                0,
+                23.8135593220339
+              ],
+              "zoom": 2.08
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2006.936528775468
+          },
+          {
+            "file": "D063-after-seed516-downtown-close-412.png",
+            "name": "seed516-downtown-close",
+            "sha256": "4e909d50479da516bfd2201276a0b721f58276cd39afd1236ec45d5ed1e09808",
+            "bytes": 42562,
+            "camera": {
+              "pos": [
+                137.97966101694917,
+                94.06040612287403,
+                139.0135593220339
+              ],
+              "target": [
+                22.779661016949152,
+                0,
+                23.8135593220339
+              ],
+              "zoom": 3.5200000000000005
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2113.575122805756
+          },
+          {
+            "file": "D063-after-seed516-district-412.png",
+            "name": "seed516-district",
+            "sha256": "2ed9b69a800df58be1697647b784687aad933607d5fa23635103a18dae5b6011",
+            "bytes": 28995,
+            "camera": {
+              "pos": [
+                155.6,
+                94.06040612287403,
+                121.90000000000002
+              ],
+              "target": [
+                40.4,
+                0,
+                6.700000000000001
+              ],
+              "zoom": 2.56
+            },
+            "render": {
+              "calls": 13,
+              "triangles": 109748
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2197.0640751051324
+          },
+          {
+            "file": "D063-after-marketHall-main-se-412.png",
+            "name": "marketHall-main-se",
+            "sha256": "4b0e2f6ffb0bb0242a4f5addbea0f759a668c847a56b7fc679139906c658714b",
+            "bytes": 19652,
+            "camera": {
+              "pos": [
+                132.69999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                17.5,
+                0,
+                36
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1587.272198247556
+          },
+          {
+            "file": "D063-after-shopParade-main-se-412.png",
+            "name": "shopParade-main-se",
+            "sha256": "f010b734d8ccb92285681903161d5dafb64da7668513de4acc8e746238d99dd5",
+            "bytes": 18765,
+            "camera": {
+              "pos": [
+                132.19999999999996,
+                94.06040612287404,
+                153.7
+              ],
+              "target": [
+                17,
+                0,
+                38.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1365.377508383801
+          },
+          {
+            "file": "D063-after-greatStore-main-se-412.png",
+            "name": "greatStore-main-se",
+            "sha256": "59a23a5b3c66ba7265bd61352320c567aed0f2f381a57fad178a1fe3f286b73e",
+            "bytes": 25130,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                121.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                6
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2595.7712607501253
+          },
+          {
+            "file": "D063-after-slabDrum-main-se-412.png",
+            "name": "slabDrum-main-se",
+            "sha256": "69d2f4292f51799337b5efecb7c92353dc7bfc26a2e71ced7020b95e4db4f12c",
+            "bytes": 28766,
+            "camera": {
+              "pos": [
+                138.2,
+                94.06040612287403,
+                125.20000000000002
+              ],
+              "target": [
+                23,
+                0,
+                10
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2149.7401682662494
+          },
+          {
+            "file": "D063-after-gothicHotel-main-se-412.png",
+            "name": "gothicHotel-main-se",
+            "sha256": "cf6391f98ae61bf3a09477960d11bfef0c261a2d33e62657fbba5390576517d2",
+            "bytes": 30563,
+            "camera": {
+              "pos": [
+                138.69999999999996,
+                94.06040612287404,
+                149.2
+              ],
+              "target": [
+                23.500000000000004,
+                0,
+                34
+              ],
+              "zoom": 5.736586952365225
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1868.7472264346034
+          },
+          {
+            "file": "D063-after-pilotisTower-main-se-412.png",
+            "name": "pilotisTower-main-se",
+            "sha256": "1f3766d7de2ad949cd27d482a15704eab04d18e4437e3d15c88007a4900eb809",
+            "bytes": 32700,
+            "camera": {
+              "pos": [
+                140.70000000000002,
+                94.06040612287403,
+                126.70000000000002
+              ],
+              "target": [
+                25.500000000000004,
+                0,
+                11.500000000000002
+              ],
+              "zoom": 5.794827906976744
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2024.9104199448066
+          },
+          {
+            "file": "D063-after-steppedOffice-main-se-412.png",
+            "name": "steppedOffice-main-se",
+            "sha256": "5dd97e7cd795ae8f90d67572ba78dfa54279de078be311bce29471a05b74081b",
+            "bytes": 27070,
+            "camera": {
+              "pos": [
+                137.69999999999996,
+                94.06040612287404,
+                129.7
+              ],
+              "target": [
+                22.5,
+                0,
+                14.499999999999998
+              ],
+              "zoom": 6.760632558139535
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1905.4916601257737
+          },
+          {
+            "file": "D063-after-gridCourt-main-se-412.png",
+            "name": "gridCourt-main-se",
+            "sha256": "83bbbe42fee00069fdb4b40284a76a269822b1480175d6f0c054ec74dfc18062",
+            "bytes": 27705,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                138.7
+              ],
+              "target": [
+                31.5,
+                0,
+                23.5
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1605.1514804713934
+          },
+          {
+            "file": "D063-after-domedTower-main-se-412.png",
+            "name": "domedTower-main-se",
+            "sha256": "63a1a8196faec9956d5ca5ca0e3d2714b1d1451404ef662b8c928826289b9198",
+            "bytes": 32875,
+            "camera": {
+              "pos": [
+                142.2,
+                94.06040612287403,
+                127.20000000000002
+              ],
+              "target": [
+                27,
+                0,
+                12
+              ],
+              "zoom": 6.009451162790697
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1893.2275922753124
+          },
+          {
+            "file": "D063-after-telecomTower-main-se-412.png",
+            "name": "telecomTower-main-se",
+            "sha256": "b93c0c9732c72c0725821aab050e3fadbb38a6b2c8b9e5fc01ecce0a6661a1d0",
+            "bytes": 36196,
+            "camera": {
+              "pos": [
+                136.69999999999996,
+                94.06040612287404,
+                133.7
+              ],
+              "target": [
+                21.5,
+                0,
+                18.499999999999996
+              ],
+              "zoom": 5.07047441860465
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 2194.4338641434097
+          },
+          {
+            "file": "D063-after-bridgedCourt-main-se-412.png",
+            "name": "bridgedCourt-main-se",
+            "sha256": "377782fb85ead6ed25f9c43a68f96d5a1adc2d597f3caa77098445add5aa13af",
+            "bytes": 30362,
+            "camera": {
+              "pos": [
+                147.19999999999996,
+                94.06040612287404,
+                133.2
+              ],
+              "target": [
+                32,
+                0,
+                18
+              ],
+              "zoom": 7.17073369045653
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113668
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "pixelVariance": 1622.5138255486509
+          },
+          {
+            "file": "D063-after-ai120-district-412.png",
+            "name": "ai120-district",
+            "sha256": "f7bf607a6a618fad6d44b2cf42028dc8b16f8cbdc8f07b959739f939149b5161",
+            "bytes": 41229,
+            "camera": {
+              "pos": [
+                142.6,
+                94.06040612287403,
+                168.50000000000003
+              ],
+              "target": [
+                27.400000000000002,
+                0,
+                53.300000000000004
+              ],
+              "zoom": 2.56
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "pixelVariance": 1997.9150705771426
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "centre": {
+              "c": 59,
+              "x": 22.779661016949152,
+              "z": 23.8135593220339
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "e163bd1bcb8d143cec4fd03e9b0f0f60a09357eaf542b6fc21cfe243840649bc"
+          },
+          "ai120": {
+            "centre": null,
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "141c8fdf3438646c66b4fc6b606b838deeb65bc64f03871841d80020ed98a920"
+          }
+        },
+        "passed": true,
+        "picks": {
+          "blocks": {
+            "pool": 229,
+            "tested": 100,
+            "multi": true,
+            "oblique": 95,
+            "bad": []
+          },
+          "sites": [
+            {
+              "id": "marketHall-main",
+              "block": 177,
+              "hits": 47
+            },
+            {
+              "id": "marketHall-small",
+              "block": 206,
+              "hits": 47
+            },
+            {
+              "id": "shopParade-main",
+              "block": 197,
+              "hits": 31
+            },
+            {
+              "id": "greatStore-main",
+              "block": 222,
+              "hits": 57
+            },
+            {
+              "id": "greatStore-small",
+              "block": 151,
+              "hits": 57
+            },
+            {
+              "id": "slabDrum-main",
+              "block": 65,
+              "hits": 17
+            },
+            {
+              "id": "slabDrum-small",
+              "block": 13,
+              "hits": 17
+            },
+            {
+              "id": "gothicHotel-main",
+              "block": 162,
+              "hits": 29
+            },
+            {
+              "id": "gothicHotel-small",
+              "block": 332,
+              "hits": 29
+            },
+            {
+              "id": "pilotisTower-main",
+              "block": 72,
+              "hits": 15
+            },
+            {
+              "id": "pilotisTower-small",
+              "block": 54,
+              "hits": 15
+            },
+            {
+              "id": "steppedOffice-main",
+              "block": 88,
+              "hits": 31
+            },
+            {
+              "id": "steppedOffice-small",
+              "block": 81,
+              "hits": 41
+            },
+            {
+              "id": "gridCourt-main",
+              "block": 115,
+              "hits": 40
+            },
+            {
+              "id": "gridCourt-small",
+              "block": 99,
+              "hits": 40
+            },
+            {
+              "id": "domedTower-main",
+              "block": 249,
+              "hits": 33
+            },
+            {
+              "id": "domedTower-small",
+              "block": 271,
+              "hits": 41
+            },
+            {
+              "id": "telecomTower-main",
+              "block": 278,
+              "hits": 5
+            },
+            {
+              "id": "telecomTower-small",
+              "block": 310,
+              "hits": 5
+            },
+            {
+              "id": "bridgedCourt-main",
+              "block": 272,
+              "hits": 41
+            },
+            {
+              "id": "bridgedCourt-small",
+              "block": 87,
+              "hits": 47
+            }
+          ]
+        },
+        "modes": {
+          "a": {
+            "digestSha256": "d32d81938587ddddd6c0fe5e567e8888b3e333e32c3aeca8ed94557f58f4b969"
+          },
+          "b": {
+            "digestSha256": "232614d574e27eaccddfa715212c36bb9d1e07e56044135ddb22f220c1367bc1"
+          },
+          "c": {
+            "digestSha256": "e163bd1bcb8d143cec4fd03e9b0f0f60a09357eaf542b6fc21cfe243840649bc"
+          }
+        },
+        "sceneStats": {
+          "pieces": 384,
+          "regen": 384,
+          "up": 14374848,
+          "upFull": 11777160,
+          "grown": 0,
+          "moved": 0,
+          "relayout": 0,
+          "fresh": true,
+          "groundUp": 1327104,
+          "groundFull": 1327104,
+          "treesKept": false,
+          "cached": 384,
+          "rebuildAll": null,
+          "arenas": [
+            {
+              "cap": 10870,
+              "used": 8696,
+              "live": 8696,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 10003,
+              "used": 8002,
+              "live": 8002,
+              "holes": 0,
+              "free": 0
+            },
+            {
+              "cap": 52555,
+              "used": 42044,
+              "live": 42044,
+              "holes": 0,
+              "free": 0
+            }
+          ]
+        },
+        "gl": {
+          "programs": 16,
+          "geometries": 13,
+          "textures": 8,
+          "hazardShown": false
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "pairs": 15
+}

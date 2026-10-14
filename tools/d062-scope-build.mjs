@@ -1,3 +1,4 @@
+// （D063 起這份產生器與 D062 的兩份 fixtures 凍結在 D062 候選 c17da56；之後不要再 --write，改動 src 要重跑的是 tools/d063-scope-build.mjs）
 // D062 範圍鎖的產生器：由基線提交（git）與現行樹算出 fixtures/d062-source-before.json 與 fixtures/d062-art-scope.json。
 // 每次改動 D062 的 src/ 檔案之後都要重跑，並且連同 src 一起提交；tools/d062-scope.mjs 會在載入時驗證這兩份清單。
 //   node tools/d062-scope-build.mjs          只印出摘要（不寫檔）
