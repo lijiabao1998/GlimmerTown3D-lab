@@ -90,6 +90,7 @@
    "modes": {
     "a": {
      "weighted": 121606,
+     "signature": "f9fee6b8bb98a08b4dfa8c536c7639eb42515fae4007bad2e1f3bd8ef5c4b976",
      "meshes": [
       {
        "name": "ground",
@@ -241,6 +242,7 @@
     },
     "b": {
      "weighted": 86908,
+     "signature": "0420eed13a91ca19c8ad6f816a510571e20cfc5b2d9636df0abca6414fa55a88",
      "meshes": [
       {
        "name": "ground",
@@ -410,6 +412,7 @@
     },
     "c": {
      "weighted": 118007,
+     "signature": "c820aa787f22478fc92e5da27346b504bc98239f052e88982137f4cd679e7c92",
      "meshes": [
       {
        "name": "ground",
@@ -590,6 +593,7 @@
    "modes": {
     "a": {
      "weighted": 92942,
+     "signature": "4faa4fc49180f702c9dd31b1f9453fe8d94423296e7bac4b29fdd899cd1b73d3",
      "meshes": [
       {
        "name": "ground",
@@ -691,6 +695,7 @@
     },
     "b": {
      "weighted": 88205,
+     "signature": "43d39b16bcdce1e6e312a0e133f4c18c3e7051310e45e2ff22f358e1a21adb2b",
      "meshes": [
       {
        "name": "ground",
@@ -804,6 +809,7 @@
     },
     "c": {
      "weighted": 97121,
+     "signature": "44f4ea06641e63bbfd88025c94189a74198b64fbd05da2c0225ed016144496e4",
      "meshes": [
       {
        "name": "ground",

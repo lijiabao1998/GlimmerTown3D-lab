@@ -146,7 +146,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
 // D058-BEGIN street-default
 // D059-BEGIN village-enabled
-    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D060-BEGIN industry-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D060-END industry-enabled
 // D059-END village-enabled
 // D058-END street-default
   };

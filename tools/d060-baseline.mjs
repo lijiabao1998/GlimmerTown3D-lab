@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
 import {buildCityScene} from '../src/render/cityScene.ts';
@@ -23,6 +24,12 @@ const KT=kindTableFrom(read('src/content/lab-kinds.json'));
 const LOOKS=read('src/content/lab-looks.json').looks;
 const civic={shape:shapeOf,colors:(k,lv)=>kindColors(LOOKS,k,lv,KT.catColor(KT.cat(k)))};
 export const weighted=b=>b.meshStats().reduce((n,m)=>n+m.tris*(m.shadow?2:1),0);
+// 整個建好的場景的內容簽章：每個網格每個三角形的全部屬性（不分順序、照主人分組）＋地面像素＋實例＋查詢＋計數。
+// 同一函式在基線提交與現行樹各算一次，相等＝位元組相同。
+export const signature=b=>{
+  const d=sceneDigest(b);
+  return createHash('sha256').update(JSON.stringify({meshes:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),ground:d.ground,inst:d.inst,queries:d.queries,counts:d.counts})).digest('hex');
+};
 
 // 一座城、一個畫法檔的量測。blocks 由呼叫端決定旗標（基線＝現行預設；D060 守衛用同一函式量「新」）。
 export function measure(city,blocks) {
@@ -40,7 +47,7 @@ export function measure(city,blocks) {
       row.sizes[b.w+'x'+b.h]=(row.sizes[b.w+'x'+b.h]??0)+1;
       cls.blocks++;cls.weighted+=cost;
     });
-    return {weighted:weighted(built),meshes:stats,industry:{...cls,byArche:Object.fromEntries(Object.entries(byArche).sort(([a],[b])=>a<b?-1:1))}};
+    return {weighted:weighted(built),signature:signature(built),meshes:stats,industry:{...cls,byArche:Object.fromEntries(Object.entries(byArche).sort(([a],[b])=>a<b?-1:1))}};
   } finally {built.dispose();con.dispose();}
 }
 

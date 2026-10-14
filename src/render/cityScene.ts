@@ -18,6 +18,10 @@ import { PX_PER_CELL } from '../content/recipes.ts';
 import { villageBlock, villageKind } from '../content/britishVillage.ts';
 import { drawBritishVillage } from './britishVillageArt.ts';
 // D059-END village-imports
+// D060-BEGIN industry-imports
+import { industryBlock } from '../content/britishIndustry.ts';
+import { drawBritishIndustry } from './britishIndustryArt.ts';
+// D060-END industry-imports
 import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
@@ -34,7 +38,9 @@ export interface CityHit { id: number; x: number; z: number; block?: number }
 // D004：住商工改用街區配方畫（?blocks=a|b|c）。plan＝要畫的街區（src/content/blocks.ts），recipe＝每個街區的配方（src/content/recipes.ts）
 // D058-BEGIN street-option
 // D059-BEGIN village-option
-export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D060-BEGIN industry-option
+export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D060-END industry-option
 // D059-END village-option
 // D058-END street-option
   detail: boolean; facade(b: DrawBlock): FacadePlan | null; trim(b: DrawBlock): TrimPlan | null }   // D008：detail＝B、C 兩檔才畫英美立面逐戶造型與飾條
@@ -158,7 +164,9 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
   const sc = con ? con.cache : new SceneCache(), stats = sc.stats;
 // D058-BEGIN street-mode-key
 // D059-BEGIN village-mode-key
-  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}${blocks?.villageArt && blocks.detail ? '|D059' : ''}`;
+// D060-BEGIN industry-mode-key
+  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}${blocks?.villageArt && blocks.detail ? '|D059' : ''}${blocks?.industryArt && blocks.detail ? '|D060' : ''}`;
+// D060-END industry-mode-key
 // D059-END village-mode-key
 // D058-END street-mode-key
   Object.assign(stats, { pieces: 0, regen: 0, up: 0, upFull: 0, grown: 0, moved: 0, relayout: 0, fresh: false, groundUp: 0, groundFull: 0, treesKept: false });
@@ -307,13 +315,28 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     for (const i of bk.cells) y0 = Math.max(y0, top[i]);
 // D058-BEGIN street-dispatch
 // D059-BEGIN village-blocks
+// D060-BEGIN industry-blocks
     const street = blocks.streetArt && blocks.detail && isBritishStreet(blocks.recipe(bk)) ? streetFrame(c, bk) : null;
     const village = blocks.villageArt && blocks.detail ? villageBlock(blocks.recipe(bk)) : null;
-    const frame = village ? streetFrame(c, bk) : null;
-    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : '') + (village && frame ? '|D059:' + village + ':' + frame.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+    const industry = blocks.industryArt && blocks.detail ? industryBlock(blocks.recipe(bk)) : null;
+    const frame = village || industry ? streetFrame(c, bk) : null;
+    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : '') + (village && frame ? '|D059:' + village + ':' + frame.key : '') + (industry && frame ? '|D060:' + industry + ':' + frame.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
       const fp = blocks.detail ? blocks.facade(bk) : null, nj: NearJob[] = [];
       m.counts = emptyCounts(); m.facade = !!fp;
-      if (village && frame) {
+      if (industry && frame) {
+        const local = { ...bk, x: 0, z: 0, w: frame.turn % 2 ? bk.h : bk.w, h: frame.turn % 2 ? bk.w : bk.h };
+        const r = blocks.recipe(local);
+        m.anchor = drawBritishIndustry({ W, O, D, x0: 0, z0: 0, w: local.w, d: local.h, y0, wall: r.wallPx / PX_PER_CELL, pal: (r.v + ((hash2(bk.x, bk.z, 60) * 6) | 0)) % 6, weather: r.path === 'core' }, industry);
+        m.facade = false;
+        for (const g of [W, O, D]) for (let i = 0; i < g.pos.length; i += 3) {
+          [g.pos[i], g.pos[i + 2]] = streetPoint(bk, frame.turn, g.pos[i], g.pos[i + 2]);
+          [g.nor[i], g.nor[i + 2]] = streetNormal(frame.turn, g.nor[i], g.nor[i + 2]);
+        }
+        [m.anchor.x, m.anchor.z] = streetPoint(bk, frame.turn, m.anchor.x, m.anchor.z);
+        // Keep the existing yard tree instances at their original world positions.
+        for (const p of blocks.dress(bk).props) if (p.kind === 'tree')
+          m.yard.push({ x: bk.x + p.u * bk.w, z: bk.z + p.v * bk.h, y: y0, s: .55 });
+      } else if (village && frame) {
         const local = { ...bk, x: 0, z: 0, w: frame.turn % 2 ? bk.h : bk.w, h: frame.turn % 2 ? bk.w : bk.h };
         const r = blocks.recipe(local), H = (r.wallPx + r.roof.risePx) / PX_PER_CELL;
         m.anchor = drawBritishVillage({ W, O, D, x0: 0, z0: 0, w: local.w, d: local.h, y0, H, weather: r.path === 'core' }, village);
@@ -339,6 +362,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       } else m.anchor = drawBlock(W, O, D, bk, blocks.recipe(bk), blocks.dress(bk), y0, m.yard, m.counts, fp, blocks.detail ? blocks.trim(bk) : null, con ? nj : null);
       m.near = nj[0] ?? null;
     } });
+// D060-END industry-blocks
 // D059-END village-blocks
 // D058-END street-dispatch
   });
