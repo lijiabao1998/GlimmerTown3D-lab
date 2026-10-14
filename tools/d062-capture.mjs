@@ -76,7 +76,8 @@ const report={sourceRef:process.env.GITHUB_SHA??'local uncommitted D062 candidat
 const world=`JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList()])`;
 const worldKey=`JSON.stringify([__gt.buildingCount(),__gt.history().length])`;   // what must not change while the clock runs (the save code itself carries the day)
 const variance=`(()=>{const c=document.querySelector('canvas'),k=document.createElement('canvas');k.width=96;k.height=60;const x=k.getContext('2d');x.drawImage(c,0,0,96,60);const d=x.getImageData(0,0,96,60).data;let sum=0,sq=0,n=0;for(let i=0;i<d.length;i+=4){const v=(d[i]+d[i+1]+d[i+2])/3;sum+=v;sq+=v*v;n++;}return sq/n-(sum/n)**2})()`;
-const queryOf=(v,st)=>['sample='+v.sample,'clean=1',st.flag].filter(Boolean).join('&');
+// D063：商業建築預設已換畫法。這支工具量的是 D061 預設的畫面（season=off 要逐像素等於已提交的 D061 預設圖），所以釘住舊畫法——跟 d061-capture 釘住季節與天氣同一個理由。
+const queryOf=(v,st)=>['sample='+v.sample,'clean=1','commerceArt=legacy',st.flag].filter(Boolean).join('&');
 async function shot(p,page,v,file) {
   await settle(p,v);await p.frames(3);
   const pixelVariance=await p.ev(variance);assert.ok(pixelVariance>0.5,`${file}: nonblank production canvas`);

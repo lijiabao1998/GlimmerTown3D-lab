@@ -20,6 +20,7 @@ import {recipe} from '../src/content/recipes.ts';
 import {isBritishStreet} from '../src/content/britishStreets.ts';
 import {villageBlock,villageKind} from '../src/content/britishVillage.ts';
 import {industryBlock} from '../src/content/britishIndustry.ts';
+import {commerceBlock} from '../src/content/britishCommerce.ts';
 import {BRITISH_KINDS} from '../src/content/britishCivic.ts';
 import {BRITISH_HERITAGE_KINDS} from '../src/content/britishHeritage.ts';
 import {d058Blocks,d058City} from './unit-d058.mjs';
@@ -33,11 +34,11 @@ const civic={shape:shapeOf,colors:(k,lv)=>kindColors(LOOKS,k,lv,KT.catColor(KT.c
 const LAND_USE={1:'住宅',2:'商業',3:'工業'};
 const SIZES=[[1,1],[1,2],[2,1],[2,2]];
 
-const classify=r=>isBritishStreet(r)?'D058 英式街屋':villageBlock(r)?'D059 村莊':industryBlock(r)?'D060 工業':'通用';
+const classify=r=>isBritishStreet(r)?'D058 英式街屋':villageBlock(r)?'D059 村莊':industryBlock(r)?'D060 工業':commerceBlock(r)?'D063 商業':'通用';   // 順序＝cityScene 的選擇順序；D063 之前的存證（art-coverage-2026-10-14.json）沒有這一列
 
 export function coverage(id) {
   const city=d058City(fs.readFileSync(path.join(ROOT,`src/content/samples/${id}.code.txt`),'utf8'));
-  const blocks={...d058Blocks(city,'c'),villageArt:true,industryArt:true,detail:true};
+  const blocks={...d058Blocks(city,'c'),villageArt:true,industryArt:true,commerceArt:true,detail:true};
   const con=new ConState(city.n),built=buildCityScene(city,KT,STYLES.A,blocks,'d',civic,con,true);
   try {
     const meshes=sceneDigest(built).meshes,owner=(name,o)=>meshes[name]?.ownerTris?.[o]??0;
@@ -45,8 +46,8 @@ export function coverage(id) {
     let blockWeighted=0;
     blocks.plan.forEach((b,bi)=>{
       const r=blocks.recipe(b),o=-(bi+1),cost=2*(owner('walls',o)+owner('other',o))+owner('dress',o),cat=classify(r);
-      const use=(byUse[b.k]??={});(use[cat]??={blocks:0,weighted:0});use[cat].blocks++;use[cat].weighted+=cost;blockWeighted+=cost;
-      if(cat==='通用'){const key=`k${b.k} lv${r.lv} ${r.arche??''}/${r.path??''}`;(generic[key]??={blocks:0,weighted:0});generic[key].blocks++;generic[key].weighted+=cost;}
+      const use=(byUse[b.k]??={});(use[cat]??={blocks:0,cells:0,weighted:0});use[cat].blocks++;use[cat].cells+=b.cells.length;use[cat].weighted+=cost;blockWeighted+=cost;
+      if(cat==='通用'){const key=`k${b.k} lv${r.lv} ${r.arche??''}/${r.path??''}`;(generic[key]??={blocks:0,cells:0,weighted:0});generic[key].blocks++;generic[key].cells+=b.cells.length;generic[key].weighted+=cost;}
     });
     const special={},genericKinds={};
     for(const b of city.buildings) {
