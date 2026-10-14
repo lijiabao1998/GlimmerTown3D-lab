@@ -1,0 +1,1783 @@
+{
+  "phase": "after",
+  "sourceRef": "b91023113f66c35137c9a1e9f407e583463f533c",
+  "htmlSha256": "e276d151a2fc6ea5f8a5fbdc58b6faa5c792ba25633bf16e2042191e843cf62f",
+  "qualification": "Authored synthetic fixture; Chrome software WebGL; mobile touch emulation, not Android hardware.",
+  "fixtureSha256": "08b5d8364cf81a63924fd1e844067b1801c3dc64fd63308564a8b77ae5ed696a",
+  "cases": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "shots": [
+        {
+          "file": "D057-after-district-1440.png",
+          "sha256": "e34450c1263b1df7b667a3cf308b0e6456cb38c5d27b39a476a0f1a785d85f13",
+          "bytes": 131593,
+          "camera": {
+            "pos": [
+              147.00000000000006,
+              94.06040612287407,
+              147.00000000000006
+            ],
+            "target": [
+              31.8,
+              0,
+              31.8
+            ],
+            "zoom": 3.4
+          }
+        },
+        {
+          "file": "D057-after-battersea-1440.png",
+          "sha256": "6f949ba62cc6878cda7a025f0673c8f5269e963b82b9d558a07ccb83f1234069",
+          "bytes": 121834,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-jumbo-1440.png",
+          "sha256": "5698a3aa32035be2dfebc17d52719381987a20c9f770a5d8dd97a4658d7e66f5",
+          "bytes": 127740,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-natural-history-1440.png",
+          "sha256": "bb529ab05eb6a5d89f2e54e7ce288ea82704ab13a9b1763f7f46a8e4e111729d",
+          "bytes": 120211,
+          "camera": {
+            "pos": [
+              149.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              34,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-royal-albert-1440.png",
+          "sha256": "c599ae2a80290584f9db1995e55b70db0d2941c50f1181a88e54e1e58f94043e",
+          "bytes": 114310,
+          "camera": {
+            "pos": [
+              153.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              38,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-radcliffe-1440.png",
+          "sha256": "be7f8f6928c6d99612ebc1720e77fee1d57470de0db8faaf2738d25de6147948",
+          "bytes": 108888,
+          "camera": {
+            "pos": [
+              141.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              26,
+              0,
+              35
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-palm-house-1440.png",
+          "sha256": "774e0513a4bde81c9c2526b952fd571825852b7d9137d0129b8b1c85c95d34bb",
+          "bytes": 109462,
+          "camera": {
+            "pos": [
+              145.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              30,
+              0,
+              35
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-elizabeth-1440.png",
+          "sha256": "b753d945ad42cd39d17a26537bf6bf833667bc895ce53438e0cc39b383ec9704",
+          "bytes": 109886,
+          "camera": {
+            "pos": [
+              148.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              33.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-smeaton-1440.png",
+          "sha256": "a7cf8530da0da67f5600574092129eb407283ea9479c04f9681763082cb94f06",
+          "bytes": 106216,
+          "camera": {
+            "pos": [
+              152.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              37.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 5,
+          "want": 5,
+          "got": 5
+        },
+        {
+          "kind": 10,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 35,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 36,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 41,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 63,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 67,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 69,
+          "want": 15,
+          "got": 15
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 22262,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 293.54521307083814,
+      "boxes": {
+        "5": [
+          650,
+          25.092,
+          0,
+          28.108,
+          25.908,
+          1.6000000002086163,
+          28.852
+        ],
+        "6": [
+          524,
+          29.15,
+          0,
+          28.15,
+          29.85,
+          1.8,
+          28.85
+        ],
+        "7": [
+          768,
+          33.14,
+          0,
+          28.44,
+          34.86,
+          1.28,
+          29.86
+        ],
+        "8": [
+          882,
+          37.14,
+          0,
+          28.3,
+          38.86,
+          1.66,
+          29.830000000000002
+        ],
+        "9": [
+          180,
+          21.07,
+          0,
+          30.17,
+          21.905,
+          1.38,
+          30.86
+        ],
+        "10": [
+          134,
+          43.095,
+          0,
+          30.17,
+          43.905,
+          0.85,
+          30.900000000000002
+        ],
+        "11": [
+          260,
+          21.08,
+          0,
+          33.17,
+          21.92,
+          0.79,
+          33.909
+        ],
+        "12": [
+          1280,
+          25.32,
+          0,
+          34.32,
+          26.68,
+          1.61,
+          35.68
+        ],
+        "13": [
+          840,
+          29.11,
+          0,
+          34.44,
+          30.89,
+          0.47,
+          35.766
+        ],
+        "14": [
+          484,
+          33.28,
+          0,
+          34.28,
+          33.72,
+          2.12,
+          34.72
+        ],
+        "15": [
+          770,
+          37.21999999880791,
+          -1.0907649991565016e-9,
+          34.21999999880791,
+          37.78000000119209,
+          1.89,
+          34.78000000119209
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          26,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          2,
+          1,
+          30,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          3,
+          1,
+          34,
+          24,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          4,
+          1,
+          38,
+          24,
+          1,
+          1,
+          3,
+          0
+        ],
+        [
+          5,
+          5,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          10,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          35,
+          33,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          36,
+          37,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          6,
+          21,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          14,
+          43,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          7,
+          21,
+          33,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          41,
+          25,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          63,
+          29,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          67,
+          33,
+          34,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          69,
+          37,
+          34,
+          1,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 15,
+        "regen": 15,
+        "up": 3265392,
+        "upFull": 2521440,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 15,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 5025,
+            "used": 4020,
+            "live": 4020,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 3733,
+            "used": 2986,
+            "live": 2986,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "plant",
+            "repeat": 0,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "plant",
+            "repeat": 1,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "water",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "water",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          35,
+          36,
+          41,
+          67,
+          69
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D057-after-district-360.png",
+          "sha256": "b8d2aec4a8c171e9d5c26ca1c906d797d4bc45edb10a4836808be1e253cc159c",
+          "bytes": 67361,
+          "camera": {
+            "pos": [
+              147.00000000000006,
+              94.06040612287407,
+              147.00000000000006
+            ],
+            "target": [
+              31.8,
+              0,
+              31.8
+            ],
+            "zoom": 1.5
+          }
+        },
+        {
+          "file": "D057-after-battersea-360.png",
+          "sha256": "e25c8885838458147d0317d8d53b4fd4a20652ce65edf79cbb4709cae56cadd2",
+          "bytes": 57944,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-jumbo-360.png",
+          "sha256": "8b97e6e1e0e5d7871333ea1a8cc06d70ca2b25f5938c84fba914a8e8ad0d98d9",
+          "bytes": 61996,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-natural-history-360.png",
+          "sha256": "8834ff33a78f6e9f552fb886c332e2ec6b51ee44a755ab3c207569ca72e56971",
+          "bytes": 64556,
+          "camera": {
+            "pos": [
+              149.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              34,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-royal-albert-360.png",
+          "sha256": "fd9dc90c1ca7986aeebdf4f71baca21795fc6b6bf67489c7a8f8d77d855a83f0",
+          "bytes": 62596,
+          "camera": {
+            "pos": [
+              153.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              38,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-radcliffe-360.png",
+          "sha256": "3f461f65c5ec97de99328dd1c0cb8082b62286b8a8caf5afc989ceda9c2ea3a2",
+          "bytes": 60892,
+          "camera": {
+            "pos": [
+              141.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              26,
+              0,
+              35
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-palm-house-360.png",
+          "sha256": "bd29cbf5025761dc5e12303431c4e42dbbc99f72c99d51fb4638245e9a96bf6d",
+          "bytes": 61886,
+          "camera": {
+            "pos": [
+              145.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              30,
+              0,
+              35
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-elizabeth-360.png",
+          "sha256": "482ae7732d1660f2af564865c62a13e3a8b3912b3abd67f99d5205de7c4e882d",
+          "bytes": 56895,
+          "camera": {
+            "pos": [
+              148.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              33.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-smeaton-360.png",
+          "sha256": "62ce1272ae79c598e4b7c8351c575e3ad42a03b9b5b54d14205f9b2cfa1ddafc",
+          "bytes": 57891,
+          "camera": {
+            "pos": [
+              152.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              37.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 5,
+          "want": 5,
+          "got": 5
+        },
+        {
+          "kind": 10,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 35,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 36,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 41,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 63,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 67,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 69,
+          "want": 15,
+          "got": 15
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 22262,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 305.75641384453047,
+      "boxes": {
+        "5": [
+          650,
+          25.092,
+          0,
+          28.108,
+          25.908,
+          1.6000000002086163,
+          28.852
+        ],
+        "6": [
+          524,
+          29.15,
+          0,
+          28.15,
+          29.85,
+          1.8,
+          28.85
+        ],
+        "7": [
+          768,
+          33.14,
+          0,
+          28.44,
+          34.86,
+          1.28,
+          29.86
+        ],
+        "8": [
+          882,
+          37.14,
+          0,
+          28.3,
+          38.86,
+          1.66,
+          29.830000000000002
+        ],
+        "9": [
+          180,
+          21.07,
+          0,
+          30.17,
+          21.905,
+          1.38,
+          30.86
+        ],
+        "10": [
+          134,
+          43.095,
+          0,
+          30.17,
+          43.905,
+          0.85,
+          30.900000000000002
+        ],
+        "11": [
+          260,
+          21.08,
+          0,
+          33.17,
+          21.92,
+          0.79,
+          33.909
+        ],
+        "12": [
+          1280,
+          25.32,
+          0,
+          34.32,
+          26.68,
+          1.61,
+          35.68
+        ],
+        "13": [
+          840,
+          29.11,
+          0,
+          34.44,
+          30.89,
+          0.47,
+          35.766
+        ],
+        "14": [
+          484,
+          33.28,
+          0,
+          34.28,
+          33.72,
+          2.12,
+          34.72
+        ],
+        "15": [
+          770,
+          37.21999999880791,
+          -1.0907649991565016e-9,
+          34.21999999880791,
+          37.78000000119209,
+          1.89,
+          34.78000000119209
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          26,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          2,
+          1,
+          30,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          3,
+          1,
+          34,
+          24,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          4,
+          1,
+          38,
+          24,
+          1,
+          1,
+          3,
+          0
+        ],
+        [
+          5,
+          5,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          10,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          35,
+          33,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          36,
+          37,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          6,
+          21,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          14,
+          43,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          7,
+          21,
+          33,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          41,
+          25,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          63,
+          29,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          67,
+          33,
+          34,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          69,
+          37,
+          34,
+          1,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 15,
+        "regen": 15,
+        "up": 3265392,
+        "upFull": 2521440,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 15,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 5025,
+            "used": 4020,
+            "live": 4020,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 3733,
+            "used": 2986,
+            "live": 2986,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "plant",
+            "repeat": 0,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "plant",
+            "repeat": 1,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "water",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "water",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          35,
+          36,
+          41,
+          67,
+          69
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D057-after-district-412.png",
+          "sha256": "6a2a9fbf242f8d2881a0e629632bcc108eff0ff41b05e4a75371d1373a5dcfea",
+          "bytes": 75612,
+          "camera": {
+            "pos": [
+              147.00000000000006,
+              94.06040612287407,
+              147.00000000000006
+            ],
+            "target": [
+              31.8,
+              0,
+              31.8
+            ],
+            "zoom": 1.5
+          }
+        },
+        {
+          "file": "D057-after-battersea-412.png",
+          "sha256": "a5e2312e81a8882bed4aa40c94b1152ecdb0394b2ff4fe78bf0f9770eb83791e",
+          "bytes": 62636,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-jumbo-412.png",
+          "sha256": "a9ef49dd769047a50859dd9daa9479512cdc77fbee701b8a00c9275ff3f539f0",
+          "bytes": 67936,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-natural-history-412.png",
+          "sha256": "d302ed7180f7e8276148276678d16176a11b57bc73ea6e2dd0d16b46bca84623",
+          "bytes": 70702,
+          "camera": {
+            "pos": [
+              149.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              34,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-royal-albert-412.png",
+          "sha256": "8744f9a53bb055cf9d944009f027afc3696487fdd87d439c795718aa51f5ada0",
+          "bytes": 67881,
+          "camera": {
+            "pos": [
+              153.19999999999996,
+              94.06040612287404,
+              144.2
+            ],
+            "target": [
+              38,
+              0,
+              28.999999999999996
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-radcliffe-412.png",
+          "sha256": "c0eac938fac2870855d0a2d467294f9da2dcde2ca0ade15ca96da6ed06bacead",
+          "bytes": 66100,
+          "camera": {
+            "pos": [
+              141.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              26,
+              0,
+              35
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-palm-house-412.png",
+          "sha256": "887e3dc3c7119f61c38ed2ee8100089390cdf5fd96334c6c102c3cbb5bc2929c",
+          "bytes": 67281,
+          "camera": {
+            "pos": [
+              145.19999999999996,
+              94.06040612287404,
+              150.2
+            ],
+            "target": [
+              30,
+              0,
+              35
+            ],
+            "zoom": 5
+          }
+        },
+        {
+          "file": "D057-after-elizabeth-412.png",
+          "sha256": "28c4fdd9ca3eac2eaafbe6485070126bc5804f2072228457930d670a50634b68",
+          "bytes": 61321,
+          "camera": {
+            "pos": [
+              148.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              33.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D057-after-smeaton-412.png",
+          "sha256": "77ae02bca892a946840d0c188e96554c660e89e79296c242eaca8362a3da5f74",
+          "bytes": 62250,
+          "camera": {
+            "pos": [
+              152.69999999999996,
+              94.06040612287404,
+              149.7
+            ],
+            "target": [
+              37.5,
+              0,
+              34.5
+            ],
+            "zoom": 8
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 5,
+          "want": 5,
+          "got": 5
+        },
+        {
+          "kind": 10,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 35,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 36,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 41,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 63,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 67,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 69,
+          "want": 15,
+          "got": 15
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 22262,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 294.900702467512,
+      "boxes": {
+        "5": [
+          650,
+          25.092,
+          0,
+          28.108,
+          25.908,
+          1.6000000002086163,
+          28.852
+        ],
+        "6": [
+          524,
+          29.15,
+          0,
+          28.15,
+          29.85,
+          1.8,
+          28.85
+        ],
+        "7": [
+          768,
+          33.14,
+          0,
+          28.44,
+          34.86,
+          1.28,
+          29.86
+        ],
+        "8": [
+          882,
+          37.14,
+          0,
+          28.3,
+          38.86,
+          1.66,
+          29.830000000000002
+        ],
+        "9": [
+          180,
+          21.07,
+          0,
+          30.17,
+          21.905,
+          1.38,
+          30.86
+        ],
+        "10": [
+          134,
+          43.095,
+          0,
+          30.17,
+          43.905,
+          0.85,
+          30.900000000000002
+        ],
+        "11": [
+          260,
+          21.08,
+          0,
+          33.17,
+          21.92,
+          0.79,
+          33.909
+        ],
+        "12": [
+          1280,
+          25.32,
+          0,
+          34.32,
+          26.68,
+          1.61,
+          35.68
+        ],
+        "13": [
+          840,
+          29.11,
+          0,
+          34.44,
+          30.89,
+          0.47,
+          35.766
+        ],
+        "14": [
+          484,
+          33.28,
+          0,
+          34.28,
+          33.72,
+          2.12,
+          34.72
+        ],
+        "15": [
+          770,
+          37.21999999880791,
+          -1.0907649991565016e-9,
+          34.21999999880791,
+          37.78000000119209,
+          1.89,
+          34.78000000119209
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          26,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          2,
+          1,
+          30,
+          24,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          3,
+          1,
+          34,
+          24,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          4,
+          1,
+          38,
+          24,
+          1,
+          1,
+          3,
+          0
+        ],
+        [
+          5,
+          5,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          10,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          35,
+          33,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          36,
+          37,
+          28,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          6,
+          21,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          14,
+          43,
+          30,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          7,
+          21,
+          33,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          41,
+          25,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          63,
+          29,
+          34,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          67,
+          33,
+          34,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          69,
+          37,
+          34,
+          1,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 15,
+        "regen": 15,
+        "up": 3265392,
+        "upFull": 2521440,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 15,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 5025,
+            "used": 4020,
+            "live": 4020,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 3733,
+            "used": 2986,
+            "live": 2986,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "plant",
+            "repeat": 0,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "plant",
+            "repeat": 1,
+            "cost": 550,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "water",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "water",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "greenhouse",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          35,
+          36,
+          41,
+          67,
+          69
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

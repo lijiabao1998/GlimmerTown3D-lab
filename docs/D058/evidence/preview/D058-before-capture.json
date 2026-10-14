@@ -1,0 +1,1667 @@
+{
+  "phase": "before",
+  "sourceRef": "6f30f83faf4c4f4b02d1e3416d968a133f7da0b9",
+  "htmlSha256": "e276d151a2fc6ea5f8a5fbdc58b6faa5c792ba25633bf16e2042191e843cf62f",
+  "qualification": "Authored save fixtures, production decode/restyle/render. Chrome software WebGL. Mobile touch emulation, not Android hardware.",
+  "cases": [
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-before-highstreet-se-1440.png",
+          "sha256": "875f5084e5aaade4a759fbfc0ef76906eeeeda096729762da02f66613d43532d",
+          "bytes": 95894,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ne-1440.png",
+          "sha256": "2352abca7963a854e5be827e5d4018887df795d1f5fd016102f2d677cf8170f9",
+          "bytes": 93737,
+          "camera": {
+            "pos": [
+              -96.19999999996148,
+              94.06040612287407,
+              121.70000000003863
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-nw-1440.png",
+          "sha256": "143882e2bf580a32bab82338dab9311950b80e1951c0d9b4d8773a5b0db82c45",
+          "bytes": 98269,
+          "camera": {
+            "pos": [
+              -96.19999999998697,
+              94.06040612287407,
+              -108.70000000001313
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-sw-1440.png",
+          "sha256": "a1f3752a45d182fc6d863a99f3d9547d166dfc538f75b00edd5d816ec59dee87",
+          "bytes": 98675,
+          "camera": {
+            "pos": [
+              134.19999999998535,
+              94.06040612287404,
+              -108.70000000001471
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-far-1440.png",
+          "sha256": "832ad38eac9df6c9934ae526d67d215af732ac9ae95b63fa42f713165555ca43",
+          "bytes": 102607,
+          "camera": {
+            "pos": [
+              134.1999999999652,
+              94.06040612287407,
+              121.70000000003492
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 4.35
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-se-1440.png",
+          "sha256": "2cb77d374e50c549de9d4624380c96f105df8bd324a48b3fec1a228c3ee34b5f",
+          "bytes": 92732,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-ne-1440.png",
+          "sha256": "3e5dfd3a72bc2bb26cdd45a8724cfcba8016b8db08db6b252b3d462689a338f1",
+          "bytes": 90712,
+          "camera": {
+            "pos": [
+              -96.19999999995736,
+              94.06040612287407,
+              120.70000000004275
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-nw-1440.png",
+          "sha256": "b7644a521af98b78ddcc356cbc6bc9c5262d9d6d3b885e0583cb0ab0d9b9cf29",
+          "bytes": 94664,
+          "camera": {
+            "pos": [
+              -96.19999999998487,
+              94.06040612287407,
+              -109.70000000001524
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-sw-1440.png",
+          "sha256": "51ae001ce17d876aa9f9b48e07120de37b36d9475e1b5b87089084df12497798",
+          "bytes": 95515,
+          "camera": {
+            "pos": [
+              134.19999999998535,
+              94.06040612287404,
+              -109.70000000001471
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 11592,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 714.166581734582,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1402080,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 96,
+            "live": 96,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 140,
+            "live": 140,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 176,
+            "live": 176,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-before-corner-se-1440.png",
+          "sha256": "f28f32c082b61cbcc42e99ef141cc2fdd969ce210cf4434898bba10ad5a09781",
+          "bytes": 107395,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ne-1440.png",
+          "sha256": "1df72d9dca9bec91ea641f2c1607f301843c2551a7bec75e39c9cb9de41f1cd4",
+          "bytes": 103927,
+          "camera": {
+            "pos": [
+              -89.69999999995736,
+              94.06040612287407,
+              122.40000000004275
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-nw-1440.png",
+          "sha256": "37c4e596e921d9e5d4a56e3da0525e487df67914c1a4c3fb4da45b2f53dc9da5",
+          "bytes": 105993,
+          "camera": {
+            "pos": [
+              -89.69999999998282,
+              94.06040612287407,
+              -108.00000000001728
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-sw-1440.png",
+          "sha256": "db1e85ecaf9d69574b6a1f2a221068bd59bd783327d6aef0b1a221f674c92297",
+          "bytes": 107001,
+          "camera": {
+            "pos": [
+              140.6999999999872,
+              94.06040612287404,
+              -108.00000000001286
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-far-1440.png",
+          "sha256": "d17261757276437941beb30843ee0d3f568120e2ce1b19b9b51ea29c816919a0",
+          "bytes": 114179,
+          "camera": {
+            "pos": [
+              140.6999999999652,
+              94.06040612287407,
+              122.40000000003492
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 3.4799999999999995
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-se-1440.png",
+          "sha256": "40d48369587c2f75b4db242b5fc51713cedd3e59c315e6ed55814edd7a7b57a7",
+          "bytes": 109803,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-ne-1440.png",
+          "sha256": "59ac1f2cf6fa611cb9fe11ca2acc38e236c7820c43da00e6629a0078aa73a62b",
+          "bytes": 97536,
+          "camera": {
+            "pos": [
+              -91.19999999995514,
+              94.06040612287407,
+              120.70000000004498
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-nw-1440.png",
+          "sha256": "4042b590b5755740cc9b59563fcf5bc4b31fb585c475090b6a614c7e36ded869",
+          "bytes": 101694,
+          "camera": {
+            "pos": [
+              -91.19999999998282,
+              94.06040612287407,
+              -109.70000000001728
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-sw-1440.png",
+          "sha256": "4d24795a4060cd08d95cf18e14b4e135f6eb3e572d92c315a290b8daa9e0ec4a",
+          "bytes": 102309,
+          "camera": {
+            "pos": [
+              139.19999999998535,
+              94.06040612287404,
+              -109.70000000001471
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-se-1440.png",
+          "sha256": "a426a57d93b586f77c50128158eb4065f3ae22fd45ae41c279204d523b090a80",
+          "bytes": 105686,
+          "camera": {
+            "pos": [
+              139.69999999996546,
+              94.06040612287407,
+              122.70000000003466
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-ne-1440.png",
+          "sha256": "207ea13b60424d6e75fa8d6e6532e255635ed27afb299c71e080e408d5c1bf0a",
+          "bytes": 102093,
+          "camera": {
+            "pos": [
+              -90.69999999995514,
+              94.06040612287407,
+              122.70000000004498
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-nw-1440.png",
+          "sha256": "892a507b157bb67dd61ca7113eb7760f225a2a29b1fe32137692c546900fe2a8",
+          "bytes": 103849,
+          "camera": {
+            "pos": [
+              -90.69999999998282,
+              94.06040612287407,
+              -107.70000000001728
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-sw-1440.png",
+          "sha256": "02ff866c86dd6f99a4295a3f9560e6df4e62e47b3f3d0ec2b71896f819751e13",
+          "bytes": 107039,
+          "camera": {
+            "pos": [
+              139.69999999998714,
+              94.06040612287407,
+              -107.70000000001299
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-se-1440.png",
+          "sha256": "aac56295af023fb3a8eb30d0c896e31779ab4f7f5155d9a03fd7b0ee81bd16d4",
+          "bytes": 104299,
+          "camera": {
+            "pos": [
+              143.6999999999652,
+              94.06040612287407,
+              124.20000000003492
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-ne-1440.png",
+          "sha256": "ff4309d337b868bc4281deff07a531ef3cfda4817ba1a403583631f7e8ee39f7",
+          "bytes": 99142,
+          "camera": {
+            "pos": [
+              -86.69999999995514,
+              94.06040612287407,
+              124.20000000004498
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-nw-1440.png",
+          "sha256": "4b12ddd8ccb7413d0d52b5d76e22cf75a9ddd4d9341e5f3ba26c2a970f0417db",
+          "bytes": 112269,
+          "camera": {
+            "pos": [
+              -86.6999999999816,
+              94.06040612287407,
+              -106.2000000000185
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-sw-1440.png",
+          "sha256": "fa07c8bdddfa625fbfb3ca39f3bbb763dfcb746a04723d0be8a73f2745e10eb8",
+          "bytes": 101198,
+          "camera": {
+            "pos": [
+              143.6999999999872,
+              94.06040612287404,
+              -106.20000000001286
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 12212,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 937.3553642463739,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2482176,
+        "upFull": 1477200,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 312,
+            "live": 312,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 48,
+            "live": 48,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 422,
+            "live": 422,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-before-highstreet-se-360.png",
+          "sha256": "3a5dc8951985e5b8cc924301f629e5413ff0e273c67f08526ba5f71d31ec5d31",
+          "bytes": 59186,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ne-360.png",
+          "sha256": "48e3df7cdb5bf4cc2f3e7756914b920b0afe15e2f010efa3fff083debbb46c5d",
+          "bytes": 58181,
+          "camera": {
+            "pos": [
+              -96.19999999995034,
+              94.06040612287407,
+              121.70000000004977
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-nw-360.png",
+          "sha256": "80bb376fe2e03a04d0bde475d63dfb1e0d124a006b3728b876e69df9215a61fc",
+          "bytes": 58460,
+          "camera": {
+            "pos": [
+              -96.19999999997879,
+              94.06040612287407,
+              -108.70000000002133
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-sw-360.png",
+          "sha256": "38e8d613e94b171a7f2dfa742dc4a7eb4fdc4cf7c59b204b44fc5b7cbbb1691a",
+          "bytes": 58848,
+          "camera": {
+            "pos": [
+              134.19999999998566,
+              94.06040612287407,
+              -108.70000000001448
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-far-360.png",
+          "sha256": "edae0b876b16fa3c3114199684e269bb386f3a465133df9d18e4ef9491491160",
+          "bytes": 59317,
+          "camera": {
+            "pos": [
+              134.19999999995935,
+              94.06040612287407,
+              121.70000000004075
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 2.175
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-se-360.png",
+          "sha256": "012cdade76f6d68237fcb6731d9d94fae6fed0c2484121369d634cb232564360",
+          "bytes": 58683,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-ne-360.png",
+          "sha256": "67993140509d928201b53fcb89423de9b8dd40774ef367f34ba43645ff30f6d1",
+          "bytes": 57369,
+          "camera": {
+            "pos": [
+              -96.1999999999528,
+              94.06040612287407,
+              120.70000000004731
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 11592,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 1592.9934154209623,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1402080,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 96,
+            "live": 96,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 140,
+            "live": 140,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 176,
+            "live": 176,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-before-corner-se-360.png",
+          "sha256": "ddccef96e05ed3c7a5d429039202615041a7ab8876277d20f3f8a6345e341391",
+          "bytes": 60666,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ne-360.png",
+          "sha256": "25f159b318a77f20c88b045352004e633239bdeb8c88b6393316fa84f9efaf9e",
+          "bytes": 60144,
+          "camera": {
+            "pos": [
+              -89.6999999999528,
+              94.06040612287407,
+              122.40000000004731
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-nw-360.png",
+          "sha256": "95622d05cad1dcc9c8bf147671841cf330d1feeca815e6a5f77f5775f1bf058c",
+          "bytes": 58011,
+          "camera": {
+            "pos": [
+              -89.69999999998103,
+              94.06040612287407,
+              -108.00000000001907
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-sw-360.png",
+          "sha256": "69e6248112669db78d668dae58461baeb535ad7e8299581215c973b6850a4b23",
+          "bytes": 58479,
+          "camera": {
+            "pos": [
+              140.69999999998566,
+              94.06040612287407,
+              -108.00000000001448
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-far-360.png",
+          "sha256": "11dde5ef7783b04ad86d888b7a8f0780cb44606a96e7ac41bc57e02353063723",
+          "bytes": 59778,
+          "camera": {
+            "pos": [
+              140.69999999995935,
+              94.06040612287406,
+              122.40000000004078
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 1.4616
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-se-360.png",
+          "sha256": "b9123254ddf9acdf734fcfac736aa184a5d102fb5d39c5206e5689cbfc0b7921",
+          "bytes": 61733,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-nw-360.png",
+          "sha256": "f93fdb517b460c8297d3e6b99b1349cfad2a3398ae122b61e80a6ed95db854fa",
+          "bytes": 60525,
+          "camera": {
+            "pos": [
+              -91.20000000002779,
+              94.06040612287407,
+              -109.69999999997232
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-se-360.png",
+          "sha256": "516f43992f6122d91c79a1a2dbd5eeb8e9af55e0dc59e1ee052a12b7777eb6fc",
+          "bytes": 62372,
+          "camera": {
+            "pos": [
+              139.6999999999732,
+              94.06040612287407,
+              122.70000000002692
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-nw-360.png",
+          "sha256": "501c18977dc73e0cb80abcbb00a89cae359310825360c2a10b171cf604420398",
+          "bytes": 62549,
+          "camera": {
+            "pos": [
+              -90.70000000002759,
+              94.06040612287407,
+              -107.69999999997252
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-se-360.png",
+          "sha256": "ec5baf2c948325fcab9935146712d9c5b42700d65159836faa219b95581182ff",
+          "bytes": 62635,
+          "camera": {
+            "pos": [
+              143.69999999997293,
+              94.06040612287407,
+              124.20000000002719
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-ne-360.png",
+          "sha256": "e23779ea08b69380d2b8f83714ab97ef58ffd221ef2998046a2f4b62217dfb5d",
+          "bytes": 59577,
+          "camera": {
+            "pos": [
+              -86.69999999995034,
+              94.06040612287407,
+              124.20000000004977
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 12212,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 1837.2368535639762,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2482176,
+        "upFull": 1477200,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 312,
+            "live": 312,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 48,
+            "live": 48,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 422,
+            "live": 422,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-before-highstreet-se-412.png",
+          "sha256": "22453be664030a41d2617bd056bc5a5baaa0724ef26bfd5dfd2211639b9297a7",
+          "bytes": 62623,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ne-412.png",
+          "sha256": "0c76d88f85eab3e36c885badf29199e01819023e727c8adbc238c754463de6cd",
+          "bytes": 62332,
+          "camera": {
+            "pos": [
+              -96.1999999999528,
+              94.06040612287407,
+              121.70000000004731
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-nw-412.png",
+          "sha256": "963333f7252fa72bcaf6d8cd09eae38fa2526ccdc80c7d788b8af29802beb630",
+          "bytes": 61955,
+          "camera": {
+            "pos": [
+              -96.19999999998328,
+              94.06040612287407,
+              -108.70000000001683
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-sw-412.png",
+          "sha256": "f4fe9d3b43024dd53f43ce3a1e9661e44e0bde5ee669fb2b8c43299133a68a37",
+          "bytes": 62251,
+          "camera": {
+            "pos": [
+              134.19999999998566,
+              94.06040612287407,
+              -108.70000000001448
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-far-412.png",
+          "sha256": "c471f891528f941b3200df89173b2cf8276dfd24d5c8f88c345e9853fe0f6b17",
+          "bytes": 64010,
+          "camera": {
+            "pos": [
+              134.19999999996128,
+              94.06040612287407,
+              121.70000000003883
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 2.175
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-se-412.png",
+          "sha256": "a08ce2e2b81864a4929f92abcfc787b9beb14ff8f468cc32d37fe07e161d7c58",
+          "bytes": 62640,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-before-highstreet-ukHighStreet-ne-412.png",
+          "sha256": "28b706eb54056a07ded4d1096f7bc717d5e85b81fcf48b26f693f8e8ec39f67a",
+          "bytes": 61255,
+          "camera": {
+            "pos": [
+              -96.19999999995034,
+              94.06040612287407,
+              120.70000000004977
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 11592,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 1595.7386048088702,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1402080,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 96,
+            "live": 96,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 140,
+            "live": 140,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 176,
+            "live": 176,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-before-corner-se-412.png",
+          "sha256": "56063bf99bcb0295c64175ab3c969892d2500809686d76bff1d636ceb9ec8c62",
+          "bytes": 66214,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ne-412.png",
+          "sha256": "fc63762eb62ae54b7af45c0d2d31b2c6f6c6ec75d4f614eb68e0b441f478352e",
+          "bytes": 65675,
+          "camera": {
+            "pos": [
+              -89.69999999995034,
+              94.06040612287407,
+              122.40000000004977
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-nw-412.png",
+          "sha256": "6d1c554bf074b00a750f27276829e204ea8b13ac2077c85a3b8172732f6f2546",
+          "bytes": 63170,
+          "camera": {
+            "pos": [
+              -89.69999999998103,
+              94.06040612287407,
+              -108.00000000001907
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-sw-412.png",
+          "sha256": "43fcea406a78e6ea7f283128cd7c88eff2581b0f79cc869285a8db4723e38929",
+          "bytes": 63648,
+          "camera": {
+            "pos": [
+              140.69999999998595,
+              94.06040612287407,
+              -108.00000000001417
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-far-412.png",
+          "sha256": "bdbc28f3ec7c076fecf4171c4d7c6e15cfa8cc21fcc18343b8dcec244276a792",
+          "bytes": 66218,
+          "camera": {
+            "pos": [
+              140.69999999996324,
+              94.06040612287407,
+              122.40000000003687
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 1.4616
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-se-412.png",
+          "sha256": "c5bfc174ded10e44820b8ec6e76345ceba5181b2d54bd5d0f520d4ab1a970509",
+          "bytes": 66673,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukVictorian-nw-412.png",
+          "sha256": "6ef5be32c9f6c51d0f53476ccc22089c2cf099adcaf0f303a1bc004509045353",
+          "bytes": 65156,
+          "camera": {
+            "pos": [
+              -91.20000000002779,
+              94.06040612287407,
+              -109.69999999997232
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-se-412.png",
+          "sha256": "43ed16064b6ff22abf46ada188adbcad67f171f02f592cf2d6fc48688a4d3fd5",
+          "bytes": 67946,
+          "camera": {
+            "pos": [
+              139.6999999999732,
+              94.06040612287407,
+              122.70000000002692
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukSemi-nw-412.png",
+          "sha256": "96394f064e026c575803f13fb44db661e00398cf4a67ad78e443caf9f1479b13",
+          "bytes": 68040,
+          "camera": {
+            "pos": [
+              -90.7000000000262,
+              94.06040612287407,
+              -107.69999999997391
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-se-412.png",
+          "sha256": "4d3f5d964103f77fc4d0ce24b07697458a8bc5d7f99c494cb21c988bdf908d3e",
+          "bytes": 68235,
+          "camera": {
+            "pos": [
+              143.6999999999756,
+              94.06040612287407,
+              124.20000000002452
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-before-corner-ukTerrace-ne-412.png",
+          "sha256": "9c87225e6db756dad9350bf5b99af42c1054eb695582024da94b4bcc4ee41612",
+          "bytes": 64968,
+          "camera": {
+            "pos": [
+              -86.69999999995034,
+              94.06040612287407,
+              124.20000000004977
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 12212,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 1821.470845976466,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2482176,
+        "upFull": 1477200,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 312,
+            "live": 312,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 48,
+            "live": 48,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 422,
+            "live": 422,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 10,
+        "textures": 8,
+        "hazardShown": false
+      }
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,2183 @@
+{
+  "phase": "after",
+  "sourceRef": "cc31a5d51a7193d81acafbf9369d4af219b0e93c",
+  "htmlSha256": "e672f5f12a7cd1db8962fb984243b33d03d9ad75c59138248f5e3e8143ba92e6",
+  "qualification": "Authored save fixtures, production decode/restyle/render. Chrome software WebGL. Mobile touch emulation, not Android hardware.",
+  "cases": [
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-after-highstreet-se-1440.png",
+          "sha256": "d7dc17e1a9b75b130ca03588f0ddd6a639bce8aa1e3d0aeb0e64ac5420f508cc",
+          "bytes": 97200,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ne-1440.png",
+          "sha256": "f9120a5d8f7354b011a83d1c1f94c461b01abef4ebe05981d757fc3edd50d179",
+          "bytes": 94933,
+          "camera": {
+            "pos": [
+              -96.19999999995514,
+              94.06040612287407,
+              121.70000000004498
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-nw-1440.png",
+          "sha256": "5752e72445a8210db0d8b2237496df4a036278bb49b3c8cbb3ca011e0c2c768e",
+          "bytes": 99209,
+          "camera": {
+            "pos": [
+              -96.1999999999816,
+              94.06040612287407,
+              -108.7000000000185
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-sw-1440.png",
+          "sha256": "2f33c35af9ca937f70d54a426a9799fd8625f72f206158c8f1ab29d444756104",
+          "bytes": 98846,
+          "camera": {
+            "pos": [
+              134.1999999999872,
+              94.06040612287404,
+              -108.70000000001286
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 7.5
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-far-1440.png",
+          "sha256": "04df847c67c5334bbbeb1a0c87b5c1a0944517174b27638e007c13465ebd90e5",
+          "bytes": 103012,
+          "camera": {
+            "pos": [
+              134.1999999999652,
+              94.06040612287407,
+              121.70000000003492
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 4.35
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-se-1440.png",
+          "sha256": "14ba5f695b925a487b926ec7ba670b528af5ad4c6ded6c7da3275bf42deff272",
+          "bytes": 94229,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-ne-1440.png",
+          "sha256": "1eda8dffb058ff05a26f8345ff3d4dab8aeaf97c340a22f12fd1ab12e48b4ee6",
+          "bytes": 91862,
+          "camera": {
+            "pos": [
+              -96.19999999995514,
+              94.06040612287407,
+              120.70000000004498
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-nw-1440.png",
+          "sha256": "8ca033112634037e6902d27b5055200dda02c8dc7e3c694a51696e565b342d9e",
+          "bytes": 95780,
+          "camera": {
+            "pos": [
+              -96.19999999998282,
+              94.06040612287407,
+              -109.70000000001728
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-sw-1440.png",
+          "sha256": "14594ac468130068ddff4fdfe2bf24de6a8765bf2cfdc22eea047dad9fe6fb02",
+          "bytes": 96037,
+          "camera": {
+            "pos": [
+              134.19999999998535,
+              94.06040612287404,
+              -109.70000000001471
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 12120,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 683.2484642898125,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": false,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1504992,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 64,
+            "live": 64,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 896,
+            "live": 896,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-after-corner-se-1440.png",
+          "sha256": "645ee6e0dc7682c1750829c2c5ed8f9ab19dc86fb6b73b336eba83507829ed00",
+          "bytes": 106849,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ne-1440.png",
+          "sha256": "df78e73a652a405c16bc911c3330ff89a3b755c5610d7280916f54c3572813b3",
+          "bytes": 104949,
+          "camera": {
+            "pos": [
+              -89.69999999995514,
+              94.06040612287407,
+              122.40000000004498
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-nw-1440.png",
+          "sha256": "c764a57cb9ead39582516ba5275a0f07b901465b912b35197ad6fdaab13a9908",
+          "bytes": 106654,
+          "camera": {
+            "pos": [
+              -89.6999999999816,
+              94.06040612287407,
+              -108.0000000000185
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-sw-1440.png",
+          "sha256": "cb1c35a5e8fe3d777217ba469fd0cb5db6e94268943e708abdd2878c28a049ab",
+          "bytes": 106560,
+          "camera": {
+            "pos": [
+              140.6999999999872,
+              94.06040612287404,
+              -108.00000000001286
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 6
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-far-1440.png",
+          "sha256": "4034d1e8b7dae636eabafe3eed4034e5a5b676bf966857f0b83a9e42010d8685",
+          "bytes": 114386,
+          "camera": {
+            "pos": [
+              140.6999999999652,
+              94.06040612287407,
+              122.40000000003492
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 3.4799999999999995
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-se-1440.png",
+          "sha256": "ed567777969bb6225e193d8ec355257434ab88e567725452ea037e18b3bdf35f",
+          "bytes": 107791,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-ne-1440.png",
+          "sha256": "d31e9a8445c0bde6ae7ef0e1f0c799f239c28082489c9f12c4eaedc0d070f57c",
+          "bytes": 97684,
+          "camera": {
+            "pos": [
+              -91.19999999995514,
+              94.06040612287407,
+              120.70000000004498
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-nw-1440.png",
+          "sha256": "326a57e7395b0cafe2157c0011171348fc303b5a0f7894ab3052ed694c4c4be4",
+          "bytes": 102696,
+          "camera": {
+            "pos": [
+              -91.19999999998282,
+              94.06040612287407,
+              -109.70000000001728
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-sw-1440.png",
+          "sha256": "27b8e744692acd0afcb724f1c6c312b0ef0e679d9abcf2be931a44fbbadc335f",
+          "bytes": 101835,
+          "camera": {
+            "pos": [
+              139.19999999998535,
+              94.06040612287404,
+              -109.70000000001471
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-se-1440.png",
+          "sha256": "ffd4211a9cb6a66e2afe7f220137700546f9acb0a50245bd1b5b77fcf12b40ca",
+          "bytes": 104872,
+          "camera": {
+            "pos": [
+              139.69999999996546,
+              94.06040612287407,
+              122.70000000003466
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-ne-1440.png",
+          "sha256": "ddaea3f04e285c501e8f95a08fa9f51c9b03cdfabecc051495cfa64fb43a2e53",
+          "bytes": 102508,
+          "camera": {
+            "pos": [
+              -90.69999999995514,
+              94.06040612287407,
+              122.70000000004498
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-nw-1440.png",
+          "sha256": "b96eb144e495f47d96858f4e5d364a9dbfa097e6cdd249e5f51305510224f53b",
+          "bytes": 105028,
+          "camera": {
+            "pos": [
+              -90.69999999998282,
+              94.06040612287407,
+              -107.70000000001728
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-sw-1440.png",
+          "sha256": "270c457e7a2eed2b9a170d80a9f111319106c559c1ee28e459f0abd42aff5e30",
+          "bytes": 106180,
+          "camera": {
+            "pos": [
+              139.69999999998714,
+              94.06040612287407,
+              -107.70000000001299
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-se-1440.png",
+          "sha256": "362885e4feee28d1e4dcb292add22580b8fe0851378951bb675b6f14ea6bb49a",
+          "bytes": 103409,
+          "camera": {
+            "pos": [
+              143.6999999999652,
+              94.06040612287407,
+              124.20000000003492
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-ne-1440.png",
+          "sha256": "fb4577505818551a68e3c35539eaf2271d77ecdd45d789634f98c292b976a6d9",
+          "bytes": 100787,
+          "camera": {
+            "pos": [
+              -86.69999999995514,
+              94.06040612287407,
+              124.20000000004498
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-nw-1440.png",
+          "sha256": "b4e2dbd00e203eedd4ec3515920e481e4cd33aae799e04bed9bee24e3a3e0225",
+          "bytes": 113853,
+          "camera": {
+            "pos": [
+              -86.6999999999816,
+              94.06040612287407,
+              -106.2000000000185
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-sw-1440.png",
+          "sha256": "9005bd6b9dbc944cf1a1403ec2469fec9214725e6f627b6da3561fccef134482",
+          "bytes": 101153,
+          "camera": {
+            "pos": [
+              143.69999999998535,
+              94.06040612287404,
+              -106.20000000001471
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 8
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 13595,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 908.3877526985052,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "mouse"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "mouse"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": false,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2608008,
+        "upFull": 1743048,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 148,
+            "live": 148,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 38,
+            "live": 38,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2797,
+            "used": 2237,
+            "live": 2237,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-after-highstreet-se-360.png",
+          "sha256": "19aed5d752839f6d7a6c7c581019227c43d35537a4aaa28ffdbeeb5b2ab063fc",
+          "bytes": 59545,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ne-360.png",
+          "sha256": "32cdf54881afd71fb1ebba3b938cbfaebac95d46e5b51f869728b2a8b3bc3837",
+          "bytes": 58428,
+          "camera": {
+            "pos": [
+              -96.19999999995034,
+              94.06040612287407,
+              121.70000000004977
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-nw-360.png",
+          "sha256": "54a6c490b9546a61d86c55b3c17f50a703b3ec5c65767485498efc719f1ba05a",
+          "bytes": 58670,
+          "camera": {
+            "pos": [
+              -96.1999999999774,
+              94.06040612287407,
+              -108.70000000002271
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-sw-360.png",
+          "sha256": "91af927164ab4a42549439505c47ebd88cc4100e1181f14c3e49f959d85de5ab",
+          "bytes": 58939,
+          "camera": {
+            "pos": [
+              134.1999999999839,
+              94.06040612287406,
+              -108.70000000001622
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-far-360.png",
+          "sha256": "55a1e5c806cf8ad92616e12e823ea2a46b5a5a3001109fe958e48d0974940cd1",
+          "bytes": 59498,
+          "camera": {
+            "pos": [
+              134.19999999996128,
+              94.06040612287407,
+              121.70000000003883
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 2.175
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-se-360.png",
+          "sha256": "7f9597dd8ffce4a6cb5991a813bca3e07b5d0bf0e320efcc994855cb5285a9b5",
+          "bytes": 59329,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-ne-360.png",
+          "sha256": "c50aad8d12485e4851017bf9629e0895c9c835ab6a50b62d649c7cc9fdbd008b",
+          "bytes": 57751,
+          "camera": {
+            "pos": [
+              -96.19999999995034,
+              94.06040612287407,
+              120.70000000004977
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 12120,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 1578.3650004763476,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointercancel",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": true,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1504992,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 64,
+            "live": 64,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 896,
+            "live": 896,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-after-corner-se-360.png",
+          "sha256": "517c979eedb7970320aba7eed2a26782d9b14f603e83dff7ea419a5096c72fc8",
+          "bytes": 60475,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ne-360.png",
+          "sha256": "deb82580846291993057cc826f9028535972c1648af794dc17e146a11375e5e9",
+          "bytes": 60234,
+          "camera": {
+            "pos": [
+              -89.6999999999528,
+              94.06040612287407,
+              122.40000000004731
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-nw-360.png",
+          "sha256": "fcbaab0e8bd826012f116bf060d41204383b4b849bf909a8d87db952375c655f",
+          "bytes": 58101,
+          "camera": {
+            "pos": [
+              -89.69999999998103,
+              94.06040612287407,
+              -108.00000000001907
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-sw-360.png",
+          "sha256": "473e32d44bb8e6968137fa1facc066e2f9098fe89a140957e643f37dbb79f7cc",
+          "bytes": 58355,
+          "camera": {
+            "pos": [
+              140.69999999998566,
+              94.06040612287407,
+              -108.00000000001448
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-far-360.png",
+          "sha256": "c4f2edb6bfab33999f87dcb62b1383ac955cefd91f992ba307f051991c24b4b1",
+          "bytes": 59785,
+          "camera": {
+            "pos": [
+              140.69999999995935,
+              94.06040612287406,
+              122.40000000004078
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 1.4616
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-se-360.png",
+          "sha256": "ec48bdfae689839720429969650b5e01a8248398a8fffa45829a695a0b472555",
+          "bytes": 61388,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-nw-360.png",
+          "sha256": "0953dbeae05d33acc1ddf93ed0a7f771b3290710ffd1dc73c05680e84601f9a2",
+          "bytes": 60680,
+          "camera": {
+            "pos": [
+              -91.20000000002779,
+              94.06040612287407,
+              -109.69999999997232
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-se-360.png",
+          "sha256": "1ac6e908d3bee25d57e52469d9da4d903e9abda4cf7dc606dd8c5bb492079a78",
+          "bytes": 62209,
+          "camera": {
+            "pos": [
+              139.6999999999732,
+              94.06040612287407,
+              122.70000000002692
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-nw-360.png",
+          "sha256": "e7b3e56f2a1e2b8c6ac54436b37a0f00f4f05d8fc71afefeb1d5bcaaeca7dc91",
+          "bytes": 62717,
+          "camera": {
+            "pos": [
+              -90.70000000002759,
+              94.06040612287407,
+              -107.69999999997252
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-se-360.png",
+          "sha256": "7ade3fba44e3a23d4686b3d3eea10cc6080e9f407ff5a3915be6ec7fae00e5e2",
+          "bytes": 62403,
+          "camera": {
+            "pos": [
+              143.69999999997293,
+              94.06040612287407,
+              124.20000000002719
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-ne-360.png",
+          "sha256": "235ff1df63b5b9bc6901dc00c7fdbad9309177e2a2c97744381c649fdf08c22d",
+          "bytes": 59962,
+          "camera": {
+            "pos": [
+              -86.69999999995034,
+              94.06040612287407,
+              124.20000000004977
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 13595,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 1815.7267399130396,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointercancel",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": true,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2608008,
+        "upFull": 1743048,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 148,
+            "live": 148,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 38,
+            "live": 38,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2797,
+            "used": 2237,
+            "live": 2237,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "highstreet",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "shots": [
+        {
+          "file": "D058-after-highstreet-se-412.png",
+          "sha256": "a0513541b664010b63e7c3ff3884930fe8468f7ec61902e6ab1983131d6e156a",
+          "bytes": 63119,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287403,
+              121.70000000000002
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ne-412.png",
+          "sha256": "be2680e670215fc5929dd326bf5c0225e21ca35489a8cc658e8daf15e3f29286",
+          "bytes": 62676,
+          "camera": {
+            "pos": [
+              -96.1999999999528,
+              94.06040612287407,
+              121.70000000004731
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-nw-412.png",
+          "sha256": "3956279f6827216fd1e84c4937f0faf7c8b60b7541e2aca0a5ba296ec02ab5aa",
+          "bytes": 62396,
+          "camera": {
+            "pos": [
+              -96.19999999998328,
+              94.06040612287407,
+              -108.70000000001683
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-sw-412.png",
+          "sha256": "622cc84e1b0f6c1472a7b6b01c3763a7c7b30f63a78ad25126919807510c1b24",
+          "bytes": 62305,
+          "camera": {
+            "pos": [
+              134.1999999999877,
+              94.06040612287408,
+              -108.70000000001244
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 3.75
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-far-412.png",
+          "sha256": "6ade75ffe796f67281daaa18daafaf4752152117421d3dabca54126d8258cf8e",
+          "bytes": 64248,
+          "camera": {
+            "pos": [
+              134.19999999996324,
+              94.06040612287407,
+              121.70000000003687
+            ],
+            "target": [
+              19,
+              0,
+              6.5
+            ],
+            "zoom": 2.175
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-se-412.png",
+          "sha256": "13526af9a1be0e36ee71a5361a1af3928c73c95e20369fe535cca3b6e6451cea",
+          "bytes": 63412,
+          "camera": {
+            "pos": [
+              134.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        },
+        {
+          "file": "D058-after-highstreet-ukHighStreet-ne-412.png",
+          "sha256": "ef6166141ff48cf1d2a3cc3c7e71a5993c5b5f2f5aa3693585a7993856bf2799",
+          "bytes": 61702,
+          "camera": {
+            "pos": [
+              -96.19999999995034,
+              94.06040612287407,
+              120.70000000004977
+            ],
+            "target": [
+              19,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "f2416076007a368e3db92424737534d323fbbf2e3046fe5fa6f1bdaa6d861051"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 7,
+        "triangles": 12120,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 1566.131966933357,
+      "picks": {
+        "pool": 2,
+        "tested": 2,
+        "multi": true,
+        "oblique": 2,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointercancel",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": true,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 2,
+        "regen": 2,
+        "up": 2482176,
+        "upFull": 1504992,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 2,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 64,
+            "live": 64,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 76,
+            "live": 76,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 896,
+            "live": 896,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    },
+    {
+      "scene": "corner",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "shots": [
+        {
+          "file": "D058-after-corner-se-412.png",
+          "sha256": "b088f46b901937b993836be070a58125dd465c8131747baa3a138cce2a3ccdd8",
+          "bytes": 66127,
+          "camera": {
+            "pos": [
+              140.7,
+              94.06040612287403,
+              122.40000000000002
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ne-412.png",
+          "sha256": "925632998da2e751cdfbd6d60519c7f938c9b853b644812f231efcc8759a3da5",
+          "bytes": 65763,
+          "camera": {
+            "pos": [
+              -89.69999999995514,
+              94.06040612287407,
+              122.40000000004498
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-nw-412.png",
+          "sha256": "77d25534e25b70c7f051914936ed9fc923610f90bd801b56c8efc9781c468c47",
+          "bytes": 63175,
+          "camera": {
+            "pos": [
+              -89.69999999998328,
+              94.06040612287407,
+              -108.00000000001683
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-sw-412.png",
+          "sha256": "d6650980d8dfd5981ac6c87695848f47ff1001908ebc0acb98abf9d47379a93e",
+          "bytes": 63492,
+          "camera": {
+            "pos": [
+              140.69999999998566,
+              94.06040612287407,
+              -108.00000000001448
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 2.52
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-far-412.png",
+          "sha256": "d60b066e8b52dbfcc65757842d1c894dcf8f7a9517354fb07ee72b8d1a233cee",
+          "bytes": 66253,
+          "camera": {
+            "pos": [
+              140.69999999996128,
+              94.06040612287407,
+              122.40000000003883
+            ],
+            "target": [
+              25.5,
+              0,
+              7.200000000000002
+            ],
+            "zoom": 1.4616
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-se-412.png",
+          "sha256": "bc65ecf0970cf05596d2174a7b7b6193a2e0c996c0ca264053cd3252b40825be",
+          "bytes": 66561,
+          "camera": {
+            "pos": [
+              139.2,
+              94.06040612287404,
+              120.7000000000001
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukVictorian-nw-412.png",
+          "sha256": "37dd0ec9c667a96dad393c8eb6bb5e54b0217326fc43aeb91f66a37243cf0049",
+          "bytes": 65573,
+          "camera": {
+            "pos": [
+              -91.20000000002779,
+              94.06040612287407,
+              -109.69999999997232
+            ],
+            "target": [
+              24,
+              0,
+              5.5
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-se-412.png",
+          "sha256": "93215c498d543feefdd692627823200aba30aaa0b2c53755dd4f2c3955fb9f2c",
+          "bytes": 67717,
+          "camera": {
+            "pos": [
+              139.69999999997466,
+              94.06040612287407,
+              122.70000000002545
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukSemi-nw-412.png",
+          "sha256": "4d16d151e54424c1c6c59612b8a9c0376db990b6385acceeaf9e96b489298031",
+          "bytes": 68297,
+          "camera": {
+            "pos": [
+              -90.70000000002759,
+              94.06040612287407,
+              -107.69999999997252
+            ],
+            "target": [
+              24.500000000000004,
+              0,
+              7.500000000000001
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-se-412.png",
+          "sha256": "01cc8fc66ed3336c9e333369db2efaed26283024a87876a794bd24173f84eaa4",
+          "bytes": 68085,
+          "camera": {
+            "pos": [
+              143.6999999999744,
+              94.06040612287407,
+              124.20000000002571
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        },
+        {
+          "file": "D058-after-corner-ukTerrace-ne-412.png",
+          "sha256": "b8c67aa23689b7dd4874bb76f462d13b4038d6182bcd0e495baf3fec8dfac32f",
+          "bytes": 65506,
+          "camera": {
+            "pos": [
+              -86.69999999995034,
+              94.06040612287407,
+              124.20000000004977
+            ],
+            "target": [
+              28.5,
+              0,
+              9
+            ],
+            "zoom": 5.2
+          },
+          "worldSha256": "31ff16d501902ab640f54e5a1321c7683be93482a128cfc70042d8a24b8cc2df"
+        }
+      ],
+      "checks": [
+        "production fixture archetypes",
+        "zero world changes during all views",
+        "nonblank real WebGL",
+        "four camera directions",
+        "fresh/incremental scene equality",
+        "genuine mouse/touch doze and undo",
+        "save/reload",
+        "one-day original simulator parity",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "render": {
+        "calls": 9,
+        "triangles": 13595,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 1799.9129195442147,
+      "picks": {
+        "pool": 3,
+        "tested": 3,
+        "multi": true,
+        "oblique": 3,
+        "bad": []
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointercancel",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "pointerType": "touch"
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "pointerType": "touch"
+        }
+      ],
+      "native": {
+        "roadRemoveUndoRepeats": 2,
+        "touchCancel": true,
+        "saveReload": true,
+        "simulationCompared": true
+      },
+      "sceneStats": {
+        "pieces": 4,
+        "regen": 4,
+        "up": 2608008,
+        "upFull": 1743048,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 4,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 148,
+            "live": 148,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 38,
+            "live": 38,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2797,
+            "used": 2237,
+            "live": 2237,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 8,
+        "geometries": 7,
+        "textures": 8,
+        "hazardShown": false
+      }
+    }
+  ],
+  "passed": true
+}

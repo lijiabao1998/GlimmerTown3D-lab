@@ -1,0 +1,1432 @@
+{
+  "passed": true,
+  "qualification": "Same camera/save/fixture; visual acceptance still requires inspecting the actual screenshots.",
+  "pairs": [
+    {
+      "before": "D058-before-highstreet-se-1440.png",
+      "after": "D058-after-highstreet-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287403,
+          121.70000000000002
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 7.5
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ne-1440.png",
+      "after": "D058-after-highstreet-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999995514,
+          94.06040612287407,
+          121.70000000004498
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 7.5
+      }
+    },
+    {
+      "before": "D058-before-highstreet-nw-1440.png",
+      "after": "D058-after-highstreet-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.1999999999816,
+          94.06040612287407,
+          -108.7000000000185
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 7.5
+      }
+    },
+    {
+      "before": "D058-before-highstreet-sw-1440.png",
+      "after": "D058-after-highstreet-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.1999999999872,
+          94.06040612287404,
+          -108.70000000001286
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 7.5
+      }
+    },
+    {
+      "before": "D058-before-highstreet-far-1440.png",
+      "after": "D058-after-highstreet-far-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.1999999999652,
+          94.06040612287407,
+          121.70000000003492
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 4.35
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-se-1440.png",
+      "after": "D058-after-highstreet-ukHighStreet-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-ne-1440.png",
+      "after": "D058-after-highstreet-ukHighStreet-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999995514,
+          94.06040612287407,
+          120.70000000004498
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-nw-1440.png",
+      "after": "D058-after-highstreet-ukHighStreet-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999998282,
+          94.06040612287407,
+          -109.70000000001728
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-sw-1440.png",
+      "after": "D058-after-highstreet-ukHighStreet-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.19999999998535,
+          94.06040612287404,
+          -109.70000000001471
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-se-1440.png",
+      "after": "D058-after-corner-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.7,
+          94.06040612287403,
+          122.40000000000002
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 6
+      }
+    },
+    {
+      "before": "D058-before-corner-ne-1440.png",
+      "after": "D058-after-corner-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.69999999995514,
+          94.06040612287407,
+          122.40000000004498
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 6
+      }
+    },
+    {
+      "before": "D058-before-corner-nw-1440.png",
+      "after": "D058-after-corner-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.6999999999816,
+          94.06040612287407,
+          -108.0000000000185
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 6
+      }
+    },
+    {
+      "before": "D058-before-corner-sw-1440.png",
+      "after": "D058-after-corner-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.6999999999872,
+          94.06040612287404,
+          -108.00000000001286
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 6
+      }
+    },
+    {
+      "before": "D058-before-corner-far-1440.png",
+      "after": "D058-after-corner-far-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.6999999999652,
+          94.06040612287407,
+          122.40000000003492
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 3.4799999999999995
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-se-1440.png",
+      "after": "D058-after-corner-ukVictorian-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-ne-1440.png",
+      "after": "D058-after-corner-ukVictorian-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -91.19999999995514,
+          94.06040612287407,
+          120.70000000004498
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-nw-1440.png",
+      "after": "D058-after-corner-ukVictorian-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -91.19999999998282,
+          94.06040612287407,
+          -109.70000000001728
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-sw-1440.png",
+      "after": "D058-after-corner-ukVictorian-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.19999999998535,
+          94.06040612287404,
+          -109.70000000001471
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-se-1440.png",
+      "after": "D058-after-corner-ukSemi-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.69999999996546,
+          94.06040612287407,
+          122.70000000003466
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-ne-1440.png",
+      "after": "D058-after-corner-ukSemi-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -90.69999999995514,
+          94.06040612287407,
+          122.70000000004498
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-nw-1440.png",
+      "after": "D058-after-corner-ukSemi-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -90.69999999998282,
+          94.06040612287407,
+          -107.70000000001728
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-sw-1440.png",
+      "after": "D058-after-corner-ukSemi-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.69999999998714,
+          94.06040612287407,
+          -107.70000000001299
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-se-1440.png",
+      "after": "D058-after-corner-ukTerrace-se-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          143.6999999999652,
+          94.06040612287407,
+          124.20000000003492
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-ne-1440.png",
+      "after": "D058-after-corner-ukTerrace-ne-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -86.69999999995514,
+          94.06040612287407,
+          124.20000000004498
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-nw-1440.png",
+      "after": "D058-after-corner-ukTerrace-nw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -86.6999999999816,
+          94.06040612287407,
+          -106.2000000000185
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-sw-1440.png",
+      "after": "D058-after-corner-ukTerrace-sw-1440.png",
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          143.69999999998535,
+          94.06040612287404,
+          -106.20000000001471
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 8
+      }
+    },
+    {
+      "before": "D058-before-highstreet-se-360.png",
+      "after": "D058-after-highstreet-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287403,
+          121.70000000000002
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ne-360.png",
+      "after": "D058-after-highstreet-ne-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999995034,
+          94.06040612287407,
+          121.70000000004977
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-nw-360.png",
+      "after": "D058-after-highstreet-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.1999999999774,
+          94.06040612287407,
+          -108.70000000002271
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-sw-360.png",
+      "after": "D058-after-highstreet-sw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.1999999999839,
+          94.06040612287406,
+          -108.70000000001622
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-far-360.png",
+      "after": "D058-after-highstreet-far-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.19999999996128,
+          94.06040612287407,
+          121.70000000003883
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 2.175
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-se-360.png",
+      "after": "D058-after-highstreet-ukHighStreet-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-ne-360.png",
+      "after": "D058-after-highstreet-ukHighStreet-ne-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999995034,
+          94.06040612287407,
+          120.70000000004977
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-se-360.png",
+      "after": "D058-after-corner-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.7,
+          94.06040612287403,
+          122.40000000000002
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-ne-360.png",
+      "after": "D058-after-corner-ne-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.6999999999528,
+          94.06040612287407,
+          122.40000000004731
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-nw-360.png",
+      "after": "D058-after-corner-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.69999999998103,
+          94.06040612287407,
+          -108.00000000001907
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-sw-360.png",
+      "after": "D058-after-corner-sw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.69999999998566,
+          94.06040612287407,
+          -108.00000000001448
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-far-360.png",
+      "after": "D058-after-corner-far-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.69999999995935,
+          94.06040612287406,
+          122.40000000004078
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 1.4616
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-se-360.png",
+      "after": "D058-after-corner-ukVictorian-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-nw-360.png",
+      "after": "D058-after-corner-ukVictorian-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -91.20000000002779,
+          94.06040612287407,
+          -109.69999999997232
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-se-360.png",
+      "after": "D058-after-corner-ukSemi-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.6999999999732,
+          94.06040612287407,
+          122.70000000002692
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-nw-360.png",
+      "after": "D058-after-corner-ukSemi-nw-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -90.70000000002759,
+          94.06040612287407,
+          -107.69999999997252
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-se-360.png",
+      "after": "D058-after-corner-ukTerrace-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          143.69999999997293,
+          94.06040612287407,
+          124.20000000002719
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-ne-360.png",
+      "after": "D058-after-corner-ukTerrace-ne-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -86.69999999995034,
+          94.06040612287407,
+          124.20000000004977
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-highstreet-se-412.png",
+      "after": "D058-after-highstreet-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287403,
+          121.70000000000002
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ne-412.png",
+      "after": "D058-after-highstreet-ne-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.1999999999528,
+          94.06040612287407,
+          121.70000000004731
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-nw-412.png",
+      "after": "D058-after-highstreet-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999998328,
+          94.06040612287407,
+          -108.70000000001683
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-sw-412.png",
+      "after": "D058-after-highstreet-sw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.1999999999877,
+          94.06040612287408,
+          -108.70000000001244
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 3.75
+      }
+    },
+    {
+      "before": "D058-before-highstreet-far-412.png",
+      "after": "D058-after-highstreet-far-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.19999999996324,
+          94.06040612287407,
+          121.70000000003687
+        ],
+        "target": [
+          19,
+          0,
+          6.5
+        ],
+        "zoom": 2.175
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-se-412.png",
+      "after": "D058-after-highstreet-ukHighStreet-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          134.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-highstreet-ukHighStreet-ne-412.png",
+      "after": "D058-after-highstreet-ukHighStreet-ne-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "b5741c417bd0312ee6ad12554fee38b6f93e4f985a723756b207546fdc58e02d",
+      "camera": {
+        "pos": [
+          -96.19999999995034,
+          94.06040612287407,
+          120.70000000004977
+        ],
+        "target": [
+          19,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-se-412.png",
+      "after": "D058-after-corner-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.7,
+          94.06040612287403,
+          122.40000000000002
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-ne-412.png",
+      "after": "D058-after-corner-ne-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.69999999995514,
+          94.06040612287407,
+          122.40000000004498
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-nw-412.png",
+      "after": "D058-after-corner-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -89.69999999998328,
+          94.06040612287407,
+          -108.00000000001683
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-sw-412.png",
+      "after": "D058-after-corner-sw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.69999999998566,
+          94.06040612287407,
+          -108.00000000001448
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 2.52
+      }
+    },
+    {
+      "before": "D058-before-corner-far-412.png",
+      "after": "D058-after-corner-far-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          140.69999999996128,
+          94.06040612287407,
+          122.40000000003883
+        ],
+        "target": [
+          25.5,
+          0,
+          7.200000000000002
+        ],
+        "zoom": 1.4616
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-se-412.png",
+      "after": "D058-after-corner-ukVictorian-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.2,
+          94.06040612287404,
+          120.7000000000001
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukVictorian-nw-412.png",
+      "after": "D058-after-corner-ukVictorian-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -91.20000000002779,
+          94.06040612287407,
+          -109.69999999997232
+        ],
+        "target": [
+          24,
+          0,
+          5.5
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-se-412.png",
+      "after": "D058-after-corner-ukSemi-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          139.69999999997466,
+          94.06040612287407,
+          122.70000000002545
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukSemi-nw-412.png",
+      "after": "D058-after-corner-ukSemi-nw-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -90.70000000002759,
+          94.06040612287407,
+          -107.69999999997252
+        ],
+        "target": [
+          24.500000000000004,
+          0,
+          7.500000000000001
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-se-412.png",
+      "after": "D058-after-corner-ukTerrace-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          143.6999999999744,
+          94.06040612287407,
+          124.20000000002571
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 5.2
+      }
+    },
+    {
+      "before": "D058-before-corner-ukTerrace-ne-412.png",
+      "after": "D058-after-corner-ukTerrace-ne-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "fixtureSha256": "468601eb88a0f091eab4c4e6f70e313de2b3ed269883c961d4c5b4d874258fc6",
+      "camera": {
+        "pos": [
+          -86.69999999995034,
+          94.06040612287407,
+          124.20000000004977
+        ],
+        "target": [
+          28.5,
+          0,
+          9
+        ],
+        "zoom": 5.2
+      }
+    }
+  ]
+}
