@@ -1,0 +1,673 @@
+{
+ "head": "2bdebec7e1463f0d12451b2977907e82c9d1babc",
+ "coverage": {
+  "seed516": {
+   "blocks": 362,
+   "blockWeighted": 72815,
+   "sceneWeighted": 116227,
+   "byLandUse": {
+    "1 住宅": {
+     "通用": {
+      "blocks": 70,
+      "weighted": 8472
+     },
+     "D059 村莊": {
+      "blocks": 30,
+      "weighted": 11644
+     },
+     "D058 英式街屋": {
+      "blocks": 28,
+      "weighted": 13207
+     }
+    },
+    "2 商業": {
+     "通用": {
+      "blocks": 89,
+      "weighted": 12884
+     },
+     "D059 村莊": {
+      "blocks": 19,
+      "weighted": 13352
+     },
+     "D058 英式街屋": {
+      "blocks": 1,
+      "weighted": 188
+     }
+    },
+    "3 工業": {
+     "D060 工業": {
+      "blocks": 125,
+      "weighted": 13068
+     }
+    }
+   },
+   "genericBlockTypes": {
+    "k1 lv1 villa/core": {
+     "blocks": 47,
+     "weighted": 6016
+    },
+    "k2 lv2 office/usMainStreet": {
+     "blocks": 19,
+     "weighted": 2494
+    },
+    "k2 lv2 modernOffice/core": {
+     "blocks": 11,
+     "weighted": 1556
+    },
+    "k2 lv3 courtC/core": {
+     "blocks": 10,
+     "weighted": 1764
+    },
+    "k1 lv2 townWalk/core": {
+     "blocks": 9,
+     "weighted": 1118
+    },
+    "k2 lv3 podTower/core": {
+     "blocks": 8,
+     "weighted": 996
+    },
+    "k2 lv2 dept/core": {
+     "blocks": 8,
+     "weighted": 1096
+    },
+    "k2 lv3 stoneTower/core": {
+     "blocks": 7,
+     "weighted": 1248
+    },
+    "k2 lv2 stoneHotel/core": {
+     "blocks": 6,
+     "weighted": 852
+    },
+    "k1 lv2 modernWalk/core": {
+     "blocks": 5,
+     "weighted": 422
+    },
+    "k2 lv3 setback/core": {
+     "blocks": 5,
+     "weighted": 842
+    },
+    "k1 lv2 walkup/usBrownstone": {
+     "blocks": 5,
+     "weighted": 672
+    },
+    "k2 lv3 slabC/core": {
+     "blocks": 5,
+     "weighted": 824
+    },
+    "k1 lv1 modern/core": {
+     "blocks": 4,
+     "weighted": 244
+    },
+    "k2 lv3 modernNeedle/core": {
+     "blocks": 4,
+     "weighted": 616
+    },
+    "k2 lv1 modernShop/core": {
+     "blocks": 3,
+     "weighted": 364
+    },
+    "k2 lv1 market/core": {
+     "blocks": 2,
+     "weighted": 152
+    },
+    "k2 lv1 shophouse/usMainStreet": {
+     "blocks": 1,
+     "weighted": 80
+    }
+   },
+   "civicSpecial": {
+    "D059 村莊": 1,
+    "通用": 20
+   },
+   "genericCivicKinds": {
+    "33 住宅摩天樓": 3,
+    "34 商業摩天樓": 3,
+    "165 貨櫃物流中心": 2,
+    "25 太陽能": 1,
+    "116 數據中心": 1,
+    "136 文化藝術中心": 1,
+    "135 大型醫學中心": 1,
+    "105 住宅巨廈": 1,
+    "106 商業綜合體": 1,
+    "139 高速鐵路車站": 1,
+    "55 中央車站": 1,
+    "166 鐵公路聯運中心": 1,
+    "143 大型太陽能園區": 1,
+    "123 造船廠": 1,
+    "174 大型貨櫃碼頭": 1
+   }
+  },
+  "ai120": {
+   "blocks": 190,
+   "blockWeighted": 29137,
+   "sceneWeighted": 96607,
+   "byLandUse": {
+    "1 住宅": {
+     "D058 英式街屋": {
+      "blocks": 22,
+      "weighted": 7845
+     },
+     "通用": {
+      "blocks": 49,
+      "weighted": 5506
+     },
+     "D059 村莊": {
+      "blocks": 19,
+      "weighted": 6080
+     }
+    },
+    "3 工業": {
+     "D060 工業": {
+      "blocks": 100,
+      "weighted": 9706
+     }
+    }
+   },
+   "genericBlockTypes": {
+    "k1 lv1 villa/core": {
+     "blocks": 37,
+     "weighted": 4736
+    },
+    "k1 lv1 modern/core": {
+     "blocks": 12,
+     "weighted": 770
+    }
+   },
+   "civicSpecial": {
+    "D057 遺產": 11,
+    "通用": 56,
+    "D056 市政": 19,
+    "D059 村莊": 1
+   },
+   "genericCivicKinds": {
+    "4 公園": 17,
+    "52 派出所": 12,
+    "25 太陽能": 6,
+    "53 大農場": 4,
+    "30 高級消防": 4,
+    "28 救護站": 2,
+    "8 垃圾場": 2,
+    "60 地熱發電": 2,
+    "85 樂齡中心": 1,
+    "23 牧場": 1,
+    "84 幼兒園": 1,
+    "27 污水廠": 1,
+    "146 電池儲能站": 1,
+    "161 配電變電站": 1,
+    "163 配水調壓站": 1
+   }
+  }
+ },
+ "vocabulary": {
+  "k1 住宅": {
+   "archetypes": {
+    "lv1 villa/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 bungalow/ukSemi": {
+     "covered": "D058 英式街屋",
+     "roofs": [
+      "hip"
+     ],
+     "windows": [
+      "punch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 bungalow/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "punch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 cottage/ukTerrace": {
+     "covered": "D058 英式街屋",
+     "roofs": [
+      "gable"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 cottage/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 modern/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv1 town/core": {
+     "covered": "D059 村莊",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv2 walkup/usBrownstone": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 walkup/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 courtyard/ukMansion": {
+     "covered": "D059 村莊",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 courtyard/core": {
+     "covered": "D059 村莊",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 terrace/ukVictorian": {
+     "covered": "D058 英式街屋",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 modernWalk/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv2 townWalk/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv3 slab/usPrewar": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 1
+    },
+    "lv3 point/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 1
+    },
+    "lv3 twin/usPrewar": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 1
+    },
+    "lv3 modernPoint/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv3 townSlab/core": {
+     "covered": "通用",
+     "roofs": [
+      "gables"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 1
+    },
+    "lv3 stepTwin/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 1
+    }
+   },
+   "total": {
+    "roofKinds": [
+     "gables",
+     "hip",
+     "gable",
+     "flat"
+    ],
+    "windowStyles": [
+     "arch",
+     "punch",
+     "ribbon",
+     "grid"
+    ],
+    "wallColors": 8
+   }
+  },
+  "k2 商業": {
+   "archetypes": {
+    "lv1 shophouse/usMainStreet": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "shop"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 market/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "punch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 2
+    },
+    "lv1 cornerLot/ukHighStreet": {
+     "covered": "D058 英式街屋",
+     "roofs": [
+      "gable"
+     ],
+     "windows": [
+      "shop"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv1 modernShop/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv1 townShop/core": {
+     "covered": "D059 村莊",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv2 office/usMainStreet": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 hotel/ukHighStreet": {
+     "covered": "D059 村莊",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 1
+    },
+    "lv2 dept/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "shop"
+     ],
+     "wallColors": 5,
+     "roofColors": 5,
+     "formCombos": 2
+    },
+    "lv2 modernOffice/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv2 stoneHotel/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv3 podTower/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 2
+    },
+    "lv3 setback/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 2
+    },
+    "lv3 slabC/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 2
+    },
+    "lv3 stoneTower/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "arch"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv3 modernNeedle/core": {
+     "covered": "通用",
+     "roofs": [
+      "flat"
+     ],
+     "windows": [
+      "ribbon"
+     ],
+     "wallColors": 1,
+     "roofColors": 1,
+     "formCombos": 2
+    },
+    "lv3 courtC/core": {
+     "covered": "通用",
+     "roofs": [
+      "parapet"
+     ],
+     "windows": [
+      "grid"
+     ],
+     "wallColors": 1,
+     "roofColors": 2,
+     "formCombos": 2
+    }
+   },
+   "total": {
+    "roofKinds": [
+     "flat",
+     "parapet",
+     "gable"
+    ],
+    "windowStyles": [
+     "shop",
+     "punch",
+     "ribbon",
+     "arch",
+     "grid"
+    ],
+    "wallColors": 8
+   }
+  }
+ }
+}
