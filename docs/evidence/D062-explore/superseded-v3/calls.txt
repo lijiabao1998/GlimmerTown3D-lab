@@ -1,0 +1,11 @@
+夏（無季節旗標）         calls  15 triangles  116227 rt 480x333 errors 0
+春 全              calls  15 triangles  116227 rt 480x333 errors 0
+秋 全              calls  15 triangles  116227 rt 480x333 errors 0
+冬 全              calls  15 triangles  116227 rt 480x333 errors 0
+春 柔              calls  15 triangles  116227 rt 480x333 errors 0
+冬 柔              calls  15 triangles  116227 rt 480x333 errors 0
+雨                calls  15 triangles  116227 rt 480x333 errors 0
+暴雨               calls  15 triangles  116227 rt 480x333 errors 0
+雪                calls  15 triangles  116227 rt 480x333 errors 0
+彩虹               calls  15 triangles  116227 rt 480x333 errors 0
+轉季一半             calls  15 triangles  116227 rt 480x333 errors 0

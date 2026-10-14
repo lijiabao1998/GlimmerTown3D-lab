@@ -1,0 +1,36 @@
+// 批次拍四季對照：node run-shots.mjs  （一個畫面＝一個瀏覽器，順序跑）
+import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
+const SP = '/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad';
+const OUT = SP + '/d063/v4';
+fs.mkdirSync(OUT, { recursive: true });
+const VIEWS = [
+  { id: 'newcity-far', sample: 'newcity', x: 32, z: 32, zoom: 1.2, W: 1440, H: 1000, mob: 0 },
+  { id: 'seed516-far', sample: 'seed516', x: 36, z: 36, zoom: 1.2, W: 1440, H: 1000, mob: 0 },
+  { id: 'seed516-district', sample: 'seed516', x: 40.4, z: 6.7, zoom: 2.56, W: 412, H: 860, mob: 1 },
+  { id: 'newcity-near', sample: 'newcity', x: 32, z: 32, zoom: 4, W: 412, H: 860, mob: 1 },
+  { id: 'ai120-district', sample: 'ai120', x: 27.4, z: 53.3, zoom: 2.56, W: 412, H: 860, mob: 1 },
+];
+const only = process.argv[2] ? process.argv[2].split(',') : null;
+const VARIANTS = [
+  { id: 'none', q: '' },
+  { id: 'full-s0', q: 'season=0' }, { id: 'full-s1', q: 'season=1' }, { id: 'full-s2', q: 'season=2' }, { id: 'full-s3', q: 'season=3' },
+  { id: 'soft-s1', q: 'season=1&seasonSoft=1' }, { id: 'soft-s2', q: 'season=2&seasonSoft=1' }, { id: 'soft-s3', q: 'season=3&seasonSoft=1' },
+];
+const TRANS = [
+  { id: 'trans-aut-win', q: 'season=2&seasonB=3&seasonT=0.5' },
+  { id: 'trans-spr-sum', q: 'season=0&seasonB=1&seasonT=0.5' },
+  { id: 'trans-sum-aut', q: 'season=1&seasonB=2&seasonT=0.5' },
+  { id: 'trans-win-spr', q: 'season=3&seasonB=0&seasonT=0.5' },
+];
+for (const v of VIEWS) {
+  if (only && !only.includes(v.id)) continue;
+  const list = [...VARIANTS, ...(v.id.endsWith('far') ? TRANS : [])];
+  for (const w of list) {
+    const out = `${OUT}/${v.id}-${w.id}.png`;
+    if (fs.existsSync(out) && !process.env.REDO) continue;
+    const r = spawnSync('node', [SP + '/look-at-exp.mjs', v.sample, v.x, v.z, v.zoom, v.W, v.H, v.mob, out, '0', 'landArt=2&' + w.q], { env: { ...process.env, CHROME_PATH: '/opt/pw-browsers/chromium' }, encoding: 'utf8', timeout: 180000 });
+    console.log(v.id, w.id, (r.stdout || '').trim().split('\n').pop(), r.status !== 0 ? 'ERR ' + (r.stderr || '').slice(-200) : '');
+  }
+}
+console.log('done');

@@ -1,0 +1,21 @@
+// 2x2 對照拼圖。用法：node compose-grid.mjs <out.png> <W> <H> <f1>=<l1> <f2>=<l2> <f3>=<l3> <f4>=<l4>
+import fs from 'node:fs';
+import path from 'node:path';
+import { withBrowser } from '/home/user/GlimmerTown3D-lab/tools/cdp.mjs';
+const [out, Cs, Ws, Hs, ...items] = process.argv.slice(2);
+const W = +Ws, H = +Hs, gap = 6, cols = +Cs, rows = Math.ceil(items.length / cols), sw = cols * W + gap, sh = rows * H + gap * (rows - 1);
+const root = fs.mkdtempSync(path.join(path.dirname(path.resolve(out)), 'cg-'));
+fs.writeFileSync(path.join(root, 'index.html'), '<!doctype html><meta charset="utf-8"><body></body>');
+await withBrowser({ root, width: 1400, height: 900, port: 8396, gl: false, ready: 'true', settle: 150 }, async ({ page, open }) => {
+  await open('x=1');
+  await page.send('Emulation.setDeviceMetricsOverride', { width: sw, height: sh, deviceScaleFactor: 1, mobile: false });
+  const cells = items.map(s => { const i = s.indexOf('='); return { label: s.slice(i + 1), data: fs.readFileSync(s.slice(0, i)).toString('base64') }; });
+  const html = cells.map(c => `<div class="c" style="background-image:url(data:image/png;base64,${c.data})"><span>${c.label}</span></div>`).join('');
+  await page.evaluate(`(async()=>{document.body.innerHTML=${JSON.stringify(html)};document.body.style.cssText='margin:0;background:#222;display:grid;grid-template-columns:repeat(${cols},${W}px);gap:${gap}px;width:${sw}px;font-family:"WenQuanYi Zen Hei",sans-serif';
+    const st=document.createElement('style');st.textContent='.c{position:relative;width:${W}px;height:${H}px;background-repeat:no-repeat}.c span{position:absolute;left:8px;bottom:8px;padding:3px 10px;border-radius:5px;background:rgba(10,18,32,.82);color:#fff;font-size:18px;line-height:24px}';document.head.appendChild(st);
+    await Promise.all([...document.querySelectorAll('.c')].map(e=>{const i=new Image();i.src=e.style.backgroundImage.slice(5,-2);return i.decode()}));})()`);
+  await new Promise(r => setTimeout(r, 250));
+  const png = Buffer.from((await page.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: sw, height: sh, scale: 1 } })).data, 'base64');
+  fs.writeFileSync(out, png); console.log('wrote', out, sw + 'x' + sh, png.length);
+});
+fs.rmSync(root, { recursive: true, force: true });

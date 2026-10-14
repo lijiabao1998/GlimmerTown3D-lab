@@ -1,0 +1,319 @@
+{
+ "card": "docs/D062-seasons-weather.md",
+ "savedAt": "2026-10-14",
+ "provenance": {
+  "baseSrc": "36e6935f4b28a8d5af59c964b91428c10a6882ba（D061 候選；之後的提交只動文件，src 逐字相同）",
+  "prototypeV4": "docs/evidence/D062-explore/D062-prototype-v4.patch（git diff，套在 src/render 四個檔上；原型只存在於隔離的 git worktree，從未進主樹或推送）",
+  "buildIdentityV4": "exp/dist/index.html SHA-256 5856be8ed681e5729e8da77b5a6a9c900a017bc866d5ed3b87df1cb7afec5583（最後一次建置；v4 的量測與拍照用的是它，個別擷取在更早的建置上，差異只在樹色與彩虹，見 patch 歷史不另存）",
+  "labReference": "lijiabao1998/GlimmerTown-lab @ d23c18d8e24ecb1f7b9223907484729eebe9b3a0（只讀；/home/user/lijiabao1998/glimmertown-lab 淺複製，HEAD 逐字核對）",
+  "environment": "這個容器：Chromium（/opt/pw-browsers）、軟體 WebGL（SwiftShader）、Node 22"
+ },
+ "limits": [
+  "原型不是施工結果：調色盤、樹色與天氣著色器會在施工時依卡面驗收條件修正（秋天沙色與工業記號已知偏低，見卡面驗收 4）",
+  "拼圖由單張擷取用 compose-any 拼成；單張 PNG 沒有逐張存檔，只有拼圖有 SHA-256",
+  "擷取分幾批、在不同次建置上跑（秋天樹色與彩虹參數中途調過）：被中途調整影響到的格（秋天、彩虹）都已重拍，其餘格的內容與最終建置一致，但沒有逐格的建置雜湊",
+  "業主看的是 SendUserFile 傳的那幾張（sentToOwner=true）；本檔不證明業主看過",
+  "未涵蓋 Android 實機；繪製呼叫與三角形是軟體 WebGL 下的 sceneInfo，不是手機 GPU 時間；降水在靜止圖上看起來比動起來稀"
+ ],
+ "images": [
+  {
+   "file": "docs/img/D062/D062-v4-1-full-seed516-far.png",
+   "sha256": "db3c93b77fffa559f2e2a1503f6fa21c471b206c637fdd54de8bd42f715beff3",
+   "bytes": 419123,
+   "sentToOwner": true,
+   "what": "全季：春（基準＝現在的畫面）、夏、秋、冬；seed516 遠景 1440×1000（sample=seed516 at 36,36 zoom 1.2）；landArt=2&season=0|1|2|3"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-2-soft-seed516-far.png",
+   "sha256": "518771047832346978c248acafd655b80e44da3d4329b923699754c7f2bd07a3",
+   "bytes": 420544,
+   "sentToOwner": true,
+   "what": "柔檔（手調色階）：春＝基準、夏／秋／冬柔；seasonSoft=1"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-3-transition-seed516-far.png",
+   "sha256": "0b714a3001dc7d5a7778d32d4eb370aa22e52b2626e45d04c3e8f843032a1b0c",
+   "bytes": 440553,
+   "sentToOwner": true,
+   "what": "轉季轉到一半（seasonT=0.5，逐格門檻）：冬→春、春→夏、夏→秋、秋→冬"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-4-full-near-mobile.png",
+   "sha256": "22f0f34bf15203de465e87af249e12a76819a9de33d89169e035f73b4fcc1901",
+   "bytes": 128359,
+   "sentToOwner": true,
+   "what": "全季手機近景 412×860：上排 seed516 工業區（40.4,6.7 zoom 2.56）、下排新城（32,32 zoom 4）"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-4b-soft-near-mobile.png",
+   "sha256": "c614248ccf0eec59d7429e772416c89f81abec3946611ee80f248cc38a30ca40",
+   "bytes": 144649,
+   "sentToOwner": false,
+   "what": "柔檔手機近景，同鏡頭（沒傳給業主，補充）"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-5-weather-seed516-far.png",
+   "sha256": "b52d383bf1f20ac998c1b876a61f4605e5c52076c504a6bad4791a569f7d92c4",
+   "bytes": 414497,
+   "sentToOwner": true,
+   "what": "雨 wx=1、暴雨 wx=2（春基準）、雪 wx=3、暴雪 wx=4（冬）；實驗線的色調 α 與條數；wxTime=3.2 固定一格"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-6-flash-rainbow-seed516-far.png",
+   "sha256": "47fa891b2f41b1f5dc5d50834dd6aea545242f47483af1efc395d6610ba2c04f",
+   "bytes": 261274,
+   "sentToOwner": true,
+   "what": "暴雨＋閃電峰值（wx=2&flash=0.9）、雨後彩虹（rainbow=1；實驗線七色、圓心與弧；帶寬 .016H、天空 α.46／地面 α.32）"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-6b-weather-near-mobile.png",
+   "sha256": "80434004d532da0bdd8a8a93deed2789f136603eb7a7f3de0cbd80cbebc23c42",
+   "bytes": 114443,
+   "sentToOwner": false,
+   "what": "天氣手機近景：晴、雨、暴雨、雪（沒傳給業主，補充）"
+  },
+  {
+   "file": "docs/img/D062/D062-v4-7-full-newcity-far.png",
+   "sha256": "5108b92c2389c8a5a96b10c23a6063a26b1c1ba89f06ee29c2c00e0d5138ba86",
+   "bytes": 306509,
+   "sentToOwner": false,
+   "what": "新城遠景（空地）全季（沒傳給業主，補充）"
+  }
+ ],
+ "supersededImages": [
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-1-full-seed516-far.png",
+   "sha256": "4a3d51111c249bf7d37a7a2c09f7298c7bc09096f5fc1c2a83862815f529d8ef",
+   "bytes": 438394,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  },
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-2-soft-seed516-far.png",
+   "sha256": "66d59d96a203498f8c266ae10d3d6aead99a5079c7a2233fbe65d2d48c1b792e",
+   "bytes": 424554,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  },
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-3-transition-seed516-far.png",
+   "sha256": "de8d5183e473c6088bface220bb6e5430b37a8fbe5e748137b2983adeade61b2",
+   "bytes": 459666,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  },
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-4-full-near-mobile.png",
+   "sha256": "20432cabfd853cd88ebb3c1eface245c32ae4724d18b9c9ae50073442db9dc69",
+   "bytes": 137130,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  },
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-5-weather-seed516-far.png",
+   "sha256": "b88cd90d59bc9247e8475566daa6442caad87fb3d044267db6edd37494ae1ab3",
+   "bytes": 559637,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  },
+  {
+   "file": "docs/img/D062/superseded-v3/D062-explore-6-flash-rainbow-seed516-far.png",
+   "sha256": "96eebc4c5edcc9705fa9e2c990341601fa30fea4268ba66a2a79e34b8b9139ca",
+   "bytes": 295949,
+   "sentToOwner": true,
+   "superseded": true,
+   "why": "季節標籤標反（把現在的畫面標成夏；實驗線的基準季是春）；v4 取代，只為追溯業主看過什麼"
+  }
+ ],
+ "evidenceFiles": [
+  {
+   "file": "docs/evidence/D062-explore/D062-prototype-v4.patch",
+   "sha256": "f4e3057f228b77f84c5c46591ecabf34cbf0d69b7edcb302b48b0b0c0c51ae05",
+   "bytes": 19096
+  },
+  {
+   "file": "docs/evidence/D062-explore/calls-exp4.mjs.txt",
+   "sha256": "321926be58f7eac10d522edc2103b129b701b07d6128076c1354eda59c127638",
+   "bytes": 1656
+  },
+  {
+   "file": "docs/evidence/D062-explore/calls.txt",
+   "sha256": "c4cc216f050a100eb4cbef5006f3431659b1ba6e3910309b1f42d809fd4d237b",
+   "bytes": 980
+  },
+  {
+   "file": "docs/evidence/D062-explore/compose-any.mjs.txt",
+   "sha256": "f65c25434af4e55c8d1324e3b48f180173cb9d96ee9cd9d61ca562e6714bd155",
+   "bytes": 2295
+  },
+  {
+   "file": "docs/evidence/D062-explore/days.mjs.txt",
+   "sha256": "4735cd844ea0c30d1fb825d3d67fd70aab4940beae276fe0f917c470eb63dd02",
+   "bytes": 567
+  },
+  {
+   "file": "docs/evidence/D062-explore/lab-close.mjs.txt",
+   "sha256": "83d3aeef818a6ae25b6e401808218d4879a5831bb7e16833d6e2278ca6cc8ca0",
+   "bytes": 531
+  },
+  {
+   "file": "docs/evidence/D062-explore/lab-colours-in-output-space.txt",
+   "sha256": "4ae8a1cedadb122310bff1af08865de6c534392a8e6aa1b3a1b478d9370ffae1",
+   "bytes": 542
+  },
+  {
+   "file": "docs/evidence/D062-explore/lab-targets.mjs.txt",
+   "sha256": "8514e8f99e4701f093473a8b16d7323ac692e8ff35b2e71b4a7ca78812eb3d8b",
+   "bytes": 668
+  },
+  {
+   "file": "docs/evidence/D062-explore/lab-vs-v3.txt",
+   "sha256": "19aef5d3b16da8b361c40246182394a90e7ec4bc824a33c8f80437daba2f32bf",
+   "bytes": 255
+  },
+  {
+   "file": "docs/evidence/D062-explore/look-at-exp.mjs.txt",
+   "sha256": "e8250c6f3a32910da39d827d15c451c79061a9b57cfda96768763dee8ebac5ff",
+   "bytes": 1438
+  },
+  {
+   "file": "docs/evidence/D062-explore/measure-seasons.txt",
+   "sha256": "69a9f37dbe6f409fbd4f150fcc0adf4e86c569b8ea2a126d4f30f0e50241c587",
+   "bytes": 2453
+  },
+  {
+   "file": "docs/evidence/D062-explore/measure-seasons4.mjs.txt",
+   "sha256": "d5d8362e837ba015e9e9a6f7c71a32ee83797334ba5d086418d19f1ab9e1b967",
+   "bytes": 2789
+  },
+  {
+   "file": "docs/evidence/D062-explore/pairs-bold.txt",
+   "sha256": "12adf26c1c72ef45b25964d5b91a664b6d4c9b84e79c19bc7c10e1607cb71a2b",
+   "bytes": 660
+  },
+  {
+   "file": "docs/evidence/D062-explore/pairs-soft.txt",
+   "sha256": "74a1ed5d57a64fcf520766b06badc8997497578cbd8ba7f55fe5005bf546a875",
+   "bytes": 660
+  },
+  {
+   "file": "docs/evidence/D062-explore/pairs4.mjs.txt",
+   "sha256": "3fd1a0bbecc805d65fa73ea115aedb89d3b247ea909470efe0a63483edea22d5",
+   "bytes": 1498
+  },
+  {
+   "file": "docs/evidence/D062-explore/run-shots4.mjs.txt",
+   "sha256": "009c8f1fbc56e11c4a5342ebb52d5d2bf70b19e58c945faca659fdf827cf17a4",
+   "bytes": 2188
+  },
+  {
+   "file": "docs/evidence/D062-explore/run-wx4.mjs.txt",
+   "sha256": "25ae6d0cf28092601aac908f8c3eb20635dbb268eace356476813784780ae224",
+   "bytes": 1643
+  },
+  {
+   "file": "docs/evidence/D062-explore/sample-days.txt",
+   "sha256": "a6aa242162d9e243e3e4f87eeecef677853b47e7a0588fb7f7c3c39cbf11054c",
+   "bytes": 120
+  },
+  {
+   "file": "docs/evidence/D062-explore/season-threshold.txt",
+   "sha256": "92d875ff2124b3ba25218adf41ed192636313abc55de07b4ab2ea114aecdcbf7",
+   "bytes": 265
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/D062-prototype.patch",
+   "sha256": "3b2300cfa3854daa754a3b3480801cc62f2d4f70f99a9e06af08f201916150b7",
+   "bytes": 17905,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/calls-exp.mjs.txt",
+   "sha256": "00f4139ea30aa5f8e4a9454d14d7865a1ada9c3fbac3ead25b9edb7a1abe28bd",
+   "bytes": 1538,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/calls.txt",
+   "sha256": "9a47525e9f141543d5148ed16ad8f399cba4b566b8c4cc90904ea3beade87431",
+   "bytes": 771,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/compose-any.mjs.txt",
+   "sha256": "f65c25434af4e55c8d1324e3b48f180173cb9d96ee9cd9d61ca562e6714bd155",
+   "bytes": 2295,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/days.mjs.txt",
+   "sha256": "4735cd844ea0c30d1fb825d3d67fd70aab4940beae276fe0f917c470eb63dd02",
+   "bytes": 567,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/look-at-exp.mjs.txt",
+   "sha256": "e8250c6f3a32910da39d827d15c451c79061a9b57cfda96768763dee8ebac5ff",
+   "bytes": 1438,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/measure-seasons.mjs.txt",
+   "sha256": "40c2d1566a4ea3f8a98e27792e33d97ca769d0c57d6ce250f4c10970a58dedf5",
+   "bytes": 2769,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/measure-seasons.txt",
+   "sha256": "9247331d35d0f6c51021fa101527a1d738f6dc4c9ee48e3f06068a7d7906e0f4",
+   "bytes": 2152,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/pairs-bold.txt",
+   "sha256": "3c08f7d14044d0266fdb4fc802d9a2cea5a10cfa838d512a31b5db8e1d8ccc5b",
+   "bytes": 660,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/pairs-soft.txt",
+   "sha256": "8efc0f79f6c76ea057a3d3f3b62c284abc6f1e0e742b9cc96c4282edcd776135",
+   "bytes": 660,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/pairs.mjs.txt",
+   "sha256": "9fa4294d6779316b19c0efb1a59c708d8bd0b20225bc7d5af94329ab9661ecd7",
+   "bytes": 1515,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/run-shots.mjs.txt",
+   "sha256": "57713ba311f42aad00c3772314472cacc3c59435f15afa122e15b0c729cce5ee",
+   "bytes": 2160,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/run-wx.mjs.txt",
+   "sha256": "df618c420fb677a4ebfd0047d082d6c5d407ff8c75fc0ec6c4f9308e960328fa",
+   "bytes": 1642,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/superseded-v3/sample-days.txt",
+   "sha256": "a6aa242162d9e243e3e4f87eeecef677853b47e7a0588fb7f7c3c39cbf11054c",
+   "bytes": 120,
+   "superseded": true
+  },
+  {
+   "file": "docs/evidence/D062-explore/thr-hist.mjs.txt",
+   "sha256": "9ab068aa1762887133be616cac9c23fbec4fbe9f246539c083be3d10c1c745d4",
+   "bytes": 1019
+  }
+ ]
+}

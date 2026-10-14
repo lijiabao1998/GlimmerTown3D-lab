@@ -1,0 +1,15 @@
+// 各季關鍵配對的色差（輸出色、Lab ΔE76）：地面與水、道路、劃區記號、冰與雪
+const soft = process.argv[2] === 'soft';
+globalThis.location = { search: soft ? '?seasonSoft=1' : '' };
+const L = await import('/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad/exp/src/render/landArt.ts');
+const { lab, dE } = await import('/home/user/GlimmerTown3D-lab/tools/d061-scenes.mjs');
+const { LAND_OUT, outputColor, texelFor, seasonMap } = L;
+const P = texelFor, hex = c => '#' + c.toString(16).padStart(6, '0');
+const out = (s, texel) => { const m = seasonMap(s); return outputColor(m ? (m.get(texel) ?? texel) : texel); };
+const names = ['春', '夏', '秋', '冬'];
+console.log(soft ? '柔檔' : '全季', 'season  grass-base  water-base  road   zoneR  zoneC  zoneI | ΔE grass/water  road/grass  zoneR/grass zoneC/grass zoneI/grass | water-light/grass(shore)  sand/grass');
+for (const s of [0, 1, 2, 3]) {
+  const g = out(s, P(LAND_OUT.grass[2])), w = out(s, P(LAND_OUT.water[2])), wl = out(s, P(LAND_OUT.water[3])), r = out(s, P(LAND_OUT.road[0])), sand = out(s, P(LAND_OUT.sand[0]));
+  const z = [1, 2, 3].map(k => out(s, P(LAND_OUT.zone[k][0])));
+  console.log(names[s].padEnd(3), hex(g), hex(w), hex(r), z.map(hex).join(' '), '|', dE(g, w).toFixed(1).padStart(6), dE(r, g).toFixed(1).padStart(8), z.map(c => dE(c, g).toFixed(1).padStart(9)).join(' '), '|', dE(wl, g).toFixed(1).padStart(8), dE(sand, g).toFixed(1).padStart(8));
+}

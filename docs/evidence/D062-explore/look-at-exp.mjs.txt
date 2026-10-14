@@ -1,0 +1,17 @@
+// 看現況：node look-at.mjs <sample> <x> <z> <zoom> <W> <H> <mobile:0|1> <out.png> [turn]
+import fs from 'node:fs';
+import { withBrowser } from '/home/user/GlimmerTown3D-lab/tools/cdp.mjs';
+import { pageSession } from '/home/user/GlimmerTown3D-lab/tools/smoke-d011.mjs';
+const [id, x, z, zoom, Ws, Hs, mob, out, turn = '0', extra = ''] = process.argv.slice(2);
+const W = +Ws, H = +Hs, mobile = mob === '1';
+await withBrowser({ root: '/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad/exp/dist', width: Math.max(960, W), height: Math.max(900, H), port: 8395 }, async ({ page, open }) => {
+  const p = await pageSession(page, open, { W, H, mobile });
+  await p.open(`sample=${id}&clean=1${extra ? '&' + extra : ''}`);
+  await p.ev(`__gt.view(${x},${z},${zoom});__gt.spin(${+turn * Math.PI / 2});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
+  await p.frames(30);
+  let stable = 0, last = await p.ev('__gt.cam()');
+  for (let i = 0; i < 24 && stable < 2; i++) { await p.frames(25); const n = await p.ev('__gt.cam()'); const d = Math.max(...n.pos.map((v, j) => Math.abs(v - last.pos[j]))); stable = d < 1e-9 ? stable + 1 : 0; last = n; }
+  await p.frames(3);
+  const bytes = Buffer.from((await page.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: false })).data, 'base64');
+  fs.writeFileSync(out, bytes); console.log('wrote', out, bytes.length, JSON.stringify(page.errors));
+});

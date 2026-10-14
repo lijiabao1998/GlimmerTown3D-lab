@@ -1,0 +1,3 @@
+newcity  day 1 doy 0 season 春 n 72
+seed516  day 210963 doy 2 season 春 n 72
+ai120    day 121 doy 120 season 夏 n 72

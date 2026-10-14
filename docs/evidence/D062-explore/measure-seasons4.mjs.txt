@@ -1,0 +1,31 @@
+// 四季原型的量測：色數、類別占比（排除天空色）、空地方塊的平均色與對夏天的 ΔE（Lab）
+import fs from 'node:fs';
+import { decodePng, colourCounts } from '/home/user/GlimmerTown3D-lab/tools/png.mjs';
+import { lab, dE } from '/home/user/GlimmerTown3D-lab/tools/d061-scenes.mjs';
+const V = process.argv[2] ?? '/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad/d063/v4';
+const SKY = new Set([0xaad4ea, 0x95bfea, 0xbfd4ea, 0xbfeaea, 0x80aaea]);
+const cat = c => { const r = c >> 16, g = (c >> 8) & 255, b = c & 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+  if (mn >= 0xbf && mx - mn <= 0x2a) return 'snow';
+  if (b > r + 0x20 && b >= g - 0x10) return 'water';
+  if (g > r + 0x08 && g >= b) return 'green';
+  if (r > b + 0x30 && g > b + 0x18) return 'gold';
+  return 'other'; };
+const meanOf = (img, x0, y0, x1, y1) => { let r = 0, g = 0, b = 0, n = 0; for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) { const o = (y * img.w + x) * img.bpp; r += img.data[o]; g += img.data[o + 1]; b += img.data[o + 2]; n++; } return ((Math.round(r / n) << 16) | (Math.round(g / n) << 8) | Math.round(b / n)); };
+const rows = [];
+for (const view of ['newcity-far', 'seed516-far', 'seed516-district', 'newcity-near']) {
+  const names = ['none', 'full-s0', 'full-s1', 'full-s2', 'full-s3', 'soft-s1', 'soft-s2', 'soft-s3'];
+  let sumMean = null;
+  for (const n of names) {
+    const f = `${V}/${view}-${n}.png`; if (!fs.existsSync(f)) continue;
+    const img = decodePng(fs.readFileSync(f)), counts = colourCounts(img);
+    let total = 0; const share = { snow: 0, water: 0, green: 0, gold: 0, other: 0 };
+    for (const [c, k] of counts) { if (SKY.has(c)) continue; total += k; share[cat(c)] += k; }
+    const uniq = [...counts.values()].filter(k => k >= img.w * img.h * 0.0005).length;
+    const crop = view === 'newcity-far' ? [600, 300, 840, 420] : view === 'newcity-near' ? [60, 520, 352, 760] : view === 'seed516-district' ? [180, 600, 380, 760] : [520, 560, 700, 640];
+    const mean = meanOf(img, ...crop);
+    if (n === 'none') sumMean = mean;
+    rows.push({ view, n, uniq, snow: (100 * share.snow / total).toFixed(1), green: (100 * share.green / total).toFixed(1), gold: (100 * share.gold / total).toFixed(1), water: (100 * share.water / total).toFixed(1), mean: '#' + mean.toString(16).padStart(6, '0'), dE: sumMean === null ? '-' : dE(mean, sumMean).toFixed(1) });
+  }
+}
+console.log('view'.padEnd(18), 'var'.padEnd(8), 'uniq', 'snow%', 'green%', 'gold%', 'water%', 'mean#', ' ΔE vs 基準(春)');
+for (const r of rows) console.log(r.view.padEnd(18), r.n.padEnd(8), String(r.uniq).padStart(4), r.snow.padStart(5), r.green.padStart(6), r.gold.padStart(5), r.water.padStart(6), r.mean, r.dE.padStart(6));

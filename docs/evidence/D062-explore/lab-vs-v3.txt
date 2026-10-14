@@ -1,0 +1,3 @@
+實驗線夏 #8fce5e→80bf55          vs 原型「春」底 80bf6a            ΔE 10.3
+實驗線秋 #b8935a→aa9555          vs 原型秋底 aa9540              ΔE 10.3
+實驗線冬 #e8eef2→d4eaea          vs 原型冬底 d4eaea              ΔE 0.0

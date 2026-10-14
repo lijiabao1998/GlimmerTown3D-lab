@@ -30,3 +30,13 @@
 - 條文很薄的條目（只夠輪廓、不夠立面圖樣）：Daily Express 472 字、Grainger 主條 951 字、Leadenhall 約 1,100 字、Royal Liver 約 1,200 字、Albany 約 1,300 字。鏡像裡保留了來源的原文錯字（「visula plint」「nineth」「freeze」）。
 - 級別與我的記憶不同的：Daily Express II*（不是 I）、BT Tower II（不是 I）、Space House II（不是 II*）、Harrods II*、Alexander Fleming House II（不是 II*）。我原先的提案有幾處級別是錯的，查證後更正。
 - 原型與參照有落差：Space House 板樓 8 層、無「平頂／帶狀窗」字樣；Centre Point 條文無「podium」；St Pancras 是磚；Grainger Market 早於維多利亞時代、主條文多半在寫內部與屋頂；Selfridges 立面多是 1919–28 年期。
+
+## 第二輪獨立核對（2026-10-14；另一個研究代理，我只整理）
+
+全文與逐列表在 [`docs/evidence/D063-reference-recheck-2026-10-14.md`](evidence/D063-reference-recheck-2026-10-14.md)（商業中高層已順延為 D063）。要點：
+
+- **號碼、建築、等級全對**：20 個 List Entry 的名稱、等級、登錄日期，鏡像頁與 Historic England 開放資料（NHLE feature service，2026-10-14 編修）逐一相同；引文已機器核對為鏡像文字的逐字子字串。
+- **兩處更正**：Leadenhall Market（第 1 組備選）是 **Grade II\***，不是 I；BT Tower 的鏡像文字過期——開放資料的 AmendDate 是 **2026-06-18**（planning.data.gov.uk 的 entry-date 同），等級仍是 II，補強了上面「搜尋引擎摘要」的說法，但修訂後的全文仍沒讀到。
+- **日期**：St Pancras 的「1868-76」只是旅館（車站 1865–1869）；Metro Central Heights 的 Summary 與 History 年份不一致（1959–62／1964–66 對 1959–67）；Station Parade 條目寫「1 to 8」、文字寫「ten units」。
+- **原型特徵登錄文字不支持**（不能當真實特徵畫）：market 的「低而寬」（立面 3–4 層）；modernShop 的平屋頂、帶狀窗、小（是弧形一排十戶）；dept 的「低翼」（登錄沒有 wing 這個字）；modernOffice 的單棟（Space House 是板塊加圓塔兩棟）；stoneHotel 是磚加石飾不是石；podTower（Centre Point）沒有 podium、塔立在八根 pilotis 上；setback 的格子窗；slabC（Metro Central Heights）是四棟圍中庭，不是「板加一低翼」；stoneTower 沒有裙樓；modernNeedle 的「很細、平頂」沒有明說；courtC 沒有說 C／U／L 形平面。
+- **仍未能查證**：Historic England 官網（403）；BT Tower 修訂後全文；小幅修訂不會改 AmendDate。

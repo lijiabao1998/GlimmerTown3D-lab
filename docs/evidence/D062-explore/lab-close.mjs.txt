@@ -1,0 +1,4 @@
+import { dE } from '/home/user/GlimmerTown3D-lab/tools/d061-scenes.mjs';
+// 實驗線四季草色經本線輸出色模型後的目標 vs 我原型各季的底色
+const pairs = [['實驗線夏 #8fce5e→80bf55', 0x80bf55, '原型「春」底 80bf6a', 0x80bf6a], ['實驗線秋 #b8935a→aa9555', 0xaa9555, '原型秋底 aa9540', 0xaa9540], ['實驗線冬 #e8eef2→d4eaea', 0xd4eaea, '原型冬底 d4eaea', 0xd4eaea]];
+for (const [a, ca, b, cb] of pairs) console.log(a.padEnd(28), 'vs', b.padEnd(24), 'ΔE', dE(ca, cb).toFixed(1));

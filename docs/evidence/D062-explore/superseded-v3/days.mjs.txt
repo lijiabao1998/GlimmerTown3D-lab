@@ -1,0 +1,9 @@
+import fs from 'node:fs';
+import { d058City } from '/home/user/GlimmerTown3D-lab/tools/unit-d058.mjs';
+import { season } from '/home/user/GlimmerTown3D-lab/src/sim/rules/weather.ts';
+for (const id of ['newcity', 'seed516', 'ai120']) {
+  const f = `/home/user/GlimmerTown3D-lab/src/content/samples/${id}.code.txt`;
+  if (!fs.existsSync(f)) { console.log(id, 'no file'); continue; }
+  const c = d058City(fs.readFileSync(f, 'utf8'));
+  console.log(id.padEnd(8), 'day', c.day, 'doy', (c.day - 1) % 360, 'season', ['春', '夏', '秋', '冬'][season(c.day)], 'n', c.n);
+}

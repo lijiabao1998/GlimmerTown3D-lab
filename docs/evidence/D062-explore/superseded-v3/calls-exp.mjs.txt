@@ -1,0 +1,17 @@
+// 原型的繪製呼叫與三角形：每個查詢字串開一次頁面，讀 __gt.renderInfoAll()
+import { withBrowser } from '/home/user/GlimmerTown3D-lab/tools/cdp.mjs';
+import { pageSession } from '/home/user/GlimmerTown3D-lab/tools/smoke-d011.mjs';
+const SP = '/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad';
+const Q = [['夏（無季節旗標）', ''], ['春 全', 'season=0'], ['秋 全', 'season=2'], ['冬 全', 'season=3'], ['春 柔', 'season=0&seasonSoft=1'], ['冬 柔', 'season=3&seasonSoft=1'], ['雨', 'season=1&wx=1&wxTime=3.2'], ['暴雨', 'season=1&wx=2&wxTime=3.2'], ['雪', 'season=3&wx=3&wxTime=3.2'], ['彩虹', 'season=0&rainbow=1'], ['轉季一半', 'season=2&seasonB=3&seasonT=0.5']];
+const out = [];
+await withBrowser({ root: SP + '/exp/dist', width: 1440, height: 1000, port: 8397 }, async ({ page, open }) => {
+  const p = await pageSession(page, open, { W: 1440, H: 1000, mobile: false });
+  for (const [label, q] of Q) {
+    await p.open(`sample=seed516&clean=1&landArt=2${q ? '&' + q : ''}`);
+    await p.ev('__gt.view(36,36,1.2);__gt.spin(0);__gt.setVisT(2.2);__gt.setDayFrac(0)');
+    await p.frames(30);
+    const info = await p.ev('__gt.renderInfoAll()');
+    out.push({ label, calls: info.calls, triangles: info.triangles, rt: info.rt.join('x'), errors: page.errors.length });
+  }
+});
+for (const r of out) console.log(r.label.padEnd(16), 'calls', String(r.calls).padStart(3), 'triangles', String(r.triangles).padStart(7), 'rt', r.rt, 'errors', r.errors);

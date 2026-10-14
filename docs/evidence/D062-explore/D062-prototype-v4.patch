@@ -1,0 +1,218 @@
+diff --git a/src/render/cityScene.ts b/src/render/cityScene.ts
+index fa409ee..74dad3a 100644
+--- a/src/render/cityScene.ts
++++ b/src/render/cityScene.ts
+@@ -8,6 +8,8 @@ import { drawBritishStreet } from './britishStreetArt.ts';
+ import * as THREE from 'three';
+ import type { City, CityBuilding } from '../sim/city.ts';
+ import { hash2 } from '../sim/rng.ts';
++import { SEASON_A, SEASON_AMT, seasonAt } from './landArt.ts';
++const TREE_SUMMER = new THREE.Color('#a8e070'), TREE_AUTUMN = new THREE.Color('#d8722c'), TREE_GOLD = new THREE.Color('#e0a030'), TREE_RED = new THREE.Color('#c0402a'), TREE_SNOW = new THREE.Color('#eef4f8');
+ import type { Style } from './styles.ts';
+ import { Geo } from './scene.ts';
+ import { windowTexture, toonRamp, PLAIN_UV } from './textures.ts';
+@@ -202,7 +204,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
+     }
+   }
+ // D061-BEGIN land-city
+-  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over, land: blocks?.landArt ?? 0 };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）；D061：land＝地景檔位
++  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over, land: blocks?.landArt ?? 0, season: SEASON_A };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）；D061：land＝地景檔位
+ // D061-END land-city
+   let paintedOver: Uint8Array | undefined = over;                          // D027：現在貼圖上畫的是哪一份過載等級（setTraffic 拿它跟新的比）
+   const gtex = groundTexture(gc, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
+@@ -569,7 +571,17 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
+         q.position.set(x + 0.5 + jx, y + 0.14 * sc, z + 0.5 + jz); q.rotation.set(0, 0, 0); q.scale.set(sc, sc, sc); q.updateMatrix(); trunks.setMatrixAt(ti++, q.matrix);
+         q.position.y = y + (coneShape ? 0.55 : 0.42) * sc; q.rotation.set(0, hash2(x, z, 15) * 3, 0); q.updateMatrix(); mesh.setMatrixAt(k, q.matrix);
+         const h = hash2(x, z, 16) + sp * 0.07;
+-        mesh.setColorAt(k, col.setHSL((coneShape ? 0.33 : 0.27) + (h % 1) * 0.06, 0.45, (coneShape ? 0.28 : 0.36) + (h % 1) * 0.1, THREE.SRGBColorSpace));
++        {
++          // 實驗線 d23c18d：夏＝樹冠疊 #a8e070 α.18、秋＝疊 #c96a2c α.38、冬＝樹冠頂積雪（#eef4f8）、春＝基準＋路邊櫻花（hasRoadNear 1）。這裡用整棵樹染色近似；常綠針葉秋季只染 α.12
++          const h1 = h % 1, sea = seasonAt(x, z), A = SEASON_AMT;
++          let hue = (coneShape ? 0.33 : 0.27) + h1 * 0.06, sat = 0.45, lig = (coneShape ? 0.28 : 0.36) + h1 * 0.1;
++          col.setHSL(hue, sat, lig, THREE.SRGBColorSpace);
++          if (sea === 0 && !coneShape) { let rn = false; for (let dz = -1; dz <= 1 && !rn; dz++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, zz = z + dz; if (xx >= 0 && zz >= 0 && xx < n && zz < n && c.road[zz * n + xx]) { rn = true; break; } } if (rn) col.lerp(new THREE.Color().setHSL(0.93 + h1 * 0.05, 0.55, 0.72, THREE.SRGBColorSpace), A); }
++          else if (sea === 1) col.lerp(TREE_SUMMER, 0.18 * A + (coneShape ? 0 : 0.04 * A));
++          else if (sea === 2) { if (coneShape) col.lerp(TREE_AUTUMN, 0.12 * A); else { const r = hash2(x, z, 22); col.lerp(r < 0.45 ? TREE_AUTUMN : r < 0.75 ? TREE_GOLD : TREE_RED, 0.62 * A); } }   // 闊葉樹冠：橘／金／紅（實驗線落葉色 #d8722c #e0a030 #c0402a）
++          else if (sea === 3) col.lerp(TREE_SNOW, (coneShape ? 0.5 : 0.55) * A);
++          mesh.setColorAt(k, col);
++        }
+       });
+       place(round, crownsR, false);
+       place(cone, crownsC, true);
+diff --git a/src/render/ground.ts b/src/render/ground.ts
+index 4cdfdae..d100342 100644
+--- a/src/render/ground.ts
++++ b/src/render/ground.ts
+@@ -3,7 +3,9 @@
+ //   草 #74b258 一族、草皮格線（實驗線 #82c467／#7cae59，本線取淡一點的 #7cb95e）、高地草 #8aba58、水 #3f7ec0 一族、沙 #d9c689、柏油 #4e525b 一族。
+ import { hash2 } from '../sim/rng.ts';
+ // D061-BEGIN land-import
+-import { landTile, landGrass, landWater, landSand, landZone, landRoad, landCrosswalk, landLot, LAND_MAX } from './landArt.ts';
++import { landTile, landGrass, landWater, landSand, landZone, landRoad, landCrosswalk, landLot, LAND_MAX, seasonMap, seasonAt } from './landArt.ts';
++const seasonCache = new Map<number, Map<number, number> | null>();
++const seasonMapCached = (k: number) => { if (!seasonCache.has(k)) seasonCache.set(k, seasonMap(k)); return seasonCache.get(k) ?? null; };
+ const landOf = (c: { land?: number }) => Math.max(0, Math.min(LAND_MAX, Math.floor(c.land ?? 0))) | 0;   // 檔位只認 0–3；不合法的當 0
+ // D061-END land-import
+ 
+@@ -42,6 +44,7 @@ export interface GroundCity {
+   ruin?: Uint8Array;   // D026 焦土（沒有＝不畫；建築、路、鐵路的格子不畫，那是不該同時出現的資料）
+   over?: Uint8Array;   // D027 過載道路的等級（0＝沒過載，1–OVER_LEVELS；只在道路格上畫；渲染層的輸入：由介面從模擬的道路負載算出來，不是世界狀態）
+ // D061-BEGIN land-city
++  season?: number;
+   land?: number;   // D061 地景檔位 1–3（沒有或 0＝舊畫法，逐位元組同 D060；渲染層的輸入，不是世界狀態）
+ // D061-END land-city
+ }
+@@ -117,7 +120,7 @@ export function repaintTiles(c: GroundCity, cat: (k: number) => string, S: numbe
+ export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, prev: GroundCache | null, inPlace = false): { cache: GroundCache; painted: number; tiles: number[] | null } {
+   const n = c.n, [k1, k2, k3] = groundKeys(c, cat, lots, plates);
+ // D061-BEGIN land-cache-full
+-  if (!prev || prev.n !== n || prev.S !== S || (prev.land ?? 0) !== landOf(c)) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, k3, data, land: landOf(c) }, painted: n * n, tiles: null }; }   // 換檔位一定整張重畫
++  if (!prev || prev.n !== n || prev.S !== S || (prev.land ?? 0) !== landOf(c) || (prev as any).season !== c.season) { const data = paintGround(c, cat, S, lots, plates); return { cache: { n, S, k1, k2, k3, data, land: landOf(c), season: c.season } as any, painted: n * n, tiles: null }; }   // 換檔位一定整張重畫
+ // D061-END land-cache-full
+   const data = inPlace ? prev.data : prev.data.slice(), tiles: number[] = [];
+   for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) {
+@@ -126,13 +129,14 @@ export function paintGroundInc(c: GroundCity, cat: (k: number) => string, S: num
+     paintTile(c, cat, S, lots, plates, data, x, z); tiles.push(i);
+   }
+ // D061-BEGIN land-cache-inc
+-  return { cache: { n, S, k1, k2, k3, data, land: landOf(c) }, painted: tiles.length, tiles };
++  return { cache: { n, S, k1, k2, k3, data, land: landOf(c), season: c.season } as any, painted: tiles.length, tiles };
+ // D061-END land-cache-inc
+ }
+ 
+ function paintTile(c: GroundCity, cat: (k: number) => string, S: number, lots: Uint8Array | undefined, plates: Int32Array | undefined, data: Uint8Array, x: number, z: number) {
+   const n = c.n, W = n * S;
+-  const put = (px: number, py: number, col: number) => { const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
++  const SM = landOf(c) ? (() => { const s = seasonAt(x, z); return s === undefined ? null : seasonMapCached(s); })() : null;
++  const put = (px: number, py: number, col: number) => { if (SM) col = SM.get(col) ?? col; const i = (py * W + px) * 4; data[i] = (col >> 16) & 255; data[i + 1] = (col >> 8) & 255; data[i + 2] = col & 255; data[i + 3] = 255; };
+   const isRoad = (x: number, z: number) => x >= 0 && z >= 0 && x < n && z < n && c.road[z * n + x] > 0;
+   const mid = S >> 1;
+   {
+diff --git a/src/render/landArt.ts b/src/render/landArt.ts
+index 1e5aebe..a5ca7da 100644
+--- a/src/render/landArt.ts
++++ b/src/render/landArt.ts
+@@ -237,6 +237,38 @@ export function landLot(level: number, lot: number, u: number, v: number, x: num
+ // ---- 天空四階色帶（由上到下；每一階是風格 A 量化 12 階之後的輸出色。連續漸層會在量化時三個色版各自跳階，出現偏紫與偏青的怪帶）----
+ export const LAND_SKY: Record<number, number[]> = { 1: [0xaad4ea, 0xaad4ea, 0xbfd4ea, 0xbfd4ea], 2: [0x95bfea, 0xaad4ea, 0xbfd4ea, 0xbfeaea], 3: [0x80aaea, 0x95bfea, 0xaad4ea, 0xbfeaea] };
+ 
++
++// ---- PROTOTYPE 季節 v4（對齊實驗線 d23c18d 的季節語意：春＝基準、逐位元組同無季節；夏＝#8fce5e 一族、秋＝#b8935a 一族、冬＝#e8eef2 一族；實驗線 index.html 45099–45108、60449、40917–40952）----
++const urlNum = (key: string, dflt: number | undefined): number | undefined => {
++  if (typeof location === 'undefined') return dflt;
++  const m = new RegExp('[?&]' + key + '=([0-9.]+)').exec(location.search);
++  return m ? +m[1] : dflt;
++};
++export const SEASON_A = urlNum('season', undefined), SEASON_B = urlNum('seasonB', undefined), SEASON_T = urlNum('seasonT', 0), SEASON_SOFT = urlNum('seasonSoft', 0) === 1, SEASON_AMT = SEASON_SOFT ? 0.5 : 1;
++type SeasonSet = { grass: number[]; flower: number[]; stone: number[]; water: number[]; sand: number[] };
++const SEASON_OUT: Record<number, SeasonSet> = {
++  1: { grass: [0x6aaa40, 0x80aa40, 0x80bf55, 0x95bf55, 0x95d455, 0xaad46a, 0xaabf55], flower: LAND_OUT.flower, stone: LAND_OUT.stone, water: [0x406aaa, 0x4095bf, 0x4095bf, 0x55aad4, 0xaad4d4, 0xd4eaea], sand: LAND_OUT.sand },
++  2: { grass: [0x806a55, 0x958055, 0xaa9555, 0xaaaa55, 0xbfaa55, 0xd4bf6a, 0xaa8040], flower: [0xd46a40, 0xd49540, 0xbf4040], stone: LAND_OUT.stone, water: [0x406a95, 0x4080aa, 0x4080aa, 0x5595bf, 0xaac4c4, 0xd4d4d4], sand: LAND_OUT.sand },
++  3: { grass: [0xaabfaa, 0xbfd4d4, 0xd4eaea, 0xeaeaea, 0xeaeaea, 0xeaeaea, 0xbfd4bf], flower: [0xeaeaea, 0xd4eaea, 0xbfd4ea], stone: [0x95958a, 0x80806a], water: [0x6a95bf, 0x80aad4, 0x95bfea, 0xaad4ea, 0xeaeaea, 0xeaeaea], sand: [0xd4bf95, 0xead4aa, 0xbfaa80, 0xaa956a, 0x95806a] },
++};
++const SEASON_SOFT_OUT: Record<number, SeasonSet> = {
++  // 柔：草只挪半格色階、冬天只是霜（約四成白、六成灰綠），水只在貼岸一圈結冰
++  1: { grass: [0x6a9540, 0x6aaa55, 0x80aa55, 0x80bf55, 0x95bf6a, 0xaad480, 0x95bf55], flower: LAND_OUT.flower, stone: LAND_OUT.stone, water: LAND_OUT.water, sand: LAND_OUT.sand },
++  2: { grass: [0x6a8040, 0x809540, 0x95aa55, 0xaaaa55, 0xbfaa55, 0xbfbf6a, 0xaa9540], flower: [0xd4bf80, 0xd49540, 0xbf6a40], stone: LAND_OUT.stone, water: [0x406a95, 0x4080aa, 0x4080aa, 0x55aad4, 0xaad4d4, 0xd4eaea], sand: LAND_OUT.sand },
++  3: { grass: [0x95aa95, 0xaabfaa, 0xbfd4bf, 0xd4eaea, 0xeaeaea, 0xeaeaea, 0xaabfaa], flower: [0xeaeaea, 0xd4eaea, 0xbfd4ea], stone: [0x95958a, 0x80806a], water: [0x406a95, 0x4080aa, 0x4095bf, 0xaad4ea, 0xeaeaea, 0xeaeaea], sand: [0xd4bf95, 0xead4aa, 0xbfaa80, 0xaa956a, 0x95806a] },
++};
++export const seasonMap = (season: number): Map<number, number> | null => {
++  const S = (SEASON_SOFT ? SEASON_SOFT_OUT : SEASON_OUT)[season];
++  if (!S) return null;   // 春＝基準：沒有對應表
++  const m = new Map<number, number>();
++  const link = (base: number[], to: number[]) => base.forEach((c, i) => m.set(P(c), P(to[i])));
++  link(LAND_OUT.grass, S.grass); link(LAND_OUT.flower, S.flower); link(LAND_OUT.stone, S.stone); link(LAND_OUT.water, S.water); link(LAND_OUT.sand, S.sand);
++  return m;
++};
++// 轉季：每一格有自己的「換季門檻」（低頻草甸場為主、少量雜訊），進度 T 超過門檻的格子先換成下一季——像雪一塊一塊蓋上來
++export const seasonThr = (x: number, z: number) => Math.min(0.999, Math.max(0, 0.82 * ((meadowField(x, z) - 0.18) / 0.64) + 0.18 * hash2(x, z, 1301)));
++export const seasonAt = (x: number, z: number): number | undefined => SEASON_A === undefined ? undefined : SEASON_B !== undefined && seasonThr(x, z) < (SEASON_T ?? 0) ? SEASON_B : SEASON_A;
++
+ // ---- 網址旗標：?landArt=0|1|2|3|legacy；沒給＝LAND_DEFAULT（2）；任何更早的 legacy 旗標一併關掉（歷史畫面照舊）。只認白名單，?landArt=constructor 之類的值只會落到預設 ----
+ const LAND_FLAG: Record<string, number> = { '0': 0, '1': 1, '2': 2, '3': 3 };
+ export const LAND_LEGACY_KEYS = ['landArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'];
+diff --git a/src/render/post.ts b/src/render/post.ts
+index 823c8be..6fa548e 100644
+--- a/src/render/post.ts
++++ b/src/render/post.ts
+@@ -10,6 +10,25 @@ uniform vec2 texel;
+ uniform float outline;
+ uniform float quant;
+ uniform float depthRange;
++// PROTOTYPE weather v4（對齊實驗線 d23c18d：色調 60 行 62168、雨雪粒子 57262–57295、彩虹 60351、閃電 62516）
++uniform float wx;      // 0 晴 1 雨 2 暴雨 3 雪（冬天的雨）4 暴雪（冬天的暴雨）
++uniform float wxT;     // 秒（JS 端量成 20 格／秒）
++uniform float rainbow; // 0..1：強度（實驗線 9 秒線性淡出、最大 α .46）
++uniform float flash;   // 0..1
++uniform float aspect;
++uniform vec2 res;      // 後製畫布（渲染目標）的像素數
++float h11(float x) { return fract(sin(x * 12.9898) * 43758.5453); }
++float h21(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
++// 一層斜落的雨絲／雪點：一欄一個隨機速度，欄內每隔 4×len 像素有機會出現一條 len 長的絲；N＝整個畫面的期望條數（實驗線：雨 120、暴雨 240）
++float fall(vec2 pp, float t, float speed, float len, float N, float lean, float sway, float seed) {
++  float x = pp.x + floor(pp.y * lean) + floor(sin(t * 0.9 + h11(pp.x + seed) * 6.2831) * sway);
++  float col = h11(x + seed * 7.0);
++  float y = pp.y + t * speed * (0.6 + 0.8 * col) + col * 97.0;
++  float per = len * 4.0, cell = floor(y / per);
++  float dens = clamp(N * per / (res.x * res.y), 0.0, 1.0);
++  float r = h21(vec2(x * 1.7 + seed, cell * 3.1));
++  return step(r, dens) * step(mod(y, per), len);
++}
+ // D061-BEGIN land-sky-uniforms
+ uniform float sky;
+ uniform vec3 skyA;
+@@ -43,6 +62,27 @@ void main() {
+   }
+   gl_FragColor = c;
+   #include <colorspace_fragment>
++  bool isSky = sky > 0.5 && texture2D(tDepth, vUv).r > 0.99999;
++  if (wx > 0.5) {   // PROTOTYPE 天氣色調（實驗線：雨 rgba(70,90,120,.18)、暴雨 .30、冬天雪天 rgba(200,210,230,.14)）；天空的色階由 JS 事先套同一個色調再貼回 12 階
++    if (!isSky) { vec3 tc = wx > 2.5 ? vec3(200.0, 210.0, 230.0) / 255.0 : vec3(70.0, 90.0, 120.0) / 255.0; float ta = wx > 2.5 ? 0.14 : wx > 1.5 ? 0.30 : 0.18; gl_FragColor.rgb = mix(gl_FragColor.rgb, tc, ta); }
++    vec2 pp = floor(vUv / texel);
++    float hit = 0.0; vec3 pc = vec3(200.0, 220.0, 255.0) / 255.0; float pa = 0.5;
++    if (wx < 1.5) hit = fall(pp, wxT, 110.0, 3.0, 120.0, 0.35, 0.0, 1.0);
++    else if (wx < 2.5) hit = fall(pp, wxT, 140.0, 3.0, 240.0, 0.45, 0.0, 1.0);
++    else if (wx < 3.5) { hit = fall(pp, wxT, 24.0, 1.0, 120.0, 0.0, 2.0, 1.0); pc = vec3(1.0); pa = 0.85; }
++    else { hit = fall(pp, wxT, 30.0, 1.0, 240.0, 0.0, 2.0, 1.0); pc = vec3(1.0); pa = 0.85; }
++    gl_FragColor.rgb = mix(gl_FragColor.rgb, pc, hit * pa);
++  }
++  if (rainbow > 0.01) {   // PROTOTYPE 彩虹（實驗線 60351：圓心 (0.5W, 1.08H)、外半徑 .92H、帶寬 .011H→本線 .016H（1/3 解析度下 .011H 只有 3.7 個渲染像素）、七色、α .46）：天空像素吃滿 α，其餘 α .32 疊上去（3D 的地圖佔滿畫面，只畫天空會被擋掉）
++    vec2 q = vec2((vUv.x - 0.5) * aspect, vUv.y + 0.08);
++    float r = length(q), bb = (0.92 - r) / 0.016;
++    if (bb >= 0.0 && bb < 7.0 && q.y > 0.485 * r) {
++      int i = int(floor(bb));
++      vec3 rc = i == 0 ? vec3(224.0, 80.0, 74.0) : i == 1 ? vec3(232.0, 147.0, 74.0) : i == 2 ? vec3(232.0, 210.0, 74.0) : i == 3 ? vec3(84.0, 184.0, 88.0) : i == 4 ? vec3(74.0, 144.0, 216.0) : i == 5 ? vec3(90.0, 90.0, 200.0) : vec3(154.0, 84.0, 200.0);
++      gl_FragColor.rgb = mix(gl_FragColor.rgb, rc / 255.0, (isSky ? 0.46 : 0.32) * rainbow);
++    }
++  }
++  if (flash > 0.01) gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.0), flash * 0.5);   // 實驗線峰值 α .8；本線取 .5（無障礙：單閃、不頻閃）
+   if (quant > 0.5) gl_FragColor.rgb = floor(gl_FragColor.rgb * quant + 0.5) / quant;
+ }`;
+ 
+@@ -65,6 +105,7 @@ export class Pipeline {
+       uniforms: {
+         tColor: { value: this.rt.texture }, tDepth: { value: this.rt.depthTexture },
+         texel: { value: new THREE.Vector2() }, outline: { value: 0 }, quant: { value: 0 }, depthRange: { value: 1 },
++        wx: { value: 0 }, wxT: { value: 0 }, rainbow: { value: 0 }, flash: { value: 0 }, aspect: { value: 1 }, res: { value: new THREE.Vector2(1, 1) },
+ // D061-BEGIN land-sky-init
+         sky: { value: 0 }, skyA: { value: new THREE.Color() }, skyB: { value: new THREE.Color() }, skyC: { value: new THREE.Color() }, skyD: { value: new THREE.Color() },
+ // D061-END land-sky-init
+@@ -95,6 +136,18 @@ export class Pipeline {
+     u.sky.value = this.sky ? (style.quant > 0 ? 1 : 2) : 0;   // 1＝量化畫風的色帶、2＝不量化畫風的漸層、0＝舊的平色背景
+     if (this.sky) { u.skyA.value.copy(this.sky[0]); u.skyB.value.copy(this.sky[1]); u.skyC.value.copy(this.sky[2]); u.skyD.value.copy(this.sky[3]); }
+ // D061-END land-sky-set
++    {   // PROTOTYPE 天氣輸入（網址 ?wx=1..4&wxTime=秒&rainbow=0..1&flash=0..1）
++      const q = typeof location !== 'undefined' ? new URLSearchParams(location.search) : new URLSearchParams();
++      u.wx.value = +(q.get('wx') ?? 0); u.wxT.value = q.has('wxTime') ? +(q.get('wxTime') as string) : Math.floor(performance.now() / 1000 * 20) / 20;
++      u.rainbow.value = +(q.get('rainbow') ?? 0); u.flash.value = +(q.get('flash') ?? 0); u.aspect.value = w / h; u.res.value.set(w, h);
++      if (u.wx.value > 0.5 && this.sky) {   // 天空色階套同一個色調再貼回 12 階格子（避免量化出偏紫的怪帶）
++        const wxv = u.wx.value as number, tc = wxv > 2.5 ? [200, 210, 230] : [70, 90, 120], ta = wxv > 2.5 ? 0.14 : wxv > 1.5 ? 0.3 : 0.18;
++        const snap = (v: number) => Math.round(Math.max(0, Math.min(12, Math.round(v / 255 * 12))) / 12 * 255);
++        const tint = (c: THREE.Color) => { const hx = c.getHex(); return ((hx >> 16) & 255) * (1 - ta) + tc[0] * ta | 0, [snap(((hx >> 16) & 255) * (1 - ta) + tc[0] * ta), snap(((hx >> 8) & 255) * (1 - ta) + tc[1] * ta), snap((hx & 255) * (1 - ta) + tc[2] * ta)]; };
++        const set = (t: THREE.Color, c: THREE.Color) => { const [r, g, b] = tint(c); t.set((r << 16) | (g << 8) | b); };
++        set(u.skyA.value, this.sky[0]); set(u.skyB.value, this.sky[1]); set(u.skyC.value, this.sky[2]); set(u.skyD.value, this.sky[3]);
++      }
++    }
+     renderer.render(this.quadScene, this.quadCam);
+   }
+ 

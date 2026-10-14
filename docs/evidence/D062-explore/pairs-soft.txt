@@ -1,0 +1,5 @@
+柔檔 season  grass-base  water-base  road   zoneR  zoneC  zoneI | ΔE grass/water  road/grass  zoneR/grass zoneC/grass zoneI/grass | water-light/grass(shore)  sand/grass
+春   #6aaa55 #4080bf #555555 #6abfaa #bf95d4 #bf8040 |   85.4     59.2      36.1      90.2      55.7 |     70.4     38.2
+夏   #80aa55 #4080bf #555555 #6abfaa #bf95d4 #bf8040 |   84.1     56.5      37.1      86.1      47.8 |     69.8     30.7
+秋   #95aa55 #4080aa #555555 #6abfaa #bf95d4 #bf8040 |   72.4     55.0      40.1      82.6      39.7 |     70.5     23.4
+冬   #bfd4bf #4095bf #555555 #6abfaa #bf95d4 #bf8040 |   44.7     48.7      23.4      53.5      52.0 |     23.4     20.6

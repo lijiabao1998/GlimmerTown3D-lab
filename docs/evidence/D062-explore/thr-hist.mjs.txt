@@ -1,0 +1,11 @@
+globalThis.location = { search: '' };
+const L = await import('/tmp/claude-0/-home-user-GlimmerTown3D-lab/1669b73f-8ee1-581b-9f53-351901c7277e/scratchpad/exp/src/render/landArt.ts');
+const n = 72, v = [];
+for (let z = 0; z < n; z++) for (let x = 0; x < n; x++) v.push(L.seasonThr(x, z));
+v.sort((a, b) => a - b);
+const q = p => v[Math.min(v.length - 1, Math.floor(p * v.length))].toFixed(3);
+console.log('thr deciles:', [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1].map(q).join(' '));
+// fraction flipped when t = k/12 (k=1..11)
+console.log('flipped fraction at t=k/12:', Array.from({ length: 11 }, (_, i) => { const t = (i + 1) / 12; return (v.filter(a => a < t).length / v.length).toFixed(2); }).join(' '));
+// with a 12-day window t_k=(k+.5)/12, k=0..11: flips per day
+let prev = 0; const per = []; for (let k = 0; k < 12; k++) { const t = (k + .5) / 12, f = v.filter(a => a < t).length / v.length; per.push((f - prev).toFixed(3)); prev = f; } console.log('per-day new flips:', per.join(' '), 'final', prev.toFixed(3));
