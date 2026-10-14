@@ -1,0 +1,95 @@
+{
+ "baseline": "d4cef37ae05b1ab65c801e8f3b76a1a4d40a91e4",
+ "grounds": {
+  "newcity:lots": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "7f3e5506eab490fe9029c49ce7e1f16a2e536c05566cfc85327907b3e0a332b5"
+  },
+  "newcity:plain": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "7f3e5506eab490fe9029c49ce7e1f16a2e536c05566cfc85327907b3e0a332b5"
+  },
+  "seed516:lots": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "a759a831aa9afe0c8d9e81cb4c372ad31d24869b9869069973ec67daf441ea04"
+  },
+  "seed516:plain": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "04234eef36b4f8e52b7d84ede7ba6531b6568eb562b8c03fa2b11ce8a0fffe1f"
+  },
+  "ai120:lots": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "defcdf0ad7c9473874b97d5f7c6e9ca0f59c2576ec275f39f7ae71f2eacef4ab"
+  },
+  "ai120:plain": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "237c2afd90564c3f236c3e830c9556aa01f946ab6527feb36c28e53ef9d17f34"
+  },
+  "starter:lots": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "ec308742c57bc08ef5e21c0d5d3cdc88cdbe89ae5e1f8d6f3963a1f3e6bdeab7"
+  },
+  "starter:plain": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "2584623494e375785b4c301376c77517fba260e23412f9623da73cb6514a7a48"
+  },
+  "zoned": {
+   "n": 72,
+   "S": 8,
+   "bytes": 1327104,
+   "sha": "5b8728f7a0a52821b6aae39bfbdc90bd1bfd859c5d0c32ecaf0b9ae555538f33"
+  }
+ },
+ "scenes": {
+  "seed516": {
+   "a": {
+    "signature": "f9fee6b8bb98a08b4dfa8c536c7639eb42515fae4007bad2e1f3bd8ef5c4b976",
+    "weighted": 121606,
+    "meshes": 10
+   },
+   "b": {
+    "signature": "ef07fc351b17ec773fe492cb157c1c3e2842d0600a55a31efb86fbaccc0f580a",
+    "weighted": 86156,
+    "meshes": 10
+   },
+   "c": {
+    "signature": "9eb65ca70e06b41263343ce7b5094aa03197586412a205e6ea6687bee31f90c2",
+    "weighted": 116227,
+    "meshes": 10
+   }
+  },
+  "ai120": {
+   "a": {
+    "signature": "4faa4fc49180f702c9dd31b1f9453fe8d94423296e7bac4b29fdd899cd1b73d3",
+    "weighted": 92942,
+    "meshes": 10
+   },
+   "b": {
+    "signature": "ddd8832790fcbbb63d486fe60a97a4e281af937cfe0a1533dd4567b6299f89d3",
+    "weighted": 87611,
+    "meshes": 10
+   },
+   "c": {
+    "signature": "94925ddeaa6504a8092ac101c8f1a47d8a9f36adc2e774aa112dc7233fb9fcfd",
+    "weighted": 96607,
+    "meshes": 10
+   }
+  }
+ }
+}

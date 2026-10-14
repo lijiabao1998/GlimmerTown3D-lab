@@ -10,9 +10,28 @@ uniform vec2 texel;
 uniform float outline;
 uniform float quant;
 uniform float depthRange;
+// D061-BEGIN land-sky-uniforms
+uniform float sky;
+uniform vec3 skyA;
+uniform vec3 skyB;
+uniform vec3 skyC;
+uniform vec3 skyD;
+// D061-END land-sky-uniforms
 varying vec2 vUv;
 void main() {
   vec4 c = texture2D(tColor, vUv);
+// D061-BEGIN land-sky-mix
+  if (sky > 0.5 && texture2D(tDepth, vUv).r > 0.99999) {   // 背景（深度＝遠平面）換成天空；描邊照舊乘在上面
+    if (sky > 1.5) {   // 不量化的畫風（B、C）：四個色階之間線性漸層，不抖動
+      float g = clamp((vUv.y - 0.125) / 0.75, 0.0, 1.0) * 3.0;
+      c.rgb = g < 1.0 ? mix(skyD, skyC, g) : g < 2.0 ? mix(skyC, skyB, g - 1.0) : mix(skyB, skyA, g - 2.0);
+    } else {   // 量化的畫風（A）：四階色帶，帶與帶之間照渲染像素抖動（連續漸層會在量化時三個色版各自跳階，出現偏紫、偏青的怪帶）
+      float n = fract(sin(dot(floor(vUv / texel), vec2(12.9898, 78.233))) * 43758.5453);
+      float s = clamp(vUv.y + (n - 0.5) * 0.035, 0.0, 1.0);
+      c.rgb = s > 0.75 ? skyA : s > 0.5 ? skyB : s > 0.25 ? skyC : skyD;
+    }
+  }
+// D061-END land-sky-mix
   if (outline > 0.5) {
     float d = texture2D(tDepth, vUv).r;
     float e = 0.0;
@@ -33,6 +52,9 @@ export class Pipeline {
   private quadCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   private mat: THREE.ShaderMaterial;
   sceneInfo = { calls: 0, triangles: 0 };
+// D061-BEGIN land-sky-prop
+  sky: THREE.Color[] | null = null;   // D061：天空四階色帶，由上到下（零幾何；null＝舊的平色背景，畫面逐位元組不變）
+// D061-END land-sky-prop
 
   constructor() {
     this.rt = new THREE.WebGLRenderTarget(1, 1, { depthBuffer: true });
@@ -43,6 +65,9 @@ export class Pipeline {
       uniforms: {
         tColor: { value: this.rt.texture }, tDepth: { value: this.rt.depthTexture },
         texel: { value: new THREE.Vector2() }, outline: { value: 0 }, quant: { value: 0 }, depthRange: { value: 1 },
+// D061-BEGIN land-sky-init
+        sky: { value: 0 }, skyA: { value: new THREE.Color() }, skyB: { value: new THREE.Color() }, skyC: { value: new THREE.Color() }, skyD: { value: new THREE.Color() },
+// D061-END land-sky-init
       },
       vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
       fragmentShader: FRAG,
@@ -66,6 +91,10 @@ export class Pipeline {
     u.outline.value = style.outline ? 1 : 0;
     u.quant.value = style.quant;
     u.depthRange.value = cam.far - cam.near;
+// D061-BEGIN land-sky-set
+    u.sky.value = this.sky ? (style.quant > 0 ? 1 : 2) : 0;   // 1＝量化畫風的色帶、2＝不量化畫風的漸層、0＝舊的平色背景
+    if (this.sky) { u.skyA.value.copy(this.sky[0]); u.skyB.value.copy(this.sky[1]); u.skyC.value.copy(this.sky[2]); u.skyD.value.copy(this.sky[3]); }
+// D061-END land-sky-set
     renderer.render(this.quadScene, this.quadCam);
   }
 

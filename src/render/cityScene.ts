@@ -39,7 +39,9 @@ export interface CityHit { id: number; x: number; z: number; block?: number }
 // D058-BEGIN street-option
 // D059-BEGIN village-option
 // D060-BEGIN industry-option
-export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D061-BEGIN land-option
+export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; landArt?: number; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D061-END land-option
 // D060-END industry-option
 // D059-END village-option
 // D058-END street-option
@@ -199,7 +201,9 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
       for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) plates[(b.z + dz) * n + b.x + dx] = pc;
     }
   }
-  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）
+// D061-BEGIN land-city
+  const gc: GroundCity = { ...c, wp: pipes ? c.wp : undefined, over, land: blocks?.landArt ?? 0 };   // 一律複製一份：D027 的 setTraffic 會換 gc.over，不能寫到城市模型（渲染不改世界狀態）；D061：land＝地景檔位
+// D061-END land-city
   let paintedOver: Uint8Array | undefined = over;                          // D027：現在貼圖上畫的是哪一份過載等級（setTraffic 拿它跟新的比）
   const gtex = groundTexture(gc, look, S, lots, plates, con, T); if (!con) disposables.push(gtex);   // D015：有施工資料時貼圖屬於快取
   stats.up += stats.groundUp; stats.groundFull = n * S * n * S * 4;

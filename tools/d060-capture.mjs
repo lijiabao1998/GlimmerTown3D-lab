@@ -17,7 +17,7 @@ const out=path.join(ROOT,'scratch/d060');
 const selectedWidths=(process.env.D060_WIDTHS??'').split(',').filter(Boolean).map(Number);
 const views=D060_VIEWPORTS.filter(v=>!selectedWidths.length||selectedWidths.includes(v.W));assert.ok(views.length);
 const code=d060ReviewCode(),proof=d060FixtureProof(code);
-const PHASES={before:'industryArt=legacy',after:''};
+const PHASES={before:'industryArt=legacy',after:'landArt=legacy'};   // D061：後來的全局地景美術（landArt）預設開著，而 industryArt=legacy 會連它一起關掉；D060 的前後對照只比 D060 自己的改動，所以 after 相也把地景關掉（A 檔場景摘要才會逐位相同）
 const html=fs.readFileSync(path.join(ROOT,'dist/index.html'));
 fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'D060-fixture.code.txt'),code);
 const report={sourceRef:process.env.GITHUB_SHA??'local uncommitted D060 candidate',baseline:D060_BASELINE,htmlSha256:sha(html),fixtureSha256:sha(code),fixture:proof,

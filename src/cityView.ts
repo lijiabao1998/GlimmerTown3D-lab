@@ -50,6 +50,9 @@ import { overLevel } from './render/ground.ts';
 import { LOOKS } from './content/looks.ts';
 import { shapeOf, kindColors, KIND_SHAPES } from './content/kindShapes.ts';
 import { Pipeline } from './render/post.ts';
+// D061-BEGIN land-view-import
+import { landLevelOf, LAND_SKY } from './render/landArt.ts';
+// D061-END land-view-import
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
 import { ARCHE } from './content/arche.ts';
@@ -141,13 +144,18 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // D007：非住商工照造型表畫（街區模式才用）
   // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
   const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy'), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D061-BEGIN land-level
+  const landLevel = landLevelOf(k => q.get(k));   // 地景檔位 0–3（旗標規則在 src/render/landArt.ts，Node 守衛直接測）
+// D061-END land-level
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
 // D058-BEGIN street-default
 // D059-BEGIN village-enabled
 // D060-BEGIN industry-enabled
-    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D061-BEGIN land-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D061-END land-enabled
 // D060-END industry-enabled
 // D059-END village-enabled
 // D058-END street-default
@@ -159,6 +167,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   renderer.shadowMap.type = style.softShadow ? THREE.PCFSoftShadowMap : THREE.BasicShadowMap;
   document.body.appendChild(renderer.domElement);
   const pipe = new Pipeline();
+// D061-BEGIN land-sky
+  if (blockMode && landLevel > 0) pipe.sky = LAND_SKY[landLevel].map(h => new THREE.Color(h));   // 天空四階色帶（只在街區模式、檔位 > 0）
+// D061-END land-sky
   const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
   const controls = new OrbitControls(cam, renderer.domElement);
   controls.enableDamping = true;
