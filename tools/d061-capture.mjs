@@ -76,7 +76,7 @@ try {
       // A fresh browser for every shot: `sample=` over an existing autosaved city asks for confirmation (the smoke harness turns that into an error), and a fresh profile also means no state leaks between levels.
       await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:8365},async({page,open})=>{
         const p=await pageSession(page,open,{W:v.W,H:v.H,mobile:v.mobile});
-        await p.open(`sample=${v.sample}&clean=1&${lv.flag}`);
+        await p.open(`sample=${v.sample}&clean=1&${lv.flag}&season=off&weather=off`);   // D062：季節與天氣預設開（ai120 的第 121 天是夏天），這支工具量的是 D061 的畫面，所以一律關掉季節；季節本身由 tools/d062-capture.mjs 量
         const sim=await p.ev('__gt.sim()');if(sim)assert.equal(sim.playing,false,'the clock is paused, so the world cannot change between shots');   // 樣本城沒有模擬物件（sim＝null），只有新城有
         await settle(p,v);await p.frames(3);
         const w=sha(await p.ev(world));if(worldSha===null)worldSha=w;assert.equal(w,worldSha,`${v.id} ${lv.id}: same world as the legacy shot`);
@@ -144,7 +144,7 @@ try {
     const v=D061_VIEWS.find(x=>x.id==='newcity-far'),file=`D061-style${style}-newcity-far-2.png`;
     await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:8367},async({page,open})=>{
       const p=await pageSession(page,open,{W:v.W,H:v.H,mobile:false});
-      await p.open(`sample=${v.sample}&clean=1&style=${style}&landArt=2`);await settle(p,v);await p.frames(3);
+      await p.open(`sample=${v.sample}&clean=1&style=${style}&landArt=2&season=off&weather=off`);await settle(p,v);await p.frames(3);
       const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');
       fs.writeFileSync(path.join(out,file),bytes);
       const img=decodePng(bytes),render=await p.ev('__gt.renderInfo()'),groundCheck=await p.ev('__gt.groundCheck()'),sky=columnColours(img,2,0,Math.floor(v.H*.3));
