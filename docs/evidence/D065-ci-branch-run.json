@@ -1,0 +1,157 @@
+{
+ "run": {
+  "id": 38668267606,
+  "html_url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38668267606",
+  "event": "push",
+  "head_branch": "claude/3d-claude-reading-o11uvs",
+  "head_sha": "4cf2623971c9b935867f862e47ed584e09a44483",
+  "created_at": "2026-10-15T01:55:37Z",
+  "updated_at": "2026-10-15T03:24:25Z",
+  "status": "completed",
+  "conclusion": "success"
+ },
+ "jobs": [
+  {
+   "name": "d064 (360)",
+   "id": 116205081102,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:42Z"
+  },
+  {
+   "name": "d064 (412)",
+   "id": 116205081360,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:58:06Z"
+  },
+  {
+   "name": "d055",
+   "id": 116205081378,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:30Z"
+  },
+  {
+   "name": "d062",
+   "id": 116205081391,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T02:05:02Z"
+  },
+  {
+   "name": "d061",
+   "id": 116205081450,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:58:23Z"
+  },
+  {
+   "name": "d063 (412)",
+   "id": 116205081480,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:31Z"
+  },
+  {
+   "name": "d063 (360)",
+   "id": 116205081510,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:12Z"
+  },
+  {
+   "name": "d060 (412)",
+   "id": 116205081519,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:32Z"
+  },
+  {
+   "name": "d060 (360)",
+   "id": 116205081534,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:39Z",
+   "completed_at": "2026-10-15T01:57:23Z"
+  },
+  {
+   "name": "smoke",
+   "id": 116205081354,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:40Z",
+   "completed_at": "2026-10-15T03:24:24Z"
+  },
+  {
+   "name": "d059",
+   "id": 116205081364,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:40Z",
+   "completed_at": "2026-10-15T02:06:00Z"
+  },
+  {
+   "name": "d060 (1440)",
+   "id": 116205081397,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:40Z",
+   "completed_at": "2026-10-15T02:16:22Z"
+  },
+  {
+   "name": "d064 (1440)",
+   "id": 116205081507,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:40Z",
+   "completed_at": "2026-10-15T02:35:50Z"
+  },
+  {
+   "name": "d063 (1440)",
+   "id": 116205081624,
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:55:40Z",
+   "completed_at": "2026-10-15T02:21:52Z"
+  },
+  {
+   "name": "pages",
+   "id": 116229924970,
+   "conclusion": "skipped",
+   "started_at": "2026-10-15T03:24:25Z",
+   "completed_at": "2026-10-15T03:24:24Z"
+  }
+ ],
+ "smokeSteps": [
+  {
+   "name": "Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）",
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:56:02Z",
+   "completed_at": "2026-10-15T02:15:53Z"
+  },
+  {
+   "name": "煙霧測試",
+   "conclusion": "success",
+   "started_at": "2026-10-15T02:15:54Z",
+   "completed_at": "2026-10-15T03:17:23Z"
+  },
+  {
+   "name": "拍樣張（三畫風×三年份×兩個距離）",
+   "conclusion": "success",
+   "started_at": "2026-10-15T03:17:23Z",
+   "completed_at": "2026-10-15T03:24:18Z"
+  }
+ ],
+ "smokeCounts": {
+  "unit": {
+   "ok": 742,
+   "ng": 0,
+   "seconds": 1191.2
+  },
+  "browser": {
+   "ok": 850,
+   "ng": 0,
+   "seconds": 3687.5
+  },
+  "note": "數自 smoke 工作的日誌：兩個「OK 綠燈」標記之間的「OK」行（Node 套件在第一個標記之前、browser 套件在兩個標記之間）；日誌 2133 行、521253 位元組、SHA-256 dd117966a7d4f485…（日誌本身不入庫）；沒有 NG 行；D065 的 7 項在日誌第 949–955 行"
+ },
+ "tested": {
+  "sha": "4cf2623971c9b935867f862e47ed584e09a44483",
+  "docsOnlyAfter": "之後的提交（e005bb1、與 main 的合併 96932c6）只動文件，paths-ignore 不觸發 CI"
+ }
+}
