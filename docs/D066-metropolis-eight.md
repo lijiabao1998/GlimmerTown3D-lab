@@ -35,6 +35,6 @@ post-D065 盤點中 seed516 的八類九棟通用大型設施；避開 Claude ba
 - 完整 Node 回歸第二輪全綠（1750.4 秒，exit 0）。首輪保留三個紅燈：D035／D036 主機效能波動與 D064 三參數靜態接線辨識。D064 只增加接受明確 metropolisOn 第四參數，未放寬旗標條件；未改任何效能門檻。第二輪 D035 4.39 ms／比值 1.14、D036 live 3.65 ms／比值 0.97。
 
 ## 圖面與發布狀態
-本機 Chromium 因 socket 權限拒絕而未能啟動；官方助手雲端瀏覽器不能連到工作區 localhost，且僅接受 HTTP／HTTPS。沒有繞過安全限制，尚無實拍 PNG 或業主新圖批准。
-已準備僅在獨立草稿分支觸發的 CI 拍攝 workflow，只有 contents:read，沒有 Pages 或其他部署步驟。業主已批准推送獨立草稿分支及執行 CI 產預覽；本卡記錄時尚未取得 CI 圖面結果。
+本機 Chromium 因 socket 權限拒絕而未能啟動；官方助手雲端瀏覽器不能連到工作區 localhost，且僅接受 HTTP／HTTPS。沒有繞過安全限制。經業主批准，使用 GitHub CI 正常產生實拍 PNG。尚無業主新圖批准。
+已準備僅在獨立草稿分支觸發的 CI 拍攝 workflow，只有 contents:read，沒有 Pages 或其他部署步驟。業主已批准推送獨立草稿分支及執行 CI 產預覽；CI 38747427495 全綠，候選 13b34b6ec1eef85d5079de8892c1cdee979ca640，54 張原始 PNG 加3張對照表。型別、D066／D065、build 與真 WebGL 相同世界相同鏡頭對照均通過；15 draw calls 不變，C 模式三角形113658→112762。artifact 11978748732，ZIP SHA256 58f119b80cc6844888632f31e905cf596165059cdaff6e2f2bab04514d2c1cdb。首輪 CI 因 checkout 未抓基線而失敗，已明確 fetch 固定基線修復，未放寬來源守衛。
 未合併、未部署，未測 Android 真機。
