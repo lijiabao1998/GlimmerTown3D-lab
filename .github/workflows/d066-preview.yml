@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch immutable source-scope baseline
+        run: git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
       - uses: actions/setup-node@v4
         with:
           node-version: 24
