@@ -1,0 +1,413 @@
+{
+  "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+  "started": "2026-10-15T02:17:55.582Z",
+  "commit": "f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80",
+  "viewports": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "far",
+              "file": "public-default-far-1440.png",
+              "sha256": "0ee033ec9d30703c4c5c8a34460dad5af584f955b3bb490b3f7b519828b5bde5",
+              "bytes": 129516,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  151.19999999999996,
+                  94.06040612287404,
+                  151.2
+                ],
+                "target": [
+                  35.99999999999999,
+                  0,
+                  35.99999999999999
+                ],
+                "zoom": 1.2
+              }
+            },
+            {
+              "view": "skyline",
+              "file": "public-default-skyline-1440.png",
+              "sha256": "1ab57fd72e864462fdf5f4d841a87152bad1719fe193dccfb1df04f95d3f10ca",
+              "bytes": 160329,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-default-downtown-1440.png",
+              "sha256": "a9991fcdc17745b908357173c9e3536b5c05e8bfb6d467796518ae4396cc2231",
+              "bytes": 179819,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.6
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "commerceArt=legacy",
+          "shots": [
+            {
+              "view": "far",
+              "file": "public-legacy-far-1440.png",
+              "sha256": "d6262e347279732db8888d1a8130d53845e22469ba555ce6e5b0559f8a44acc0",
+              "bytes": 128755,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  151.19999999999996,
+                  94.06040612287404,
+                  151.2
+                ],
+                "target": [
+                  35.99999999999999,
+                  0,
+                  35.99999999999999
+                ],
+                "zoom": 1.2
+              }
+            },
+            {
+              "view": "skyline",
+              "file": "public-legacy-skyline-1440.png",
+              "sha256": "1f578935cf41fe41f253fc8c5f3a59291eaa8232c2bfeea2da088b7c64a362f6",
+              "bytes": 157619,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-legacy-downtown-1440.png",
+              "sha256": "2bb0976771b8bbea1b70871fe966cb55e92a99ce0874836a1d2950409f710807",
+              "bytes": 177446,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.6
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "skyline",
+              "file": "public-default-skyline-360.png",
+              "sha256": "e080ea3ba4b0d123157f413df07902df74aff9b51f97b9bccc2489c842982a1c",
+              "bytes": 35827,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-default-downtown-360.png",
+              "sha256": "bfb510e3d95170a9f70cb70f5cffae96639bdbb68760024459eea5bbd97b3dce",
+              "bytes": 41700,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.08
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "commerceArt=legacy",
+          "shots": [
+            {
+              "view": "skyline",
+              "file": "public-legacy-skyline-360.png",
+              "sha256": "fb17ee33ebc4b2af73bc24845520d0913dd222863558a0487b1bf24c3f19ccc1",
+              "bytes": 35569,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-legacy-downtown-360.png",
+              "sha256": "dbf84d2f8b6ec8d2ae9dfcc7e1a1d986d71debdd4abc1d93b4b3a270dd796da3",
+              "bytes": 42094,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.08
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "skyline",
+              "file": "public-default-skyline-412.png",
+              "sha256": "d147560fc4fa16f7a56f9038b461ef27c63ad8e9b17651c70ae345d2c7a2afa0",
+              "bytes": 45051,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-default-downtown-412.png",
+              "sha256": "c9f47312e63a3b870552578702c33058e503cafa5599ab88cfe4f5135759e00e",
+              "bytes": 53303,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.08
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "commerceArt=legacy",
+          "shots": [
+            {
+              "view": "skyline",
+              "file": "public-legacy-skyline-412.png",
+              "sha256": "578342d0b1c63b9623bfe81f64ed37144b6d6270cc4bbc0711d4cab9469c5b24",
+              "bytes": 44324,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  140.07500000000002,
+                  94.06040612287403,
+                  126.70000000000002
+                ],
+                "target": [
+                  24.875000000000004,
+                  0,
+                  11.500000000000002
+                ],
+                "zoom": 2.4
+              }
+            },
+            {
+              "view": "downtown",
+              "file": "public-legacy-downtown-412.png",
+              "sha256": "0307310f9b29e217509885445f6868aabe6b622d8304f6f64d0f42192dfcd087",
+              "bytes": 53489,
+              "render": {
+                "calls": 15,
+                "triangles": 116227
+              },
+              "camera": {
+                "pos": [
+                  137.97966101694917,
+                  94.06040612287403,
+                  139.0135593220339
+                ],
+                "target": [
+                  22.779661016949152,
+                  0,
+                  23.8135593220339
+                ],
+                "zoom": 2.08
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "deployed": {
+    "bytes": 1300558,
+    "sha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+    "etag": "W/\"6ad03739-13d84e\"",
+    "lastModified": "Thu, 15 Oct 2026 02:15:21 GMT"
+  },
+  "localBuild": {
+    "bytes": 1300558,
+    "sha256": "c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659",
+    "builtFrom": "f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80"
+  },
+  "sameBytes": true,
+  "browserSource": "the HTML downloaded from https://lijiabao1998.github.io/GlimmerTown3D-lab/ (sha256 c1ce8a7e1fbbf338639f7ad975bd3d4a1f668d3752a22c4b2d1e388cd0c9d659), served from 127.0.0.1 (this sandbox Chromium cannot trust the egress proxy CA, so it cannot open https itself)",
+  "finished": "2026-10-15T02:18:47.801Z"
+}
