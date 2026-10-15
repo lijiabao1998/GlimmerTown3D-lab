@@ -26,6 +26,10 @@ import { drawBritishIndustry } from './britishIndustryArt.ts';
 import { commerceBlock } from '../content/britishCommerce.ts';
 import { drawBritishCommerce } from './britishCommerceArt.ts';
 // D063-END commerce-imports
+// D065-BEGIN house-imports
+import { houseBlock, houseModel } from '../content/britishHouses.ts';
+import { drawBritishHouse } from './britishHouseArt.ts';
+// D065-END house-imports
 import type { Dressing } from '../content/dressing.ts';
 import type { FacadePlan, TrimPlan } from '../content/facades.ts';
 import { drawBlock, drawNearJob, countNear, emptyCounts, type ArtCounts, type YardTree, type NearJob } from './blockArt.ts';
@@ -49,7 +53,9 @@ export interface CityHit { id: number; x: number; z: number; block?: number }
 // D061-BEGIN land-option
 // D062-BEGIN season-option
 // D063-BEGIN commerce-option
-export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; commerceArt?: boolean; landArt?: number; season?: SeasonOption; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D065-BEGIN house-option
+export interface BlockRender { mode: BlockMode; streetArt?: boolean; villageArt?: boolean; industryArt?: boolean; commerceArt?: boolean; houseArt?: boolean; houseForce?: { villa?: number; modern?: number } | null; landArt?: number; season?: SeasonOption; plan: DrawBlock[]; recipe(b: DrawBlock): Recipe; dress(b: DrawBlock): Dressing;
+// D065-END house-option
 // D063-END commerce-option
 // D062-END season-option
 // D061-END land-option
@@ -182,7 +188,9 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
 // D059-BEGIN village-mode-key
 // D060-BEGIN industry-mode-key
 // D063-BEGIN commerce-mode-key
-  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}${blocks?.villageArt && blocks.detail ? '|D059' : ''}${blocks?.industryArt && blocks.detail ? '|D060' : ''}${blocks?.commerceArt && blocks.detail ? '|D063' : ''}`;
+// D065-BEGIN house-mode-key
+  const modeKey = `${blocks ? blocks.mode : 'off'}|${blocks?.detail ? 1 : 0}|${civic ? 1 : 0}|${con ? 1 : 0}|${n}${blocks?.streetArt ? '|D058' : ''}${blocks?.villageArt && blocks.detail ? '|D059' : ''}${blocks?.industryArt && blocks.detail ? '|D060' : ''}${blocks?.commerceArt && blocks.detail ? '|D063' : ''}${blocks?.houseArt && blocks.detail ? '|D065' : ''}`;
+// D065-END house-mode-key
 // D063-END commerce-mode-key
 // D060-END industry-mode-key
 // D059-END village-mode-key
@@ -344,19 +352,27 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     const industry = blocks.industryArt && blocks.detail ? industryBlock(blocks.recipe(bk)) : null;
 // D063-BEGIN commerce-select
     const commerce = blocks.commerceArt && blocks.detail ? commerceBlock(blocks.recipe(bk)) : null;
-    const frame = village || industry || commerce ? streetFrame(c, bk) : null;
+// D065-BEGIN house-select
+    const house = blocks.houseArt && blocks.detail ? houseBlock(blocks.recipe(bk)) : null;
+    const houseKind = house ? houseModel(house, blocks.recipe(bk).v, (hash2(bk.x, bk.z, 66) * 1000) | 0, blocks.houseForce?.[house] ?? null) : null;
+    const frame = village || industry || commerce || house ? streetFrame(c, bk) : null;
+// D065-END house-select
 // D063-END commerce-select
 // D063-BEGIN commerce-key
-    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : '') + (village && frame ? '|D059:' + village + ':' + frame.key : '') + (industry && frame ? '|D060:' + industry + ':' + frame.key : '') + (commerce && frame ? '|D063:' + commerce + ':' + frame.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+// D065-BEGIN house-key
+    specs.push({ key: blockKey(bk, y0) + (street ? '|D058:' + street.key : '') + (village && frame ? '|D059:' + village + ':' + frame.key : '') + (industry && frame ? '|D060:' + industry + ':' + frame.key : '') + (commerce && frame ? '|D063:' + commerce + ':' + frame.key : '') + (houseKind && frame ? '|D065:' + houseKind + ':' + frame.key : ''), owner: -(bi + 1), block: bi, rect: [bk.x, bk.z, bk.x + bk.w, bk.z + bk.h], gen: (W, O, D, m) => {
+// D065-END house-key
 // D063-END commerce-key
       const fp = blocks.detail ? blocks.facade(bk) : null, nj: NearJob[] = [];
       m.counts = emptyCounts(); m.facade = !!fp;
 // D063-BEGIN commerce-draw
-      if ((industry || commerce) && frame) {
+// D065-BEGIN house-draw
+      if ((industry || commerce || houseKind) && frame) {
         const local = { ...bk, x: 0, z: 0, w: frame.turn % 2 ? bk.h : bk.w, h: frame.turn % 2 ? bk.w : bk.h };
         const r = blocks.recipe(local);
-        const ctx = { W, O, D, x0: 0, z0: 0, w: local.w, d: local.h, y0, wall: r.wallPx / PX_PER_CELL, pal: (r.v + ((hash2(bk.x, bk.z, commerce ? 63 : 60) * 6) | 0)) % 6, weather: r.path === 'core' };
-        m.anchor = commerce ? drawBritishCommerce(ctx, commerce) : drawBritishIndustry(ctx, industry!);
+        const ctx = { W, O, D, x0: 0, z0: 0, w: local.w, d: local.h, y0, wall: r.wallPx / PX_PER_CELL, pal: (r.v + ((hash2(bk.x, bk.z, commerce ? 63 : houseKind ? 65 : 60) * 6) | 0)) % 6, weather: r.path === 'core' };
+        m.anchor = houseKind ? drawBritishHouse(ctx, houseKind) : commerce ? drawBritishCommerce(ctx, commerce) : drawBritishIndustry(ctx, industry!);
+// D065-END house-draw
 // D063-END commerce-draw
         m.facade = false;
         for (const g of [W, O, D]) for (let i = 0; i < g.pos.length; i += 3) {

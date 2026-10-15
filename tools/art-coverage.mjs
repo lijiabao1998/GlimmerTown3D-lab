@@ -21,6 +21,7 @@ import {isBritishStreet} from '../src/content/britishStreets.ts';
 import {villageBlock,villageKind} from '../src/content/britishVillage.ts';
 import {industryBlock} from '../src/content/britishIndustry.ts';
 import {commerceBlock} from '../src/content/britishCommerce.ts';
+import {houseBlock} from '../src/content/britishHouses.ts';
 import {BRITISH_KINDS} from '../src/content/britishCivic.ts';
 import {BRITISH_HERITAGE_KINDS} from '../src/content/britishHeritage.ts';
 import {TOWER_KINDS} from '../src/content/britishTowers.ts';
@@ -36,11 +37,11 @@ const civic={shape:k=>shapeOf(k,true,true),colors:(k,lv)=>kindColors(LOOKS,k,lv,
 const LAND_USE={1:'住宅',2:'商業',3:'工業'};
 const SIZES=[[1,1],[1,2],[2,1],[2,2]];
 
-const classify=r=>isBritishStreet(r)?'D058 英式街屋':villageBlock(r)?'D059 村莊':industryBlock(r)?'D060 工業':commerceBlock(r)?'D063 商業':'通用';   // 順序＝cityScene 的選擇順序；D063 之前的存證（art-coverage-2026-10-14.json）沒有這一列
+const classify=r=>isBritishStreet(r)?'D058 英式街屋':villageBlock(r)?'D059 村莊':industryBlock(r)?'D060 工業':commerceBlock(r)?'D063 商業':houseBlock(r)?'D065 獨棟屋':'通用';   // 順序＝cityScene 的選擇順序；D063 之前的存證（art-coverage-2026-10-14.json）沒有這一列
 
 export function coverage(id) {
   const city=d058City(fs.readFileSync(path.join(ROOT,`src/content/samples/${id}.code.txt`),'utf8'));
-  const blocks={...d058Blocks(city,'c'),villageArt:true,industryArt:true,commerceArt:true,detail:true};
+  const blocks={...d058Blocks(city,'c'),villageArt:true,industryArt:true,commerceArt:true,houseArt:true,detail:true};
   const con=new ConState(city.n),built=buildCityScene(city,KT,STYLES.A,blocks,'d',civic,con,true);
   try {
     const meshes=sceneDigest(built).meshes,owner=(name,o)=>meshes[name]?.ownerTris?.[o]??0;

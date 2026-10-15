@@ -1,0 +1,515 @@
+{
+ "models": {
+  "georgianBox": {
+   "weighted": 89,
+   "triangles": {
+    "walls": 8,
+    "other": 6,
+    "dress": 61
+   },
+   "height": 0.69,
+   "footprintU": "0.160..0.840",
+   "footprintV": "0.240..0.860",
+   "colourSets": 6
+  },
+  "gothicVilla": {
+   "weighted": 112,
+   "triangles": {
+    "walls": 28,
+    "other": 10,
+    "dress": 36
+   },
+   "height": 0.8,
+   "footprintU": "0.130..0.850",
+   "footprintV": "0.250..0.860",
+   "colourSets": 6
+  },
+  "craftsHouse": {
+   "weighted": 102,
+   "triangles": {
+    "walls": 20,
+    "other": 8,
+    "dress": 46
+   },
+   "height": 0.74,
+   "footprintU": "0.140..0.860",
+   "footprintV": "0.240..0.860",
+   "colourSets": 6
+  },
+  "italianateVilla": {
+   "weighted": 102,
+   "triangles": {
+    "walls": 24,
+    "other": 12,
+    "dress": 30
+   },
+   "height": 0.82,
+   "footprintU": "0.170..0.840",
+   "footprintV": "0.290..0.860",
+   "colourSets": 6
+  },
+  "tudorbethan": {
+   "weighted": 118,
+   "triangles": {
+    "walls": 26,
+    "other": 12,
+    "dress": 42
+   },
+   "height": 0.66,
+   "footprintU": "0.120..0.860",
+   "footprintV": "0.300..0.860",
+   "colourSets": 6
+  },
+  "whiteCubist": {
+   "weighted": 56,
+   "triangles": {
+    "walls": 16,
+    "other": 6,
+    "dress": 12
+   },
+   "height": 0.5,
+   "footprintU": "0.140..0.840",
+   "footprintV": "0.300..0.784",
+   "colourSets": 6
+  },
+  "spanHouse": {
+   "weighted": 54,
+   "triangles": {
+    "walls": 20,
+    "other": 2,
+    "dress": 10
+   },
+   "height": 0.5,
+   "footprintU": "0.120..0.860",
+   "footprintV": "0.280..0.780",
+   "colourSets": 6
+  },
+  "canopyBungalow": {
+   "weighted": 50,
+   "triangles": {
+    "walls": 8,
+    "other": 2,
+    "dress": 30
+   },
+   "height": 0.4,
+   "footprintU": "0.140..0.840",
+   "footprintV": "0.340..0.820",
+   "colourSets": 6
+  }
+ },
+ "structure": {
+  "villa": {
+   "minDifferingPercent": 75.8,
+   "pairs": [
+    [
+     "georgianBox",
+     "gothicVilla",
+     89.3
+    ],
+    [
+     "georgianBox",
+     "craftsHouse",
+     89.7
+    ],
+    [
+     "georgianBox",
+     "italianateVilla",
+     85.7
+    ],
+    [
+     "georgianBox",
+     "tudorbethan",
+     76.6
+    ],
+    [
+     "gothicVilla",
+     "craftsHouse",
+     92.9
+    ],
+    [
+     "gothicVilla",
+     "italianateVilla",
+     85.1
+    ],
+    [
+     "gothicVilla",
+     "tudorbethan",
+     75.8
+    ],
+    [
+     "craftsHouse",
+     "italianateVilla",
+     86.1
+    ],
+    [
+     "craftsHouse",
+     "tudorbethan",
+     92.4
+    ],
+    [
+     "italianateVilla",
+     "tudorbethan",
+     90.9
+    ]
+   ]
+  },
+  "modern": {
+   "minDifferingPercent": 79.4,
+   "pairs": [
+    [
+     "whiteCubist",
+     "spanHouse",
+     81.5
+    ],
+    [
+     "whiteCubist",
+     "canopyBungalow",
+     79.4
+    ],
+    [
+     "spanHouse",
+     "canopyBungalow",
+     88.3
+    ]
+   ]
+  }
+ },
+ "cities": {
+  "seed516": {
+   "a": {
+    "before": {
+     "weighted": 122708,
+     "houseBlocks": 60,
+     "houseCost": 6604,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       47
+      ],
+      "modern 1x1": [
+       44,
+       46,
+       13
+      ]
+     }
+    },
+    "after": {
+     "weighted": 122708,
+     "houseBlocks": 60,
+     "houseCost": 6604,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       47
+      ],
+      "modern 1x1": [
+       44,
+       46,
+       13
+      ]
+     }
+    },
+    "delta": 0
+   },
+   "b": {
+    "before": {
+     "weighted": 85642,
+     "houseBlocks": 43,
+     "houseCost": 5304,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       40
+      ],
+      "modern 1x1": [
+       60,
+       60,
+       1
+      ],
+      "modern 2x1": [
+       62,
+       62,
+       1
+      ],
+      "modern 1x3": [
+       62,
+       62,
+       1
+      ]
+     }
+    },
+    "after": {
+     "weighted": 84712,
+     "houseBlocks": 43,
+     "houseCost": 4374,
+     "costRange": {
+      "villa 1x1": [
+       89,
+       118,
+       40
+      ],
+      "modern 1x1": [
+       50,
+       50,
+       1
+      ],
+      "modern 2x1": [
+       56,
+       56,
+       1
+      ],
+      "modern 1x3": [
+       50,
+       50,
+       1
+      ]
+     }
+    },
+    "delta": -930
+   },
+   "c": {
+    "before": {
+     "weighted": 114770,
+     "houseBlocks": 51,
+     "houseCost": 6260,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       47
+      ],
+      "modern 1x1": [
+       60,
+       60,
+       1
+      ],
+      "modern 2x1": [
+       62,
+       62,
+       1
+      ],
+      "modern 1x3": [
+       62,
+       62,
+       1
+      ],
+      "modern 1x2": [
+       60,
+       60,
+       1
+      ]
+     }
+    },
+    "after": {
+     "weighted": 113658,
+     "houseBlocks": 51,
+     "houseCost": 5148,
+     "costRange": {
+      "villa 1x1": [
+       89,
+       118,
+       47
+      ],
+      "modern 1x1": [
+       50,
+       50,
+       1
+      ],
+      "modern 2x1": [
+       56,
+       56,
+       1
+      ],
+      "modern 1x3": [
+       50,
+       50,
+       1
+      ],
+      "modern 1x2": [
+       56,
+       56,
+       1
+      ]
+     }
+    },
+    "delta": -1112
+   }
+  },
+  "ai120": {
+   "a": {
+    "before": {
+     "weighted": 92942,
+     "houseBlocks": 53,
+     "houseCost": 5440,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       37
+      ],
+      "modern 1x1": [
+       44,
+       44,
+       16
+      ]
+     }
+    },
+    "after": {
+     "weighted": 92942,
+     "houseBlocks": 53,
+     "houseCost": 5440,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       37
+      ],
+      "modern 1x1": [
+       44,
+       44,
+       16
+      ]
+     }
+    },
+    "delta": 0
+   },
+   "b": {
+    "before": {
+     "weighted": 87611,
+     "houseBlocks": 38,
+     "houseCost": 4480,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       32
+      ],
+      "modern 1x1": [
+       60,
+       60,
+       2
+      ],
+      "modern 2x1": [
+       62,
+       62,
+       2
+      ],
+      "modern 1x2": [
+       66,
+       66,
+       1
+      ],
+      "modern 1x3": [
+       74,
+       74,
+       1
+      ]
+     }
+    },
+    "after": {
+     "weighted": 86769,
+     "houseBlocks": 38,
+     "houseCost": 3638,
+     "costRange": {
+      "villa 1x1": [
+       89,
+       118,
+       32
+      ],
+      "modern 1x1": [
+       54,
+       56,
+       2
+      ],
+      "modern 2x1": [
+       50,
+       56,
+       2
+      ],
+      "modern 1x2": [
+       54,
+       54,
+       1
+      ],
+      "modern 1x3": [
+       56,
+       56,
+       1
+      ]
+     }
+    },
+    "delta": -842
+   },
+   "c": {
+    "before": {
+     "weighted": 96607,
+     "houseBlocks": 49,
+     "houseCost": 5506,
+     "costRange": {
+      "villa 1x1": [
+       128,
+       128,
+       37
+      ],
+      "modern 1x1": [
+       60,
+       60,
+       5
+      ],
+      "modern 2x1": [
+       62,
+       62,
+       2
+      ],
+      "modern 1x2": [
+       66,
+       66,
+       3
+      ],
+      "modern 1x3": [
+       74,
+       74,
+       2
+      ]
+     }
+    },
+    "after": {
+     "weighted": 95571,
+     "houseBlocks": 49,
+     "houseCost": 4470,
+     "costRange": {
+      "villa 1x1": [
+       89,
+       118,
+       37
+      ],
+      "modern 1x1": [
+       50,
+       56,
+       5
+      ],
+      "modern 2x1": [
+       50,
+       56,
+       2
+      ],
+      "modern 1x2": [
+       54,
+       56,
+       3
+      ],
+      "modern 1x3": [
+       56,
+       56,
+       2
+      ]
+     }
+    },
+    "delta": -1036
+   }
+  }
+ }
+}

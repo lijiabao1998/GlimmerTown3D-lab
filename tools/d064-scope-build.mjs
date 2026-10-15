@@ -1,3 +1,4 @@
+// （D065 起這份模組與 D064 的兩份 fixtures 凍結在 D064 候選 f4a1a4e；之後改動 src 要重跑的是 tools/d065-scope-build.mjs，不要再對 d064-scope-build.mjs --write）
 // D064 範圍鎖的產生器：由基線提交（git）與現行樹算出 fixtures/d064-source-before.json 與 fixtures/d064-art-scope.json。
 // 每次改動 D064 的 src/ 檔案之後都要重跑，並且連同 src 一起提交；tools/d064-scope.mjs 會在載入時驗證這兩份清單。
 //   node tools/d064-scope-build.mjs          只印出摘要（不寫檔）

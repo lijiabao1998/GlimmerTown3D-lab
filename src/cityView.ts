@@ -163,6 +163,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D062-BEGIN season-option
   const seasonOpt = seasonOptionOf(k => q.get(k), landLevel);   // D062 四季：?season=auto|off|0|1|2|3、?seasonStyle=bold|soft、?seasonDay=N（規則在 src/render/seasonArt.ts，Node 守衛直接測）；地景關閉時一律關
 // D062-END season-option
+// D065-BEGIN house-variant
+  let houseForce: { villa?: number; modern?: number } | null = null;   // 拍照用（__gt.houseV）：把每一棟獨棟屋都當成這個形畫；只動畫面，不動城市
+// D065-END house-variant
   const blockRenderFor = (c: City): BlockRender | undefined => {
     if (!blockMode) { plan = null; return undefined; }
     plan = drawPlan(gridOf(c), ARCHE, blockMode);
@@ -172,7 +175,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D061-BEGIN land-enabled
 // D062-BEGIN season-enabled
 // D063-BEGIN commerce-enabled
-    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), commerceArt: !['commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf, season: seasonOpt };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D065-BEGIN house-enabled
+    return { mode: blockMode, streetArt: q.get('streetArt') !== 'legacy', villageArt: !['villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), industryArt: !['industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), commerceArt: !['commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), houseArt: !['houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy'), houseForce, landArt: landLevel, plan, recipe: recipeOf, dress: dressOf, detail: blockMode !== 'a', facade: facadeOf, trim: trimOf, season: seasonOpt };   // A 檔是密度對照，不畫 D008 的逐戶立面與飾條（手機預算）
+// D065-END house-enabled
 // D063-END commerce-enabled
 // D062-END season-enabled
 // D061-END land-enabled
@@ -1772,6 +1777,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D064-BEGIN tower-gt
     towerV(v: number | null, only: number | null = null) { towerV = v; towerOnly = only; rebuildScene(true); needsRender = true; draw(); return [towerV, towerOnly]; },   // 拍照用：v＝null 照城市本來的變體；only＝只畫這一種建築（其餘不畫）
 // D064-END tower-gt
+// D065-BEGIN house-gt
+    houseV(villa: number | null, modern: number | null = null) { houseForce = villa === null && modern === null ? null : { ...(villa === null ? {} : { villa }), ...(modern === null ? {} : { modern }) }; rebuildScene(true); needsRender = true; draw(); return houseForce; },   // 拍照用：villa／modern＝強制用第幾個形（null＝照城市本來的）
+// D065-END house-gt
     advanceBy(dt: number) { advance(dt); needsRender = true; draw(); return (window as unknown as { __gt: { conCheck(): unknown } }).__gt.conCheck(); },
     // 每一座工地此刻的 t（屋齡＋當天比例）、露出比例、場景裡有沒有它的樓體；bad＝t ≥ 3.05（已經該長高）卻還沒有樓體的
     conCheck: () => {

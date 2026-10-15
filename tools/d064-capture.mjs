@@ -20,7 +20,8 @@ const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||B
 const out=path.join(ROOT,'scratch/d064');
 const selectedWidths=(process.env.D064_WIDTHS??'').split(',').filter(Boolean).map(Number);
 const viewports=D064_VIEWPORTS.filter(v=>!selectedWidths.length||selectedWidths.includes(v.W));assert.ok(viewports.length);
-const PHASES={before:'towerArt=legacy',after:''};
+// D065 起：after 要帶 houseArt=legacy，這支工具量的是 D064 單獨的效果（before 的 towerArt=legacy 透過旗標串聯本來就關掉 D065）；D065 的前後對照在 tools/d065-capture.mjs
+const PHASES={before:'towerArt=legacy',after:'houseArt=legacy'};
 const OLDER=['commerceArt','industryArt','villageArt','streetArt','britishArt','heritageArt'];   // every older legacy flag must switch D064 off with it
 const html=fs.readFileSync(path.join(ROOT,'dist/index.html'));
 const city=d064City('seed516'),towers=d064Towers(city),centre=towersCentre(towers);
