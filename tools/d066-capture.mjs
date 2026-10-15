@@ -1,5 +1,5 @@
 // D066 real production WebGL captures. Same seed516 save, camera, viewport and frozen presentation time;
-// before=metropolisArt=legacy, after=the default. No world editing and no generated substitute images.
+// before=metropolisArt=legacy, after=landmarkArt=legacy (exact D066 release). No world editing and no generated substitute images.
 //   node tools/d066-capture.mjs                 1440×1000, 360×740, 412×860
 //   node tools/d066-capture.mjs --plan-only     validate the shot plan without launching a browser (NOT a capture)
 //   D066_WIDTHS=1440 node tools/d066-capture.mjs
@@ -39,7 +39,7 @@ async function settledCamera(p,s,v){
  assert.equal(stable,2,'observed a settled camera');return last;
 }
 async function capturePhase(v,phase,raw,expected){
- const item={viewport:v,phase,query:phase==='before'?'sample=seed516&clean=1&metropolisArt=legacy':'sample=seed516&clean=1',shots:[],passed:false};
+ const item={viewport:v,phase,query:phase==='before'?'sample=seed516&clean=1&metropolisArt=legacy':'sample=seed516&clean=1&landmarkArt=legacy',shots:[],passed:false};
  await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:8366},async({page,open})=>{
   const p=await pageSession(page,open,v);await p.open(item.query);assert.equal(await p.ev('!!__gt.ready'),true,'production scene ready');
   assert.equal((await p.ev('__gt.sim()'))?.playing??false,false,'world clock paused');const initial=await p.ev(world),dig=await p.ev(digest),list=await p.ev('__gt.buildingList()');

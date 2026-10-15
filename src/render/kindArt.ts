@@ -1,3 +1,6 @@
+// D067-BEGIN landmark-import
+import { drawBritishLandmark } from './britishLandmarkArt.ts';
+// D067-END landmark-import
 // 非住商工建築的 3D 畫法（D007）：依 src/content/kindShapes.ts 的造型表，逐種組出量體。
 // 只讀城市與內容表、不改城市（規則 2）；畫面全部由程式生成（規則 7）。
 // 座標：地界裡用分數 u（沿 x）、v（沿 z，v＝1 是正面、朝鏡頭）；高度用格。H＝D003 量到的實驗線高度（格），最高那一件對準 H。
@@ -753,7 +756,9 @@ export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   USED = new Set();
 // D064-BEGIN tower-dispatch
 // D066-BEGIN metropolis-dispatch
-  try { const p = new Pen(a); if (!(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D067-BEGIN landmark-dispatch
+  try { const p = new Pen(a); if (!(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D067-END landmark-dispatch
 // D066-END metropolis-dispatch
 // D064-END tower-dispatch
 }

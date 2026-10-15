@@ -20,8 +20,10 @@ jobs:
     timeout-minutes: 120   # D054 起 90；D065 發布時 main CI（run 38701592327）跑 91:40 被逾時取消（之前三次 80:37／88:44／89:10，餘量不到 1 分鐘）。只加總時間預算，任何檢查與門檻不變。
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch immutable D066 source-scope baseline
-        run: git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
+      - name: Fetch immutable D066 and D067 source-scope baselines
+        run: |
+          git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
+          git fetch --no-tags --depth=1 origin 91e499b6c0ed0ce0cffdf0c09a35a067a8156c71
       - uses: actions/setup-node@v4
         with:
           node-version: 24

@@ -157,7 +157,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const towerOn = !['towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');   // D064：四種合併塔的英式畫法（旗標串聯：較舊的 legacy 旗標一起關掉）
 // D066-BEGIN metropolis-enabled
   const metropolisOn = !['metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D067-BEGIN landmark-enabled
+  const landmarkOn = !['landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D067-END landmark-enabled
 // D066-END metropolis-enabled
 // D064-END tower-flag
 // D061-BEGIN land-level
