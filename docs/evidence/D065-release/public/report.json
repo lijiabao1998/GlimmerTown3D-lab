@@ -1,0 +1,656 @@
+{
+  "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+  "started": "2026-10-15T10:57:29.383Z",
+  "commit": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+  "viewports": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "seed516-far",
+              "file": "public-default-seed516-far-1440.png",
+              "sha256": "d2a748d3c6b2f5df2739499bf467b0da2f9caa872a6a3328e84a995090adf462",
+              "bytes": 129069,
+              "render": {
+                "calls": 15,
+                "triangles": 113658
+              },
+              "camera": {
+                "pos": [
+                  151.19999999999996,
+                  94.06040612287404,
+                  151.2
+                ],
+                "target": [
+                  35.99999999999999,
+                  0,
+                  35.99999999999999
+                ],
+                "zoom": 1.2
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-seed516-far-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "seed516-villas-close",
+              "file": "public-default-seed516-villas-close-1440.png",
+              "sha256": "5af7b92bcc670c1b7b7756d8bf325a47b62415264a8033cfbdf5f0010b227c90",
+              "bytes": 98067,
+              "render": {
+                "calls": 15,
+                "triangles": 113658
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-seed516-villas-close-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-default-ai120-villas-1440.png",
+              "sha256": "ce0fa42edb85f4eac9f2e4f99ad2c367e586a81f8923543b04bc793f7daa868f",
+              "bytes": 119232,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-villas-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-default-ai120-modern-1440.png",
+              "sha256": "4330708babb15c4d33c4a005865241a4be36451fd0480ad6b37259a783eaddc4",
+              "bytes": 91304,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-modern-1440.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "houseArt=legacy",
+          "shots": [
+            {
+              "view": "seed516-far",
+              "file": "public-legacy-seed516-far-1440.png",
+              "sha256": "0ee033ec9d30703c4c5c8a34460dad5af584f955b3bb490b3f7b519828b5bde5",
+              "bytes": 129516,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  151.19999999999996,
+                  94.06040612287404,
+                  151.2
+                ],
+                "target": [
+                  35.99999999999999,
+                  0,
+                  35.99999999999999
+                ],
+                "zoom": 1.2
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-seed516-far-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "seed516-villas-close",
+              "file": "public-legacy-seed516-villas-close-1440.png",
+              "sha256": "1104106944a2000830bcf22a92f9b5a6242ec6f53c14840dd02b92113fc67bc8",
+              "bytes": 96285,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-seed516-villas-close-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-legacy-ai120-villas-1440.png",
+              "sha256": "f95abe9f1ecc226060697b77798bf92285c51d83ed4aa0299318b329152de942",
+              "bytes": 122349,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-villas-1440.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-legacy-ai120-modern-1440.png",
+              "sha256": "6fbe3dee2f1569ca3e3341451ce30a18e085f9138c279324eb83f36958504158",
+              "bytes": 93870,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-modern-1440.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "seed516-villas-close",
+              "file": "public-default-seed516-villas-close-360.png",
+              "sha256": "146d287bc5f09d5cf5f9fa7651963b0d94c490d6781dbeb14d3d61dcf9a5a76c",
+              "bytes": 25514,
+              "render": {
+                "calls": 15,
+                "triangles": 113658
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-seed516-villas-close-360.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-default-ai120-villas-360.png",
+              "sha256": "b536cd03326829ebaadf09aca7a8e52ad616a268b4f1fa159fe1cc09a7b1d2cd",
+              "bytes": 28632,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-villas-360.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-default-ai120-modern-360.png",
+              "sha256": "175701ddea337ec32c60f4ad86c0775c2c836c0e31ab446477efb70aa110688b",
+              "bytes": 25134,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.500000000000004,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-modern-360.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "houseArt=legacy",
+          "shots": [
+            {
+              "view": "seed516-villas-close",
+              "file": "public-legacy-seed516-villas-close-360.png",
+              "sha256": "01374e5c2f9727b6faa15b0345e1162a216904b518b598d8a4451398075c2d32",
+              "bytes": 25989,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-seed516-villas-close-360.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-legacy-ai120-villas-360.png",
+              "sha256": "bbc92e416be8d711a9c742690bfc3f2ac11e2b206f6ab63329db01e53655b5f8",
+              "bytes": 29628,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-villas-360.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-legacy-ai120-modern-360.png",
+              "sha256": "5aa0e2692318d29e76ce9e07c7fa102098d87b40ec13895fe3d489124d1fe685",
+              "bytes": 26117,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.500000000000004,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-modern-360.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "loads": {
+        "default": {
+          "flags": "",
+          "shots": [
+            {
+              "view": "seed516-villas-close",
+              "file": "public-default-seed516-villas-close-412.png",
+              "sha256": "aeda6442182d64cbef6a490818aad454f3c732459dd5b897d97b318eda0b3032",
+              "bytes": 30506,
+              "render": {
+                "calls": 15,
+                "triangles": 113658
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-seed516-villas-close-412.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-default-ai120-villas-412.png",
+              "sha256": "473526cfb5eea34d8bac237e2da86f0e57fa642dd198ce570f135d1c8ef01cef",
+              "bytes": 34553,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-villas-412.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-default-ai120-modern-412.png",
+              "sha256": "1f54afb35dee97292230ba7ac3074a82a8ba291b1dd6bf10b509b362c957239d",
+              "bytes": 29969,
+              "render": {
+                "calls": 15,
+                "triangles": 95571
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "after",
+                "file": "D065-after-ai120-modern-412.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        },
+        "legacy": {
+          "flags": "houseArt=legacy",
+          "shots": [
+            {
+              "view": "seed516-villas-close",
+              "file": "public-legacy-seed516-villas-close-412.png",
+              "sha256": "76cd3e8396818d45b417f50356c2524f98454ad172c94c0b20c113e8ec059beb",
+              "bytes": 30906,
+              "render": {
+                "calls": 15,
+                "triangles": 114770
+              },
+              "camera": {
+                "pos": [
+                  121.3,
+                  94.06040612287403,
+                  120.60000000000002
+                ],
+                "target": [
+                  6.099999999999999,
+                  0,
+                  5.4
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-seed516-villas-close-412.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-villas",
+              "file": "public-legacy-ai120-villas-412.png",
+              "sha256": "56643a84add1121b0b1e6a6fc3bcc1e234f3a1bc17f81043ea5a7ca315678493",
+              "bytes": 35920,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.7,
+                  94.06040612287401,
+                  157.8
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.60000000000001
+                ],
+                "zoom": 4.5
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-villas-412.png",
+                "identical": true
+              }
+            },
+            {
+              "view": "ai120-modern",
+              "file": "public-legacy-ai120-modern-412.png",
+              "sha256": "d2fe30f54d7e054a67deee086e0a4dcba011215b22eca5656a2220e24ffad954",
+              "bytes": 30749,
+              "render": {
+                "calls": 15,
+                "triangles": 96607
+              },
+              "camera": {
+                "pos": [
+                  146.69999999999996,
+                  94.06040612287404,
+                  158.2
+                ],
+                "target": [
+                  31.5,
+                  0,
+                  42.99999999999999
+                ],
+                "zoom": 8
+              },
+              "sameAsLocalCapture": {
+                "phase": "before",
+                "file": "D065-before-ai120-modern-412.png",
+                "identical": true
+              }
+            }
+          ],
+          "errors": [],
+          "foreignRequests": []
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "deployed": {
+    "bytes": 1311220,
+    "sha256": "49de571fb0fe235dd5f4ba3164681f0f7f496f64157bafa23db433e60d07de27",
+    "etag": "W/\"6ad0b142-1401f4\"",
+    "lastModified": "Thu, 15 Oct 2026 10:56:02 GMT"
+  },
+  "localBuild": {
+    "bytes": 1311220,
+    "sha256": "49de571fb0fe235dd5f4ba3164681f0f7f496f64157bafa23db433e60d07de27",
+    "builtFrom": "e542ed72881277fa71c6ba68b24015bd70669c3a"
+  },
+  "sameBytes": true,
+  "browserSource": "the HTML downloaded from https://lijiabao1998.github.io/GlimmerTown3D-lab/ (sha256 49de571fb0fe235dd5f4ba3164681f0f7f496f64157bafa23db433e60d07de27), served from 127.0.0.1 (this sandbox Chromium cannot trust the egress proxy CA, so it cannot open https itself)",
+  "crossCheck": {
+    "compared": 20,
+    "identicalToLocalCapture": 20,
+    "note": "同機同瀏覽器：相同的 PNG 雜湊＝正式站顯示的就是業主看過的那些圖；PNG 雜湊跨機器不可比（D064 已證實），這裡兩邊都在同一台沙箱。"
+  },
+  "finished": "2026-10-15T10:58:51.374Z"
+}

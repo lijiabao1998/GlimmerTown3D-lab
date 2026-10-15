@@ -1,0 +1,493 @@
+{
+ "firstMainRun": {
+  "run": {
+   "id": 38701592327,
+   "html_url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38701592327",
+   "event": "push",
+   "head_branch": "main",
+   "head_sha": "bbd16b2a98cf88d4241b491b5aa863021ff3fd90",
+   "created_at": "2026-10-15T07:51:32Z",
+   "updated_at": "2026-10-15T09:23:16Z",
+   "status": "completed",
+   "conclusion": "cancelled"
+  },
+  "jobs": [
+   {
+    "name": "d061",
+    "id": 116310830520,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:54:29Z"
+   },
+   {
+    "name": "d063 (412)",
+    "id": 116310830733,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:53:41Z"
+   },
+   {
+    "name": "d059",
+    "id": 116310830761,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T08:03:58Z"
+   },
+   {
+    "name": "d055",
+    "id": 116310830813,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:53:21Z"
+   },
+   {
+    "name": "d063 (360)",
+    "id": 116310830820,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:53:36Z"
+   },
+   {
+    "name": "smoke",
+    "id": 116310830824,
+    "conclusion": "cancelled",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T09:23:15Z"
+   },
+   {
+    "name": "d064 (412)",
+    "id": 116310830925,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:54:00Z"
+   },
+   {
+    "name": "d060 (412)",
+    "id": 116310830927,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:53:34Z"
+   },
+   {
+    "name": "d064 (1440)",
+    "id": 116310830955,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T08:31:33Z"
+   },
+   {
+    "name": "d063 (1440)",
+    "id": 116310830968,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T08:17:32Z"
+   },
+   {
+    "name": "d064 (360)",
+    "id": 116310830972,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:54:04Z"
+   },
+   {
+    "name": "d060 (360)",
+    "id": 116310830974,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T07:53:39Z"
+   },
+   {
+    "name": "d060 (1440)",
+    "id": 116310830994,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T08:12:02Z"
+   },
+   {
+    "name": "d062",
+    "id": 116310831143,
+    "conclusion": "success",
+    "started_at": "2026-10-15T07:51:35Z",
+    "completed_at": "2026-10-15T08:04:58Z"
+   },
+   {
+    "name": "pages",
+    "id": 116347248064,
+    "conclusion": "skipped",
+    "started_at": "2026-10-15T09:23:15Z",
+    "completed_at": "2026-10-15T09:23:15Z"
+   }
+  ],
+  "smoke": {
+   "steps": "煙霧測試步驟 08:12:05Z→09:16:11Z 失敗（exit 1；整套跑完才回報，browser 套件 3,845.1 秒）；之後「拍樣張」跑到 09:23:10Z；job 在 09:23:15Z 因超過 1h30m 上限被取消（91:40）",
+   "NGLines": 1,
+   "failedCheck": "D011 驗收 8「推進一天（含結算）≤ 5 ms」",
+   "timings": {
+    "stepDayMs": {
+     "best": 6.09,
+     "runs": [
+      6.52,
+      6.09,
+      6.51
+     ],
+     "threshold": 5.0,
+     "status": "NG"
+    },
+    "stepDay6xThrottledMs": 41.31,
+    "wideMethodMs": {
+     "best": 7.75,
+     "runs": [
+      9.28,
+      7.75,
+      8.51
+     ],
+     "threshold": 8.0
+    }
+   },
+   "nodeSideTimingProxies": {
+    "D035": [
+     2.89,
+     2.66
+    ],
+    "D036": [
+     2.81,
+     2.81
+    ],
+    "D038": [
+     2.76,
+     2.55
+    ]
+   },
+   "logBytes": 520653,
+   "logSha256": "7f6d01288f022c58"
+  },
+  "whyNotD065": "歷史套件在 tools/smoke.mjs 釘 streetArt=legacy；src/cityView.ts 的 houseArt 旗標＝所有較舊 legacy 旗標都不是 legacy 才開，所以那一趟 houseArt 關閉、cityScene 的 house＝null，D065 的選形與畫法沒有執行。同一份日誌的 Node 端同類計時與先前兩次綠燈相同，只有瀏覽器端每一項慢約 30–70%。"
+ },
+ "secondMainRun": {
+  "run": {
+   "id": 38712996947,
+   "html_url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38712996947",
+   "event": "push",
+   "head_branch": "main",
+   "head_sha": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+   "created_at": "2026-10-15T09:26:55Z",
+   "updated_at": "2026-10-15T10:56:10Z",
+   "status": "completed",
+   "conclusion": "success"
+  },
+  "jobs": [
+   {
+    "name": "smoke",
+    "id": 116348766210,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:57Z",
+    "completed_at": "2026-10-15T10:55:36Z"
+   },
+   {
+    "name": "d061",
+    "id": 116348766533,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:57Z",
+    "completed_at": "2026-10-15T09:29:41Z"
+   },
+   {
+    "name": "d064 (1440)",
+    "id": 116348766422,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:58Z",
+    "completed_at": "2026-10-15T10:06:53Z"
+   },
+   {
+    "name": "d063 (412)",
+    "id": 116348766448,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:58Z",
+    "completed_at": "2026-10-15T09:29:05Z"
+   },
+   {
+    "name": "d063 (360)",
+    "id": 116348766471,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:58Z",
+    "completed_at": "2026-10-15T09:28:55Z"
+   },
+   {
+    "name": "d064 (412)",
+    "id": 116348766455,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:28:44Z",
+    "completed_at": "2026-10-15T09:31:17Z"
+   },
+   {
+    "name": "d062",
+    "id": 116348766515,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:28:53Z",
+    "completed_at": "2026-10-15T09:39:06Z"
+   },
+   {
+    "name": "d055",
+    "id": 116348766551,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:28:57Z",
+    "completed_at": "2026-10-15T09:30:58Z"
+   },
+   {
+    "name": "d059",
+    "id": 116348766574,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:28:59Z",
+    "completed_at": "2026-10-15T09:38:22Z"
+   },
+   {
+    "name": "d060 (1440)",
+    "id": 116348766660,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:29:00Z",
+    "completed_at": "2026-10-15T09:43:41Z"
+   },
+   {
+    "name": "d060 (412)",
+    "id": 116348766596,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:29:07Z",
+    "completed_at": "2026-10-15T09:31:02Z"
+   },
+   {
+    "name": "d064 (360)",
+    "id": 116348766640,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:29:07Z",
+    "completed_at": "2026-10-15T09:31:29Z"
+   },
+   {
+    "name": "d063 (1440)",
+    "id": 116348766681,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:29:15Z",
+    "completed_at": "2026-10-15T09:55:00Z"
+   },
+   {
+    "name": "d060 (360)",
+    "id": 116348766619,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:29:24Z",
+    "completed_at": "2026-10-15T09:31:21Z"
+   },
+   {
+    "name": "pages",
+    "id": 116384245003,
+    "conclusion": "success",
+    "started_at": "2026-10-15T10:55:39Z",
+    "completed_at": "2026-10-15T10:56:09Z"
+   }
+  ],
+  "smokeCounts": {
+   "unit": {
+    "ok": 742,
+    "ng": 0,
+    "seconds": 1193.5
+   },
+   "browser": {
+    "ok": 850,
+    "ng": 0,
+    "seconds": 3684.6
+   },
+   "note": "數法同 D060–D062 發布紀錄：兩個「OK 綠燈」標記之間的「OK」行；日誌 2188 行、525149 位元組、SHA-256 648681a1c33be4ae…（日誌本身不入庫）；沒有 NG 行",
+   "timings": {
+    "stepDayMs": {
+     "best": 4.74,
+     "runs": [
+      4.74,
+      4.87,
+      5.04
+     ],
+     "threshold": 5.0,
+     "status": "OK"
+    },
+    "stepDay6xThrottledMs": 30.5,
+    "wideMethodMs": {
+     "best": 5.21,
+     "runs": [
+      7.56,
+      6.27,
+      5.21
+     ],
+     "threshold": 8.0
+    }
+   },
+   "nodeSideTimingProxies": {
+    "D035": [
+     2.93,
+     2.71
+    ],
+    "D036": [
+     2.82,
+     2.82
+    ],
+    "D038": [
+     2.81,
+     2.54
+    ]
+   }
+  }
+ },
+ "branchRunSameCommit": {
+  "run": {
+   "id": 38712993091,
+   "html_url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38712993091",
+   "event": "push",
+   "head_branch": "claude/3d-claude-reading-o11uvs",
+   "head_sha": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+   "created_at": "2026-10-15T09:26:53Z",
+   "updated_at": "2026-10-15T10:55:38Z",
+   "status": "completed",
+   "conclusion": "success"
+  },
+  "jobs": [
+   {
+    "name": "d060 (1440)",
+    "id": 116348752277,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:47:23Z"
+   },
+   {
+    "name": "smoke",
+    "id": 116348752285,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T10:55:37Z"
+   },
+   {
+    "name": "d055",
+    "id": 116348752303,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:28:42Z"
+   },
+   {
+    "name": "d063 (412)",
+    "id": 116348752327,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:29:05Z"
+   },
+   {
+    "name": "d063 (1440)",
+    "id": 116348752329,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:52:40Z"
+   },
+   {
+    "name": "d063 (360)",
+    "id": 116348752344,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:28:57Z"
+   },
+   {
+    "name": "d064 (412)",
+    "id": 116348752376,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:29:13Z"
+   },
+   {
+    "name": "d061",
+    "id": 116348752384,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:55Z",
+    "completed_at": "2026-10-15T09:29:49Z"
+   },
+   {
+    "name": "d060 (360)",
+    "id": 116348752293,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T09:28:58Z"
+   },
+   {
+    "name": "d060 (412)",
+    "id": 116348752343,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T09:28:51Z"
+   },
+   {
+    "name": "d062",
+    "id": 116348752375,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T09:39:47Z"
+   },
+   {
+    "name": "d059",
+    "id": 116348752397,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T09:39:14Z"
+   },
+   {
+    "name": "d064 (360)",
+    "id": 116348752407,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T09:29:22Z"
+   },
+   {
+    "name": "d064 (1440)",
+    "id": 116348752796,
+    "conclusion": "success",
+    "started_at": "2026-10-15T09:26:56Z",
+    "completed_at": "2026-10-15T10:06:58Z"
+   },
+   {
+    "name": "pages",
+    "id": 116384257416,
+    "conclusion": "skipped",
+    "started_at": "2026-10-15T10:55:38Z",
+    "completed_at": "2026-10-15T10:55:37Z"
+   }
+  ]
+ },
+ "ciChange": {
+  "commit": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+  "what": ".github/workflows/ci.yml：smoke 的 timeout-minutes 90 → 120；沒有改任何檢查或門檻",
+  "why": "先前 smoke 總時間 80:37／88:44／89:10，第一次 main CI 91:40 被取消；餘量不到 1 分鐘，與檢查結果無關"
+ },
+ "released": {
+  "from": "a55311f",
+  "firstPush": "bbd16b2（程式在 4cf2623；5 個提交，其中一個是把 main 的發布紀錄併回分支的合併提交）",
+  "deployedCommit": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+  "method": "git push origin HEAD:main（兩次，都是快進；沒有 PR）",
+  "srcUnchangedSinceCandidate": "git diff --stat 4cf2623 e542ed7 -- src tools fixtures package.json package-lock.json index.html vite.config.ts tsconfig.json 為空"
+ },
+ "pages": {
+  "deploymentId": 7090630944,
+  "sha": "e542ed72881277fa71c6ba68b24015bd70669c3a",
+  "statuses": [
+   {
+    "state": "success",
+    "created_at": "2026-10-15T10:56:10Z",
+    "environment_url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+   },
+   {
+    "state": "in_progress",
+    "created_at": "2026-10-15T10:55:40Z",
+    "environment_url": ""
+   },
+   {
+    "state": "queued",
+    "created_at": "2026-10-15T10:55:38Z",
+    "environment_url": ""
+   },
+   {
+    "state": "waiting",
+    "created_at": "2026-10-15T10:55:37Z",
+    "environment_url": ""
+   }
+  ]
+ }
+}
