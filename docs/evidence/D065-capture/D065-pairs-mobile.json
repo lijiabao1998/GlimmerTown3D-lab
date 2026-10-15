@@ -1,0 +1,335 @@
+{
+  "passed": true,
+  "pairs": [
+    {
+      "name": "seed516-villas-close",
+      "before": "D065-before-seed516-villas-close-360.png",
+      "after": "D065-after-seed516-villas-close-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        114770,
+        113658
+      ],
+      "composite": "D065-pair-seed516-villas-close-360.png"
+    },
+    {
+      "name": "ai120-villas",
+      "before": "D065-before-ai120-villas-360.png",
+      "after": "D065-after-ai120-villas-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95571
+      ],
+      "composite": "D065-pair-ai120-villas-360.png"
+    },
+    {
+      "name": "ai120-modern",
+      "before": "D065-before-ai120-modern-360.png",
+      "after": "D065-after-ai120-modern-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95571
+      ],
+      "composite": "D065-pair-ai120-modern-360.png"
+    },
+    {
+      "name": "villa-georgianBox-se",
+      "before": "D065-before-villa-georgianBox-se-360.png",
+      "after": "D065-after-villa-georgianBox-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95048
+      ],
+      "composite": "D065-pair-villa-georgianBox-se-360.png"
+    },
+    {
+      "name": "villa-gothicVilla-se",
+      "before": "D065-before-villa-gothicVilla-se-360.png",
+      "after": "D065-after-villa-gothicVilla-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95899
+      ],
+      "composite": "D065-pair-villa-gothicVilla-se-360.png"
+    },
+    {
+      "name": "villa-craftsHouse-se",
+      "before": "D065-before-villa-craftsHouse-se-360.png",
+      "after": "D065-after-villa-craftsHouse-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95529
+      ],
+      "composite": "D065-pair-villa-craftsHouse-se-360.png"
+    },
+    {
+      "name": "villa-italianateVilla-se",
+      "before": "D065-before-villa-italianateVilla-se-360.png",
+      "after": "D065-after-villa-italianateVilla-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95529
+      ],
+      "composite": "D065-pair-villa-italianateVilla-se-360.png"
+    },
+    {
+      "name": "villa-tudorbethan-se",
+      "before": "D065-before-villa-tudorbethan-se-360.png",
+      "after": "D065-after-villa-tudorbethan-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        96121
+      ],
+      "composite": "D065-pair-villa-tudorbethan-se-360.png"
+    },
+    {
+      "name": "modern-whiteCubist-se",
+      "before": "D065-before-modern-whiteCubist-se-360.png",
+      "after": "D065-after-modern-whiteCubist-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95589
+      ],
+      "composite": "D065-pair-modern-whiteCubist-se-360.png"
+    },
+    {
+      "name": "modern-spanHouse-se",
+      "before": "D065-before-modern-spanHouse-se-360.png",
+      "after": "D065-after-modern-spanHouse-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95565
+      ],
+      "composite": "D065-pair-modern-spanHouse-se-360.png"
+    },
+    {
+      "name": "modern-canopyBungalow-se",
+      "before": "D065-before-modern-canopyBungalow-se-360.png",
+      "after": "D065-after-modern-canopyBungalow-se-360.png",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95517
+      ],
+      "composite": "D065-pair-modern-canopyBungalow-se-360.png"
+    },
+    {
+      "name": "seed516-villas-close",
+      "before": "D065-before-seed516-villas-close-412.png",
+      "after": "D065-after-seed516-villas-close-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        114770,
+        113658
+      ],
+      "composite": "D065-pair-seed516-villas-close-412.png"
+    },
+    {
+      "name": "ai120-villas",
+      "before": "D065-before-ai120-villas-412.png",
+      "after": "D065-after-ai120-villas-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95571
+      ],
+      "composite": "D065-pair-ai120-villas-412.png"
+    },
+    {
+      "name": "ai120-modern",
+      "before": "D065-before-ai120-modern-412.png",
+      "after": "D065-after-ai120-modern-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95571
+      ],
+      "composite": "D065-pair-ai120-modern-412.png"
+    },
+    {
+      "name": "villa-georgianBox-se",
+      "before": "D065-before-villa-georgianBox-se-412.png",
+      "after": "D065-after-villa-georgianBox-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95048
+      ],
+      "composite": "D065-pair-villa-georgianBox-se-412.png"
+    },
+    {
+      "name": "villa-gothicVilla-se",
+      "before": "D065-before-villa-gothicVilla-se-412.png",
+      "after": "D065-after-villa-gothicVilla-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95899
+      ],
+      "composite": "D065-pair-villa-gothicVilla-se-412.png"
+    },
+    {
+      "name": "villa-craftsHouse-se",
+      "before": "D065-before-villa-craftsHouse-se-412.png",
+      "after": "D065-after-villa-craftsHouse-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95529
+      ],
+      "composite": "D065-pair-villa-craftsHouse-se-412.png"
+    },
+    {
+      "name": "villa-italianateVilla-se",
+      "before": "D065-before-villa-italianateVilla-se-412.png",
+      "after": "D065-after-villa-italianateVilla-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95529
+      ],
+      "composite": "D065-pair-villa-italianateVilla-se-412.png"
+    },
+    {
+      "name": "villa-tudorbethan-se",
+      "before": "D065-before-villa-tudorbethan-se-412.png",
+      "after": "D065-after-villa-tudorbethan-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        96121
+      ],
+      "composite": "D065-pair-villa-tudorbethan-se-412.png"
+    },
+    {
+      "name": "modern-whiteCubist-se",
+      "before": "D065-before-modern-whiteCubist-se-412.png",
+      "after": "D065-after-modern-whiteCubist-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95589
+      ],
+      "composite": "D065-pair-modern-whiteCubist-se-412.png"
+    },
+    {
+      "name": "modern-spanHouse-se",
+      "before": "D065-before-modern-spanHouse-se-412.png",
+      "after": "D065-after-modern-spanHouse-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95565
+      ],
+      "composite": "D065-pair-modern-spanHouse-se-412.png"
+    },
+    {
+      "name": "modern-canopyBungalow-se",
+      "before": "D065-before-modern-canopyBungalow-se-412.png",
+      "after": "D065-after-modern-canopyBungalow-se-412.png",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "triangles": [
+        96607,
+        95517
+      ],
+      "composite": "D065-pair-modern-canopyBungalow-se-412.png"
+    }
+  ]
+}

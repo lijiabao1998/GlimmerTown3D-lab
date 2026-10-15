@@ -1,0 +1,796 @@
+{
+ "card": "docs/D065-british-houses.md",
+ "savedAt": "2026-10-15",
+ "provenance": {
+  "note": "本機（容器內 Chromium、Chrome 軟體 WebGL）對最終建置的擷取：tools/d065-capture.mjs 跑兩次（1440；360 與 412），報告 JSON 在 docs/evidence/D065-capture/。單張前後圖（100 張）沒有入庫，只留並排圖與兩張近景拼圖；單張的 SHA-256 在報告 JSON 裡。D065 沒有 CI 的擷取工作，所以這些圖的來源只有本機。",
+  "distSha256": "49de571fb0fe235dd5f4ba3164681f0f7f496f64157bafa23db433e60d07de27",
+  "codeCommit": "4cf2623971c9b935867f862e47ed584e09a44483",
+  "srcPins": "fixtures/d065-art-scope.json 的 after 欄是這份建置所對應的 src 逐檔 SHA-256；之後只改文件的提交不改 src，dist 雜湊不變",
+  "build": "vite build（npm run build）；建置是決定性的（D064 已證實雲端與本機建出的 index.html 逐位元組相同）"
+ },
+ "crossChecks": [
+  "本機兩次擷取全過（1440 每相 28 張；360、412 每相 11 張）：兩座樣本城每張前後三角形差等於 Node 算的加權差（seed516 −1,112、ai120 −1,036）、前後繪製呼叫都是 15、前一相（houseArt=legacy）的真瀏覽器三角形等於 D064 基線（114,770／96,607）、同世界、同一個穩定後的相機、零頁面錯誤、零外部請求、拍照鉤關掉後場景摘要逐位元組回復、快取＝fresh。"
+ ],
+ "limits": [
+  "業主看的是否是這些圖沒有紀錄",
+  "並排圖沒有獨立的來源雜湊；單張才有（在報告 JSON）",
+  "未涵蓋 Android 實機",
+  "畫面是本線的像素風渲染（固定內部解析度再放大），房子在預設縮放下只有一百多個像素寬；近景拼圖把房子裁出來放大兩倍，才看得到屋頂與窗",
+  "強制形的圖用 __gt.houseV 把同一塊地塊畫成指定的形：這是拍照鉤，不是遊戲裡的路徑",
+  "modern 的三個形在預設縮放下辨識度偏低（見卡面「圖面」）"
+ ],
+ "files": [
+  {
+   "file": "docs/img/D065/D065-forms-nw.png",
+   "sha256": "0fde6f4b71a0e7335f6d31f399b673a917494a5e0698878a1744a6afe200cfd9",
+   "bytes": 45965,
+   "width": 1920,
+   "height": 840,
+   "view": "forms-nw",
+   "viewport": 1440,
+   "kind": "form-sheet",
+   "note": "八個形的近景（只有 after；東南向與西北向各一張，每格裁出房子並放大兩倍，最近鄰）"
+  },
+  {
+   "file": "docs/img/D065/D065-forms-se.png",
+   "sha256": "bdf681366b7e6f87f661dad7d85e692ec85f9b17e9e6bdef4bf867d4b31a4f0e",
+   "bytes": 49541,
+   "width": 1920,
+   "height": 840,
+   "view": "forms-se",
+   "viewport": 1440,
+   "kind": "form-sheet",
+   "note": "八個形的近景（只有 after；東南向與西北向各一張，每格裁出房子並放大兩倍，最近鄰）"
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-default-1440.png",
+   "sha256": "a74c6cfba3719053f537cc0ade900909272b34c20ca8caa2682f9f1596197b55",
+   "bytes": 120305,
+   "width": 2888,
+   "height": 1000,
+   "view": "ai120-default",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-modern-1440.png",
+   "sha256": "88707ff14f0bb3ed9258e6fe19fd0c808ef872aa50eba783f6b77cd638c8858a",
+   "bytes": 150476,
+   "width": 2888,
+   "height": 1000,
+   "view": "ai120-modern",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-modern-360.png",
+   "sha256": "9cc306702bf44d1a808c0ad2ecb96c2d25015e08cc219f2e00d35fc6442978f7",
+   "bytes": 45359,
+   "width": 728,
+   "height": 740,
+   "view": "ai120-modern",
+   "viewport": 360,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-modern-412.png",
+   "sha256": "c709df7c9e02357456c00297a9f06a503ce410bab111cdf8107c7070850f045c",
+   "bytes": 53119,
+   "width": 832,
+   "height": 860,
+   "view": "ai120-modern",
+   "viewport": 412,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-villas-1440.png",
+   "sha256": "9c2085d1ed01947c13c54e60edf41a81f31293043e041cafd9bdde4c7be02291",
+   "bytes": 175910,
+   "width": 2888,
+   "height": 1000,
+   "view": "ai120-villas",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-villas-360.png",
+   "sha256": "ed55e603b38ae715200148dde864d71bb5da2a170aeb5a07a73d456b802f3ad9",
+   "bytes": 47593,
+   "width": 728,
+   "height": 740,
+   "view": "ai120-villas",
+   "viewport": 360,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-ai120-villas-412.png",
+   "sha256": "7361481fabb43a5a5809379c14578064b061d5d67360394e1d31f02b839d9f1c",
+   "bytes": 56904,
+   "width": 832,
+   "height": 860,
+   "view": "ai120-villas",
+   "viewport": 412,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95571
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-canopyBungalow-nw-1440.png",
+   "sha256": "2c25826c6898b832e9adf5ce258b5940112078eace84508ca4688cc222087d58",
+   "bytes": 100301,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-canopyBungalow-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-canopyBungalow-se-1440.png",
+   "sha256": "5e19ab5518be92b110af5e8bf55ce74699fee5f961a744e5941e061e36aba67f",
+   "bytes": 105382,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-canopyBungalow-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-canopyBungalow-se-360.png",
+   "sha256": "70bf8e7af8b1ab95fa7dcbae3c80a65b913c4a1a490f8f80955eb2a3ba1e2f46",
+   "bytes": 27866,
+   "width": 728,
+   "height": 740,
+   "view": "modern-canopyBungalow-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-canopyBungalow-se-412.png",
+   "sha256": "f3fcaa0b20647a0bfdc92494a5d14ea315ea75a25c8021b7fe9695f8aa9561d7",
+   "bytes": 33168,
+   "width": 832,
+   "height": 860,
+   "view": "modern-canopyBungalow-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-spanHouse-nw-1440.png",
+   "sha256": "776f5f0c119de1dda533f24935168607e05f57804b797ca2bcbe74310c78eae6",
+   "bytes": 100137,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-spanHouse-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-spanHouse-se-1440.png",
+   "sha256": "1d50d588225101a2fa0a059d599f75f0e56ae7b671a43784ae40bdb4b3534369",
+   "bytes": 105657,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-spanHouse-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-spanHouse-se-360.png",
+   "sha256": "7da5bdc973593d17d84318b544a8f2ded31ae3ad9500f8e7bd89dbc6bda45370",
+   "bytes": 27890,
+   "width": 728,
+   "height": 740,
+   "view": "modern-spanHouse-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-spanHouse-se-412.png",
+   "sha256": "0633472ad2133ec825f94b45de9714344d000143adc4a461b1d28cfc7cba5ce0",
+   "bytes": 33229,
+   "width": 832,
+   "height": 860,
+   "view": "modern-spanHouse-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-whiteCubist-nw-1440.png",
+   "sha256": "17499feeaf960dc2b3cec0b8509ae1af8426760464ba4d11d1fc6ddee4ad0812",
+   "bytes": 100420,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-whiteCubist-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-whiteCubist-se-1440.png",
+   "sha256": "d53483640e883e13a015f2746eeb0285d5012abf140a490b3f7160dbbd40dc64",
+   "bytes": 105572,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern-whiteCubist-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-whiteCubist-se-360.png",
+   "sha256": "953b092804ba0c01766f17559ab8540364010b608469bc486cdae55df351249a",
+   "bytes": 27912,
+   "width": 728,
+   "height": 740,
+   "view": "modern-whiteCubist-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern-whiteCubist-se-412.png",
+   "sha256": "55773ce0906755a7cedcf6edf301001dd08d368edd493596491b597922b11ec0",
+   "bytes": 33248,
+   "width": 832,
+   "height": 860,
+   "view": "modern-whiteCubist-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-canopyBungalow-nw-1440.png",
+   "sha256": "94b7bf8e457a9715d54484d03275082eca9b7264b92c5ba0a963f0d1a5e34675",
+   "bytes": 144430,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-canopyBungalow-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-canopyBungalow-se-1440.png",
+   "sha256": "1bb706df62b49bdf0a466effbcce45c627f425bb55524764f184af32082fd05f",
+   "bytes": 150458,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-canopyBungalow-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95517
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-spanHouse-nw-1440.png",
+   "sha256": "de7a0c057baae72e9e4c1907cc9cb3af2afcf7638b5cb98e9f46bbbf362d3d06",
+   "bytes": 144543,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-spanHouse-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-spanHouse-se-1440.png",
+   "sha256": "7b4ae7239523356182db807f3046619bb818e784ac84ad076c6badf0eeafe3e5",
+   "bytes": 151524,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-spanHouse-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95565
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-whiteCubist-nw-1440.png",
+   "sha256": "bee722ac706cf6669a86271f3fb4d8ee2d62b9078bad0e4cf3b73c141f38bd1d",
+   "bytes": 145305,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-whiteCubist-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-modern2x1-whiteCubist-se-1440.png",
+   "sha256": "3b3b373c658d890d2fc6d0a1748be0dd133ecc54fb665a8a9a574da9addc7b82",
+   "bytes": 152167,
+   "width": 2888,
+   "height": 1000,
+   "view": "modern2x1-whiteCubist-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95589
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-seed516-far-1440.png",
+   "sha256": "24c3f261456d32884dbde8ce54942519b171fde74ff474a73954277e3256baf6",
+   "bytes": 165259,
+   "width": 2888,
+   "height": 1000,
+   "view": "seed516-far",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 114770,
+    "after": 113658
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-seed516-villas-1440.png",
+   "sha256": "5853d97c172113f8ab93e1ed0c4f6c4bf7406896037622397b9d678646807216",
+   "bytes": 151490,
+   "width": 2888,
+   "height": 1000,
+   "view": "seed516-villas",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 114770,
+    "after": 113658
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-seed516-villas-close-1440.png",
+   "sha256": "8a58c554ae18de53b65d9cd8ec5b509ea76d4bb5ee8a3b9eebc59609d499c149",
+   "bytes": 155610,
+   "width": 2888,
+   "height": 1000,
+   "view": "seed516-villas-close",
+   "viewport": 1440,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 114770,
+    "after": 113658
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-seed516-villas-close-360.png",
+   "sha256": "b8f66fee8e091fc3be1a2aebb0cefdccb1790a713a80d0e40abac541dd20578a",
+   "bytes": 44882,
+   "width": 728,
+   "height": 740,
+   "view": "seed516-villas-close",
+   "viewport": 360,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 114770,
+    "after": 113658
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-seed516-villas-close-412.png",
+   "sha256": "b691b460aa5dc8ef8ebb658f9dcf1754556c22a98a21e32f918c0597c7411869",
+   "bytes": 52536,
+   "width": 832,
+   "height": 860,
+   "view": "seed516-villas-close",
+   "viewport": 412,
+   "kind": "overview-pair",
+   "note": "前｜後並排（左 BEFORE＝houseArt=legacy＝D064，右 AFTER＝預設）；同世界同相機",
+   "triangles": {
+    "before": 114770,
+    "after": 113658
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-craftsHouse-nw-1440.png",
+   "sha256": "5c5ee8cc01f04938a8a10d43ff66aac2c70b7f4487dde1801e2d465a2ad8e47d",
+   "bytes": 100530,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-craftsHouse-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-craftsHouse-se-1440.png",
+   "sha256": "dc7cc1d74b6a81a61b5a89abfe627b0186da167c541e86bb0f2e51da4b30edd8",
+   "bytes": 115207,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-craftsHouse-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-craftsHouse-se-360.png",
+   "sha256": "5725df301c96745de846f4e3a4c1742d80ea97ce60febbc2f217565767d50895",
+   "bytes": 30381,
+   "width": 728,
+   "height": 740,
+   "view": "villa-craftsHouse-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-craftsHouse-se-412.png",
+   "sha256": "1f9fd54dd69454d78048f434ae635ecbfe1d76b6173509200cf8c0456a231972",
+   "bytes": 35805,
+   "width": 832,
+   "height": 860,
+   "view": "villa-craftsHouse-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-georgianBox-nw-1440.png",
+   "sha256": "6a99e2ab4561e118149d30b80a468ba3c81baa9e3bd47f5b797131bbecdfe79e",
+   "bytes": 102369,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-georgianBox-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95048
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-georgianBox-se-1440.png",
+   "sha256": "4dae1f0454fa6996fcbb4b6fe40d9038cc28d39394d103c9f11938517c7dce09",
+   "bytes": 117067,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-georgianBox-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95048
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-georgianBox-se-360.png",
+   "sha256": "e47558b25ad62ad97683904164053199c832817e4dec2c7e168c60c276c8a71b",
+   "bytes": 30652,
+   "width": 728,
+   "height": 740,
+   "view": "villa-georgianBox-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95048
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-georgianBox-se-412.png",
+   "sha256": "4230cda0552a647ac8490b70e17b65807d831f2f0f56767a34da595e9d0d7bee",
+   "bytes": 36102,
+   "width": 832,
+   "height": 860,
+   "view": "villa-georgianBox-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95048
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-gothicVilla-nw-1440.png",
+   "sha256": "b3ead7a2e44b2ca359a734ceba5a769af40ab9fb396dc9f06c5aba3d763084cc",
+   "bytes": 102118,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-gothicVilla-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95899
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-gothicVilla-se-1440.png",
+   "sha256": "bbd389e5d4085c5d9ae3baee8d4bc63803b31f3037f8db248d931e283a24d0f1",
+   "bytes": 116657,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-gothicVilla-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95899
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-gothicVilla-se-360.png",
+   "sha256": "ab365bb4e35df574ae45c46b7f226ca559311fd662bff883d5f6aa16ca2a293e",
+   "bytes": 30630,
+   "width": 728,
+   "height": 740,
+   "view": "villa-gothicVilla-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95899
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-gothicVilla-se-412.png",
+   "sha256": "31c8ae5247527a1d74207532eeda74b8eee1f1f77ace3d1bff850e6e2d6b77cf",
+   "bytes": 36028,
+   "width": 832,
+   "height": 860,
+   "view": "villa-gothicVilla-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95899
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-italianateVilla-nw-1440.png",
+   "sha256": "d754e915125b356c2d5b8789ba897a6fd24a333c0e63e4c2d4b194b61dc9fd5e",
+   "bytes": 102686,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-italianateVilla-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-italianateVilla-se-1440.png",
+   "sha256": "999a7b66888157db8766f8685d5fd14498d970fef9e461aec5626f4e95ae2562",
+   "bytes": 117489,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-italianateVilla-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-italianateVilla-se-360.png",
+   "sha256": "d59c037d0bff7add5683383d03dca9a8fa97d5ac9852323839495b0c82e1734a",
+   "bytes": 30785,
+   "width": 728,
+   "height": 740,
+   "view": "villa-italianateVilla-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-italianateVilla-se-412.png",
+   "sha256": "ef6313715c6a107fcf00c0008e29b28666c2c7486f4c28760c7b3fe60d2bdd95",
+   "bytes": 36200,
+   "width": 832,
+   "height": 860,
+   "view": "villa-italianateVilla-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 95529
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-tudorbethan-nw-1440.png",
+   "sha256": "56763ccd56092817359d5ee328e220b6e0b6964899660ca843242d73da1be3dc",
+   "bytes": 102046,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-tudorbethan-nw",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96121
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-tudorbethan-se-1440.png",
+   "sha256": "f8340093089e8d4ac9559ccc910d115c5396b12e6ec11a3688b2df61feb5ed0e",
+   "bytes": 116587,
+   "width": 2888,
+   "height": 1000,
+   "view": "villa-tudorbethan-se",
+   "viewport": 1440,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96121
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-tudorbethan-se-360.png",
+   "sha256": "b41fed989e35e549442229fdf80882cc92111828d1d20271dd2068a5eedd2feb",
+   "bytes": 30622,
+   "width": 728,
+   "height": 740,
+   "view": "villa-tudorbethan-se",
+   "viewport": 360,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96121
+   }
+  },
+  {
+   "file": "docs/img/D065/D065-pair-villa-tudorbethan-se-412.png",
+   "sha256": "18cb6d853ebe693be5407de0335a1dc78f8c3b960826ddd8bccb0e8e3cb64677",
+   "bytes": 36024,
+   "width": 832,
+   "height": 860,
+   "view": "villa-tudorbethan-se",
+   "viewport": 412,
+   "kind": "form-pair",
+   "note": "前｜後並排；ai120 的真實地塊，用 __gt.houseV 強制形；同相機",
+   "triangles": {
+    "before": 96607,
+    "after": 96121
+   }
+  }
+ ]
+}

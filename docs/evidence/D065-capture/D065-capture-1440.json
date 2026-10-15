@@ -1,0 +1,1658 @@
+{
+  "sourceRef": "local uncommitted D065 candidate",
+  "htmlSha256": "49de571fb0fe235dd5f4ba3164681f0f7f496f64157bafa23db433e60d07de27",
+  "expected": {
+    "seed516": {
+      "legacy": 114770,
+      "house": 113658,
+      "delta": -1112
+    },
+    "ai120": {
+      "legacy": 96607,
+      "house": 95571,
+      "delta": -1036
+    }
+  },
+  "qualification": "Two decoded production samples, production load and render, real CDP PNG, Chrome software WebGL. Mobile touch emulation is not Android hardware. Before = houseArt=legacy of the same build.",
+  "cases": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "before": {
+        "viewport": {
+          "W": 1440,
+          "H": 1000,
+          "mobile": false
+        },
+        "phase": "before",
+        "shots": [
+          {
+            "file": "D065-before-seed516-far-1440.png",
+            "name": "seed516-far",
+            "sample": "seed516",
+            "sha256": "0ee033ec9d30703c4c5c8a34460dad5af584f955b3bb490b3f7b519828b5bde5",
+            "bytes": 129516,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1.2
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-before-seed516-villas-1440.png",
+            "name": "seed516-villas",
+            "sample": "seed516",
+            "sha256": "b08fab0bd326b37a73b69bba93e6553bb16de4b8839871baa15b5215d1a6ddf0",
+            "bytes": 105889,
+            "camera": {
+              "pos": [
+                121.3,
+                94.06040612287403,
+                120.60000000000002
+              ],
+              "target": [
+                6.099999999999999,
+                0,
+                5.4
+              ],
+              "zoom": 4.5
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-before-seed516-villas-close-1440.png",
+            "name": "seed516-villas-close",
+            "sample": "seed516",
+            "sha256": "1104106944a2000830bcf22a92f9b5a6242ec6f53c14840dd02b92113fc67bc8",
+            "bytes": 96285,
+            "camera": {
+              "pos": [
+                121.3,
+                94.06040612287403,
+                120.60000000000002
+              ],
+              "target": [
+                6.099999999999999,
+                0,
+                5.4
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 114770
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-before-ai120-default-1440.png",
+            "name": "ai120-default",
+            "sample": "ai120",
+            "sha256": "a556400fba24d65957368fd6802db49d51c76c80c67a06f844ae2395e512347c",
+            "bytes": 91261,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-before-ai120-villas-1440.png",
+            "name": "ai120-villas",
+            "sample": "ai120",
+            "sha256": "f95abe9f1ecc226060697b77798bf92285c51d83ed4aa0299318b329152de942",
+            "bytes": 122349,
+            "camera": {
+              "pos": [
+                146.7,
+                94.06040612287401,
+                157.8
+              ],
+              "target": [
+                31.5,
+                0,
+                42.60000000000001
+              ],
+              "zoom": 4.5
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-before-ai120-modern-1440.png",
+            "name": "ai120-modern",
+            "sample": "ai120",
+            "sha256": "6fbe3dee2f1569ca3e3341451ce30a18e085f9138c279324eb83f36958504158",
+            "bytes": 93870,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                158.2
+              ],
+              "target": [
+                31.5,
+                0,
+                42.99999999999999
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-before-villa-georgianBox-se-1440.png",
+            "name": "villa-georgianBox-se",
+            "sample": "ai120",
+            "sha256": "50a477d4b1970f895fc2c76f4ee7ecc533763a0f35ad04a24d3b4ea467c6b141",
+            "bytes": 77720,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                147.7
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              0,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-georgianBox-nw-1440.png",
+            "name": "villa-georgianBox-nw",
+            "sample": "ai120",
+            "sha256": "28e31a894302dd80d861bf53501f9a1c73c5ff1341aa004eaf82a59b91f1bc96",
+            "bytes": 67585,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              0,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-gothicVilla-se-1440.png",
+            "name": "villa-gothicVilla-se",
+            "sample": "ai120",
+            "sha256": "50a477d4b1970f895fc2c76f4ee7ecc533763a0f35ad04a24d3b4ea467c6b141",
+            "bytes": 77720,
+            "camera": {
+              "pos": [
+                146.69999999998143,
+                94.06040612287407,
+                147.7000000000187
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              1,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-gothicVilla-nw-1440.png",
+            "name": "villa-gothicVilla-nw",
+            "sample": "ai120",
+            "sha256": "28e31a894302dd80d861bf53501f9a1c73c5ff1341aa004eaf82a59b91f1bc96",
+            "bytes": 67585,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              1,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-craftsHouse-se-1440.png",
+            "name": "villa-craftsHouse-se",
+            "sample": "ai120",
+            "sha256": "50a477d4b1970f895fc2c76f4ee7ecc533763a0f35ad04a24d3b4ea467c6b141",
+            "bytes": 77720,
+            "camera": {
+              "pos": [
+                146.69999999998143,
+                94.06040612287407,
+                147.7000000000187
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              2,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-craftsHouse-nw-1440.png",
+            "name": "villa-craftsHouse-nw",
+            "sample": "ai120",
+            "sha256": "28e31a894302dd80d861bf53501f9a1c73c5ff1341aa004eaf82a59b91f1bc96",
+            "bytes": 67585,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              2,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-italianateVilla-se-1440.png",
+            "name": "villa-italianateVilla-se",
+            "sample": "ai120",
+            "sha256": "50a477d4b1970f895fc2c76f4ee7ecc533763a0f35ad04a24d3b4ea467c6b141",
+            "bytes": 77720,
+            "camera": {
+              "pos": [
+                146.69999999998143,
+                94.06040612287407,
+                147.7000000000187
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              3,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-italianateVilla-nw-1440.png",
+            "name": "villa-italianateVilla-nw",
+            "sample": "ai120",
+            "sha256": "28e31a894302dd80d861bf53501f9a1c73c5ff1341aa004eaf82a59b91f1bc96",
+            "bytes": 67585,
+            "camera": {
+              "pos": [
+                -83.70000000002013,
+                94.06040612287407,
+                -82.69999999997998
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              3,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-tudorbethan-se-1440.png",
+            "name": "villa-tudorbethan-se",
+            "sample": "ai120",
+            "sha256": "50a477d4b1970f895fc2c76f4ee7ecc533763a0f35ad04a24d3b4ea467c6b141",
+            "bytes": 77720,
+            "camera": {
+              "pos": [
+                146.69999999998055,
+                94.06040612287408,
+                147.7000000000196
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              4,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-villa-tudorbethan-nw-1440.png",
+            "name": "villa-tudorbethan-nw",
+            "sample": "ai120",
+            "sha256": "28e31a894302dd80d861bf53501f9a1c73c5ff1341aa004eaf82a59b91f1bc96",
+            "bytes": 67585,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              4,
+              null
+            ]
+          },
+          {
+            "file": "D065-before-modern-whiteCubist-se-1440.png",
+            "name": "modern-whiteCubist-se",
+            "sample": "ai120",
+            "sha256": "45a0d6317719d0c8e40775716ebc8b8bbb6da1d12c4cec390eccc854774068da",
+            "bytes": 70153,
+            "camera": {
+              "pos": [
+                143.69999999998123,
+                94.06040612287407,
+                143.7000000000189
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-before-modern-whiteCubist-nw-1440.png",
+            "name": "modern-whiteCubist-nw",
+            "sample": "ai120",
+            "sha256": "9249b0d4322b1cdd3a289a7bfd75e4db76b4a9b71a80ee9495d56eea175489b6",
+            "bytes": 66016,
+            "camera": {
+              "pos": [
+                -86.7000000000192,
+                94.06040612287407,
+                -86.6999999999809
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-before-modern-spanHouse-se-1440.png",
+            "name": "modern-spanHouse-se",
+            "sample": "ai120",
+            "sha256": "45a0d6317719d0c8e40775716ebc8b8bbb6da1d12c4cec390eccc854774068da",
+            "bytes": 70153,
+            "camera": {
+              "pos": [
+                143.69999999998123,
+                94.06040612287407,
+                143.7000000000189
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-before-modern-spanHouse-nw-1440.png",
+            "name": "modern-spanHouse-nw",
+            "sample": "ai120",
+            "sha256": "9249b0d4322b1cdd3a289a7bfd75e4db76b4a9b71a80ee9495d56eea175489b6",
+            "bytes": 66016,
+            "camera": {
+              "pos": [
+                -86.70000000001822,
+                94.06040612287407,
+                -86.69999999998188
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-before-modern-canopyBungalow-se-1440.png",
+            "name": "modern-canopyBungalow-se",
+            "sample": "ai120",
+            "sha256": "45a0d6317719d0c8e40775716ebc8b8bbb6da1d12c4cec390eccc854774068da",
+            "bytes": 70153,
+            "camera": {
+              "pos": [
+                143.69999999998225,
+                94.06040612287397,
+                143.7000000000176
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-before-modern-canopyBungalow-nw-1440.png",
+            "name": "modern-canopyBungalow-nw",
+            "sample": "ai120",
+            "sha256": "9249b0d4322b1cdd3a289a7bfd75e4db76b4a9b71a80ee9495d56eea175489b6",
+            "bytes": 66016,
+            "camera": {
+              "pos": [
+                -86.70000000002129,
+                94.06040612287407,
+                -86.69999999997881
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-whiteCubist-se-1440.png",
+            "name": "modern2x1-whiteCubist-se",
+            "sample": "ai120",
+            "sha256": "82794d4f76fea539077c44387c85d0fd31f7c6d61e99e10eece9837fe54b24e7",
+            "bytes": 94778,
+            "camera": {
+              "pos": [
+                147.19999999998012,
+                94.06040612287399,
+                158.70000000001977
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-whiteCubist-nw-1440.png",
+            "name": "modern2x1-whiteCubist-nw",
+            "sample": "ai120",
+            "sha256": "7e36a0178c0228383417318a4c4c1668da629b2464a5e42a26fb8c804ac72ca5",
+            "bytes": 86582,
+            "camera": {
+              "pos": [
+                -83.2000000000189,
+                94.06040612287399,
+                -71.699999999981
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-spanHouse-se-1440.png",
+            "name": "modern2x1-spanHouse-se",
+            "sample": "ai120",
+            "sha256": "82794d4f76fea539077c44387c85d0fd31f7c6d61e99e10eece9837fe54b24e7",
+            "bytes": 94778,
+            "camera": {
+              "pos": [
+                147.19999999998123,
+                94.06040612287407,
+                158.7000000000189
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-spanHouse-nw-1440.png",
+            "name": "modern2x1-spanHouse-nw",
+            "sample": "ai120",
+            "sha256": "7e36a0178c0228383417318a4c4c1668da629b2464a5e42a26fb8c804ac72ca5",
+            "bytes": 86582,
+            "camera": {
+              "pos": [
+                -83.20000000001792,
+                94.06040612287399,
+                -71.69999999998198
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-canopyBungalow-se-1440.png",
+            "name": "modern2x1-canopyBungalow-se",
+            "sample": "ai120",
+            "sha256": "82794d4f76fea539077c44387c85d0fd31f7c6d61e99e10eece9837fe54b24e7",
+            "bytes": 94778,
+            "camera": {
+              "pos": [
+                147.19999999998225,
+                94.06040612287397,
+                158.7000000000176
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-before-modern2x1-canopyBungalow-nw-1440.png",
+            "name": "modern2x1-canopyBungalow-nw",
+            "sample": "ai120",
+            "sha256": "7e36a0178c0228383417318a4c4c1668da629b2464a5e42a26fb8c804ac72ca5",
+            "bytes": 86582,
+            "camera": {
+              "pos": [
+                -83.2000000000189,
+                94.06040612287399,
+                -71.699999999981
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96607
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "69bf5da134d3022334a2044f62a6f6a9c57d9dfd2452991c9e512d5441bfc49f"
+          },
+          "ai120": {
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "141c8fdf3438646c66b4fc6b606b838deeb65bc64f03871841d80020ed98a920"
+          }
+        },
+        "passed": true
+      },
+      "after": {
+        "viewport": {
+          "W": 1440,
+          "H": 1000,
+          "mobile": false
+        },
+        "phase": "after",
+        "shots": [
+          {
+            "file": "D065-after-seed516-far-1440.png",
+            "name": "seed516-far",
+            "sample": "seed516",
+            "sha256": "d2a748d3c6b2f5df2739499bf467b0da2f9caa872a6a3328e84a995090adf462",
+            "bytes": 129069,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1.2
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113658
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-after-seed516-villas-1440.png",
+            "name": "seed516-villas",
+            "sample": "seed516",
+            "sha256": "22a75a378bada071e534f4e7252e7a9cfadba6787edbc7576991e4529dda7fe7",
+            "bytes": 105976,
+            "camera": {
+              "pos": [
+                121.3,
+                94.06040612287403,
+                120.60000000000002
+              ],
+              "target": [
+                6.099999999999999,
+                0,
+                5.4
+              ],
+              "zoom": 4.5
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113658
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-after-seed516-villas-close-1440.png",
+            "name": "seed516-villas-close",
+            "sample": "seed516",
+            "sha256": "5af7b92bcc670c1b7b7756d8bf325a47b62415264a8033cfbdf5f0010b227c90",
+            "bytes": 98067,
+            "camera": {
+              "pos": [
+                121.3,
+                94.06040612287403,
+                120.60000000000002
+              ],
+              "target": [
+                6.099999999999999,
+                0,
+                5.4
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 113658
+            },
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "forms": null
+          },
+          {
+            "file": "D065-after-ai120-default-1440.png",
+            "name": "ai120-default",
+            "sample": "ai120",
+            "sha256": "dd96285ee5eb00bc59bfbc78aeb661ce5d6c53288e1c40bc7287da54b3af9ebf",
+            "bytes": 91083,
+            "camera": {
+              "pos": [
+                151.19999999999996,
+                94.06040612287404,
+                151.2
+              ],
+              "target": [
+                35.99999999999999,
+                0,
+                35.99999999999999
+              ],
+              "zoom": 1
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95571
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-after-ai120-villas-1440.png",
+            "name": "ai120-villas",
+            "sample": "ai120",
+            "sha256": "ce0fa42edb85f4eac9f2e4f99ad2c367e586a81f8923543b04bc793f7daa868f",
+            "bytes": 119232,
+            "camera": {
+              "pos": [
+                146.7,
+                94.06040612287401,
+                157.8
+              ],
+              "target": [
+                31.5,
+                0,
+                42.60000000000001
+              ],
+              "zoom": 4.5
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95571
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-after-ai120-modern-1440.png",
+            "name": "ai120-modern",
+            "sample": "ai120",
+            "sha256": "4330708babb15c4d33c4a005865241a4be36451fd0480ad6b37259a783eaddc4",
+            "bytes": 91304,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                158.2
+              ],
+              "target": [
+                31.5,
+                0,
+                42.99999999999999
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95571
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": null
+          },
+          {
+            "file": "D065-after-villa-georgianBox-se-1440.png",
+            "name": "villa-georgianBox-se",
+            "sample": "ai120",
+            "sha256": "a89a7c922e0db9adb4f97a54ac3fb2bc4bd3d47593f6707fbd6cc0ed3abcee9d",
+            "bytes": 77675,
+            "camera": {
+              "pos": [
+                146.69999999999996,
+                94.06040612287404,
+                147.7
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95048
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              0,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-georgianBox-nw-1440.png",
+            "name": "villa-georgianBox-nw",
+            "sample": "ai120",
+            "sha256": "0994a8b2e35cbf40ffb27765b214bf82760332b2312997211b2f99f189da30c0",
+            "bytes": 69388,
+            "camera": {
+              "pos": [
+                -83.70000000002129,
+                94.06040612287407,
+                -82.69999999997881
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95048
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              0,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-gothicVilla-se-1440.png",
+            "name": "villa-gothicVilla-se",
+            "sample": "ai120",
+            "sha256": "c0e3be297e777d36352fae5c1d7fe29885812b96df8965801b738b890575a0ec",
+            "bytes": 77561,
+            "camera": {
+              "pos": [
+                146.6999999999842,
+                94.06040612287407,
+                147.7000000000159
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95899
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              1,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-gothicVilla-nw-1440.png",
+            "name": "villa-gothicVilla-nw",
+            "sample": "ai120",
+            "sha256": "fc0a9fb81462c130b029545a4569cdc2e88608428c8045af7c7013a3c9e744cc",
+            "bytes": 69129,
+            "camera": {
+              "pos": [
+                -83.70000000002022,
+                94.06040612287407,
+                -82.6999999999799
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95899
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              1,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-craftsHouse-se-1440.png",
+            "name": "villa-craftsHouse-se",
+            "sample": "ai120",
+            "sha256": "c9e73ea39f9d4031ed900d569792eb5314e2d9bf129be69e6dc4b0621fdf9bbe",
+            "bytes": 75853,
+            "camera": {
+              "pos": [
+                146.69999999998495,
+                94.06040612287406,
+                147.70000000001517
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95529
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              2,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-craftsHouse-nw-1440.png",
+            "name": "villa-craftsHouse-nw",
+            "sample": "ai120",
+            "sha256": "da4d3a8ee692b94321fbb62cbe133642d7cbe5815439ddfd944a2ce7a8629192",
+            "bytes": 67276,
+            "camera": {
+              "pos": [
+                -83.70000000002022,
+                94.06040612287407,
+                -82.6999999999799
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95529
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              2,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-italianateVilla-se-1440.png",
+            "name": "villa-italianateVilla-se",
+            "sample": "ai120",
+            "sha256": "5542610956dd45f0603a94bc24f9625f79879d32afeb1f76917e52a40fa7d81b",
+            "bytes": 78145,
+            "camera": {
+              "pos": [
+                146.69999999998495,
+                94.06040612287406,
+                147.70000000001517
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95529
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              3,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-italianateVilla-nw-1440.png",
+            "name": "villa-italianateVilla-nw",
+            "sample": "ai120",
+            "sha256": "0fca50c3bd71aa53513b95c12132145197adf1f6a4920223e53fb7bd0e72cb65",
+            "bytes": 69895,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95529
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              3,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-tudorbethan-se-1440.png",
+            "name": "villa-tudorbethan-se",
+            "sample": "ai120",
+            "sha256": "c810be0fd81d3b1366e8c2a568c53f831b7beae1ec029fb626fa0ce11646fb7f",
+            "bytes": 77612,
+            "camera": {
+              "pos": [
+                146.69999999998575,
+                94.06040612287404,
+                147.7000000000142
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96121
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              4,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-villa-tudorbethan-nw-1440.png",
+            "name": "villa-tudorbethan-nw",
+            "sample": "ai120",
+            "sha256": "f36ea1ad4dec9b3b4ee24086187c053c880fc78c2271da8bb8f51d78d27a9c39",
+            "bytes": 69391,
+            "camera": {
+              "pos": [
+                -83.7000000000192,
+                94.06040612287407,
+                -82.6999999999809
+              ],
+              "target": [
+                31.500000000000004,
+                0,
+                32.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 96121
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              4,
+              null
+            ]
+          },
+          {
+            "file": "D065-after-modern-whiteCubist-se-1440.png",
+            "name": "modern-whiteCubist-se",
+            "sample": "ai120",
+            "sha256": "8d326b91217f6344d2ecfdf197d95ceace738ddbbd269f08a3fb54f6019050c3",
+            "bytes": 69808,
+            "camera": {
+              "pos": [
+                143.69999999998544,
+                94.06040612287396,
+                143.70000000001443
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95589
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-after-modern-whiteCubist-nw-1440.png",
+            "name": "modern-whiteCubist-nw",
+            "sample": "ai120",
+            "sha256": "8434423eae4f74ddfed51ebfe15088fcbfe762ecb1f5087afdf456ab68318221",
+            "bytes": 67201,
+            "camera": {
+              "pos": [
+                -86.70000000002022,
+                94.06040612287407,
+                -86.6999999999799
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95589
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-after-modern-spanHouse-se-1440.png",
+            "name": "modern-spanHouse-se",
+            "sample": "ai120",
+            "sha256": "08b5eb31a528adee5caf6fe50e1a8687536b7f634440f514edce849ad139f5f6",
+            "bytes": 69648,
+            "camera": {
+              "pos": [
+                143.69999999998475,
+                94.06040612287407,
+                143.70000000001534
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95565
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-after-modern-spanHouse-nw-1440.png",
+            "name": "modern-spanHouse-nw",
+            "sample": "ai120",
+            "sha256": "2f272ebfc4aefb6db336136634699e100ebfc78674b2fd799a39856e0141d4f5",
+            "bytes": 67000,
+            "camera": {
+              "pos": [
+                -86.7000000000173,
+                94.06040612287407,
+                -86.69999999998281
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95565
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-after-modern-canopyBungalow-se-1440.png",
+            "name": "modern-canopyBungalow-se",
+            "sample": "ai120",
+            "sha256": "af9c77b15c3da4658234896591890a510e688361b8d3d6d40afe1c777c892e1b",
+            "bytes": 69511,
+            "camera": {
+              "pos": [
+                143.6999999999863,
+                94.06040612287407,
+                143.70000000001383
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95517
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-after-modern-canopyBungalow-nw-1440.png",
+            "name": "modern-canopyBungalow-nw",
+            "sample": "ai120",
+            "sha256": "320b77f4910d9964074553a6490dd664b0b63872099ae298ae4ccc880a5c72d2",
+            "bytes": 67105,
+            "camera": {
+              "pos": [
+                -86.70000000002022,
+                94.06040612287407,
+                -86.6999999999799
+              ],
+              "target": [
+                28.5,
+                0,
+                28.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95517
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-whiteCubist-se-1440.png",
+            "name": "modern2x1-whiteCubist-se",
+            "sample": "ai120",
+            "sha256": "e793221e94c60cac88ddccd296b45843e3de73465f1bc6714cc4806f39a285f6",
+            "bytes": 92838,
+            "camera": {
+              "pos": [
+                147.19999999998475,
+                94.06040612287407,
+                158.70000000001534
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95589
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-whiteCubist-nw-1440.png",
+            "name": "modern2x1-whiteCubist-nw",
+            "sample": "ai120",
+            "sha256": "7985522d42064fb5e2b3a08a48ba0064540d5c01246501a61fa85c1dcfd79487",
+            "bytes": 91410,
+            "camera": {
+              "pos": [
+                -83.2000000000189,
+                94.06040612287399,
+                -71.699999999981
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95589
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              0
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-spanHouse-se-1440.png",
+            "name": "modern2x1-spanHouse-se",
+            "sample": "ai120",
+            "sha256": "8b919e54496ccab606429e8fd7b8d738d179cc44a82734a68674770b4938cb32",
+            "bytes": 92308,
+            "camera": {
+              "pos": [
+                147.19999999998544,
+                94.06040612287396,
+                158.70000000001443
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95565
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-spanHouse-nw-1440.png",
+            "name": "modern2x1-spanHouse-nw",
+            "sample": "ai120",
+            "sha256": "a4e40b38301f4b978c32437fb094e432d70b87506e3ad6442075c710a3cb8bd1",
+            "bytes": 91061,
+            "camera": {
+              "pos": [
+                -83.20000000002099,
+                94.06040612287399,
+                -71.69999999997891
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95565
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              1
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-canopyBungalow-se-1440.png",
+            "name": "modern2x1-canopyBungalow-se",
+            "sample": "ai120",
+            "sha256": "810ced6ebd90a4480dbd08851caef3f31eeddf2c43905e3ed37136aab58b3ade",
+            "bytes": 91487,
+            "camera": {
+              "pos": [
+                147.19999999998367,
+                94.06040612287397,
+                158.7000000000162
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95517
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          },
+          {
+            "file": "D065-after-modern2x1-canopyBungalow-nw-1440.png",
+            "name": "modern2x1-canopyBungalow-nw",
+            "sample": "ai120",
+            "sha256": "e88b7b0795ed4bd4fc9fe8e43f34ba9de7f7e4f43f44d03b917253bc9711d3bb",
+            "bytes": 90902,
+            "camera": {
+              "pos": [
+                -83.2000000000189,
+                94.06040612287399,
+                -71.699999999981
+              ],
+              "target": [
+                32,
+                0,
+                43.5
+              ],
+              "zoom": 8
+            },
+            "render": {
+              "calls": 15,
+              "triangles": 95517
+            },
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "forms": [
+              null,
+              2
+            ]
+          }
+        ],
+        "sample": {
+          "seed516": {
+            "worldSha256": "c4db47d016e4d82c9fdb941042e5f5c487e0540aecf77e2ae725c94cc48c5156",
+            "digestSha256": "a66d9439436bb9220da705a43f87f874b627800ba31aafb6b1519d4612f57fde"
+          },
+          "ai120": {
+            "worldSha256": "6aa5f716cd114398a43b1287fc2d8b9f4304600dc2d792db2e8281624929bade",
+            "digestSha256": "654464ab1d527f083648294083f0c0ec57300a001224836be9f492e039f9a449"
+          }
+        },
+        "passed": true
+      }
+    }
+  ],
+  "passed": true,
+  "pairs": 28
+}
