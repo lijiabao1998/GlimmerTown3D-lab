@@ -33,7 +33,7 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
       - name: Focused geometry, legacy, source scope, picking and negative controls
-        run: node tools/unit-d067.mjs && node tools/unit-d066.mjs && node tools/unit-d065.mjs
+        run: node tools/unit-d067.mjs && node tools/unit-d067-frame.mjs && node tools/unit-d066.mjs && node tools/unit-d065.mjs
       - run: npm run build
       - name: Validate exact source coverage without claiming screenshots
         run: node tools/d067-capture.mjs --plan-only

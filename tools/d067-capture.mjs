@@ -13,6 +13,7 @@ import {pageSession} from './smoke-d011.mjs';
 import {D057_SAME} from './d057-native.mjs';
 import {LANDMARK_BUILDINGS} from '../src/content/britishLandmarks.ts';
 import {D067_KINDS,D067_OLD,d067City,d067Expected} from './unit-d067.mjs';
+import {createD067FrameOracle,assertD067Frame,assertD067BrowserGeometry} from './d067-frame.mjs';
 
 const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
 const OUT=path.join(ROOT,'scratch/d067'),PORT=+(process.env.GT_PORT??8367);
@@ -36,11 +37,11 @@ const SOURCES=[
   const m=LANDMARK_BUILDINGS.find(m=>m.k===k),b=targets.find(b=>b.k===k);assert.ok(m&&b,'existing source building for k'+k);
   return {...m,id:source.id+'-kind-'+k+'-'+m.id,name:m.name,buildingId:b.id,x:b.x+b.size/2,z:b.z+b.size/2,size:b.size,variant:b.v,level:b.lv,parcel:{x:b.x,z:b.z,size:b.size}};
  });
- const shots=[{id:source.id+'-overview',name:source.sample==='gallery'?'展示樣本總覽（非可玩城市）':'原有 seed516 整城（本波僅 k116）',x:city.n/2,z:city.n/2,size:city.n},...sites];
+ const shots=[{id:source.id+'-overview',name:source.sample==='gallery'?'展示樣本廣角（手機裁切地圖邊角）':'seed516 廣角（手機裁切邊角；本波僅 k116）',x:city.n/2,z:city.n/2,size:city.n},...sites];
  return {...source,n:city.n,sites,shots,sampleSha256:sha(fs.readFileSync(path.join(ROOT,`src/content/samples/${source.sample}.code.txt`)))};
 });
 assert.equal(SOURCES.reduce((n,s)=>n+s.shots.length,0),11,'eight gallery closeups, gallery overview, seed516 overview and data centre closeup');
-const zoomFor=(source,s,v)=>s.k?Math.min(8,.70*.84*source.n*(v.W/v.H)/(s.size*Math.SQRT2)):.54*v.W/v.H;
+const zoomFor=(source,s,v)=>s.k?Math.min(8,.70*.84*source.n*(v.W/v.H)/(s.size*Math.SQRT2)):Math.max(.6,.54*v.W/v.H);
 // Sample saves can be null. Include every world layer, the source building list, stats and history as well.
 const WORLD=`JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList(),__gt.layers(),__gt.stats()])`;
 const DIGEST=`(()=>{const d=__gt.sceneDigest();return JSON.stringify({m:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),g:d.ground,i:d.inst,q:d.queries,c:d.counts});})()`;
@@ -69,7 +70,8 @@ async function settledCamera(p,source,shot,v){
 }
 async function capturePhase(v,phase,source,expected,item){
  Object.assign(item,{viewport:v,phase,sample:source.sample,sourceQualification:source.qualification,query:`sample=${source.sample}&clean=1`+(phase==='before'?'&landmarkArt=legacy':''),shots:[],passed:false});
- await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:PORT},async({page,open})=>{
+ const oracle=createD067FrameOracle(source.sample,phase==='after');
+ try{await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:PORT},async({page,open})=>{
   try{
    const p=await pageSession(page,open,v);await p.open(item.query);
    assert.equal(await p.ev('!!__gt.ready'),true,'production scene ready');assert.equal(await p.ev('__gt.sample'),source.sample,'requested source sample');
@@ -79,6 +81,11 @@ async function capturePhase(v,phase,source,expected,item){
    item.webgl=await p.ev(`(()=>{const gl=document.querySelector('canvas').getContext('webgl2');return {version:gl.getParameter(gl.VERSION),renderer:gl.getParameter(gl.RENDERER),vendor:gl.getParameter(gl.VENDOR),contextLost:gl.isContextLost()};})()`);
    assert.equal(item.webgl.contextLost,false,'WebGL context is live');
    const initial=await p.ev(WORLD),dig=await p.ev(DIGEST),list=await p.ev('__gt.buildingList()');item.worldSha256=sha(initial);item.digestSha256=sha(dig);
+   const geometry=await p.ev(`(()=>{const d=__gt.sceneDigest();return {meshes:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),instTransforms:d.inst.map(s=>s.split(':').slice(0,2).join(':'))};})()`);
+   // Production appends exactly two empty UI instances: placement preview and hazard overlay.
+   // The shared guard validates those exact empty tails, then every building/tree attribute independently.
+   assertD067BrowserGeometry(geometry,oracle.geometry,'browser full-scene geometry');
+   item.geometrySha256=sha(geometry);
    const actualTargets=list.filter(b=>D067_KINDS.includes(b[1]));
    assert.deepEqual(actualTargets.map(b=>b[0]).sort((a,b)=>a-b),source.sites.map(s=>s.buildingId).sort((a,b)=>a-b),'browser contains exactly the source target owners');
    for(const s of source.sites){const b=list.find(b=>b[0]===s.buildingId);assert.deepEqual(b.slice(0,7),[s.buildingId,s.k,s.parcel.x,s.parcel.z,s.size,s.level,s.variant],'actual unmodified source building, variant and level');}
@@ -86,7 +93,12 @@ async function capturePhase(v,phase,source,expected,item){
     const camera=await settledCamera(p,source,s,v);await sourceLabel(p,source,s);await p.frames(3);
     const info=await p.ev('__gt.renderInfo()'),all=await p.ev('__gt.renderInfoAll()');
     assert.ok(info.calls<=18,'existing base draw-call ceiling');assert.ok(all.calls<=20,'existing all-content draw-call ceiling');
-    assert.equal(info.triangles,phase==='before'?expected.legacy:expected.landmark,'browser triangle count agrees with Node production build');
+    // Independently predict color and shadow submissions from actual production geometry and camera.
+    // The seed516 data-centre closeup culls 280 yard trunks + 280 crowns (3920 triangles).
+    // Whole-scene budgets remain immutable; rendered counts must match the exact frustum, not a relaxed ceiling.
+    const frameExpected=oracle.measure(camera,v);
+    assert.equal(frameExpected.wholeTriangles,phase==='before'?expected.legacy:expected.landmark,'unchanged exact whole-scene budget');
+    assertD067Frame(info,frameExpected,'browser base frame');
     const pixels=await p.ev(PIXELS);assert.ok(pixels.variance>50,'nonblank real production canvas');assert.equal(pixels.width,v.W);assert.equal(pixels.height,v.H);
     const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');
     assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(bytes.readUInt32BE(16),v.W);assert.equal(bytes.readUInt32BE(20),v.H);assert.ok(bytes.length>3000,'nonempty full-resolution PNG');
@@ -96,13 +108,13 @@ async function capturePhase(v,phase,source,expected,item){
     assert.equal(await p.ev(WORLD),initial,'photography leaves every world layer/save/history untouched');assert.equal(await p.ev(DIGEST),dig,'photography does not change scene geometry');
     const con=await p.ev('__gt.con()');assert.equal(con.visT,2.2,'frozen presentation time');assert.equal(con.dayFrac,0,'frozen fraction of day');
     item.shots.push({file,name:s.id,label:s.name,source:source.sample,sourceQualification:source.qualification,kind:s.k??null,buildingId:s.buildingId??null,parcel:s.parcel??null,variant:s.variant??null,level:s.level??null,
-     sha256:sha(bytes),bytes:bytes.length,canvasSha256:pixels.sha256,canvasVariance:pixels.variance,camera,render:{calls:info.calls,triangles:info.triangles},renderAll:{calls:all.calls,triangles:all.triangles},presentation:{visT:con.visT,dayFrac:con.dayFrac},worldSha256:sha(initial)});
+     sha256:sha(bytes),bytes:bytes.length,canvasSha256:pixels.sha256,canvasVariance:pixels.variance,camera,frameExpected,render:{calls:info.calls,triangles:info.triangles},renderAll:{calls:all.calls,triangles:all.triangles},presentation:{visT:con.visT,dayFrac:con.dayFrac},worldSha256:sha(initial)});
    }
    assert.equal(await p.ev(D057_SAME),true,'cached production scene equals a fresh scene');assert.equal(await p.ev(WORLD),initial,'fresh-scene verification leaves the world untouched');
    assert.deepEqual(page.errors,[],'no browser console/page errors');assert.deepEqual(externalRequests(page.requests),[],'no external assets/network requests');
    item.passed=true;
   }finally{item.browserErrors=[...page.errors];item.externalRequests=externalRequests(page.requests);item.requestCount=page.requests.length;}
- });
+ });}finally{oracle.dispose();}
 }
 function compare(a,b,source,expected){
  assert.equal(a.worldSha256,b.worldSha256,'same source world in both phases');assert.equal(a.shots.length,source.shots.length);assert.equal(b.shots.length,source.shots.length);
@@ -132,7 +144,7 @@ if(process.argv.includes('--plan-only')){
  const plan=capturePlan(expectedBudgets());jsonWrite('D067-capture-plan.json',plan);
  console.log('PASS D067 capture plan: 8 gallery model closeups + gallery overview + seed516 overview + its sole k116/owner201 × '+viewports.length+' viewports × 2 phases; NO SCREENSHOTS');
 }else{
- const report={sourceRef:process.env.GITHUB_SHA??'local D067 candidate',qualification:'Real production CDP WebGL PNGs of unchanged, paused source samples. Gallery is a model showcase, not a playable built city. seed516 covers only k116/owner201. Software WebGL with mobile viewport/touch emulation does not certify physical Android performance.',
+ const report={sourceRef:process.env.GITHUB_SHA??'local D067 candidate',qualification:'Real production CDP WebGL PNGs of unchanged, paused source samples. Gallery is a model showcase, not a playable built city. seed516 covers only k116/owner201. Mobile wide views respect the production minimum zoom 0.6 and crop map corners; they are not complete whole-map views. Data-centre fan/entrance cues are subtle at its inherited height and 60-triangle cap. Software WebGL with mobile viewport/touch emulation does not certify physical Android performance.',
   baseline:'91e499b6c0ed0ce0cffdf0c09a35a067a8156c71',before:'landmarkArt=legacy (D066)',after:'default D067',allOriginalsRetained:true,sources:SOURCES.map(({sites,shots,...s})=>s),cases:[],passed:false,captured:false};
  try{
   report.htmlSha256=sha(fs.readFileSync(path.join(ROOT,'dist/index.html')));report.expected=expectedBudgets();jsonWrite('D067-capture-plan.json',capturePlan(report.expected));
