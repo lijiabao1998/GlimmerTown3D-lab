@@ -883,7 +883,7 @@ export async function d064Guards(log) {
   test('flag chain and photography hook: every older legacy flag switches the wave off with it; the hook copies buildings and never edits the world',()=>{
     const view=fs.readFileSync(path.join(ROOT,'src/cityView.ts'),'utf8');
     assert.match(view,/const towerOn = !\['towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'\]\.some\(key => q\.get\(key\) === 'legacy'\)/,'every older legacy flag disables D064');
-    assert.match(view,/shapeOf\(k, q\.get\('heritageArt'\) !== 'legacy', towerOn\)/,'the flag reaches the shape table');
+    assert.match(view,/shapeOf\(k, q\.get\('heritageArt'\) !== 'legacy', towerOn(?:, metropolisOn)?\)/,'the flag reaches the shape table (with optional D066 argument)');
     assert.match(view,/q\.get\('britishArt'\) === 'legacy' \? KIND_SHAPES\[k\] \?\? null/,'britishArt=legacy still returns the raw table shapes');
     assert.doesNotMatch(view,/(commerceArt|industryArt|villageArt): !\[[^\]]*'towerArt'/,'towerArt=legacy does not switch an older wave off');   // D065：新一波的旗標串聯同一行，所以只檢查各舊旗標自己的陣列
     assert.match(view,/buildCityScene\(towerView\(c\), KINDS/,'the scene is built from the photography view');
