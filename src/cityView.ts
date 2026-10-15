@@ -155,7 +155,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // D047 comparison only: keep the exact D007 recipe available for fixed-camera before shots.
 // D064-BEGIN tower-flag
   const towerOn = !['towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');   // D064：四種合併塔的英式畫法（旗標串聯：較舊的 legacy 旗標一起關掉）
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D066-BEGIN metropolis-enabled
+  const metropolisOn = !['metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D066-END metropolis-enabled
 // D064-END tower-flag
 // D061-BEGIN land-level
   const landLevel = landLevelOf(k => q.get(k));   // 地景檔位 0–3（旗標規則在 src/render/landArt.ts，Node 守衛直接測）

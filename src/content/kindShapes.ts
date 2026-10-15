@@ -1,4 +1,7 @@
 import { BRITISH_KINDS } from './britishCivic.ts';
+// D066-BEGIN metropolis-import
+import { METROPOLIS_KINDS } from './britishMetropolis.ts';
+// D066-END metropolis-import
 import { BRITISH_HERITAGE_KINDS } from './britishHeritage.ts';
 // D064-BEGIN tower-import
 import { TOWER_KINDS } from './britishTowers.ts';
@@ -212,10 +215,12 @@ export const KIND_SHAPES: Record<number, Shape> = {
 
 // Preserve the historical recipes for regression comparison; only these eleven opt in to D056.
 // D064-BEGIN tower-shape
-export const shapeOf = (k: number, heritage = true, tower = false): Shape | null => {
+// D066-BEGIN metropolis-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false): Shape | null => {
   const shape = KIND_SHAPES[k];
-  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : shape : null;
+  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : shape : null;
 };
+// D066-END metropolis-shape
 // D064-END tower-shape
 
 export const PARK_GRASS = '#82c163';   // D018：實驗線公園精靈的草地底色（40610）

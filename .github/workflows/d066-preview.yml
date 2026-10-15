@@ -1,0 +1,36 @@
+name: D066 metropolis preview (no deployment)
+on:
+  push:
+    branches: ['codex/d066-metropolis-eight']
+permissions:
+  contents: read
+concurrency:
+  group: d066-preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/codex/d066-metropolis-eight'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch immutable source-scope baseline
+        run: git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && node tools/unit-d066.mjs && node tools/unit-d065.mjs && npm run build
+      - name: Same-world WebGL desktop and mobile comparisons
+        run: node tools/d066-capture.mjs
+        env:
+          D066_KEEP_RAW: 1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d066-metropolis-${{ github.sha }}
+          path: scratch/d066/
+          if-no-files-found: error
+          retention-days: 14

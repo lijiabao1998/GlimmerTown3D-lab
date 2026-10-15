@@ -5,6 +5,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {D066_ADDED,assertD066Scope,d066HistoricalBytes} from './d066-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -12,7 +13,8 @@ const M = JSON.parse(diskRead('fixtures/d065-art-scope.json'));
 const baseline = JSON.parse(diskRead('fixtures/d065-source-before.json'));
 const expectedFiles = [...Object.keys(M.before),...M.added].sort();
 const modified = new Set(M.modified);
-export const D065_ADDED = new Set(M.added);
+const ownAdded = new Set(M.added);
+export const D065_ADDED = new Set([...M.added,...D066_ADDED]);
 
 assert.equal(M.baseline,'f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80','D065 fixed D064 candidate baseline');
 const D064M = JSON.parse(diskRead('fixtures/d064-art-scope.json'));
@@ -21,7 +23,7 @@ assert.equal(M.baseline,baseline.baseline,'D065 manifest uses the captured basel
 assert.deepEqual(M.before,baseline.before,'D065 original source SHA inventory is preserved');
 assert.deepEqual([...M.modified].sort(),['src/cityView.ts','src/render/cityScene.ts'],'D065 only the two approved dispatch sources (block dispatch, flag and hook) may change');
 assert.deepEqual([...M.added].sort(),['src/content/britishHouses.ts','src/render/britishHouseArt.ts'],'D065 only the two approved house sources (selector, procedural art) may be added');
-assert.equal(D065_ADDED.size,M.added.length,'D065 unique added source paths');
+assert.equal(ownAdded.size,M.added.length,'D065 unique added source paths');
 assert.equal(modified.size,M.modified.length,'D065 unique modified source paths');
 assert.deepEqual(Object.keys(M.replacements).sort(),[...modified].sort(),'D065 exact reversible source paths');
 for(const file of M.added)assert.ok(!(file in M.before),'D065 additions were absent at baseline: '+file);
@@ -29,11 +31,11 @@ for(const file of M.modified)assert.ok(file in M.before,'D065 modifications have
 for(const file of [...M.added,...M.modified])assert.ok(file in M.after,'D065 changed source has current SHA: '+file);
 for(const [file,pin] of Object.entries(M.after)) {
   assert.ok(expectedFiles.includes(file),'D065 SHA belongs to exact source inventory: '+file);
-  if(!D065_ADDED.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D065 unchanged source SHA: '+file);
+  if(!ownAdded.has(file)&&!modified.has(file))assert.equal(pin,M.before[file],'D065 unchanged source SHA: '+file);
 }
 
 function historical(file,current) {
-  if(D065_ADDED.has(file))return '';
+  if(ownAdded.has(file))return '';
   const replacements = M.replacements[file]??[];
   const prior = new Map();
   for(const entry of replacements) {
@@ -63,20 +65,21 @@ function historical(file,current) {
 }
 
 export function d065HistoricalBytes(file,read=diskRead) {
-  const current=read(file),pin=M.after[file]??M.before[file];
+  const current=d066HistoricalBytes(file,read),pin=M.after[file]??M.before[file];
   assert.ok(pin,file+' belongs to D065 source inventory');
   assert.equal(sha(current),pin,file+' exact allowed source');
   return historical(file,current);
 }
 
 export function assertD065Scope(read=diskRead) {
+  assertD066Scope(read);
   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
+    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D066_ADDED.has(file)).sort();
   assert.deepEqual(files,expectedFiles,'D065 exact source inventory');
   const snapshot = new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d066HistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }

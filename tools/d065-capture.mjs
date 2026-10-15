@@ -30,7 +30,7 @@ export const D065_VIEWPORTS=[{W:1440,H:1000,mobile:false},{W:360,H:740,mobile:tr
 const selectedWidths=(process.env.D065_WIDTHS??'').split(',').filter(Boolean).map(Number);
 const viewports=D065_VIEWPORTS.filter(v=>!selectedWidths.length||selectedWidths.includes(v.W));assert.ok(viewports.length);
 // before = houseArt=legacy (the D064 candidate); after = the default
-const PHASES={before:'houseArt=legacy',after:''};
+const PHASES={before:'houseArt=legacy',after:'metropolisArt=legacy'}; // D066: keep measuring only D065
 const OVERVIEWS=[
   {id:'seed516-far',sample:'seed516',x:36,z:36,zoom:1.2,desktop:true},
   {id:'seed516-villas',sample:'seed516',x:6.1,z:5.4,zoom:4.5,desktop:true},
