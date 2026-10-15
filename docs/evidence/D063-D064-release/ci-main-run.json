@@ -1,0 +1,192 @@
+{
+ "run": {
+  "id": 38661889692,
+  "html_url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38661889692",
+  "event": "push",
+  "head_branch": "main",
+  "head_sha": "f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80",
+  "created_at": "2026-10-15T00:46:02Z",
+  "updated_at": "2026-10-15T02:15:27Z",
+  "status": "completed",
+  "conclusion": "success"
+ },
+ "jobs": [
+  {
+   "name": "d061",
+   "id": 116184844476,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:49:02Z"
+  },
+  {
+   "name": "d059",
+   "id": 116184844713,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:58:26Z"
+  },
+  {
+   "name": "d055",
+   "id": 116184844741,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:48:02Z"
+  },
+  {
+   "name": "d063 (412)",
+   "id": 116184844754,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:48:25Z"
+  },
+  {
+   "name": "smoke",
+   "id": 116184844764,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T02:15:14Z"
+  },
+  {
+   "name": "d062",
+   "id": 116184844768,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:58:52Z"
+  },
+  {
+   "name": "d060 (412)",
+   "id": 116184844803,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:48:10Z"
+  },
+  {
+   "name": "d064 (412)",
+   "id": 116184844815,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:48:31Z"
+  },
+  {
+   "name": "d063 (1440)",
+   "id": 116184844863,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T01:00:30Z"
+  },
+  {
+   "name": "d060 (1440)",
+   "id": 116184844900,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T01:03:13Z"
+  },
+  {
+   "name": "d060 (360)",
+   "id": 116184844917,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:47:48Z"
+  },
+  {
+   "name": "d063 (360)",
+   "id": 116184844949,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:47:52Z"
+  },
+  {
+   "name": "d064 (1440)",
+   "id": 116184844967,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T01:26:05Z"
+  },
+  {
+   "name": "d064 (360)",
+   "id": 116184844982,
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:04Z",
+   "completed_at": "2026-10-15T00:48:27Z"
+  },
+  {
+   "name": "pages",
+   "id": 116210649606,
+   "conclusion": "success",
+   "started_at": "2026-10-15T02:15:17Z",
+   "completed_at": "2026-10-15T02:15:27Z"
+  }
+ ],
+ "smokeSteps": [
+  {
+   "name": "Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）",
+   "conclusion": "success",
+   "started_at": "2026-10-15T00:46:31Z",
+   "completed_at": "2026-10-15T01:06:12Z"
+  },
+  {
+   "name": "煙霧測試",
+   "conclusion": "success",
+   "started_at": "2026-10-15T01:06:13Z",
+   "completed_at": "2026-10-15T02:08:14Z"
+  },
+  {
+   "name": "拍樣張（三畫風×三年份×兩個距離）",
+   "conclusion": "success",
+   "started_at": "2026-10-15T02:08:14Z",
+   "completed_at": "2026-10-15T02:15:09Z"
+  }
+ ],
+ "smokeCounts": {
+  "unit": {
+   "ok": 735,
+   "ng": 0,
+   "seconds": 1180.4
+  },
+  "browser": {
+   "ok": 850,
+   "ng": 0,
+   "seconds": 3719.8
+  },
+  "note": "數自 smoke 工作的日誌：兩個「OK 綠燈」標記之間的「OK」行（Node 套件在第一個標記之前、browser 套件在兩個標記之間）；日誌 2181 行、523495 位元組、SHA-256 f500fec20ecae57f…（日誌本身不入庫，這個雜湊是用來認我數的是哪一份）；沒有 NG 行"
+ },
+ "released": {
+  "from": "8428ef903934b38560dfd2321d9cba66e61e36a1",
+  "to": "f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80",
+  "method": "git push origin HEAD:main（快進；CLAUDE.md 雲端流程；沒有 PR、沒有合併提交）",
+  "pushedAt": "2026-10-15T00:46:00Z（本機 origin/main 的 reflog）",
+  "commitsAhead": 11,
+  "docsOnlyAfterTestedBranchCommit": "git diff 31e3119 f4a1a4e -- src tools .github fixtures package.json package-lock.json index.html vite.config.ts tsconfig.json 為空；分支 CI run 38635806086 在 31e3119 全綠；main CI 另在 f4a1a4e 本身重跑一次"
+ },
+ "pages": {
+  "deploymentId": 7082079144,
+  "sha": "f4a1a4eb5d991c6856aacccfd51e51ee9d0b8c80",
+  "statuses": [
+   {
+    "state": "success",
+    "created_at": "2026-10-15T02:15:28Z",
+    "environment_url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+   },
+   {
+    "state": "in_progress",
+    "created_at": "2026-10-15T02:15:18Z",
+    "environment_url": ""
+   },
+   {
+    "state": "queued",
+    "created_at": "2026-10-15T02:15:16Z",
+    "environment_url": ""
+   },
+   {
+    "state": "queued",
+    "created_at": "2026-10-15T02:15:16Z",
+    "environment_url": ""
+   },
+   {
+    "state": "waiting",
+    "created_at": "2026-10-15T02:15:15Z",
+    "environment_url": ""
+   }
+  ]
+ }
+}
