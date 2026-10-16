@@ -67,6 +67,17 @@ function cameraFor(n,view,viewport){
  camera.updateProjectionMatrix();camera.updateMatrixWorld(true);return camera;
 }
 
+// A positive quarter-turn via production spin rotates the southeast view to southwest.
+// This verifies camera placement only; screenshots remain the evidence for visual acceptance.
+export function assertD071SchoolCamera(actual,baseline){
+ for(const c of [actual,baseline]){assert.ok(c.pos.length===3&&c.target.length===3&&[...c.pos,...c.target,c.zoom].every(Number.isFinite),'finite school camera');}
+ assert.deepEqual(actual.target,baseline.target,'school rotation preserves exact target');assert.equal(actual.zoom,baseline.zoom,'school rotation preserves exact zoom');
+ const b=baseline.pos.map((v,i)=>v-baseline.target[i]),a=actual.pos.map((v,i)=>v-actual.target[i]);
+ assert.ok(b[0]>0&&b[2]>0&&a[0]<0&&a[2]>0,'school alternate view is southwest, not the original southeast angle');
+ const expected=[-b[2],b[1],b[0]];
+ for(let i=0;i<3;i++)assert.ok(Math.abs(a[i]-expected[i])<1e-9,'exact quarter-turn within floating-point camera arithmetic');
+}
+
 export function assertD071Frame(actual,expected,label='D071 base frame'){
  assert.equal(actual.triangles,expected.triangles,label+' triangles agree with independent scene/frustum oracle');
  assert.equal(actual.calls,expected.calls,label+' calls agree with independent scene/frustum oracle');

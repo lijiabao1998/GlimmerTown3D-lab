@@ -1,7 +1,7 @@
 // D071 actual production WebGL pairs. Never substitute manufactured cities or pictures.
 // Three original cities × native and render-only copied saved v0/v1/v2 × three viewports.
 // Ten distinct education saved slots, four existing kinds; not ten native placement tools.
-// node tools/d071-capture.mjs retains all 132 original PNGs plus labelled pair sheets.
+// node tools/d071-capture.mjs retains the original 132 views plus 18 school-angle PNGs (150 total) and labelled pair sheets.
 // --plan-only validates the plan in Node and never launches a browser.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +13,7 @@ import {D057_SAME} from './d057-native.mjs';
 import {pathToFileURL} from 'node:url';
 import {EDUCATION_BUILDINGS,EDUCATION_KINDS} from '../src/content/britishEducation.ts';
 import {D071_OLD,d071City,d071Expected} from './unit-d071.mjs';
-import {createD071FrameOracle,assertD071Frame,D071_FRAME_WHOLE} from './d071-frame.mjs';
+import {createD071FrameOracle,assertD071Frame,assertD071SchoolCamera,D071_FRAME_WHOLE} from './d071-frame.mjs';
 import {D067_UPLOAD_PROBE} from './d067-diagnose.mjs';
 
 const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
@@ -46,15 +46,19 @@ export const D071_CAPTURE_SOURCES=['gallery','seed516','ai120'].flatMap(sample=>
   return {...m,id:id+'-k'+m.k+'-v'+m.v,buildingId:b.id,x:b.x+b.size/2,z:b.z+b.size/2,size:b.size,sourceVariant:b.v,renderedVariant:m.v,level:b.lv,parcel:{x:b.x,z:b.z,size:b.size}};
  });
  const shots=[{id:id+'-overview',name:force===null?'Native existing-city overview':'Copied saved-variant '+variant+' overview (not ten native tools)',x:city.n/2,z:city.n/2,size:city.n},...sites];
+ // Append a real supported camera rotation; retain every original shot, label, camera and file name.
+ const school=sites.find(s=>s.k===108);if(school)shots.push({...school,id:school.id+'-southwest-quarter-turn',name:school.name+' · SOUTHWEST QUARTER-TURN / ADDITIONAL CAMERA VIEW',additionalView:'southwest-quarter-turn',spinRadians:Math.PI/2});
  return {sample,id,label,qualification,force,variant,n:city.n,sites,shots,targets:targets.map(b=>({id:b.id,k:b.k,x:b.x,z:b.z,size:b.size,lv:b.lv,v:b.v})),sampleSha256:sha(fs.readFileSync(path.join(ROOT,'src/content/samples/'+sample+'.code.txt')))};
 }));
 const SOURCES=D071_CAPTURE_SOURCES;
 assert.equal(SOURCES.length,12,'three original cities × native and three copied variant previews');
 assert.deepEqual(SOURCES.flatMap(s=>s.sites.map(x=>x.k+':'+x.v)).sort(),D071_SLOTS.map(s=>s.k+':'+s.v).sort(),'each of the ten saved slots has exactly one closeup per viewport/phase');
-assert.equal(SOURCES.reduce((n,s)=>n+s.shots.length,0),22,'ten slot closeups plus twelve native/copied overviews');
+assert.equal(SOURCES.reduce((n,s)=>n+s.shots.filter(x=>!x.additionalView).length,0),22,'all original ten slot closeups and twelve overviews are retained');
+assert.equal(SOURCES.reduce((n,s)=>n+s.shots.filter(x=>x.additionalView).length,0),3,'one additional southwest view for each school saved variant');
+assert.equal(SOURCES.reduce((n,s)=>n+s.shots.length,0),25,'original 22 shots plus three school alternative angles');
 const ORIGINALS_PER_VIEWPORT=2*SOURCES.reduce((n,s)=>n+s.shots.length,0);
-assert.equal(ORIGINALS_PER_VIEWPORT,44,'exactly 44 original WebGL PNGs per viewport');
-assert.equal(D071_VIEWPORTS.length*ORIGINALS_PER_VIEWPORT,132,'all three viewports require exactly 132 original WebGL PNGs');
+assert.equal(ORIGINALS_PER_VIEWPORT,50,'exactly 50 original WebGL PNGs per viewport');
+assert.equal(D071_VIEWPORTS.length*ORIGINALS_PER_VIEWPORT,150,'132 original views plus 18 additional school-angle WebGL PNGs');
 const zoomFor=(source,s,v)=>s.k?Math.min(8,.70*.84*source.n*(v.W/v.H)/(s.size*Math.SQRT2)):Math.max(.6,.54*v.W/v.H);
 // Sample saves can be null. Include every world layer, the source building list, stats and history as well.
 const WORLD=`JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList(),__gt.layers(),__gt.stats()])`;
@@ -69,7 +73,7 @@ function expectedBudgets(){
 }
 export function d071CapturePlan(expected=expectedBudgets()){
  return {passed:true,captured:false,qualification:'Source coverage, camera plan and Node triangle counts only. This plan file is not screenshot evidence; --plan-only never launches a browser.',expected,viewports,
-  plannedOriginalPngs:viewports.length*ORIGINALS_PER_VIEWPORT,completeThreeViewportOriginalPngs:132,sources:SOURCES.map(s=>({...s,shots:s.shots.map(shot=>({...shot,zooms:Object.fromEntries(viewports.map(v=>[v.W,zoomFor(s,shot,v)]))}))}))};
+  plannedOriginalPngs:viewports.length*ORIGINALS_PER_VIEWPORT,completeThreeViewportOriginalPngs:150,preservedOriginalViews:132,additionalSchoolViews:18,sources:SOURCES.map(s=>({...s,shots:s.shots.map(shot=>({...shot,zooms:Object.fromEntries(viewports.map(v=>[v.W,zoomFor(s,shot,v)]))}))}))};
 }
 async function sourceLabel(p,source,shot){
  // The same factual caption appears in both phases. It never supplies the changed-pixels evidence.
@@ -80,7 +84,17 @@ async function settledCamera(p,source,shot,v){
  await p.ev(`__gt.view(${shot.x},${shot.z},${zoomFor(source,shot,v)});__gt.setVisT(2.2);__gt.setDayFrac(0)`);await p.frames(25);
  let stable=0,last=await p.ev('__gt.cam()');
  for(let i=0;i<24&&stable<2;i++){await p.frames(20);const next=await p.ev('__gt.cam()'),delta=Math.max(...['pos','target'].flatMap(k=>next[k].map((x,j)=>Math.abs(x-last[k][j]))),Math.abs(next.zoom-last.zoom));stable=delta<1e-9?stable+1:0;last=next;}
- assert.equal(stable,2,'observed a settled camera');return last;
+ assert.equal(stable,2,'observed a settled camera');
+ if(shot.additionalView){
+  assert.equal(shot.k,108);assert.equal(shot.spinRadians,Math.PI/2);
+  const initial=last;
+  // spin is an existing production OrbitControls hook. Synchronous zero-angle updates drain
+  // damping deterministically; no direct camera assignment, scene edit or clipping change is used.
+  await p.ev('__gt.spin('+shot.spinRadians+');for(let i=0;i<900;i++)__gt.spin(0)');
+  last=await p.ev('__gt.cam()');assertD071SchoolCamera(last,initial);
+  await p.frames(20);assert.deepEqual(await p.ev('__gt.cam()'),last,'additional camera is at an exact damping fixed point');
+ }
+ return last;
 }
 async function uploadState(p){
  return p.ev(`(()=>{const r=__gt.renderInfo(),a=__gt.renderInfoAll();return {world:${WORLD},digest:__gt.sceneDigest(),camera:__gt.cam(),render:{calls:r.calls,triangles:r.triangles},renderAll:{calls:a.calls,triangles:a.triangles}};})()`);
@@ -160,7 +174,7 @@ async function capturePhase(v,phase,source,expected,item){
     assert.equal((await p.ev(PIXELS)).sha256,pixels.sha256,'paused canvas stayed pixel-stable during screenshot');
     assert.equal(await p.ev(WORLD),initial,'photography leaves every world layer/save/history untouched');assert.equal(await p.ev(DIGEST),dig,'photography does not change scene geometry');
     const con=await p.ev('__gt.con()');assert.equal(con.visT,2.2,'frozen presentation time');assert.equal(con.dayFrac,0,'frozen fraction of day');
-    item.shots.push({file,name:s.id,label:s.name,source:source.sample,sourceQualification:source.qualification,kind:s.k??null,buildingId:s.buildingId??null,parcel:s.parcel??null,sourceVariant:s.sourceVariant??null,renderedVariant:s.renderedVariant??null,level:s.level??null,
+    item.shots.push({file,name:s.id,label:s.name,source:source.sample,sourceQualification:source.qualification,kind:s.k??null,additionalView:s.additionalView??null,spinRadians:s.spinRadians??0,buildingId:s.buildingId??null,parcel:s.parcel??null,sourceVariant:s.sourceVariant??null,renderedVariant:s.renderedVariant??null,level:s.level??null,
      sha256:sha(bytes),bytes:bytes.length,width:v.W,height:v.H,canvasSha256:pixels.sha256,canvasVariance:pixels.variance,camera,frameExpected,render:{calls:info.calls,triangles:info.triangles},renderAll:{calls:all.calls,triangles:all.triangles},presentation:{visT:con.visT,dayFrac:con.dayFrac},worldSha256:sha(initial)});
    }
    if(source.force!==null){
@@ -208,9 +222,9 @@ if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
 fs.mkdirSync(OUT,{recursive:true});
 if(process.argv.includes('--plan-only')){
  const plan=d071CapturePlan(expectedBudgets());jsonWrite('D071-capture-plan.json',plan);
- console.log('PASS D071 capture plan: 10 saved-slot closeups + 12 native/copied city overviews × '+viewports.length+' viewports × 2 phases; NO SCREENSHOTS');
+ console.log('PASS D071 capture plan: 10 saved-slot closeups + 12 native/copied city overviews + 3 additional school angles × '+viewports.length+' viewports × 2 phases; NO SCREENSHOTS');
 }else{
- const report={sourceRef:process.env.GITHUB_SHA??'local D071 candidate',qualification:'Real production CDP WebGL PNGs of unchanged paused source worlds. Three original cities are each shown natively and with copied saved-variant v0/v1/v2 previews. Four existing kinds supply ten distinct saved slots, not ten native placement tools. Every preview restores its phase-specific exact native scene digest. seed516 and ai120 contain no target kinds and remain negative controls. Mobile overviews respect production minimum zoom 0.6 and crop map corners. Software WebGL plus mobile viewport/touch emulation does not certify physical Android performance.',
+ const report={sourceRef:process.env.GITHUB_SHA??'local D071 candidate',qualification:'Real production CDP WebGL PNGs of unchanged paused source worlds. Three original cities are each shown natively and with copied saved-variant v0/v1/v2 previews. Four existing kinds supply ten distinct saved slots, not ten native placement tools. Every preview restores its phase-specific exact native scene digest. All 132 original views remain; 18 additional school PNGs use the existing production spin hook for a southwest quarter-turn, without removing or clipping neighboring buildings. Their actual images still require visual review. seed516 and ai120 contain no target kinds and remain negative controls. Mobile overviews respect production minimum zoom 0.6 and crop map corners. Software WebGL plus mobile viewport/touch emulation does not certify physical Android performance.',
   baseline:'1c40e13a219adb90827acd3b60fb6b7623600b63',before:'educationArt=legacy (D070)' ,after:'default D071',allOriginalsRetained:true,sources:SOURCES.map(({sites,shots,...s})=>s),cases:[],passed:false,captured:false};
  try{
   report.htmlSha256=sha(fs.readFileSync(path.join(ROOT,'dist/index.html')));report.expected=expectedBudgets();jsonWrite('D071-capture-plan.json',d071CapturePlan(report.expected));

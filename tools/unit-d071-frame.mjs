@@ -1,7 +1,9 @@
 // D071 camera-specific draw oracle guards. Node only; no browser counters, renderer, network, or output files.
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
-import {createD071FrameOracle,assertD071Frame,assertD071BrowserGeometry,D071_FRAME_WHOLE} from './d071-frame.mjs';
+import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {createD071FrameOracle,assertD071Frame,assertD071SchoolCamera,assertD071BrowserGeometry,D071_FRAME_WHOLE} from './d071-frame.mjs';
 import {hashOf,sceneDigest,meshDigest} from '../src/render/digest.ts';
 import {buildCityScene} from '../src/render/cityScene.ts';
 import {ConState} from '../src/render/construction.ts';
@@ -16,7 +18,7 @@ function cameraFor(n,shot,v){
  const D=n*1.6,target=[shot.x,0,shot.z];
  // __gt.view sets this pose; OrbitControls subsequently clamps overview zoom to its actual .6 minimum.
  const requested=shot.k?Math.min(8,.70*.84*n*(v.W/v.H)/(shot.size*Math.SQRT2)):.54*v.W/v.H;
- return {pos:[shot.x+D,D*Math.SQRT2*Math.tan(Math.PI/6),shot.z+D],target,zoom:Math.max(.6,requested)};
+ return {pos:[shot.x+(shot.additionalView?-D:D),D*Math.SQRT2*Math.tan(Math.PI/6),shot.z+D],target,zoom:Math.max(.6,requested)};
 }
 // Independent production data for comparisons; mutations are confined to disposable test clones.
 function browserFixture(sample,on,force=null){
@@ -31,7 +33,7 @@ function browserFixture(sample,on,force=null){
    return {actual,words:{[name]:Array.from(new Uint32Array(a.buffer,a.byteOffset+start*4,end-start))}};
   }finally{g.dispose();}
  };
- return {digest,change,start:owners[1].findIndex(o=>o===-98),dispose:()=>{built.dispose();con.dispose();}};
+ return {digest,change,meshes,owners,scene:built.scene,start:owners[1].findIndex(o=>o===-98),dispose:()=>{built.dispose();con.dispose();}};
 }
 export async function d071FrameGuards(log=()=>{}){
  let failed=0;const report={qualification:'Independent Node geometry/frustum oracle tests; not WebGL screenshot evidence.',tests:[],frames:[],passed:false};
@@ -44,18 +46,20 @@ export async function d071FrameGuards(log=()=>{}){
    assert.ok(expected[variant][sample].education<=expected[variant][sample].legacy);
   }
  });
- test('capture plan explicitly covers ten saved slots, twelve native/copied city overviews and 132 originals',()=>{
-  const plan=d071CapturePlan();assert.equal(plan.captured,false);assert.equal(plan.completeThreeViewportOriginalPngs,132);
+ test('capture plan preserves all 132 views and adds exactly 18 school-angle originals',()=>{
+  const plan=d071CapturePlan();assert.equal(plan.captured,false);assert.equal(plan.completeThreeViewportOriginalPngs,150);assert.equal(plan.preservedOriginalViews,132);assert.equal(plan.additionalSchoolViews,18);
   assert.deepEqual(D071_SLOTS.map(s=>[s.k,s.v]),[[32,0],[32,1],[32,2],[45,0],[45,1],[45,2],[108,0],[108,1],[108,2],[109,0]]);
   assert.equal(D071_CAPTURE_SOURCES.length,12);
   assert.deepEqual(D071_CAPTURE_SOURCES.flatMap(s=>s.sites.map(x=>x.k+':'+x.v)).sort(),D071_SLOTS.map(s=>s.k+':'+s.v).sort());
   for(const source of D071_CAPTURE_SOURCES){
-   assert.equal(source.shots.length,source.sites.length+1);
+   const extra=source.shots.filter(s=>s.additionalView);assert.equal(extra.length,source.sample==='gallery'&&source.force!==null?1:0);
+   assert.equal(source.shots.filter(s=>!s.additionalView).length,source.sites.length+1);
+   if(extra.length){const school=source.sites.find(s=>s.k===108);assert.deepEqual(extra[0],{...school,id:school.id+'-southwest-quarter-turn',name:school.name+' · SOUTHWEST QUARTER-TURN / ADDITIONAL CAMERA VIEW',additionalView:'southwest-quarter-turn',spinRadians:Math.PI/2});assert.equal(source.shots.at(-1),extra[0],'alternate is appended after every original shot');}
    if(source.force!==null)assert.match(source.label,/COPIED SAVED-VARIANT .* NOT TEN NATIVE TOOLS/);
    for(const site of source.sites){assert.equal(site.sourceVariant,0);assert.equal(site.renderedVariant,source.force);}
   }
  });
- test('all 132 planned native/copied views reproduce exact main/shadow submissions at three widths and two phases',()=>{
+ test('all 150 original and additional-angle views reproduce exact main/shadow submissions at three widths and two phases',()=>{
   for(const source of D071_CAPTURE_SOURCES){
    const {sample,n,shots,force,variant}=source;
    for(const on of [false,true]){const oracle=createD071FrameOracle(sample,on,force);
@@ -72,8 +76,47 @@ export async function d071FrameGuards(log=()=>{}){
     }}finally{oracle.dispose();}
    }
   }
-  assert.equal(report.frames.length,132);
+  assert.equal(report.frames.length,150);
   for(const before of report.frames.filter(f=>!f.on)){const after=report.frames.find(f=>f.on&&f.sample===before.sample&&f.variant===before.variant&&f.width===before.width&&f.shot===before.shot);assert.equal(after.calls,before.calls);const pin=D071_FRAME_WHOLE[before.variant][before.sample];assert.equal(after.triangles-before.triangles,pin.education-pin.legacy);}
+ });
+ test('production spin quarter-turn settles exactly and rejects unchanged/wrong camera poses',()=>{
+  const source=D071_CAPTURE_SOURCES.find(s=>s.sample==='gallery'&&s.force===0),shot=source.sites.find(s=>s.k===108);
+  for(const viewport of VIEWPORTS){
+   const initial=cameraFor(source.n,shot,viewport),run=()=>{
+    const camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,source.n*6),controls=new OrbitControls(camera,null);
+    controls.enableDamping=true;controls.minPolarAngle=Math.PI*.18;controls.maxPolarAngle=Math.PI*.42;controls.minZoom=.6;controls.maxZoom=8;
+    controls.target.fromArray(initial.target);camera.position.fromArray(initial.pos);camera.zoom=initial.zoom;camera.lookAt(controls.target);for(let i=0;i<100;i++)controls.update();
+    const state=()=>({pos:camera.position.toArray(),target:controls.target.toArray(),zoom:camera.zoom}),baseline=state();
+    controls.rotateLeft(Math.PI/2);for(let i=0;i<900;i++)controls.rotateLeft(0);const rotated=state();
+    assertD071SchoolCamera(rotated,baseline);for(let i=0;i<1000;i++)controls.update();assert.deepEqual(state(),rotated,'future animation frames cannot change the settled pose');
+    return {baseline,rotated};
+   };
+   const {baseline,rotated}=run();assert.deepEqual(run(),{baseline,rotated},'before/after camera sequence is deterministic');
+   assert.throws(()=>assertD071SchoolCamera(baseline,baseline),/southwest/);
+   for(const key of ['target','pos','zoom']){const bad=structuredClone(rotated);if(key==='zoom')bad.zoom+=.01;else bad[key][0]+=.01;assert.throws(()=>assertD071SchoolCamera(bad,baseline),{name:'AssertionError'},'changed '+key+' rejected');}
+  }
+ });
+ test('school southwest rays reach the school before every neighbor in all six artwork/variant cases',()=>{
+  // Independent geometry-only visibility diagnostic. It is not a substitute for actual WebGL visual review.
+  const pins={legacy:[201,207,206],education:[250,263,217]};
+  for(const on of [false,true])for(const force of [0,1,2]){const f=browserFixture('gallery',on,force);
+   try{
+    const n=d071City('gallery').n,D=n*1.6,camera=new THREE.OrthographicCamera(-10,10,10,-10,.1,n*6);
+    camera.position.set(6-D,D*Math.SQRT2*Math.tan(Math.PI/6),14+D);camera.lookAt(6,0,14);camera.updateMatrixWorld(true);f.scene.updateMatrixWorld(true);
+    const lo=[Infinity,Infinity],hi=[-Infinity,-Infinity],point=new THREE.Vector3(),ray=new THREE.Raycaster(),owner=47;
+    f.meshes.forEach((mesh,mi)=>{const attr=mesh.geometry.attributes.position;for(let t=0;t<f.owners[mi].length;t++)if(f.owners[mi][t]===owner)for(let j=0;j<3;j++){
+     point.fromBufferAttribute(attr,t*3+j).project(camera);for(let k=0;k<2;k++){const v=k?point.y:point.x;lo[k]=Math.min(lo[k],v);hi[k]=Math.max(hi[k],v);}
+    }});
+    let targetRays=0,visibleRays=0;
+    for(let y=0;y<20;y++)for(let x=0;x<20;x++){
+     ray.setFromCamera(new THREE.Vector2(lo[0]+(x+.5)/20*(hi[0]-lo[0]),lo[1]+(y+.5)/20*(hi[1]-lo[1])),camera);
+     const owners=ray.intersectObjects(f.meshes,false).map(hit=>f.owners[f.meshes.indexOf(hit.object)][hit.faceIndex]);
+     if(owners.includes(owner)){targetRays++;if(owners[0]===owner)visibleRays++;}
+    }
+    assert.equal(targetRays,pins[on?'education':'legacy'][force],'exact fixed school silhouette sample count');
+    assert.equal(visibleRays,targetRays,'no sampled school ray is blocked by any neighboring building');
+   }finally{f.dispose();}
+  }
  });
  test('original D067 frustum-culling control remains exact despite zero D071 targets in seed516',()=>{
   const city=d071City('seed516'),b=city.buildings.find(b=>live(city,b)&&b.k===116);assert.equal(b.id,201);
