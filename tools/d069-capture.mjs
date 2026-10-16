@@ -93,7 +93,7 @@ async function verifyUploadedGeometry(p,oracle,item){
  item.geometrySha256=sha(before.digest);
 }
 async function capturePhase(v,phase,source,expected,item){
- Object.assign(item,{viewport:v,phase,sample:source.sample,sourceQualification:source.qualification,query:`sample=${source.sample}&clean=1`+(phase==='before'?'&commerceVariantArt=legacy':''),shots:[],passed:false});
+ Object.assign(item,{viewport:v,phase,sample:source.sample,sourceQualification:source.qualification,query:`sample=${source.sample}&clean=1`+(phase==='before'?'&commerceVariantArt=legacy':'&commerceThirdArt=legacy'),shots:[],passed:false});
  const oracle=createD069FrameOracle(source.sample,phase==='after');
  try{await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:PORT},async({page,open})=>{
   try{

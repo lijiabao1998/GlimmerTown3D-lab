@@ -1,0 +1,202 @@
+{
+  "baseline": "bece722ed2480a3728a274c90bd0170eb52cf389",
+  "qualification": "Node geometry tests only; browser/WebGL captures are separate evidence.",
+  "tests": [
+    {
+      "name": "only the approved ten kinds opt in; eighth argument defaults off for all historical guards",
+      "passed": true
+    },
+    {
+      "name": "strict numeric saved v2 only; rejected kinds/variants emit no direct geometry",
+      "passed": true
+    },
+    {
+      "name": "immediate D069 models are pinned; all v0/v1/non-v2 slots and every non-target model remain byte-identical",
+      "passed": true
+    },
+    {
+      "name": "all thirty D068/D069/D070 structures are unique across rotation/translation/stretch/color/order",
+      "passed": true
+    },
+    {
+      "name": "every v2 level/height/size/origin and quarter-turn has finite bounded deterministic owner geometry and zero growth",
+      "passed": true
+    },
+    {
+      "name": "structural identity rejects recolored, reordered, moved, rotated and independently scaled copies; detects edits",
+      "passed": true
+    },
+    {
+      "name": "negative geometry controls reject NaN, missing attributes/owner, collapsed triangles, overflow, wrong normals and trees",
+      "passed": true
+    },
+    {
+      "name": "render-only gallery copy preserves original world and non-target object identity",
+      "passed": true
+    },
+    {
+      "name": "three real cities × A/B/C preserve original v0 and copied-v1 scenes exactly; copied-v2 changes only ten owners with zero growth",
+      "passed": true
+    },
+    {
+      "name": "actual production-batched faces of every v2 model pick their owning building",
+      "passed": true
+    },
+    {
+      "name": "procedural sources and exact reversible scope preserve simulation, saves, D069 art and all historical gates",
+      "passed": true
+    },
+    {
+      "name": "thirteen legacy switches disable only this wave; explicit copied-v2 gallery preview cannot mutate saved world",
+      "passed": true
+    }
+  ],
+  "geometryCases": 1872,
+  "preservedCases": 7860,
+  "costs": {
+    "57": {
+      "name": "食品加工廠",
+      "min": 190,
+      "max": 190,
+      "cap": 346
+    },
+    "64": {
+      "name": "倉儲物流中心",
+      "min": 192,
+      "max": 192,
+      "cap": 194
+    },
+    "65": {
+      "name": "大型購物中心",
+      "min": 92,
+      "max": 92,
+      "cap": 92
+    },
+    "86": {
+      "name": "銀行",
+      "min": 192,
+      "max": 192,
+      "cap": 284
+    },
+    "91": {
+      "name": "貿易站",
+      "min": 104,
+      "max": 104,
+      "cap": 118
+    },
+    "98": {
+      "name": "青年旅舍",
+      "min": 78,
+      "max": 78,
+      "cap": 80
+    },
+    "99": {
+      "name": "婚禮教堂",
+      "min": 116,
+      "max": 116,
+      "cap": 116
+    },
+    "110": {
+      "name": "貨運站",
+      "min": 76,
+      "max": 76,
+      "cap": 76
+    },
+    "167": {
+      "name": "大型配送中心",
+      "min": 64,
+      "max": 64,
+      "cap": 80
+    },
+    "168": {
+      "name": "冷鏈倉儲",
+      "min": 78,
+      "max": 78,
+      "cap": 80
+    }
+  },
+  "cities": [
+    {
+      "sample": "seed516",
+      "mode": "a",
+      "targets": 0,
+      "before": 121812,
+      "after": 121812,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "seed516",
+      "mode": "b",
+      "targets": 0,
+      "before": 83816,
+      "after": 83816,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "seed516",
+      "mode": "c",
+      "targets": 0,
+      "before": 112762,
+      "after": 112762,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "ai120",
+      "mode": "a",
+      "targets": 0,
+      "before": 92942,
+      "after": 92942,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "ai120",
+      "mode": "b",
+      "targets": 0,
+      "before": 86769,
+      "after": 86769,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "ai120",
+      "mode": "c",
+      "targets": 0,
+      "before": 95571,
+      "after": 95571,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "gallery",
+      "mode": "a",
+      "targets": 10,
+      "before": 60570,
+      "after": 60286,
+      "delta": -284,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    },
+    {
+      "sample": "gallery",
+      "mode": "b",
+      "targets": 10,
+      "before": 61312,
+      "after": 61028,
+      "delta": -284,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    },
+    {
+      "sample": "gallery",
+      "mode": "c",
+      "targets": 10,
+      "before": 61312,
+      "after": 61028,
+      "delta": -284,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    }
+  ],
+  "passed": true
+}
