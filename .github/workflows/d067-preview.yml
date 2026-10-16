@@ -34,6 +34,8 @@ jobs:
       - run: npm run typecheck
       - name: Focused geometry, legacy, source scope, picking and negative controls
         run: node tools/unit-d067.mjs && node tools/unit-d067-frame.mjs && node tools/unit-d066.mjs && node tools/unit-d065.mjs
+      - name: Validate pass-through upload probe without claiming browser evidence
+        run: node tools/d067-diagnose.mjs --plan-only > scratch/d067/D067-diagnose-plan.json
       - run: npm run build
       - name: Validate exact source coverage without claiming screenshots
         run: node tools/d067-capture.mjs --plan-only

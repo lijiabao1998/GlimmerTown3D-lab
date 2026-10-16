@@ -44,3 +44,7 @@
 ### 2026-10-16 跨執行期診斷（保留失敗）
 - `563db12817681de64c624144e77afdf6f259b716` 的 [預覽 38826368261](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38826368261) 全部 gallery 對照再通過，新增的 seed516 跨執行期屬性守衛失敗：`other.byOwner` 瀏覽器 `7f9bde8f`、Node `2c3b6cdc`，owner 三角形表相等。保留 54 張原圖、三張展示對照表；未宣稱 seed516 驗收。
 - 新增僅在失敗時執行的診斷工具，對照無探針頁面與直通 WebGL buffer 上傳探針頁面，保存第一個相異屬性／值／位元／owner／kind。保留原始失敗守衛、整景與每鏡頭預算、同世界／同鏡頭與 mutation controls；未修改任何 src 或模型。
+- [診斷 38827651949](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38827651949) 保留原始失敗。實際 GPU words 證實僅有 18 個 `other.normal` 分量不同，全屬既有工業街區 owner −98（k3、lv3、v7、位置 35,17、1×2），非 D067 建築。第一個分量 Node `5.532029353241775e−16`（`261f732c`）、Chrome `6.915036691552219e−16`（`26474ff7`），最大差 `1.6270671765675616e−16`。所有位置、顏色、其他屬性與 owner/count 表相等；替換這 18 個原始字組即精確重現 Chrome `other.byOwner = 7f9bde8f`。完整[原始診斷](evidence/D067/normal-zero-diagnostic.json) SHA-256：`4bb982afc12226c94d8e76df5065ee63d02071ebd040c9dc91086053ccb26a48`。
+- 來源是 D060 `bottleKilns → Pen.frustum → Geo.slope` 的三個六邊形窯體面：第一窯腹、第一窯肩、第二窯腹，面索引 4（4π/3 到 5π/3）。其解析 local x 法線為零，經 street turn 1 成為 world z；cross-product／normalize 留下約 10⁻¹⁶ 殘差。工具只在該 owner 的三個面（六個三角形、18 個 z 分量）及 `abs(value) ≤ 1e−15` 範圍，對複本歸零後比完整 mesh/owner digest。其他法線與所有非 normal 屬性仍逐位元組比對，先重建並核對原始 Chrome digest，正式場景與原始 digest 不動。
+- 守衛增加邊界、超界法線、未授權分量、位置／顏色／owner／數量、錯誤 GPU words 與原陣列不變負向控制；整景預算、相機／陰影精確提交數、同城同鏡頭前後差及 cached/fresh 檢查保留。直通探針與原頁世界、幾何、相機、提交數完全相同，讀取後還原原始 WebGL 方法。
+- 2026-10-16 00:18 UTC 業主看過展示圖後指示「直接合併」，並確認目標為「3d lab」。僅完成必要的工具修復與最後 CI／真預覽驗證；不新增美術修改，不跳過幾何或實際效能守衛。合併／發布仍待最新候選驗證全綠後執行。

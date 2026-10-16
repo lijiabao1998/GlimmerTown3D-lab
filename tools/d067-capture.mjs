@@ -13,7 +13,8 @@ import {pageSession} from './smoke-d011.mjs';
 import {D057_SAME} from './d057-native.mjs';
 import {LANDMARK_BUILDINGS} from '../src/content/britishLandmarks.ts';
 import {D067_KINDS,D067_OLD,d067City,d067Expected} from './unit-d067.mjs';
-import {createD067FrameOracle,assertD067Frame,assertD067BrowserGeometry} from './d067-frame.mjs';
+import {createD067FrameOracle,assertD067Frame} from './d067-frame.mjs';
+import {D067_UPLOAD_PROBE} from './d067-diagnose.mjs';
 
 const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
 const OUT=path.join(ROOT,'scratch/d067'),PORT=+(process.env.GT_PORT??8367);
@@ -68,24 +69,47 @@ async function settledCamera(p,source,shot,v){
  for(let i=0;i<24&&stable<2;i++){await p.frames(20);const next=await p.ev('__gt.cam()'),delta=Math.max(...['pos','target'].flatMap(k=>next[k].map((x,j)=>Math.abs(x-last[k][j]))),Math.abs(next.zoom-last.zoom));stable=delta<1e-9?stable+1:0;last=next;}
  assert.equal(stable,2,'observed a settled camera');return last;
 }
+async function uploadState(p){
+ return p.ev(`(()=>{const r=__gt.renderInfo(),a=__gt.renderInfoAll();return {world:${WORLD},digest:__gt.sceneDigest(),camera:__gt.cam(),render:{calls:r.calls,triangles:r.triangles},renderAll:{calls:a.calls,triangles:a.triangles}};})()`);
+}
+async function verifyUploadedGeometry(p,oracle,item){
+ const before=await uploadState(p),words={};
+ item.rawSceneDigest=before.digest;
+ assert.deepEqual(await p.ev('__d067UploadProbe.errors'),[],'pass-through upload probe has no capture errors');
+ for(const [name,spec] of Object.entries(oracle.normalSpecs)){
+  const hash=before.digest.meshes[name].attrs.normal;
+  if(hash===spec.hash)continue;
+  const candidates=await p.ev(`__d067UploadProbe.select(${J({...spec,hash})})`);
+  assert.ok(candidates.length,'captured normal upload reproduces browser hash: '+name);
+  words[name]=await p.ev(`__d067UploadProbe.bits(${candidates[0].id},${spec.start},${spec.length})`);
+  for(const duplicate of candidates.slice(1))assert.deepEqual(await p.ev(`__d067UploadProbe.bits(${duplicate.id},${spec.start},${spec.length})`),words[name],'same-hash normal buffers have identical live words');
+ }
+ item.geometryComparison=oracle.assertBrowserGeometry(before.digest,words);
+ item.normalArithmetic={node:[4,5].map(i=>{const angle=i*(Math.PI*2/6);return {angle,cos:Math.cos(angle),sin:Math.sin(angle)};}),browser:await p.ev('[4,5].map(i=>{const angle=i*(Math.PI*2/6);return {angle,cos:Math.cos(angle),sin:Math.sin(angle)};})')};
+ await p.ev('__d067UploadProbe.stop()');
+ assert.deepEqual(await uploadState(p),before,'normal inspection/restoration preserves world, raw geometry, camera and submitted geometry');
+ item.uploadProbe={restored:true,worldGeometryCameraAndSubmissionsUnchanged:true};
+ item.geometrySha256=sha(before.digest);
+}
 async function capturePhase(v,phase,source,expected,item){
  Object.assign(item,{viewport:v,phase,sample:source.sample,sourceQualification:source.qualification,query:`sample=${source.sample}&clean=1`+(phase==='before'?'&landmarkArt=legacy':''),shots:[],passed:false});
  const oracle=createD067FrameOracle(source.sample,phase==='after');
  try{await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:PORT},async({page,open})=>{
   try{
-   const p=await pageSession(page,open,v);await p.open(item.query);
+   const p=await pageSession(page,open,v);
+   await page.send('Page.addScriptToEvaluateOnNewDocument',{source:D067_UPLOAD_PROBE});
+   await p.open(item.query);
    assert.equal(await p.ev('!!__gt.ready'),true,'production scene ready');assert.equal(await p.ev('__gt.sample'),source.sample,'requested source sample');
    assert.equal(await p.ev('__gt.webgl2'),true,'real WebGL2 production renderer');assert.equal((await p.ev('__gt.sim()'))?.playing??false,false,'world clock paused');
    assert.equal(await p.ev('__gt.blockMode()'),'c','the same default block mode as the Node budget');
    await p.ev('document.fonts.ready');
+   await p.ev('__gt.setVisT(2.2);__gt.setDayFrac(0)');await p.frames(6);
    item.webgl=await p.ev(`(()=>{const gl=document.querySelector('canvas').getContext('webgl2');return {version:gl.getParameter(gl.VERSION),renderer:gl.getParameter(gl.RENDERER),vendor:gl.getParameter(gl.VENDOR),contextLost:gl.isContextLost()};})()`);
    assert.equal(item.webgl.contextLost,false,'WebGL context is live');
    const initial=await p.ev(WORLD),dig=await p.ev(DIGEST),list=await p.ev('__gt.buildingList()');item.worldSha256=sha(initial);item.digestSha256=sha(dig);
-   const geometry=await p.ev(`(()=>{const d=__gt.sceneDigest();return {meshes:Object.fromEntries(Object.entries(d.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),instTransforms:d.inst.map(s=>s.split(':').slice(0,2).join(':'))};})()`);
-   // Production appends exactly two empty UI instances: placement preview and hazard overlay.
-   // The shared guard validates those exact empty tails, then every building/tree attribute independently.
-   assertD067BrowserGeometry(geometry,oracle.geometry,'browser full-scene geometry');
-   item.geometrySha256=sha(geometry);
+   // Raw browser attributes remain recorded. Only the three source-proven D060 kiln-face
+   // numerical-zero normals can be canonicalized in cloned comparison data; no source is changed.
+   await verifyUploadedGeometry(p,oracle,item);
    const actualTargets=list.filter(b=>D067_KINDS.includes(b[1]));
    assert.deepEqual(actualTargets.map(b=>b[0]).sort((a,b)=>a-b),source.sites.map(s=>s.buildingId).sort((a,b)=>a-b),'browser contains exactly the source target owners');
    for(const s of source.sites){const b=list.find(b=>b[0]===s.buildingId);assert.deepEqual(b.slice(0,7),[s.buildingId,s.k,s.parcel.x,s.parcel.z,s.size,s.level,s.variant],'actual unmodified source building, variant and level');}

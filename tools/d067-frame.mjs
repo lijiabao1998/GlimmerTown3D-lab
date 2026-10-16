@@ -5,8 +5,9 @@ import assert from 'node:assert/strict';
 import * as THREE from 'three';
 import {buildCityScene} from '../src/render/cityScene.ts';
 import {ConState} from '../src/render/construction.ts';
-import {sceneDigest,hashOf} from '../src/render/digest.ts';
+import {sceneDigest,meshDigest,hashOf} from '../src/render/digest.ts';
 import {STYLES} from '../src/render/styles.ts';
+import {streetFrame} from '../src/content/britishStreets.ts';
 import {D067_OLD,D067_KT,d067City,d067Blocks,d067Civic} from './unit-d067.mjs';
 
 // Existing approved whole-scene counts. Frustum culling cannot relax or replace these pins.
@@ -85,11 +86,11 @@ export function createD067FrameOracle(sample,on){
  assert.equal(typeof on,'boolean','landmark phase must be boolean');
  const phase=on?'landmark':'legacy',pin=D067_FRAME_WHOLE[sample][phase];
  assert.equal(D067_FRAME_WHOLE[sample].legacy,D067_OLD[sample].c[0],'immutable whole-scene legacy baseline');
- const city=d067City(sample),con=new ConState(city.n);
+ const city=d067City(sample),blocks=d067Blocks(city),con=new ConState(city.n);
  let built,disposed=false;
  const dispose=()=>{if(!disposed){disposed=true;try{built?.dispose();}finally{con.dispose();}}};
  try{
-  built=buildCityScene(city,D067_KT,STYLES.A,d067Blocks(city),'d',d067Civic(on),con,true);
+  built=buildCityScene(city,D067_KT,STYLES.A,blocks,'d',d067Civic(on),con,true);
   const beforeSync=sceneDigest(built);
   // Match the static sample's construction setup. Uniform/age updates do not change model aCon attributes.
   if(built.con)con.setGeometry(built.con.top,built.con.base,built.con.wallTop);
@@ -113,6 +114,71 @@ export function createD067FrameOracle(sample,on){
    meshes:Object.fromEntries(Object.entries(digest.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),
    instTransforms:digest.inst.map(s=>s.split(':').slice(0,2).join(':')),
   });
+  const modelMeshes=built.buildingMeshes(),modelOwners=built.pickOwners(),meshNames=['walls','other','dress'];
+  const normalSpecs=frozen(Object.fromEntries(meshNames.map((name,i)=>{
+   const g=modelMeshes[i].geometry,a=g.attributes.normal,start=g.drawRange.start*a.itemSize;
+   return [name,{capacity:a.array.length,start,length:Math.min(g.attributes.position.count-g.drawRange.start,g.drawRange.count)*a.itemSize,hash:digest.meshes[name].attrs.normal}];
+  })));
+  // D060 bottleKilns, hexagon face i=4: analytically zero local x becomes world z under turn 1.
+  // The owner-local offsets survive D067's earlier civic arena-size changes between before/after.
+  const eligible=[];
+  if(sample==='seed516'){
+   const bk=blocks.plan[97];
+   assert.deepEqual([bk.x,bk.z,bk.w,bk.h,bk.k,bk.lv,bk.v],[35,17,1,2,3,3,7],'exact diagnosed existing D060 kiln parcel');
+   assert.equal(blocks.recipe(bk).arche,'chimneyHall','diagnosed D060 bottle-kiln archetype');
+   assert.equal(streetFrame(city,bk).turn,1,'diagnosed local-x normal maps to world z');
+   const ow=modelOwners[1],start=ow.findIndex(o=>o===-98),end=ow.lastIndexOf(-98);
+   assert.equal(end-start+1,88,'exact diagnosed kiln other-mesh span');
+   assert.ok(start>=0&&ow.subarray(start,end+1).every(o=>o===-98),'contiguous diagnosed owner span');
+   for(const t of [12,13,24,25,54,55])for(let v=0;v<3;v++)eligible.push((start+t)*9+v*3+2);
+  }
+  const zeroBound=1e-15;
+  const assertBrowserGeometry=(actual,normalBits={})=>{
+   assert.ok(!disposed,'frame oracle has not been disposed');
+   assert.deepEqual(sceneDigest(built).meshes,digest.meshes,'raw Node model still equals its immutable geometry snapshot');
+   const clones=[],canonicalNode={},canonicalBrowser={},raw={},normalized=[];
+   try{
+    assert.deepEqual(Object.keys(actual.meshes),meshNames,'exact browser building mesh names');
+    assert.ok(normalBits&&typeof normalBits==='object','uploaded normal words keyed by mesh');
+    for(const name of Object.keys(normalBits))assert.ok(meshNames.includes(name),'known uploaded normal mesh');
+    for(const [i,name] of meshNames.entries()){
+     const nd=digest.meshes[name],bd=actual.meshes[name],spec=normalSpecs[name],source=modelMeshes[i].geometry,owners=modelOwners[i];
+     assert.deepEqual(Object.keys(bd.attrs),Object.keys(nd.attrs),name+' exact attribute names');
+     for(const key of ['tris','holes','owners','ownerTris'])assert.deepEqual(bd[key],nd[key],name+' exact '+key);
+     for(const [key,hash] of Object.entries(nd.attrs))if(key!=='normal')assert.equal(bd.attrs[key],hash,name+' byte-exact '+key);
+     const node=source.clone(),browser=source.clone();clones.push(node,browser);
+     const na=node.attributes.normal.array,ba=browser.attributes.normal.array,words=normalBits[name];
+     if(words===undefined)assert.equal(bd.attrs.normal,nd.attrs.normal,name+' changed normal hash requires actual uploaded words');
+     else{
+      assert.ok(Array.isArray(words)||words instanceof Uint32Array,name+' uploaded Uint32 words');
+      assert.equal(words.length,spec.length,name+' complete live uploaded normal array');
+      for(const word of words)assert.ok(Number.isInteger(word)&&word>=0&&word<=0xffffffff,name+' valid raw Uint32 word');
+      new Uint32Array(ba.buffer,ba.byteOffset+spec.start*4,spec.length).set(words);
+     }
+     for(let j=spec.start;j<spec.start+spec.length;j++)assert.ok(Number.isFinite(na[j])&&Number.isFinite(ba[j]),name+' finite normal components');
+     const rawBrowser=meshDigest({geometry:browser},owners);
+     assert.deepEqual(rawBrowser,bd,name+' raw uploaded normals reconstruct full browser mesh/per-owner digest');
+     raw[name]={node:nd.byOwner,browser:bd.byOwner,nodeNormal:nd.attrs.normal,browserNormal:bd.attrs.normal,equal:nd.byOwner===bd.byOwner};
+     if(name==='other')for(const index of eligible){
+      assert.ok(index>=spec.start&&index<spec.start+spec.length,'eligible normal is inside the live range');
+      assert.equal(owners[Math.floor(index/9)],-98,'eligible normal belongs to the diagnosed kiln');
+      assert.ok(Math.abs(na[index])<=zeroBound&&Math.abs(ba[index])<=zeroBound,'diagnosed normal residual stays within 1e-15');
+      if(new Uint32Array(na.buffer,na.byteOffset+index*4,1)[0]!==new Uint32Array(ba.buffer,ba.byteOffset+index*4,1)[0])normalized.push({index,triangle:Math.floor(index/9),owner:-98,node:na[index],browser:ba[index]});
+      na[index]=0;ba[index]=0;
+     }
+     canonicalNode[name]=meshDigest({geometry:node},owners);canonicalBrowser[name]=meshDigest({geometry:browser},owners);
+     assert.deepEqual(canonicalBrowser[name],canonicalNode[name],name+' full canonical mesh/per-owner geometry equality');
+    }
+    const project=meshes=>Object.fromEntries(Object.entries(meshes).map(([name,m])=>[name,[m.byOwner,m.ownerTris]]));
+    assertD067BrowserGeometry({meshes:project(canonicalBrowser),instTransforms:actual.inst.map(s=>s.split(':').slice(0,2).join(':'))},
+     {meshes:project(canonicalNode),instTransforms:geometry.instTransforms},'D067 canonical browser geometry');
+    return {raw,canonical:Object.fromEntries(meshNames.map(name=>[name,canonicalNode[name].byOwner])),
+     canonicalization:{bound:zeroBound,sample,owner:sample==='seed516'?-98:null,eligibleComponents:eligible.length,changedComponents:normalized.length,changes:normalized},rawNodePreserved:true};
+   }finally{
+    for(const clone of clones)clone.dispose();
+    assert.deepEqual(sceneDigest(built).meshes,digest.meshes,'comparison never mutates any raw Node geometry attribute or owner');
+   }
+  };
   const measure=(view,viewport)=>{
    assert.ok(!disposed,'frame oracle has not been disposed');
    const wholeTriangles=whole(),camera=cameraFor(city.n,view,viewport);
@@ -141,6 +207,6 @@ export function createD067FrameOracle(sample,on){
     culled:meshes.filter(m=>m.main.culled||m.shadow.culled),meshes};
   };
   // scene is diagnostic read-only in production; negative-control tests deliberately inject and restore a triangle.
-  return {sample,on,n:city.n,wholeTriangles:pin,geometry,scene,measure,dispose};
+  return {sample,on,n:city.n,wholeTriangles:pin,geometry,normalSpecs,assertBrowserGeometry,scene,measure,dispose};
  }catch(error){dispose();throw error;}
 }

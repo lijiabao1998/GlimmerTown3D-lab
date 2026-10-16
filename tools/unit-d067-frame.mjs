@@ -2,8 +2,11 @@
 import assert from 'node:assert/strict';
 import {pathToFileURL} from 'node:url';
 import {createD067FrameOracle,assertD067Frame,assertD067BrowserGeometry,D067_FRAME_WHOLE} from './d067-frame.mjs';
-import {hashOf} from '../src/render/digest.ts';
-import {D067_KINDS,D067_OLD,d067City,d067Expected} from './unit-d067.mjs';
+import {hashOf,sceneDigest,meshDigest} from '../src/render/digest.ts';
+import {buildCityScene} from '../src/render/cityScene.ts';
+import {ConState} from '../src/render/construction.ts';
+import {STYLES} from '../src/render/styles.ts';
+import {D067_KINDS,D067_OLD,D067_KT,d067City,d067Blocks,d067Civic,d067Expected} from './unit-d067.mjs';
 
 const VIEWPORTS=[{W:1440,H:1000},{W:360,H:740},{W:412,H:860}];
 const live=(c,b)=>b.goneDay===undefined&&b.x>=0&&b.z>=0&&b.x+b.size<=c.n&&b.z+b.size<=c.n;
@@ -18,6 +21,21 @@ function cameraFor(n,shot,v){
  // __gt.view sets this pose; OrbitControls subsequently clamps overview zoom to its actual .6 minimum.
  const requested=shot.k?Math.min(8,.70*.84*n*(v.W/v.H)/(shot.size*Math.SQRT2)):.54*v.W/v.H;
  return {pos:[shot.x+D,D*Math.SQRT2*Math.tan(Math.PI/6),shot.z+D],target,zoom:Math.max(.6,requested)};
+}
+// Independent production data for comparisons; mutations are confined to disposable test clones.
+function browserFixture(sample,on){
+ const city=d067City(sample),con=new ConState(city.n),built=buildCityScene(city,D067_KT,STYLES.A,d067Blocks(city),'d',d067Civic(on),con,true);
+ con.setGeometry(built.con.top,built.con.base,built.con.wallTop);con.setCity(city,k=>D067_KT.cat(k));built.setTreeAges(i=>con.siteAge(i));
+ const digest=sceneDigest(built),empty='0:'+hashOf(new Float32Array(0));digest.inst.push(empty+':-:-',empty+':-:-');
+ const names=['walls','other','dress'],meshes=built.buildingMeshes(),owners=built.pickOwners();
+ const change=(name,fn)=>{
+  const i=names.indexOf(name),g=meshes[i].geometry.clone(),ow=owners[i].slice();
+  try{fn(g,ow);const actual=structuredClone(digest);actual.meshes[name]=meshDigest({geometry:g},ow);
+   const a=g.attributes.normal.array,start=g.drawRange.start*3,end=Math.min(g.attributes.position.count,g.drawRange.start+g.drawRange.count)*3;
+   return {actual,words:{[name]:Array.from(new Uint32Array(a.buffer,a.byteOffset+start*4,end-start))}};
+  }finally{g.dispose();}
+ };
+ return {digest,change,start:owners[1].findIndex(o=>o===-98),dispose:()=>{built.dispose();con.dispose();}};
 }
 export async function d067FrameGuards(log=()=>{}){
  let failed=0;const report={qualification:'Independent Node geometry/frustum oracle tests; not WebGL screenshot evidence.',tests:[],frames:[],passed:false};
@@ -109,6 +127,68 @@ export async function d067FrameGuards(log=()=>{}){
    }
    assertD067BrowserGeometry(browser,o.geometry,'unaltered control');
   }finally{o.dispose();}
+ });
+ test('uploaded-word reconstruction admits only the 18 diagnosed D060 residuals and leaves source geometry exact',()=>{
+  for(const on of [false,true]){
+   const o=createD067FrameOracle('seed516',on),f=browserFixture('seed516',on);
+   try{
+    const before=JSON.stringify(o.geometry),exact=o.assertBrowserGeometry(f.digest);
+    assert.equal(exact.canonicalization.changedComponents,0);assert.equal(exact.canonicalization.eligibleComponents,18);
+    assert.equal(f.start,on?2576:2556,'phase-specific owner span');
+    for(const name of ['walls','other','dress']){const s=o.normalSpecs[name];assert.ok(s.capacity>=s.length);assert.equal(s.start,0);assert.equal(s.hash,f.digest.meshes[name].attrs.normal);}
+    const observed=f.change('other',g=>{
+     const words=new Uint32Array(g.attributes.normal.array.buffer);
+     for(const [t,bits] of [[12,0x26474ff7],[24,0x26464a92],[54,0x263b968e]])for(let j=0;j<6;j++)words[(f.start+t)*9+j*3+2]=bits;
+    });
+    if(!on){assert.equal(observed.actual.meshes.other.attrs.normal,'e2aefdc6','exact recorded browser upload');assert.equal(observed.actual.meshes.other.byOwner,'7f9bde8f','all 18 observed components reconstruct the original raw failure');}
+    assert.throws(()=>assertD067BrowserGeometry({meshes:Object.fromEntries(Object.entries(observed.actual.meshes).map(([k,m])=>[k,[m.byOwner,m.ownerTris]])),instTransforms:observed.actual.inst.map(s=>s.split(':').slice(0,2).join(':'))},o.geometry),'original raw guard still rejects diagnostic mismatch');
+    assert.throws(()=>o.assertBrowserGeometry(observed.actual),/requires actual uploaded words/);
+    const result=o.assertBrowserGeometry(observed.actual,observed.words);
+    assert.equal(result.canonicalization.bound,1e-15);assert.equal(result.canonicalization.changedComponents,18);assert.equal(result.raw.other.equal,false);assert.equal(result.rawNodePreserved,true);
+    assert.equal(JSON.stringify(o.geometry),before,'snapshot unchanged');assert.deepEqual(o.assertBrowserGeometry(f.digest),exact,'raw model still compares exactly after canonical fallback');
+    const wrong=structuredClone(observed.words);wrong.other[0]=(wrong.other[0]^1)>>>0;
+    assert.throws(()=>o.assertBrowserGeometry(observed.actual,wrong),/reconstruct full browser/,'bad captured words cannot justify a hash exception');
+    const truncated=structuredClone(observed.words);truncated.other.pop();assert.throws(()=>o.assertBrowserGeometry(observed.actual,truncated),/complete live/);
+   }finally{o.dispose();f.dispose();}
+  }
+ });
+ test('canonical normal boundary is exact; outside-face, meaningful, nonfinite and unproven changes reject',()=>{
+  const o=createD067FrameOracle('seed516',false),f=browserFixture('seed516',false),index=(f.start+12)*9+2;
+  try{
+   const boundWords=new Uint32Array(new Float32Array([1e-15]).buffer);if(new Float32Array(boundWords.buffer)[0]>1e-15)boundWords[0]--;
+   const atBound=new Float32Array(boundWords.buffer)[0],aboveWords=new Uint32Array([boundWords[0]+1]),above=new Float32Array(aboveWords.buffer)[0];
+   assert.ok(atBound<=1e-15&&above>1e-15);
+   for(const value of [0,-0,atBound,-atBound]){const x=f.change('other',g=>g.attributes.normal.array[index]=value);o.assertBrowserGeometry(x.actual,x.words);}
+   for(const [name,idx,value] of [['above boundary',index,above],['below negative boundary',index,-above],['meaningful eligible normal',index,.001],['outside eligible face',index+1,1e-16],['other normal component',index-1,0],['NaN',index,NaN],['infinity',index,Infinity]]){
+    const x=f.change('other',g=>g.attributes.normal.array[idx]=value);assert.throws(()=>o.assertBrowserGeometry(x.actual,x.words),{name:'AssertionError'},name+' rejects');
+   }
+   const tinyElsewhere=f.change('other',g=>{
+    const allowed=new Set([12,13,24,25,54,55].flatMap(t=>[0,1,2].map(v=>(f.start+t)*9+v*3+2)));
+    const a=g.attributes.normal.array,j=a.findIndex((v,j)=>v===0&&!allowed.has(j));assert.ok(j>=0);a[j]=1e-16;
+   });
+   assert.throws(()=>o.assertBrowserGeometry(tinyElsewhere.actual,tinyElsewhere.words),/canonical mesh/,'even sub-bound mutation of an unrelated zero normal rejects');
+   const walls=f.change('walls',g=>g.attributes.normal.array[0]=1e-16);assert.throws(()=>o.assertBrowserGeometry(walls.actual,walls.words),/canonical mesh/,'no other mesh gets a near-zero allowance');
+   const raw=f.change('other',g=>g.attributes.normal.array[index]=0);raw.actual.meshes.other.byOwner='00000000';assert.throws(()=>o.assertBrowserGeometry(raw.actual,raw.words),/reconstruct full browser/,'forged raw owner digest rejects');
+   for(const [name,mutate] of [['position',g=>g.attributes.position.array[0]+=.01],['color',g=>g.attributes.color.array[0]+=.01],['owners',(g,ow)=>ow[0]++],['triangles',g=>g.setDrawRange(0,g.drawRange.count-3)]]){
+    const x=f.change('other',mutate);assert.throws(()=>o.assertBrowserGeometry(x.actual,x.words),{name:'AssertionError'},name+' stays exact');
+   }
+   for(const [name,mutate] of [['holes',a=>a.meshes.other.holes++],['owner map',a=>a.meshes.other.ownerTris[-98]++],['normal attribute missing',a=>delete a.meshes.other.attrs.normal],['tree transform',a=>a.inst[0]='1:deadbeef:-:-'],['UI instance',a=>a.inst.pop()]]){
+    const x=structuredClone(f.digest);mutate(x);assert.throws(()=>o.assertBrowserGeometry(x),{name:'AssertionError'},name+' rejects');
+   }
+   const wrong=browserFixture('seed516',true);try{assert.throws(()=>o.assertBrowserGeometry(wrong.digest),{name:'AssertionError'},'wrong model phase rejects');}finally{wrong.dispose();}
+   assert.equal(o.assertBrowserGeometry(f.digest).rawNodePreserved,true,'all failed comparisons preserve original model');
+  }finally{o.dispose();f.dispose();}
+ });
+ test('other samples have zero eligible normal components and source mutation cannot replace the oracle baseline',()=>{
+  const o=createD067FrameOracle('gallery',true),f=browserFixture('gallery',true);
+  try{
+   assert.equal(o.assertBrowserGeometry(f.digest).canonicalization.eligibleComponents,0);
+   const x=f.change('other',g=>g.attributes.normal.array[2]=1e-16);assert.throws(()=>o.assertBrowserGeometry(x.actual,x.words),/canonical mesh/);
+   let model;o.scene.traverse(m=>{if(!model&&m.isMesh&&!m.isInstancedMesh&&m.geometry.attributes.wStyle)model=m;});assert.ok(model);
+   const a=model.geometry.attributes.position.array,word=new Uint32Array(a.buffer,a.byteOffset,1),saved=word[0];
+   try{word[0]^=1;assert.throws(()=>o.assertBrowserGeometry(f.digest),/immutable geometry snapshot/);}finally{word[0]=saved;}
+   o.assertBrowserGeometry(f.digest);
+  }finally{o.dispose();f.dispose();}
  });
  report.passed=failed===0;return {failed,report};
 }
