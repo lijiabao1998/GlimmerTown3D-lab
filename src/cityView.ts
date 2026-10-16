@@ -1,3 +1,6 @@
+// D069-BEGIN variant-import
+import { VARIANT_KINDS } from './content/britishCommerceVariants.ts';
+// D069-END variant-import
 // 2D 城市模式（D003）：把 2D 實驗線的分享碼解碼成城市，畫成 3D。
 // D011 起是建造模式：預設開「我的城」（有存檔時）或新城；種子城、AI 城、全種類照舊只能看。
 // 網址參數：?mode=city（預設）&sample=mine|newcity|starter|seed516|ai120|gallery &style=A|B|C（對照用）&at=x,z|center &zoom= &clean=1（拍照，藏介面）
@@ -161,7 +164,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const landmarkOn = !['landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D068-BEGIN facility-enabled
   const facilityOn = !['facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D069-BEGIN variant-enabled
+  const commerceVariantOn = !['commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D069-END variant-enabled
 // D068-END facility-enabled
 // D067-END landmark-enabled
 // D066-END metropolis-enabled
@@ -282,9 +288,15 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let towerV: number | null = null, towerOnly: number | null = null;   // 拍照用（__gt.towerV）：把每一棟合併塔都當成這個變體畫、並可只畫某一種；只動畫面，不動城市
   const towerView = (c: City): City => towerV === null && towerOnly === null ? c : { ...c, buildings: towerBuildings(c.buildings, towerV, towerOnly) };
 // D064-END tower-variant
+// D069-BEGIN variant-view
+  let commerceForcedV: number | null = null;
+  const commerceView = (c: City): City => commerceForcedV === null ? c : { ...c, buildings: c.buildings.map(b => VARIANT_KINDS.has(b.k) ? { ...b, v: commerceForcedV! } : b) };
+// D069-END variant-view
   function makeScene(c: City, fresh: boolean): BuiltCity {
 // D064-BEGIN tower-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(towerView(c), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D069-BEGIN variant-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(commerceView(towerView(c)), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D069-END variant-scene
 // D064-END tower-scene
     b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
     builtDay = c.day;
@@ -1783,6 +1795,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D069-BEGIN variant-gt
+    commerceV(v: number | null) { if (v !== null && v !== 1) throw new Error('commerceV supports saved variant 1 or null'); commerceForcedV = v; rebuildScene(true); needsRender = true; draw(); return commerceForcedV; }, // Render-only copied saved-variant showcase; world is unchanged.
+// D069-END variant-gt
 // D064-BEGIN tower-gt
     towerV(v: number | null, only: number | null = null) { towerV = v; towerOnly = only; rebuildScene(true); needsRender = true; draw(); return [towerV, towerOnly]; },   // 拍照用：v＝null 照城市本來的變體；only＝只畫這一種建築（其餘不畫）
 // D064-END tower-gt
