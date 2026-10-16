@@ -1,3 +1,6 @@
+// D071-BEGIN education-import
+import { EDUCATION_KINDS } from './britishEducation.ts';
+// D071-END education-import
 // D070-BEGIN third-import
 import { THIRD_KINDS } from './britishCommerceThird.ts';
 // D070-END third-import
@@ -232,13 +235,16 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D068-BEGIN facility-shape
 // D069-BEGIN variant-shape
 // D070-BEGIN third-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false): Shape | null => {
+// D071-BEGIN education-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false): Shape | null => {
   const shape = KIND_SHAPES[k];
+  if (shape && education && EDUCATION_KINDS.has(k)) return { ...shape, p: { ...shape.p, education: true, commerceThird, commerceVariant, facility } };
   if (shape && commerceThird && THIRD_KINDS.has(k)) return { ...shape, p: { ...shape.p, commerceThird: true, commerceVariant, facility } };
   if (shape && commerceVariant && VARIANT_KINDS.has(k)) return { ...shape, p: { ...shape.p, commerceVariant: true, facility } };
   if (shape && facility && FACILITY_KINDS.has(k)) return { ...shape, p: { ...shape.p, facility: true } };
   return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D071-END education-shape
 // D070-END third-shape
 // D069-END variant-shape
 // D068-END facility-shape
