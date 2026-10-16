@@ -43,6 +43,9 @@ jobs:
         run: node tools/d067-capture.mjs
         env:
           D067_WIDTHS: ${{ matrix.width }}
+      - name: Preserve exact failing attribute diagnostics without changing acceptance
+        if: failure() && matrix.width == 1440
+        run: node tools/d067-diagnose.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
