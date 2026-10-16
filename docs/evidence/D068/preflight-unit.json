@@ -1,0 +1,185 @@
+{
+  "baseline": "3527859dfa4d802fda0eaa4a0d96aa05e1471a2d",
+  "qualification": "Node geometry tests only; browser captures are a separate result.",
+  "tests": [
+    {
+      "name": "only the approved ten kinds opt in; legacy and non-target dispatch remain identical",
+      "passed": true
+    },
+    {
+      "name": "all kinds, variants, levels, sizes and translated origins: deterministic finite nondegenerate geometry within parcel and old budget",
+      "passed": true
+    },
+    {
+      "name": "structural identity rejects disguised copies and detects a real geometric edit",
+      "passed": true
+    },
+    {
+      "name": "negative controls catch corrupt position, missing owner, collapsed triangle, parcel/height overflow and bad normals",
+      "passed": true
+    },
+    {
+      "name": "three real cities × A/B/C: legacy signature, isolated owner changes, no world edits and zero total growth",
+      "passed": true
+    },
+    {
+      "name": "actual mesh faces pick the correct facility after production batching",
+      "passed": true
+    },
+    {
+      "name": "pure procedural source and bounded source changes preserve simulation and save code",
+      "passed": true
+    },
+    {
+      "name": "eleven legacy switches each disable only this wave; SHA scope reverses to D067 and rejects source mutations",
+      "passed": true
+    }
+  ],
+  "geometryCases": 918,
+  "costs": {
+    "57": {
+      "name": "食品加工廠",
+      "min": 346,
+      "max": 346,
+      "cap": 560
+    },
+    "64": {
+      "name": "倉儲物流中心",
+      "min": 194,
+      "max": 194,
+      "cap": 408
+    },
+    "65": {
+      "name": "大型購物中心",
+      "min": 92,
+      "max": 92,
+      "cap": 92
+    },
+    "86": {
+      "name": "銀行",
+      "min": 284,
+      "max": 284,
+      "cap": 348
+    },
+    "91": {
+      "name": "貿易站",
+      "min": 118,
+      "max": 118,
+      "cap": 122
+    },
+    "98": {
+      "name": "青年旅舍",
+      "min": 80,
+      "max": 80,
+      "cap": 80
+    },
+    "99": {
+      "name": "婚禮教堂",
+      "min": 116,
+      "max": 116,
+      "cap": 116
+    },
+    "110": {
+      "name": "貨運站",
+      "min": 76,
+      "max": 76,
+      "cap": 76
+    },
+    "167": {
+      "name": "大型配送中心",
+      "min": 80,
+      "max": 80,
+      "cap": 80
+    },
+    "168": {
+      "name": "冷鏈倉儲",
+      "min": 80,
+      "max": 80,
+      "cap": 80
+    }
+  },
+  "cities": [
+    {
+      "sample": "seed516",
+      "mode": "a",
+      "targets": 0,
+      "before": 121812,
+      "after": 121812,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "seed516",
+      "mode": "b",
+      "targets": 0,
+      "before": 83816,
+      "after": 83816,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "seed516",
+      "mode": "c",
+      "targets": 0,
+      "before": 112762,
+      "after": 112762,
+      "delta": 0,
+      "worldSha256": "6b8db4db89e609006612f4315fc65303d59dabcc9ceec6f05c6f1c8970cbe627"
+    },
+    {
+      "sample": "ai120",
+      "mode": "a",
+      "targets": 0,
+      "before": 92942,
+      "after": 92942,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "ai120",
+      "mode": "b",
+      "targets": 0,
+      "before": 86769,
+      "after": 86769,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "ai120",
+      "mode": "c",
+      "targets": 0,
+      "before": 95571,
+      "after": 95571,
+      "delta": 0,
+      "worldSha256": "a4e6d56df7f3a87b70f1a36621a90ed40162e392318dec4ea669ea4c19e2928e"
+    },
+    {
+      "sample": "gallery",
+      "mode": "a",
+      "targets": 10,
+      "before": 61066,
+      "after": 60570,
+      "delta": -496,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    },
+    {
+      "sample": "gallery",
+      "mode": "b",
+      "targets": 10,
+      "before": 61808,
+      "after": 61312,
+      "delta": -496,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    },
+    {
+      "sample": "gallery",
+      "mode": "c",
+      "targets": 10,
+      "before": 61808,
+      "after": 61312,
+      "delta": -496,
+      "worldSha256": "f0101c73005c22326112d778a71ba772c9b1921e03557ce3e2e44dac018ba1e8"
+    }
+  ],
+  "passed": true
+}

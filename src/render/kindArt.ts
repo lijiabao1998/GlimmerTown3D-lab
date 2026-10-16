@@ -1,3 +1,6 @@
+// D068-BEGIN facility-import
+import { drawBritishCommerceFacility } from './britishCommerceFacilityArt.ts';
+// D068-END facility-import
 // D067-BEGIN landmark-import
 import { drawBritishLandmark } from './britishLandmarkArt.ts';
 // D067-END landmark-import
@@ -757,7 +760,9 @@ export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
 // D064-BEGIN tower-dispatch
 // D066-BEGIN metropolis-dispatch
 // D067-BEGIN landmark-dispatch
-  try { const p = new Pen(a); if (!(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D068-BEGIN facility-dispatch
+  try { const p = new Pen(a); if (!(shape?.p?.facility === true && drawBritishCommerceFacility(p)) && !(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D068-END facility-dispatch
 // D067-END landmark-dispatch
 // D066-END metropolis-dispatch
 // D064-END tower-dispatch

@@ -21,6 +21,7 @@ import {STYLES} from '../src/render/styles.ts';
 import {d058City,d058Blocks} from './unit-d058.mjs';
 import {signature,weighted} from './d060-baseline.mjs';
 import {assertD067Scope,d067HistoricalBytes} from './d067-scope.mjs';
+import {D068_ADDED,d068HistoricalBytes} from './d068-scope.mjs';
 
 const read=f=>JSON.parse(fs.readFileSync(path.join(ROOT,f),'utf8'));
 const sha=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
@@ -187,11 +188,11 @@ export async function d067Guards(log){
   for(const f of ['src/content/britishLandmarks.ts','src/render/britishLandmarkArt.ts']){const s=fs.readFileSync(path.join(ROOT,f),'utf8').replace(/\/\/.*$/gm,'');for(const re of [/Math\.random/,/Date\.now|new Date|performance\.now/,/\bfetch\(|XMLHttpRequest|WebSocket|localStorage|sessionStorage|indexedDB/,/\bdocument\b|\bwindow\b|\blocation\b/,/data:image|\.png|\.jpe?g|\.glb|TextureLoader|ImageLoader|new Image|OffscreenCanvas|createElement/i])assert.doesNotMatch(s,re,f);}
   const allowed=new Set(['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/content/britishLandmarks.ts','src/render/britishLandmarkArt.ts']);
   const changed=execFileSync('git',['diff','--name-only',D067_BASELINE,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean),untracked=execFileSync('git',['ls-files','--others','--exclude-standard','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean);
-  for(const f of [...changed,...untracked])assert.ok(allowed.has(f),'only approved render-only source may change: '+f);
-  const view=fs.readFileSync(path.join(ROOT,'src/cityView.ts'),'utf8');assert.match(view,/landmarkArt/,'production URL switch exists');assert.match(view,/shapeOf\([^\n]*landmark/,'production passes fifth flag');
+  for(const f of [...changed,...untracked])assert.ok(allowed.has(f)||D068_ADDED.has(f),'only approved render-only source may change: '+f);
+  const view=d068HistoricalBytes('src/cityView.ts');assert.match(view,/landmarkArt/,'production URL switch exists');assert.match(view,/shapeOf\([^\n]*landmark/,'production passes fifth flag');
  });
  test('ten legacy switches each disable only this wave; SHA scope reverses to D066 and rejects source mutations',()=>{
-  const view=fs.readFileSync(path.join(ROOT,'src/cityView.ts'),'utf8'),match=view.match(/const landmarkOn = ([^;]+);/);assert.ok(match,'exact production flag expression');
+  const view=d068HistoricalBytes('src/cityView.ts'),match=view.match(/const landmarkOn = ([^;]+);/);assert.ok(match,'exact production flag expression');
   const flags=['landmarkArt','metropolisArt','houseArt','towerArt','commerceArt','industryArt','villageArt','streetArt','britishArt','heritageArt'];
   const evaluate=Function('q','return '+match[1]);assert.equal(evaluate(new URLSearchParams()),true,'default production art enabled');
   const listed=[...match[1].matchAll(/'(\w+Art)'/g)].map(m=>m[1]);assert.deepEqual(listed,flags,'complete legacy cascade');

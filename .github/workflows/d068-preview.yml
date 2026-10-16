@@ -1,0 +1,56 @@
+name: D068 ten British facilities preview (no deployment)
+on:
+  push:
+    branches: ['codex/d068-british-ten']
+permissions:
+  contents: read
+concurrency:
+  group: d068-preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    if: github.ref == 'refs/heads/codex/d068-british-ten'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 360, 412]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch immutable D068, D067 and D066 source-scope baselines
+        run: |
+          git fetch --no-tags --depth=1 origin 3527859dfa4d802fda0eaa4a0d96aa05e1471a2d
+          git fetch --no-tags --depth=1 origin 91e499b6c0ed0ce0cffdf0c09a35a067a8156c71
+          git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Local Chinese fonts for factual image captions
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck
+      - name: Focused geometry, legacy, source scope, picking and negative controls
+        run: node tools/unit-d068.mjs && node tools/unit-d068-frame.mjs && node tools/unit-d067.mjs && node tools/unit-d067-frame.mjs && node tools/unit-d066.mjs && node tools/unit-d065.mjs
+      - run: npm run build
+      - name: Validate exact source coverage without claiming screenshots
+        run: node tools/d068-capture.mjs --plan-only
+        env:
+          D068_WIDTHS: ${{ matrix.width }}
+      - name: Real same-world WebGL pairs (gallery ten-model showcase; existing cities negative controls)
+        run: node tools/d068-capture.mjs
+        env:
+          D068_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d068-british-ten-${{ matrix.width }}-${{ github.sha }}
+          path: |
+            scratch/d068/
+            scratch/d066/D066-unit.json
+            scratch/d065/D065-unit.json
+          if-no-files-found: error
+          retention-days: 14
