@@ -1,3 +1,6 @@
+// D068-BEGIN facility-import
+import { FACILITY_KINDS } from './britishCommerceFacilities.ts';
+// D068-END facility-import
 // D067-BEGIN landmark-import
 import { LANDMARK_KINDS } from './britishLandmarks.ts';
 // D067-END landmark-import
@@ -220,10 +223,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D064-BEGIN tower-shape
 // D066-BEGIN metropolis-shape
 // D067-BEGIN landmark-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false): Shape | null => {
+// D068-BEGIN facility-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false): Shape | null => {
   const shape = KIND_SHAPES[k];
+  if (shape && facility && FACILITY_KINDS.has(k)) return { ...shape, p: { ...shape.p, facility: true } };
   return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D068-END facility-shape
 // D067-END landmark-shape
 // D066-END metropolis-shape
 // D064-END tower-shape
