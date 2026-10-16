@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {D070_ADDED,assertD070Scope,d070HistoricalBytes} from './d070-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -11,7 +12,7 @@ const M = JSON.parse(diskRead('fixtures/d069-art-scope.json'));
 const baseline = JSON.parse(diskRead('fixtures/d069-source-before.json'));
 const expectedFiles = [...Object.keys(M.before),...M.added].sort();
 const modified = new Set(M.modified);
-export const D069_ADDED = new Set(M.added);
+export const D069_ADDED = new Set([...M.added,...D070_ADDED]);
 
 assert.equal(M.baseline,'ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883','D069 fixed D068 candidate baseline');
 const D068M = JSON.parse(diskRead('fixtures/d068-art-scope.json'));
@@ -20,7 +21,7 @@ assert.equal(M.baseline,baseline.baseline,'D069 manifest uses the captured basel
 assert.deepEqual(M.before,baseline.before,'D069 original source SHA inventory is preserved');
 assert.deepEqual([...M.modified].sort(),['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts'],'D069 only the three reversible dispatch sources may change');
 assert.deepEqual([...M.added].sort(),['src/content/britishCommerceVariants.ts','src/render/britishCommerceVariantArt.ts'],'D069 only the two metropolis sources may be added');
-assert.equal(D069_ADDED.size,M.added.length,'D069 unique added source paths');
+assert.equal(new Set(M.added).size,M.added.length,'D069 unique added source paths');
 assert.equal(modified.size,M.modified.length,'D069 unique modified source paths');
 assert.deepEqual(Object.keys(M.replacements).sort(),[...modified].sort(),'D069 exact reversible source paths');
 for(const file of M.added)assert.ok(!(file in M.before),'D069 additions were absent at baseline: '+file);
@@ -62,20 +63,21 @@ function historical(file,current) {
 }
 
 export function d069HistoricalBytes(file,read=diskRead) {
-  const current=read(file),pin=M.after[file]??M.before[file];
+  const current=d070HistoricalBytes(file,read),pin=M.after[file]??M.before[file];
   assert.ok(pin,file+' belongs to D069 source inventory');
   assert.equal(sha(current),pin,file+' exact allowed source');
   return historical(file,current);
 }
 
 export function assertD069Scope(read=diskRead) {
+  assertD070Scope(read);
   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
+    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D070_ADDED.has(file)).sort();
   assert.deepEqual(files,expectedFiles,'D069 exact source inventory');
   const snapshot = new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d070HistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }

@@ -1,3 +1,6 @@
+// D070-BEGIN third-import
+import { THIRD_KINDS } from './content/britishCommerceThird.ts';
+// D070-END third-import
 // D069-BEGIN variant-import
 import { VARIANT_KINDS } from './content/britishCommerceVariants.ts';
 // D069-END variant-import
@@ -166,7 +169,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const facilityOn = !['facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D069-BEGIN variant-enabled
   const commerceVariantOn = !['commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D070-BEGIN third-enabled
+  const commerceThirdOn = !['commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D070-END third-enabled
 // D069-END variant-enabled
 // D068-END facility-enabled
 // D067-END landmark-enabled
@@ -292,10 +298,16 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let commerceForcedV: number | null = null;
   const commerceView = (c: City): City => commerceForcedV === null ? c : { ...c, buildings: c.buildings.map(b => VARIANT_KINDS.has(b.k) ? { ...b, v: commerceForcedV! } : b) };
 // D069-END variant-view
+// D070-BEGIN third-view
+  let commerceThirdForcedV: number | null = null;
+  const commerceThirdView = (c: City): City => commerceThirdForcedV === null ? c : { ...c, buildings: c.buildings.map(b => THIRD_KINDS.has(b.k) ? { ...b, v: commerceThirdForcedV! } : b) };
+// D070-END third-view
   function makeScene(c: City, fresh: boolean): BuiltCity {
 // D064-BEGIN tower-scene
 // D069-BEGIN variant-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(commerceView(towerView(c)), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D070-BEGIN third-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(commerceThirdView(commerceView(towerView(c))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D070-END third-scene
 // D069-END variant-scene
 // D064-END tower-scene
     b.timing.plan = t1 - t0;   // 街區計畫（D015 之前這一項一直是 0：起點與終點取在同一刻）
@@ -1795,6 +1807,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D070-BEGIN third-gt
+    commerceThirdV(v: number | null) { if (v !== null && v !== 2) throw new Error('commerceThirdV supports saved variant 2 or null'); commerceThirdForcedV = v; rebuildScene(true); needsRender = true; draw(); return commerceThirdForcedV; }, // Render-only copied saved-v2 showcase; world is unchanged.
+// D070-END third-gt
 // D069-BEGIN variant-gt
     commerceV(v: number | null) { if (v !== null && v !== 1) throw new Error('commerceV supports saved variant 1 or null'); commerceForcedV = v; rebuildScene(true); needsRender = true; draw(); return commerceForcedV; }, // Render-only copied saved-variant showcase; world is unchanged.
 // D069-END variant-gt
