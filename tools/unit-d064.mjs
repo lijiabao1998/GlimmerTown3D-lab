@@ -28,6 +28,7 @@ import {signature,weighted} from './d060-baseline.mjs';
 import {civicOf,TOWER_KIND_LIST} from './d064-baseline.mjs';
 import {dE} from './d061-scenes.mjs';
 import {assertD064Scope,d064HistoricalBytes} from './d064-scope.mjs';
+import {d067HistoricalBytes} from './d067-scope.mjs';
 
 const read=file=>JSON.parse(fs.readFileSync(path.join(ROOT,file),'utf8'));
 const sha=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
@@ -881,7 +882,7 @@ export async function d064Guards(log) {
   });
 
   test('flag chain and photography hook: every older legacy flag switches the wave off with it; the hook copies buildings and never edits the world',()=>{
-    const view=fs.readFileSync(path.join(ROOT,'src/cityView.ts'),'utf8');
+    const view=d067HistoricalBytes('src/cityView.ts');
     assert.match(view,/const towerOn = !\['towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'\]\.some\(key => q\.get\(key\) === 'legacy'\)/,'every older legacy flag disables D064');
     assert.match(view,/shapeOf\(k, q\.get\('heritageArt'\) !== 'legacy', towerOn(?:, metropolisOn)?\)/,'the flag reaches the shape table (with optional D066 argument)');
     assert.match(view,/q\.get\('britishArt'\) === 'legacy' \? KIND_SHAPES\[k\] \?\? null/,'britishArt=legacy still returns the raw table shapes');

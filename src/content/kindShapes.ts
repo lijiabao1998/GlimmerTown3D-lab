@@ -1,3 +1,6 @@
+// D067-BEGIN landmark-import
+import { LANDMARK_KINDS } from './britishLandmarks.ts';
+// D067-END landmark-import
 import { BRITISH_KINDS } from './britishCivic.ts';
 // D066-BEGIN metropolis-import
 import { METROPOLIS_KINDS } from './britishMetropolis.ts';
@@ -216,10 +219,12 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // Preserve the historical recipes for regression comparison; only these eleven opt in to D056.
 // D064-BEGIN tower-shape
 // D066-BEGIN metropolis-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false): Shape | null => {
+// D067-BEGIN landmark-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false): Shape | null => {
   const shape = KIND_SHAPES[k];
-  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : shape : null;
+  return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D067-END landmark-shape
 // D066-END metropolis-shape
 // D064-END tower-shape
 
