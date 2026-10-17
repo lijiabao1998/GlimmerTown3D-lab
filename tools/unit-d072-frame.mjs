@@ -57,7 +57,7 @@ export async function d072FrameGuards(log=()=>{}){
   for(const source of D072_CAPTURE_SOURCES){
    const before=d072CaptureQuery(source.sample,'before'),after=d072CaptureQuery(source.sample,'after');
    assert.equal(before,'sample='+source.sample+'&clean=1&campusArt=legacy');
-   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.equal(after,'sample='+source.sample+'&clean=1&emergencyHotelArt=legacy');
    assert.notEqual(before,after,'D072 phases cannot both load legacy artwork');
    assert.equal(artworkEnabled(new URLSearchParams(before)),false,'BEFORE selects the exact D071 production phase');
    assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER selects the new D072 production phase');

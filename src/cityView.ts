@@ -1,3 +1,6 @@
+// D073-BEGIN emergency-hotel-import
+import { EMERGENCY_HOTEL_BUILDINGS } from './content/britishEmergencyHotels.ts';
+// D073-END emergency-hotel-import
 // D072-BEGIN campus-import
 import { CAMPUS_BUILDINGS } from './content/britishCampuses.ts';
 // D072-END campus-import
@@ -181,7 +184,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const educationOn = !['educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D072-BEGIN campus-enabled
   const campusOn = !['campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D073-BEGIN emergency-hotel-enabled
+  const emergencyHotelOn = !['emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D073-END emergency-hotel-enabled
 // D072-END campus-enabled
 // D071-END education-enabled
 // D070-END third-enabled
@@ -318,6 +324,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let educationForcedV: number | null = null;
   const educationView = (c: City): City => educationForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EDUCATION_KINDS.has(b.k) ? { ...b, v: b.k === 109 ? 0 : educationForcedV! } : b) };
 // D071-END education-view
+// D073-BEGIN emergency-hotel-view
+  let emergencyHotelForcedV: number | null = null;
+  const emergencyHotelView = (c: City): City => emergencyHotelForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EMERGENCY_HOTEL_BUILDINGS.some(slot => slot.k === b.k && slot.v === emergencyHotelForcedV) ? { ...b, v: emergencyHotelForcedV! } : b) };
+// D073-END emergency-hotel-view
 // D072-BEGIN campus-view
   let campusForcedV: number | null = null;
   const campusView = (c: City): City => campusForcedV === null ? c : { ...c, buildings: c.buildings.map(b => CAMPUS_BUILDINGS.some(slot => slot.k === b.k && slot.v === campusForcedV) ? { ...b, v: campusForcedV! } : b) };
@@ -328,7 +338,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D070-BEGIN third-scene
 // D071-BEGIN education-scene
 // D072-BEGIN campus-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(campusView(educationView(commerceThirdView(commerceView(towerView(c))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D073-BEGIN emergency-hotel-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c)))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D073-END emergency-hotel-scene
 // D072-END campus-scene
 // D071-END education-scene
 // D070-END third-scene
@@ -1831,6 +1843,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D073-BEGIN emergency-hotel-gt
+    emergencyHotelV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('emergencyHotelV supports saved variants 0, 1, 2 or null'); emergencyHotelForcedV = v; rebuildScene(true); needsRender = true; draw(); return emergencyHotelForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
+// D073-END emergency-hotel-gt
 // D072-BEGIN campus-gt
     campusV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('campusV supports saved variants 0, 1, 2 or null'); campusForcedV = v; rebuildScene(true); needsRender = true; draw(); return campusForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
 // D072-END campus-gt
