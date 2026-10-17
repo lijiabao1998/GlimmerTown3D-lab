@@ -1,3 +1,6 @@
+// D072-BEGIN campus-import
+import { CAMPUS_BUILDINGS } from './content/britishCampuses.ts';
+// D072-END campus-import
 // D071-BEGIN education-import
 import { EDUCATION_KINDS } from './content/britishEducation.ts';
 // D071-END education-import
@@ -176,7 +179,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const commerceThirdOn = !['commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D071-BEGIN education-enabled
   const educationOn = !['educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D072-BEGIN campus-enabled
+  const campusOn = !['campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D072-END campus-enabled
 // D071-END education-enabled
 // D070-END third-enabled
 // D069-END variant-enabled
@@ -312,12 +318,18 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let educationForcedV: number | null = null;
   const educationView = (c: City): City => educationForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EDUCATION_KINDS.has(b.k) ? { ...b, v: b.k === 109 ? 0 : educationForcedV! } : b) };
 // D071-END education-view
+// D072-BEGIN campus-view
+  let campusForcedV: number | null = null;
+  const campusView = (c: City): City => campusForcedV === null ? c : { ...c, buildings: c.buildings.map(b => CAMPUS_BUILDINGS.some(slot => slot.k === b.k && slot.v === campusForcedV) ? { ...b, v: campusForcedV! } : b) };
+// D072-END campus-view
   function makeScene(c: City, fresh: boolean): BuiltCity {
 // D064-BEGIN tower-scene
 // D069-BEGIN variant-scene
 // D070-BEGIN third-scene
 // D071-BEGIN education-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(educationView(commerceThirdView(commerceView(towerView(c)))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D072-BEGIN campus-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(campusView(educationView(commerceThirdView(commerceView(towerView(c))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D072-END campus-scene
 // D071-END education-scene
 // D070-END third-scene
 // D069-END variant-scene
@@ -1819,6 +1831,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D072-BEGIN campus-gt
+    campusV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('campusV supports saved variants 0, 1, 2 or null'); campusForcedV = v; rebuildScene(true); needsRender = true; draw(); return campusForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
+// D072-END campus-gt
 // D071-BEGIN education-gt
     educationV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('educationV supports saved variants 0, 1, 2 or null'); educationForcedV = v; rebuildScene(true); needsRender = true; draw(); return educationForcedV; }, // Render-only copied saved-variant showcase; world is unchanged.
 // D071-END education-gt
