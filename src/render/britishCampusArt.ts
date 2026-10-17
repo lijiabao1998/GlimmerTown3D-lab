@@ -135,7 +135,9 @@ const BUILD:Record<number,ReadonlyArray<((p:Pen)=>void)|undefined>>={
       peaked(p,[[.65,.19],[.83,.13],[.95,.57],[.76,.66]],.46,.62,.80,.39,C.brick,'punch');
       for(const x of [.36,.44,.56,.64])block(p,x-.012,x+.012,.74,.77,0,.37,C.stone,false,C.stone);
       block(p,.33,.67,.65,.81,.37,.415,C.stone,false,C.slate);
-      p.a.O.triangle(at(p,.33,.811,.415),at(p,.67,.811,.415),at(p,.50,.811,.53),[0,0,1],col(C.stone));
+      // Close both pitched slopes behind the front pediment, including its rear
+      // gable. A decorative front triangle alone leaves the roof volume open.
+      roof(p,.33,.67,.65,.811,.415,.115,C.slate,C.stone,'z');
       for(const [a,b,c,d,h] of [[.31,.69,.81,.88,.025],[.29,.71,.88,.93,.016],[.27,.73,.93,.98,.008]])
         p.bit(a,b,c,d,0,p.H*h,C.stone,C.stone);
       front(p,.44,.56,.671,0,.34,C.green);

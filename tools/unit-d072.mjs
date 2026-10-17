@@ -102,6 +102,44 @@ export function validCampusGeometry(r){
  }
  assert.ok(top>=r.H*.85,'real building silhouette reaches intended height');return {lo,hi,low,top};
 }
+// Independent intended pitched volumes, including the civic portico. These pins
+// describe roofs, not cameras: a low H or a screen-space occluder cannot excuse
+// an absent surface. Bounds/rise remain relative to the existing parcel/table H.
+export const D072_PITCHED_ROOFS=frozen([
+ {k:48,v:0,id:'west-ward',roof:[.12,.28,.30,.86,.72,.18,'z']},
+ {k:48,v:0,id:'middle-ward',roof:[.43,.59,.30,.92,.65,.18,'z']},
+ {k:48,v:0,id:'east-ward',roof:[.74,.90,.30,.82,.80,.20,'z']},
+ {k:48,v:1,id:'rear-hospital-hall',roof:[.10,.90,.10,.30,.74,.26,'x']},
+ {k:48,v:2,id:'emergency-hall',roof:[.68,.92,.58,.87,.18,.06,'x']},
+ {k:115,v:0,id:'civic-portico',roof:[.33,.67,.65,.811,.415,.115,'z']},
+ {k:115,v:1,id:'meeting-hall',roof:[.18,.82,.39,.66,.72,.28,'x']},
+ {k:115,v:2,id:'west-public-hall',roof:[.08,.31,.16,.67,.50,.22,'z']},
+ {k:115,v:2,id:'rear-public-hall',roof:[.41,.81,.10,.32,.43,.18,'x']},
+ {k:115,v:2,id:'east-public-hall',roof:[.69,.92,.45,.89,.67,.33,'z']},
+ {k:31,v:0,id:'rear-cell-range',roof:[.15,.85,.18,.30,.72,.28,'x']},
+ {k:31,v:0,id:'middle-cell-range',roof:[.15,.85,.44,.56,.66,.24,'x']},
+ {k:31,v:0,id:'front-cell-range',roof:[.15,.85,.70,.82,.70,.22,'x']},
+ {k:31,v:0,id:'low-gatehouse',roof:[.40,.60,.84,.94,.60,.15,'x']},
+ {k:31,v:1,id:'radial-gatehouse',roof:[.40,.60,.85,.94,.50,.22,'x']},
+]);
+export function campusRoofTriangles(r,spec){
+ const [a,b,c,d,h,rise]=spec.roof,indices=[],g=r.G[1];
+ for(let t=0;t<g.pos.length/9;t++){let inside=true,raised=false;for(let j=0;j<9;j+=3){const u=(g.pos[t*9+j]-r.x0)/r.s,v=(g.pos[t*9+j+2]-r.z0)/r.s,y=(g.pos[t*9+j+1]-r.y0)/r.H;if(u<a-1e-8||u>b+1e-8||v<c-1e-8||v>d+1e-8||y<h-1e-8||y>h+rise+1e-8)inside=false;if(y>h+1e-8)raised=true;}if(inside&&raised)indices.push(t);}
+ return indices;
+}
+export function assertCampusRoofClosure(r,spec){
+ const [a,b,c,d,h,rise,axis]=spec.roof,pts=[[a,h,c],[b,h,c],[b,h,d],[a,h,d]],ridges=axis==='x'?[[a,h+rise,(c+d)/2],[b,h+rise,(c+d)/2]]:[[(a+b)/2,h+rise,c],[(a+b)/2,h+rise,d]],key=p=>p.map(n=>Math.round(n*1e8)).join(','),edge=(p,q)=>[key(p),key(q)].sort().join('|'),legal=new Set([...pts,...ridges].map(key)),boundary=new Set(pts.map((p,i)=>edge(p,pts[(i+1)%4]))),indices=campusRoofTriangles(r,spec),counts=new Map();
+ assert.equal(indices.length,6,spec.id+' has four real pitched triangles and two end gables above its slab');
+ for(const t of indices){const tri=[];for(let j=0;j<9;j+=3){const p=[(r.G[1].pos[t*9+j]-r.x0)/r.s,(r.G[1].pos[t*9+j+1]-r.y0)/r.H,(r.G[1].pos[t*9+j+2]-r.z0)/r.s];assert.ok(legal.has(key(p)),spec.id+' uses its actual eaves and ridge vertices');tri.push(p);}for(let j=0;j<3;j++){const e=edge(tri[j],tri[(j+1)%3]);counts.set(e,(counts.get(e)??0)+1);}}
+ assert.equal(counts.size,11,spec.id+' closed triangle roof has seven joined edges and four open eaves');for(const[e,n]of counts)assert.equal(n,boundary.has(e)?1:2,spec.id+' roof has no unjoined slope or pediment edge');for(const e of boundary)assert.equal(counts.get(e),1,spec.id+' only the intended eave boundary is open');
+ return indices;
+}
+// Quantize the independently pinned roof vertices exactly as the GPU upload does;
+// otherwise steep tiny roofs at translated origins accrue avoidable float32 error.
+export function assertCampusRoofCoverage(r,spec){
+ const [a,b,c,d,h,rise,axis]=spec.roof,geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(r.G[1].pos,3));const mesh=new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({side:THREE.FrontSide}));let probes=0;
+ try{for(const u of [.15,.35,.65,.85])for(const v of [.2,.5,.8]){const x=a+(b-a)*u,z=c+(d-c)*v,q=axis==='x'?r.z0+r.s*z:r.x0+r.s*x,o=axis==='x'?r.z0:r.x0,lo=axis==='x'?c:a,hi=axis==='x'?d:b,ridge=Math.fround(o+r.s*(lo+hi)/2),eave=Math.fround(o+r.s*(q<ridge?lo:hi)),base=Math.fround(r.y0+r.H*h),top=Math.fround(r.y0+r.H*(h+rise)),expected=top+(base-top)*Math.abs((q-ridge)/(eave-ridge)),ray=new THREE.Raycaster(new THREE.Vector3(r.x0+r.s*x,r.y0+r.H+1,r.z0+r.s*z),new THREE.Vector3(0,-1,0)),hits=ray.intersectObject(mesh);assert.ok(hits.some(hit=>Math.abs(hit.point.y-expected)<1e-6*Math.max(1,r.H)&&hit.face.normal.y>0),spec.id+' actual front-sided roof covers its pitched volume at '+u+','+v+'; a flat cap or isolated pediment is insufficient');probes++;}return probes;}finally{geometry.dispose();mesh.material.dispose();}
+}
 // Exact typed-attribute bytes per real owner, excluding only collapsed allocator holes.
 function ownerContent(built){
  const owners=built.pickOwners();return built.buildingMeshes().map((mesh,mi)=>{
@@ -185,6 +223,18 @@ export async function d072Guards(log=()=>{}){
   const axisAligned=r=>{const n=r.G[1].nor;for(let i=0;i<n.length;i+=3)assert.ok(Math.abs(n[i])<1e-8||Math.abs(n[i+2])<1e-8,'axis-aligned opaque hall faces cannot acquire diagonal horizontal normals');};
   report.productionRoofCases=0;for(const [k,v]of [[48,0],[48,1],[48,2],[115,1],[115,2],[31,0]])for(const s of [1,4])for(const H of [.12,3.7]){axisAligned(drawCampusCase(k,{v,s,H}));report.productionRoofCases++;}
   const diagonal=drawCampusCase(48),n=diagonal.G[1].nor;n.splice(0,3,Math.SQRT1_2,0,Math.SQRT1_2);assert.throws(()=>axisAligned(diagonal),/diagonal horizontal normals/,'production structural control catches a crossed-corner horizontal normal');
+ });
+ test('all fifteen actual pitched volumes have closed roof surfaces and front-sided coverage at every tested height',()=>{
+  report.roofComponentCases=0;report.roofCoverageRays=0;
+  for(const spec of D072_PITCHED_ROOFS)for(const size of [1,4])for(const H of new Set([.12,Math.max(.12,D072_KT.height(spec.k,1,spec.v)),3.7]))for(const origin of [{x0:0,z0:0,y0:0},{x0:-3.125,z0:7.375,y0:.21}]){const r=drawCampusCase(spec.k,{v:spec.v,s:size,H,...origin});assertCampusRoofClosure(r,spec);report.roofCoverageRays+=assertCampusRoofCoverage(r,spec);report.roofComponentCases++;}
+  const spec=D072_PITCHED_ROOFS.find(s=>s.id==='civic-portico'),original=drawCampusCase(115,{v:0,s:1,H:1,x0:0,z0:0,y0:0}),indices=assertCampusRoofClosure(original,spec),front=indices.find(t=>[2,5,8].every(j=>Math.abs(original.G[1].pos[t*9+j]-.811)<1e-9));assert.ok(front!==undefined,'real front pediment is present');
+  // Recreate the exact historical defect: retain the flat slab and one upright
+  // pediment, remove only its connecting slopes and rear end. All remaining
+  // triangles can still be finite/perpendicular/bounded, so topology and rays
+  // must independently reject it.
+  const legacy=structuredClone(original),remove=new Set(indices.filter(t=>t!==front));for(const key of ['pos','nor','col','uv','wst','wgl','wbd','owners','tags']){const stride=key==='uv'?6:['owners','tags'].includes(key)?1:['wst','wbd'].includes(key)?3:9,arr=legacy.G[1][key];legacy.G[1][key]=arr.filter((_,i)=>!remove.has(Math.floor(i/stride)));}
+  legacy.cost=d072Cost(legacy.G);assert.equal(legacy.cost,286,'negative control exactly recreates the pre-fix civic weighted cost');validCampusGeometry(legacy);assert.throws(()=>assertCampusRoofClosure(legacy,spec),/four real pitched triangles/,'historical lone-pediment defect fails independent closure');assert.throws(()=>assertCampusRoofCoverage(legacy,spec),/flat cap or isolated pediment/,'historical defect fails actual rays even though its flat slab exists');
+  const reversed=structuredClone(original);for(const t of indices)for(let j=0;j<3;j++)[reversed.G[1].pos[t*9+3+j],reversed.G[1].pos[t*9+6+j]]=[reversed.G[1].pos[t*9+6+j],reversed.G[1].pos[t*9+3+j]];assertCampusRoofClosure(reversed,spec);assert.throws(()=>assertCampusRoofCoverage(reversed,spec),/flat cap or isolated pediment/,'closed but back-facing roof also fails actual front-sided rays');
  });
  test('identity rejects recolored/reordered/moved/rotated/stretched copies and detects real geometric edits',()=>{
   const original=drawCampusCase(48),expected=campusStructureSignature(original);

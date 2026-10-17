@@ -386,7 +386,7 @@
   "src/io/save.ts": "d01aec3907c13926ad1dfed0902cd57dacfa69403097ac8a23480672dcedccbe",
   "src/main.ts": "6511a7852731746ac5b578d6f64d8d2695104eb76029b87f60f16e125b86a4c2",
   "src/render/blockArt.ts": "de6fc6d37698dbc45e8eab6685c92f34d7f2141682b21acd17bbe6fc7548f427",
-  "src/render/britishCampusArt.ts": "9d0c1d695d3fdb609c91b69e47b04abbcfee337fa54c66acfaf3660b085a3a90",
+  "src/render/britishCampusArt.ts": "e5d35805eab9f4c541e596d826ef3691ff4422c3bb57e5fe036f94e12ca1a2d7",
   "src/render/britishCivicArt.ts": "f31fbd360c23a6096227e4399293a8c8521b10ab0f89c78792d5844d60aed91f",
   "src/render/britishCommerceArt.ts": "25a72b40755c61e1b7fee7307ad65f5f280ba187877d7d09e04f66f4e63d2d42",
   "src/render/britishCommerceFacilityArt.ts": "137e49554435a570556a14ca914eb2db5ce24cda199bf8a0ccb8ef9a433262e1",

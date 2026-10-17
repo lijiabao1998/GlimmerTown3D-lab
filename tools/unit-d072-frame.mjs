@@ -4,14 +4,14 @@ import fs from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import {createD072FrameOracle,assertD072Frame,assertD072CampusCamera,assertD072BrowserGeometry,d072OwnerRayAudit,D072_FRAME_WHOLE} from './d072-frame.mjs';
+import {createD072FrameOracle,assertD072Frame,assertD072CampusCamera,assertD072BrowserGeometry,d072OwnerRayAudit,assertD072PausedRepeat,D072_FRAME_WHOLE} from './d072-frame.mjs';
 import {hashOf,sceneDigest,meshDigest} from '../src/render/digest.ts';
 import {buildCityScene} from '../src/render/cityScene.ts';
 import {ConState} from '../src/render/construction.ts';
 import {STYLES} from '../src/render/styles.ts';
 import {D072_OLD,D072_KT,d072City,d072CampusCity,d072Blocks,d072Civic,d072Expected} from './unit-d072.mjs';
 
-import {D072_CAPTURE_SOURCES,D072_SLOTS,D072_ALTERNATE_VIEWS,d072CapturePlan,d072CaptureQuery} from './d072-capture.mjs';
+import {D072_CAPTURE_SOURCES,D072_SLOTS,D072_ALTERNATE_VIEWS,D072_REPEAT_SLOTS,d072CapturePlan,d072CaptureQuery} from './d072-capture.mjs';
 
 const VIEWPORTS=[{W:1440,H:1000},{W:360,H:740},{W:412,H:860}];
 const live=(c,b)=>b.goneDay===undefined&&b.x>=0&&b.z>=0&&b.x+b.size<=c.n&&b.z+b.size<=c.n;
@@ -68,20 +68,22 @@ export async function d072FrameGuards(log=()=>{}){
   for(const phase of [null,undefined,'legacy','campus','BEFORE'])assert.throws(()=>d072CaptureQuery('gallery',phase),/explicit D072/);
   assert.throws(()=>d072CaptureQuery('gallery&campusArt=legacy','after'),/known D072/);
  });
- test('capture plan retains all 132 original views and appends only audited unoccluded campus angles',()=>{
-  const plan=d072CapturePlan(),extraCount=Object.keys(D072_ALTERNATE_VIEWS).length;
-  assert.equal(plan.captured,false);assert.equal(plan.completeThreeViewportOriginalPngs,132+6*extraCount);assert.equal(plan.preservedOriginalViews,132);assert.equal(plan.additionalCampusViews,6*extraCount);
+ test('capture plan retains all 132 originals and adds six roof-angle and six exact-repeat images',()=>{
+  const plan=d072CapturePlan(),extraCount=Object.keys(D072_ALTERNATE_VIEWS).length,repeatCount=D072_REPEAT_SLOTS.length;
+  assert.equal(plan.captured,false);assert.equal(plan.completeThreeViewportOriginalPngs,132+6*(extraCount+repeatCount));assert.equal(plan.completeThreeViewportOriginalPngs,144);assert.equal(plan.pausedRepeatViews,6);assert.equal(plan.distinctBuildings,10);assert.deepEqual(D072_REPEAT_SLOTS,['115:0']);assert.equal(plan.preservedOriginalViews,132);assert.equal(plan.additionalCampusViews,6*extraCount);
   assert.deepEqual(D072_SLOTS.map(s=>[s.k,s.v]),[[109,1],[109,2],[48,0],[48,1],[48,2],[115,0],[115,1],[115,2],[31,0],[31,1]]);
   assert.equal(D072_CAPTURE_SOURCES.length,12);
   assert.deepEqual(D072_CAPTURE_SOURCES.flatMap(s=>s.sites.map(x=>x.k+':'+x.v)).sort(),D072_SLOTS.map(s=>s.k+':'+s.v).sort());
   for(const source of D072_CAPTURE_SOURCES){
    const extra=source.shots.filter(s=>s.additionalView),needed=source.sites.filter(s=>D072_ALTERNATE_VIEWS[s.k+':'+s.v]);
-   assert.equal(extra.length,needed.length);assert.equal(source.shots.filter(s=>!s.additionalView).length,source.sites.length+1);
+   assert.equal(extra.length,needed.length);assert.equal(source.shots.filter(s=>!s.additionalView&&!s.repeatOf).length,source.sites.length+1);
    for(let i=0;i<needed.length;i++){
     const site=needed[i],angle=D072_ALTERNATE_VIEWS[site.k+':'+site.v];
     assert.deepEqual(extra[i],{...site,id:site.id+'-'+angle.name,name:site.name+' · '+angle.label+' / ADDITIONAL CAMERA VIEW',additionalView:angle.name,spinRadians:angle.spinRadians});
-    assert.equal(source.shots[source.sites.length+1+i],extra[i],'alternates append after every original shot');
+    assert.ok(source.shots.indexOf(extra[i])>Math.max(...source.shots.map((s,j)=>s.additionalView?-1:j)),'alternate follows every original and paused repeat');
    }
+   const repeats=source.shots.filter(s=>s.repeatOf);assert.equal(repeats.length,source.sample==='gallery'&&source.force===0?1:0);
+   for(const shot of repeats){const initial=source.shots[source.shots.indexOf(shot)-1];assert.equal(initial.id,shot.repeatOf);assert.deepEqual(shot,{...initial,id:initial.id+'-paused-repeat',repeatOf:initial.id,pausedFrames:30});}
    if(source.force!==null)assert.match(source.label,/COPIED SAVED-VARIANT .* NOT TEN NATIVE TOOLS/);
    for(const site of source.sites){assert.equal(site.sourceVariant,0);assert.equal(site.renderedVariant,source.force);}
   }
@@ -125,6 +127,16 @@ export async function d072FrameGuards(log=()=>{}){
    for(const key of ['target','pos','zoom']){const bad=structuredClone(rotated);if(key==='zoom')bad.zoom+=.01;else bad[key][0]+=.01;assert.throws(()=>assertD072CampusCamera(bad,baseline,shot.spinRadians),{name:'AssertionError'},'changed '+key+' rejected');}
   }
  });
+ test('zero-angle settlement preserves the original portico view and makes the thirty-frame repeat exact',()=>{
+  const source=D072_CAPTURE_SOURCES.find(s=>s.sample==='gallery'&&s.force===0),shot=source.sites.find(s=>s.k===115);
+  for(const viewport of VIEWPORTS){const initial=cameraFor(source.n,shot,viewport),camera=new THREE.OrthographicCamera(-1,1,1,-1,.1,source.n*6),controls=new OrbitControls(camera,null);
+   controls.enableDamping=true;controls.minPolarAngle=Math.PI*.18;controls.maxPolarAngle=Math.PI*.42;controls.minZoom=.6;controls.maxZoom=8;
+   controls.target.fromArray(initial.target);camera.position.fromArray(initial.pos);camera.zoom=initial.zoom;camera.lookAt(controls.target);
+   const state=()=>({pos:camera.position.toArray(),target:controls.target.toArray(),zoom:camera.zoom});
+   for(let i=0;i<900;i++)controls.rotateLeft(0);const settled=state();assert.deepEqual(settled.target,initial.target);assert.equal(settled.zoom,initial.zoom);assert.ok(settled.pos.every((x,i)=>Math.abs(x-initial.pos[i])<1e-9));
+   for(let i=0;i<1030;i++)controls.update();assert.deepEqual(state(),settled,'thirty repeated frames and all future updates preserve exact camera bytes');
+  }
+ });
  test('every campus slot has a fully unoccluded owner-ray view in both phases with all neighbors retained',()=>{
   // Geometry-only visibility is necessary, not a substitute for actual WebGL visual review.
   report.visibility=[];
@@ -140,6 +152,27 @@ export async function d072FrameGuards(log=()=>{}){
    }finally{f.dispose();}
   }
   assert.equal(report.visibility.length,20,'ten distinct saved slots, each independently checked before and after');
+ });
+ test('both repaired portico slopes are directly visible across southeast and southwest cameras at all widths',()=>{
+  const source=D072_CAPTURE_SOURCES.find(s=>s.sample==='gallery'&&s.force===0),views=source.shots.filter(s=>s.k===115&&s.v===0&&!s.repeatOf),oracle=createD072FrameOracle('gallery',true,0);
+  assert.equal(views.length,2,'original southeast and one opposite-side roof view');
+  try{report.porticoVisibility=[];for(const viewport of VIEWPORTS){
+   const audits=views.map(s=>oracle.porticoVisibility(cameraFor(source.n,s,viewport),viewport)),expected=Object.values(audits[0].slopes).flat().sort((a,b)=>a-b),visible=[...new Set(audits.flatMap(a=>a.fullyVisibleTriangles))].sort((a,b)=>a-b);
+   assert.equal(expected.length,4,'two real triangles on each roof slope');assert.deepEqual(visible,expected,'all four repaired slope triangles have three unblocked surface rays');
+   report.porticoVisibility.push({width:viewport.W,audits});
+  }}finally{oracle.dispose();}
+  const legacy=createD072FrameOracle('gallery',false,0);try{assert.throws(()=>legacy.porticoVisibility(cameraFor(source.n,views[0],VIEWPORTS[0]),VIEWPORTS[0]),/slope triangles/,'historical geometry cannot prove the new closed portico roof');}finally{legacy.dispose();}
+ });
+ test('paused repeat requires exact PNG, canvas, world, camera, presentation and submitted geometry',()=>{
+  const initial={sha256:'a'.repeat(64),canvasSha256:'b'.repeat(64),worldSha256:'c'.repeat(64),camera:{pos:[1,2,3],target:[4,0,6],zoom:2},presentation:{visT:2.2,dayFrac:0},render:{calls:9,triangles:61080},renderAll:{calls:9,triangles:61080},width:1440,height:1000,bytes:5000};
+  assertD072PausedRepeat(structuredClone(initial),initial);
+  for(const key of Object.keys(initial)){const bad=structuredClone(initial);if(typeof bad[key]==='string')bad[key]='d'.repeat(64);else if(typeof bad[key]==='number')bad[key]++;else if(key==='camera')bad[key].pos[0]+=.001;else if(key==='presentation')bad[key].visT+=.01;else bad[key].triangles++;
+   assert.throws(()=>assertD072PausedRepeat(bad,initial),{name:'AssertionError'},'changed '+key+' must reject');
+   const missing=structuredClone(initial);delete missing[key];assert.throws(()=>assertD072PausedRepeat(missing,missing),{name:'AssertionError'},'missing '+key+' cannot prove stability');
+  }
+  const capture=fs.readFileSync(new URL('./d072-capture.mjs',import.meta.url),'utf8');
+  assert.match(capture,/await p\.frames\(s\.pausedFrames\)/,'actual repeat waits thirty presentation frames');
+  assert.match(capture,/if\(s\.repeatOf\)assertD072PausedRepeat\(/,'actual images use strict equality validator');
  });
  test('original D067 frustum-culling control remains exact despite zero D072 targets in seed516',()=>{
   const city=d072City('seed516'),b=city.buildings.find(b=>live(city,b)&&b.k===116);assert.equal(b.id,201);

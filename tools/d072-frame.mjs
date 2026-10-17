@@ -14,8 +14,8 @@ import {D072_OLD,D072_KT,d072City,d072CampusCity,d072Blocks,d072Civic} from './u
 // Legacy values are also checked against the immutable D071 native and copied-variant fixtures in unit-d072.mjs.
 // Exact before/after pins measured independently from the production D071/D072 scene, not browser counters.
 export const D072_FRAME_WHOLE=Object.freeze({
- native:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61070}),ai120:Object.freeze({legacy:95571,campus:95571})}),
- v0:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61070}),ai120:Object.freeze({legacy:95571,campus:95571})}),
+ native:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61080}),ai120:Object.freeze({legacy:95571,campus:95571})}),
+ v0:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61080}),ai120:Object.freeze({legacy:95571,campus:95571})}),
  v1:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61220}),ai120:Object.freeze({legacy:95571,campus:95571})}),
  v2:Object.freeze({seed516:Object.freeze({legacy:112762,campus:112762}),gallery:Object.freeze({legacy:61302,campus:61010}),ai120:Object.freeze({legacy:95571,campus:95571})}),
 });
@@ -122,6 +122,41 @@ export function d072OwnerRayAudit({scene,meshes,owners,n},view,viewport,owner,gr
  }
  assert.ok(targetRays>0,'owner silhouette has actual target intersections');
  return {owner,grid,targetTriangles,targetRays,visibleRays,blockedRays:targetRays-visibleRays,blockers,projectedBounds:{lo,hi},fitsViewport,unoccluded:targetRays===visibleRays};
+}
+
+// Inspect the four actual repaired k115:v0 portico roof triangles, independently
+// of the whole-owner silhouette. Float32 coordinate tolerance selects the patch;
+// it never changes a vertex, normal, owner or geometry-comparison threshold.
+export function d072PorticoRayAudit({scene,meshes,owners,city},view,viewport){
+ const b=city.buildings.find(b=>b.k===115&&b.v===0);assert.ok(b,'original k115:v0 owner exists');
+ const H=Math.max(.12,D072_KT.height(b.k,b.lv,b.v)),epsilon=1e-5,roof=meshes[1],position=roof.geometry.attributes.position,normal=roof.geometry.attributes.normal;
+ let y0=Infinity;meshes.forEach((m,i)=>{const p=m.geometry.attributes.position;for(let t=0;t<owners[i].length;t++)if(owners[i][t]===b.id)for(let j=0;j<3;j++)y0=Math.min(y0,p.getY(t*3+j));});
+ const slopes={west:[],east:[]},vertices=new Map();
+ for(let t=0;t<owners[1].length;t++)if(owners[1][t]===b.id&&normal.getY(t*3)>.1&&Math.abs(normal.getX(t*3))>.1){
+  const vs=[0,1,2].map(j=>new THREE.Vector3().fromBufferAttribute(position,t*3+j));
+  if(vs.every(p=>p.x>=b.x+b.size*.33-epsilon&&p.x<=b.x+b.size*.67+epsilon&&p.z>=b.z+b.size*.65-epsilon&&p.z<=b.z+b.size*.811+epsilon&&p.y>=y0+H*.415-epsilon&&p.y<=y0+H*.53+epsilon)){
+   slopes[normal.getX(t*3)<0?'west':'east'].push(t);vertices.set(t,vs);
+  }
+ }
+ assert.equal(slopes.west.length,2,'portico has exactly two actual west slope triangles');assert.equal(slopes.east.length,2,'portico has exactly two actual east slope triangles');
+ const camera=cameraFor(city.n,view,viewport),ray=new THREE.Raycaster(),objects=[],samples=[];
+ scene.updateMatrixWorld(true);scene.traverse(o=>{if(o.isMesh&&visibleInHierarchy(o)&&o.layers.test(camera.layers))objects.push(o);});
+ for(const [side,triangles] of Object.entries(slopes))for(const triangle of triangles){
+  const vs=vertices.get(triangle);let visibleSamples=0;
+  for(const weights of [[.2,.3,.5],[.5,.2,.3],[.3,.5,.2]]){
+   const p=new THREE.Vector3();vs.forEach((v,i)=>p.addScaledVector(v,weights[i]));p.applyMatrix4(roof.matrixWorld).project(camera);
+   assert.ok(Math.abs(p.x)<1&&Math.abs(p.y)<1,'each repaired roof sample fits the original viewport');
+   ray.setFromCamera(new THREE.Vector2(p.x,p.y),camera);const first=ray.intersectObjects(objects,false)[0];
+   if(first?.object===roof&&first.faceIndex===triangle)visibleSamples++;
+  }
+  samples.push({side,triangle,visibleSamples,totalSamples:3});
+ }
+ return {owner:b.id,slopes,samples,fullyVisibleTriangles:samples.filter(s=>s.visibleSamples===s.totalSamples).map(s=>s.triangle),qualification:'Independent actual-surface ray audit; original scene objects and camera clipping remain unchanged.'};
+}
+
+export function assertD072PausedRepeat(actual,initial){
+ for(const key of ['sha256','canvasSha256','worldSha256']){assert.match(initial[key],/^[0-9a-f]{64}$/,'original '+key+' is recorded');assert.equal(actual[key],initial[key],'paused repeat exact '+key);}
+ for(const key of ['camera','presentation','render','renderAll','width','height','bytes']){assert.notEqual(initial[key],undefined,'original '+key+' is recorded');assert.deepEqual(actual[key],initial[key],'paused repeat exact '+key);}
 }
 
 export function createD072FrameOracle(sample,on,force=null){
@@ -253,6 +288,7 @@ export function createD072FrameOracle(sample,on,force=null){
   };
   // scene is diagnostic read-only in production; negative-control tests deliberately inject and restore a triangle.
   return {sample,on,force,variant,n:city.n,wholeTriangles:pin,geometry,normalSpecs,assertBrowserGeometry,scene,measure,
-   ownerVisibility:(view,viewport,owner,grid=32)=>d072OwnerRayAudit({scene,meshes:modelMeshes,owners:modelOwners,n:city.n},view,viewport,owner,grid),dispose};
+   ownerVisibility:(view,viewport,owner,grid=32)=>d072OwnerRayAudit({scene,meshes:modelMeshes,owners:modelOwners,n:city.n},view,viewport,owner,grid),
+   porticoVisibility:(view,viewport)=>d072PorticoRayAudit({scene,meshes:modelMeshes,owners:modelOwners,city},view,viewport),dispose};
  }catch(error){dispose();throw error;}
 }
