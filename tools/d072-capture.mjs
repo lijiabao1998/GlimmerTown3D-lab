@@ -122,8 +122,16 @@ async function verifyUploadedGeometry(p,oracle,item){
  item.uploadProbe={worldGeometryCameraAndSubmissionsUnchanged:true};
  item.geometrySha256=sha(before.digest);
 }
+// The new-wave AFTER view must use the current default artwork. Historical D071
+// captures deliberately use campusArt=legacy after educationArt=legacy; that suffix
+// must never leak into either D072 after-phase browser load.
+export function d072CaptureQuery(sample,phase){
+ assert.ok(['gallery','seed516','ai120'].includes(sample),'known D072 capture sample');
+ assert.ok(phase==='before'||phase==='after','explicit D072 before/after capture phase');
+ return 'sample='+sample+'&clean=1'+(phase==='before'?'&campusArt=legacy':'');
+}
 async function capturePhase(v,phase,source,expected,item){
- Object.assign(item,{viewport:v,phase,sample:source.sample,variant:source.variant,force:source.force,sourceQualification:source.qualification,query:`sample=${source.sample}&clean=1`+(phase==='before'?'&campusArt=legacy':'&campusArt=legacy'),shots:[],passed:false});
+ Object.assign(item,{viewport:v,phase,sample:source.sample,variant:source.variant,force:source.force,sourceQualification:source.qualification,query:d072CaptureQuery(source.sample,phase),shots:[],passed:false});
  const oracle=createD072FrameOracle(source.sample,phase==='after',source.force);
  try{await withBrowser({root:path.join(ROOT,'dist'),width:Math.max(960,v.W),height:Math.max(900,v.H),port:PORT},async({page,open})=>{
   try{

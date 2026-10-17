@@ -1,5 +1,6 @@
 // D072 camera-specific draw oracle guards. Node only; no browser counters, renderer, network, or output files.
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
@@ -10,7 +11,7 @@ import {ConState} from '../src/render/construction.ts';
 import {STYLES} from '../src/render/styles.ts';
 import {D072_OLD,D072_KT,d072City,d072CampusCity,d072Blocks,d072Civic,d072Expected} from './unit-d072.mjs';
 
-import {D072_CAPTURE_SOURCES,D072_SLOTS,D072_ALTERNATE_VIEWS,d072CapturePlan} from './d072-capture.mjs';
+import {D072_CAPTURE_SOURCES,D072_SLOTS,D072_ALTERNATE_VIEWS,d072CapturePlan,d072CaptureQuery} from './d072-capture.mjs';
 
 const VIEWPORTS=[{W:1440,H:1000},{W:360,H:740},{W:412,H:860}];
 const live=(c,b)=>b.goneDay===undefined&&b.x>=0&&b.z>=0&&b.x+b.size<=c.n&&b.z+b.size<=c.n;
@@ -46,6 +47,26 @@ export async function d072FrameGuards(log=()=>{}){
    for(const phase of ['legacy','campus'])assert.equal(expected[variant][sample][phase],D072_FRAME_WHOLE[variant][sample][phase]);
    assert.ok(expected[variant][sample].campus<=expected[variant][sample].legacy);
   }
+ });
+ test('actual capture path selects legacy BEFORE and default campus AFTER without inherited legacy flags',()=>{
+  const capture=fs.readFileSync(new URL('./d072-capture.mjs',import.meta.url),'utf8'),cityView=fs.readFileSync(new URL('../src/cityView.ts',import.meta.url),'utf8');
+  assert.match(capture,/query:d072CaptureQuery\(source\.sample,phase\)/,'actual capture metadata uses the tested query helper');
+  assert.match(capture,/await p\.open\(item\.query\)/,'production browser opens that same tested query');
+  const condition=cityView.match(/const campusOn = ([^;]+);/);assert.ok(condition,'actual production campus dispatch condition');
+  const artworkEnabled=Function('q','return ('+condition[1]+')');
+  for(const source of D072_CAPTURE_SOURCES){
+   const before=d072CaptureQuery(source.sample,'before'),after=d072CaptureQuery(source.sample,'after');
+   assert.equal(before,'sample='+source.sample+'&clean=1&campusArt=legacy');
+   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.notEqual(before,after,'D072 phases cannot both load legacy artwork');
+   assert.equal(artworkEnabled(new URLSearchParams(before)),false,'BEFORE selects the exact D071 production phase');
+   assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER selects the new D072 production phase');
+   // Reproduce the failed CI URL: an after-phase legacy suffix must fail the same
+   // dispatch check, rather than being excused as numerical normal drift.
+   assert.throws(()=>assert.equal(artworkEnabled(new URLSearchParams(after+'&campusArt=legacy')),true),{name:'AssertionError'});
+  }
+  for(const phase of [null,undefined,'legacy','campus','BEFORE'])assert.throws(()=>d072CaptureQuery('gallery',phase),/explicit D072/);
+  assert.throws(()=>d072CaptureQuery('gallery&campusArt=legacy','after'),/known D072/);
  });
  test('capture plan retains all 132 original views and appends only audited unoccluded campus angles',()=>{
   const plan=d072CapturePlan(),extraCount=Object.keys(D072_ALTERNATE_VIEWS).length;
