@@ -1,3 +1,6 @@
+// D074-BEGIN farm-memorial-import
+import { FARM_MEMORIAL_BUILDINGS } from './content/britishFarmMemorials.ts';
+// D074-END farm-memorial-import
 // D073-BEGIN emergency-hotel-import
 import { EMERGENCY_HOTEL_BUILDINGS } from './content/britishEmergencyHotels.ts';
 // D073-END emergency-hotel-import
@@ -186,7 +189,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const campusOn = !['campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D073-BEGIN emergency-hotel-enabled
   const emergencyHotelOn = !['emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D074-BEGIN farm-memorial-enabled
+  const farmMemorialOn = !['farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D074-END farm-memorial-enabled
 // D073-END emergency-hotel-enabled
 // D072-END campus-enabled
 // D071-END education-enabled
@@ -324,6 +330,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let educationForcedV: number | null = null;
   const educationView = (c: City): City => educationForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EDUCATION_KINDS.has(b.k) ? { ...b, v: b.k === 109 ? 0 : educationForcedV! } : b) };
 // D071-END education-view
+// D074-BEGIN farm-memorial-view
+  let farmMemorialForcedV: number | null = null;
+  const farmMemorialView = (c: City): City => farmMemorialForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FARM_MEMORIAL_BUILDINGS.some(slot => slot.k === b.k && slot.v === farmMemorialForcedV) ? { ...b, v: farmMemorialForcedV! } : b) };
+// D074-END farm-memorial-view
 // D073-BEGIN emergency-hotel-view
   let emergencyHotelForcedV: number | null = null;
   const emergencyHotelView = (c: City): City => emergencyHotelForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EMERGENCY_HOTEL_BUILDINGS.some(slot => slot.k === b.k && slot.v === emergencyHotelForcedV) ? { ...b, v: emergencyHotelForcedV! } : b) };
@@ -339,7 +349,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D071-BEGIN education-scene
 // D072-BEGIN campus-scene
 // D073-BEGIN emergency-hotel-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c)))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D074-BEGIN farm-memorial-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D074-END farm-memorial-scene
 // D073-END emergency-hotel-scene
 // D072-END campus-scene
 // D071-END education-scene
@@ -1843,6 +1855,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D074-BEGIN farm-memorial-gt
+    tilt: (rad: number) => { if (!Number.isFinite(rad)) throw new Error('tilt requires a finite angle'); controls.rotateUp?.(rad); invalidate(); }, // Existing OrbitControls limits apply; capture-only camera movement.
+    farmMemorialV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3 && v !== 4) throw new Error('farmMemorialV supports saved variants 0, 1, 2, 3, 4 or null'); farmMemorialForcedV = v; rebuildScene(true); needsRender = true; draw(); return farmMemorialForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
+// D074-END farm-memorial-gt
 // D073-BEGIN emergency-hotel-gt
     emergencyHotelV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('emergencyHotelV supports saved variants 0, 1, 2 or null'); emergencyHotelForcedV = v; rebuildScene(true); needsRender = true; draw(); return emergencyHotelForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
 // D073-END emergency-hotel-gt
