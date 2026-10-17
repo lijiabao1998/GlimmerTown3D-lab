@@ -1,3 +1,6 @@
+// D072-BEGIN campus-import
+import { CAMPUS_KINDS } from './britishCampuses.ts';
+// D072-END campus-import
 // D071-BEGIN education-import
 import { EDUCATION_KINDS } from './britishEducation.ts';
 // D071-END education-import
@@ -236,14 +239,17 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D069-BEGIN variant-shape
 // D070-BEGIN third-shape
 // D071-BEGIN education-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false): Shape | null => {
+// D072-BEGIN campus-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false): Shape | null => {
   const shape = KIND_SHAPES[k];
+  if (shape && campus && CAMPUS_KINDS.has(k)) return { ...shape, p: { ...shape.p, campus: true, education, commerceThird, commerceVariant, facility } };
   if (shape && education && EDUCATION_KINDS.has(k)) return { ...shape, p: { ...shape.p, education: true, commerceThird, commerceVariant, facility } };
   if (shape && commerceThird && THIRD_KINDS.has(k)) return { ...shape, p: { ...shape.p, commerceThird: true, commerceVariant, facility } };
   if (shape && commerceVariant && VARIANT_KINDS.has(k)) return { ...shape, p: { ...shape.p, commerceVariant: true, facility } };
   if (shape && facility && FACILITY_KINDS.has(k)) return { ...shape, p: { ...shape.p, facility: true } };
   return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D072-END campus-shape
 // D071-END education-shape
 // D070-END third-shape
 // D069-END variant-shape
