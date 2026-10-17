@@ -61,7 +61,7 @@ export async function d073FrameGuards(log=()=>{}){
   for(const source of D073_CAPTURE_SOURCES){
    const before=d073CaptureQuery(source.sample,'before'),after=d073CaptureQuery(source.sample,'after');
    assert.equal(before,'sample='+source.sample+'&clean=1&emergencyHotelArt=legacy');
-   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.equal(after,'sample='+source.sample+'&clean=1&farmMemorialArt=legacy');
    assert.notEqual(before,after,'D073 phases cannot both load legacy artwork');
    for(const [phase,query] of [['before',before],['after',after]])assertD073CaptureUrl('http://127.0.0.1:8370/?'+query,source.sample,phase);
    assert.throws(()=>assertD073CaptureUrl('http://127.0.0.1:8370/?'+before,source.sample,'after'),/actual browser URL/,'actual historical URL cannot masquerade as AFTER');
