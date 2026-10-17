@@ -684,6 +684,8 @@ await guard('./unit-d069.mjs', 'd069Guards');
 await guard('./unit-d069-frame.mjs', 'd069FrameGuards');
 await guard('./unit-d070.mjs', 'd070Guards');
 await guard('./unit-d070-frame.mjs', 'd070FrameGuards');
+await guard('./unit-d071.mjs', 'd071Guards');
+await guard('./unit-d071-frame.mjs', 'd071FrameGuards');
 await guard('./unit-evidence.mjs', 'evidenceImageGuards');
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);

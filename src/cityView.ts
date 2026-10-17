@@ -1,3 +1,6 @@
+// D071-BEGIN education-import
+import { EDUCATION_KINDS } from './content/britishEducation.ts';
+// D071-END education-import
 // D070-BEGIN third-import
 import { THIRD_KINDS } from './content/britishCommerceThird.ts';
 // D070-END third-import
@@ -171,7 +174,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const commerceVariantOn = !['commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D070-BEGIN third-enabled
   const commerceThirdOn = !['commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D071-BEGIN education-enabled
+  const educationOn = !['educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D071-END education-enabled
 // D070-END third-enabled
 // D069-END variant-enabled
 // D068-END facility-enabled
@@ -302,11 +308,17 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let commerceThirdForcedV: number | null = null;
   const commerceThirdView = (c: City): City => commerceThirdForcedV === null ? c : { ...c, buildings: c.buildings.map(b => THIRD_KINDS.has(b.k) ? { ...b, v: commerceThirdForcedV! } : b) };
 // D070-END third-view
+// D071-BEGIN education-view
+  let educationForcedV: number | null = null;
+  const educationView = (c: City): City => educationForcedV === null ? c : { ...c, buildings: c.buildings.map(b => EDUCATION_KINDS.has(b.k) ? { ...b, v: b.k === 109 ? 0 : educationForcedV! } : b) };
+// D071-END education-view
   function makeScene(c: City, fresh: boolean): BuiltCity {
 // D064-BEGIN tower-scene
 // D069-BEGIN variant-scene
 // D070-BEGIN third-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(commerceThirdView(commerceView(towerView(c))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D071-BEGIN education-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(educationView(commerceThirdView(commerceView(towerView(c)))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D071-END education-scene
 // D070-END third-scene
 // D069-END variant-scene
 // D064-END tower-scene
@@ -1807,6 +1819,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       con.tex.needsUpdate = true; needsRender = true; draw(); return true;
     },
     // 播放那條路（advance）推進 dt 秒（要先 simPlay(true)）；回傳這一步之後的施工狀態
+// D071-BEGIN education-gt
+    educationV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('educationV supports saved variants 0, 1, 2 or null'); educationForcedV = v; rebuildScene(true); needsRender = true; draw(); return educationForcedV; }, // Render-only copied saved-variant showcase; world is unchanged.
+// D071-END education-gt
 // D070-BEGIN third-gt
     commerceThirdV(v: number | null) { if (v !== null && v !== 2) throw new Error('commerceThirdV supports saved variant 2 or null'); commerceThirdForcedV = v; rebuildScene(true); needsRender = true; draw(); return commerceThirdForcedV; }, // Render-only copied saved-v2 showcase; world is unchanged.
 // D070-END third-gt
