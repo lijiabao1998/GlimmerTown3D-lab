@@ -20,8 +20,9 @@ jobs:
     timeout-minutes: 120   # D054 起 90；D065 發布時 main CI（run 38701592327）跑 91:40 被逾時取消（之前三次 80:37／88:44／89:10，餘量不到 1 分鐘）。只加總時間預算，任何檢查與門檻不變。
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch immutable D066 through D073 source-scope baselines
+      - name: Fetch immutable D066 through D074 source-scope baselines
         run: |
+          git fetch --no-tags --depth=1 origin a5674d9bdbfbf439319b50e26c3f864864ab5363
           git fetch --no-tags --depth=1 origin a69397ed0900b1f0a27bdc3be8e1616d2973fc43
           git fetch --no-tags --depth=1 origin f689c35d8d061498779321149ccce4443f0ce6de
           git fetch --no-tags --depth=1 origin 1c40e13a219adb90827acd3b60fb6b7623600b63
@@ -249,7 +250,7 @@ jobs:
           retention-days: 14
 
   pages:
-    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073]
+    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:
@@ -439,5 +440,35 @@ jobs:
         with:
           name: d073-preview-${{ matrix.width }}-${{ github.sha }}
           path: scratch/d073/
+          if-no-files-found: error
+          retention-days: 14
+
+  d074:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 360, 412]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D074 real ten-model WebGL pairs and existing-city controls
+        run: node tools/d074-capture.mjs
+        env:
+          D074_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d074-preview-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d074/
           if-no-files-found: error
           retention-days: 14
