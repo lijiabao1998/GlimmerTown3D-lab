@@ -1,3 +1,6 @@
+// D073-BEGIN emergency-hotel-import
+import { drawBritishEmergencyHotel } from './britishEmergencyHotelArt.ts';
+// D073-END emergency-hotel-import
 // D072-BEGIN campus-import
 import { drawBritishCampus } from './britishCampusArt.ts';
 // D072-END campus-import
@@ -777,7 +780,9 @@ export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
 // D070-BEGIN third-dispatch
 // D071-BEGIN education-dispatch
 // D072-BEGIN campus-dispatch
-  try { const p = new Pen(a); if (!(shape?.p?.campus === true && drawBritishCampus(p)) && !(shape?.p?.education === true && drawBritishEducation(p)) && !(shape?.p?.commerceThird === true && drawBritishCommerceThird(p)) && !(shape?.p?.commerceVariant === true && drawBritishCommerceVariant(p)) && !(shape?.p?.facility === true && drawBritishCommerceFacility(p)) && !(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D073-BEGIN emergency-hotel-dispatch
+  try { const p = new Pen(a); if (!(shape?.p?.emergencyHotel === true && drawBritishEmergencyHotel(p)) && !(shape?.p?.campus === true && drawBritishCampus(p)) && !(shape?.p?.education === true && drawBritishEducation(p)) && !(shape?.p?.commerceThird === true && drawBritishCommerceThird(p)) && !(shape?.p?.commerceVariant === true && drawBritishCommerceVariant(p)) && !(shape?.p?.facility === true && drawBritishCommerceFacility(p)) && !(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D073-END emergency-hotel-dispatch
 // D072-END campus-dispatch
 // D071-END education-dispatch
 // D070-END third-dispatch
