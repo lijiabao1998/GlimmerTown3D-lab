@@ -10,6 +10,10 @@
 
 ---
 
+| D076 替換候選 | [D076](docs/D076-british-health-dispatch-ten.md) | 第8批保留六款，四款改用已通過基線可行性檢查的k149調度建築；預先新卡，不修改D075凍結驗收 | focused幾何19/19、frame30/30與全部歷史守衛成功；正式同head完整CI待驗 | 獨立實拍47339e56 | run39111457564三尺寸360原圖及45對照核驗成功 | 完整正式CI及發布待完成；尚不計新增完成數 |
+| D075 未通過並保留 | [D075](docs/D075-british-health-response-ten.md) | 十款初始候選與56張inspection原圖 | 原嚴格coverage失敗：舊8298/8389，另桌機k135v0近景頂點超框；原始記錄全保留 | a1dc2f95 inspection-only | run39105758400 360/1440 inspection成功，非完整驗收 | 未合併未上線；四個受阻槽位由新卡D076替換，D075卡與證據不改，不計完成 |
+| D074 發布完成 | [PR26](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/26) | 第7輪十款建築與有界原生touch展示修補；main94024b6e | release39098621210全36jobs成功，HTTP200且1396867bytes與候選逐byte相同，SHA4231fc6a34ab50791bec8adb137aab7a4a87ece4dff089ce91e264b00278de1e | 94024b6e | 原270美術圖及12修復UI圖完成代審 | 原觸控失敗因果未確證；本地D011均值5.85ms及固定ABBA四次超5ms均保留，正式同head CI原門檻1.80ms通過；不聲稱本地通過或性能等價。累計7/20波70/200棟 |
+
 | D074 CI follow-up（PR27發布準備） | [CI卡](docs/D074-ci-parallel.md) | 完整Node、單次build、瀏覽器與樣張並行；保留smoke聚合及所有D gate／Pages門檻；業主2026-10-18 08:15 UTC指名批准PR27 Ready／合main／核驗既有Pages；不增加模型波次、不混D075／D076 | 原候選55e4d58的[CI39106124240](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39106124240) 39驗證job全成功、48 helper正反控制；Node984條OK、browser850條OK，無NG；補本列後的最後head仍須完整CI成功才合 | [PR27](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/27)；首卡17c9f2d、原驗證候選55e4d58 | browser238檔＋樣張163檔＝combined401檔，逐路徑與SHA256核對完全相同；不改遊戲／美術 | 原候選全run58分37秒對歷史100分43秒，單次差42分06秒並含runner速度差，不保證未來省時；最後head CI、main／Pages／公站仍待實測，後續真實SHA與結果記於PR27；未測live failed-job rerun |
 
 | D074 發布修復候選 | [D074修復](docs/D074-touch-release-repair.md) | 第7輪已合併美術，原main發布在D052原生觸控失敗；新增有界touch-cohort展示保護 | 首紅證據與完整診斷保留；候選完整技術／實機驗收待完成 | 待提交 | 原D074美術270張已核；修復UI原圖待驗 | 原始失敗因果仍未確證；不保證touchend後任意延遲click；仍僅6／20發布，不以診斷綠燈代替正式發布 |

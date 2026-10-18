@@ -1,3 +1,6 @@
+// D076-BEGIN health-response-import
+import { HEALTH_RESPONSE_KINDS } from './britishHealthResponse.ts';
+// D076-END health-response-import
 // D074-BEGIN farm-memorial-import
 import { FARM_MEMORIAL_KINDS } from './britishFarmMemorials.ts';
 // D074-END farm-memorial-import
@@ -248,8 +251,10 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D072-BEGIN campus-shape
 // D073-BEGIN emergency-hotel-shape
 // D074-BEGIN farm-memorial-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false): Shape | null => {
+// D076-BEGIN health-response-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false): Shape | null => {
   const shape = KIND_SHAPES[k];
+  if (shape && healthResponse && HEALTH_RESPONSE_KINDS.has(k)) return { ...shape, p: { ...shape.p, healthResponse: true, farmMemorial, emergencyHotel, campus, education, commerceThird, commerceVariant, facility, metropolis } };
   if (shape && farmMemorial && FARM_MEMORIAL_KINDS.has(k)) return { ...shape, p: { ...shape.p, farmMemorial: true, emergencyHotel, campus, education, commerceThird, commerceVariant, facility } };
   if (shape && emergencyHotel && EMERGENCY_HOTEL_KINDS.has(k)) return { ...shape, p: { ...shape.p, emergencyHotel: true, campus, education, commerceThird, commerceVariant, facility } };
   if (shape && campus && CAMPUS_KINDS.has(k)) return { ...shape, p: { ...shape.p, campus: true, education, commerceThird, commerceVariant, facility } };
@@ -259,6 +264,7 @@ export const shapeOf = (k: number, heritage = true, tower = false, metropolis = 
   if (shape && facility && FACILITY_KINDS.has(k)) return { ...shape, p: { ...shape.p, facility: true } };
   return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D076-END health-response-shape
 // D074-END farm-memorial-shape
 // D073-END emergency-hotel-shape
 // D072-END campus-shape
