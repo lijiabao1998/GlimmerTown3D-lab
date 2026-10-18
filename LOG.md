@@ -10,6 +10,8 @@
 
 ---
 
+| D074 CI follow-up（PR27發布準備） | [CI卡](docs/D074-ci-parallel.md) | 完整Node、單次build、瀏覽器與樣張並行；保留smoke聚合及所有D gate／Pages門檻；業主2026-10-18 08:15 UTC指名批准PR27 Ready／合main／核驗既有Pages；不增加模型波次、不混D075／D076 | 原候選55e4d58的[CI39106124240](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39106124240) 39驗證job全成功、48 helper正反控制；Node984條OK、browser850條OK，無NG；補本列後的最後head仍須完整CI成功才合 | [PR27](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/27)；首卡17c9f2d、原驗證候選55e4d58 | browser238檔＋樣張163檔＝combined401檔，逐路徑與SHA256核對完全相同；不改遊戲／美術 | 原候選全run58分37秒對歷史100分43秒，單次差42分06秒並含runner速度差，不保證未來省時；最後head CI、main／Pages／公站仍待實測，後續真實SHA與結果記於PR27；未測live failed-job rerun |
+
 | D074 發布修復候選 | [D074修復](docs/D074-touch-release-repair.md) | 第7輪已合併美術，原main發布在D052原生觸控失敗；新增有界touch-cohort展示保護 | 首紅證據與完整診斷保留；候選完整技術／實機驗收待完成 | 待提交 | 原D074美術270張已核；修復UI原圖待驗 | 原始失敗因果仍未確證；不保證touchend後任意延遲click；仍僅6／20發布，不以診斷綠燈代替正式發布 |
 | D074 候選 | [D074](docs/D074-british-farm-memorial-ten.md) | 第7／20輪，5牧場、3墓園、2植物園結構 | 型別/build、17幾何及23frame專項綠；完整Node與實拍並行待驗 | 首候選 | 270計畫原圖，尚無實拍 | 保留原高度、樹與全部歷史門檻；5牧場變體沿用原生ranch，其餘匯入／展示 |
 | D073 正式發布 | [D073](docs/D073-british-emergency-hotels-ten.md) | 第6／20輪，十個英式消防／監獄／酒店結構 | 完整Node1808.5秒、PR32／32、main33／33綠 | a5674d9bdbfbf439319b50e26c3f864864ab5363 | 192原圖、36對照核驗及代審；16:05UTC線上1385407bytes、SHA dc954f31f813324f35a4fe9df1786f9ece3d5ec608e0b7e0ead32a59954ad5b7逐位元組一致 | 60／200棟發布；其餘14輪未完成；無新原生工具，軟體WebGL不代表實體Android效能 |
