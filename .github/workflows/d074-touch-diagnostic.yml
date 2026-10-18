@@ -22,12 +22,12 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
-      - name: Fixed-count trusted input and event ordering evidence
-        run: node tools/d074-touch-diagnostic.mjs
+      - name: Fixed observer-ablation and CPU-load matrix
+        run: node tools/d074-touch-matrix.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: d074-touch-diagnostic-${{ github.sha }}
-          path: scratch/d074-touch-diagnostic/
+          path: scratch/d074-touch-matrix/
           if-no-files-found: error
           retention-days: 14

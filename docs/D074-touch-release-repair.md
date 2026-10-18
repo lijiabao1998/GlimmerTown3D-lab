@@ -14,3 +14,8 @@ Add a negative control that reproduces the original failure ordering and rejects
 
 ## Not completed
 Diagnosis, repair, focused tests, real browser evidence, full regression and publication are pending. No rerun has been used to override the failed release.
+
+## Diagnostic observation, 2026-10-18 00:43 UTC
+Independent diagnostic run39083647992 collected all twelve planned original-timing gestures on the exact release HTML SHA and Chrome155 revision. All twelve passed; their fallback timers were cleared after click without firing. This does not establish the cause of the original failure or replace the failed release gate. The observer added global touch listeners and synchronous layout reads, which can affect input scheduling.
+
+The next predeclared collection is a 16-session observer-ablation/load matrix: timer instrumentation off/on, passive touch observers off/on, CPU slowdown 1/6, two fresh-session replicates per cell in forward/reverse order. Original pointer-only evidence, fixture, native action and 50/200ms waits remain. No per-event layout, hit-test, stack or model reads; no retry-until-green. Timer instrumentation records only timing and DOM row-key order. This is a stress/observer comparison, not a claimed forced native interleaving. Preserve every result, including failures and setup errors. Production remains unchanged pending evidence.
