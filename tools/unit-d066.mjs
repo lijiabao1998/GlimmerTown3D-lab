@@ -9,6 +9,7 @@ import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import * as THREE from 'three';
 import {ROOT} from './cdp.mjs';
+import {isD074TouchRepairAllowed} from './d074-touch-repair-scope.mjs';
 import {Geo} from '../src/render/scene.ts';
 import {drawKind} from '../src/render/kindArt.ts';
 import {shapeOf,kindColors} from '../src/content/kindShapes.ts';
@@ -148,7 +149,7 @@ export async function d066Guards(log){
   for(const f of ['src/content/britishMetropolis.ts','src/render/britishMetropolisArt.ts']){const s=fs.readFileSync(path.join(ROOT,f),'utf8').replace(/\/\/.*$/gm,'');for(const re of [/Math\.random/,/Date\.now|new Date|performance\.now/,/\bfetch\(|XMLHttpRequest|WebSocket|localStorage|sessionStorage|indexedDB/,/\bdocument\b|\bwindow\b|\blocation\b/,/data:image|\.png|\.jpe?g|\.glb|TextureLoader|ImageLoader|new Image|OffscreenCanvas|createElement/i])assert.doesNotMatch(s,re,f);}
   const allowed=new Set(['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/content/britishMetropolis.ts','src/render/britishMetropolisArt.ts']);
   const changed=execFileSync('git',['diff','--name-only',D066_BASELINE,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean),untracked=execFileSync('git',['ls-files','--others','--exclude-standard','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean);
-  for(const f of [...changed,...untracked])assert.ok(allowed.has(f)||D067_ADDED.has(f),'only approved render-only source may change: '+f);
+  for(const f of [...changed,...untracked])assert.ok(allowed.has(f)||D067_ADDED.has(f)||isD074TouchRepairAllowed(f),'only approved render-only source may change: '+f);
   const view=d067HistoricalBytes('src/cityView.ts');assert.match(view,/metropolisArt/,'production URL switch exists');assert.match(view,/shapeOf\([^\n]*metropolis/,'production passes fourth flag');
  });
  test('nine legacy switches each disable only this wave; SHA scope reverses to D065 and rejects source mutations',()=>{

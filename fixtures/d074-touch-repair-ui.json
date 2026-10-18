@@ -1,0 +1,13 @@
+{
+  "baseline": "beca506c224ad72f9a890ed20b5aa1fa7b2616f5",
+  "htmlSha": "3d0809c50a4a3233f89b84ff5f97941374bdb95706b9cf2fb2a188a84261ab3d",
+  "source": "Original release39075552114 artifact12119895716; independently matched by corrected full-context diagnostic39087831219. Only the streetArt=legacy path is compared byte-for-byte.",
+  "shots": {
+    "D052-after-paid-c6-hud-360.png": "5082761787ca8723ca8d71867119902a5e57d467e8a77cafe4e8133d761b4e51",
+    "D052-after-eco-reg-capacity-412.png": "268ac25e18baa946278f32fe7282126005dea0354df47648eac5f1d413631ad6",
+    "D052-after-budget-limit-360.png": "e7ba19743093aab4534e3d7d021fb8269b65f3738f7e47a97633c2927e9a7bfb",
+    "D052-after-free-resume-412.png": "0ddc5c9a931ea930e2400a9b4fc89619d52bb9376ad95df6684dd55631dee324",
+    "D052-after-population-lock-360.png": "429034b1f9a8a3d2841163f5bd02234cd1b8607efca30c0a48abd724d0f98d97",
+    "D052-after-research-completion-412.png": "7a53a05510548219086b8290a6d362dfde1e6d392429cecee01cf30e1ed0e193"
+  }
+}

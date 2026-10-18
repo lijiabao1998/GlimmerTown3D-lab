@@ -1,0 +1,46 @@
+name: D074 bounded touch repair native verification
+on:
+  push:
+    branches: ['codex/d074-native-activation-repair']
+permissions:
+  contents: read
+concurrency:
+  group: d074-touch-repair-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        art: [legacy, current]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Fetch immutable pre-repair source
+        run: git fetch --no-tags --depth=1 origin beca506c224ad72f9a890ed20b5aa1fa7b2616f5
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck
+      - name: Bounded touch ordering and original runtime guards
+        run: |
+          node tools/unit-d074-touch-repair.mjs
+          node tools/unit-d052.mjs
+      - run: npm run build
+      - name: All original native sessions and actual UI images
+        run: node tools/d074-touch-repair-browser.mjs ${{ matrix.art }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d074-touch-repair-${{ matrix.art }}-${{ github.sha }}
+          path: |
+            scratch/d074-touch-repair/
+            scratch/shots/D052-*
+          if-no-files-found: error
+          retention-days: 14

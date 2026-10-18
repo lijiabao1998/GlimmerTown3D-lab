@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Fetch immutable D066 through D074 source-scope baselines
         run: |
+          git fetch --no-tags --depth=1 origin beca506c224ad72f9a890ed20b5aa1fa7b2616f5
           git fetch --no-tags --depth=1 origin a5674d9bdbfbf439319b50e26c3f864864ab5363
           git fetch --no-tags --depth=1 origin a69397ed0900b1f0a27bdc3be8e1616d2973fc43
           git fetch --no-tags --depth=1 origin f689c35d8d061498779321149ccce4443f0ce6de

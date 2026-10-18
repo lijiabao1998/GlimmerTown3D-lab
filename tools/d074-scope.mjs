@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {d074TouchRepairHistoricalBytes} from './d074-touch-repair-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -62,7 +63,7 @@ function historical(file,current) {
 }
 
 export function d074HistoricalBytes(file,read=diskRead) {
-  const current=read(file),pin=M.after[file]??M.before[file];
+  const current=d074TouchRepairHistoricalBytes(file,read),pin=M.after[file]??M.before[file];
   assert.ok(pin,file+' belongs to D074 source inventory');
   assert.equal(sha(current),pin,file+' exact allowed source');
   return historical(file,current);
@@ -75,7 +76,7 @@ export function assertD074Scope(read=diskRead) {
   assert.deepEqual(files,expectedFiles,'D074 exact source inventory');
   const snapshot = new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d074TouchRepairHistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }
