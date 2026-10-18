@@ -1,0 +1,33 @@
+name: D074 native touch release diagnostic (no deployment)
+on:
+  push:
+    branches: ['codex/d074-touch-repair']
+permissions:
+  contents: read
+concurrency:
+  group: d074-touch-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Fixed-count trusted input and event ordering evidence
+        run: node tools/d074-touch-diagnostic.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d074-touch-diagnostic-${{ github.sha }}
+          path: scratch/d074-touch-diagnostic/
+          if-no-files-found: error
+          retention-days: 14
