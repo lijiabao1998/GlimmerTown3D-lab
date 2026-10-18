@@ -714,7 +714,7 @@ function pressMutations(source=city) {
     ['research held presentation gate removed','if (tcGate.defer(renderTech)) return;'],
     ['policy held presentation gate removed','if (plGate.defer(renderPolicy)) return;'],
   ];
-  for(const [name,from]of views)assert.throws(()=>heldPanelPresentation(change(source,from,'void 0;')),e=>e?.code==='ERR_ASSERTION',name);
+  for(const [name,from]of views){const altered=change(source,from,'void 0;');assert.throws(()=>heldPanelPresentation(altered),e=>e?.code==='ERR_ASSERTION',name);}
   const gates=[
     ['pointerup eagerly flushes before click','presses.set(event.pointerId, true); releaseFallback();','presses.delete(event.pointerId); flush();'],
     ['lost capture incorrectly flushes before click',"  doc.addEventListener('click', event => {","  doc.addEventListener('lostpointercapture', () => { presses.clear(); flush(); });\n  doc.addEventListener('click', event => {"],
@@ -722,7 +722,7 @@ function pressMutations(source=city) {
     ['cancel replays stale pending render','presses.clear(); pending = null;','presses.clear(); flush();'],
     ['no-click fallback remains locked','if (released) presses.delete(id);','if (false) presses.delete(id);'],
   ];
-  for(const [name,from,to]of gates)assert.throws(()=>panelGateCases(change(pressSource,from,to)),e=>e?.code==='ERR_ASSERTION',name);
+  for(const [name,from,to]of gates){const altered=change(pressSource,from,to);assert.throws(()=>panelGateCases(altered),e=>e?.code==='ERR_ASSERTION',name);}
   return `${views.length+gates.length} additional actual gate/wiring mutations rejected`;
 }
 function mutations(source=city) {
@@ -803,7 +803,7 @@ export function d052Guards(log, source = city) {
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){
   let bad=0;const log=(ok,name,detail)=>{console.log(ok?'OK':'NG',name,detail??'');if(!ok)bad++;};
   if(process.argv[2]==='--press'){
-    for(const [name,fn]of [['gate',()=>panelGateCases()],['held original functions',()=>heldPanelPresentation()],['cleanup',()=>gatePanelLifecycle()],['gate mutations',()=>pressMutations()],['stale offer index',()=>assert.throws(()=>heldPanelPresentation(staleOfferIndex(city)),e=>e?.code==='ERR_ASSERTION')]]){
+    for(const [name,fn]of [['gate',()=>panelGateCases()],['held original functions',()=>heldPanelPresentation()],['cleanup',()=>gatePanelLifecycle()],['gate mutations',()=>pressMutations()],['stale offer index',()=>{const altered=staleOfferIndex(city);assert.throws(()=>heldPanelPresentation(altered),e=>e?.code==='ERR_ASSERTION');}]]){
       try{log(true,'D052 focused press '+name,fn());}catch(e){log(false,'D052 focused press '+name,e.stack);}
     }
   }else if(process.argv[2]==='--baseline'){

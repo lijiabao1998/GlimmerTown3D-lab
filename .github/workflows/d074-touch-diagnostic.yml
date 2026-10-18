@@ -1,0 +1,52 @@
+name: D074 native touch release diagnostic (no deployment)
+on:
+  push:
+    branches: ['codex/d074-touch-repair']
+permissions:
+  contents: read
+concurrency:
+  group: d074-touch-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Restore original smoke CJK font prerequisite and record manifest
+        shell: bash
+        run: |
+          mkdir -p scratch/d074-full-context-environment
+          fc-list | sort > scratch/d074-full-context-environment/fonts-before.txt
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+          dpkg-query -W fonts-wqy-zenhei > scratch/d074-full-context-environment/font-package.txt
+          fc-list | sort > scratch/d074-full-context-environment/fonts-after.txt
+          fc-match 'sans-serif:lang=zh-tw' > scratch/d074-full-context-environment/cjk-match.txt
+          fc-match 'WenQuanYi Zen Hei' | tee scratch/d074-full-context-environment/zenhei-match.txt
+          grep -qi 'WenQuanYi Zen Hei' scratch/d074-full-context-environment/zenhei-match.txt
+          sha256sum /usr/share/fonts/truetype/wqy/wqy-zenhei.ttc > scratch/d074-full-context-environment/zenhei-sha256.txt
+          node --version > scratch/d074-full-context-environment/node-version.txt
+          google-chrome --version > scratch/d074-full-context-environment/chrome-version.txt
+          cat /etc/os-release > scratch/d074-full-context-environment/os-release.txt
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Original full smoke context with bounded D052 tracing
+        run: node tools/d074-full-context-diagnostic.mjs 2>&1 | tee full-context-smoke-run.txt; exit ${PIPESTATUS[0]}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d074-touch-diagnostic-${{ github.sha }}
+          path: |
+            scratch/d074-full-context-diagnostic/
+            scratch/d074-full-context-environment/
+            scratch/shots/
+            full-context-smoke-run.txt
+          if-no-files-found: error
+          retention-days: 14
