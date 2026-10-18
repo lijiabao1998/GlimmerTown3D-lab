@@ -10,7 +10,7 @@ concurrency:
 jobs:
   diagnose:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,12 +22,15 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run build
-      - name: Fixed observer-ablation and CPU-load matrix
-        run: node tools/d074-touch-matrix.mjs
+      - name: Original full smoke context with bounded D052 tracing
+        run: node tools/d074-full-context-diagnostic.mjs 2>&1 | tee full-context-smoke-run.txt; exit ${PIPESTATUS[0]}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: d074-touch-diagnostic-${{ github.sha }}
-          path: scratch/d074-touch-matrix/
+          path: |
+            scratch/d074-full-context-diagnostic/
+            scratch/shots/
+            full-context-smoke-run.txt
           if-no-files-found: error
           retention-days: 14
