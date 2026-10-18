@@ -10,6 +10,9 @@
 
 ---
 
+| D077 修正候選 | [D077](docs/D077-british-service-lodges-ten.md) | 第9批十款英式服務建築與旅館；保留初版72個必要牆面樣點遮擋失敗，移除新門面覆片、擴大k119v0院落並降低k119v1附翼接簷 | 修正focused幾何26/26、完整frame32/32；50439/50439必要樣點與24942/24942獨立舊基線全可見，66組原始射線完全對拍；90款結構唯一與原預算保留；正式同head完整CI待驗 | inspection e5d36bea | run39144514997兩尺寸68張真實WebGL原圖及全部manifest核對成功；旅館原角保留並新增補角 | 未合併未上線；初版frame31/32殘差fixture絕對偏移失敗保留，僅精確分phase修正pin後完整重驗通過，18分量及1e-15界限不變。正式CI與發布待完成。k116沿用H=.12；全為既有saved/import槽，沒有新增建造工具 |
+| D076 正式發布 | [PR28](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/28) | 第8批十款建築；main7d4df8a907368a25f1ff92958b8b70ae85b8ad1c | PR39128618327全42驗證job成功；main39134674577全43job及全部step成功，Pages15:19:30UTC完成 | 7d4df8a9 | 既有圖片確認及代審完成；15:21:45UTC公站1404808bytes與本次Pages產物逐byte一致，SHA8b2817cca06df3de2ece11f18285dd3157ef06e49726d260ff3c61ad736eabe5 | 累計8/20波80/200棟；D075失敗及D076首次歷史實拍隔離失敗保留；未做實體Android手動驗收 |
+
 | D076 歷史實拍隔離修復 | [D076](docs/D076-british-health-dispatch-ten.md) | PR28初次CI39116968344保留39成功／3失敗／1跳過：D074三尺寸AFTER裸URL誤啟用D076，固定D074 oracle正確拒絕 | 原始瀏覽器幾何與D076成功產物逐項相同；舊碼首紅保留，僅修D074捕獲URL與相應phase負控／標籤，所有模型／oracle／fixture／門檻不動 | 初次2771ef32，修復待驗 | D076原360張實拍已通過；修復後D074三尺寸與新head完整CI待驗 | 未合併未上線，不以其他綠燈取代失敗門檻 |
 
 | D076 替換候選 | [D076](docs/D076-british-health-dispatch-ten.md) | 第8批保留六款，四款改用已通過基線可行性檢查的k149調度建築；預先新卡，不修改D075凍結驗收 | focused幾何19/19、frame30/30與全部歷史守衛成功；正式同head完整CI待驗 | 獨立實拍47339e56 | run39111457564三尺寸360原圖及45對照核驗成功 | 完整正式CI及發布待完成；尚不計新增完成數 |

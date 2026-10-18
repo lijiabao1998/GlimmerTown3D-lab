@@ -1,3 +1,6 @@
+// D077-BEGIN service-lodge-import
+import { SERVICE_LODGE_BUILDINGS } from './content/britishServiceLodges.ts';
+// D077-END service-lodge-import
 // D076-BEGIN health-response-import
 import { HEALTH_RESPONSE_BUILDINGS } from './content/britishHealthResponse.ts';
 // D076-END health-response-import
@@ -196,7 +199,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const farmMemorialOn = !['farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D076-BEGIN health-response-enabled
   const healthResponseOn = !['healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D077-BEGIN service-lodge-enabled
+  const serviceLodgeOn = !['serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D077-END service-lodge-enabled
 // D076-END health-response-enabled
 // D074-END farm-memorial-enabled
 // D073-END emergency-hotel-enabled
@@ -340,6 +346,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let healthResponseForcedV: number | null = null;
   const healthResponseView = (c: City): City => healthResponseForcedV === null ? c : { ...c, buildings: c.buildings.map(b => HEALTH_RESPONSE_BUILDINGS.some(slot => slot.k === b.k && slot.v === healthResponseForcedV) ? { ...b, v: healthResponseForcedV! } : b) };
 // D076-END health-response-view
+// D077-BEGIN service-lodge-view
+  let serviceLodgeForcedV: number | null = null;
+  const serviceLodgeView = (c: City): City => serviceLodgeForcedV === null ? c : { ...c, buildings: c.buildings.map(b => SERVICE_LODGE_BUILDINGS.some(slot => slot.k === b.k && slot.v === serviceLodgeForcedV) ? { ...b, v: serviceLodgeForcedV! } : b) };
+// D077-END service-lodge-view
 // D074-BEGIN farm-memorial-view
   let farmMemorialForcedV: number | null = null;
   const farmMemorialView = (c: City): City => farmMemorialForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FARM_MEMORIAL_BUILDINGS.some(slot => slot.k === b.k && slot.v === farmMemorialForcedV) ? { ...b, v: farmMemorialForcedV! } : b) };
@@ -361,7 +371,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D073-BEGIN emergency-hotel-scene
 // D074-BEGIN farm-memorial-scene
 // D076-BEGIN health-response-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c)))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D077-BEGIN service-lodge-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(serviceLodgeView(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c))))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D077-END service-lodge-scene
 // D076-END health-response-scene
 // D074-END farm-memorial-scene
 // D073-END emergency-hotel-scene
@@ -1870,6 +1882,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D076-BEGIN health-response-gt
     healthResponseV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3) throw new Error('healthResponseV supports saved variants 0, 1, 2, 3 or null'); healthResponseForcedV = v; rebuildScene(true); needsRender = true; draw(); return healthResponseForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
 // D076-END health-response-gt
+// D077-BEGIN service-lodge-gt
+    serviceLodgeV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 4) throw new Error('serviceLodgeV supports saved variants 0, 1, 2, 4 or null'); serviceLodgeForcedV = v; rebuildScene(true); needsRender = true; draw(); return serviceLodgeForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
+// D077-END service-lodge-gt
 // D074-BEGIN farm-memorial-gt
     tilt: (rad: number) => { if (!Number.isFinite(rad)) throw new Error('tilt requires a finite angle'); controls.rotateUp?.(rad); invalidate(); }, // Existing OrbitControls limits apply; capture-only camera movement.
     farmMemorialV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3 && v !== 4) throw new Error('farmMemorialV supports saved variants 0, 1, 2, 3, 4 or null'); farmMemorialForcedV = v; rebuildScene(true); needsRender = true; draw(); return farmMemorialForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
