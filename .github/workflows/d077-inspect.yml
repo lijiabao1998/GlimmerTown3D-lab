@@ -1,0 +1,54 @@
+name: D077 inspection-only WebGL images (no deployment or merge approval)
+on:
+  push:
+    branches: ['codex/d077-inspection']
+permissions:
+  contents: read
+concurrency:
+  group: d077-inspection-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  inspect:
+    if: github.ref == 'refs/heads/codex/d077-inspection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [360, 1440]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Original CJK font prerequisite and environment provenance
+        shell: bash
+        run: |
+          mkdir -p scratch/d077-inspection/environment
+          fc-list | sort > scratch/d077-inspection/environment/fonts-before.txt
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+          dpkg-query -W fonts-wqy-zenhei > scratch/d077-inspection/environment/font-package.txt
+          fc-list | sort > scratch/d077-inspection/environment/fonts-after.txt
+          fc-match 'sans-serif:lang=zh-tw' > scratch/d077-inspection/environment/cjk-match.txt
+          fc-match 'WenQuanYi Zen Hei' | tee scratch/d077-inspection/environment/zenhei-match.txt
+          grep -qi 'WenQuanYi Zen Hei' scratch/d077-inspection/environment/zenhei-match.txt
+          sha256sum /usr/share/fonts/truetype/wqy/wqy-zenhei.ttc > scratch/d077-inspection/environment/zenhei-sha256.txt
+          node --version > scratch/d077-inspection/environment/node-version.txt
+          google-chrome --version > scratch/d077-inspection/environment/chrome-version.txt
+          cat /etc/os-release > scratch/d077-inspection/environment/os-release.txt
+      - run: npm run build
+      - name: Actual production gallery originals, inspection only
+        run: node tools/d077-inspect.mjs
+        env:
+          D077_INSPECT_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d077-inspection-only-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d077-inspection/
+          if-no-files-found: error
+          retention-days: 14

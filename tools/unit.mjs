@@ -696,6 +696,8 @@ await guard('./unit-d074-touch-repair.mjs', 'd074TouchRepairGuards');
 await guard('./d074-touch-repair-scope.mjs', 'd074TouchRepairScopeGuards');
 await guard('./unit-d076.mjs', 'd076Guards');
 await guard('./unit-d076-frame.mjs', 'd076FrameGuards');
+await guard('./unit-d077.mjs', 'd077Guards');
+await guard('./unit-d077-frame.mjs', 'd077FrameGuards');
 await guard('./unit-evidence.mjs', 'evidenceImageGuards');
 
 const sec = ((Date.now() - t0) / 1000).toFixed(1);

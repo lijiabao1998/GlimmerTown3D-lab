@@ -69,7 +69,8 @@ export async function d076FrameGuards(log=()=>{}){
   for(const source of D076_CAPTURE_SOURCES){
    const before=d076CaptureQuery(source.sample,'before'),after=d076CaptureQuery(source.sample,'after');
    assert.equal(before,'sample='+source.sample+'&clean=1&healthResponseArt=legacy');
-   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.equal(after,'sample='+source.sample+'&clean=1&serviceLodgeArt=legacy');
+   const serviceCondition=cityView.match(/const serviceLodgeOn = ([^;]+);/);assert.ok(serviceCondition,'new phase has explicit dispatch');const serviceEnabled=Function('q','return ('+serviceCondition[1]+')');assert.equal(serviceEnabled(new URLSearchParams(after)),false,'historical D076 AFTER explicitly suppresses D077');assert.equal(serviceEnabled(new URLSearchParams(before)),false,'historical D076 BEFORE also suppresses D077');assert.equal(serviceEnabled(new URLSearchParams(after.replace('&serviceLodgeArt=legacy',''))),true,'missing historical isolation mutant enables D077 and must reject');assert.throws(()=>assertD076CaptureUrl('http://127.0.0.1:8370/?'+after.replace('&serviceLodgeArt=legacy',''),source.sample,'after'),/actual browser URL/);
    assert.notEqual(before,after,'D076 phases cannot both load legacy artwork');
    for(const [phase,query] of [['before',before],['after',after]])assertD076CaptureUrl('http://127.0.0.1:8370/?'+query,source.sample,phase);
    assert.throws(()=>assertD076CaptureUrl('http://127.0.0.1:8370/?'+before,source.sample,'after'),/actual browser URL/,'actual historical URL cannot masquerade as AFTER');
