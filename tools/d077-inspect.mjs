@@ -34,8 +34,9 @@ const provenance={commit:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encod
   scriptSha256:sha(fs.readFileSync(path.join(ROOT,'tools/d077-inspect.mjs')))};
 if(provenance.githubSha)assert.equal(provenance.commit,provenance.githubSha,'runner checkout equals recorded build commit');
 // Standard camera formula is exactly the D077 capture plan. No private camera
-// assignment, altered clipping, alternate angle, or scene isolation is used.
-const zoomFor=(n,shot,v)=>shot.k?Math.min(8,.70*.84*n*(v.W/v.H)/(shot.size*Math.SQRT2)):Math.max(.6,.54*v.W/v.H);
+// assignment, altered clipping or scene isolation is used. Explicit supplementary
+// guesthouse views retain all original shots and use the fixed legal-view plan.
+const zoomFor=(n,shot,v)=>shot.additionalView?8:shot.k?Math.min(8,.70*.84*n*(v.W/v.H)/(shot.size*Math.SQRT2)):Math.max(.6,.54*v.W/v.H);
 async function camera(page,frames,n,shot,v){
   await page.evaluate(`__gt.view(${shot.x},${shot.z},${zoomFor(n,shot,v)});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
   await frames(25);let stable=0,last=await page.evaluate('__gt.cam()');
@@ -44,7 +45,13 @@ async function camera(page,frames,n,shot,v){
     const delta=Math.max(...['pos','target'].flatMap(k=>next[k].map((x,j)=>Math.abs(x-last[k][j]))),Math.abs(next.zoom-last.zoom));
     stable=delta<1e-9?stable+1:0;last=next;
   }
-  assert.equal(stable,2,'standard production camera visibly settled');return last;
+  assert.equal(stable,2,'standard production camera visibly settled');
+  if(shot.additionalView){
+    await page.evaluate('__gt.spin(Math.PI/2);__gt.tilt(-0.27227136331111534);for(let i=0;i<900;i++)__gt.spin(0)');
+    last=await page.evaluate('__gt.cam()');await frames(20);
+    assert.deepEqual(await page.evaluate('__gt.cam()'),last,'supplementary camera exactly settled');
+  }
+  return last;
 }
 async function phase(v,name,report){
   const item={phase:name,viewport:v,query:'sample=gallery&clean=1'+(name==='before'?'&serviceLodgeArt=legacy':''),shots:[],captureComplete:false};
@@ -81,6 +88,7 @@ async function phase(v,name,report){
           const row=targets.find(b=>b[1]===slot.k);assert.ok(row,'actual source owner for each slot');
           const [owner,k,x,z,size,lv,sourceVariant,y0]=row;
           shots.push({id:variant+'-k'+k+'-v'+force,name:slot.id,k,renderedVariant:force,sourceVariant,owner,lv,y0,parcel:{x,z,size},x:x+size/2,z:z+size/2,size});
+          if(k===81)shots.push({...shots.at(-1),id:shots.at(-1).id+'-supplement-yaw90',name:slot.id+' supplementary yaw90',additionalView:true,yaw:Math.PI/2,elevation:.08*Math.PI});
         }
         for(const shot of shots){
           const cam=await camera(page,frames,n,shot,v),pixels=await page.evaluate(PIXELS);
@@ -99,7 +107,7 @@ async function phase(v,name,report){
       }
       assert.equal(await page.evaluate('__gt.serviceLodgeV(null)'),null,'restore original gallery variants');await frames(3);
       assert.equal(await page.evaluate(WORLD),world,'inspection restores untouched original gallery world');
-      assert.equal(item.shots.length,15,'five gallery overviews plus ten closeups per phase');
+      assert.equal(item.shots.length,17,'five gallery overviews plus ten original closeups and two supplemental guesthouse views per phase');
       assert.deepEqual(page.errors,[],'no browser errors');assert.deepEqual(external(page.requests),[],'no external asset requests');
       item.captureComplete=true;
     }finally{item.browserErrors=[...page.errors];item.externalRequests=external(page.requests);item.requestCount=page.requests.length;}
@@ -113,8 +121,8 @@ function index(v,report){
 }
 fs.mkdirSync(OUT,{recursive:true});
 for(const v of viewports){
-  const report={qualification:QUALIFICATION,inspectionOnly:true,mergeAuthorized:false,coverageVerification:'pending',regressionVerification:'pending',captureComplete:false,plannedOriginalPngs:30,actualOriginalPngs:0,viewport:v,provenance,phases:[]};
-  try{await phase(v,'before',report);await phase(v,'after',report);report.actualOriginalPngs=report.phases.reduce((n,p)=>n+p.shots.length,0);assert.equal(report.actualOriginalPngs,30);report.captureComplete=true;index(v,report);}
+  const report={qualification:QUALIFICATION,inspectionOnly:true,mergeAuthorized:false,coverageVerification:'pending',regressionVerification:'pending',captureComplete:false,plannedOriginalPngs:34,actualOriginalPngs:0,viewport:v,provenance,phases:[]};
+  try{await phase(v,'before',report);await phase(v,'after',report);report.actualOriginalPngs=report.phases.reduce((n,p)=>n+p.shots.length,0);assert.equal(report.actualOriginalPngs,34);report.captureComplete=true;index(v,report);}
   catch(error){report.error=error.stack??String(error);throw error;}
   finally{report.actualOriginalPngs=report.phases.reduce((n,p)=>n+p.shots.length,0);write(`D077-inspection-${v.W}.json`,report);}
 }

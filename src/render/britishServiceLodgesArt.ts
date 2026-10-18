@@ -1,19 +1,18 @@
 // D077: original code-native British utility buildings, kitchens and guesthouses.
-// Every architectural wall/roof is in W/O. D contains only flush facade details
-// and ground paving. Existing parcel size, inherited H and owner remain untouched.
+// Every architectural wall/roof is in W/O. Facades use the existing window shader;
+// D contains only ground paving. Parcel size, inherited H and owner stay untouched.
 import { col, type Pen } from './kindArt.ts';
 import { WIN_STYLE } from './windows.ts';
 import { SERVICE_LODGE_BUILDINGS } from '../content/britishServiceLodges.ts';
 
 type V3 = [number, number, number];
 type P2 = [number, number];
-const C = { brick: '#a56650', red: '#8e5143', stone: '#d7cbb4', pale: '#e6dfcd', slate: '#4c5b62', green: '#3a6155', glass: '#84adb7', dark: '#2d4447', paving: '#bbb399' };
+const C = { brick: '#a56650', red: '#8e5143', stone: '#d7cbb4', pale: '#e6dfcd', slate: '#4c5b62', green: '#3a6155', glass: '#84adb7', paving: '#bbb399' };
 const at = (p:Pen,x:number,z:number,h:number):V3 => [p.X(x),p.a.y0+p.H*h,p.Z(z)];
 const rect = (a:number,b:number,c:number,d:number):P2[] => [[a,c],[b,c],[b,d],[a,d]];
 const normal = (a:P2,b:P2):V3 => { const dx=b[0]-a[0],dz=b[1]-a[1],n=Math.hypot(dx,dz);return [dz/n,0,-dx/n]; };
 const cap = (p:Pen,a:number,b:number,c:number,d:number,h:number,color=C.slate) => p.a.O.quad(at(p,a,c,h),at(p,b,c,h),at(p,b,d,h),at(p,a,d,h),[0,1,0],col(color));
 const paving = (p:Pen,a:number,b:number,c:number,d:number) => p.flat(a,b,c,d,p.H*.004,C.paving);
-const front = (p:Pen,a:number,b:number,z:number,h0:number,h1:number,color:string) => p.a.D.quad(at(p,a,z,h0),at(p,b,z,h0),at(p,b,z,h1),at(p,a,z,h1),[0,0,1],col(color));
 
 // Perimeter order is clockwise in x/z. Sloping eaves retain full trapezoid walls.
 function edge(p:Pen,a:P2,b:P2,h0:number,ha:number,hb:number,color:string,win:false|string=false){
@@ -71,9 +70,6 @@ function dispatch(p:Pen){
   for(let i=1;i<7;i++)g.triangle(at(p,...points[0],1),at(p,...points[i],1),at(p,...points[i+1],1),[0,1,0],col(C.slate));
   const entry:P2[]=[[.76,.36],[.92,.58],[.76,.62]];
   walls(p,entry,0,.30,C.stone);g.triangle(at(p,...entry[0],.30),at(p,...entry[1],.30),at(p,...entry[2],.30),[0,1,0],col(C.green));
-  // A genuine flush door on the slanted entrance face, with its true normal.
-  const n=normal(entry[1],entry[2]),a:P2=[.88+n[0]*.001,.59+n[2]*.001],b:P2=[.80+n[0]*.001,.61+n[2]*.001];
-  p.a.D.quad(at(p,...a,.02),at(p,...b,.02),at(p,...b,.23),at(p,...a,.23),n,col(C.dark));
 }
 function singleHip(p:Pen){
   const points=rect(.12,.88,.22,.76),g=p.a.O;walls(p,points,0,.56,C.stone,'arch');
@@ -87,28 +83,30 @@ const BUILD:Record<number,Readonly<Record<number,(p:Pen)=>void>>>={
     0:p=>{
       hall(p,.12,.70,.28,.66,.50,.78,C.brick);
       block(p,.78,.90,.16,.36,0,1,C.stone,'grid');
-      front(p,.31,.45,.661,0,.32,C.green);paving(p,.15,.66,.70,.84);paving(p,.30,.44,.84,.95);
+      paving(p,.15,.66,.70,.84);paving(p,.30,.44,.84,.95);
     },
     1:p=>{
       lRange(p,[[.12,.16],[.72,.16],[.72,.36],[.35,.36],[.35,.78],[.12,.78]],.64,C.brick,'ribbon');
       pyramid(p,.54,.80,.52,.78,.57,.67,.65,1,C.stone,false);
     },
-    2:p=>{lantern(p);front(p,.41,.55,.761,0,.32,C.green);paving(p,.40,.56,.78,.94);},
+    2:p=>{lantern(p);paving(p,.40,.56,.78,.94);},
   },
   119:{
     0:p=>{
-      mono(p,.12,.49,.18,.63,.65,.45,C.brick,'grid');mono(p,.57,.88,.34,.74,.36,.51,C.stone,'ribbon');
+      // A genuinely open working court separates the unequal cooking halls.
+      mono(p,.12,.45,.18,.63,.65,.45,C.brick,'grid');mono(p,.61,.88,.34,.74,.36,.51,C.stone,'ribbon');
       block(p,.73,.82,.12,.21,0,1,C.red);
-      front(p,.24,.36,.631,0,.30,C.dark);front(p,.66,.79,.741,0,.25,C.green);paving(p,.15,.50,.68,.86);
+      paving(p,.15,.50,.68,.86);
     },
     1:p=>{
       hall(p,.12,.48,.16,.78,.57,.89,C.brick,'z');
-      mono(p,.48,.86,.30,.63,.38,.25,C.stone,'punch');block(p,.70,.78,.14,.22,0,1,C.red);
+      // The lower loading roof leaves a real brick wall band below the main eave.
+      mono(p,.48,.86,.30,.63,.34,.25,C.stone,'punch');block(p,.70,.78,.14,.22,0,1,C.red);
     },
     2:p=>{
       pyramid(p,.14,.58,.20,.64,.54,.36,.42,.88,C.stone);
       block(p,.58,.90,.34,.64,0,.30,C.brick,'ribbon',C.green);block(p,.72,.79,.16,.23,0,1,C.red);
-      front(p,.68,.80,.641,0,.20,C.dark);paving(p,.66,.82,.67,.90);
+      paving(p,.66,.82,.67,.90);
     },
   },
   116:{
@@ -116,7 +114,6 @@ const BUILD:Record<number,Readonly<Record<number,(p:Pen)=>void>>>={
       // Deliberately retain the inherited H=.12 low profile; no height repair.
       lRange(p,[[.12,.16],[.68,.16],[.68,.33],[.36,.33],[.36,.74],[.12,.74]],1,C.brick,'grid');
       mono(p,.52,.88,.49,.77,.53,.35,C.stone,'ribbon');
-      front(p,.16,.30,.741,.22,.68,C.dark);front(p,.60,.80,.771,.10,.25,C.dark);
       paving(p,.40,.48,.38,.86);paving(p,.52,.88,.81,.91);
     },
   },
