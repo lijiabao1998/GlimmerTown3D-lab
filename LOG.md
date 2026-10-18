@@ -10,6 +10,8 @@
 
 ---
 
+| D076 歷史實拍隔離修復 | [D076](docs/D076-british-health-dispatch-ten.md) | PR28初次CI39116968344保留39成功／3失敗／1跳過：D074三尺寸AFTER裸URL誤啟用D076，固定D074 oracle正確拒絕 | 原始瀏覽器幾何與D076成功產物逐項相同；舊碼首紅保留，僅修D074捕獲URL與相應phase負控／標籤，所有模型／oracle／fixture／門檻不動 | 初次2771ef32，修復待驗 | D076原360張實拍已通過；修復後D074三尺寸與新head完整CI待驗 | 未合併未上線，不以其他綠燈取代失敗門檻 |
+
 | D076 替換候選 | [D076](docs/D076-british-health-dispatch-ten.md) | 第8批保留六款，四款改用已通過基線可行性檢查的k149調度建築；預先新卡，不修改D075凍結驗收 | focused幾何19/19、frame30/30與全部歷史守衛成功；正式同head完整CI待驗 | 獨立實拍47339e56 | run39111457564三尺寸360原圖及45對照核驗成功 | 完整正式CI及發布待完成；尚不計新增完成數 |
 | D075 未通過並保留 | [D075](docs/D075-british-health-response-ten.md) | 十款初始候選與56張inspection原圖 | 原嚴格coverage失敗：舊8298/8389，另桌機k135v0近景頂點超框；原始記錄全保留 | a1dc2f95 inspection-only | run39105758400 360/1440 inspection成功，非完整驗收 | 未合併未上線；四個受阻槽位由新卡D076替換，D075卡與證據不改，不計完成 |
 | D074 發布完成 | [PR26](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/26) | 第7輪十款建築與有界原生touch展示修補；main94024b6e | release39098621210全36jobs成功，HTTP200且1396867bytes與候選逐byte相同，SHA4231fc6a34ab50791bec8adb137aab7a4a87ece4dff089ce91e264b00278de1e | 94024b6e | 原270美術圖及12修復UI圖完成代審 | 原觸控失敗因果未確證；本地D011均值5.85ms及固定ABBA四次超5ms均保留，正式同head CI原門檻1.80ms通過；不聲稱本地通過或性能等價。累計7/20波70/200棟 |
