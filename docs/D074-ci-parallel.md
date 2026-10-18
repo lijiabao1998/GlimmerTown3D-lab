@@ -33,4 +33,9 @@ Revert this CI-only PR. No data migration or application artifact changes are re
 
 ## Implementation and verification log
 
-Not implemented yet. No candidate checks claimed. Full GitHub CI and timing comparison pending.
+- 2026-10-18: Card-first commit `17c9f2d603ede49621eb3137eb7cc428a6ecea69` published before implementation.
+- Implemented independent complete Node guards, a single immutable build, browser smoke and screenshots on separate runners, and the original `smoke` check as a strict all-success aggregator. Browser and screenshot files are combined in the original order into `smoke-<sha>`.
+- Every existing job from `d055` onward, including the complete Pages job, is byte-for-byte unchanged. Workflow triggers, concurrency and permissions are unchanged. Each original primary test/build command still runs exactly once; all ten immutable baseline fetches remain in the Node job.
+- Cloud local checks: 48 CI-helper tests passed, including each non-success stage result and altered/missing/extra artifact data; Node syntax checks, YAML parsing, `git diff --check`, `npm run typecheck` and `npm run build` passed. CLI record/verify passed. Two builds produced identical HTML SHA-256 `4231fc6a34ab50791bec8adb137aab7a4a87ece4dff089ce91e264b00278de1e`.
+- No application, assertion, baseline, package or art changes. No GitHub permissions or settings changed. No other writer workspace used.
+- Not yet done at implementation commit: full candidate GitHub Node/browser/D-matrix CI, actual parallel timing comparison, and main/Pages verification. Exact-candidate run results will be recorded in the draft PR description. Main/Pages cannot be validated until an explicitly approved merge; this PR is not self-merged.
