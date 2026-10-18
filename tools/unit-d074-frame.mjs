@@ -55,7 +55,7 @@ export async function d074FrameGuards(log=()=>{}){
   for(const sample of ['manufactured','gallery-copy',''])assert.throws(()=>createD074FrameOracle(sample,true,0),/known immutable D074 sample/);
   for(const on of [null,undefined,0,1,'after'])assert.throws(()=>createD074FrameOracle('gallery',on,0),/phase must be boolean/);
  });
- test('actual capture path selects legacy BEFORE and default farmMemorial AFTER without inherited legacy flags',()=>{
+ test('actual capture path preserves published D073 BEFORE and D074 AFTER with newer D076 disabled',()=>{
   const capture=fs.readFileSync(new URL('./d074-capture.mjs',import.meta.url),'utf8'),cityView=fs.readFileSync(new URL('../src/cityView.ts',import.meta.url),'utf8');
   assert.match(capture,/query:d074CaptureQuery\(source\.sample,phase\)/,'actual capture metadata uses the tested query helper');
   assert.match(capture,/await p\.open\(item\.query\)/,'production browser opens that same tested query');
@@ -64,23 +64,35 @@ export async function d074FrameGuards(log=()=>{}){
   const artworkEnabled=Function('q','return ('+condition[1]+')');
   const flags=['farmMemorialArt','emergencyHotelArt','campusArt','educationArt','commerceThirdArt','commerceVariantArt','facilityArt','landmarkArt','metropolisArt','houseArt','towerArt','commerceArt','industryArt','villageArt','streetArt','britishArt','heritageArt'];
   assert.equal(flags.length,17,'all historical flag generations are explicitly retained');
+  const newerCondition=cityView.match(/const healthResponseOn = ([^;]+);/);assert.ok(newerCondition,'actual newer D076 dispatch condition');
+  const newerArtworkEnabled=Function('q','return ('+newerCondition[1]+')');
+  assert.deepEqual([...newerCondition[1].matchAll(/'(\w+Art)'/g)].map(m=>m[1]),['healthResponseArt',...flags],'exact production cascade includes the D076 isolation flag and every old suppression flag');
   for(const flag of flags){assert.ok(condition[1].includes("'"+flag+"'"),'production condition includes '+flag);assert.equal(artworkEnabled(new URLSearchParams('sample=gallery&clean=1&'+flag+'=legacy')),false,'legacy '+flag+' suppresses D074');}
   for(const source of D074_CAPTURE_SOURCES){
    const before=d074CaptureQuery(source.sample,'before'),after=d074CaptureQuery(source.sample,'after');
    assert.equal(before,'sample='+source.sample+'&clean=1&farmMemorialArt=legacy');
-   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.equal(after,'sample='+source.sample+'&clean=1&healthResponseArt=legacy');
    assert.notEqual(before,after,'D074 phases cannot both load legacy artwork');
    for(const [phase,query] of [['before',before],['after',after]])assertD074CaptureUrl('http://127.0.0.1:8370/?'+query,source.sample,phase);
    assert.throws(()=>assertD074CaptureUrl('http://127.0.0.1:8370/?'+before,source.sample,'after'),/actual browser URL/,'actual historical URL cannot masquerade as AFTER');
    for(const flag of flags)assert.throws(()=>assertD074CaptureUrl('http://127.0.0.1:8370/?'+after+'&'+flag+'=legacy',source.sample,'after'),/actual browser URL/,'actual inherited '+flag+' must reject');
    assert.equal(artworkEnabled(new URLSearchParams(before)),false,'BEFORE selects the exact D073 production phase');
-   assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER selects the new D074 production phase');
+   assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER retains the exact published D074 production phase');
+   for(const query of [before,after])assert.equal(newerArtworkEnabled(new URLSearchParams(query)),false,'both historical phases disable D076 without changing their D074 selection');
+   const bare='sample='+source.sample+'&clean=1';
+   assert.equal(artworkEnabled(new URLSearchParams(bare)),true,'failed bare AFTER still enables D074');
+   assert.equal(newerArtworkEnabled(new URLSearchParams(bare)),true,'failed bare AFTER also enables D076 in the actual production source');
+   assert.throws(()=>assert.equal(newerArtworkEnabled(new URLSearchParams(bare)),false),{name:'AssertionError'},'the failed bare AFTER cannot satisfy D076 phase isolation');
+   for(const wrong of [bare,after.replace('healthResponseArt=legacy','healthResponseArt=other'),after+'&healthResponseArt=legacy',before+'&healthResponseArt=legacy'])assert.throws(()=>assertD074CaptureUrl('http://127.0.0.1:8370/?'+wrong,source.sample,wrong.startsWith(before)?'before':'after'),/actual browser URL/,'omitted, changed, duplicate or unrecorded isolation flags reject');
    // Reproduce the failed CI URL: an after-phase legacy suffix must fail the same
    // dispatch check, rather than being excused as numerical normal drift.
    assert.throws(()=>assert.equal(artworkEnabled(new URLSearchParams(after+'&farmMemorialArt=legacy')),true),{name:'AssertionError'});
   }
   for(const phase of [null,undefined,'legacy','farmMemorial','BEFORE'])assert.throws(()=>d074CaptureQuery('gallery',phase),/explicit D074/);
   assert.throws(()=>d074CaptureQuery('gallery&farmMemorialArt=legacy','after'),/known D074/);
+  assert.match(capture,/BEFORE = published D073 \/ farmMemorialArt=legacy; AFTER = published D074 \/ healthResponseArt=legacy/,'comparison sheet labels disclose both exact historical phases');
+  assert.match(capture,/before:'farmMemorialArt=legacy \(published D073\)' ,after:'healthResponseArt=legacy \(published D074\)'/,'capture report labels disclose both exact historical phases');
+  assert.doesNotMatch(capture,/default D074|D074 default/,'current D076 default is never mislabeled as published D074');
  });
  test('capture plan retains all 168 originals with bounded independently justified roof angles and stability checks',()=>{
   const plan=d074CapturePlan(),extraCount=Object.values(D074_ALTERNATE_VIEWS).reduce((n,a)=>n+a.length,0),repeatCount=D074_REPEAT_SLOTS.length;
