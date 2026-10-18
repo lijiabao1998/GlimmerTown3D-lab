@@ -1,3 +1,4 @@
+# CI-only release bookkeeping and exact-head verification evidence: LOG.md / PR #27.
 # 每次推送：型別與完整 Node 守衛獨立跑；單次建置後，完整瀏覽器煙霧與樣張並行。
 # smoke 聚合門檻確認每一項成功；瀏覽器與樣張使用同一次建置的逐位元組相同成品。
 # main 綠燈之後把 dist/index.html 發到 GitHub Pages：手機直接開網址就能看、能轉。
