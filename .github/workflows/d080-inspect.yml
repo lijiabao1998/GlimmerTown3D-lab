@@ -1,0 +1,54 @@
+name: D080 inspection-only WebGL images (no deployment or merge approval)
+on:
+  push:
+    branches: ['codex/d080-inspection']
+permissions:
+  contents: read
+concurrency:
+  group: d080-inspection-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  inspect:
+    if: github.ref == 'refs/heads/codex/d080-inspection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [360, 1440]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Original CJK font prerequisite and environment provenance
+        shell: bash
+        run: |
+          mkdir -p scratch/d080-inspection/environment
+          fc-list | sort > scratch/d080-inspection/environment/fonts-before.txt
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+          dpkg-query -W fonts-wqy-zenhei > scratch/d080-inspection/environment/font-package.txt
+          fc-list | sort > scratch/d080-inspection/environment/fonts-after.txt
+          fc-match 'sans-serif:lang=zh-tw' > scratch/d080-inspection/environment/cjk-match.txt
+          fc-match 'WenQuanYi Zen Hei' | tee scratch/d080-inspection/environment/zenhei-match.txt
+          grep -qi 'WenQuanYi Zen Hei' scratch/d080-inspection/environment/zenhei-match.txt
+          sha256sum /usr/share/fonts/truetype/wqy/wqy-zenhei.ttc > scratch/d080-inspection/environment/zenhei-sha256.txt
+          node --version > scratch/d080-inspection/environment/node-version.txt
+          google-chrome --version > scratch/d080-inspection/environment/chrome-version.txt
+          cat /etc/os-release > scratch/d080-inspection/environment/os-release.txt
+      - run: npm run build
+      - name: Actual production gallery originals, inspection only
+        run: node tools/d080-inspect.mjs
+        env:
+          D080_INSPECT_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d080-inspection-only-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d080-inspection/
+          if-no-files-found: error
+          retention-days: 14
