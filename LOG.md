@@ -10,6 +10,7 @@
 
 ---
 
+| D078 CI等價分區候選 | [補充卡](docs/D078-ci-frame-partition.md) | 與美術獨立commit；預設unit仍完整115組註冊，CI historical完整inline＋114組與獨立D078 frame並行，兩者聯集不漏不重；smoke要求全部成功及frame證據artifact | 92/92 helper與分區負控、六JS語法、YAML唯一鍵、原指令與斷言位元組保留、diff檢查通過；兩job原120分鐘不變 | 待正式最新headCI | 完整frame report／摘要／來源／失敗診斷與log一律留存 | 原單次frame96分50.877秒及33/34首紅保留；尚未實測正式並行耗時，不保證提速；全正式CI／合併發布仍待完成 |
 | D078 候選 | [D078](docs/D078-british-neighbourhood-pavilions-ten.md) | 第10批十款英式鄰里亭舍；獨立122面／230三角形／17封閉量體，保留七個被拒舊槽位及全部首紅 | 幾何30/30；首次完整frame96分50.877秒33/34，70317必要點及額外封存33558點、96 raw對拍、384缺面及32屋頂負控通過；新增D067子pass斷言抄錯8三角形，獨立22da封存證明正確既有值28308/80530，僅修新增斷言後，原樣六個phase/width回歸與15輸入負控通過；正式最新head完整CI待驗 | inspection0d9fb7d | run39182840740兩尺寸96張實際WebGL原圖與manifest／build全核；3張360原圖已交付，兩尺寸standard及supplement代審；完整三尺寸正式實拍待驗 | 尚未合併或發布，不計完成；不稱首次frame全綠。k130v0有效H=.12、v2 H=.34；全為saved/import槽；原gallery完工，ai120長者中心age7施工中另行標示；部分單角受鄰樓遮擋，以完整多角覆蓋守衛驗證，未做實體手機手動測試 |
 | D077 正式發布 | [PR29](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/29) | 第9批十款英式服務建築與旅館；main22da5314145f96aaa83cfb739c382b86e1d5b0f3 | 正式PR39169234645全45驗證job成功；main39175006873全46job及全部step成功，Pages2026-10-19 00:18:17UTC完成 | 22da5314 | 正式三尺寸372原圖與45對照表全核；00:19:27UTC公站1411515bytes與本次Pages產物逐byte一致，SHA1c834b2b90f2682ac9f92d3c72bd18dad43708f13777eec4de84bfdefb5814da | 累計9/20波90/200棟；額外串行preview39169103598三尺寸45分鐘取消保留為失敗，未延長門檻，正式分離CI完整驗收通過；初版幾何與殘差pin失敗全保留；未做實體手機手動驗收 |
 
