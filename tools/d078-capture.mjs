@@ -894,7 +894,7 @@ async function verifyUploadedGeometry(p,oracle,item){
 export function d078CaptureQuery(sample,phase){
  assert.ok(['gallery','seed516','ai120'].includes(sample),'known D078 capture sample');
  assert.ok(phase==='before'||phase==='after','explicit D078 before/after capture phase');
- return 'sample='+sample+'&clean=1'+(phase==='before'?'&neighbourhoodArt=legacy':'');
+ return 'sample='+sample+'&clean=1&transitUtilityArt=legacy'+(phase==='before'?'&neighbourhoodArt=legacy':'');
 }
 export function assertD078CaptureUrl(actualUrl,sample,phase){
  const actual=new URL(actualUrl),expected=d078CaptureQuery(sample,phase);
