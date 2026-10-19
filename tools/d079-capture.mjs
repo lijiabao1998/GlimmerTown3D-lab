@@ -144,11 +144,11 @@ async function verifyUploadedGeometry(p,oracle,item){
  item.geometrySha256=sha(before.digest);
 }
 // The BEFORE URL selects exactly the published D078 phase. AFTER is the production
-// default; historical capture flags must never leak into either actual D079 browser load.
+// D079 phase. D080 is explicitly isolated off in BOTH phases; all earlier flags remain exact.
 export function d079CaptureQuery(sample,phase){
  assert.ok(['gallery','seed516','ai120'].includes(sample),'known D079 capture sample');
  assert.ok(phase==='before'||phase==='after','explicit D079 before/after capture phase');
- return 'sample='+sample+'&clean=1'+(phase==='before'?'&transitUtilityArt=legacy':'');
+ return 'sample='+sample+'&clean=1'+(phase==='before'?'&transitUtilityArt=legacy':'')+'&communityArt=legacy';
 }
 export function assertD079CaptureUrl(actualUrl,sample,phase){
  const actual=new URL(actualUrl),expected=d079CaptureQuery(sample,phase);

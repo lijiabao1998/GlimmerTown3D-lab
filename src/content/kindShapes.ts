@@ -1,3 +1,6 @@
+// D080-BEGIN community-building-import
+import { COMMUNITY_KINDS } from './britishCommunityBuildings.ts';
+// D080-END community-building-import
 // D079-BEGIN transit-utility-pavilion-import
 import { TRANSIT_UTILITY_PAVILION_KINDS } from './britishTransitUtilityPavilions.ts';
 // D079-END transit-utility-pavilion-import
@@ -264,7 +267,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D077-BEGIN service-lodge-shape
 // D078-BEGIN neighbourhood-pavilion-shape
 // D079-BEGIN transit-utility-pavilion-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false): Shape | null => {
+// D080-BEGIN community-building-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false): Shape | null => {
+  if (communityBuilding && COMMUNITY_KINDS.has(k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion);
+    return previous ? { ...previous, p: { ...previous.p, communityBuilding: true } } : null;
+  }
+// D080-END community-building-shape
   if (transitUtilityPavilion && TRANSIT_UTILITY_PAVILION_KINDS.has(k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion);
     return previous ? { ...previous, p: { ...previous.p, transitUtilityPavilion: true } } : null;

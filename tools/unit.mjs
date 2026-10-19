@@ -707,6 +707,8 @@ await guard('./unit-d078.mjs', 'd078Guards');
 await guard('./unit-d078-frame.mjs', 'd078FrameGuards');
 await guard('./unit-d079.mjs', 'd079Guards');
 await guard('./unit-d079-frame.mjs', 'd079FrameGuards');
+await guard('./unit-d080.mjs', 'd080Guards');
+await guard('./unit-d080-frame.mjs', 'd080FrameGuards');
 await guard('./unit-evidence.mjs', 'evidenceImageGuards');
 
 selection.finish();

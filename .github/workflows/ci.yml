@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # CI-only split: historical Node + D078 frame + D079 frame equal the full Node suite.
+  # CI-only split: historical Node + D078 frame + D079 frame + D080 frame equal the full Node suite.
   # Browser and screenshots retain their entire commands and acceptance limits.
   # Build once; all consumers verify the same immutable artifact ID and digest.
   build:
@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch immutable D066 through D079 source-scope baselines
+      - name: Fetch immutable D066 through D080 source-scope baselines
         run: |
           git fetch --no-tags --depth=1 origin 22da5314145f96aaa83cfb739c382b86e1d5b0f3
           git fetch --no-tags --depth=1 origin 7d4df8a907368a25f1ff92958b8b70ae85b8ad1c
@@ -71,6 +71,7 @@ jobs:
           git fetch --no-tags --depth=1 origin 3527859dfa4d802fda0eaa4a0d96aa05e1471a2d
           git fetch --no-tags --depth=1 origin 91e499b6c0ed0ce0cffdf0c09a35a067a8156c71
           git fetch --no-tags --depth=1 origin 46771cdc00f33759e0a3c45ddf05c3387d4bb4fc
+          git fetch --no-tags --depth=1 origin 23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -171,6 +172,52 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  node-frame-d080:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    outputs:
+      artifact-id: ${{ steps.evidence.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch immutable D066 through D080 source-scope baselines
+        run: |
+          git fetch --no-tags --depth=1 origin 22da5314145f96aaa83cfb739c382b86e1d5b0f3
+          git fetch --no-tags --depth=1 origin 7d4df8a907368a25f1ff92958b8b70ae85b8ad1c
+          git fetch --no-tags --depth=1 origin 94024b6e2195f4d545de1f1af770dfbe98c1777a
+          git fetch --no-tags --depth=1 origin beca506c224ad72f9a890ed20b5aa1fa7b2616f5
+          git fetch --no-tags --depth=1 origin a5674d9bdbfbf439319b50e26c3f864864ab5363
+          git fetch --no-tags --depth=1 origin a69397ed0900b1f0a27bdc3be8e1616d2973fc43
+          git fetch --no-tags --depth=1 origin f689c35d8d061498779321149ccce4443f0ce6de
+          git fetch --no-tags --depth=1 origin 1c40e13a219adb90827acd3b60fb6b7623600b63
+          git fetch --no-tags --depth=1 origin bece722ed2480a3728a274c90bd0170eb52cf389
+          git fetch --no-tags --depth=1 origin ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883
+          git fetch --no-tags --depth=1 origin e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69
+          git fetch --no-tags --depth=1 origin 3527859dfa4d802fda0eaa4a0d96aa05e1471a2d
+          git fetch --no-tags --depth=1 origin 91e499b6c0ed0ce0cffdf0c09a35a067a8156c71
+          git fetch --no-tags --depth=1 origin 46771cdc00f33759e0a3c45ddf05c3387d4bb4fc
+          git fetch --no-tags --depth=1 origin 23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - name: Complete D080 frame oracle (all frozen acceptance and camera-detail controls)
+        run: |
+          mkdir -p scratch/d080-node-frame
+          set -o pipefail
+          node tools/unit-partition.mjs --partition=d080-frame 2>&1 | tee scratch/d080-node-frame/console.log
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        id: evidence
+        if: always()
+        with:
+          name: node-frame-d080-${{ github.sha }}-${{ github.run_attempt }}
+          path: scratch/d080-node-frame/
+          if-no-files-found: error
+          retention-days: 14
+
   browser:
     needs: build
     runs-on: ubuntu-24.04
@@ -258,7 +305,7 @@ jobs:
   # Preserve the original required-check identity. Skips/cancellation are failures,
   # never success. Pages keeps depending on this gate and every existing D job.
   smoke:
-    needs: [build, node, node-frame, node-frame-d079, browser, screenshots]
+    needs: [build, node, node-frame, node-frame-d079, node-frame-d080, browser, screenshots]
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -496,7 +543,7 @@ jobs:
           retention-days: 14
 
   pages:
-    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079]
+    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079, d080]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:
@@ -836,5 +883,35 @@ jobs:
         with:
           name: d079-preview-${{ matrix.width }}-${{ github.sha }}
           path: scratch/d079/
+          if-no-files-found: error
+          retention-days: 14
+
+  d080:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 360, 412]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - name: D080 real ten-model WebGL pairs and existing-city controls
+        run: node tools/d080-capture.mjs
+        env:
+          D080_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d080-preview-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d080/
           if-no-files-found: error
           retention-days: 14

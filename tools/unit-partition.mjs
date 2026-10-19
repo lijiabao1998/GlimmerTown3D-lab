@@ -1,19 +1,25 @@
-// Independent CI runner for the unchanged D078 and additive D079 frame guard exports.
+// Independent CI runner for unchanged D078/D079 and additive D080 frame guard exports.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { D078_FRAME, D079_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
+import { D078_FRAME, D079_FRAME, D080_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const D078_SOURCE_FILES = ['tools/unit-partition.mjs', 'tools/unit-partitions.mjs', 'tools/unit-d078-frame.mjs', 'tools/d078-frame.mjs', 'tools/d078-capture.mjs', 'tools/unit-d078.mjs', 'docs/D078-british-neighbourhood-pavilions-ten.md', 'package-lock.json'];
 
+const D080_SOURCE_FILES = ['tools/unit-partition.mjs', 'tools/unit-partitions.mjs', 'tools/unit-d080-frame.mjs',
+  'tools/d080-frame.mjs', 'tools/d080-capture.mjs', 'tools/unit-d080.mjs',
+  'docs/D080-british-community-buildings-ten.md', 'package-lock.json',
+  'docs/D080-parallel-validation.md', 'tools/d080-baseline.mjs', 'tools/d080-scope.mjs', 'tools/d080-scope-build.mjs',
+  'fixtures/d080-architecture-contract.json', 'docs/D080-initial-architecture.json'];
+
 export function frameProvenance({ partition = 'd078-frame', root = ROOT, env = process.env, git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim() } = {}) {
-  assert.ok(['d078-frame', 'd079-frame'].includes(partition), 'unknown frame provenance partition');
-  const sourceFiles = partition === 'd078-frame' ? D078_SOURCE_FILES : [...D078_SOURCE_FILES.map(file => file.replaceAll('d078', 'd079').replace('D078-british-neighbourhood-pavilions-ten', 'D079-british-transit-utility-pavilions-ten')),
+  assert.ok(['d078-frame', 'd079-frame', 'd080-frame'].includes(partition), 'unknown frame provenance partition');
+  const sourceFiles = partition === 'd080-frame' ? D080_SOURCE_FILES : partition === 'd078-frame' ? D078_SOURCE_FILES : [...D078_SOURCE_FILES.map(file => file.replaceAll('d078', 'd079').replace('D078-british-neighbourhood-pavilions-ten', 'D079-british-transit-utility-pavilions-ten')),
     'docs/D079-parallel-validation.md', 'tools/d079-baseline.mjs', 'tools/d079-scope.mjs', 'tools/d079-scope-build.mjs',
     'fixtures/d079-architecture-contract.json', 'docs/D079-initial-architecture.json'];
   const sha = git(['rev-parse', 'HEAD']), tree = git(['rev-parse', 'HEAD^{tree}']);
@@ -35,8 +41,8 @@ export function frameProvenance({ partition = 'd078-frame', root = ROOT, env = p
 // Dependency injection is used only by fast runner failure/serialization controls.
 export async function runFramePartition({ args = [], load = file => import(file), write = line => console.log(line),
   evidenceDir, provenance = options => frameProvenance(options) } = {}) {
-  const partition = parsePartition(args, ['d078-frame', 'd079-frame'], 'd078-frame');
-  const [file, fn] = partition === 'd078-frame' ? D078_FRAME : D079_FRAME;
+  const partition = parsePartition(args, ['d078-frame', 'd079-frame', 'd080-frame'], 'd078-frame');
+  const [file, fn] = partition === 'd078-frame' ? D078_FRAME : partition === 'd079-frame' ? D079_FRAME : D080_FRAME;
   const card = partition.slice(0, 4).toUpperCase();
   evidenceDir ??= path.join(ROOT, `scratch/${partition.slice(0, 4)}-node-frame`);
   assert.deepEqual(partitionInventory(partition), [file + ':' + fn]);

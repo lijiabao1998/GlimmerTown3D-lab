@@ -1,0 +1,24 @@
+# D080 additive parallel validation
+
+Supplemental scheduling card, frozen before implementation on 2026-10-19. Implements the authorized equal-partition CI scheduling for D080 without changing product behavior, assertions, samples, thresholds, GitHub settings, or existing job limits. Immutable published baseline: `23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e`. The frozen architectural card is `docs/D080-british-community-buildings-ten.md`.
+
+## Acceptance
+
+- Register D080 geometry and frame guards additively. Default unit execution remains the complete ordered inventory and every inline assertion. Historical execution retains all geometry and inline assertions, excluding only the three separately scheduled D078, D079 and D080 frame exports. Verify the actual registration counts and exact ordered, exhaustive, pairwise-disjoint membership; expected counts are 119 default guards, 116 historical guards, and one guard in each frame partition.
+- Preserve every D078 and D079 partition command, job, artifact, assertion and limit. Add independent `node-frame-d080` with the original 120-minute limit and exact D080 baseline fetch. Historical Node retains its 120-minute limit and every previous baseline fetch, adding the D080 baseline.
+- Extend the frame runner additively with exact D080 source paths, including its frozen card, supplemental card, architecture contract and initial architecture. Preserve complete guard reports, all failed assertions, exceptions, incomplete reports, evidence-write failures and source/run provenance. CI checkout must equal workflow SHA, tracked sources must be clean, and workflow identity must be valid.
+- Smoke aggregate requires all seven stages: build, historical Node, D078 frame, D079 frame, D080 frame, browser and screenshots. Require matching evidence from every artifact-producing stage; missing, failed, skipped, cancelled, pending, malformed or absent-artifact inputs fail closed. Artifact upload cannot turn a failed test into success.
+- Add D080 WebGL captures at widths 1440, 360 and 412, with fail-fast disabled, complete mandatory artifacts, the original 45-minute limit and a required Pages dependency. Existing jobs, release dependencies, workflow settings and timeouts remain unchanged except the explicitly additive historical baseline fetch, smoke dependency/evidence inventory and Pages dependency.
+- Fast controls must prove inventory and all negative conditions, exact D080 provenance paths, unchanged prior partition/job blocks, the three-width D080 capture matrix and mandatory Pages gates. Run only targeted partition/fail-closed tests here, not full Node suites or browsers.
+
+## Not yet completed
+
+Implementation and targeted controls pending at card creation. This scheduling card does not assert D080 renderer correctness, geometry or frame coverage, WebGL captures, CI, merge, publication, or physical-device testing. Keep every first-red result.
+
+## Scheduling implementation verification
+
+2026-10-19: `node --test .github/scripts/ci-integrity.test.mjs tools/unit-partitions.test.mjs` passed 200/200 targeted controls on both runs, with zero failed, cancelled or skipped tests. Actual registration parsing confirms 119 default guards and 116 historical guards, each retaining all inline assertions; D078, D079 and D080 frame partitions each contain exactly one guard. Controls verify exact ordered membership, every registration exactly once, all pairwise intersections empty, and rejection of omission, duplication or changed export at each of the 119 registration positions. D080 runner controls preserve complete successful and failed reports, logs, exceptions, absent reports, evidence-write failures and exact source/architecture/run provenance.
+
+Against immutable baseline `23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e`, 23 existing job bodies are byte-identical, including both original frame jobs, all historical WebGL jobs, build, browser and screenshots. Job-separator blank lines are excluded from that comparison. Top-level workflow settings are byte-identical. The historical Node job differs only by the added D080 baseline fetch and its descriptive label; smoke and Pages differ only by their added dependencies. All prior `tools/unit.mjs` bytes, including every inline assertion and original registration, are unchanged after removing the two new D080 registrations.
+
+First diagnostic issues were retained: the initial diff check found an extra blank line at the workflow EOF, which was removed; the one-off baseline-comparison helper initially parsed `on.push` as a job, so its parser was corrected to read only the jobs section. Neither targeted test run failed. Final assigned-file `git diff --check` passes. Local logs, comparison script, exact job-body hashes and diff are in `scratch/d080-ci/`. No full Node suite, browser capture, remote write, formal CI or publication result is claimed by this scheduling verification.
