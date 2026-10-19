@@ -1,10 +1,11 @@
 // CI scheduling only: never change guard assertions or samples here.
 import assert from 'node:assert/strict';
 
-export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame']);
+export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame']);
 export const INLINE_SUITE = 'unit.mjs:inline';
 export const D078_FRAME = Object.freeze(['./unit-d078-frame.mjs', 'd078FrameGuards']);
-// Explicit, ordered inventory of every original guard registration, including D078.
+export const D079_FRAME = Object.freeze(['./unit-d079-frame.mjs', 'd079FrameGuards']);
+// Explicit, ordered inventory of every original guard registration, including D079.
 export const UNIT_GUARDS = Object.freeze([
   ["./unit-d010-fields.mjs","d010FieldGuards"],
   ["./unit-d010-sim.mjs","d010SimGuards"],
@@ -120,11 +121,13 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d077-frame.mjs","d077FrameGuards"],
   ["./unit-d078.mjs","d078Guards"],
   ["./unit-d078-frame.mjs","d078FrameGuards"],
+  ["./unit-d079.mjs","d079Guards"],
+  ["./unit-d079-frame.mjs","d079FrameGuards"],
   ["./unit-evidence.mjs","evidenceImageGuards"],
 ].map(Object.freeze));
 
 const key = ([file, fn]) => file + ':' + fn;
-const frameKey = key(D078_FRAME);
+const frameKeys = new Map([['d078-frame', key(D078_FRAME)], ['d079-frame', key(D079_FRAME)]]);
 
 export function parsePartition(args, allowed = PARTITIONS, fallback = 'all') {
   assert.ok(args.length <= 1, 'expected at most one --partition=<name> argument');
@@ -142,12 +145,12 @@ export function assertGuardInventory(registrations) {
 
 export function partitionInventory(partition) {
   assert.ok(PARTITIONS.includes(partition), 'unknown unit partition: ' + partition);
-  if (partition === 'd078-frame') return [frameKey];
-  return [INLINE_SUITE, ...UNIT_GUARDS.map(key).filter(id => partition === 'all' || id !== frameKey)];
+  if (frameKeys.has(partition)) return [frameKeys.get(partition)];
+  return [INLINE_SUITE, ...UNIT_GUARDS.map(key).filter(id => partition === 'all' || ![...frameKeys.values()].includes(id))];
 }
 
 // Both full and historical visit every registration in its original order.
-// Only historical skips executing the separately scheduled D078 frame export.
+// Only historical skips executing the separately scheduled D078 and D079 frame exports.
 export function createGuardSelection(partition) {
   assert.ok(['all', 'historical'].includes(partition), 'unsupported inline runner partition: ' + partition);
   const selected = new Set(partitionInventory(partition));
