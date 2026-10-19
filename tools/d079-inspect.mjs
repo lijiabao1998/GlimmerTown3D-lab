@@ -78,7 +78,9 @@ async function phase(v,name,report){
       const targets=list.filter(row=>KINDS.includes(row[1]));
       assert.equal(targets.length,3,'exactly three original gallery target owners');
       assert.deepEqual(targets.map(row=>row[1]).sort((a,b)=>a-b),[21,29,37]);
-      item.originalOwners=targets;item.citySize=n;item.worldSha256=sha(world);
+      assert.deepEqual(targets.map(r=>r.slice(0,7)),[[86,29,56,20,1,1,0],[104,21,40,25,1,1,0],[119,37,33,31,2,1,0]],'exact original gallery owner/parcel/level/variant records');
+      const originalConstruction=[];for(const row of targets){const [owner,k,x,z,size]=row;for(let dz=0;dz<size;dz++)for(let dx=0;dx<size;dx++){const tile=await page.evaluate('__gt.conTile('+ (x+dx)+','+(z+dz)+')');assert.equal(tile.age,400,'every original owner parcel is fully built age400');originalConstruction.push({owner,k,x:x+dx,z:z+dz,...tile});}}
+      item.originalOwners=targets;item.originalConstruction=originalConstruction;item.citySize=n;item.worldSha256=sha(world);
       for(const force of [null,0,1,2,3]){
         assert.equal(await page.evaluate(`__gt.transitUtilityV(${J(force)})`),force,'production render-only variant hook');
         await frames(6);assert.equal(await page.evaluate(WORLD),world,'variant preview keeps original world unchanged');
@@ -94,13 +96,16 @@ async function phase(v,name,report){
           const cam=await camera(page,frames,n,shot,v),pixels=await page.evaluate(PIXELS);
           assert.equal(pixels.canvasWidth,v.W);assert.equal(pixels.canvasHeight,v.H);assert.ok(pixels.variance>50,'nonblank production WebGL canvas');
           const presentation=await page.evaluate('({visT:__gt.con().visT,dayFrac:__gt.con().dayFrac})');
+          const diagnostic=await page.evaluate('__gt.transitUtilityConstruction()'),labZoom=Math.SQRT2*v.H*cam.zoom/(n*.84)/64,detail=labZoom<.9?0:labZoom<1?.58:labZoom<1.3?.78:1;
+          assert.deepEqual(diagnostic.uniforms,{uDayFrac:0,uTime:2.2,uDetail:detail,uProbe:[-1,-1],uNoClip:0},'actual paused clipping and camera-derived detail remain exact');
+          for(const row of targets){const [, ,x,z,size]=row;for(const tree of diagnostic.trees)for(let i=0;i<tree.count;i++){const tx=tree.matrices[i*16+12],tz=tree.matrices[i*16+14];assert.ok(!(tx>x&&tx<x+size&&tz>z&&tz<z+size),'original selected parcels remain tree-free');}}
           assert.deepEqual(presentation,{visT:2.2,dayFrac:0});
           assert.equal((await page.evaluate('__gt.sim()'))?.playing??false,false,'world remains paused');
           assert.equal(await page.evaluate(WORLD),world,'camera/capture leaves complete original world untouched');
           const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');
           assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');assert.equal(bytes.readUInt32BE(16),v.W);assert.equal(bytes.readUInt32BE(20),v.H);assert.ok(bytes.length>3000,'full-resolution original PNG');
           const file=`D079-INSPECTION-${name}-${shot.id}-${v.W}.png`;fs.writeFileSync(path.join(OUT,file),bytes);
-          item.shots.push({...shot,file,phase:name,actualUrl:item.actualUrl,force,width:v.W,height:v.H,bytes:bytes.length,sha256:sha(bytes),camera:cam,cameraSha256:sha(cam),presentation,pixels,worldSha256:sha(world),sourceInventorySha256:provenance.sourceInventorySha256,buildSha256:provenance.build.sha256,
+          item.shots.push({...shot,file,phase:name,actualUrl:item.actualUrl,force,width:v.W,height:v.H,bytes:bytes.length,sha256:sha(bytes),camera:cam,cameraSha256:sha(cam),presentation,constructionUniforms:diagnostic.uniforms,pixels,worldSha256:sha(world),sourceInventorySha256:provenance.sourceInventorySha256,buildSha256:provenance.build.sha256,
             qualification:force===null?'Untouched original gallery saved records. Native refers to saved records, not construction-tool availability.':'Original gallery with render-only supported saved-slot copies. All ten slots are saved/import-only; no construction tools were added.'});
           write(`D079-inspection-${v.W}.json`,report);console.log(name,v.W,shot.id,file);
         }
