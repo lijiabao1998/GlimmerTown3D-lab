@@ -1,3 +1,6 @@
+// D079-BEGIN transit-utility-pavilion-import
+import { TRANSIT_UTILITY_PAVILION_KINDS } from './britishTransitUtilityPavilions.ts';
+// D079-END transit-utility-pavilion-import
 // D078-BEGIN neighbourhood-pavilion-import
 import { NEIGHBOURHOOD_PAVILION_KINDS } from './britishNeighbourhoodPavilions.ts';
 // D078-END neighbourhood-pavilion-import
@@ -260,7 +263,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D076-BEGIN health-response-shape
 // D077-BEGIN service-lodge-shape
 // D078-BEGIN neighbourhood-pavilion-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false): Shape | null => {
+// D079-BEGIN transit-utility-pavilion-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false): Shape | null => {
+  if (transitUtilityPavilion && TRANSIT_UTILITY_PAVILION_KINDS.has(k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion);
+    return previous ? { ...previous, p: { ...previous.p, transitUtilityPavilion: true } } : null;
+  }
+// D079-END transit-utility-pavilion-shape
   if (neighbourhoodPavilion && NEIGHBOURHOOD_PAVILION_KINDS.has(k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge);
     return previous ? { ...previous, p: { ...previous.p, neighbourhoodPavilion: true } } : null;
