@@ -1,6 +1,7 @@
 // Node 端守衛（D003）：不開瀏覽器，直接跑模擬層與解碼器。用法：node tools/unit.mjs　退出碼 0＝綠、1＝紅
 // 模擬層 import 寫明 .ts，Node 22.18+ 可以直接跑（型別剝除）。
 import fs from 'node:fs';
+import { parsePartition, createGuardSelection } from './unit-partitions.mjs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { gunzipSync } from 'node:zlib';
@@ -29,6 +30,8 @@ import { countNear, getMaxRoadClass, hasRoadNear, urbanDens406 } from '../src/si
 import { season as d009Season, inWinter as d009Winter, weatherStep } from '../src/sim/rules/weather.ts';
 import { computePower, powerCap, assignPower } from '../src/sim/rules/power.ts';
 
+const partition = parsePartition(process.argv.slice(2), ['all', 'historical']);
+const selection = createGuardSelection(partition);
 const t0 = Date.now();
 const fails = [], log = (ok, name, detail) => { console.log(`  ${ok ? 'OK' : 'NG'} ${name}${detail !== undefined ? '：' + detail : ''}`); if (!ok) fails.push(name); };
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
@@ -492,6 +495,8 @@ for (const [name, count] of Object.entries(D009_COUNTS)) {
 // 分檔的守衛各包一層：載入或執行時丟例外，就記一條 NG（錯誤訊息＋丟出來的那一行），接著跑後面的守衛（純度、零外部素材）。
 // 不包的話一支守衛丟例外，整套帶著堆疊停掉、後面的守衛都沒跑，紅燈也列不出名字。那一支在例外之前已經記下的結果照留
 const guard = async (file, fn) => {
+  if (!selection.shouldRun(file, fn)) return;
+  console.log(`START ${fn} (${file})`);
   try {
     const m = await import(file);
     if (typeof m[fn] !== 'function') throw new Error(`${file} 沒有匯出 ${fn}`);
@@ -698,8 +703,11 @@ await guard('./unit-d076.mjs', 'd076Guards');
 await guard('./unit-d076-frame.mjs', 'd076FrameGuards');
 await guard('./unit-d077.mjs', 'd077Guards');
 await guard('./unit-d077-frame.mjs', 'd077FrameGuards');
+await guard('./unit-d078.mjs', 'd078Guards');
+await guard('./unit-d078-frame.mjs', 'd078FrameGuards');
 await guard('./unit-evidence.mjs', 'evidenceImageGuards');
 
+selection.finish();
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);

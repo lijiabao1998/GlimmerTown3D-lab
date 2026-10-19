@@ -63,26 +63,30 @@ export async function d077FrameGuards(log=()=>{}){
   for(const sample of ['manufactured','gallery-copy',''])assert.throws(()=>createD077FrameOracle(sample,true,0),/known immutable D077 sample/);
   for(const on of [null,undefined,0,1,'after'])assert.throws(()=>createD077FrameOracle('gallery',on,0),/phase must be boolean/);
  });
- test('actual capture path selects legacy BEFORE and default serviceLodge AFTER without inherited legacy flags',()=>{
+ test('actual capture path isolates exact D076 BEFORE and D077 AFTER from subsequent D078 artwork',()=>{
   const capture=fs.readFileSync(new URL('./d077-capture.mjs',import.meta.url),'utf8'),cityView=fs.readFileSync(new URL('../src/cityView.ts',import.meta.url),'utf8');
   assert.match(capture,/query:d077CaptureQuery\(source\.sample,phase\)/,'actual capture metadata uses the tested query helper');
   assert.match(capture,/await p\.open\(item\.query\)/,'production browser opens that same tested query');
   assert.match(capture,/assertD077CaptureUrl\(await p\.ev\('location.href'\),source\.sample,phase\)/,'actual browser location is checked after navigation');
   const condition=cityView.match(/const serviceLodgeOn = ([^;]+);/);assert.ok(condition,'actual production serviceLodge dispatch condition');
   const artworkEnabled=Function('q','return ('+condition[1]+')');
+  const nextCondition=cityView.match(/const neighbourhoodPavilionOn = ([^;]+);/);assert.ok(nextCondition,'actual D078 dispatch condition');
+  const nextArtworkEnabled=Function('q','return ('+nextCondition[1]+')');
   const flags=['serviceLodgeArt','healthResponseArt','farmMemorialArt','emergencyHotelArt','campusArt','educationArt','commerceThirdArt','commerceVariantArt','facilityArt','landmarkArt','metropolisArt','houseArt','towerArt','commerceArt','industryArt','villageArt','streetArt','britishArt','heritageArt'];
   assert.equal(flags.length,19,'all historical flag generations are explicitly retained');assert.equal(artworkEnabled(new URLSearchParams('sample=gallery&clean=1&spaceArt=legacy')),true,'rocket-only compatibility does not suppress service lodges');
   for(const flag of flags){assert.ok(condition[1].includes("'"+flag+"'"),'production condition includes '+flag);assert.equal(artworkEnabled(new URLSearchParams('sample=gallery&clean=1&'+flag+'=legacy')),false,'legacy '+flag+' suppresses D077');}
   for(const source of D077_CAPTURE_SOURCES){
    const before=d077CaptureQuery(source.sample,'before'),after=d077CaptureQuery(source.sample,'after');
    assert.equal(before,'sample='+source.sample+'&clean=1&serviceLodgeArt=legacy');
-   assert.equal(after,'sample='+source.sample+'&clean=1');
+   assert.equal(after,'sample='+source.sample+'&clean=1&neighbourhoodArt=legacy');
    assert.notEqual(before,after,'D077 phases cannot both load legacy artwork');
    for(const [phase,query] of [['before',before],['after',after]])assertD077CaptureUrl('http://127.0.0.1:8370/?'+query,source.sample,phase);
    assert.throws(()=>assertD077CaptureUrl('http://127.0.0.1:8370/?'+before,source.sample,'after'),/actual browser URL/,'actual historical URL cannot masquerade as AFTER');
    for(const flag of flags)assert.throws(()=>assertD077CaptureUrl('http://127.0.0.1:8370/?'+after+'&'+flag+'=legacy',source.sample,'after'),/actual browser URL/,'actual inherited '+flag+' must reject');
    assert.equal(artworkEnabled(new URLSearchParams(before)),false,'BEFORE selects the exact D076 production phase');
-   assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER selects the new D077 production phase');
+   assert.equal(artworkEnabled(new URLSearchParams(after)),true,'AFTER selects the published D077 production phase');
+   assert.equal(nextArtworkEnabled(new URLSearchParams(before)),false,'historical BEFORE excludes subsequent D078 artwork');
+   assert.equal(nextArtworkEnabled(new URLSearchParams(after)),false,'historical AFTER excludes subsequent D078 artwork');
    // Reproduce the failed CI URL: an after-phase legacy suffix must fail the same
    // dispatch check, rather than being excused as numerical normal drift.
    assert.throws(()=>assert.equal(artworkEnabled(new URLSearchParams(after+'&serviceLodgeArt=legacy')),true),{name:'AssertionError'});

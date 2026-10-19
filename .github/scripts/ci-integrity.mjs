@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const STAGES = ['build', 'node', 'browser', 'screenshots'];
+export const STAGES = ['build', 'node', 'node-frame', 'browser', 'screenshots'];
 export const digest = value => createHash('sha256').update(value).digest('hex');
 
 export function filesIn(dir, root = dir) {
@@ -47,7 +47,7 @@ export function requireSuccess(needs) {
   for (const stage of STAGES) {
     assert.equal(needs[stage]?.result, 'success', `${stage} did not succeed`);
   }
-  for (const stage of ['build', 'browser', 'screenshots']) {
+  for (const stage of ['build', 'node-frame', 'browser', 'screenshots']) {
     assert.match(needs[stage]?.outputs?.['artifact-id'] ?? '', /^\d+$/, `${stage} evidence artifact is required`);
   }
   assert.match(needs.build.outputs.digest ?? '', /^[a-f0-9]{64}$/, 'build digest is required');
@@ -70,7 +70,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (command === 'gate') {
     const needs = JSON.parse(process.env.CI_NEEDS ?? '{}');
     requireSuccess(needs);
-    console.log('All four stages and their evidence artifacts succeeded.');
+    console.log('All five stages and their evidence artifacts succeeded.');
   } else if (command === 'record') {
     const raw = record(root, currentIdentity()), hash = digest(raw);
     fs.writeFileSync('ci-build.json', raw);
