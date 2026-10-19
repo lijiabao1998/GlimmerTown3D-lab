@@ -49,7 +49,10 @@ function radialRoof(p: Pen, boundary: readonly V3[], apex: V3) {
   for (let i = 0; i < boundary.length; i++) roof(p, [boundary[i], boundary[(i + 1) % boundary.length], apex], roofTriangle);
 }
 function ground(p: Pen, x0: number, x1: number, z0: number, z1: number, color: string) {
-  face(p, 'D', [[x0, .004, z0], [x1, .004, z0], [x1, .004, z1], [x0, .004, z1]], diagonal02, [0, 1, 0], color);
+  // All four vertices share this exact horizontal plane. Use its analytic
+  // normal, preserving the existing 0–2 diagonal without normalization drift.
+  const y = p.a.y0 + p.H * .004;
+  p.a.D.quad([p.X(x0), y, p.Z(z0)], [p.X(x1), y, p.Z(z0)], [p.X(x1), y, p.Z(z1)], [p.X(x0), y, p.Z(z1)], [0, 1, 0], col(color));
 }
 function forecourt(p: Pen) {
   ground(p, .16, .42, .90, .94, C.paving);
