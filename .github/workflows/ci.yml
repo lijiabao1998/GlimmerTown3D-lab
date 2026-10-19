@@ -110,7 +110,7 @@ jobs:
       - run: npm ci
       - name: 中文字型（履歷卡與樣張的版面才會跟手機一致）
         run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
-      - name: Complete D078 frame oracle (all 34 checks, unchanged)
+      - name: Complete D078 frame oracle (all 35 checks, including camera-detail controls)
         run: |
           mkdir -p scratch/d078-node-frame
           set -o pipefail

@@ -9787,13 +9787,47 @@ export const D078_BASELINE_CONSTRUCTION=frozen({
  }
 });
 export const D078_PAUSED_UNIFORMS=frozen({uDayFrac:0,uTime:2.2,uDetail:0,uProbe:[-1,-1],uNoClip:0});
+
+// Supplemental pre-code card: correct only the universal browser uDetail assumption.
+// Historical Node diagnostics below retain their original zero; no live state is written.
+export const D078_CAMERA_DETAIL_CARD_SHA256='5f4f6619b500f9e049dc567fdd16ffffae5569c1335165b2984327eba5d723b7';
+export const D078_CAMERA_DETAIL_PLAN_SHA256='7c42ca8d26eb5fd3b757ba5599442ebfbbc30d7e13d78d6cc49bd8588bfefbc9';
+export const D078_CAMERA_DETAIL_SOURCES=frozen({'src/cityView.ts':'0f44e02bd1acf1c2754487b94d6f434b118818713f1ba068f3c8158de3b2db4f','src/content/construction.ts':'985b81b9e8c1042b82398256f3ddb16d3301e4139c07853ccb7823e1926c6217','src/render/construction.ts':'c8b9b3515c6781d41f414c7dcc4c41e0566e1878508bf86bd7695d43d7a6d8a7'});
+export const D078_CAMERA_SETTLED_TARGETS=frozen([{"requested":[36,0,36],"settled":[35.99999999999999,0,35.99999999999999]},{"requested":[1.5,0,13.5],"settled":[1.5,0,13.5]},{"requested":[3.5,0,13.5],"settled":[3.5,0,13.500000000000002]},{"requested":[66.5,0,20.5],"settled":[66.5,0,20.5]},{"requested":[21.5,0,37.5],"settled":[21.5,0,37.5]},{"requested":[28.5,0,27.5],"settled":[28.500000000000004,0,27.5]},{"requested":[20.5,0,25.5],"settled":[20.5,0,25.5]}]);
+export const D078_CAMERA_DETAIL_DEPENDENCIES=frozen({"packageLockSha256":"5ab53afaf88bd98bc323682d6e5e1240f046311cf1b461d83a2935eab90a1130","threeVersion":"0.186.1","integrity":"sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==","orbitControlsSha256":"3d79d07ecb686b4e5d93232eedab255331c1beef711e13164eaa1f68655a5f2b","vector3Sha256":"9fa712118252ac8bbccededa1211d3ccf190c4e74c056b73557f76b66f53cf45"});
+export function d078DetailAlpha(z){assert.ok(Number.isFinite(z)&&z>=0,'finite nonnegative independent lab zoom');return z<.9?0:z<1?.58:z<1.3?.78:1;}
+export function d078PlannedConstructionCamera(n,shot,v){
+ const D=n*1.6,target=[shot.x,0,shot.z];
+ // __gt.view sets this pose; OrbitControls subsequently clamps overview zoom to its actual .6 minimum.
+ const requested=shot.additionalView?shot.zoomByWidth[v.W]:shot.k?Math.min(8,.70*.84*n*(v.W/v.H)/(shot.size*Math.SQRT2)):.54*v.W/v.H;
+ const a=shot.spinRadians??0,c=Math.cos(a),s=Math.sin(a);
+ if(!shot.tiltRadians)return {pos:[shot.x+D*(c-s),D*Math.SQRT2*Math.tan(Math.PI/6),shot.z+D*(s+c)],target,zoom:Math.max(.6,requested)};
+ const radius=D*Math.sqrt(2+2*Math.tan(Math.PI/6)**2),elevation=Math.PI/6+(shot.tiltRadians??0),horizontal=radius*Math.cos(elevation)/Math.SQRT2;
+ return {pos:[shot.x+horizontal*(c-s),radius*Math.sin(elevation),shot.z+horizontal*(s+c)],target,zoom:Math.max(.6,requested)};
+}
+
+export function d078CameraDetail(n,shot,viewport,actualCamera){
+ assert.ok(Number.isInteger(n)&&n>0,'original city size for camera detail');
+ assert.ok([[1440,1000],[360,740],[412,860]].some(([W,H])=>viewport.W===W&&viewport.H===H),'exact declared camera-detail viewport');
+ const plannedCamera=d078PlannedConstructionCamera(n,shot,viewport);
+ for(const c of [plannedCamera,actualCamera])assert.ok(c?.pos?.length===3&&c?.target?.length===3&&[...c.pos,...c.target,c.zoom].every(Number.isFinite),'finite original camera for detail');
+ const targetPin=D078_CAMERA_SETTLED_TARGETS.find(p=>p.requested.every((x,i)=>x===plannedCamera.target[i]));assert.ok(targetPin,'independently pinned original requested target');
+ assert.deepEqual(actualCamera.target,targetPin.settled,'camera detail retains exact original planned settled target');
+ assert.equal(actualCamera.zoom,plannedCamera.zoom,'camera detail retains exact original planned zoom');
+ for(let i=0;i<3;i++)assert.ok(Math.abs(actualCamera.pos[i]-plannedCamera.pos[i])<1e-9,'camera detail retains original planned position within unchanged camera arithmetic');
+ const half=n*.42,labZoom=Math.SQRT2*viewport.H*plannedCamera.zoom/(half-(-half))/64;
+ return frozen({citySize:n,viewport:{W:viewport.W,H:viewport.H},plannedCamera,settledTarget:targetPin.settled,observedCamera:{pos:[...actualCamera.pos],target:[...actualCamera.target],zoom:actualCamera.zoom},labZoom,uDetail:d078DetailAlpha(labZoom)});
+}
 export function d078ConstructionDiagnostic(scene,con){
  const trees=[];scene.traverse(mesh=>{if(!mesh.isInstancedMesh)return;const ages=mesh.geometry.getAttribute('aTreeT');if(ages)trees.push({name:mesh.geometry.type,count:mesh.count,ages:Array.from(ages.array).slice(0,mesh.count),matrices:Array.from(mesh.instanceMatrix.array).slice(0,mesh.count*16)});});const u=con.uni;
  return {uniforms:{uDayFrac:u.uDayFrac.value,uTime:u.uTime.value,uDetail:u.uDetail.value,uProbe:u.uProbe.value.toArray(),uNoClip:u.uNoClip.value},trees};
 }
-export function assertD078ConstructionDiagnostic(actual,expected){
- assert.deepEqual(expected.uniforms,D078_PAUSED_UNIFORMS,'independent paused construction pins');assert.deepEqual(actual.uniforms,D078_PAUSED_UNIFORMS,'actual clipping/probe/time uniforms remain exact');assert.deepEqual(actual.trees,expected.trees,'every actual ordered live tree age and transform remains exact');
- for(const tree of actual.trees){assert.equal(tree.ages.length,tree.count);assert.equal(tree.matrices.length,tree.count*16);assert.ok([...tree.ages,...tree.matrices].every(Number.isFinite),'finite live tree state');}return {uniforms:actual.uniforms,trees:actual.trees.map(t=>({name:t.name,count:t.count,agesSha256:createHash('sha256').update(JSON.stringify(t.ages)).digest('hex'),matricesSha256:createHash('sha256').update(JSON.stringify(t.matrices)).digest('hex')})),allLiveTreeBuffersExact:true};
+export function assertD078ConstructionDiagnostic(actual,expected,context=null){
+ const cameraDetail=context?d078CameraDetail(context.n,context.shot,context.viewport,context.camera):null;
+ if(cameraDetail){assert.deepEqual(context.actualViewport,cameraDetail.viewport,'actual viewport equals original declared viewport');assert.equal(context.labZoom,cameraDetail.labZoom,'actual lab zoom equals independently planned camera law');assert.equal(context.uDetail,cameraDetail.uDetail,'actual detail equals independently planned camera law');}
+ const requiredUniforms={...D078_PAUSED_UNIFORMS,uDetail:cameraDetail?.uDetail??0};
+ assert.deepEqual(expected.uniforms,D078_PAUSED_UNIFORMS,'independent paused construction pins');assert.deepEqual(actual.uniforms,requiredUniforms,'actual clipping/probe/time and camera-derived detail uniforms remain exact');assert.deepEqual(actual.trees,expected.trees,'every actual ordered live tree age and transform remains exact');
+ for(const tree of actual.trees){assert.equal(tree.ages.length,tree.count);assert.equal(tree.matrices.length,tree.count*16);assert.ok([...tree.ages,...tree.matrices].every(Number.isFinite),'finite live tree state');}return {uniforms:actual.uniforms,cameraDetail,trees:actual.trees.map(t=>({name:t.name,count:t.count,agesSha256:createHash('sha256').update(JSON.stringify(t.ages)).digest('hex'),matricesSha256:createHash('sha256').update(JSON.stringify(t.matrices)).digest('hex')})),allLiveTreeBuffersExact:true};
 }
 export function d078OwnerConstruction(city,con,owner,contract=null){
  const b=city.buildings.find(b=>b.id===owner);assert.ok(b,'original construction owner');const tiles=[];

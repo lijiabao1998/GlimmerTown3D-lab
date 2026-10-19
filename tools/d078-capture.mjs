@@ -13,7 +13,7 @@ import {D057_SAME} from './d057-native.mjs';
 import {pathToFileURL} from 'node:url';
 import {NEIGHBOURHOOD_PAVILION_BUILDINGS,NEIGHBOURHOOD_PAVILION_KINDS} from '../src/content/britishNeighbourhoodPavilions.ts';
 import {D078_OLD,d078City,d078Expected} from './unit-d078.mjs';
-import {createD078FrameOracle,assertD078Frame,assertD078NeighbourhoodPavilionCamera,assertD078PausedRepeat,assertD078RoofCoverage,assertD078SurfaceCoverage,assertD078OwnerFits,D078_FRAME_WHOLE,assertD078ConstructionDiagnostic} from './d078-frame.mjs';
+import {createD078FrameOracle,assertD078Frame,assertD078NeighbourhoodPavilionCamera,assertD078PausedRepeat,assertD078RoofCoverage,assertD078SurfaceCoverage,assertD078OwnerFits,D078_FRAME_WHOLE,assertD078ConstructionDiagnostic,D078_CAMERA_DETAIL_CARD_SHA256} from './d078-frame.mjs';
 import {D067_UPLOAD_PROBE} from './d067-diagnose.mjs';
 
 const J=JSON.stringify,sha=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
@@ -827,8 +827,9 @@ export function d078CapturePlan(expected=expectedBudgets()){
   actualOriginalPngs:0,plannedOriginalPngs:viewports.length*ORIGINALS_PER_VIEWPORT,nativeReachability:{nativeToolSlots:0,savedImportOnlySlots:10,kinds:[81,84,85,130],qualification:"No FACILITY_TOOLS IDs dispatch these four kinds. Native means the untouched saved-city records, not a native construction selector."},completeThreeViewportOriginalPngs:COMPLETE_ORIGINALS,preservedOriginalViews:168,additionalRoofViews:6*ADDITIONAL_ANGLES,pausedRepeatViews:6*PAUSED_REPEATS,distinctBuildings:10,sources:SOURCES.map(s=>({...s,shots:s.shots.map(shot=>({...shot,zooms:Object.fromEntries(viewports.map(v=>[v.W,zoomFor(s,shot,v)]))}))}))};
 }
 function captureProvenance(){
+ assert.equal(sha(fs.readFileSync(path.join(ROOT,'docs/D078-camera-detail-correction.md'))),D078_CAMERA_DETAIL_CARD_SHA256,'immutable supplemental camera-detail correction card');
  const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
- const sourceSha256=Object.fromEntries(files.map(file=>[file,sha(fs.readFileSync(path.join(ROOT,file)))])),guards=['tools/d078-frame.mjs','tools/unit-d078-frame.mjs','tools/d078-capture.mjs','tools/unit-d078.mjs','tools/d078-scope.mjs','docs/D078-british-neighbourhood-pavilions-ten.md','docs/D078-initial-architecture.json','fixtures/d078-architecture-contract.json','fixtures/d078-geometry-before.json','fixtures/d078-source-before.json','fixtures/d078-history-before.json','fixtures/d078-art-scope.json'];
+ const sourceSha256=Object.fromEntries(files.map(file=>[file,sha(fs.readFileSync(path.join(ROOT,file)))])),guards=['tools/d078-frame.mjs','tools/unit-d078-frame.mjs','tools/d078-capture.mjs','tools/unit-d078.mjs','tools/d078-scope.mjs','docs/D078-british-neighbourhood-pavilions-ten.md','docs/D078-camera-detail-correction.md','docs/D078-initial-architecture.json','fixtures/d078-architecture-contract.json','fixtures/d078-geometry-before.json','fixtures/d078-source-before.json','fixtures/d078-history-before.json','fixtures/d078-art-scope.json'];
  const commit=execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim();if(process.env.GITHUB_SHA)assert.equal(commit,process.env.GITHUB_SHA,'actual checkout equals runner evidence head');
  return {commit,githubSha:process.env.GITHUB_SHA??null,node:process.version,platform:process.platform,sourceSha256,sourceInventorySha256:sha(sourceSha256),guardSha256:Object.fromEntries(guards.map(file=>[file,sha(fs.readFileSync(path.join(ROOT,file)))])),publishedBaseline:'22da5314145f96aaa83cfb739c382b86e1d5b0f3',oldFeasibilityArchiveSha256:'815559751b78806114c598109f14108ef9e29f7a04a925f9a4912cf68678d817',html:{file:'dist/index.html',bytes:fs.statSync(path.join(ROOT,'dist/index.html')).size,sha256:sha(fs.readFileSync(path.join(ROOT,'dist/index.html')))}};
 }
@@ -836,6 +837,11 @@ async function sourceLabel(p,source,shot){
  // The same factual caption appears in both phases. It never supplies the changed-pixels evidence.
  const detail=(shot.k?'k'+shot.k+':v'+shot.renderedVariant+' · '+shot.name+' · owner '+shot.buildingId+' · source v'+shot.sourceVariant+' unchanged · '+shot.constructionLabel:shot.name);
  await p.ev(`(()=>{let label=document.getElementById('d078-source-label');if(!label){label=document.createElement('div');label.id='d078-source-label';label.style.cssText='position:fixed;left:0;right:0;top:0;z-index:2147483647;box-sizing:border-box;padding:8px 12px;background:rgba(15,22,29,.90);color:#fff;font:12px/1.45 sans-serif;pointer-events:none;white-space:pre-line';document.body.append(label);}label.textContent=${J(source.label+'\n'+detail)};})()`);
+}
+async function verifyConstructionDiagnostic(p,oracle,source,shot,viewport){
+ const live=await p.ev('(()=>{const con=__gt.con();return {camera:__gt.cam(),actualViewport:{W:innerWidth,H:innerHeight},labZoom:con.labZoom,uDetail:con.detail,diagnostic:__gt.neighbourhoodConstruction()};})()');
+ const comparison=assertD078ConstructionDiagnostic(live.diagnostic,oracle.constructionDiagnostic(),{n:source.n,shot,viewport,camera:live.camera,actualViewport:live.actualViewport,labZoom:live.labZoom,uDetail:live.uDetail});
+ return {actual:live.diagnostic,comparison};
 }
 async function settledCamera(p,source,shot,v,settlement={}){
  await p.ev(`__gt.view(${shot.x},${shot.z},${zoomFor(source,shot,v)});__gt.setVisT(2.2);__gt.setDayFrac(0)`);await p.frames(25);
@@ -931,8 +937,8 @@ async function capturePhase(v,phase,source,expected,item){
    const probeBefore=await uploadState(p);await p.ev('__d067UploadProbe.stop()');
    assert.deepEqual(await uploadState(p),probeBefore,'restoring upload functions preserves world, geometry, camera and submissions');
    item.uploadProbe.restored=true;item.nativeGeometry.uploadProbe.restored=true;
-   item.constructionState=await p.ev('__gt.neighbourhoodConstruction()');
-   item.constructionComparison=assertD078ConstructionDiagnostic(item.constructionState,oracle.constructionDiagnostic());
+   const initialConstruction=await verifyConstructionDiagnostic(p,oracle,source,source.shots[0],v);
+   item.constructionState=initialConstruction.actual;item.constructionComparison=initialConstruction.comparison;
    const actualTargets=list.filter(b=>KINDS.includes(b[1]));
    assert.deepEqual(actualTargets.map(b=>b[0]).sort((a,b)=>a-b),source.targets.map(b=>b.id).sort((a,b)=>a-b),'browser contains exactly the source target owners');
    for(const b of source.targets){const row=list.find(row=>row[0]===b.id);assert.deepEqual(row.slice(0,7),[b.id,b.k,b.x,b.z,b.size,b.lv,b.v],'actual unmodified source building, variant and level');}
@@ -958,7 +964,7 @@ async function capturePhase(v,phase,source,expected,item){
     let surfaceVisibility=null;if(s.k){const key=s.k+':'+s.renderedVariant;if(!item.surfaceContracts[key]){assert.ok(!s.additionalView&&!s.repeatOf,'fixed surface contract is made from the preserved original view before alternatives');item.surfaceContracts[key]=oracle.surfaceContract(camera,v,s.buildingId);}surfaceVisibility=oracle.surfaceVisibility(camera,v,item.surfaceContracts[key]);}
     let archivedSurfaceVisibility=null;if(phase==='before'&&s.k){const key=s.k+':'+s.renderedVariant;if(!item.archivedSurfaceContracts[key])item.archivedSurfaceContracts[key]=oracle.archivedSurfaceContract(v,s.buildingId);archivedSurfaceVisibility=oracle.surfaceVisibility(camera,v,item.archivedSurfaceContracts[key]);}
     let precodeSurfaceVisibility=null;if(phase==='before'&&s.k){const key=s.k+':'+s.renderedVariant;if(!item.precodeSurfaceContracts[key])item.precodeSurfaceContracts[key]=oracle.productionSurfaceContract(v,s.buildingId);precodeSurfaceVisibility=oracle.surfaceVisibility(camera,v,item.precodeSurfaceContracts[key]);}
-    const constructionDiagnostic=assertD078ConstructionDiagnostic(await p.ev('__gt.neighbourhoodConstruction()'),oracle.constructionDiagnostic());
+    const constructionDiagnostic=(await verifyConstructionDiagnostic(p,oracle,source,s,v)).comparison;
     let constructionState=null;if(s.k){constructionState=oracle.ownerConstruction(s.buildingId,item.surfaceContracts[s.k+':'+s.renderedVariant]);const actualTiles=await p.ev('('+J(constructionState.tiles)+').map(t=>({x:t.x,z:t.z,...__gt.conTile(t.x,t.z)}))');assert.deepEqual(actualTiles,constructionState.tiles,'actual uploaded construction tiles equal independently measured geometry and original ages');assert.equal(constructionState.originalAge,s.age,'original age unchanged');if(source.sample==='gallery'){assert.equal(constructionState.originalAge,400);assert.equal(constructionState.rise,1);assert.equal(constructionState.treeShaderScale,1);assert.equal(constructionState.clippedCount,0,'gallery is finished-model WebGL evidence');}if(source.sample==='ai120'&&s.k===85){assert.equal(constructionState.originalAge,7);assert.equal(constructionState.rise,.84);assert.equal(constructionState.treeShaderScale,0);assert.equal(constructionState.complete,false);}}
     const pixels=await p.ev(PIXELS);assert.ok(pixels.variance>50,'nonblank real production canvas');assert.equal(pixels.width,v.W);assert.equal(pixels.height,v.H);
     const bytes=Buffer.from((await page.send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64');
