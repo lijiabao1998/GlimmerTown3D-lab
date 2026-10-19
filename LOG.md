@@ -10,6 +10,9 @@
 
 ---
 
+| D078 候選 | [D078](docs/D078-british-neighbourhood-pavilions-ten.md) | 第10批十款英式鄰里亭舍；獨立122面／230三角形／17封閉量體，保留七個被拒舊槽位及全部首紅 | 幾何30/30；首次完整frame96分50.877秒33/34，70317必要點及額外封存33558點、96 raw對拍、384缺面及32屋頂負控通過；新增D067子pass斷言抄錯8三角形，獨立22da封存證明正確既有值28308/80530，僅修新增斷言後，原樣六個phase/width回歸與15輸入負控通過；正式最新head完整CI待驗 | inspection0d9fb7d | run39182840740兩尺寸96張實際WebGL原圖與manifest／build全核；3張360原圖已交付，兩尺寸standard及supplement代審；完整三尺寸正式實拍待驗 | 尚未合併或發布，不計完成；不稱首次frame全綠。k130v0有效H=.12、v2 H=.34；全為saved/import槽；原gallery完工，ai120長者中心age7施工中另行標示；部分單角受鄰樓遮擋，以完整多角覆蓋守衛驗證，未做實體手機手動測試 |
+| D077 正式發布 | [PR29](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/29) | 第9批十款英式服務建築與旅館；main22da5314145f96aaa83cfb739c382b86e1d5b0f3 | 正式PR39169234645全45驗證job成功；main39175006873全46job及全部step成功，Pages2026-10-19 00:18:17UTC完成 | 22da5314 | 正式三尺寸372原圖與45對照表全核；00:19:27UTC公站1411515bytes與本次Pages產物逐byte一致，SHA1c834b2b90f2682ac9f92d3c72bd18dad43708f13777eec4de84bfdefb5814da | 累計9/20波90/200棟；額外串行preview39169103598三尺寸45分鐘取消保留為失敗，未延長門檻，正式分離CI完整驗收通過；初版幾何與殘差pin失敗全保留；未做實體手機手動驗收 |
+
 | D077 修正候選 | [D077](docs/D077-british-service-lodges-ten.md) | 第9批十款英式服務建築與旅館；保留初版72個必要牆面樣點遮擋失敗，移除新門面覆片、擴大k119v0院落並降低k119v1附翼接簷 | 修正focused幾何26/26、完整frame32/32；50439/50439必要樣點與24942/24942獨立舊基線全可見，66組原始射線完全對拍；90款結構唯一與原預算保留；正式同head完整CI待驗 | inspection e5d36bea | run39144514997兩尺寸68張真實WebGL原圖及全部manifest核對成功；旅館原角保留並新增補角 | 未合併未上線；初版frame31/32殘差fixture絕對偏移失敗保留，僅精確分phase修正pin後完整重驗通過，18分量及1e-15界限不變。正式CI與發布待完成。k116沿用H=.12；全為既有saved/import槽，沒有新增建造工具 |
 | D076 正式發布 | [PR28](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/28) | 第8批十款建築；main7d4df8a907368a25f1ff92958b8b70ae85b8ad1c | PR39128618327全42驗證job成功；main39134674577全43job及全部step成功，Pages15:19:30UTC完成 | 7d4df8a9 | 既有圖片確認及代審完成；15:21:45UTC公站1404808bytes與本次Pages產物逐byte一致，SHA8b2817cca06df3de2ece11f18285dd3157ef06e49726d260ff3c61ad736eabe5 | 累計8/20波80/200棟；D075失敗及D076首次歷史實拍隔離失敗保留；未做實體Android手動驗收 |
 
