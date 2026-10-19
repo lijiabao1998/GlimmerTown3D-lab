@@ -79,7 +79,7 @@ for (const stage of STAGES) {
 test('gate rejects unexpected dependency and missing artifact identity', () => {
   const needs = success(); needs.unexpected = { result: 'success' };
   assert.throws(() => requireSuccess(needs), /every split stage/);
-  for (const stage of ['build', 'node-frame', 'browser', 'screenshots']) {
+  for (const stage of ['build', 'node-frame', 'node-frame-d079', 'browser', 'screenshots']) {
     const missing = success(); delete missing[stage].outputs['artifact-id'];
     assert.throws(() => requireSuccess(missing), /artifact is required/);
   }
@@ -87,11 +87,11 @@ test('gate rejects unexpected dependency and missing artifact identity', () => {
   assert.throws(() => requireSuccess(noDigest), /build digest is required/);
 });
 
-test('required stage inventory is fixed and includes the independent D078 frame job', () => {
-  assert.deepEqual(STAGES, ['build', 'node', 'node-frame', 'browser', 'screenshots']);
+test('required stage inventory is fixed and includes the independent D078 and D079 frame jobs', () => {
+  assert.deepEqual(STAGES, ['build', 'node', 'node-frame', 'node-frame-d079', 'browser', 'screenshots']);
 });
 
-test('workflow keeps both Node partitions mandatory at the original 120-minute limit', () => {
+test('workflow keeps all three Node partitions mandatory at the original 120-minute limit', () => {
   const workflow = fs.readFileSync(new URL('../workflows/ci.yml', import.meta.url), 'utf8');
   const job = name => {
     const start = workflow.indexOf(`\n  ${name}:\n`);
@@ -99,8 +99,8 @@ test('workflow keeps both Node partitions mandatory at the original 120-minute l
     const end = workflow.slice(start + 1).search(/\n  [a-z][a-z0-9-]*:\n/);
     return end < 0 ? workflow.slice(start) : workflow.slice(start, start + 1 + end);
   };
-  const historical = job('node'), frame = job('node-frame'), smoke = job('smoke'), pages = job('pages');
-  for (const stage of [historical, frame]) {
+  const historical = job('node'), frame = job('node-frame'), frame79 = job('node-frame-d079'), smoke = job('smoke'), pages = job('pages');
+  for (const stage of [historical, frame, frame79]) {
     assert.match(stage, /timeout-minutes: 120\n/);
     assert.match(stage, /uses: actions\/checkout@v4\n/);
     assert.match(stage, /node-version: 24\n/);
@@ -116,14 +116,39 @@ test('workflow keeps both Node partitions mandatory at the original 120-minute l
   assert.match(frame, /name: node-frame-d078-\$\{\{ github\.sha \}\}-\$\{\{ github\.run_attempt \}\}/);
   assert.match(frame, /path: scratch\/d078-node-frame\/\n          if-no-files-found: error/);
   const baselines = s => [...s.matchAll(/git fetch --no-tags --depth=1 origin ([a-f0-9]{40})/g)].map(m => m[1]);
-  assert.equal(baselines(historical).length, 13);
-  assert.deepEqual(baselines(frame), baselines(historical));
+  assert.equal(baselines(historical).length, 14);
+  assert.deepEqual(baselines(frame), baselines(historical).slice(0, -1));
+  assert.deepEqual(baselines(frame79), baselines(historical));
+  assert.equal(baselines(historical).at(-1), '46771cdc00f33759e0a3c45ddf05c3387d4bb4fc');
+  assert.ok(frame79.includes('node tools/unit-partition.mjs --partition=d079-frame 2>&1 | tee scratch/d079-node-frame/console.log'));
+  assert.ok(frame79.includes('name: node-frame-d079-'));
+  assert.ok(frame79.includes('path: scratch/d079-node-frame/'));
+  assert.match(frame79, /if-no-files-found: error/);
+  assert.match(frame79, /if: always\(\)/);
+  const capture = job('d079');
+  assert.match(capture, /timeout-minutes: 45/);
+  assert.match(capture, /fail-fast: false/);
+  assert.ok(capture.includes('width: [1440, 360, 412]'));
+  assert.ok(capture.includes('run: node tools/d079-capture.mjs'));
+  assert.ok(capture.includes('D079_WIDTHS:'));
+  assert.ok(capture.includes('path: scratch/d079/'));
+  assert.match(capture, /if-no-files-found: error/);
+  assert.doesNotMatch(capture, /continue-on-error:|\n    (?:if|needs):/);
   const needs = s => /\n    needs: \[([^\]]+)\]/.exec(s)?.[1].split(', ');
   assert.deepEqual(needs(smoke), STAGES);
   assert.match(smoke, /\n    if: always\(\)\n/);
   assert.match(smoke, /run: node \.github\/scripts\/ci-integrity\.mjs gate\n/);
-  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078']);
+  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078', 'd079']);
   assert.match(pages, /\n    if: github\.ref == 'refs\/heads\/main' && github\.event_name != 'pull_request'\n/);
   assert.doesNotMatch(pages, /always\(\)|continue-on-error:/);
   assert.match(workflow, /run: node --test \.github\/scripts\/ci-integrity\.test\.mjs tools\/unit-partitions\.test\.mjs\n/);
 });
+
+for (const stage of ['build', 'node-frame', 'node-frame-d079', 'browser', 'screenshots']) {
+  for (const id of ['', 'wrong-run-artifact', '-1', '1.2', null, undefined]) {
+    test(`gate rejects malformed ${stage} artifact identity ${id}`, () => {
+      const needs = success(); needs[stage].outputs['artifact-id'] = id;
+      assert.throws(() => requireSuccess(needs), /artifact is required/);
+    });
+  }
+}

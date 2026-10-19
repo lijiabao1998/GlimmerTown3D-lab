@@ -1,17 +1,21 @@
-// Independent CI runner for the unchanged D078 frame guard export.
+// Independent CI runner for the unchanged D078 and additive D079 frame guard exports.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { D078_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
+import { D078_FRAME, D079_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const SOURCE_FILES = ['tools/unit-partition.mjs', 'tools/unit-partitions.mjs', 'tools/unit-d078-frame.mjs', 'tools/d078-frame.mjs', 'tools/d078-capture.mjs', 'tools/unit-d078.mjs', 'docs/D078-british-neighbourhood-pavilions-ten.md', 'package-lock.json'];
+const D078_SOURCE_FILES = ['tools/unit-partition.mjs', 'tools/unit-partitions.mjs', 'tools/unit-d078-frame.mjs', 'tools/d078-frame.mjs', 'tools/d078-capture.mjs', 'tools/unit-d078.mjs', 'docs/D078-british-neighbourhood-pavilions-ten.md', 'package-lock.json'];
 
-export function frameProvenance({ root = ROOT, env = process.env, git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim() } = {}) {
+export function frameProvenance({ partition = 'd078-frame', root = ROOT, env = process.env, git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim() } = {}) {
+  assert.ok(['d078-frame', 'd079-frame'].includes(partition), 'unknown frame provenance partition');
+  const sourceFiles = partition === 'd078-frame' ? D078_SOURCE_FILES : [...D078_SOURCE_FILES.map(file => file.replaceAll('d078', 'd079').replace('D078-british-neighbourhood-pavilions-ten', 'D079-british-transit-utility-pavilions-ten')),
+    'docs/D079-parallel-validation.md', 'tools/d079-baseline.mjs', 'tools/d079-scope.mjs', 'tools/d079-scope-build.mjs',
+    'fixtures/d079-architecture-contract.json', 'docs/D079-initial-architecture.json'];
   const sha = git(['rev-parse', 'HEAD']), tree = git(['rev-parse', 'HEAD^{tree}']);
   const changed = git(['status', '--porcelain', '--untracked-files=no']);
   if (env.GITHUB_ACTIONS === 'true' || env.GITHUB_SHA) {
@@ -25,14 +29,16 @@ export function frameProvenance({ root = ROOT, env = process.env, git = args => 
   return { schema: 1, repository: env.GITHUB_REPOSITORY ?? null, sha, tree, trackedChanges: changed || null,
     runId: env.GITHUB_RUN_ID ?? null, attempt: env.GITHUB_RUN_ATTEMPT ? Number(env.GITHUB_RUN_ATTEMPT) : null,
     event: env.GITHUB_EVENT_NAME ?? 'local', node: process.version,
-    sources: SOURCE_FILES.map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) };
+    sources: sourceFiles.map(file => ({ path: file, sha256: hash(fs.readFileSync(path.join(root, file))) })) };
 }
 
 // Dependency injection is used only by fast runner failure/serialization controls.
 export async function runFramePartition({ args = [], load = file => import(file), write = line => console.log(line),
-  evidenceDir = path.join(ROOT, 'scratch/d078-node-frame'), provenance = () => frameProvenance() } = {}) {
-  const partition = parsePartition(args, ['d078-frame'], 'd078-frame');
-  const [file, fn] = D078_FRAME;
+  evidenceDir, provenance = options => frameProvenance(options) } = {}) {
+  const partition = parsePartition(args, ['d078-frame', 'd079-frame'], 'd078-frame');
+  const [file, fn] = partition === 'd078-frame' ? D078_FRAME : D079_FRAME;
+  const card = partition.slice(0, 4).toUpperCase();
+  evidenceDir ??= path.join(ROOT, `scratch/${partition.slice(0, 4)}-node-frame`);
   assert.deepEqual(partitionInventory(partition), [file + ':' + fn]);
   const t0 = Date.now(), fails = [], diagnostics = [];
   fs.mkdirSync(evidenceDir, { recursive: true });
@@ -47,7 +53,7 @@ export async function runFramePartition({ args = [], load = file => import(file)
   let result, identity;
   emit(`START ${fn} (${file})`);
   try {
-    identity = provenance();
+    identity = provenance({ partition });
     save('provenance.json', identity);
     const m = await load(file);
     if (typeof m[fn] !== 'function') throw new Error(`${file} 沒有匯出 ${fn}`);
@@ -63,7 +69,7 @@ export async function runFramePartition({ args = [], load = file => import(file)
   // retain explicit incomplete-report diagnostics rather than inventing success.
   const report = result?.report ?? { passed: false, incomplete: true, diagnostics };
   try {
-    const fullReport = save('D078-frame.json', report);
+    const fullReport = save(`${card}-frame.json`, report);
     save('diagnostics.json', diagnostics);
     save('summary.json', { partition, passed: fails.length === 0, failed: result?.failed ?? null, loggedFailures: fails,
       tests: report.tests?.length ?? 0, frames: report.frames?.length ?? 0, elapsedSeconds: (Date.now() - t0) / 1000,
