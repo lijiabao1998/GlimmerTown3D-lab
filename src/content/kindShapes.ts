@@ -1,3 +1,6 @@
+// D078-BEGIN neighbourhood-pavilion-import
+import { NEIGHBOURHOOD_PAVILION_KINDS } from './britishNeighbourhoodPavilions.ts';
+// D078-END neighbourhood-pavilion-import
 // D077-BEGIN service-lodge-import
 import { SERVICE_LODGE_KINDS } from './britishServiceLodges.ts';
 // D077-END service-lodge-import
@@ -256,7 +259,12 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D074-BEGIN farm-memorial-shape
 // D076-BEGIN health-response-shape
 // D077-BEGIN service-lodge-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false): Shape | null => {
+// D078-BEGIN neighbourhood-pavilion-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false): Shape | null => {
+  if (neighbourhoodPavilion && NEIGHBOURHOOD_PAVILION_KINDS.has(k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge);
+    return previous ? { ...previous, p: { ...previous.p, neighbourhoodPavilion: true } } : null;
+  }
   if (serviceLodge && SERVICE_LODGE_KINDS.has(k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse);
     return previous ? { ...previous, p: { ...previous.p, serviceLodge: true } } : null;
@@ -272,6 +280,7 @@ export const shapeOf = (k: number, heritage = true, tower = false, metropolis = 
   if (shape && facility && FACILITY_KINDS.has(k)) return { ...shape, p: { ...shape.p, facility: true } };
   return shape ? heritage && BRITISH_HERITAGE_KINDS.has(k) ? { ...shape, p: { ...shape.p, heritage: true } } : BRITISH_KINDS.has(k) ? { ...shape, p: { ...shape.p, british: true } } : tower && TOWER_KINDS.has(k) ? { ...shape, p: { ...shape.p, skyline: true } } : metropolis && METROPOLIS_KINDS.has(k) ? { ...shape, p: { ...shape.p, metropolis: true } } : landmark && LANDMARK_KINDS.has(k) ? { ...shape, p: { ...shape.p, landmark: true } } : shape : null;
 };
+// D078-END neighbourhood-pavilion-shape
 // D077-END service-lodge-shape
 // D076-END health-response-shape
 // D074-END farm-memorial-shape
