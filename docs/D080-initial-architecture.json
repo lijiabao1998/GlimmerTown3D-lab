@@ -1,0 +1,6648 @@
+{
+  "schema": "d080-precode-architecture-v1",
+  "status": "Independent pre-code candidate design. Exact ten-slot cohort requested by parent; baseline feasibility and parent freeze remain separate. No future renderer output used.",
+  "baseline": "23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e",
+  "coordinateOrder": [
+    "parcel-relative x",
+    "fraction of actual inherited H above y0",
+    "parcel-relative z"
+  ],
+  "worldMapping": {
+    "x": "x0 + s*x",
+    "y": "y0 + H*h",
+    "z": "z0 + s*z"
+  },
+  "normalRule": "Apply inverse transpose diag(1/s,1/H,1/s) and normalize, or derive world triangle normals. Stored normal belongs to x/h/z coordinates.",
+  "triangulationRule": "Explicit independently prescribed planar partitions. Concave footprints use ear clipping, never hull/fan fill.",
+  "decorationRule": "D only declared upward ground paving or water at .004H. Housing127 has no D. All walls/roofs are W/O.",
+  "maximumBuildingBounds": {
+    "x": [
+      0.12,
+      0.88
+    ],
+    "z": [
+      0.12,
+      0.86
+    ],
+    "h": [
+      0,
+      1
+    ]
+  },
+  "ownerSources": {
+    "21": {
+      "gallery": {
+        "owner": 104,
+        "x": 40,
+        "z": 25,
+        "nativeV": 0,
+        "age": 400
+      }
+    },
+    "29": {
+      "gallery": {
+        "owner": 86,
+        "x": 56,
+        "z": 20,
+        "nativeV": 0,
+        "age": 400
+      }
+    },
+    "72": {
+      "gallery": {
+        "owner": 133,
+        "x": 3,
+        "z": 37,
+        "nativeV": 0,
+        "age": 400
+      }
+    },
+    "120": {
+      "gallery": {
+        "owner": 181,
+        "x": 60,
+        "z": 43,
+        "nativeV": 0,
+        "age": 400
+      }
+    },
+    "127": {
+      "gallery": {
+        "owner": 3,
+        "x": 8,
+        "z": 1,
+        "nativeV": 0,
+        "age": 400
+      }
+    }
+  },
+  "seed516TargetOwners": [],
+  "nativeConstructionToolsAdded": false,
+  "readOnlyCopyModes": [
+    "native",
+    "v0",
+    "v1",
+    "v2",
+    "v3",
+    "v4"
+  ],
+  "expectedOwnerVariantCases": 10,
+  "structuralUniqueness": {
+    "allModels": 120,
+    "previousModels": 110,
+    "newModels": 10,
+    "fullSignature": true,
+    "architectureOnlyWO": true,
+    "normalizationBounds": "W/O only for architectural signature",
+    "ignore": [
+      "translation",
+      "independent axis scale",
+      "quarter-turns",
+      "colors",
+      "window styles",
+      "vertex ordering",
+      "triangle ordering",
+      "coplanar triangulation diagonals"
+    ]
+  },
+  "fixedViews": {
+    "yawCount": 8,
+    "elevationsDegrees": [
+      14.4,
+      30,
+      57.6
+    ],
+    "total": 24,
+    "changeAnglesOrDropMandatoryPoints": false
+  },
+  "sourceReferences": [
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1405550",
+      "grounding": "British tram-depot and municipal workshop context; D080 plans are original abstractions."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1220537",
+      "grounding": "British fishing lodge with flint-and-brick construction and a mono-pitch roof; vocabulary only."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1424250",
+      "grounding": "Blagdon fishing lodge and waterworks recreation context; no replica or external asset."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1130403",
+      "grounding": "Post-war British council housing as bold slab composition; these economical point blocks are original forms, not Alexandra Road replicas."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1393203",
+      "grounding": "Parkham Wood House documents British modern domestic butterfly-roof design. D080 uses the valley-roof vocabulary in an original economical council block, not a replica."
+    },
+    {
+      "url": "https://historicengland.org.uk/listing/the-list/list-entry/1001423",
+      "grounding": "Walsall Memorial Garden includes a pavilion-like memorial chapel with pyramidal roof vocabulary. D080 is an original enclosed remembrance-building pair, not a recreation of its structure or landscape."
+    }
+  ],
+  "models": [
+    {
+      "k": 21,
+      "v": 3,
+      "name": "Z-plan tram terminus hall",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.43,
+      "weightedCap": 92,
+      "components": [
+        {
+          "id": "cranked-tram-hall",
+          "groundFootprint": [
+            [
+              0.12,
+              0.16
+            ],
+            [
+              0.58,
+              0.16
+            ],
+            [
+              0.58,
+              0.38
+            ],
+            [
+              0.88,
+              0.38
+            ],
+            [
+              0.88,
+              0.84
+            ],
+            [
+              0.42,
+              0.84
+            ],
+            [
+              0.42,
+              0.62
+            ],
+            [
+              0.12,
+              0.62
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "cranked-tram-hall-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.12,
+                  0,
+                  0.16
+                ],
+                [
+                  0.58,
+                  0,
+                  0.16
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.16
+                ],
+                [
+                  0.12,
+                  0.48,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.45999999999999996
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.58,
+                  0,
+                  0.16
+                ],
+                [
+                  0.58,
+                  0,
+                  0.38
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.38
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.9999999999999999,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.22,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.58,
+                  0,
+                  0.38
+                ],
+                [
+                  0.88,
+                  0,
+                  0.38
+                ],
+                [
+                  0.88,
+                  1,
+                  0.38
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.38
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.30000000000000004
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.88,
+                  0,
+                  0.38
+                ],
+                [
+                  0.88,
+                  0,
+                  0.84
+                ],
+                [
+                  0.88,
+                  1,
+                  0.84
+                ],
+                [
+                  0.88,
+                  1,
+                  0.38
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.45999999999999996,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-4",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.88,
+                  0,
+                  0.84
+                ],
+                [
+                  0.42,
+                  0,
+                  0.84
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.84
+                ],
+                [
+                  0.88,
+                  1,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                0.46
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-5",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.42,
+                  0,
+                  0.84
+                ],
+                [
+                  0.42,
+                  0,
+                  0.62
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.62
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9999999999999999,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.21999999999999997,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-6",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.42,
+                  0,
+                  0.62
+                ],
+                [
+                  0.12,
+                  0,
+                  0.62
+                ],
+                [
+                  0.12,
+                  0.48,
+                  0.62
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.62
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                0.3
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "cranked-tram-hall-wall-7",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.12,
+                  0,
+                  0.62
+                ],
+                [
+                  0.12,
+                  0,
+                  0.16
+                ],
+                [
+                  0.12,
+                  0.48,
+                  0.16
+                ],
+                [
+                  0.12,
+                  0.48,
+                  0.62
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.45999999999999996,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "cranked-tram-hall-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.12,
+                  0.48,
+                  0.16
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.16
+                ],
+                [
+                  0.58,
+                  0.7947368421052632,
+                  0.38
+                ],
+                [
+                  0.88,
+                  1,
+                  0.38
+                ],
+                [
+                  0.88,
+                  1,
+                  0.84
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.84
+                ],
+                [
+                  0.42,
+                  0.6852631578947368,
+                  0.62
+                ],
+                [
+                  0.12,
+                  0.48,
+                  0.62
+                ]
+              ],
+              "triangulation": [
+                [
+                  6,
+                  0,
+                  7
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ],
+                [
+                  2,
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  6,
+                  5
+                ],
+                [
+                  6,
+                  2,
+                  0
+                ],
+                [
+                  2,
+                  6,
+                  4
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  6,
+                  0,
+                  7
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ],
+                [
+                  2,
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  6,
+                  5
+                ],
+                [
+                  6,
+                  2,
+                  0
+                ],
+                [
+                  2,
+                  6,
+                  4
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.5646839155919903,
+                0.8253072612498318,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 22
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Z-plan tram terminus hall-ground-0",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.16,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.94
+            ],
+            [
+              0.16,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Z-plan tram terminus hall-ground-1",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.58,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.94
+            ],
+            [
+              0.58,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 16,
+      "roofTriangles": 6,
+      "shellTriangles": 22,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 48,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A continuous eight-sided Z footprint has two opposed re-entrant corners and a complete raked roof. No previous L, T, V, U or rectangular workshop shares its footprint topology."
+    },
+    {
+      "k": 21,
+      "v": 4,
+      "name": "Y-plan tram waiting pavilion",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.37,
+      "weightedCap": 92,
+      "components": [
+        {
+          "id": "three-arm-tram-pavilion",
+          "groundFootprint": [
+            [
+              0.43,
+              0.14
+            ],
+            [
+              0.61,
+              0.14
+            ],
+            [
+              0.61,
+              0.4
+            ],
+            [
+              0.88,
+              0.68
+            ],
+            [
+              0.75,
+              0.84
+            ],
+            [
+              0.52,
+              0.58
+            ],
+            [
+              0.26,
+              0.84
+            ],
+            [
+              0.12,
+              0.68
+            ],
+            [
+              0.43,
+              0.38
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "three-arm-tram-pavilion-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.43,
+                  0,
+                  0.14
+                ],
+                [
+                  0.61,
+                  0,
+                  0.14
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.18
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.61,
+                  0,
+                  0.14
+                ],
+                [
+                  0.61,
+                  0,
+                  0.4
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.4
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.26,
+                0,
+                0
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.61,
+                  0,
+                  0.4
+                ],
+                [
+                  0.88,
+                  0,
+                  0.68
+                ],
+                [
+                  0.88,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.4
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.7198442954206852,
+                0,
+                -0.694135570584232
+              ],
+              "outwardDirection": [
+                0.28,
+                0,
+                -0.27
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.88,
+                  0,
+                  0.68
+                ],
+                [
+                  0.75,
+                  0,
+                  0.84
+                ],
+                [
+                  0.75,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.88,
+                  0.5,
+                  0.68
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.7761140001162653,
+                0,
+                0.6305926250944659
+              ],
+              "outwardDirection": [
+                0.15999999999999992,
+                0,
+                0.13
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-4",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.75,
+                  0,
+                  0.84
+                ],
+                [
+                  0.52,
+                  0,
+                  0.58
+                ],
+                [
+                  0.52,
+                  0.5,
+                  0.58
+                ],
+                [
+                  0.75,
+                  0.5,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7489965624903806,
+                0,
+                0.6625738822030289
+              ],
+              "outwardDirection": [
+                -0.26,
+                0,
+                0.22999999999999998
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-5",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.52,
+                  0,
+                  0.58
+                ],
+                [
+                  0.26,
+                  0,
+                  0.84
+                ],
+                [
+                  0.26,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.52,
+                  0.5,
+                  0.58
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.7071067811865475,
+                0,
+                0.7071067811865475
+              ],
+              "outwardDirection": [
+                0.26,
+                0,
+                0.26
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-6",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.26,
+                  0,
+                  0.84
+                ],
+                [
+                  0.12,
+                  0,
+                  0.68
+                ],
+                [
+                  0.12,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.26,
+                  0.5,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7525766947068776,
+                0,
+                0.6585046078685183
+              ],
+              "outwardDirection": [
+                -0.15999999999999992,
+                0,
+                0.14
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-7",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.12,
+                  0,
+                  0.68
+                ],
+                [
+                  0.43,
+                  0,
+                  0.38
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.38
+                ],
+                [
+                  0.12,
+                  0.5,
+                  0.68
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.6954214275160556,
+                0,
+                -0.7186021417665907
+              ],
+              "outwardDirection": [
+                -0.30000000000000004,
+                0,
+                -0.31
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "three-arm-tram-pavilion-wall-8",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.43,
+                  0,
+                  0.38
+                ],
+                [
+                  0.43,
+                  0,
+                  0.14
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.38
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.24,
+                0,
+                0
+              ],
+              "windowStyle": "ribbon"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "three-arm-tram-pavilion-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.43,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0.5508422083307386,
+                -0.8346094065617253
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.61,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.61,
+                  0.5,
+                  0.4
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.9841833239736953,
+                0.1771529983152651,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-2",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.61,
+                  0.5,
+                  0.4
+                ],
+                [
+                  0.88,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.702022897651825,
+                0.22113721276032478,
+                -0.676950651307117
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-3",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.88,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.75,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.5990701224064028,
+                0.6357631674037951,
+                0.4867444744552026
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-4",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.75,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.52,
+                  0.5,
+                  0.58
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7411638990582602,
+                0.14424189727826137,
+                0.6556449876284608
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-5",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.52,
+                  0.5,
+                  0.58
+                ],
+                [
+                  0.26,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.6987030135838642,
+                0.1537146629884501,
+                0.6987030135838642
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-6",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.26,
+                  0.5,
+                  0.84
+                ],
+                [
+                  0.12,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.5653525303174949,
+                0.6600490791456755,
+                0.4946834640278083
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-7",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.12,
+                  0.5,
+                  0.68
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.38
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.6739343573963168,
+                0.24665997480705196,
+                -0.696398835976194
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "three-arm-tram-pavilion-roof-8",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.43,
+                  0.5,
+                  0.38
+                ],
+                [
+                  0.43,
+                  0.5,
+                  0.14
+                ],
+                [
+                  0.52,
+                  1,
+                  0.47
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9841833239736952,
+                0.17715299831526518,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-radial-roof",
+          "apex": [
+            0.52,
+            1,
+            0.47
+          ],
+          "shellTriangles": 27
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Y-plan tram waiting pavilion-ground-0",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.16,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.94
+            ],
+            [
+              0.16,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Y-plan tram waiting pavilion-ground-1",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.58,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.94
+            ],
+            [
+              0.58,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 18,
+      "roofTriangles": 9,
+      "shellTriangles": 27,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 58,
+      "treeContract": null,
+      "uniquenessDesignRationale": "Three outward arms and three real intervening notches meet one enclosed central hall. A radial roof covers the entire Y footprint without filling the exterior notches."
+    },
+    {
+      "k": 29,
+      "v": 4,
+      "name": "Notched municipal sorting lodge",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.22,
+      "weightedCap": 62,
+      "components": [
+        {
+          "id": "notched-sorting-hall",
+          "groundFootprint": [
+            [
+              0.14,
+              0.3
+            ],
+            [
+              0.86,
+              0.3
+            ],
+            [
+              0.86,
+              0.84
+            ],
+            [
+              0.5,
+              0.6
+            ],
+            [
+              0.14,
+              0.84
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "notched-sorting-hall-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.72
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "notched-sorting-hall-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0,
+                  0.84
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.54,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "notched-sorting-hall-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.84
+                ],
+                [
+                  0.5,
+                  0,
+                  0.6
+                ],
+                [
+                  0.5,
+                  0.56,
+                  0.6
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.5547001962252291,
+                0,
+                0.8320502943378436
+              ],
+              "outwardDirection": [
+                -0.24,
+                0,
+                0.36
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "notched-sorting-hall-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.5,
+                  0,
+                  0.6
+                ],
+                [
+                  0.14,
+                  0,
+                  0.84
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.5,
+                  0.56,
+                  0.6
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.5547001962252291,
+                0,
+                0.8320502943378436
+              ],
+              "outwardDirection": [
+                0.24,
+                0,
+                0.36
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "notched-sorting-hall-wall-4",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.84
+                ],
+                [
+                  0.14,
+                  0,
+                  0.3
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.54,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "notched-sorting-hall-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.5,
+                  1,
+                  0.48
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0.37863284572050415,
+                -0.9255469562056768
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "notched-sorting-hall-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.5,
+                  1,
+                  0.48
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.7739572992033209,
+                0.6332377902572627,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "notched-sorting-hall-roof-2",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.86,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.5,
+                  0.56,
+                  0.6
+                ],
+                [
+                  0.5,
+                  1,
+                  0.48
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.5409472635653937,
+                0.22129660782220656,
+                0.8114208953480906
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "notched-sorting-hall-roof-3",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.5,
+                  0.56,
+                  0.6
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.5,
+                  1,
+                  0.48
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.5409472635653937,
+                0.2212966078222065,
+                0.8114208953480906
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "notched-sorting-hall-roof-4",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.56,
+                  0.84
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.5,
+                  1,
+                  0.48
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7739572992033209,
+                0.6332377902572627,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-radial-roof",
+          "apex": [
+            0.5,
+            1,
+            0.48
+          ],
+          "shellTriangles": 15
+        },
+        {
+          "id": "front-intake-room",
+          "groundFootprint": [
+            [
+              0.36,
+              0.12
+            ],
+            [
+              0.64,
+              0.12
+            ],
+            [
+              0.64,
+              0.3
+            ],
+            [
+              0.36,
+              0.3
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "front-intake-room-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.36,
+                  0,
+                  0.12
+                ],
+                [
+                  0.64,
+                  0,
+                  0.12
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.12
+                ],
+                [
+                  0.36,
+                  0.3,
+                  0.12
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.28
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "front-intake-room-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.64,
+                  0,
+                  0.12
+                ],
+                [
+                  0.64,
+                  0,
+                  0.3
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.3
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.12
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.18,
+                0,
+                0
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "front-intake-room-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.64,
+                  0,
+                  0.3
+                ],
+                [
+                  0.36,
+                  0,
+                  0.3
+                ],
+                [
+                  0.36,
+                  0.3,
+                  0.3
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                0.28
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "front-intake-room-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.36,
+                  0,
+                  0.3
+                ],
+                [
+                  0.36,
+                  0,
+                  0.12
+                ],
+                [
+                  0.36,
+                  0.3,
+                  0.12
+                ],
+                [
+                  0.36,
+                  0.3,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.18,
+                0,
+                0
+              ],
+              "windowStyle": "punch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "front-intake-room-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.36,
+                  0.3,
+                  0.12
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.12
+                ],
+                [
+                  0.64,
+                  0.3,
+                  0.3
+                ],
+                [
+                  0.36,
+                  0.3,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                1,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 10
+        }
+      ],
+      "contacts": [
+        {
+          "id": "sorting-intake-contact",
+          "componentA": "notched-sorting-hall",
+          "componentB": "front-intake-room",
+          "plane": {
+            "coordinate": "z",
+            "constant": 0.3,
+            "normalFromAToB": [
+              0,
+              0,
+              -1
+            ]
+          },
+          "edge": [
+            [
+              0.36,
+              0.3
+            ],
+            [
+              0.64,
+              0.3
+            ]
+          ],
+          "tangent": [
+            1,
+            0,
+            0
+          ],
+          "heightLower": 0,
+          "heightUpper": 0.3,
+          "componentABoundaryCeiling": {
+            "expression": "0.56",
+            "minimumOnContact": 0.56
+          },
+          "minimumVerticalClearance": 0.26000000000000006,
+          "oppositeNormals": [
+            [
+              0,
+              0,
+              -1
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ],
+          "edgeSampleFractions": [
+            0.2,
+            0.5,
+            0.8
+          ],
+          "localHeightSampleFractions": [
+            0.25,
+            0.5,
+            0.75
+          ],
+          "probeOffsetParcel": 0.00001,
+          "requiredControls": [
+            "shifted-gap",
+            "false-overlap",
+            "wrong-normal",
+            "missing-shared-wall",
+            "annex-top-crossing-host",
+            "insufficient-positive-top-clearance"
+          ]
+        }
+      ],
+      "groundDecoration": [
+        {
+          "id": "Notched municipal sorting lodge-ground-0",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.16,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.9
+            ],
+            [
+              0.42,
+              0.004,
+              0.94
+            ],
+            [
+              0.16,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Notched municipal sorting lodge-ground-1",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.58,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.94
+            ],
+            [
+              0.58,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 18,
+      "roofTriangles": 7,
+      "shellTriangles": 25,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 54,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A true concave rear court cuts into a five-sided apex-roof sorting house; a lower complete rectangular intake attaches to the opposite front. Not a convex radial hall with a roof-only change."
+    },
+    {
+      "k": 127,
+      "v": 0,
+      "name": "Cranked council housing slab",
+      "parcelSize": 2,
+      "actualLevelOneH": 1.61,
+      "weightedCap": 20,
+      "components": [
+        {
+          "id": "cranked-estate-slab",
+          "groundFootprint": [
+            [
+              0.14,
+              0.16
+            ],
+            [
+              0.86,
+              0.16
+            ],
+            [
+              0.52,
+              0.44
+            ],
+            [
+              0.72,
+              0.84
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "cranked-estate-slab-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.16
+                ],
+                [
+                  0.86,
+                  0,
+                  0.16
+                ],
+                [
+                  0.86,
+                  1,
+                  0.16
+                ],
+                [
+                  0.14,
+                  1,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.72
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "cranked-estate-slab-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.16
+                ],
+                [
+                  0.52,
+                  0,
+                  0.44
+                ],
+                [
+                  0.52,
+                  1,
+                  0.44
+                ],
+                [
+                  0.86,
+                  1,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.6357072528610997,
+                0,
+                0.7719302356170495
+              ],
+              "outwardDirection": [
+                0.28,
+                0,
+                0.33999999999999997
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "cranked-estate-slab-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.52,
+                  0,
+                  0.44
+                ],
+                [
+                  0.72,
+                  0,
+                  0.84
+                ],
+                [
+                  0.72,
+                  1,
+                  0.84
+                ],
+                [
+                  0.52,
+                  1,
+                  0.44
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.8944271909999161,
+                0,
+                -0.4472135954999579
+              ],
+              "outwardDirection": [
+                0.39999999999999997,
+                0,
+                -0.19999999999999996
+              ],
+              "windowStyle": "ribbon"
+            },
+            {
+              "id": "cranked-estate-slab-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.72,
+                  0,
+                  0.84
+                ],
+                [
+                  0.14,
+                  0,
+                  0.16
+                ],
+                [
+                  0.14,
+                  1,
+                  0.16
+                ],
+                [
+                  0.72,
+                  1,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7608339519590858,
+                0,
+                0.6489466060827497
+              ],
+              "outwardDirection": [
+                -0.6799999999999999,
+                0,
+                0.58
+              ],
+              "windowStyle": "ribbon"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "cranked-estate-slab-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  1,
+                  0.16
+                ],
+                [
+                  0.86,
+                  1,
+                  0.16
+                ],
+                [
+                  0.52,
+                  1,
+                  0.44
+                ],
+                [
+                  0.72,
+                  1,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                1,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 10
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [],
+      "wallTriangles": 8,
+      "roofTriangles": 2,
+      "shellTriangles": 10,
+      "groundTriangles": 0,
+      "plannedWeightedCost": 20,
+      "treeContract": null,
+      "uniquenessDesignRationale": "Four perimeter walls define a genuinely concave cranked slab with a deep open notch. Its flat roof uses two concavity-preserving triangles. Not a sheared or scaled rectangular slab."
+    },
+    {
+      "k": 127,
+      "v": 1,
+      "name": "Kite-plan council point block",
+      "parcelSize": 2,
+      "actualLevelOneH": 1.51,
+      "weightedCap": 20,
+      "components": [
+        {
+          "id": "kite-estate-block",
+          "groundFootprint": [
+            [
+              0.16,
+              0.36
+            ],
+            [
+              0.44,
+              0.12
+            ],
+            [
+              0.86,
+              0.42
+            ],
+            [
+              0.54,
+              0.86
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "kite-estate-block-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.16,
+                  0,
+                  0.36
+                ],
+                [
+                  0.44,
+                  0,
+                  0.12
+                ],
+                [
+                  0.44,
+                  1,
+                  0.12
+                ],
+                [
+                  0.16,
+                  0.58,
+                  0.36
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.6507913734559685,
+                0,
+                -0.7592566023652967
+              ],
+              "outwardDirection": [
+                -0.24,
+                0,
+                -0.28
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "kite-estate-block-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.44,
+                  0,
+                  0.12
+                ],
+                [
+                  0.86,
+                  0,
+                  0.42
+                ],
+                [
+                  0.86,
+                  0.58,
+                  0.42
+                ],
+                [
+                  0.44,
+                  1,
+                  0.12
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.5812381937190964,
+                0,
+                -0.813733471206735
+              ],
+              "outwardDirection": [
+                0.3,
+                0,
+                -0.42
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "kite-estate-block-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.42
+                ],
+                [
+                  0.54,
+                  0,
+                  0.86
+                ],
+                [
+                  0.54,
+                  0.86,
+                  0.86
+                ],
+                [
+                  0.86,
+                  0.58,
+                  0.42
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.8087360843031886,
+                0,
+                0.5881716976750461
+              ],
+              "outwardDirection": [
+                0.44,
+                0,
+                0.31999999999999995
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "kite-estate-block-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.54,
+                  0,
+                  0.86
+                ],
+                [
+                  0.16,
+                  0,
+                  0.36
+                ],
+                [
+                  0.16,
+                  0.58,
+                  0.36
+                ],
+                [
+                  0.54,
+                  0.86,
+                  0.86
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7961621941231025,
+                0,
+                0.6050832675335579
+              ],
+              "outwardDirection": [
+                -0.5,
+                0,
+                0.38
+              ],
+              "windowStyle": "punch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "kite-estate-block-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.16,
+                  0.58,
+                  0.36
+                ],
+                [
+                  0.44,
+                  1,
+                  0.12
+                ],
+                [
+                  0.54,
+                  0.86,
+                  0.86
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.7492255294241627,
+                0.6248951746135152,
+                0.21947010457879512
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "kite-estate-block-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.44,
+                  1,
+                  0.12
+                ],
+                [
+                  0.86,
+                  0.58,
+                  0.42
+                ],
+                [
+                  0.54,
+                  0.86,
+                  0.86
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.6908580416601554,
+                0.7216999185199835,
+                0.04317862760375968
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "explicit-boundary-folded-roof",
+          "roofPartition": [
+            [
+              0,
+              1,
+              3
+            ],
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          "shellTriangles": 10
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [],
+      "wallTriangles": 8,
+      "roofTriangles": 2,
+      "shellTriangles": 10,
+      "groundTriangles": 0,
+      "plannedWeightedCost": 20,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A skew kite footprint supports a descending diagonal ridge between opposite corners, with two roof planes and four complete raked wall faces. Unlike the prior kite marine hall there are no interior ridge vertices or detached ticket house."
+    },
+    {
+      "k": 127,
+      "v": 2,
+      "name": "Diagonal-valley council housing",
+      "parcelSize": 2,
+      "actualLevelOneH": 0.7,
+      "weightedCap": 20,
+      "components": [
+        {
+          "id": "diagonal-valley-estate-block",
+          "groundFootprint": [
+            [
+              0.14,
+              0.18
+            ],
+            [
+              0.86,
+              0.3
+            ],
+            [
+              0.7,
+              0.84
+            ],
+            [
+              0.3,
+              0.66
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "diagonal-valley-estate-block-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.18
+                ],
+                [
+                  0.86,
+                  0,
+                  0.3
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.14,
+                  1,
+                  0.18
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.16439898730535732,
+                0,
+                -0.9863939238321437
+              ],
+              "outwardDirection": [
+                0.12,
+                0,
+                -0.72
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "diagonal-valley-estate-block-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.3
+                ],
+                [
+                  0.7,
+                  0,
+                  0.84
+                ],
+                [
+                  0.7,
+                  0.84,
+                  0.84
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.9587981127083873,
+                0,
+                0.28408832969137404
+              ],
+              "outwardDirection": [
+                0.54,
+                0,
+                0.16000000000000003
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "diagonal-valley-estate-block-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.7,
+                  0,
+                  0.84
+                ],
+                [
+                  0.3,
+                  0,
+                  0.66
+                ],
+                [
+                  0.3,
+                  0.5,
+                  0.66
+                ],
+                [
+                  0.7,
+                  0.84,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.4103646773287978,
+                0,
+                0.9119215051751064
+              ],
+              "outwardDirection": [
+                -0.17999999999999994,
+                0,
+                0.39999999999999997
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "diagonal-valley-estate-block-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.3,
+                  0,
+                  0.66
+                ],
+                [
+                  0.14,
+                  0,
+                  0.18
+                ],
+                [
+                  0.14,
+                  1,
+                  0.18
+                ],
+                [
+                  0.3,
+                  0.5,
+                  0.66
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9486832980505138,
+                0,
+                0.31622776601683783
+              ],
+              "outwardDirection": [
+                -0.48000000000000004,
+                0,
+                0.15999999999999998
+              ],
+              "windowStyle": "grid"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "diagonal-valley-estate-block-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  1,
+                  0.18
+                ],
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.3,
+                  0.5,
+                  0.66
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.3274088461250536,
+                0.7067873503651952,
+                0.6271005412553938
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "diagonal-valley-estate-block-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.86,
+                  0.56,
+                  0.3
+                ],
+                [
+                  0.7,
+                  0.84,
+                  0.84
+                ],
+                [
+                  0.3,
+                  0.5,
+                  0.66
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.4103646773287979,
+                0.75418373130698,
+                -0.5126477650714111
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "explicit-boundary-folded-roof",
+          "roofPartition": [
+            [
+              0,
+              1,
+              3
+            ],
+            [
+              1,
+              2,
+              3
+            ]
+          ],
+          "shellTriangles": 10
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [],
+      "wallTriangles": 8,
+      "roofTriangles": 2,
+      "shellTriangles": 10,
+      "groundTriangles": 0,
+      "plannedWeightedCost": 20,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A skew non-parallelogram slab has a genuine descending diagonal roof valley between low opposite corners. It changes both footprint and signed roof concavity relative to the kite ridge block, and differs from the rectangular six-boundary-vertex butterfly nursery. No rotation or axis scaling can change a convex ridge into this concave valley."
+    },
+    {
+      "k": 120,
+      "v": 0,
+      "name": "Re-entrant fishery keeper lodge",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.96,
+      "weightedCap": 32,
+      "components": [
+        {
+          "id": "notched-fishery-lodge",
+          "groundFootprint": [
+            [
+              0.14,
+              0.14
+            ],
+            [
+              0.62,
+              0.14
+            ],
+            [
+              0.62,
+              0.54
+            ],
+            [
+              0.37,
+              0.38
+            ],
+            [
+              0.14,
+              0.54
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "notched-fishery-lodge-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.62,
+                  0,
+                  0.14
+                ],
+                [
+                  0.62,
+                  1,
+                  0.14
+                ],
+                [
+                  0.14,
+                  1,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.48
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "notched-fishery-lodge-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.62,
+                  0,
+                  0.14
+                ],
+                [
+                  0.62,
+                  0,
+                  0.54
+                ],
+                [
+                  0.62,
+                  1,
+                  0.54
+                ],
+                [
+                  0.62,
+                  1,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.4,
+                0,
+                0
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "notched-fishery-lodge-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.62,
+                  0,
+                  0.54
+                ],
+                [
+                  0.37,
+                  0,
+                  0.38
+                ],
+                [
+                  0.37,
+                  1,
+                  0.38
+                ],
+                [
+                  0.62,
+                  1,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.5390536964233674,
+                0,
+                0.8422714006615114
+              ],
+              "outwardDirection": [
+                -0.16000000000000003,
+                0,
+                0.25
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "notched-fishery-lodge-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.37,
+                  0,
+                  0.38
+                ],
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  1,
+                  0.54
+                ],
+                [
+                  0.37,
+                  1,
+                  0.38
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.5710644881985999,
+                0,
+                0.8209052017854871
+              ],
+              "outwardDirection": [
+                0.16000000000000003,
+                0,
+                0.22999999999999998
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "notched-fishery-lodge-wall-4",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.14,
+                  1,
+                  0.14
+                ],
+                [
+                  0.14,
+                  1,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.4,
+                0,
+                0
+              ],
+              "windowStyle": "punch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "notched-fishery-lodge-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  1,
+                  0.14
+                ],
+                [
+                  0.62,
+                  1,
+                  0.14
+                ],
+                [
+                  0.62,
+                  1,
+                  0.54
+                ],
+                [
+                  0.37,
+                  1,
+                  0.38
+                ],
+                [
+                  0.14,
+                  1,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  3,
+                  0,
+                  4
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ],
+                [
+                  2,
+                  0,
+                  3
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  3,
+                  0,
+                  4
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ],
+                [
+                  2,
+                  0,
+                  3
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                1,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 13
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Re-entrant fishery keeper lodge-ground-0",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.14,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.86
+            ],
+            [
+              0.14,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Re-entrant fishery keeper lodge-ground-1",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.54,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.86
+            ],
+            [
+              0.54,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 10,
+      "roofTriangles": 3,
+      "shellTriangles": 13,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 30,
+      "treeContract": null,
+      "uniquenessDesignRationale": "Five perimeter walls and a real re-entrant lake-facing cutout distinguish this compact keeper lodge from prior convex five-sided day pavilions. Two ground-only ponds remain separate from structure."
+    },
+    {
+      "k": 120,
+      "v": 1,
+      "name": "Paired fishery keeper rooms",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.68,
+      "weightedCap": 32,
+      "components": [
+        {
+          "id": "triangular-net-room",
+          "groundFootprint": [
+            [
+              0.14,
+              0.14
+            ],
+            [
+              0.43,
+              0.14
+            ],
+            [
+              0.14,
+              0.54
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "triangular-net-room-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.43,
+                  0,
+                  0.14
+                ],
+                [
+                  0.43,
+                  1,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.48,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.29
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "triangular-net-room-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.43,
+                  0,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0.48,
+                  0.54
+                ],
+                [
+                  0.43,
+                  1,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.8096104433943877,
+                0,
+                0.586967571460931
+              ],
+              "outwardDirection": [
+                0.4,
+                0,
+                0.29
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "triangular-net-room-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.48,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.48,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.4,
+                0,
+                0
+              ],
+              "windowStyle": "punch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "triangular-net-room-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.48,
+                  0.14
+                ],
+                [
+                  0.43,
+                  1,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.48,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.8733638743282574,
+                0.4870683145292204,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 7
+        },
+        {
+          "id": "triangular-feed-room",
+          "groundFootprint": [
+            [
+              0.52,
+              0.22
+            ],
+            [
+              0.86,
+              0.22
+            ],
+            [
+              0.86,
+              0.54
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "triangular-feed-room-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.52,
+                  0,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0.44,
+                  0.22
+                ],
+                [
+                  0.52,
+                  0.44,
+                  0.22
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.33999999999999997
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "triangular-feed-room-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0,
+                  0.54
+                ],
+                [
+                  0.86,
+                  0.68,
+                  0.54
+                ],
+                [
+                  0.86,
+                  0.44,
+                  0.22
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                0.32000000000000006,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "triangular-feed-room-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.86,
+                  0,
+                  0.54
+                ],
+                [
+                  0.52,
+                  0,
+                  0.22
+                ],
+                [
+                  0.52,
+                  0.44,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0.68,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.6853646990049911,
+                0,
+                0.7281999926928028
+              ],
+              "outwardDirection": [
+                -0.32000000000000006,
+                0,
+                0.33999999999999997
+              ],
+              "windowStyle": "grid"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "triangular-feed-room-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.52,
+                  0.44,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0.44,
+                  0.22
+                ],
+                [
+                  0.86,
+                  0.68,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0.8,
+                -0.6
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 7
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Paired fishery keeper rooms-ground-0",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.14,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.86
+            ],
+            [
+              0.14,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Paired fishery keeper rooms-ground-1",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.54,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.86
+            ],
+            [
+              0.54,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 12,
+      "roofTriangles": 2,
+      "shellTriangles": 14,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 32,
+      "treeContract": null,
+      "uniquenessDesignRationale": "Two detached scalene triangular rooms have complete monopitch roofs, unequal heights and an open service gap. No previous two-house composition uses two triangular enclosed footprints."
+    },
+    {
+      "k": 120,
+      "v": 2,
+      "name": "Chamfered folded fishery store",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.51,
+      "weightedCap": 32,
+      "components": [
+        {
+          "id": "chamfered-fishery-store",
+          "groundFootprint": [
+            [
+              0.14,
+              0.14
+            ],
+            [
+              0.52,
+              0.14
+            ],
+            [
+              0.72,
+              0.32
+            ],
+            [
+              0.52,
+              0.54
+            ],
+            [
+              0.14,
+              0.54
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "chamfered-fishery-store-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.52,
+                  0,
+                  0.14
+                ],
+                [
+                  0.52,
+                  0.54,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.38
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "chamfered-fishery-store-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.52,
+                  0,
+                  0.14
+                ],
+                [
+                  0.72,
+                  0,
+                  0.32
+                ],
+                [
+                  0.72,
+                  1,
+                  0.32
+                ],
+                [
+                  0.52,
+                  0.54,
+                  0.14
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.6689647316224497,
+                0,
+                -0.7432941462471663
+              ],
+              "outwardDirection": [
+                0.18,
+                0,
+                -0.19999999999999996
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "chamfered-fishery-store-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.72,
+                  0,
+                  0.32
+                ],
+                [
+                  0.52,
+                  0,
+                  0.54
+                ],
+                [
+                  0.52,
+                  0.66,
+                  0.54
+                ],
+                [
+                  0.72,
+                  1,
+                  0.32
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.7399400733959438,
+                0,
+                0.6726727939963123
+              ],
+              "outwardDirection": [
+                0.22000000000000003,
+                0,
+                0.19999999999999996
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "chamfered-fishery-store-wall-3",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.52,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.54
+                ],
+                [
+                  0.52,
+                  0.66,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                0.9999999999999999
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                0.38
+              ],
+              "windowStyle": "grid"
+            },
+            {
+              "id": "chamfered-fishery-store-wall-4",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.14
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -1,
+                0,
+                0
+              ],
+              "outwardDirection": [
+                -0.4,
+                0,
+                0
+              ],
+              "windowStyle": "grid"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "chamfered-fishery-store-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.54,
+                  0.14
+                ],
+                [
+                  0.52,
+                  0.54,
+                  0.14
+                ],
+                [
+                  0.72,
+                  1,
+                  0.32
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0.3643993485805122,
+                -0.9312427797057533
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "chamfered-fishery-store-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.54,
+                  0.14
+                ],
+                [
+                  0.72,
+                  1,
+                  0.32
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.6213947110020441,
+                0.7834976790895338,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "chamfered-fishery-store-roof-2",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.72,
+                  1,
+                  0.32
+                ],
+                [
+                  0.52,
+                  0.66,
+                  0.54
+                ],
+                [
+                  0.14,
+                  0.54,
+                  0.54
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.1927831238277618,
+                0.6104798921212458,
+                0.7682115388894142
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "explicit-boundary-folded-roof",
+          "roofPartition": [
+            [
+              0,
+              1,
+              2
+            ],
+            [
+              0,
+              2,
+              4
+            ],
+            [
+              2,
+              3,
+              4
+            ]
+          ],
+          "shellTriangles": 13
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Chamfered folded fishery store-ground-0",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.14,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.66
+            ],
+            [
+              0.42,
+              0.004,
+              0.86
+            ],
+            [
+              0.14,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "Chamfered folded fishery store-ground-1",
+          "role": "ground-water",
+          "vertices": [
+            [
+              0.54,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.66
+            ],
+            [
+              0.86,
+              0.004,
+              0.86
+            ],
+            [
+              0.54,
+              0.004,
+              0.86
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 10,
+      "roofTriangles": 3,
+      "shellTriangles": 13,
+      "groundTriangles": 4,
+      "plannedWeightedCost": 30,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A canted five-sided keeper store has three explicit noncoplanar roof facets ending in a high canted point. No central apex, rotated rectangular box or filled concave notch."
+    },
+    {
+      "k": 72,
+      "v": 0,
+      "name": "Remembrance hall and vigil pavilion",
+      "parcelSize": 1,
+      "actualLevelOneH": 0.89,
+      "weightedCap": 34,
+      "components": [
+        {
+          "id": "triangular-remembrance-hall",
+          "groundFootprint": [
+            [
+              0.14,
+              0.16
+            ],
+            [
+              0.6,
+              0.16
+            ],
+            [
+              0.34,
+              0.78
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "triangular-remembrance-hall-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.14,
+                  0,
+                  0.16
+                ],
+                [
+                  0.6,
+                  0,
+                  0.16
+                ],
+                [
+                  0.6,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0,
+                -1
+              ],
+              "outwardDirection": [
+                0,
+                0,
+                -0.45999999999999996
+              ],
+              "windowStyle": "arch"
+            },
+            {
+              "id": "triangular-remembrance-hall-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.6,
+                  0,
+                  0.16
+                ],
+                [
+                  0.34,
+                  0,
+                  0.78
+                ],
+                [
+                  0.34,
+                  0.56,
+                  0.78
+                ],
+                [
+                  0.6,
+                  0.56,
+                  0.16
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.922194381828531,
+                0,
+                0.3867266762506742
+              ],
+              "outwardDirection": [
+                0.62,
+                0,
+                0.25999999999999995
+              ],
+              "windowStyle": "arch"
+            },
+            {
+              "id": "triangular-remembrance-hall-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.34,
+                  0,
+                  0.78
+                ],
+                [
+                  0.14,
+                  0,
+                  0.16
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.34,
+                  0.56,
+                  0.78
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9517086177605509,
+                0,
+                0.3070027799227584
+              ],
+              "outwardDirection": [
+                -0.62,
+                0,
+                0.2
+              ],
+              "windowStyle": "arch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "triangular-remembrance-hall-roof-0",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.14,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.6,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.34,
+                  1,
+                  0.36
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                0.413802944301184,
+                -0.9103664774626048
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "triangular-remembrance-hall-roof-1",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.6,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.34,
+                  0.56,
+                  0.78
+                ],
+                [
+                  0.34,
+                  1,
+                  0.36
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.865130509261016,
+                0.3463059076660665,
+                0.3627966651739743
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "id": "triangular-remembrance-hall-roof-2",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.34,
+                  0.56,
+                  0.78
+                ],
+                [
+                  0.14,
+                  0.56,
+                  0.16
+                ],
+                [
+                  0.34,
+                  1,
+                  0.36
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9133003959826982,
+                0.28122152955478985,
+                0.29461303096216074
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-radial-roof",
+          "apex": [
+            0.34,
+            1,
+            0.36
+          ],
+          "shellTriangles": 9
+        },
+        {
+          "id": "detached-vigil-pavilion",
+          "groundFootprint": [
+            [
+              0.7,
+              0.42
+            ],
+            [
+              0.88,
+              0.78
+            ],
+            [
+              0.68,
+              0.84
+            ]
+          ],
+          "groundInterfaceHeight": 0,
+          "groundClosure": "complete footprint boundary at y0; ground supplies the base interface",
+          "wallFaces": [
+            {
+              "id": "detached-vigil-pavilion-wall-0",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.7,
+                  0,
+                  0.42
+                ],
+                [
+                  0.88,
+                  0,
+                  0.78
+                ],
+                [
+                  0.88,
+                  0.42,
+                  0.78
+                ],
+                [
+                  0.7,
+                  0.42,
+                  0.42
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.8944271909999159,
+                0,
+                -0.447213595499958
+              ],
+              "outwardDirection": [
+                0.36000000000000004,
+                0,
+                -0.18000000000000005
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "detached-vigil-pavilion-wall-1",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.88,
+                  0,
+                  0.78
+                ],
+                [
+                  0.68,
+                  0,
+                  0.84
+                ],
+                [
+                  0.68,
+                  0.42,
+                  0.84
+                ],
+                [
+                  0.88,
+                  0.42,
+                  0.78
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  3
+                ],
+                [
+                  3,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0.2873478855663452,
+                0,
+                0.9578262852211514
+              ],
+              "outwardDirection": [
+                0.05999999999999994,
+                0,
+                0.19999999999999996
+              ],
+              "windowStyle": "punch"
+            },
+            {
+              "id": "detached-vigil-pavilion-wall-2",
+              "role": "wall",
+              "vertices": [
+                [
+                  0.68,
+                  0,
+                  0.84
+                ],
+                [
+                  0.7,
+                  0,
+                  0.42
+                ],
+                [
+                  0.7,
+                  0.42,
+                  0.42
+                ],
+                [
+                  0.68,
+                  0.42,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  2,
+                  0,
+                  3
+                ],
+                [
+                  0,
+                  2,
+                  1
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                -0.9988681377244374,
+                0,
+                -0.04756514941544919
+              ],
+              "outwardDirection": [
+                -0.42,
+                0,
+                -0.019999999999999907
+              ],
+              "windowStyle": "punch"
+            }
+          ],
+          "roofFaces": [
+            {
+              "id": "detached-vigil-pavilion-roof",
+              "role": "roof",
+              "vertices": [
+                [
+                  0.7,
+                  0.42,
+                  0.42
+                ],
+                [
+                  0.88,
+                  0.42,
+                  0.78
+                ],
+                [
+                  0.68,
+                  0.42,
+                  0.84
+                ]
+              ],
+              "triangulation": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "orientedTriangles": [
+                [
+                  1,
+                  0,
+                  2
+                ]
+              ],
+              "normalizedPlaneNormal": [
+                0,
+                1,
+                0
+              ],
+              "outwardDirection": [
+                0,
+                1,
+                0
+              ]
+            }
+          ],
+          "roofForm": "complete-planar-roof",
+          "shellTriangles": 7
+        }
+      ],
+      "contacts": [],
+      "groundDecoration": [
+        {
+          "id": "Remembrance hall and vigil pavilion-ground-0",
+          "role": "ground-paving",
+          "vertices": [
+            [
+              0.16,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.9
+            ],
+            [
+              0.84,
+              0.004,
+              0.94
+            ],
+            [
+              0.16,
+              0.004,
+              0.94
+            ]
+          ],
+          "triangulation": [
+            [
+              2,
+              0,
+              3
+            ],
+            [
+              0,
+              2,
+              1
+            ]
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ]
+        }
+      ],
+      "wallTriangles": 12,
+      "roofTriangles": 4,
+      "shellTriangles": 16,
+      "groundTriangles": 2,
+      "plannedWeightedCost": 34,
+      "treeContract": null,
+      "uniquenessDesignRationale": "A broad fully enclosed triangular remembrance hall has three complete roof facets. A second lower enclosed triangular vigil pavilion is detached across a positive ground gap. This is neither a recolored monument shaft nor a box with a hip, and it differs from the fishery pair by component roof topology and massing.",
+      "separationWitness": {
+        "componentA": "triangular-remembrance-hall",
+        "componentB": "detached-vigil-pavilion",
+        "axis": "x",
+        "componentAMaximum": 0.6,
+        "componentBMinimum": 0.68,
+        "minimumGapParcel": 0.08,
+        "roofsContainedInFootprints": true
+      }
+    }
+  ],
+  "requiredGlobalControls": [
+    "finite nondegenerate planar faces",
+    "outward winding and world-perpendicular normals",
+    "complete roof/wall inventories",
+    "closed shells with ground-interface witnesses",
+    "positive contact clearance",
+    "nonoverlapping projected roof partition including concave end checks",
+    "exact prior110 preservation",
+    "all mandatory baseline and candidate samples visible at all3widths",
+    "full owner fit with original neighbours and24predeterminedviews",
+    "independent raw Three.js parity",
+    "no new shadows/lights/materials/trees/passes"
+  ],
+  "ai120TargetOwners": []
+}
