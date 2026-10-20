@@ -1,0 +1,50 @@
+name: D081 touch lease diagnosis
+on:
+  pull_request:
+    paths:
+      - 'src/ui/panelPress.ts'
+      - 'src/cityView.ts'
+      - 'tools/*d081-touch-lease*'
+      - '.github/workflows/d081-touch-lease.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  touch-layout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck && npm run build
+      - name: Record runtime and exact source
+        run: |
+          mkdir -p scratch/d081-touch-lease
+          { node --version; google-chrome --version; uname -a; git rev-parse HEAD; sha256sum src/ui/panelPress.ts src/cityView.ts dist/index.html; } > scratch/d081-touch-lease/runtime.txt
+      - name: Representative layout stress (synthetic schedule)
+        run: |
+          set -o pipefail
+          node tools/d081-touch-lease-browser.mjs 2>&1 | tee scratch/d081-touch-lease/layout.log
+        shell: bash
+      - name: Actual app layout (synthetic schedule)
+        if: always()
+        run: |
+          set -o pipefail
+          node tools/d081-touch-lease-app-browser.mjs 2>&1 | tee scratch/d081-touch-lease/app.log
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d081-touch-lease-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            scratch/d081-touch-lease/
+            scratch/d081-touch-lease-app/
+          if-no-files-found: error
+          retention-days: 14

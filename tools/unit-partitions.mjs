@@ -1,12 +1,13 @@
 // CI scheduling only: never change guard assertions or samples here.
 import assert from 'node:assert/strict';
 
-export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame']);
+export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame']);
 export const INLINE_SUITE = 'unit.mjs:inline';
 export const D078_FRAME = Object.freeze(['./unit-d078-frame.mjs', 'd078FrameGuards']);
 export const D079_FRAME = Object.freeze(['./unit-d079-frame.mjs', 'd079FrameGuards']);
 export const D080_FRAME = Object.freeze(['./unit-d080-frame.mjs', 'd080FrameGuards']);
-// Explicit, ordered inventory of every original guard registration, including D080.
+export const D081_FRAME = Object.freeze(['./unit-d081-frame.mjs', 'd081FrameGuards']);
+// Explicit, ordered inventory of every original guard registration, including D081.
 export const UNIT_GUARDS = Object.freeze([
   ["./unit-d010-fields.mjs","d010FieldGuards"],
   ["./unit-d010-sim.mjs","d010SimGuards"],
@@ -115,6 +116,8 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d074.mjs","d074Guards"],
   ["./unit-d074-frame.mjs","d074FrameGuards"],
   ["./unit-d074-touch-repair.mjs","d074TouchRepairGuards"],
+  ["./d081-touch-lease-scope.mjs","d081TouchLeaseScopeGuards"],
+  ["./unit-d081-touch-lease.mjs","d081TouchLeaseGuards"],
   ["./d074-touch-repair-scope.mjs","d074TouchRepairScopeGuards"],
   ["./unit-d076.mjs","d076Guards"],
   ["./unit-d076-frame.mjs","d076FrameGuards"],
@@ -126,11 +129,13 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d079-frame.mjs","d079FrameGuards"],
   ["./unit-d080.mjs","d080Guards"],
   ["./unit-d080-frame.mjs","d080FrameGuards"],
+  ["./unit-d081.mjs","d081Guards"],
+  ["./unit-d081-frame.mjs","d081FrameGuards"],
   ["./unit-evidence.mjs","evidenceImageGuards"],
 ].map(Object.freeze));
 
 const key = ([file, fn]) => file + ':' + fn;
-const frameKeys = new Map([['d078-frame', key(D078_FRAME)], ['d079-frame', key(D079_FRAME)], ['d080-frame', key(D080_FRAME)]]);
+const frameKeys = new Map([['d078-frame', key(D078_FRAME)], ['d079-frame', key(D079_FRAME)], ['d080-frame', key(D080_FRAME)], ['d081-frame', key(D081_FRAME)]]);
 
 export function parsePartition(args, allowed = PARTITIONS, fallback = 'all') {
   assert.ok(args.length <= 1, 'expected at most one --partition=<name> argument');
@@ -153,7 +158,7 @@ export function partitionInventory(partition) {
 }
 
 // Both full and historical visit every registration in its original order.
-// Only historical skips executing the separately scheduled D078, D079 and D080 frame exports.
+// Only historical skips executing the separately scheduled D078, D079, D080 and D081 frame exports.
 export function createGuardSelection(partition) {
   assert.ok(['all', 'historical'].includes(partition), 'unsupported inline runner partition: ' + partition);
   const selected = new Set(partitionInventory(partition));

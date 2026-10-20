@@ -10,6 +10,12 @@
 
 ---
 
+| D081 觸控修復完成候選驗證 | [PR34](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/34)／[驗收卡](docs/D081-touch-lease-repair.md) | 僅兩個產品檔；獨立審閱 lease／幾何、原 current-ID handler、exact scope 與 D051 單行相容層，未見阻擋整合的問題 | [CI39410580519](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39410580519) 61 驗證 job 成功，Pages skipped；原 trusted D052 全通過，新增 108+6 通過；另兩 workflow 成功 | 34f13ca；tested merge a2e41fa 與 head 同 tree c606c674 | final-head browser artifact12262842596；同產品診斷 20 原圖雜湊與實際像素重核通過 | 此列為文件補證前候選結果；補證新 head 仍須完整 CI，之後僅先整合 PR33。未合併 main／未部署／不計第13波；原 native 首紅根因未證明，synthetic 非實體手機證據；小屏追加項需捲動；保留所有首紅與原門檻 |
+
+| D081 觸控修復驗證候選 | [驗收卡](docs/D081-touch-lease-repair.md) | 使用者批准固定觸控委託位置、next-task新鮮數據、失效拒絕；保持原handler與凍結斷言，新增exact source層及混合觸控回歸 | focused與scope通過；完整本地historical有原性能首紅，遠端真瀏覽器及完整CI待跑 | 待審驗證分支 | 實際app幾何與原trusted smoke分開取證 | 未修復根因宣稱、未合併、未上線；本地Chrome受sandbox阻擋；日結算6.53ms/5ms、大圖1668ms/1500ms首紅保留，門檻未改 |
+
+| D081 候選 | [D081](docs/D081-british-field-study-buildings-ten.md) | 第13批：濕地研學5款、露營設施3款、紀念建築2款；17封閉量體／144完整面，保留120既發模型與全部原高／存檔槽 | 幾何30/30、130full與130W/O結構唯一；型別/build、CI分區235/235通過。完整本地frame36/36（2012.275s、312計畫原圖），60rawThree、45951/45951完整樣點與240負控通過；其後僅修capture卡路徑／說明／來源雜湊並新增回歸，修後focused15/15與實際provenance呼叫通過。最新head完整CI仍待驗 | inspection5662b7c | [三尺寸真WebGL預覽](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39348146689)，228原圖逐檔核驗，156初版原圖位元組完全相同；獨立看120張原圖 | 首紅保留：計數36→42由既有182v0 fallback獨立推導；capture錯卡路徑及前批metadata修正；360字型前置apt來源403原樣重試通過。低矮160較屋頂主導、72v1呈窄高楔塔；一補角有既有前景桿遮擋，其他角可見。只限saved/import槽，未做實體手機測試；正式CI／合併／上線仍未完成，不計第13波完成 |
+
 | D080 候選 | [D080](docs/D080-british-community-buildings-ten.md) | 第12批：電車站2款、回收中心1款、社宅3款、魚塘亭舍3款、紀念堂1款；獨立13量體／91面／160建築三角設計，保留110既發模型 | 修正後幾何31/31、型別/build通過；120full與120W/O結構唯一、原基線19464/19464與候選1440的6546/6546樣點通過。畫面接線15/15、4554負控及828ULP控制、CI等價分區200/200通過；完整三尺寸frame／正式CI待驗 | inspection414c75f | [修正後真實預覽](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39255424585)，初版104張原圖已核驗，三張360交付 | 保留水平法向首紅及已中斷首輪、72v0三個遮擋點及新增合法補角、127相機固定點14/15首紅。只修水平鋪地法向及新增測試接線，門檻不變；全為saved/import槽，29v4 H=.22沿用；未上線，不計第12波完成，未做實體手機測試 |
 
 | D079 正式發布 | [PR31](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/31) | 第11批十款英式交通及公用亭舍；main23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e | 最終PR39228413898全53驗證job成功；main39239090242全54job成功，Pages2026-10-19 12:03:07UTC完成 | 23eac8f12 | 最終三尺寸294原圖與已代審產品圖片逐byte一致；12:08:37UTC公站HTTP200，1426192bytes與發布產物一致，SHA7fcd1c82783521d1bf65a71e70c9be2c1e43e18263709b8d012945fcf85f7b3c | 累計11/20波110/200棟；初版分割22/29、frame34/36與多格施工判定失敗保留，修正後完整最新head通過。全為saved/import槽，回收中心原低高度保留；未做實體手機手動驗收 |

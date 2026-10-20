@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { UNIT_GUARDS, D078_FRAME, D079_FRAME, D080_FRAME, INLINE_SUITE, PARTITIONS, parsePartition, assertGuardInventory, partitionInventory, createGuardSelection } from './unit-partitions.mjs';
+import { UNIT_GUARDS, D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, INLINE_SUITE, PARTITIONS, parsePartition, assertGuardInventory, partitionInventory, createGuardSelection } from './unit-partitions.mjs';
 import { runFramePartition, frameProvenance } from './unit-partition.mjs';
 
 const source = fs.readFileSync(new URL('./unit.mjs', import.meta.url), 'utf8');
@@ -19,23 +19,26 @@ function runnerFixture(t) {
     read: name => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')) };
 }
 
-test('explicit inventory equals every original ordered registration, including D080', () => {
-  assert.equal(UNIT_GUARDS.length, 119);
-  assert.equal(registered.length, 119);
+test('explicit inventory equals every original ordered registration, including D081', () => {
+  assert.equal(UNIT_GUARDS.length, 123);
+  assert.equal(registered.length, 123);
   assertGuardInventory(registered);
-  assert.deepEqual(registered.slice(-7), [['./unit-d078.mjs', 'd078Guards'], [...D078_FRAME], ['./unit-d079.mjs', 'd079Guards'], [...D079_FRAME], ['./unit-d080.mjs', 'd080Guards'], [...D080_FRAME], ['./unit-evidence.mjs', 'evidenceImageGuards']]);
+  assert.deepEqual(registered.slice(-9), [['./unit-d078.mjs', 'd078Guards'], [...D078_FRAME], ['./unit-d079.mjs', 'd079Guards'], [...D079_FRAME], ['./unit-d080.mjs', 'd080Guards'], [...D080_FRAME], ['./unit-d081.mjs', 'd081Guards'], [...D081_FRAME], ['./unit-evidence.mjs', 'evidenceImageGuards']]);
 });
 
-test('historical plus three frames is a disjoint, exhaustive partition including all inline checks', () => {
-  assert.deepEqual(PARTITIONS, ['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame']);
-  const all = partitionInventory('all'), historical = partitionInventory('historical'), frame = [...partitionInventory('d078-frame'), ...partitionInventory('d079-frame'), ...partitionInventory('d080-frame')];
-  assert.equal(all.length, 120);
-  assert.equal(historical.length, 117);
-  assert.deepEqual(frame, [key(D078_FRAME), key(D079_FRAME), key(D080_FRAME)]);
+test('historical plus four frames is a disjoint, exhaustive partition including all inline checks', () => {
+  assert.deepEqual(PARTITIONS, ['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame']);
+  const all = partitionInventory('all'), historical = partitionInventory('historical'), frame = [...partitionInventory('d078-frame'), ...partitionInventory('d079-frame'), ...partitionInventory('d080-frame'), ...partitionInventory('d081-frame')];
+  assert.equal(all.length, 124);
+  assert.equal(historical.length, 120);
+  assert.equal(all.filter(id => id !== INLINE_SUITE).length, 123, 'registered guards exclude the inline suite');
+  assert.equal(historical.filter(id => id !== INLINE_SUITE).length, 119, 'historical registered guards exclude the inline suite');
+  assert.deepEqual(frame, [key(D078_FRAME), key(D079_FRAME), key(D080_FRAME), key(D081_FRAME)]);
   assert.equal(historical[0], INLINE_SUITE);
   assert.ok(historical.includes('./unit-d078.mjs:d078Guards'));
   assert.ok(historical.includes('./unit-d079.mjs:d079Guards'));
   assert.ok(historical.includes('./unit-d080.mjs:d080Guards'));
+  assert.ok(historical.includes('./unit-d081.mjs:d081Guards'));
   assert.deepEqual(historical.filter(id => frame.includes(id)), []);
   assert.deepEqual([...historical, ...frame].sort(), [...all].sort());
   assert.equal(new Set([...historical, ...frame]).size, all.length);
@@ -71,6 +74,8 @@ for (const [name, mutate] of [
   ['missing D079 frame', rows => rows.filter(([file]) => file !== D079_FRAME[0])],
   ['missing D080 geometry', rows => rows.filter(([file]) => file !== './unit-d080.mjs')],
   ['missing D080 frame', rows => rows.filter(([file]) => file !== D080_FRAME[0])],
+  ['missing D081 geometry', rows => rows.filter(([file]) => file !== './unit-d081.mjs')],
+  ['missing D081 frame', rows => rows.filter(([file]) => file !== D081_FRAME[0])],
   ['missing D078 frame', rows => rows.filter(([file]) => file !== D078_FRAME[0])],
 ]) {
   test(`inventory rejects ${name}`, () => assert.throws(() => assertGuardInventory(mutate(registered)), /guard (registration|inventory)/));
@@ -336,7 +341,7 @@ test('D079 provenance pins exact D079 card and tools and rejects wrong or missin
   assert.throws(() => frameProvenance(options), /ENOENT/);
 });
 
-for (const partition of ['d078-frame', 'd079-frame', 'd080-frame']) {
+for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame']) {
   test(`${partition} source identity failure prevents guard loading`, async t => {
     const f = runnerFixture(t); let loaded = false;
     assert.equal(await f.run({ args: ['--partition=' + partition], write: () => {}, provenance: ({ partition: actual }) => {
@@ -461,9 +466,9 @@ test('D080 provenance pins exact D080 card and tools and rejects wrong or missin
 });
 
 
-test('every registration is covered once; historical order and all three frame identities are exact', () => {
-  const frames = [D078_FRAME, D079_FRAME, D080_FRAME].map(key);
-  const scheduled = ['historical', 'd078-frame', 'd079-frame', 'd080-frame'].map(partitionInventory);
+test('every registration is covered once; historical order and all four frame identities are exact', () => {
+  const frames = [D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME].map(key);
+  const scheduled = ['historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame'].map(partitionInventory);
   const expectedAll = [INLINE_SUITE, ...registered.map(key)];
   assert.deepEqual(partitionInventory('all'), expectedAll);
   assert.deepEqual(scheduled[0], expectedAll.filter(id => !frames.includes(id)));
@@ -492,7 +497,7 @@ test('inventory rejects omission, duplication and changed export at every regist
   }
 });
 
-for (const partition of ['d078-frame', 'd079-frame', 'd080-frame']) {
+for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame']) {
   test(`${partition} cannot be scheduled through the inline runner`, () => {
     assert.throws(() => createGuardSelection(partition), /unsupported/);
     assert.throws(() => parsePartition(['--partition=' + partition], ['all', 'historical']), /unsupported/);
@@ -505,4 +510,134 @@ test('D080: evidence-write failure also rejects an otherwise successful guard', 
   assert.equal(await f.run({ write: line => lines.push(line), load: async () => ({ [D080_FRAME[1]]: () => ({ failed: 0, report: { passed: true } }) }) }), 1);
   assert.ok(lines.some(line => line.includes('evidence could not be saved')));
   assert.match(lines.at(-1), /NG 紅燈/);
+});
+
+function runnerFixture81(t) {
+  const f = runnerFixture(t);
+  return { ...f, run: options => f.run({ args: ['--partition=d081-frame'], ...options }) };
+}
+test('D081: frame runner imports exactly its export once and forwards all 34 injected reports', async t => {
+  const f = runnerFixture81(t);
+  const loads = [], lines = [], reports = Array.from({ length: 34 }, (_, i) => `frame guard ${i + 1}`);
+  const code = await f.run({ args: ['--partition=d081-frame'], write: line => lines.push(line), load: async file => {
+    loads.push(file);
+    return { [D081_FRAME[1]]: async log => { for (const name of reports) log(true, name); return { failed: 0, report: { passed: true, tests: reports, frames: [] } }; } };
+  } });
+  assert.equal(code, 0);
+  assert.deepEqual(loads, [D081_FRAME[0]]);
+  assert.equal(lines.filter(line => line.startsWith('  OK ')).length, 34);
+  assert.match(lines.at(-1), /OK 綠燈/);
+  assert.deepEqual(f.read('D081-frame.json'), { passed: true, tests: reports, frames: [] });
+  assert.deepEqual(f.read('provenance.json'), mockIdentity);
+  const summary = f.read('summary.json'), bytes = fs.readFileSync(path.join(f.dir, 'D081-frame.json'));
+  assert.equal(summary.passed, true);
+  assert.equal(summary.tests, 34);
+  assert.equal(summary.fullReport.bytes, bytes.length);
+  assert.equal(summary.fullReport.sha256, createHash('sha256').update(bytes).digest('hex'));
+  assert.equal(fs.readFileSync(path.join(f.dir, 'runner.log'), 'utf8'), lines.join('\n') + '\n');
+});
+
+for (const [name, load] of [
+  ['false report', async () => ({ [D081_FRAME[1]]: log => { log(false, 'original assertion failed'); return { failed: 1, report: { passed: false, tests: [{ passed: false }] } }; } })],
+  ['missing export', async () => ({})],
+  ['load exception', async () => { throw new Error('import failed'); }],
+  ['guard exception', async () => ({ [D081_FRAME[1]]: () => { throw new Error('guard failed'); } })],
+]) {
+  test(`D081: frame runner propagates ${name} as a nonzero exit`, async t => {
+    const f = runnerFixture81(t), lines = [];
+    assert.equal(await f.run({ load, write: line => lines.push(line) }), 1);
+    assert.match(lines.at(-1), /NG 紅燈/);
+    assert.doesNotMatch(lines.at(-1), /OK 綠燈/);
+    assert.equal(f.read('summary.json').passed, false);
+    assert.equal(f.read('D081-frame.json').passed, false);
+    if (name === 'false report') assert.deepEqual(f.read('D081-frame.json'), { passed: false, tests: [{ passed: false }] });
+    else {
+      assert.equal(f.read('D081-frame.json').incomplete, true);
+      assert.equal(f.read('diagnostics.json').length, 1);
+      assert.ok(f.read('diagnostics.json')[0].stack);
+    }
+  });
+}
+
+test('D081: frame runner refuses the historical/full/unknown partitions without loading any module', async () => {
+  for (const partition of ['all', 'historical', 'unknown']) {
+    let loaded = false;
+    await assert.rejects(runFramePartition({ args: ['--partition=' + partition], load: async () => { loaded = true; } }), /unknown or unsupported/);
+    assert.equal(loaded, false);
+  }
+});
+
+test('D081: a failed returned report cannot become success even if the guard forgot to log false', async t => {
+  const f = runnerFixture81(t), report = { passed: false, tests: [{ passed: false }], completeOriginalData: { kept: [1, 2, 3] } };
+  assert.equal(await f.run({ write: () => {}, load: async () => ({ [D081_FRAME[1]]: () => ({ failed: 1, report }) }) }), 1);
+  assert.deepEqual(f.read('D081-frame.json'), report);
+  assert.equal(f.read('summary.json').failed, 1);
+});
+
+test('D081: a logged assertion failure cannot be overwritten by a successful returned report', async t => {
+  const f = runnerFixture81(t);
+  assert.equal(await f.run({ write: () => {}, load: async () => ({ [D081_FRAME[1]]: log => {
+    log(false, 'must stay failed'); return { failed: 0, report: { passed: true, tests: [] } };
+  } }) }), 1);
+  assert.equal(f.read('summary.json').passed, false);
+  assert.deepEqual(f.read('summary.json').loggedFailures, ['must stay failed']);
+});
+
+test('D081: missing returned report fails closed and retains exception diagnostics', async t => {
+  const f = runnerFixture81(t);
+  assert.equal(await f.run({ write: () => {}, load: async () => ({ [D081_FRAME[1]]: () => undefined }) }), 1);
+  assert.equal(f.read('D081-frame.json').incomplete, true);
+  assert.match(f.read('diagnostics.json')[0].message, /complete report/);
+});
+
+test('D081: evidence serialization failure never overrides a nonzero exit with success', async t => {
+  const f = runnerFixture81(t), lines = [];
+  fs.mkdirSync(path.join(f.dir, 'D081-frame.json'));
+  assert.equal(await f.run({ write: line => lines.push(line), load: async () => ({ [D081_FRAME[1]]: () => ({ failed: 1, report: { passed: false } }) }) }), 1);
+  assert.ok(lines.some(line => line.includes('evidence could not be saved')));
+  assert.match(lines.at(-1), /NG 紅燈/);
+});
+
+
+test('D081 provenance pins exact D081 card and tools and rejects wrong or missing identity', t => {
+  const f = runnerFixture(t), files = [
+    'tools/unit-partition.mjs', 'tools/unit-partitions.mjs', 'tools/unit-d081-frame.mjs',
+    'tools/d081-frame.mjs', 'tools/d081-capture.mjs', 'tools/unit-d081.mjs',
+    'docs/D081-british-field-study-buildings-ten.md', 'package-lock.json',
+    'docs/D081-parallel-validation.md', 'tools/d081-baseline.mjs', 'tools/d081-scope.mjs', 'tools/d081-scope-build.mjs',
+    'fixtures/d081-architecture-contract.json', 'docs/D081-initial-architecture.json',
+  ];
+  for (const file of files) {
+    fs.mkdirSync(path.dirname(path.join(f.dir, file)), { recursive: true });
+    fs.writeFileSync(path.join(f.dir, file), 'exact source for ' + file);
+  }
+  const options = { partition: 'd081-frame', root: f.dir, env: workflowEnv, git: mockGit };
+  const identity = frameProvenance(options);
+  assert.deepEqual(identity.sources.map(s => s.path), files);
+  for (const source of identity.sources) assert.equal(source.sha256, createHash('sha256').update(fs.readFileSync(path.join(f.dir, source.path))).digest('hex'));
+  assert.throws(() => frameProvenance({ ...options, env: { ...workflowEnv, GITHUB_SHA: 'c'.repeat(40) } }), /exact workflow SHA/);
+  assert.throws(() => frameProvenance({ ...options, git: args => args[0] === 'status' ? ' M source.ts' : mockGit(args) }), /tracked source/);
+  for (const field of ['GITHUB_SHA', 'GITHUB_RUN_ID', 'GITHUB_RUN_ATTEMPT', 'GITHUB_REPOSITORY', 'GITHUB_EVENT_NAME']) {
+    assert.throws(() => frameProvenance({ ...options, env: { ...workflowEnv, [field]: '' } }), /required/);
+  }
+  fs.unlinkSync(path.join(f.dir, files[2]));
+  assert.throws(() => frameProvenance(options), /ENOENT/);
+});
+
+
+
+test('D081: evidence-write failure also rejects an otherwise successful guard', async t => {
+  const f = runnerFixture81(t), lines = [];
+  fs.mkdirSync(path.join(f.dir, 'D081-frame.json'));
+  assert.equal(await f.run({ write: line => lines.push(line), load: async () => ({ [D081_FRAME[1]]: () => ({ failed: 0, report: { passed: true } }) }) }), 1);
+  assert.ok(lines.some(line => line.includes('evidence could not be saved')));
+  assert.match(lines.at(-1), /NG 紅燈/);
+});
+
+
+test('D081 approved touch repair adds exact scope and actual-source guards without dropping historical guards', () => {
+  for (const id of ['./d081-touch-lease-scope.mjs:d081TouchLeaseScopeGuards', './unit-d081-touch-lease.mjs:d081TouchLeaseGuards']) {
+    assert.equal(partitionInventory('all').filter(x => x === id).length, 1);
+    assert.equal(partitionInventory('historical').filter(x => x === id).length, 1);
+  }
 });
