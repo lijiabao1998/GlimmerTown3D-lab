@@ -81,6 +81,14 @@ export async function d081TouchLeaseScopeGuards(log=()=>{}) {
     };
     for(const [file,pin] of Object.entries(immutable))assert.equal(sha(diskRead(file)),pin,'immutable original fixture or behavior test '+file);
   });
+  test('D051 boundary adds only unleased gate API compatibility with every assertion unchanged',()=>{
+    const file='tools/unit-d051.mjs';
+    const original=execFileSync('git',['show',D081_TOUCH_LEASE_BASELINE+':'+file],{cwd:ROOT,encoding:'utf8'});
+    const before='const createPanelUpdateGate = () => ({ defer: () => false, cancel() {} }), tcGate = createPanelUpdateGate();';
+    const after='const createPanelUpdateGate = () => ({ defer: () => false, cancel() {}, presentation: kids => kids, refreshGeometry() {} }), tcGate = createPanelUpdateGate();';
+    assert.equal(original.split(before).length,2,'exact original boundary stub');
+    assert.equal(diskRead(file),original.replace(before,after),'no D051 assertion, mutation or renderer substitution');
+  });
   test('actual candidate checked once before exact restoration and diff allowance',()=>{
     for(const file of paths){
       const reads=[],read=name=>{reads.push(name);return diskRead(name);};
