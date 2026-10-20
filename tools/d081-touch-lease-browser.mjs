@@ -102,6 +102,33 @@ async function exercise({ disappear, exit, layout }) {
     pointer(target, 'click', 71);
     assert(JSON.stringify(accepted) === JSON.stringify(disappear ? [] : ['happy']), 'only current semantic offer accepted');
     assert(JSON.stringify(rejected) === JSON.stringify(disappear ? ['happy'] : []), 'missing offer rejected');
+  } else if (exit === 'reuse-close' || exit === 'reuse-outside') {
+    // The old released offer owns pointer ID 71. A newer gesture reusing 71
+    // must not make its cancellation look like cancellation of the old offer.
+    // Outside-panel reuse uses a mouse pointer to also exercise type changes.
+    const reusedTarget = exit === 'reuse-close' ? panel.querySelector('#cmX') : mk('button', '', '面板外操作');
+    if (exit === 'reuse-outside') document.body.append(reusedTarget);
+    const dispatchReuse = type => reusedTarget.dispatchEvent(new PointerEvent(type, {
+      bubbles: true, pointerId: 71, pointerType: exit === 'reuse-close' ? 'touch' : 'mouse',
+      button: 0, buttons: type === 'pointerdown' ? 1 : 0,
+    }));
+    dispatchReuse('pointerdown'); dispatchReuse('pointercancel');
+    await task();
+    verify(`${exit}: newer gesture cancelled`);
+    assert(card.style.position === 'fixed', `${exit}: ambiguous old lease remains pinned`);
+    const retainedOrder = JSON.stringify(order()), previousRenders = renders;
+    revision = 4; render();
+    assert(renders === previousRenders + 1, `${exit}: fresh render not blocked by cancelled generic press`);
+    assert(JSON.stringify(order()) === retainedOrder, `${exit}: retained offer order survives fresh reconciliation`);
+    assert(body.querySelector('[data-k="trade"] small').textContent.includes('$4000'), `${exit}: fresh numeric data after collision`);
+    assert(panel.querySelector('.sub').textContent.startsWith('第 4,'), `${exit}: fresh header after collision`);
+    if (disappear) assert(target.textContent === '已失效' && target.getAttribute('aria-disabled') === 'true', `${exit}: unavailable target remains honest`);
+    verify(`${exit}: fresh data after cancellation`);
+    await task(); verify(`${exit}: no delayed premature restoration`);
+    assert(accepted.length === 0 && rejected.length === 0, `${exit}: cancelled gesture did not invoke an offer`);
+    // The collision latch is conservative until an explicit lifecycle reset.
+    gate.cancel(); panel.hidden = true;
+    if (exit === 'reuse-outside') reusedTarget.remove();
   } else if (exit === 'mixed-release' || exit === 'mixed-cancel') {
     const close = panel.querySelector('#cmX'), closeBox = rect(close);
     pointer(close, 'pointerdown', 99);
@@ -131,7 +158,7 @@ async function exercise({ disappear, exit, layout }) {
 let count = 0;
 for (const width of [360, 412, 1440]) {
   await withBrowser({ root: ROOT, entry: 'd081-fixture.html', overlay: { 'd081-fixture.html': html }, width, height: 844, port: +(process.env.GT_PORT || 8431), gl: false, ready: '!!document.querySelector("#cm .body")', settle: 0 }, async ({ open, page }) => {
-    for (const layout of ['centered', 'overflow']) for (const disappear of [false, true]) for (const exit of ['click', 'cancel', 'pointercancel', 'blur', 'pagehide', 'mixed-release', 'mixed-cancel']) {
+    for (const layout of ['centered', 'overflow']) for (const disappear of [false, true]) for (const exit of ['click', 'cancel', 'pointercancel', 'blur', 'pagehide', 'mixed-release', 'mixed-cancel', 'reuse-close', 'reuse-outside']) {
       await open('');
       await page.evaluate(`${gateSource}\n${contentSource}\nwindow.d081Exercise = ${exercise.toString()};`);
       const result = await page.evaluate(`window.d081Exercise(${JSON.stringify({ disappear, exit, layout })})`);

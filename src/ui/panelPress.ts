@@ -146,6 +146,11 @@ function createCommissionGeometry(panel: HTMLElement) {
   doc.addEventListener('touchstart', observeTouches, { capture: true, passive: true });
   doc.addEventListener('touchend', observeTouches, { capture: true, passive: true });
   doc.addEventListener('touchcancel', observeTouches, { capture: true, passive: true });
+  doc.addEventListener('pointerdown', event => {
+    // Reuse can begin on another control or outside the panel. Its cancellation
+    // cannot identify the older delayed activation, regardless of pointer type.
+    if (offerLeases.has(event.pointerId)) saturatedOffers = true;
+  }, true);
   panel.addEventListener('pointerdown', event => {
     const button = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>('button');
     if (panel.hidden || !button || button.disabled || !panel.contains(button) || event.button !== 0) return;
@@ -162,9 +167,6 @@ function createCommissionGeometry(panel: HTMLElement) {
           for (const child of Array.from(row.parentElement.children) as HTMLElement[]) if (child.dataset.kind === 'offer') savedOffers.set(child.dataset.k!, copy(child) as HTMLElement);
           geometry.activate();
         }
-        // A reused ID cannot distinguish an arbitrarily delayed older click.
-        // Preserve the geometry conservatively until explicit invalidation.
-        if (offerLeases.has(event.pointerId)) saturatedOffers = true;
         if (offerLeases.size < MAX_OFFER_LEASES || offerLeases.has(event.pointerId)) offerLeases.set(event.pointerId, { button, released: false });
         else saturatedOffers = true;
       }

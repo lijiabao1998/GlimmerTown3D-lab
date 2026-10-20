@@ -97,6 +97,19 @@ export async function d081TouchLeaseGuards(log = () => {}) {
     assert.equal(buttons(row(h, 'cm', 'offer', 'happy70'))[0], happy);
     h.node('#cmX').click(); h.openCommission(); assert.deepEqual(order(h), ['happy70', 'steel40', 'trade1200']);
   });
+  for (const selector of ['#cmX', '#tc']) test(`reused pointer ID on ${selector} cannot cancel an older offer lease`, () => {
+    const h = harness(promotionFixture()); h.openCommission();
+    const happy = buttons(row(h, 'cm', 'offer', 'happy70'))[0], other = h.node(selector);
+    begin(h, happy); h.advance(1); release(h, happy);
+    begin(h, other); release(h, other);
+    h.doc.emit('pointercancel', { target: other, pointerId: 701 }); h.doc.runTimers();
+    h.advance(1);
+    assert.deepEqual(order(h).slice(0, 2), ['trade1200', 'happy70']);
+    assert.equal(buttons(row(h, 'cm', 'offer', 'happy70'))[0], happy);
+    assert.match(h.node('#cm .sub').textContent, /第 52 天/);
+    h.node('#cmX').click(); h.openCommission();
+    assert.equal(order(h)[0], 'happy70');
+  });
   test('resource saturation conservatively preserves slots until explicit close', () => {
     const h = harness(promotionFixture()); h.openCommission(); const button = buttons(row(h, 'cm', 'offer', 'happy70'))[0];
     for (let id = 1; id <= 257; id++) { begin(h, button, id); release(h, button, id); }

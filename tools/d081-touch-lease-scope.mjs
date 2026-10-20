@@ -17,7 +17,7 @@ export const D081_TOUCH_LEASE_BEFORE=Object.freeze({
 // Freeze these independently reviewed candidate hashes only after product edits finish.
 export const D081_TOUCH_LEASE_AFTER=Object.freeze({
   'src/cityView.ts':'c88768b73180cbd33978daa262c205bdac9b14c6715fa1b973577ec4d6feca6d',
-  'src/ui/panelPress.ts':'dd7cc2f709c9a79ba85f3a64be29caba2fd5e44f5fd13297c58fe14e378d0673',
+  'src/ui/panelPress.ts':'a481a138c3a47cd1820301db30678f63bf993b6e128399e17ef0b7263a7b088b',
 });
 const paths=Object.keys(D081_TOUCH_LEASE_BEFORE).sort();
 const diskRead=file=>fs.readFileSync(path.join(ROOT,file),'utf8');

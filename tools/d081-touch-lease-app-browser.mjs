@@ -87,6 +87,42 @@ export async function d081TouchLeaseAppBrowser(browser=withBrowser){
       if(seed===1){assert.deepEqual(freshIds,['happy70','steel40','trade1200']);assert.equal(released.buttonText,'接受');}
       else{assert.ok(!freshIds.includes('happy70'));assert.equal(released.state,'unavailable');assert.equal(released.buttonText,'已失效');assert.equal(released.ariaDisabled,'true');}
       await shot('task-before-click');await p.ev('__gt.journalFlush()');
+      if(seed===5&&W===360){
+        // Explicit DOM scroll setup, not a native swipe claim. Newly appended
+        // content must remain reachable inside the fixed-height leased card.
+        const beforeScroll=await p.ev(WORLD),scrollWrites=await p.ev('__leaseWrites');
+        const reach=await p.ev(`(()=>{
+          const card=document.querySelector('#cm .card'),head=document.querySelector('#cm .head'),foot=document.querySelector('#cm .foot');
+          const row=document.querySelector('#cm li[data-kind="offer"][data-k="techC6"]'),button=row.querySelector('button');
+          window.__leaseOriginalScroll=card.scrollTop;window.__leaseOriginalHandler=__leaseButton.onclick;
+          const r=row.getBoundingClientRect(),h=head.getBoundingClientRect(),f=foot.getBoundingClientRect();
+          card.scrollTop+=((r.top+r.bottom)-(h.bottom+f.top))/2;
+          const rr=row.getBoundingClientRect(),br=button.getBoundingClientRect(),hh=head.getBoundingClientRect(),ff=foot.getBoundingClientRect();
+          return {before:__leaseOriginalScroll,after:card.scrollTop,row:[rr.left,rr.top,rr.right,rr.bottom],
+            button:[br.left,br.top,br.right,br.bottom],visible:[hh.bottom,ff.top],
+            hit:button.contains(document.elementFromPoint((br.left+br.right)/2,(br.top+br.bottom)/2)),
+            id:row.dataset.k,state:row.dataset.st,name:row.querySelector('b').textContent,label:button.textContent,
+            ariaLabel:button.getAttribute('aria-label'),ariaDisabled:button.getAttribute('aria-disabled'),disabled:button.disabled,
+            same:__leaseButton===document.querySelector(${J(TARGET)})&&__leaseButton.isConnected,
+            sameHandler:__leaseButton.onclick===__leaseOriginalHandler};
+        })()`);
+        assert.ok(reach.after>reach.before,'intentional card scroll exposes appended offer');
+        assert.ok(reach.row[1]>=reach.visible[0]-.1&&reach.row[3]<=reach.visible[1]+.1,'entire appended row readable between sticky header/footer');
+        assert.ok(reach.button[1]>=reach.visible[0]-.1&&reach.button[3]<=reach.visible[1]+.1,'appended button unobscured');
+        assert.equal(reach.hit,true,'appended offer is hittable, not covered by sticky footer');
+        assert.equal(reach.id,'techC6');assert.equal(reach.state,'can');assert.match(reach.name,/學術網絡/);
+        assert.equal(reach.label,'接受');assert.match(reach.ariaLabel,/接受委託：.*學術網絡/);
+        assert.equal(reach.ariaDisabled,null);assert.equal(reach.disabled,false);
+        assert.equal(reach.same,true);assert.equal(reach.sameHandler,true,'scroll retains original semantic handler');
+        assert.deepEqual(await p.ev(WORLD),beforeScroll,'scroll does not change save/history/model');
+        assert.equal(await p.ev('__leaseWrites'),scrollWrites,'scroll does not save');
+        await shot('appended-offer-scrolled');
+        await p.ev(`document.querySelector('#cm .card').scrollTop=__leaseOriginalScroll`);await p.frames(2);
+        stable(await sample('restored-after-intentional-scroll'),initial,'scroll restored');
+        assert.deepEqual(await p.ev(WORLD),beforeScroll,'restoring scroll does not change save/history/model');
+        assert.equal(await p.ev('__leaseWrites'),scrollWrites);
+        item.scrollReachability={passed:true,method:'intentional DOM card scroll, not native swipe',...reach};
+      }
       const before=await p.ev(WORLD),writes=await p.ev('__leaseWrites');
       await p.ev(`__leasePointer('click')`);await task(p);await p.ev('__gt.journalFlush()');
       const after=await p.ev(WORLD);item.beforeClick=before;item.afterClick=after;item.saveWrites=await p.ev('__leaseWrites')-writes;
