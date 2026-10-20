@@ -1,0 +1,23 @@
+# D081 native-touch diagnostic: acceptance before execution
+
+This is evidence collection, not a production repair or release acceptance. Preserve the formal first-red run and wrong-target native click signature. No deployment, merge, D074 branch/workflow changes, simulation change, synthetic activation, gesture retry, added gesture delay or weakened assertion is authorized here.
+
+## Predeclared acceptance and stopping condition
+
+Run exactly one complete original historical smoke invocation per pinned condition: baseline main 7ec70a96 and formal D081 9e3452a. Keep each source checkout isolated from the diagnostic harness. Both full source commit IDs, original smoke/D052/gate hashes and formal built HTML SHA must match before browser execution. The verified baseline HTML SHA256 d5aabce535e8fbcc7500a7d5473666bc159facb433063dcc69d59245d0d5394d (1433062 bytes; main run39336233543, Pages artifact12229929404) is pinned too. Formal HTML SHA256 ca7d4ca6c434cbbc6a08278b2a90c2d0a0de7a1b351f514e12fe7313b169842d is 1441431 bytes; the failed synthetic merge0be9907 and formal9e3452a have the same pinned tree22b5bb0fe01364d1b37e52734f472e9bbfdcd25a. The original CJK font installation, Ubuntu24.04 and Node24 setup must be retained, with actual Chrome revision, font hashes and environment recorded. A newer runner browser is a disclosed non-equivalence, not silently equivalent to failed Chrome155.0.8059.39 revision 3ff7ac5a9224be9156d7f8703a06e22890aafd34.
+
+Each matrix condition stops after its single full smoke invocation terminates, fails a prerequisite, or reaches the existing 120-minute job budget. Matrix failures must not cancel the other condition. No retry-until-green and no automatic rerun. Every original smoke assertion, fixture, preceding-case order, native input and 50/200ms waits remains unchanged. The original full runner retains streetArt=legacy. Source/HTML hashes are checked again on exit. Original outputs, stdout/stderr, environment, manifests and observer traces upload even on failure.
+
+The causal observation sought is: touchend empties cohort; an associated zero-delay callback fires; DOM offer order changes from trade1200/happy70 to happy70/steel40/trade1200; then trusted native click targets no commission button. Record lifecycle events to distinguish fallback from abandon-on-blur/visibility. The existing first-red trace establishes wrong-target click, not this timer ordering. A normal-order passing sample does not prove a repair or invalidate first-red evidence.
+
+## Observation surface and limitations
+
+Only the in-memory full-smoke module changes: one added diagnostic import and replacement of the D052 browser argument. The inverse transformation must reconstruct the pinned original bytes. Original D052 module, production source and compiled HTML are never rewritten. The separate preload forwards native timer callback, receiver, arguments, delay and return values; records schedule/fire/clear, native input timestamps/targets and touch counts; reads row-key order before/after observed callbacks. No geometry, hit-test or stack reads and no synthetic events. Adding observers can perturb timing, so diagnostic passes are not uninstrumented release gates.
+
+The local deterministic experiment established that the identical baseline/candidate gate permits presentation to flush after touchend before delayed click, while its existing 15/15 bounded tests remain green. That is a logical vulnerability, not proof of Chrome causality. Local Chromium154 launch was blocked before navigation or input and is not equivalent evidence.
+
+## Execution boundaries
+
+Pre-publication audit refinement: the observation step has a 110-minute cap inside the unchanged 120-minute job budget to reserve artifact-upload time. This diagnostic-only cap does not change any formal release gate or extend its runtime; a timed-out diagnostic is incomplete, never a pass. Smoke-step GITHUB_SHA is the matrix product SHA so original D058 evidence identifies the source actually tested; the diagnostic harness SHA is recorded independently. Artifact preservation is best effort if infrastructure or the entire job terminates abruptly.
+
+The sole trigger is a push to codex/d081-touch-diagnostic. Workflow permissions are contents:read; checkouts do not persist credentials. No secrets, external write API, deployment, pull-request creation or merge step exists. Concurrency cancellation is disabled. There are two fixed matrix conditions and no workflow-dispatch inputs. A subsequent production repair requires separately approved scope. Do not alter the formal branch or earlier D074 workflow.

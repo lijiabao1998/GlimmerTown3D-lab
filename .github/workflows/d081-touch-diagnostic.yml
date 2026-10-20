@@ -1,0 +1,111 @@
+name: D081 touch diagnostic (no deployment)
+on:
+  push:
+    branches: [codex/d081-touch-diagnostic]
+permissions:
+  contents: read
+concurrency:
+  group: d081-touch-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - condition: baseline
+            sha: 7ec70a96b01437ab4576b0962905be16b1591e79
+          - condition: formal
+            sha: 9e3452a438331feec4082f6821cfcb0b0e653c4b
+    steps:
+      - name: Checkout separate diagnostic harness
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: harness
+          persist-credentials: false
+      - name: Checkout immutable product condition separately
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.sha }}
+          path: source
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: source/package-lock.json
+      - name: Record initial environment
+        run: |
+          mkdir -p evidence
+          {
+            date -u --iso-8601=seconds
+            uname -a
+            cat /etc/os-release
+            node --version
+            npm --version
+            google-chrome --version
+            git -C harness rev-parse HEAD
+            git -C source rev-parse HEAD HEAD^{tree}
+            fc-list
+          } > evidence/environment-before.txt 2>&1
+      - name: Install original CJK font prerequisite
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - name: Verify and record CJK fonts
+        run: |
+          {
+            dpkg-query -W fonts-wqy-zenhei
+            fc-list
+            fc-match 'WenQuanYi Zen Hei'
+            find /usr/share/fonts -type f -iname '*wqy*' -exec sha256sum {} \;
+          } > evidence/fonts.txt
+          fc-match 'WenQuanYi Zen Hei' | grep -i 'wqy-zenhei'
+      - name: Install pinned dependencies
+        working-directory: source
+        run: npm ci
+      - name: Original typecheck
+        working-directory: source
+        run: npm run typecheck
+      - name: Build exact pinned product
+        working-directory: source
+        run: npm run build
+      - name: Exactly one complete historical smoke with D052 observations
+        timeout-minutes: 110
+        env:
+          GITHUB_SHA: ${{ matrix.sha }}
+        shell: bash
+        run: |
+          set -o pipefail
+          node harness/tools/d081-touch-diagnostic/run.mjs "$GITHUB_WORKSPACE/source" '${{ matrix.condition }}' "$GITHUB_WORKSPACE/evidence/observer" 2>&1 | tee evidence/smoke-run.txt
+      - name: Record final environment and original outputs
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p evidence
+          {
+            date -u --iso-8601=seconds
+            node --version
+            google-chrome --version
+            git -C source status --short
+            git -C source rev-parse HEAD HEAD^{tree}
+            sha256sum source/dist/index.html source/tools/smoke.mjs source/tools/smoke-d052.mjs source/src/ui/panelPress.ts
+          } > evidence/environment-after.txt 2>&1
+      - name: Preserve every result even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d081-touch-diagnostic-${{ matrix.condition }}-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            evidence/
+            source/scratch/
+            source/smoke-run.txt
+            source/dist/
+            harness/tools/d081-touch-diagnostic/
+            harness/docs/D081-touch-diagnostic.md
+            harness/.github/workflows/d081-touch-diagnostic.yml
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
