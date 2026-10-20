@@ -698,6 +698,8 @@ await guard('./unit-d073-frame.mjs', 'd073FrameGuards');
 await guard('./unit-d074.mjs', 'd074Guards');
 await guard('./unit-d074-frame.mjs', 'd074FrameGuards');
 await guard('./unit-d074-touch-repair.mjs', 'd074TouchRepairGuards');
+await guard('./d081-touch-lease-scope.mjs', 'd081TouchLeaseScopeGuards');
+await guard('./unit-d081-touch-lease.mjs', 'd081TouchLeaseGuards');
 await guard('./d074-touch-repair-scope.mjs', 'd074TouchRepairScopeGuards');
 await guard('./unit-d076.mjs', 'd076Guards');
 await guard('./unit-d076-frame.mjs', 'd076FrameGuards');

@@ -116,6 +116,8 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d074.mjs","d074Guards"],
   ["./unit-d074-frame.mjs","d074FrameGuards"],
   ["./unit-d074-touch-repair.mjs","d074TouchRepairGuards"],
+  ["./d081-touch-lease-scope.mjs","d081TouchLeaseScopeGuards"],
+  ["./unit-d081-touch-lease.mjs","d081TouchLeaseGuards"],
   ["./d074-touch-repair-scope.mjs","d074TouchRepairScopeGuards"],
   ["./unit-d076.mjs","d076Guards"],
   ["./unit-d076-frame.mjs","d076FrameGuards"],

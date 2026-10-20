@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
+import {d081TouchLeaseHistoricalBytes} from './d081-touch-lease-scope.mjs';
 
 export const D074_TOUCH_REPAIR_PATH = 'src/ui/panelPress.ts';
 export const D074_TOUCH_REPAIR_BASELINE = 'beca506c224ad72f9a890ed20b5aa1fa7b2616f5';
@@ -18,6 +19,10 @@ const FIXTURE = 'fixtures/d074-touch-repair-scope.json';
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
 const fixture = Object.freeze(JSON.parse(diskRead(FIXTURE)));
+// The old D074 contract is checked on exact PR33 bytes, only after the new
+// outer scope verifies actual candidate bytes. Raw negative-control readers
+// below remain raw; neither runtime nor behavioral tests use this adapter.
+const priorCandidateRead = file => d081TouchLeaseHistoricalBytes(file,diskRead);
 
 function validateFixture(value) {
   const label = 'D074 touch repair fixture';
@@ -46,13 +51,13 @@ function historicalBytes(file,read,value) {
   return value.beforeBytes;
 }
 
-export function d074TouchRepairHistoricalBytes(file,read=diskRead) {
+export function d074TouchRepairHistoricalBytes(file,read=priorCandidateRead) {
   return historicalBytes(file,read,fixture);
 }
 
 // A predicate for the nine explicit historical Git-diff checks. This never adds
 // the UI path to an art-added set, and a matching path alone is not permission.
-export function isD074TouchRepairAllowed(file,read=diskRead) {
+export function isD074TouchRepairAllowed(file,read=priorCandidateRead) {
   if(file !== D074_TOUCH_REPAIR_PATH)return false;
   d074TouchRepairHistoricalBytes(file,read);
   return true;
@@ -73,8 +78,8 @@ export async function d074TouchRepairScopeGuards(log=()=>{}) {
     assert.ok(!manifest.added.includes(D074_TOUCH_REPAIR_PATH));
     assert.ok(!manifest.modified.includes(D074_TOUCH_REPAIR_PATH));
   });
-  test('actual reviewed bytes are checked before exact historical restoration',()=>{
-    const current=diskRead(D074_TOUCH_REPAIR_PATH),reads=[];
+  test('exact PR33 D074 candidate bytes are checked after outer actual-source verification',()=>{
+    const current=priorCandidateRead(D074_TOUCH_REPAIR_PATH),reads=[];
     assert.equal(sha(current),D074_TOUCH_REPAIR_AFTER_SHA);
     assert.notEqual(current,fixture.beforeBytes);
     const injected=file=>{reads.push(file);return current;};
@@ -93,7 +98,7 @@ export async function d074TouchRepairScopeGuards(log=()=>{}) {
     }
   });
   test('old production, one-byte changes, empty and missing source fail closed',()=>{
-    const current=diskRead(D074_TOUCH_REPAIR_PATH);
+    const current=priorCandidateRead(D074_TOUCH_REPAIR_PATH);
     const variants=[fixture.beforeBytes,current+'\n',current.slice(0,-1),current.replace(/./,character=>character==='X'?'Y':'X'),''];
     for(const raw of variants){
       const injected=()=>raw;
@@ -111,7 +116,7 @@ export async function d074TouchRepairScopeGuards(log=()=>{}) {
   test('malformed or broadened fixtures cannot authorize or supply historical bytes',()=>{
     const mutations=[null,[],{},'fixture',{...fixture,schema:2},{...fixture,baseline:'0'.repeat(40)},{...fixture,path:'src/ui/growthGuide.ts'},{...fixture,path:[D074_TOUCH_REPAIR_PATH,'src/sim/day.ts']},{...fixture,beforeSha256:'0'.repeat(64)},{...fixture,beforeBytes:fixture.beforeBytes+'\n'},{...fixture,beforeBytes:null},{...fixture,afterSha256:null},{...fixture,afterSha256:D074_TOUCH_REPAIR_BEFORE_SHA},{...fixture,afterSha256:'0'.repeat(64)},{...fixture,added:['src/sim/day.ts']}];
     for(const key of Object.keys(fixture)){const missing={...fixture};delete missing[key];mutations.push(missing);}
-    const current=diskRead(D074_TOUCH_REPAIR_PATH);
+    const current=priorCandidateRead(D074_TOUCH_REPAIR_PATH);
     for(const value of mutations)assert.throws(()=>historicalBytes(D074_TOUCH_REPAIR_PATH,()=>current,value),/D074 touch repair fixture/);
   });
   // Import only when running guards, avoiding a runtime adapter/scope import cycle.
