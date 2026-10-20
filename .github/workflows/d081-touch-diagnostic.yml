@@ -1,14 +1,63 @@
-name: D081 touch diagnostic (no deployment)
+name: D081 controlled touch diagnostic (no deployment)
 on:
   push:
-    branches: [codex/d081-touch-diagnostic]
+    branches: [codex/d081-touch-controlled]
 permissions:
   contents: read
 concurrency:
-  group: d081-touch-diagnostic-${{ github.ref }}
+  group: d081-touch-controlled-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  prepare-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      artifact-id: ${{ steps.runtime.outputs.artifact-id }}
+      artifact-digest: ${{ steps.runtime.outputs.artifact-digest }}
+      zip-sha: ${{ steps.hash.outputs.zip-sha }}
+    steps:
+      - name: Download official metadata and browser once (no mirrors or retries)
+        shell: bash
+        run: |
+          mkdir runtime
+          curl --fail --location --proto '=https' --proto-redir '=https' --max-time 180 --dump-header runtime/metadata-headers.txt --write-out '%{url_effective}\n' --output runtime/version.json https://raw.githubusercontent.com/GoogleChromeLabs/chrome-for-testing/gh-pages/155.0.8059.39.json > runtime/metadata-final-url.txt
+          python3 - <<'PYMETA'
+          import json
+          d=json.load(open('runtime/version.json'))
+          assert d['version']=='155.0.8059.39'
+          url='https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.39/linux64/chrome-linux64.zip'
+          assert any(x['platform']=='linux64' and x['url']==url for x in d['downloads']['chrome'])
+          PYMETA
+          curl --fail --location --proto '=https' --proto-redir '=https' --max-time 180 --dump-header runtime/archive-headers.txt --write-out '%{url_effective}\n' --output runtime/chrome-linux64.zip https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.39/linux64/chrome-linux64.zip > runtime/archive-final-url.txt
+          test "$(cat runtime/archive-final-url.txt)" = 'https://storage.googleapis.com/chrome-for-testing-public/155.0.8059.39/linux64/chrome-linux64.zip'
+          unzip -q runtime/chrome-linux64.zip -d runtime
+      - name: Measure immutable runtime inventory without executing Chrome
+        id: hash
+        shell: bash
+        run: |
+          python3 - <<'PYHASH'
+          import hashlib,json,pathlib,os
+          root=pathlib.Path('runtime')
+          sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+          files=[{'path':str(p.relative_to(root)),'sha256':sha(p)} for p in sorted((root/'chrome-linux64').rglob('*')) if p.is_file()]
+          data={'distribution':'official Chrome for Testing','version':'155.0.8059.39','zipSha256':sha(root/'chrome-linux64.zip'),'chromeSha256':sha(root/'chrome-linux64/chrome'),'files':files,'digestMeaning':'locally measured, not vendor-published; original Stable executable hash unknown'}
+          (root/'runtime-manifest.json').write_text(json.dumps(data,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:f.write('zip-sha='+data['zipSha256']+'\n')
+          PYHASH
+      - name: Preserve single immutable official runtime artifact
+        id: runtime
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: d081-controlled-runtime-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            runtime/*.zip
+            runtime/*.json
+            runtime/*.txt
+          if-no-files-found: error
+          retention-days: 14
   observe:
+    needs: prepare-runtime
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     strategy:
@@ -20,7 +69,26 @@ jobs:
             sha: 7ec70a96b01437ab4576b0962905be16b1591e79
           - condition: formal
             sha: 9e3452a438331feec4082f6821cfcb0b0e653c4b
+    env:
+      D081_RUNTIME_ARTIFACT_ID: ${{ needs.prepare-runtime.outputs.artifact-id }}
+      D081_RUNTIME_ARTIFACT_DIGEST: ${{ needs.prepare-runtime.outputs.artifact-digest }}
+      D081_ZIP_SHA: ${{ needs.prepare-runtime.outputs.zip-sha }}
     steps:
+      - name: Consume exact shared immutable runtime artifact
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.prepare-runtime.outputs.artifact-id }}
+          path: runtime
+          merge-multiple: true
+      - name: Verify shared archive and extract once
+        shell: bash
+        run: |
+          test -n "$D081_RUNTIME_ARTIFACT_ID"
+          test -n "$D081_RUNTIME_ARTIFACT_DIGEST"
+          echo "$D081_ZIP_SHA  runtime/chrome-linux64.zip" | sha256sum --check --strict
+          unzip -q runtime/chrome-linux64.zip -d runtime
+          echo "D081_RUNTIME_DIR=$GITHUB_WORKSPACE/runtime" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$GITHUB_WORKSPACE/runtime/chrome-linux64/chrome" >> "$GITHUB_ENV"
       - name: Checkout separate diagnostic harness
         uses: actions/checkout@v4
         with:
@@ -35,7 +103,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 24.21.0
           cache: npm
           cache-dependency-path: source/package-lock.json
       - name: Record initial environment
@@ -47,13 +115,15 @@ jobs:
             cat /etc/os-release
             node --version
             npm --version
-            google-chrome --version
+            printf 'Verified Chrome path: %s\n' "$CHROME_PATH"
             git -C harness rev-parse HEAD
             git -C source rev-parse HEAD HEAD^{tree}
+            printf 'ImageOS=%s ImageVersion=%s\n' "$ImageOS" "$ImageVersion"
+            dpkg-query -W
             fc-list
           } > evidence/environment-before.txt 2>&1
       - name: Install original CJK font prerequisite
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei=0.9.45-8
       - name: Verify and record CJK fonts
         run: |
           {
@@ -85,10 +155,12 @@ jobs:
         shell: bash
         run: |
           mkdir -p evidence
+          if test -f runtime/runtime-manifest.json; then cp runtime/runtime-manifest.json evidence/runtime-prepared-manifest.json; fi
+          { printf 'artifactId=%s\nartifactDigest=%s\nzipSha=%s\n' "$D081_RUNTIME_ARTIFACT_ID" "$D081_RUNTIME_ARTIFACT_DIGEST" "$D081_ZIP_SHA"; } > evidence/runtime-artifact.txt
           {
             date -u --iso-8601=seconds
             node --version
-            google-chrome --version
+            printf 'Verified Chrome path: %s\n' "$CHROME_PATH"
             git -C source status --short
             git -C source rev-parse HEAD HEAD^{tree}
             sha256sum source/dist/index.html source/tools/smoke.mjs source/tools/smoke-d052.mjs source/src/ui/panelPress.ts
@@ -97,7 +169,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: d081-touch-diagnostic-${{ matrix.condition }}-${{ github.sha }}-${{ github.run_attempt }}
+          name: d081-controlled-${{ matrix.condition }}-${{ github.sha }}-${{ github.run_attempt }}
           path: |
             evidence/
             source/scratch/
@@ -107,5 +179,42 @@ jobs:
             harness/docs/D081-touch-diagnostic.md
             harness/.github/workflows/d081-touch-diagnostic.yml
           include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 14
+
+  compare-components:
+    needs: [prepare-runtime, observe]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: d081-controlled-baseline-${{ github.sha }}-${{ github.run_attempt }}
+          path: comparison/baseline
+      - uses: actions/download-artifact@v4
+        with:
+          name: d081-controlled-formal-${{ github.sha }}-${{ github.run_attempt }}
+          path: comparison/formal
+      - name: Require matching measured pair; mismatch means non-equivalence, never rerun
+        shell: bash
+        run: |
+          python3 - <<'PYCOMPARE'
+          import pathlib,json
+          root=pathlib.Path('comparison')
+          paths=list(root.glob('baseline/evidence/observer/runtime-components.json'))+list(root.glob('formal/evidence/observer/runtime-components.json'))
+          result={'interpretation':'No release acceptance; normal-order pair stops this plan.','componentPaths':[str(p) for p in paths],'controlled':False}
+          if len(paths)==2:
+              values=[json.loads(p.read_text()) for p in paths]
+              result['controlled']=values[0]==values[1]
+              result['differentKeys']=[k for k in set(values[0])|set(values[1]) if values[0].get(k)!=values[1].get(k)]
+          pathlib.Path('runtime-comparison.json').write_text(json.dumps(result,indent=2)+'\n')
+          assert result['controlled'],'Missing or unequal runtime components: no controlled comparison conclusion; stop without retry'
+          PYCOMPARE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d081-controlled-comparison-${{ github.sha }}-${{ github.run_attempt }}
+          path: runtime-comparison.json
           if-no-files-found: error
           retention-days: 14
