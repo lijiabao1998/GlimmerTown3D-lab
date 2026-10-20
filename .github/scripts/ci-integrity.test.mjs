@@ -211,3 +211,19 @@ test('D081 WebGL captures retain the full three-width matrix, original limit and
   assert.match(capture, /path: scratch\/d081\/\n          if-no-files-found: error\n          retention-days: 14/);
   assert.doesNotMatch(capture, /continue-on-error:|\n    (?:if|needs):/);
 });
+
+
+test('D081 touch geometry is mandatory alongside unchanged trusted browser smoke', () => {
+  const workflow = fs.readFileSync(new URL('../workflows/ci.yml', import.meta.url), 'utf8');
+  assert.ok(workflow.includes('run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}'));
+  assert.ok(workflow.includes('run: node tools/d081-touch-lease-browser.mjs 2>&1 | tee d081-touch-lease-browser.txt; exit ${PIPESTATUS[0]}'));
+  assert.ok(workflow.includes('            d081-touch-lease-browser.txt'));
+});
+
+
+test('D081 touch scope has its own immutable PR33 Git baseline without replacing any art baseline', () => {
+  const workflow = fs.readFileSync(new URL('../workflows/ci.yml', import.meta.url), 'utf8');
+  const node = workflow.slice(workflow.indexOf('\n  node:\n'), workflow.indexOf('\n  node-frame:\n'));
+  assert.ok(node.includes('run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"'));
+  assert.ok(node.includes('D081_TOUCH_BASELINE: 9e3452a438331feec4082f6821cfcb0b0e653c4b'));
+});

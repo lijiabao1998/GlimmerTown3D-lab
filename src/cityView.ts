@@ -1192,7 +1192,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   // 存檔、記世界歷史（cms 事件，城市格式 10）；完成、過期由每天的結算發通知。狀態的順序照實驗線：沙盒 → 進行中 → 城市等級不到 3 → 人口不到 51 → 三選一。
   // D046：新委託排除未實作的公共運量；舊檔正在進行的運量委託仍可無懲罰放棄。
   const cm = $<HTMLElement>('#cm');
-  const cmGate = createPanelUpdateGate(cm);
+  const cmGate = createPanelUpdateGate(cm, true);
   $<HTMLButtonElement>('#cmX').onclick = () => { cmGate.cancel(); cm.hidden = true; };
   cm.onclick = e => { if (e.target === cm) { cmGate.cancel(); cm.hidden = true; } };
   let cmTip = '';
@@ -1246,9 +1246,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       kids.push(mk('h3', '', `${commissionOffers(s).length} 選一（第 ${s.cms.n + 1} 輪）`), ol);
     }
     kids.push(mk('h3', '', '紀錄'), note('done', 'rec', '已完成委託', String(s.cms.done.length), s.cms.done.length ? s.cms.done.map(id => CMS_BY_ID385[id]?.ic ?? '?').join(' ') : '—'));
-    updatePanelContent($('#cm .body'), ...kids);
+    updatePanelContent($('#cm .body'), ...cmGate.presentation(kids, state === 'offers' ? commissionOffers(s).length : 0));
     $('#cm .sub').textContent = `第 ${s.day.toLocaleString()} 天・${s.diff === 3 ? '沙盒' : '資金 $' + Math.floor(s.money).toLocaleString()}・城市 Lv.${s.rankIdx + 1}・已完成 ${s.cms.done.length} 條`;
     $('#cm .tip').textContent = cmTip;
+    cmGate.refreshGeometry();
   }
   // 接受第 i 張／放棄進行中的：成功就發通知（實驗線的字）、存檔；不行講原因，不動狀態
   function uiCommission(kind: 'accept' | 'drop', i = 0) {

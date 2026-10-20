@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {d081TouchLeaseHistoricalBytes} from './d081-touch-lease-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const diskRead = file => fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -63,7 +64,7 @@ function historical(file,current) {
 }
 
 export function d081HistoricalBytes(file,read=diskRead) {
-  const current=read(file),pin=M.after[file]??M.before[file];
+  const current=d081TouchLeaseHistoricalBytes(file,read),pin=M.after[file]??M.before[file];
   assert.ok(pin,file+' belongs to D081 source inventory');
   assert.equal(sha(current),pin,file+' exact allowed source');
   return historical(file,current);
@@ -78,7 +79,7 @@ export function assertD081Scope(read=diskRead) {
   assertD081Inventory(files);
   const snapshot = new Map();
   for(const file of files) {
-    const current=read(file);
+    const current=d081TouchLeaseHistoricalBytes(file,read);
     assert.equal(sha(current),M.after[file]??M.before[file],file+' exact allowed source');
     snapshot.set(file,current);
   }

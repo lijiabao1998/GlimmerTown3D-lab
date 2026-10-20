@@ -20,8 +20,8 @@ function runnerFixture(t) {
 }
 
 test('explicit inventory equals every original ordered registration, including D081', () => {
-  assert.equal(UNIT_GUARDS.length, 121);
-  assert.equal(registered.length, 121);
+  assert.equal(UNIT_GUARDS.length, 123);
+  assert.equal(registered.length, 123);
   assertGuardInventory(registered);
   assert.deepEqual(registered.slice(-9), [['./unit-d078.mjs', 'd078Guards'], [...D078_FRAME], ['./unit-d079.mjs', 'd079Guards'], [...D079_FRAME], ['./unit-d080.mjs', 'd080Guards'], [...D080_FRAME], ['./unit-d081.mjs', 'd081Guards'], [...D081_FRAME], ['./unit-evidence.mjs', 'evidenceImageGuards']]);
 });
@@ -29,10 +29,10 @@ test('explicit inventory equals every original ordered registration, including D
 test('historical plus four frames is a disjoint, exhaustive partition including all inline checks', () => {
   assert.deepEqual(PARTITIONS, ['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame']);
   const all = partitionInventory('all'), historical = partitionInventory('historical'), frame = [...partitionInventory('d078-frame'), ...partitionInventory('d079-frame'), ...partitionInventory('d080-frame'), ...partitionInventory('d081-frame')];
-  assert.equal(all.length, 122);
-  assert.equal(historical.length, 118);
-  assert.equal(all.filter(id => id !== INLINE_SUITE).length, 121, 'registered guards exclude the inline suite');
-  assert.equal(historical.filter(id => id !== INLINE_SUITE).length, 117, 'historical registered guards exclude the inline suite');
+  assert.equal(all.length, 124);
+  assert.equal(historical.length, 120);
+  assert.equal(all.filter(id => id !== INLINE_SUITE).length, 123, 'registered guards exclude the inline suite');
+  assert.equal(historical.filter(id => id !== INLINE_SUITE).length, 119, 'historical registered guards exclude the inline suite');
   assert.deepEqual(frame, [key(D078_FRAME), key(D079_FRAME), key(D080_FRAME), key(D081_FRAME)]);
   assert.equal(historical[0], INLINE_SUITE);
   assert.ok(historical.includes('./unit-d078.mjs:d078Guards'));
@@ -632,4 +632,12 @@ test('D081: evidence-write failure also rejects an otherwise successful guard', 
   assert.equal(await f.run({ write: line => lines.push(line), load: async () => ({ [D081_FRAME[1]]: () => ({ failed: 0, report: { passed: true } }) }) }), 1);
   assert.ok(lines.some(line => line.includes('evidence could not be saved')));
   assert.match(lines.at(-1), /NG 紅燈/);
+});
+
+
+test('D081 approved touch repair adds exact scope and actual-source guards without dropping historical guards', () => {
+  for (const id of ['./d081-touch-lease-scope.mjs:d081TouchLeaseScopeGuards', './unit-d081-touch-lease.mjs:d081TouchLeaseGuards']) {
+    assert.equal(partitionInventory('all').filter(x => x === id).length, 1);
+    assert.equal(partitionInventory('historical').filter(x => x === id).length, 1);
+  }
 });

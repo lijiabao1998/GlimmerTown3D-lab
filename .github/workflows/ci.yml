@@ -73,6 +73,10 @@ jobs:
           git fetch --no-tags --depth=1 origin 46771cdc00f33759e0a3c45ddf05c3387d4bb4fc
           git fetch --no-tags --depth=1 origin 23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e
           git fetch --no-tags --depth=1 origin 7ec70a96b01437ab4576b0962905be16b1591e79
+      - name: Fetch separate exact PR33 touch contract baseline
+        run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"
+        env:
+          D081_TOUCH_BASELINE: 9e3452a438331feec4082f6821cfcb0b0e653c4b
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -292,6 +296,14 @@ jobs:
       - name: 煙霧測試
         run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
         shell: bash
+      - name: D081 approved touch lease real-layout regression
+        if: always()
+        run: node tools/d081-touch-lease-browser.mjs 2>&1 | tee d081-touch-lease-browser.txt; exit ${PIPESTATUS[0]}
+        shell: bash
+      - name: D081 actual compiled commission layout regression
+        if: always()
+        run: node tools/d081-touch-lease-app-browser.mjs 2>&1 | tee d081-touch-lease-app.txt; exit ${PIPESTATUS[0]}
+        shell: bash
       - uses: actions/upload-artifact@v4
         id: evidence
         if: always()
@@ -299,6 +311,9 @@ jobs:
           name: smoke-browser-${{ github.sha }}-${{ github.run_attempt }}
           path: |
             smoke-run.txt
+            d081-touch-lease-browser.txt
+            d081-touch-lease-app.txt
+            scratch/d081-touch-lease-app/
             scratch/shots/*.png
             scratch/shots/D048-evidence.json
             scratch/shots/D049-evidence.json
@@ -385,6 +400,9 @@ jobs:
           name: smoke-${{ github.sha }}
           path: |
             smoke-run.txt
+            d081-touch-lease-browser.txt
+            d081-touch-lease-app.txt
+            scratch/d081-touch-lease-app/
             scratch/shots/*.png
             scratch/shots/D048-evidence.json
             scratch/shots/D049-evidence.json
