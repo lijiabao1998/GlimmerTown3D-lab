@@ -1,3 +1,6 @@
+// D081-BEGIN field-study-lodge-import
+import { FIELD_STUDY_KINDS } from './britishFieldStudyLodges.ts';
+// D081-END field-study-lodge-import
 // D080-BEGIN community-building-import
 import { COMMUNITY_KINDS } from './britishCommunityBuildings.ts';
 // D080-END community-building-import
@@ -268,7 +271,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D078-BEGIN neighbourhood-pavilion-shape
 // D079-BEGIN transit-utility-pavilion-shape
 // D080-BEGIN community-building-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false): Shape | null => {
+// D081-BEGIN field-study-lodge-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false): Shape | null => {
+  if (fieldStudyLodge && FIELD_STUDY_KINDS.has(k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding);
+    return previous ? { ...previous, p: { ...previous.p, fieldStudyLodge: true } } : null;
+  }
+// D081-END field-study-lodge-shape
   if (communityBuilding && COMMUNITY_KINDS.has(k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion);
     return previous ? { ...previous, p: { ...previous.p, communityBuilding: true } } : null;

@@ -79,7 +79,7 @@ for (const stage of STAGES) {
 test('gate rejects unexpected dependency and missing artifact identity', () => {
   const needs = success(); needs.unexpected = { result: 'success' };
   assert.throws(() => requireSuccess(needs), /every split stage/);
-  for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'browser', 'screenshots']) {
+  for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots']) {
     const missing = success(); delete missing[stage].outputs['artifact-id'];
     assert.throws(() => requireSuccess(missing), /artifact is required/);
   }
@@ -87,11 +87,11 @@ test('gate rejects unexpected dependency and missing artifact identity', () => {
   assert.throws(() => requireSuccess(noDigest), /build digest is required/);
 });
 
-test('required stage inventory is fixed and includes the independent D078, D079 and D080 frame jobs', () => {
-  assert.deepEqual(STAGES, ['build', 'node', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'browser', 'screenshots']);
+test('required stage inventory is fixed and includes the independent D078, D079, D080 and D081 frame jobs', () => {
+  assert.deepEqual(STAGES, ['build', 'node', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots']);
 });
 
-test('workflow keeps all four Node partitions mandatory at the original 120-minute limit', () => {
+test('workflow keeps all five Node partitions mandatory at the original 120-minute limit', () => {
   const workflow = fs.readFileSync(new URL('../workflows/ci.yml', import.meta.url), 'utf8');
   const job = name => {
     const start = workflow.indexOf(`\n  ${name}:\n`);
@@ -99,8 +99,8 @@ test('workflow keeps all four Node partitions mandatory at the original 120-minu
     const end = workflow.slice(start + 1).search(/\n  [a-z][a-z0-9-]*:\n/);
     return end < 0 ? workflow.slice(start) : workflow.slice(start, start + 1 + end);
   };
-  const historical = job('node'), frame = job('node-frame'), frame79 = job('node-frame-d079'), frame80 = job('node-frame-d080'), smoke = job('smoke'), pages = job('pages');
-  for (const stage of [historical, frame, frame79, frame80]) {
+  const historical = job('node'), frame = job('node-frame'), frame79 = job('node-frame-d079'), frame80 = job('node-frame-d080'), frame81 = job('node-frame-d081'), smoke = job('smoke'), pages = job('pages');
+  for (const stage of [historical, frame, frame79, frame80, frame81]) {
     assert.match(stage, /timeout-minutes: 120\n/);
     assert.match(stage, /uses: actions\/checkout@v4\n/);
     assert.match(stage, /node-version: 24\n/);
@@ -116,12 +116,14 @@ test('workflow keeps all four Node partitions mandatory at the original 120-minu
   assert.match(frame, /name: node-frame-d078-\$\{\{ github\.sha \}\}-\$\{\{ github\.run_attempt \}\}/);
   assert.match(frame, /path: scratch\/d078-node-frame\/\n          if-no-files-found: error/);
   const baselines = s => [...s.matchAll(/git fetch --no-tags --depth=1 origin ([a-f0-9]{40})/g)].map(m => m[1]);
-  assert.equal(baselines(historical).length, 15);
-  assert.deepEqual(baselines(frame), baselines(historical).slice(0, -2));
-  assert.deepEqual(baselines(frame79), baselines(historical).slice(0, -1));
-  assert.deepEqual(baselines(frame80), baselines(historical));
-  assert.equal(baselines(historical).at(-2), '46771cdc00f33759e0a3c45ddf05c3387d4bb4fc');
-  assert.equal(baselines(historical).at(-1), '23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e');
+  assert.equal(baselines(historical).length, 16);
+  assert.deepEqual(baselines(frame), baselines(historical).slice(0, -3));
+  assert.deepEqual(baselines(frame79), baselines(historical).slice(0, -2));
+  assert.deepEqual(baselines(frame80), baselines(historical).slice(0, -1));
+  assert.equal(baselines(historical).at(-3), '46771cdc00f33759e0a3c45ddf05c3387d4bb4fc');
+  assert.equal(baselines(historical).at(-2), '23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e');
+  assert.deepEqual(baselines(frame81), baselines(historical));
+  assert.equal(baselines(historical).at(-1), '7ec70a96b01437ab4576b0962905be16b1591e79');
   assert.ok(frame79.includes('node tools/unit-partition.mjs --partition=d079-frame 2>&1 | tee scratch/d079-node-frame/console.log'));
   assert.ok(frame79.includes('name: node-frame-d079-'));
   assert.ok(frame79.includes('path: scratch/d079-node-frame/'));
@@ -132,6 +134,11 @@ test('workflow keeps all four Node partitions mandatory at the original 120-minu
   assert.match(frame80, /uses: actions\/upload-artifact@v4\n        id: evidence\n        if: always\(\)/);
   assert.match(frame80, /name: node-frame-d080-\$\{\{ github\.sha \}\}-\$\{\{ github\.run_attempt \}\}/);
   assert.match(frame80, /path: scratch\/d080-node-frame\/\n          if-no-files-found: error/);
+  assert.match(frame81, /set -o pipefail\n          node tools\/unit-partition\.mjs --partition=d081-frame 2>&1 \| tee scratch\/d081-node-frame\/console\.log\n        shell: bash/);
+  assert.match(frame81, /outputs:\n      artifact-id: \$\{\{ steps\.evidence\.outputs\.artifact-id \}\}/);
+  assert.match(frame81, /uses: actions\/upload-artifact@v4\n        id: evidence\n        if: always\(\)/);
+  assert.match(frame81, /name: node-frame-d081-\$\{\{ github\.sha \}\}-\$\{\{ github\.run_attempt \}\}/);
+  assert.match(frame81, /path: scratch\/d081-node-frame\/\n          if-no-files-found: error/);
   const capture = job('d079');
   assert.match(capture, /timeout-minutes: 45/);
   assert.match(capture, /fail-fast: false/);
@@ -145,13 +152,13 @@ test('workflow keeps all four Node partitions mandatory at the original 120-minu
   assert.deepEqual(needs(smoke), STAGES);
   assert.match(smoke, /\n    if: always\(\)\n/);
   assert.match(smoke, /run: node \.github\/scripts\/ci-integrity\.mjs gate\n/);
-  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078', 'd079', 'd080']);
+  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078', 'd079', 'd080', 'd081']);
   assert.match(pages, /\n    if: github\.ref == 'refs\/heads\/main' && github\.event_name != 'pull_request'\n/);
   assert.doesNotMatch(pages, /always\(\)|continue-on-error:/);
   assert.match(workflow, /run: node --test \.github\/scripts\/ci-integrity\.test\.mjs tools\/unit-partitions\.test\.mjs\n/);
 });
 
-for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'browser', 'screenshots']) {
+for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots']) {
   for (const id of ['', 'wrong-run-artifact', '-1', '1.2', null, undefined]) {
     test(`gate rejects malformed ${stage} artifact identity ${id}`, () => {
       const needs = success(); needs[stage].outputs['artifact-id'] = id;
@@ -178,7 +185,7 @@ test('D080 WebGL captures retain the full three-width matrix, original limit and
   assert.doesNotMatch(capture, /continue-on-error:|\n    (?:if|needs):/);
 });
 
-for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'browser', 'screenshots']) {
+for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots']) {
   for (const outputs of [null, undefined, {}]) {
     test(`gate rejects absent ${stage} artifact outputs ${JSON.stringify(outputs)}`, () => {
       const needs = success(); needs[stage].outputs = outputs;
@@ -186,3 +193,21 @@ for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080'
     });
   }
 }
+
+test('D081 WebGL captures retain the full three-width matrix, original limit and mandatory evidence', () => {
+  const workflow = fs.readFileSync(new URL('../workflows/ci.yml', import.meta.url), 'utf8');
+  const capture = /\n  d081:\n[\s\S]*?(?=\n  [a-z][a-z0-9-]*:\n|$)/.exec(workflow)?.[0];
+  assert.ok(capture, 'D081 capture job is required');
+  assert.match(capture, /timeout-minutes: 45\n/);
+  assert.match(capture, /strategy:\n      fail-fast: false\n      matrix:\n        width: \[1440, 360, 412\]/);
+  assert.match(capture, /uses: actions\/checkout@v4\n        with:\n          persist-credentials: false/);
+  assert.match(capture, /node-version: 24\n/);
+  assert.match(capture, /run: npm ci\n/);
+  assert.match(capture, /fonts-wqy-zenhei\n/);
+  assert.match(capture, /run: npm run build\n/);
+  assert.match(capture, /run: node tools\/d081-capture\.mjs\n        env:\n          D081_WIDTHS: \$\{\{ matrix\.width \}\}/);
+  assert.match(capture, /uses: actions\/upload-artifact@v4\n        if: always\(\)/);
+  assert.match(capture, /name: d081-preview-\$\{\{ matrix\.width \}\}-\$\{\{ github\.sha \}\}/);
+  assert.match(capture, /path: scratch\/d081\/\n          if-no-files-found: error\n          retention-days: 14/);
+  assert.doesNotMatch(capture, /continue-on-error:|\n    (?:if|needs):/);
+});

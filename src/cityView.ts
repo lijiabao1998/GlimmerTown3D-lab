@@ -1,3 +1,6 @@
+// D081-BEGIN field-study-lodge-import
+import { FIELD_STUDY_LODGES } from './content/britishFieldStudyLodges.ts';
+// D081-END field-study-lodge-import
 // D080-BEGIN community-building-import
 import { COMMUNITY_BUILDINGS } from './content/britishCommunityBuildings.ts';
 // D080-END community-building-import
@@ -216,7 +219,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const transitUtilityPavilionOn = !['transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D080-BEGIN community-building-enabled
   const communityBuildingOn = !['communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D081-BEGIN field-study-lodge-enabled
+  const fieldStudyLodgeOn = !['fieldStudyArt', 'communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn, fieldStudyLodgeOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D081-END field-study-lodge-enabled
 // D080-END community-building-enabled
 // D079-END transit-utility-pavilion-enabled
 // D078-END neighbourhood-pavilion-enabled
@@ -380,6 +386,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let communityForcedV: number | null = null;
   const communityView = (c: City): City => communityForcedV === null ? c : { ...c, buildings: c.buildings.map(b => COMMUNITY_BUILDINGS.some(slot => slot.k === b.k && slot.v === communityForcedV) ? { ...b, v: communityForcedV! } : b) };
 // D080-END community-building-view
+// D081-BEGIN field-study-lodge-view
+  let fieldStudyForcedV: number | null = null;
+  const fieldStudyView = (c: City): City => fieldStudyForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FIELD_STUDY_LODGES.some(slot => slot.k === b.k && slot.v === fieldStudyForcedV) ? { ...b, v: fieldStudyForcedV! } : b) };
+// D081-END field-study-lodge-view
 // D074-BEGIN farm-memorial-view
   let farmMemorialForcedV: number | null = null;
   const farmMemorialView = (c: City): City => farmMemorialForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FARM_MEMORIAL_BUILDINGS.some(slot => slot.k === b.k && slot.v === farmMemorialForcedV) ? { ...b, v: farmMemorialForcedV! } : b) };
@@ -405,7 +415,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D078-BEGIN neighbourhood-pavilion-scene
 // D079-BEGIN transit-utility-pavilion-scene
 // D080-BEGIN community-building-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(communityView(transitUtilityView(neighbourhoodView(serviceLodgeView(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c)))))))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D081-BEGIN field-study-lodge-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(fieldStudyView(communityView(transitUtilityView(neighbourhoodView(serviceLodgeView(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c))))))))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D081-END field-study-lodge-scene
 // D080-END community-building-scene
 // D079-END transit-utility-pavilion-scene
 // D078-END neighbourhood-pavilion-scene
@@ -1921,6 +1933,22 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D077-BEGIN service-lodge-gt
     serviceLodgeV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 4) throw new Error('serviceLodgeV supports saved variants 0, 1, 2, 4 or null'); serviceLodgeForcedV = v; rebuildScene(true); needsRender = true; draw(); return serviceLodgeForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
 // D077-END service-lodge-gt
+// D081-BEGIN field-study-lodge-gt
+    fieldStudyLodgeOn,
+    fieldStudyV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3 && v !== 4) throw new Error('fieldStudyV supports saved variants 0, 1, 2, 3, 4 or null'); fieldStudyForcedV = v; rebuildScene(true); needsRender = true; draw(); return fieldStudyForcedV; }, // Render-only exact saved/import-slot copies; world is unchanged.
+    fieldStudyConstruction() {
+      if (!con || !built) return null;
+      const trees: { name: string; count: number; ages: number[]; matrices: number[] }[] = [];
+      built.scene.traverse(o => {
+        const mesh = o as THREE.InstancedMesh;
+        if (!mesh.isInstancedMesh) return;
+        const ages = mesh.geometry.getAttribute('aTreeT');
+        if (ages) trees.push({ name: mesh.geometry.type, count: mesh.count, ages: Array.from(ages.array).slice(0, mesh.count), matrices: Array.from(mesh.instanceMatrix.array).slice(0, mesh.count * 16) });
+      });
+      const u = con.uni;
+      return { uniforms: { uDayFrac: u.uDayFrac.value, uTime: u.uTime.value, uDetail: u.uDetail.value, uProbe: u.uProbe.value.toArray(), uNoClip: u.uNoClip.value }, trees };
+    }, // Read-only copies of the actual construction uniforms and ordered live tree buffers.
+// D081-END field-study-lodge-gt
 // D080-BEGIN community-building-gt
     communityBuildingOn,
     communityV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3 && v !== 4) throw new Error('communityV supports saved variants 0, 1, 2, 3, 4 or null'); communityForcedV = v; rebuildScene(true); needsRender = true; draw(); return communityForcedV; }, // Render-only exact saved/import-slot copies; world is unchanged.
