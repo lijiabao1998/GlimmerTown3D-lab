@@ -1,3 +1,6 @@
+// D082-BEGIN coastal-recreation-import
+import { MODELS as COASTAL_RECREATION_BUILDINGS } from './content/britishCoastalRecreation.ts';
+// D082-END coastal-recreation-import
 // D081-BEGIN field-study-lodge-import
 import { FIELD_STUDY_LODGES } from './content/britishFieldStudyLodges.ts';
 // D081-END field-study-lodge-import
@@ -221,7 +224,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const communityBuildingOn = !['communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D081-BEGIN field-study-lodge-enabled
   const fieldStudyLodgeOn = !['fieldStudyArt', 'communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn, fieldStudyLodgeOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D082-BEGIN coastal-recreation-enabled
+  const coastalRecreationOn = !['coastalArt', 'fieldStudyArt', 'communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn, fieldStudyLodgeOn, coastalRecreationOn), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+// D082-END coastal-recreation-enabled
 // D081-END field-study-lodge-enabled
 // D080-END community-building-enabled
 // D079-END transit-utility-pavilion-enabled
@@ -390,6 +396,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   let fieldStudyForcedV: number | null = null;
   const fieldStudyView = (c: City): City => fieldStudyForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FIELD_STUDY_LODGES.some(slot => slot.k === b.k && slot.v === fieldStudyForcedV) ? { ...b, v: fieldStudyForcedV! } : b) };
 // D081-END field-study-lodge-view
+// D082-BEGIN coastal-recreation-view
+  let coastalForcedV: number | null = null;
+  const coastalView = (c: City): City => coastalForcedV === null ? c : { ...c, buildings: c.buildings.map(b => COASTAL_RECREATION_BUILDINGS.some(slot => slot.k === b.k && slot.v === coastalForcedV) ? { ...b, v: coastalForcedV! } : b) };
+// D082-END coastal-recreation-view
 // D074-BEGIN farm-memorial-view
   let farmMemorialForcedV: number | null = null;
   const farmMemorialView = (c: City): City => farmMemorialForcedV === null ? c : { ...c, buildings: c.buildings.map(b => FARM_MEMORIAL_BUILDINGS.some(slot => slot.k === b.k && slot.v === farmMemorialForcedV) ? { ...b, v: farmMemorialForcedV! } : b) };
@@ -416,7 +426,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D079-BEGIN transit-utility-pavilion-scene
 // D080-BEGIN community-building-scene
 // D081-BEGIN field-study-lodge-scene
-    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(fieldStudyView(communityView(transitUtilityView(neighbourhoodView(serviceLodgeView(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c))))))))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D082-BEGIN coastal-recreation-scene
+    const t0 = performance.now(), br = blockRenderFor(c), t1 = performance.now(), st = conFor(c), b = buildCityScene(coastalView(fieldStudyView(communityView(transitUtilityView(neighbourhoodView(serviceLodgeView(healthResponseView(farmMemorialView(emergencyHotelView(campusView(educationView(commerceThirdView(commerceView(towerView(c)))))))))))))), KINDS, style, br, tone, br ? civic : undefined, st, fresh, pipesShown, trafficOver());
+// D082-END coastal-recreation-scene
 // D081-END field-study-lodge-scene
 // D080-END community-building-scene
 // D079-END transit-utility-pavilion-scene
@@ -1934,6 +1946,10 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
 // D077-BEGIN service-lodge-gt
     serviceLodgeV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 4) throw new Error('serviceLodgeV supports saved variants 0, 1, 2, 4 or null'); serviceLodgeForcedV = v; rebuildScene(true); needsRender = true; draw(); return serviceLodgeForcedV; }, // Render-only supported saved-slot copies; world is unchanged.
 // D077-END service-lodge-gt
+// D082-BEGIN coastal-recreation-gt
+    coastalRecreationOn,
+    coastalV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2) throw new Error('coastalV supports saved variants 0, 1, 2 or null'); coastalForcedV = v; rebuildScene(true); needsRender = true; draw(); return coastalForcedV; }, // Read-only exact saved-slot copies.
+// D082-END coastal-recreation-gt
 // D081-BEGIN field-study-lodge-gt
     fieldStudyLodgeOn,
     fieldStudyV(v: number | null) { if (v !== null && v !== 0 && v !== 1 && v !== 2 && v !== 3 && v !== 4) throw new Error('fieldStudyV supports saved variants 0, 1, 2, 3, 4 or null'); fieldStudyForcedV = v; rebuildScene(true); needsRender = true; draw(); return fieldStudyForcedV; }, // Render-only exact saved/import-slot copies; world is unchanged.

@@ -5,7 +5,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
+import { D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, D082_FRAME, parsePartition, partitionInventory } from './unit-partitions.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -21,11 +21,13 @@ const D081_SOURCE_FILES = ['tools/unit-partition.mjs', 'tools/unit-partitions.mj
   'tools/d081-frame.mjs', 'tools/d081-capture.mjs', 'tools/unit-d081.mjs',
   'docs/D081-british-field-study-buildings-ten.md', 'package-lock.json',
   'docs/D081-parallel-validation.md', 'tools/d081-baseline.mjs', 'tools/d081-scope.mjs', 'tools/d081-scope-build.mjs',
-  'fixtures/d081-architecture-contract.json', 'docs/D081-initial-architecture.json'];
+  'fixtures/d081-architecture-contract.json', 'docs/D081-initial-architecture.json', 'tools/test-d082-historical-isolation.mjs'];
+
+const D082_SOURCE_FILES = ['src/render/landArt.ts','src/render/seasonArt.ts','src/render/preview.ts','src/render/hazard.ts','tools/test-d082-browser-surfaces.mjs','tools/d082-browser-surfaces.mjs','tools/d082-inspect.mjs','docs/D082-browser-surface-capture.md','tools/d082-frame.mjs','tools/unit-d082-architecture-contract.mjs','docs/D082-visibility-repair-architecture.json','fixtures/d082-geometry-before.json','fixtures/d082-source-before.json','fixtures/d082-history-before.json','src/content/britishCoastalRecreation.ts','src/render/britishCoastalRecreationArt.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/cityView.ts','tools/unit-partition.mjs','tools/unit-partitions.mjs','tools/unit-d082-frame.mjs','tools/d082-candidate-coverage.mjs','tools/unit-d082.mjs','tools/unit-d082-scope.mjs','tools/d082/geometry-test.mjs','tools/d082-scope.mjs','tools/d082-baseline.mjs','fixtures/d082-art-scope.json','fixtures/d082-baseline-feasibility.json','docs/D082-integration-architecture.json','package-lock.json'];
 
 export function frameProvenance({ partition = 'd078-frame', root = ROOT, env = process.env, git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim() } = {}) {
-  assert.ok(['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame'].includes(partition), 'unknown frame provenance partition');
-  const sourceFiles = partition === 'd081-frame' ? D081_SOURCE_FILES : partition === 'd080-frame' ? D080_SOURCE_FILES : partition === 'd078-frame' ? D078_SOURCE_FILES : [...D078_SOURCE_FILES.map(file => file.replaceAll('d078', 'd079').replace('D078-british-neighbourhood-pavilions-ten', 'D079-british-transit-utility-pavilions-ten')),
+  assert.ok(['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame'].includes(partition), 'unknown frame provenance partition');
+  const sourceFiles = partition === 'd082-frame' ? D082_SOURCE_FILES : partition === 'd081-frame' ? D081_SOURCE_FILES : partition === 'd080-frame' ? D080_SOURCE_FILES : partition === 'd078-frame' ? D078_SOURCE_FILES : [...D078_SOURCE_FILES.map(file => file.replaceAll('d078', 'd079').replace('D078-british-neighbourhood-pavilions-ten', 'D079-british-transit-utility-pavilions-ten')),
     'docs/D079-parallel-validation.md', 'tools/d079-baseline.mjs', 'tools/d079-scope.mjs', 'tools/d079-scope-build.mjs',
     'fixtures/d079-architecture-contract.json', 'docs/D079-initial-architecture.json'];
   const sha = git(['rev-parse', 'HEAD']), tree = git(['rev-parse', 'HEAD^{tree}']);
@@ -47,8 +49,8 @@ export function frameProvenance({ partition = 'd078-frame', root = ROOT, env = p
 // Dependency injection is used only by fast runner failure/serialization controls.
 export async function runFramePartition({ args = [], load = file => import(file), write = line => console.log(line),
   evidenceDir, provenance = options => frameProvenance(options) } = {}) {
-  const partition = parsePartition(args, ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame'], 'd078-frame');
-  const [file, fn] = partition === 'd078-frame' ? D078_FRAME : partition === 'd079-frame' ? D079_FRAME : partition === 'd080-frame' ? D080_FRAME : D081_FRAME;
+  const partition = parsePartition(args, ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame'], 'd078-frame');
+  const [file, fn] = partition === 'd078-frame' ? D078_FRAME : partition === 'd079-frame' ? D079_FRAME : partition === 'd080-frame' ? D080_FRAME : partition === 'd081-frame' ? D081_FRAME : D082_FRAME;
   const card = partition.slice(0, 4).toUpperCase();
   evidenceDir ??= path.join(ROOT, `scratch/${partition.slice(0, 4)}-node-frame`);
   assert.deepEqual(partitionInventory(partition), [file + ':' + fn]);

@@ -1,7 +1,8 @@
 // CI scheduling only: never change guard assertions or samples here.
 import assert from 'node:assert/strict';
 
-export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame']);
+export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']);
+export const D082_FRAME = Object.freeze(['./unit-d082-frame.mjs', 'd082FrameGuards']);
 export const INLINE_SUITE = 'unit.mjs:inline';
 export const D078_FRAME = Object.freeze(['./unit-d078-frame.mjs', 'd078FrameGuards']);
 export const D079_FRAME = Object.freeze(['./unit-d079-frame.mjs', 'd079FrameGuards']);
@@ -131,11 +132,13 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d080-frame.mjs","d080FrameGuards"],
   ["./unit-d081.mjs","d081Guards"],
   ["./unit-d081-frame.mjs","d081FrameGuards"],
+  ["./unit-d082.mjs","d082Guards"],
+  ["./unit-d082-frame.mjs","d082FrameGuards"],
   ["./unit-evidence.mjs","evidenceImageGuards"],
 ].map(Object.freeze));
 
 const key = ([file, fn]) => file + ':' + fn;
-const frameKeys = new Map([['d078-frame', key(D078_FRAME)], ['d079-frame', key(D079_FRAME)], ['d080-frame', key(D080_FRAME)], ['d081-frame', key(D081_FRAME)]]);
+const frameKeys = new Map([['d078-frame', key(D078_FRAME)], ['d079-frame', key(D079_FRAME)], ['d080-frame', key(D080_FRAME)], ['d081-frame', key(D081_FRAME)], ['d082-frame', key(D082_FRAME)]]);
 
 export function parsePartition(args, allowed = PARTITIONS, fallback = 'all') {
   assert.ok(args.length <= 1, 'expected at most one --partition=<name> argument');

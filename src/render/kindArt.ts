@@ -1,3 +1,6 @@
+// D082-BEGIN coastal-recreation-import
+import { drawBritishCoastalRecreation } from './britishCoastalRecreationArt.ts';
+// D082-END coastal-recreation-import
 // D081-BEGIN field-study-lodge-import
 import { drawBritishFieldStudyLodge } from './britishFieldStudyLodgeArt.ts';
 // D081-END field-study-lodge-import
@@ -809,7 +812,9 @@ export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
 // D079-BEGIN transit-utility-pavilion-dispatch
 // D080-BEGIN community-building-dispatch
 // D081-BEGIN field-study-lodge-dispatch
-  try { const p = new Pen(a); if (!(shape?.p?.fieldStudyLodge === true && drawBritishFieldStudyLodge(p)) && !(shape?.p?.communityBuilding === true && drawBritishCommunityBuilding(p)) && !(shape?.p?.transitUtilityPavilion === true && drawBritishTransitUtilityPavilions(p)) && !(shape?.p?.neighbourhoodPavilion === true && drawBritishNeighbourhoodPavilions(p)) && !(shape?.p?.serviceLodge === true && drawBritishServiceLodges(p)) && !(shape?.p?.healthResponse === true && drawBritishHealthResponse(p)) && !(shape?.p?.farmMemorial === true && drawBritishFarmMemorial(p)) && !(shape?.p?.emergencyHotel === true && drawBritishEmergencyHotel(p)) && !(shape?.p?.campus === true && drawBritishCampus(p)) && !(shape?.p?.education === true && drawBritishEducation(p)) && !(shape?.p?.commerceThird === true && drawBritishCommerceThird(p)) && !(shape?.p?.commerceVariant === true && drawBritishCommerceVariant(p)) && !(shape?.p?.facility === true && drawBritishCommerceFacility(p)) && !(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D082-BEGIN coastal-recreation-dispatch
+  try { const p = new Pen(a); if (!(shape?.p?.coastalRecreation === true && drawBritishCoastalRecreation(p)) && !(shape?.p?.fieldStudyLodge === true && drawBritishFieldStudyLodge(p)) && !(shape?.p?.communityBuilding === true && drawBritishCommunityBuilding(p)) && !(shape?.p?.transitUtilityPavilion === true && drawBritishTransitUtilityPavilions(p)) && !(shape?.p?.neighbourhoodPavilion === true && drawBritishNeighbourhoodPavilions(p)) && !(shape?.p?.serviceLodge === true && drawBritishServiceLodges(p)) && !(shape?.p?.healthResponse === true && drawBritishHealthResponse(p)) && !(shape?.p?.farmMemorial === true && drawBritishFarmMemorial(p)) && !(shape?.p?.emergencyHotel === true && drawBritishEmergencyHotel(p)) && !(shape?.p?.campus === true && drawBritishCampus(p)) && !(shape?.p?.education === true && drawBritishEducation(p)) && !(shape?.p?.commerceThird === true && drawBritishCommerceThird(p)) && !(shape?.p?.commerceVariant === true && drawBritishCommerceVariant(p)) && !(shape?.p?.facility === true && drawBritishCommerceFacility(p)) && !(shape?.p?.heritage === true && drawBritishHeritage(p)) && !(shape?.p?.british === true && drawBritishCivic(p)) && !(shape?.p?.skyline === true && drawBritishTower(p)) && !(shape?.p?.metropolis === true && drawBritishMetropolis(p)) && !(shape?.p?.landmark === true && drawBritishLandmark(p)) && b) b(p, shape!.p ?? {}); return USED; } finally { USED = null; }
+// D082-END coastal-recreation-dispatch
 // D081-END field-study-lodge-dispatch
 // D080-END community-building-dispatch
 // D079-END transit-utility-pavilion-dispatch

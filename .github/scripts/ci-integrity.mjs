@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-export const STAGES = ['build', 'node', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots'];
+export const STAGES = ['build', 'node', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'node-frame-d082', 'browser', 'screenshots'];
 export const digest = value => createHash('sha256').update(value).digest('hex');
 
 export function filesIn(dir, root = dir) {
@@ -47,7 +47,7 @@ export function requireSuccess(needs) {
   for (const stage of STAGES) {
     assert.equal(needs[stage]?.result, 'success', `${stage} did not succeed`);
   }
-  for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'browser', 'screenshots']) {
+  for (const stage of ['build', 'node-frame', 'node-frame-d079', 'node-frame-d080', 'node-frame-d081', 'node-frame-d082', 'browser', 'screenshots']) {
     assert.match(needs[stage]?.outputs?.['artifact-id'] ?? '', /^\d+$/, `${stage} evidence artifact is required`);
   }
   assert.match(needs.build.outputs.digest ?? '', /^[a-f0-9]{64}$/, 'build digest is required');
