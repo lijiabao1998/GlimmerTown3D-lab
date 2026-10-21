@@ -28,12 +28,12 @@ export const MODELS:Model[]=[
  model(126,0,'Gambrel playgroup cottage',.94,1,56,[prism('broken-pitch main hall',[[.15,.48],[.24,.85],[.49,1],[.73,.85],[.85,.48]],.18,.82,brick)]),
  model(126,1,'Saltbox activity cottage',.47,1,56,[prism('unequal saltbox',[[.13,.35],[.38,1],[.56,.83],[.87,.55]],.20,.80)]),
  model(126,2,'Twin-gabled play pavilion',.42,1,56,[prism('unequal twin gables',[[.14,.51],[.32,1],[.51,.51],[.70,.85],[.86,.51]],.23,.77,brick)]),
- model(179,0,'Festival hall and pyramidal lodge',.78,1,182,[prism('meeting hall',[[.13,.58],[.35,1],[.57,.58]],.17,.83),polygon('detached vestry',rect(.65,.45,.87,.77),.35,[.76,.70,.61])]),
+ model(179,0,'Festival hall and pyramidal lodge',.78,1,182,[prism('meeting hall',[[.13,.58],[.35,1],[.57,.58]],.17,.59),polygon('detached vestry',rect(.68,.70,.88,.90),.35,[.78,.70,.80])]),
  model(179,1,'Clerestory lantern-square hall',.66,1,182,[prism('stepped clerestory hall',[[.13,.46],[.38,.70],[.38,1],[.64,.82],[.64,.57],[.87,.40]],.18,.82,brick)]),
  model(179,2,'Open-court community hall',.56,1,182,[polygon('open courtyard shell',[[.13,.15],[.87,.15],[.87,.84],[.65,.84],[.65,.42],[.35,.42],[.35,.84],[.13,.84]],1,null)]),
- model(185,0,'Bow-roof coastal visitor house',1.48,1,120,[prism('clipped boathouse roof',[[.12,.48],[.19,.77],[.32,1],[.47,1],[.59,.77],[.65,.48]],.18,.81,brick),polygon('separate office',rect(.72,.39,.89,.73),.43,[.805,.73,.56])]),
+ model(185,0,'Bow-roof coastal visitor house',1.48,1,120,[prism('clipped boathouse roof',[[.12,.48],[.19,.77],[.32,1],[.47,1],[.59,.77],[.65,.48]],.18,.58,brick),polygon('separate office',rect(.73,.73,.90,.90),.43,[.815,.73,.815])]),
  model(185,1,'Butterfly observation lodge and store',.88,1,120,[prism('butterfly lodge',[[.12,1],[.37,.61],[.60,.87]],.18,.82),polygon('hexagonal store',[[.72,.33],[.82,.33],[.89,.43],[.89,.60],[.80,.69],[.71,.59]],.32,[.80,.73,.50])]),
- model(185,2,'Lantern-roof coastal reading pavilion',.91,1,120,[prism('lantern-roof pavilion',[[.12,.44],[.28,.67],[.28,.87],[.38,1],[.48,.87],[.48,.67],[.63,.44]],.19,.81),prism('detached shed',[[.72,.40],[.80,.68],[.89,.40]],.36,.74,brick)]),
+ model(185,2,'Lantern-roof coastal reading pavilion',.91,1,120,[prism('lantern-roof pavilion',[[.12,.44],[.28,.67],[.28,.87],[.38,1],[.48,.87],[.48,.67],[.63,.44]],.19,.59),prism('detached shed',[[.73,.40],[.81,.68],[.90,.40]],.73,.90,brick)]),
  model(154,0,'Triple-bay waterworks and valve house',.33,4,342,[prism('three unequal market bays',[[.12,.46],[.21,.76],[.31,.46],[.43,1],[.55,.46],[.67,.86],[.79,.46]],.14,.57,brick),polygon('detached weigh house',[[.39,.68],[.62,.68],[.71,.77],[.62,.88],[.39,.88]],.38,[.52,.70,.78])]),
 ];
 

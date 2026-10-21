@@ -135,3 +135,5 @@
 
 | D082 (draft stage 1) | 2026-10-21 | Ten working procedural village/waterside meshes, isolated real-WebGL review harness, independent geometry checks and additive review workflow. Slot assignments provisional; original-slot surface qualification has first reds. Production dispatch unchanged; no completed wave, merge or deployment claimed. |
 | D082 (draft stage 2) | 2026-10-21 | Ten exact slots integrated into product rendering. Baseline30/30 cases and19,989 samples qualified; original130 models and7,878 non-target geometry cases pass initial regression. Candidate coverage/full CI and user visual approval pending. No merge or deployment. |
+
+| D082 (visibility repair, draft) | 2026-10-21 | Preserved three actual narrow-passage first reds; repaired only annex positioning/main depths without changing inherited heights, topology, cameras or classifier. All30 repaired owner-width cases pass24,300 mandatory points and240 paired controls. D082/D081 Node regressions and independent runtime-frame controls pass; actual production WebGL capture and full latest-head CI pending. No merge/deployment; published remains130. |

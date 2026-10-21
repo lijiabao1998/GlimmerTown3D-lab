@@ -1,3 +1,4 @@
+import {d082ArchitectureContractGuards} from './unit-d082-architecture-contract.mjs';
 // D082 production integration guards. Immutable release evidence is independent of candidate source.
 // Detailed architectural topology is additionally qualified by tools/d082/geometry-test.mjs.
 import assert from 'node:assert/strict';
@@ -104,6 +105,7 @@ export async function d082Guards(log=()=>{}){
  const report={baseline:D082_BASELINE,qualification:'Production Node integration only; architectural topology and browser/WebGL evidence are separate gates.',sourcePins,tests:[],geometryCases:0,preservedCases:0,costs:{},cities:[],passed:false};
  const test=(name,fn)=>{try{fn();report.tests.push({name,passed:true});log(true,'D082 '+name);}catch(e){failed++;report.tests.push({name,passed:false,error:e.stack??String(e)});log(false,'D082 '+name,e.stack??String(e));}};
  test('complete independent architecture topology, partitions and missing/reversed controls',()=>{report.architecture=runGeometryTests();assert.equal(report.architecture.passed,true);});
+ test('immutable original and post-repair architecture checkpoints',()=>{report.repairContract=d082ArchitectureContractGuards();assert.equal(report.repairContract.passed,true);});
  test('complete fail-closed historical source restoration and inventory',()=>{report.scope=d082ScopeGuards();assert.equal(report.scope.passed,true);});
  test('ten exact numeric slots and appended default-off dispatch',()=>{
   assert.deepEqual([...COASTAL_RECREATION_KINDS],D082_KINDS);assert.equal(MODELS.length,10);assert.deepEqual(MODELS.map(m=>[m.k,m.v]),D082_SLOTS);

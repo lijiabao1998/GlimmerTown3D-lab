@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {gunzipSync} from 'node:zlib';
-import {pathToFileURL} from 'node:url';
+import {pathToFileURL,fileURLToPath} from 'node:url';
+import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {D082_KT as D081_KT,d082City as d081City,d082Blocks as d081Blocks,d082Civic as d081Civic} from './unit-d082.mjs';
 import {buildCityScene} from '../src/render/cityScene.ts';
@@ -33,9 +34,9 @@ assert.match(reportName,/^[a-z0-9-]+$/);
 const outputName=reportName+'.json';
 if(write)assert.ok(!fs.existsSync(new URL(outputName,OUT)),'never overwrite prior evidence');
 assert.deepEqual(pool,BASE.pool,'exact frozen joint pool');
-const candidateFiles=fs.readdirSync(new URL('src/',ROOT),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>e.parentPath+'/'+e.name).sort();
-const inventory={files:Object.fromEntries(candidateFiles.map(file=>[file,{sha256:sha(fs.readFileSync(file))}]))};
-function verifySources(){for(const [file,pin]of Object.entries(inventory.files))assert.equal(sha(fs.readFileSync(file)),pin.sha256,'candidate source bytes remain frozen: '+file);}
+const candidateFiles=fs.readdirSync(new URL('src/',ROOT),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(fileURLToPath(ROOT),path.join(e.parentPath,e.name)).split(path.sep).join('/')).sort();
+const inventory={files:Object.fromEntries(candidateFiles.map(file=>[file,{sha256:sha(fs.readFileSync(new URL(file,ROOT)))}]))};
+function verifySources(){for(const [file,pin]of Object.entries(inventory.files))assert.equal(sha(fs.readFileSync(new URL(file,ROOT))),pin.sha256,'candidate source bytes remain frozen: '+file);}
 verifySources();
 assert.equal(sha(fs.readFileSync(new URL('tools/d081-frame.mjs',ROOT))),BASE.classifierSha256,'unchanged frozen surface classifier');
 function archived(k,v,owner,width){const cohort=[179,185].includes(k)?'coastal-halls':'play-water',name='final-pool-'+cohort+'-gallery-k'+k+'-v'+v+'-owner'+owner+'-'+width+'.json.gz';const bytes=fs.readFileSync(new URL(name,EVIDENCE));assert.equal(sha(bytes),BASE.evidenceFiles[name].sha256,'exact archived width evidence');return JSON.parse(gunzipSync(bytes));}

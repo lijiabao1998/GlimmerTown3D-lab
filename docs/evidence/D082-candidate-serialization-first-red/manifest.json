@@ -1,0 +1,13 @@
+{
+  "reason": "Live signed-zero normals compared with JSON-serialized0 caused archival strict-equality diagnostic failure before candidate surface sampling. Corrected to exact JSON serialization equality for archive comparison only. Live accelerated/rawThree deep equality remains strict; classifier, geometry, camera and binary preservation guards unchanged.",
+  "files": {
+    "candidate-play-water-v1.json.gz": {
+      "sha256": "138416000b4fd2fad8536c4f5e7992c24253b88b07fbcd4f6be348ab47dd322c",
+      "rawSha256": "9edd79e49b8876b1292dd1a9bbea295723dbf6c7c866feff75fe479ad149d786"
+    },
+    "candidate-play-water-v1.log.gz": {
+      "sha256": "c34f7ac679a42938d29f2a661e90131dd8c253294498444ccb9991e09d41c5f7",
+      "rawSha256": "86f163ef894dd22622955a3f385ff53f704016bf9470ed3cbcedb21bfea05b31"
+    }
+  }
+}
