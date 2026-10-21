@@ -2,13 +2,22 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {gunzipSync} from 'node:zlib';
-import {createD082BrowserSurfaceOracle,d082SupplementaryViews} from './d082-browser-surfaces.mjs';
+import {createD082BrowserSurfaceOracle,createD082ProductionSurfaceFixture,d082SupplementaryViews} from './d082-browser-surfaces.mjs';
 if(process.argv.includes('--plan-matrix')){
- for(const width of [360,412,1440])for(const on of [false,true])for(const force of [0,1,2]){
+ for(const width of (process.env.D082_WIDTHS??'360,412,1440').split(',').map(Number))for(const on of [false,true])for(const force of [0,1,2]){
   const oracle=createD082BrowserSurfaceOracle(on,force,width);
   try{console.log(JSON.stringify({width,on,force,owners:oracle.owners,passed:true,qualification:'Node exact-scene contract and complete legal-view plan only'}));}finally{oracle.dispose();}
  }
 }else{
+ for(const on of [false,true])for(const force of [0,1,2]){
+  const production=createD082ProductionSurfaceFixture(on,force);
+  try{
+   production.assertBrowserGeometry(production.digest,production.groundEvidence);
+   for(const mutate of [d=>d.ground='00000000',d=>d.inst.push('1:050c5d1f:050c5d1f:-'),d=>d.inst[d.inst.length-1]='1:050c5d1f:050c5d1f:-',d=>d.inst.pop(),d=>d.meshes.walls.attrs.position='00000000']){const bad=structuredClone(production.digest);mutate(bad);assert.throws(()=>production.assertBrowserGeometry(bad,production.groundEvidence));}
+   const badGround=structuredClone(production.groundEvidence),bytes=Buffer.from(badGround.rgb,'base64');bytes[0]^=1;badGround.rgb=bytes.toString('base64');assert.throws(()=>production.assertBrowserGeometry(production.digest,badGround));
+   console.log(JSON.stringify({on,force,productionBridge:production.bridge,negativeControls:6,passed:true}));
+  }finally{production.dispose();}
+ }
  const oracle=createD082BrowserSurfaceOracle(true,2,360);
  try{
   assert.throws(()=>oracle.assertBrowserGeometry({}));assert.throws(()=>oracle.finish());

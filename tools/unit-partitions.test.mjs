@@ -607,7 +607,7 @@ test('D081 provenance pins exact D081 card and tools and rejects wrong or missin
     'tools/d081-frame.mjs', 'tools/d081-capture.mjs', 'tools/unit-d081.mjs',
     'docs/D081-british-field-study-buildings-ten.md', 'package-lock.json',
     'docs/D081-parallel-validation.md', 'tools/d081-baseline.mjs', 'tools/d081-scope.mjs', 'tools/d081-scope-build.mjs',
-    'fixtures/d081-architecture-contract.json', 'docs/D081-initial-architecture.json',
+    'fixtures/d081-architecture-contract.json', 'docs/D081-initial-architecture.json', 'tools/test-d082-historical-isolation.mjs',
   ];
   for (const file of files) {
     fs.mkdirSync(path.dirname(path.join(f.dir, file)), { recursive: true });
