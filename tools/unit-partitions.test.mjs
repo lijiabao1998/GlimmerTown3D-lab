@@ -5,7 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { UNIT_GUARDS, D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, INLINE_SUITE, PARTITIONS, parsePartition, assertGuardInventory, partitionInventory, createGuardSelection } from './unit-partitions.mjs';
+import { UNIT_GUARDS, D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, D082_FRAME, INLINE_SUITE, PARTITIONS, parsePartition, assertGuardInventory, partitionInventory, createGuardSelection } from './unit-partitions.mjs';
 import { runFramePartition, frameProvenance } from './unit-partition.mjs';
 
 const source = fs.readFileSync(new URL('./unit.mjs', import.meta.url), 'utf8');
@@ -19,21 +19,21 @@ function runnerFixture(t) {
     read: name => JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')) };
 }
 
-test('explicit inventory equals every original ordered registration, including D081', () => {
-  assert.equal(UNIT_GUARDS.length, 123);
-  assert.equal(registered.length, 123);
+test('explicit inventory equals every original ordered registration, including D082', () => {
+  assert.equal(UNIT_GUARDS.length, 125);
+  assert.equal(registered.length, 125);
   assertGuardInventory(registered);
-  assert.deepEqual(registered.slice(-9), [['./unit-d078.mjs', 'd078Guards'], [...D078_FRAME], ['./unit-d079.mjs', 'd079Guards'], [...D079_FRAME], ['./unit-d080.mjs', 'd080Guards'], [...D080_FRAME], ['./unit-d081.mjs', 'd081Guards'], [...D081_FRAME], ['./unit-evidence.mjs', 'evidenceImageGuards']]);
+  assert.deepEqual(registered.slice(-11), [['./unit-d078.mjs', 'd078Guards'], [...D078_FRAME], ['./unit-d079.mjs', 'd079Guards'], [...D079_FRAME], ['./unit-d080.mjs', 'd080Guards'], [...D080_FRAME], ['./unit-d081.mjs', 'd081Guards'], [...D081_FRAME], ['./unit-d082.mjs', 'd082Guards'], [...D082_FRAME], ['./unit-evidence.mjs', 'evidenceImageGuards']]);
 });
 
-test('historical plus four frames is a disjoint, exhaustive partition including all inline checks', () => {
-  assert.deepEqual(PARTITIONS, ['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame']);
-  const all = partitionInventory('all'), historical = partitionInventory('historical'), frame = [...partitionInventory('d078-frame'), ...partitionInventory('d079-frame'), ...partitionInventory('d080-frame'), ...partitionInventory('d081-frame')];
-  assert.equal(all.length, 124);
-  assert.equal(historical.length, 120);
-  assert.equal(all.filter(id => id !== INLINE_SUITE).length, 123, 'registered guards exclude the inline suite');
-  assert.equal(historical.filter(id => id !== INLINE_SUITE).length, 119, 'historical registered guards exclude the inline suite');
-  assert.deepEqual(frame, [key(D078_FRAME), key(D079_FRAME), key(D080_FRAME), key(D081_FRAME)]);
+test('historical plus five frames is a disjoint, exhaustive partition including all inline checks', () => {
+  assert.deepEqual(PARTITIONS, ['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']);
+  const all = partitionInventory('all'), historical = partitionInventory('historical'), frame = [...partitionInventory('d078-frame'), ...partitionInventory('d079-frame'), ...partitionInventory('d080-frame'), ...partitionInventory('d081-frame'), ...partitionInventory('d082-frame')];
+  assert.equal(all.length, 126);
+  assert.equal(historical.length, 121);
+  assert.equal(all.filter(id => id !== INLINE_SUITE).length, 125, 'registered guards exclude the inline suite');
+  assert.equal(historical.filter(id => id !== INLINE_SUITE).length, 120, 'historical registered guards exclude the inline suite');
+  assert.deepEqual(frame, [key(D078_FRAME), key(D079_FRAME), key(D080_FRAME), key(D081_FRAME), key(D082_FRAME)]);
   assert.equal(historical[0], INLINE_SUITE);
   assert.ok(historical.includes('./unit-d078.mjs:d078Guards'));
   assert.ok(historical.includes('./unit-d079.mjs:d079Guards'));
@@ -74,6 +74,8 @@ for (const [name, mutate] of [
   ['missing D079 frame', rows => rows.filter(([file]) => file !== D079_FRAME[0])],
   ['missing D080 geometry', rows => rows.filter(([file]) => file !== './unit-d080.mjs')],
   ['missing D080 frame', rows => rows.filter(([file]) => file !== D080_FRAME[0])],
+  ['missing D082 geometry', rows => rows.filter(([file]) => file !== './unit-d082.mjs')],
+  ['missing D082 frame', rows => rows.filter(([file]) => file !== './unit-d082-frame.mjs')],
   ['missing D081 geometry', rows => rows.filter(([file]) => file !== './unit-d081.mjs')],
   ['missing D081 frame', rows => rows.filter(([file]) => file !== D081_FRAME[0])],
   ['missing D078 frame', rows => rows.filter(([file]) => file !== D078_FRAME[0])],
@@ -341,7 +343,7 @@ test('D079 provenance pins exact D079 card and tools and rejects wrong or missin
   assert.throws(() => frameProvenance(options), /ENOENT/);
 });
 
-for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame']) {
+for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']) {
   test(`${partition} source identity failure prevents guard loading`, async t => {
     const f = runnerFixture(t); let loaded = false;
     assert.equal(await f.run({ args: ['--partition=' + partition], write: () => {}, provenance: ({ partition: actual }) => {
@@ -466,9 +468,9 @@ test('D080 provenance pins exact D080 card and tools and rejects wrong or missin
 });
 
 
-test('every registration is covered once; historical order and all four frame identities are exact', () => {
-  const frames = [D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME].map(key);
-  const scheduled = ['historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame'].map(partitionInventory);
+test('every registration is covered once; historical order and all five frame identities are exact', () => {
+  const frames = [D078_FRAME, D079_FRAME, D080_FRAME, D081_FRAME, D082_FRAME].map(key);
+  const scheduled = ['historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame'].map(partitionInventory);
   const expectedAll = [INLINE_SUITE, ...registered.map(key)];
   assert.deepEqual(partitionInventory('all'), expectedAll);
   assert.deepEqual(scheduled[0], expectedAll.filter(id => !frames.includes(id)));
@@ -497,7 +499,7 @@ test('inventory rejects omission, duplication and changed export at every regist
   }
 });
 
-for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame']) {
+for (const partition of ['d078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']) {
   test(`${partition} cannot be scheduled through the inline runner`, () => {
     assert.throws(() => createGuardSelection(partition), /unsupported/);
     assert.throws(() => parsePartition(['--partition=' + partition], ['all', 'historical']), /unsupported/);

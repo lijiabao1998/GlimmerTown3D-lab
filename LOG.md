@@ -134,3 +134,4 @@
 | D068 | 2026-10-16 | 第 1／20 波英式商業物流十棟；正式渲染接線，既有功能／存檔不變。型別/build、D068 8／8 幾何守衛（918 案例）、10／10 frame oracle（78 計畫鏡頭）與 D065–D067 回歸通過。gallery −496 加權三角形，兩基準城市無目標且完全不增。本機 Chromium socket 拒絕，真圖改走正常 CI；完整回歸／真預覽／發送／合併發布仍待驗證。只有 k57/k91 既有原生工具 v0，其餘沿用匯入／展示可達性，不是新增十個建造工具。 | [施工與驗收卡](docs/D068-british-commerce-ten.md) |
 
 | D082 (draft stage 1) | 2026-10-21 | Ten working procedural village/waterside meshes, isolated real-WebGL review harness, independent geometry checks and additive review workflow. Slot assignments provisional; original-slot surface qualification has first reds. Production dispatch unchanged; no completed wave, merge or deployment claimed. |
+| D082 (draft stage 2) | 2026-10-21 | Ten exact slots integrated into product rendering. Baseline30/30 cases and19,989 samples qualified; original130 models and7,878 non-target geometry cases pass initial regression. Candidate coverage/full CI and user visual approval pending. No merge or deployment. |

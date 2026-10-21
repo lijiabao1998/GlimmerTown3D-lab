@@ -1,0 +1,541 @@
+{
+  "baseline": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+  "fixtureSha256": "ea3d6c5c0570f0694b892918b85b0fdc2b2cc4ae12154e8c5994cd0b76e88fd8",
+  "evidenceFiles": {
+    "alternate-four-gallery-k16-v0-owner53-1440.json.gz": {
+      "sha256": "a7d3a0fe79b86fd3d611efcc05692e32d3f1cbb6c9e7834139fd82feca54189f",
+      "rawSha256": "135ad5e2bfd3ff3f5e142c043b54884e06586a019019fb068ca81110c19c1295",
+      "rawBytes": 10041872,
+      "gzipBytes": 448590
+    },
+    "alternate-four-gallery-k74-v1-owner135-1440.json.gz": {
+      "sha256": "4bebebb57112d1cd7f2d762f7fe07b21eb3833a5c109ec02182944e54878dd8b",
+      "rawSha256": "6114beeafa9586a3ff85c275cb99c7d1f89a8c9769e16de1020676d763f62701",
+      "rawBytes": 3066778,
+      "gzipBytes": 163290
+    },
+    "alternate-four-gallery-k96-v0-owner149-1440.json.gz": {
+      "sha256": "839e4006d92554f058f1c58941cb3252cf30a480c42be66081d9145d72b1a51d",
+      "rawSha256": "7d9370aa7fcb9aca0495d6171b8508d3040f6a31cf0829060305280a48dd6662",
+      "rawBytes": 2269049,
+      "gzipBytes": 134144
+    },
+    "alternate-four.json.gz": {
+      "sha256": "e7c75b8c437b4a47f7e86b93bb19c446845567fcaf16ff9956c3966e1b05a007",
+      "rawSha256": "a06b025dd140c338b7bbf850125f0e828816d4c1f41b5b4c3c78b1c7e910d138",
+      "rawBytes": 3188397,
+      "gzipBytes": 102301
+    },
+    "alternate-four.log.gz": {
+      "sha256": "901344964dbbce0f14672479b023ec40413a42f91941e67f557d9f3eb511f065",
+      "rawSha256": "6cbe00dd1f4085ac3ab09e582fd383409ed2331c05fe0bb20c36fe0f7837d7d5",
+      "rawBytes": 2119,
+      "gzipBytes": 657
+    },
+    "balloon-one-gallery-k180-v0-owner155-1440.json.gz": {
+      "sha256": "984147509d14907f4de8fa86b5cbcb946457f532d784a76ed2bef589086e725d",
+      "rawSha256": "102eb13db557388d1bfb54d75a15c0b9748bbc252397b695418edb87b8c36e19",
+      "rawBytes": 4043037,
+      "gzipBytes": 214226
+    },
+    "balloon-one.json.gz": {
+      "sha256": "0c87f95eaaa8133a4a7ee21480a8b4ea8f8a18bad171c86401ed3f220de4066f",
+      "rawSha256": "6cae4945133d6c4e638fa4013f84c023e14fec804cc73c61e054e66144843983",
+      "rawBytes": 337311,
+      "gzipBytes": 14939
+    },
+    "balloon-one.log.gz": {
+      "sha256": "3c65d57cf090a33e211a37415ac36c416010ea1a2cd17a5a01ba0507f3f1fe79",
+      "rawSha256": "43172c3e20096ccf724c18f59345db64dd0659ee5791d60ea34fbeebfbb06ed8",
+      "rawBytes": 513,
+      "gzipBytes": 326
+    },
+    "baseline-source-inventory.json.gz": {
+      "sha256": "3b6aacb4fdc2df0abcfbc40b5ff18cb05d59bc054a0518ab54dee35738f070b6",
+      "rawSha256": "55e7455243f2ceda402d778ebe9e3568072baabc370d28b16faf2d1f1f77dd9b",
+      "rawBytes": 29387,
+      "gzipBytes": 10216
+    },
+    "cemetery-four-gallery-k16-v1-owner53-1440.json.gz": {
+      "sha256": "2bdcc796da080d0bb313abd720c5bd94d74e6ded40e6cc7148fe3b470a1527a2",
+      "rawSha256": "28d178bd6fed40d6a0ec713d8761d20c0a14e0bab72f755cfb37cff9e45bb3af",
+      "rawBytes": 10061266,
+      "gzipBytes": 447428
+    },
+    "cemetery-four-gallery-k16-v2-owner53-1440.json.gz": {
+      "sha256": "61943ef2af29b68f02d71d2ccd5bcff44d359ab95fc91ca7ad204fe85ba5ba1a",
+      "rawSha256": "d970b63413c0ad4f290eff33af395ce2811a3998d53983bd1f6ae27bd8c8f7b1",
+      "rawBytes": 10061266,
+      "gzipBytes": 447422
+    },
+    "cemetery-four-gallery-k16-v3-owner53-1440.json.gz": {
+      "sha256": "0e610e249bd3b885d2e545feec60a23923c03a93f7b497d0d2f22bd41387b972",
+      "rawSha256": "3fa6fc445cfbe01707fef61be68ea8e32d8c0a5e973730fd33b7f5065d77bb1e",
+      "rawBytes": 10058115,
+      "gzipBytes": 445814
+    },
+    "cemetery-four-gallery-k16-v4-owner53-1440.json.gz": {
+      "sha256": "90d3ea86d39787c489736b20a039de1b3b938592067bedad771c0b7ca361af82",
+      "rawSha256": "d4b76192ff53799a63d957a1f78015fb5db5baaed2b21a6c94f372b604d59792",
+      "rawBytes": 10061266,
+      "gzipBytes": 447444
+    },
+    "cemetery-four.json.gz": {
+      "sha256": "4cf4c03a385f2f1fdae0968a710f92db666d5b0a6e5a1a134cad96b50f3d1ab6",
+      "rawSha256": "47f4d2c5e6b63e8ca46337ac0c0d7210efd11fcbfb3bb16e63131e87b469f562",
+      "rawBytes": 9200866,
+      "gzipBytes": 232031
+    },
+    "cemetery-four.log.gz": {
+      "sha256": "b3d2d9e2c5b044311eab0777634e04911be77eec570b4a487efb79c25f87fb67",
+      "rawSha256": "c3661aca154581b41583047579e705b999fc25fa0e1a44bbd965a53099055da4",
+      "rawBytes": 1675,
+      "gzipBytes": 428
+    },
+    "check-doc-descendant.mjs.gz": {
+      "sha256": "935a941cdc477f256de0b9fcd165c2c5ad7063e4f1d3fbcfdac5728fa3a13747",
+      "rawSha256": "a65ff85b2fba15c9819f7534532fb274d932e9721fbfecea3deaae10c2435407",
+      "rawBytes": 12886,
+      "gzipBytes": 4732
+    },
+    "check.mjs.gz": {
+      "sha256": "ffa4a05440e27a1487292bc6e72bb9a4ecf6b0fec923b28e2516f1f777fe0977",
+      "rawSha256": "64649d2ad555e72ba994d51e2e25816129785c87cf16697d6482ea05d31fddaa",
+      "rawBytes": 12671,
+      "gzipBytes": 4669
+    },
+    "data-center-one-gallery-k116-v1-owner11-1440.json.gz": {
+      "sha256": "d93e8fc131c7d852f1c771b068c897b53d0768365ac253f46181a9ee6483e959",
+      "rawSha256": "f7c11e7a598a0f1822967e47a09b409f4cad539bcce73232390abf4abf085d36",
+      "rawBytes": 2540522,
+      "gzipBytes": 156513
+    },
+    "data-center-one.json.gz": {
+      "sha256": "2cf1ac03f1c71f2e381e6f988b593a526889566650efc3037894d49d45fd70f5",
+      "rawSha256": "6feb2f75f2835da7bea67be8849d24bc1f4a546b33109cc2c8ea98af6474d08e",
+      "rawBytes": 248566,
+      "gzipBytes": 14880
+    },
+    "data-center-one.log.gz": {
+      "sha256": "3c4decf2fb7f00378fc664c8096c8115edb1cb3abbb96e3a615ba3a62829ffef",
+      "rawSha256": "13fc798038305b6161bcdbfdbed7a758379934f6a68849e5940b55e5f2959c28",
+      "rawBytes": 510,
+      "gzipBytes": 327
+    },
+    "final-pool-coastal-halls-gallery-k179-v0-owner154-1440.json.gz": {
+      "sha256": "86eb2a39dd3060f5161363ac17507f0a66f39fd9d404d1c0a9b0de474ca3425d",
+      "rawSha256": "aedd7b467fab2632ea5b60a1c7a209de2dc063c9ec5619aab575e702b1a573ff",
+      "rawBytes": 4757879,
+      "gzipBytes": 212653
+    },
+    "final-pool-coastal-halls-gallery-k179-v0-owner154-360.json.gz": {
+      "sha256": "dd031715a99255906db370c05b08d914b08282d34d2aebe32d822cacb3880229",
+      "rawSha256": "4d90a4173e41f0ef0d814be20dbf1e1e51685e5dfe0db2482cb3f5bc751e6b5d",
+      "rawBytes": 4757924,
+      "gzipBytes": 212653
+    },
+    "final-pool-coastal-halls-gallery-k179-v0-owner154-412.json.gz": {
+      "sha256": "0d6f05c39f554cedd70dbc34b67c8b98af861a4a9d4034751769223a0531368f",
+      "rawSha256": "c979d24b70f6970b2ef117170eaeb1dcfe6cb91e01250cfe7a7e01617fb8d0be",
+      "rawBytes": 4757866,
+      "gzipBytes": 212677
+    },
+    "final-pool-coastal-halls-gallery-k179-v1-owner154-1440.json.gz": {
+      "sha256": "7359ed58c72342c6f04d16c3dce89d4a0c7c1b6140cb48463dc8315449a54582",
+      "rawSha256": "1ee0ef6c7d51fce368e97e1236dcf7231c24601355a7989360143e74080a5e15",
+      "rawBytes": 4842095,
+      "gzipBytes": 217514
+    },
+    "final-pool-coastal-halls-gallery-k179-v1-owner154-360.json.gz": {
+      "sha256": "c3142686d5c48d9ec61440214e9adefb867442fc4de7e37d2266c1b58a22ef42",
+      "rawSha256": "f1d228a5f40650b8c4a3174d02b514d77ae1288c14433a73a5e6715b4173c420",
+      "rawBytes": 4842091,
+      "gzipBytes": 217508
+    },
+    "final-pool-coastal-halls-gallery-k179-v1-owner154-412.json.gz": {
+      "sha256": "849dadca5780af79eaf78c31d2454b5b216d331a25eac634d3a61d97aa3a0cbf",
+      "rawSha256": "5583e2bd52545a108c45ec02761afd14a1b3aee6ed2735fbc570d1145e18afe8",
+      "rawBytes": 4842137,
+      "gzipBytes": 217507
+    },
+    "final-pool-coastal-halls-gallery-k179-v2-owner154-1440.json.gz": {
+      "sha256": "32bbd34ae705dd8644c06e96142e82a6793d679173b72bebc0895e8aa0844abd",
+      "rawSha256": "998f5ae7256d73b84e0eb7995d1ba28a5a32855620705070f422f16b96e3079b",
+      "rawBytes": 4881652,
+      "gzipBytes": 218319
+    },
+    "final-pool-coastal-halls-gallery-k179-v2-owner154-360.json.gz": {
+      "sha256": "d8e83c3f794f094d94260e969968dfbc000566cfdc27c1819e6d8d12a1a63a2e",
+      "rawSha256": "876a22a507f45ba37ac33ebed964784ae8c14d9a167a6ecfc1949fd7452fc309",
+      "rawBytes": 4881550,
+      "gzipBytes": 218386
+    },
+    "final-pool-coastal-halls-gallery-k179-v2-owner154-412.json.gz": {
+      "sha256": "468f14072c4ac848df539b15e136fc69ede71e69df83919bc7a22f5a6a6561d3",
+      "rawSha256": "e2cef6fbbf75ff19250e4ae48264dd6afda90103ec91a30220436eaf71ff7eab",
+      "rawBytes": 4881564,
+      "gzipBytes": 218250
+    },
+    "final-pool-coastal-halls-gallery-k185-v0-owner160-1440.json.gz": {
+      "sha256": "8e2837520510da3855e87c91330648ec35199661a4363086a2e9aba319a501fd",
+      "rawSha256": "b87d1a94f4422bda20560d14e0125f77c27eea2b0a1bd39a9040bff47b81e354",
+      "rawBytes": 3849902,
+      "gzipBytes": 187585
+    },
+    "final-pool-coastal-halls-gallery-k185-v0-owner160-360.json.gz": {
+      "sha256": "c82c5f56a17dc35905d82acaf2e0ee2a0dcc19e937af07d1751f0aa2afe5804a",
+      "rawSha256": "db11b5da6f85c6dedae9a688b3ba0ae7ce06c94f0b04da11fc6e8e4aaa7420ab",
+      "rawBytes": 3849840,
+      "gzipBytes": 187563
+    },
+    "final-pool-coastal-halls-gallery-k185-v0-owner160-412.json.gz": {
+      "sha256": "60b4a12c0169dcff820be7e1453827fe07819e5cb59fe750d70434af23c9ae40",
+      "rawSha256": "21b450c70a304c24222e77845192f61178b498634fc97fd62f4d85463450ddd6",
+      "rawBytes": 3849829,
+      "gzipBytes": 187588
+    },
+    "final-pool-coastal-halls-gallery-k185-v1-owner160-1440.json.gz": {
+      "sha256": "e00c84dd1f0ceb75e99e189734bece0953181f09c4fbcb0e599ded24fde2b2ee",
+      "rawSha256": "75beb73d4cb8a1634d36f7324c05cf8ae9c9a2c681a504e4a8843b02ed045f90",
+      "rawBytes": 4076302,
+      "gzipBytes": 196432
+    },
+    "final-pool-coastal-halls-gallery-k185-v1-owner160-360.json.gz": {
+      "sha256": "3d922472dd4800ee5e725b1a174d3256eda6aa3c42d8deaeb9078e9c8bf982f1",
+      "rawSha256": "2014454ec260b7a0c8a8fb1a1aa5e0fcfa5c265b8212667def1eebb0fac646be",
+      "rawBytes": 4076219,
+      "gzipBytes": 196401
+    },
+    "final-pool-coastal-halls-gallery-k185-v1-owner160-412.json.gz": {
+      "sha256": "70603f56efd4a681bb8e9d25f127754ae4a4e4c9eb16f75bc35e299839b8c498",
+      "rawSha256": "c4aee0718bb50edb1b408c354cb5804bf9dde7c7843a4e3e4a45391ad69fe377",
+      "rawBytes": 4076218,
+      "gzipBytes": 196529
+    },
+    "final-pool-coastal-halls-gallery-k185-v2-owner160-1440.json.gz": {
+      "sha256": "9dea613d4bcae8740802e15a041f56c9fa08395f9379c04f7cf598c07d092a06",
+      "rawSha256": "c6976c073498c9a25c8353c66c1f1721fc62b43d16cb3d714b5887e6f44bc3d2",
+      "rawBytes": 4046542,
+      "gzipBytes": 198163
+    },
+    "final-pool-coastal-halls-gallery-k185-v2-owner160-360.json.gz": {
+      "sha256": "5d0aeadf5c0a262dbb72e779e04efe04579aefd7ee66debd2d8e80962b88119b",
+      "rawSha256": "411c23d1f21e679fb76f4677d0596529e0c28f5300354e7af60f5c71ab042c12",
+      "rawBytes": 4046486,
+      "gzipBytes": 198131
+    },
+    "final-pool-coastal-halls-gallery-k185-v2-owner160-412.json.gz": {
+      "sha256": "623b0de59edaef935e516cae8c057a170cbc7b5b9388676fe931c2a29b358a54",
+      "rawSha256": "0980744465d4f68c7c5c288c9a59f3c66a57b1f36ae3f8035caea79b3b30f4ae",
+      "rawBytes": 4046502,
+      "gzipBytes": 198197
+    },
+    "final-pool-coastal-halls.json.gz": {
+      "sha256": "beffee28da9ad9855e86e053565c7fc3326574dfbcafb225edf29291a368ad49",
+      "rawSha256": "c6d0d3c9ecb297dad384488c6fb44aa839fa9aa846c532546bd870e74efb01f6",
+      "rawBytes": 463447,
+      "gzipBytes": 57873
+    },
+    "final-pool-coastal-halls.log.gz": {
+      "sha256": "05d7a78f1a90141aced6a6e91611956cf3fac3719710f9d3b0dca84b2ac73072",
+      "rawSha256": "5539ef36da64608c4e0db9bd7bd9e805f1bdd1152badb3fe159f7ad0a5677b82",
+      "rawBytes": 4667,
+      "gzipBytes": 836
+    },
+    "final-pool-play-water-gallery-k126-v0-owner168-1440.json.gz": {
+      "sha256": "d2e997b2b3cb747bf3f5201d0123ead74df45192aa8e7cf97c7ee23d84250272",
+      "rawSha256": "bc31af4b70f80aacb5f26a2a12c4d72d9f824b6997c2b55384dad8bae619d52d",
+      "rawBytes": 2013834,
+      "gzipBytes": 103163
+    },
+    "final-pool-play-water-gallery-k126-v0-owner168-360.json.gz": {
+      "sha256": "b1309b7f27daf36fa63780541c286d5dccca55fc00ce79b095e02ce97037aad5",
+      "rawSha256": "a71b7336b22b64ac9642df74a43a13579ded366d095a5f0dfb7d737c2f9f26f1",
+      "rawBytes": 2013819,
+      "gzipBytes": 103168
+    },
+    "final-pool-play-water-gallery-k126-v0-owner168-412.json.gz": {
+      "sha256": "f2a6354706571c869be0cf46b0f75c07b22164fd9fafdd28e38d833f8a62fa55",
+      "rawSha256": "4c9b39aca5128887cbb4b1b3d9329700225295d5e8f01729d526386954ff2632",
+      "rawBytes": 2013770,
+      "gzipBytes": 103167
+    },
+    "final-pool-play-water-gallery-k126-v1-owner168-1440.json.gz": {
+      "sha256": "60b8c0d83ada4b4b1b619a5a843b9bef5ec29442f310fa59c173c6fad05f06e3",
+      "rawSha256": "49dc559b3b702d5a9398abbeeba6744f8097774ad450a11ad190ee0a0d881267",
+      "rawBytes": 2408062,
+      "gzipBytes": 131171
+    },
+    "final-pool-play-water-gallery-k126-v1-owner168-360.json.gz": {
+      "sha256": "7ebf9658f3f869ccb583dc171eafee0c1bc6a9cf2d2848c9821b04223e6ecd6f",
+      "rawSha256": "ac2fbd3f0a2e3772b3d9db8195cebce4556874ce3540ef626bedf63a9a29fb49",
+      "rawBytes": 2407921,
+      "gzipBytes": 131190
+    },
+    "final-pool-play-water-gallery-k126-v1-owner168-412.json.gz": {
+      "sha256": "f7cd7105216da8601619806f7d7ad01d5a20ab72d38a1a23c815219bbb3f7629",
+      "rawSha256": "31cb09a2e8d88691dd00cd433f3d915e241367d515419610dce297f92cc15b54",
+      "rawBytes": 2407979,
+      "gzipBytes": 131175
+    },
+    "final-pool-play-water-gallery-k126-v2-owner168-1440.json.gz": {
+      "sha256": "6cd382ac8b14e9127e77657d00700e72cf2a9f519ba32e9324c283e9f2cea825",
+      "rawSha256": "b614167d2e396e0c7036d185e47e12b9cb9604f769920daa606f92488989839a",
+      "rawBytes": 2475820,
+      "gzipBytes": 135125
+    },
+    "final-pool-play-water-gallery-k126-v2-owner168-360.json.gz": {
+      "sha256": "2ef40fb213087bbf91abc7390f967a17ac9fffe0aa2c5a46da8d00294b580de4",
+      "rawSha256": "ec30d7af6549c0477e482b09a28e194ba4f98b9e665e5437b6cf545f885f8547",
+      "rawBytes": 2475748,
+      "gzipBytes": 135049
+    },
+    "final-pool-play-water-gallery-k126-v2-owner168-412.json.gz": {
+      "sha256": "cf778e694eb79b4e12f61815ae0816b343bd070b0abdbf64f22c20cac5724e56",
+      "rawSha256": "435fdf5dbea0d8a606f87f6fde68821f0aa2fd693659998afb12576861bcc85b",
+      "rawBytes": 2475749,
+      "gzipBytes": 135131
+    },
+    "final-pool-play-water-gallery-k154-v0-owner94-1440.json.gz": {
+      "sha256": "e01669f0dd3698f05f6ec82fdc9e53e6a1c0aaf73beac84828b358cd8ca6ac9c",
+      "rawSha256": "9ad096748f790dd03dadfaeaecef37a0b33ecca7c980b6e126f4414d0471532a",
+      "rawBytes": 8452428,
+      "gzipBytes": 362412
+    },
+    "final-pool-play-water-gallery-k154-v0-owner94-360.json.gz": {
+      "sha256": "4418e75a44904654422523fe90db962db41519b503d4128efd9233c7cc6bc071",
+      "rawSha256": "29980418020f194ef23573c6e4d78202d17c82ba5eedbdf07f8793362041151b",
+      "rawBytes": 8452839,
+      "gzipBytes": 362946
+    },
+    "final-pool-play-water-gallery-k154-v0-owner94-412.json.gz": {
+      "sha256": "9af8aa712cf43ab0d43232b5a45a7d64fbcb3f1ed2d345361a1929ad486379c1",
+      "rawSha256": "45da29efece7c6d176fdd2be64f0ee3f1b333f2abe177667883c8efaad85d818",
+      "rawBytes": 8452739,
+      "gzipBytes": 362829
+    },
+    "final-pool-play-water.json.gz": {
+      "sha256": "ba75cb7c6445242892e06b7768fa8260b2ae75107b563dc340c601d758a02a4b",
+      "rawSha256": "003576a8d29246d7f8ad3ea0bd4e562f8422ceb72e98914569d762c48071387f",
+      "rawBytes": 309117,
+      "gzipBytes": 38838
+    },
+    "final-pool-play-water.log.gz": {
+      "sha256": "1b2f44c7a60e6794dc50a84055e649f1fe972a4d6f98d283611d79657478fff5",
+      "rawSha256": "a666dc7172e0a0109b6be276a402f6b3b3144b5c34585b4d3a184b523e29472e",
+      "rawBytes": 2915,
+      "gzipBytes": 662
+    },
+    "final-slot-inventory.json.gz": {
+      "sha256": "eca0b94e4c16f2fb6e81735910159a8f0843564223303985b19c8b8fb2c81e5a",
+      "rawSha256": "d41581640d2793b10618e7c98e7d2107974d00e4df60f46eac0d1fe2658758c6",
+      "rawBytes": 4936,
+      "gzipBytes": 439
+    },
+    "final-summary.json.gz": {
+      "sha256": "745a3101aae5dfe77f357706655b32ebfcba89e838d8a89676ee8d897e261dbf",
+      "rawSha256": "8a8e6b885cf44ceb817bfa04b11205a5040509487990b173e50c3ca99b6c4cdc",
+      "rawBytes": 658744,
+      "gzipBytes": 87123
+    },
+    "fourth-four-gallery-k151-v0-owner91-1440.json.gz": {
+      "sha256": "95fec1abc783182eb9b1250f4d4db00041807014bd0905764d0a1d587d3f0311",
+      "rawSha256": "0c78466dd8347f05e7613832afb4b175603eaa4a7d08d9d296d986ba7c1d982f",
+      "rawBytes": 3663465,
+      "gzipBytes": 189780
+    },
+    "fourth-four-gallery-k180-v0-owner155-1440.json.gz": {
+      "sha256": "984147509d14907f4de8fa86b5cbcb946457f532d784a76ed2bef589086e725d",
+      "rawSha256": "102eb13db557388d1bfb54d75a15c0b9748bbc252397b695418edb87b8c36e19",
+      "rawBytes": 4043037,
+      "gzipBytes": 214226
+    },
+    "fourth-four.json.gz": {
+      "sha256": "6c02a70c43871c03a1584527c3f9c2fd4a6966ab329d90c473ca6bd2ecbaa334",
+      "rawSha256": "364c529e426cf72fbcbf11caf518b2b7107861070745973258eac610fcef2164",
+      "rawBytes": 735734,
+      "gzipBytes": 46453
+    },
+    "fourth-four.log.gz": {
+      "sha256": "fa7cf5b1a684e35b470b908e870d7f1a26f2653cbec8e7893777c6ba508c8711",
+      "rawSha256": "9544c53f2e9735e307491e61e0c9fa70bd7304c25d7fa41f79325c6bb7a440d8",
+      "rawBytes": 2331,
+      "gzipBytes": 680
+    },
+    "initial-four-gallery-k102-v0-owner57-1440.json.gz": {
+      "sha256": "faa465cad89eb06f352253b61c2c38417dd43967ebd2e81a08d6f41ac2931f2a",
+      "rawSha256": "c58dad0d145c5e6019a974e00ff102eaed8a8cdc830a9cf420a3dd8fcf2943a3",
+      "rawBytes": 2868493,
+      "gzipBytes": 175274
+    },
+    "initial-four-gallery-k184-v0-owner159-1440.json.gz": {
+      "sha256": "7f05a33444c860ce19b9b2a38c38b207c9474b738c78bb20f5c5f3ff3dbfa23b",
+      "rawSha256": "4ab9066028470759e4f4cf40b858003f79d971e4031ec63c481d3a373b1958c1",
+      "rawBytes": 5185153,
+      "gzipBytes": 260985
+    },
+    "initial-four-gallery-k66-v0-owner127-1440.json.gz": {
+      "sha256": "7a5b8149f80ca3c4639c64e0d9ef43afbe6fb3c880a84145677195d24dabdfeb",
+      "rawSha256": "b8cc2b905f9b82812484fb199321e6e56bd4d9f34c2a8e3e32fcfff594b188ce",
+      "rawBytes": 10045678,
+      "gzipBytes": 444503
+    },
+    "initial-four-gallery-k79-v0-owner140-1440.json.gz": {
+      "sha256": "366c39e546a927bbb0c4eff64047ad145115bb4ee361d3324c5191cace3cdc62",
+      "rawSha256": "1f0071f1ffe55c692eb34e586fc20b6d3b22a736e4df68dcdec3aedc80b35f45",
+      "rawBytes": 2943154,
+      "gzipBytes": 163943
+    },
+    "initial-four.json.gz": {
+      "sha256": "8cdf1d89377da26b16b5fb654944c35b1633268bb65c82780c94379c4a3af9ab",
+      "rawSha256": "55a13ec0ca552ae29c86a8619a969874871a0e27e3a3406a7d97d4d8c6ded674",
+      "rawBytes": 5257555,
+      "gzipBytes": 151917
+    },
+    "initial-four.log.gz": {
+      "sha256": "2f32f1afc6b07b36617fa71b1ff14c03f0fc52aeb9d6a1ba9f0d169756c01f9a",
+      "rawSha256": "5f3d0d1186c60f7057f19ec23ae13cdc19a0db281f3310d9484ed16f6ff472d5",
+      "rawBytes": 1676,
+      "gzipBytes": 506
+    },
+    "second-three-gallery-k128-v0-owner68-1440.json.gz": {
+      "sha256": "6052eb10b2d4a66f05f92e994a9f1aad827ed859559394f67f8dba08964490ec",
+      "rawSha256": "f4da3d5899f430f252dc9d65c551ce2d143ec51d46f5e299a62cc25a0519ee40",
+      "rawBytes": 5851132,
+      "gzipBytes": 284060
+    },
+    "second-three-gallery-k9-v0-owner115-1440.json.gz": {
+      "sha256": "3e1d037eae52c04b13d9e63e5bbd811982ed922800acdc7c9c1eed57a283ea69",
+      "rawSha256": "febea0ac476bab2d9a3583d24cdfbddc1b643e5eb49fb3e077bda4b091859e29",
+      "rawBytes": 5688363,
+      "gzipBytes": 337831
+    },
+    "second-three.json.gz": {
+      "sha256": "4a6294ccbf3ff14f0236b09c2fe98602d7169ca7ca08980b355d6bd6ce60f70b",
+      "rawSha256": "1fe5e3023bece92faa6fa996ec1cadd6683d99656e640c09a079ece39bf58584",
+      "rawBytes": 410959,
+      "gzipBytes": 34798
+    },
+    "second-three.log.gz": {
+      "sha256": "f3f1495475a413b77bab66d979b49ae45765b5fad3f16583ac3702681b62acea",
+      "rawSha256": "a20077959dff72292620974564a63e28ccf494de2d0e18319045850dd7072f1b",
+      "rawBytes": 1580,
+      "gzipBytes": 542
+    },
+    "summarize-final.mjs.gz": {
+      "sha256": "15e7041a4a31268e9fdf0e90ab94c75ad83ef28a5aa4274a44d595b73be1c287",
+      "rawSha256": "a71de6ed705caf068a8836e480db3d843c698c252c89ee2af50b7d07b3781790",
+      "rawBytes": 3329,
+      "gzipBytes": 1376
+    },
+    "tennis-one.log.gz": {
+      "sha256": "278d41cb926034362c8ef0f026c172a9a73708b213f46e807c93710f5c38f32a",
+      "rawSha256": "1227e68663608586d384dc86bd65df04d9e180deee9c2234f0339d3fb5ac40e6",
+      "rawBytes": 571,
+      "gzipBytes": 376
+    },
+    "third-two-gallery-k124-v0-owner166-1440.json.gz": {
+      "sha256": "c7bab441745904816daa61502cb11f01f3b05aeb9f97793510ca9652736fdb33",
+      "rawSha256": "5e0f53696193f71ec8638b7976606ad2138ca495bf9ce2d1d9104378d0de4804",
+      "rawBytes": 1851517,
+      "gzipBytes": 103264
+    },
+    "third-two-gallery-k9-v1-owner115-1440.json.gz": {
+      "sha256": "9c94808a3cf134f987f30bafbe7e40f993f34a6553bec8134abe5af14d1077f1",
+      "rawSha256": "01d6ac98c04e6254ef5daa8a07993c980eb550217ca051cb989262623140f16b",
+      "rawBytes": 5588040,
+      "gzipBytes": 331154
+    },
+    "third-two.json.gz": {
+      "sha256": "49a73945361878f03edc8f4812fa15765104c673fab8c7497b8073ac1dd2ad07",
+      "rawSha256": "d9da7670fdae73f2674d9528659f21d2f5e3686d8976e4f08cca28b080837d97",
+      "rawBytes": 279248,
+      "gzipBytes": 23668
+    },
+    "third-two.log.gz": {
+      "sha256": "c6a5b3f32eb76b6834970f72f42409d230a1dba0d83724ec7b3d698bf320bf3e",
+      "rawSha256": "804c9c7ec26a6322feef1a6ce11c47ab67174b8a4b81566f7de9c26c5021209c",
+      "rawBytes": 899,
+      "gzipBytes": 391
+    }
+  },
+  "firstRedCases": [
+    {
+      "report": "alternate-four.json",
+      "key": "gallery-k96-v0-owner149"
+    },
+    {
+      "report": "alternate-four.json",
+      "key": "gallery-k74-v1-owner135"
+    },
+    {
+      "report": "alternate-four.json",
+      "key": "gallery-k16-v0-owner53"
+    },
+    {
+      "report": "balloon-one.json",
+      "key": "gallery-k180-v0-owner155"
+    },
+    {
+      "report": "cemetery-four.json",
+      "key": "gallery-k16-v1-owner53"
+    },
+    {
+      "report": "cemetery-four.json",
+      "key": "gallery-k16-v2-owner53"
+    },
+    {
+      "report": "cemetery-four.json",
+      "key": "gallery-k16-v3-owner53"
+    },
+    {
+      "report": "cemetery-four.json",
+      "key": "gallery-k16-v4-owner53"
+    },
+    {
+      "report": "data-center-one.json",
+      "key": "gallery-k116-v1-owner11"
+    },
+    {
+      "report": "fourth-four.json",
+      "key": "gallery-k180-v0-owner155"
+    },
+    {
+      "report": "fourth-four.json",
+      "key": "gallery-k151-v0-owner91"
+    },
+    {
+      "report": "initial-four.json",
+      "key": "gallery-k102-v0-owner57"
+    },
+    {
+      "report": "initial-four.json",
+      "key": "gallery-k66-v0-owner127"
+    },
+    {
+      "report": "initial-four.json",
+      "key": "gallery-k79-v0-owner140"
+    },
+    {
+      "report": "initial-four.json",
+      "key": "gallery-k184-v0-owner159"
+    },
+    {
+      "report": "second-three.json",
+      "key": "gallery-k9-v0-owner115"
+    },
+    {
+      "report": "second-three.json",
+      "key": "gallery-k128-v0-owner68"
+    },
+    {
+      "report": "third-two.json",
+      "key": "gallery-k124-v0-owner166"
+    },
+    {
+      "report": "third-two.json",
+      "key": "gallery-k9-v1-owner115"
+    }
+  ],
+  "packaging": "Readable fixture retains counts, contracts and SHA-pinned full first-red gzip references; original evidence gzip bytes unchanged."
+}

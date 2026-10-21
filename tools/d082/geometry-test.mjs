@@ -50,7 +50,7 @@ export function assertClosed(tris,label){
  const volume=tris.reduce((v,t)=>v+dot(t[0],cross(t[1],t[2]))/6,0);assert.ok(volume>EPS,label+' positive signed volume');return volume;
 }
 function assertTriangles(tris,label){for(const {p,n}of tris){assert.ok(p.flat().every(Number.isFinite),label+' finite positions');const nn=normal(p),len=norm(nn);assert.ok(len>EPS,label+' nondegenerate triangle');for(const q of n){assert.ok(q.every(Number.isFinite),label+' finite normals');assert.ok(Math.abs(norm(q)-1)<EPS,label+' unit normal');assert.ok(dot(nn,q)/len>1-1e-9,label+' winding agrees with actual normal');}}}
-const EXPECTED=[[102,0,14,8,48],[102,1,12,6,48],[102,2,14,8,48],[66,0,18,8,76],[66,1,20,6,76],[66,2,16,6,76],[79,0,24,14,102],[79,1,22,10,102],[79,2,32,12,102],[184,0,28,17,134]];
+const EXPECTED=[[126,0,14,8,56],[126,1,12,6,56],[126,2,14,8,56],[179,0,18,8,182],[179,1,20,6,182],[179,2,16,6,182],[185,0,24,14,120],[185,1,22,10,120],[185,2,32,12,120],[154,0,28,17,342]];
 export function runGeometryTests(){
  assert.equal(MODELS.length,10);const report=[];let controls=0;
  for(const [mi,m]of MODELS.entries()){
