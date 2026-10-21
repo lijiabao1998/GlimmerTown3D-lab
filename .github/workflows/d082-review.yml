@@ -34,3 +34,34 @@ jobs:
             scratch/d082-geometry-report.json
           if-no-files-found: error
           retention-days: 14
+  production-review:
+    # Additive review only: full ci remains the release gate and deployment stays absent.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 360, 412]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run build
+      - run: node tools/test-d082-browser-surfaces.mjs
+      - name: Actual original and supplementary production WebGL views
+        run: node tools/d082-inspect.mjs
+        env:
+          D082_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-production-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-production-review/
+          if-no-files-found: error
+          retention-days: 14

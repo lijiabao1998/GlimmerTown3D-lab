@@ -8,6 +8,7 @@ import {execFileSync} from 'node:child_process';
 import {ROOT,withBrowser} from './cdp.mjs';
 import {MODELS} from '../src/content/britishCoastalRecreation.ts';
 import {createD082FrameOracle,assertD082Frame,assertD082FrameBudget,assertD082ConstructionDiagnostic,assertD082PausedRepeat,assertD082OwnerFits} from './d082-frame.mjs';
+import {createD082BrowserSurfaceOracle,d082SupplementaryViews,D082_BROWSER_SURFACE_EVIDENCE} from './d082-browser-surfaces.mjs';
 import {D067_UPLOAD_PROBE} from './d067-diagnose.mjs';
 const J=JSON.stringify,sha=b=>createHash('sha256').update(typeof b==='string'||Buffer.isBuffer(b)?b:J(b)).digest('hex');
 const WORLD='JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList(),__gt.layers(),__gt.stats()])';
@@ -16,11 +17,11 @@ const out=path.join(ROOT,'scratch/d082-production-review');fs.mkdirSync(out,{rec
 const widths=(process.env.D082_WIDTHS??'360,412,1440').split(',').map(Number),viewports={360:740,412:860,1440:1000};
 const listSourceFiles=()=>fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
 const sourceFiles=listSourceFiles();
-const guardFiles=['tools/d082-frame.mjs','tools/d082-inspect.mjs','tools/unit-d082.mjs','fixtures/d082-geometry-before.json','fixtures/d082-source-before.json','fixtures/d082-history-before.json','fixtures/d082-art-scope.json','fixtures/d082-baseline-feasibility.json','docs/D082-british-village-waterside-ten.md','docs/D082-integration-architecture.json','docs/D082-visibility-repair-architecture.json','tools/unit-d082-architecture-contract.mjs','tools/d082/geometry-test.mjs','tools/d082/models.ts','tools/d082-candidate-coverage.mjs','tools/unit-d082-frame.mjs','tools/unit-d082-scope.mjs','tools/d082-scope.mjs','tools/d081-frame.mjs','tools/d067-diagnose.mjs','tools/cdp.mjs','package-lock.json'];
+const guardFiles=['tools/test-d082-browser-surfaces.mjs','docs/D082-browser-surface-capture.md','tools/d082-browser-surfaces.mjs',...Object.keys(D082_BROWSER_SURFACE_EVIDENCE),'tools/d082-frame.mjs','tools/d082-inspect.mjs','tools/unit-d082.mjs','fixtures/d082-geometry-before.json','fixtures/d082-source-before.json','fixtures/d082-history-before.json','fixtures/d082-art-scope.json','fixtures/d082-baseline-feasibility.json','docs/D082-british-village-waterside-ten.md','docs/D082-integration-architecture.json','docs/D082-visibility-repair-architecture.json','tools/unit-d082-architecture-contract.mjs','tools/d082/geometry-test.mjs','tools/d082/models.ts','tools/d082-candidate-coverage.mjs','tools/unit-d082-frame.mjs','tools/unit-d082-scope.mjs','tools/d082-scope.mjs','tools/d081-frame.mjs','tools/d067-diagnose.mjs','tools/cdp.mjs','package-lock.json'];
 const inventory=files=>Object.fromEntries(files.map(f=>[f,sha(fs.readFileSync(path.join(ROOT,f)))]));
 const provenance={commit:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),buildSha256:sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),sources:inventory(sourceFiles),guards:inventory(guardFiles)};
-const reports=[],pairs=new Map();
-const write=()=>fs.writeFileSync(path.join(out,'manifest.json'),J({provenance,shots:reports,complete:false}));
+const reports=[],surfaceCoverage=[],pairs=new Map();
+const write=()=>fs.writeFileSync(path.join(out,'manifest.json'),J({provenance,shots:reports,surfaceCoverage,complete:false}));
 write(); // Preserve provenance even when the first browser gate fails.
 for(const width of widths){assert.ok(width in viewports);const height=viewports[width],viewport={W:width,H:height};
  await withBrowser({width,height,port:8596},async({open,page})=>{
@@ -42,22 +43,28 @@ for(const width of widths){assert.ok(width in viewports);const height=viewports[
    for(const force of [null,0,1,2]){
     assert.equal(await page.evaluate(`__gt.coastalV(${J(force)})`),force);await frames(6);
     const oracle=createD082FrameOracle(sample,phase==='after',force);
+    let surfaces=null;
     try{
      let geometryComparison=null;
+     if(sample==='gallery'&&force!==null)surfaces=createD082BrowserSurfaceOracle(phase==='after',force,width);
      const shots=[{id:sample+'-'+(force===null?'native':'v'+force)+'-overview',x:n/2,z:n/2,size:n,owner:null,name:sample+' original-city overview'}];
      if(sample==='gallery'&&force!==null)for(const m of MODELS.filter(m=>m.v===force)){
       const row=list.find(b=>b[1]===m.k);assert.ok(row,'original target owner');const[owner,k,x,z,size]=row;assert.equal(size,m.size);
       shots.push({id:k+'-v'+m.v,k,v:m.v,H:m.H,owner,name:m.name,x:x+size/2,z:z+size/2,size,parcel:{x,z,size}});
      }
+     const targets=shots.filter(s=>s.k);
+     for(const target of targets)for(const extra of d082SupplementaryViews(target.k,target.v,target.owner,width))shots.push({...target,...extra,id:target.id+'-'+extra.id,surfaceViewId:extra.id});
      for(const shot of shots){
-      const zoom=shot.k?Math.min(8,.70*.84*n*(width/height)/(shot.size*Math.SQRT2)):.54*width/height;
+      const zoom=shot.additionalView?shot.zoomByWidth[width]:shot.k?Math.min(8,.70*.84*n*(width/height)/(shot.size*Math.SQRT2)):.54*width/height;
       await page.evaluate(`__gt.view(${shot.x},${shot.z},${zoom});__gt.setVisT(2.2);__gt.setDayFrac(0)`);
       await frames(30);let previous=null,camera=null,stable=0;for(let i=0;i<30&&stable<2;i++){await frames(15);camera=await page.evaluate('__gt.cam()');stable=previous===J(camera)?stable+1:0;previous=J(camera);}assert.equal(stable,2,'production camera settled');
       // Existing zero-angle OrbitControls updates reach a repeatable damping fixed point.
       const settled=camera;await page.evaluate('for(let i=0;i<900;i++)__gt.spin(0)');camera=await page.evaluate('__gt.cam()');assert.equal(camera.zoom,settled.zoom);for(const key of ['pos','target'])for(let i=0;i<3;i++)assert.ok(Math.abs(camera[key][i]-settled[key][i])<1e-9);await frames(20);assert.deepEqual(await page.evaluate('__gt.cam()'),camera);
+      if(shot.additionalView){await page.evaluate(`__gt.spin(${shot.spinRadians});__gt.tilt(${shot.tiltRadians});for(let i=0;i<900;i++)__gt.spin(0)`);camera=await page.evaluate('__gt.cam()');await frames(20);assert.deepEqual(await page.evaluate('__gt.cam()'),camera);assert.equal(camera.zoom,shot.view.zoom);for(const key of ['pos','target'])for(let i=0;i<3;i++)assert.ok(Math.abs(camera[key][i]-shot.view[key][i])<1e-9,'observed supplementary camera equals frozen legal view');}
       // Upload-state equality includes the camera, so establish its exact fixed point first.
-      if(geometryComparison===null)geometryComparison=await verifyGeometry(oracle);
-      const expected=oracle.measure(camera,viewport),ownerConstruction=shot.owner?oracle.ownerConstruction(shot.owner):null;
+      if(geometryComparison===null){geometryComparison=await verifyGeometry(oracle);surfaces?.assertBrowserGeometry(await page.evaluate('__gt.sceneDigest()'));}
+      const surfaceVisibility=shot.owner?surfaces.audit(shot.owner,camera):null;
+      const expected=oracle.measure(camera,viewport),ownerConstruction=surfaceVisibility?.construction??(shot.owner?oracle.ownerConstruction(shot.owner):null);
       if(shot.owner)assertD082OwnerFits(oracle.ownerBounds(camera,viewport,shot.owner),'D082 full original owner view');
       async function capture(){
        assert.equal(await page.evaluate(WORLD),world,'copied preview never mutates actual world');assert.equal((await page.evaluate('__gt.sim()'))?.playing??false,false);
@@ -73,12 +80,13 @@ for(const width of widths){assert.ok(width in viewports);const height=viewports[
        return {rawPng:bytes,width,height,bytes:bytes.length,sha256:sha(bytes),canvasSha256:pixels.sha256,worldSha256:sha(world),camera:state.camera,presentation,render:state.render,renderAll:state.renderAll,constructionState,constructionDiagnostic:live.diagnostic,diagnosticComparison,pixels,webgl};
       }
       const first=await capture();await frames(30);const repeat=await capture();assertD082PausedRepeat(repeat,first);
-      const key=[sample,force,shot.id,width].join(':'),file=shot.k?`D082-${phase}-${shot.k}-v${shot.v}-${width}.png`:`D082-${phase}-${shot.id}-${width}.png`;
+      const key=[sample,force,shot.id,width].join(':'),file=shot.k?`D082-${phase}-${shot.k}-v${shot.v}-${width}${shot.additionalView?'-'+shot.surfaceViewId:''}.png`:`D082-${phase}-${shot.id}-${width}.png`;
       fs.writeFileSync(path.join(out,file),first.rawPng);const{rawPng,...record}=first;
       if(phase==='before')pairs.set(key,{expected,record});else{const baseline=pairs.get(key);assert.ok(baseline,'actual matching before screenshot exists');assert.deepEqual(record.camera,baseline.record.camera,'before/after camera unchanged');assert.equal(record.worldSha256,baseline.record.worldSha256);assertD082FrameBudget(expected,baseline.expected);for(const metric of ['triangles','calls'])assert.ok(record.renderAll[metric]<=baseline.record.renderAll[metric],'full production frame '+metric+' does not grow');if(shot.k)assert.notEqual(record.canvasSha256,baseline.record.canvasSha256,'target has actual changed WebGL pixels');else if(sample!=='gallery')assert.equal(record.canvasSha256,baseline.record.canvasSha256,'no-target city remains pixel-identical');}
-      reports.push({...shot,phase,sample,force,...record,construction:record.constructionState[0]??null,file,expectedFrame:expected,geometryComparison,ownerConstruction,pausedRepeat:{passed:true,sha256:repeat.sha256,canvasSha256:repeat.canvasSha256},qualification:'Actual production WebGL with immutable world, inherited dimensions, exact uploaded geometry, independent frame budget, live shader/construction and paused-repeat checks. Full multi-view surface acceptance remains separate.'});write();
+      reports.push({...shot,phase,sample,force,...record,construction:record.constructionState[0]??null,file,expectedFrame:expected,geometryComparison,ownerConstruction,surfaceVisibility,pausedRepeat:{passed:true,sha256:repeat.sha256,canvasSha256:repeat.canvasSha256},qualification:'Actual production WebGL with immutable world, inherited dimensions, exact uploaded geometry, independent frame budget, live shader/construction and paused-repeat checks. Complete fixed exterior contracts are audited at observed original and supplementary production cameras, with mandatory original silhouette probes retained.'});write();
      }
-    }finally{oracle.dispose();}
+     if(surfaces){surfaceCoverage.push({phase,force,width,owners:surfaces.finish()});write();}
+    }finally{surfaces?.dispose();oracle.dispose();}
    }
    await page.evaluate('__gt.coastalV(null)');assert.equal(await page.evaluate(WORLD),world);
   }
@@ -86,5 +94,7 @@ for(const width of widths){assert.ok(width in viewports);const height=viewports[
  });
 }
 assert.deepEqual(listSourceFiles(),sourceFiles,'full source inventory remains unchanged');assert.deepEqual(inventory(sourceFiles),provenance.sources);assert.deepEqual(inventory(guardFiles),provenance.guards);assert.equal(sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),provenance.buildSha256);
-assert.equal(reports.length,widths.length*44,'all original images plus native/copied overview pairs in three original cities');
-fs.writeFileSync(path.join(out,'manifest.json'),J({provenance,shots:reports,complete:true}));console.log('Actual production screenshots and exact paused repeats:',reports.length);
+assert.equal(reports.filter(s=>!s.additionalView).length,widths.length*44,'all original images plus native/copied overview pairs in three original cities');
+assert.equal(reports.filter(s=>s.additionalView).length,widths.length*62,'all 31 supplementary legal views per phase per viewport');
+assert.equal(surfaceCoverage.length,widths.length*6,'both phases and all copied variants have complete observed-camera surface unions');
+fs.writeFileSync(path.join(out,'manifest.json'),J({provenance,shots:reports,surfaceCoverage,complete:true}));console.log('Actual production screenshots and exact paused repeats:',reports.length);

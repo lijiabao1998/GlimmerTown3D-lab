@@ -1078,6 +1078,8 @@ jobs:
       - run: npm ci
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run build
+      - name: D082 observed-camera surface API negative controls
+        run: node tools/test-d082-browser-surfaces.mjs
       - name: Actual D082 production gallery before and after, all ten slots
         run: node tools/d082-inspect.mjs
         env:
