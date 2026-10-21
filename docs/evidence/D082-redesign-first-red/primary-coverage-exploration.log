@@ -1,0 +1,29 @@
+179 0 false [
+  'original',
+  'front',
+  'rear',
+  'side',
+  'surface-e576-y4',
+  'surface-e576-y2',
+  'surface-e144-y1'
+] [ 120, 76 ] [ 0, 31 ]
+185 0 false [
+  'original',
+  'front',
+  'rear',
+  'side',
+  'surface-e144-y2',
+  'surface-e576-y4',
+  'surface-e576-y6'
+] [ 90, 35 ] [ 0, 16 ]
+154 0 false [
+  'original',
+  'front',
+  'rear',
+  'side',
+  'surface-e144-y3',
+  'surface-e144-y2',
+  'surface-e144-y0',
+  'surface-e300-y4',
+  'surface-e576-y0'
+] [ 8, 111 ] [ 0, 56 ]

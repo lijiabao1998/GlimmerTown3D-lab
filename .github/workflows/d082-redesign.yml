@@ -1,4 +1,4 @@
-name: D082 two-sample art review (no deployment)
+name: D082 nine-model art review (no deployment)
 on:
   push:
     branches: ['codex/d082-art-redesign']
@@ -8,7 +8,7 @@ concurrency:
   group: d082-redesign-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  two-sample-production-review:
+  nine-model-production-review:
     # This is not final D082 acceptance. Existing ten-model gates are unchanged.
     runs-on: ubuntu-24.04
     timeout-minutes: 45
@@ -27,8 +27,6 @@ jobs:
       - run: npm ci
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run typecheck
-      - name: Two prototypes, eight unchanged rejected slots, independent production frames
-        run: node --experimental-strip-types tools/d082-redesign-check.mjs
       - run: npm run build
       - name: Actual production original, context, front, rear and side PNGs
         run: node --experimental-strip-types tools/d082-redesign-capture.mjs
@@ -37,7 +35,69 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: d082-two-sample-art-review-${{ matrix.width }}-${{ github.sha }}
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
           path: scratch/d082-redesign/
+          if-no-files-found: error
+          retention-days: 30
+
+  independent-structural-product-checks:
+    # Mandatory diagnostic result; its red status cannot suppress actual preview images.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Nine models, accepted byte pins, closure, attachments, 130 prior models and frames
+        shell: bash
+        run: |
+          mkdir -p scratch/d082-redesign
+          set -o pipefail
+          node --experimental-strip-types tools/d082-redesign-check.mjs 2>&1 | tee scratch/d082-redesign/structural-console.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-nine-model-structural-${{ github.sha }}
+          path: scratch/d082-redesign/
+          if-no-files-found: error
+          retention-days: 30
+
+  unchanged-d081-surface-coverage:
+    # Separate, mandatory result: red coverage cannot prevent delivery of real PNGs.
+    needs: nine-model-production-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+      - name: Unchanged D081 mandatory probes in actual captured before/after cameras
+        run: node --experimental-strip-types tools/d082-redesign-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-nine-model-primary-coverage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign-coverage/
           if-no-files-found: error
           retention-days: 30

@@ -1,0 +1,11 @@
+# Retained first-red evidence
+
+- `conTop.log`: first generalized nine-slot construction hash failure. Current replacement check follows the existing target-footprint allowance in unchanged tools/unit-d082.mjs and independently recomputes the geometry envelope.
+- `coplanar-overlap.log`: new independent actual-3D same-plane check found unapproved 154 geometry contacts. The coordinated corrections are documented in ../../D082-redesign-verification.md.
+- `primary-coverage-179-0-360.json.gz`: full unchanged D081 contracts, all original hits, actual geometric ray audits for standard and supplementary legal camera plans, and unresolved probe positions. These are Node diagnostic views, not screenshots. The 179v0 baseline reached coverage and candidate retained 31 probes. The 185v0 first-red count of 16 is retained in primary-coverage-exploration.log; its full current per-probe evidence remains pending CI. No required flags were changed. The primary classifier was checked exactly against raw Three raycasts.
+- `accepted-pair-pins.json`: immutable source commit and source file hashes, default complete geometry bytes and the 36-case affine aggregate for each accepted model. These are not regenerated from the new artwork.
+- `manifest.json`: evidence hashes and unchanged classifier hash.
+
+Reproduction for current source: `node --experimental-strip-types tools/d082-redesign-check.mjs`. For primary coverage after CI captures, download the corresponding image artifact into scratch/d082-redesign and run `D082_REDESIGN_WIDTHS=360 node --experimental-strip-types tools/d082-redesign-coverage.mjs`. This uses actual PNG cameras only and retains every primary missing probe before failing at the end.
+
+The early supplementary diagnostic can be reproduced by importing createOracle, TARGETS and VIEWPORTS from tools/d082-redesign-support.mjs and planSurfaceViews from tools/d082-redesign-surfaces.mjs, constructing unchanged gallery before/after oracles with forced v0, and passing each target's original saved owner, center, size, H and zoom8 with the 360 viewport. It tests the original views plus 24 legal angle candidates and preserves unresolved samples. Current 154 corrections can change the whole-scene provenance hash; they do not alter the accepted pair.

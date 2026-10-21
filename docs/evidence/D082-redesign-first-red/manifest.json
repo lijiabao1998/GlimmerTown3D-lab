@@ -1,0 +1,14 @@
+{
+  "qualification": "Historical first-red diagnostics, not release acceptance. Visibility exploration preceded the coordinated 154 correction. The saved179v0 primary contract keeps all unchanged D081 probes and raw Three parity.185v0 first-red count is in the log; its full per-probe current evidence is pending the CI coverage job. Exploratory cameras are not PNG captures.",
+  "unchangedClassifierSha256": "2a6510fe84db1a233040df0dc2cda24ed1e1a40113518a41be506809cf2d73fb",
+  "acceptedSourceCommit": "c3b601b",
+  "acceptedRemoteCommit": "cb09a27b66546f749596e5c4760b09446c78433b",
+  "files": {
+    "README.md": "8dff494938eda23d7a379505b8dacf12ca85eec413c10dd3d865b7c3269ba833",
+    "accepted-pair-pins.json": "9406b31b623f4e8ab43a0d842637e37534e814841e15ca82e632f74095452686",
+    "primary-coverage-179-0-360.json.gz": "71551e1b24cbb9b51fbcfe18735ead803cbd5d7ecf4d23db7889c70d8708b084",
+    "conTop.log": "fec841a36d70883f3eb0ebe9d4c2bc91d347a42799b6a1c376bc3d07947e11a4",
+    "coplanar-overlap.log": "af0f4d57dc1db066abb749b80e6c96c3d358cb00e3129289aa0b88f42a0df8b4",
+    "primary-coverage-exploration.log": "a1fdecd7d2bcc30a0f716622e780c17bccde5044b447559fce0e5cccc2b8fcec"
+  }
+}

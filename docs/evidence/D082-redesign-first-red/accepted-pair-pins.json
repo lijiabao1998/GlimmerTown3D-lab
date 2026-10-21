@@ -1,0 +1,20 @@
+{
+  "sourceCommit": "c3b601b",
+  "remoteCommit": "cb09a27b66546f749596e5c4760b09446c78433b",
+  "sources": {
+    "src/content/britishCoastalRecreation.ts": "922173a2d9f245a7631e19cf6c6d92b50eb9cea78ac8a0a4b472a85d707650b2",
+    "src/render/britishCoastalRecreationArt.ts": "4df0f557d7c4cd8586d322300c7775ad11d16f228be2f0ac75891dc8432efb12"
+  },
+  "slots": {
+    "179:0": {
+      "defaultGeometry": "5d5de66f9401492b83bfbfa1be04b2c1288eefa3106fa1074dc765c1b1d00665",
+      "cases": 36,
+      "allAffineCasesSha256": "b65ee3b473de9cab0e82012eaa3042a228e72f6748b448f074a8e4d2a21e2a62"
+    },
+    "179:1": {
+      "defaultGeometry": "1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049",
+      "cases": 36,
+      "allAffineCasesSha256": "b7a060fca867dd2866e65898b0840fe93aeb20a7011f4a54d0aeeb89191f2ab0"
+    }
+  }
+}

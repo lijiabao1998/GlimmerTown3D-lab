@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: no same-oriented coplanar duplicate component surface
+    at assertSolidRelationships (file:///workspace/shared/glimmer-3d-d082-redesign/tools/d082-redesign-surfaces.mjs:80:282)
+    at file:///workspace/shared/glimmer-3d-d082-redesign/tools/d082-redesign-check.mjs:17:89
+    at Array.map (<anonymous>)
+    at file:///workspace/shared/glimmer-3d-d082-redesign/tools/d082-redesign-check.mjs:14:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0
