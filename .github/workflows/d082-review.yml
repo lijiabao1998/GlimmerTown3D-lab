@@ -1,0 +1,36 @@
+name: D082 candidate geometry and studio WebGL (no deployment)
+on:
+  push:
+    branches: ['codex/d082-british-ten']
+permissions:
+  contents: read
+concurrency:
+  group: d082-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npx tsc --ignoreConfig --noEmit --strict --skipLibCheck --allowImportingTsExtensions --target es2022 --module esnext --moduleResolution bundler --lib es2022,dom tools/d082/models.ts tools/d082/review.ts
+      - run: node --experimental-strip-types tools/d082/geometry-test.mjs
+      - run: node tools/d082/build.mjs
+      - run: node tools/d082/capture.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-studio-review-${{ github.sha }}
+          path: |
+            scratch/d082-previews/
+            scratch/d082-geometry-report.json
+          if-no-files-found: error
+          retention-days: 14
