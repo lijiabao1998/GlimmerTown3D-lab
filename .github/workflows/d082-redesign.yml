@@ -54,7 +54,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Paired supplementary PNG evidence and all-legal-angle obstruction controls
-        run: node --test tools/d082-redesign-views.test.mjs
+        run: node --test tools/d082-redesign-views.test.mjs tools/d082-179v1-retained.test.mjs
       - name: Approved 179v1 numerical envelope, exact joins, prior pins and 177 manifold controls
         run: node --experimental-strip-types tools/d082-proposal-check.mjs
       - name: Nine models, accepted byte pins, closure, attachments, 130 prior models and frames

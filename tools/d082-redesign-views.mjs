@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {sha,pairedCamera,assertCamera,VIEWS} from './d082-redesign-support.mjs';
 import {surfaceContract,auditSurface} from './d082-redesign-surfaces.mjs';
+import {retained179v1} from './d082-179v1-retained.mjs';
 
 export const STANDARD_VIEW_IDS=Object.freeze(['context','original','front','rear','side']);
 export const SUPPLEMENTARY_VIEWS=Object.freeze([Math.PI*.08+1e-8,Math.PI/6,Math.PI*.32-1e-8].flatMap((elevation,e)=>
@@ -18,18 +19,24 @@ export function planSupplementaryViews(before,after,shot,viewport,standardShots,
  const audits=states.map((o,i)=>standardShots.map(s=>auditSurface(o,s.camera,viewport,contracts[i])));
  const remove=(rows)=>rows.forEach((a,i)=>a.visibleSamples.forEach(id=>required[i].delete(id)));
  for(let j=0;j<standardShots.length;j++)remove(audits.map(rows=>rows[j]));
+ // Additional immutable old-coordinate goals do not alter either full D081
+ // contract. Audit all old records, including the 487 historically failing ones.
+ const historical=retained179v1(shot),retained=historical?new Set(historical.retainedIds):new Set(),retainedAudits=historical?standardShots.map(s=>auditSurface(after,s.camera,viewport,historical.contract)):[];
+ if(historical)assert.equal(historical.contract.owner,shot.owner);
+ const removeRetained=a=>{for(const id of a.visibleSamples)retained.delete(id);};retainedAudits.forEach(removeRetained);
  const originalUncovered=required.map(s=>s.size);
  const candidates=SUPPLEMENTARY_VIEWS.map((view,index)=>{
   const camera=pairedCamera(before,after,{...shot,zoom:8,view},viewport,view);
-  return {view,camera,index,rows:states.map((o,i)=>auditSurface(o,camera,viewport,contracts[i]))};
+  return {view,camera,index,rows:states.map((o,i)=>auditSurface(o,camera,viewport,contracts[i])),retainedAudit:historical?auditSurface(after,camera,viewport,historical.contract):null};
  });
  const selected=[];
- while(required.some(s=>s.size)){
-  for(const r of candidates)r.gain=r.rows.map((a,i)=>a.visibleSamples.filter(id=>required[i].has(id)).length);
-  candidates.sort((a,b)=>b.gain[0]+b.gain[1]-a.gain[0]-a.gain[1]||a.index-b.index);
-  const best=candidates.shift();if(!best||best.gain[0]+best.gain[1]===0)break;
+ while(required.some(s=>s.size)||retained.size){
+  for(const r of candidates){r.gain=r.rows.map((a,i)=>a.visibleSamples.filter(id=>required[i].has(id)).length);r.retainedGain=r.retainedAudit?.visibleSamples.filter(id=>retained.has(id)).length??0;}
+  candidates.sort((a,b)=>b.gain[0]+b.gain[1]+b.retainedGain-a.gain[0]-a.gain[1]-a.retainedGain||a.index-b.index);
+  const best=candidates.shift();if(!best||best.gain[0]+best.gain[1]+best.retainedGain===0)break;
   remove(best.rows);best.rows.forEach((a,i)=>audits[i].push(a));
-  selected.push({view:best.view,camera:best.camera,gain:best.gain,remaining:required.map(s=>s.size)});
+  if(best.retainedAudit){retainedAudits.push(best.retainedAudit);removeRetained(best.retainedAudit);}
+  selected.push({view:best.view,camera:best.camera,gain:best.gain,remaining:required.map(s=>s.size),...(historical?{retainedOldGain:best.retainedGain,retainedOldRemaining:retained.size}:{})});
  }
  const missing=contracts.map((c,i)=>c.probes.filter(p=>required[i].has(p.id)));
  const plan={slot:shot.k+':'+shot.v,width:viewport.W,owner:shot.owner,originalCamera:original.camera,
@@ -37,6 +44,7 @@ export function planSupplementaryViews(before,after,shot,viewport,standardShots,
   required:contracts.map(c=>c.requiredSamples.length),originalUncovered,selected,
   remaining:missing.map(ps=>ps.length),passed:missing.every(ps=>ps.length===0),
   qualification:'Geometric planning only. Every selected view must be captured as paired production PNGs. Every original mandatory point remains required; residual probes still fail.'};
+ if(historical){plan.retainedOldCoordinates={oldContractSha256:historical.contract.sha256,ledgerSha256:historical.ledgerSha256,requiredIds:historical.retainedIds,required:524,remaining:retained.size,completeOldContractStillRequired:1011,supersededOrientedPositions:487};plan.passed&&=retained.size===0;}
  return {plan,contracts,audits,missing};
 }
 
@@ -56,6 +64,7 @@ export function assertCapturedSurfaceViews(manifest,target,width,{directory=null
  const relevant=manifest.shots.filter(s=>s.width===width&&s.k===target.k&&s.v===target.v&&['prototype','supplementary-surface'].includes(s.role));
  const plans=(manifest.supplementaryPlans??[]).filter(p=>p.slot===target.k+':'+target.v&&p.width===width);
  assert.equal(plans.length,1,'exactly one paired supplementary plan per owner and width');const plan=plans[0];
+ const historical=retained179v1(target);if(historical){assert.deepEqual(plan.retainedOldCoordinates?.requiredIds,historical.retainedIds,'all 524 retained old coordinates are planned without dropping a point');assert.equal(plan.retainedOldCoordinates.oldContractSha256,historical.contract.sha256);assert.equal(plan.retainedOldCoordinates.ledgerSha256,historical.ledgerSha256);assert.equal(plan.retainedOldCoordinates.required,524);assert.equal(plan.retainedOldCoordinates.remaining,0);}
  assert.deepEqual(plan.standardViews.map(s=>s.view.id),STANDARD_VIEW_IDS);
  const phases=['before','after'].map(phase=>{
   const shots=relevant.filter(s=>s.phase===phase),standard=shots.filter(s=>s.role==='prototype'),extra=shots.filter(s=>s.role==='supplementary-surface');
