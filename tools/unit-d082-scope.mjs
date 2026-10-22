@@ -6,7 +6,8 @@ import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
-import {D082_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory} from './d082-scope.mjs';
+import {D082_ADDED,D082_LEGACY_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
+import {D082_CURRENT_PATHS,D082_REVIEWED_SOURCES,validateD082RestorationLease} from './d082-source-restoration.mjs';
 import {assertD081Scope,d081HistoricalBytes} from './d081-scope.mjs';
 import {assertD074Scope,d074HistoricalBytes} from './d074-scope.mjs';
 const BASELINE='2cd43c424dcc909dcfa6ac55275406d2bc527ce0';
@@ -15,17 +16,82 @@ const git=(...args)=>execFileSync('git',args,{cwd:ROOT,encoding:'utf8',maxBuffer
 export function d082ScopeGuards(){
  const baseline=git('ls-tree','-r','--name-only',BASELINE,'--','src').trim().split('\n').sort();
  const current=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
- assert.equal(assertD082Scope(),baseline.length+2);assert.ok(assertD081Scope()>0);assert.ok(assertD074Scope()>0);
+ const legacy=JSON.parse(read('fixtures/d082-art-scope.json')),lease=JSON.parse(read('fixtures/d082-source-restoration-v1.json'));
+ assert.equal(baseline.length,227);assert.equal(assertD082LegacyInventory(Object.keys(legacy.after)),baseline.length+2);
+ assert.equal(D082_LEGACY_ADDED.size,2);assert.equal(D082_ADDED.size,4);
+ assert.equal(assertD082Scope(),baseline.length+4);assert.ok(assertD081Scope()>0);assert.ok(assertD074Scope()>0);
+ assert.deepEqual(current,D082_CURRENT_PATHS);assert.equal(validateD082RestorationLease(lease),true);
  let mutations=0;
  for(const file of baseline){assert.equal(d082HistoricalBytes(file),git('show',BASELINE+':'+file),'restores independent immediate Git baseline '+file);}
  for(const file of D082_ADDED)assert.equal(d082HistoricalBytes(file),'','SHA-verified addition is absent from prior release');
+ for(const file of Object.keys(D082_REVIEWED_SOURCES)){
+  const source=file==='src/content/britishCoastalRecreation.ts'?lease.reviewedNineSource:lease.reviewed179v1Source;
+  assert.equal(read(file),git('show',source+':'+file),'current approved source equals independent reviewed Git bytes '+file);
+ }
  for(const bad of [[...current,'src/unauthorized.ts'],current.slice(1),[...current,current[0]]]){assert.throws(()=>assertD082Inventory(bad),/exact source inventory/);mutations++;}
+ assert.throws(()=>assertD082Inventory(Object.keys(legacy.after)),/exact source inventory/,'old 229-path inventory cannot pass current 231-path phase');mutations++;
+ assert.throws(()=>assertD082LegacyInventory(current),/exact original source inventory/,'current phase cannot silently replace archived 229-path inventory');mutations++;
  assert.throws(()=>d082HistoricalBytes('src/unauthorized.ts',()=>assert.fail('unknown path must not read')),/belongs to D082 source inventory/);
+ const snapshot=new Map(current.map(file=>[file,read(file)])),fromSnapshot=file=>snapshot.get(file);
+ assert.equal(assertD082Scope(fromSnapshot),231,'injected complete snapshot is the actual source of bytes');
  for(const target of current){
-  const mutated=file=>read(file)+(file===target?'\n// unauthorized mutation':'');
+  const mutated=file=>fromSnapshot(file)+(file===target?'\n// unauthorized mutation':'');
   assert.throws(()=>assertD082Scope(mutated),/exact allowed source/,'current-byte mutation rejected '+target);
   assert.throws(()=>d082HistoricalBytes(target,mutated),/exact allowed source/,'single-source mutation rejected '+target);mutations+=2;
   assert.throws(()=>assertD081Scope(mutated),/exact allowed source/,'new additions cannot disappear from historical inventory unchecked '+target);mutations++;
+  assert.throws(()=>assertD074Scope(mutated),/exact allowed source/,'entire older injected-reader chain rejects '+target);mutations++;
+  const missing=new Error('missing '+target),absent=file=>{if(file===target)throw missing;return fromSnapshot(file);};
+  for(const fn of [assertD082Scope,assertD081Scope,assertD074Scope]){assert.throws(()=>fn(absent),e=>e===missing,'missing source error is preserved '+target);mutations++;}
+  assert.throws(()=>d082HistoricalBytes(target,absent),e=>e===missing);mutations++;
+  for(const raw of [undefined,null,'',fromSnapshot(target).slice(0,-1)]){
+   const missingBytes=file=>file===target?raw:fromSnapshot(file);
+   assert.throws(()=>d082HistoricalBytes(target,missingBytes),/exact allowed source/,'missing/truncated injected bytes never fall back to disk '+target);mutations++;
+  }
+  const calls=[];d082HistoricalBytes(target,file=>{calls.push(file);return fromSnapshot(file);});
+  assert.deepEqual(calls,[target],'actual current source is read exactly once before any historical suppression '+target);
+ }
+ for(const target of ['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/render/windows.ts']){
+  const old=git('show',BASELINE+':'+target),stale=file=>file===target?old:fromSnapshot(file);
+  for(const fn of [assertD082Scope,assertD081Scope,assertD074Scope]){assert.throws(()=>fn(stale),/exact allowed source/,'stale published source cannot masquerade as current '+target);mutations++;}
+ }
+ for(const reader of [null,{},true]){assert.throws(()=>d082HistoricalBytes('src/render/windows.ts',reader),/reader required/);mutations++;}
+ const malformed=[null,[],{}, {...lease,extra:true},{...lease,schema:2},{...lease,counts:{...lease.counts,current:229}},
+  {...lease,currentPaths:lease.currentPaths.slice(1)},{...lease,currentPaths:[...lease.currentPaths,lease.currentPaths[0]]},
+  {...lease,currentPaths:[...lease.currentPaths,'src/unauthorized.ts']},{...lease,added:{...lease.added,'src/unauthorized.ts':'0'.repeat(64)}}];
+ for(const key of Object.keys(lease)){const bad=structuredClone(lease);delete bad[key];malformed.push(bad);}
+ for(const key of ['publishedBaseline','reviewedNineSource','reviewed179v1Source','approvalMessage','legacyManifestSha256','baselineManifestSha256'])malformed.push({...lease,[key]:'0'.repeat(64)});
+ for(const file of Object.keys(lease.modified)){
+  const missing=structuredClone(lease);delete missing.modified[file];malformed.push(missing);
+  for(const key of ['legacySha256','reviewedSha256']){const bad=structuredClone(lease);bad.modified[file][key]='0'.repeat(64);malformed.push(bad);}
+ }
+ for(const file of Object.keys(lease.added)){
+  const missing=structuredClone(lease);delete missing.added[file];malformed.push(missing);
+  const bad=structuredClone(lease);bad.added[file]='0'.repeat(64);malformed.push(bad);
+ }
+ for(const key of ['sha256','bytes']){const bad=structuredClone(lease);bad.historicalSources['src/render/windows.ts'][key]+='X';malformed.push(bad);}
+ const broader=structuredClone(lease);broader.historicalSources['src/sim/day.ts']=broader.historicalSources['src/render/windows.ts'];malformed.push(broader);
+ const extra=structuredClone(lease);extra.modified['src/sim/day.ts']=extra.modified['src/render/windows.ts'];malformed.push(extra);
+ for(const bad of malformed){assert.throws(()=>validateD082RestorationLease(bad));mutations++;}
+ // Preserve the original seventeen published baselines; reviewed D082 candidates
+ // are an additional explicit phase, like the existing separate PR33 touch lease.
+ const fetchStep=`      - name: Fetch independently reviewed D082 source snapshots
+        run: |
+          git fetch --no-tags --depth=1 origin "$D082_REVIEWED_NINE"
+          git fetch --no-tags --depth=1 origin "$D082_REVIEWED_179V1"
+        env:
+          D082_REVIEWED_NINE: 67440cc8de625f0482665c3f3f94efba73a1aed3
+          D082_REVIEWED_179V1: 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
+`;
+ const assertFetchPhase=workflow=>{
+  assert.equal(workflow.split('      - name: Fetch independently reviewed D082 source snapshots\n').length,2,'exactly one reviewed D082 source fetch phase');
+  assert.ok(workflow.includes(fetchStep),'reviewed D082 fetch commands and both literal provenance pins stay exact');
+ };
+ const workflow=read('.github/workflows/ci.yml');assertFetchPhase(workflow);
+ for(const bad of [workflow.replace(fetchStep,''),workflow+fetchStep,
+  workflow.replace('$D082_REVIEWED_NINE','HEAD'),workflow.replace('$D082_REVIEWED_179V1','HEAD'),
+  workflow.replace('D082_REVIEWED_NINE: 67440cc8de625f0482665c3f3f94efba73a1aed3','D082_REVIEWED_NINE: '+'0'.repeat(40)),
+  workflow.replace('D082_REVIEWED_179V1: 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694','D082_REVIEWED_179V1: '+'0'.repeat(40))]){
+  assert.throws(()=>assertFetchPhase(bad));mutations++;
  }
  for(const target of ['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/ui/panelPress.ts']){
   const error=new Error('missing '+target),absent=file=>{if(file===target)throw error;return read(file);};
@@ -35,6 +101,6 @@ export function d082ScopeGuards(){
    assert.throws(()=>d082HistoricalBytes(target,stale),/exact allowed source/,'baseline bytes cannot masquerade as current candidate');mutations++;
   }
  }
- return {passed:true,baseline:BASELINE,baselineSources:baseline.length,currentSources:current.length,negativeControls:mutations,qualification:'Exact source restoration and inventory only, not runtime geometry or browser evidence.'};
+ return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),negativeControls:mutations,qualification:'Exact approved source restoration and inventory only. Original 227/229 phase, 900/487 probe evidence, geometry/runtime/frame/browser assertions are unchanged.'};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(d082ScopeGuards(),null,2));

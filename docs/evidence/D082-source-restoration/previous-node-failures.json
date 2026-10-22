@@ -1,0 +1,60 @@
+{
+  "run": 39795570522,
+  "head": "ddd8de7eef7e351a2083cdac17821643ba1a77f7",
+  "job": 119882691760,
+  "namedNgLines": [
+    "2026-10-22T14:58:22.7413773Z   NG D053 original154 + explicit D055 gameplay and D056 art scope：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T14:58:57.5311075Z   NG D054 original154 + explicit D055 gameplay and D056 art scope：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:00:12.3131662Z   NG D057 deterministic and read-only inputs; no change to gameplay/source bytes outside reversible art dispatch：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:00:12.3156953Z   NG D057 source allowlist rejects gameplay, existing D056 art, new art and dispatch mutations：AssertionError [ERR_ASSERTION]: The input did not match the regular expression /exact allowed source/. Input:",
+    "2026-10-22T15:00:14.6462255Z   NG D058 current source whitelist preserves all simulation, saves, D056 and D057 bytes; mutations rejected：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:00:18.7679977Z   NG D059 exact source scope reconstructs D058 and rejects injected mutations before historical reversal：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:00:28.8931883Z   NG D060 exact source scope reconstructs D059 and rejects injected mutations before historical reversal：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:00:37.0782409Z   NG D061 exact source scope reconstructs D060 and rejects injected mutations before historical reversal：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:10.0190947Z   NG D062 exact source scope reconstructs D061 and rejects injected mutations before historical reversal：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:19.9526907Z   NG D063 exact source scope reconstructs D062 and rejects injected mutations before historical reversal：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:28.5931968Z   NG D064 exact source scope reconstructs D063 and rejects injected mutations before historical reversal; files outside the three regions are byte-identical to the baseline：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:34.1989650Z   NG D065 exact source scope reconstructs D064 and rejects injected mutations before historical reversal; files outside the two dispatch sources are byte-identical to the baseline：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:38.1280366Z   NG D066 pure procedural source and bounded source changes preserve simulation and save code：AssertionError [ERR_ASSERTION]: only approved render-only source may change: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:01:38.1507062Z   NG D066 nine legacy switches each disable only this wave; SHA scope reverses to D065 and rejects source mutations：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:42.4569175Z   NG D067 pure procedural source and bounded source changes preserve simulation and save code：AssertionError [ERR_ASSERTION]: only approved render-only source may change: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:01:42.4777912Z   NG D067 ten legacy switches each disable only this wave; SHA scope reverses to D066 and rejects source mutations：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:01:54.7434076Z   NG D068 pure procedural source and bounded source changes preserve simulation and save code：AssertionError [ERR_ASSERTION]: only approved render-only source may change: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:01:54.7631800Z   NG D068 eleven legacy switches each disable only this wave; SHA scope reverses to D067 and rejects source mutations：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:02:19.5444492Z   NG D069 procedural sources and exact reversible scope preserve simulation, saves, D068 art and all historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:02:51.0284738Z   NG D070 procedural sources and exact reversible scope preserve simulation, saves, D069 art and all historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:03:25.8825569Z   NG D071 procedural sources and reversible scope preserve simulation, saves, thirty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:04:18.4363332Z   NG D072 procedural sources and reversible scope preserve simulation, saves, forty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:06:14.6002165Z   NG D073 procedural sources and reversible scope preserve simulation, saves, fifty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:09:05.0392498Z   NG D074 procedural sources and reversible scope preserve simulation, saves, sixty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:16:49.5712870Z   NG D081 touch lease scope outer and older scope chains preserve every injected negative control：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:16:50.1276104Z   NG D074 touch repair scope historical guard chain preserves source inventories and injected mutation readers：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:17:19.3331893Z   NG D076 procedural sources and reversible scope preserve simulation, saves, seventy earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:25:31.6099088Z   NG D077 procedural sources and reversible scope preserve simulation, saves, eighty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:25:31.6214276Z   NG D077 tested source and guard freeze remain exact through the entire focused run：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:39:38.4833831Z   NG D078 procedural sources and reversible scope preserve simulation, saves, ninety earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:39:38.4932241Z   NG D078 tested source and guard freeze remain exact through the entire focused run：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:40:17.3625997Z   NG D079 procedural sources and reversible scope preserve simulation, saves, one hundred earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:40:17.3715530Z   NG D079 tested source and guard freeze remain exact through the entire focused run：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:41:00.9272563Z   NG D080 procedural sources and reversible scope preserve simulation, saves, one hundred ten earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:41:00.9353562Z   NG D080 tested source and guard freeze remain exact through the entire focused run：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:41:56.6883710Z   NG D081 procedural sources and reversible scope preserve simulation, saves, one hundred twenty earlier models and historical gates：AssertionError [ERR_ASSERTION]: approved render-only source: src/render/d082Repair179v1.ts",
+    "2026-10-22T15:41:56.6947116Z   NG D081 tested source and guard freeze remain exact through the entire focused run：AssertionError [ERR_ASSERTION]: D082 exact source inventory",
+    "2026-10-22T15:41:56.7274201Z   NG D082 complete independent architecture topology, partitions and missing/reversed controls：AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:",
+    "2026-10-22T15:41:56.9092975Z   NG D082 immutable original and post-repair architecture checkpoints：AssertionError [ERR_ASSERTION]: actual source matches separately recorded repair checkpoint"
+  ],
+  "count": 39,
+  "originalLogs": {
+    "previous-node-complete.log.gz": {
+      "uncompressedBytes": 1416829,
+      "uncompressedSha256": "34bdb6631eb029350aac5db43a62d8b8d3edd664cc3f4bed45029ec56c2b1c99",
+      "gzipSha256": "fc91cace93e1d10b9fa3e888f6b5387f911f731918bbb1d5e8712dda0fe6324a"
+    },
+    "previous-smoke.log.gz": {
+      "uncompressedBytes": 21603,
+      "uncompressedSha256": "83d1ef8027f266d6a7869747d9e4fc882ae989a87e78cf663bb074f8f3b959ac",
+      "gzipSha256": "d71c611c096f244897df59d086fd982288fb45858e03cfbee9e9db7033ebe923"
+    }
+  },
+  "sourceInventoryFailuresRemainDistinctFromRuntimeGeometryFailures": true
+}

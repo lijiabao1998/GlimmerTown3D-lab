@@ -74,6 +74,13 @@ jobs:
           git fetch --no-tags --depth=1 origin 23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e
           git fetch --no-tags --depth=1 origin 7ec70a96b01437ab4576b0962905be16b1591e79
           git fetch --no-tags --depth=1 origin 2cd43c424dcc909dcfa6ac55275406d2bc527ce0
+      - name: Fetch independently reviewed D082 source snapshots
+        run: |
+          git fetch --no-tags --depth=1 origin "$D082_REVIEWED_NINE"
+          git fetch --no-tags --depth=1 origin "$D082_REVIEWED_179V1"
+        env:
+          D082_REVIEWED_NINE: 67440cc8de625f0482665c3f3f94efba73a1aed3
+          D082_REVIEWED_179V1: 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
       - name: Fetch separate exact PR33 touch contract baseline
         run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"
         env:
