@@ -47,5 +47,10 @@
     "examples": [],
     "volume": 0.17511357703753733
   },
-  "candidateSha256": "a6378f5a920159d06a84e4bee3d0238848352443f8931cd4eda80c5bdb97ba05"
+  "candidateSha256": "a6378f5a920159d06a84e4bee3d0238848352443f8931cd4eda80c5bdb97ba05",
+  "evidenceStage": "early-research-before-facade-masks-and-inventory-subdivision",
+  "statusAtCapture": "uncommitted research",
+  "historicalValuesPreserved": true,
+  "supersededBy": "final-authoritative-evidence.json",
+  "note": "216 weighted / 120 triangles including virtual ground caps and this raw serializer hash are early research values, not the final 176 weighted / 88 rendered triangles or emitted product hash. All original historical fields are retained."
 }
