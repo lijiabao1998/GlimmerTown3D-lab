@@ -74,6 +74,14 @@ export function d082HistoricalBytes(file,read=diskRead) {
   return historical(file,current);
 }
 
+// Approved fixed-source allowance: no additional file becomes an addition or leaves historical inventory.
+export function isD082ReviewedExistingSource(file,read=diskRead){
+  if(file!=='src/render/windows.ts')return false;
+  const original=d082HistoricalBytes(file,read);
+  assert.equal(sha(original),M.before[file],'reviewed existing source restores exact published bytes');
+  return true;
+}
+
 export function assertD082LegacyInventory(files){assert.deepEqual([...files].sort(),expectedFiles,'D082 exact original source inventory');return files.length;}
 export const assertD082Inventory=assertD082CurrentInventory;
 

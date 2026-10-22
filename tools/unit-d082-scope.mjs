@@ -8,6 +8,7 @@ import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
 import {D082_ADDED,D082_LEGACY_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
 import {D082_CURRENT_PATHS,D082_REVIEWED_SOURCES,validateD082RestorationLease} from './d082-source-restoration.mjs';
+import {reviewedWindowsGuards} from './d082-reviewed-windows-check.mjs';
 import {assertD081Scope,d081HistoricalBytes} from './d081-scope.mjs';
 import {assertD074Scope,d074HistoricalBytes} from './d074-scope.mjs';
 const BASELINE='2cd43c424dcc909dcfa6ac55275406d2bc527ce0';
@@ -101,6 +102,7 @@ export function d082ScopeGuards(){
    assert.throws(()=>d082HistoricalBytes(target,stale),/exact allowed source/,'baseline bytes cannot masquerade as current candidate');mutations++;
   }
  }
- return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),negativeControls:mutations,qualification:'Exact approved source restoration and inventory only. Original 227/229 phase, 900/487 probe evidence, geometry/runtime/frame/browser assertions are unchanged.'};
+ const windowsGuard=reviewedWindowsGuards();assert.equal(windowsGuard.passed,true);
+ return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved source restoration plus the explicitly approved Windows hash predicate. Original 227/229 phase, 900/487 evidence and all runtime/geometry/frame/browser assertions are retained.'};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(d082ScopeGuards(),null,2));
