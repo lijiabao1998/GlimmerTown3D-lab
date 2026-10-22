@@ -53,6 +53,8 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - name: Paired supplementary PNG evidence and all-legal-angle obstruction controls
+        run: node --test tools/d082-redesign-views.test.mjs
       - name: Nine models, accepted byte pins, closure, attachments, 130 prior models and frames
         shell: bash
         run: |

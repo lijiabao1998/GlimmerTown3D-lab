@@ -1,0 +1,403 @@
+{
+  "slot": "179:1",
+  "owner": 154,
+  "sourceGeometrySha256": "c51eaa5b7aa465cd20da8e45cdb5d2bee57d46c8dc442591ec27844e64d7200f",
+  "cityViewSha256": "13b168565198cca3a8e9ac3fe9817c331bcf160372287ed48c7f9934a56416fc",
+  "contractSha256": "176125330d153813b6560a1268db28649c7df80cd5ade657f052210d0b343770",
+  "legalElevationRadians": [
+    0.25132741228718347,
+    1.0053096491487339
+  ],
+  "approvedPrototypePins": {
+    "defaultGeometry": "1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049",
+    "allAffineCasesSha256": "b7a060fca867dd2866e65898b0840fe93aeb20a7011f4a54d0aeeb89191f2ab0"
+  },
+  "downward": [
+    {
+      "id": "mesh-1-triangle-15568-barycentric-0",
+      "point": [
+        54.438334147135414,
+        0.36959999799728394,
+        37.38166809082031
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15568-barycentric-1",
+      "point": [
+        54.313000488281254,
+        0.36959999799728394,
+        37.303001403808594
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15568-barycentric-2",
+      "point": [
+        54.5010009765625,
+        0.36959999799728394,
+        37.303001403808594
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15568-barycentric-3",
+      "point": [
+        54.5010009765625,
+        0.36959999799728394,
+        37.53900146484375
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15569-barycentric-0",
+      "point": [
+        54.281667073567704,
+        0.36959999799728394,
+        37.57833480834961
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15569-barycentric-1",
+      "point": [
+        54.21900024414063,
+        0.36959999799728394,
+        37.42100143432617
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15569-barycentric-2",
+      "point": [
+        54.40700073242188,
+        0.36959999799728394,
+        37.65700149536133
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15569-barycentric-3",
+      "point": [
+        54.21900024414063,
+        0.36959999799728394,
+        37.65700149536133
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15587-barycentric-0",
+      "point": [
+        54.47166570027669,
+        0.19140000641345975,
+        37.78833262125651
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15587-barycentric-1",
+      "point": [
+        54.4129997253418,
+        0.19140000641345978,
+        37.76299896240235
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15587-barycentric-2",
+      "point": [
+        54.50099868774414,
+        0.19140000641345978,
+        37.76299896240235
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15587-barycentric-3",
+      "point": [
+        54.50099868774414,
+        0.19140000641345978,
+        37.83899993896485
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15588-barycentric-0",
+      "point": [
+        54.39833323160807,
+        0.19140000641345975,
+        37.85166676839192
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15588-barycentric-1",
+      "point": [
+        54.36900024414062,
+        0.19140000641345978,
+        37.80099945068359
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15588-barycentric-2",
+      "point": [
+        54.45699920654297,
+        0.19140000641345978,
+        37.877000427246095
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15588-barycentric-3",
+      "point": [
+        54.36900024414062,
+        0.19140000641345978,
+        37.877000427246095
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15599-barycentric-0",
+      "point": [
+        54.24333318074544,
+        0.46860000491142273,
+        37.43000157674153
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15599-barycentric-1",
+      "point": [
+        54.221999359130855,
+        0.46860000491142273,
+        37.41800155639648
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15599-barycentric-2",
+      "point": [
+        54.25400009155273,
+        0.46860000491142273,
+        37.41800155639648
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15599-barycentric-3",
+      "point": [
+        54.25400009155273,
+        0.46860000491142273,
+        37.45400161743164
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15600-barycentric-0",
+      "point": [
+        54.216665903727204,
+        0.46860000491142273,
+        37.460001627604164
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15600-barycentric-1",
+      "point": [
+        54.205998992919916,
+        0.46860000491142273,
+        37.43600158691406
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15600-barycentric-2",
+      "point": [
+        54.237999725341794,
+        0.46860000491142273,
+        37.47200164794922
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    },
+    {
+      "id": "mesh-1-triangle-15600-barycentric-3",
+      "point": [
+        54.205998992919916,
+        0.46860000491142273,
+        37.47200164794921
+      ],
+      "normal": [
+        0,
+        -1,
+        0
+      ],
+      "required": true,
+      "minimumNormalDotRayDirection": 0.2486898871648548,
+      "proof": "Orthographic camera rays have dy=-sin(elevation). For normal [0,ny,0] with ny<0 and every legal elevation, normal.dot(rayDirection)=-ny*sin(elevation)>0 at every yaw. The unchanged FrontSide audit therefore rejects this required sample as back-facing for ALL legal views."
+    }
+  ],
+  "qualification": "These are proofs of an unsatisfied requirement, not exemptions. Every listed point remains in the required contract and the coverage failure. Removing or moving these faces would also violate the existing structural/approved-mesh contracts.",
+  "retainedCoverageFileSha256": "d2c8ce18d490172f043914748ba92d4623ed862e6cadbbd1a2da9dbd25437795"
+}

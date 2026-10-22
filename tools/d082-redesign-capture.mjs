@@ -6,15 +6,16 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {ROOT,withBrowser} from './cdp.mjs';
 import {REDESIGN_UPLOAD_PROBE} from './d082-redesign-upload-probe.mjs';
+import {planSupplementaryViews,assertCapturedSurfaceViews} from './d082-redesign-views.mjs';
 import {J,sha,TARGETS,VIEWS,VIEWPORTS,QUALIFICATION,createOracle,cityOf,plannedCamera,pairedCamera,assertCamera,assertBudget,assertFrame,references} from './d082-redesign-support.mjs';
 const WORLD='JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList(),__gt.layers(),__gt.stats()])';
 const PIXELS=`(async()=>{const c=document.querySelector('canvas'),k=document.createElement('canvas');k.width=c.width;k.height=c.height;const x=k.getContext('2d');x.drawImage(c,0,0);const d=x.getImageData(0,0,k.width,k.height).data;let s=0,q=0,n=0;for(let i=0;i<d.length;i+=4){const l=d[i]*.3+d[i+1]*.59+d[i+2]*.11;s+=l;q+=l*l;n++;}const hash=await crypto.subtle.digest('SHA-256',d);return {width:k.width,height:k.height,variance:q/n-(s/n)**2,sha256:[...new Uint8Array(hash)].map(v=>v.toString(16).padStart(2,'0')).join('')};})()`;
 const out=path.join(ROOT,'scratch/d082-redesign');fs.mkdirSync(out,{recursive:true});
 const widths=(process.env.D082_REDESIGN_WIDTHS??'1440,412,360').split(',').map(Number);assert.ok(widths.length&&widths.every(w=>VIEWPORTS.some(v=>v.W===w)));
 const listSources=()=>fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
-const sources=listSources(),oldGates=fs.readdirSync(path.join(ROOT,'tools')).filter(f=>/d082/.test(f)&&!/^d082-redesign-/.test(f)).filter(f=>fs.statSync(path.join(ROOT,'tools',f)).isFile()).map(f=>'tools/'+f),guards=[...oldGates,'tools/d082/models.ts','tools/d082/geometry-test.mjs','tools/d082-redesign-support.mjs','tools/d082-redesign-check.mjs','tools/d082-redesign-capture.mjs','tools/d082-redesign-upload-probe.mjs','tools/d082-redesign-surfaces.mjs','tools/d082-redesign-coverage.mjs','tools/d081-frame.mjs','tools/unit-d081.mjs','fixtures/d082-redesign-additional-before.json.gz','.github/workflows/d082-redesign.yml','fixtures/d082-geometry-before.json','fixtures/d082-source-before.json','fixtures/d082-history-before.json','package-lock.json'];
+const sources=listSources(),oldGates=fs.readdirSync(path.join(ROOT,'tools')).filter(f=>/d082/.test(f)&&!/^d082-redesign-/.test(f)).filter(f=>fs.statSync(path.join(ROOT,'tools',f)).isFile()).map(f=>'tools/'+f),guards=[...oldGates,'tools/d082/models.ts','tools/d082/geometry-test.mjs','tools/d082-redesign-support.mjs','tools/d082-redesign-check.mjs','tools/d082-redesign-capture.mjs','tools/d082-redesign-upload-probe.mjs','tools/d082-redesign-surfaces.mjs','tools/d082-redesign-coverage.mjs','tools/d082-redesign-views.mjs','tools/d082-redesign-conflicts.mjs','tools/d082-redesign-views.test.mjs','tools/d081-frame.mjs','tools/unit-d081.mjs','fixtures/d082-redesign-additional-before.json.gz','.github/workflows/d082-redesign.yml','fixtures/d082-geometry-before.json','fixtures/d082-source-before.json','fixtures/d082-history-before.json','package-lock.json'];
 const inventory=files=>Object.fromEntries(files.map(f=>[f,sha(fs.readFileSync(path.join(ROOT,f)))]));
-const manifest={qualification:QUALIFICATION,complete:false,provenance:{commit:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),buildSha256:sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),sources:inventory(sources),guards:inventory(guards)},shots:[],errors:[],requests:[],geometryFailures:[]};
+const manifest={qualification:QUALIFICATION,complete:false,provenance:{commit:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),buildSha256:sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),sources:inventory(sources),guards:inventory(guards)},shots:[],supplementaryPlans:[],errors:[],requests:[],geometryFailures:[]};
 const write=()=>fs.writeFileSync(path.join(out,'manifest.json'),J(manifest));write();
 const pairs=new Map(),refs=references();
 function diagnostic(o){const trees=[];o.scene.traverse(m=>{if(!m.isInstancedMesh)return;const a=m.geometry.getAttribute('aTreeT');if(a)trees.push({name:m.geometry.type,count:m.count,ages:Array.from(a.array).slice(0,m.count),matrices:Array.from(m.instanceMatrix.array).slice(0,m.count*16)});});return trees;}
@@ -61,7 +62,19 @@ try{for(const width of widths){const viewport=VIEWPORTS.find(v=>v.W===width),hei
   }
   for(const phase of ['before','after']){
    await open('sample=gallery&clean=1'+(phase==='before'?'&coastalArt=legacy':''));assert.equal(await page.evaluate('__gt.coastalRecreationOn'),phase==='after');assert.equal(await page.evaluate('__gt.webgl2'),true);assert.equal(await page.evaluate('__gt.sample'),'gallery');await page.evaluate('document.fonts.ready');const world=await page.evaluate(WORLD);
-   for(const force of [null,0,1,2]){assert.equal(await page.evaluate(`__gt.coastalV(${J(force)})`),force);await page.evaluate('__gt.setVisT(2.2);__gt.setDayFrac(0)');await frames(6);const o=createOracle('gallery',phase==='after',force),other=createOracle('gallery',phase!=='after',force),paired=phase==='before'?[o,other]:[other,o];try{const geometry=await verifyGeometry(o,{sample:'gallery',phase,force});for(const shot of shotsFor('gallery',force,o.n,viewport))await shoot({sample:'gallery',phase,force,o,world,shot,geometry,paired});}finally{o.dispose();other.dispose();}}
+   for(const force of [null,0,1,2]){assert.equal(await page.evaluate(`__gt.coastalV(${J(force)})`),force);await page.evaluate('__gt.setVisT(2.2);__gt.setDayFrac(0)');await frames(6);const o=createOracle('gallery',phase==='after',force),other=createOracle('gallery',phase!=='after',force),paired=phase==='before'?[o,other]:[other,o];try{
+    const geometry=await verifyGeometry(o,{sample:'gallery',phase,force});
+    for(const shot of shotsFor('gallery',force,o.n,viewport))await shoot({sample:'gallery',phase,force,o,world,shot,geometry,paired});
+    if(force!==null)for(const target of TARGETS.filter(t=>t.v===force)){
+     const standard=manifest.shots.filter(s=>s.width===width&&s.phase==='before'&&s.k===target.k&&s.v===force&&s.role==='prototype');
+     const {owner,x,z,parcel}=standard[0],template={...target,owner,x,z,parcel,zoom:8};
+     let plan=manifest.supplementaryPlans.find(p=>p.slot===target.k+':'+force&&p.width===width);
+     if(phase==='before'){assert.equal(plan,undefined);plan=planSupplementaryViews(paired[0],paired[1],template,viewport,standard).plan;manifest.supplementaryPlans.push(plan);write();}
+     assert.ok(plan,'one shared before/after supplementary plan');
+     for(const {view}of plan.selected){const shot={...template,id:`${target.k}-v${force}-${view.id}`,view,role:'supplementary-surface'};await shoot({sample:'gallery',phase,force,o,world,shot,geometry,paired});}
+     if(phase==='after')assertCapturedSurfaceViews(manifest,target,width,{directory:out});
+    }
+   }finally{o.dispose();other.dispose();}}
    await page.evaluate('__gt.coastalV(null)');assert.equal(await page.evaluate(WORLD),world);
   }
   // Earlier accepted model families in the same exact build, actual saved sites and equal pixels per unit.
@@ -69,5 +82,10 @@ try{for(const width of widths){const viewport=VIEWPORTS.find(v=>v.W===width),hei
   assert.deepEqual(await page.evaluate('__d082RedesignUploadProbe.errors'),[]);assert.deepEqual(page.errors,[]);assert.ok(page.requests.every(u=>u.startsWith('http://127.0.0.1:8598/')),'no external assets or requests');manifest.errors.push(...page.errors);manifest.requests.push(...page.requests);write();
  });
 }
-assert.deepEqual(listSources(),sources);assert.deepEqual(inventory(sources),manifest.provenance.sources);assert.deepEqual(inventory(guards),manifest.provenance.guards);assert.equal(sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),manifest.provenance.buildSha256);assert.equal(manifest.shots.length,widths.length*(2*(4+TARGETS.length*5)+refs.length*5));manifest.complete=true;manifest.geometryPassed=manifest.geometryFailures.length===0;write();manifest.coverageQualification='Image capture and exact product checks completed. Unchanged D081 visibility is a separate required job; image completion does not imply coverage passed.';write();console.log('Nine-model production image capture complete:',manifest.shots.length,'original PNGs. No final D082 acceptance implied.');assert.equal(manifest.geometryFailures.length,0,'complete PNG capture retained, but exact production geometry is RED');
+assert.deepEqual(listSources(),sources);assert.deepEqual(inventory(sources),manifest.provenance.sources);assert.deepEqual(inventory(guards),manifest.provenance.guards);assert.equal(sha(fs.readFileSync(path.join(ROOT,'dist/index.html'))),manifest.provenance.buildSha256);
+assert.equal(manifest.supplementaryPlans.length,widths.length*TARGETS.length);
+for(const width of widths)for(const target of TARGETS)assertCapturedSurfaceViews(manifest,target,width,{directory:out});
+const originalImages=widths.length*(2*(4+TARGETS.length*5)+refs.length*5),supplementaryImages=2*manifest.supplementaryPlans.reduce((n,p)=>n+p.selected.length,0);
+assert.equal(manifest.shots.filter(s=>s.role!=='supplementary-surface').length,originalImages,'every original capture remains');assert.equal(manifest.shots.length,originalImages+supplementaryImages,'exact planned paired image total');
+manifest.complete=true;manifest.geometryPassed=manifest.geometryFailures.length===0;write();manifest.coverageQualification='Image capture and exact product checks completed. Unchanged D081 visibility is a separate required job; image completion does not imply coverage passed.';write();console.log('Nine-model production image capture complete:',manifest.shots.length,'original PNGs, including',supplementaryImages,'paired supplementary PNGs. No final D082 acceptance implied.');assert.equal(manifest.geometryFailures.length,0,'complete PNG capture retained, but exact production geometry is RED');
 }catch(error){manifest.failure=error.stack??String(error);write();throw error;}
