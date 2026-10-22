@@ -42,8 +42,17 @@ const addedGzip=fs.readFileSync(path.join(ROOT,'fixtures/d082-redesign-additiona
 assert.equal(sha(addedBytes),'5ee4253aa8a02ed912d246220875183eb8664d00a48d78c1857187f581895c01','immutable published nine-slot qualification');
 export const ADDITIONAL=JSON.parse(addedBytes);
 export const legacySlot=(k,v)=>LEGACY.slots[k+':'+v]??ADDITIONAL.slots[k+':'+v];
-export const ACCEPTED=Object.freeze({'179:0':{defaultGeometry:'5d5de66f9401492b83bfbfa1be04b2c1288eefa3106fa1074dc765c1b1d00665',allAffineCasesSha256:'b65ee3b473de9cab0e82012eaa3042a228e72f6748b448f074a8e4d2a21e2a62'},'179:1':{defaultGeometry:'1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049',allAffineCasesSha256:'b7a060fca867dd2866e65898b0840fe93aeb20a7011f4a54d0aeeb89191f2ab0'}});
-// Accepted pins were independently drawn from immutable c3b601b / approved remote cb09a27b, not regenerated from the expansion.
+export const PREVIOUS_ACCEPTED=Object.freeze({'179:0':{defaultGeometry:'5d5de66f9401492b83bfbfa1be04b2c1288eefa3106fa1074dc765c1b1d00665',allAffineCasesSha256:'b65ee3b473de9cab0e82012eaa3042a228e72f6748b448f074a8e4d2a21e2a62'},'179:1':{defaultGeometry:'1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049',allAffineCasesSha256:'b7a060fca867dd2866e65898b0840fe93aeb20a7011f4a54d0aeeb89191f2ab0'}});
+// Only 179v1 is superseded by the explicit 2026-10-22 finite-revision approval.
+export const APPROVED_179_V1=Object.freeze(read('fixtures/d082-179v1-approved-revision.json'));
+assert.deepEqual(APPROVED_179_V1.previousPins,PREVIOUS_ACCEPTED['179:1']);
+assert.equal(APPROVED_179_V1.approvedPins.defaultGeometry,'e33779d6bf749fe114fcc9e8079e6978d4acfcc956745df9d91735002f3cc2df');
+assert.equal(APPROVED_179_V1.approvedPins.allAffineCasesSha256,'4d2bac3a4ab58469109380fc40881a1ea1246cea8df177e53fc543e07ddcc853');
+for(const[file,hash]of Object.entries(APPROVED_179_V1.evidence))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'immutable pre-approval evidence '+file);
+for(const[file,hash]of Object.entries(APPROVED_179_V1.approvedProductSources))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'exact product source reviewed in the approved actual preview '+file);
+export const ACCEPTED=Object.freeze({...PREVIOUS_ACCEPTED,'179:1':Object.freeze(APPROVED_179_V1.approvedPins)});
+// Previous pins retain immutable c3b601b / approved cb09a27b. Only 179v1 is
+// superseded by reviewed 90b80f4 CI evidence and the explicit approval record.
 const flags=Array(17).fill(true);
 export const civic=on=>({shape:k=>shapeOf(k,...flags,on),colors:(k,lv)=>kindColors(LOOKS,k,lv,KT.catColor(KT.cat(k)))});
 export function cityOf(sample,force=null){

@@ -1,10 +1,10 @@
 # D082 nine-building redesign
 
-On 2026-10-21 the user rejected the original ten-building art, then explicitly accepted both redesigned prototypes after seeing actual game screenshots. That approval selects the art direction, not the unseen full batch or a release. The original rejected PR remains untouched. This branch is not authorized for merge or deployment.
+On 2026-10-21 the user rejected the original ten-building art, then accepted the redesigned art direction; the task confirms all nine designs are accepted. Verification remains required. At 13:44 UTC on 2026-10-22 the user additionally approved the previewed finite 179v1 repair and its corresponding pin update. [That revision](D082-179v1-approved-repair.md) preserves the previous pins and coordinate evidence. The original rejected PR remains untouched. This branch is not authorized for merge or deployment.
 
 ## Scope
 
-The accepted 179v0 stone village hall and 179v1 Arts-and-Crafts reading room are preserved byte-for-byte across the tested transforms. Seven further designs use the same emphasis on entrances, roof hierarchy, masonry, chimney silhouettes and readable large details:
+The accepted 179v0 stone village hall remains byte-identical across tested transforms. The 179v1 Arts-and-Crafts reading room now uses exactly the separately previewed and approved finite repair, with both old and new pins retained. Seven further designs use the same emphasis on entrances, roof hierarchy, masonry, chimney silhouettes and readable large details:
 
 - 179v2: twin-gabled village schoolhouse.
 - 185v0: stone coastal lookout house, a tall watch-house with a lower entrance range rather than a stretched cottage.

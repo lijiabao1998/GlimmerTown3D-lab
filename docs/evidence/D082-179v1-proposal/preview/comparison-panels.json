@@ -1,0 +1,103 @@
+{
+  "qualification": "Raw PNGs are byte-preserved actual product AFTER images. Annotated comparison figures and nearest-neighbour detail panels are derived QA reports and never replace acceptance PNGs.",
+  "panels": [
+    {
+      "view": "original",
+      "names": {
+        "before": "accepted-67440cc8-179v1-original-412.png",
+        "after": "proposal-90b80f4-179v1-original-412.png"
+      },
+      "acceptedSha256": "0282ef72bff4e6227f64072318ce1344c66bf1f2d04594b7d54e316156d25bb3",
+      "candidateSha256": "c9fc18baa4565e75351bc5eb95f599a55de0ba8cd3d6aca2893ba13c20595387",
+      "width": 412,
+      "height": 860,
+      "camera": {
+        "pos": [
+          169.69999999999996,
+          94.06040612287404,
+          152.7
+        ],
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "worldSha256": "702ecf23b3ee25cf39ad8f82b0215c3cec7766bca50eb12cc143c3b7b0b9807e",
+      "renderBefore": {
+        "calls": 9,
+        "triangles": 60160
+      },
+      "renderAfter": {
+        "calls": 9,
+        "triangles": 60160
+      },
+      "anchors": {
+        "wallBefore": [
+          156.12839474488766,
+          389.5665393734991
+        ],
+        "wallAfter": [
+          153.7152525551244,
+          389.5665393734991
+        ],
+        "chimneyBox": [
+          178.86857810236552,
+          345.4895575778759,
+          198.54305051102673,
+          381.73422326735175
+        ]
+      }
+    },
+    {
+      "view": "front",
+      "names": {
+        "before": "accepted-67440cc8-179v1-front-412.png",
+        "after": "proposal-90b80f4-179v1-front-412.png"
+      },
+      "acceptedSha256": "b41f739478f0f6b905b21b29f232d88d3f593a6f478021461d8d51a5f306ada7",
+      "candidateSha256": "d3ffbe74061b407418f9625dc2313f48f720c2a01bc914f2178f492f3ed7d870",
+      "width": 412,
+      "height": 860,
+      "camera": {
+        "pos": [
+          54.50000000000006,
+          94.06040612287407,
+          200.41740238538063
+        ],
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "worldSha256": "702ecf23b3ee25cf39ad8f82b0215c3cec7766bca50eb12cc143c3b7b0b9807e",
+      "renderBefore": {
+        "calls": 9,
+        "triangles": 60160
+      },
+      "renderAfter": {
+        "calls": 9,
+        "triangles": 60160
+      },
+      "anchors": {
+        "wallBefore": [
+          165.04761904761912,
+          408.37680281146817
+        ],
+        "wallAfter": [
+          163.34126984126982,
+          409.22997741464286
+        ],
+        "chimneyBox": [
+          167.7354497354495,
+          356.2915318534338,
+          182.8359788359792,
+          390.81800895762666
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "evidenceStage": "final-emitted-product-and-actual-preview",
+  "candidateSourceCommit": "90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694",
+  "acceptedSourceCommit": "67440cc8de625f0482665c3f3f94efba73a1aed3",
+  "proposalRun": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39785052810",
+  "oldAcceptancePassed": false,
+  "completeD082Acceptance": false,
+  "finiteGeometryDeltaRequiresApproval": true,
+  "oldPinUnchanged": true,
+  "oldAcceptedDefaultSha256": "1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049",
+  "emittedDefaultSha256": "e33779d6bf749fe114fcc9e8079e6978d4acfcc956745df9d91735002f3cc2df",
+  "emittedAffineCasesSha256": "4d2bac3a4ab58469109380fc40881a1ea1246cea8df177e53fc543e07ddcc853",
+  "weighted": 176,
+  "ceiling": 182,
+  "renderTriangles": 88,
+  "W": 48,
+  "O": 40,
+  "D": 0,
+  "virtualGroundCapsTriangles": 12,
+  "manifoldTrianglesIncludingVirtualGround": 100,
+  "geometryCases": 324,
+  "closureNegativeControls": 177,
+  "unchangedTargets": [
+    "179:0",
+    "179:2",
+    "185:0",
+    "185:1",
+    "185:2",
+    "154:0",
+    "154:1",
+    "154:2"
+  ],
+  "priorModelsUnchanged": 130,
+  "actual": [
+    {
+      "width": 1440,
+      "required": 1044,
+      "covered": 1044,
+      "originalHits": 692,
+      "retainedInternalRecords": 0,
+      "views": 7,
+      "oldIdsDropped": 0,
+      "addedIds": 33,
+      "oldCoordinateCoveragePassed": false,
+      "oldCoordinatesMissing": 489,
+      "oldPinPassed": false
+    },
+    {
+      "width": 360,
+      "required": 1044,
+      "covered": 1044,
+      "originalHits": 692,
+      "retainedInternalRecords": 0,
+      "views": 7,
+      "oldIdsDropped": 0,
+      "addedIds": 33,
+      "oldCoordinateCoveragePassed": false,
+      "oldCoordinatesMissing": 489,
+      "oldPinPassed": false
+    },
+    {
+      "width": 412,
+      "required": 1044,
+      "covered": 1044,
+      "originalHits": 692,
+      "retainedInternalRecords": 0,
+      "views": 7,
+      "oldIdsDropped": 0,
+      "addedIds": 33,
+      "oldCoordinateCoveragePassed": false,
+      "oldCoordinatesMissing": 489,
+      "oldPinPassed": false
+    }
+  ],
+  "geometricCoordinateDelta": {
+    "file": "487-coordinate-delta.json",
+    "csv": "487-coordinate-delta.csv",
+    "records": 487,
+    "fixed": 198,
+    "silhouette": 289,
+    "sameSurfaceClaim": false
+  },
+  "earlyResearch": {
+    "file": "geometry-deltas.json",
+    "status": "historical pre-mask/pre-subdivision research; original values retained",
+    "weighted": 216,
+    "renderTriangles": 108,
+    "virtualGroundTriangles": 12,
+    "manifoldTrianglesIncludingGround": 120,
+    "rawResearchSerializerSha256": "a6378f5a920159d06a84e4bee3d0238848352443f8931cd4eda80c5bdb97ba05"
+  },
+  "panels": [
+    {
+      "view": "original",
+      "names": {
+        "before": "accepted-67440cc8-179v1-original-412.png",
+        "after": "proposal-90b80f4-179v1-original-412.png"
+      },
+      "acceptedSha256": "0282ef72bff4e6227f64072318ce1344c66bf1f2d04594b7d54e316156d25bb3",
+      "candidateSha256": "c9fc18baa4565e75351bc5eb95f599a55de0ba8cd3d6aca2893ba13c20595387",
+      "cameraEqual": true,
+      "worldEqual": true,
+      "renderEqual": true
+    },
+    {
+      "view": "front",
+      "names": {
+        "before": "accepted-67440cc8-179v1-front-412.png",
+        "after": "proposal-90b80f4-179v1-front-412.png"
+      },
+      "acceptedSha256": "b41f739478f0f6b905b21b29f232d88d3f593a6f478021461d8d51a5f306ada7",
+      "candidateSha256": "d3ffbe74061b407418f9625dc2313f48f720c2a01bc914f2178f492f3ed7d870",
+      "cameraEqual": true,
+      "worldEqual": true,
+      "renderEqual": true
+    }
+  ]
+}
