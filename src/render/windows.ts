@@ -62,15 +62,27 @@ export function patchWindowMaterial(m: THREE.Material) {
       .replace('#include <common>', '#include <common>\nuniform vec3 shopGlass;\nvarying float vWStyle;\nvarying vec3 vWGlass;\nvarying float vWBand;')
       .replace('#include <map_fragment>', `
         float wSt = floor(vWStyle + 0.5); vec2 wUv = vMapUv; vec3 wGl = vWGlass; float wDark = 1.0;
-        if (vWBand > 0.0 && wUv.y < vWBand) { wSt = ${WIN_STYLE.shop.toFixed(1)}; wUv = vec2(wUv.x * 0.5, wUv.y / vWBand); wGl = shopGlass; wDark = 0.8; }
-        else if (vWBand < 0.0 && wUv.y < -vWBand) { wSt = 0.0; wUv = vec2(0.03, 0.03); }
+        bool wFacadeMask = wSt == 6.0 || wSt == 7.0; vec3 wFacadeColor = vColor.rgb;
+        if (wSt == 6.0) {
+          float v = wUv.y; float u = (wUv.x + vWBand * v) / (1.0 + 2.0 * vWBand * v);
+          float base = 0.055 / 0.56; float top = 1.0 - 0.025 / 0.56; float post = 0.025 / 0.44;
+          if (v < base) { wFacadeColor = vec3(0.57112482945658538,0.46778379610254284,0.26225065751888765); wSt = 0.0; wUv = vec2(0.03); }
+          else if (v > top || u < post || u > 1.0 - post) { wFacadeColor = vec3(0.80695225766508727,0.70837577988564571,0.47932018309134022); wSt = 0.0; wUv = vec2(0.03); }
+          else { wSt = 2.0; wUv = vec2((u-post)/(1.0-2.0*post)*2.0, (v-base)/(top-base)*2.0); }
+        } else if (wSt == 7.0) {
+          if (abs(wUv.x - 0.5) <= vWBand) wFacadeColor = vec3(0.059511238155621766,0.048171824220138951,0.035601314869097636);
+          wSt = 0.0; wUv = vec2(0.03);
+        }
+
+        if (!wFacadeMask && vWBand > 0.0 && wUv.y < vWBand) { wSt = ${WIN_STYLE.shop.toFixed(1)}; wUv = vec2(wUv.x * 0.5, wUv.y / vWBand); wGl = shopGlass; wDark = 0.8; }
+        else if (!wFacadeMask && vWBand < 0.0 && wUv.y < -vWBand) { wSt = 0.0; wUv = vec2(0.03, 0.03); }
         vec4 wTex = texture2D(map, vec2((wSt + fract(wUv.x)) / ${N.toFixed(1)}, fract(wUv.y)));`)
       .replace('#include <color_fragment>', `
-        vec3 wWall = vColor.rgb * wDark;
+        vec3 wWall = wFacadeColor * wDark;
         vec3 wCol = wTex.a > 0.83 ? wWall : wTex.a > 0.5 ? mix(wWall, vec3(1.0), 0.45) : wTex.a > 0.17 ? mix(wGl, vec3(1.0), 0.45) : wGl;
         diffuseColor.rgb *= wCol * wTex.rgb;`);
   };
-  m.customProgramCacheKey = () => 'gt3d-window-atlas-v2';
+  m.customProgramCacheKey = () => 'gt3d-window-atlas-v2-d082-proposal';
 }
 
 // 守衛：圖集第 0 格跟 D003 的窗磚逐像素相同（瀏覽器裡跑；canvas 的像素全不透明，讀回來是精確值）
