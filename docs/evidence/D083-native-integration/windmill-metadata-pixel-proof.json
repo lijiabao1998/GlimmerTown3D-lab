@@ -1,0 +1,61 @@
+{
+  "beforeBuild": "5ae552cd33f43ada767998b98c38ae4cb503a206db8c0cb9cbf41a929d3b667e",
+  "afterBuild": "1655045a79b2755721c4bc226f46fbc7d53a32d84eb45df989cd82e2b87f618f",
+  "all13PngsByteIdentical": true,
+  "rows": [
+    {
+      "id": "catalogue",
+      "samePng": true
+    },
+    {
+      "id": "construction-day0",
+      "samePng": true
+    },
+    {
+      "id": "construction-day4",
+      "samePng": true
+    },
+    {
+      "id": "eight-context",
+      "samePng": true
+    },
+    {
+      "id": "01-staddle-granary",
+      "samePng": true
+    },
+    {
+      "id": "02-stone-dovecote",
+      "samePng": true
+    },
+    {
+      "id": "03-railway-signal-box",
+      "samePng": true
+    },
+    {
+      "id": "04-octagonal-tollhouse",
+      "samePng": true
+    },
+    {
+      "id": "05-smock-windmill",
+      "samePng": true
+    },
+    {
+      "id": "06-village-smithy",
+      "samePng": true
+    },
+    {
+      "id": "07-great-tithe-barn",
+      "samePng": true
+    },
+    {
+      "id": "08-iron-bandstand",
+      "samePng": true
+    },
+    {
+      "id": "saved-reloaded",
+      "samePng": true
+    }
+  ],
+  "currentBuildSha256": "1655045a79b2755721c4bc226f46fbc7d53a32d84eb45df989cd82e2b87f618f",
+  "currentSources": 236
+}

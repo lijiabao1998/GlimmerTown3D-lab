@@ -1,3 +1,6 @@
+// D083-BEGIN rural-heritage-import
+import { drawBritishRuralHeritage } from './britishRuralHeritageArt.ts';
+// D083-END rural-heritage-import
 // D082-BEGIN coastal-recreation-import
 import { drawBritishCoastalRecreation } from './britishCoastalRecreationArt.ts';
 // D082-END coastal-recreation-import
@@ -796,6 +799,11 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
+  // D083-BEGIN rural-heritage-dispatch
+  if (shape?.p?.ruralHeritage === true) {
+    try { drawBritishRuralHeritage(new Pen(a)); return USED; } finally { USED = null; }
+  }
+  // D083-END rural-heritage-dispatch
 // D064-BEGIN tower-dispatch
 // D066-BEGIN metropolis-dispatch
 // D067-BEGIN landmark-dispatch

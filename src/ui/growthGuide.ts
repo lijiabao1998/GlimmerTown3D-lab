@@ -1,15 +1,18 @@
 // D053: presentation scope only. The imported rank table, tool ids, prices and
 // unlock rules stay authoritative; no simulation or saved-state writes here.
 import { FACILITY_TOOLS, type CivicTool } from '../sim/edit.ts';
+import { RURAL_HERITAGE_BUILDINGS } from '../content/britishRuralHeritage.ts';
 import { RANKS } from '../sim/rules/rank.ts';
 
 export const FACILITY_GROUPS = [
   { id: 'all', name: '全部' }, { id: 'service', name: '生活服務' },
   { id: 'utility', name: '城市管線' }, { id: 'resource', name: '資源研究' }, { id: 'food', name: '農業外貿' },
+  { id: 'heritage', name: '英式建築' },
 ] as const;
 export type FacilityGroup = typeof FACILITY_GROUPS[number]['id'];
 interface FacilityNote { group: Exclude<FacilityGroup, 'all'>; use: string; placement: string }
 export const FACILITY_NOTES: Readonly<Record<string, FacilityNote>> = {
+  ...Object.fromEntries(RURAL_HERITAGE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:'英式歷史建築街景，不新增生產或運輸產能',placement:'連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。'}])),
  farm: { group: 'food', use: '生產糧食，產量依季節、供電與原有規則結算', placement: '連續2×2草地；整塊不能有交通線、電力走廊或建築。' },
  ranch: { group: 'food', use: '牧業糧食生產', placement: '連續2×2草地；其他阻擋以落點預覽為準。' },
  bigFarm: { group: 'food', use: '大型糧食生產基地', placement: '連續5×5草地；造價只收一次，整塊占地一併建造。' },

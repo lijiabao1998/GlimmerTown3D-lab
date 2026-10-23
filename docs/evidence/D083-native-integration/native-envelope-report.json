@@ -1,0 +1,185 @@
+{
+  "qualification": "Mandatory inherited geometric envelope, using the same 1e-9 bounds precision as the existing D082 checker. No point deleted, clamped, optional or reclassified. Independent of focused UI/save/picking pass.",
+  "passed": true,
+  "models": [
+    {
+      "k": 187,
+      "id": "01-staddle-granary",
+      "size": 2,
+      "H": 0.78,
+      "min": [
+        0.2986,
+        0,
+        0.33
+      ],
+      "max": [
+        1.71,
+        0.6084,
+        1.994648162310469
+      ],
+      "triangles": 1024,
+      "weighted": 2048,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 188,
+      "id": "02-stone-dovecote",
+      "size": 2,
+      "H": 1.05,
+      "min": [
+        0.3786269006074355,
+        0,
+        0.3786269006074355
+      ],
+      "max": [
+        1.6213730993925646,
+        0.9765000000000001,
+        1.6280000000000001
+      ],
+      "triangles": 1070,
+      "weighted": 2140,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 189,
+      "id": "03-railway-signal-box",
+      "size": 2,
+      "H": 1.08,
+      "min": [
+        0.30599999999999994,
+        0,
+        0.39
+      ],
+      "max": [
+        1.834,
+        1.0152,
+        1.9715846608414846
+      ],
+      "triangles": 710,
+      "weighted": 1420,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 190,
+      "id": "04-octagonal-tollhouse",
+      "size": 2,
+      "H": 0.72,
+      "min": [
+        0.32870656865448417,
+        0,
+        0.322
+      ],
+      "max": [
+        1.6712934313455157,
+        0.6552,
+        1.682
+      ],
+      "triangles": 510,
+      "weighted": 1020,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 191,
+      "id": "05-smock-windmill",
+      "size": 2,
+      "H": 2.052400388672855,
+      "min": [
+        0.19955512369682835,
+        0,
+        0.5687065686544842
+      ],
+      "max": [
+        1.8004448763031717,
+        2.052400388672855,
+        1.57
+      ],
+      "triangles": 1522,
+      "weighted": 3044,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 192,
+      "id": "06-village-smithy",
+      "size": 2,
+      "H": 0.78,
+      "min": [
+        0.2,
+        0,
+        0.47
+      ],
+      "max": [
+        1.91,
+        0.7098000000000001,
+        1.82
+      ],
+      "triangles": 648,
+      "weighted": 1296,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 193,
+      "id": "07-great-tithe-barn",
+      "size": 2,
+      "H": 0.94,
+      "min": [
+        0.1386,
+        0,
+        0.452
+      ],
+      "max": [
+        1.866,
+        0.7238,
+        1.843
+      ],
+      "triangles": 622,
+      "weighted": 1244,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    },
+    {
+      "k": 194,
+      "id": "08-iron-bandstand",
+      "size": 2,
+      "H": 0.75,
+      "min": [
+        0.27,
+        0,
+        0.27
+      ],
+      "max": [
+        1.73,
+        0.6525,
+        1.8900000000000001
+      ],
+      "triangles": 854,
+      "weighted": 1708,
+      "passed": true,
+      "violatingTriangles": 0,
+      "parts": [],
+      "violations": []
+    }
+  ],
+  "logicalTriangles": 6960,
+  "weightedTriangles": 13920,
+  "budgetQualification": "Counts only; no new accepted per-kind/scene allowance and no historical budget changed."
+}
