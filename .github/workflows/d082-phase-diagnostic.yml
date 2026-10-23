@@ -1,0 +1,37 @@
+name: D082 complete original Node phase diagnostic (no product changes)
+on:
+  push:
+    branches: ['codex/d082-remaining-diagnostics-preview']
+    paths: ['.github/workflows/d082-phase-diagnostic.yml']
+permissions:
+  contents: read
+jobs:
+  original-ce33-node-with-exact-history:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ce33e3eb73ab3602c16ff383c9fc5d194947ae64
+          persist-credentials: false
+      - name: Fetch exact immutable source snapshots required by the unchanged injected-reader tests
+        run: |
+          git fetch --no-tags --depth=1 origin 2cd43c424dcc909dcfa6ac55275406d2bc527ce0
+          git fetch --no-tags --depth=1 origin 67440cc8de625f0482665c3f3f94efba73a1aed3
+          git fetch --no-tags --depth=1 origin 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci
+      - name: Unmodified direct CLI retains all 18 outcomes and actual exit 1
+        shell: bash
+        run: |
+          mkdir -p scratch/d082
+          set -o pipefail
+          node --experimental-strip-types tools/unit-d082.mjs 2>&1 | tee scratch/d082/complete-original.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-ce33-complete-node-with-history-${{ github.sha }}
+          path: scratch/d082/
+          if-no-files-found: error
+          retention-days: 30

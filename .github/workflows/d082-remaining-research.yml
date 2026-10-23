@@ -2,7 +2,8 @@ name: D082 isolated remaining diagnostics and candidate preview (no adoption)
 on:
   push:
     branches: ['codex/d082-remaining-diagnostics-preview']
-    paths-ignore: ['docs/**', 'LOG.md']
+    # Evidence/diagnostic-workflow updates do not repeat already-running captures.
+    paths: ['src/**', 'tools/d082-remaining-preview-*.mjs']
 permissions:
   contents: read
 concurrency:
