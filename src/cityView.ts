@@ -104,6 +104,7 @@ import { inWinter } from './sim/rules/weather.ts';
 // D062-END weather-view-import
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
+import { HERITAGE_TOOLS } from './sim/edit.ts';
 import { ARCHE } from './content/arche.ts';
 import { starterLayout } from './content/starter.ts';
 import { gridOf, labPartition, partRow, drawPlan, BLOCK_MODES, type BlockMode, type DrawBlock } from './content/blocks.ts';
@@ -1393,7 +1394,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function syncDock() {
     syncRes();
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : HERITAGE_TOOLS.some(c => c.id === civicTool) ? HERITAGE_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
     const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
@@ -1435,7 +1436,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function setTool(t: ToolId | null, silent = false) {
     if (t && !sim) t = null;
     if (t === 'food' && !FOOD_TOOLS.some(c => c.id === civicTool)) civicTool = 'farm';
-    if (t === 'civic' && !CIVIC_TOOLS.some(c => c.id === civicTool)) civicTool = 'police';
+    if (t === 'civic' && ![...CIVIC_TOOLS, ...HERITAGE_TOOLS].some(c => c.id === civicTool)) civicTool = 'police';
     tool = t; stroke = null; lastPreview = null; preview.clear(); bui.hideCost();
     syncPipes();
     // 拿著工具：一指（滑鼠左鍵）拿來蓋，兩指照舊縮放、平移；放下工具：一指照舊轉鏡頭

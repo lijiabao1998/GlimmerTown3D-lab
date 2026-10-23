@@ -1,0 +1,173 @@
+{
+  "qualification": "Exact original camera projection of every actual model vertex, not AABB corner approximation.",
+  "rows": [
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "01-staddle-granary",
+      "maxNdc": 0.36485523259487707,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "02-stone-dovecote",
+      "maxNdc": 0.19080673684689448,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "03-railway-signal-box",
+      "maxNdc": 0.19881136740905683,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "04-octagonal-tollhouse",
+      "maxNdc": 0.42671744024253677,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "05-smock-windmill",
+      "maxNdc": 0.5973791728302812,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "06-village-smithy",
+      "maxNdc": 0.37413051258992014,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "07-great-tithe-barn",
+      "maxNdc": 0.2607315905281833,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "08-iron-bandstand",
+      "maxNdc": 0.4222998618007066,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "01-staddle-granary",
+      "model": "01-staddle-granary",
+      "maxNdc": 0.32755906264910883,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "02-stone-dovecote",
+      "model": "02-stone-dovecote",
+      "maxNdc": 0.282157169171209,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "03-railway-signal-box",
+      "model": "03-railway-signal-box",
+      "maxNdc": 0.3123598089467014,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "04-octagonal-tollhouse",
+      "model": "04-octagonal-tollhouse",
+      "maxNdc": 0.2880034648244394,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "05-smock-windmill",
+      "model": "05-smock-windmill",
+      "maxNdc": 0.3242898943995326,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "06-village-smithy",
+      "model": "06-village-smithy",
+      "maxNdc": 0.3507472626367155,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "07-great-tithe-barn",
+      "model": "07-great-tithe-barn",
+      "maxNdc": 0.3187903624999227,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "08-iron-bandstand",
+      "model": "08-iron-bandstand",
+      "maxNdc": 0.29716092690962254,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "01-staddle-granary",
+      "maxNdc": 0.6168887257902703,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "02-stone-dovecote",
+      "maxNdc": 0.3226115846785114,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "03-railway-signal-box",
+      "maxNdc": 0.33614562751735194,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "04-octagonal-tollhouse",
+      "maxNdc": 0.7214839050314348,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "05-smock-windmill",
+      "maxNdc": 1.0100347859067327,
+      "fullyInside": false
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "06-village-smithy",
+      "maxNdc": 0.6325711530828602,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "07-great-tithe-barn",
+      "maxNdc": 0.21560132671596718,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "08-iron-bandstand",
+      "maxNdc": 0.33159774873862374,
+      "fullyInside": true
+    }
+  ]
+}

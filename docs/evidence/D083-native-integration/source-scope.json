@@ -1,0 +1,26 @@
+{
+  "baseline": "7deb34881b38679b1d0396e21eb9e57ad2ee9a0c",
+  "currentSourceTreeSha256": "5af2e9f6b92f80e84bd997679367148cdc9aedbcd8b18fbeb3417d01f32c260f",
+  "currentPaths": 236,
+  "baselinePaths": 231,
+  "modified": [
+    "src/cityView.ts",
+    "src/content/gallery.ts",
+    "src/content/kindShapes.ts",
+    "src/content/kinds.ts",
+    "src/render/kindArt.ts",
+    "src/sim/edit.ts",
+    "src/ui/growthGuide.ts"
+  ],
+  "added": [
+    "src/content/britishRuralHeritage.ts",
+    "src/render/britishRuralHeritageArt.ts",
+    "src/render/d083AcceptedModels.d.mts",
+    "src/render/d083AcceptedModels.mjs",
+    "src/sim/heritageBuild.ts"
+  ],
+  "unmodifiedOldSources": 224,
+  "originalDispatchAfterStrippingD083RegionsExact": true,
+  "restorationProposalSnapshotSha256": "27a4bec7df2a211eef6157af90a8bae2ae3d25c97fb92636d428ceac15dcbf50",
+  "protectedRulesToolsFixturesAndOriginalCiChanged": false
+}
