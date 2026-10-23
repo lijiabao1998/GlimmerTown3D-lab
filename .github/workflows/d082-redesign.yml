@@ -21,6 +21,10 @@ jobs:
           git fetch --no-tags --depth=1 origin 2cd43c424dcc909dcfa6ac55275406d2bc527ce0
           git fetch --no-tags --depth=1 origin 67440cc8de625f0482665c3f3f94efba73a1aed3
           git fetch --no-tags --depth=1 origin 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
+      - name: Fetch approved185 finite geometry source snapshot
+        run: git fetch --no-tags --depth=1 origin "$D082_REVIEWED_185"
+        env:
+          D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -84,7 +88,9 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Paired supplementary PNG evidence and all-legal-angle obstruction controls
-        run: node --test tools/d082-redesign-views.test.mjs tools/d082-179v1-retained.test.mjs
+        run: node --test tools/d082-redesign-views.test.mjs tools/d082-179v1-retained.test.mjs tools/d082-185-retained.test.mjs
+      - name: Approved185 exact exterior, original ceilings, preserved other models and 234 manifold controls
+        run: node --experimental-strip-types tools/d082-185-approved-check.mjs
       - name: Approved 179v1 numerical envelope, exact joins, prior pins and 177 manifold controls
         run: node --experimental-strip-types tools/d082-proposal-check.mjs
       - name: Nine models, accepted byte pins, closure, attachments, 130 prior models and frames
@@ -105,6 +111,48 @@ jobs:
         with:
           name: d082-approved-179v1-physical-${{ github.sha }}
           path: scratch/d082-proposal/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-185-physical-${{ github.sha }}
+          path: scratch/d082-185-approved/
+          if-no-files-found: error
+          retention-days: 30
+
+  approved-185-actual-surface-regression:
+    # Only the two explicitly approved revisions. All six other coverage failures remain mandatory.
+    needs: nine-model-production-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+      - name: Every new required point plus418/354 surviving old points and all827/797 historical records
+        run: node --experimental-strip-types tools/d082-185-approved-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-185-coverage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-185-approved/
           if-no-files-found: error
           retention-days: 30
 

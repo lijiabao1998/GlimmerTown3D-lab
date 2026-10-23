@@ -5,6 +5,7 @@ import path from 'node:path';
 import {sha,pairedCamera,assertCamera,VIEWS} from './d082-redesign-support.mjs';
 import {surfaceContract,auditSurface} from './d082-redesign-surfaces.mjs';
 import {retained179v1} from './d082-179v1-retained.mjs';
+import {retained185} from './d082-185-retained.mjs';
 
 export const STANDARD_VIEW_IDS=Object.freeze(['context','original','front','rear','side']);
 export const SUPPLEMENTARY_VIEWS=Object.freeze([Math.PI*.08+1e-8,Math.PI/6,Math.PI*.32-1e-8].flatMap((elevation,e)=>
@@ -21,7 +22,7 @@ export function planSupplementaryViews(before,after,shot,viewport,standardShots,
  for(let j=0;j<standardShots.length;j++)remove(audits.map(rows=>rows[j]));
  // Additional immutable old-coordinate goals do not alter either full D081
  // contract. Audit all old records, including the 487 historically failing ones.
- const historical=retained179v1(shot),retained=historical?new Set(historical.retainedIds):new Set(),retainedAudits=historical?standardShots.map(s=>auditSurface(after,s.camera,viewport,historical.contract)):[];
+ const historical=retained179v1(shot)??retained185(shot,viewport.W),retained=historical?new Set(historical.retainedIds):new Set(),retainedAudits=historical?standardShots.map(s=>auditSurface(after,s.camera,viewport,historical.contract)):[];
  if(historical)assert.equal(historical.contract.owner,shot.owner);
  const removeRetained=a=>{for(const id of a.visibleSamples)retained.delete(id);};retainedAudits.forEach(removeRetained);
  const originalUncovered=required.map(s=>s.size);
@@ -44,7 +45,7 @@ export function planSupplementaryViews(before,after,shot,viewport,standardShots,
   required:contracts.map(c=>c.requiredSamples.length),originalUncovered,selected,
   remaining:missing.map(ps=>ps.length),passed:missing.every(ps=>ps.length===0),
   qualification:'Geometric planning only. Every selected view must be captured as paired production PNGs. Every original mandatory point remains required; residual probes still fail.'};
- if(historical){plan.retainedOldCoordinates={oldContractSha256:historical.contract.sha256,ledgerSha256:historical.ledgerSha256,requiredIds:historical.retainedIds,required:524,remaining:retained.size,completeOldContractStillRequired:1011,supersededOrientedPositions:487};plan.passed&&=retained.size===0;}
+ if(historical){plan.retainedOldCoordinates={oldContractSha256:historical.contract.sha256,ledgerSha256:historical.ledgerSha256,requiredIds:historical.retainedIds,required:historical.retainedIds.length,remaining:retained.size,completeOldContractStillRequired:historical.contract.requiredSamples.length,supersededOrientedPositions:historical.supersededIds.length};plan.passed&&=retained.size===0;}
  return {plan,contracts,audits,missing};
 }
 
@@ -64,7 +65,7 @@ export function assertCapturedSurfaceViews(manifest,target,width,{directory=null
  const relevant=manifest.shots.filter(s=>s.width===width&&s.k===target.k&&s.v===target.v&&['prototype','supplementary-surface'].includes(s.role));
  const plans=(manifest.supplementaryPlans??[]).filter(p=>p.slot===target.k+':'+target.v&&p.width===width);
  assert.equal(plans.length,1,'exactly one paired supplementary plan per owner and width');const plan=plans[0];
- const historical=retained179v1(target);if(historical){assert.deepEqual(plan.retainedOldCoordinates?.requiredIds,historical.retainedIds,'all 524 retained old coordinates are planned without dropping a point');assert.equal(plan.retainedOldCoordinates.oldContractSha256,historical.contract.sha256);assert.equal(plan.retainedOldCoordinates.ledgerSha256,historical.ledgerSha256);assert.equal(plan.retainedOldCoordinates.required,524);assert.equal(plan.retainedOldCoordinates.remaining,0);}
+ const historical=retained179v1(target)??retained185(target,width);if(historical){assert.deepEqual(plan.retainedOldCoordinates?.requiredIds,historical.retainedIds,'all surviving old coordinates are planned without dropping a point');assert.equal(plan.retainedOldCoordinates.oldContractSha256,historical.contract.sha256);assert.equal(plan.retainedOldCoordinates.ledgerSha256,historical.ledgerSha256);assert.equal(plan.retainedOldCoordinates.required,historical.retainedIds.length);assert.equal(plan.retainedOldCoordinates.completeOldContractStillRequired,historical.contract.requiredSamples.length);assert.equal(plan.retainedOldCoordinates.supersededOrientedPositions,historical.supersededIds.length);assert.equal(plan.retainedOldCoordinates.remaining,0);}
  assert.deepEqual(plan.standardViews.map(s=>s.view.id),STANDARD_VIEW_IDS);
  const phases=['before','after'].map(phase=>{
   const shots=relevant.filter(s=>s.phase===phase),standard=shots.filter(s=>s.role==='prototype'),extra=shots.filter(s=>s.role==='supplementary-surface');

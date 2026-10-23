@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
+import {D082_185_ART_PATH,D082_185_CURRENT_ART_SHA,validateD082185SourceLease} from './d082-185-approved-source.mjs';
 
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const readFixture=file=>fs.readFileSync(path.join(ROOT,file),'utf8');
@@ -23,7 +24,9 @@ const ADDED=Object.freeze({
  'src/render/d082Repair179v1.ts':'b006936d523423bff074b169cbdf61e8eec9aa1fd481c983046902baa1b9dcc7',
  'src/render/d082Repair179v1Data.ts':'98b73814abd5b3541ada80e31a3e72700236eed7f5e91db27209db024e65d8c0'
 });
-export const D082_REVIEWED_SOURCES=Object.freeze({...CHANGED,...ADDED});
+// Preserve the previous179 approval/lease verbatim. Only the approved185 art
+// file gets its new exact hash; all231 paths and four additions stay fixed.
+export const D082_REVIEWED_SOURCES=Object.freeze({...CHANGED,...ADDED,[D082_185_ART_PATH]:D082_185_CURRENT_ART_SHA});
 const currentPaths=Object.freeze([...Object.keys(M.after),...Object.keys(ADDED)].sort());
 const currentPins=Object.freeze({...M.after,...D082_REVIEWED_SOURCES});
 const fields=(value,names,label)=>{
@@ -63,6 +66,7 @@ export function validateD082RestorationLease(value){
 }
 const lease=JSON.parse(readFixture('fixtures/d082-source-restoration-v1.json'));
 validateD082RestorationLease(lease);
+validateD082185SourceLease(JSON.parse(readFixture('fixtures/d082-185-source-restoration.json')));
 export const D082_CURRENT_PATHS=currentPaths;
 export const D082_CURRENT_ADDITIONS=Object.freeze([...M.added,...Object.keys(ADDED)].sort());
 assert.equal(D082_CURRENT_ADDITIONS.length,4,'exact four post-published additions');

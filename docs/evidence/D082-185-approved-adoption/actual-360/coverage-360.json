@@ -1,0 +1,176 @@
+{
+  "qualification": "UNAPPROVED research only. New exterior, original frozen-coordinate regressions and unchanged-geometry camera gains are separately reported. No old probe is deleted or made optional; original guards remain unchanged. This is not D082 acceptance.",
+  "commit": "b58a1f6775f88489ee3637da44db19cdc223874a",
+  "acceptedCommit": "ce33e3eb73ab3602c16ff383c9fc5d194947ae64",
+  "width": 360,
+  "complete": true,
+  "cases": [
+    {
+      "slot": "185:0",
+      "newRequired": 905,
+      "newCovered": 890,
+      "newMissing": 15,
+      "newExteriorPassed": false,
+      "coverageError": "AssertionError [ERR_ASSERTION]: unapproved candidate current exterior every fixed exterior point is visible in an actual declared view\n+ actual - expected\n... Skipped lines\n\n  [\n    'mesh-0-triangle-2036-barycentric-0',\n    'mesh-0-triangle-2036-barycentric-1',\n    'mesh-0-triangle-2036-barycentric-2',\n    'mesh-0-triangle-2036-barycentric-3',\n...\n    'mesh-0-triangle-2051-barycentric-3',\n-   'mesh-0-triangle-2052-barycentric-0',\n-   'mesh-0-triangle-2052-barycentric-1',\n-   'mesh-0-triangle-2052-barycentric-2',\n-   'mesh-0-triangle-2052-barycentric-3',\n-   'mesh-0-triangle-2053-barycentric-0',\n-   'mesh-0-triangle-2053-barycentric-1',\n    'mesh-0-triangle-2053-barycentric-2',\n    'mesh-0-triangle-2053-barycentric-3',\n    'mesh-0-triangle-2054-barycentric-0',\n    'mesh-0-triangle-2054-barycentric-1',\n    'mesh-0-triangle-2054-barycentric-2',\n...\n    'mesh-0-triangle-2059-barycentric-0',\n-   'mesh-0-triangle-2059-barycentric-1',\n    'mesh-0-triangle-2059-barycentric-2',\n    'mesh-0-triangle-2059-barycentric-3',\n    'mesh-0-triangle-2060-barycentric-0',\n    'mesh-0-triangle-2060-barycentric-1',\n    'mesh-0-triangle-2060-barycentric-2',\n...\n    'mesh-1-triangle-16114-barycentric-3',\n-   'mesh-1-triangle-16115-barycentric-0',\n-   'mesh-1-triangle-16115-barycentric-1',\n-   'mesh-1-triangle-16115-barycentric-2',\n-   'mesh-1-triangle-16115-barycentric-3',\n-   'mesh-1-triangle-16116-barycentric-0',\n-   'mesh-1-triangle-16116-barycentric-1',\n-   'mesh-1-triangle-16116-barycentric-2',\n-   'mesh-1-triangle-16116-barycentric-3',\n    'mesh-1-triangle-16119-barycentric-0',\n    'mesh-1-triangle-16119-barycentric-1',\n    'mesh-1-triangle-16119-barycentric-2',\n    'mesh-1-triangle-16119-barycentric-3',\n    'mesh-1-triangle-16120-barycentric-0',\n",
+      "oldFrozenRequired": 905,
+      "oldFrozenMissing": 15,
+      "oldFrozenCoordinateCoveragePassed": false,
+      "allOldRecordsPerView": 905,
+      "allOldRequiredFlagsUnchanged": true,
+      "originalMissing": 16,
+      "actualViews": 9,
+      "retainedPriorActualViews": 3,
+      "addedResearchViews": [
+        {
+          "view": {
+            "id": "research-y123.75-e14.4",
+            "spin": 2.1598449493429825,
+            "tilt": -0.27227135331111535
+          },
+          "camera": {
+            "target": [
+              66.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -112.20952397373225,
+              46.783745392862436,
+              73.04753448690687
+            ]
+          },
+          "gain": [
+            1,
+            1
+          ]
+        }
+      ],
+      "geometryChanged": false,
+      "acceptedPinsUpdated": false,
+      "recoveredByActualPairedNewViews": 1,
+      "fullEvidence": "surface-185-v0-360.json.gz"
+    },
+    {
+      "slot": "185:1",
+      "newRequired": 920,
+      "newCovered": 920,
+      "newMissing": 0,
+      "newExteriorPassed": true,
+      "coverageError": null,
+      "oldFrozenRequired": 827,
+      "oldFrozenMissing": 409,
+      "oldFrozenCoordinateCoveragePassed": false,
+      "allOldRecordsPerView": 827,
+      "allOldRequiredFlagsUnchanged": true,
+      "originalMissing": 10,
+      "actualViews": 8,
+      "retainedPriorActualViews": 3,
+      "addedResearchViews": [],
+      "geometryChanged": true,
+      "acceptedPinsUpdated": false,
+      "physicalSupersededOldPoints": 409,
+      "survivingOldPoints": 418,
+      "acceptedGeometrySha256": "2515e8f46534c7e1b687f5e1337a31a411b7ccf8db715f4fd71cb0863c45a606",
+      "candidateGeometrySha256": "786452b12fcd97c87b4319831b05a99f23791cc67a0da39e22c007de705dd508",
+      "oldAcceptedPinPassed": false,
+      "fullEvidence": "surface-185-v1-360.json.gz"
+    },
+    {
+      "slot": "185:2",
+      "newRequired": 864,
+      "newCovered": 864,
+      "newMissing": 0,
+      "newExteriorPassed": true,
+      "coverageError": null,
+      "oldFrozenRequired": 797,
+      "oldFrozenMissing": 443,
+      "oldFrozenCoordinateCoveragePassed": false,
+      "allOldRecordsPerView": 797,
+      "allOldRequiredFlagsUnchanged": true,
+      "originalMissing": 10,
+      "actualViews": 8,
+      "retainedPriorActualViews": 3,
+      "addedResearchViews": [],
+      "geometryChanged": true,
+      "acceptedPinsUpdated": false,
+      "physicalSupersededOldPoints": 443,
+      "survivingOldPoints": 354,
+      "acceptedGeometrySha256": "fd632b57609b3fa7cea91275ce2029b2099847e9336b62e74f99545ffdcc51a8",
+      "candidateGeometrySha256": "ddddc1a69f8b63ffb9d753aaf51b05c79676396174ac21f471597475c0462ba8",
+      "oldAcceptedPinPassed": false,
+      "fullEvidence": "surface-185-v2-360.json.gz"
+    },
+    {
+      "slot": "154:0",
+      "newRequired": 1053,
+      "newCovered": 994,
+      "newMissing": 59,
+      "newExteriorPassed": false,
+      "coverageError": "AssertionError [ERR_ASSERTION]: unapproved candidate current exterior every fixed exterior point is visible in an actual declared view\n+ actual - expected\n... Skipped lines\n\n  [\n    'mesh-0-triangle-1426-barycentric-0',\n    'mesh-0-triangle-1426-barycentric-1',\n    'mesh-0-triangle-1426-barycentric-2',\n    'mesh-0-triangle-1426-barycentric-3',\n...\n    'mesh-0-triangle-1447-barycentric-3',\n-   'mesh-0-triangle-1448-barycentric-0',\n-   'mesh-0-triangle-1448-barycentric-1',\n    'mesh-0-triangle-1448-barycentric-2',\n    'mesh-0-triangle-1448-barycentric-3',\n-   'mesh-0-triangle-1449-barycentric-0',\n-   'mesh-0-triangle-1449-barycentric-1',\n    'mesh-0-triangle-1449-barycentric-2',\n    'mesh-0-triangle-1449-barycentric-3',\n-   'mesh-0-triangle-1450-barycentric-0',\n-   'mesh-0-triangle-1450-barycentric-1',\n-   'mesh-0-triangle-1450-barycentric-2',\n-   'mesh-0-triangle-1450-barycentric-3',\n-   'mesh-0-triangle-1451-barycentric-0',\n-   'mesh-0-triangle-1451-barycentric-1',\n-   'mesh-0-triangle-1451-barycentric-2',\n-   'mesh-0-triangle-1451-barycentric-3',\n    'mesh-0-triangle-1452-barycentric-0',\n    'mesh-0-triangle-1452-barycentric-1',\n    'mesh-0-triangle-1452-barycentric-2',\n    'mesh-0-triangle-1452-barycentric-3',\n    'mesh-0-triangle-1453-barycentric-0',\n...\n    'mesh-0-triangle-1456-barycentric-3',\n-   'mesh-0-triangle-1457-barycentric-0',\n-   'mesh-0-triangle-1457-barycentric-1',\n    'mesh-0-triangle-1457-barycentric-2',\n    'mesh-0-triangle-1457-barycentric-3',\n    'mesh-0-triangle-1458-barycentric-0',\n    'mesh-0-triangle-1458-barycentric-1',\n-   'mesh-0-triangle-1458-barycentric-2',\n-   'mesh-0-triangle-1458-barycentric-3',\n    'mesh-0-triangle-1459-barycentric-0',\n    'mesh-0-triangle-1459-barycentric-1',\n    'mesh-0-triangle-1459-barycentric-2',\n    'mesh-0-triangle-1459-barycentric-3',\n    'mesh-0-triangle-1460-barycentric-0',\n...\n    'mesh-0-triangle-1461-barycentric-1',\n-   'mesh-0-triangle-1461-barycentric-2',\n    'mesh-0-triangle-1461-barycentric-3',\n-   'mesh-0-triangle-1462-barycentric-0',\n-   'mesh-0-triangle-1462-barycentric-1',\n-   'mesh-0-triangle-1462-barycentric-2',\n-   'mesh-0-triangle-1462-barycentric-3',\n-   'mesh-0-triangle-1463-barycentric-0',\n-   'mesh-0-triangle-1463-barycentric-1',\n-   'mesh-0-triangle-1463-barycentric-2',\n-   'mesh-0-triangle-1463-barycentric-3',\n    'mesh-0-triangle-1464-barycentric-0',\n    'mesh-0-triangle-1464-barycentric-1',\n    'mesh-0-triangle-1464-barycentric-2',\n    'mesh-0-triangle-1464-barycentric-3',\n    'mesh-0-triangle-1465-barycentric-0',\n...\n    'mesh-0-triangle-1469-barycentric-3',\n-   'mesh-0-triangle-1470-barycentric-0',\n-   'mesh-0-triangle-1470-barycentric-1',\n-   'mesh-0-triangle-1470-barycentric-2',\n    'mesh-0-triangle-1470-barycentric-3',\n    'mesh-0-triangle-1471-barycentric-0',\n    'mesh-0-triangle-1471-barycentric-1',\n    'mesh-0-triangle-1471-barycentric-2',\n-   'mesh-0-triangle-1471-barycentric-3',\n    'mesh-1-triangle-9393-barycentric-0',\n    'mesh-1-triangle-9393-barycentric-1',\n    'mesh-1-triangle-9393-barycentric-2',\n    'mesh-1-triangle-9393-barycentric-3',\n    'mesh-1-triangle-9394-barycentric-0',\n...\n    'mesh-1-triangle-9430-barycentric-3',\n-   'mesh-1-triangle-9437-barycentric-0',\n-   'mesh-1-triangle-9437-barycentric-1',\n    'mesh-1-triangle-9437-barycentric-2',\n    'mesh-1-triangle-9437-barycentric-3',\n-   'mesh-1-triangle-9438-barycentric-0',\n    'mesh-1-triangle-9438-barycentric-1',\n    'mesh-1-triangle-9438-barycentric-2',\n-   'mesh-1-triangle-9438-barycentric-3',\n    'mesh-1-triangle-9439-barycentric-2',\n    'mesh-1-triangle-9440-barycentric-0',\n    'mesh-1-triangle-9440-barycentric-1',\n    'mesh-1-triangle-9440-barycentric-2',\n    'mesh-1-triangle-9440-barycentric-3',\n...\n    'mesh-1-triangle-9441-barycentric-3',\n-   'mesh-1-triangle-9442-barycentric-0',\n    'mesh-1-triangle-9442-barycentric-1',\n    'mesh-1-triangle-9442-barycentric-2',\n-   'mesh-1-triangle-9442-barycentric-3',\n    'mesh-1-triangle-9447-barycentric-0',\n    'mesh-1-triangle-9447-barycentric-1',\n    'mesh-1-triangle-9447-barycentric-2',\n    'mesh-1-triangle-9447-barycentric-3',\n    'mesh-1-triangle-9448-barycentric-0',\n...\n    'mesh-1-triangle-9472-barycentric-2',\n-   'mesh-1-triangle-9473-barycentric-0',\n-   'mesh-1-triangle-9473-barycentric-1',\n-   'mesh-1-triangle-9473-barycentric-2',\n-   'mesh-1-triangle-9473-barycentric-3',\n-   'mesh-1-triangle-9474-barycentric-0',\n-   'mesh-1-triangle-9474-barycentric-1',\n-   'mesh-1-triangle-9474-barycentric-2',\n-   'mesh-1-triangle-9474-barycentric-3',\n-   'mesh-1-triangle-9477-barycentric-0',\n-   'mesh-1-triangle-9477-barycentric-1',\n-   'mesh-1-triangle-9477-barycentric-2',\n-   'mesh-1-triangle-9477-barycentric-3',\n    'mesh-1-triangle-9478-barycentric-0',\n    'mesh-1-triangle-9478-barycentric-1',\n    'mesh-1-triangle-9478-barycentric-2',\n    'mesh-1-triangle-9478-barycentric-3',\n    'mesh-1-triangle-9479-barycentric-0',\n...\n    'mesh-1-triangle-9480-barycentric-0',\n-   'mesh-1-triangle-9480-barycentric-1',\n    'mesh-1-triangle-9480-barycentric-2',\n-   'mesh-1-triangle-9480-barycentric-3',\n    'mesh-1-triangle-9481-barycentric-0',\n    'mesh-1-triangle-9481-barycentric-1',\n    'mesh-1-triangle-9481-barycentric-2',\n    'mesh-1-triangle-9481-barycentric-3',\n    'mesh-1-triangle-9482-barycentric-0',\n-   'mesh-1-triangle-9482-barycentric-1',\n-   'mesh-1-triangle-9482-barycentric-2',\n    'mesh-1-triangle-9482-barycentric-3',\n-   'mesh-1-triangle-9483-barycentric-0',\n-   'mesh-1-triangle-9483-barycentric-1',\n-   'mesh-1-triangle-9483-barycentric-2',\n-   'mesh-1-triangle-9483-barycentric-3',\n-   'mesh-1-triangle-9484-barycentric-0',\n-   'mesh-1-triangle-9484-barycentric-1',\n-   'mesh-1-triangle-9484-barycentric-2',\n-   'mesh-1-triangle-9484-barycentric-3',\n    'mesh-1-triangle-9485-barycentric-2',\n    'mesh-1-triangle-9486-barycentric-0',\n    'mesh-1-triangle-9486-barycentric-1',\n    'mesh-1-triangle-9486-barycentric-2',\n    'mesh-1-triangle-9486-barycentric-3',\n",
+      "oldFrozenRequired": 1053,
+      "oldFrozenMissing": 59,
+      "oldFrozenCoordinateCoveragePassed": false,
+      "allOldRecordsPerView": 1053,
+      "allOldRequiredFlagsUnchanged": true,
+      "originalMissing": 59,
+      "actualViews": 12,
+      "retainedPriorActualViews": 5,
+      "addedResearchViews": [
+        {
+          "view": {
+            "id": "research-y67.5-e20",
+            "spin": 1.1780972450961724,
+            "tilt": -0.17453292519943292
+          },
+          "camera": {
+            "target": [
+              10,
+              0,
+              27
+            ],
+            "zoom": 7.441713159166968,
+            "pos": [
+              -57.64914659138023,
+              64.34110716683197,
+              190.31948718387585
+            ]
+          },
+          "gain": [
+            2,
+            2
+          ]
+        },
+        {
+          "view": {
+            "id": "surface-e1-y1",
+            "spin": 0.39269908169872414,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              10,
+              0,
+              27
+            ],
+            "zoom": 7.441713159167025,
+            "pos": [
+              72.34579073684188,
+              94.06040612287403,
+              177.51605355375858
+            ]
+          },
+          "gain": [
+            1,
+            1
+          ]
+        }
+      ],
+      "geometryChanged": false,
+      "acceptedPinsUpdated": false,
+      "recoveredByActualPairedNewViews": 0,
+      "fullEvidence": "surface-154-v0-360.json.gz"
+    }
+  ],
+  "allCandidateExteriorPassed": true
+}

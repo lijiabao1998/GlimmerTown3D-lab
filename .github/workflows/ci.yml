@@ -81,6 +81,10 @@ jobs:
         env:
           D082_REVIEWED_NINE: 67440cc8de625f0482665c3f3f94efba73a1aed3
           D082_REVIEWED_179V1: 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
+      - name: Fetch approved185 finite geometry source snapshot
+        run: git fetch --no-tags --depth=1 origin "$D082_REVIEWED_185"
+        env:
+          D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83
       - name: Fetch separate exact PR33 touch contract baseline
         run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"
         env:

@@ -4,10 +4,12 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
 import {D082_ADDED,D082_LEGACY_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
 import {D082_CURRENT_PATHS,D082_REVIEWED_SOURCES,validateD082RestorationLease} from './d082-source-restoration.mjs';
+import {D082_185_ART_PATH,D082_185_PREVIOUS_ART_SHA,D082_185_REVIEWED_SOURCE,D082_185_COMPONENTS,composeReviewed185Art,validateD082185SourceLease} from './d082-185-approved-source.mjs';
 import {reviewedWindowsGuards} from './d082-reviewed-windows-check.mjs';
 import {assertD081Scope,d081HistoricalBytes} from './d081-scope.mjs';
 import {assertD074Scope,d074HistoricalBytes} from './d074-scope.mjs';
@@ -26,6 +28,11 @@ export function d082ScopeGuards(){
  for(const file of baseline){assert.equal(d082HistoricalBytes(file),git('show',BASELINE+':'+file),'restores independent immediate Git baseline '+file);}
  for(const file of D082_ADDED)assert.equal(d082HistoricalBytes(file),'','SHA-verified addition is absent from prior release');
  for(const file of Object.keys(D082_REVIEWED_SOURCES)){
+  if(file===D082_185_ART_PATH){
+   assert.equal(createHash('sha256').update(git('show',lease.reviewed179v1Source+':'+file)).digest('hex'),D082_185_PREVIOUS_ART_SHA,'previous independently reviewed179 source pin stays immutable');
+   assert.equal(read(file),composeReviewed185Art(file=>git('show',D082_185_REVIEWED_SOURCE+':'+file)),'actual approved185 packaging equals independent reviewed Git bytes');
+   continue;
+  }
   const source=file==='src/content/britishCoastalRecreation.ts'?lease.reviewedNineSource:lease.reviewed179v1Source;
   assert.equal(read(file),git('show',source+':'+file),'current approved source equals independent reviewed Git bytes '+file);
  }
@@ -73,6 +80,18 @@ export function d082ScopeGuards(){
  const broader=structuredClone(lease);broader.historicalSources['src/sim/day.ts']=broader.historicalSources['src/render/windows.ts'];malformed.push(broader);
  const extra=structuredClone(lease);extra.modified['src/sim/day.ts']=extra.modified['src/render/windows.ts'];malformed.push(extra);
  for(const bad of malformed){assert.throws(()=>validateD082RestorationLease(bad));mutations++;}
+ const approved185Lease=JSON.parse(read('fixtures/d082-185-source-restoration.json'));assert.equal(validateD082185SourceLease(approved185Lease),true);
+ const bad185=[null,{},[],{...approved185Lease,extra:true}];
+ for(const key of Object.keys(approved185Lease)){const bad=structuredClone(approved185Lease);delete bad[key];bad185.push(bad);const changed=structuredClone(approved185Lease);changed[key]=key==='schema'?2:'unauthorized';bad185.push(changed);}
+ for(const file of Object.keys(approved185Lease.reviewedComponents)){const bad=structuredClone(approved185Lease);bad.reviewedComponents[file]='0'.repeat(64);bad185.push(bad);}
+ for(const bad of bad185){assert.throws(()=>validateD082185SourceLease(bad));mutations++;}
+ const reviewed185=new Map(Object.keys(D082_185_COMPONENTS).map(file=>[file,git('show',D082_185_REVIEWED_SOURCE+':'+file)])),reader185=file=>reviewed185.get(file),calls185=[];
+ assert.equal(composeReviewed185Art(file=>{calls185.push(file);return reader185(file);}),read(D082_185_ART_PATH));assert.deepEqual(calls185,Object.keys(D082_185_COMPONENTS));
+ const approved185=JSON.parse(read('fixtures/d082-185-approved-revision.json'));
+ for(const [file,pin]of Object.entries(approved185.evidence)){const reviewed=file.replace('docs/evidence/D082-185-approved-adoption/','docs/evidence/D082-remaining-proposal/');assert.equal(createHash('sha256').update(execFileSync('git',['show',D082_185_REVIEWED_SOURCE+':'+reviewed],{cwd:ROOT,maxBuffer:64*1024*1024})).digest('hex'),pin,'independent reviewed185 old-coordinate evidence');}
+ for(const[file,pin]of Object.entries(approved185.preservedProtectedCode.files))assert.equal(createHash('sha256').update(execFileSync('git',['show',D082_185_REVIEWED_SOURCE+':'+file],{cwd:ROOT,maxBuffer:64*1024*1024})).digest('hex'),pin,'independent unchanged protected code from reviewed source');
+ for(const target of reviewed185.keys())for(const value of [undefined,null,'',reader185(target)+'\n// unauthorized']){assert.throws(()=>composeReviewed185Art(file=>file===target?value:reader185(file)));mutations++;}
+ for(const reader of [null,{},true]){assert.throws(()=>composeReviewed185Art(reader),/reader required/);mutations++;}
  // Preserve the original seventeen published baselines; reviewed D082 candidates
  // are an additional explicit phase, like the existing separate PR33 touch lease.
  const fetchStep=`      - name: Fetch independently reviewed D082 source snapshots
@@ -88,6 +107,9 @@ export function d082ScopeGuards(){
   assert.ok(workflow.includes(fetchStep),'reviewed D082 fetch commands and both literal provenance pins stay exact');
  };
  const workflow=read('.github/workflows/ci.yml');assertFetchPhase(workflow);
+ const fetch185=`      - name: Fetch approved185 finite geometry source snapshot\n        run: git fetch --no-tags --depth=1 origin "$D082_REVIEWED_185"\n        env:\n          D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83\n`;
+ const assert185Fetch=w=>{assert.equal(w.split(fetch185).length,2,'one exact approved185 source fetch; original baseline phases retained');};assert185Fetch(workflow);
+ for(const bad of [workflow.replace(fetch185,''),workflow+fetch185,workflow.replace('$D082_REVIEWED_185','HEAD'),workflow.replace('D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83','D082_REVIEWED_185: '+'0'.repeat(40))]){assert.throws(()=>assert185Fetch(bad));mutations++;}
  for(const bad of [workflow.replace(fetchStep,''),workflow+fetchStep,
   workflow.replace('$D082_REVIEWED_NINE','HEAD'),workflow.replace('$D082_REVIEWED_179V1','HEAD'),
   workflow.replace('D082_REVIEWED_NINE: 67440cc8de625f0482665c3f3f94efba73a1aed3','D082_REVIEWED_NINE: '+'0'.repeat(40)),
@@ -103,6 +125,6 @@ export function d082ScopeGuards(){
   }
  }
  const windowsGuard=reviewedWindowsGuards();assert.equal(windowsGuard.passed,true);
- return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved source restoration plus the explicitly approved Windows hash predicate. Original 227/229 phase, 900/487 evidence and all runtime/geometry/frame/browser assertions are retained.'};
+ return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),approved185Source: D082_185_REVIEWED_SOURCE,sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved185 source-only hash update and independently reviewed inline packaging; original231 paths/four additions,227/229 phases,3202 previous controls,179 pins,900/487 and409/443 evidence remain. No runtime phase-routing or report change.'};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(d082ScopeGuards(),null,2));

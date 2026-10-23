@@ -1,0 +1,51 @@
+{
+  "passed": true,
+  "reviewedSource": "0b583d1deecc8a72af19c6c470cacd73153bfe83",
+  "currentSourceSha256": "3c8be9834fb42d4105563a33db502d4b8e7afa4626ac0acf5e0cfce9121fbb97",
+  "geometryCases": 324,
+  "reviewedEqualityCases": 324,
+  "unchangedTargets": [
+    "179:0",
+    "179:1",
+    "179:2",
+    "185:0",
+    "154:0",
+    "154:1",
+    "154:2"
+  ],
+  "priorModels": 130,
+  "slots": {
+    "185:1": {
+      "approvedPins": {
+        "defaultGeometry": "786452b12fcd97c87b4319831b05a99f23791cc67a0da39e22c007de705dd508",
+        "allAffineCasesSha256": "609cac2b6163dce79eca5a32debd9efde2bcc1b6e741a1fa7c3dd2405c540f95"
+      },
+      "previousPins": {
+        "defaultGeometry": "2515e8f46534c7e1b687f5e1337a31a411b7ccf8db715f4fd71cb0863c45a606",
+        "allAffineCasesSha256": "fe4ec56148c9b6069eb1f57575ea9375df5be0a032389edc2d6c315ab84e847a"
+      },
+      "weighted": 120,
+      "triangles": [
+        24,
+        36,
+        0
+      ]
+    },
+    "185:2": {
+      "approvedPins": {
+        "defaultGeometry": "ddddc1a69f8b63ffb9d753aaf51b05c79676396174ac21f471597475c0462ba8",
+        "allAffineCasesSha256": "b7c2660c179c1a2bf4968636066789cb27955786a261c18aa81d0aa17d071d06"
+      },
+      "previousPins": {
+        "defaultGeometry": "fd632b57609b3fa7cea91275ce2029b2099847e9336b62e74f99545ffdcc51a8",
+        "allAffineCasesSha256": "ba84f0b54cdaf5d81f59f0df19206d350863b86541d0cf9097c90769fcba53ef"
+      },
+      "weighted": 112,
+      "triangles": [
+        25,
+        31,
+        0
+      ]
+    }
+  }
+}

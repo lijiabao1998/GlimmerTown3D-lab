@@ -1,0 +1,23 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: exact product source reviewed in the approved actual preview src/render/britishCoastalRecreationArt.ts
++ actual - expected
+
++ 'c31842cc1e4d4cfc5cdd3e9572a1d0d2d3633da18776ab1375d6dcbb1c96c9b1'
+- 'bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf'
+
+    at file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/d082-redesign-support.mjs:52:86
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'c31842cc1e4d4cfc5cdd3e9572a1d0d2d3633da18776ab1375d6dcbb1c96c9b1',
+  expected: 'bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

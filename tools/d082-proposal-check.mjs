@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {ROOT} from './cdp.mjs';
-import {TARGETS,LEGACY,ACCEPTED,PREVIOUS_ACCEPTED,APPROVED_179_V1,drawCase,assertCase,caseBytes,caseSignature,sha} from './d082-redesign-support.mjs';
+import {TARGETS,LEGACY,ACCEPTED,PREVIOUS_ACCEPTED,APPROVED_179_V1,APPROVED_185,drawCase,assertCase,caseBytes,caseSignature,sha} from './d082-redesign-support.mjs';
 import {assertExterior,assertSolidRelationships} from './d082-redesign-surfaces.mjs';
 const baseline=JSON.parse(fs.readFileSync(path.join(ROOT,'fixtures/d082-179v1-proposal-before.json'),'utf8'));
 assert.equal(baseline.sourceCommit,'67440cc8de625f0482665c3f3f94efba73a1aed3');assert.equal(baseline.slots['179:1'].default,PREVIOUS_ACCEPTED['179:1'].defaultGeometry);
@@ -22,17 +22,18 @@ export function assertProposalTopology(ts){
  assert.equal(loops,1,'one connected original ground footprint');const area=Math.abs(boundary.reduce((n,e)=>n+e.a[0]*e.b[2]-e.a[2]*e.b[0],0)/2);assert.ok(Math.abs(area-.3832)<1e-8,'unchanged exact three-body ground union area');assert.ok(volume>.25&&volume<.28,'positive normalized volume in independently bounded architectural envelope');
  return {triangles:ts.length,edges:edges.size,groundBoundaryEdges:boundary.length,groundLoops:loops,groundArea:area,positiveNormalizedVolume:volume};
 }
-const report={qualification:'Approved finite 179v1 revision only. All previous pins and coordinate evidence remain immutable. This does not approve other models, merge, deployment or complete D082 acceptance.',approval:APPROVED_179_V1.approval,complete:false,geometryCases:0,unchangedTargets:[],priorModels:[],candidate:null,negativeControls:0};
+const report={qualification:'Original179v1 geometry, pins and controls remain exact. Only separately approved185v1/v2 use their new exact geometry pins; their previous pins remain historical. No merge, deployment or complete D082 acceptance.',approval:APPROVED_179_V1.approval,complete:false,geometryCases:0,unchangedTargets:[],approved185Targets:[],priorModels:[],candidate:null,negativeControls:0};
 for(const t of TARGETS){const entry=baseline.slots[t.k+':'+t.v],r=drawCase(t.k,{v:t.v});assertCase(r);const hashes=[];
  for(const [options,oldHash]of entry.affine){const now=drawCase(t.k,options);assertCase(now);const hash=caseBytes(now);hashes.push([options,hash]);report.geometryCases++;
-  if(t.k===179&&t.v===1){assert.notEqual(hash,oldHash,'old affine pin remains a rejecting baseline');assertProposalTopology(triangles(now));assertExterior(now);}else assert.equal(hash,oldHash,'every other target affine case remains byte-exact');
+  if(t.k===179&&t.v===1){assert.notEqual(hash,oldHash,'old affine pin remains a rejecting baseline');assertProposalTopology(triangles(now));assertExterior(now);}else if(APPROVED_185.slots[t.k+':'+t.v]){const approved=APPROVED_185.slots[t.k+':'+t.v],index=approved.affine.findIndex(([o])=>JSON.stringify([o.v,o.lv,o.s,o.H,o.x0,o.z0,o.y0])===JSON.stringify([options.v,options.lv,options.s,options.H,options.x0,options.z0,options.y0]));assert.ok(index>=0);assert.equal(approved.previousAffine[index][1],oldHash,'original185 affine pin remains archived');assert.equal(hash,approved.affine[index][1],'only the explicitly approved185 geometry pin may supersede it');}else assert.equal(hash,oldHash,'all six other target affine cases remain byte-exact');
  }
  if(t.k===179&&t.v===1){const ts=triangles(r),topology=assertProposalTopology(ts);assert.deepEqual(r.G.map(g=>g.owners.length),[48,40,0]);assert.equal(r.cost,176);assert.notEqual(caseBytes(r),PREVIOUS_ACCEPTED['179:1'].defaultGeometry);assert.equal(caseBytes(r),ACCEPTED['179:1'].defaultGeometry);assert.equal(sha(hashes),ACCEPTED['179:1'].allAffineCasesSha256);const exterior=assertExterior(r,{negativeControls:true}),joins=assertSolidRelationships('179:1',{negativeControls:true});
   for(let i=0;i<ts.length;i++){assert.throws(()=>assertProposalTopology(ts.filter((_,j)=>i!==j)));assert.throws(()=>assertProposalTopology(ts.map((p,j)=>j===i?[...p].reverse():p)));report.negativeControls+=2;}
   assert.throws(()=>assertProposalTopology(ts.concat([ts[0]])));report.negativeControls++;
   report.candidate={slot:'179:1',weighted:176,ceiling:182,counts:r.G.map(g=>g.owners.length),topology,exterior,joins,oldAcceptedPins:PREVIOUS_ACCEPTED['179:1'],approvedPins:ACCEPTED['179:1'],currentDefaultSha256:caseBytes(r),currentAffineCasesSha256:sha(hashes),oldPinPassed:false,approvedPinPassed:true};
+ }else if(APPROVED_185.slots[t.k+':'+t.v]){const approved=APPROVED_185.slots[t.k+':'+t.v];assert.equal(entry.default,approved.previousPins.defaultGeometry,'original185 default pin retained');assert.equal(caseBytes(r),approved.approvedPins.defaultGeometry);assert.equal(sha(hashes),approved.approvedPins.allAffineCasesSha256);report.approved185Targets.push(t.k+':'+t.v);
  }else{assert.equal(caseBytes(r),entry.default);report.unchangedTargets.push(t.k+':'+t.v);if(t.k===179&&t.v===0){assert.equal(caseBytes(r),ACCEPTED['179:0'].defaultGeometry);assert.equal(sha(hashes),ACCEPTED['179:0'].allAffineCasesSha256);}}
 }
 for(const [id,pin]of Object.entries(LEGACY.priorModels)){const[k,v]=id.split(':').map(Number),r=drawCase(k,{v});assert.equal(caseBytes(r),pin.float64Sha256);assert.equal(caseSignature(r),pin.sha256);assert.equal(r.cost,pin.cost);report.priorModels.push(id);}
-assert.equal(report.priorModels.length,130);assert.equal(report.unchangedTargets.length,8);assert.equal(report.geometryCases,324);report.complete=true;
+assert.equal(report.priorModels.length,130);assert.equal(report.unchangedTargets.length,6);assert.deepEqual(report.approved185Targets,['185:1','185:2']);assert.equal(report.geometryCases,324);report.complete=true;
 fs.mkdirSync(path.join(ROOT,'scratch/d082-proposal'),{recursive:true});fs.writeFileSync(path.join(ROOT,'scratch/d082-proposal/physical-report.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));

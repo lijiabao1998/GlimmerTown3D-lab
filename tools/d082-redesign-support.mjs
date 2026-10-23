@@ -24,6 +24,7 @@ import {Preview} from '../src/render/preview.ts';
 import {HazardMarks} from '../src/render/hazard.ts';
 import {Geo} from '../src/render/scene.ts';
 import {drawKind} from '../src/render/kindArt.ts';
+import {D082_185_ART_PATH,D082_185_PREVIOUS_ART_SHA,D082_185_CURRENT_ART_SHA} from './d082-185-approved-source.mjs';
 export const J=JSON.stringify;
 export const sha=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
 const read=f=>JSON.parse(fs.readFileSync(path.join(ROOT,f),'utf8'));
@@ -49,8 +50,22 @@ assert.deepEqual(APPROVED_179_V1.previousPins,PREVIOUS_ACCEPTED['179:1']);
 assert.equal(APPROVED_179_V1.approvedPins.defaultGeometry,'e33779d6bf749fe114fcc9e8079e6978d4acfcc956745df9d91735002f3cc2df');
 assert.equal(APPROVED_179_V1.approvedPins.allAffineCasesSha256,'4d2bac3a4ab58469109380fc40881a1ea1246cea8df177e53fc543e07ddcc853');
 for(const[file,hash]of Object.entries(APPROVED_179_V1.evidence))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'immutable pre-approval evidence '+file);
-for(const[file,hash]of Object.entries(APPROVED_179_V1.approvedProductSources))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'exact product source reviewed in the approved actual preview '+file);
-export const ACCEPTED=Object.freeze({...PREVIOUS_ACCEPTED,'179:1':Object.freeze(APPROVED_179_V1.approvedPins)});
+// The previous179 source receipt is immutable. Only the art-file packaging was
+// superseded by the explicit185 approval;179 geometry and its other sources stay exact.
+export const APPROVED_185=Object.freeze(read('fixtures/d082-185-approved-revision.json'));
+assert.equal(APPROVED_185.approval.message,'Sentinel_a416d384950081919aa629cf2e2fbab6');
+assert.equal(APPROVED_185.previewSource,'0b583d1deecc8a72af19c6c470cacd73153bfe83');
+assert.deepEqual(Object.keys(APPROVED_185.slots),['185:1','185:2']);
+assert.equal(APPROVED_185.previousArtSha256,D082_185_PREVIOUS_ART_SHA);
+assert.deepEqual(APPROVED_185.approvedProductSources,{[D082_185_ART_PATH]:D082_185_CURRENT_ART_SHA});
+assert.deepEqual(APPROVED_185.slots['185:1'].approvedPins,{defaultGeometry:'786452b12fcd97c87b4319831b05a99f23791cc67a0da39e22c007de705dd508',allAffineCasesSha256:'609cac2b6163dce79eca5a32debd9efde2bcc1b6e741a1fa7c3dd2405c540f95'});
+assert.deepEqual(APPROVED_185.slots['185:2'].approvedPins,{defaultGeometry:'ddddc1a69f8b63ffb9d753aaf51b05c79676396174ac21f471597475c0462ba8',allAffineCasesSha256:'b7c2660c179c1a2bf4968636066789cb27955786a261c18aa81d0aa17d071d06'});
+for(const[file,hash]of Object.entries(APPROVED_185.evidence))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'immutable185 old-coordinate evidence '+file);
+for(const[file,hash]of Object.entries(APPROVED_179_V1.approvedProductSources)){
+ if(file===D082_185_ART_PATH){assert.equal(hash,D082_185_PREVIOUS_ART_SHA,'unchanged historical179 source pin');assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),D082_185_CURRENT_ART_SHA,'exact approved185-only art packaging');}
+ else assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'unchanged179 approved product source '+file);
+}
+export const ACCEPTED=Object.freeze({...PREVIOUS_ACCEPTED,'179:1':Object.freeze(APPROVED_179_V1.approvedPins),...Object.fromEntries(Object.entries(APPROVED_185.slots).map(([key,s])=>[key,Object.freeze(s.approvedPins)]))});
 // Previous pins retain immutable c3b601b / approved cb09a27b. Only 179v1 is
 // superseded by reviewed 90b80f4 CI evidence and the explicit approval record.
 const flags=Array(17).fill(true);
