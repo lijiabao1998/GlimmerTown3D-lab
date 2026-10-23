@@ -11,6 +11,8 @@ import { replayCity } from '../src/sim/replay.ts';
 import { stepDay } from '../src/sim/day.ts';
 import { season } from '../src/sim/rules/weather.ts';
 import * as E from '../src/sim/edit.ts';
+import { D053_TOOL_IDS } from './d053-scenes.mjs';
+import { catalogueWithD083 } from './d083-catalogue-compat.mjs';
 import { COST } from '../src/sim/rules/build.ts';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const KT = kindTableFrom(JSON.parse(fs.readFileSync(path.join(ROOT, 'src/content/lab-kinds.json'), 'utf8')));
@@ -43,9 +45,10 @@ function buildAll(L) { for (const d of DEFS) { const r=E.commitOp(L.sim,tap(d.to
 const stripHistory = h => h.filter(e => e.t !== 'restyle');
 export async function d055NativeGuards(log) {
   const check = async (label,fn) => { try { const detail=await fn(); log(true,label,detail||''); } catch(e) { log(false,label,e.stack||String(e)); } };
-  await check('D055 native catalogue: seven food tools, 18 unchanged civic tools, 25 unique facilities and original sizes/prices', () => {
+  await check('D055 native catalogue: seven food tools, 18 unchanged civic tools, 25 original facilities plus exact D083 eight and original sizes/prices', () => {
     assert.equal(E.CIVIC_TOOLS.length,18); assert.deepEqual(E.FOOD_TOOLS.map(t=>t.id),DEFS.map(d=>d.tool));
-    assert.equal(E.FACILITY_TOOLS.length,25); assert.equal(new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,25);
+    assert.deepEqual(E.FACILITY_TOOLS.map(t=>t.id),catalogueWithD083([...D053_TOOL_IDS,...DEFS.map(d=>d.tool)]));
+    assert.equal(new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,33);
     for(const d of DEFS) { const t=E.FOOD_TOOLS.find(t=>t.id===d.tool); assert.equal(t.cost,COST[d.tool]); assert.equal(E.toolSize(d.tool),d.size); assert.equal(E.gestureOf(d.tool),'tap'); }
   });
   await check('D055 preview and rejection: complete footprint, one charged root, no history/money changes, blocked last square and clipped map edge', () => {

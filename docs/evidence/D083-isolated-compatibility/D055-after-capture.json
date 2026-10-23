@@ -1,0 +1,1752 @@
+{
+  "phase": "after",
+  "baseline": {
+    "commit": "1955bd24e2f671b8f63416321e763b5a3fb19a2a",
+    "htmlSha256": "5ab7d9960854a7caf56a056698a1fef6fbe156c1d5f02d622f6f9abeb098509e"
+  },
+  "qualification": "Synthetic authored save only for fixed review pictures. Not naturally played. Real native Chrome input; touch emulation, not Android hardware.",
+  "fixtureSha256": "931565a74a3a861de8c2654307d961a90a6677d3934a41c5ac89a494cb1e5a1e",
+  "cases": [
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved",
+        "catalog baseline or new seven exact",
+        "read-only navigation world unchanged",
+        "native trusted input",
+        "zero errors external requests",
+        "no page overflow",
+        "native construction and CTA produced no browser errors or external requests"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-360.png",
+          "sha256": "68185ae5e409fa2af6fed1887a5649346e98f7d7fbcc15b8feb9607c8bebdbbf",
+          "bytes": 94020,
+          "stage": "district",
+          "viewport": {
+            "W": 360,
+            "H": 740,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-catalog-360.png",
+          "sha256": "a88bbab70464b456d4dca9250248147ea135102b0c9dd7af73e73e2e0b19222c",
+          "bytes": 70617,
+          "stage": "catalog",
+          "viewport": {
+            "W": 360,
+            "H": 740,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-tools-360.png",
+          "sha256": "7b8061cf27615fcd8570659a98f049798a16109736a2646598674292c7251486",
+          "bytes": 76030,
+          "stage": "tools",
+          "viewport": {
+            "W": 360,
+            "H": 740,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": true,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          419.15625,
+          360,
+          740,
+          360,
+          320.84375
+        ],
+        "playBar": [
+          8,
+          618,
+          352,
+          664,
+          344,
+          46
+        ],
+        "civic": [
+          470,
+          610
+        ],
+        "wrap": [
+          470,
+          610
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            566,
+            610
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            566,
+            610
+          ]
+        ]
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        }
+      ],
+      "native": {
+        "checks": [
+          {
+            "tool": "farm",
+            "footprint": 4,
+            "cost": 120,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "ranch",
+            "footprint": 4,
+            "cost": 180,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "bigFarm",
+            "footprint": 25,
+            "cost": 750,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "greenhouse",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "foodPlant",
+            "footprint": 9,
+            "cost": 1800,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "market",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "tradepost",
+            "footprint": 4,
+            "cost": 1100,
+            "paid": true,
+            "undo": true
+          }
+        ],
+        "navigation": [
+          {
+            "path": "already-open-food-to-catalog",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "closed-dock-to-catalog",
+            "startTool": null,
+            "sharedActivations": 1,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "farm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "ranch-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "bigFarm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "greenhouse-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "foodPlant-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "market-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "tradepost-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          }
+        ],
+        "commissionNavigation": true
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved",
+        "catalog baseline or new seven exact",
+        "read-only navigation world unchanged",
+        "native trusted input",
+        "zero errors external requests",
+        "no page overflow",
+        "native construction and CTA produced no browser errors or external requests"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-412.png",
+          "sha256": "0910a3141584a357e2e7a5d11147289a311a172ea041a8b940807c46d6ef4954",
+          "bytes": 99975,
+          "stage": "district",
+          "viewport": {
+            "W": 412,
+            "H": 860,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-catalog-412.png",
+          "sha256": "1e2caa75be7bd698ea9d4d4824ae4c507b73a130093bb6fcfae426e9bb5df0a9",
+          "bytes": 82177,
+          "stage": "catalog",
+          "viewport": {
+            "W": 412,
+            "H": 860,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-tools-412.png",
+          "sha256": "4eceb03bc7a8d0a7a1a6691fb9afd81ef5c34438117ee3472fd4350fd9ed6c19",
+          "bytes": 82261,
+          "stage": "tools",
+          "viewport": {
+            "W": 412,
+            "H": 860,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": true,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          535.15625,
+          412,
+          860,
+          412,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          738,
+          402,
+          784,
+          392,
+          46
+        ],
+        "civic": [
+          586,
+          730
+        ],
+        "wrap": [
+          586,
+          730
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            586,
+            630
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            636,
+            680
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            686,
+            730
+          ]
+        ]
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "touch",
+          "key": ""
+        }
+      ],
+      "native": {
+        "checks": [
+          {
+            "tool": "farm",
+            "footprint": 4,
+            "cost": 120,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "ranch",
+            "footprint": 4,
+            "cost": 180,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "bigFarm",
+            "footprint": 25,
+            "cost": 750,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "greenhouse",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "foodPlant",
+            "footprint": 9,
+            "cost": 1800,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "market",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "tradepost",
+            "footprint": 4,
+            "cost": 1100,
+            "paid": true,
+            "undo": true
+          }
+        ],
+        "navigation": [
+          {
+            "path": "already-open-food-to-catalog",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "closed-dock-to-catalog",
+            "startTool": null,
+            "sharedActivations": 1,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "farm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "ranch-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "bigFarm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "greenhouse-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "foodPlant-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "market-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "tradepost-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          }
+        ],
+        "commissionNavigation": true
+      }
+    },
+    {
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved",
+        "catalog baseline or new seven exact",
+        "read-only navigation world unchanged",
+        "native trusted input",
+        "zero errors external requests",
+        "no page overflow",
+        "native construction and CTA produced no browser errors or external requests"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-1280.png",
+          "sha256": "6ea2e3b9272e4fe57b2f10f6d066c9d8af80fea6cea4adbbc3ba9565e3c9164a",
+          "bytes": 161225,
+          "stage": "district",
+          "viewport": {
+            "W": 1280,
+            "H": 800,
+            "mobile": false
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-catalog-1280.png",
+          "sha256": "5ba596a4219a8584d30134072423c63ba429d9b34f08a19b0a2f97e9411c1744",
+          "bytes": 149425,
+          "stage": "catalog",
+          "viewport": {
+            "W": 1280,
+            "H": 800,
+            "mobile": false
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        },
+        {
+          "filename": "D055-after-tools-1280.png",
+          "sha256": "e4e7b9ca97a7c8085f87af650b853bca0fd9d9cc8a08de624fe7bdb84f7f0c95",
+          "bytes": 138788,
+          "stage": "tools",
+          "viewport": {
+            "W": 1280,
+            "H": 800,
+            "mobile": false
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": true,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          475.15625,
+          1280,
+          800,
+          1280,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          678,
+          1270,
+          724,
+          1260,
+          46
+        ],
+        "civic": [
+          526,
+          670
+        ],
+        "wrap": [
+          526,
+          670
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            76,
+            44,
+            356,
+            432,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            626,
+            670
+          ]
+        ]
+      },
+      "inputs": [
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "civicGuide",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerdown",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "pointerup",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        },
+        {
+          "type": "click",
+          "trusted": true,
+          "target": "",
+          "pointerType": "mouse",
+          "key": ""
+        }
+      ],
+      "native": {
+        "checks": [
+          {
+            "tool": "farm",
+            "footprint": 4,
+            "cost": 120,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "ranch",
+            "footprint": 4,
+            "cost": 180,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "bigFarm",
+            "footprint": 25,
+            "cost": 750,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "greenhouse",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "foodPlant",
+            "footprint": 9,
+            "cost": 1800,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "market",
+            "footprint": 4,
+            "cost": 950,
+            "paid": true,
+            "undo": true
+          },
+          {
+            "tool": "tradepost",
+            "footprint": 4,
+            "cost": 1100,
+            "paid": true,
+            "undo": true
+          }
+        ],
+        "navigation": [
+          {
+            "path": "already-open-food-to-catalog",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "closed-dock-to-catalog",
+            "startTool": null,
+            "sharedActivations": 1,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "farm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "ranch-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "bigFarm-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "greenhouse-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "foodPlant-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "market-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          },
+          {
+            "path": "tradepost-build-selection",
+            "startTool": "food",
+            "sharedActivations": 0,
+            "guideActivations": 1,
+            "trusted": true
+          }
+        ],
+        "commissionNavigation": true
+      }
+    }
+  ],
+  "shots": [
+    {
+      "filename": "D055-after-district-360.png",
+      "sha256": "68185ae5e409fa2af6fed1887a5649346e98f7d7fbcc15b8feb9607c8bebdbbf",
+      "bytes": 94020,
+      "stage": "district",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-catalog-360.png",
+      "sha256": "a88bbab70464b456d4dca9250248147ea135102b0c9dd7af73e73e2e0b19222c",
+      "bytes": 70617,
+      "stage": "catalog",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-tools-360.png",
+      "sha256": "7b8061cf27615fcd8570659a98f049798a16109736a2646598674292c7251486",
+      "bytes": 76030,
+      "stage": "tools",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-district-412.png",
+      "sha256": "0910a3141584a357e2e7a5d11147289a311a172ea041a8b940807c46d6ef4954",
+      "bytes": 99975,
+      "stage": "district",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-catalog-412.png",
+      "sha256": "1e2caa75be7bd698ea9d4d4824ae4c507b73a130093bb6fcfae426e9bb5df0a9",
+      "bytes": 82177,
+      "stage": "catalog",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-tools-412.png",
+      "sha256": "4eceb03bc7a8d0a7a1a6691fb9afd81ef5c34438117ee3472fd4350fd9ed6c19",
+      "bytes": 82261,
+      "stage": "tools",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-district-1280.png",
+      "sha256": "6ea2e3b9272e4fe57b2f10f6d066c9d8af80fea6cea4adbbc3ba9565e3c9164a",
+      "bytes": 161225,
+      "stage": "district",
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-catalog-1280.png",
+      "sha256": "5ba596a4219a8584d30134072423c63ba429d9b34f08a19b0a2f97e9411c1744",
+      "bytes": 149425,
+      "stage": "catalog",
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-tools-1280.png",
+      "sha256": "e4e7b9ca97a7c8085f87af650b853bca0fd9d9cc8a08de624fe7bdb84f7f0c95",
+      "bytes": 138788,
+      "stage": "tools",
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    }
+  ],
+  "passed": true,
+  "htmlSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+}

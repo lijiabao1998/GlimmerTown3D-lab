@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "checks": 56,
+  "failures": [
+    {
+      "ok": false,
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category",
+      "detail": "AssertionError [ERR_ASSERTION]: all 18 original plus seven food callbacks: a48c239a49ac6f7f4e4a53159126259fd9c67c7ef43b37349eec82f0cf531bec != 4a8743a888339f2bd173122b1bf57c9333813458efc67f9438e9083cd8261997\n    at same (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:23:38)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:160:55\n    at async file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:115:56\n    at async withBrowser (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/cdp.mjs:130:12)\n    at async run (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:112:11)\n    at async d053Smoke (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:147:3)\n    at async file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/smoke-d053.mjs:258:89"
+    }
+  ]
+}

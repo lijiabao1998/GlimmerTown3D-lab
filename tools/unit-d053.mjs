@@ -14,10 +14,12 @@ import { d045Load } from './d045-cities.mjs';
 import { stepDay } from '../src/sim/day.ts';
 import { saveCode, loadCode } from '../src/io/save.ts';
 import { decodeLabCode } from '../src/io/labcode.ts';
-import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, toolLock, toolSize, gestureOf, labToolOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, HERITAGE_TOOLS, FACILITY_TOOLS, toolLock, toolSize, gestureOf, labToolOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
 import { COST } from '../src/sim/rules/build.ts';
 import { RANKS, rankStep, rankOfSave } from '../src/sim/rules/rank.ts';
 import * as Guide from '../src/ui/growthGuide.ts';
+import { RURAL_HERITAGE_BUILDINGS } from '../src/content/britishRuralHeritage.ts';
+import { D083_TOOL_IDS, catalogueWithD083 } from './d083-catalogue-compat.mjs';
 import { createMapClickGuard } from '../src/ui/mapClickGuard.ts';
 
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -75,6 +77,7 @@ const FOOD = [
  ['tradepost','外貿商行','貿',1100,'food','tap',2],
 ];
 const ALL_TOOLS = [...TOOLS,...FOOD];
+const CATALOG_IDS = catalogueWithD083(ALL_TOOLS.map(t => t[0]));
 const RANK_NAMES = ['拓荒營地','邊陲聚落','溪畔村落','阡陌村莊','磚瓦小鎮','集市小鎮','石橋鎮','通衢鎮','燈火小城','繁景小城','匠坊之城','商旅之城','學府之城','港灣之城','花園之城','星軌之城','雲塔之城','千帆之都','萬家之都','燈海都會','環帶都會','穹頂都會','星穹大都會','永晝大都會','織夢都會','微光之巔'];
 const RANK_POINTS = [0,30,80,160,280,450,680,980,1360,1830,2400,3080,3880,4810,5880,7100,8480,10030,11760,13680,15800,18130,20680,23460,26480,29750];
 const ORIGINAL_NOTES = {
@@ -86,9 +89,10 @@ const ORIGINAL_NOTES = {
 function metadata(guide = Guide) {
   assert.deepEqual(CIVIC_TOOLS.map(t => [t.id,t.name,t.short,t.cost]), TOOLS.map(t => t.slice(0,4)));
   assert.deepEqual(FOOD_TOOLS.map(t=>[t.id,t.name,t.short,t.cost]),FOOD.map(t=>t.slice(0,4)));
-  assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),ALL_TOOLS.map(t=>t[0]));
-  assert.deepEqual(Object.keys(guide.FACILITY_NOTES).sort(), ALL_TOOLS.map(t => t[0]).sort(), 'exactly all 25 real tools, without invented entries');
-  assert.deepEqual(guide.FACILITY_GROUPS, [{id:'all',name:'全部'},{id:'service',name:'生活服務'},{id:'utility',name:'城市管線'},{id:'resource',name:'資源研究'},{id:'food',name:'農業外貿'}]);
+  assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),CATALOG_IDS);
+  assert.deepEqual(HERITAGE_TOOLS.map(t=>t.id),D083_TOOL_IDS);
+  assert.deepEqual(Object.keys(guide.FACILITY_NOTES).sort(), [...CATALOG_IDS].sort(), 'original25 plus exact D083 eight, without invented entries');
+  assert.deepEqual(guide.FACILITY_GROUPS, [{id:'all',name:'全部'},{id:'service',name:'生活服務'},{id:'utility',name:'城市管線'},{id:'resource',name:'資源研究'},{id:'food',name:'農業外貿'},{id:'heritage',name:'英式建築'}]);
   for (const [id,name,short,cost,group,gesture,size] of ALL_TOOLS) {
     const t = tool(id);
     assert.equal(COST[id],cost,id+' unchanged original price'); assert.equal(t.name,name); assert.equal(t.short,short);
@@ -123,7 +127,7 @@ function ranks(guide=Guide) {
     if(pending[i]) { assert.ok(note.includes(pending[i])); assert.match(note,/本線尚無建造工具/); assert.match(note,/不會新增/); assert.doesNotMatch(note,/^解鎖/); }
     else if(i===21){assert.match(note,/解鎖：太空研究中心/);assert.match(note,/3×3/);}
     else assert.equal(note,ORIGINAL_NOTES[i]??'');
-    assert.equal(summary.total,25); assert.equal(summary.available,i<21?24:25);
+    assert.equal(summary.total,33); assert.equal(summary.available,i<21?32:33);
     assert.equal(summary.next,i<21?tool('megaproject'):null,'next must be real Lv.22 facility, never imported preview milestones');
     assert.equal(rankStep(i,0).rankIdx,i,'low current points never lower historical rank');
     assert.equal(rankOfSave(i,0),i,'saved rank is preserved');
@@ -145,7 +149,7 @@ function promotionTruth(source=citySource) {
   return 'actual simDay promotion toast loop qualifies four unavailable milestones, actual Lv.22 and unchanged Lv.26';
 }
 function compileGuide(source=helperSource) {
-  return new Function('FACILITY_TOOLS','RANKS',strip(source)+'; return { FACILITY_GROUPS,FACILITY_NOTES,rankBuildNote,facilitySummary,facilityPresentation };')(FACILITY_TOOLS,RANKS);
+  return new Function('FACILITY_TOOLS','RANKS','RURAL_HERITAGE_BUILDINGS',strip(source)+'; return { FACILITY_GROUPS,FACILITY_NOTES,rankBuildNote,facilitySummary,facilityPresentation };')(FACILITY_TOOLS,RANKS,RURAL_HERITAGE_BUILDINGS);
 }
 function inspect(fixture, guide=Guide) {
   const s=fixture.sim;
@@ -263,13 +267,13 @@ function catalogHarness({guide=Guide,source=catalogSource,onSelect}={}) {
 function catalogBehavior(source=catalogSource) {
   const h=catalogHarness({source});const {catalog:c,doc}=h;c.root.hidden=false;c.update({rankIdx:20,sandbox:false,day:150});
   assert.equal(c.root.getAttribute('role'),'dialog');assert.equal(c.root.getAttribute('aria-modal'),'true');assert.equal(c.root.getAttribute('aria-labelledby'),c.title.id);
-  assert.equal(h.rows().length,25);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,24);
+  assert.equal(h.rows().length,33);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,32);
   for(const [id,name,,,group] of ALL_TOOLS){const row=h.rows().find(r=>r.dataset.k===id);assert.equal(row.querySelector('h3').textContent,name);assert.ok(row.querySelector('.meta').textContent.includes('基價 $'+tool(id).cost.toLocaleString('en-US')));assert.equal(h.button(id).disabled,id==='megaproject');if(id!=='megaproject'){h.button(id).click();assert.equal(h.selected.at(-1),id);}assert.equal(Guide.FACILITY_NOTES[id].group,group);}
   h.button('megaproject').click();assert.equal(h.selected.length,24,'locked button cannot dispatch a selection');
-  for(const [group,count] of [['service',10],['utility',4],['resource',4],['food',7],['all',25]]){h.filter(group).click();assert.equal(c.group(),group);assert.equal(h.rows().length,count);assert.equal(h.filter(group).getAttribute('aria-pressed'),'true');}
+  for(const [group,count] of [['service',10],['utility',4],['resource',4],['food',7],['heritage',8],['all',33]]){h.filter(group).click();assert.equal(c.group(),group);assert.equal(h.rows().length,count);assert.equal(h.filter(group).getAttribute('aria-pressed'),'true');}
   h.filter('resource').click();const button=h.button('mine'),body=c.root.querySelector('.body');body.scrollTop=73;button.focus({preventScroll:true});const oldRows=h.rows();
   c.update({rankIdx:21,sandbox:true,day:151});assert.equal(c.group(),'resource');assert.equal(body.scrollTop,73);assert.ok(doc.activeElement===button);assert.ok(h.button('mine')===button,'real reconciliation retains button identity');assert.ok(h.rows().every((r,i)=>r===oldRows[i]));
-  assert.equal(h.button('megaproject').disabled,false);assert.match(c.root.querySelector('.sub').textContent,/25／25.*151/);h.button('megaproject').click();assert.equal(h.selected.at(-1),'megaproject');
+  assert.equal(h.button('megaproject').disabled,false);assert.match(c.root.querySelector('.sub').textContent,/33／33.*151/);h.button('megaproject').click();assert.equal(h.selected.at(-1),'megaproject');
   // A held original button's entire presentation remains fixed until its one
   // original click. The latest update is used, not the first queued day.
   const held=h.button('gaswell'),text=c.root.textContent,selectionCount=h.selected.length;
@@ -279,7 +283,7 @@ function catalogBehavior(source=catalogSource) {
   doc.emit('pointerdown',{target:held,pointerId:42});c.update({rankIdx:21,sandbox:true,day:154});doc.emit('pointercancel',{target:held,pointerId:42});doc.runTimers();assert.match(c.root.querySelector('.sub').textContent,/154/);assert.equal(h.selected.length,selectionCount+1);
   doc.emit('pointerdown',{target:held,pointerId:43});c.update({rankIdx:21,sandbox:true,day:155});c.reset();c.root.hidden=true;doc.emit('pointerup',{target:held,pointerId:43});doc.runTimers();assert.match(c.root.querySelector('.sub').textContent,/154/,'reset cancels stale pending presentation');
   c.root.hidden=false;c.update({rankIdx:21,sandbox:false,day:156});c.root.querySelector('#catalogClose').click();c.root.querySelector('#catalogRank').click();doc.emit('click',{target:c.root});assert.deepEqual(h.closed,['close','rank','close']);
-  return 'actual catalog: 25 rows, group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks';
+  return 'actual catalog: 33 rows (original25 plus exact D083 eight), group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks';
 }
 
 // Execute original rank render/open/close/selection and syncUi wiring; modal
@@ -321,7 +325,7 @@ function growthBehavior(source=citySource) {
     assert.equal(raw(a),before);assert.equal(saved(a),code);assert.deepEqual(ar,br);
     const result=h.rankList();assert.equal(result.pct,rankIdx===25?100:0,'retained high rank with fallen points clamps to 0');
     assert.equal(h.node('#rk .bar i').style.width,(rankIdx===25?100:0)+'%');
-    assert.match(text()[2],rankIdx<21?/24／25/:/25／25/);
+    assert.match(text()[2],rankIdx<21?/32／33/:/33／33/);
     if(rankIdx<21)assert.match(text()[3],/Lv.22 太空研究中心/);else assert.doesNotMatch(text()[3],/下一個/);
     if([5,7,11,16].includes(rankIdx))assert.match(text()[1],/本線尚無建造工具/);
     if(rankIdx===25)assert.match(text()[1],/全城住宅幸福 \+2%（永久）/);
@@ -332,7 +336,7 @@ function growthBehavior(source=citySource) {
   h.openRank();assert.equal(h.catalog.root.hidden,true);assert.equal(h.rk.hidden,false);
   const close=h.node('#rkX');h.doc.emit('pointerdown',{target:close,pointerId:51});const held=text();
   a.sim.day=b.sim.day=151;a.sim.cityPoints=b.sim.cityPoints=18130;a.sim.rankIdx=b.sim.rankIdx=21;h.syncUi();assert.deepEqual(text(),held,'rank presentation stays stationary under held control');
-  h.doc.emit('pointercancel',{target:close,pointerId:51});h.doc.runTimers();assert.match(text()[0],/151/);assert.match(text()[2],/25／25/);
+  h.doc.emit('pointercancel',{target:close,pointerId:51});h.doc.runTimers();assert.match(text()[0],/151/);assert.match(text()[2],/33／33/);
   h.openCatalog();const oldCatalogText=h.catalog.root.textContent;a.sim.day=b.sim.day=152;h.syncUi();assert.notEqual(h.catalog.root.textContent,oldCatalogText);assert.match(h.catalog.root.querySelector('.sub').textContent,/152/);
   const closedRank=text(),closedCatalog=h.catalog.root.textContent;h.closeGrowth();a.sim.day=b.sim.day=153;h.syncUi();assert.deepEqual(text(),closedRank);assert.equal(h.catalog.root.textContent,closedCatalog,'closed catalog not refreshed by actual syncUi');
   assert.equal(raw(a),raw(b),'all user-visible refreshes leave exact full state unchanged');assert.equal(saved(a),saved(b));assert.deepEqual(ar,br);assert.equal(h.playing(),true);assert.ok(!h.calls.includes('save')&&!h.calls.includes('journal'),'guide cannot save/write journal');
@@ -344,7 +348,7 @@ function selectionHarness(fixture,source=citySource) {
   const calls=[],toasts=[],x={sim:fixture.sim,calls,toasts};
   const chunks=[section(source,'  function selectCatalogTool(','  // D032：'),section(source,'  function pickCivic(','  function syncDock()'),section(source,'  function setTool(','  const toolColor'),section(source,'  function opOf(','  function updatePreview()'),section(source,'  function commitStroke(','  // 手勢和測試出口')];
   const js=`let sim=x.sim,city=sim.city,tool='road',roadTool='alley',civicTool='police',stroke={old:true},lastPreview={old:true};
-    const toolLock=d.toolLock,labToolOf=d.labToolOf,gestureOf=d.gestureOf,CIVIC_TOOLS=d.CIVIC_TOOLS,FACILITY_TOOLS=d.FACILITY_TOOLS,FOOD_TOOLS=d.FOOD_TOOLS;
+    const toolLock=d.toolLock,labToolOf=d.labToolOf,gestureOf=d.gestureOf,CIVIC_TOOLS=d.CIVIC_TOOLS,FACILITY_TOOLS=d.FACILITY_TOOLS,FOOD_TOOLS=d.FOOD_TOOLS,HERITAGE_TOOLS=d.HERITAGE_TOOLS;
     const closeGrowth=restore=>x.calls.push(['closeGrowth',restore]);
     const controls={touches:{ONE:'rotate'},mouseButtons:{LEFT:'rotate'}},THREE={TOUCH:{ROTATE:'rotate'},MOUSE:{ROTATE:'rotate'}};
     const preview={clear:()=>x.calls.push('clear')},bui={root:{querySelector:()=>({focus:options=>x.calls.push(['focus',options])})},hideCost:()=>x.calls.push('hideCost'),toast:(...args)=>x.toasts.push(args)};
@@ -352,7 +356,7 @@ function selectionHarness(fixture,source=citySource) {
     const runOp=op=>{x.calls.push('commit');return d.commitOp(sim,op,0);},saveNow=()=>x.calls.push('save'),kickJournal=()=>x.calls.push('journal');
     ${chunks.map(strip).join('\n')}
     return {selectCatalogTool,pickCivic,setTool,opOf,commitStroke,setSim:value=>{sim=value;},read:()=>({tool,civicTool,stroke,lastPreview,controls}),setStroke:s=>{stroke=s;lastPreview={old:true};}};`;
-  return {...new Function('x','d',js)(x,{toolLock,labToolOf,gestureOf,commitOp,CIVIC_TOOLS,FACILITY_TOOLS,FOOD_TOOLS}),calls,toasts,fixture};
+  return {...new Function('x','d',js)(x,{toolLock,labToolOf,gestureOf,commitOp,CIVIC_TOOLS,FACILITY_TOOLS,FOOD_TOOLS,HERITAGE_TOOLS}),calls,toasts,fixture};
 }
 function selectionAndCommit(source=citySource) {
   let builds=0;

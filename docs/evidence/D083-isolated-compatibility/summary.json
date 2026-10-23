@@ -1,0 +1,337 @@
+{
+  "qualification": "Finite catalogue and extracted-dependency repair only. Overall required qualification is blocked; no merge or deployment.",
+  "productSourceCommit": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e",
+  "branch": "codex/d083-isolated-compat-20261023",
+  "productSrcChanged": false,
+  "protectedSourceFilesUnchanged": 19,
+  "build": {
+    "typecheck": true,
+    "productionBuild": true,
+    "sha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+  },
+  "originalCI": {
+    "run": 39945499626,
+    "counts": {
+      "failure": 12,
+      "success": 53,
+      "skipped": 1
+    },
+    "rerun": false
+  },
+  "nodeGroups": [
+    {
+      "group": "d052",
+      "passed": true,
+      "checks": 18,
+      "failures": []
+    },
+    {
+      "group": "d081touch",
+      "passed": true,
+      "checks": 14,
+      "failures": []
+    },
+    {
+      "group": "d055native",
+      "passed": true,
+      "checks": 5,
+      "failures": []
+    },
+    {
+      "group": "d053",
+      "passed": false,
+      "checks": 12,
+      "failures": [
+        "D053 original154 + explicit D055 gameplay and D056 art scope"
+      ]
+    },
+    {
+      "group": "d054ui",
+      "passed": true,
+      "checks": 6,
+      "failures": []
+    }
+  ],
+  "d054Rules": {
+    "passed": false,
+    "checks": 13,
+    "failures": [
+      "D054 original154 + explicit D055 gameplay and D056 art scope"
+    ]
+  },
+  "d053Browser": {
+    "passed": true,
+    "checks": 56,
+    "fixedScenarios": 10,
+    "comparisonPngs": 6
+  },
+  "d055Parity": {
+    "passed": true,
+    "goldenMaps": 902,
+    "operations": 2511
+  },
+  "native": {
+    "qualification": "Focused native D083 functionality, immutable accepted art and the explicit12-triangle containment correction. Not historical-source, whole-frame budget, old D082 coverage, full CI or release acceptance.",
+    "complete": true,
+    "checks": [
+      {
+        "name": "append-only catalogue, eight tools, old rows and gallery coordinates retained",
+        "passed": true
+      },
+      {
+        "name": "immutable accepted source, finite12-triangle containment correction and exact native affine emission",
+        "passed": true
+      },
+      {
+        "name": "all130 previously accepted model byte pins retained",
+        "passed": true
+      },
+      {
+        "name": "every tile blocks roads, water, ruins, craters, buildings and foreign layers without partial writes",
+        "passed": true
+      },
+      {
+        "name": "insufficient funds, sandbox, tree surcharge, tech and transaction controls",
+        "passed": true
+      },
+      {
+        "name": "real commitOp places eight four-tile owned buildings; exact save/load/history replay",
+        "passed": true
+      },
+      {
+        "name": "native child-tile demolition and undo/refund restore complete footprints",
+        "passed": true
+      },
+      {
+        "name": "nine native days complete construction; regular scene owner attributes and raycast picking",
+        "passed": true
+      }
+    ],
+    "negativeControls": 114,
+    "blockedFootprintCases": 704,
+    "affineCases": 24,
+    "pickedOwners": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "oldAcceptedModelCases": 130,
+    "releasePrerequisite": "D082 remains blocked; old gates are unchanged.",
+    "nativeArtCorrection": {
+      "acceptedSourceSha256": "9f0e20ad062b2638e2f4f0b0de365664383a2e05f88f61f3421ba44b4bd8b7d8",
+      "nativeSourceSha256": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+      "changedGranaryTriangleIndices": [
+        788,
+        789,
+        790,
+        791,
+        792,
+        793,
+        794,
+        795,
+        796,
+        797,
+        798,
+        799
+      ],
+      "allOtherGranaryTrianglesExact": 1012,
+      "otherSevenModelsExact": true,
+      "noTriangleRemoved": true,
+      "noMaterialChanged": true,
+      "finiteArtConfirmation": "Sentinel_2b0f80763e308191aaf466520dc9a728"
+    },
+    "buildings": [
+      {
+        "id": 1,
+        "k": 187,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 3,
+        "z": 4,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 2,
+        "k": 188,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 9,
+        "z": 4,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 3,
+        "k": 189,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 15,
+        "z": 4,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 4,
+        "k": 190,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 21,
+        "z": 4,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 5,
+        "k": 191,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 3,
+        "z": 12,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 6,
+        "k": 192,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 9,
+        "z": 12,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 7,
+        "k": 193,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 15,
+        "z": 12,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      },
+      {
+        "id": 8,
+        "k": 194,
+        "lv": 1,
+        "v": 0,
+        "age": 0,
+        "x": 21,
+        "z": 12,
+        "size": 2,
+        "abandoned": false,
+        "builtDay": 0
+      }
+    ],
+    "placeEvents": 8,
+    "nativeSceneMeshStats": [
+      {
+        "name": "ground",
+        "tris": 2048,
+        "shadow": false
+      },
+      {
+        "name": "cliff",
+        "tris": 256,
+        "shadow": false
+      },
+      {
+        "name": "walls",
+        "tris": 0,
+        "shadow": true
+      },
+      {
+        "name": "other",
+        "tris": 6960,
+        "shadow": true
+      }
+    ],
+    "construction": {
+      "normalOwnedAttributes": true,
+      "noClip": 0,
+      "completedAfterNativeDays": 9
+    },
+    "passed": true
+  },
+  "envelope": {
+    "passed": true,
+    "models": 8
+  },
+  "actualNativeWidths": [
+    {
+      "width": 1440,
+      "complete": true,
+      "placements": 8,
+      "saveReload": true,
+      "pngs": 13,
+      "errors": 0,
+      "legacyFood": true
+    },
+    {
+      "width": 412,
+      "complete": true,
+      "placements": 8,
+      "saveReload": true,
+      "pngs": 13,
+      "errors": 0,
+      "legacyFood": true
+    },
+    {
+      "width": 360,
+      "complete": true,
+      "placements": 8,
+      "saveReload": true,
+      "pngs": 13,
+      "errors": 0,
+      "legacyFood": true
+    }
+  ],
+  "d055Capture": {
+    "passed": true,
+    "cases": 3,
+    "pngs": 9
+  },
+  "sourceCandidate": {
+    "activated": false,
+    "qualificationStatus": "denied by protected repository guard; no tool permission denial",
+    "candidateReport": {
+      "passed": true,
+      "currentSources": 236,
+      "priorSources": 231,
+      "changed": 12,
+      "negativeControls": 32,
+      "qualification": "Seven finite source inverses and five exact additions. Original D082 pins/controls and actual runtime remain intact."
+    },
+    "firstRejection": "tools/d082-reviewed-windows-check.mjs:50 exact Windows predicate body",
+    "finalActiveInventory": {
+      "actual": 236,
+      "expected": 231
+    }
+  },
+  "remainingGates": [
+    "Protected D083 source qualification",
+    "D082 immutable scene budget 60196 versus59802",
+    "D082 complete paired coverage",
+    "D083 independent complete scene-budget qualification"
+  ]
+}

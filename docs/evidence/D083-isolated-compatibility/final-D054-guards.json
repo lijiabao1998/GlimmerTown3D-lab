@@ -1,0 +1,70 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "passed": false,
+      "name": "D054 original154 + explicit D055 gameplay and D056 art scope",
+      "detail": "AssertionError [ERR_ASSERTION]: D082 exact source inventory\n+ actual - expected\n... Skipped lines\n\n  [\n    'src/cityView.ts',\n    'src/content/arche.ts',\n    'src/content/blocks.ts',\n    'src/content/britishCampuses.ts',\n...\n    'src/content/britishNeighbourhoodPavilions.ts',\n+   'src/content/britishRuralHeritage.ts',\n    'src/content/britishServiceLodges.ts',\n    'src/content/britishStreets.ts',\n    'src/content/britishTowers.ts',\n    'src/content/britishTransitUtilityPavilions.ts',\n    'src/content/britishVillage.ts',\n...\n    'src/render/britishNeighbourhoodPavilionsArt.ts',\n+   'src/render/britishRuralHeritageArt.ts',\n    'src/render/britishServiceLodgesArt.ts',\n    'src/render/britishStreetArt.ts',\n    'src/render/britishTowerArt.ts',\n    'src/render/britishTransitUtilityPavilionsArt.ts',\n    'src/render/britishVillageArt.ts',\n...\n    'src/render/d082Repair179v1Data.ts',\n+   'src/render/d083AcceptedModels.d.mts',\n+   'src/render/d083AcceptedModels.mjs',\n    'src/render/digest.ts',\n    'src/render/ground.ts',\n    'src/render/hazard.ts',\n    'src/render/kindArt.ts',\n    'src/render/landArt.ts',\n...\n    'src/sim/eventRegistry.ts',\n+   'src/sim/heritageBuild.ts',\n    'src/sim/history.ts',\n    'src/sim/replay.ts',\n    'src/sim/restyle.ts',\n    'src/sim/rng.ts',\n    'src/sim/rules/build.ts',\n\n    at assertD082CurrentInventory (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d082-source-restoration.mjs:75:9)\n    at assertD082Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d082-scope.mjs:92:3)\n    at assertD081Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d081-scope.mjs:78:3)\n    at assertD080Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d080-scope.mjs:77:3)\n    at assertD079Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d079-scope.mjs:77:3)\n    at assertD078Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d078-scope.mjs:74:3)\n    at assertD077Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d077-scope.mjs:74:3)\n    at assertD076Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d076-scope.mjs:76:3)\n    at assertD074Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d074-scope.mjs:74:3)\n    at assertD073Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d073-scope.mjs:73:3)"
+    },
+    {
+      "passed": true,
+      "name": "D054 original authoritative baseline semantics",
+      "detail": "original low-funds line builds cheap cell after refused bridge; rectangle all-or-nothing; negative-money sandbox refuses $0 despite original preview flag"
+    },
+    {
+      "passed": true,
+      "name": "D054 selected tool names and D053 guidance",
+      "detail": "all 35 tools retain authoritative names and gestures; all facility placement/use comes from extended D053 notes"
+    },
+    {
+      "passed": true,
+      "name": "D054 mixed selection reasons and megaproject counting",
+      "detail": "mixed/none/same pipe/same zone/tree zone/protected Lv2 doze/outside; 3×3 footprint stays one job; provided preview is not mutated or aliased"
+    },
+    {
+      "passed": true,
+      "name": "D054 exact finances and operation policy",
+      "detail": "exact fractional discounts/tree cost/funds/shortfall and round-trip display; equality/$0/negative/sandbox truth; actual gesture policy"
+    },
+    {
+      "passed": true,
+      "name": "D054 finite oil/ore reserves and legal exhausted rebuild",
+      "detail": "oil/ore fresh, partial, 1-unit and exhausted stocks; legal remove/rebuild never replenishes; wrong resource and gas excluded"
+    },
+    {
+      "passed": true,
+      "name": "D054 actual result diagnostics preserve captured reasons",
+      "detail": "result reports actual placed/spent/reason/armed/protected skip; preserves original mixed reasons and captured day; no total-money inference"
+    },
+    {
+      "passed": true,
+      "name": "D054 current sewage contact distinct from water placement",
+      "detail": "same legal shoreline with disconnected, touching, two networks, connected identity, sewer-main and corner-only cases; no service/past-day promise"
+    },
+    {
+      "passed": true,
+      "name": "D054 authoritative preview and pure query call boundaries",
+      "detail": "original count/ok/cost consumed directly; only rejected roots re-previewed for reason; one current sewer-component query only for sewage"
+    },
+    {
+      "passed": true,
+      "name": "D054 deep query purity and snapshot isolation",
+      "detail": "five finances/modes × 35 tool queries twice; full model/typed arrays/Map/Set/save/RNG/metadata unchanged; frozen inputs and returned snapshot isolation"
+    },
+    {
+      "passed": true,
+      "name": "D054 real paired commit undo history save RNG",
+      "detail": "14 original/no-query versus candidate/query real commit + result + undo pairs with exact cost/state/history/save/RNG"
+    },
+    {
+      "passed": true,
+      "name": "D054 36 uninterrupted paired day trajectories",
+      "detail": "36 uninterrupted original/candidate paired days across ordinary, active-research and sandbox cities with interleaved commits/undo; all reports/state/history/save/RNG equal"
+    },
+    {
+      "passed": true,
+      "name": "D054 behavior mutation sensitivity",
+      "detail": "23 executable guidance/count/reason/finance/resource/network/result/state/RNG mutations rejected by behavior"
+    }
+  ]
+}

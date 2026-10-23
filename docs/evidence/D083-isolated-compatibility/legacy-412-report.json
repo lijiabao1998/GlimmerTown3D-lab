@@ -1,0 +1,308 @@
+{
+  "qualification": "Original D055 native paid placement/undo/navigation/commission functions, unchanged. Does not qualify old full-catalogue count or replace complete CI.",
+  "width": 412,
+  "sourceCommit": null,
+  "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f",
+  "passed": true,
+  "originalDock": {
+    "playHeight": 46,
+    "segmentHeight": 46,
+    "segmentButtonHeight": 44,
+    "segmentBorders": [
+      1,
+      1
+    ],
+    "dock": [
+      0,
+      535.15625,
+      412,
+      860,
+      412,
+      324.84375
+    ],
+    "playBar": [
+      10,
+      738,
+      402,
+      784,
+      392,
+      46
+    ],
+    "civic": [
+      586,
+      730
+    ],
+    "wrap": [
+      586,
+      730
+    ],
+    "rows": 3,
+    "buttons": [
+      [
+        50.84375,
+        44,
+        10,
+        60.84375,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        66.84375,
+        117.703125,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        123.703125,
+        174.5625,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        180.5625,
+        231.421875,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        237.421875,
+        288.28125,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        294.28125,
+        345.140625,
+        586,
+        630
+      ],
+      [
+        50.859375,
+        44,
+        351.140625,
+        402,
+        586,
+        630
+      ],
+      [
+        50.84375,
+        44,
+        10,
+        60.84375,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        66.84375,
+        117.703125,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        123.703125,
+        174.5625,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        180.5625,
+        231.421875,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        237.421875,
+        288.28125,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        294.28125,
+        345.140625,
+        636,
+        680
+      ],
+      [
+        50.859375,
+        44,
+        351.140625,
+        402,
+        636,
+        680
+      ],
+      [
+        50.84375,
+        44,
+        10,
+        60.84375,
+        686,
+        730
+      ],
+      [
+        50.859375,
+        44,
+        66.84375,
+        117.703125,
+        686,
+        730
+      ],
+      [
+        50.859375,
+        44,
+        123.703125,
+        174.5625,
+        686,
+        730
+      ],
+      [
+        50.859375,
+        44,
+        180.5625,
+        231.421875,
+        686,
+        730
+      ]
+    ]
+  },
+  "native": {
+    "checks": [
+      {
+        "tool": "farm",
+        "footprint": 4,
+        "cost": 120,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "ranch",
+        "footprint": 4,
+        "cost": 180,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "bigFarm",
+        "footprint": 25,
+        "cost": 750,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "greenhouse",
+        "footprint": 4,
+        "cost": 950,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "foodPlant",
+        "footprint": 9,
+        "cost": 1800,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "market",
+        "footprint": 4,
+        "cost": 950,
+        "paid": true,
+        "undo": true
+      },
+      {
+        "tool": "tradepost",
+        "footprint": 4,
+        "cost": 1100,
+        "paid": true,
+        "undo": true
+      }
+    ],
+    "navigation": [
+      {
+        "path": "already-open-food-to-catalog",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "closed-dock-to-catalog",
+        "startTool": null,
+        "sharedActivations": 1,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "farm-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "ranch-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "bigFarm-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "greenhouse-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "foodPlant-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "market-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      },
+      {
+        "path": "tradepost-build-selection",
+        "startTool": "food",
+        "sharedActivations": 0,
+        "guideActivations": 1,
+        "trusted": true
+      }
+    ],
+    "commissionNavigation": true
+  },
+  "errors": [],
+  "shotSha256": "a9e8e296fc3235b30a421b8e50f67d3a3658fc61017d29b23a23b95a0f182fcb"
+}
