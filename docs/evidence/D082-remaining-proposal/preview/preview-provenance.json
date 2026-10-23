@@ -1,0 +1,102 @@
+{
+  "qualification": "Actual independently built accepted ce33e3e redesign versus unapproved b58a1f6. Full original production PNGs are retained. Panels add labels outside the screenshots; screenshots are never cropped, rescaled, reconstructed or overlaid. Full coverage and final actual coordinate ledgers remain pending.",
+  "sourceManifestSha256": "bd71a15f9e8f4c2270311267ef4b938ef6875ff5a82a499929bf3d1885ae71c9",
+  "images": [
+    {
+      "slot": "185:1",
+      "view": "original",
+      "acceptedRaw": "accepted-ce33-185-v1-original-412.png",
+      "candidateRaw": "proposal-b58-185-v1-original-412.png",
+      "comparison": "comparison-185-v1-original-412.png",
+      "camera": {
+        "pos": [
+          181.69999999999996,
+          94.06040612287404,
+          152.7
+        ],
+        "target": [
+          66.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "acceptedSha256": "0293c0e9f1d1985bae37f2a7bc08e6d847d333f6505582cdf00b07c25f401b42",
+      "candidateSha256": "8b12b9865f507789c4e28ad56fa6342e469f2fa0e1c1029fd8162e69ddf66fd1",
+      "acceptedMatchesPriorActualPngByteForByte": true,
+      "comparisonSha256": "c19c13a498e969830e997ffae2c0952b46d48be4eca12dc9834a56ae456ae55d"
+    },
+    {
+      "slot": "185:1",
+      "view": "front",
+      "acceptedRaw": "accepted-ce33-185-v1-front-412.png",
+      "candidateRaw": "proposal-b58-185-v1-front-412.png",
+      "comparison": "comparison-185-v1-front-412.png",
+      "camera": {
+        "pos": [
+          66.50000000000018,
+          94.06040612287407,
+          200.41740238538063
+        ],
+        "target": [
+          66.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "acceptedSha256": "a8b345163d90c71436a0cf3a7ee923f194979144f137d2aeaefba0e4a4c14b04",
+      "candidateSha256": "aaafcf63a5a046530b445269ff0c434c6312b8de18483ed7503548ef4a7ba490",
+      "acceptedMatchesPriorActualPngByteForByte": true,
+      "comparisonSha256": "b3ee5e050a1b49fc978492f21f83c819ede73a8c9ba46a539148c7b8070e00a8"
+    },
+    {
+      "slot": "185:2",
+      "view": "original",
+      "acceptedRaw": "accepted-ce33-185-v2-original-412.png",
+      "candidateRaw": "proposal-b58-185-v2-original-412.png",
+      "comparison": "comparison-185-v2-original-412.png",
+      "camera": {
+        "pos": [
+          181.69999999999996,
+          94.06040612287404,
+          152.7
+        ],
+        "target": [
+          66.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "acceptedSha256": "1684486dc50e65496cf8504c17333f4bbf1628ab5a42400a51a011cb74d244a2",
+      "candidateSha256": "c6cfc81ad3a4beda07c195c1225c82de482389dfd9cac1b76f548ddd8267a881",
+      "acceptedMatchesPriorActualPngByteForByte": true,
+      "comparisonSha256": "6304b995c54071761ba01881dd8056f0a90534e37d3296553ce1d255c778f5b6"
+    },
+    {
+      "slot": "185:2",
+      "view": "front",
+      "acceptedRaw": "accepted-ce33-185-v2-front-412.png",
+      "candidateRaw": "proposal-b58-185-v2-front-412.png",
+      "comparison": "comparison-185-v2-front-412.png",
+      "camera": {
+        "pos": [
+          66.50000000000018,
+          94.06040612287407,
+          200.41740238538063
+        ],
+        "target": [
+          66.5,
+          0,
+          37.5
+        ],
+        "zoom": 8
+      },
+      "acceptedSha256": "85c41585631bf85a380940a88a62ab7e5ff1f7ad48b78ba88ec48e7eeea5f791",
+      "candidateSha256": "68a66b2f304e5da827a65ab56ed153ffd65df8fd545b289bb6a84a434ed01f17",
+      "acceptedMatchesPriorActualPngByteForByte": true,
+      "comparisonSha256": "5e8e40a27424bac1430544d1ddeda479ae00e27fbd6909dd1a1bb7a1c6216a11"
+    }
+  ]
+}
