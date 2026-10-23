@@ -1,0 +1,147 @@
+name: D082 isolated remaining diagnostics and candidate preview (no adoption)
+on:
+  push:
+    branches: ['codex/d082-remaining-diagnostics-preview']
+    paths-ignore: ['docs/**', 'LOG.md']
+permissions:
+  contents: read
+concurrency:
+  group: d082-remaining-research-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  unchanged-accepted-source-lock-on-candidate:
+    # Intentionally retains the original rejection. This is not an approval or acceptance override.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci
+      - name: Unmodified original guard must still reject the unapproved art source
+        shell: bash
+        run: |
+          mkdir -p scratch/d082-original-lock
+          set -o pipefail
+          node --experimental-strip-types tools/d082-redesign-check.mjs 2>&1 | tee scratch/d082-original-lock/unchanged-guard.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-preserved-original-lock-${{ github.sha }}
+          path: scratch/d082-original-lock/
+          retention-days: 30
+          if-no-files-found: error
+  complete-original-node-d082-diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ce33e3eb73ab3602c16ff383c9fc5d194947ae64
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with: {node-version: 24, cache: npm}
+      - run: npm ci
+      - name: Original unmodified D082 CLI writes its complete report before returning the actual failure code
+        shell: bash
+        run: |
+          mkdir -p scratch/d082
+          set -o pipefail
+          node --experimental-strip-types tools/unit-d082.mjs 2>&1 | tee scratch/d082/complete-original.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-ce33-complete-node-${{ github.sha }}
+          path: scratch/d082/
+          retention-days: 30
+          if-no-files-found: error
+  independent-candidate-physical-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      D082_ACCEPTED_ROOT: ${{ github.workspace }}/accepted
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: proposal, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: ce33e3eb73ab3602c16ff383c9fc5d194947ae64, path: accepted, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - run: npm ci
+        working-directory: accepted
+      - run: npm ci
+        working-directory: proposal
+      - run: npm run typecheck
+        working-directory: proposal
+      - run: node --experimental-strip-types tools/d082-remaining-preview-check.mjs
+        working-directory: proposal
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-remaining-physical-${{ github.sha }}
+          path: proposal/scratch/d082-remaining-physical/
+          retention-days: 30
+          if-no-files-found: error
+  immediate-two-model-412-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      D082_ACCEPTED_ROOT: ${{ github.workspace }}/accepted
+      D082_REDESIGN_WIDTHS: 412
+      D082_RESEARCH_QUICK: 1
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: proposal, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: ce33e3eb73ab3602c16ff383c9fc5d194947ae64, path: accepted, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm ci && npm run build
+        working-directory: accepted
+      - run: npm ci && npm run build
+        working-directory: proposal
+      - run: node --experimental-strip-types tools/d082-remaining-preview-capture.mjs
+        working-directory: proposal
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-remaining-quick-412-${{ github.sha }}
+          path: proposal/scratch/d082-remaining-quick/
+          retention-days: 30
+          if-no-files-found: error
+  actual-three-width-coverage-and-camera-research:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix: {width: [412, 360, 1440]}
+    env:
+      D082_ACCEPTED_ROOT: ${{ github.workspace }}/accepted
+      D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {path: proposal, persist-credentials: false}
+      - uses: actions/checkout@v4
+        with: {ref: ce33e3eb73ab3602c16ff383c9fc5d194947ae64, path: accepted, persist-credentials: false}
+      - uses: actions/setup-node@v4
+        with: {node-version: 24}
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm ci && npm run build
+        working-directory: accepted
+      - run: npm ci && npm run build
+        working-directory: proposal
+      - name: Every original five view and prior supplementary view retained; selected research angles are paired actual PNGs
+        run: node --experimental-strip-types tools/d082-remaining-preview-capture.mjs
+        working-directory: proposal
+      - name: Unchanged classifier; complete old-coordinate regressions retained separately from proposed new exterior
+        run: node --experimental-strip-types tools/d082-remaining-preview-coverage.mjs
+        working-directory: proposal
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-remaining-full-${{ matrix.width }}-${{ github.sha }}
+          path: proposal/scratch/d082-remaining-full/
+          retention-days: 30
+          if-no-files-found: error

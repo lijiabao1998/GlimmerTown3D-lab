@@ -1,0 +1,170 @@
+{
+  "qualification": "Analytical union candidates only; no adoption, no pin or probe changes, no acceptance claim.",
+  "baseline": "ce33e3eb73ab3602c16ff383c9fc5d194947ae64",
+  "candidates": [
+    {
+      "slot": "179:0",
+      "originalCounts": [
+        30,
+        56,
+        0
+      ],
+      "candidateCounts": [
+        43,
+        77,
+        0
+      ],
+      "originalWeighted": 172,
+      "candidateWeighted": 240,
+      "ceiling": 182,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 128,
+        "edges": 192,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 0.21761239500000004
+      },
+      "originalSha256": "ab241ea694a532000ad92b40baac9a54044ef4080b62b3c9938b6e6dad6c013d",
+      "candidateSha256": "fc7cf6285e0ff0b5e2e7fe4e13807093f8aa18d1fd257b5bb4e5308529d765ce"
+    },
+    {
+      "slot": "179:2",
+      "originalCounts": [
+        46,
+        42,
+        0
+      ],
+      "candidateCounts": [
+        60,
+        62,
+        0
+      ],
+      "originalWeighted": 176,
+      "candidateWeighted": 244,
+      "ceiling": 182,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 132,
+        "edges": 198,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 0.13933064493785174
+      },
+      "originalSha256": "aaeaf3bc408cc5f77a25913224b333623641dbbae237c5f8b3a61457a6b90f53",
+      "candidateSha256": "56a8b3986a27540e6ebb26929787fd8f311a7cc2f464574bd0398a9b8e66bed7"
+    },
+    {
+      "slot": "185:0",
+      "error": "AssertionError [ERR_ASSERTION]: unambiguous oriented planar boundary\n\n2 !== 1\n\n    at mergeShell (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d082-partial/scratch/merge-shell.mjs:22:121)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d082-partial/scratch/research-remaining-shells.mjs:10:15"
+    },
+    {
+      "slot": "185:1",
+      "originalCounts": [
+        22,
+        32,
+        0
+      ],
+      "candidateCounts": [
+        26,
+        54,
+        0
+      ],
+      "originalWeighted": 108,
+      "candidateWeighted": 160,
+      "ceiling": 120,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 88,
+        "edges": 132,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 0.23655576823448282
+      },
+      "originalSha256": "d00b75d007a33a8e1baa59e2f03d4f16fc754b1449ff53f8080b551462c3f649",
+      "candidateSha256": "8ff11fec6a9548c7e6ac1b81c76d1aec465ec915829cf92aab1aaf7a8653c936"
+    },
+    {
+      "slot": "185:2",
+      "originalCounts": [
+        22,
+        32,
+        0
+      ],
+      "candidateCounts": [
+        27,
+        45,
+        0
+      ],
+      "originalWeighted": 108,
+      "candidateWeighted": 144,
+      "ceiling": 120,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 80,
+        "edges": 120,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 0.2394623845951724
+      },
+      "originalSha256": "8762c55719ad1698ca6520287c0375861ddbf2355c49906bea84a78af1770a46",
+      "candidateSha256": "2c1ec43706ebb735cf2aca7be78e231851b7d57e8ce3d502bbf7177bde4e2949"
+    },
+    {
+      "slot": "154:0",
+      "originalCounts": [
+        46,
+        112,
+        0
+      ],
+      "candidateCounts": [
+        67,
+        129,
+        0
+      ],
+      "originalWeighted": 316,
+      "candidateWeighted": 392,
+      "ceiling": 342,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 208,
+        "edges": 312,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 0.7134089599999998
+      },
+      "originalSha256": "df13fec66ecb00eb7e3ce88ccbe60409ddff7a67fc297f5f979e7a5a16ffe50f",
+      "candidateSha256": "2b28d99de8070ee7d7f00a5148a3121cd9bbb7323a206b03f3730a84a3f0788a"
+    },
+    {
+      "slot": "154:1",
+      "error": "AssertionError [ERR_ASSERTION]: triangulate conformed consolidated polygon\n    at mergeShell (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d082-partial/scratch/merge-shell.mjs:40:417)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d082-partial/scratch/research-remaining-shells.mjs:10:15"
+    },
+    {
+      "slot": "154:2",
+      "originalCounts": [
+        54,
+        88,
+        0
+      ],
+      "candidateCounts": [
+        93,
+        153,
+        0
+      ],
+      "originalWeighted": 284,
+      "candidateWeighted": 492,
+      "ceiling": 342,
+      "validityError": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(r.cost>=12&&r.cost<=cap)\n",
+      "topology": {
+        "triangles": 268,
+        "edges": 402,
+        "invalidEdges": 0,
+        "examples": [],
+        "volume": 2.4181536880941166
+      },
+      "originalSha256": "a46bf7deabc9e7e7ef07ce83b905b222c4e5397cb61a1c1ad0a0e3a43240c8f4",
+      "candidateSha256": "271485f884840766bb60526239b1b900cfaa12fff28517daa26e5945de775964"
+    }
+  ]
+}

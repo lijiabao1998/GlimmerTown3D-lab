@@ -1,3 +1,4 @@
+import {emitD082RemainingProposal} from './d082RemainingProposal.ts';
 import {emitD082Repair179v1} from './d082Repair179v1.ts';
 // D082 nine-building redesign. Real production geometry; no UI or simulation changes.
 import {ShapeUtils,Vector2} from 'three';
@@ -45,7 +46,7 @@ class Building {
  }
 
 }
-export function emitCoastalModel(p:Pen,m:Model){const b=new Building(p);if(m.k===179&&m.v===1){emitD082Repair179v1(p);return;}
+export function emitCoastalModel(p:Pen,m:Model){const b=new Building(p);if(m.k===185&&(m.v===1||m.v===2)){emitD082RemainingProposal(p,m.v);return;}if(m.k===179&&m.v===1){emitD082Repair179v1(p);return;}
  if(m.k===179&&m.v===0){
   b.body(.13,.87,.22,.73,.55,C.stone,'hall',WIN_STYLE.arch);
   b.roof(.115,.885,.205,.745,.55,.82,C.slate,C.light);

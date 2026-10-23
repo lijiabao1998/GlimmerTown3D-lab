@@ -1,0 +1,66 @@
+{
+  "checkedAtUtc": "2026-10-23T01:42:44.090849+00:00",
+  "repository": "lijiabao1998/GlimmerTown3D-lab",
+  "branch": "codex/d082-art-redesign",
+  "head": "ce33e3eb73ab3602c16ff383c9fc5d194947ae64",
+  "main": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+  "checkoutClean": true,
+  "finiteWindowsRepair": "completed and pushed",
+  "nativeSourceGuards": {
+    "passed": 15,
+    "failed": 0,
+    "unreported": 0
+  },
+  "sourceNegativeControls": 3202,
+  "originalSourceNegativeControlsRetained": 2858,
+  "integratedNegativeControls": 344,
+  "integratedPositiveControls": 21,
+  "originalCiTestsPassed": 261,
+  "verifiedActualPngs": 518,
+  "fullProbeContractsUnchanged": 54,
+  "missingTupleCasesUnchanged": 24,
+  "artRun": {
+    "id": 39874673025,
+    "conclusion": "failure",
+    "jobs": {
+      "success": 8,
+      "failure": 3
+    }
+  },
+  "fullRun": {
+    "id": 39874698906,
+    "conclusion": "failure",
+    "jobs": {
+      "success": 58,
+      "failure": 7,
+      "skipped": 1
+    },
+    "original66JobSetPreserved": true
+  },
+  "remainingActions": [
+    {
+      "action": "Adopt finite geometry repairs after actual comparison previews",
+      "target": "Eight unchanged current D082 models",
+      "reason": "Mandatory actual-PNG coverage still misses397/396/395 points at1440/360/412; Windows-only authorization does not adopt new geometry",
+      "status": "pending"
+    },
+    {
+      "action": "Review explicit historical-ten/current-nine runtime and recipe qualification plus the report interface",
+      "target": "Old D082/D081 protected runtime/frame/capture guards",
+      "reason": "Original count/checkpoints,59802 pin,selected recipe and frozen forced-scene rules remain incompatible with the accepted current nine-model phase; no acceptance threshold is changed",
+      "status": "pending"
+    }
+  ],
+  "remainingEvidence": [
+    {
+      "action": "Determine later individual D082 Node outcomes",
+      "target": "Completed native Node job120157337272",
+      "reason": "Original downloaded log cuts off inside a large assertion comparison and has no final global per-test summary; all15 source outcomes are separately explicit",
+      "status": "uncertain"
+    }
+  ],
+  "remainingDeniedActions": [],
+  "merged": false,
+  "markedReady": false,
+  "deployed": false
+}

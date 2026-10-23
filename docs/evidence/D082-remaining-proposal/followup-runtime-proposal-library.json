@@ -1,0 +1,22 @@
+{
+  "operation": "create_library_file",
+  "status": "succeeded",
+  "path": "/NEXT-D082-RUNTIME-PHASE-PROPOSAL.md",
+  "file_id": "file_00000000b0c081f598d7126eda889f84",
+  "library_file_id": "libfile_310a8adfdf448191a77d3d0a40daba99",
+  "file_name": "NEXT-D082-RUNTIME-PHASE-PROPOSAL.md",
+  "current_version_number": 0,
+  "restored_from_version_number": null,
+  "xattrs": [
+    {
+      "name": "user.library-file-version",
+      "value": "0"
+    }
+  ],
+  "directory_id": "libdir_cdefa105900c8191bfcf9baaefe71561",
+  "mime_type": "text/markdown",
+  "library_artifact_type": "report",
+  "file_size_bytes": 9059,
+  "external_connectors_accessed": false,
+  "local_path": "C:\\Users\\Leon1\\Documents\\Codex\\2026-10-22\\task-2\\NEXT-D082-RUNTIME-PHASE-PROPOSAL.md"
+}

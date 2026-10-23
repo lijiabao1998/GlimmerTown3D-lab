@@ -1,0 +1,34 @@
+{
+  "qualification": "Unadopted 185v1 finite physical candidate. Ground footprints, roof silhouettes, colors and accepted pins retained as baselines. Wall tops flare to existing roof edges; chimney base embeds in existing roof. Original required probes will be kept in a separate coordinate ledger.",
+  "beforeWeighted": 108,
+  "afterWeighted": 112,
+  "cap": 120,
+  "topology": {
+    "triangles": 64,
+    "edges": 96,
+    "invalidEdges": 0,
+    "examples": [],
+    "volume": 0.25274378270920766
+  },
+  "validityError": null,
+  "beforeSha256": "8762c55719ad1698ca6520287c0375861ddbf2355c49906bea84a78af1770a46",
+  "candidateSha256": "42c7d70ff7a7868c80e037b31db4f55d1b8fc254de52fb356e8e12c5473cdedc",
+  "tops": {
+    "0.15,0.84,0.24,0.75": [
+      0.13,
+      0.86,
+      0.22,
+      0.77
+    ],
+    "0.55,0.78,0.73,0.9": [
+      0.535,
+      0.795,
+      0.715,
+      0.915
+    ]
+  },
+  "chimneyBottom": [
+    0.72,
+    0.72
+  ]
+}
