@@ -1,0 +1,35 @@
+{
+  "status": "PROPOSAL_ONLY_UNAPPLIED",
+  "target": "tools/unit-d082-frame.mjs",
+  "originalSourceSha256": "12b9390d3d56e01dc11d0214f57fcb924ccf1ad3479d8a45c2995e06d1f51caf",
+  "patchSha256": "4290c436ef95050db9e0a78b246235207cfe1c9b2071ae8dc0dbd5f84fb267bb",
+  "existingSourceUnchanged": true,
+  "scope": "Add required report envelope. Preserve every underlying failure count, runtime/surface report, original guard, exception and fail-closed runner. This cannot repair runtime or geometry coverage.",
+  "truthTable": [
+    {
+      "runtimeFailed": 0,
+      "surfaceFailed": 0,
+      "returnedFailedBeforeAndAfter": 0,
+      "proposedReportPassed": true
+    },
+    {
+      "runtimeFailed": 1,
+      "surfaceFailed": 0,
+      "returnedFailedBeforeAndAfter": 1,
+      "proposedReportPassed": false
+    },
+    {
+      "runtimeFailed": 0,
+      "surfaceFailed": 1,
+      "returnedFailedBeforeAndAfter": 1,
+      "proposedReportPassed": false
+    },
+    {
+      "runtimeFailed": 1,
+      "surfaceFailed": 1,
+      "returnedFailedBeforeAndAfter": 2,
+      "proposedReportPassed": false
+    }
+  ],
+  "integrationTests": "Pending finite protected change review; this is not an executed gate patch."
+}

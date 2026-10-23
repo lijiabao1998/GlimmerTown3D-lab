@@ -1,5 +1,7 @@
 # D082 remaining diagnostics and isolated physical candidates
 
+Final actual delivery: [DELIVERY.md](evidence/D082-remaining-proposal/DELIVERY.md). The checkpoint below retains early research: final actual185v1 superseded count is409, replacing early426; all three actual exterior results and complete old-coordinate deltas are now retained. Candidate adoption and protected phase routing remain pending, never applied.
+
 Research branch: `codex/d082-remaining-diagnostics-preview`, based on accepted `ce33e3eb73ab3602c16ff383c9fc5d194947ae64`. The original branch, main, previous 179v1 preview, all accepted pins, all original tools/fixtures and every original required-probe record are preserved. No candidate has been adopted. No Ready, merge or deployment is requested or performed.
 
 ## Complete bounded follow-up and native Library identity

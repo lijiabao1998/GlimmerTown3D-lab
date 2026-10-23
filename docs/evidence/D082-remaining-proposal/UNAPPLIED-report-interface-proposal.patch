@@ -1,0 +1,7 @@
+--- a/tools/unit-d082-frame.mjs
++++ b/tools/unit-d082-frame.mjs
+@@ -10 +10,3 @@
+-  return {failed:failed+surface.failed,runtime,surface:surface.report};
++  const count=failed+surface.failed;
++  return {failed:count,runtime,surface:surface.report,
++    report:{passed:count===0,runtime,surface:surface.report}};
