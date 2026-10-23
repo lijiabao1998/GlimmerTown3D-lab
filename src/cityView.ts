@@ -1394,7 +1394,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function syncDock() {
     syncRes();
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : [...CIVIC_TOOLS, ...HERITAGE_TOOLS]).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : HERITAGE_TOOLS.some(c => c.id === civicTool) ? HERITAGE_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
     const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;

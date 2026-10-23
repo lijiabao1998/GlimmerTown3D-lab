@@ -101,6 +101,8 @@ jobs:
           sha256sum --check dist/index.sha256
       - name: Real catalogue, mouse/touch placement, construction, picking and save reload
         run: node --experimental-strip-types proposals/d083/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+      - name: Unchanged original food placement, refund and commission UI functions
+        run: node --experimental-strip-types proposals/d083/native-legacy-ui-check.mjs --width=${{ matrix.width }} --attempt=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:

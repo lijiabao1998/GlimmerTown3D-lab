@@ -4,6 +4,7 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {withBrowser} from '../../tools/cdp.mjs';
+import {D054_LAYOUT} from '../../tools/d054-layout-probe.mjs';
 import {KINDS} from '../../src/content/kinds.ts';
 import {RURAL_HERITAGE_BUILDINGS as MODELS} from '../../src/content/britishRuralHeritage.ts';
 import {encodeLabCode} from '../../src/io/labcode.ts';
@@ -39,10 +40,12 @@ try{await withBrowser({width,height,port:8603,root:path.resolve('dist')},async({
   await page.evaluate('__gt.simPlay(false);__gt.clearSave();__gt.menu("paste")');await frames(3);
   await page.evaluate(`(()=>{const t=document.querySelector('#dlg textarea');t.value=${JSON.stringify(playable)};t.dispatchEvent(new Event('input',{bubbles:true}));})()`);await click('#dlgOk');await settle();
   assert.equal(await page.evaluate('__gt.ui().dock'),'build');assert.equal(await page.evaluate('__gt.buildingCount()'),6);assert.equal(await page.evaluate('__gt.kinds().count'),194);
+  await click('.tool[data-t="civic"]');manifest.originalDock=await page.evaluate(D054_LAYOUT);assert.equal(manifest.originalDock.buttons.length,18,'original civic dock stays18');assert.equal(manifest.originalDock.rows,3,'original civic dock stays3 rows');
   await page.evaluate('__gt.simPlay(false);__gt.menu("catalog")');await frames(3);await click('#catalog [data-group="heritage"]');assert.equal(await page.evaluate('document.querySelectorAll("#catalog li[data-kind=facility]").length'),8);await shot('catalogue');
   for(const[m,i]of MODELS.map((m,i)=>[m,i])){
    if(i){await page.evaluate('__gt.menu("catalog")');await frames(3);}
    await click(`#catalog button[data-tool="${m.tool}"]`);assert.equal(await page.evaluate('__gt.ui().civicTool'),m.tool);assert.equal(await page.evaluate('__gt.ui().tool'),'civic');
+   assert.equal(await page.evaluate('document.querySelectorAll("#civicSub button").length'),8,'heritage selection uses its compact eight-entry dock');
    const[x,z]=coords(i);await page.evaluate(`__gt.view(${x+1},${z+1},${width===1440?3.5:3})`);await settle();
    const preview=await page.evaluate(`__gt.preview(${JSON.stringify({k:'tap',tool:m.tool,x0:x,z0:z,x1:x,z1:z})})`);assert.equal(preview.cells.length,4);assert.equal(preview.count,1);assert.equal(preview.affordable,true);
    const p=await page.evaluate(`__gt.cellScreen(${x},${z})`);assert.ok(Array.isArray(p)&&p.length===2);await tapXY(p[0],p[1]);await settle();
