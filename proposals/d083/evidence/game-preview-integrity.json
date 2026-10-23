@@ -1,0 +1,41 @@
+{
+  "qualification": "Actual local original-game WebGL screenshots; original product source, accepted geometry and rules unchanged. No production adoption, full CI, performance threshold or deployment claim.",
+  "captures": 10,
+  "viewports": [
+    [
+      1440,
+      1000
+    ],
+    [
+      412,
+      860
+    ]
+  ],
+  "browserErrors": [],
+  "onlyLocalRequests": true,
+  "originalProductSourcesExact": 231,
+  "protectedFilesExact": 14,
+  "protectedRegionsExact": 5,
+  "d98DesignSourcesAndExportsExact": true,
+  "ordinaryProductBuildContainsPreviewCode": false,
+  "ordinaryProductBuildSha256": "0825263b7cf2ed31c1a08beae08bfef81d84aa341a218c48e7eace8b24852a2a",
+  "previewBuildSha256": "38fbfef63aa8ad0eb0cc9582b5e05c4a74996a52a9c65d3b895678b9eb8bf49f",
+  "originalSavedBuildingCount": 183,
+  "originalWorldSha256": "702ecf23b3ee25cf39ad8f82b0215c3cec7766bca50eb12cc143c3b7b0b9807e",
+  "sharedOriginalBuildingMaterial": true,
+  "constructionBoundary": "New unowned preview exhibits only; no saved owner, uNoClip or original construction state changed. Production construction acceptance remains untested.",
+  "browserOperation": "Original repository CDP helper with installed local Chrome; new user-requested local in-game screenshot action allowed and completed on first launch; no denial occurred in this turn, no remote/browser fallback.",
+  "originalResearchPush": "withdrawn, never retried",
+  "sourceHead": "d98e3196062b3685f0e9e20cc478cb384e1e12a1",
+  "currentFraming": {
+    "checks": 24,
+    "passed": true,
+    "mobileMaxNdc": 0.8978086985837622,
+    "mobileNativeVersion": 1,
+    "actualCameraZoom": 1.2,
+    "firstFailurePreserved": true
+  },
+  "recheckedUtc": "2026-10-23T08:15:50.009Z",
+  "productAndProtectedGitDiffEmpty": true,
+  "d98ModelAndExportGitDiffEmpty": true
+}
