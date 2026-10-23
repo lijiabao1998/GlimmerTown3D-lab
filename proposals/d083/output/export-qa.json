@@ -1,0 +1,56 @@
+{
+  "qualification": "Local prototype export and actual Pen/Geo adapter checks. No saved slot, product dispatch, scene, native budget, WebGL or coverage acceptance is claimed.",
+  "models": [
+    {
+      "id": "01-staddle-granary",
+      "primaryArchitectureSha256": "b70f60b2d6bd08476c12f0ffd9654b945b73eef4cc826fe1670551aaa2b12cb1",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "02-stone-dovecote",
+      "primaryArchitectureSha256": "99bb55af1057b7f98f292ba75288b3ded4001a29dbf1de72bff141435ba0acd0",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "03-railway-signal-box",
+      "primaryArchitectureSha256": "4a03eb1acfaf3ca7df6fc04e4fc80d3c65983ab0e04999a4a49bc7006e862762",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "04-octagonal-tollhouse",
+      "primaryArchitectureSha256": "d376cfc9ffe8e6e87c46303532a946c0969fcf9e02fe095b70aaa3a00399b071",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "05-smock-windmill",
+      "primaryArchitectureSha256": "27372b7b68c9cdebb7f5b22944132526d18d0a98bc4d98c48c903d185cb82e8e",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "06-village-smithy",
+      "primaryArchitectureSha256": "cec1b02e68398e64c4970ac0d3302bdb315ea3865a2a81771ade425f4499e54f",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "07-great-tithe-barn",
+      "primaryArchitectureSha256": "59dc0c66b47e8aa945cb3e01be6cf8f8af4677a22e9c38e8383454f2700807c5",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    },
+    {
+      "id": "08-iron-bandstand",
+      "primaryArchitectureSha256": "85e3530a81528d0533348d19d5543077110a108dce8c49c8125ee43e615187eb",
+      "glbValidated": true,
+      "actualPenGeoValidated": true
+    }
+  ],
+  "affinePenCases": 24,
+  "identityControls": 24,
+  "finishedAtUtc": "2026-10-23T07:28:27.415Z"
+}

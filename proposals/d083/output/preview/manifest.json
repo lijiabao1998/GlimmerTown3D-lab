@@ -1,0 +1,427 @@
+{
+  "qualification": "Actual local mesh rendering with the same model triangles as GLB exports. No browser/WebGL capture or in-game acceptance claimed. No downloaded visual assets.",
+  "records": [
+    {
+      "file": "01-staddle-granary-front.png",
+      "design": "01-staddle-granary",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "d0adfeb9f21ce0a96364505560aeba13b1b871dec706bbf80b59b68f7082e267"
+      },
+      "sha256": "f2cf584ddd11ca8f2c94f51538deed252ca5939afbdd300369e33575d9231812"
+    },
+    {
+      "file": "02-stone-dovecote-front.png",
+      "design": "02-stone-dovecote",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "fbbb62deb143c585d90642028b8a14ac553dfcf66f6fc131487a1efd8abcd2ad"
+      },
+      "sha256": "92017ea64a94870936d0a62c48773c05cf33e5664b32cb98318b217617ef58cc"
+    },
+    {
+      "file": "03-railway-signal-box-front.png",
+      "design": "03-railway-signal-box",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "6d18c0ac6c3ea603cbeed20c440d6c660e4ad136941698907492f8e0e21b7a9d"
+      },
+      "sha256": "a783a6f2f3da220a3b8ab9fe92ad8fdc276f7d084d1cf01e2c1a93ad95a65459"
+    },
+    {
+      "file": "04-octagonal-tollhouse-front.png",
+      "design": "04-octagonal-tollhouse",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "34e7af7881a3cf18f594451b2e6e69d2d179d60a0149432c174715d8b3af9805"
+      },
+      "sha256": "2f755f7fb827a2f2f75a8e9af43111bfcb0ca6f2da41fcf09430547804b13049"
+    },
+    {
+      "file": "05-smock-windmill-front.png",
+      "design": "05-smock-windmill",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "97af9dfc2bc0d05504866fe7fb32430fc3a6d704af704b7c7ffd64863e5c4e8f"
+      },
+      "sha256": "eb271a30478e00818c69d2d3b6e3822c309fbfd07432ae6edb404b2533663607"
+    },
+    {
+      "file": "06-village-smithy-front.png",
+      "design": "06-village-smithy",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "4261e78db694c14740765a83e21f661ad5225d166cc048ba839e5f4da1339d74"
+      },
+      "sha256": "b527f74f4e92624db7dca3d6e4d1fafe08283169176e8ee387cd24ee24c501df"
+    },
+    {
+      "file": "07-great-tithe-barn-front.png",
+      "design": "07-great-tithe-barn",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "54c56a2df41c429092aab4604d30d8ea7cbaa8817a368eb914f565dc4dbdeb97"
+      },
+      "sha256": "03961efd5f3739753eb557f601e0a9e11698c73374fda469313ded8058b713b6"
+    },
+    {
+      "file": "08-iron-bandstand-front.png",
+      "design": "08-iron-bandstand",
+      "view": "front",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 35,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "806a440158031ab8b61da804de06f0a84c193245d6a1bffb8c606c3c9e102a15"
+      },
+      "sha256": "691fde85ea62ea36c07c9539ec4b004f9b83d73054bc4d87bb579794337b07ce"
+    },
+    {
+      "file": "d083-eight-front-board.png",
+      "view": "front",
+      "width": 2400,
+      "height": 1450,
+      "sha256": "863f2fdd5c437595062fcf76455164ed2cb523906fcf89acbf212c1abfbcd728"
+    },
+    {
+      "file": "01-staddle-granary-rear.png",
+      "design": "01-staddle-granary",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "d0adfeb9f21ce0a96364505560aeba13b1b871dec706bbf80b59b68f7082e267"
+      },
+      "sha256": "b910050276b016a2b7f65d303743ab022a6d747f3e0ba107c1d5c28b921e1a5a"
+    },
+    {
+      "file": "02-stone-dovecote-rear.png",
+      "design": "02-stone-dovecote",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "fbbb62deb143c585d90642028b8a14ac553dfcf66f6fc131487a1efd8abcd2ad"
+      },
+      "sha256": "59aec2057bb28c251b0d1330f04c73e1cf38d4137cea95feaf84616fbff7a174"
+    },
+    {
+      "file": "03-railway-signal-box-rear.png",
+      "design": "03-railway-signal-box",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "6d18c0ac6c3ea603cbeed20c440d6c660e4ad136941698907492f8e0e21b7a9d"
+      },
+      "sha256": "e5755562eeec1e53a7547d5329f12ad4be51fbf2b84b0416d4619964da5ea568"
+    },
+    {
+      "file": "04-octagonal-tollhouse-rear.png",
+      "design": "04-octagonal-tollhouse",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "34e7af7881a3cf18f594451b2e6e69d2d179d60a0149432c174715d8b3af9805"
+      },
+      "sha256": "a867022a07110147cd6d971924f2a33037e8863b63e0d077bebcd9a8dc3c7228"
+    },
+    {
+      "file": "05-smock-windmill-rear.png",
+      "design": "05-smock-windmill",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "97af9dfc2bc0d05504866fe7fb32430fc3a6d704af704b7c7ffd64863e5c4e8f"
+      },
+      "sha256": "6765117b9482ad4db25b86c3a121ef1b5be2b3001ac9756f178166ae252d59d1"
+    },
+    {
+      "file": "06-village-smithy-rear.png",
+      "design": "06-village-smithy",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "4261e78db694c14740765a83e21f661ad5225d166cc048ba839e5f4da1339d74"
+      },
+      "sha256": "a18b4bac672ed7282b4882b975411dfb31fda2e0803891475eff4eccc74667bd"
+    },
+    {
+      "file": "07-great-tithe-barn-rear.png",
+      "design": "07-great-tithe-barn",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "54c56a2df41c429092aab4604d30d8ea7cbaa8817a368eb914f565dc4dbdeb97"
+      },
+      "sha256": "a5811b0d0450f743fa44b917dcefb749ea1420217ba8191ea2edee022a3e947a"
+    },
+    {
+      "file": "08-iron-bandstand-rear.png",
+      "design": "08-iron-bandstand",
+      "view": "rear",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 215,
+        "elevationDegrees": 28,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "806a440158031ab8b61da804de06f0a84c193245d6a1bffb8c606c3c9e102a15"
+      },
+      "sha256": "3304953ffe1e832dc2b127154fa0f0cde19a6321c77eb10ab1d4fe19f1e10533"
+    },
+    {
+      "file": "d083-eight-rear-board.png",
+      "view": "rear",
+      "width": 2400,
+      "height": 1450,
+      "sha256": "ad2870c51586a015b592e57fec20db9782a8789e381bd57aeb3eaf709f032cd9"
+    },
+    {
+      "file": "01-staddle-granary-elevation.png",
+      "design": "01-staddle-granary",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "d0adfeb9f21ce0a96364505560aeba13b1b871dec706bbf80b59b68f7082e267"
+      },
+      "sha256": "459cdf43dbfeaf3b049c2ec12775e8e3c3a75b86cc08eb16882860653f45b57a"
+    },
+    {
+      "file": "02-stone-dovecote-elevation.png",
+      "design": "02-stone-dovecote",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "fbbb62deb143c585d90642028b8a14ac553dfcf66f6fc131487a1efd8abcd2ad"
+      },
+      "sha256": "802ac2507700f1637feb0e806a6a6591726349c0455ec74111b4f79ca7b77b07"
+    },
+    {
+      "file": "03-railway-signal-box-elevation.png",
+      "design": "03-railway-signal-box",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "6d18c0ac6c3ea603cbeed20c440d6c660e4ad136941698907492f8e0e21b7a9d"
+      },
+      "sha256": "dcc9f2d71c73b6012701dc6373cbd686e6920b0e53489707de9d75c01cd35228"
+    },
+    {
+      "file": "04-octagonal-tollhouse-elevation.png",
+      "design": "04-octagonal-tollhouse",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "34e7af7881a3cf18f594451b2e6e69d2d179d60a0149432c174715d8b3af9805"
+      },
+      "sha256": "8dc6ff98c1732ee4f26abae5e0fa2326e423d2eef6a6c942a0d426d2f018a3ec"
+    },
+    {
+      "file": "05-smock-windmill-elevation.png",
+      "design": "05-smock-windmill",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "97af9dfc2bc0d05504866fe7fb32430fc3a6d704af704b7c7ffd64863e5c4e8f"
+      },
+      "sha256": "4c6bc3e770a9b0ed97a2f9e5d45c84a22afad5c00f13321dd4dc6a30d6a4a2b3"
+    },
+    {
+      "file": "06-village-smithy-elevation.png",
+      "design": "06-village-smithy",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "4261e78db694c14740765a83e21f661ad5225d166cc048ba839e5f4da1339d74"
+      },
+      "sha256": "190b544e9c72b3c862a03a00eebbff824754af73b79e6c42eb53685181f8f52b"
+    },
+    {
+      "file": "07-great-tithe-barn-elevation.png",
+      "design": "07-great-tithe-barn",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "54c56a2df41c429092aab4604d30d8ea7cbaa8817a368eb914f565dc4dbdeb97"
+      },
+      "sha256": "cb2ab3e3e3697b3535ae64070f1b4d503e25eea430655145600703f0fdfc7f47"
+    },
+    {
+      "file": "08-iron-bandstand-elevation.png",
+      "design": "08-iron-bandstand",
+      "view": "elevation",
+      "width": 1200,
+      "height": 1000,
+      "camera": {
+        "yawDegrees": 0,
+        "elevationDegrees": 3,
+        "projection": "orthographic CPU triangle z-buffer",
+        "sameParcelScale": true,
+        "allVerticesInsideImage": true,
+        "worldPixelScale": 598.8023952095808,
+        "sourceModelFileSha256": "806a440158031ab8b61da804de06f0a84c193245d6a1bffb8c606c3c9e102a15"
+      },
+      "sha256": "3fef9769cd2027591b8f5f99d4242ae2176c4afd454fc98a0c408bf9a9671c47"
+    }
+  ]
+}
