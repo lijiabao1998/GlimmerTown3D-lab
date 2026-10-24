@@ -1,3 +1,4 @@
+import {d084PriorSource} from './d084-source-v1.mjs';
 // Exact finite source accounting for technical accepted-nine geometry revisions.
 // Only historical source readers use preimages; all runtime imports use actual product files.
 import fs from 'node:fs';
@@ -18,7 +19,7 @@ export function releaseSourceManifest(){
  return m;
 }
 export function releaseHistoricalSource(file,read=disk){
- const m=releaseSourceManifest(),text=read(file);
+ const m=releaseSourceManifest(),text=d084PriorSource(file,read(file));
  assert.equal(typeof text,'string',file+' exact allowed source: actual reader text');
  if(Object.hasOwn(m.modified,file)){const r=m.modified[file];assert.equal(sha(text),r.afterSha256,file+' exact allowed source: technical revision');return r.before;}
  if(Object.hasOwn(m.added,file)){assert.equal(sha(text),m.added[file],file+' exact allowed source: finite addition');return '';}

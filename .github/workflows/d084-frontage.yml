@@ -25,7 +25,14 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y fonts-wqy-microhei
       - run: node --experimental-strip-types proposals/d084/frontage-check.mjs
       - run: node --experimental-strip-types proposals/d084/source-check.mjs
+      - run: node --test tools/d084-source-v1.test.mjs tools/d082-release-source-v2.test.mjs
       - run: npm run typecheck && npm run build
+      - name: Download and pin already published main bytes for whole-frame comparison
+        run: |
+          mkdir -p scratch/d084-baseline
+          curl --fail --location --silent --show-error https://lijiabao1998.github.io/GlimmerTown3D-lab/ -o scratch/d084-baseline/index.html
+          echo '020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1  scratch/d084-baseline/index.html' | sha256sum --check
+      - run: node --experimental-strip-types proposals/d084/browser-check.mjs --width=${{ matrix.width }} --baseline
       - run: node --experimental-strip-types proposals/d084/browser-check.mjs --width=${{ matrix.width }}
       - uses: actions/upload-artifact@v4
         if: always()

@@ -17,3 +17,11 @@
 ## 初始風險與未完成
 
 本機 Chromium 啟動受環境 socket 限制，雲端 GUI 的 WebGL disabled；需要既有 GitHub Actions 真 Chromium 證據，不用概念圖替代。實體手機未驗證。
+
+## 有限來源契約與首紅修復
+
+原來源守衛首紅完整保留於 proposals/d084/evidence/first-source-red.txt。D084 使用獨立 fixtures/d084-source-v1.json 與 tools/d084-source-v1.mjs：精確列兩個顯示接線修改和一個新增顯示檔，固定整份 manifest SHA 與每檔 before/after SHA；前像再與 e0508af Git 物件逐位元組獨立比對。新程式仍實際執行，只有歷史「讀原始碼」守衛取得經校驗的前像。舊 fixture、舊 pin、Windows predicate、mesh 門檻、歷史來源原測試不變。
+
+最外來源庫存仍經原 exact inventory 驗證，新增來源、重複來源、遺漏來源、空內容及任一 byte mutation 均拒絕。接線限定 tools/d082-release-source-v2.mjs 和 tools/d083-scope.mjs 的外層，保留先前各層的 inventory 與所有原始測試。完整原 D082 source/windows 3,244 negatives 及 D083 outer 59 negatives 已在本機通過；舊 mesh 衝突負控與 D083 原生幾何 envelope 亦通過。這不等於整個遠端 CI／瀏覽器／圖審完成。
+
+測試首紅亦保留：raw 2D 分享碼只讀是既有正確行為。測試改用原生 saveCode 產生可繼續建造的本線碼，再經真貼上 UI 進入遊戲；未繞過原有只讀保護。公網正式 HTML 固定 SHA 後放在獨立測試 origin，比對三尺寸關閉候選的整張 PNG；不是公網 origin 互動宣稱。
