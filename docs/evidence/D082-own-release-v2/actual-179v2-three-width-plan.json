@@ -1,0 +1,599 @@
+{
+  "complete": true,
+  "passed": true,
+  "qualification": "Exact capture plan only; actual paired Chromium PNGs still mandatory.",
+  "sourcePins": {
+    "src/render/britishCoastalRecreationArt.ts": "4869a83614364d7f2c97027991e860f73c6fca21568b7e57ba3cbae42896a5c2",
+    "src/render/d082RemainingGeometryData.ts": "ec726d06fbd65b78cfae069564c4a2cccb71f91ebf2a889df7bbb3c3bc83d4e4"
+  },
+  "rows": [
+    {
+      "slot": "179:2",
+      "width": 1440,
+      "owner": 154,
+      "originalCamera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "standardViews": [
+        {
+          "view": {
+            "id": "context",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 4,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "original",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "front",
+            "spin": 0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              200.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "rear",
+            "spin": -2.356194490192345,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              -125.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "side",
+            "spin": -0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              217.41740238538057,
+              94.06040612287403,
+              37.500000000000014
+            ]
+          }
+        }
+      ],
+      "contractSha256": [
+        "117fd46635ac3e15ac824de19442d29de9db0ffa32e6892d16ff3929cfd38035",
+        "807850db29c4ce6e4c3d694a798f779ed911c0a5c9d99dc3aba2b83f7311e0f4"
+      ],
+      "required": [
+        826,
+        1014
+      ],
+      "originalUncovered": [
+        120,
+        26
+      ],
+      "selected": [
+        {
+          "view": {
+            "id": "surface-e2-y7",
+            "spin": 2.748893571891069,
+            "tilt": 0.48171086355043513
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -38.62721715438403,
+              158.83565413920485,
+              -1.0745563714101962
+            ]
+          },
+          "gain": [
+            120,
+            17
+          ],
+          "remaining": [
+            0,
+            9
+          ]
+        },
+        {
+          "view": {
+            "id": "surface-e0-y3",
+            "spin": 1.1780972450961724,
+            "tilt": -0.27227135331111535
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -15.22899715876882,
+              46.783745392862436,
+              205.84069063137474
+            ]
+          },
+          "gain": [
+            0,
+            9
+          ],
+          "remaining": [
+            0,
+            0
+          ]
+        }
+      ],
+      "remaining": [
+        0,
+        0
+      ],
+      "passed": true,
+      "qualification": "Geometric planning only. Every selected view must be captured as paired production PNGs. Every original mandatory point remains required; residual probes still fail."
+    },
+    {
+      "slot": "179:2",
+      "width": 412,
+      "owner": 154,
+      "originalCamera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "standardViews": [
+        {
+          "view": {
+            "id": "context",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 4,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "original",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "front",
+            "spin": 0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              200.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "rear",
+            "spin": -2.356194490192345,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              -125.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "side",
+            "spin": -0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              217.41740238538057,
+              94.06040612287403,
+              37.500000000000014
+            ]
+          }
+        }
+      ],
+      "contractSha256": [
+        "bf9b5f3473b311e9e51fd115b6c47b84bf53bb97326325deee4e70cd817a61a2",
+        "fd1c57202dcc4d5372e6af3c85e1b3dced043a099be39613be60e311e44d07a0"
+      ],
+      "required": [
+        826,
+        1014
+      ],
+      "originalUncovered": [
+        120,
+        26
+      ],
+      "selected": [
+        {
+          "view": {
+            "id": "surface-e2-y7",
+            "spin": 2.748893571891069,
+            "tilt": 0.48171086355043513
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -38.62721715438403,
+              158.83565413920485,
+              -1.0745563714101962
+            ]
+          },
+          "gain": [
+            120,
+            17
+          ],
+          "remaining": [
+            0,
+            9
+          ]
+        },
+        {
+          "view": {
+            "id": "surface-e0-y3",
+            "spin": 1.1780972450961724,
+            "tilt": -0.27227135331111535
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -15.22899715876882,
+              46.783745392862436,
+              205.84069063137474
+            ]
+          },
+          "gain": [
+            0,
+            9
+          ],
+          "remaining": [
+            0,
+            0
+          ]
+        }
+      ],
+      "remaining": [
+        0,
+        0
+      ],
+      "passed": true,
+      "qualification": "Geometric planning only. Every selected view must be captured as paired production PNGs. Every original mandatory point remains required; residual probes still fail."
+    },
+    {
+      "slot": "179:2",
+      "width": 360,
+      "owner": 154,
+      "originalCamera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "standardViews": [
+        {
+          "view": {
+            "id": "context",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 4,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "original",
+            "spin": 0,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              169.7,
+              94.06040612287403,
+              152.7
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "front",
+            "spin": 0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              200.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "rear",
+            "spin": -2.356194490192345,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              54.500000000000014,
+              94.06040612287403,
+              -125.41740238538057
+            ]
+          }
+        },
+        {
+          "view": {
+            "id": "side",
+            "spin": -0.7853981633974483,
+            "tilt": 0
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              217.41740238538057,
+              94.06040612287403,
+              37.500000000000014
+            ]
+          }
+        }
+      ],
+      "contractSha256": [
+        "69366c4e00542c8e48ef90270a8c5734a66f5b639b21567029bd3aa666ff5feb",
+        "fd1c57202dcc4d5372e6af3c85e1b3dced043a099be39613be60e311e44d07a0"
+      ],
+      "required": [
+        826,
+        1014
+      ],
+      "originalUncovered": [
+        120,
+        26
+      ],
+      "selected": [
+        {
+          "view": {
+            "id": "surface-e2-y7",
+            "spin": 2.748893571891069,
+            "tilt": 0.48171086355043513
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -38.62721715438403,
+              158.83565413920485,
+              -1.0745563714101962
+            ]
+          },
+          "gain": [
+            120,
+            17
+          ],
+          "remaining": [
+            0,
+            9
+          ]
+        },
+        {
+          "view": {
+            "id": "surface-e0-y3",
+            "spin": 1.1780972450961724,
+            "tilt": -0.27227135331111535
+          },
+          "camera": {
+            "target": [
+              54.5,
+              0,
+              37.5
+            ],
+            "zoom": 8,
+            "pos": [
+              -15.22899715876882,
+              46.783745392862436,
+              205.84069063137474
+            ]
+          },
+          "gain": [
+            0,
+            9
+          ],
+          "remaining": [
+            0,
+            0
+          ]
+        }
+      ],
+      "remaining": [
+        0,
+        0
+      ],
+      "passed": true,
+      "qualification": "Geometric planning only. Every selected view must be captured as paired production PNGs. Every original mandatory point remains required; residual probes still fail."
+    }
+  ]
+}

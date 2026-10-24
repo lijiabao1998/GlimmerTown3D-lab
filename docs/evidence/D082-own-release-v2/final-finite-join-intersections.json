@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "qualification": "Actual product joined-shell geometry only, not browser QA.",
+  "triangles": 80,
+  "pairs": 3160,
+  "intersections": 0,
+  "negativeControls": 2
+}

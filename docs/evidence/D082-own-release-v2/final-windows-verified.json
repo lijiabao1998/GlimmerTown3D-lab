@@ -1,0 +1,28 @@
+{
+  "passed": true,
+  "finiteJoin": true,
+  "finitePhases": [
+    {
+      "name": "immutable-predecessor-uv",
+      "file": "tools/d082-remaining-geometry-windows.mjs",
+      "passed": true
+    },
+    {
+      "name": "current-finite-contract",
+      "file": "tools/d082-remaining-geometry-join-contract.test.mjs",
+      "passed": true
+    },
+    {
+      "name": "current-finite-uv",
+      "file": "tools/d082-remaining-geometry-join-uv.mjs",
+      "passed": true
+    }
+  ],
+  "candidateOnly": false,
+  "qualification": "Current five-slot original UV equivalence plus mandatory immutable179v2 predecessor and actual finite-join UV proofs; not browser acceptance.",
+  "cases": 60,
+  "comparisons": 6984,
+  "negativeControls": 16296,
+  "horizontalUDiscrepancies": [],
+  "horizontalUDiscrepancyCount": 0
+}

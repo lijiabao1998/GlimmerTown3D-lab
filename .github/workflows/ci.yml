@@ -34,7 +34,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: CI provenance and fail-closed gate negative controls
-        run: node --test .github/scripts/ci-integrity.test.mjs tools/unit-partitions.test.mjs
+        run: node --test .github/scripts/ci-integrity-release-v2.test.mjs tools/unit-partitions-release-v2.test.mjs
       - run: npm run build
       - name: Record build source and file hashes
         id: identity
@@ -93,6 +93,13 @@ jobs:
         run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"
         env:
           D081_TOUCH_BASELINE: 9e3452a438331feec4082f6821cfcb0b0e653c4b
+      - name: Fetch immutable D082 versioned release sources
+        run: |
+          git fetch --no-tags --depth=1 origin "$D082_IMMUTABLE_TEN"
+          git fetch --no-tags --depth=1 origin "$D082_REPAIR_PARENT"
+        env:
+          D082_IMMUTABLE_TEN: 0b6da7aa384e5a65c07221eed9301aa4a94cd4ba
+          D082_REPAIR_PARENT: 63a1b3919b0e1531f3d0e988cc575bdde5736002
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -103,6 +110,20 @@ jobs:
       - run: npm run typecheck
       - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
         run: npm run unit -- --partition=historical
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-versioned-node-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            scratch/d082-release-mesh-v2/
+            scratch/d082-remaining-geometry/*.json
+            scratch/d082-remaining-geometry/windows-*.log
+            scratch/d082-historical-release-runs/*/report.json
+            scratch/d082-historical-release-runs/*/source-inventory.json
+            scratch/d082-historical-release-runs/*/*.stdout.log
+            scratch/d082-historical-release-runs/*/*.stderr.log
+          if-no-files-found: error
+          retention-days: 14
 
   node-frame:
     runs-on: ubuntu-24.04
@@ -313,6 +334,13 @@ jobs:
           git fetch --no-tags --depth=1 origin 23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e
           git fetch --no-tags --depth=1 origin 7ec70a96b01437ab4576b0962905be16b1591e79
           git fetch --no-tags --depth=1 origin 2cd43c424dcc909dcfa6ac55275406d2bc527ce0
+      - name: Fetch immutable D082 versioned release sources
+        run: |
+          git fetch --no-tags --depth=1 origin "$D082_IMMUTABLE_TEN"
+          git fetch --no-tags --depth=1 origin "$D082_REPAIR_PARENT"
+        env:
+          D082_IMMUTABLE_TEN: 0b6da7aa384e5a65c07221eed9301aa4a94cd4ba
+          D082_REPAIR_PARENT: 63a1b3919b0e1531f3d0e988cc575bdde5736002
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -332,6 +360,19 @@ jobs:
         with:
           name: node-frame-d082-${{ github.sha }}-${{ github.run_attempt }}
           path: scratch/d082-node-frame/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-versioned-frame-${{ github.sha }}-${{ github.run_attempt }}
+          path: |
+            scratch/d082-release-capture-plan-v2/
+            scratch/d082-historical-release-runs/*/report.json
+            scratch/d082-historical-release-runs/*/source-inventory.json
+            scratch/d082-historical-release-runs/*/*.stdout.log
+            scratch/d082-historical-release-runs/*/*.stderr.log
+            scratch/d082-historical-release-runs/*/source/scratch/historical-frame-result.json
           if-no-files-found: error
           retention-days: 14
 
@@ -1086,6 +1127,10 @@ jobs:
         width: [1440, 360, 412]
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch immutable immediate predecessor for genuine paired product QA
+        run: git fetch --no-tags --depth=1 origin "$D082_PAIR_SOURCE"
+        env:
+          D082_PAIR_SOURCE: 63a1b3919b0e1531f3d0e988cc575bdde5736002
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -1093,16 +1138,33 @@ jobs:
       - run: npm ci
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run build
-      - name: D082 observed-camera surface API negative controls
-        run: node tools/test-d082-browser-surfaces.mjs
-      - name: Actual D082 production gallery before and after, all ten slots
-        run: node tools/d082-inspect.mjs
+      - name: Current nine scene API and real-image manifest negative controls
+        run: |
+          node tools/test-d082-release-browser-v2.mjs
+          node --test tools/d082-redesign-views.test.mjs tools/d082-join-product-capture.test.mjs
+      - name: Actual accepted-nine product paired Chromium images
+        run: node tools/d082-redesign-capture.mjs
         env:
-          D082_WIDTHS: ${{ matrix.width }}
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - name: Unchanged full surface coverage using only actual captured PNG views
+        if: always()
+        run: node tools/d082-redesign-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - name: Actual accepted-nine predecessor versus repaired product seam QA
+        if: always()
+        run: node tools/d082-join-product-capture.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: d082-production-${{ matrix.width }}-${{ github.sha }}
-          path: scratch/d082-production-review/
+          path: |
+            scratch/d082-redesign/
+            scratch/d082-redesign-coverage/
+            scratch/d082-join-product-capture/*.png
+            scratch/d082-join-product-capture/manifest.json
+            scratch/d082-join-product-capture/before-build.log
           if-no-files-found: error
           retention-days: 14

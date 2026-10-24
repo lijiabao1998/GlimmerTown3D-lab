@@ -1,0 +1,55 @@
+{
+  "sourceCommit": "63a1b3919b0e1531f3d0e988cc575bdde5736002",
+  "originalEmitterSha256": "3c8be9834fb42d4105563a33db502d4b8e7afa4626ac0acf5e0cfce9121fbb97",
+  "qualification": "Reproducible geometry construction only; not browser, CI, visual approval or release.",
+  "modes": [
+    {
+      "name": "reservoir-union",
+      "slots": [
+        "154:0"
+      ],
+      "env": {
+        "D082_GEOMETRY_SLOT": "154:0"
+      }
+    },
+    {
+      "name": "attached-buildings",
+      "slots": [
+        "179:0",
+        "179:2",
+        "185:0"
+      ],
+      "env": {
+        "D082_PRESERVE_BUILDINGS": "1",
+        "D082_FOUNDATION": "1",
+        "D082_INTEGRATE_DOOR": "1"
+      }
+    },
+    {
+      "name": "joined-wings",
+      "slots": [
+        "154:1",
+        "154:2"
+      ],
+      "env": {
+        "D082_PRESERVE_COMPONENTS": "1",
+        "D082_FOUNDATION": "1"
+      }
+    }
+  ],
+  "tools": {
+    "tools/d082-remaining-geometry-build.mjs": "14e74ca289ce69a6664b014702a7123b76a125f8db3a2072f8a7a75ef15ce8d7",
+    "tools/d082-remaining-geometry-triangulate.mjs": "c41cc133d00ffe3b90a894427ab2fc39caf52d83ae5d7c2b32e71f3b055d87ab",
+    "tools/d082-remaining-geometry-conform.mjs": "7fd67f204cc14d4ac35ebb5433d08eed7e914ae23510aea9c031288d4e4c1d7d",
+    "tools/d082-remaining-geometry-join-contract.mjs": "61871a34fd3528510e4ba0d758a14493a2ff765b2939c50c5b25ad46553ba2e5"
+  },
+  "dataSha256": "ec726d06fbd65b78cfae069564c4a2cccb71f91ebf2a889df7bbb3c3bc83d4e4",
+  "weightedCounts": {
+    "154:0": 332,
+    "179:0": 160,
+    "179:2": 180,
+    "185:0": 120,
+    "154:1": 316,
+    "154:2": 312
+  }
+}

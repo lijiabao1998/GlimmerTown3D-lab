@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 
 export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']);
-export const D082_FRAME = Object.freeze(['./unit-d082-frame.mjs', 'd082FrameGuards']);
+export const D082_FRAME = Object.freeze(['./unit-d082-release-frame-v2.mjs', 'd082FrameGuards']);
 export const INLINE_SUITE = 'unit.mjs:inline';
 export const D078_FRAME = Object.freeze(['./unit-d078-frame.mjs', 'd078FrameGuards']);
 export const D079_FRAME = Object.freeze(['./unit-d079-frame.mjs', 'd079FrameGuards']);
@@ -132,8 +132,8 @@ export const UNIT_GUARDS = Object.freeze([
   ["./unit-d080-frame.mjs","d080FrameGuards"],
   ["./unit-d081.mjs","d081Guards"],
   ["./unit-d081-frame.mjs","d081FrameGuards"],
-  ["./unit-d082.mjs","d082Guards"],
-  ["./unit-d082-frame.mjs","d082FrameGuards"],
+  ["./unit-d082-release-v2.mjs","d082Guards"],
+  ["./unit-d082-release-frame-v2.mjs","d082FrameGuards"],
   ["./unit-evidence.mjs","evidenceImageGuards"],
 ].map(Object.freeze));
 
