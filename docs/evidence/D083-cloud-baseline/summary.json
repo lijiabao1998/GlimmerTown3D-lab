@@ -1,0 +1,33 @@
+{
+  "qualification": "Cloud rerun of exact PR37 product before integrating the new D082 technical repair. Focused native functionality and immutable accepted art, not complete release CI.",
+  "sourceCommit": "63a1b3919b0e1531f3d0e988cc575bdde5736002",
+  "widths": [
+    {
+      "width": 1440,
+      "complete": true,
+      "shots": 13,
+      "manifest": "1440/manifest.json",
+      "manifestSha256": "f9b758b0c46ff1625854c8d72741ac21fb1a9c47e27c8b239d922e3c681bb10d",
+      "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+    },
+    {
+      "width": 412,
+      "complete": true,
+      "shots": 13,
+      "manifest": "412/manifest.json",
+      "manifestSha256": "509812cbe1d33440f2ea7a7b83679e2c1518a832cb303984968f9fee79d83258",
+      "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+    },
+    {
+      "width": 360,
+      "complete": true,
+      "shots": 13,
+      "manifest": "360/manifest.json",
+      "manifestSha256": "15a570700db6e830d70618334ff19de645c299b8496caad1ff10c395e58b0792",
+      "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+    }
+  ],
+  "rawPngs": 39,
+  "imagesEdited": false,
+  "sourceFilesChanged": false
+}
