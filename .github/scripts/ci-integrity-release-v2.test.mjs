@@ -160,7 +160,7 @@ test('workflow keeps all six Node partitions mandatory at the original 120-minut
   assert.deepEqual(needs(smoke), STAGES);
   assert.match(smoke, /\n    if: always\(\)\n/);
   assert.match(smoke, /run: node \.github\/scripts\/ci-integrity\.mjs gate\n/);
-  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078', 'd079', 'd080', 'd081', 'd082']);
+  assert.deepEqual(needs(pages), ['smoke', 'd055', 'd059', 'd060', 'd061', 'd062', 'd063', 'd064', 'd068', 'd069', 'd070', 'd071', 'd072', 'd073', 'd074', 'd076', 'd077', 'd078', 'd079', 'd080', 'd081', 'd082', 'd083-native-release']);
   assert.match(pages, /\n    if: github\.ref == 'refs\/heads\/main' && github\.event_name != 'pull_request'\n/);
   assert.doesNotMatch(pages, /always\(\)|continue-on-error:/);
   assert.match(workflow, /run: node --test \.github\/scripts\/ci-integrity-release-v2\.test\.mjs tools\/unit-partitions-release-v2\.test\.mjs\n/);

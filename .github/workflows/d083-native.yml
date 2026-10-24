@@ -1,10 +1,11 @@
 name: D083 native buildings
 on:
   push:
-    branches: ['main', 'codex/d083-british-local-design']
+    branches: ['codex/d083-british-local-design']
   pull_request:
     branches: ['main', 'codex/d083-isolated-compat-20261023']
   workflow_dispatch:
+  workflow_call:
 permissions:
   contents: read
   actions: read

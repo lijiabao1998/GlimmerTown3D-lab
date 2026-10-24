@@ -716,8 +716,16 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  # Main publication requires the same exact-SHA native workflow, not a parallel observation.
+  d083-native-release:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/d083-native.yml
+
   pages:
-    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079, d080, d081, d082]
+    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079, d080, d081, d082, d083-native-release]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:
