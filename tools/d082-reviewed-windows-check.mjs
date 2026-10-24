@@ -5,7 +5,8 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
-import {isD082ReviewedExistingSource,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
+import {isD082ReviewedWindowsSource as isD082ReviewedExistingSource,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
+import {D083_ADDED,d083PriorScopeSource} from './d083-scope.mjs';
 import {assertD081Scope} from './d081-scope.mjs';
 import {assertD074Scope} from './d074-scope.mjs';
 import {D082_CURRENT_PATHS} from './d082-source-restoration.mjs';
@@ -37,6 +38,7 @@ function assertAppliedGuard(file,current){
  return true;
 }
 function assertScopeHelper(current){
+ current=d083PriorScopeSource(current);
  assert.equal(current.split(REVIEW.approvedHelperBlock).length,2,'one exact approved source-only helper');
  assert.equal(sha(current.replace(REVIEW.approvedHelperBlock,'')),REVIEW.scopeBeforeTextSha256,'all pre-existing D082 reader and inventory bytes retained');
 }
@@ -68,7 +70,7 @@ export function reviewedWindowsGuards(){
   assert.deepEqual(calls,[WINDOW]);report.negativeControls++;
  });
  test('entire D082/D081/D074 scope chain rejects invalid Windows readers and preserves missing errors',()=>{
-  const snapshot=new Map(D082_CURRENT_PATHS.map(file=>[file,read(file)]));
+  const snapshot=new Map([...D082_CURRENT_PATHS,...D083_ADDED].map(file=>[file,read(file)]));
   for(const value of invalid){const injected=file=>file===WINDOW?value:snapshot.get(file);for(const guard of [assertD082Scope,assertD081Scope,assertD074Scope]){assert.throws(()=>guard(injected),/exact allowed source/);report.negativeControls++;}}
   const missing=new Error('missing Windows in complete reader'),injected=file=>{if(file===WINDOW)throw missing;return snapshot.get(file);};
   for(const guard of [assertD082Scope,assertD081Scope,assertD074Scope]){assert.throws(()=>guard(injected),error=>error===missing);report.negativeControls++;}

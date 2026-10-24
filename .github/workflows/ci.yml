@@ -85,6 +85,10 @@ jobs:
         run: git fetch --no-tags --depth=1 origin "$D082_REVIEWED_185"
         env:
           D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83
+      - name: Fetch exact D083 source-accounting baseline
+        run: git fetch --no-tags --depth=1 origin "$D083_SOURCE_BASELINE"
+        env:
+          D083_SOURCE_BASELINE: 7deb34881b38679b1d0396e21eb9e57ad2ee9a0c
       - name: Fetch separate exact PR33 touch contract baseline
         run: git fetch --no-tags --depth=1 origin "$D081_TOUCH_BASELINE"
         env:

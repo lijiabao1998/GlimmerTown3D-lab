@@ -1,6 +1,6 @@
 # D083 isolated compatibility repair
 
-Status: catalogue/dependency repairs implemented; protected source qualification and inherited D082 gates remain blocked. No release claim.
+Historical report for the first repair at `2e85efb`. Its source-boundary failures are superseded by [the finite outer-boundary repair](D083-source-boundary-repair.md); the original evidence below remains unchanged. Inherited D082 release gates remain unresolved.
 
 Source: `7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e`, obtained from the authorized remote in a new sparse checkout. Branch: `codex/d083-isolated-compat-20261023`. PR36 remains untouched and Draft, based on `codex/d082-art-redesign`. This repair will be stacked on PR36.
 

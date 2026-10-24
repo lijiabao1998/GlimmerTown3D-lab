@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "groups": [
+    {
+      "file": "./tools/d081-touch-lease-scope.mjs",
+      "failed": 0,
+      "report": {
+        "baseline": "9e3452a438331feec4082f6821cfcb0b0e653c4b",
+        "before": {
+          "src/cityView.ts": "97f4920ebb467cfe3662dd3542ff8d9ff2fef33f440e12d917aae51ca234549f",
+          "src/ui/panelPress.ts": "2e3011d22cb999a9a6d5366b229861ea6e73438259a369f82e66718a3eb4a422"
+        },
+        "after": {
+          "src/cityView.ts": "c88768b73180cbd33978daa262c205bdac9b14c6715fa1b973577ec4d6feca6d",
+          "src/ui/panelPress.ts": "a481a138c3a47cd1820301db30678f63bf993b6e128399e17ef0b7263a7b088b"
+        },
+        "qualification": "Exact source allowance and historical reconstruction only; not runtime behavior evidence.",
+        "tests": [
+          {
+            "name": "frozen fixture equals exact PR33 Git bytes, not regenerated art expectations",
+            "passed": true
+          },
+          {
+            "name": "original historical fixtures and behavioral assertions remain byte-identical",
+            "passed": true
+          },
+          {
+            "name": "D051 boundary adds only unleased gate API compatibility with every assertion unchanged",
+            "passed": true
+          },
+          {
+            "name": "actual candidate checked once before exact restoration and diff allowance",
+            "passed": true
+          },
+          {
+            "name": "unchanged, unknown, alias paths pass through without gaining permission",
+            "passed": true
+          },
+          {
+            "name": "old sources, one-byte mutations and missing sources fail closed",
+            "passed": true
+          },
+          {
+            "name": "malformed broadened or repinned fixtures cannot authorize source",
+            "passed": true
+          },
+          {
+            "name": "outer and older scope chains preserve every injected negative control",
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    },
+    {
+      "file": "./tools/d074-touch-repair-scope.mjs",
+      "failed": 0,
+      "report": {
+        "baseline": "beca506c224ad72f9a890ed20b5aa1fa7b2616f5",
+        "path": "src/ui/panelPress.ts",
+        "beforeSha256": "108ed5b4b11f262728c0cddb4abe8a719f4b2ef6f673c1dd96a471c7cabc45c6",
+        "afterSha256": "2e3011d22cb999a9a6d5366b229861ea6e73438259a369f82e66718a3eb4a422",
+        "tests": [
+          {
+            "name": "fixture captures exact baseline bytes and only a frozen reviewed repair",
+            "passed": true
+          },
+          {
+            "name": "exact PR33 D074 candidate bytes are checked after outer actual-source verification",
+            "passed": true
+          },
+          {
+            "name": "all other paths and injected mutations pass through raw without an allowance",
+            "passed": true
+          },
+          {
+            "name": "old production, one-byte changes, empty and missing source fail closed",
+            "passed": true
+          },
+          {
+            "name": "malformed or broadened fixtures cannot authorize or supply historical bytes",
+            "passed": true
+          },
+          {
+            "name": "historical guard chain preserves source inventories and injected mutation readers",
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    }
+  ]
+}

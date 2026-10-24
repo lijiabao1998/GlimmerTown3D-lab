@@ -54,8 +54,39 @@ export function assertD083Scope(read = diskRead) {
   for (const file of files) d083HistoricalBytes(file, read);
   return files.length;
 }
+export function d083PriorSourceFiles(files, read = diskRead) {
+  assertD083Inventory(files);
+  for (const file of files) d083HistoricalBytes(file, read);
+  return files.filter(file => !D083_ADDED.has(file));
+}
 export function isD083ReviewedSource(file, read = diskRead) {
   if (!D083_CHANGED.includes(file)) return false;
   d083HistoricalBytes(file, read);
   return true;
+}
+// Compose a new outer permission without changing the original Windows-only
+// predicate or reclassifying existing D083 sources as historical additions.
+export function withD083SourceAllowance(windowsOnly) {
+  assert.equal(typeof windowsOnly, 'function', 'original Windows predicate required');
+  return function d083ReviewedExistingSource(file, read = diskRead) {
+    return isD083ReviewedSource(file, read) || windowsOnly(file, read);
+  };
+}
+// A single tool boundary is qualified independently of the twelve product
+// sources. The original Windows qualification still checks its frozen preimage.
+export function d083PriorScopeSource(current) {
+  const bytes = diskRead('fixtures/d083-scope-boundary.json');
+  assert.equal(sha(bytes), 'b9a1373387b9c78d54877c22f531a8e213c5b991ed4d68fa7b7d5e86560821ee', 'exact D083 scope-boundary manifest');
+  const boundary = JSON.parse(bytes);
+  assert.equal(boundary.file, 'tools/d082-scope.mjs');
+  assert.equal(boundary.baseline, '2e85efbc265efcc4c214e21365839d0a842f995e');
+  assert.equal(typeof current, 'string', 'D083 scope boundary requires actual source text');
+  assert.equal(sha(current), boundary.afterSha256, 'exact D083 scope boundary');
+  let prior = current;
+  for (const entry of boundary.replacements) {
+    assert.equal(prior.split(entry.after).length, 2, 'unique finite D083 scope-boundary inverse');
+    prior = prior.replace(entry.after, () => entry.before);
+  }
+  assert.equal(sha(prior), boundary.beforeSha256, 'exact original D082 scope source');
+  return prior;
 }

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
 import {D082_ADDED,assertD082Scope,d082HistoricalBytes} from './d082-scope.mjs';
+import {D083_ADDED} from './d083-scope.mjs';
 import {d081TouchLeaseHistoricalBytes} from './d081-touch-lease-scope.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -13,7 +14,7 @@ const M = JSON.parse(diskRead('fixtures/d081-art-scope.json'));
 const baseline = JSON.parse(diskRead('fixtures/d081-source-before.json'));
 const expectedFiles = [...Object.keys(M.before),...M.added].sort();
 const modified = new Set(M.modified);
-export const D081_ADDED = new Set([...M.added,...D082_ADDED]);
+export const D081_ADDED = new Set([...M.added,...D082_ADDED,...D083_ADDED]);
 
 assert.equal(M.baseline,'7ec70a96b01437ab4576b0962905be16b1591e79','D081 fixed D080 candidate baseline');
 const D080M = JSON.parse(diskRead('fixtures/d080-art-scope.json'));
@@ -78,7 +79,7 @@ export function assertD081Scope(read=diskRead) {
   assertD082Scope(read);
   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D082_ADDED.has(file)).sort();
+    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D082_ADDED.has(file)&&!D083_ADDED.has(file)).sort();
   assertD081Inventory(files);
   const snapshot = new Map();
   for(const file of files) {

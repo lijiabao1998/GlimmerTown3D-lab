@@ -4,7 +4,10 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {ROOT} from './cdp.mjs';
-import {D082_CURRENT_ADDITIONS,assertD082CurrentInventory,d082RestorationInput} from './d082-source-restoration.mjs';
+import {D082_CURRENT_ADDITIONS,assertD082CurrentInventory,d082RestorationInput as d082PreviousRestorationInput} from './d082-source-restoration.mjs';
+import {D083_ADDED,d083HistoricalBytes,d083PriorSourceFiles,withD083SourceAllowance} from './d083-scope.mjs';
+
+const d082RestorationInput=(file,read)=>d082PreviousRestorationInput(file,name=>d083HistoricalBytes(name,read));
 
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -69,26 +72,30 @@ function historical(file,current) {
 }
 
 export function d082HistoricalBytes(file,read=diskRead) {
+  if(D083_ADDED.has(file))return d083HistoricalBytes(file,read);
   const current=d082RestorationInput(file,read);
   if(D082_ADDED.has(file))return '';
   return historical(file,current);
 }
 
 // Approved fixed-source allowance: no additional file becomes an addition or leaves historical inventory.
-export function isD082ReviewedExistingSource(file,read=diskRead){
+function isD082ReviewedExistingSource(file,read=diskRead){
   if(file!=='src/render/windows.ts')return false;
   const original=d082HistoricalBytes(file,read);
   assert.equal(sha(original),M.before[file],'reviewed existing source restores exact published bytes');
   return true;
 }
+const d083ReviewedExistingSource=withD083SourceAllowance(isD082ReviewedExistingSource);
+export {isD082ReviewedExistingSource as isD082ReviewedWindowsSource,d083ReviewedExistingSource as isD082ReviewedExistingSource};
 
 export function assertD082LegacyInventory(files){assert.deepEqual([...files].sort(),expectedFiles,'D082 exact original source inventory');return files.length;}
 export const assertD082Inventory=assertD082CurrentInventory;
 
 export function assertD082Scope(read=diskRead) {
-  const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
+  const actualFiles=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
     .filter(entry=>entry.isFile())
     .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
+  const files=d083PriorSourceFiles(actualFiles,read);
   assertD082Inventory(files);
   for(const file of files)d082HistoricalBytes(file,read);
   return files.length;
