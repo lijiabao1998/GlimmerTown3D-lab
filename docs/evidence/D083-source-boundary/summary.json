@@ -71,7 +71,12 @@
           "status": "technical-failure",
           "reason": "child status null instead of7; precise OS cause not established"
         }
-      ]
+      ],
+      "rawLog": {
+        "file": "ci-integrity-windows.txt.gz",
+        "bytes": 23930,
+        "sha256": "f7d6a1e4810db258de9c8cf74fc4873b98a098a45ebcd0c1abd73fdb456a6764"
+      }
     }
   },
   "oldCI": {
