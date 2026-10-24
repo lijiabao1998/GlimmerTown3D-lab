@@ -25,3 +25,11 @@
 最外來源庫存仍經原 exact inventory 驗證，新增來源、重複來源、遺漏來源、空內容及任一 byte mutation 均拒絕。接線限定 tools/d082-release-source-v2.mjs 和 tools/d083-scope.mjs 的外層，保留先前各層的 inventory 與所有原始測試。完整原 D082 source/windows 3,244 negatives 及 D083 outer 59 negatives 已在本機通過；舊 mesh 衝突負控與 D083 原生幾何 envelope 亦通過。這不等於整個遠端 CI／瀏覽器／圖審完成。
 
 測試首紅亦保留：raw 2D 分享碼只讀是既有正確行為。測試改用原生 saveCode 產生可繼續建造的本線碼，再經真貼上 UI 進入遊戲；未繞過原有只讀保護。公網正式 HTML 固定 SHA 後放在獨立測試 origin，比對三尺寸關閉候選的整張 PNG；不是公網 origin 互動宣稱。
+
+## 完整 CI 首紅與 v2 修復（2026-10-24 23:20 UTC）
+
+9f76d9d 的完整 CI 40137299826 node job 實際跑完 3797.7 秒，四項 D054 UI 守衛因舊測試替身沒有新 setFrontage 介面報 TypeError，另 D082 完整 mesh 外層來源庫存拒絕新增街邊顯示檔。完整首紅保留於 GitHub job 121001759721，錯誤摘錄與本機修復驗證另存 evidence；不把獨立瀏覽器綠燈冒充全部綠燈。
+
+v2 改產品接線：只在 Preview 明確 opt-in getter 為 true 時讀道路與呼叫 setFrontage。預設關閉不計算新增參數、不要求新方法；開啟後缺方法仍拋錯，不用 optional call 掩蓋。原 D054 檔案與所有六組行為守衛、26 個錯誤注入完全不改，現已全過。新增實際 updatePreview 函式測試以真 Preview 驗道路共邊、輸入／world 不變及禁用路徑不讀新增參數，並拒絕無條件呼叫和強制關閉變異。
+
+v1 manifest／adapter 保留，應在凍結 9f76d9d 候選重現，不聲稱 v1 current-source 測試適用 v2。v2 精確固定完整新來源與相同正式 baseline 前像。D082 mesh 只加外層精確來源投影，舊庫存 expected 不改，所有 238 個實際檔案仍前後雜湊；新增重複／未知／遺漏／改 byte 負控。七組完整 mesh qualification 本機全過。最終 head 仍須重新三尺寸 Chromium 和完整 CI，先前圖片僅屬先前 head，不替代新驗收。沒有合併或上線。

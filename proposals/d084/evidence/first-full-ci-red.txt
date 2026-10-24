@@ -1,0 +1,9 @@
+Source: https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40137299826/job/121001759721
+Head: 9f76d9d87a81d37388589b326fde0c0622c7a5dc
+Extracted exact error lines; full immutable job log retained at source.
+2026-10-24T22:27:34.5452966Z   NG D054 UI actual commit and undo integration parity：TypeError: preview.setFrontage is not a function
+2026-10-24T22:27:34.5848276Z   NG D054 UI actual warmup refresh interruption and pipe-layer integration：TypeError: preview.setFrontage is not a function
+2026-10-24T22:27:34.6258680Z   NG D054 UI actual idle product preparation purity：TypeError: preview.setFrontage is not a function
+2026-10-24T22:27:34.7078068Z   NG D054 UI actual UI mutation sensitivity：TypeError: preview.setFrontage is not a function
+2026-10-24T23:14:43.8048242Z   NG D082 independent current geometry qualification：AssertionError [ERR_ASSERTION]: exact outer current237 source inventory
+2026-10-24T23:16:51.7324727Z NG 紅燈（3797.7s）：D054 UI actual commit and undo integration parity、D054 UI actual warmup refresh interruption and pipe-layer integration、D054 UI actual idle product preparation purity、D054 UI actual UI mutation sensitivity、D082 independent current geometry qualification

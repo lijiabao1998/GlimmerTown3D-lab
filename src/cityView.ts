@@ -1459,7 +1459,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (op.k === 'tap' && stroke.moved) { preview.clear(); bui.hideCost(); lastPreview = null; invalidate(); return; }   // 點的工具：拖了就取消（實驗線 T436）
     const pv = previewOp(sim, op);
     preview.set(pv.cells.map(q => ({ x: q.x, z: q.z, y: Math.max(0, tileTop(city!, q.z * n + q.x)), ok: q.ok })), toolColor());
-    preview.setFrontage(n, city.road, op.k === 'tap' && op.tool !== 'doze' ? pv.cells.map(c => ({ ...c, ok: c.ok || !!c.foot, y: Math.max(0, tileTop(city!, c.z * n + c.x)) })) : []);
+    if (preview.frontageEnabled === true) preview.setFrontage(n, city.road, op.k === 'tap' && op.tool !== 'doze' ? pv.cells.map(c => ({ ...c, ok: c.ok || !!c.foot, y: Math.max(0, tileTop(city!, c.z * n + c.x)) })) : []);
     lastPreview = pv;
     const diagnosis = diagnoseSite(sim, op, pv);
     if (stroke.pid >= 0) siteEstimate = diagnosis;

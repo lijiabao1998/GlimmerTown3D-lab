@@ -18,6 +18,7 @@ export class Preview {
     this.frontage = streetFrontage ? new StreetFrontage() : null;
     if (this.frontage) this.mesh.add(this.frontage.mesh);
   }
+  get frontageEnabled() { return this.frontage !== null; }
   setFrontage(n: number, road: ArrayLike<number>, cells: readonly PreviewCell[]) {
     this.frontage?.set(frontageEdges(n, road, cells));
   }
