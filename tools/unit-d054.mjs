@@ -75,7 +75,7 @@ function originalScope() {
     'src/sim/edit.ts': '4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6',
     'src/sim/rules/build.ts': '9530e920f3f590ee467b1ba581ceb369d0d3ed4e092446109274e48d6f9245ca',
   };
-  for (const [file, sha] of Object.entries(d055)) assert.equal(createHash('sha256').update(read(file)).digest('hex'),sha,file+' reviewed D055 bytes');
+  for (const [file, sha] of Object.entries(d055)) assert.equal(createHash('sha256').update(d056HistoricalBytes(file)).digest('hex'),sha,file+' reviewed D055 bytes');
   const expected = {
     'src/sim': [42, '1258c893fdaa67894ccc5fc05c172ef1c8b03d3c71931512e1870a2cc212b420'],
     'src/io': [3, '3fc04802b3cb5b65f738239db7b355e13432901fa65c02db3c7648c2cd00a4fb'],

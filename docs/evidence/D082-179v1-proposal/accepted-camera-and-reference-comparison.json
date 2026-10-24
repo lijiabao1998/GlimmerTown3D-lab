@@ -1,0 +1,91 @@
+{
+  "comparisons": [
+    {
+      "file": "D082-redesign-after-179-v1-context-412.png",
+      "view": "context",
+      "cameraSame": true,
+      "worldSame": true,
+      "pixelShaOld": "6fc22dc82de0b70a9ef7ce69ad9c7535dbf399dcae1729519b7743168bb17db4",
+      "pixelShaNew": "9f12482fd9036ac22de6aaa209bd90879470e181c309ce7e3fb227607d53ada2",
+      "renderSame": true
+    },
+    {
+      "file": "D082-redesign-after-179-v1-original-412.png",
+      "view": "original",
+      "cameraSame": true,
+      "worldSame": true,
+      "pixelShaOld": "0282ef72bff4e6227f64072318ce1344c66bf1f2d04594b7d54e316156d25bb3",
+      "pixelShaNew": "c9fc18baa4565e75351bc5eb95f599a55de0ba8cd3d6aca2893ba13c20595387",
+      "renderSame": true
+    },
+    {
+      "file": "D082-redesign-after-179-v1-front-412.png",
+      "view": "front",
+      "cameraSame": true,
+      "worldSame": true,
+      "pixelShaOld": "b41f739478f0f6b905b21b29f232d88d3f593a6f478021461d8d51a5f306ada7",
+      "pixelShaNew": "d3ffbe74061b407418f9625dc2313f48f720c2a01bc914f2178f492f3ed7d870",
+      "renderSame": true
+    },
+    {
+      "file": "D082-redesign-after-179-v1-rear-412.png",
+      "view": "rear",
+      "cameraSame": true,
+      "worldSame": true,
+      "pixelShaOld": "7c5a0027d26722d8cf3b2a3c97845c1f794c812618018c9dc7dc86f05ef5157b",
+      "pixelShaNew": "52beb98dfe98557d8c2a8b483797251d0513b953f0434994972d019149f11017",
+      "renderSame": true
+    },
+    {
+      "file": "D082-redesign-after-179-v1-side-412.png",
+      "view": "side",
+      "cameraSame": true,
+      "worldSame": true,
+      "pixelShaOld": "541d1f342949b22f8d4477e777aa185764bcf83cb732b32a882399f8708e8b35",
+      "pixelShaNew": "1c52f3fdccfeca0e743a78d7fd6e0dcfb900a159d01d13f3766d25bf7623ea83",
+      "renderSame": true
+    }
+  ],
+  "referenceImages": [
+    {
+      "file": "D082-redesign-reference-reference-D059-church-context-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D059-church-original-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D059-church-front-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D059-church-rear-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D059-church-side-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D065-villa-context-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D065-villa-original-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D065-villa-front-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D065-villa-rear-412.png",
+      "same": true
+    },
+    {
+      "file": "D082-redesign-reference-reference-D065-villa-side-412.png",
+      "same": true
+    }
+  ]
+}

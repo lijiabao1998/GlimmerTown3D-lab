@@ -1,0 +1,4932 @@
+{
+  "qualification": "Compact export of the actual complete existing D053 browser report. Full raw input traces remain at the local artifact path and are hashed here.",
+  "passed": true,
+  "checks": [
+    {
+      "ok": true,
+      "name": "all 10 fixed scenes and six comparison PNGs",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 360",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 360 genuine native input",
+      "detail": "{\"events\":302}"
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 360 zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 412",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 412 genuine native input",
+      "detail": "{\"events\":302}"
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 412 zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 1280",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 1280 genuine native input",
+      "detail": "{\"events\":262}"
+    },
+    {
+      "ok": true,
+      "name": "layout accessibility 1280 zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category genuine native input",
+      "detail": "{\"events\":532}"
+    },
+    {
+      "ok": true,
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock normal",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock normal genuine native input",
+      "detail": "{\"events\":30}"
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock normal zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock sandbox",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock sandbox genuine native input",
+      "detail": "{\"events\":30}"
+    },
+    {
+      "ok": true,
+      "name": "rank 21 lock sandbox zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "held promotion selection",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "held promotion selection genuine native input",
+      "detail": "{\"events\":27}"
+    },
+    {
+      "ok": true,
+      "name": "held promotion selection zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-button",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-button genuine native input",
+      "detail": "{\"events\":27}"
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-button zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-catalog-button",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-catalog-button genuine native input",
+      "detail": "{\"events\":17}"
+    },
+    {
+      "ok": true,
+      "name": "held promotion rank-catalog-button zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "catalog cancel and hidden live update",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "catalog cancel and hidden live update genuine native input",
+      "detail": "{\"events\":32}"
+    },
+    {
+      "ok": true,
+      "name": "catalog cancel and hidden live update zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "normal playback refreshes both growth dialogs",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "normal playback refreshes both growth dialogs genuine native input",
+      "detail": "{\"events\":27}"
+    },
+    {
+      "ok": true,
+      "name": "normal playback refreshes both growth dialogs zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "space native interruption cancellations",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "space native interruption cancellations genuine native input",
+      "detail": "{\"events\":174}"
+    },
+    {
+      "ok": true,
+      "name": "space native interruption cancellations zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "space original model build undo persistence",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "space original model build undo persistence genuine native input",
+      "detail": "{\"events\":47}"
+    },
+    {
+      "ok": true,
+      "name": "space original model build undo persistence zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "sandbox rank22 original free placement",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "sandbox rank22 original free placement genuine native input",
+      "detail": "{\"events\":27}"
+    },
+    {
+      "ok": true,
+      "name": "sandbox rank22 original free placement zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "original pipe park resource and shore restrictions",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "original pipe park resource and shore restrictions genuine native input",
+      "detail": "{\"events\":202}"
+    },
+    {
+      "ok": true,
+      "name": "original pipe park resource and shore restrictions zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "native pagehide and city switch release inert",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "native pagehide and city switch release inert genuine native input",
+      "detail": "{\"events\":39}"
+    },
+    {
+      "ok": true,
+      "name": "native pagehide and city switch release inert zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory control",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory control genuine native input",
+      "detail": "{\"events\":7}"
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory control zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory all tools",
+      "detail": ""
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory all tools genuine native input",
+      "detail": "{\"events\":397}"
+    },
+    {
+      "ok": true,
+      "name": "paired future trajectory all tools zero console errors/external requests",
+      "detail": "[]"
+    },
+    {
+      "ok": true,
+      "name": "paired six-day full exposed state/code/history trajectory",
+      "detail": ""
+    }
+  ],
+  "sessions": [
+    {
+      "name": "layout accessibility 360",
+      "mode": "catalog",
+      "viewport": {
+        "W": 360,
+        "H": 740
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "layout accessibility 412",
+      "mode": "catalog",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "layout accessibility 1280",
+      "mode": "catalog",
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category",
+      "mode": "space-catalog",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "rank 21 lock normal",
+      "mode": "rank21",
+      "viewport": {
+        "W": 360,
+        "H": 740
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "rank 21 lock sandbox",
+      "mode": "rank21",
+      "viewport": {
+        "W": 360,
+        "H": 740
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "held promotion selection",
+      "mode": "rank-live",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "held promotion rank-button",
+      "mode": "rank-live",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "held promotion rank-catalog-button",
+      "mode": "rank-live",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "catalog cancel and hidden live update",
+      "mode": "rank-live",
+      "viewport": {
+        "W": 360,
+        "H": 740
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "normal playback refreshes both growth dialogs",
+      "mode": "rank-live",
+      "viewport": {
+        "W": 360,
+        "H": 740
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "space native interruption cancellations",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "space original model build undo persistence",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "sandbox rank22 original free placement",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "original pipe park resource and shore restrictions",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "native pagehide and city switch release inert",
+      "mode": "catalog",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "paired future trajectory control",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    },
+    {
+      "name": "paired future trajectory all tools",
+      "mode": "space-build",
+      "viewport": {
+        "W": 412,
+        "H": 860
+      },
+      "passed": true,
+      "errors": [],
+      "external": []
+    }
+  ],
+  "fixedCapture": {
+    "passed": true,
+    "cases": [
+      {
+        "mode": "rank6",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "original rank 6 is rendered",
+          "phase-specific truthful current-line unlock explanation",
+          "all18 real civic tools, no unimplemented culture/landmark/research tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-rank6-current-line-412.png",
+          "sha256": "bebe6dc9e6baedf8c346b833714e697318bf41bd66cc1416292192b676415bf9",
+          "bytes": 98706,
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "rank6",
+            "cityName": "城市成長導覽驗收",
+            "seed": 5167048,
+            "day": 150,
+            "rankIndex": 5,
+            "paused": true,
+            "codeSha256": "4bf55c0a0e08a7002d624c9d4f1719ee80dc3b1d757a9343502b4d288f61b0be",
+            "codeLength": 1977,
+            "rawCodeSha256": "3344ba541cc0877ed7700e50abdda96096f22f989011e71994b5e5a90c097ddc",
+            "camera": {
+              "x": 31,
+              "z": 30,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": {
+              "pos": [
+                146.19999999999996,
+                94.06040612287404,
+                145.2
+              ],
+              "target": [
+                31,
+                0,
+                29.999999999999993
+              ],
+              "zoom": 4.4
+            },
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+          },
+          "ui": {
+            "rank": {
+              "day": 150,
+              "name": "城市成長導覽驗收",
+              "idx": 5,
+              "points": 68,
+              "promoted": []
+            },
+            "rankPanel": {
+              "open": true,
+              "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "0%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.6 集市小鎮",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "68",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.7 石橋鎮（680 點）",
+                ""
+              ],
+              [
+                "進度",
+                "0%",
+                ""
+              ],
+              [
+                "本線說明",
+                "文化建築：本線尚無建造工具；升級不會新增這類可建設施。",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": null,
+              "roadTool": "road",
+              "civicTool": "police",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空🔒Lv.22",
+                "label": "太空研究中心（城市 Lv.22 解鎖）",
+                "disabled": "true",
+                "locked": true
+              }
+            ],
+            "catalog": {
+              "open": false,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+              "tools": []
+            },
+            "toasts": []
+          },
+          "stateSha256": "6fe508da75ad97eb39e3cf9f2970040f254d8e694b5fe6755982f4eb4e65799b",
+          "stateFile": "D053-after-state-shot-rank6.json"
+        }
+      },
+      {
+        "mode": "catalog",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "18 original civic tools retained; catalogue union adds exactly seven food tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-civic-navigation-360.png",
+          "sha256": "94674ee310e11a437400beb64f27e78013d02a33182e37fec9fa07c4de2a938d",
+          "bytes": 60204,
+          "viewport": {
+            "width": 360,
+            "height": 740
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "catalog",
+            "cityName": "城市成長導覽驗收",
+            "seed": 5167048,
+            "day": 150,
+            "rankIndex": 5,
+            "paused": true,
+            "codeSha256": "4bf55c0a0e08a7002d624c9d4f1719ee80dc3b1d757a9343502b4d288f61b0be",
+            "codeLength": 1977,
+            "rawCodeSha256": "3344ba541cc0877ed7700e50abdda96096f22f989011e71994b5e5a90c097ddc",
+            "camera": {
+              "x": 31,
+              "z": 30,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": {
+              "pos": [
+                146.19999999999996,
+                94.06040612287404,
+                145.2
+              ],
+              "target": [
+                31,
+                0,
+                29.999999999999993
+              ],
+              "zoom": 4.4
+            },
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+          },
+          "ui": {
+            "rank": {
+              "day": 150,
+              "name": "城市成長導覽驗收",
+              "idx": 5,
+              "points": 68,
+              "promoted": []
+            },
+            "rankPanel": {
+              "open": false,
+              "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "0%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.6 集市小鎮",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "68",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.7 石橋鎮（680 點）",
+                ""
+              ],
+              [
+                "進度",
+                "0%",
+                ""
+              ],
+              [
+                "本線說明",
+                "文化建築：本線尚無建造工具；升級不會新增這類可建設施。",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": null,
+              "roadTool": "road",
+              "civicTool": "police",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空🔒Lv.22",
+                "label": "太空研究中心（城市 Lv.22 解鎖）",
+                "disabled": "true",
+                "locked": true
+              }
+            ],
+            "catalog": {
+              "open": true,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施Lv.6・32／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心Lv.22 開放基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。Lv.22 開放農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+              "tools": [
+                {
+                  "id": "park",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "water",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "wpipe",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "fire",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "police",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "policeBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "hospital",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "clinic",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "school",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "library",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "post",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "cemetery",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "dump",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "sewage",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "oilwell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "mine",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "gaswell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "megaproject",
+                  "text": "Lv.22 開放",
+                  "disabled": null
+                },
+                {
+                  "id": "farm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "ranch",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "bigFarm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "greenhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "foodPlant",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "market",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "tradepost",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGranary",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageDovecote",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSignalBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageTollhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageWindmill",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSmithy",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGreatBarn",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageBandstand",
+                  "text": "選取",
+                  "disabled": null
+                }
+              ]
+            },
+            "toasts": []
+          },
+          "stateSha256": "82d5495453c8baa399fde8b9c8ef5f388e9cde9f6835021a745ab2571d4737d6",
+          "stateFile": "D053-after-state-shot-catalog.json"
+        }
+      },
+      {
+        "mode": "rank8",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "original rank 8 is rendered",
+          "phase-specific truthful current-line unlock explanation",
+          "all18 real civic tools, no unimplemented culture/landmark/research tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ]
+      },
+      {
+        "mode": "rank12",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "original rank 12 is rendered",
+          "phase-specific truthful current-line unlock explanation",
+          "all18 real civic tools, no unimplemented culture/landmark/research tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ]
+      },
+      {
+        "mode": "rank17",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "original rank 17 is rendered",
+          "phase-specific truthful current-line unlock explanation",
+          "all18 real civic tools, no unimplemented culture/landmark/research tools",
+          "native keyboard Escape closes rank",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ]
+      },
+      {
+        "mode": "rank21",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "rank21 still genuinely refuses space selection",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ]
+      },
+      {
+        "mode": "space-rank",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "original rank 22 is rendered",
+          "phase-specific truthful current-line unlock explanation",
+          "all18 real civic tools, no unimplemented culture/landmark/research tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-rank22-space-entry-412.png",
+          "sha256": "927a210d1a3f23c23bec82535524bc38f7ddf326490a32f392b990b403bffca2",
+          "bytes": 99651,
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "space-rank",
+            "cityName": "城市成長導覽驗收",
+            "seed": 5167048,
+            "day": 150,
+            "rankIndex": 21,
+            "paused": true,
+            "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+            "codeLength": 1981,
+            "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+            "camera": {
+              "x": 31,
+              "z": 30,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": {
+              "pos": [
+                146.19999999999996,
+                94.06040612287404,
+                145.2
+              ],
+              "target": [
+                31,
+                0,
+                29.999999999999993
+              ],
+              "zoom": 4.4
+            },
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+          },
+          "ui": {
+            "rank": {
+              "day": 150,
+              "name": "城市成長導覽驗收",
+              "idx": 21,
+              "points": 68,
+              "promoted": []
+            },
+            "rankPanel": {
+              "open": true,
+              "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "0%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.22 穹頂都會",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "68",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.23 星穹大都會（20,680 點）",
+                ""
+              ],
+              [
+                "進度",
+                "0%",
+                ""
+              ],
+              [
+                "本線說明",
+                "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": null,
+              "roadTool": "road",
+              "civicTool": "police",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空$4500",
+                "label": "太空研究中心 $4500",
+                "disabled": null,
+                "locked": false
+              }
+            ],
+            "catalog": {
+              "open": false,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+              "tools": []
+            },
+            "toasts": []
+          },
+          "stateSha256": "da9c404a9718cdebea9798d789750cfb29a4930eb615743031f7c71a02ed72d0",
+          "stateFile": "D053-after-state-shot-space-rank.json"
+        }
+      },
+      {
+        "mode": "space-catalog",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "18 original civic tools retained; catalogue union adds exactly seven food tools",
+          "navigation changes no saved code, layers, history, buildings, money or day",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-space-tool-detail-412.png",
+          "sha256": "917507a9ecca631fb91e718d5b82bcf00f28b7f6f9a8df23392fc4a04a7162cb",
+          "bytes": 68781,
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "space-catalog",
+            "cityName": "城市成長導覽驗收",
+            "seed": 5167048,
+            "day": 150,
+            "rankIndex": 21,
+            "paused": true,
+            "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+            "codeLength": 1981,
+            "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+            "camera": {
+              "x": 31,
+              "z": 30,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": {
+              "pos": [
+                146.19999999999996,
+                94.06040612287404,
+                145.2
+              ],
+              "target": [
+                31,
+                0,
+                29.999999999999993
+              ],
+              "zoom": 4.4
+            },
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+          },
+          "ui": {
+            "rank": {
+              "day": 150,
+              "name": "城市成長導覽驗收",
+              "idx": 21,
+              "points": 68,
+              "promoted": []
+            },
+            "rankPanel": {
+              "open": false,
+              "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "0%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.22 穹頂都會",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "68",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.23 星穹大都會（20,680 點）",
+                ""
+              ],
+              [
+                "進度",
+                "0%",
+                ""
+              ],
+              [
+                "本線說明",
+                "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": null,
+              "roadTool": "road",
+              "civicTool": "police",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空$4500",
+                "label": "太空研究中心 $4500",
+                "disabled": null,
+                "locked": false
+              }
+            ],
+            "catalog": {
+              "open": true,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施Lv.22・33／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心等級可選基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。選取農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+              "tools": [
+                {
+                  "id": "park",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "water",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "wpipe",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "fire",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "police",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "policeBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "hospital",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "clinic",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "school",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "library",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "post",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "cemetery",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "dump",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "sewage",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "oilwell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "mine",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "gaswell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "megaproject",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "farm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "ranch",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "bigFarm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "greenhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "foodPlant",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "market",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "tradepost",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGranary",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageDovecote",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSignalBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageTollhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageWindmill",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSmithy",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGreatBarn",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageBandstand",
+                  "text": "選取",
+                  "disabled": null
+                }
+              ]
+            },
+            "toasts": []
+          },
+          "stateSha256": "fe020bd6e96c479a03b2ef0935ec222d4ff7dec362215153adf810abd8911283",
+          "stateFile": "D053-after-state-shot-space-catalog.json"
+        }
+      },
+      {
+        "mode": "space-build",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "rank22 actual space tool selected",
+          "trusted hold produces9cells preview costing4500",
+          "actual build charges4500, one k51 event and nine same occupancy cells",
+          "real undo restores money, occupancy, zone and tree",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-space-build-result-412.png",
+          "sha256": "ffecf7ff2c6525f37aa185331ee286aa27a1dd1f34d213b0debe3c62910a78ef",
+          "bytes": 103427,
+          "viewport": {
+            "width": 412,
+            "height": 860
+          },
+          "camera": {
+            "pos": [
+              145.69999999999996,
+              94.06040612287404,
+              141.7
+            ],
+            "target": [
+              30.5,
+              0,
+              26.5
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "4cd9fd92a25c18749caafea14bb4c7700f96c86b173add645cf3dbecd348b6f2",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "space-build",
+            "cityName": "城市成長導覽驗收",
+            "seed": 5167048,
+            "day": 150,
+            "rankIndex": 21,
+            "paused": true,
+            "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+            "codeLength": 1981,
+            "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+            "camera": {
+              "x": 30.5,
+              "z": 26.5,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": null,
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+          },
+          "ui": {
+            "rank": {
+              "day": 150,
+              "name": "城市成長導覽驗收",
+              "idx": 21,
+              "points": 68,
+              "promoted": []
+            },
+            "rankPanel": {
+              "open": false,
+              "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "0%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.22 穹頂都會",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "68",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.23 星穹大都會（20,680 點）",
+                ""
+              ],
+              [
+                "進度",
+                "0%",
+                ""
+              ],
+              [
+                "本線說明",
+                "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": "civic",
+              "roadTool": "road",
+              "civicTool": "megaproject",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空$4500",
+                "label": "太空研究中心 $4500",
+                "disabled": null,
+                "locked": false
+              }
+            ],
+            "catalog": {
+              "open": false,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施Lv.22・33／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心等級可選基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。選取農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+              "tools": [
+                {
+                  "id": "park",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "water",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "wpipe",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "fire",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "police",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "policeBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "hospital",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "clinic",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "school",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "library",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "post",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "cemetery",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "dump",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "sewage",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "oilwell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "mine",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "gaswell",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "megaproject",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "farm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "ranch",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "bigFarm",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "greenhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "foodPlant",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "market",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "tradepost",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGranary",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageDovecote",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSignalBox",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageTollhouse",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageWindmill",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageSmithy",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageGreatBarn",
+                  "text": "選取",
+                  "disabled": null
+                },
+                {
+                  "id": "heritageBandstand",
+                  "text": "選取",
+                  "disabled": null
+                }
+              ]
+            },
+            "toasts": [
+              "−$4,500"
+            ]
+          },
+          "stateSha256": "c98e71d64fe9849066296b95f4821f40010147bf4113cc90b96cea6e7f4a0cba",
+          "stateFile": "D053-after-state-shot-space-build.json"
+        }
+      },
+      {
+        "mode": "rank-live",
+        "passed": true,
+        "assertions": [
+          "paused exact saved rank/day/money",
+          "one original day really promotes rank3to4 and updates money/points",
+          "open rank panel stale before/live after",
+          "all recorded activation events are genuine",
+          "zero external requests and console errors",
+          "no horizontal page overflow"
+        ],
+        "shot": {
+          "filename": "D053-after-open-rank-after-day-360.png",
+          "sha256": "89159f850a3337151eba3d4d90a1326872029f49c6d0ea2386cf26c6b1c659d1",
+          "bytes": 88064,
+          "viewport": {
+            "width": 360,
+            "height": 740
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "fixture": {
+            "synthetic": true,
+            "injection": "localStorage save fixture before real page load; no runtime world mutation",
+            "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+            "baseline": {
+              "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+              "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+            },
+            "mode": "rank-live",
+            "cityName": "城市成長跨日驗收",
+            "seed": 1,
+            "day": 50,
+            "rankIndex": 2,
+            "paused": true,
+            "codeSha256": "9470a6b500e7a1e631f8f3cae52a99ed4691a7d880a7324228115092ae8a4d0f",
+            "codeLength": 2116,
+            "rawCodeSha256": "049262e2d0a3aabdb1dfb898d87a50bcd1c07ad47ad7915089f66bf45dceee74",
+            "camera": {
+              "x": 31,
+              "z": 30,
+              "zoom": 4.4
+            },
+            "measuredBaselineCamera": {
+              "pos": [
+                146.19999999999996,
+                94.06040612287404,
+                145.2
+              ],
+              "target": [
+                31,
+                0,
+                29.999999999999993
+              ],
+              "zoom": 4.4
+            },
+            "views": [
+              {
+                "width": 360,
+                "height": 740
+              },
+              {
+                "width": 412,
+                "height": 860
+              }
+            ],
+            "visT": 2.2,
+            "dayFrac": 0,
+            "spaceSite": {
+              "x": 29,
+              "z": 25,
+              "size": 3
+            },
+            "qualification": "seed1, 32 original level1 density3 houses: original simDay changes day50/Lv3 to day51/Lv4, 169 city points. No runtime rank/pop override."
+          },
+          "ui": {
+            "rank": {
+              "day": 51,
+              "name": "城市成長跨日驗收",
+              "idx": 3,
+              "points": 169,
+              "promoted": [
+                3
+              ]
+            },
+            "rankPanel": {
+              "open": true,
+              "sub": "第 51 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+              "bar": "7.5%"
+            },
+            "rankRows": [
+              [
+                "等級",
+                "Lv.4 阡陌村莊",
+                "sum"
+              ],
+              [
+                "城市點數",
+                "169",
+                ""
+              ],
+              [
+                "下一級",
+                "Lv.5 磚瓦小鎮（280 點）",
+                ""
+              ],
+              [
+                "進度",
+                "8%",
+                ""
+              ]
+            ],
+            "ui": {
+              "tool": null,
+              "roadTool": "road",
+              "civicTool": "police",
+              "coach": "② 選「住」，在路邊拖出一塊住宅區",
+              "dock": "build",
+              "saved": true,
+              "autosaves": true,
+              "saveError": "",
+              "pointers": 0
+            },
+            "civic": [
+              {
+                "id": "park",
+                "text": "公園$60",
+                "label": "公園 $60",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "water",
+                "text": "水塔$400",
+                "label": "水塔 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "wpipe",
+                "text": "配水管$10",
+                "label": "配水管 $10",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "fire",
+                "text": "消防局$400",
+                "label": "消防局 $400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "police",
+                "text": "警察局$500",
+                "label": "警察局 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "policeBox",
+                "text": "派出所$250",
+                "label": "派出所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "hospital",
+                "text": "醫院$600",
+                "label": "醫院 $600",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "clinic",
+                "text": "診所$250",
+                "label": "診所 $250",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "school",
+                "text": "學校$350",
+                "label": "學校 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "library",
+                "text": "圖書館$280",
+                "label": "圖書館 $280",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "post",
+                "text": "郵局$320",
+                "label": "郵局 $320",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "cemetery",
+                "text": "墓園$350",
+                "label": "墓園 $350",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "dump",
+                "text": "垃圾場$300",
+                "label": "垃圾場 $300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "sewage",
+                "text": "污水廠$500",
+                "label": "污水廠 $500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "oilwell",
+                "text": "油井$1300",
+                "label": "油井 $1300",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "mine",
+                "text": "礦場$1500",
+                "label": "礦場 $1500",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "gaswell",
+                "text": "氣井$1400",
+                "label": "天然氣井 $1400",
+                "disabled": null,
+                "locked": false
+              },
+              {
+                "id": "megaproject",
+                "text": "太空🔒Lv.22",
+                "label": "太空研究中心（城市 Lv.22 解鎖）",
+                "disabled": "true",
+                "locked": true
+              }
+            ],
+            "catalog": {
+              "open": false,
+              "groups": [
+                "all",
+                "service",
+                "utility",
+                "resource",
+                "food",
+                "heritage"
+              ],
+              "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+              "tools": []
+            },
+            "toasts": [
+              "人口到 50：獎勵 $300",
+              "🏙️ 城市成長跨日驗收升至 Lv.4 阡陌村莊！"
+            ]
+          },
+          "stateSha256": "244cc37832c441a535f4c8d39d53d8a4e455420ba58218bb09eca483521cd7c8",
+          "stateFile": "D053-after-state-shot-rank-live.json"
+        }
+      }
+    ],
+    "shots": [
+      {
+        "filename": "D053-after-rank6-current-line-412.png",
+        "sha256": "bebe6dc9e6baedf8c346b833714e697318bf41bd66cc1416292192b676415bf9",
+        "bytes": 98706,
+        "viewport": {
+          "width": 412,
+          "height": 860
+        },
+        "camera": {
+          "pos": [
+            146.19999999999996,
+            94.06040612287404,
+            145.2
+          ],
+          "target": [
+            31,
+            0,
+            29.999999999999993
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "rank6",
+          "cityName": "城市成長導覽驗收",
+          "seed": 5167048,
+          "day": 150,
+          "rankIndex": 5,
+          "paused": true,
+          "codeSha256": "4bf55c0a0e08a7002d624c9d4f1719ee80dc3b1d757a9343502b4d288f61b0be",
+          "codeLength": 1977,
+          "rawCodeSha256": "3344ba541cc0877ed7700e50abdda96096f22f989011e71994b5e5a90c097ddc",
+          "camera": {
+            "x": 31,
+            "z": 30,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+        },
+        "ui": {
+          "rank": {
+            "day": 150,
+            "name": "城市成長導覽驗收",
+            "idx": 5,
+            "points": 68,
+            "promoted": []
+          },
+          "rankPanel": {
+            "open": true,
+            "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "0%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.6 集市小鎮",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "68",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.7 石橋鎮（680 點）",
+              ""
+            ],
+            [
+              "進度",
+              "0%",
+              ""
+            ],
+            [
+              "本線說明",
+              "文化建築：本線尚無建造工具；升級不會新增這類可建設施。",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": null,
+            "roadTool": "road",
+            "civicTool": "police",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空🔒Lv.22",
+              "label": "太空研究中心（城市 Lv.22 解鎖）",
+              "disabled": "true",
+              "locked": true
+            }
+          ],
+          "catalog": {
+            "open": false,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+            "tools": []
+          },
+          "toasts": []
+        },
+        "stateSha256": "6fe508da75ad97eb39e3cf9f2970040f254d8e694b5fe6755982f4eb4e65799b",
+        "stateFile": "D053-after-state-shot-rank6.json"
+      },
+      {
+        "filename": "D053-after-civic-navigation-360.png",
+        "sha256": "94674ee310e11a437400beb64f27e78013d02a33182e37fec9fa07c4de2a938d",
+        "bytes": 60204,
+        "viewport": {
+          "width": 360,
+          "height": 740
+        },
+        "camera": {
+          "pos": [
+            146.19999999999996,
+            94.06040612287404,
+            145.2
+          ],
+          "target": [
+            31,
+            0,
+            29.999999999999993
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "catalog",
+          "cityName": "城市成長導覽驗收",
+          "seed": 5167048,
+          "day": 150,
+          "rankIndex": 5,
+          "paused": true,
+          "codeSha256": "4bf55c0a0e08a7002d624c9d4f1719ee80dc3b1d757a9343502b4d288f61b0be",
+          "codeLength": 1977,
+          "rawCodeSha256": "3344ba541cc0877ed7700e50abdda96096f22f989011e71994b5e5a90c097ddc",
+          "camera": {
+            "x": 31,
+            "z": 30,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+        },
+        "ui": {
+          "rank": {
+            "day": 150,
+            "name": "城市成長導覽驗收",
+            "idx": 5,
+            "points": 68,
+            "promoted": []
+          },
+          "rankPanel": {
+            "open": false,
+            "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "0%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.6 集市小鎮",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "68",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.7 石橋鎮（680 點）",
+              ""
+            ],
+            [
+              "進度",
+              "0%",
+              ""
+            ],
+            [
+              "本線說明",
+              "文化建築：本線尚無建造工具；升級不會新增這類可建設施。",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": null,
+            "roadTool": "road",
+            "civicTool": "police",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空🔒Lv.22",
+              "label": "太空研究中心（城市 Lv.22 解鎖）",
+              "disabled": "true",
+              "locked": true
+            }
+          ],
+          "catalog": {
+            "open": true,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施Lv.6・32／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心Lv.22 開放基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。Lv.22 開放農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+            "tools": [
+              {
+                "id": "park",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "water",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "wpipe",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "fire",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "police",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "policeBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "hospital",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "clinic",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "school",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "library",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "post",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "cemetery",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "dump",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "sewage",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "oilwell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "mine",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "gaswell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "megaproject",
+                "text": "Lv.22 開放",
+                "disabled": null
+              },
+              {
+                "id": "farm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "ranch",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "bigFarm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "greenhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "foodPlant",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "market",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "tradepost",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGranary",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageDovecote",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSignalBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageTollhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageWindmill",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSmithy",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGreatBarn",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageBandstand",
+                "text": "選取",
+                "disabled": null
+              }
+            ]
+          },
+          "toasts": []
+        },
+        "stateSha256": "82d5495453c8baa399fde8b9c8ef5f388e9cde9f6835021a745ab2571d4737d6",
+        "stateFile": "D053-after-state-shot-catalog.json"
+      },
+      {
+        "filename": "D053-after-rank22-space-entry-412.png",
+        "sha256": "927a210d1a3f23c23bec82535524bc38f7ddf326490a32f392b990b403bffca2",
+        "bytes": 99651,
+        "viewport": {
+          "width": 412,
+          "height": 860
+        },
+        "camera": {
+          "pos": [
+            146.19999999999996,
+            94.06040612287404,
+            145.2
+          ],
+          "target": [
+            31,
+            0,
+            29.999999999999993
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "space-rank",
+          "cityName": "城市成長導覽驗收",
+          "seed": 5167048,
+          "day": 150,
+          "rankIndex": 21,
+          "paused": true,
+          "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+          "codeLength": 1981,
+          "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+          "camera": {
+            "x": 31,
+            "z": 30,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+        },
+        "ui": {
+          "rank": {
+            "day": 150,
+            "name": "城市成長導覽驗收",
+            "idx": 21,
+            "points": 68,
+            "promoted": []
+          },
+          "rankPanel": {
+            "open": true,
+            "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "0%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.22 穹頂都會",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "68",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.23 星穹大都會（20,680 點）",
+              ""
+            ],
+            [
+              "進度",
+              "0%",
+              ""
+            ],
+            [
+              "本線說明",
+              "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": null,
+            "roadTool": "road",
+            "civicTool": "police",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空$4500",
+              "label": "太空研究中心 $4500",
+              "disabled": null,
+              "locked": false
+            }
+          ],
+          "catalog": {
+            "open": false,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+            "tools": []
+          },
+          "toasts": []
+        },
+        "stateSha256": "da9c404a9718cdebea9798d789750cfb29a4930eb615743031f7c71a02ed72d0",
+        "stateFile": "D053-after-state-shot-space-rank.json"
+      },
+      {
+        "filename": "D053-after-space-tool-detail-412.png",
+        "sha256": "917507a9ecca631fb91e718d5b82bcf00f28b7f6f9a8df23392fc4a04a7162cb",
+        "bytes": 68781,
+        "viewport": {
+          "width": 412,
+          "height": 860
+        },
+        "camera": {
+          "pos": [
+            146.19999999999996,
+            94.06040612287404,
+            145.2
+          ],
+          "target": [
+            31,
+            0,
+            29.999999999999993
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "space-catalog",
+          "cityName": "城市成長導覽驗收",
+          "seed": 5167048,
+          "day": 150,
+          "rankIndex": 21,
+          "paused": true,
+          "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+          "codeLength": 1981,
+          "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+          "camera": {
+            "x": 31,
+            "z": 30,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+        },
+        "ui": {
+          "rank": {
+            "day": 150,
+            "name": "城市成長導覽驗收",
+            "idx": 21,
+            "points": 68,
+            "promoted": []
+          },
+          "rankPanel": {
+            "open": false,
+            "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "0%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.22 穹頂都會",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "68",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.23 星穹大都會（20,680 點）",
+              ""
+            ],
+            [
+              "進度",
+              "0%",
+              ""
+            ],
+            [
+              "本線說明",
+              "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": null,
+            "roadTool": "road",
+            "civicTool": "police",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空$4500",
+              "label": "太空研究中心 $4500",
+              "disabled": null,
+              "locked": false
+            }
+          ],
+          "catalog": {
+            "open": true,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施Lv.22・33／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心等級可選基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。選取農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+            "tools": [
+              {
+                "id": "park",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "water",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "wpipe",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "fire",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "police",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "policeBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "hospital",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "clinic",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "school",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "library",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "post",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "cemetery",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "dump",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "sewage",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "oilwell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "mine",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "gaswell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "megaproject",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "farm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "ranch",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "bigFarm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "greenhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "foodPlant",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "market",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "tradepost",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGranary",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageDovecote",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSignalBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageTollhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageWindmill",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSmithy",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGreatBarn",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageBandstand",
+                "text": "選取",
+                "disabled": null
+              }
+            ]
+          },
+          "toasts": []
+        },
+        "stateSha256": "fe020bd6e96c479a03b2ef0935ec222d4ff7dec362215153adf810abd8911283",
+        "stateFile": "D053-after-state-shot-space-catalog.json"
+      },
+      {
+        "filename": "D053-after-space-build-result-412.png",
+        "sha256": "ffecf7ff2c6525f37aa185331ee286aa27a1dd1f34d213b0debe3c62910a78ef",
+        "bytes": 103427,
+        "viewport": {
+          "width": 412,
+          "height": 860
+        },
+        "camera": {
+          "pos": [
+            145.69999999999996,
+            94.06040612287404,
+            141.7
+          ],
+          "target": [
+            30.5,
+            0,
+            26.5
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "4cd9fd92a25c18749caafea14bb4c7700f96c86b173add645cf3dbecd348b6f2",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "space-build",
+          "cityName": "城市成長導覽驗收",
+          "seed": 5167048,
+          "day": 150,
+          "rankIndex": 21,
+          "paused": true,
+          "codeSha256": "8f2ebb155e13085f513c5ce5d0d4d4e3b235f0aec451854859981fe065ab889b",
+          "codeLength": 1981,
+          "rawCodeSha256": "c27d6af6f88c65911fe54d727816968d57cb172306ffc6466a46bf295a735a3e",
+          "camera": {
+            "x": 30.5,
+            "z": 26.5,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": null,
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "Saved rank preserves original only-up rank semantics; points may be below the historical rank threshold. No claim of a naturally played city."
+        },
+        "ui": {
+          "rank": {
+            "day": 150,
+            "name": "城市成長導覽驗收",
+            "idx": 21,
+            "points": 68,
+            "promoted": []
+          },
+          "rankPanel": {
+            "open": false,
+            "sub": "第 150 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "0%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.22 穹頂都會",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "68",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.23 星穹大都會（20,680 點）",
+              ""
+            ],
+            [
+              "進度",
+              "0%",
+              ""
+            ],
+            [
+              "本線說明",
+              "解鎖：太空研究中心，可從設施導覽選取（3×3）。",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": "civic",
+            "roadTool": "road",
+            "civicTool": "megaproject",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空$4500",
+              "label": "太空研究中心 $4500",
+              "disabled": null,
+              "locked": false
+            }
+          ],
+          "catalog": {
+            "open": false,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施Lv.22・33／33 項等級可選・第 150 天\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。公園等級可選基價 $60・每格1×1・框選提供周邊公園覆蓋在空陸地按住拖出範圍，每格一座公園。選取水塔等級可選基價 $400・1×1・點放供水網的水源水塔蓋在空陸地；搭配配水管連接用水區。選取配水管等級可選基價 $10・每格・拉線連接水塔與用水區陸地上按住拉線；可鋪在道路、分區與建築下方，已有水管的格子略過。選取消防局等級可選基價 $400・1×1・點放提供消防服務覆蓋點選未被道路或建築佔用的陸地。選取警察局等級可選基價 $500・1×1・點放提供警察服務覆蓋點選未被道路或建築佔用的陸地。選取派出所等級可選基價 $250・1×1・點放提供派出所警力覆蓋點選未被道路或建築佔用的陸地。選取醫院等級可選基價 $600・1×1・點放提供醫院醫療覆蓋點選未被道路或建築佔用的陸地。選取診所等級可選基價 $250・1×1・點放提供診所醫療覆蓋點選未被道路或建築佔用的陸地。選取學校等級可選基價 $350・1×1・點放提供學校教育覆蓋點選未被道路或建築佔用的陸地。選取圖書館等級可選基價 $280・1×1・點放提供圖書館服務覆蓋點選未被道路或建築佔用的陸地。選取郵局等級可選基價 $320・1×1・點放提供郵政服務覆蓋點選未被道路或建築佔用的陸地。選取墓園等級可選基價 $350・1×1・點放安撫周邊喪事，提供墓園覆蓋點選未被道路或建築佔用的陸地。選取垃圾場等級可選基價 $300・1×1・點放提供垃圾處理容量點選未被道路或建築佔用的陸地；注意周邊污染。選取污水廠等級可選基價 $500・1×1・點放處理接入管網的污水空陸地，周圍3×3內至少2格水域；交通線與電力走廊會阻擋。選取油井等級可選基價 $1,300・1×1・點放開採油田資源必須在油田資源格；選取後以黃色顯示可見資源位置，仍以落點預覽為準。選取礦場等級可選基價 $1,500・1×1・點放開採礦藏資源必須在礦藏資源格；選取後以藍色顯示可見資源位置，仍以落點預覽為準。選取天然氣井等級可選基價 $1,400・1×1・點放開採油田伴生天然氣同樣需要油田資源格；選取後顯示黃色資源位置。選取太空研究中心等級可選基價 $4,500・3×3・點放支援城市研究需要連續3×3陸地；整塊不能有道路或建築，其他阻擋以預覽為準。選取農場等級可選基價 $120・2×2・點放生產糧食，產量依季節、供電與原有規則結算連續2×2草地；整塊不能有交通線、電力走廊或建築。選取牧場等級可選基價 $180・2×2・點放牧業糧食生產連續2×2草地；其他阻擋以落點預覽為準。選取大農場等級可選基價 $750・5×5・點放大型糧食生產基地連續5×5草地；造價只收一次，整塊占地一併建造。選取溫室等級可選基價 $950・2×2・點放溫室農業生產連續2×2草地；仍須注意供電及每日結算。選取食品加工廠等級可選基價 $1,800・3×3・點放將糧食盈餘加工為收入連續3×3陸地；先建立糧食供應，生產依原有規則。選取農貿市場等級可選基價 $950・2×2・點放農貿收入與市場覆蓋連續2×2陸地；收益於每日結算反映。選取外貿商行等級可選基價 $1,100・2×2・點放產生外貿收入，支援外貿委託連續2×2陸地；收入依現有生產及外貿公式每日結算。選取架高穀倉等級可選基價 $120・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取石造鴿舍等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵路信號樓等級可選基價 $320・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取八角收費亭等級可選基價 $180・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取罩殼風車等級可選基價 $550・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取村莊鐵匠鋪等級可選基價 $250・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取什一稅穀倉等級可選基價 $350・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取鐵藝樂亭等級可選基價 $280・2×2・點放英式歷史建築街景，不新增生產或運輸產能連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。選取\n    城市成長返回城市",
+            "tools": [
+              {
+                "id": "park",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "water",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "wpipe",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "fire",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "police",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "policeBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "hospital",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "clinic",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "school",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "library",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "post",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "cemetery",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "dump",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "sewage",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "oilwell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "mine",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "gaswell",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "megaproject",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "farm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "ranch",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "bigFarm",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "greenhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "foodPlant",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "market",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "tradepost",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGranary",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageDovecote",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSignalBox",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageTollhouse",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageWindmill",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageSmithy",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageGreatBarn",
+                "text": "選取",
+                "disabled": null
+              },
+              {
+                "id": "heritageBandstand",
+                "text": "選取",
+                "disabled": null
+              }
+            ]
+          },
+          "toasts": [
+            "−$4,500"
+          ]
+        },
+        "stateSha256": "c98e71d64fe9849066296b95f4821f40010147bf4113cc90b96cea6e7f4a0cba",
+        "stateFile": "D053-after-state-shot-space-build.json"
+      },
+      {
+        "filename": "D053-after-open-rank-after-day-360.png",
+        "sha256": "89159f850a3337151eba3d4d90a1326872029f49c6d0ea2386cf26c6b1c659d1",
+        "bytes": 88064,
+        "viewport": {
+          "width": 360,
+          "height": 740
+        },
+        "camera": {
+          "pos": [
+            146.19999999999996,
+            94.06040612287404,
+            145.2
+          ],
+          "target": [
+            31,
+            0,
+            29.999999999999993
+          ],
+          "zoom": 4.4
+        },
+        "cameraSha256": "a1ceac4d135bbc17c385b9f8850d4de5ed2dc940bac756b390efc31dde2d972e",
+        "visual": {
+          "visT": 2.2,
+          "dayFrac": 0
+        },
+        "fixture": {
+          "synthetic": true,
+          "injection": "localStorage save fixture before real page load; no runtime world mutation",
+          "device": "Chrome CDP touch emulation, or explicit desktop mouse/keyboard; no Android hardware",
+          "baseline": {
+            "commit": "39bfa913ac2e955490448ef52c2f587f9c237101",
+            "htmlSha256": "4c3c4e05a2ab5cbdde1b7055593ca8531c0ac7814c7049e6522a6ea4825cb075"
+          },
+          "mode": "rank-live",
+          "cityName": "城市成長跨日驗收",
+          "seed": 1,
+          "day": 50,
+          "rankIndex": 2,
+          "paused": true,
+          "codeSha256": "9470a6b500e7a1e631f8f3cae52a99ed4691a7d880a7324228115092ae8a4d0f",
+          "codeLength": 2116,
+          "rawCodeSha256": "049262e2d0a3aabdb1dfb898d87a50bcd1c07ad47ad7915089f66bf45dceee74",
+          "camera": {
+            "x": 31,
+            "z": 30,
+            "zoom": 4.4
+          },
+          "measuredBaselineCamera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 4.4
+          },
+          "views": [
+            {
+              "width": 360,
+              "height": 740
+            },
+            {
+              "width": 412,
+              "height": 860
+            }
+          ],
+          "visT": 2.2,
+          "dayFrac": 0,
+          "spaceSite": {
+            "x": 29,
+            "z": 25,
+            "size": 3
+          },
+          "qualification": "seed1, 32 original level1 density3 houses: original simDay changes day50/Lv3 to day51/Lv4, 169 city points. No runtime rank/pop override."
+        },
+        "ui": {
+          "rank": {
+            "day": 51,
+            "name": "城市成長跨日驗收",
+            "idx": 3,
+            "points": 169,
+            "promoted": [
+              3
+            ]
+          },
+          "rankPanel": {
+            "open": true,
+            "sub": "第 51 天・城市點數＝人口＋幸福＋服務覆蓋的加權和，每天結算後重算；等級只升不降",
+            "bar": "7.5%"
+          },
+          "rankRows": [
+            [
+              "等級",
+              "Lv.4 阡陌村莊",
+              "sum"
+            ],
+            [
+              "城市點數",
+              "169",
+              ""
+            ],
+            [
+              "下一級",
+              "Lv.5 磚瓦小鎮（280 點）",
+              ""
+            ],
+            [
+              "進度",
+              "8%",
+              ""
+            ]
+          ],
+          "ui": {
+            "tool": null,
+            "roadTool": "road",
+            "civicTool": "police",
+            "coach": "② 選「住」，在路邊拖出一塊住宅區",
+            "dock": "build",
+            "saved": true,
+            "autosaves": true,
+            "saveError": "",
+            "pointers": 0
+          },
+          "civic": [
+            {
+              "id": "park",
+              "text": "公園$60",
+              "label": "公園 $60",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "water",
+              "text": "水塔$400",
+              "label": "水塔 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "wpipe",
+              "text": "配水管$10",
+              "label": "配水管 $10",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "fire",
+              "text": "消防局$400",
+              "label": "消防局 $400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "police",
+              "text": "警察局$500",
+              "label": "警察局 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "policeBox",
+              "text": "派出所$250",
+              "label": "派出所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "hospital",
+              "text": "醫院$600",
+              "label": "醫院 $600",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "clinic",
+              "text": "診所$250",
+              "label": "診所 $250",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "school",
+              "text": "學校$350",
+              "label": "學校 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "library",
+              "text": "圖書館$280",
+              "label": "圖書館 $280",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "post",
+              "text": "郵局$320",
+              "label": "郵局 $320",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "cemetery",
+              "text": "墓園$350",
+              "label": "墓園 $350",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "dump",
+              "text": "垃圾場$300",
+              "label": "垃圾場 $300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "sewage",
+              "text": "污水廠$500",
+              "label": "污水廠 $500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "oilwell",
+              "text": "油井$1300",
+              "label": "油井 $1300",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "mine",
+              "text": "礦場$1500",
+              "label": "礦場 $1500",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "gaswell",
+              "text": "氣井$1400",
+              "label": "天然氣井 $1400",
+              "disabled": null,
+              "locked": false
+            },
+            {
+              "id": "megaproject",
+              "text": "太空🔒Lv.22",
+              "label": "太空研究中心（城市 Lv.22 解鎖）",
+              "disabled": "true",
+              "locked": true
+            }
+          ],
+          "catalog": {
+            "open": false,
+            "groups": [
+              "all",
+              "service",
+              "utility",
+              "resource",
+              "food",
+              "heritage"
+            ],
+            "text": "建造指南可建設施\n    全部 33生活服務 10城市管線 4資源研究 4農業外貿 7英式建築 8\n    基價不含科技、城市方向與清樹調整；實付及此地能否建造，以地圖預覽為準。焦土或隕石坑須先清理。\n    城市成長返回城市",
+            "tools": []
+          },
+          "toasts": [
+            "人口到 50：獎勵 $300",
+            "🏙️ 城市成長跨日驗收升至 Lv.4 阡陌村莊！"
+          ]
+        },
+        "stateSha256": "244cc37832c441a535f4c8d39d53d8a4e455420ba58218bb09eca483521cd7c8",
+        "stateFile": "D053-after-state-shot-rank-live.json"
+      }
+    ]
+  },
+  "rawEvidence": {
+    "path": "scratch/shots/D053-evidence.json",
+    "bytes": 1166920,
+    "sha256": "ea14e2fb8c42edc5df9c676fa020149013524d7f99111e3bccc4a5e40aab5ee9"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "baseline": "2e85efbc265efcc4c214e21365839d0a842f995e",
+  "file": "tools/d082-scope.mjs",
+  "beforeSha256": "451ff243ee55826457b8030b8d0a3dfd5049cc6672edf33c1f69628d76d11f89",
+  "afterSha256": "2d72b48e6ed7acfa8d2f7ac073df977981711efb70433165544e9e3cce4ed402",
+  "replacements": [
+    {
+      "before": "import {D082_CURRENT_ADDITIONS,assertD082CurrentInventory,d082RestorationInput} from './d082-source-restoration.mjs';\n",
+      "after": "import {D082_CURRENT_ADDITIONS,assertD082CurrentInventory,d082RestorationInput as d082PreviousRestorationInput} from './d082-source-restoration.mjs';\nimport {D083_ADDED,d083HistoricalBytes,d083PriorSourceFiles,withD083SourceAllowance} from './d083-scope.mjs';\n\nconst d082RestorationInput=(file,read)=>d082PreviousRestorationInput(file,name=>d083HistoricalBytes(name,read));\n"
+    },
+    {
+      "before": "",
+      "after": "  if(D083_ADDED.has(file))return d083HistoricalBytes(file,read);\n"
+    },
+    {
+      "before": "export function isD082ReviewedExistingSource(file,read=diskRead){\n",
+      "after": "function isD082ReviewedExistingSource(file,read=diskRead){\n"
+    },
+    {
+      "before": "",
+      "after": "const d083ReviewedExistingSource=withD083SourceAllowance(isD082ReviewedExistingSource);\nexport {isD082ReviewedExistingSource as isD082ReviewedWindowsSource,d083ReviewedExistingSource as isD082ReviewedExistingSource};\n"
+    },
+    {
+      "before": "  const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})\n",
+      "after": "  const actualFiles=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})\n"
+    },
+    {
+      "before": "",
+      "after": "  const files=d083PriorSourceFiles(actualFiles,read);\n"
+    }
+  ]
+}

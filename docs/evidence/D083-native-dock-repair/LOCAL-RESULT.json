@@ -1,0 +1,63 @@
+{
+  "qualification": "Finite native UI bugfix; original18 civic dock restored, selected heritage uses8; no protected assertion changed. Final remote-head CI is required.",
+  "previousCommittedHead": "efd6ea33312a438517b770e4e2f5a84415a63ea8",
+  "sourceTreeSha256": "36111209199979ab4f5d5abfd5fd16cbd060590058ce872d1146b67f7953bade",
+  "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f",
+  "actualSourcePaths": 236,
+  "currentSourceChangedSincePrevious": [
+    "src/cityView.ts"
+  ],
+  "geometryGeneratorStillExact": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+  "actualProfiles": [
+    {
+      "width": 1440,
+      "pngs": 13,
+      "placements": 8,
+      "saveReopened": 8,
+      "originalDockButtons": 18,
+      "originalDockRows": 3
+    },
+    {
+      "width": 412,
+      "pngs": 13,
+      "placements": 8,
+      "saveReopened": 8,
+      "originalDockButtons": 18,
+      "originalDockRows": 3
+    },
+    {
+      "width": 360,
+      "pngs": 13,
+      "placements": 8,
+      "saveReopened": 8,
+      "originalDockButtons": 18,
+      "originalDockRows": 3
+    }
+  ],
+  "rawPngs": 39,
+  "originalD056": {
+    "passed": true,
+    "widths": 3,
+    "paidPlacementAndUndoChecks": 48
+  },
+  "originalD055": {
+    "passed": false,
+    "originalDockPassedAll3": true,
+    "remainingFailure": "Frozen full catalogue omits eight new heritage tool ids. Preserve original assertion; protected qualification proposal required."
+  },
+  "restorationProposalFixture": "proposals/d083/evidence/source-restoration-proposal-dock-repair.json.gz",
+  "restorationProposalSha256": "db1ce0aec1c99013d7a27fde4a19c45f7424b95cbbf719364e0259bd23eef160",
+  "restorationProposalOnly": true,
+  "originalD055Native": {
+    "qualification": "Unchanged original d055Native functions; separate from still-red full-catalogue25 fixture.",
+    "passed": true,
+    "widths": [
+      1440,
+      412,
+      360
+    ],
+    "paidFoodBuildRefundChecks": 21,
+    "navigationPaths": 27,
+    "commissionReadOnlyCases": 3
+  }
+}

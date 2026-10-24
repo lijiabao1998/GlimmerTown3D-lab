@@ -1,0 +1,50 @@
+{
+  "images": [
+    {
+      "file_name": "comparison-185-v1-front-412.png",
+      "library_file_id": "libfile_2ef1d4905804819191c42032ba57e89c",
+      "file_id": "file_0000000041ec81f5a7a2f2259f1d907c",
+      "version": 1,
+      "file_size_bytes": 44610,
+      "sha256": "80833fabf5a17d167149faca027ae088c04fd00b0ab06bf73c73b9679450f0b6",
+      "readVerified": true
+    },
+    {
+      "file_name": "comparison-185-v1-original-412.png",
+      "library_file_id": "libfile_cb43b99d26ac8191ad40929b1f244788",
+      "file_id": "file_0000000007c481f5b199762327f99746",
+      "version": 1,
+      "file_size_bytes": 52695,
+      "sha256": "d4fb98b3eb0bbe4c304dfa8a9ad18490707947ea27495093d15948c54a22341b",
+      "readVerified": true
+    },
+    {
+      "file_name": "comparison-185-v2-front-412.png",
+      "library_file_id": "libfile_c2f3fc77261481919bbd092dd87f7862",
+      "file_id": "file_00000000276081f59b79cda8bce797d0",
+      "version": 1,
+      "file_size_bytes": 43771,
+      "sha256": "43e44da11d72353f05b1a4ab099acb61ad38d3db68121fa3ef3f911c0a090543",
+      "readVerified": true
+    },
+    {
+      "file_name": "comparison-185-v2-original-412.png",
+      "library_file_id": "libfile_930944d91c8081919f48de6dee68e8be",
+      "file_id": "file_000000003ad881f589cbe13fd84df930",
+      "version": 1,
+      "file_size_bytes": 51613,
+      "sha256": "154dfc5d2d0c7269a79a0436afa177eaf7172ea2cd7765fb08712b01da7eb09c",
+      "readVerified": true
+    }
+  ],
+  "priorProposal": {
+    "library_file_id": "libfile_310a8adfdf448191a77d3d0a40daba99",
+    "version": 0,
+    "file_id": "file_00000000b0c081f598d7126eda889f84"
+  },
+  "priorReport": {
+    "library_file_id": "libfile_87c15bce09fc8191b36d9ddf4c95f1a8",
+    "version": 3,
+    "file_id": "file_00000000060881f5ab4dfc05765e2b25"
+  }
+}

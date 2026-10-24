@@ -1,0 +1,2497 @@
+{
+  "phase": "after",
+  "sourceRef": "local",
+  "htmlSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f",
+  "qualification": "Authored synthetic fixture; Chrome software WebGL; mobile touch emulation, not Android hardware.",
+  "fixtureSha256": "ccb422836f5b7cddccf52769616e55be33f4dc0c8aecbae956b9bb048f9b9ff9",
+  "cases": [
+    {
+      "viewport": {
+        "W": 1440,
+        "H": 1000,
+        "mobile": false
+      },
+      "shots": [
+        {
+          "file": "D056-after-district-1440.png",
+          "sha256": "4e11f6e4d8bef05eb476ab67bbddd1ed2e7981508309a376e7089f94474fbff9",
+          "bytes": 129842,
+          "camera": {
+            "pos": [
+              144,
+              94.06040612287403,
+              146.00000000000003
+            ],
+            "target": [
+              28.8,
+              0,
+              30.800000000000004
+            ],
+            "zoom": 4
+          }
+        },
+        {
+          "file": "D056-after-fire-station-1440.png",
+          "sha256": "7e52e8904f3f79c151d50de9ca438026ffb05e70a279e9bff6735591f0741250",
+          "bytes": 127919,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-school-1440.png",
+          "sha256": "8d68fbcf4551952d8f45125877c33247fcc69d9f3fa2a464c6643d5ee672fc51",
+          "bytes": 128925,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              27.5,
+              0,
+              28.500000000000004
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-public-library-1440.png",
+          "sha256": "42094a842b9d77f89027cd02846577c81adfb362486dca11831ee14ccc7e3009",
+          "bytes": 121877,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-post-office-1440.png",
+          "sha256": "1fc2673b6fbe0370f21affc635b2e6f8f1ce3497412b009296c1d45db9c6b0bb",
+          "bytes": 121108,
+          "camera": {
+            "pos": [
+              146.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              31.5,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-police-station-1440.png",
+          "sha256": "462e03c65cb38c9c207b52e323368d24a192766c04dff6ef3c9267c9a0c4b9ee",
+          "bytes": 130454,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              25.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-pavilion-hospital-1440.png",
+          "sha256": "7e78f9400d67314d1e620270e5cdabe958743a19e760952149ed15d8a447ff75",
+          "bytes": 133833,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              27.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-clinic-1440.png",
+          "sha256": "a35472c7d6fc6b185ccb84cad7c9cf1dc6e0f48112e8722e631831941e107f3c",
+          "bytes": 135863,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              29.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-market-hall-1440.png",
+          "sha256": "d3b314e2ce791a4062cc1af04214a304d2e9ebfec0050b178bdc2680f65b5619",
+          "bytes": 127207,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-railway-station-1440.png",
+          "sha256": "86fc53771a817eaff48d0e7e8d8b6d247d04197e5bc60c799caac328137c0e7a",
+          "bytes": 108231,
+          "camera": {
+            "pos": [
+              139.69999999999996,
+              94.06040612287404,
+              153.7
+            ],
+            "target": [
+              24.5,
+              0,
+              38.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-town-hall-1440.png",
+          "sha256": "5addc8dca5719cb9067e40032ce09b599775f9a9d542a163fae53b4be23bdd99",
+          "bytes": 109687,
+          "camera": {
+            "pos": [
+              144.19999999999996,
+              94.06040612287404,
+              154.2
+            ],
+            "target": [
+              28.999999999999996,
+              0,
+              39
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-courthouse-1440.png",
+          "sha256": "ad7f9d2be109c0ec957a613ebaf15aeba16e305c626f2784d9a8664801ff2c77",
+          "bytes": 105768,
+          "camera": {
+            "pos": [
+              148.19999999999996,
+              94.06040612287404,
+              154.2
+            ],
+            "target": [
+              32.99999999999999,
+              0,
+              39
+            ],
+            "zoom": 8
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 6,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 7,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 14,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 15,
+          "want": 9,
+          "got": 9
+        },
+        {
+          "kind": 11,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 12,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 13,
+          "want": 15,
+          "got": 15
+        },
+        {
+          "kind": 87,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 17,
+          "want": 22,
+          "got": 22
+        },
+        {
+          "kind": 42,
+          "want": 23,
+          "got": 23
+        },
+        {
+          "kind": 43,
+          "want": 24,
+          "got": 24
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 17423,
+        "rt": [
+          480,
+          333
+        ]
+      },
+      "pixelVariance": 575.3133156492404,
+      "boxes": {
+        "6": [
+          180,
+          25.07,
+          0,
+          28.17,
+          25.905,
+          1.38,
+          28.86
+        ],
+        "7": [
+          260,
+          27.08,
+          0,
+          28.17,
+          27.92,
+          0.79,
+          28.909
+        ],
+        "8": [
+          134,
+          29.095,
+          0,
+          28.17,
+          29.905,
+          0.85,
+          28.900000000000002
+        ],
+        "9": [
+          178,
+          31.08,
+          -2.002716076310307e-9,
+          28.13,
+          31.905,
+          1.6299999999999997,
+          28.918
+        ],
+        "10": [
+          650,
+          21.092,
+          0,
+          29.108,
+          21.908,
+          1.6000000002086163,
+          29.852
+        ],
+        "11": [
+          46,
+          38.0427,
+          0.006,
+          29.1427,
+          38.9573,
+          0.4228950000000001,
+          29.93
+        ],
+        "12": [
+          404,
+          31.2,
+          0,
+          31.32,
+          32.8,
+          0.6600000000000001,
+          32.76
+        ],
+        "13": [
+          260,
+          25.095,
+          0,
+          32.17,
+          25.905,
+          1,
+          32.909
+        ],
+        "14": [
+          228,
+          27.08,
+          0,
+          32.2,
+          27.92,
+          1.8,
+          32.88
+        ],
+        "15": [
+          212,
+          29.09,
+          0,
+          32.17,
+          29.92,
+          0.8,
+          32.91
+        ],
+        "16": [
+          46,
+          38.0427,
+          0.006,
+          32.1427,
+          38.9573,
+          0.4228950000000001,
+          32.93
+        ],
+        "22": [
+          216,
+          24.05,
+          0,
+          38.17,
+          24.96,
+          0.73,
+          38.89
+        ],
+        "23": [
+          200,
+          28.19,
+          0,
+          38.34,
+          29.81,
+          1.6799999999999997,
+          39.79
+        ],
+        "24": [
+          296,
+          32.19,
+          0,
+          38.34,
+          33.81,
+          1.16,
+          39.864
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          24,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          27,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          3,
+          1,
+          30,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          4,
+          1,
+          33,
+          26,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          5,
+          1,
+          36,
+          26,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          27,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          14,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          15,
+          31,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          5,
+          21,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          4,
+          38,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          87,
+          31,
+          31,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          11,
+          25,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          12,
+          27,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          13,
+          29,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          16,
+          4,
+          38,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          17,
+          2,
+          24,
+          35,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          18,
+          2,
+          27,
+          35,
+          1,
+          1,
+          6,
+          0
+        ],
+        [
+          19,
+          2,
+          30,
+          35,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          20,
+          2,
+          33,
+          35,
+          1,
+          1,
+          11,
+          0
+        ],
+        [
+          21,
+          2,
+          36,
+          35,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          22,
+          17,
+          24,
+          38,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          23,
+          42,
+          28,
+          38,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          24,
+          43,
+          32,
+          38,
+          2,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 24,
+        "regen": 24,
+        "up": 2820024,
+        "upFull": 2153364,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 24,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 331,
+            "live": 331,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 1222,
+            "live": 1222,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 4059,
+            "used": 3247,
+            "live": 3247,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "fire",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "fire",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "school",
+            "repeat": 0,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "school",
+            "repeat": 1,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "library",
+            "repeat": 0,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "library",
+            "repeat": 1,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "post",
+            "repeat": 0,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "post",
+            "repeat": 1,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "market",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "market",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "police",
+            "repeat": 0,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "police",
+            "repeat": 1,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "hospital",
+            "repeat": 0,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "hospital",
+            "repeat": 1,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "clinic",
+            "repeat": 0,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          },
+          {
+            "tool": "clinic",
+            "repeat": 1,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": false
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          17,
+          42,
+          43
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D056-after-district-360.png",
+          "sha256": "f4d28ea330d8e21cfbb9f8893d9d1ee636112e27a6e174f2e8d1ddb408f408b3",
+          "bytes": 63118,
+          "camera": {
+            "pos": [
+              144,
+              94.06040612287403,
+              146.00000000000003
+            ],
+            "target": [
+              28.8,
+              0,
+              30.800000000000004
+            ],
+            "zoom": 1.5
+          }
+        },
+        {
+          "file": "D056-after-fire-station-360.png",
+          "sha256": "423f7548858f2c70693017dddf168a7fe4349bf8ae94d659eb9f9b0b1d180772",
+          "bytes": 58817,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-school-360.png",
+          "sha256": "0187885d5973374cbe19d87e7b7d2e6b18850a7b6273b1625603b593107f66b6",
+          "bytes": 61008,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              27.5,
+              0,
+              28.500000000000004
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-public-library-360.png",
+          "sha256": "fb6037dbb3f841c3d041a36d723f91ccd19caad6eed6be9004acc1ac393eaa59",
+          "bytes": 60034,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-post-office-360.png",
+          "sha256": "6f156f46b60b3fba8512dcda3eb91906c7a3ea4bfb3dd5d69ae74fee77177975",
+          "bytes": 57433,
+          "camera": {
+            "pos": [
+              146.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              31.5,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-police-station-360.png",
+          "sha256": "c3a3cb7f87d81ef06b920af50561178be5c96634e4d19774d8251aea633e80d7",
+          "bytes": 60097,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              25.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-pavilion-hospital-360.png",
+          "sha256": "b3b9b2321b767b95482b8e544d4f4f11430511e8decbf835b61ad03921f1c862",
+          "bytes": 58613,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              27.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-clinic-360.png",
+          "sha256": "c8991f1645bf2d4009b6d7ad25cdab3410ae8c8018fed86557db2beb54ef4065",
+          "bytes": 61800,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              29.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-market-hall-360.png",
+          "sha256": "3e2f363c11a3730c6270aac7b900f77f5f28394dd61babe05fc66dbc5e575692",
+          "bytes": 61612,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 5
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 6,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 7,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 14,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 15,
+          "want": 9,
+          "got": 9
+        },
+        {
+          "kind": 11,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 12,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 13,
+          "want": 15,
+          "got": 15
+        },
+        {
+          "kind": 87,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 17,
+          "want": 22,
+          "got": 22
+        },
+        {
+          "kind": 42,
+          "want": 23,
+          "got": 23
+        },
+        {
+          "kind": 43,
+          "want": 24,
+          "got": 24
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 17423,
+        "rt": [
+          120,
+          246
+        ]
+      },
+      "pixelVariance": 395.9713115662198,
+      "boxes": {
+        "6": [
+          180,
+          25.07,
+          0,
+          28.17,
+          25.905,
+          1.38,
+          28.86
+        ],
+        "7": [
+          260,
+          27.08,
+          0,
+          28.17,
+          27.92,
+          0.79,
+          28.909
+        ],
+        "8": [
+          134,
+          29.095,
+          0,
+          28.17,
+          29.905,
+          0.85,
+          28.900000000000002
+        ],
+        "9": [
+          178,
+          31.08,
+          -2.002716076310307e-9,
+          28.13,
+          31.905,
+          1.6299999999999997,
+          28.918
+        ],
+        "10": [
+          650,
+          21.092,
+          0,
+          29.108,
+          21.908,
+          1.6000000002086163,
+          29.852
+        ],
+        "11": [
+          46,
+          38.0427,
+          0.006,
+          29.1427,
+          38.9573,
+          0.4228950000000001,
+          29.93
+        ],
+        "12": [
+          404,
+          31.2,
+          0,
+          31.32,
+          32.8,
+          0.6600000000000001,
+          32.76
+        ],
+        "13": [
+          260,
+          25.095,
+          0,
+          32.17,
+          25.905,
+          1,
+          32.909
+        ],
+        "14": [
+          228,
+          27.08,
+          0,
+          32.2,
+          27.92,
+          1.8,
+          32.88
+        ],
+        "15": [
+          212,
+          29.09,
+          0,
+          32.17,
+          29.92,
+          0.8,
+          32.91
+        ],
+        "16": [
+          46,
+          38.0427,
+          0.006,
+          32.1427,
+          38.9573,
+          0.4228950000000001,
+          32.93
+        ],
+        "22": [
+          216,
+          24.05,
+          0,
+          38.17,
+          24.96,
+          0.73,
+          38.89
+        ],
+        "23": [
+          200,
+          28.19,
+          0,
+          38.34,
+          29.81,
+          1.6799999999999997,
+          39.79
+        ],
+        "24": [
+          296,
+          32.19,
+          0,
+          38.34,
+          33.81,
+          1.16,
+          39.864
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          24,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          27,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          3,
+          1,
+          30,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          4,
+          1,
+          33,
+          26,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          5,
+          1,
+          36,
+          26,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          27,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          14,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          15,
+          31,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          5,
+          21,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          4,
+          38,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          87,
+          31,
+          31,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          11,
+          25,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          12,
+          27,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          13,
+          29,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          16,
+          4,
+          38,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          17,
+          2,
+          24,
+          35,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          18,
+          2,
+          27,
+          35,
+          1,
+          1,
+          6,
+          0
+        ],
+        [
+          19,
+          2,
+          30,
+          35,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          20,
+          2,
+          33,
+          35,
+          1,
+          1,
+          11,
+          0
+        ],
+        [
+          21,
+          2,
+          36,
+          35,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          22,
+          17,
+          24,
+          38,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          23,
+          42,
+          28,
+          38,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          24,
+          43,
+          32,
+          38,
+          2,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 24,
+        "regen": 24,
+        "up": 2820024,
+        "upFull": 2153364,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 24,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 331,
+            "live": 331,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 1222,
+            "live": 1222,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 4059,
+            "used": 3247,
+            "live": 3247,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "fire",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "fire",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "school",
+            "repeat": 0,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "school",
+            "repeat": 1,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "library",
+            "repeat": 0,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "library",
+            "repeat": 1,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "post",
+            "repeat": 0,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "post",
+            "repeat": 1,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "market",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "market",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "police",
+            "repeat": 0,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "police",
+            "repeat": 1,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "hospital",
+            "repeat": 0,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "hospital",
+            "repeat": 1,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "clinic",
+            "repeat": 0,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "clinic",
+            "repeat": 1,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          17,
+          42,
+          43
+        ]
+      }
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "shots": [
+        {
+          "file": "D056-after-district-412.png",
+          "sha256": "0ac1c5c066a515a1e1aca3f336b87278c115228701c47d3ddeae9dbead21e322",
+          "bytes": 70201,
+          "camera": {
+            "pos": [
+              144,
+              94.06040612287403,
+              146.00000000000003
+            ],
+            "target": [
+              28.8,
+              0,
+              30.800000000000004
+            ],
+            "zoom": 1.5
+          }
+        },
+        {
+          "file": "D056-after-fire-station-412.png",
+          "sha256": "23b9f309f171fa4296f502e140e74515aed694167625666e968848fcc86d2b9d",
+          "bytes": 64548,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              25.499999999999996,
+              0,
+              28.499999999999996
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-school-412.png",
+          "sha256": "f70da9d4cf321bbc053c3c3fb8ceb41a2fe81aef615f1caa00f19a34486249dc",
+          "bytes": 66070,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              27.5,
+              0,
+              28.500000000000004
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-public-library-412.png",
+          "sha256": "8e7f5f694dab25791f13a5d6fad5abb0408fc6f1a8f4f11e11e1f63b57960d00",
+          "bytes": 65089,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              29.499999999999996,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-post-office-412.png",
+          "sha256": "170036c5331ac651122001480ee1679511331fa65b9862cccec67409ea0f8c7d",
+          "bytes": 62763,
+          "camera": {
+            "pos": [
+              146.69999999999996,
+              94.06040612287404,
+              143.7
+            ],
+            "target": [
+              31.5,
+              0,
+              28.499999999999993
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-police-station-412.png",
+          "sha256": "bde28f183c12c3515d79aa585cebfa59ade701aa0fa890df612455054886ed75",
+          "bytes": 65716,
+          "camera": {
+            "pos": [
+              140.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              25.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-pavilion-hospital-412.png",
+          "sha256": "a3e956eb3b6b5025b2dfa1a90b2fd347571b6d3fbcdd22a55e953a13eb79e7d2",
+          "bytes": 64736,
+          "camera": {
+            "pos": [
+              142.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              27.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-village-clinic-412.png",
+          "sha256": "16f7604ab7a3240cce785b31307b358c80aefb5f00a6393d8b2d7d5753af435e",
+          "bytes": 67825,
+          "camera": {
+            "pos": [
+              144.69999999999996,
+              94.06040612287404,
+              147.7
+            ],
+            "target": [
+              29.5,
+              0,
+              32.5
+            ],
+            "zoom": 8
+          }
+        },
+        {
+          "file": "D056-after-market-hall-412.png",
+          "sha256": "feafe769d56f915e81e0e2843c7bdf75685967e01a20f533dce766bd1fe00914",
+          "bytes": 67098,
+          "camera": {
+            "pos": [
+              147.19999999999996,
+              94.06040612287404,
+              147.2
+            ],
+            "target": [
+              32,
+              0,
+              32
+            ],
+            "zoom": 5
+          }
+        }
+      ],
+      "checks": [
+        "all owner geometry and queries match fresh scene",
+        "camera and visual time do not mutate simulation/history/buildings",
+        "zero browser errors and external requests"
+      ],
+      "passed": true,
+      "picks": [
+        {
+          "kind": 6,
+          "want": 6,
+          "got": 6
+        },
+        {
+          "kind": 7,
+          "want": 7,
+          "got": 7
+        },
+        {
+          "kind": 14,
+          "want": 8,
+          "got": 8
+        },
+        {
+          "kind": 15,
+          "want": 9,
+          "got": 9
+        },
+        {
+          "kind": 11,
+          "want": 13,
+          "got": 13
+        },
+        {
+          "kind": 12,
+          "want": 14,
+          "got": 14
+        },
+        {
+          "kind": 13,
+          "want": 15,
+          "got": 15
+        },
+        {
+          "kind": 87,
+          "want": 12,
+          "got": 12
+        },
+        {
+          "kind": 17,
+          "want": 22,
+          "got": 22
+        },
+        {
+          "kind": 42,
+          "want": 23,
+          "got": 23
+        },
+        {
+          "kind": 43,
+          "want": 24,
+          "got": 24
+        }
+      ],
+      "render": {
+        "calls": 9,
+        "triangles": 17423,
+        "rt": [
+          137,
+          286
+        ]
+      },
+      "pixelVariance": 387.1390745276585,
+      "boxes": {
+        "6": [
+          180,
+          25.07,
+          0,
+          28.17,
+          25.905,
+          1.38,
+          28.86
+        ],
+        "7": [
+          260,
+          27.08,
+          0,
+          28.17,
+          27.92,
+          0.79,
+          28.909
+        ],
+        "8": [
+          134,
+          29.095,
+          0,
+          28.17,
+          29.905,
+          0.85,
+          28.900000000000002
+        ],
+        "9": [
+          178,
+          31.08,
+          -2.002716076310307e-9,
+          28.13,
+          31.905,
+          1.6299999999999997,
+          28.918
+        ],
+        "10": [
+          650,
+          21.092,
+          0,
+          29.108,
+          21.908,
+          1.6000000002086163,
+          29.852
+        ],
+        "11": [
+          46,
+          38.0427,
+          0.006,
+          29.1427,
+          38.9573,
+          0.4228950000000001,
+          29.93
+        ],
+        "12": [
+          404,
+          31.2,
+          0,
+          31.32,
+          32.8,
+          0.6600000000000001,
+          32.76
+        ],
+        "13": [
+          260,
+          25.095,
+          0,
+          32.17,
+          25.905,
+          1,
+          32.909
+        ],
+        "14": [
+          228,
+          27.08,
+          0,
+          32.2,
+          27.92,
+          1.8,
+          32.88
+        ],
+        "15": [
+          212,
+          29.09,
+          0,
+          32.17,
+          29.92,
+          0.8,
+          32.91
+        ],
+        "16": [
+          46,
+          38.0427,
+          0.006,
+          32.1427,
+          38.9573,
+          0.4228950000000001,
+          32.93
+        ],
+        "22": [
+          216,
+          24.05,
+          0,
+          38.17,
+          24.96,
+          0.73,
+          38.89
+        ],
+        "23": [
+          200,
+          28.19,
+          0,
+          38.34,
+          29.81,
+          1.6799999999999997,
+          39.79
+        ],
+        "24": [
+          296,
+          32.19,
+          0,
+          38.34,
+          33.81,
+          1.16,
+          39.864
+        ]
+      },
+      "buildings": [
+        [
+          1,
+          1,
+          24,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          2,
+          1,
+          27,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          3,
+          1,
+          30,
+          26,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          4,
+          1,
+          33,
+          26,
+          1,
+          1,
+          9,
+          0
+        ],
+        [
+          5,
+          1,
+          36,
+          26,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          25,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          27,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          8,
+          14,
+          29,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          9,
+          15,
+          31,
+          28,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          10,
+          5,
+          21,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          11,
+          4,
+          38,
+          29,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          12,
+          87,
+          31,
+          31,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          13,
+          11,
+          25,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          14,
+          12,
+          27,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          15,
+          13,
+          29,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          16,
+          4,
+          38,
+          32,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          17,
+          2,
+          24,
+          35,
+          1,
+          1,
+          2,
+          0
+        ],
+        [
+          18,
+          2,
+          27,
+          35,
+          1,
+          1,
+          6,
+          0
+        ],
+        [
+          19,
+          2,
+          30,
+          35,
+          1,
+          1,
+          5,
+          0
+        ],
+        [
+          20,
+          2,
+          33,
+          35,
+          1,
+          1,
+          11,
+          0
+        ],
+        [
+          21,
+          2,
+          36,
+          35,
+          1,
+          1,
+          1,
+          0
+        ],
+        [
+          22,
+          17,
+          24,
+          38,
+          1,
+          1,
+          0,
+          0
+        ],
+        [
+          23,
+          42,
+          28,
+          38,
+          2,
+          1,
+          0,
+          0
+        ],
+        [
+          24,
+          43,
+          32,
+          38,
+          2,
+          1,
+          0,
+          0
+        ]
+      ],
+      "scene": {
+        "pieces": 24,
+        "regen": 24,
+        "up": 2820024,
+        "upFull": 2153364,
+        "grown": 0,
+        "moved": 0,
+        "relayout": 0,
+        "fresh": true,
+        "groundUp": 1327104,
+        "groundFull": 1327104,
+        "treesKept": false,
+        "cached": 24,
+        "rebuildAll": null,
+        "arenas": [
+          {
+            "cap": 2048,
+            "used": 331,
+            "live": 331,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 2048,
+            "used": 1222,
+            "live": 1222,
+            "holes": 0,
+            "free": 0
+          },
+          {
+            "cap": 4059,
+            "used": 3247,
+            "live": 3247,
+            "holes": 0,
+            "free": 0
+          }
+        ]
+      },
+      "gl": {
+        "programs": 10,
+        "geometries": 9,
+        "textures": 8,
+        "hazardShown": false
+      },
+      "native": {
+        "results": [
+          {
+            "tool": "fire",
+            "repeat": 0,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "fire",
+            "repeat": 1,
+            "cost": 400,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "school",
+            "repeat": 0,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "school",
+            "repeat": 1,
+            "cost": 350,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "library",
+            "repeat": 0,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "library",
+            "repeat": 1,
+            "cost": 280,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "post",
+            "repeat": 0,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "post",
+            "repeat": 1,
+            "cost": 320,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "market",
+            "repeat": 0,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "market",
+            "repeat": 1,
+            "cost": 950,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "police",
+            "repeat": 0,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "police",
+            "repeat": 1,
+            "cost": 500,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "hospital",
+            "repeat": 0,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "hospital",
+            "repeat": 1,
+            "cost": 600,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "clinic",
+            "repeat": 0,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          },
+          {
+            "tool": "clinic",
+            "repeat": 1,
+            "cost": 250,
+            "nativePlacement": true,
+            "undo": true,
+            "picking": true,
+            "cancel": true
+          }
+        ],
+        "allInputTrusted": true,
+        "importOnlyKinds": [
+          17,
+          42,
+          43
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,33 @@
+{
+  "qualification": "Independent CPU render repeat only; not WebGL paused capture or in-game evidence.",
+  "samePngBytes": true,
+  "images": 26,
+  "sha256": {
+    "01-staddle-granary-elevation.png": "459cdf43dbfeaf3b049c2ec12775e8e3c3a75b86cc08eb16882860653f45b57a",
+    "01-staddle-granary-front.png": "f2cf584ddd11ca8f2c94f51538deed252ca5939afbdd300369e33575d9231812",
+    "01-staddle-granary-rear.png": "b910050276b016a2b7f65d303743ab022a6d747f3e0ba107c1d5c28b921e1a5a",
+    "02-stone-dovecote-elevation.png": "802ac2507700f1637feb0e806a6a6591726349c0455ec74111b4f79ca7b77b07",
+    "02-stone-dovecote-front.png": "92017ea64a94870936d0a62c48773c05cf33e5664b32cb98318b217617ef58cc",
+    "02-stone-dovecote-rear.png": "59aec2057bb28c251b0d1330f04c73e1cf38d4137cea95feaf84616fbff7a174",
+    "03-railway-signal-box-elevation.png": "dcc9f2d71c73b6012701dc6373cbd686e6920b0e53489707de9d75c01cd35228",
+    "03-railway-signal-box-front.png": "a783a6f2f3da220a3b8ab9fe92ad8fdc276f7d084d1cf01e2c1a93ad95a65459",
+    "03-railway-signal-box-rear.png": "e5755562eeec1e53a7547d5329f12ad4be51fbf2b84b0416d4619964da5ea568",
+    "04-octagonal-tollhouse-elevation.png": "8dc6ff98c1732ee4f26abae5e0fa2326e423d2eef6a6c942a0d426d2f018a3ec",
+    "04-octagonal-tollhouse-front.png": "2f755f7fb827a2f2f75a8e9af43111bfcb0ca6f2da41fcf09430547804b13049",
+    "04-octagonal-tollhouse-rear.png": "a867022a07110147cd6d971924f2a33037e8863b63e0d077bebcd9a8dc3c7228",
+    "05-smock-windmill-elevation.png": "4c6bc3e770a9b0ed97a2f9e5d45c84a22afad5c00f13321dd4dc6a30d6a4a2b3",
+    "05-smock-windmill-front.png": "eb271a30478e00818c69d2d3b6e3822c309fbfd07432ae6edb404b2533663607",
+    "05-smock-windmill-rear.png": "6765117b9482ad4db25b86c3a121ef1b5be2b3001ac9756f178166ae252d59d1",
+    "06-village-smithy-elevation.png": "190b544e9c72b3c862a03a00eebbff824754af73b79e6c42eb53685181f8f52b",
+    "06-village-smithy-front.png": "b527f74f4e92624db7dca3d6e4d1fafe08283169176e8ee387cd24ee24c501df",
+    "06-village-smithy-rear.png": "a18b4bac672ed7282b4882b975411dfb31fda2e0803891475eff4eccc74667bd",
+    "07-great-tithe-barn-elevation.png": "cb2ab3e3e3697b3535ae64070f1b4d503e25eea430655145600703f0fdfc7f47",
+    "07-great-tithe-barn-front.png": "03961efd5f3739753eb557f601e0a9e11698c73374fda469313ded8058b713b6",
+    "07-great-tithe-barn-rear.png": "a5811b0d0450f743fa44b917dcefb749ea1420217ba8191ea2edee022a3e947a",
+    "08-iron-bandstand-elevation.png": "3fef9769cd2027591b8f5f99d4242ae2176c4afd454fc98a0c408bf9a9671c47",
+    "08-iron-bandstand-front.png": "691fde85ea62ea36c07c9539ec4b004f9b83d73054bc4d87bb579794337b07ce",
+    "08-iron-bandstand-rear.png": "3304953ffe1e832dc2b127154fa0f0cde19a6321c77eb10ab1d4fe19f1e10533",
+    "d083-eight-front-board.png": "863f2fdd5c437595062fcf76455164ed2cb523906fcf89acbf212c1abfbcd728",
+    "d083-eight-rear-board.png": "ad2870c51586a015b592e57fec20db9782a8789e381bd57aeb3eaf709f032cd9"
+  }
+}

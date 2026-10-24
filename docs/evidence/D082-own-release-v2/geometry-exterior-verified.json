@@ -1,0 +1,50 @@
+[
+  {
+    "slot": "179:0",
+    "planes": 29,
+    "maxError": 1.3877787807814457e-16,
+    "triangles": 80,
+    "cap": 182,
+    "negativeControls": 161
+  },
+  {
+    "slot": "179:2",
+    "planes": 28,
+    "maxError": 2.220446049250313e-16,
+    "triangles": 82,
+    "cap": 182,
+    "negativeControls": 165
+  },
+  {
+    "slot": "185:0",
+    "planes": 21,
+    "maxError": 1.1102230246251565e-16,
+    "triangles": 60,
+    "cap": 120,
+    "negativeControls": 121
+  },
+  {
+    "slot": "154:0",
+    "planes": 41,
+    "maxError": 5.551115123125783e-17,
+    "triangles": 166,
+    "cap": 342,
+    "negativeControls": 333
+  },
+  {
+    "slot": "154:1",
+    "planes": 44,
+    "maxError": 2.2898349882893854e-16,
+    "triangles": 158,
+    "cap": 342,
+    "negativeControls": 317
+  },
+  {
+    "slot": "154:2",
+    "planes": 42,
+    "maxError": 1.249000902703301e-16,
+    "triangles": 156,
+    "cap": 342,
+    "negativeControls": 313
+  }
+]

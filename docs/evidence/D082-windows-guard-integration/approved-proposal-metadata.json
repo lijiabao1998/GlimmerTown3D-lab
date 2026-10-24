@@ -1,0 +1,99 @@
+{
+  "status": "UNAPPLIED PROPOSAL",
+  "base": "8f553f21f648013118ad9f4e14f8bce300499bdb",
+  "guardFiles": [
+    {
+      "file": "tools/unit-d066.mjs",
+      "beforeTextSha256": "fe6772a74267c8b9bc83b0f9158c5de498d58bc593da90b7b7e5cc10335d8b55",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d067.mjs",
+      "beforeTextSha256": "a7d60065f1353a5f9504b9aff0848bc6bb5496d634a1b36611b4787bfa37a42f",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d068.mjs",
+      "beforeTextSha256": "2467fadf121cd8e0088cb542fe165845ec62fe39a87acec022c8e5459e805f32",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d069.mjs",
+      "beforeTextSha256": "b5753356c8ad4af489032fb537af319f7286dc2f3eadf1db22b5f97abf3bae75",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d070.mjs",
+      "beforeTextSha256": "12e1912ec1c297432bd003af47b2c3f8151c18daabf2ba014db3a9c3a2f4d7a7",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d071.mjs",
+      "beforeTextSha256": "73b67c97fa3c9fdef2524108d9072223d6c6ed4388801b98d70db1adb0058ae3",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d072.mjs",
+      "beforeTextSha256": "ce467ad05f7d13ff021c9d7157c402286c9ef40b39ab0badd77ffb348ff247d5",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d073.mjs",
+      "beforeTextSha256": "572c557077eb1aabcf628892b810bd51472b7958a8d1a2db37725011e7c13ee7",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d074.mjs",
+      "beforeTextSha256": "37a326018314ff5c9d658b368e099228f2213f25e1f6334c2aac058313d28e41",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d076.mjs",
+      "beforeTextSha256": "992c2dd26e0cb128872bc7dca836745c0b79c358fa65d80c7149b737d132aca1",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d077.mjs",
+      "beforeTextSha256": "d012a403fdada404e91f6d3d10fc45468bfb4f987a61d1691f198837719576a2",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d078.mjs",
+      "beforeTextSha256": "8c9b3feffcf427382f46e8447c5c93d050ceb0705168bbeaddbc0e5eceedf9c5",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d079.mjs",
+      "beforeTextSha256": "ae1c3b7cdc492bacabec54990b3ca40827f92931d53bff97636a0b53bfe95916",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d080.mjs",
+      "beforeTextSha256": "a9e52f73b66569e9d00d2544301a88856ed45c68728a5ed1b0fd8ff46e2c0ec5",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    },
+    {
+      "file": "tools/unit-d081.mjs",
+      "beforeTextSha256": "4ab406512120c94bed122fbcc9ad2bb1e7ea9e23ae12874fc64064891072c9aa",
+      "proposedOnly": true,
+      "semanticDelta": "one exact verified-existing-source predicate disjunct, plus its import"
+    }
+  ],
+  "helper": "tools/d082-scope.mjs",
+  "protectedRulesChangedInCheckout": false,
+  "runtimeCountBudgetProbeCameraChanges": false
+}

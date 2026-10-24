@@ -1,0 +1,13 @@
+{
+  "scope": "Native containment bugfix; exact same material and principal shape. Original accepted generator/source, old coordinate deltas and first reds retained.",
+  "acceptedSourceSha256": "9f0e20ad062b2638e2f4f0b0de365664383a2e05f88f61f3421ba44b4bd8b7d8",
+  "nativeSourceSha256": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+  "changedGranaryTriangles": 12,
+  "otherGranaryTrianglesExact": 1012,
+  "otherSevenModelsExact": true,
+  "allOld130PinsExact": true,
+  "finiteArtConfirmation": "Sentinel_2b0f80763e308191aaf466520dc9a728",
+  "beforeLibrary": "libfile_81b3ff13555c8191a829b3133bfb471c",
+  "afterLibrary": "libfile_b6af3e0ebbc8819195bc70740d14f335",
+  "normalProductHtmlEqualsShownCorrection": true
+}

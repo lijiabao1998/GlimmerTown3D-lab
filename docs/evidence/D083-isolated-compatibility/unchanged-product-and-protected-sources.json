@@ -1,0 +1,26 @@
+{
+  "source": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e",
+  "srcUnchanged": true,
+  "buildSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f",
+  "protectedFiles": {
+    "tools/unit-d066.mjs": "84d9b9044c7f7c4ffd0bb8776dd6bf8a340618888fb64f0f50d4db530864fa64",
+    "tools/unit-d067.mjs": "d9437638aa0fc5ab8433498bac1fc6f62e4a4d4fd1f150f8a960fc71d871c001",
+    "tools/unit-d068.mjs": "407b48e0486831303138b32ce3f1f3efd49e93642bbec7e98325852393cceb44",
+    "tools/unit-d069.mjs": "20a1561e9afc88652e766fe4a6e8ffb5345581ea226865e83d60a3724daff51b",
+    "tools/unit-d070.mjs": "26765a7411b1517480062d92636e738a9739d10e34f551829ee7f2674fee1701",
+    "tools/unit-d071.mjs": "620b42b553338ae91ada666f6a5772e97d7b3475f9d6865835a9754a8b3f8816",
+    "tools/unit-d072.mjs": "88f0f1f5d9bf12bf2af3f87db1742d455ad8fac09cf1bd21374a269ab6e6af2b",
+    "tools/unit-d073.mjs": "7f9d4644cf0d7143a9b3fd4b5a8bb6400e77a740a1d2c81e2ece0cf4175653bf",
+    "tools/unit-d074.mjs": "41c39d84074b94f26eb0cc0a87106e66dfce2ec691c75ca37a974d8233c65b12",
+    "tools/unit-d076.mjs": "c343cc4e0a803dec1888b8a536fddcac052bf8a7bbb4e9ee03a7165107702b69",
+    "tools/unit-d077.mjs": "477de75a0d872073d28ef4c3623f25adf00cb896818d89819f0bd718dc983cd1",
+    "tools/unit-d078.mjs": "68640f3d1d1da755eb9605ea6ab98e61b68b66fba1e7108d9b03f0515fea916d",
+    "tools/unit-d079.mjs": "c43477dd71204328ef44aa3343c0f7c537bd54c7eb9fe39d0e26d505e47db588",
+    "tools/unit-d080.mjs": "e5b0e1e008e88dd47fd43a9299944792abd65e380ef62ac99d82a622d928ff45",
+    "tools/unit-d081.mjs": "2b1f4793854016b93afcad162ff84a8a6f76a9fb7f6f6f9864e82b23de5f0231",
+    "tools/d081-scope.mjs": "4fd0aa9722461952c8ab6e521b48aa3070ebf41467d9ab20304f7a24e8fffba3",
+    "tools/d082-scope.mjs": "451ff243ee55826457b8030b8d0a3dfd5049cc6672edf33c1f69628d76d11f89",
+    "tools/unit-d082-scope.mjs": "9a61d72b6240a336c90ec9dec84204b56d2a46512de835f63f0313c386346181",
+    "tools/d082-reviewed-windows-check.mjs": "bfd5e5b487c43a092a3c6a7ed160078cb5ae499e07e2b882abeee42b717acca2"
+  }
+}

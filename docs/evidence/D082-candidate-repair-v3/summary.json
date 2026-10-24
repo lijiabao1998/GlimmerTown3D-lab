@@ -1,0 +1,60 @@
+{
+  "pass": true,
+  "totals": {
+    "slots": 3,
+    "widths": 9,
+    "required": 7857,
+    "covered": 7857,
+    "controls": 72
+  },
+  "files": {
+    "candidate-repair-179-v3-gallery-k179-v0-owner154-1440.json.gz": {
+      "sha256": "beb1fdec60fc74beaead060729cd73b74f4eba8e06a6b5f188066addaa298eb9",
+      "rawSha256": "0d9f20086ffdfcf09fa72306c7bcb6b7b112e48f3d2e774604bd6d8f8b798585"
+    },
+    "candidate-repair-179-v3-gallery-k179-v0-owner154-360.json.gz": {
+      "sha256": "8841bee7c378b493e3d81e10efda91f7a3575ef226c6316b886900c39acb3647",
+      "rawSha256": "4faefd05f4e48acc07d7474f6fa88e3ac52fa7f635079667177e7407a8fee6d7"
+    },
+    "candidate-repair-179-v3-gallery-k179-v0-owner154-412.json.gz": {
+      "sha256": "656aed736d2501bb0236e1c0895c17b05dae305228b0486fa3b87487636454b3",
+      "rawSha256": "d5a9e9964c618c3332846013699a3821bcac645d3c351f7d07ffcae464b7baa3"
+    },
+    "candidate-repair-179-v3.json.gz": {
+      "sha256": "77bd271192e9c6936aaa1385d7fff5e3844ea9f84a2362136b784da22667da1b",
+      "rawSha256": "6643bcd608677630301ba118c688ddfbf6a32babd2e241489e3f5c3bc619b1de"
+    },
+    "candidate-repair-1850-v3-gallery-k185-v0-owner160-1440.json.gz": {
+      "sha256": "1d24e2dc834ad4d0452b210b3f3a23fb197b3e2000bee11c6b47f95fd1af64ba",
+      "rawSha256": "2cd9b9911d9f8f89590127520c21aa956809ce0d2f642cd502bb24d55c96260f"
+    },
+    "candidate-repair-1850-v3-gallery-k185-v0-owner160-360.json.gz": {
+      "sha256": "47a87068134adc7103d8f461bc52b8672b148d8d7ef97f78ab6483258f919233",
+      "rawSha256": "16ca0de626a46aea5cbca8846adbcf6585b0afe1bd65810db7e451fc7b0bd652"
+    },
+    "candidate-repair-1850-v3-gallery-k185-v0-owner160-412.json.gz": {
+      "sha256": "832a60f52579165bd2c35ae80f6d199204f92f9135fe10134787008d76070c67",
+      "rawSha256": "76ebf38e5a41c17213bf42d67c9e7567f01e39b5de47856667ce12990de4df72"
+    },
+    "candidate-repair-1850-v3.json.gz": {
+      "sha256": "29e74222aa4ffca060164c25d58419ebc7eb8ed3ec0bbd51a820baf603bb4d3f",
+      "rawSha256": "3100239511afa0fc56c928b44e84743a89e395db69277378f4586ced2c480a9f"
+    },
+    "candidate-repair-1852-v3-gallery-k185-v2-owner160-1440.json.gz": {
+      "sha256": "ccc6f6c43e65c8f9248a87530b7ecf4c3eaa192c2bade09921034ef19d7c4d31",
+      "rawSha256": "b1550b0845ee55938f8e125c2f87d6563d43bf39782b797180303ae125f75187"
+    },
+    "candidate-repair-1852-v3-gallery-k185-v2-owner160-360.json.gz": {
+      "sha256": "f525fd1ebb507ccf436295731974508bb6e919ae24a6a81c7ecfe73221f61463",
+      "rawSha256": "6e1f6eec8a6294c4ba03016868b9de54626bd60eee91a8706d0a09cd13a33eab"
+    },
+    "candidate-repair-1852-v3-gallery-k185-v2-owner160-412.json.gz": {
+      "sha256": "4b0703e7b0d622427bdf0e393312e19ab4181420f63d064e9ae57cded4055ef7",
+      "rawSha256": "55e35078230091b8a7053354505df669ccc95bd001d89e828d52d7059f9f4d53"
+    },
+    "candidate-repair-1852-v3.json.gz": {
+      "sha256": "37c9fc078dbde1ad07695f033f69596b4ddce68a618a2ee05eb21bed054a46d5",
+      "rawSha256": "af1fc4564d5cf45db7878465708d158ff0ca6a04c7e69fab714af1f3c297e3a8"
+    }
+  }
+}

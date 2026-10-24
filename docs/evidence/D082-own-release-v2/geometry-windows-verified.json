@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "candidateOnly": false,
+  "qualification": "Original procedural horizontal phase and vertical window-row UV equivalence; not browser acceptance.",
+  "cases": 72,
+  "comparisons": 7704,
+  "negativeControls": 17976,
+  "horizontalUDiscrepancies": [],
+  "horizontalUDiscrepancyCount": 0
+}

@@ -1,0 +1,297 @@
+{
+  "qualification": "Final actual unapproved candidate evidence only. Original branch, all accepted pins and every original required record remain unchanged. No adoption or overall D082 pass.",
+  "capturedSourceCommit": "b58a1f6775f88489ee3637da44db19cdc223874a",
+  "acceptedCommit": "ce33e3eb73ab3602c16ff383c9fc5d194947ae64",
+  "widths": [
+    {
+      "width": 360,
+      "pngProof": {
+        "width": 360,
+        "allPngsVerified": true,
+        "actualPngRecords": 92,
+        "all233CurrentProductSourcesMatchCapture": true,
+        "acceptedOriginalFivePngsByteEqualPriorCe33": 20,
+        "manifestSha256": "c2264392c3e77ed7b6ed9a40b94ab5099e6abc3a94507b95b8c2ff48234e1c2a"
+      },
+      "cases": [
+        {
+          "slot": "185:0",
+          "newRequired": 905,
+          "newCovered": 890,
+          "newMissing": 15,
+          "oldFrozenRequired": 905,
+          "oldFrozenMissing": 15,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 1,
+          "actualViews": 9
+        },
+        {
+          "slot": "185:1",
+          "newRequired": 920,
+          "newCovered": 920,
+          "newMissing": 0,
+          "oldFrozenRequired": 827,
+          "oldFrozenMissing": 409,
+          "physicalSupersededOldPoints": 409,
+          "survivingOldPoints": 418,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "185:2",
+          "newRequired": 864,
+          "newCovered": 864,
+          "newMissing": 0,
+          "oldFrozenRequired": 797,
+          "oldFrozenMissing": 443,
+          "physicalSupersededOldPoints": 443,
+          "survivingOldPoints": 354,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "154:0",
+          "newRequired": 1053,
+          "newCovered": 994,
+          "newMissing": 59,
+          "oldFrozenRequired": 1053,
+          "oldFrozenMissing": 59,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 0,
+          "actualViews": 12
+        }
+      ]
+    },
+    {
+      "width": 412,
+      "pngProof": {
+        "width": 412,
+        "allPngsVerified": true,
+        "actualPngRecords": 86,
+        "all233CurrentProductSourcesMatchCapture": true,
+        "acceptedOriginalFivePngsByteEqualPriorCe33": 20,
+        "manifestSha256": "0e7bf6c13c93cfc7cb3201d1782e0eb08591fbe7d5fb598b32010836adcc9f15"
+      },
+      "cases": [
+        {
+          "slot": "185:0",
+          "newRequired": 905,
+          "newCovered": 890,
+          "newMissing": 15,
+          "oldFrozenRequired": 905,
+          "oldFrozenMissing": 15,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 1,
+          "actualViews": 9
+        },
+        {
+          "slot": "185:1",
+          "newRequired": 920,
+          "newCovered": 920,
+          "newMissing": 0,
+          "oldFrozenRequired": 827,
+          "oldFrozenMissing": 409,
+          "physicalSupersededOldPoints": 409,
+          "survivingOldPoints": 418,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "185:2",
+          "newRequired": 864,
+          "newCovered": 864,
+          "newMissing": 0,
+          "oldFrozenRequired": 797,
+          "oldFrozenMissing": 443,
+          "physicalSupersededOldPoints": 443,
+          "survivingOldPoints": 354,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "154:0",
+          "newRequired": 1053,
+          "newCovered": 995,
+          "newMissing": 58,
+          "oldFrozenRequired": 1053,
+          "oldFrozenMissing": 58,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 0,
+          "actualViews": 9
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "pngProof": {
+        "width": 1440,
+        "allPngsVerified": true,
+        "actualPngRecords": 90,
+        "all233CurrentProductSourcesMatchCapture": true,
+        "acceptedOriginalFivePngsByteEqualPriorCe33": 20,
+        "manifestSha256": "0293f3ecc749bc041e065308642d3b54dce111a3a98bc25321eb9ffc2f0d4e9d"
+      },
+      "cases": [
+        {
+          "slot": "185:0",
+          "newRequired": 905,
+          "newCovered": 890,
+          "newMissing": 15,
+          "oldFrozenRequired": 905,
+          "oldFrozenMissing": 15,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 1,
+          "actualViews": 9
+        },
+        {
+          "slot": "185:1",
+          "newRequired": 920,
+          "newCovered": 920,
+          "newMissing": 0,
+          "oldFrozenRequired": 827,
+          "oldFrozenMissing": 409,
+          "physicalSupersededOldPoints": 409,
+          "survivingOldPoints": 418,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "185:2",
+          "newRequired": 864,
+          "newCovered": 864,
+          "newMissing": 0,
+          "oldFrozenRequired": 797,
+          "oldFrozenMissing": 443,
+          "physicalSupersededOldPoints": 443,
+          "survivingOldPoints": 354,
+          "recoveredByActualPairedNewViews": null,
+          "actualViews": 8
+        },
+        {
+          "slot": "154:0",
+          "newRequired": 1053,
+          "newCovered": 993,
+          "newMissing": 60,
+          "oldFrozenRequired": 1053,
+          "oldFrozenMissing": 60,
+          "physicalSupersededOldPoints": null,
+          "survivingOldPoints": null,
+          "recoveredByActualPairedNewViews": 0,
+          "actualViews": 11
+        }
+      ]
+    }
+  ],
+  "coordinateDeltas": [
+    {
+      "slot": "185:1",
+      "width": 360,
+      "oldRequired": 827,
+      "currentRequired": 920,
+      "currentFixedSamples": 240,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 781,
+      "physicalSuperseded": 409,
+      "physicalSurviving": 418,
+      "survivingOldCoordinatesActuallyCovered": 418,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    },
+    {
+      "slot": "185:2",
+      "width": 360,
+      "oldRequired": 797,
+      "currentRequired": 864,
+      "currentFixedSamples": 224,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 670,
+      "physicalSuperseded": 443,
+      "physicalSurviving": 354,
+      "survivingOldCoordinatesActuallyCovered": 354,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    },
+    {
+      "slot": "185:1",
+      "width": 412,
+      "oldRequired": 827,
+      "currentRequired": 920,
+      "currentFixedSamples": 240,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 781,
+      "physicalSuperseded": 409,
+      "physicalSurviving": 418,
+      "survivingOldCoordinatesActuallyCovered": 418,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    },
+    {
+      "slot": "185:2",
+      "width": 412,
+      "oldRequired": 797,
+      "currentRequired": 864,
+      "currentFixedSamples": 224,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 671,
+      "physicalSuperseded": 443,
+      "physicalSurviving": 354,
+      "survivingOldCoordinatesActuallyCovered": 354,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    },
+    {
+      "slot": "185:1",
+      "width": 1440,
+      "oldRequired": 827,
+      "currentRequired": 920,
+      "currentFixedSamples": 240,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 781,
+      "physicalSuperseded": 409,
+      "physicalSurviving": 418,
+      "survivingOldCoordinatesActuallyCovered": 418,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    },
+    {
+      "slot": "185:2",
+      "width": 1440,
+      "oldRequired": 797,
+      "currentRequired": 864,
+      "currentFixedSamples": 224,
+      "allCurrentFixedSamplesRequired": true,
+      "oldIdsMissingFromCurrentNamespace": 0,
+      "oldIdsMadeOptional": 0,
+      "sameIdTuplesChanged": 671,
+      "physicalSuperseded": 443,
+      "physicalSurviving": 354,
+      "survivingOldCoordinatesActuallyCovered": 354,
+      "everyOldIdStillMandatoryInEveryFrozenAudit": true,
+      "oldCoordinateVerdict": "FAIL \u2014 never waived",
+      "matchingRule": "Diagnostic only: 3e-6 world-distance and normal dot>1-1e-6. These never affect unchanged D081 ray coverage, required flags or byte pins."
+    }
+  ],
+  "fullPngRecordsVerified": 268,
+  "quickPngRecordsPreviouslyVerified": 38,
+  "totalCapturedPngRecordsVerifiedIncludingRepeatedQuickViews": 306
+}

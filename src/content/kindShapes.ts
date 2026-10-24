@@ -1,3 +1,9 @@
+// D083-BEGIN rural-heritage-import
+import { RURAL_HERITAGE_KINDS } from './britishRuralHeritage.ts';
+// D083-END rural-heritage-import
+// D082-BEGIN coastal-recreation-import
+import { COASTAL_RECREATION_KINDS } from './britishCoastalRecreation.ts';
+// D082-END coastal-recreation-import
 // D081-BEGIN field-study-lodge-import
 import { FIELD_STUDY_KINDS } from './britishFieldStudyLodges.ts';
 // D081-END field-study-lodge-import
@@ -272,7 +278,16 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D079-BEGIN transit-utility-pavilion-shape
 // D080-BEGIN community-building-shape
 // D081-BEGIN field-study-lodge-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false): Shape | null => {
+// D082-BEGIN coastal-recreation-shape
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false): Shape | null => {
+  // D083-BEGIN rural-heritage-shape
+  if (RURAL_HERITAGE_KINDS.has(k)) return S('hall', { ruralHeritage: true });
+  // D083-END rural-heritage-shape
+  if (coastalRecreation && COASTAL_RECREATION_KINDS.has(k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge);
+    return previous ? { ...previous, p: { ...previous.p, coastalRecreation: true } } : null;
+  }
+// D082-END coastal-recreation-shape
   if (fieldStudyLodge && FIELD_STUDY_KINDS.has(k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding);
     return previous ? { ...previous, p: { ...previous.p, fieldStudyLodge: true } } : null;

@@ -1,0 +1,74 @@
+name: D082 179v1 finite geometry review (no deployment)
+on:
+  push:
+    branches: ['codex/d082-179v1-geometry-preview']
+permissions:
+  contents: read
+concurrency:
+  group: d082-179v1-proposal-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  physical-proof-and-original-acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Physical manifold, unchanged 130 models and eight targets, 36 affine deltas and 177 controls
+        run: node --experimental-strip-types tools/d082-proposal-check.mjs
+      - name: Current approved finite geometry and preserved previous pins remain mandatory
+        shell: bash
+        run: |
+          mkdir -p scratch/d082-proposal
+          set -o pipefail
+          node --experimental-strip-types tools/d082-redesign-check.mjs 2>&1 | tee scratch/d082-proposal/original-acceptance.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-179v1-proposal-physical-${{ github.sha }}
+          path: scratch/d082-proposal/
+          if-no-files-found: error
+          retention-days: 30
+  actual-proposal-images-and-unchanged-classifier:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Single-prototype actual product PNGs, original five views and real paired supplements
+        run: node --experimental-strip-types tools/d082-proposal-capture.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - name: Unchanged D081 classifier, every old ID, all new exterior points and retained old-coordinate failure
+        run: node --experimental-strip-types tools/d082-proposal-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-179v1-proposal-${{ matrix.width }}-${{ github.sha }}
+          path: |
+            scratch/d082-redesign/
+            scratch/d082-proposal/
+          if-no-files-found: error
+          retention-days: 30

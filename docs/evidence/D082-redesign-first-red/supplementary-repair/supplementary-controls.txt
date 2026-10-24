@@ -1,0 +1,33 @@
+鉁?complete paired original and supplementary PNG evidence is accepted (35.2746ms)
+鉁?fail closed: missing original view (27.1322ms)
+鉁?fail closed: duplicated original view (22.1399ms)
+鉁?fail closed: unpaired supplementary camera (25.7773ms)
+鉁?fail closed: duplicated supplementary image (27.4212ms)
+鉁?fail closed: unplanned supplementary angle (28.1071ms)
+鉁?fail closed: changed supplementary observed pose (25.5664ms)
+鉁?fail closed: changed original observed pose (20.6814ms)
+鉁?fail closed: changed world (31.9204ms)
+鉁?fail closed: changed owner (38.0512ms)
+鉁?fail closed: missing shared plan (21.5148ms)
+鉁?fail closed: duplicate shared plan (21.2064ms)
+鉁?fail closed: planned but uncaptured image (22.895ms)
+鉁?fail closed: reused before PNG as after (37.5989ms)
+鉁?fail closed: nonexistent PNG (37.2812ms)
+鉁?fail closed: PNG hash mismatch (39.1619ms)
+鉁?fail closed: PNG size mismatch (34.0676ms)
+鉁?fail closed: PNG dimensions mismatch (33.2907ms)
+鉁?fail closed: escaped PNG path (33.4714ms)
+鉁?fail closed: missing repeat proof (32.8569ms)
+鉁?fail closed: changed repeat pixels (36.0304ms)
+鉁?fail closed: inexact production geometry (39.9505ms)
+鉁?fail closed: illegal planned orbit (20.2111ms)
+鉁?supplementary angles preserve the original OrbitControls limits (0.2941ms)
+鉁?downward required surfaces are back-facing for the entire legal continuum (0.2929ms)
+鈩?tests 25
+鈩?suites 0
+鈩?pass 25
+鈩?fail 0
+鈩?cancelled 0
+鈩?skipped 0
+鈩?todo 0
+鈩?duration_ms 1988.5421

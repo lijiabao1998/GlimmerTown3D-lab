@@ -1,0 +1,29 @@
+{
+  "qualification": "Lossless original logs; gzip preserves original bytes. Uncompressed copies also remain in the isolated workspace.",
+  "entries": [
+    {
+      "file": "job-120387040486-original.log",
+      "archive": "job-120387040486-original.log.gz",
+      "rawBytes": 63690,
+      "rawSha256": "f56dcabaa4f5c7cdcc1bb79ee01aecb4cac1e8567fc4298ae15a9034c7ca27a5"
+    },
+    {
+      "file": "job-120387040570-original.log",
+      "archive": "job-120387040570-original.log.gz",
+      "rawBytes": 26127,
+      "rawSha256": "99e11b887c506693c16200823104b69809d5d8863dbaf0aa2160449a6ee42b13"
+    },
+    {
+      "file": "job-120387040709-original.log",
+      "archive": "job-120387040709-original.log.gz",
+      "rawBytes": 81538,
+      "rawSha256": "dcf51836dba3f6cd76fc0642101e25592ec46589ba3ab2b328c221a70661ff66"
+    },
+    {
+      "file": "D053-browser-final.log",
+      "archive": "D053-browser-final.log.gz",
+      "rawBytes": 4927,
+      "rawSha256": "f65577785cee0f5bb29027f97c4ad43bdc6c275909ac6fc81dc66338cc29c75d"
+    }
+  ]
+}

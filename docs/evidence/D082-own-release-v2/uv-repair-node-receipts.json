@@ -1,0 +1,45 @@
+{
+  "qualification": "Partial local Node and build evidence only; 179v2 visibility unresolved, complete integration and coverage pending, no real Chromium/CI/release claim.",
+  "sourcePins": {
+    "src/render/britishCoastalRecreationArt.ts": "4869a83614364d7f2c97027991e860f73c6fca21568b7e57ba3cbae42896a5c2",
+    "src/render/d082RemainingGeometryData.ts": "c473c1b7afefb68a8aca6f5df14c38831177558c1324bc220edd36c102d428e4"
+  },
+  "logs": {
+    "frame-v2-uv-final.log": {
+      "sha256": "4fc1886861fd5df5b6729c9f1bb50df0239c6f3a51250b8060fd4408a3a74c0e",
+      "bytes": 24883
+    },
+    "scenes-v2-uv-final.log": {
+      "sha256": "6a060c943bcc2f3d75f49c934d87e07b44d44c8a479b6dd100017b625341c6b2",
+      "bytes": 9038
+    },
+    "d083-native-uv-final.log": {
+      "sha256": "ed79cd520d59610009d7491434cd389382276708099d916e833bacca77dc52d6",
+      "bytes": 819
+    },
+    "d083-envelope-uv-final.log": {
+      "sha256": "90753d7ec27d98861e6a906a3f3a83ccadd121bd2797c31b64c21bd22c6f7bb5",
+      "bytes": 3448
+    },
+    "typecheck-uv-final.log": {
+      "sha256": "f268b07197da008ac5dc2159ddfd70f404b066f4705a8c32d100cbeb67ae4eb2",
+      "bytes": 152
+    },
+    "build-uv-final.log": {
+      "sha256": "29c4ba1e7d2400970360037664dfc8aa07b41b2b3845fc97de24722588fdfa45",
+      "bytes": 441
+    },
+    "nine-browser-api-uv-final.log": {
+      "sha256": "2bbc03437295d072de9186b3afcf66a8cdc7221691d86306e675da31a21b1307",
+      "bytes": 747
+    },
+    "views-uv-final.log": {
+      "sha256": "466ee32619ae47fe299d031a1715a55d7715f2cdd2a799d33b417d8a425d618d",
+      "bytes": 1549
+    },
+    "d083-scope-uv-final-correct-entry.log": {
+      "sha256": "54028a94e35f94a13d18888561820875a717813c4891799d04aa8fb098b06c92",
+      "bytes": 337
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "approvalMessage": "Sentinel_a416d384950081919aa629cf2e2fbab6",
+  "reviewedSource": "0b583d1deecc8a72af19c6c470cacd73153bfe83",
+  "sourcePath": "src/render/britishCoastalRecreationArt.ts",
+  "previousSha256": "bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf",
+  "currentSha256": "3c8be9834fb42d4105563a33db502d4b8e7afa4626ac0acf5e0cfce9121fbb97",
+  "packaging": "inline-fixed-reviewed-emitter-data-v1",
+  "reviewedComponents": {
+    "src/render/britishCoastalRecreationArt.ts": "c31842cc1e4d4cfc5cdd3e9572a1d0d2d3633da18776ab1375d6dcbb1c96c9b1",
+    "src/render/d082RemainingProposal.ts": "082cbb211680dad24150057aef2487140b2b47d23a5b66300e62beff4bdb0120",
+    "src/render/d082RemainingProposalData.ts": "35e4a6003ecbed23306b6b676c8b2a1d5763e80c8cc04cc36e330c09899a3d56"
+  }
+}

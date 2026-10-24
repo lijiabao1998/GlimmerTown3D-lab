@@ -1,0 +1,116 @@
+name: D083 native buildings
+on:
+  push:
+    branches: ['codex/d083-british-local-design']
+  pull_request:
+    branches: ['main', 'codex/d083-isolated-compat-20261023']
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: d083-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      artifact-id: ${{ steps.build.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node --test tools/d083-release-trigger.test.mjs
+      - run: npm run typecheck
+      - name: Native ownership, placement, save replay, picking and original130 byte pins
+        run: node --experimental-strip-types proposals/d083/native-integration-check.mjs
+      - name: Unchanged original food/build parity and mutation controls
+        run: node --experimental-strip-types tools/unit-d055-build.mjs
+      - run: npm run build
+      - name: Exact source commit and built HTML
+        shell: bash
+        run: |
+          printf '%s\n' "$GITHUB_SHA" > dist/source-commit.txt
+          sha256sum dist/index.html > dist/index.sha256
+      - uses: actions/upload-artifact@v4
+        id: build
+        with:
+          name: d083-native-build-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d083-native-node-${{ github.sha }}
+          path: scratch/d083-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  inherited-geometry-envelope:
+    # Mandatory; retains the strict bounds that caught the original plank.
+    # Its failure cannot suppress the actual game evidence or become optional.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node --experimental-strip-types proposals/d083/native-envelope-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d083-native-envelope-${{ github.sha }}
+          path: scratch/d083-native-evidence/native-envelope-report.json
+          if-no-files-found: error
+          retention-days: 30
+  actual-game:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: dist/
+          merge-multiple: true
+      - name: Verify same immutable build and exact source head
+        shell: bash
+        run: |
+          test "$(cat dist/source-commit.txt)" = "$GITHUB_SHA"
+          sha256sum --check dist/index.sha256
+      - name: Real catalogue, mouse/touch placement, construction, picking and save reload
+        run: node --experimental-strip-types proposals/d083/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+      - name: Unchanged original food placement, refund and commission UI functions
+        run: node --experimental-strip-types proposals/d083/native-legacy-ui-check.mjs --width=${{ matrix.width }} --attempt=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d083-native-game-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d083-native-evidence/
+          if-no-files-found: error
+          retention-days: 30

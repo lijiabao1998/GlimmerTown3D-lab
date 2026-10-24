@@ -1,0 +1,40 @@
+{
+  "qualification": "Unapplied windows-only predicate prototype and exact patch review. Protected guards are not modified or integrated. Existing source-restoration CI2858 is separate.",
+  "base": "8f553f21f648013118ad9f4e14f8bce300499bdb",
+  "negativeControls": 280,
+  "positiveControls": 20,
+  "tests": [
+    {
+      "name": "exact proposal function, reviewed current hash and exact published restoration",
+      "passed": true
+    },
+    {
+      "name": "every other current path, unknown files and aliases receive no new permission or reads",
+      "passed": true
+    },
+    {
+      "name": "one-byte changes, stale published/ten-model phase, missing and non-text bytes reject",
+      "passed": true
+    },
+    {
+      "name": "missing source exception propagates by identity with no default disk fallback",
+      "passed": true
+    },
+    {
+      "name": "full D082/D081/D074 injected scope chain still rejects every invalid windows source",
+      "passed": true
+    },
+    {
+      "name": "229 legacy and 231 current phases cannot masquerade as one another; windows is never added",
+      "passed": true
+    },
+    {
+      "name": "proposed patch changes only fifteen import/disjunct pairs and one source-accounting helper",
+      "passed": true
+    }
+  ],
+  "protectedGuardFilesStillUnchanged": 15,
+  "patchApplied": false,
+  "complete": true,
+  "passed": true
+}

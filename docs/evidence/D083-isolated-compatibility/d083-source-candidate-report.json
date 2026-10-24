@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "currentSources": 236,
+  "priorSources": 231,
+  "changed": 12,
+  "negativeControls": 32,
+  "qualification": "Seven finite source inverses and five exact additions. Original D082 pins/controls and actual runtime remain intact."
+}

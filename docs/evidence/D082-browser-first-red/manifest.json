@@ -1,0 +1,64 @@
+{
+  "head": "044c8b099f948a3bbc6e372a0b0cac3a33e3ea4d",
+  "runId": 39564027992,
+  "qualification": "Retained first actual-browser red, not acceptance. All three widths stop at full scene bridge equality after original baseline overview.",
+  "failure": "Ground digest and two zero-count production instanced systems missing from independent surface fixture; architectural mesh digests matched. No fields may be dropped to repair this bridge.",
+  "files": [
+    {
+      "path": "1440.zip",
+      "sha256": "dd2797da463a67dd4eb5f06ad01a469e3d039bd69b9a3b206ce81e9f55dc399d",
+      "rawSha256": "dd2797da463a67dd4eb5f06ad01a469e3d039bd69b9a3b206ce81e9f55dc399d",
+      "width": 1440,
+      "artifactId": 12329306414,
+      "jobId": 119101864072
+    },
+    {
+      "path": "1440.log.gz",
+      "sha256": "352d581db1eefd7b2781a9a7e54c18d98d7613e1d67a6547c18794a3fd7659bf",
+      "rawSha256": "7dec13c73e811e05c53c753d29f3e884903dc6919e30bb788b28aff529b29e96",
+      "width": 1440,
+      "artifactId": 12329306414,
+      "jobId": 119101864072
+    },
+    {
+      "path": "360.zip",
+      "sha256": "40801642bf3186c0c134ff110344ca60b585327dde4c3553c84d5a48aacb1203",
+      "rawSha256": "40801642bf3186c0c134ff110344ca60b585327dde4c3553c84d5a48aacb1203",
+      "width": 360,
+      "artifactId": 12328818856,
+      "jobId": 119101864061
+    },
+    {
+      "path": "360.log.gz",
+      "sha256": "8419888c1a5b946e5aac1e63e6166bd640749a5fc4c410aceb86a84a2f656c2e",
+      "rawSha256": "2ee903c32e58ba72ef13c8eab178b2b89d607d01e3877bf12ae887397f1369a1",
+      "width": 360,
+      "artifactId": 12328818856,
+      "jobId": 119101864061
+    },
+    {
+      "path": "412.zip",
+      "sha256": "ddb867024de78450ce46b5bec4259bd9fdcd1a5c4dfbef3ed818373d087cff9b",
+      "rawSha256": "ddb867024de78450ce46b5bec4259bd9fdcd1a5c4dfbef3ed818373d087cff9b",
+      "width": 412,
+      "artifactId": 12328943444,
+      "jobId": 119101864037
+    },
+    {
+      "path": "412.log.gz",
+      "sha256": "b2af518289d6e515186397865e5749ee8b437ded6dc9d453cb742fffbe89a124",
+      "rawSha256": "3b3e3b873de339974b209e205b41e6ee07af70fa8922f8fc6b5b8a099dcd1649",
+      "width": 412,
+      "artifactId": 12328943444,
+      "jobId": 119101864037
+    }
+  ],
+  "historicalFirstRed": {
+    "runId": 39564033090,
+    "jobId": 119103850818,
+    "path": "d081-360.log.gz",
+    "sha256": "9d85856a12ef2575569e2e5bc114b3f81abfc414e37ad697e80ea4bf5a6e0978",
+    "rawSha256": "295bb6a9d045322e414e1231fea1a7e98ca2a8e223918420106e31b6971ecfc7",
+    "failure": "captured normal upload reproduces browser hash: walls"
+  }
+}

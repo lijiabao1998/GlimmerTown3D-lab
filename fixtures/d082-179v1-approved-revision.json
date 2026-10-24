@@ -1,0 +1,37 @@
+{
+  "slot": "179:1",
+  "approval": {
+    "message": "Sentinel_10efac81d03c81918f43d14578aa40d8",
+    "utc": "2026-10-22T13:44:00Z",
+    "response": "允許",
+    "scope": "Adopt only the previewed 179v1 finite geometry revision, update its corresponding accepted pins, preserve previous pins and 487-coordinate evidence, and continue verification. No other models, merge or deployment."
+  },
+  "previewSource": "90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694",
+  "previewDelivery": "258dccd4faef954e52ba9e2771a03db3141e60db",
+  "previousSource": "67440cc8de625f0482665c3f3f94efba73a1aed3",
+  "previousPins": {
+    "defaultGeometry": "1ad82e98714bd84ae41435298b0cf6ada16e93ea56153ffb046eb3d183aca049",
+    "allAffineCasesSha256": "b7a060fca867dd2866e65898b0840fe93aeb20a7011f4a54d0aeeb89191f2ab0"
+  },
+  "approvedPins": {
+    "defaultGeometry": "e33779d6bf749fe114fcc9e8079e6978d4acfcc956745df9d91735002f3cc2df",
+    "allAffineCasesSha256": "4d2bac3a4ab58469109380fc40881a1ea1246cea8df177e53fc543e07ddcc853"
+  },
+  "evidence": {
+    "docs/evidence/D082-179v1-proposal/487-coordinate-delta.json": "e0854be30eaf25135c12437c272e241b5fe5fe364834e9b3a0fe146e46ccd3c7",
+    "docs/evidence/D082-179v1-proposal/487-coordinate-delta.csv": "10779bfab44b973463274c3e5b051a1e8fe4a2c90017eaf4bca80a285dfef4eb",
+    "docs/evidence/D082-redesign-first-red/supplementary-repair/surface-179-v1-after-412.json.gz": "d2c8ce18d490172f043914748ba92d4623ed862e6cadbbd1a2da9dbd25437795",
+    "fixtures/d082-179v1-proposal-before.json": "729c10a0061b4f056b23168eb6b7bb12ac10b639e19b89804c22c2fbebef09a7"
+  },
+  "changedOrientedCoordinates": 487,
+  "fixedRecords": 198,
+  "silhouetteRecords": 289,
+  "oldFrozenCoordinateMissingInPreview": 489,
+  "sameOrientedSurfaceClaim": false,
+  "approvedProductSources": {
+    "src/render/britishCoastalRecreationArt.ts": "bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf",
+    "src/render/d082Repair179v1.ts": "b006936d523423bff074b169cbdf61e8eec9aa1fd481c983046902baa1b9dcc7",
+    "src/render/d082Repair179v1Data.ts": "98b73814abd5b3541ada80e31a3e72700236eed7f5e91db27209db024e65d8c0",
+    "src/render/windows.ts": "91a9d2b02154fc5f437252fc2e83709058a811977300c226cc4e7993fb973f00"
+  }
+}

@@ -1,0 +1,799 @@
+{
+  "qualification": "Local design geometry checks only; component closure does not prove joined exterior coverage, production slot budgets or WebGL integration.",
+  "designs": [
+    {
+      "id": "01-staddle-granary",
+      "name": "Staddle-stone granary",
+      "triangles": 1024,
+      "structuralTriangles": 720,
+      "components": [
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.0004060772822998105
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.00030601695871670617
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.0004060772822998118
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.0003060169587167063
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.00040607728229981305
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.00030601695871670655
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.00040607728229981126
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.00030601695871670855
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.0004060772822998098
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.0003060169587167042
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.00040607728229980974
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.00030601695871670725
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.0004060772822998171
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.00030601695871670416
+        },
+        {
+          "name": "staddle-stem",
+          "triangles": 44,
+          "volume": 0.0004060772822998111
+        },
+        {
+          "name": "mushroom-cap",
+          "triangles": 44,
+          "volume": 0.0003060169587166985
+        },
+        {
+          "name": "raised-granary",
+          "triangles": 16,
+          "volume": 0.20967935999999998
+        }
+      ],
+      "geometrySha256": "5c4be6a987ed5249ca85442cfef2683b21410c40dfdb7f9d0f1a3003827e3db7",
+      "jsonSha256": "d0adfeb9f21ce0a96364505560aeba13b1b871dec706bbf80b59b68f7082e267",
+      "glbSha256": "b833b73ab22d9fc45d0889a29df320716888aca5ecf6474b4c9a7bafb0e92c92",
+      "glbBytes": 111908
+    },
+    {
+      "id": "02-stone-dovecote",
+      "name": "Cotswold dovecote",
+      "triangles": 1070,
+      "structuralTriangles": 92,
+      "components": [
+        {
+          "name": "stone-dovecote",
+          "triangles": 62,
+          "volume": 0.18142766406140676
+        },
+        {
+          "name": "roof-lantern",
+          "triangles": 30,
+          "volume": 0.0009004392032533449
+        }
+      ],
+      "geometrySha256": "8223bb5b6e7e1d00f594be7163049b68cbbac496dafe424420611f21f2501b49",
+      "jsonSha256": "fbbb62deb143c585d90642028b8a14ac553dfcf66f6fc131487a1efd8abcd2ad",
+      "glbSha256": "c72b3be151074e67ee1f4e2c31c53d8a1fa64f7302d7b8809100b8dd7813b3ba",
+      "glbBytes": 116852
+    },
+    {
+      "id": "03-railway-signal-box",
+      "name": "Railway signal box",
+      "triangles": 710,
+      "structuralTriangles": 184,
+      "components": [
+        {
+          "name": "brick-locking-room",
+          "triangles": 12,
+          "volume": 0.08745
+        },
+        {
+          "name": "timber-operating-storey",
+          "triangles": 16,
+          "volume": 0.12613888
+        },
+        {
+          "name": "landing",
+          "triangles": 12,
+          "volume": 0.0009000000000000084
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.000762500000000013
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.0006600000000000078
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.0005574999999999996
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.0004550000000000156
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.00035249999999999366
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.00025000000000000076
+        },
+        {
+          "name": "stair-tread",
+          "triangles": 12,
+          "volume": 0.00014750000000000012
+        },
+        {
+          "name": "stair-rail",
+          "triangles": 12,
+          "volume": 0.00006632218331749647
+        },
+        {
+          "name": "balcony-post",
+          "triangles": 12,
+          "volume": 0.000027439999999982854
+        },
+        {
+          "name": "balcony-post",
+          "triangles": 12,
+          "volume": 0.000027439999999984362
+        },
+        {
+          "name": "landing-rail",
+          "triangles": 12,
+          "volume": 0.0000372400000000157
+        },
+        {
+          "name": "brick-stack",
+          "triangles": 12,
+          "volume": 0.0006489599999999981
+        }
+      ],
+      "geometrySha256": "f07cc03c1a698caa582155ea5c40bb994cb9df27b1c0773c8d20400f60fca431",
+      "jsonSha256": "6d18c0ac6c3ea603cbeed20c440d6c660e4ad136941698907492f8e0e21b7a9d",
+      "glbSha256": "19903d260df94966030e9dcd23556e6738d7f2c696e4837e9cf773fdf729c73d",
+      "glbBytes": 77976
+    },
+    {
+      "id": "04-octagonal-tollhouse",
+      "name": "Turnpike tollhouse",
+      "triangles": 510,
+      "structuralTriangles": 42,
+      "components": [
+        {
+          "name": "octagonal-toll-lodge",
+          "triangles": 30,
+          "volume": 0.18198760086946095
+        },
+        {
+          "name": "brick-stack",
+          "triangles": 12,
+          "volume": 0.0011760000000000008
+        }
+      ],
+      "geometrySha256": "1d391180e5c9e41eb24401eb9aee2c85022adca3f740fd4053be3c39b4f27580",
+      "jsonSha256": "34e7af7881a3cf18f594451b2e6e69d2d179d60a0149432c174715d8b3af9805",
+      "glbSha256": "f78b5240825d40f5707755d301c91143c04572650d8ac128274556ce200fc0b1",
+      "glbBytes": 56376
+    },
+    {
+      "id": "05-smock-windmill",
+      "name": "Kentish smock windmill",
+      "triangles": 1522,
+      "structuralTriangles": 580,
+      "components": [
+        {
+          "name": "brick-base",
+          "triangles": 44,
+          "volume": 0.03265348404841358
+        },
+        {
+          "name": "tapered-smock-tower",
+          "triangles": 28,
+          "volume": 0.044523148183038486
+        },
+        {
+          "name": "rotating-cap",
+          "triangles": 16,
+          "volume": 0.006761253333333307
+        },
+        {
+          "name": "sail-spine",
+          "triangles": 12,
+          "volume": 0.0000881999999999897
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025919999999996174
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025920000000040897
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.0000057599999999729525
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999960706
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000053513
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000018661
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000047826
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999991014
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999967143
+        },
+        {
+          "name": "sail-spine",
+          "triangles": 12,
+          "volume": 0.00008820000000003157
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025919999999971563
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.00002591999999999715
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999999938
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999988766
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000020584
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000023765
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000011651
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.0000057600000000001464
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000004151
+        },
+        {
+          "name": "sail-spine",
+          "triangles": 12,
+          "volume": 0.00008820000000002303
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025920000000007002
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025919999999991837
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000002755
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000002362
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999999701
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000006513
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000001539
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999993991
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000002466
+        },
+        {
+          "name": "sail-spine",
+          "triangles": 12,
+          "volume": 0.00008820000000000225
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.00002591999999998775
+        },
+        {
+          "name": "sail-edge",
+          "triangles": 12,
+          "volume": 0.000025920000000006782
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000017553
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000006279
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000003387
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999986311
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.0000057600000000286525
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005760000000001124
+        },
+        {
+          "name": "sail-lattice",
+          "triangles": 12,
+          "volume": 0.000005759999999990792
+        },
+        {
+          "name": "sail-hub",
+          "triangles": 12,
+          "volume": 0.00008750000000002096
+        }
+      ],
+      "geometrySha256": "161fd798b96c32e1e709280f309034b9920bf885a7419ff918a9be0f43d65303",
+      "jsonSha256": "97af9dfc2bc0d05504866fe7fb32430fc3a6d704af704b7c7ffd64863e5c4e8f",
+      "glbSha256": "3475013d3cc66050975d9c4ba4c24cf2bbf3b3d1297265a45acb65c9de9112d6",
+      "glbBytes": 165672
+    },
+    {
+      "id": "06-village-smithy",
+      "name": "Village blacksmith forge",
+      "triangles": 648,
+      "structuralTriangles": 80,
+      "components": [
+        {
+          "name": "smithy-main",
+          "triangles": 16,
+          "volume": 0.177674
+        },
+        {
+          "name": "side-store",
+          "triangles": 16,
+          "volume": 0.023231999999999996
+        },
+        {
+          "name": "brick-stack",
+          "triangles": 12,
+          "volume": 0.005290000000000005
+        },
+        {
+          "name": "forge-hearth",
+          "triangles": 12,
+          "volume": 0.0014399999999999999
+        },
+        {
+          "name": "anvil-pedestal",
+          "triangles": 12,
+          "volume": 0.0003920000000000011
+        },
+        {
+          "name": "anvil",
+          "triangles": 12,
+          "volume": 0.00031849999999999934
+        }
+      ],
+      "geometrySha256": "f610775c3b974ff591b980bf02422b7b5434f46fe233427ff021406150a2d77f",
+      "jsonSha256": "4261e78db694c14740765a83e21f661ad5225d166cc048ba839e5f4da1339d74",
+      "glbSha256": "2e454e17561681efe23b7400bd64f235cb6abada495d95d776b776213bc418fb",
+      "glbBytes": 71284
+    },
+    {
+      "id": "07-great-tithe-barn",
+      "name": "Monastic great barn",
+      "triangles": 622,
+      "structuralTriangles": 80,
+      "components": [
+        {
+          "name": "aisled-barn",
+          "triangles": 16,
+          "volume": 0.21478500000000003
+        },
+        {
+          "name": "wagon-porch",
+          "triangles": 16,
+          "volume": 0.02414999999999999
+        },
+        {
+          "name": "buttress",
+          "triangles": 12,
+          "volume": 0.0006635199999999985
+        },
+        {
+          "name": "buttress",
+          "triangles": 12,
+          "volume": 0.0006635200000000044
+        },
+        {
+          "name": "buttress",
+          "triangles": 12,
+          "volume": 0.0006635199999999967
+        },
+        {
+          "name": "buttress",
+          "triangles": 12,
+          "volume": 0.000663519999999989
+        }
+      ],
+      "geometrySha256": "25cede9fc09cf84b5450b61e30aec661b5a435984ba1b4f2fda86dc6b82324dd",
+      "jsonSha256": "54c56a2df41c429092aab4604d30d8ea7cbaa8817a368eb914f565dc4dbdeb97",
+      "glbSha256": "1ec7ec3cdb7039b0d4e07a74e9fa7b634356be804e667bdd0b6521eef90f6661",
+      "glbBytes": 68472
+    },
+    {
+      "id": "08-iron-bandstand",
+      "name": "Victorian park bandstand",
+      "triangles": 854,
+      "structuralTriangles": 726,
+      "components": [
+        {
+          "name": "raised-stage",
+          "triangles": 60,
+          "volume": 0.03187752991601198
+        },
+        {
+          "name": "domed-bandstand-roof",
+          "triangles": 60,
+          "volume": 0.034451075998667195
+        },
+        {
+          "name": "roof-dome",
+          "triangles": 60,
+          "volume": 0.0077229343485598935
+        },
+        {
+          "name": "lantern-finial",
+          "triangles": 30,
+          "volume": 0.0002866139486409715
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.0001860000000000011
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658366253
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018600000000000355
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658408432
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.00003196172027113023
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999989912
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999995026
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999990537
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.0001859999999999939
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658367473
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.00003196172027112902
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008820000000004388
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008820000000000512
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008820000000001374
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018600000000000772
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658376584
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.00003196172027113237
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.00000882000000000628
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999999155
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999998752
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018600000000000186
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658389872
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.00003196172027113187
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999997139
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999999085
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999999651
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018599999999999831
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.00002344150165838279
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.000031961720271134126
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999999892
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.00000882000000000267
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008820000000000092
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018600000000000043
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.00002344150165838204
+        },
+        {
+          "name": "balustrade-top",
+          "triangles": 12,
+          "volume": 0.00003196172027113062
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999998745
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999999833
+        },
+        {
+          "name": "railing-spindle",
+          "triangles": 12,
+          "volume": 0.000008819999999995423
+        },
+        {
+          "name": "iron-column",
+          "triangles": 12,
+          "volume": 0.00018600000000000224
+        },
+        {
+          "name": "column-bracket",
+          "triangles": 12,
+          "volume": 0.000023441501658381026
+        },
+        {
+          "name": "stage-step",
+          "triangles": 12,
+          "volume": 0.0004200000000000014
+        },
+        {
+          "name": "stage-step",
+          "triangles": 12,
+          "volume": 0.0002856000000000013
+        },
+        {
+          "name": "stage-step",
+          "triangles": 12,
+          "volume": 0.00015120000000000115
+        }
+      ],
+      "geometrySha256": "693268515d8984948a8c12d18b6c6a907b16a785f086c7d49bb797b21e2083cc",
+      "jsonSha256": "806a440158031ab8b61da804de06f0a84c193245d6a1bffb8c606c3c9e102a15",
+      "glbSha256": "6f4fbc067a5b2a45114aef80358e755e7a8f56f8875b3d530ca3689dc9411245",
+      "glbBytes": 93532
+    }
+  ],
+  "negativeControls": 278,
+  "acceptedProductChanged": false,
+  "completedAtUtc": "2026-10-23T07:23:28.434Z"
+}

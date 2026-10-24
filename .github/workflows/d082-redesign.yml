@@ -1,0 +1,227 @@
+name: D082 nine-model art review (no deployment)
+on:
+  push:
+    branches: ['codex/d082-art-redesign']
+permissions:
+  contents: read
+concurrency:
+  group: d082-redesign-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  approved-source-restoration:
+    # Source-only version compatibility; all original runtime and coverage gates remain mandatory.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Fetch exact published and independently reviewed source snapshots
+        run: |
+          git fetch --no-tags --depth=1 origin 2cd43c424dcc909dcfa6ac55275406d2bc527ce0
+          git fetch --no-tags --depth=1 origin 67440cc8de625f0482665c3f3f94efba73a1aed3
+          git fetch --no-tags --depth=1 origin 90b80f4bc7e9a16d53fdc9127e9fe1e23f6c1694
+      - name: Fetch approved185 finite geometry source snapshot
+        run: git fetch --no-tags --depth=1 origin "$D082_REVIEWED_185"
+        env:
+          D082_REVIEWED_185: 0b583d1deecc8a72af19c6c470cacd73153bfe83
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Exact 231-source lease, original 227/229 manifests and full injected-reader controls
+        shell: bash
+        run: |
+          mkdir -p scratch/d082-source-restoration
+          set -o pipefail
+          node tools/unit-d082-scope.mjs 2>&1 | tee scratch/d082-source-restoration/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-source-restoration-${{ github.sha }}
+          path: scratch/d082-source-restoration/
+          if-no-files-found: error
+          retention-days: 30
+
+  nine-model-production-review:
+    # This is not final D082 acceptance. Existing ten-model gates are unchanged.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - run: npm run typecheck
+      - run: npm run build
+      - name: Actual production original, context, front, rear and side PNGs
+        run: node --experimental-strip-types tools/d082-redesign-capture.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+          if-no-files-found: error
+          retention-days: 30
+
+  independent-structural-product-checks:
+    # Mandatory diagnostic result; its red status cannot suppress actual preview images.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Paired supplementary PNG evidence and all-legal-angle obstruction controls
+        run: node --test tools/d082-redesign-views.test.mjs tools/d082-179v1-retained.test.mjs tools/d082-185-retained.test.mjs
+      - name: Approved185 exact exterior, original ceilings, preserved other models and 234 manifold controls
+        run: node --experimental-strip-types tools/d082-185-approved-check.mjs
+      - name: Approved 179v1 numerical envelope, exact joins, prior pins and 177 manifold controls
+        run: node --experimental-strip-types tools/d082-proposal-check.mjs
+      - name: Nine models, accepted byte pins, closure, attachments, 130 prior models and frames
+        shell: bash
+        run: |
+          mkdir -p scratch/d082-redesign
+          set -o pipefail
+          node --experimental-strip-types tools/d082-redesign-check.mjs 2>&1 | tee scratch/d082-redesign/structural-console.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-nine-model-structural-${{ github.sha }}
+          path: scratch/d082-redesign/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-179v1-physical-${{ github.sha }}
+          path: scratch/d082-proposal/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-185-physical-${{ github.sha }}
+          path: scratch/d082-185-approved/
+          if-no-files-found: error
+          retention-days: 30
+
+  approved-185-actual-surface-regression:
+    # Only the two explicitly approved revisions. All six other coverage failures remain mandatory.
+    needs: nine-model-production-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+      - name: Every new required point plus418/354 surviving old points and all827/797 historical records
+        run: node --experimental-strip-types tools/d082-185-approved-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-185-coverage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-185-approved/
+          if-no-files-found: error
+          retention-days: 30
+
+  approved-179v1-actual-surface-regression:
+    # Finite approved repair only. Other eight coverage failures remain mandatory.
+    needs: nine-model-production-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+      - name: Every required point, approved preview coordinates and PNG bytes, retained old-coordinate failures
+        run: node --experimental-strip-types tools/d082-proposal-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-approved-179v1-coverage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-proposal/
+          if-no-files-found: error
+          retention-days: 30
+
+  unchanged-d081-surface-coverage:
+    # Separate, mandatory result: red coverage cannot prevent delivery of real PNGs.
+    needs: nine-model-production-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: d082-nine-model-art-review-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign/
+      - name: Unchanged D081 mandatory probes in actual captured before/after cameras
+        run: node --experimental-strip-types tools/d082-redesign-coverage.mjs
+        env:
+          D082_REDESIGN_WIDTHS: ${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d082-nine-model-primary-coverage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d082-redesign-coverage/
+          if-no-files-found: error
+          retention-days: 30

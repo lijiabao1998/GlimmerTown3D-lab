@@ -1,5 +1,6 @@
 // 全種類樣張城（D007）：住商工（k1–3）以外的每一種各擺一棟（lv1、v0），擺在一片草地上，照分類排成一列一列，棟與棟之間空一格。
 // 純函式：不 import three、不碰 DOM。tools/lab-extract.mjs --part=d007 用它編成實驗線的分享碼，讓實驗線自己匯入讀回。
+import { RURAL_HERITAGE_KINDS } from './britishRuralHeritage.ts';
 export interface GalleryKind { k: number; size: number; cat: string }
 export interface GalleryPlace { k: number; x: number; z: number; size: number; cat: string }
 
@@ -8,7 +9,11 @@ export const GALLERY_N = 72;
 export const GALLERY_CATS = ['R', 'C', 'I', 'S', 'D', 'H', 'E', 'W', 'T', 'A', 'G', 'F'];
 
 export function galleryLayout(kinds: GalleryKind[], n = GALLERY_N): GalleryPlace[] {
-  const list = kinds.filter(q => q.k > 3).sort((a, b) => GALLERY_CATS.indexOf(a.cat) - GALLERY_CATS.indexOf(b.cat) || a.k - b.k);
+  // New append-only kinds must not move any historical gallery parcel.
+  const list = [
+    ...kinds.filter(q => q.k > 3 && !RURAL_HERITAGE_KINDS.has(q.k)).sort((a, b) => GALLERY_CATS.indexOf(a.cat) - GALLERY_CATS.indexOf(b.cat) || a.k - b.k),
+    ...kinds.filter(q => RURAL_HERITAGE_KINDS.has(q.k)).sort((a, b) => a.k - b.k),
+  ];
   const out: GalleryPlace[] = [];
   let x = 1, z = 1, rowH = 0;
   for (const q of list) {

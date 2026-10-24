@@ -1,0 +1,95 @@
+{
+  "productSource": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e",
+  "workingSrcDiffExit": 0,
+  "windowsPredicateExact": true,
+  "oldGuardFiles": [
+    {
+      "file": "tools/unit-d066.mjs",
+      "sha256": "84d9b9044c7f7c4ffd0bb8776dd6bf8a340618888fb64f0f50d4db530864fa64",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d067.mjs",
+      "sha256": "d9437638aa0fc5ab8433498bac1fc6f62e4a4d4fd1f150f8a960fc71d871c001",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d068.mjs",
+      "sha256": "407b48e0486831303138b32ce3f1f3efd49e93642bbec7e98325852393cceb44",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d069.mjs",
+      "sha256": "20a1561e9afc88652e766fe4a6e8ffb5345581ea226865e83d60a3724daff51b",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d070.mjs",
+      "sha256": "26765a7411b1517480062d92636e738a9739d10e34f551829ee7f2674fee1701",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d071.mjs",
+      "sha256": "620b42b553338ae91ada666f6a5772e97d7b3475f9d6865835a9754a8b3f8816",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d072.mjs",
+      "sha256": "88f0f1f5d9bf12bf2af3f87db1742d455ad8fac09cf1bd21374a269ab6e6af2b",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d073.mjs",
+      "sha256": "7f9d4644cf0d7143a9b3fd4b5a8bb6400e77a740a1d2c81e2ece0cf4175653bf",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d074.mjs",
+      "sha256": "41c39d84074b94f26eb0cc0a87106e66dfce2ec691c75ca37a974d8233c65b12",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d076.mjs",
+      "sha256": "c343cc4e0a803dec1888b8a536fddcac052bf8a7bbb4e9ee03a7165107702b69",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d077.mjs",
+      "sha256": "477de75a0d872073d28ef4c3623f25adf00cb896818d89819f0bd718dc983cd1",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d078.mjs",
+      "sha256": "68640f3d1d1da755eb9605ea6ab98e61b68b66fba1e7108d9b03f0515fea916d",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d079.mjs",
+      "sha256": "c43477dd71204328ef44aa3343c0f7c537bd54c7eb9fe39d0e26d505e47db588",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d080.mjs",
+      "sha256": "e5b0e1e008e88dd47fd43a9299944792abd65e380ef62ac99d82a622d928ff45",
+      "unchanged": true
+    },
+    {
+      "file": "tools/unit-d081.mjs",
+      "sha256": "2b1f4793854016b93afcad162ff84a8a6f76a9fb7f6f6f9864e82b23de5f0231",
+      "unchanged": true
+    }
+  ],
+  "finiteProductManifest": {
+    "bytes": 8309,
+    "sha256": "bfc9a922069c1bf1f828db4ead37eddf43712bce9fda61893b032e700eab9ddb"
+  },
+  "singleToolBoundary": {
+    "bytes": 1759,
+    "sha256": "b9a1373387b9c78d54877c22f531a8e213c5b991ed4d68fa7b7d5e86560821ee"
+  },
+  "currentD082Inventory": 231,
+  "currentD083Inventory": 236,
+  "modifiedProductSources": 7,
+  "addedProductSources": 5,
+  "runtimePhaseRoutingAdded": false
+}

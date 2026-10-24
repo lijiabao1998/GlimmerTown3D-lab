@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "complete": true,
+  "baseline": "8f553f21f648013118ad9f4e14f8bce300499bdb",
+  "approvalMessage": "Sentinel_aa61756b80208191b674aed7b1079532",
+  "currentWindowsSha256": "91a9d2b02154fc5f437252fc2e83709058a811977300c226cc4e7993fb973f00",
+  "publishedWindowsSha256": "590499c829a9c19d329690acd660cd9be53422af2530aa5d042a3dd9aa2f10ee",
+  "guardFiles": [
+    "tools/unit-d066.mjs",
+    "tools/unit-d067.mjs",
+    "tools/unit-d068.mjs",
+    "tools/unit-d069.mjs",
+    "tools/unit-d070.mjs",
+    "tools/unit-d071.mjs",
+    "tools/unit-d072.mjs",
+    "tools/unit-d073.mjs",
+    "tools/unit-d074.mjs",
+    "tools/unit-d076.mjs",
+    "tools/unit-d077.mjs",
+    "tools/unit-d078.mjs",
+    "tools/unit-d079.mjs",
+    "tools/unit-d080.mjs",
+    "tools/unit-d081.mjs"
+  ],
+  "negativeControls": 344,
+  "positiveControls": 21,
+  "tests": [
+    {
+      "name": "actual exported predicate matches reviewed body and exact current/published source hashes",
+      "passed": true
+    },
+    {
+      "name": "all other current files, unknown paths and aliases gain no permission and are not read",
+      "passed": true
+    },
+    {
+      "name": "mutation, truncation, stale old phase, missing/non-text bytes and invalid readers reject",
+      "passed": true
+    },
+    {
+      "name": "injected missing-source exception preserves identity without disk fallback",
+      "passed": true
+    },
+    {
+      "name": "entire D082/D081/D074 scope chain rejects invalid Windows readers and preserves missing errors",
+      "passed": true
+    },
+    {
+      "name": "legacy229/current231 phases remain distinct and Windows stays in published227, never added",
+      "passed": true
+    },
+    {
+      "name": "all fifteen actual guards differ only by reviewed import/disjunct; broadening or extra edits reject",
+      "passed": true
+    }
+  ],
+  "qualification": "Actual integrated exact-hash Windows predicate and unchanged historical guards only. No product, geometry, pins, probes, camera, classifier, budget or complete-D082 acceptance change."
+}

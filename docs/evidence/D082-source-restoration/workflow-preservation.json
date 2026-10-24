@@ -1,0 +1,12 @@
+[
+  {
+    "file": ".github/workflows/ci.yml",
+    "allOriginalDefinitionsUnchanged": true,
+    "additiveSourceChecksOnly": true
+  },
+  {
+    "file": ".github/workflows/d082-redesign.yml",
+    "allOriginalDefinitionsUnchanged": true,
+    "additiveSourceChecksOnly": true
+  }
+]

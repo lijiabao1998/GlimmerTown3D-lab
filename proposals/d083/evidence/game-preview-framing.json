@@ -1,0 +1,200 @@
+{
+  "qualification": "Current real WebGL screenshots; original-camera projection of every actual unchanged model vertex. No occlusion/coverage or performance claim.",
+  "initialFailurePreserved": "../d083-game-webgl/actual-vertex-framing.json; mobile windmill maxNdc 1.0100347859067327 at zoom 1.35",
+  "correction": "Only original __gt.view mobile zoom 1.35 -> 1.2; same preview build, unchanged models. Desktop captures unchanged.",
+  "rows": [
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "01-staddle-granary",
+      "vertices": 3072,
+      "maxNdc": 0.36485523259487707,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "02-stone-dovecote",
+      "vertices": 3210,
+      "maxNdc": 0.19080673684689448,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "03-railway-signal-box",
+      "vertices": 2130,
+      "maxNdc": 0.19881136740905683,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "04-octagonal-tollhouse",
+      "vertices": 1530,
+      "maxNdc": 0.42671744024253677,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "05-smock-windmill",
+      "vertices": 4566,
+      "maxNdc": 0.5973791728302812,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "06-village-smithy",
+      "vertices": 1944,
+      "maxNdc": 0.37413051258992014,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "07-great-tithe-barn",
+      "vertices": 1866,
+      "maxNdc": 0.2607315905281833,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "eight-context",
+      "model": "08-iron-bandstand",
+      "vertices": 2562,
+      "maxNdc": 0.4222998618007066,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "01-staddle-granary",
+      "model": "01-staddle-granary",
+      "vertices": 3072,
+      "maxNdc": 0.32755906264910883,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "02-stone-dovecote",
+      "model": "02-stone-dovecote",
+      "vertices": 3210,
+      "maxNdc": 0.282157169171209,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "03-railway-signal-box",
+      "model": "03-railway-signal-box",
+      "vertices": 2130,
+      "maxNdc": 0.3123598089467014,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "04-octagonal-tollhouse",
+      "model": "04-octagonal-tollhouse",
+      "vertices": 1530,
+      "maxNdc": 0.2880034648244394,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "05-smock-windmill",
+      "model": "05-smock-windmill",
+      "vertices": 4566,
+      "maxNdc": 0.3242898943995326,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "06-village-smithy",
+      "model": "06-village-smithy",
+      "vertices": 1944,
+      "maxNdc": 0.3507472626367155,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "07-great-tithe-barn",
+      "model": "07-great-tithe-barn",
+      "vertices": 1866,
+      "maxNdc": 0.3187903624999227,
+      "fullyInside": true
+    },
+    {
+      "width": 1440,
+      "shot": "08-iron-bandstand",
+      "model": "08-iron-bandstand",
+      "vertices": 2562,
+      "maxNdc": 0.29716092690962254,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "01-staddle-granary",
+      "vertices": 3072,
+      "maxNdc": 0.5483455340357958,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "02-stone-dovecote",
+      "vertices": 3210,
+      "maxNdc": 0.28676585304756563,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "03-railway-signal-box",
+      "vertices": 2130,
+      "maxNdc": 0.2987961133487572,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "04-octagonal-tollhouse",
+      "vertices": 1530,
+      "maxNdc": 0.6413190266946086,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "05-smock-windmill",
+      "vertices": 4566,
+      "maxNdc": 0.8978086985837622,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "06-village-smithy",
+      "vertices": 1944,
+      "maxNdc": 0.5622854694069866,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "07-great-tithe-barn",
+      "vertices": 1866,
+      "maxNdc": 0.19164562374752633,
+      "fullyInside": true
+    },
+    {
+      "width": 412,
+      "shot": "eight-context",
+      "model": "08-iron-bandstand",
+      "vertices": 2562,
+      "maxNdc": 0.29475355443433215,
+      "fullyInside": true
+    }
+  ],
+  "allCurrentVerticesInside": true
+}

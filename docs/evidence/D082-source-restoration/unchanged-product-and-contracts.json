@@ -1,0 +1,1768 @@
+{
+  "baselineHead": "ddd8de7eef7e351a2083cdac17821643ba1a77f7",
+  "sourceFiles": 231,
+  "protectedFiles": 251,
+  "allGitBlobsUnchanged": true,
+  "allWorkingTreeBytesUnchanged": true,
+  "files": [
+    {
+      "file": ".github/scripts/ci-integrity.test.mjs",
+      "worktreeSha256": "f324be5cf6093cf00b4df137066268614a8d9f7dc56bf93144d52d38b821d30e",
+      "gitBlobSha256": "f324be5cf6093cf00b4df137066268614a8d9f7dc56bf93144d52d38b821d30e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "docs/evidence/D082-179v1-approved/probe-reparameterization.json",
+      "worktreeSha256": "de792beca9c5d435d43f13b5e0d56d5b07595480e4cf170e89089719165d0056",
+      "gitBlobSha256": "baa4ef14a4b63cb93a5ef70f4b53e22b28879b28b0a980742d1682fdeebd1d15",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true,
+      "note": "Pre-existing CRLF worktree equals its pre-edit checkpoint SHA. Original LF Git blob is unchanged. No rewrite or normalization was performed."
+    },
+    {
+      "file": "docs/evidence/D082-179v1-proposal/487-coordinate-delta.csv",
+      "worktreeSha256": "10779bfab44b973463274c3e5b051a1e8fe4a2c90017eaf4bca80a285dfef4eb",
+      "gitBlobSha256": "10779bfab44b973463274c3e5b051a1e8fe4a2c90017eaf4bca80a285dfef4eb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "docs/evidence/D082-179v1-proposal/487-coordinate-delta.json",
+      "worktreeSha256": "e0854be30eaf25135c12437c272e241b5fe5fe364834e9b3a0fe146e46ccd3c7",
+      "gitBlobSha256": "e0854be30eaf25135c12437c272e241b5fe5fe364834e9b3a0fe146e46ccd3c7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-179v1-approved-revision.json",
+      "worktreeSha256": "2a8268f12a79fbb2c99404dcb2050a6577e90b7530fa4cc496abd9b390a2db90",
+      "gitBlobSha256": "90bc9fbd2b746e1342ab680a8e186e33ada5db914910468b6308e5a11c4ef8c8",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true,
+      "note": "Pre-existing CRLF worktree equals its pre-edit checkpoint SHA. Original LF Git blob is unchanged. No rewrite or normalization was performed."
+    },
+    {
+      "file": "fixtures/d082-179v1-proposal-before.json",
+      "worktreeSha256": "729c10a0061b4f056b23168eb6b7bb12ac10b639e19b89804c22c2fbebef09a7",
+      "gitBlobSha256": "729c10a0061b4f056b23168eb6b7bb12ac10b639e19b89804c22c2fbebef09a7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-art-scope.json",
+      "worktreeSha256": "962bf60981e689287b3b125dd7704e3d911d8335207ff5d6bc8114323753c393",
+      "gitBlobSha256": "962bf60981e689287b3b125dd7704e3d911d8335207ff5d6bc8114323753c393",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-baseline-feasibility.json",
+      "worktreeSha256": "ea3d6c5c0570f0694b892918b85b0fdc2b2cc4ae12154e8c5994cd0b76e88fd8",
+      "gitBlobSha256": "ea3d6c5c0570f0694b892918b85b0fdc2b2cc4ae12154e8c5994cd0b76e88fd8",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-geometry-before.json",
+      "worktreeSha256": "98f9d7d0bdb219fe4fe1ff2cfd1791f04b49fcc5e62da2833bef6dfeb228ae68",
+      "gitBlobSha256": "98f9d7d0bdb219fe4fe1ff2cfd1791f04b49fcc5e62da2833bef6dfeb228ae68",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-history-before.json",
+      "worktreeSha256": "2c6228f59fcec71298c1badb81314f9db338532a8f0b728364d652994dd94878",
+      "gitBlobSha256": "2c6228f59fcec71298c1badb81314f9db338532a8f0b728364d652994dd94878",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-redesign-additional-before.json.gz",
+      "worktreeSha256": "0114070fc3eecb5acbfc133e84392b44dee3e003993d0244ff4130b0044857ed",
+      "gitBlobSha256": "0114070fc3eecb5acbfc133e84392b44dee3e003993d0244ff4130b0044857ed",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "fixtures/d082-source-before.json",
+      "worktreeSha256": "d1397602beaa64bfc15397048ebd4444803179617a7d46df49766f9114a46213",
+      "gitBlobSha256": "d1397602beaa64bfc15397048ebd4444803179617a7d46df49766f9114a46213",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/cityView.ts",
+      "worktreeSha256": "13b168565198cca3a8e9ac3fe9817c331bcf160372287ed48c7f9934a56416fc",
+      "gitBlobSha256": "13b168565198cca3a8e9ac3fe9817c331bcf160372287ed48c7f9934a56416fc",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/arche.ts",
+      "worktreeSha256": "df8fdee42742fe60005cc8a91099a913b14dc91f508b31760879ef8254715bf6",
+      "gitBlobSha256": "df8fdee42742fe60005cc8a91099a913b14dc91f508b31760879ef8254715bf6",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/blocks.ts",
+      "worktreeSha256": "8c634dc1cc3931e18d91fa97d799ec4799240204e52486c8d992af05760ce271",
+      "gitBlobSha256": "8c634dc1cc3931e18d91fa97d799ec4799240204e52486c8d992af05760ce271",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCampuses.ts",
+      "worktreeSha256": "c23c2c719c32be06412d503dcd89c8afd57f5286c6e6edda2c3ec9a4e7b3b42c",
+      "gitBlobSha256": "c23c2c719c32be06412d503dcd89c8afd57f5286c6e6edda2c3ec9a4e7b3b42c",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCivic.ts",
+      "worktreeSha256": "d710d6ce7420c893c7edda4a21651822249d7bfd9099c3578b4dda6c7cf21a23",
+      "gitBlobSha256": "d710d6ce7420c893c7edda4a21651822249d7bfd9099c3578b4dda6c7cf21a23",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCoastalRecreation.ts",
+      "worktreeSha256": "a8b659728272b4974cc1185d701ada00daf02eca7cc18298f63ab63bcda5020f",
+      "gitBlobSha256": "a8b659728272b4974cc1185d701ada00daf02eca7cc18298f63ab63bcda5020f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCommerce.ts",
+      "worktreeSha256": "e90125c8726cfb245e3078f8015e20b4535d982066c53e44b510744f11fed2a3",
+      "gitBlobSha256": "e90125c8726cfb245e3078f8015e20b4535d982066c53e44b510744f11fed2a3",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCommerceFacilities.ts",
+      "worktreeSha256": "cec05e9fd0b7e2cef524004ebd7a0fb3374856312696cdef3ebeb681a1d05629",
+      "gitBlobSha256": "cec05e9fd0b7e2cef524004ebd7a0fb3374856312696cdef3ebeb681a1d05629",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCommerceThird.ts",
+      "worktreeSha256": "94a0ad5b6743d7207c46cf962970611ca8da326cc513f91333f00422a56a1c2d",
+      "gitBlobSha256": "94a0ad5b6743d7207c46cf962970611ca8da326cc513f91333f00422a56a1c2d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCommerceVariants.ts",
+      "worktreeSha256": "220874c7668160ad4d476b990e536ce989263c379f05af58f67756e2bc2f09f5",
+      "gitBlobSha256": "220874c7668160ad4d476b990e536ce989263c379f05af58f67756e2bc2f09f5",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishCommunityBuildings.ts",
+      "worktreeSha256": "5a0e73d499fec357fccede00ca7f93664be8e08ec93f26297f63ea0beae78d3a",
+      "gitBlobSha256": "5a0e73d499fec357fccede00ca7f93664be8e08ec93f26297f63ea0beae78d3a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishEducation.ts",
+      "worktreeSha256": "fa1ee2ba14ba328ab96c5092ef6932b696a2afffe2d8bf936f874ba3d1d1c22b",
+      "gitBlobSha256": "fa1ee2ba14ba328ab96c5092ef6932b696a2afffe2d8bf936f874ba3d1d1c22b",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishEmergencyHotels.ts",
+      "worktreeSha256": "aa94d6a9941f5cb91626f7e71cebc8296b0b7984cbfaaf9c6dad618368fd645a",
+      "gitBlobSha256": "aa94d6a9941f5cb91626f7e71cebc8296b0b7984cbfaaf9c6dad618368fd645a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishFarmMemorials.ts",
+      "worktreeSha256": "202ddecd4b7efeed1bed3630154b9ff5d301a1d06bb8a0dd937d06ba31f5235d",
+      "gitBlobSha256": "202ddecd4b7efeed1bed3630154b9ff5d301a1d06bb8a0dd937d06ba31f5235d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishFieldStudyLodges.ts",
+      "worktreeSha256": "d3df65c4b0f823e7390bebad5165e80e87dd004e5b8592af2d52f2e8aa3e2b40",
+      "gitBlobSha256": "d3df65c4b0f823e7390bebad5165e80e87dd004e5b8592af2d52f2e8aa3e2b40",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishHealthResponse.ts",
+      "worktreeSha256": "bbfbe8db8e5370313ed2270db45f483eea466099eab4c279ce0057812f4e5dcd",
+      "gitBlobSha256": "bbfbe8db8e5370313ed2270db45f483eea466099eab4c279ce0057812f4e5dcd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishHeritage.ts",
+      "worktreeSha256": "060412480220859e8f6e0ed1bc5013c1454d32ab9dad1d6c79125346f4179614",
+      "gitBlobSha256": "060412480220859e8f6e0ed1bc5013c1454d32ab9dad1d6c79125346f4179614",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishHouses.ts",
+      "worktreeSha256": "8d5c13dddb953feb7210fc4953a1425ecd4765f2e3e1999d3b4f2d8fef614878",
+      "gitBlobSha256": "8d5c13dddb953feb7210fc4953a1425ecd4765f2e3e1999d3b4f2d8fef614878",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishIndustry.ts",
+      "worktreeSha256": "b7396618112ba18beeef82cb1f46956dabbe0000216d7699ca7c758963cf5f94",
+      "gitBlobSha256": "b7396618112ba18beeef82cb1f46956dabbe0000216d7699ca7c758963cf5f94",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishLandmarks.ts",
+      "worktreeSha256": "e2ea6e12b7f16a8d56080c965e356389a92212d802f80178ced547b15b0c1c5a",
+      "gitBlobSha256": "e2ea6e12b7f16a8d56080c965e356389a92212d802f80178ced547b15b0c1c5a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishMetropolis.ts",
+      "worktreeSha256": "69a39b4c68e715a12d17e7eb454dfbe41cdf36e4ceb346775decc519768ebccc",
+      "gitBlobSha256": "69a39b4c68e715a12d17e7eb454dfbe41cdf36e4ceb346775decc519768ebccc",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishNeighbourhoodPavilions.ts",
+      "worktreeSha256": "65ba3053661119c5a5b4a39a526ea66fa55857b8e7a88e04e2fbd91f59ff47a7",
+      "gitBlobSha256": "65ba3053661119c5a5b4a39a526ea66fa55857b8e7a88e04e2fbd91f59ff47a7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishServiceLodges.ts",
+      "worktreeSha256": "61af13e7ab4296d03183612248b644e321863b8028576d50cc08a7f74397ffee",
+      "gitBlobSha256": "61af13e7ab4296d03183612248b644e321863b8028576d50cc08a7f74397ffee",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishStreets.ts",
+      "worktreeSha256": "8f00ecf264e3801d2daae04db9b8da4638245f23c9e2987e51e4589c3dff69bd",
+      "gitBlobSha256": "8f00ecf264e3801d2daae04db9b8da4638245f23c9e2987e51e4589c3dff69bd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishTowers.ts",
+      "worktreeSha256": "18d341e7963b385984225321a3d8c178ba1af9bd6af602861f97672cd42c09d4",
+      "gitBlobSha256": "18d341e7963b385984225321a3d8c178ba1af9bd6af602861f97672cd42c09d4",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishTransitUtilityPavilions.ts",
+      "worktreeSha256": "c2ac6960d524ef106e429d328581d100e5833e286a34366463a88437c391f265",
+      "gitBlobSha256": "c2ac6960d524ef106e429d328581d100e5833e286a34366463a88437c391f265",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/britishVillage.ts",
+      "worktreeSha256": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705",
+      "gitBlobSha256": "49f537a75b7738d64192e308d65b6264e1c90672db48a9f8497e0f791ead4705",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/construction.ts",
+      "worktreeSha256": "985b81b9e8c1042b82398256f3ddb16d3301e4139c07853ccb7823e1926c6217",
+      "gitBlobSha256": "985b81b9e8c1042b82398256f3ddb16d3301e4139c07853ccb7823e1926c6217",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/dressing.ts",
+      "worktreeSha256": "8cf069e54fa876467eb487ab001e12d67bf8dd294eb5815d60a68f4e17751cc0",
+      "gitBlobSha256": "8cf069e54fa876467eb487ab001e12d67bf8dd294eb5815d60a68f4e17751cc0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/facades.ts",
+      "worktreeSha256": "513bd787919de83f3c832164527f628ec3e119fbdcc2f07512b7d05745b49452",
+      "gitBlobSha256": "513bd787919de83f3c832164527f628ec3e119fbdcc2f07512b7d05745b49452",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/gallery.ts",
+      "worktreeSha256": "c5333a4d4065f04ebd76eab44463753e7a63bb2262c1ebb6077a918f72fd8c53",
+      "gitBlobSha256": "c5333a4d4065f04ebd76eab44463753e7a63bb2262c1ebb6077a918f72fd8c53",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/kindShapes.ts",
+      "worktreeSha256": "4995bcddb5e1112525f039c9a367d3105b19e4cf58cd1475bb4a33b5068701af",
+      "gitBlobSha256": "4995bcddb5e1112525f039c9a367d3105b19e4cf58cd1475bb4a33b5068701af",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/kindTable.ts",
+      "worktreeSha256": "6ccc1affa562c88faf61021df0b90561c41120623d626d7051930fa5e09a558e",
+      "gitBlobSha256": "6ccc1affa562c88faf61021df0b90561c41120623d626d7051930fa5e09a558e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/kinds.ts",
+      "worktreeSha256": "6fda857b654bc996703f577df0be7b4858413c1c3af06074f007c76d7be5824f",
+      "gitBlobSha256": "6fda857b654bc996703f577df0be7b4858413c1c3af06074f007c76d7be5824f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/lab-arche.json",
+      "worktreeSha256": "7d16a81ae2e7c6dd5654a3d7065744180ca477be885a6a7ffaec1a50034eb192",
+      "gitBlobSha256": "7d16a81ae2e7c6dd5654a3d7065744180ca477be885a6a7ffaec1a50034eb192",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/lab-kinds.json",
+      "worktreeSha256": "1aafe226eb216abd5c4e9915954978a4758fa8a1f5d3fe3738b68926ad2980ea",
+      "gitBlobSha256": "1aafe226eb216abd5c4e9915954978a4758fa8a1f5d3fe3738b68926ad2980ea",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/lab-looks.json",
+      "worktreeSha256": "2f54f140374cd55b873d68802abfddc524e50bda7563d30e8e5b13a3a90eb550",
+      "gitBlobSha256": "2f54f140374cd55b873d68802abfddc524e50bda7563d30e8e5b13a3a90eb550",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/looks.ts",
+      "worktreeSha256": "a64ecfc8f1c80d3009c8ee962afac5eca7befbea56af01549bc941799b08e424",
+      "gitBlobSha256": "a64ecfc8f1c80d3009c8ee962afac5eca7befbea56af01549bc941799b08e424",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/recipes.ts",
+      "worktreeSha256": "2cb581121aabc8980f09a269f8da130bf746fc6dbe170fba15b3784b4eef6165",
+      "gitBlobSha256": "2cb581121aabc8980f09a269f8da130bf746fc6dbe170fba15b3784b4eef6165",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/ai120.code.txt",
+      "worktreeSha256": "361c7ac53ecfd0f2905a1c60c200b330e12e3779bd9ec44437290f2a3ab95938",
+      "gitBlobSha256": "361c7ac53ecfd0f2905a1c60c200b330e12e3779bd9ec44437290f2a3ab95938",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/ai120.json",
+      "worktreeSha256": "6632bd3f4c830ffa1d2eb06d00c233acbc07c39f5b7e4d4742e42d18fcda20b0",
+      "gitBlobSha256": "6632bd3f4c830ffa1d2eb06d00c233acbc07c39f5b7e4d4742e42d18fcda20b0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d004-massing.json",
+      "worktreeSha256": "8fc420bedf7188e38d2f20daedfb5df3fb4479ef2e20121ebc3008d073933cc1",
+      "gitBlobSha256": "8fc420bedf7188e38d2f20daedfb5df3fb4479ef2e20121ebc3008d073933cc1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d004-partition-ai120.json",
+      "worktreeSha256": "199a27b2f5b1c59e3ca9bc4ff90cd4042e53b35043d699c57b250086e5216ec1",
+      "gitBlobSha256": "199a27b2f5b1c59e3ca9bc4ff90cd4042e53b35043d699c57b250086e5216ec1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d004-partition-seed516.json",
+      "worktreeSha256": "8da07e5234c0d3ab5129d1fe799217f561a8b85a8a70f5d027e491abfd2cfdcd",
+      "gitBlobSha256": "8da07e5234c0d3ab5129d1fe799217f561a8b85a8a70f5d027e491abfd2cfdcd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d009-formulas.json",
+      "worktreeSha256": "322ba6da3fb592f5ac3da891aa71c1fd611a22df3f587f2398293fa8a0b0c5f3",
+      "gitBlobSha256": "322ba6da3fb592f5ac3da891aa71c1fd611a22df3f587f2398293fa8a0b0c5f3",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d009-live.json",
+      "worktreeSha256": "485d1fcc615bb8956970cd1671c0b4c3724d5dda3b24e255cf30140a782c07a5",
+      "gitBlobSha256": "485d1fcc615bb8956970cd1671c0b4c3724d5dda3b24e255cf30140a782c07a5",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d010-3d.json",
+      "worktreeSha256": "f2c2a351c23d945fb90adf5e0f117fe53387d5df795c5e56894b3be24c0495ed",
+      "gitBlobSha256": "f2c2a351c23d945fb90adf5e0f117fe53387d5df795c5e56894b3be24c0495ed",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d010-fields.json",
+      "worktreeSha256": "5414282de994ae96554c7ed6196aeaf8eb8227f9bb3d9cc2d8f1c6493d857c2a",
+      "gitBlobSha256": "5414282de994ae96554c7ed6196aeaf8eb8227f9bb3d9cc2d8f1c6493d857c2a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d010-lab.json",
+      "worktreeSha256": "566b5a4c5bb9a74e7d8ec7eacc8080a07429dcddee39f042975e506216ae0878",
+      "gitBlobSha256": "566b5a4c5bb9a74e7d8ec7eacc8080a07429dcddee39f042975e506216ae0878",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-3d.json",
+      "worktreeSha256": "4ad78e264e5038e3023c284682873a6b6aae9a2b57b1c2ebbc2c6560d62e7f5e",
+      "gitBlobSha256": "4ad78e264e5038e3023c284682873a6b6aae9a2b57b1c2ebbc2c6560d62e7f5e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-build.json",
+      "worktreeSha256": "288ab699f09197379066b1b0a0432b7cb8d788af79548d0b487e1e90bc96e3bb",
+      "gitBlobSha256": "288ab699f09197379066b1b0a0432b7cb8d788af79548d0b487e1e90bc96e3bb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-lab.json",
+      "worktreeSha256": "42d483babc3abc4c1a72b5e7ac8386f5fce48e2f5739deb2338e8eaad96c1548",
+      "gitBlobSha256": "42d483babc3abc4c1a72b5e7ac8386f5fce48e2f5739deb2338e8eaad96c1548",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-money.json",
+      "worktreeSha256": "5a217503373dbf9979586dbdcfc01dba1553d47610dd7569df76fcf56e976e03",
+      "gitBlobSha256": "5a217503373dbf9979586dbdcfc01dba1553d47610dd7569df76fcf56e976e03",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-prebuilt.code.txt",
+      "worktreeSha256": "d689e1dc663bf80b39cf407931f32b5011ad01b30efef0726e317a4e50b09125",
+      "gitBlobSha256": "d689e1dc663bf80b39cf407931f32b5011ad01b30efef0726e317a4e50b09125",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d011-prebuilt.json",
+      "worktreeSha256": "a16d1ea9c2b2063a047d2600f00a8bcca37b1dde4b29aca60d2c891b158fac6f",
+      "gitBlobSha256": "a16d1ea9c2b2063a047d2600f00a8bcca37b1dde4b29aca60d2c891b158fac6f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d012-lab.json",
+      "worktreeSha256": "1b865f6c616a784552d680736b641da0a8e9dd73463ea7e4c28dc80cffd1f2dc",
+      "gitBlobSha256": "1b865f6c616a784552d680736b641da0a8e9dd73463ea7e4c28dc80cffd1f2dc",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d013-lab.json",
+      "worktreeSha256": "d48d728580f9f670a1c9f7da87ba6cf41d7f2f549756d044e30167c867bf146b",
+      "gitBlobSha256": "d48d728580f9f670a1c9f7da87ba6cf41d7f2f549756d044e30167c867bf146b",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d014-lab.json",
+      "worktreeSha256": "a496199ddd02e513eb8319d49c9f75e38cdd2b3a136d0180b7bc1a3d97e68d33",
+      "gitBlobSha256": "a496199ddd02e513eb8319d49c9f75e38cdd2b3a136d0180b7bc1a3d97e68d33",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d015-golden.json",
+      "worktreeSha256": "a4765b2df44697ee22d15d7413f9d66332db03837f44854d8b72f8bb7b2d3876",
+      "gitBlobSha256": "a4765b2df44697ee22d15d7413f9d66332db03837f44854d8b72f8bb7b2d3876",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d016-build.json",
+      "worktreeSha256": "1a98977c70e3e9d20afc971ada03ad33c0730dee9fe5d9ac45251110e2183106",
+      "gitBlobSha256": "1a98977c70e3e9d20afc971ada03ad33c0730dee9fe5d9ac45251110e2183106",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d016-lab.json",
+      "worktreeSha256": "facad0134b2c4718ee0b6bd4933bd390fc5bcd19d0f6d286b6d9ebf72c86df00",
+      "gitBlobSha256": "facad0134b2c4718ee0b6bd4933bd390fc5bcd19d0f6d286b6d9ebf72c86df00",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d017-lab.json",
+      "worktreeSha256": "b71f0eb681d2d56a661e563894a3e135af7ad5d0aaa453293c9b039b404d3a8c",
+      "gitBlobSha256": "b71f0eb681d2d56a661e563894a3e135af7ad5d0aaa453293c9b039b404d3a8c",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d017-noise.json",
+      "worktreeSha256": "392e512f823447e88f0b1711275e079485a56223c7d70bc8f6ec9c823bcdcea1",
+      "gitBlobSha256": "392e512f823447e88f0b1711275e079485a56223c7d70bc8f6ec9c823bcdcea1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d018-kinds-before.json",
+      "worktreeSha256": "d3ac4047dbcbaf6d5b321f926c45ffe7c03bc161289b1da49c35181a0739958f",
+      "gitBlobSha256": "d3ac4047dbcbaf6d5b321f926c45ffe7c03bc161289b1da49c35181a0739958f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d018-lab.json",
+      "worktreeSha256": "44bc19dd037766a2b5df90e571f0f5a92fae5b7d9b5684c10a58905da7b2cbab",
+      "gitBlobSha256": "44bc19dd037766a2b5df90e571f0f5a92fae5b7d9b5684c10a58905da7b2cbab",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d019-build.json",
+      "worktreeSha256": "03b5f52ad75bd1002e504836f5a40f3fd19619d93b9691559808e6f1a5f8d674",
+      "gitBlobSha256": "03b5f52ad75bd1002e504836f5a40f3fd19619d93b9691559808e6f1a5f8d674",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d019-lab.json",
+      "worktreeSha256": "74013876f0b7032440c590102b6f11d4af9f725527e2c0a60099a36859a7a156",
+      "gitBlobSha256": "74013876f0b7032440c590102b6f11d4af9f725527e2c0a60099a36859a7a156",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d019-water.json",
+      "worktreeSha256": "86c698b61b2719050483bc82ea3a49e7186b4cfd7127fe7d80da106d998c2f28",
+      "gitBlobSha256": "86c698b61b2719050483bc82ea3a49e7186b4cfd7127fe7d80da106d998c2f28",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d020-build.json",
+      "worktreeSha256": "cc01c18b2e5dfbdc06c533ba8f84717a552e11f5fa25c9007b7f122f922a4bdd",
+      "gitBlobSha256": "cc01c18b2e5dfbdc06c533ba8f84717a552e11f5fa25c9007b7f122f922a4bdd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d020-garbage.json",
+      "worktreeSha256": "78fbb9639560398cff0b371ea354ff8069f3b8f39117547bc8caa6ff4acf9f9c",
+      "gitBlobSha256": "78fbb9639560398cff0b371ea354ff8069f3b8f39117547bc8caa6ff4acf9f9c",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d020-lab.json",
+      "worktreeSha256": "2d05124e3396682c6e86dd42cf902933516371ca07d274a03b01d84857b01321",
+      "gitBlobSha256": "2d05124e3396682c6e86dd42cf902933516371ca07d274a03b01d84857b01321",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d021-lab.json",
+      "worktreeSha256": "0a065ef0a2feca70e2bce504a58c5afb64f70c8a6bda86f2a296ed4cdb113f22",
+      "gitBlobSha256": "0a065ef0a2feca70e2bce504a58c5afb64f70c8a6bda86f2a296ed4cdb113f22",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d022-food.json",
+      "worktreeSha256": "dab914ab1b81b47975bec2038abd9f59fb8e99995530adaa2e68eafd0a77b15d",
+      "gitBlobSha256": "dab914ab1b81b47975bec2038abd9f59fb8e99995530adaa2e68eafd0a77b15d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d022-lab.json",
+      "worktreeSha256": "d9ec1a9a32c2e7f7e20aa8a1fbe4dd1f843275b40a8d917c307a6b00dee6b637",
+      "gitBlobSha256": "d9ec1a9a32c2e7f7e20aa8a1fbe4dd1f843275b40a8d917c307a6b00dee6b637",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d023-lab.json",
+      "worktreeSha256": "9110b2ecaf5e3bdd5895b7f3703020777709d7fd9c1a18681e5b56a47e013406",
+      "gitBlobSha256": "9110b2ecaf5e3bdd5895b7f3703020777709d7fd9c1a18681e5b56a47e013406",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d024-count.json",
+      "worktreeSha256": "4ba936aaf83940d198d0cd4211d26c09e84acdbb2469fe8f7e330a763f19e487",
+      "gitBlobSha256": "4ba936aaf83940d198d0cd4211d26c09e84acdbb2469fe8f7e330a763f19e487",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d024-lab.json",
+      "worktreeSha256": "719fd1bfe957c14d0f2940627764c1915a32ea25270333ffde486d9be6c2ee46",
+      "gitBlobSha256": "719fd1bfe957c14d0f2940627764c1915a32ea25270333ffde486d9be6c2ee46",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d025-economy.json",
+      "worktreeSha256": "915fa78449ae209331971ba21564bf9980eaea92b3053115cbb05909a63dfbb0",
+      "gitBlobSha256": "915fa78449ae209331971ba21564bf9980eaea92b3053115cbb05909a63dfbb0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d025-lab.json",
+      "worktreeSha256": "caef86058543d3423f99ee37e5bcaf462cfa107ca2d06d9363ac79bbb6494773",
+      "gitBlobSha256": "caef86058543d3423f99ee37e5bcaf462cfa107ca2d06d9363ac79bbb6494773",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d026-hazard.json",
+      "worktreeSha256": "205d350785b359af63fe6cc9f10991d193ad740877627f775bfa959bcfcfa13c",
+      "gitBlobSha256": "205d350785b359af63fe6cc9f10991d193ad740877627f775bfa959bcfcfa13c",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d026-lab.json",
+      "worktreeSha256": "3c4455e8cdd02cad50da5907d5238f37ce43050c4ad70fc2ac677b2609df18b4",
+      "gitBlobSha256": "3c4455e8cdd02cad50da5907d5238f37ce43050c4ad70fc2ac677b2609df18b4",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d027-commute.json",
+      "worktreeSha256": "8192492580cd91d240b819b7adaad9fa39bf0d441d28d25aeda1f201acf8b61e",
+      "gitBlobSha256": "8192492580cd91d240b819b7adaad9fa39bf0d441d28d25aeda1f201acf8b61e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d027-lab.json",
+      "worktreeSha256": "8c79cb2696f61ff4c7cba993382b415242d7c5b5c1e3af75d54f878fddba8c10",
+      "gitBlobSha256": "8c79cb2696f61ff4c7cba993382b415242d7c5b5c1e3af75d54f878fddba8c10",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d028-income.json",
+      "worktreeSha256": "235b0a08acd3658d0c81aea999f7e72e80d21f53c3c282a96b00f188d929e38e",
+      "gitBlobSha256": "235b0a08acd3658d0c81aea999f7e72e80d21f53c3c282a96b00f188d929e38e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d028-lab.json",
+      "worktreeSha256": "736c82c038d05a6747b8e7636d627510f3a2bee4723afb9b81d968545427e230",
+      "gitBlobSha256": "736c82c038d05a6747b8e7636d627510f3a2bee4723afb9b81d968545427e230",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d029-night.json",
+      "worktreeSha256": "d9e90c84a55e01dbe91ede1ed65ad5c3c81f6e606ad2f70c9e4d85b7ff8c1aea",
+      "gitBlobSha256": "d9e90c84a55e01dbe91ede1ed65ad5c3c81f6e606ad2f70c9e4d85b7ff8c1aea",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d030-events.json",
+      "worktreeSha256": "42cac2eb9c58d596096e0e493822e2cd69af388457f6fae299f6b0183be08048",
+      "gitBlobSha256": "42cac2eb9c58d596096e0e493822e2cd69af388457f6fae299f6b0183be08048",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d031-lab.json",
+      "worktreeSha256": "b21d37df5bcb952b965787d491400c4c8382a515ffa5fa5322244ac8409c1dd0",
+      "gitBlobSha256": "b21d37df5bcb952b965787d491400c4c8382a515ffa5fa5322244ac8409c1dd0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d031-rank.json",
+      "worktreeSha256": "f84a2bd634f2fff8b37570976ec2d3e7acf13435d56e29ef69702e28d88e86cb",
+      "gitBlobSha256": "f84a2bd634f2fff8b37570976ec2d3e7acf13435d56e29ef69702e28d88e86cb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d032-lab.json",
+      "worktreeSha256": "978489d4299d04167bfc407c67d4963750a20e448021f480a26dea7e55e8f7fb",
+      "gitBlobSha256": "978489d4299d04167bfc407c67d4963750a20e448021f480a26dea7e55e8f7fb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d032-policy.json",
+      "worktreeSha256": "313bfa5a8bfe7fe1e3c495466097b4b89019c5191e78a6a5b42221c698ed16f9",
+      "gitBlobSha256": "313bfa5a8bfe7fe1e3c495466097b4b89019c5191e78a6a5b42221c698ed16f9",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d033-build.json",
+      "worktreeSha256": "3a51bbc063e341df1db5f438995e7083cd7b1104ee6a6f42eab5bf1743675166",
+      "gitBlobSha256": "3a51bbc063e341df1db5f438995e7083cd7b1104ee6a6f42eab5bf1743675166",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d033-lab.json",
+      "worktreeSha256": "8f9a98899a66b44edaf156c5b8a5ed3c9c43b3de4234dcdb35130605957c1de9",
+      "gitBlobSha256": "8f9a98899a66b44edaf156c5b8a5ed3c9c43b3de4234dcdb35130605957c1de9",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d033-sewer.json",
+      "worktreeSha256": "edec248f5c8d074c998e12727be4819442d7fe52e8cec882a457cfa273a6ad10",
+      "gitBlobSha256": "edec248f5c8d074c998e12727be4819442d7fe52e8cec882a457cfa273a6ad10",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d034-lab.json",
+      "worktreeSha256": "9c84111bc8dff0f9ad86f1c415d270355d6a771fd7827cbb33aeb1b5b5d7800d",
+      "gitBlobSha256": "9c84111bc8dff0f9ad86f1c415d270355d6a771fd7827cbb33aeb1b5b5d7800d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d034-merge.json",
+      "worktreeSha256": "57d14b4aa697764ead9695c78189f63dfcbee14c8f8b37ec8536f3fcb094bae2",
+      "gitBlobSha256": "57d14b4aa697764ead9695c78189f63dfcbee14c8f8b37ec8536f3fcb094bae2",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d035-lab.json",
+      "worktreeSha256": "c250aa563881d1d57198a936d330e697a4e9c737ec7a6f80328d3bf3fb95d264",
+      "gitBlobSha256": "c250aa563881d1d57198a936d330e697a4e9c737ec7a6f80328d3bf3fb95d264",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d036-lab.json",
+      "worktreeSha256": "8cd6ca6640511386344959f728efd5734fd31a0a8fc25321d44034b33e5de1a2",
+      "gitBlobSha256": "8cd6ca6640511386344959f728efd5734fd31a0a8fc25321d44034b33e5de1a2",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d036-resource.json",
+      "worktreeSha256": "942883f99c5e3ce8c6ae5565ca6e0d4a7eb62428c5fe4536b0026c4be0aae5b9",
+      "gitBlobSha256": "942883f99c5e3ce8c6ae5565ca6e0d4a7eb62428c5fe4536b0026c4be0aae5b9",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d037-lab.json",
+      "worktreeSha256": "9744417f881891c56f898a6e3c1b3f92359ce0c964e11cbbdc14ada7626f9bd0",
+      "gitBlobSha256": "9744417f881891c56f898a6e3c1b3f92359ce0c964e11cbbdc14ada7626f9bd0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d038-lab.json",
+      "worktreeSha256": "5a0c00b450a8fa18b1243c3afb9f488347b89d058f98e62764e1fdef7dff7a09",
+      "gitBlobSha256": "5a0c00b450a8fa18b1243c3afb9f488347b89d058f98e62764e1fdef7dff7a09",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d038-tech.json",
+      "worktreeSha256": "0b482e5bc92720dc646d52f20db73ed62a6e58565e1ba5300e3cd857b716eeeb",
+      "gitBlobSha256": "0b482e5bc92720dc646d52f20db73ed62a6e58565e1ba5300e3cd857b716eeeb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d040-build.json",
+      "worktreeSha256": "8a2ffe07c669acc67f888e110629a268d59ca15d03059887bdb444909bc25844",
+      "gitBlobSha256": "8a2ffe07c669acc67f888e110629a268d59ca15d03059887bdb444909bc25844",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d041-lab.json",
+      "worktreeSha256": "ccb1ec105e8baa6447ba32b1776ba84210c4d97632450a1cb839218c677f1ff0",
+      "gitBlobSha256": "ccb1ec105e8baa6447ba32b1776ba84210c4d97632450a1cb839218c677f1ff0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d043-lab.json",
+      "worktreeSha256": "af844d1fa2967a986924812941bace6994115f99440003af5be5935b9e8e5e58",
+      "gitBlobSha256": "af844d1fa2967a986924812941bace6994115f99440003af5be5935b9e8e5e58",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d044-build.json",
+      "worktreeSha256": "770fbaca8f352b4007298ce2f1a5c47dc8491955c942ee8be23ca2d3e0b4768a",
+      "gitBlobSha256": "770fbaca8f352b4007298ce2f1a5c47dc8491955c942ee8be23ca2d3e0b4768a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d045-cms.json",
+      "worktreeSha256": "15a32dbbf14564416385392d74b2e4759e9fe1aa6c04bc4a0818290d01edbe96",
+      "gitBlobSha256": "15a32dbbf14564416385392d74b2e4759e9fe1aa6c04bc4a0818290d01edbe96",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d045-lab.json",
+      "worktreeSha256": "71f8ea87c8319ac795982152362b5c09ae4685286fd09ee0395698996f3a6af9",
+      "gitBlobSha256": "71f8ea87c8319ac795982152362b5c09ae4685286fd09ee0395698996f3a6af9",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d046-compat.json",
+      "worktreeSha256": "11acb2cc888f18d19fa45bba226345287e23e9ea8fb7ffee807533ab55100b84",
+      "gitBlobSha256": "11acb2cc888f18d19fa45bba226345287e23e9ea8fb7ffee807533ab55100b84",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d047-kinds-before.json",
+      "worktreeSha256": "be919c3ac0f8d5cacfce665b44b30fac39f9c99ff05748170d73f75337fed576",
+      "gitBlobSha256": "be919c3ac0f8d5cacfce665b44b30fac39f9c99ff05748170d73f75337fed576",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d047-space-center-golden.json",
+      "worktreeSha256": "c30d228e3abefacdd8cc393ae794d1c3253765b421070213bdafbdbcfc1fb371",
+      "gitBlobSha256": "c30d228e3abefacdd8cc393ae794d1c3253765b421070213bdafbdbcfc1fb371",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d048-save-boundaries.json",
+      "worktreeSha256": "e96c690adb682a408ffb5e6d5e9e3258052b3d8129bbcfb7c2e3a043d9285e4e",
+      "gitBlobSha256": "e96c690adb682a408ffb5e6d5e9e3258052b3d8129bbcfb7c2e3a043d9285e4e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d056-current-art.json",
+      "worktreeSha256": "b54a8b23e92b276be715bff012348c339f350da03537b8d037347b5d1064c04f",
+      "gitBlobSha256": "b54a8b23e92b276be715bff012348c339f350da03537b8d037347b5d1064c04f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/d056-kinds-before.json",
+      "worktreeSha256": "c92384c2ed6d9a058c8d0676b7e99ccfdc6edc29e86f1155e978cdb43a32937e",
+      "gitBlobSha256": "c92384c2ed6d9a058c8d0676b7e99ccfdc6edc29e86f1155e978cdb43a32937e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/gallery.code.txt",
+      "worktreeSha256": "b7558a45d2cd23011fd7591f22e949fa1054bdbdb54fdcc0a6c2afb93f0d2a9e",
+      "gitBlobSha256": "b7558a45d2cd23011fd7591f22e949fa1054bdbdb54fdcc0a6c2afb93f0d2a9e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/gallery.json",
+      "worktreeSha256": "2e637ccf9ebe3bf7442b683eb43ecbb52465bec498aae69b73317197f4e79dcd",
+      "gitBlobSha256": "2e637ccf9ebe3bf7442b683eb43ecbb52465bec498aae69b73317197f4e79dcd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/newcity.code.txt",
+      "worktreeSha256": "a676b0ccc7b4e6a9d043d759abe41ab4e380ee0b97f1e20e699d2638fbc87cbc",
+      "gitBlobSha256": "a676b0ccc7b4e6a9d043d759abe41ab4e380ee0b97f1e20e699d2638fbc87cbc",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/newcity.json",
+      "worktreeSha256": "4c33831227507844c34518aaa53cd663ccd18baa9dd643b8340dfe1a538e120e",
+      "gitBlobSha256": "4c33831227507844c34518aaa53cd663ccd18baa9dd643b8340dfe1a538e120e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/seed516.code.txt",
+      "worktreeSha256": "8a2331f11bf2db44f132fa548983f65c7eed5d95c83d29f6fbb59a688fd4f9e1",
+      "gitBlobSha256": "8a2331f11bf2db44f132fa548983f65c7eed5d95c83d29f6fbb59a688fd4f9e1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/seed516.json",
+      "worktreeSha256": "cb1c4941e7bcb32a901df506970f74f42fbb36a95f9ce002feea108c81370d10",
+      "gitBlobSha256": "cb1c4941e7bcb32a901df506970f74f42fbb36a95f9ce002feea108c81370d10",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/starter.code.txt",
+      "worktreeSha256": "7332253879dfe7a43cbe18bc890f668200782e37c2d8cebc7a200bb41ab13869",
+      "gitBlobSha256": "7332253879dfe7a43cbe18bc890f668200782e37c2d8cebc7a200bb41ab13869",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/samples/starter.json",
+      "worktreeSha256": "724c8f42162a1aba0023a69b5e41273fce303cf963ad487184afc28e5c1fcbf5",
+      "gitBlobSha256": "724c8f42162a1aba0023a69b5e41273fce303cf963ad487184afc28e5c1fcbf5",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/content/starter.ts",
+      "worktreeSha256": "dd85bc15fe1cedab3ae930fd6f6616b60c4b7a795df334f5a395a81fe9b5e26d",
+      "gitBlobSha256": "dd85bc15fe1cedab3ae930fd6f6616b60c4b7a795df334f5a395a81fe9b5e26d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/historyView.ts",
+      "worktreeSha256": "c4a9f5410847a5f7f8a588832de0eae151340e1a90e4a7e802b061fe3490e8bf",
+      "gitBlobSha256": "c4a9f5410847a5f7f8a588832de0eae151340e1a90e4a7e802b061fe3490e8bf",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/idbJournal.ts",
+      "worktreeSha256": "1f1c92aea0d30863f253b5d985ced50e44c61645d4d4fb2e97e992690f2d4e22",
+      "gitBlobSha256": "1f1c92aea0d30863f253b5d985ced50e44c61645d4d4fb2e97e992690f2d4e22",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/io/journal.ts",
+      "worktreeSha256": "bb48ceb033ac801164231393fd2104b46bbbc6be6e4c525e723a9bcb3a664d99",
+      "gitBlobSha256": "bb48ceb033ac801164231393fd2104b46bbbc6be6e4c525e723a9bcb3a664d99",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/io/labcode.ts",
+      "worktreeSha256": "8fed4dc11d58cf20fb7cbce7aeed5d7365e30c4f6a226be1ec2e5aa7a7d4a4af",
+      "gitBlobSha256": "8fed4dc11d58cf20fb7cbce7aeed5d7365e30c4f6a226be1ec2e5aa7a7d4a4af",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/io/save.ts",
+      "worktreeSha256": "d01aec3907c13926ad1dfed0902cd57dacfa69403097ac8a23480672dcedccbe",
+      "gitBlobSha256": "d01aec3907c13926ad1dfed0902cd57dacfa69403097ac8a23480672dcedccbe",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/main.ts",
+      "worktreeSha256": "6511a7852731746ac5b578d6f64d8d2695104eb76029b87f60f16e125b86a4c2",
+      "gitBlobSha256": "6511a7852731746ac5b578d6f64d8d2695104eb76029b87f60f16e125b86a4c2",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/blockArt.ts",
+      "worktreeSha256": "de6fc6d37698dbc45e8eab6685c92f34d7f2141682b21acd17bbe6fc7548f427",
+      "gitBlobSha256": "de6fc6d37698dbc45e8eab6685c92f34d7f2141682b21acd17bbe6fc7548f427",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCampusArt.ts",
+      "worktreeSha256": "e5d35805eab9f4c541e596d826ef3691ff4422c3bb57e5fe036f94e12ca1a2d7",
+      "gitBlobSha256": "e5d35805eab9f4c541e596d826ef3691ff4422c3bb57e5fe036f94e12ca1a2d7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCivicArt.ts",
+      "worktreeSha256": "f31fbd360c23a6096227e4399293a8c8521b10ab0f89c78792d5844d60aed91f",
+      "gitBlobSha256": "f31fbd360c23a6096227e4399293a8c8521b10ab0f89c78792d5844d60aed91f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCoastalRecreationArt.ts",
+      "worktreeSha256": "bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf",
+      "gitBlobSha256": "bc685bcd6df1467e53feeb9ce358f6d137aa2a64f29288658ff9f6fab27263bf",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCommerceArt.ts",
+      "worktreeSha256": "25a72b40755c61e1b7fee7307ad65f5f280ba187877d7d09e04f66f4e63d2d42",
+      "gitBlobSha256": "25a72b40755c61e1b7fee7307ad65f5f280ba187877d7d09e04f66f4e63d2d42",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCommerceFacilityArt.ts",
+      "worktreeSha256": "137e49554435a570556a14ca914eb2db5ce24cda199bf8a0ccb8ef9a433262e1",
+      "gitBlobSha256": "137e49554435a570556a14ca914eb2db5ce24cda199bf8a0ccb8ef9a433262e1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCommerceThirdArt.ts",
+      "worktreeSha256": "5dae8e80bb3cd66ef3d22a123612801b80be2740f6d6369f6ea5428d03adbd22",
+      "gitBlobSha256": "5dae8e80bb3cd66ef3d22a123612801b80be2740f6d6369f6ea5428d03adbd22",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCommerceVariantArt.ts",
+      "worktreeSha256": "0faa61f29b2c088a5d0b0bf6107e8cbb7090b935acbb8f96191ee40014a009e7",
+      "gitBlobSha256": "0faa61f29b2c088a5d0b0bf6107e8cbb7090b935acbb8f96191ee40014a009e7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishCommunityBuildingArt.ts",
+      "worktreeSha256": "dcd20db75bc374f3588429ea580826b73e3573903f139540f19462af20e7f055",
+      "gitBlobSha256": "dcd20db75bc374f3588429ea580826b73e3573903f139540f19462af20e7f055",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishEducationArt.ts",
+      "worktreeSha256": "ced3fa64b565e85dffe79645953af2b9127da2f5a0d86911d808ec14815f9e85",
+      "gitBlobSha256": "ced3fa64b565e85dffe79645953af2b9127da2f5a0d86911d808ec14815f9e85",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishEmergencyHotelArt.ts",
+      "worktreeSha256": "69bbc711bb96868e983d5f04869fda624303f0623521e3f2b0cf5ef164f86b51",
+      "gitBlobSha256": "69bbc711bb96868e983d5f04869fda624303f0623521e3f2b0cf5ef164f86b51",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishFarmMemorialArt.ts",
+      "worktreeSha256": "9c7873a2d40cd912f06bfcbc8bbc40451666c7092e67903705c9296dec0502f1",
+      "gitBlobSha256": "9c7873a2d40cd912f06bfcbc8bbc40451666c7092e67903705c9296dec0502f1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishFieldStudyLodgeArt.ts",
+      "worktreeSha256": "bd5a9833cc8c45b6f8f65a5a7a038af848a80296b1f46c2d88f2ee1ae407f906",
+      "gitBlobSha256": "bd5a9833cc8c45b6f8f65a5a7a038af848a80296b1f46c2d88f2ee1ae407f906",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishHealthResponseArt.ts",
+      "worktreeSha256": "f068c73585fbd661eaef67cf25708d0ae36f928988b6c538d4e31d1d9bbdc433",
+      "gitBlobSha256": "f068c73585fbd661eaef67cf25708d0ae36f928988b6c538d4e31d1d9bbdc433",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishHeritageArt.ts",
+      "worktreeSha256": "f349c649383e00557873f6b4311b2a74cc0522c0f1621c00bb731a41375d2167",
+      "gitBlobSha256": "f349c649383e00557873f6b4311b2a74cc0522c0f1621c00bb731a41375d2167",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishHouseArt.ts",
+      "worktreeSha256": "f1e124ae3cb171c935ac7133648022ebfc0203582808c1fea8f4d19326734c00",
+      "gitBlobSha256": "f1e124ae3cb171c935ac7133648022ebfc0203582808c1fea8f4d19326734c00",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishIndustryArt.ts",
+      "worktreeSha256": "09827711b57091f17bfed9ef1c50168355390885a6ae50ee6123205937334219",
+      "gitBlobSha256": "09827711b57091f17bfed9ef1c50168355390885a6ae50ee6123205937334219",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishLandmarkArt.ts",
+      "worktreeSha256": "3eb25c8e3aa3b37da85ff792c83a234c9b3c77294c421548993d249e259ea229",
+      "gitBlobSha256": "3eb25c8e3aa3b37da85ff792c83a234c9b3c77294c421548993d249e259ea229",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishMetropolisArt.ts",
+      "worktreeSha256": "6941ac02b212dc202778ba4dad566388fe1caa9e32b4add312b03b915ab00741",
+      "gitBlobSha256": "6941ac02b212dc202778ba4dad566388fe1caa9e32b4add312b03b915ab00741",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishNeighbourhoodPavilionsArt.ts",
+      "worktreeSha256": "e60daaee47e14f1e6e3a3c3f009309826c47b978e8a2e7761f7e5b586b1c920e",
+      "gitBlobSha256": "e60daaee47e14f1e6e3a3c3f009309826c47b978e8a2e7761f7e5b586b1c920e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishServiceLodgesArt.ts",
+      "worktreeSha256": "bc5c84f3b9d0622c2548e45a4bbbf3f1260f579f3f7ece0dbdce347d34d82115",
+      "gitBlobSha256": "bc5c84f3b9d0622c2548e45a4bbbf3f1260f579f3f7ece0dbdce347d34d82115",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishStreetArt.ts",
+      "worktreeSha256": "13d1e9d1241cd3056e1c31f2c68a427c8c75df516627504a11dd6bba05969172",
+      "gitBlobSha256": "13d1e9d1241cd3056e1c31f2c68a427c8c75df516627504a11dd6bba05969172",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishTowerArt.ts",
+      "worktreeSha256": "0f0f0f101c7ec54d7133d94f920e5dc3c808dece0864eafecd8b092682e1eeee",
+      "gitBlobSha256": "0f0f0f101c7ec54d7133d94f920e5dc3c808dece0864eafecd8b092682e1eeee",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishTransitUtilityPavilionsArt.ts",
+      "worktreeSha256": "9a56d2120ed6fee9cae0c27ef18047297e66919174ff471a7c9c6b0d5322bc75",
+      "gitBlobSha256": "9a56d2120ed6fee9cae0c27ef18047297e66919174ff471a7c9c6b0d5322bc75",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/britishVillageArt.ts",
+      "worktreeSha256": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
+      "gitBlobSha256": "59b634ef2c1ffa0ec9a8489bb3cd43fa832b958f6cd0b143ebb7e6a7c7b1846a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/cityScene.ts",
+      "worktreeSha256": "79434a1389e884f4739e0853a37da3c421e4c3b5c2a53becf3a994a4249ecfeb",
+      "gitBlobSha256": "79434a1389e884f4739e0853a37da3c421e4c3b5c2a53becf3a994a4249ecfeb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/construction.ts",
+      "worktreeSha256": "c8b9b3515c6781d41f414c7dcc4c41e0566e1878508bf86bd7695d43d7a6d8a7",
+      "gitBlobSha256": "c8b9b3515c6781d41f414c7dcc4c41e0566e1878508bf86bd7695d43d7a6d8a7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/d082Repair179v1.ts",
+      "worktreeSha256": "b006936d523423bff074b169cbdf61e8eec9aa1fd481c983046902baa1b9dcc7",
+      "gitBlobSha256": "b006936d523423bff074b169cbdf61e8eec9aa1fd481c983046902baa1b9dcc7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/d082Repair179v1Data.ts",
+      "worktreeSha256": "98b73814abd5b3541ada80e31a3e72700236eed7f5e91db27209db024e65d8c0",
+      "gitBlobSha256": "98b73814abd5b3541ada80e31a3e72700236eed7f5e91db27209db024e65d8c0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/digest.ts",
+      "worktreeSha256": "827bedcab1525b5a9e284115dfbf74b36442cc01937b5bddfc08dea44dee8d39",
+      "gitBlobSha256": "827bedcab1525b5a9e284115dfbf74b36442cc01937b5bddfc08dea44dee8d39",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/ground.ts",
+      "worktreeSha256": "a4be0809525ed08b7153c66dfeb3a16a721ba1132d5a762c49b4964de9812b46",
+      "gitBlobSha256": "a4be0809525ed08b7153c66dfeb3a16a721ba1132d5a762c49b4964de9812b46",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/hazard.ts",
+      "worktreeSha256": "8369d1ce05c820cb60460cf759be593e0b9c967ff589884b0ee464a3feefa4c1",
+      "gitBlobSha256": "8369d1ce05c820cb60460cf759be593e0b9c967ff589884b0ee464a3feefa4c1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/kindArt.ts",
+      "worktreeSha256": "ad91070c93afbf5a74207d0d89ced24eb2d495dceea2b5abe4a10ac73ef28fc1",
+      "gitBlobSha256": "ad91070c93afbf5a74207d0d89ced24eb2d495dceea2b5abe4a10ac73ef28fc1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/landArt.ts",
+      "worktreeSha256": "c3399aa411e90cb8bb90a2f50098114fcd2bba785e5272304fd3b463ea5c74d0",
+      "gitBlobSha256": "c3399aa411e90cb8bb90a2f50098114fcd2bba785e5272304fd3b463ea5c74d0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/pieces.ts",
+      "worktreeSha256": "d749db4c02804703be91b290b9229e8c84636bcf2a27dce02a78099d408bbf2e",
+      "gitBlobSha256": "d749db4c02804703be91b290b9229e8c84636bcf2a27dce02a78099d408bbf2e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/post.ts",
+      "worktreeSha256": "e30b91b4ad1a60feb489ec3df04052b574d752f7c002baf0e00a1b34c516fa5c",
+      "gitBlobSha256": "e30b91b4ad1a60feb489ec3df04052b574d752f7c002baf0e00a1b34c516fa5c",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/preview.ts",
+      "worktreeSha256": "ae1804013c200f255cc73b479e90d9aa94ddb5dd1757a6eb1f320218d4a18511",
+      "gitBlobSha256": "ae1804013c200f255cc73b479e90d9aa94ddb5dd1757a6eb1f320218d4a18511",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/resource.ts",
+      "worktreeSha256": "83d332cfc35e9405c9ff6035969301f1097fdd34159036796a0822c77a563b46",
+      "gitBlobSha256": "83d332cfc35e9405c9ff6035969301f1097fdd34159036796a0822c77a563b46",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/scene.ts",
+      "worktreeSha256": "419333c5aadc810eb850eae79d27fd0dcf6ece353df2e4dc5880393a7e234892",
+      "gitBlobSha256": "419333c5aadc810eb850eae79d27fd0dcf6ece353df2e4dc5880393a7e234892",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/seasonArt.ts",
+      "worktreeSha256": "bf77a0a01ae49f781938c2efe646f1ee2ab535598d3717df88445cb4d6fac303",
+      "gitBlobSha256": "bf77a0a01ae49f781938c2efe646f1ee2ab535598d3717df88445cb4d6fac303",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/styles.ts",
+      "worktreeSha256": "5ff2ca92e9feec166217641145f35b46557bbab381f00a0c4c9bca6181b4c21d",
+      "gitBlobSha256": "5ff2ca92e9feec166217641145f35b46557bbab381f00a0c4c9bca6181b4c21d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/textures.ts",
+      "worktreeSha256": "559dd2a5e577991fdc20011a412628fd0a121d36759647f05ed3a2efe841240b",
+      "gitBlobSha256": "559dd2a5e577991fdc20011a412628fd0a121d36759647f05ed3a2efe841240b",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/weatherArt.ts",
+      "worktreeSha256": "490e0ef8fd3fc807fb23beef6e658b75e356f14731b1f9da48f5fd88184befb0",
+      "gitBlobSha256": "490e0ef8fd3fc807fb23beef6e658b75e356f14731b1f9da48f5fd88184befb0",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/render/windows.ts",
+      "worktreeSha256": "91a9d2b02154fc5f437252fc2e83709058a811977300c226cc4e7993fb973f00",
+      "gitBlobSha256": "91a9d2b02154fc5f437252fc2e83709058a811977300c226cc4e7993fb973f00",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/act.ts",
+      "worktreeSha256": "45ddd6e3656259192cdbe0d519934703f48ba9790049355ea6b644755f1d1bcf",
+      "gitBlobSha256": "45ddd6e3656259192cdbe0d519934703f48ba9790049355ea6b644755f1d1bcf",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/city.ts",
+      "worktreeSha256": "02cba2d17e38d873fbc5738d35a03989ecba7afafa57220c2246fbc088ce9e13",
+      "gitBlobSha256": "02cba2d17e38d873fbc5738d35a03989ecba7afafa57220c2246fbc088ce9e13",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/day.ts",
+      "worktreeSha256": "c57f757deb3746bda4e0590f80a4f78664b27c9560c542ad2878a7a5cbd4dca3",
+      "gitBlobSha256": "c57f757deb3746bda4e0590f80a4f78664b27c9560c542ad2878a7a5cbd4dca3",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/decisions.ts",
+      "worktreeSha256": "ff06a4f84fc68c7cb5af921275ff25c073763d37274ca63b2a60c347100b27f4",
+      "gitBlobSha256": "ff06a4f84fc68c7cb5af921275ff25c073763d37274ca63b2a60c347100b27f4",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/edit.ts",
+      "worktreeSha256": "4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6",
+      "gitBlobSha256": "4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/eventRegistry.ts",
+      "worktreeSha256": "5cb52c4b9ba638ef66fa024af6a8154289cde080b7f1fdb7d25b21676f645f21",
+      "gitBlobSha256": "5cb52c4b9ba638ef66fa024af6a8154289cde080b7f1fdb7d25b21676f645f21",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/history.ts",
+      "worktreeSha256": "3d57c8b870c41723cede08f8b1946b435779679f4fa074e3417c1eb543a2ee99",
+      "gitBlobSha256": "3d57c8b870c41723cede08f8b1946b435779679f4fa074e3417c1eb543a2ee99",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/replay.ts",
+      "worktreeSha256": "cfaa8d576b3cb0fd2e737c4e074eda7d9f439569fc359c42c3da152b3bbba974",
+      "gitBlobSha256": "cfaa8d576b3cb0fd2e737c4e074eda7d9f439569fc359c42c3da152b3bbba974",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/restyle.ts",
+      "worktreeSha256": "aa610e15983e606d8a89a4dc80b70bd04757bacaf326d44a96c111596ab787a3",
+      "gitBlobSha256": "aa610e15983e606d8a89a4dc80b70bd04757bacaf326d44a96c111596ab787a3",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rng.ts",
+      "worktreeSha256": "10d46477fc06ca3ee1acad3948f8bf84a7d8893d8bb8a1580612c125ef14a03e",
+      "gitBlobSha256": "10d46477fc06ca3ee1acad3948f8bf84a7d8893d8bb8a1580612c125ef14a03e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/build.ts",
+      "worktreeSha256": "9530e920f3f590ee467b1ba581ceb369d0d3ed4e092446109274e48d6f9245ca",
+      "gitBlobSha256": "9530e920f3f590ee467b1ba581ceb369d0d3ed4e092446109274e48d6f9245ca",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/commission.ts",
+      "worktreeSha256": "39155ae3869433b37041688758d02489f8074aa2ab6d113af7e1e53aca5b505a",
+      "gitBlobSha256": "39155ae3869433b37041688758d02489f8074aa2ab6d113af7e1e53aca5b505a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/commissionAvailability.ts",
+      "worktreeSha256": "c4bd2253c36e7d625a795256e19caa6270507f136da3b5c9e62064abf6bef14f",
+      "gitBlobSha256": "c4bd2253c36e7d625a795256e19caa6270507f136da3b5c9e62064abf6bef14f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/commissionSave.ts",
+      "worktreeSha256": "75149947ec5e8cedf9ba157bdde889f6ca9c4f9f9b691d4b4e3bfa9e5ea04b05",
+      "gitBlobSha256": "75149947ec5e8cedf9ba157bdde889f6ca9c4f9f9b691d4b4e3bfa9e5ea04b05",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/commute.ts",
+      "worktreeSha256": "3c1fffd93478382a2856aabb38068bc4343f34605a75f7c275c6629c8e416903",
+      "gitBlobSha256": "3c1fffd93478382a2856aabb38068bc4343f34605a75f7c275c6629c8e416903",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/count.ts",
+      "worktreeSha256": "cc4be6724619c5bb7d96f4b78042e206947b4b21b5332e353f3c0ac679fd260a",
+      "gitBlobSha256": "cc4be6724619c5bb7d96f4b78042e206947b4b21b5332e353f3c0ac679fd260a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/demand.ts",
+      "worktreeSha256": "26a94f69d0eb9d5d0c3427e572233e089d9d0446e66aa017a96810501ce16281",
+      "gitBlobSha256": "26a94f69d0eb9d5d0c3427e572233e089d9d0446e66aa017a96810501ce16281",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/economy.ts",
+      "worktreeSha256": "263f04ee417cb46d426a738bc8548e82bcc318eafe042a193e9752c53c4150af",
+      "gitBlobSha256": "263f04ee417cb46d426a738bc8548e82bcc318eafe042a193e9752c53c4150af",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/events.ts",
+      "worktreeSha256": "680ef08636084a13726c5cc157e1c2f36f8bd929f7583a21e6ab6c8db6334bae",
+      "gitBlobSha256": "680ef08636084a13726c5cc157e1c2f36f8bd929f7583a21e6ab6c8db6334bae",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/fields.ts",
+      "worktreeSha256": "921cbb96ccce941cb0a71e36cc52de1c9f245be5475af8aafdad9924297ad1d6",
+      "gitBlobSha256": "921cbb96ccce941cb0a71e36cc52de1c9f245be5475af8aafdad9924297ad1d6",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/food.ts",
+      "worktreeSha256": "5b188535c244aa952fadc13f364fe7f2d32dc744dc41aaf43f586ac73223acd1",
+      "gitBlobSha256": "5b188535c244aa952fadc13f364fe7f2d32dc744dc41aaf43f586ac73223acd1",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/garbage.ts",
+      "worktreeSha256": "39cde194d08c2fbb9a8a04156f39cc2626c980097eb67a48fa8d3746198c40a7",
+      "gitBlobSha256": "39cde194d08c2fbb9a8a04156f39cc2626c980097eb67a48fa8d3746198c40a7",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/grid.ts",
+      "worktreeSha256": "81df1fb7c0134420d4d54ba74869748e1e5d1b943175f1bdc1245b788dd295fc",
+      "gitBlobSha256": "81df1fb7c0134420d4d54ba74869748e1e5d1b943175f1bdc1245b788dd295fc",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/growth.ts",
+      "worktreeSha256": "5ff3c68260c4b152b9d1a916df80261c40e4de0a46be1fea979fe6382caf232d",
+      "gitBlobSha256": "5ff3c68260c4b152b9d1a916df80261c40e4de0a46be1fea979fe6382caf232d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/happy.ts",
+      "worktreeSha256": "1141b4c4e1a4f0191b7f11d31bda76c2e4b784d281206ddaab80a11e642012ed",
+      "gitBlobSha256": "1141b4c4e1a4f0191b7f11d31bda76c2e4b784d281206ddaab80a11e642012ed",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/hazard.ts",
+      "worktreeSha256": "8270edd9a0a5bed6bb3111162bdc4e20f0da6aed211d854e52da67b856f0b44b",
+      "gitBlobSha256": "8270edd9a0a5bed6bb3111162bdc4e20f0da6aed211d854e52da67b856f0b44b",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/income2.ts",
+      "worktreeSha256": "aba0bd539e3572972415c7e04c72a96c18b5d544b07fef75f3cb61681808a550",
+      "gitBlobSha256": "aba0bd539e3572972415c7e04c72a96c18b5d544b07fef75f3cb61681808a550",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/jobs.ts",
+      "worktreeSha256": "3c70a1720e39bdad51b1dc47867e212330aed59637486d95d918333aa9207f51",
+      "gitBlobSha256": "3c70a1720e39bdad51b1dc47867e212330aed59637486d95d918333aa9207f51",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/lab.ts",
+      "worktreeSha256": "e61e72381db4c5ab91b94c7dc69232111d1abe242287ad0e8001cc51e6d7478d",
+      "gitBlobSha256": "e61e72381db4c5ab91b94c7dc69232111d1abe242287ad0e8001cc51e6d7478d",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/land.ts",
+      "worktreeSha256": "6e95aa2e77e6e3796132741f196f68993fbdfedb87158150ea6b626b549d3d19",
+      "gitBlobSha256": "6e95aa2e77e6e3796132741f196f68993fbdfedb87158150ea6b626b549d3d19",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/logistics.ts",
+      "worktreeSha256": "bc956c904e13503cc7b6acd525ea5c0924bcce9734cd574edcc613ade0e9befe",
+      "gitBlobSha256": "bc956c904e13503cc7b6acd525ea5c0924bcce9734cd574edcc613ade0e9befe",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/merge.ts",
+      "worktreeSha256": "8975c3456b6faa018780aa96e644b664da91a58910e23c187373c4cad983d6a5",
+      "gitBlobSha256": "8975c3456b6faa018780aa96e644b664da91a58910e23c187373c4cad983d6a5",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/money.ts",
+      "worktreeSha256": "bf288b920bb7c84a4ab21837bdbc09849bcb0984988bc2ada243abc39973b4af",
+      "gitBlobSha256": "bf288b920bb7c84a4ab21837bdbc09849bcb0984988bc2ada243abc39973b4af",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/nightcity.ts",
+      "worktreeSha256": "431ccb81a0cc6569e0f0ec25237775f2092ed4b432f5265f94d3a39f51f9a9c3",
+      "gitBlobSha256": "431ccb81a0cc6569e0f0ec25237775f2092ed4b432f5265f94d3a39f51f9a9c3",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/policy.ts",
+      "worktreeSha256": "cdade5adeaae0da05d8504f46e8af675def2853749de400edaee6442d16e4a2f",
+      "gitBlobSha256": "cdade5adeaae0da05d8504f46e8af675def2853749de400edaee6442d16e4a2f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/power.ts",
+      "worktreeSha256": "01216bbf5454a34749c6b0837a7e65d016e24108adb2bab21c6a536ed1b04f91",
+      "gitBlobSha256": "01216bbf5454a34749c6b0837a7e65d016e24108adb2bab21c6a536ed1b04f91",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/rank.ts",
+      "worktreeSha256": "3ac637adf766805366102d8b98e0aba9797d89aba4aad9983d80e19a13430f74",
+      "gitBlobSha256": "3ac637adf766805366102d8b98e0aba9797d89aba4aad9983d80e19a13430f74",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/resource.ts",
+      "worktreeSha256": "e562a1b5a1dc7e57ecd48b80186562e6843327863dc46d187321bfd7ec742fda",
+      "gitBlobSha256": "e562a1b5a1dc7e57ecd48b80186562e6843327863dc46d187321bfd7ec742fda",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/sewer.ts",
+      "worktreeSha256": "1e96ddfb884abf2e0d311a010b0f0648056c6f9500c000646613d4fd04565ba2",
+      "gitBlobSha256": "1e96ddfb884abf2e0d311a010b0f0648056c6f9500c000646613d4fd04565ba2",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/tech.ts",
+      "worktreeSha256": "21ef71f94abb84b78a545503800934196a75143e18c55b1a428d3db0cb1a7707",
+      "gitBlobSha256": "21ef71f94abb84b78a545503800934196a75143e18c55b1a428d3db0cb1a7707",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/water.ts",
+      "worktreeSha256": "eed089dc486ee6621c9ab63c15eaeee02fa6bcc2445831b1004a85aaca42324f",
+      "gitBlobSha256": "eed089dc486ee6621c9ab63c15eaeee02fa6bcc2445831b1004a85aaca42324f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/sim/rules/weather.ts",
+      "worktreeSha256": "1c75f974dff7755e3cf1e3a3e4b3c7e6acc293278b24d8acddbcfd54a2a6e1cd",
+      "gitBlobSha256": "1c75f974dff7755e3cf1e3a3e4b3c7e6acc293278b24d8acddbcfd54a2a6e1cd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/buildUi.ts",
+      "worktreeSha256": "82741c20afffe2fd3867627a0bab61c6c47cb63a129ea5f145ea913dde287249",
+      "gitBlobSha256": "82741c20afffe2fd3867627a0bab61c6c47cb63a129ea5f145ea913dde287249",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/copyFeedback.ts",
+      "worktreeSha256": "fbdaa5f43ac00a9583e23a4e5820fd1d60f5d14f0b7da8d1d020fa327b7ecc9f",
+      "gitBlobSha256": "fbdaa5f43ac00a9583e23a4e5820fd1d60f5d14f0b7da8d1d020fa327b7ecc9f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/costTag.ts",
+      "worktreeSha256": "0ace0e1bb1f1c0071016c2e0ad9077bb5921259a1591e016c52c07795bea1d63",
+      "gitBlobSha256": "0ace0e1bb1f1c0071016c2e0ad9077bb5921259a1591e016c52c07795bea1d63",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/facilityCatalog.ts",
+      "worktreeSha256": "1faa35d21e9612821f332128b2865dedfdc9f0a90315bd623cbd9d8b6b630024",
+      "gitBlobSha256": "1faa35d21e9612821f332128b2865dedfdc9f0a90315bd623cbd9d8b6b630024",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/growthGuide.css",
+      "worktreeSha256": "ede93fb91bbd6dae6ad9c11c08c524e9392a353b1a21cab45a7cabf9c3aa6846",
+      "gitBlobSha256": "ede93fb91bbd6dae6ad9c11c08c524e9392a353b1a21cab45a7cabf9c3aa6846",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/growthGuide.ts",
+      "worktreeSha256": "e3318aac0b50cb5844a7d875d65d90ce7013f2aa826992ffce0c631da1b98c5e",
+      "gitBlobSha256": "e3318aac0b50cb5844a7d875d65d90ce7013f2aa826992ffce0c631da1b98c5e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/icons.ts",
+      "worktreeSha256": "4137b49a0fac3f80e58277d73a36ceb3a570140fa4b678fc04a742c9de783886",
+      "gitBlobSha256": "4137b49a0fac3f80e58277d73a36ceb3a570140fa4b678fc04a742c9de783886",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/importFeedback.ts",
+      "worktreeSha256": "74fe7b396630da4a693c0f0f0fdca34784490ccc4cb522dcab479d0d64467b76",
+      "gitBlobSha256": "74fe7b396630da4a693c0f0f0fdca34784490ccc4cb522dcab479d0d64467b76",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/mapClickGuard.ts",
+      "worktreeSha256": "dae7d5d9e783d0ac8da1c6a203bf49e0a56cd0d10b6e7e6494892958d761b2b2",
+      "gitBlobSha256": "dae7d5d9e783d0ac8da1c6a203bf49e0a56cd0d10b6e7e6494892958d761b2b2",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/panelContent.ts",
+      "worktreeSha256": "2ec1219b2e3e5ba4066383fa2ff7d5947ef48c564926a34592ec19d4b5038934",
+      "gitBlobSha256": "2ec1219b2e3e5ba4066383fa2ff7d5947ef48c564926a34592ec19d4b5038934",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/panelPress.ts",
+      "worktreeSha256": "a481a138c3a47cd1820301db30678f63bf993b6e128399e17ef0b7263a7b088b",
+      "gitBlobSha256": "a481a138c3a47cd1820301db30678f63bf993b6e128399e17ef0b7263a7b088b",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/saveStatus.ts",
+      "worktreeSha256": "d11ee17a263db643a2d414b1d3b162f61458bcc3b494d17b8125b1cd49ccf0a6",
+      "gitBlobSha256": "d11ee17a263db643a2d414b1d3b162f61458bcc3b494d17b8125b1cd49ccf0a6",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/siteDiagnostics.css",
+      "worktreeSha256": "2cfed802c512ffec45894d6db757ad138ba058acd377d0c6aea9f041970a7f2e",
+      "gitBlobSha256": "2cfed802c512ffec45894d6db757ad138ba058acd377d0c6aea9f041970a7f2e",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/siteDiagnostics.ts",
+      "worktreeSha256": "0c57698a85bf92ff010b2e2a571472b3dfff6e062b7840f33d193af80b6dd00f",
+      "gitBlobSha256": "0c57698a85bf92ff010b2e2a571472b3dfff6e062b7840f33d193af80b6dd00f",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/ui/sitePanel.ts",
+      "worktreeSha256": "6361099f7f55180ff5237e094fca2c745e276f76f73433fe4f6e91204323ab86",
+      "gitBlobSha256": "6361099f7f55180ff5237e094fca2c745e276f76f73433fe4f6e91204323ab86",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "src/vite-env.d.ts",
+      "worktreeSha256": "f64d434e5a812df2fd28a4c070dc4d1dc1b4c8c238773b75bf0ded511ddfd9fd",
+      "gitBlobSha256": "f64d434e5a812df2fd28a4c070dc4d1dc1b4c8c238773b75bf0ded511ddfd9fd",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/d081-frame.mjs",
+      "worktreeSha256": "2a6510fe84db1a233040df0dc2cda24ed1e1a40113518a41be506809cf2d73fb",
+      "gitBlobSha256": "2a6510fe84db1a233040df0dc2cda24ed1e1a40113518a41be506809cf2d73fb",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/d082-frame.mjs",
+      "worktreeSha256": "f22c66c699e2f9d02ec61b65a68f12296d08c79f36966dcb7592e2f4bdc1cf50",
+      "gitBlobSha256": "f22c66c699e2f9d02ec61b65a68f12296d08c79f36966dcb7592e2f4bdc1cf50",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/d082-redesign-check.mjs",
+      "worktreeSha256": "1262ab545fce09274250962072bb16a8523c0156fd9b785d580d7029c36cadb8",
+      "gitBlobSha256": "1262ab545fce09274250962072bb16a8523c0156fd9b785d580d7029c36cadb8",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/d082-redesign-surfaces.mjs",
+      "worktreeSha256": "63ae3c374841db0bc34ed47e9fc555fb850c3e0863f62a013cb195708c4ea209",
+      "gitBlobSha256": "63ae3c374841db0bc34ed47e9fc555fb850c3e0863f62a013cb195708c4ea209",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/d082-redesign-views.mjs",
+      "worktreeSha256": "88d73b7a2a94dd83eebfd91dd6b5fe3584b85356676639b782724de1adf96774",
+      "gitBlobSha256": "88d73b7a2a94dd83eebfd91dd6b5fe3584b85356676639b782724de1adf96774",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/unit-d081.mjs",
+      "worktreeSha256": "4ab406512120c94bed122fbcc9ad2bb1e7ea9e23ae12874fc64064891072c9aa",
+      "gitBlobSha256": "4ab406512120c94bed122fbcc9ad2bb1e7ea9e23ae12874fc64064891072c9aa",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/unit-d082.mjs",
+      "worktreeSha256": "2ae3eea1bb3ada5ec4349545299357365d6408a05f171e0fc8cc13e79ac6d260",
+      "gitBlobSha256": "2ae3eea1bb3ada5ec4349545299357365d6408a05f171e0fc8cc13e79ac6d260",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    },
+    {
+      "file": "tools/unit-partitions.test.mjs",
+      "worktreeSha256": "0894bdfd61be9dc24fd620f5d34446f18cbb9086cab899a652d0ed0d3d090c6a",
+      "gitBlobSha256": "0894bdfd61be9dc24fd620f5d34446f18cbb9086cab899a652d0ed0d3d090c6a",
+      "workingTreeBytesUnchanged": true,
+      "unchangedGitBlob": true
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "status": "LOCAL_PASSES_RECORDED_EXACT_HEAD_CI_PENDING",
+  "approvedPreview": "0b583d1deecc8a72af19c6c470cacd73153bfe83",
+  "currentArtSha256": "3c8be9834fb42d4105563a33db502d4b8e7afa4626ac0acf5e0cfce9121fbb97",
+  "sourceControlsPassedFirstExecution": 3244,
+  "originalSourceControlsRetained": 3202,
+  "sourceFinalEvidenceAuthenticationExecution": "PASSED: complete JSON report, 3244 controls; 18 evidence and 14 protected-file Git hashes authenticated",
+  "typecheckPassed": true,
+  "structuralAffineCases": 324,
+  "reviewedByteEqualityCases": 324,
+  "priorModelsPreserved": 130,
+  "otherCurrentTargetsPreserved": 7,
+  "newManifoldControls": 234,
+  "original179ManifoldControls": 177,
+  "existingProbeCameraTestsPassed": 26,
+  "newOldCoordinateTestsPassed": 2,
+  "productPaths": 231,
+  "additions": 4,
+  "windowsCoreTests": {
+    "pass": 258,
+    "fail": 3,
+    "acceptedCe33BaselineSameThreeFailures": true,
+    "linuxConfirmation": "PENDING"
+  },
+  "unapprovedPhaseRoutingOrReportAdopted": false,
+  "sourceFinalReportSha256": "635f09abc6f8d934320502e4c0af083f27ad0cbc12c7800672ac2bae7a58b143"
+}

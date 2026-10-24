@@ -1,3 +1,4 @@
+import {isD082ReviewedExistingSource} from './d082-scope.mjs';
 // D067: actual production geometry, dispatch, budgets, picking and unchanged-world guards.
 // Run: node tools/unit-d067.mjs. This is a Node geometry test, NOT evidence of a WebGL screenshot.
 // The immutable D066 values below were measured before D067 dispatch changed (scratch/d067/D067-baseline.json).
@@ -189,7 +190,7 @@ export async function d067Guards(log){
   for(const f of ['src/content/britishLandmarks.ts','src/render/britishLandmarkArt.ts']){const s=fs.readFileSync(path.join(ROOT,f),'utf8').replace(/\/\/.*$/gm,'');for(const re of [/Math\.random/,/Date\.now|new Date|performance\.now/,/\bfetch\(|XMLHttpRequest|WebSocket|localStorage|sessionStorage|indexedDB/,/\bdocument\b|\bwindow\b|\blocation\b/,/data:image|\.png|\.jpe?g|\.glb|TextureLoader|ImageLoader|new Image|OffscreenCanvas|createElement/i])assert.doesNotMatch(s,re,f);}
   const allowed=new Set(['src/cityView.ts','src/content/kindShapes.ts','src/render/kindArt.ts','src/content/britishLandmarks.ts','src/render/britishLandmarkArt.ts']);
   const changed=execFileSync('git',['diff','--name-only',D067_BASELINE,'--','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean),untracked=execFileSync('git',['ls-files','--others','--exclude-standard','src'],{cwd:ROOT,encoding:'utf8'}).trim().split('\n').filter(Boolean);
-  for(const f of [...changed,...untracked])assert.ok(allowed.has(f)||D068_ADDED.has(f)||isD074TouchRepairAllowed(f),'only approved render-only source may change: '+f);
+  for(const f of [...changed,...untracked])assert.ok(allowed.has(f)||D068_ADDED.has(f)||isD074TouchRepairAllowed(f)||isD082ReviewedExistingSource(f),'only approved render-only source may change: '+f);
   const view=d068HistoricalBytes('src/cityView.ts');assert.match(view,/landmarkArt/,'production URL switch exists');assert.match(view,/shapeOf\([^\n]*landmark/,'production passes fifth flag');
  });
  test('ten legacy switches each disable only this wave; SHA scope reverses to D066 and rejects source mutations',()=>{

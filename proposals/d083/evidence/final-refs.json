@@ -1,0 +1,365 @@
+{
+  "checkedAt": "2026-10-23 07:34:32 UTC",
+  "original": {
+    "ref": "refs/heads/codex/d082-art-redesign",
+    "node_id": "REF_kwDOUpi2UdoAInJlZnMvaGVhZHMvY29kZXgvZDA4Mi1hcnQtcmVkZXNpZ24",
+    "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/codex/d082-art-redesign",
+    "object": {
+      "sha": "7deb34881b38679b1d0396e21eb9e57ad2ee9a0c",
+      "type": "commit",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/7deb34881b38679b1d0396e21eb9e57ad2ee9a0c"
+    }
+  },
+  "main": {
+    "ref": "refs/heads/main",
+    "node_id": "REF_kwDOUpi2Ua9yZWZzL2hlYWRzL21haW4",
+    "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/main",
+    "object": {
+      "sha": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+      "type": "commit",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/2cd43c424dcc909dcfa6ac55275406d2bc527ce0"
+    }
+  },
+  "claudeHeads": [
+    {
+      "ref": "refs/heads/claude/3d-claude-reading-o11uvs",
+      "node_id": "REF_kwDOUpi2UdoAKnJlZnMvaGVhZHMvY2xhdWRlLzNkLWNsYXVkZS1yZWFkaW5nLW8xMXV2cw",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/3d-claude-reading-o11uvs",
+      "object": {
+        "sha": "e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/3d-remote-status-2qeati",
+      "node_id": "REF_kwDOUpi2UdoAKXJlZnMvaGVhZHMvY2xhdWRlLzNkLXJlbW90ZS1zdGF0dXMtMnFlYXRp",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/3d-remote-status-2qeati",
+      "object": {
+        "sha": "199fe78bd5c22645f7016dccfed93aa24d5a35fa",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/199fe78bd5c22645f7016dccfed93aa24d5a35fa"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d046-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNDYtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d046-live-verification",
+      "object": {
+        "sha": "d37f6363a63ab227f7adff4ff73e16918bf54c7b",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/d37f6363a63ab227f7adff4ff73e16918bf54c7b"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d047-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNDctbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d047-live-verification",
+      "object": {
+        "sha": "02a1bc91b7b31a46c489d984c23247708e440080",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/02a1bc91b7b31a46c489d984c23247708e440080"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d047-release-record",
+      "node_id": "REF_kwDOUpi2UdoAJXJlZnMvaGVhZHMvY2xhdWRlL2QwNDctcmVsZWFzZS1yZWNvcmQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d047-release-record",
+      "object": {
+        "sha": "2b077c6471e245602173c5e367c267d1a25d8c8f",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/2b077c6471e245602173c5e367c267d1a25d8c8f"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d047-space-center-mobile",
+      "node_id": "REF_kwDOUpi2UdoAKnJlZnMvaGVhZHMvY2xhdWRlL2QwNDctc3BhY2UtY2VudGVyLW1vYmlsZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d047-space-center-mobile",
+      "object": {
+        "sha": "3074995be8e71b13af6ea2cec2948264d8eb73d2",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/3074995be8e71b13af6ea2cec2948264d8eb73d2"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d048-baseline-capture",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNDgtYmFzZWxpbmUtY2FwdHVyZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d048-baseline-capture",
+      "object": {
+        "sha": "95cdb7a60b2efacbc377154498327231ce6ade0a",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/95cdb7a60b2efacbc377154498327231ce6ade0a"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d048-focused-verification",
+      "node_id": "REF_kwDOUpi2UdoAK3JlZnMvaGVhZHMvY2xhdWRlL2QwNDgtZm9jdXNlZC12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d048-focused-verification",
+      "object": {
+        "sha": "069dd9c78552e86cd531f264c6fed426d8d60944",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/069dd9c78552e86cd531f264c6fed426d8d60944"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d048-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNDgtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d048-live-verification",
+      "object": {
+        "sha": "5246cedbf1257a6ee8be9a48d75b682b21b577a7",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/5246cedbf1257a6ee8be9a48d75b682b21b577a7"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d048-mobile-save-status",
+      "node_id": "REF_kwDOUpi2UdoAKXJlZnMvaGVhZHMvY2xhdWRlL2QwNDgtbW9iaWxlLXNhdmUtc3RhdHVz",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d048-mobile-save-status",
+      "object": {
+        "sha": "bfe27e861b34785ba5e9ee011899fb111fbb40ca",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/bfe27e861b34785ba5e9ee011899fb111fbb40ca"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d048-release-record",
+      "node_id": "REF_kwDOUpi2UdoAJXJlZnMvaGVhZHMvY2xhdWRlL2QwNDgtcmVsZWFzZS1yZWNvcmQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d048-release-record",
+      "object": {
+        "sha": "8addb34b31d7ee52763727c5aacddc75a7dedeb7",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/8addb34b31d7ee52763727c5aacddc75a7dedeb7"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d049-baseline-capture",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNDktYmFzZWxpbmUtY2FwdHVyZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d049-baseline-capture",
+      "object": {
+        "sha": "5b13e99ab57d57f2a3ec9caea70fe9393fc9121f",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/5b13e99ab57d57f2a3ec9caea70fe9393fc9121f"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d049-copy-feedback",
+      "node_id": "REF_kwDOUpi2UdoAJHJlZnMvaGVhZHMvY2xhdWRlL2QwNDktY29weS1mZWVkYmFjaw",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d049-copy-feedback",
+      "object": {
+        "sha": "960b3e329717d7895bf788f0e095b1efee1dcc82",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/960b3e329717d7895bf788f0e095b1efee1dcc82"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d049-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNDktbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d049-live-verification",
+      "object": {
+        "sha": "af693ed740d3c20b72e235f0c8a773d5d123cb1d",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/af693ed740d3c20b72e235f0c8a773d5d123cb1d"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d050-baseline-capture",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNTAtYmFzZWxpbmUtY2FwdHVyZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d050-baseline-capture",
+      "object": {
+        "sha": "4649b69df44103cd0dd09a711f79757f6cdb3e46",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/4649b69df44103cd0dd09a711f79757f6cdb3e46"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d050-import-retry",
+      "node_id": "REF_kwDOUpi2UdoAI3JlZnMvaGVhZHMvY2xhdWRlL2QwNTAtaW1wb3J0LXJldHJ5",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d050-import-retry",
+      "object": {
+        "sha": "a8c0fbe34339272c17166163277e454262594187",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/a8c0fbe34339272c17166163277e454262594187"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d050-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTAtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d050-live-verification",
+      "object": {
+        "sha": "33e3ccfacb13f605238afb3a384c5483e4755ee3",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/33e3ccfacb13f605238afb3a384c5483e4755ee3"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d051-baseline-capture",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNTEtYmFzZWxpbmUtY2FwdHVyZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d051-baseline-capture",
+      "object": {
+        "sha": "5261c33f08d0e4a34d4e6c4a78125b0eef1ee9d5",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/5261c33f08d0e4a34d4e6c4a78125b0eef1ee9d5"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d051-commission-research",
+      "node_id": "REF_kwDOUpi2UdoAKnJlZnMvaGVhZHMvY2xhdWRlL2QwNTEtY29tbWlzc2lvbi1yZXNlYXJjaA",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d051-commission-research",
+      "object": {
+        "sha": "f76e0570735fc109a5f06e1d17f6a3f278443176",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/f76e0570735fc109a5f06e1d17f6a3f278443176"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d051-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTEtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d051-live-verification",
+      "object": {
+        "sha": "8854cb23a0d72202a459e3db5fc820757a3f300b",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/8854cb23a0d72202a459e3db5fc820757a3f300b"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d052-baseline-capture",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNTItYmFzZWxpbmUtY2FwdHVyZQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d052-baseline-capture",
+      "object": {
+        "sha": "4c4cc63149d7dedd3434fcb8aa91ccab8df8b7bc",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/4c4cc63149d7dedd3434fcb8aa91ccab8df8b7bc"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d052-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTItbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d052-live-verification",
+      "object": {
+        "sha": "b019a078bca6db6d2eeb029e910c8286ba13ad17",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/b019a078bca6db6d2eeb029e910c8286ba13ad17"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d052-paused-feedback",
+      "node_id": "REF_kwDOUpi2UdoAJnJlZnMvaGVhZHMvY2xhdWRlL2QwNTItcGF1c2VkLWZlZWRiYWNr",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d052-paused-feedback",
+      "object": {
+        "sha": "b984e6914a536e0c0040898ac12748521e335e7e",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/b984e6914a536e0c0040898ac12748521e335e7e"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d052-touch-verification",
+      "node_id": "REF_kwDOUpi2UdoAKXJlZnMvaGVhZHMvY2xhdWRlL2QwNTItdG91Y2gtdmVyaWZpY2F0aW9u",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d052-touch-verification",
+      "object": {
+        "sha": "d3f4847b4b270e3b19b0033dca97ccbc8e5869e3",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/d3f4847b4b270e3b19b0033dca97ccbc8e5869e3"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d053-growth-navigation",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTMtZ3Jvd3RoLW5hdmlnYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d053-growth-navigation",
+      "object": {
+        "sha": "dbe8825ce8f42a0c36013c82b3e8c8050d5e8ae1",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/dbe8825ce8f42a0c36013c82b3e8c8050d5e8ae1"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d053-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTMtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d053-live-verification",
+      "object": {
+        "sha": "3c39fee324e99f90de1bf186fe9e2cf61bed8c4a",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/3c39fee324e99f90de1bf186fe9e2cf61bed8c4a"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d054-live-verification",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL2QwNTQtbGl2ZS12ZXJpZmljYXRpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d054-live-verification",
+      "object": {
+        "sha": "c698a61d0b6ce560f214dd99f812a65363e9642d",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/c698a61d0b6ce560f214dd99f812a65363e9642d"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d054-site-diagnostics",
+      "node_id": "REF_kwDOUpi2UdoAJ3JlZnMvaGVhZHMvY2xhdWRlL2QwNTQtc2l0ZS1kaWFnbm9zdGljcw",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d054-site-diagnostics",
+      "object": {
+        "sha": "4f0dd04001293f92df884989ccfc295517cc8162",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/4f0dd04001293f92df884989ccfc295517cc8162"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d055-baseline",
+      "node_id": "REF_kwDOUpi2Ub9yZWZzL2hlYWRzL2NsYXVkZS9kMDU1LWJhc2VsaW5l",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d055-baseline",
+      "object": {
+        "sha": "3e5fc80811c9b58a24405eae2a55b4b1734fabc8",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/3e5fc80811c9b58a24405eae2a55b4b1734fabc8"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/d055-reconstruction",
+      "node_id": "REF_kwDOUpi2UdoAJXJlZnMvaGVhZHMvY2xhdWRlL2QwNTUtcmVjb25zdHJ1Y3Rpb24",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/d055-reconstruction",
+      "object": {
+        "sha": "fe2a3ff1bb34a2c0fdd8e621c86039db083a0539",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/fe2a3ff1bb34a2c0fdd8e621c86039db083a0539"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/qa-d054-before",
+      "node_id": "REF_kwDOUpi2UdoAIHJlZnMvaGVhZHMvY2xhdWRlL3FhLWQwNTQtYmVmb3Jl",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/qa-d054-before",
+      "object": {
+        "sha": "a534d5855dcdf84b83ffdda5d524a7664ebc3af0",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/a534d5855dcdf84b83ffdda5d524a7664ebc3af0"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/qa-d054-preflight",
+      "node_id": "REF_kwDOUpi2UdoAI3JlZnMvaGVhZHMvY2xhdWRlL3FhLWQwNTQtcHJlZmxpZ2h0",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/qa-d054-preflight",
+      "object": {
+        "sha": "e7a90bfadf23860a3dd7116f7b998a8f4a571552",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/e7a90bfadf23860a3dd7116f7b998a8f4a571552"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/qa-d054-recovery-diagnose",
+      "node_id": "REF_kwDOUpi2UdoAK3JlZnMvaGVhZHMvY2xhdWRlL3FhLWQwNTQtcmVjb3ZlcnktZGlhZ25vc2U",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/qa-d054-recovery-diagnose",
+      "object": {
+        "sha": "a099f5cadfc9120592c69eafcb313f869f0b44fd",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/a099f5cadfc9120592c69eafcb313f869f0b44fd"
+      }
+    },
+    {
+      "ref": "refs/heads/claude/qa-d054-recovery-fixed",
+      "node_id": "REF_kwDOUpi2UdoAKHJlZnMvaGVhZHMvY2xhdWRlL3FhLWQwNTQtcmVjb3ZlcnktZml4ZWQ",
+      "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/refs/heads/claude/qa-d054-recovery-fixed",
+      "object": {
+        "sha": "2a2760ae17ca5eea556fa502eaf61f917b38fbd9",
+        "type": "commit",
+        "url": "https://api.github.com/repos/lijiabao1998/GlimmerTown3D-lab/git/commits/2a2760ae17ca5eea556fa502eaf61f917b38fbd9"
+      }
+    }
+  ]
+}

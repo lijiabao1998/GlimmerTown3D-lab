@@ -17,6 +17,7 @@ import { D053_BASELINE,D053_MODES,D053_SHOTS,D053_CAMERA,D053_BASELINE_CAMERA,D0
 // D055 extends the catalogue; D053_TOOL_IDS remains the exact original 18 civic tools.
 export const D055_FOOD_IDS = ['farm','ranch','bigFarm','greenhouse','foodPlant','market','tradepost'];
 export const D055_CATALOG_IDS = [...D053_TOOL_IDS,...D055_FOOD_IDS];
+import {catalogueWithD083} from './d083-catalogue-compat.mjs';
 const J=JSON.stringify;
 export const d053Hash=x=>createHash('sha256').update(typeof x==='string'||Buffer.isBuffer(x)?x:J(x)).digest('hex');
 export const D053_SNAPSHOT=D052_SNAPSHOT;
@@ -79,7 +80,7 @@ export async function captureD053Scene(p,page,mode,{phase,outDir,mobile=true}) {
   if(!mobile){await menuRank();await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});await page.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});const escaped=await p.ev(D053_UI);check('native keyboard Escape closes rank',()=>assert.equal(escaped.rankPanel.open,false));}
  }else if(mode==='catalog'||mode==='space-catalog') {
   await catalog();if(mode==='space-catalog'){const selector=phase==='before'?'#civicSub [data-c="megaproject"]':'#catalog [data-tool="megaproject"]';await p.ev(`document.querySelector(${J(selector)}).scrollIntoView({block:'center'})`);await p.frames(2);}
-  const ui=await p.ev(D053_UI);check('18 original civic tools retained; catalogue union adds exactly seven food tools',()=>{assert.deepEqual(ui.civic.map(c=>c.id),D053_TOOL_IDS);if(phase==='after'){assert.ok(ui.catalog.open);assert.deepEqual(ui.catalog.tools.map(t=>t.id).sort(),[...D055_CATALOG_IDS].sort());assert.deepEqual(ui.catalog.groups,['all','service','utility','resource','food']);assert.deepEqual(ui.catalog.tools.map(t=>t.id).filter(id=>D055_FOOD_IDS.includes(id)),D055_FOOD_IDS);}});await take();
+  const ui=await p.ev(D053_UI);check('18 original civic tools retained; catalogue union adds exactly seven food tools',()=>{assert.deepEqual(ui.civic.map(c=>c.id),D053_TOOL_IDS);if(phase==='after'){assert.ok(ui.catalog.open);assert.deepEqual(ui.catalog.tools.map(t=>t.id).sort(),catalogueWithD083(D055_CATALOG_IDS).sort());assert.deepEqual(ui.catalog.groups,['all','service','utility','resource','food','heritage']);assert.deepEqual(ui.catalog.tools.map(t=>t.id).filter(id=>D055_FOOD_IDS.includes(id)),D055_FOOD_IDS);}});await take();
  }else if(mode==='rank21') {
   await civic();const ui=await p.ev(D053_UI);assert.ok(ui.civic.find(c=>c.id==='megaproject').locked);await tap('#civicSub [data-c="megaproject"]');
   const after=await p.ev(D053_UI);check('rank21 still genuinely refuses space selection',()=>{assert.equal(after.ui.civicTool,ui.ui.civicTool);assert.ok(after.toasts.some(t=>/Lv\.22/.test(t)));});

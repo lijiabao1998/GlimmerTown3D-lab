@@ -9,7 +9,7 @@ import { ROOT } from './cdp.mjs';
 import { d044Load, BLOCKS } from './d044-cities.mjs';
 import { saveCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
-import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
+import { CIVIC_TOOLS, FOOD_TOOLS, HERITAGE_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp } from '../src/sim/edit.ts';
 import { FOREIGN_LAYERS } from '../src/sim/rules/build.ts';
 import * as Site from '../src/ui/siteDiagnostics.ts';
 
@@ -89,7 +89,7 @@ function cityHarness(f, source = citySource, panel = panelSource, options = {}) 
   const { doc, Element } = makeDom(), { createSitePanel, siteCostText } = compilePanel(doc, Element, panel), calls = [], toasts = [], guides = [], costs = [], previews = [];
   const x = { sim: f.sim, calls, toasts, guides, costs, previews, saved: [], clock: 1000, idle: [], delays: [], diagnoses: [], labels: [], visiblePreview: [], visibleCost: null, failDiagnosis: '' };
   if (options.idle !== false) doc.defaultView.requestIdleCallback = task => { x.idle.push(task); };
-  const deps = { ...Site, CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel,
+  const deps = { ...Site, CIVIC_TOOLS, FOOD_TOOLS, HERITAGE_TOOLS, FACILITY_TOOLS, ROAD_TOOLS, labToolOf, gestureOf, previewOp, commitOp, undoOp, createSitePanel,
     diagnoseSite: (...args) => { const d = Site.diagnoseSite(...args); x.diagnoses.push({ op: args[1], provided: !!args[2], d }); if (x.failDiagnosis === args[1].tool) throw new Error('forced warm diagnosis failure'); return d; },
     siteCostText: d => { x.labels.push(d); return siteCostText(d); }, document: doc, HTMLElement: Element, Element };
   const chunks = [section(source, '  function warmEdit() {', '  // 換城：'), section(source, '  // D054: ephemeral UI snapshots only', '  // D053: keep imported rank rules'), section(source, '  function syncUi() {', '  // D040：資源圖。'), section(source, '  let pipesShown = false;', '  const toolColor'), section(source, '  function opOf(', '  // 鍵盤：對話框')];

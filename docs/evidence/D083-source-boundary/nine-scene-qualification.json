@@ -1,0 +1,2121 @@
+{
+  "qualification": "Nine-model expansion after explicit acceptance of the two prototypes. The accepted pair is byte-pinned to its approved snapshot. This preview is not release approval, deployment, Android-device testing, or a claim that the unchanged rejected ten-model gates pass. Before is the same production build with coastalArt=legacy; accepted-family references are in this same build, not historical screenshots.",
+  "complete": true,
+  "geometryCases": 324,
+  "unchangedSlots": [
+    {
+      "k": 126,
+      "v": 0,
+      "weighted": 56,
+      "sha256": "462b195a8846c2e9adf622f5b596106a8d8ff495495a68fad1f4f03374743deb"
+    },
+    {
+      "k": 126,
+      "v": 1,
+      "weighted": 56,
+      "sha256": "7e5ed83fd864cbf5b18a56eea58a8b913d6d389e7e2ad9ab3612c21eaac7d8e4"
+    },
+    {
+      "k": 126,
+      "v": 2,
+      "weighted": 56,
+      "sha256": "e5505e0d733c927aa83add26d66e52ac65adce97d7144985a20369934a1b6482"
+    }
+  ],
+  "scenePairs": [
+    {
+      "sample": "gallery",
+      "force": null,
+      "construction": {
+        "targetTiles": [
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              25
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              25
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              26
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              26
+            ],
+            "before": 0,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              26
+            ],
+            "before": 0,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              26
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              27
+            ],
+            "before": 0,
+            "after": 0.19470000267028809,
+            "expected": 0.19470000267028809
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.19470000267028809,
+            "expected": 0.19470000267028809
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              28
+            ],
+            "before": 0.004000000189989805,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              28
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.33000001311302185,
+            "expected": 0.33000001311302185
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              28
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2870999872684479,
+            "expected": 0.2870999872684479
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              28
+            ],
+            "before": 0.33000001311302185,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 154,
+            "tile": [
+              54,
+              37
+            ],
+            "before": 0.7799999713897705,
+            "after": 0.7799999713897705,
+            "expected": 0.7799999713897705
+          },
+          {
+            "owner": 160,
+            "tile": [
+              66,
+              37
+            ],
+            "before": 1.4800000190734863,
+            "after": 1.4800000190734863,
+            "expected": 1.4800000190734863
+          }
+        ],
+        "changedTiles": 14,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 60236,
+      "after": 60196,
+      "changedOwners": [
+        "94",
+        "154",
+        "160"
+      ],
+      "frames": 39,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "gallery",
+      "force": 0,
+      "construction": {
+        "targetTiles": [
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              25
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              25
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.06599999964237213,
+            "expected": 0.06599999964237213
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              26
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              26
+            ],
+            "before": 0,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              26
+            ],
+            "before": 0,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              26
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              27
+            ],
+            "before": 0,
+            "after": 0.19470000267028809,
+            "expected": 0.19470000267028809
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.19470000267028809,
+            "expected": 0.19470000267028809
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              27
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2903999984264374,
+            "expected": 0.2903999984264374
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              28
+            ],
+            "before": 0.004000000189989805,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              28
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.33000001311302185,
+            "expected": 0.33000001311302185
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              28
+            ],
+            "before": 0.2409999966621399,
+            "after": 0.2870999872684479,
+            "expected": 0.2870999872684479
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              28
+            ],
+            "before": 0.33000001311302185,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 154,
+            "tile": [
+              54,
+              37
+            ],
+            "before": 0.7799999713897705,
+            "after": 0.7799999713897705,
+            "expected": 0.7799999713897705
+          },
+          {
+            "owner": 160,
+            "tile": [
+              66,
+              37
+            ],
+            "before": 1.4800000190734863,
+            "after": 1.4800000190734863,
+            "expected": 1.4800000190734863
+          }
+        ],
+        "changedTiles": 14,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 60236,
+      "after": 60196,
+      "changedOwners": [
+        "94",
+        "154",
+        "160"
+      ],
+      "frames": 39,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "gallery",
+      "force": 1,
+      "construction": {
+        "targetTiles": [
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.4697999954223633,
+            "expected": 0.4697999954223633
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              25
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.6873000264167786,
+            "expected": 0.6873000264167786
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              25
+            ],
+            "before": 0.6190000176429749,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              26
+            ],
+            "before": 0.6190000176429749,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              26
+            ],
+            "before": 0,
+            "after": 0.26969999074935913,
+            "expected": 0.26969999074935913
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              26
+            ],
+            "before": 0,
+            "after": 0.8700000047683716,
+            "expected": 0.8700000047683716
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              26
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.8700000047683716,
+            "expected": 0.8700000047683716
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              27
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.4697999954223633,
+            "expected": 0.4697999954223633
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              27
+            ],
+            "before": 0,
+            "after": 0.6873000264167786,
+            "expected": 0.6873000264167786
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              27
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.609000027179718,
+            "expected": 0.609000027179718
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              27
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.39149999618530273,
+            "expected": 0.39149999618530273
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              28
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.243599995970726,
+            "expected": 0.243599995970726
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              28
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.374099999666214,
+            "expected": 0.374099999666214
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              28
+            ],
+            "before": 0.6190000176429749,
+            "after": 0.03914999961853027,
+            "expected": 0.03914999961853027
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              28
+            ],
+            "before": 0.8700000047683716,
+            "after": 0.03914999961853027,
+            "expected": 0.03914999961853027
+          },
+          {
+            "owner": 154,
+            "tile": [
+              54,
+              37
+            ],
+            "before": 0.6600000262260437,
+            "after": 0.6600000262260437,
+            "expected": 0.6600000262260437
+          },
+          {
+            "owner": 160,
+            "tile": [
+              66,
+              37
+            ],
+            "before": 0.8799999952316284,
+            "after": 0.8799999952316284,
+            "expected": 0.8799999952316284
+          }
+        ],
+        "changedTiles": 16,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 60236,
+      "after": 60172,
+      "changedOwners": [
+        "94",
+        "154",
+        "160"
+      ],
+      "frames": 39,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "gallery",
+      "force": 2,
+      "construction": {
+        "targetTiles": [
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.45239999890327454,
+            "expected": 0.45239999890327454
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              25
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.45239999890327454,
+            "expected": 0.45239999890327454
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              25
+            ],
+            "before": 0.5559999942779541,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              25
+            ],
+            "before": 0.004000000189989805,
+            "after": 0,
+            "expected": 0
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              26
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.7799999713897705,
+            "expected": 0.7799999713897705
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              26
+            ],
+            "before": 0,
+            "after": 0.7799999713897705,
+            "expected": 0.7799999713897705
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              26
+            ],
+            "before": 0,
+            "after": 0.32760000228881836,
+            "expected": 0.32760000228881836
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              26
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.32760000228881836,
+            "expected": 0.32760000228881836
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              27
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.45239999890327454,
+            "expected": 0.45239999890327454
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              27
+            ],
+            "before": 0,
+            "after": 0.45239999890327454,
+            "expected": 0.45239999890327454
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              27
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.5303999781608582,
+            "expected": 0.5303999781608582
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              27
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.5303999781608582,
+            "expected": 0.5303999781608582
+          },
+          {
+            "owner": 94,
+            "tile": [
+              8,
+              28
+            ],
+            "before": 0.004000000189989805,
+            "after": 0.22619999945163727,
+            "expected": 0.22619999945163727
+          },
+          {
+            "owner": 94,
+            "tile": [
+              9,
+              28
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.35100001096725464,
+            "expected": 0.35100001096725464
+          },
+          {
+            "owner": 94,
+            "tile": [
+              10,
+              28
+            ],
+            "before": 0.5559999942779541,
+            "after": 0.32760000228881836,
+            "expected": 0.32760000228881836
+          },
+          {
+            "owner": 94,
+            "tile": [
+              11,
+              28
+            ],
+            "before": 0.7799999713897705,
+            "after": 0.32760000228881836,
+            "expected": 0.32760000228881836
+          },
+          {
+            "owner": 154,
+            "tile": [
+              54,
+              37
+            ],
+            "before": 0.5600000023841858,
+            "after": 0.5600000023841858,
+            "expected": 0.5600000023841858
+          },
+          {
+            "owner": 160,
+            "tile": [
+              66,
+              37
+            ],
+            "before": 0.9100000262260437,
+            "after": 0.9100000262260437,
+            "expected": 0.9100000262260437
+          }
+        ],
+        "changedTiles": 16,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 60236,
+      "after": 60164,
+      "changedOwners": [
+        "94",
+        "154",
+        "160"
+      ],
+      "frames": 39,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "ai120",
+      "force": null,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 95505,
+      "after": 95505,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "ai120",
+      "force": 0,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 95505,
+      "after": 95505,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "ai120",
+      "force": 1,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 95505,
+      "after": 95505,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "ai120",
+      "force": 2,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 95505,
+      "after": 95505,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "seed516",
+      "force": null,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 112758,
+      "after": 112758,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "seed516",
+      "force": 0,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 112758,
+      "after": 112758,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "seed516",
+      "force": 1,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 112758,
+      "after": 112758,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    },
+    {
+      "sample": "seed516",
+      "force": 2,
+      "construction": {
+        "targetTiles": [],
+        "changedTiles": 0,
+        "nonTargetTilesExact": true,
+        "baseWallTopBlockOfExact": true,
+        "rule": "Frozen unit-d082.mjs target-footprint envelope allowance, independently recomputed from emitted source geometry. Saved world, history and simulation remain unchanged."
+      },
+      "before": 112758,
+      "after": 112758,
+      "changedOwners": [],
+      "frames": 3,
+      "allOtherOwnersByteExact": true,
+      "worldUnchanged": true,
+      "legacyCopiedQualification": "Exact immutable published raw scene digest, weighted cost, world and independent per-slot bytes for every native/v0/v1/v2 copy."
+    }
+  ],
+  "referenceModels": [
+    {
+      "id": "reference-D059-church",
+      "family": "D059 village church",
+      "sample": "gallery",
+      "owner": 53,
+      "k": 16,
+      "x": 28.5,
+      "z": 13.5,
+      "size": 1
+    },
+    {
+      "id": "reference-D065-villa",
+      "family": "D065 villa",
+      "sample": "ai120",
+      "owner": -19,
+      "k": 1,
+      "x": 31.5,
+      "z": 32.5,
+      "size": 1
+    }
+  ],
+  "negativeControls": 63,
+  "targets": [
+    {
+      "k": 179,
+      "v": 0,
+      "H": 0.78,
+      "size": 1,
+      "cap": 182,
+      "triangles": [
+        30,
+        56,
+        0
+      ],
+      "weighted": 172,
+      "top": 0.78,
+      "surface": {
+        "key": "179:0",
+        "planes": 34,
+        "maxError": 3.3306690738754696e-16,
+        "faces": 38,
+        "triangles": 86,
+        "analyticSolids": 7,
+        "virtualGroundCaps": 2,
+        "closedElevatedSolids": 5,
+        "doorTriangles": 2,
+        "negativeControls": 175,
+        "contractSha256": "d2b1c39136c111821ab6d99c7afae5311bd0209d45a1f3615e3e71648eb457f4"
+      },
+      "solids": {
+        "volumes": [
+          0.20756999999999998,
+          0.05613299999999996,
+          0.011969999999999998,
+          0.003960000000000011,
+          0.0017100000000000123,
+          0.00005999999999999394,
+          0.000059999999999985995
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0.0012600000000000007,
+            "vertices": 8
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.0006299999999999886,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:4",
+            "volume": 0.0005827500000000041,
+            "vertices": 10
+          },
+          {
+            "pair": "4:5",
+            "volume": 2.0057740190981832e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "4:6",
+            "volume": 0,
+            "vertices": 4
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0.001261,
+          "0:3": 0.000631,
+          "2:3": 0,
+          "1:4": 0.000584,
+          "4:5": 0,
+          "4:6": 0
+        },
+        "negativeControls": 82
+      }
+    },
+    {
+      "k": 179,
+      "v": 1,
+      "H": 0.66,
+      "size": 1,
+      "cap": 182,
+      "triangles": [
+        48,
+        40,
+        0
+      ],
+      "weighted": 176,
+      "top": 0.66,
+      "surface": {
+        "key": "179:1",
+        "planes": 26,
+        "maxError": 1.3877787807814457e-16,
+        "faces": 40,
+        "triangles": 88,
+        "analyticSolids": 7,
+        "virtualGroundCaps": 3,
+        "closedElevatedSolids": 4,
+        "doorTriangles": 2,
+        "negativeControls": 179,
+        "contractSha256": "1e72156b1481debcbcaa6a0211e0fd7432826b44cd16ba0713f9c6aad8ac6909"
+      },
+      "solids": {
+        "volumes": [
+          0.14655199999999996,
+          0.04436799999999999,
+          0.04901550000000003,
+          0.014852250000000004,
+          0.010425500000000004,
+          0.003344000000000006,
+          0.0025920000000000023
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 1.0408340855860843e-17,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0.0017205357142857213,
+            "vertices": 6
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.0009394506987577644,
+            "vertices": 8
+          },
+          {
+            "pair": "1:3",
+            "volume": 0.00005207681356242681,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 8.673617379884035e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "0:4",
+            "volume": 0.001882281250000002,
+            "vertices": 8
+          },
+          {
+            "pair": "0:5",
+            "volume": 0.0007778571428571483,
+            "vertices": 6
+          },
+          {
+            "pair": "4:5",
+            "volume": 5.204170427930421e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "1:6",
+            "volume": 0.00045344680851064063,
+            "vertices": 8
+          }
+        ],
+        "maxSamePlaneOverlap": 2.7755575615628914e-17,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0.0017205357142857213,
+          "0:3": 0.0009394506987577644,
+          "1:3": 0.00005207681356242681,
+          "2:3": 0,
+          "0:4": 0.001882281250000002,
+          "0:5": 0.0007778571428571483,
+          "4:5": 0,
+          "1:6": 0.00045344680851064063
+        },
+        "negativeControls": 80
+      }
+    },
+    {
+      "k": 179,
+      "v": 2,
+      "H": 0.56,
+      "size": 1,
+      "cap": 182,
+      "triangles": [
+        46,
+        42,
+        0
+      ],
+      "weighted": 176,
+      "top": 0.56,
+      "surface": {
+        "key": "179:2",
+        "planes": 34,
+        "maxError": 4.440892098500626e-16,
+        "faces": 36,
+        "triangles": 88,
+        "analyticSolids": 7,
+        "virtualGroundCaps": 3,
+        "closedElevatedSolids": 4,
+        "doorTriangles": 2,
+        "negativeControls": 179,
+        "contractSha256": "8a632af7e6510a4629ff537b4a0b4222b494f0ece53393d09c2a8a1cb106dfcd"
+      },
+      "solids": {
+        "volumes": [
+          0.104976,
+          0.03556799999999999,
+          0.06991999999999998,
+          0.026444999999999993,
+          0.00832000000000001,
+          0.0034960000000000043,
+          0.002231999999999997
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 3.469446951953614e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.00006832317073171505,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 5.204170427930421e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "0:4",
+            "volume": 0.0003119999999999976,
+            "vertices": 8
+          },
+          {
+            "pair": "2:4",
+            "volume": 0.0007279999999999884,
+            "vertices": 8
+          },
+          {
+            "pair": "0:5",
+            "volume": 0.00013695652173913143,
+            "vertices": 6
+          },
+          {
+            "pair": "2:5",
+            "volume": 0.0005070434782608749,
+            "vertices": 8
+          },
+          {
+            "pair": "4:5",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:6",
+            "volume": 0.00039995372596154255,
+            "vertices": 6
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0,
+          "0:3": 0.00007,
+          "2:3": 0,
+          "0:4": 0.000314,
+          "2:4": 0.00073,
+          "0:5": 0.000139,
+          "2:5": 0.00051,
+          "4:5": 0,
+          "1:6": 0.000402
+        },
+        "negativeControls": 80
+      }
+    },
+    {
+      "k": 185,
+      "v": 0,
+      "H": 1.48,
+      "size": 1,
+      "cap": 120,
+      "triangles": [
+        26,
+        32,
+        0
+      ],
+      "weighted": 116,
+      "top": 1.48,
+      "surface": {
+        "key": "185:0",
+        "planes": 27,
+        "maxError": 1.1102230246251565e-16,
+        "faces": 27,
+        "triangles": 58,
+        "analyticSolids": 5,
+        "virtualGroundCaps": 2,
+        "closedElevatedSolids": 3,
+        "doorTriangles": 2,
+        "negativeControls": 119,
+        "contractSha256": "7644a9750e949565f21fe6a6deff3d8cb2e5c8a17b42ce3b88f9c45c68973820"
+      },
+      "solids": {
+        "volumes": [
+          0.12311999999999995,
+          0.016422840000000022,
+          0.03306000000000001,
+          0.009183999999999994,
+          0.0010080000000000015
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0.000780000000000008,
+            "vertices": 8
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.00007519531249999732,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 6.071532165918825e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "1:4",
+            "volume": 0.00017828571428570874,
+            "vertices": 8
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0.000782,
+          "0:3": 0.000078,
+          "2:3": 0,
+          "1:4": 0.000181
+        },
+        "negativeControls": 58
+      }
+    },
+    {
+      "k": 185,
+      "v": 1,
+      "H": 0.88,
+      "size": 1,
+      "cap": 120,
+      "triangles": [
+        24,
+        36,
+        0
+      ],
+      "weighted": 120,
+      "top": 0.8800000000000001,
+      "surface": {
+        "key": "185:1",
+        "planes": 19,
+        "maxError": 5.551115123125783e-17,
+        "faces": 35,
+        "triangles": 60,
+        "analyticSolids": 5,
+        "virtualGroundCaps": 2,
+        "closedElevatedSolids": 3,
+        "doorTriangles": 2,
+        "negativeControls": 123,
+        "contractSha256": "8d0b9a3f6e7ff1430ca509ab6c3fe0dffeb7729c21c0d4ed9f751a9655eb081b"
+      },
+      "solids": {
+        "volumes": [
+          0.1941125,
+          0.05582500000000001,
+          0.024514000000000015,
+          0.008855,
+          0.0021600000000000052
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 6.938893903907228e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0.0037011886792452896,
+            "vertices": 8
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.0017618792881646727,
+            "vertices": 8
+          },
+          {
+            "pair": "1:3",
+            "volume": 0.000029623824451424337,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:4",
+            "volume": 0.000592560000000002,
+            "vertices": 10
+          }
+        ],
+        "maxSamePlaneOverlap": 2.7755575615628914e-17,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0.0037011886792452896,
+          "0:3": 0.0017618792881646727,
+          "1:3": 0.000029623824451424337,
+          "2:3": 0,
+          "1:4": 0.000592560000000002
+        },
+        "negativeControls": 58
+      }
+    },
+    {
+      "k": 185,
+      "v": 2,
+      "H": 0.91,
+      "size": 1,
+      "cap": 120,
+      "triangles": [
+        25,
+        31,
+        0
+      ],
+      "weighted": 112,
+      "top": 0.9100000000000001,
+      "surface": {
+        "key": "185:2",
+        "planes": 19,
+        "maxError": 2.636779683484747e-16,
+        "faces": 31,
+        "triangles": 56,
+        "analyticSolids": 5,
+        "virtualGroundCaps": 2,
+        "closedElevatedSolids": 3,
+        "doorTriangles": 2,
+        "negativeControls": 115,
+        "contractSha256": "6068fbe0cd2d8711b879e12962fe80fd0dafde1a49668951bfada07098fa1359"
+      },
+      "solids": {
+        "volumes": [
+          0.21456699999999998,
+          0.04721639999999999,
+          0.014074000000000012,
+          0.0039000000000000163,
+          0.0017920000000000032
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0.002521741228070173,
+            "vertices": 8
+          },
+          {
+            "pair": "0:3",
+            "volume": 0.0009288157894736717,
+            "vertices": 6
+          },
+          {
+            "pair": "2:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:4",
+            "volume": 0.00035842242288744734,
+            "vertices": 10
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0.002521741228070173,
+          "0:3": 0.0009288157894736717,
+          "2:3": 0,
+          "1:4": 0.00035842242288744734
+        },
+        "negativeControls": 58
+      }
+    },
+    {
+      "k": 154,
+      "v": 0,
+      "H": 0.33,
+      "size": 4,
+      "cap": 342,
+      "triangles": [
+        46,
+        112,
+        0
+      ],
+      "weighted": 316,
+      "top": 0.33000000000000007,
+      "surface": {
+        "key": "154:0",
+        "planes": 55,
+        "maxError": 8.326672684688674e-17,
+        "faces": 76,
+        "triangles": 158,
+        "analyticSolids": 14,
+        "virtualGroundCaps": 4,
+        "closedElevatedSolids": 10,
+        "doorTriangles": 2,
+        "negativeControls": 319,
+        "contractSha256": "a9ca9f4cc5d6bc005a2b471a941610242a1b5556cb2927848f956cd9f07b3a8b"
+      },
+      "solids": {
+        "volumes": [
+          0.017999999999999995,
+          0.001959999999999998,
+          0.001959999999999993,
+          0.0019999999999999983,
+          0.0019999999999999957,
+          0.026656000000000013,
+          0.009216000000000002,
+          0.026655999999999985,
+          0.009216000000000009,
+          0.02643200000000002,
+          0.007560000000000009,
+          0.0035000000000000014,
+          0.0013679999999999908,
+          0.00027599999999998123
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 4.336808689942018e-19,
+            "vertices": 4
+          },
+          {
+            "pair": "0:2",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:3",
+            "volume": 1.1926223897340549e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "0:4",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:4",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:4",
+            "volume": 1.0842021724855044e-19,
+            "vertices": 4
+          },
+          {
+            "pair": "1:5",
+            "volume": 1.3010426069826053e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "5:6",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:7",
+            "volume": 5.204170427930421e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "7:8",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "4:9",
+            "volume": 0.0005600000000000049,
+            "vertices": 8
+          },
+          {
+            "pair": "9:10",
+            "volume": 6.938893903907228e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "9:11",
+            "volume": 0.0007000000000000001,
+            "vertices": 8
+          },
+          {
+            "pair": "9:12",
+            "volume": 0.00034199999999999986,
+            "vertices": 6
+          },
+          {
+            "pair": "11:12",
+            "volume": 7.48099499014998e-18,
+            "vertices": 4
+          },
+          {
+            "pair": "10:13",
+            "volume": 0.00008266666666667966,
+            "vertices": 10
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "0:2": 0,
+          "0:3": 0,
+          "1:3": 0,
+          "2:3": 0,
+          "0:4": 0,
+          "1:4": 0,
+          "2:4": 0,
+          "1:5": 0,
+          "5:6": 0,
+          "2:7": 0,
+          "7:8": 0,
+          "4:9": 0.000562,
+          "9:10": 0,
+          "9:11": 0.000702,
+          "9:12": 0.000344,
+          "11:12": 0,
+          "10:13": 0.000085
+        },
+        "negativeControls": 162
+      }
+    },
+    {
+      "k": 154,
+      "v": 1,
+      "H": 0.87,
+      "size": 4,
+      "cap": 342,
+      "triangles": [
+        54,
+        88,
+        0
+      ],
+      "weighted": 284,
+      "top": 0.8700000000000001,
+      "surface": {
+        "key": "154:1",
+        "planes": 59,
+        "maxError": 1.3877787807814457e-16,
+        "faces": 64,
+        "triangles": 142,
+        "analyticSolids": 12,
+        "virtualGroundCaps": 4,
+        "closedElevatedSolids": 8,
+        "doorTriangles": 2,
+        "negativeControls": 287,
+        "contractSha256": "41d983bac1475d227e5cea5cda8174fbb252cb75c416850e06793c68895e0d44"
+      },
+      "solids": {
+        "volumes": [
+          0.08143199999999998,
+          0.020924999999999992,
+          0.06137999999999999,
+          0.01897499999999999,
+          0.011160000000000008,
+          0.002430999999999992,
+          0.004704000000000005,
+          0.0016799999999999994,
+          0.002793000000000028,
+          0.0005000000000000138,
+          0.008315999999999999,
+          0.007560000000000002
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:3",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:4",
+            "volume": 0.0014879999999999963,
+            "vertices": 8
+          },
+          {
+            "pair": "2:4",
+            "volume": 0.0014880000000000006,
+            "vertices": 8
+          },
+          {
+            "pair": "0:5",
+            "volume": 0.0004289999999999962,
+            "vertices": 6
+          },
+          {
+            "pair": "2:5",
+            "volume": 0.000429000000000014,
+            "vertices": 6
+          },
+          {
+            "pair": "4:5",
+            "volume": 6.505213034913027e-19,
+            "vertices": 4
+          },
+          {
+            "pair": "0:6",
+            "volume": 0.0006720000000000033,
+            "vertices": 8
+          },
+          {
+            "pair": "0:7",
+            "volume": 0.0003150000000000041,
+            "vertices": 6
+          },
+          {
+            "pair": "6:7",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:8",
+            "volume": 0.00009799999999999848,
+            "vertices": 8
+          },
+          {
+            "pair": "3:8",
+            "volume": 0.000999621212121228,
+            "vertices": 10
+          },
+          {
+            "pair": "8:9",
+            "volume": 0.0002450000000000154,
+            "vertices": 8
+          },
+          {
+            "pair": "0:10",
+            "volume": 0.006786,
+            "vertices": 8
+          },
+          {
+            "pair": "4:10",
+            "volume": 0.00043199999999999966,
+            "vertices": 8
+          },
+          {
+            "pair": "6:10",
+            "volume": 0.00021599999999999926,
+            "vertices": 8
+          },
+          {
+            "pair": "2:11",
+            "volume": 0.006138,
+            "vertices": 8
+          },
+          {
+            "pair": "4:11",
+            "volume": 0.0004319999999999988,
+            "vertices": 8
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "2:3": 0,
+          "0:4": 0.00149,
+          "2:4": 0.00149,
+          "0:5": 0.000431,
+          "2:5": 0.000431,
+          "4:5": 0,
+          "0:6": 0.000674,
+          "0:7": 0.000317,
+          "6:7": 0,
+          "2:8": 0.0001,
+          "3:8": 0.001002,
+          "8:9": 0.000247,
+          "0:10": 0.006788,
+          "4:10": 0.000434,
+          "6:10": 0.000218,
+          "2:11": 0.00614,
+          "4:11": 0.000434
+        },
+        "negativeControls": 138
+      }
+    },
+    {
+      "k": 154,
+      "v": 2,
+      "H": 0.78,
+      "size": 4,
+      "cap": 342,
+      "triangles": [
+        54,
+        88,
+        0
+      ],
+      "weighted": 284,
+      "top": 0.78,
+      "surface": {
+        "key": "154:2",
+        "planes": 58,
+        "maxError": 1.6653345369377348e-16,
+        "faces": 64,
+        "triangles": 142,
+        "analyticSolids": 12,
+        "virtualGroundCaps": 4,
+        "closedElevatedSolids": 8,
+        "doorTriangles": 2,
+        "negativeControls": 287,
+        "contractSha256": "984dbdf26031cf43645a47d0f572d1b69f76dc7f53b7c7aa127f55d4b9374ef5"
+      },
+      "solids": {
+        "volumes": [
+          0.08352,
+          0.01837836000000001,
+          0.055692,
+          0.020201999999999987,
+          0.0074480000000000015,
+          0.0018479999999999976,
+          0.005568000000000001,
+          0.0020160000000000017,
+          0.0006074999999999926,
+          0.0004725000000000073,
+          0.006188,
+          0.005719000000000005
+        ],
+        "intersections": [
+          {
+            "pair": "0:1",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "2:3",
+            "volume": 1.214306433183765e-17,
+            "vertices": 4
+          },
+          {
+            "pair": "0:4",
+            "volume": 0.0010639999999999955,
+            "vertices": 8
+          },
+          {
+            "pair": "2:4",
+            "volume": 0.001063999999999998,
+            "vertices": 8
+          },
+          {
+            "pair": "0:5",
+            "volume": 0.0003465000000000078,
+            "vertices": 6
+          },
+          {
+            "pair": "2:5",
+            "volume": 0.00034649999999999785,
+            "vertices": 6
+          },
+          {
+            "pair": "4:5",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "0:6",
+            "volume": 0.000696000000000003,
+            "vertices": 8
+          },
+          {
+            "pair": "0:7",
+            "volume": 0.00033600000000000253,
+            "vertices": 6
+          },
+          {
+            "pair": "6:7",
+            "volume": 0,
+            "vertices": 4
+          },
+          {
+            "pair": "1:8",
+            "volume": 0.000007337952488692859,
+            "vertices": 6
+          },
+          {
+            "pair": "1:9",
+            "volume": 0.0000057072963801000324,
+            "vertices": 6
+          },
+          {
+            "pair": "0:10",
+            "volume": 0.005040000000000001,
+            "vertices": 8
+          },
+          {
+            "pair": "4:10",
+            "volume": 0.0002660000000000008,
+            "vertices": 8
+          },
+          {
+            "pair": "6:10",
+            "volume": 0.00016799999999999945,
+            "vertices": 8
+          },
+          {
+            "pair": "2:11",
+            "volume": 0.004640999999999999,
+            "vertices": 8
+          },
+          {
+            "pair": "4:11",
+            "volume": 0.0002660000000000003,
+            "vertices": 8
+          }
+        ],
+        "maxSamePlaneOverlap": 0,
+        "attachmentBounds": {
+          "0:1": 0,
+          "2:3": 0,
+          "0:4": 0.001066,
+          "2:4": 0.001066,
+          "0:5": 0.000349,
+          "2:5": 0.000349,
+          "4:5": 0,
+          "0:6": 0.000698,
+          "0:7": 0.000338,
+          "6:7": 0,
+          "1:8": 0.00001,
+          "1:9": 0.000008,
+          "0:10": 0.005042,
+          "4:10": 0.000268,
+          "6:10": 0.00017,
+          "2:11": 0.004643,
+          "4:11": 0.000268
+        },
+        "negativeControls": 138
+      }
+    }
+  ],
+  "priorModels": [
+    "65:0",
+    "65:1",
+    "65:2",
+    "86:0",
+    "86:1",
+    "86:2",
+    "91:0",
+    "91:1",
+    "91:2",
+    "98:0",
+    "98:1",
+    "98:2",
+    "99:0",
+    "99:1",
+    "99:2",
+    "57:0",
+    "57:1",
+    "57:2",
+    "64:0",
+    "64:1",
+    "64:2",
+    "110:0",
+    "110:1",
+    "110:2",
+    "167:0",
+    "167:1",
+    "167:2",
+    "168:0",
+    "168:1",
+    "168:2",
+    "32:0",
+    "32:1",
+    "32:2",
+    "45:0",
+    "45:1",
+    "45:2",
+    "108:0",
+    "108:1",
+    "108:2",
+    "109:0",
+    "109:1",
+    "109:2",
+    "48:0",
+    "48:1",
+    "48:2",
+    "115:0",
+    "115:1",
+    "115:2",
+    "31:0",
+    "31:1",
+    "31:2",
+    "61:0",
+    "61:1",
+    "61:2",
+    "82:0",
+    "82:1",
+    "82:2",
+    "83:0",
+    "83:1",
+    "83:2",
+    "23:0",
+    "23:1",
+    "23:2",
+    "23:3",
+    "23:4",
+    "54:0",
+    "54:1",
+    "54:2",
+    "47:0",
+    "47:1",
+    "131:0",
+    "131:1",
+    "131:2",
+    "107:0",
+    "107:1",
+    "107:2",
+    "149:0",
+    "149:1",
+    "149:2",
+    "149:3",
+    "164:0",
+    "164:1",
+    "164:2",
+    "119:0",
+    "119:1",
+    "119:2",
+    "116:0",
+    "149:4",
+    "81:0",
+    "81:1",
+    "81:2",
+    "84:0",
+    "84:1",
+    "84:2",
+    "85:0",
+    "85:1",
+    "85:2",
+    "130:0",
+    "130:1",
+    "130:2",
+    "21:0",
+    "21:1",
+    "21:2",
+    "29:0",
+    "29:1",
+    "29:2",
+    "29:3",
+    "37:0",
+    "37:1",
+    "37:2",
+    "21:3",
+    "21:4",
+    "29:4",
+    "127:0",
+    "127:1",
+    "127:2",
+    "120:0",
+    "120:1",
+    "120:2",
+    "72:0",
+    "160:0",
+    "160:1",
+    "160:2",
+    "160:3",
+    "160:4",
+    "182:0",
+    "182:1",
+    "182:2",
+    "72:1",
+    "72:2"
+  ],
+  "structuralIdentity": {
+    "distinctNew": 9,
+    "priorCompared": 130
+  }
+}

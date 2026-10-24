@@ -17,7 +17,7 @@ import { packMore, PACK0 } from '../src/io/journal.ts';
 import { liveBuildings } from '../src/sim/city.ts';
 import { stepDay, simCounts } from '../src/sim/day.ts';
 import { startResearch, chooseSpec, setPolicy, setBudget, powerStatus, canUndo, toolLock,
-  ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE, acceptCommission, dropCommission, commissionOffers, commissionState } from '../src/sim/edit.ts';
+  ROAD_TOOLS, CIVIC_TOOLS, HERITAGE_TOOLS, TOOL_PRICE, acceptCommission, dropCommission, commissionOffers, commissionState } from '../src/sim/edit.ts';
 import { assignPower } from '../src/sim/rules/power.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from '../src/sim/rules/tech.ts';
 import { CMS_BY_ID385, NO_RIDERSHIP, cmsToast } from '../src/sim/rules/commission.ts';
@@ -225,7 +225,7 @@ function harness(fixture, source = city, options = {}) {
   const dependencies = { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee,
     CMS_BY_ID385, NO_RIDERSHIP, cmsToast, commissionOffers, commissionState, chooseSpec,
     POLICY_CATALOG, POLICY_SHOWN, POLICY_FEE, BUDGET_CATS, BUDGET_STEP, INSURANCE_TOAST, cooldownLeft, stepTax, upRegOf,
-    saveCode, SAVE_LIMIT, packMore, PACK0, liveBuildings, simCounts, powerStatus, canUndo, toolLock, ROAD_TOOLS, CIVIC_TOOLS, TOOL_PRICE,
+    saveCode, SAVE_LIMIT, packMore, PACK0, liveBuildings, simCounts, powerStatus, canUndo, toolLock, ROAD_TOOLS, CIVIC_TOOLS, HERITAGE_TOOLS, TOOL_PRICE,
     CITY_EVENTS, RANKS, rankBuildNote, depletedToastText, mergesToastText, MEGA_POP, MEGA_JOBS,
   };
   const chunks = [

@@ -1,0 +1,14 @@
+// Independent numerical finite-repair contract. Historical SOLIDS stays unmodified.
+// Only wall-to-eave joins and the specified masonry foundations differ.
+import {Vector3} from 'three';
+import {SOLIDS,solidFaces} from './d082-redesign-surfaces.mjs';
+import {joinedExterior} from './d082-179v1-envelope.mjs';
+export const REVISION_SLOTS=['179:0','179:2','185:0','154:0','154:1','154:2'];
+export const FOUNDATION_COMPONENTS=Object.freeze({'179:0':[4],'179:2':[6],'185:0':[4],'154:1':[8],'154:2':[8,9]});
+export const ORIGINAL_CAPS=Object.freeze({'179:0':182,'179:2':182,'185:0':120,'154:0':342,'154:1':342,'154:2':342});
+const V=p=>new Vector3(...p),mean=ps=>ps.reduce((a,p)=>a.map((x,i)=>x+p[i]/ps.length),[0,0,0]);
+function taperedBody(spec,roof,solid){const[,x0,x1,z0,z1,h]=spec,[,a,b,c,d]=roof,base=[[x0,0,z0],[x1,0,z0],[x1,0,z1],[x0,0,z1]],top=[[a,h,c],[b,h,c],[b,h,d],[a,h,d]],center=mean([...base,...top]);return[base,top,...base.map((p,i)=>[p,base[(i+1)%4],top[(i+1)%4],top[i]])].map((points,i)=>{let n=V(points[1]).sub(V(points[0])).cross(V(points[2]).sub(V(points[0]))).normalize();if(n.dot(V(mean(points)).sub(V(center)))<0){points=points.toReversed();n.negate();}return{points,normal:n.toArray(),d:n.dot(V(points[0])),virtual:i===0,solid,kind:'finite-wall-to-existing-eave'};});}
+export function revisionPlan(slot){if(!REVISION_SLOTS.includes(slot))throw new Error('unsupported revision slot');const specs=structuredClone(SOLIDS[slot]);for(const i of FOUNDATION_COMPONENTS[slot]??[])specs[i][5]=0;const solids=specs.map((s,i)=>s[0]==='body'?taperedBody(s,specs[i+1],i):solidFaces(s,i));const groups=slot==='154:0'?[solids]:['154:1','154:2'].includes(slot)?[solids.filter((f,i)=>specs[i][0]!=='box'),...solids.filter((f,i)=>specs[i][0]==='box').map(f=>[f])]:solids.reduce((groups,solid,i)=>{if(specs[i][0]==='body')groups.push([solid,solids[i+1]]);else if(specs[i][0]==='box')groups.push([solid]);return groups;},[]);return{slot,originalCap:ORIGINAL_CAPS[slot],oldPrimitives:SOLIDS[slot],newPrimitives:specs,foundationComponents:FOUNDATION_COMPONENTS[slot]??[],solids,groups,exterior:groups.flatMap(joinedExterior).filter(f=>!f.virtual&& !f.points.every(p=>p[1]===0)),qualification:'Each original architectural volume retains its roof, footprint, height and semantic part. Wall tops meet original eaves. Explicit flues extend to foundation within existing footprints.154v0 uses a fully joined reservoir envelope; other contacts retain independent closed architectural volumes.'};}
+
+// Current finite join has a separate versioned oracle; revisionPlan retains the predecessor primitives.
+export {independentJoinFaces} from './d082-remaining-geometry-join-envelope.mjs';

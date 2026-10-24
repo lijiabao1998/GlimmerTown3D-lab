@@ -1,0 +1,56 @@
+{
+  "qualification": "Uncommitted geometry proposal only. Old pins and all required-probe ledgers remain intact. Not a passing product candidate.",
+  "slot": "179:1",
+  "changes": {
+    "bodyGroundFootprints": "unchanged",
+    "roofSilhouette": "unchanged",
+    "wallTopXz": {
+      "0.14,0.58,0.2,0.76": [
+        0.125,
+        0.595,
+        0.185,
+        0.775
+      ],
+      "0.58,0.87,0.36,0.74": [
+        0.57,
+        0.885,
+        0.345,
+        0.755
+      ],
+      "0.34,0.53,0.74,0.9": [
+        0.325,
+        0.545,
+        0.725,
+        0.915
+      ]
+    },
+    "chimney": {
+      "bottomBefore": 0.71,
+      "bottomAfter": 0.64,
+      "worldChange": -0.0462,
+      "top": 1,
+      "footprint": [
+        0.19,
+        0.27,
+        0.4,
+        0.49
+      ]
+    }
+  },
+  "beforeWeighted": 176,
+  "afterWeighted": 216,
+  "cap": 182,
+  "topology": {
+    "triangles": 120,
+    "edges": 180,
+    "invalidEdges": 0,
+    "examples": [],
+    "volume": 0.17511357703753733
+  },
+  "candidateSha256": "a6378f5a920159d06a84e4bee3d0238848352443f8931cd4eda80c5bdb97ba05",
+  "evidenceStage": "early-research-before-facade-masks-and-inventory-subdivision",
+  "statusAtCapture": "uncommitted research",
+  "historicalValuesPreserved": true,
+  "supersededBy": "final-authoritative-evidence.json",
+  "note": "216 weighted / 120 triangles including virtual ground caps and this raw serializer hash are early research values, not the final 176 weighted / 88 rendered triangles or emitted product hash. All original historical fields are retained."
+}

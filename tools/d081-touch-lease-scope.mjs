@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
+import {d082HistoricalBytes} from './d082-scope.mjs';
 
 export const D081_TOUCH_LEASE_BASELINE='9e3452a438331feec4082f6821cfcb0b0e653c4b';
 export const D081_TOUCH_LEASE_BEFORE=Object.freeze({
@@ -21,6 +22,8 @@ export const D081_TOUCH_LEASE_AFTER=Object.freeze({
 });
 const paths=Object.keys(D081_TOUCH_LEASE_BEFORE).sort();
 const diskRead=file=>fs.readFileSync(path.join(ROOT,file),'utf8');
+// Source accounting only: remove the exact SHA-pinned D082 layer before testing the original touch contract.
+const priorCandidateRead=file=>paths.includes(file)?d082HistoricalBytes(file,diskRead):diskRead(file);
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const fixture=JSON.parse(diskRead('fixtures/d081-touch-lease-scope.json'));
 function validate(value) {
@@ -52,8 +55,8 @@ function historical(file,read,value) {
   assert.equal(sha(current),D081_TOUCH_LEASE_AFTER[file],file+' exact allowed source: frozen D081 touch lease repair');
   return value.files[file].beforeBytes;
 }
-export function d081TouchLeaseHistoricalBytes(file,read=diskRead) { return historical(file,read,fixture); }
-export function isD081TouchLeaseAllowed(file,read=diskRead) {
+export function d081TouchLeaseHistoricalBytes(file,read=priorCandidateRead) { return historical(file,read,fixture); }
+export function isD081TouchLeaseAllowed(file,read=priorCandidateRead) {
   if(!paths.includes(file))return false;
   d081TouchLeaseHistoricalBytes(file,read);return true;
 }
@@ -91,7 +94,7 @@ export async function d081TouchLeaseScopeGuards(log=()=>{}) {
   });
   test('actual candidate checked once before exact restoration and diff allowance',()=>{
     for(const file of paths){
-      const reads=[],read=name=>{reads.push(name);return diskRead(name);};
+      const reads=[],read=name=>{reads.push(name);return priorCandidateRead(name);};
       assert.equal(d081TouchLeaseHistoricalBytes(file,read),fixture.files[file].beforeBytes);
       assert.deepEqual(reads,[file]);
       assert.equal(isD081TouchLeaseAllowed(file,read),true);assert.deepEqual(reads,[file,file]);
@@ -106,7 +109,7 @@ export async function d081TouchLeaseScopeGuards(log=()=>{}) {
   });
   test('old sources, one-byte mutations and missing sources fail closed',()=>{
     for(const file of paths){
-      const current=diskRead(file);
+      const current=priorCandidateRead(file);
       for(const raw of [fixture.files[file].beforeBytes,current+'\n',current.slice(0,-1),current.replace(/./,c=>c==='X'?'Y':'X'),'',null,undefined]){
         assert.throws(()=>d081TouchLeaseHistoricalBytes(file,()=>raw),/exact allowed source/);
         assert.throws(()=>isD081TouchLeaseAllowed(file,()=>raw),/exact allowed source/);
@@ -123,7 +126,7 @@ export async function d081TouchLeaseScopeGuards(log=()=>{}) {
       const bad=structuredClone(fixture);delete bad.files[file];variants.push(bad);
       for(const key of Object.keys(fixture.files[file])){const bad=structuredClone(fixture);delete bad.files[file][key];variants.push(bad);}
     }
-    for(const value of variants)assert.throws(()=>historical(paths[0],diskRead,value),/D081 touch lease fixture/);
+    for(const value of variants)assert.throws(()=>historical(paths[0],priorCandidateRead,value),/D081 touch lease fixture/);
   });
   const outer=await import('./d081-scope.mjs'),older=await import('./d074-scope.mjs');
   test('outer and older scope chains preserve every injected negative control',()=>{

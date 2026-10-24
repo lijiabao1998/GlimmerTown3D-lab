@@ -1,0 +1,71 @@
+{
+  "adopt185-core-ci-controls.log": {
+    "stats": [
+      "\u9229?tests 261",
+      "\u9229?pass 258",
+      "\u9229?fail 3",
+      "\u9229?cancelled 0",
+      "\u9229?skipped 0"
+    ],
+    "failureNames": [
+      [
+        ".github\\scripts\\ci-integrity.test.mjs:50:1",
+        "\u9241?rejects absent build, empty index, and symlinks (6.1889ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:102:1",
+        "\u9241?both real CLI entry points fail closed on an unknown partition before executing guards (80.79ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:227:1",
+        "\u9241?workflow tee capture preserves stdout/stderr and a failed frame process exit (11.3228ms)"
+      ]
+    ]
+  },
+  "adopt185-baseline-core-ci-controls.log": {
+    "stats": [
+      "\u9229?tests 261",
+      "\u9229?pass 258",
+      "\u9229?fail 3",
+      "\u9229?cancelled 0",
+      "\u9229?skipped 0"
+    ],
+    "failureNames": [
+      [
+        ".github\\scripts\\ci-integrity.test.mjs:50:1",
+        "\u9241?rejects absent build, empty index, and symlinks (7.1554ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:102:1",
+        "\u9241?both real CLI entry points fail closed on an unknown partition before executing guards (99.0786ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:227:1",
+        "\u9241?workflow tee capture preserves stdout/stderr and a failed frame process exit (13.7072ms)"
+      ]
+    ]
+  },
+  "adopt185-core-ci-controls-final.log": {
+    "stats": [
+      "\u9229?tests 261",
+      "\u9229?pass 258",
+      "\u9229?fail 3",
+      "\u9229?cancelled 0",
+      "\u9229?skipped 0"
+    ],
+    "failureNames": [
+      [
+        ".github\\scripts\\ci-integrity.test.mjs:50:1",
+        "\u9241?rejects absent build, empty index, and symlinks (6.424ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:102:1",
+        "\u9241?both real CLI entry points fail closed on an unknown partition before executing guards (85.5576ms)"
+      ],
+      [
+        "tools\\unit-partitions.test.mjs:227:1",
+        "\u9241?workflow tee capture preserves stdout/stderr and a failed frame process exit (10.9563ms)"
+      ]
+    ]
+  }
+}

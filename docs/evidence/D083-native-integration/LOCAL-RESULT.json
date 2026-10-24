@@ -1,0 +1,72 @@
+{
+  "qualification": "Actual local native product test evidence. Exact source tree and normal built HTML are pinned; remote exact-head CI is still required.",
+  "profiles": [
+    {
+      "width": 1440,
+      "manifest": "native-1440-manifest.json",
+      "shots": 13,
+      "actualPlacements": 8,
+      "actualPicks": 8,
+      "savedReopenedOwners": 8
+    },
+    {
+      "width": 412,
+      "manifest": "native-412-manifest.json",
+      "shots": 13,
+      "actualPlacements": 8,
+      "actualPicks": 8,
+      "savedReopenedOwners": 8
+    },
+    {
+      "width": 360,
+      "manifest": "native-360-manifest.json",
+      "shots": 13,
+      "actualPlacements": 8,
+      "actualPicks": 8,
+      "savedReopenedOwners": 8
+    }
+  ],
+  "buildSha256": "7baa18ef2b7d00c9ec126d5ab96a4104fb23eb1cbd43034865e19e272268d0d8",
+  "sourceTreeSha256": "5af2e9f6b92f80e84bd997679367148cdc9aedbcd8b18fbeb3417d01f32c260f",
+  "sourceScope": {
+    "baseline": "7deb34881b38679b1d0396e21eb9e57ad2ee9a0c",
+    "currentSourceTreeSha256": "5af2e9f6b92f80e84bd997679367148cdc9aedbcd8b18fbeb3417d01f32c260f",
+    "currentPaths": 236,
+    "baselinePaths": 231,
+    "modified": [
+      "src/cityView.ts",
+      "src/content/gallery.ts",
+      "src/content/kindShapes.ts",
+      "src/content/kinds.ts",
+      "src/render/kindArt.ts",
+      "src/sim/edit.ts",
+      "src/ui/growthGuide.ts"
+    ],
+    "added": [
+      "src/content/britishRuralHeritage.ts",
+      "src/render/britishRuralHeritageArt.ts",
+      "src/render/d083AcceptedModels.d.mts",
+      "src/render/d083AcceptedModels.mjs",
+      "src/sim/heritageBuild.ts"
+    ],
+    "unmodifiedOldSources": 224,
+    "originalDispatchAfterStrippingD083RegionsExact": true,
+    "restorationProposalSnapshotSha256": "27a4bec7df2a211eef6157af90a8bae2ae3d25c97fb92636d428ceac15dcbf50",
+    "protectedRulesToolsFixturesAndOriginalCiChanged": false
+  },
+  "correction": {
+    "scope": "Native containment bugfix; exact same material and principal shape. Original accepted generator/source, old coordinate deltas and first reds retained.",
+    "acceptedSourceSha256": "9f0e20ad062b2638e2f4f0b0de365664383a2e05f88f61f3421ba44b4bd8b7d8",
+    "nativeSourceSha256": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+    "changedGranaryTriangles": 12,
+    "otherGranaryTrianglesExact": 1012,
+    "otherSevenModelsExact": true,
+    "allOld130PinsExact": true,
+    "finiteArtConfirmation": "Sentinel_2b0f80763e308191aaf466520dc9a728",
+    "beforeLibrary": "libfile_81b3ff13555c8191a829b3133bfb471c",
+    "afterLibrary": "libfile_b6af3e0ebbc8819195bc70740d14f335",
+    "normalProductHtmlEqualsShownCorrection": true
+  },
+  "localBrowserErrors": [],
+  "rawGamePngs": 39
+}

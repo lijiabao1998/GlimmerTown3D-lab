@@ -1,0 +1,12 @@
+✔ actual frame receipt snippet works without integration-created scratch and preserves unrelated files (57.483927ms)
+✔ frame receipt never overwrites existing evidence (49.62452ms)
+✔ immutable historical geometry and architecture test sources retain original exact hashes (2.751815ms)
+✔ actual frame runner uses the tested receipt and propagates original failure count (0.242426ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 195.859228

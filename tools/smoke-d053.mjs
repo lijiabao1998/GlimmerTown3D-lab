@@ -17,17 +17,20 @@ import { decodeLabCode, encodeLabCode } from '../src/io/labcode.ts';
 import { loadCode } from '../src/io/save.ts';
 import { stepDay } from '../src/sim/day.ts';
 import { CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, previewOp, commitOp, undoOp, powerStatus } from '../src/sim/edit.ts';
+import { D083_TOOL_IDS, catalogueWithD083 } from './d083-catalogue-compat.mjs';
+const CATALOG_IDS = catalogueWithD083(D055_CATALOG_IDS);
 const J = JSON.stringify, OUT = path.join(ROOT, 'scratch/shots');
 const same = (a, b, label) => assert.ok(isDeepStrictEqual(a, b), `${label}: ${d053Hash(a)} != ${d053Hash(b)}`);
 assert.deepEqual(CIVIC_TOOLS.map(t=>t.id),D053_TOOL_IDS,'D055 must retain exact original civic18');
 assert.deepEqual(FOOD_TOOLS.map(t=>t.id),D055_FOOD_IDS,'exact food7 additions');
-assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),D055_CATALOG_IDS,'exact catalogue25 union');
+assert.deepEqual(FACILITY_TOOLS.map(t=>t.id),CATALOG_IDS,'exact original25 plus D083 eight union');
 const GROUPS = {
-  all: D055_CATALOG_IDS,
+  all: CATALOG_IDS,
   service: ['park','fire','police','policeBox','hospital','clinic','school','library','post','cemetery'],
   utility: ['water','wpipe','dump','sewage'],
   resource: ['oilwell','mine','gaswell','megaproject'],
   food: D055_FOOD_IDS,
+  heritage: D083_TOOL_IDS,
 };
 // Do not equate sim().hash with an RNG dump. Paired uninterrupted trajectories
 // below test later stochastic behavior after navigation versus the untouched UI.
@@ -154,7 +157,7 @@ export async function d053Smoke(browser,log) {
       assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe','sewage'].includes(t.id));
       assert.equal(await p.ev(`__d053Extra.filter(e=>e.type==='click'&&e.tool===${J(t.id)}&&e.trusted).length`),1,'exactly one original selection activation');item.selected.push(t.id);
     }
-    assert.equal(await p.ev('__d053Writes.length'),0);same(item.selected,D055_CATALOG_IDS,'all 18 original plus seven food callbacks');await key(page,'Escape');
+    assert.equal(await p.ev('__d053Writes.length'),0);same(item.selected,CATALOG_IDS,'original25 plus exact D083 eight callbacks');await key(page,'Escape');
   });
   for(const sandbox of [false,true]) await run('rank 21 lock '+(sandbox?'sandbox':'normal'),'rank21',{W:360,H:740},async(p,page)=>{
     if(sandbox){const raw=structuredClone(decodeLabCode(d053ReviewCode('rank21')).save.raw);raw.df=3;await newCode(p,encodeLabCode(raw));assert.equal(await p.ev('__gt.techState().diff'),3);}

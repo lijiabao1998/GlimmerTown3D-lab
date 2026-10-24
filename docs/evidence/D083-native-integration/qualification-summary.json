@@ -1,0 +1,39 @@
+[
+  {
+    "name": "unchanged-d082-source",
+    "args": [
+      "--experimental-strip-types",
+      "tools/unit-d082-scope.mjs"
+    ],
+    "exit": 1,
+    "stdoutBytes": 0,
+    "stderrBytes": 10787,
+    "sha256": "5e7afd56c6368b781791d38ac64f306c8c8949f351e9a2d668ec776add911383",
+    "tests": 0,
+    "passed": 0,
+    "failed": 0,
+    "failedNames": [],
+    "firstError": "D082 exact source inventory236 versus231"
+  },
+  {
+    "name": "original-ci-meta-windows",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      ".github/scripts/ci-integrity.test.mjs",
+      "tools/unit-partitions.test.mjs"
+    ],
+    "exit": 1,
+    "stdoutBytes": 51865,
+    "stderrBytes": 0,
+    "sha256": "833cf64e7b26edfd83eb53da383f7e5e01dd6081a607c27746ba33d5e4a739ec",
+    "tests": 261,
+    "passed": 258,
+    "failed": 3,
+    "failedNames": [
+      "rejects absent build, empty index, and symlinks",
+      "both real CLI entry points fail closed on an unknown partition before executing guards",
+      "workflow tee capture preserves stdout/stderr and a failed frame process exit"
+    ]
+  }
+]

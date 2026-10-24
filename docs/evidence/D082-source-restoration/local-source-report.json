@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "baseline": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+  "baselineSources": 227,
+  "legacyAfterSources": 229,
+  "currentSources": 231,
+  "currentAdditions": 4,
+  "reviewedSources": [
+    "src/content/britishCoastalRecreation.ts",
+    "src/render/britishCoastalRecreationArt.ts",
+    "src/render/windows.ts",
+    "src/render/d082Repair179v1.ts",
+    "src/render/d082Repair179v1Data.ts"
+  ],
+  "negativeControls": 2858,
+  "qualification": "Exact approved source restoration and inventory only. Original 227/229 phase, 900/487 probe evidence, geometry/runtime/frame/browser assertions are unchanged."
+}

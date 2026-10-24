@@ -1,0 +1,144 @@
+{
+  "schema": 1,
+  "baseline": "7deb34881b38679b1d0396e21eb9e57ad2ee9a0c",
+  "source": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e",
+  "added": {
+    "src/content/britishRuralHeritage.ts": "964239f55473b101e01b211f9e89cac27d633a93e26a3844b65b2d1f3ab85afd",
+    "src/render/britishRuralHeritageArt.ts": "5b7025d8795030584df5f458294de96b37c2d72ec049f39a2bc283a1533b6320",
+    "src/render/d083AcceptedModels.d.mts": "e1aceddda9eff6edfb8b250b1b64c55459c84f0736f723b113646df45b3d8885",
+    "src/render/d083AcceptedModels.mjs": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+    "src/sim/heritageBuild.ts": "1285e285bc7a53d693533d00bbae8b745bb17bd7419b232f48998b6d0726dbdf"
+  },
+  "modified": {
+    "src/cityView.ts": {
+      "beforeSha256": "13b168565198cca3a8e9ac3fe9817c331bcf160372287ed48c7f9934a56416fc",
+      "afterSha256": "a2f925605c7fc9b30e87fdc39b8784f77c8bf11a8b12fe9da4b7268f2a2429f6",
+      "replacements": [
+        {
+          "before": "",
+          "after": "import { HERITAGE_TOOLS } from './sim/edit.ts';\n"
+        },
+        {
+          "before": "    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });\n",
+          "after": "    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : HERITAGE_TOOLS.some(c => c.id === civicTool) ? HERITAGE_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });\n"
+        },
+        {
+          "before": "    if (t === 'civic' && !CIVIC_TOOLS.some(c => c.id === civicTool)) civicTool = 'police';\n",
+          "after": "    if (t === 'civic' && ![...CIVIC_TOOLS, ...HERITAGE_TOOLS].some(c => c.id === civicTool)) civicTool = 'police';\n"
+        }
+      ]
+    },
+    "src/content/gallery.ts": {
+      "beforeSha256": "c5333a4d4065f04ebd76eab44463753e7a63bb2262c1ebb6077a918f72fd8c53",
+      "afterSha256": "747473f5cfec2bad18ea0eb746606c5640cfc92ebfb26b5bf6b78a708ea9afe1",
+      "replacements": [
+        {
+          "before": "",
+          "after": "import { RURAL_HERITAGE_KINDS } from './britishRuralHeritage.ts';\n"
+        },
+        {
+          "before": "  const list = kinds.filter(q => q.k > 3).sort((a, b) => GALLERY_CATS.indexOf(a.cat) - GALLERY_CATS.indexOf(b.cat) || a.k - b.k);\n",
+          "after": "  // New append-only kinds must not move any historical gallery parcel.\n  const list = [\n    ...kinds.filter(q => q.k > 3 && !RURAL_HERITAGE_KINDS.has(q.k)).sort((a, b) => GALLERY_CATS.indexOf(a.cat) - GALLERY_CATS.indexOf(b.cat) || a.k - b.k),\n    ...kinds.filter(q => RURAL_HERITAGE_KINDS.has(q.k)).sort((a, b) => a.k - b.k),\n  ];\n"
+        }
+      ]
+    },
+    "src/content/kindShapes.ts": {
+      "beforeSha256": "4995bcddb5e1112525f039c9a367d3105b19e4cf58cd1475bb4a33b5068701af",
+      "afterSha256": "15f3d1dd89d27ac17699b400d0f5e1f5100de865630fd2e790318f0a3d17d93a",
+      "replacements": [
+        {
+          "before": "",
+          "after": "// D083-BEGIN rural-heritage-import\nimport { RURAL_HERITAGE_KINDS } from './britishRuralHeritage.ts';\n// D083-END rural-heritage-import\n"
+        },
+        {
+          "before": "",
+          "after": "  // D083-BEGIN rural-heritage-shape\n  if (RURAL_HERITAGE_KINDS.has(k)) return S('hall', { ruralHeritage: true });\n  // D083-END rural-heritage-shape\n"
+        }
+      ]
+    },
+    "src/content/kinds.ts": {
+      "beforeSha256": "6fda857b654bc996703f577df0be7b4858413c1c3af06074f007c76d7be5824f",
+      "afterSha256": "a635a35a990db3001ac13cdb0538b814ca856a43d3be6a5253e1a73089892259",
+      "replacements": [
+        {
+          "before": "import data from './lab-kinds.json';\n",
+          "after": "import data from './lab-kinds.json' with { type: 'json' };\n"
+        },
+        {
+          "before": "",
+          "after": "import { withRuralHeritageKinds } from './britishRuralHeritage.ts';\n"
+        },
+        {
+          "before": "export const KINDS = kindTableFrom(data as unknown as KindData);\n",
+          "after": "export const KINDS = kindTableFrom(withRuralHeritageKinds(data as unknown as KindData));\n"
+        }
+      ]
+    },
+    "src/render/kindArt.ts": {
+      "beforeSha256": "ad91070c93afbf5a74207d0d89ced24eb2d495dceea2b5abe4a10ac73ef28fc1",
+      "afterSha256": "80bafa224b4299874138c50577ebfb38c7d6c77905ea117aca369f6dfaf292d0",
+      "replacements": [
+        {
+          "before": "",
+          "after": "// D083-BEGIN rural-heritage-import\nimport { drawBritishRuralHeritage } from './britishRuralHeritageArt.ts';\n// D083-END rural-heritage-import\n"
+        },
+        {
+          "before": "",
+          "after": "  // D083-BEGIN rural-heritage-dispatch\n  if (shape?.p?.ruralHeritage === true) {\n    try { drawBritishRuralHeritage(new Pen(a)); return USED; } finally { USED = null; }\n  }\n  // D083-END rural-heritage-dispatch\n"
+        }
+      ]
+    },
+    "src/sim/edit.ts": {
+      "beforeSha256": "4c31222a982864e0a3ab526a378db6d7ec45fa099848b0abf32dbb51adff26f6",
+      "afterSha256": "5f4469282c71f91092c6c0b16a226c5305f20ebbaaeff4db239e77fde0db5b00",
+      "replacements": [
+        {
+          "before": "",
+          "after": "import { RURAL_HERITAGE_BUILDINGS, ruralHeritageTool } from '../content/britishRuralHeritage.ts';\nimport { canPlaceHeritage, heritagePlaceCost, tapHeritage } from './heritageBuild.ts';\n"
+        },
+        {
+          "before": "export const FACILITY_TOOLS = [...CIVIC_TOOLS, ...FOOD_TOOLS];\n",
+          "after": "export const HERITAGE_TOOLS:CivicTool[] = RURAL_HERITAGE_BUILDINGS.map(m=>({id:m.tool,name:m.name,short:m.short,cost:m.cost,size:m.size}));\nexport const FACILITY_TOOLS = [...CIVIC_TOOLS, ...FOOD_TOOLS, ...HERITAGE_TOOLS];\n"
+        },
+        {
+          "before": "",
+          "after": "  const heritage=!!ruralHeritageTool(op.tool);\n  if(heritage&&op.k!=='tap')return{cells:[],count:0,total:0,affordable:true,reason:'英式建築請點放'};\n"
+        },
+        {
+          "before": "    let r = canPlace(st, op.tool, x, z);\n",
+          "after": "    let r = heritage ? canPlaceHeritage(st, op.tool, x, z) : canPlace(st, op.tool, x, z);\n"
+        },
+        {
+          "before": "    const cost = r ? 0 : placeCost(st, op.tool, x, z);\n",
+          "after": "    const cost = r ? 0 : heritage ? heritagePlaceCost(st, op.tool, x, z) : placeCost(st, op.tool, x, z);\n"
+        },
+        {
+          "before": "",
+          "after": "  const heritage=!!ruralHeritageTool(op.tool);\n  if(heritage&&op.k!=='tap')return{ok:false,placed:0,spent:0,events:[],reason:'英式建築請點放'};\n"
+        },
+        {
+          "before": "  if (op.k === 'tap') { const r = tap(st, op.tool, op.x0, op.z0); placed = r.ok ? 1 : 0; txn = r.txn; }\n",
+          "after": "  if (op.k === 'tap') { const r = heritage ? tapHeritage(st, op.tool, op.x0, op.z0) : tap(st, op.tool, op.x0, op.z0); placed = r.ok ? 1 : 0; txn = r.txn; }\n"
+        }
+      ]
+    },
+    "src/ui/growthGuide.ts": {
+      "beforeSha256": "e3318aac0b50cb5844a7d875d65d90ce7013f2aa826992ffce0c631da1b98c5e",
+      "afterSha256": "190136ea806d9e1e1acd13ec7f10de2eebca3260c2ae04943a25e47136c9552c",
+      "replacements": [
+        {
+          "before": "",
+          "after": "import { RURAL_HERITAGE_BUILDINGS } from '../content/britishRuralHeritage.ts';\n"
+        },
+        {
+          "before": "",
+          "after": "  { id: 'heritage', name: '英式建築' },\n"
+        },
+        {
+          "before": "",
+          "after": "  ...Object.fromEntries(RURAL_HERITAGE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:'英式歷史建築街景，不新增生產或運輸產能',placement:'連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。'}])),\n"
+        }
+      ]
+    }
+  }
+}

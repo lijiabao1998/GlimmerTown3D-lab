@@ -1,0 +1,774 @@
+{
+  "phase": "after",
+  "baseline": {
+    "commit": "1955bd24e2f671b8f63416321e763b5a3fb19a2a",
+    "htmlSha256": "5ab7d9960854a7caf56a056698a1fef6fbe156c1d5f02d622f6f9abeb098509e"
+  },
+  "qualification": "Synthetic authored save only for fixed review pictures. Not naturally played. Real native Chrome input; touch emulation, not Android hardware.",
+  "fixtureSha256": "931565a74a3a861de8c2654307d961a90a6677d3934a41c5ac89a494cb1e5a1e",
+  "cases": [
+    {
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-360.png",
+          "sha256": "68185ae5e409fa2af6fed1887a5649346e98f7d7fbcc15b8feb9607c8bebdbbf",
+          "bytes": 94020,
+          "stage": "district",
+          "viewport": {
+            "W": 360,
+            "H": 740,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": false,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          419.15625,
+          360,
+          740,
+          360,
+          320.84375
+        ],
+        "playBar": [
+          8,
+          618,
+          352,
+          664,
+          344,
+          46
+        ],
+        "civic": [
+          470,
+          610
+        ],
+        "wrap": [
+          470,
+          610
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            470,
+            514
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            470,
+            514
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            206.84375,
+            252.5625,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            256.5625,
+            302.28125,
+            518,
+            562
+          ],
+          [
+            45.71875,
+            44,
+            306.28125,
+            352,
+            518,
+            562
+          ],
+          [
+            45.703125,
+            44,
+            8,
+            53.703125,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            57.703125,
+            103.421875,
+            566,
+            610
+          ],
+          [
+            45.71875,
+            44,
+            107.421875,
+            153.140625,
+            566,
+            610
+          ],
+          [
+            45.703125,
+            44,
+            157.140625,
+            202.84375,
+            566,
+            610
+          ]
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    'bigFarm',\n    'cemetery',\n    'clinic',\n    'dump',\n...\n    'greenhouse',\n+   'heritageBandstand',\n+   'heritageDovecote',\n+   'heritageGranary',\n+   'heritageGreatBarn',\n+   'heritageSignalBox',\n+   'heritageSmithy',\n+   'heritageTollhouse',\n+   'heritageWindmill',\n    'hospital',\n    'library',\n    'market',\n    'megaproject',\n    'mine',\n\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:161\n    at check (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:13:114)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:106\n    at async withBrowser (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/cdp.mjs:130:12)\n    at async captureD055 (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:12:34)\n    at async file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/scratch/check-d055-dock-repair.mjs:2:9"
+    },
+    {
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-412.png",
+          "sha256": "0910a3141584a357e2e7a5d11147289a311a172ea041a8b940807c46d6ef4954",
+          "bytes": 99975,
+          "stage": "district",
+          "viewport": {
+            "W": 412,
+            "H": 860,
+            "mobile": true
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": false,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          535.15625,
+          412,
+          860,
+          412,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          738,
+          402,
+          784,
+          392,
+          46
+        ],
+        "civic": [
+          586,
+          730
+        ],
+        "wrap": [
+          586,
+          730
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            586,
+            630
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            586,
+            630
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            237.421875,
+            288.28125,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            294.28125,
+            345.140625,
+            636,
+            680
+          ],
+          [
+            50.859375,
+            44,
+            351.140625,
+            402,
+            636,
+            680
+          ],
+          [
+            50.84375,
+            44,
+            10,
+            60.84375,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            66.84375,
+            117.703125,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            123.703125,
+            174.5625,
+            686,
+            730
+          ],
+          [
+            50.859375,
+            44,
+            180.5625,
+            231.421875,
+            686,
+            730
+          ]
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    'bigFarm',\n    'cemetery',\n    'clinic',\n    'dump',\n...\n    'greenhouse',\n+   'heritageBandstand',\n+   'heritageDovecote',\n+   'heritageGranary',\n+   'heritageGreatBarn',\n+   'heritageSignalBox',\n+   'heritageSmithy',\n+   'heritageTollhouse',\n+   'heritageWindmill',\n    'hospital',\n    'library',\n    'market',\n    'megaproject',\n    'mine',\n\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:161\n    at check (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:13:114)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:106\n    at async withBrowser (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/cdp.mjs:130:12)\n    at async captureD055 (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:12:34)\n    at async file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/scratch/check-d055-dock-repair.mjs:2:9"
+    },
+    {
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "checks": [
+        "paused exact fixture",
+        "original18 dock tools preserved"
+      ],
+      "shots": [
+        {
+          "filename": "D055-after-district-1280.png",
+          "sha256": "6ea2e3b9272e4fe57b2f10f6d066c9d8af80fea6cea4adbbc3ba9565e3c9164a",
+          "bytes": 161225,
+          "stage": "district",
+          "viewport": {
+            "W": 1280,
+            "H": 800,
+            "mobile": false
+          },
+          "camera": {
+            "pos": [
+              146.19999999999996,
+              94.06040612287404,
+              145.2
+            ],
+            "target": [
+              31,
+              0,
+              29.999999999999993
+            ],
+            "zoom": 1.6
+          },
+          "visual": {
+            "visT": 2.2,
+            "dayFrac": 0
+          },
+          "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+        }
+      ],
+      "passed": false,
+      "layout": {
+        "playHeight": 46,
+        "segmentHeight": 46,
+        "segmentButtonHeight": 44,
+        "segmentBorders": [
+          1,
+          1
+        ],
+        "dock": [
+          0,
+          475.15625,
+          1280,
+          800,
+          1280,
+          324.84375
+        ],
+        "playBar": [
+          10,
+          678,
+          1270,
+          724,
+          1260,
+          46
+        ],
+        "civic": [
+          526,
+          670
+        ],
+        "wrap": [
+          526,
+          670
+        ],
+        "rows": 3,
+        "buttons": [
+          [
+            76,
+            44,
+            356,
+            432,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            526,
+            570
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            684,
+            760,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            766,
+            842,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            848,
+            924,
+            576,
+            620
+          ],
+          [
+            76,
+            44,
+            356,
+            432,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            438,
+            514,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            520,
+            596,
+            626,
+            670
+          ],
+          [
+            76,
+            44,
+            602,
+            678,
+            626,
+            670
+          ]
+        ]
+      },
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  [\n    'bigFarm',\n    'cemetery',\n    'clinic',\n    'dump',\n...\n    'greenhouse',\n+   'heritageBandstand',\n+   'heritageDovecote',\n+   'heritageGranary',\n+   'heritageGreatBarn',\n+   'heritageSignalBox',\n+   'heritageSmithy',\n+   'heritageTollhouse',\n+   'heritageWindmill',\n    'hospital',\n    'library',\n    'market',\n    'megaproject',\n    'mine',\n\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:161\n    at check (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:13:114)\n    at file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:22:106\n    at async withBrowser (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/cdp.mjs:130:12)\n    at async captureD055 (file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/tools/d055-capture.mjs:12:34)\n    at async file:///C:/Users/Leon1/Documents/Codex/2026-10-22/task-2/d083-british-local-design/scratch/check-d055-dock-repair.mjs:2:9"
+    }
+  ],
+  "shots": [
+    {
+      "filename": "D055-after-district-360.png",
+      "sha256": "68185ae5e409fa2af6fed1887a5649346e98f7d7fbcc15b8feb9607c8bebdbbf",
+      "bytes": 94020,
+      "stage": "district",
+      "viewport": {
+        "W": 360,
+        "H": 740,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-district-412.png",
+      "sha256": "0910a3141584a357e2e7a5d11147289a311a172ea041a8b940807c46d6ef4954",
+      "bytes": 99975,
+      "stage": "district",
+      "viewport": {
+        "W": 412,
+        "H": 860,
+        "mobile": true
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    },
+    {
+      "filename": "D055-after-district-1280.png",
+      "sha256": "6ea2e3b9272e4fe57b2f10f6d066c9d8af80fea6cea4adbbc3ba9565e3c9164a",
+      "bytes": 161225,
+      "stage": "district",
+      "viewport": {
+        "W": 1280,
+        "H": 800,
+        "mobile": false
+      },
+      "camera": {
+        "pos": [
+          146.19999999999996,
+          94.06040612287404,
+          145.2
+        ],
+        "target": [
+          31,
+          0,
+          29.999999999999993
+        ],
+        "zoom": 1.6
+      },
+      "visual": {
+        "visT": 2.2,
+        "dayFrac": 0
+      },
+      "worldSha256": "d26d83d8c17053f87ae25d85db008da103e8e11c348c1e8b62c3b9e43f2cf252"
+    }
+  ],
+  "passed": false,
+  "htmlSha256": "e09a443dd875e078af3fcec4b55cdc390142102aa3b253130a768091cbe05f5f"
+}
