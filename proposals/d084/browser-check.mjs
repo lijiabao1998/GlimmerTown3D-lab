@@ -20,7 +20,9 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
  const settle=()=>page.evaluate('for(let i=0;i<160;i++)__gt.spin(0);new Promise(r=>{let n=0;function f(){if(++n===8)r();else requestAnimationFrame(f)}requestAnimationFrame(f)})');
  const shot=async(name)=>{await settle();const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
  for (const enabled of (baseline?[false]:[false,true])) {
-  await open('sample=newcity&streetFrontage='+(enabled?'1':'0'));await page.evaluate('document.fonts.ready');
+  report.phase='open '+(enabled?'existing isolated city':'new isolated city');record();
+  let openTimer;try{await Promise.race([open('sample='+(enabled?'mine':'newcity')+'&streetFrontage='+(enabled?'1':'0')),new Promise((_,reject)=>{openTimer=setTimeout(()=>reject(new Error('Open timed out; no modal accepted')),90000)})]);}finally{clearTimeout(openTimer);}
+  await page.evaluate('document.fonts.ready');
   if(width!==1440)await page.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
   assert.equal(await page.evaluate('__gt.webgl2'),true);
   await page.evaluate('__gt.simPlay(false);__gt.clearSave();__gt.menu("paste")');
