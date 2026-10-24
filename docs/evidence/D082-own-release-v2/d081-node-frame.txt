@@ -1,0 +1,217 @@
+OK D081 frame complete surface classifier and geometric witnesses are exactly the unchanged D080 policy 
+OK D081 frame frozen baseline evidence and legal-angle views remain intact 
+OK D081 frame whole-scene pins equal immutable D080 native/copied baselines and d081Expected 
+OK D081 frame frame oracle permits only original samples, explicit phases and null or integer variants zero through four 
+OK D081 frame capture URLs isolate published D080 before and default D081 after without any inherited opt-out 
+OK D081 frame capture URLs isolate later art while keeping the D082 default active 
+OK D081 frame capture plan retains 168 standard originals and all supplemental views with bounded exterior/roof angles and stability checks 
+OK D081 frame original cities retain their exact native target owners and all five copied-variant states 
+OK D081 frame all original and additional-angle views reproduce exact main/shadow submissions at three widths and two phases 
+OK D081 frame production spin angles settle exactly and reject unchanged/wrong camera poses 
+OK D081 frame zero-angle settlement preserves a production roof view and makes the thirty-frame repeat exact 
+OK D081 frame all target owner silhouettes are retained with every original neighbor 
+OK D081 frame paired supplementary zoom retains every owner vertex in both phases without changing original views 
+OK D081 frame owner-partition acceleration reproduces complete raw Three ray intersections and face identities 
+D081 frame progress raw-contract {"case":1,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":1440}
+D081 frame progress raw-contract {"case":2,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":360}
+D081 frame progress raw-contract {"case":3,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":412}
+D081 frame progress raw-contract {"case":4,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":1440}
+D081 frame progress raw-contract {"case":5,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":360}
+D081 frame progress raw-contract {"case":6,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":412}
+D081 frame progress raw-contract {"case":7,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":1440}
+D081 frame progress raw-contract {"case":8,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":360}
+D081 frame progress raw-contract {"case":9,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":412}
+D081 frame progress raw-contract {"case":10,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":1440}
+D081 frame progress raw-contract {"case":11,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":360}
+D081 frame progress raw-contract {"case":12,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":412}
+D081 frame progress raw-contract {"case":13,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":1440}
+D081 frame progress raw-contract {"case":14,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":360}
+D081 frame progress raw-contract {"case":15,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":412}
+D081 frame progress raw-contract {"case":16,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":1440}
+D081 frame progress raw-contract {"case":17,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":360}
+D081 frame progress raw-contract {"case":18,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":412}
+D081 frame progress raw-contract {"case":19,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":1440}
+D081 frame progress raw-contract {"case":20,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":360}
+D081 frame progress raw-contract {"case":21,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":412}
+D081 frame progress raw-contract {"case":22,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":1440}
+D081 frame progress raw-contract {"case":23,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":360}
+D081 frame progress raw-contract {"case":24,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":412}
+D081 frame progress raw-contract {"case":25,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":1440}
+D081 frame progress raw-contract {"case":26,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":360}
+D081 frame progress raw-contract {"case":27,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":412}
+D081 frame progress raw-contract {"case":28,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":1440}
+D081 frame progress raw-contract {"case":29,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":360}
+D081 frame progress raw-contract {"case":30,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":412}
+D081 frame progress raw-contract {"case":31,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":1440}
+D081 frame progress raw-contract {"case":32,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":360}
+D081 frame progress raw-contract {"case":33,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":412}
+D081 frame progress raw-contract {"case":34,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":1440}
+D081 frame progress raw-contract {"case":35,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":360}
+D081 frame progress raw-contract {"case":36,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":412}
+D081 frame progress raw-contract {"case":37,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":1440}
+D081 frame progress raw-contract {"case":38,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":360}
+D081 frame progress raw-contract {"case":39,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":412}
+D081 frame progress raw-contract {"case":40,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":1440}
+D081 frame progress raw-contract {"case":41,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":360}
+D081 frame progress raw-contract {"case":42,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":412}
+D081 frame progress raw-contract {"case":43,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":1440}
+D081 frame progress raw-contract {"case":44,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":360}
+D081 frame progress raw-contract {"case":45,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":412}
+D081 frame progress raw-contract {"case":46,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":1440}
+D081 frame progress raw-contract {"case":47,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":360}
+D081 frame progress raw-contract {"case":48,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":412}
+D081 frame progress raw-contract {"case":49,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":1440}
+D081 frame progress raw-contract {"case":50,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":360}
+D081 frame progress raw-contract {"case":51,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":412}
+D081 frame progress raw-contract {"case":52,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":1440}
+D081 frame progress raw-contract {"case":53,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":360}
+D081 frame progress raw-contract {"case":54,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":412}
+D081 frame progress raw-contract {"case":55,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":1440}
+D081 frame progress raw-contract {"case":56,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":360}
+D081 frame progress raw-contract {"case":57,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":412}
+D081 frame progress raw-contract {"case":58,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":1440}
+D081 frame progress raw-contract {"case":59,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":360}
+D081 frame progress raw-contract {"case":60,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":412}
+OK D081 frame all sixty accelerated surface contracts exactly equal raw Three contracts without sorting or tolerances 
+OK D081 frame enclosure witnesses require complete correctly wound solids and reject open, elevated and non-manifold substitutes 
+OK D081 frame upward contact cover needs the actual complete top and four sides and never excludes vertical or below-base points 
+OK D081 frame open screens and separate-owner solids cannot hide a mandatory exterior point 
+OK D081 frame coincident exterior equivalence requires exact owner, point, orientation and absence of a closer blocker 
+D081 frame progress full-surface {"case":1,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":1440,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":2,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":360,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":3,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":412,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":4,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":1440,"required":545,"covered":545}
+D081 frame progress full-surface {"case":5,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":360,"required":545,"covered":545}
+D081 frame progress full-surface {"case":6,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":412,"required":545,"covered":545}
+D081 frame progress full-surface {"case":7,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":1440,"required":483,"covered":483}
+D081 frame progress full-surface {"case":8,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":360,"required":483,"covered":483}
+D081 frame progress full-surface {"case":9,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":412,"required":483,"covered":483}
+D081 frame progress full-surface {"case":10,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":1440,"required":674,"covered":674}
+D081 frame progress full-surface {"case":11,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":360,"required":674,"covered":674}
+D081 frame progress full-surface {"case":12,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":412,"required":674,"covered":674}
+D081 frame progress full-surface {"case":13,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":1440,"required":1332,"covered":1332}
+D081 frame progress full-surface {"case":14,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":360,"required":1332,"covered":1332}
+D081 frame progress full-surface {"case":15,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":412,"required":1332,"covered":1332}
+D081 frame progress full-surface {"case":16,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":1440,"required":571,"covered":571}
+D081 frame progress full-surface {"case":17,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":360,"required":571,"covered":571}
+D081 frame progress full-surface {"case":18,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":412,"required":571,"covered":571}
+D081 frame progress full-surface {"case":19,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":1440,"required":442,"covered":442}
+D081 frame progress full-surface {"case":20,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":360,"required":442,"covered":442}
+D081 frame progress full-surface {"case":21,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":412,"required":442,"covered":442}
+D081 frame progress full-surface {"case":22,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":1440,"required":513,"covered":513}
+D081 frame progress full-surface {"case":23,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":360,"required":513,"covered":513}
+D081 frame progress full-surface {"case":24,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":412,"required":513,"covered":513}
+D081 frame progress full-surface {"case":25,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":1440,"required":699,"covered":699}
+D081 frame progress full-surface {"case":26,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":360,"required":699,"covered":699}
+D081 frame progress full-surface {"case":27,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":412,"required":699,"covered":699}
+D081 frame progress full-surface {"case":28,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":1440,"required":732,"covered":732}
+D081 frame progress full-surface {"case":29,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":360,"required":732,"covered":732}
+D081 frame progress full-surface {"case":30,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":412,"required":732,"covered":732}
+D081 frame progress full-surface {"case":31,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":1440,"required":1343,"covered":1343}
+D081 frame progress full-surface {"case":32,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":360,"required":1343,"covered":1343}
+D081 frame progress full-surface {"case":33,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":412,"required":1343,"covered":1343}
+D081 frame progress full-surface {"case":34,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":1440,"required":588,"covered":588}
+D081 frame progress full-surface {"case":35,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":360,"required":588,"covered":588}
+D081 frame progress full-surface {"case":36,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":412,"required":588,"covered":588}
+D081 frame progress full-surface {"case":37,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":1440,"required":568,"covered":568}
+D081 frame progress full-surface {"case":38,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":360,"required":568,"covered":568}
+D081 frame progress full-surface {"case":39,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":412,"required":568,"covered":568}
+D081 frame progress full-surface {"case":40,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":1440,"required":484,"covered":484}
+D081 frame progress full-surface {"case":41,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":360,"required":484,"covered":484}
+D081 frame progress full-surface {"case":42,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":412,"required":484,"covered":484}
+D081 frame progress full-surface {"case":43,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":1440,"required":601,"covered":601}
+D081 frame progress full-surface {"case":44,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":360,"required":601,"covered":601}
+D081 frame progress full-surface {"case":45,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":412,"required":601,"covered":601}
+D081 frame progress full-surface {"case":46,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":1440,"required":682,"covered":682}
+D081 frame progress full-surface {"case":47,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":360,"required":682,"covered":682}
+D081 frame progress full-surface {"case":48,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":412,"required":682,"covered":682}
+D081 frame progress full-surface {"case":49,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":1440,"required":1334,"covered":1334}
+D081 frame progress full-surface {"case":50,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":360,"required":1334,"covered":1334}
+D081 frame progress full-surface {"case":51,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":412,"required":1334,"covered":1334}
+D081 frame progress full-surface {"case":52,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":1440,"required":548,"covered":548}
+D081 frame progress full-surface {"case":53,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":360,"required":548,"covered":548}
+D081 frame progress full-surface {"case":54,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":412,"required":548,"covered":548}
+D081 frame progress full-surface {"case":55,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":1440,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":56,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":360,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":57,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":412,"required":1335,"covered":1335}
+D081 frame progress full-surface {"case":58,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":1440,"required":508,"covered":508}
+D081 frame progress full-surface {"case":59,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":360,"required":508,"covered":508}
+D081 frame progress full-surface {"case":60,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":412,"required":508,"covered":508}
+OK D081 frame every target fixed exterior sample and original blocked silhouette hit has complete actual-view union coverage 
+D081 frame progress mutation-controls {"case":1,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":1440,"controls":4}
+D081 frame progress mutation-controls {"case":2,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":1440,"controls":8}
+D081 frame progress mutation-controls {"case":3,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":360,"controls":12}
+D081 frame progress mutation-controls {"case":4,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":360,"controls":16}
+D081 frame progress mutation-controls {"case":5,"sample":"gallery","owner":172,"slot":"160:0","on":false,"width":412,"controls":20}
+D081 frame progress mutation-controls {"case":6,"sample":"gallery","owner":157,"slot":"182:0","on":false,"width":412,"controls":24}
+D081 frame progress mutation-controls {"case":7,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":1440,"controls":28}
+D081 frame progress mutation-controls {"case":8,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":1440,"controls":32}
+D081 frame progress mutation-controls {"case":9,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":360,"controls":36}
+D081 frame progress mutation-controls {"case":10,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":360,"controls":40}
+D081 frame progress mutation-controls {"case":11,"sample":"gallery","owner":172,"slot":"160:0","on":true,"width":412,"controls":44}
+D081 frame progress mutation-controls {"case":12,"sample":"gallery","owner":157,"slot":"182:0","on":true,"width":412,"controls":48}
+D081 frame progress mutation-controls {"case":13,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":1440,"controls":52}
+D081 frame progress mutation-controls {"case":14,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":1440,"controls":56}
+D081 frame progress mutation-controls {"case":15,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":1440,"controls":60}
+D081 frame progress mutation-controls {"case":16,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":360,"controls":64}
+D081 frame progress mutation-controls {"case":17,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":360,"controls":68}
+D081 frame progress mutation-controls {"case":18,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":360,"controls":72}
+D081 frame progress mutation-controls {"case":19,"sample":"gallery","owner":172,"slot":"160:1","on":false,"width":412,"controls":76}
+D081 frame progress mutation-controls {"case":20,"sample":"gallery","owner":157,"slot":"182:1","on":false,"width":412,"controls":80}
+D081 frame progress mutation-controls {"case":21,"sample":"gallery","owner":133,"slot":"72:1","on":false,"width":412,"controls":84}
+D081 frame progress mutation-controls {"case":22,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":1440,"controls":88}
+D081 frame progress mutation-controls {"case":23,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":1440,"controls":92}
+D081 frame progress mutation-controls {"case":24,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":1440,"controls":96}
+D081 frame progress mutation-controls {"case":25,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":360,"controls":100}
+D081 frame progress mutation-controls {"case":26,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":360,"controls":104}
+D081 frame progress mutation-controls {"case":27,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":360,"controls":108}
+D081 frame progress mutation-controls {"case":28,"sample":"gallery","owner":172,"slot":"160:1","on":true,"width":412,"controls":112}
+D081 frame progress mutation-controls {"case":29,"sample":"gallery","owner":157,"slot":"182:1","on":true,"width":412,"controls":116}
+D081 frame progress mutation-controls {"case":30,"sample":"gallery","owner":133,"slot":"72:1","on":true,"width":412,"controls":120}
+D081 frame progress mutation-controls {"case":31,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":1440,"controls":124}
+D081 frame progress mutation-controls {"case":32,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":1440,"controls":128}
+D081 frame progress mutation-controls {"case":33,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":1440,"controls":132}
+D081 frame progress mutation-controls {"case":34,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":360,"controls":136}
+D081 frame progress mutation-controls {"case":35,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":360,"controls":140}
+D081 frame progress mutation-controls {"case":36,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":360,"controls":144}
+D081 frame progress mutation-controls {"case":37,"sample":"gallery","owner":172,"slot":"160:2","on":false,"width":412,"controls":148}
+D081 frame progress mutation-controls {"case":38,"sample":"gallery","owner":157,"slot":"182:2","on":false,"width":412,"controls":152}
+D081 frame progress mutation-controls {"case":39,"sample":"gallery","owner":133,"slot":"72:2","on":false,"width":412,"controls":156}
+D081 frame progress mutation-controls {"case":40,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":1440,"controls":160}
+D081 frame progress mutation-controls {"case":41,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":1440,"controls":164}
+D081 frame progress mutation-controls {"case":42,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":1440,"controls":168}
+D081 frame progress mutation-controls {"case":43,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":360,"controls":172}
+D081 frame progress mutation-controls {"case":44,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":360,"controls":176}
+D081 frame progress mutation-controls {"case":45,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":360,"controls":180}
+D081 frame progress mutation-controls {"case":46,"sample":"gallery","owner":172,"slot":"160:2","on":true,"width":412,"controls":184}
+D081 frame progress mutation-controls {"case":47,"sample":"gallery","owner":157,"slot":"182:2","on":true,"width":412,"controls":188}
+D081 frame progress mutation-controls {"case":48,"sample":"gallery","owner":133,"slot":"72:2","on":true,"width":412,"controls":192}
+D081 frame progress mutation-controls {"case":49,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":1440,"controls":196}
+D081 frame progress mutation-controls {"case":50,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":360,"controls":200}
+D081 frame progress mutation-controls {"case":51,"sample":"gallery","owner":172,"slot":"160:3","on":false,"width":412,"controls":204}
+D081 frame progress mutation-controls {"case":52,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":1440,"controls":208}
+D081 frame progress mutation-controls {"case":53,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":360,"controls":212}
+D081 frame progress mutation-controls {"case":54,"sample":"gallery","owner":172,"slot":"160:3","on":true,"width":412,"controls":216}
+D081 frame progress mutation-controls {"case":55,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":1440,"controls":220}
+D081 frame progress mutation-controls {"case":56,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":360,"controls":224}
+D081 frame progress mutation-controls {"case":57,"sample":"gallery","owner":172,"slot":"160:4","on":false,"width":412,"controls":228}
+D081 frame progress mutation-controls {"case":58,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":1440,"controls":232}
+D081 frame progress mutation-controls {"case":59,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":360,"controls":236}
+D081 frame progress mutation-controls {"case":60,"sample":"gallery","owner":172,"slot":"160:4","on":true,"width":412,"controls":240}
+OK D081 frame missing or reversed actual target wall and roof faces reject intact frozen surface contracts 
+OK D081 frame camera-derived detail follows the independently frozen published law for every planned view and rejects wrong cameras or LOD 
+OK D081 frame construction uniforms reject clipping bypass, probe isolation, time drift and every changed tree buffer 
+OK D081 frame independent intended roof points are closed and directly unoccluded across planned cameras at every width 
+OK D081 frame missing and back-facing actual roof surfaces cannot pass independent intended-plan ray probes 
+OK D081 frame paused repeat requires exact PNG, canvas, world, camera, presentation and submitted geometry 
+OK D081 frame original D067 seed516 owner201 framing and full culling remain exact in both D081 phases 
+OK D081 frame wrong submitted triangle/call counts and substituting whole-scene count are rejected 
+OK D081 frame injected real model triangle is rejected by whole-scene cap before any frustum test 
+OK D081 frame geometry snapshot includes all building owner attributes and instance counts/transforms, independent of construction ages 
+OK D081 frame render-only saved preview geometry is independently matched and native/copied world records are never mutated 
+OK D081 frame browser geometry admits only the two exact trailing empty UI instances and rejects all other mismatches 
+OK D081 frame uploaded-word reconstruction admits only the 18 diagnosed D060 residuals and leaves source geometry exact 
+OK D081 frame canonical normal boundary is exact; outside-face, meaningful, nonfinite and unproven changes reject 
+OK D081 frame other samples have zero eligible normal components and source mutation cannot replace the oracle baseline 
+OK D081 frame construction color/depth clipping and tree growth source remain byte-exact published rules 
+OK D081 frame all ten original construction states retain all parcel tiles and ages while every mandatory point remains unclipped 

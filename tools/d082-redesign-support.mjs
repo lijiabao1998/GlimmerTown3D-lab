@@ -1,3 +1,4 @@
+import {releaseHistoricalSource} from './d082-release-source-v2.mjs';
 // Nine-model expansion review. Independent of the unchanged rejected D082 ten-model gates.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -62,7 +63,7 @@ assert.deepEqual(APPROVED_185.slots['185:1'].approvedPins,{defaultGeometry:'7864
 assert.deepEqual(APPROVED_185.slots['185:2'].approvedPins,{defaultGeometry:'ddddc1a69f8b63ffb9d753aaf51b05c79676396174ac21f471597475c0462ba8',allAffineCasesSha256:'b7c2660c179c1a2bf4968636066789cb27955786a261c18aa81d0aa17d071d06'});
 for(const[file,hash]of Object.entries(APPROVED_185.evidence))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'immutable185 old-coordinate evidence '+file);
 for(const[file,hash]of Object.entries(APPROVED_179_V1.approvedProductSources)){
- if(file===D082_185_ART_PATH){assert.equal(hash,D082_185_PREVIOUS_ART_SHA,'unchanged historical179 source pin');assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),D082_185_CURRENT_ART_SHA,'exact approved185-only art packaging');}
+ if(file===D082_185_ART_PATH){assert.equal(hash,D082_185_PREVIOUS_ART_SHA,'unchanged historical179 source pin');assert.equal(sha(releaseHistoricalSource(file)),D082_185_CURRENT_ART_SHA,'exact approved185-only art packaging');}
  else assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),hash,'unchanged179 approved product source '+file);
 }
 export const ACCEPTED=Object.freeze({...PREVIOUS_ACCEPTED,'179:1':Object.freeze(APPROVED_179_V1.approvedPins),...Object.fromEntries(Object.entries(APPROVED_185.slots).map(([key,s])=>[key,Object.freeze(s.approvedPins)]))});

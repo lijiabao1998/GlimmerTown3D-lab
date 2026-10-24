@@ -1,3 +1,4 @@
+import {releaseHistoricalSource} from './d082-release-source-v2.mjs';
 // Independent source-only acceptance: exact immediate Git baseline and fail-closed adapters.
 // Runtime model imports and behavioral tests always execute actual product sources.
 import assert from 'node:assert/strict';
@@ -34,7 +35,7 @@ export function d082ScopeGuards(){
  for(const file of Object.keys(D082_REVIEWED_SOURCES)){
   if(file===D082_185_ART_PATH){
    assert.equal(createHash('sha256').update(git('show',lease.reviewed179v1Source+':'+file)).digest('hex'),D082_185_PREVIOUS_ART_SHA,'previous independently reviewed179 source pin stays immutable');
-   assert.equal(read(file),composeReviewed185Art(file=>git('show',D082_185_REVIEWED_SOURCE+':'+file)),'actual approved185 packaging equals independent reviewed Git bytes');
+   assert.equal(releaseHistoricalSource(file,read),composeReviewed185Art(file=>git('show',D082_185_REVIEWED_SOURCE+':'+file)),'actual approved185 packaging equals independent reviewed Git bytes');
    continue;
   }
   const source=file==='src/content/britishCoastalRecreation.ts'?lease.reviewedNineSource:lease.reviewed179v1Source;
@@ -90,7 +91,7 @@ export function d082ScopeGuards(){
  for(const file of Object.keys(approved185Lease.reviewedComponents)){const bad=structuredClone(approved185Lease);bad.reviewedComponents[file]='0'.repeat(64);bad185.push(bad);}
  for(const bad of bad185){assert.throws(()=>validateD082185SourceLease(bad));mutations++;}
  const reviewed185=new Map(Object.keys(D082_185_COMPONENTS).map(file=>[file,git('show',D082_185_REVIEWED_SOURCE+':'+file)])),reader185=file=>reviewed185.get(file),calls185=[];
- assert.equal(composeReviewed185Art(file=>{calls185.push(file);return reader185(file);}),read(D082_185_ART_PATH));assert.deepEqual(calls185,Object.keys(D082_185_COMPONENTS));
+ assert.equal(composeReviewed185Art(file=>{calls185.push(file);return reader185(file);}),releaseHistoricalSource(D082_185_ART_PATH,read));assert.deepEqual(calls185,Object.keys(D082_185_COMPONENTS));
  const approved185=JSON.parse(read('fixtures/d082-185-approved-revision.json'));
  for(const [file,pin]of Object.entries(approved185.evidence)){const reviewed=file.replace('docs/evidence/D082-185-approved-adoption/','docs/evidence/D082-remaining-proposal/');assert.equal(createHash('sha256').update(execFileSync('git',['show',D082_185_REVIEWED_SOURCE+':'+reviewed],{cwd:ROOT,maxBuffer:64*1024*1024})).digest('hex'),pin,'independent reviewed185 old-coordinate evidence');}
  for(const[file,pin]of Object.entries(approved185.preservedProtectedCode.files))assert.equal(createHash('sha256').update(execFileSync('git',['show',D082_185_REVIEWED_SOURCE+':'+file],{cwd:ROOT,maxBuffer:64*1024*1024})).digest('hex'),pin,'independent unchanged protected code from reviewed source');

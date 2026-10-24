@@ -1,3 +1,4 @@
+import {D082_REMAINING_GEOMETRY} from './d082RemainingGeometryData.ts';
 import {emitD082Repair179v1} from './d082Repair179v1.ts';
 // D082 nine-building redesign. Real production geometry; no UI or simulation changes.
 import {ShapeUtils,Vector2,Color,Vector3} from 'three';
@@ -60,7 +61,10 @@ function emitD082RemainingProposal(p:Pen,v:1|2){
  }
 }
 
-export function emitCoastalModel(p:Pen,m:Model){const b=new Building(p);if(m.k===185&&(m.v===1||m.v===2)){emitD082RemainingProposal(p,m.v);return;}if(m.k===179&&m.v===1){emitD082Repair179v1(p);return;}
+export function emitCoastalModel(p:Pen,m:Model){
+ const revision=D082_REMAINING_GEOMETRY[(m.k+':'+m.v) as keyof typeof D082_REMAINING_GEOMETRY];
+ if(revision){for(const t of revision){const g=[p.a.W,p.a.O,p.a.D][t.layer],saved=[g.style,g.band,g.glass] as const;try{g.style=t.style;g.band=t.band;g.glass=t.glass.length?new Color().fromArray([...t.glass]):null;const ps=t.points.map(([x,y,z])=>[p.X(x),p.a.y0+y*p.H,p.Z(z)] as V3),n=new Vector3(...ps[1]).sub(new Vector3(...ps[0])).cross(new Vector3(...ps[2]).sub(new Vector3(...ps[0]))).normalize();g.triangle(ps[0],ps[1],ps[2],[n.x,n.y,n.z],new Color().fromArray([...t.color]));const uv=t.uv.flat(),rowScale='windowHeight' in t?((t.windowHeight*p.H>.34?2:1)/t.capturedRows):1;for(let i=0;i<6;i++)g.uv[g.uv.length-6+i]=uv[i]*(i%2?rowScale:1);}finally{[g.style,g.band,g.glass]=saved;}}return;}
+const b=new Building(p);if(m.k===185&&(m.v===1||m.v===2)){emitD082RemainingProposal(p,m.v);return;}if(m.k===179&&m.v===1){emitD082Repair179v1(p);return;}
  if(m.k===179&&m.v===0){
   b.body(.13,.87,.22,.73,.55,C.stone,'hall',WIN_STYLE.arch);
   b.roof(.115,.885,.205,.745,.55,.82,C.slate,C.light);

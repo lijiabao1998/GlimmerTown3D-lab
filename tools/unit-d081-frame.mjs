@@ -16,7 +16,7 @@ import {D081_OLD,D081_KT,d081City,d081FieldStudyCity,d081Blocks,d081Civic,d081Ex
 
 import {d081HistoricalBytes} from './d081-scope.mjs';
 import {d082HistoricalBytes} from './d082-scope.mjs';
-import {d082HistoricalIsolationGuards} from './test-d082-historical-isolation.mjs';
+import {d082ReleaseIsolationV2 as d082HistoricalIsolationGuards} from './d082-release-isolation-v2.mjs';
 import {D081_CAPTURE_SOURCES,D081_SLOTS,D081_BASELINE_ALTERNATE_VIEWS,D081_ALTERNATE_VIEWS,D081_REPEAT_SLOTS,d081CapturePlan,d081CaptureQuery,assertD081CaptureUrl,assertD081OriginalViewCount,d081CameraZoom} from './d081-capture.mjs';
 
 const VIEWPORTS=[{W:1440,H:1000},{W:360,H:740},{W:412,H:860}];
