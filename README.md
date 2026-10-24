@@ -14,7 +14,15 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前正式版：D065 英式獨棟屋
+## 目前正式版：D082／D083 原生英式建築
+
+[PR #39](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/39) 已合併至 main `e0508afacaf660bc5864d0cc136c22bcedb7f5bb`：D082 正式接受的九款、D083 八款可建造建築，以及有限幾何／來源相容性修復。舊十款未通過版只保留歷史，不是正式產品。
+
+[main CI 40122805423](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40122805423) 的 71 項工作成功，含原有完整回歸、D083 原生建造、1440／412／360 Chromium 與 Pages。2026-10-24 21:39 UTC 重新下載[公開遊戲](https://lijiabao1998.github.io/GlimmerTown3D-lab/)的 HTML，SHA-256 為 `020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1`，與同一 main 的正式建置相同。
+
+[發布收據](docs/D082-D083-main-release-receipt.md) 區分 CI 真瀏覽器驗證、公網位元組一致性與尚未完成的公網 WebGL 互動驗證。D084 僅為獨立候選，不代表新美術已核准或發布。建造為目前主線，一生與考古暫緩。
+
+## 歷史正式版：D065 英式獨棟屋
 
 [D065](docs/D065-british-houses.md) 把一級住宅 `core` 路徑裡永遠通用的 villa 與 modern 換成八個程序化英式獨棟屋（villa：喬治亞方盒、哥德別墅、工藝運動屋、義式鐘塔別墅、都鐸式；modern：白色立方、單坡屋、遮篷平房）。形的選擇只在畫面端算（決定性），不動模擬、存檔、編號；繪製呼叫維持 15，種子城 C 檔三角形 114,770 → 113,658、ai120 96,607 → 95,571；通用美術街區 seed516 90 → 39 塊、ai120 49 → 0。旗標 `houseArt`，要舊畫面：`?houseArt=legacy`。
 

@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1440,
+    "pngs": 13,
+    "source": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+    "build": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+    "owners": 8,
+    "passed": true
+  },
+  {
+    "width": 412,
+    "pngs": 13,
+    "source": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+    "build": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+    "owners": 8,
+    "passed": true
+  },
+  {
+    "width": 360,
+    "pngs": 13,
+    "source": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+    "build": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+    "owners": 8,
+    "passed": true
+  }
+]
