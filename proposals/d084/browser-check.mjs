@@ -17,12 +17,19 @@ try {await withBrowser({width,height,port:8644},async({open,page})=>{
  for (const enabled of [false,true]) {
   await open('sample=newcity&streetFrontage='+(enabled?'1':'0'));await page.evaluate('document.fonts.ready');
   assert.equal(await page.evaluate('__gt.webgl2'),true);
-  assert.equal((await page.evaluate(`__gt.loadCode(${JSON.stringify(code)})`)).ok,true);
+  await page.evaluate('__gt.menu("paste")');
+  await page.evaluate(`document.querySelector('#dlg textarea').value=${JSON.stringify(code)}`);
+  const button=await page.evaluate("(()=>{const r=document.querySelector('#dlgOk').getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})()");
+  await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x:button[0],y:button[1],button:'left',buttons:1,clickCount:1});
+  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:button[0],y:button[1],button:'left',buttons:0,clickCount:1});await settle();
+  assert.equal(await page.evaluate('__gt.ui().dock'),'build','paste UI creates an editable city');
   await page.evaluate('__gt.simPlay(false);__gt.view(9,9,2);__gt.tool("civic","heritageGranary")');await settle();
   const before=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
   const [x,y]=await page.evaluate('__gt.cellScreen(8,8)');
   assert.ok(x>0&&x<width&&y>0&&y<height);
   await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});await settle();
+  report.pointer=await page.evaluate(`({ui:__gt.ui(),stroke:__gt.stroke(),hit:document.elementFromPoint(${x},${y})?.tagName})`);record();
+  await shot(enabled?'candidate-precheck':'legacy-precheck');
   assert.equal(await page.evaluate('__gt.previewCount()'),4,'actual native footprint');
   assert.equal(await page.evaluate('__gt.frontageCount()'),enabled?2:0,'only the two shared north edges');
   assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),before,'held preview changes no world');
