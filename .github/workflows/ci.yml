@@ -35,6 +35,8 @@ jobs:
       - run: npm ci
       - name: CI provenance and fail-closed gate negative controls
         run: node --test .github/scripts/ci-integrity-release-v2.test.mjs tools/unit-partitions-release-v2.test.mjs
+      - name: Versioned source missing/stale negatives and fresh historical receipt regression
+        run: node --test tools/d082-release-source-v2.test.mjs tools/d082-historical-release.test.mjs
       - run: npm run build
       - name: Record build source and file hashes
         id: identity

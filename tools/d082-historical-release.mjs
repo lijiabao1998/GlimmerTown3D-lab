@@ -22,6 +22,8 @@ export function historicalVerifierControls(){
  assert.throws(()=>assertHistoricalBlob(b,'0'.repeat(40),'wrong object control'));
  return {positive:1,negative:3};
 }
+// The frame-only partition starts from a fresh archive, with no integration-created scratch directory.
+export const HISTORICAL_FRAME_RECEIPT = "fs.mkdirSync('scratch',{recursive:true});fs.writeFileSync('scratch/historical-frame-result.json',JSON.stringify(r),{flag:'wx'});";
 export function runHistoricalTenQualification({phase='all'}={}){
  assert.ok(['all','integration','frame'].includes(phase),'explicit historical qualification phase');
  assert.equal(git(['rev-parse','--show-object-format']).trim(),'sha1','explicit repository object format');
@@ -40,7 +42,7 @@ export function runHistoricalTenQualification({phase='all'}={}){
  for(const [id,file]of [['geometry','tools/d082/geometry-test.mjs'],['architecture','tools/unit-d082-architecture-contract.mjs'],['integration','tools/unit-d082.mjs'],['historical-isolation','tools/test-d082-historical-isolation.mjs'],['browser-surface-api','tools/test-d082-browser-surfaces.mjs'],['partition-inventory','tools/unit-partitions.test.mjs'],['ci-integrity','.github/scripts/ci-integrity.test.mjs'],['frame','tools/unit-d082-frame.mjs']].filter(([id])=>phase==='all'||(phase==='frame'?id==='frame':id!=='frame'))){
   const stdout=fs.openSync(path.join(out,id+'.stdout.log'),'w'),stderr=fs.openSync(path.join(out,id+'.stderr.log'),'w');
   const start=new Date().toISOString();let r;
-  const args=id==='frame'?['--experimental-strip-types','--input-type=module','-e',`import fs from 'node:fs';import {d082FrameGuards} from './tools/unit-d082-frame.mjs';const r=await d082FrameGuards((ok,n,d)=>console.log(ok?'OK':'NG',n,d??''));fs.writeFileSync('scratch/historical-frame-result.json',JSON.stringify(r));process.exitCode=r.failed?1:0;`]:['--experimental-strip-types',file];
+  const args=id==='frame'?['--experimental-strip-types','--input-type=module','-e',`import fs from 'node:fs';import {d082FrameGuards} from './tools/unit-d082-frame.mjs';const r=await d082FrameGuards((ok,n,d)=>console.log(ok?'OK':'NG',n,d??''));${HISTORICAL_FRAME_RECEIPT}process.exitCode=r.failed?1:0;`]:['--experimental-strip-types',file];
   try{r=spawnSync(process.execPath,args,{cwd:snapshot,env:{...process.env,GIT_DIR:gitDir,GIT_WORK_TREE:snapshot},stdio:['ignore',stdout,stderr]});}finally{fs.closeSync(stdout);fs.closeSync(stderr);}
   report.commands.push({id,command:['node',...args],sourceSha256:sha(fs.readFileSync(path.join(snapshot,file))),started:start,finished:new Date().toISOString(),exitCode:r.status,signal:r.signal,error:r.error?.message??null,stdout:id+'.stdout.log',stderr:id+'.stderr.log'});
   fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2)+'\n');

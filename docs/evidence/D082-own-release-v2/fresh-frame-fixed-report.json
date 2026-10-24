@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "phase": "frame",
+  "qualification": "Historical rejected-ten source only; not current accepted-nine, browser, merge or deployment success.",
+  "commit": "0b6da7aa384e5a65c07221eed9301aa4a94cd4ba",
+  "tree": "34a6e740e1b13c20814d4f3bcc0d48e40e84f8cd",
+  "archiveSha256": "7ebcd66f81ee85e610c590ec2c4e03af79f085d6db3dfc26e7aead3522102417",
+  "trackedFiles": 1980,
+  "verifierControls": {
+    "positive": 1,
+    "negative": 3
+  },
+  "commands": [
+    {
+      "id": "frame",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "--input-type=module",
+        "-e",
+        "import fs from 'node:fs';import {d082FrameGuards} from './tools/unit-d082-frame.mjs';const r=await d082FrameGuards((ok,n,d)=>console.log(ok?'OK':'NG',n,d??''));fs.mkdirSync('scratch',{recursive:true});fs.writeFileSync('scratch/historical-frame-result.json',JSON.stringify(r),{flag:'wx'});process.exitCode=r.failed?1:0;"
+      ],
+      "sourceSha256": "12b9390d3d56e01dc11d0214f57fcb924ccf1ad3479d8a45c2995e06d1f51caf",
+      "started": "2026-10-24T14:19:20.516Z",
+      "finished": "2026-10-24T14:28:29.659Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "frame.stdout.log",
+      "stderr": "frame.stderr.log"
+    }
+  ],
+  "passed": true,
+  "sourcePreserved": true
+}

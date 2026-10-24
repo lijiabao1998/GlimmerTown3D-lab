@@ -1,0 +1,6 @@
+{
+  "qualification": "Exact original receipt statement in fresh directory; not a substitute for full frame execution.",
+  "exitCode": 1,
+  "stdout": "",
+  "stderr": "node:fs:2483\n    return binding.writeFileUtf8(\n                   ^\n\nError: ENOENT: no such file or directory, open 'scratch/historical-frame-result.json'\n    at Object.writeFileSync (node:fs:2483:20)\n    at file:///tmp/d082-original-receipt-OKQVqg/[eval1]:1:48\n    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)\n    at async node:internal/modules/esm/loader:224:26\n    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {\n  errno: -2,\n  code: 'ENOENT',\n  syscall: 'open',\n  path: 'scratch/historical-frame-result.json'\n}\n\nNode.js v24.19.0\n"
+}

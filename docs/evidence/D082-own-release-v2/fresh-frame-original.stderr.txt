@@ -1,0 +1,14 @@
+node:fs:2483
+    return binding.writeFileUtf8(
+                   ^
+
+Error: ENOENT: no such file or directory, open 'scratch/historical-frame-result.json'
+    at Object.writeFileSync (node:fs:2483:20)
+    at file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d082-own-release/scratch/d082-historical-release-runs/run-t6RXbj/source/[eval1]:1:164 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'scratch/historical-frame-result.json'
+}
+
+Node.js v24.19.0

@@ -1,0 +1,58 @@
+{
+  "workflowRun": 40101128869,
+  "head": "55bcf7ad01a48b2bffc370326bda2c06e99f98fb",
+  "verifiedGitTree": "7f09abdb74768b4dfa07cb73881f8149f73a0081",
+  "rows": [
+    {
+      "width": 1440,
+      "complete": true,
+      "errors": [],
+      "placements": 8,
+      "pngs": 13,
+      "sourceCommit": "325766c65dd7b46c2d37a88c5a34b4fa8bea333d",
+      "sourceTreeSha256": "6a146098dbcc1c2c29ff1bb9a112ad5bc237b31c2c71aa9180ac741e4a58e2c2",
+      "buildSha256": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+      "saveReload": {
+        "passed": true,
+        "sample": "mine",
+        "note": "歷史 9 筆重播成功（日誌 9 列＋存檔 0 列）",
+        "buildings": 14,
+        "newOwnersRetained": 8
+      }
+    },
+    {
+      "width": 412,
+      "complete": true,
+      "errors": [],
+      "placements": 8,
+      "pngs": 13,
+      "sourceCommit": "325766c65dd7b46c2d37a88c5a34b4fa8bea333d",
+      "sourceTreeSha256": "6a146098dbcc1c2c29ff1bb9a112ad5bc237b31c2c71aa9180ac741e4a58e2c2",
+      "buildSha256": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+      "saveReload": {
+        "passed": true,
+        "sample": "mine",
+        "note": "歷史 9 筆重播成功（日誌 9 列＋存檔 0 列）",
+        "buildings": 14,
+        "newOwnersRetained": 8
+      }
+    },
+    {
+      "width": 360,
+      "complete": true,
+      "errors": [],
+      "placements": 8,
+      "pngs": 13,
+      "sourceCommit": "325766c65dd7b46c2d37a88c5a34b4fa8bea333d",
+      "sourceTreeSha256": "6a146098dbcc1c2c29ff1bb9a112ad5bc237b31c2c71aa9180ac741e4a58e2c2",
+      "buildSha256": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+      "saveReload": {
+        "passed": true,
+        "sample": "mine",
+        "note": "歷史 9 筆重播成功（日誌 9 列＋存檔 0 列）",
+        "buildings": 14,
+        "newOwnersRetained": 8
+      }
+    }
+  ]
+}
