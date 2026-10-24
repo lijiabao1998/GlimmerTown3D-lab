@@ -5,20 +5,25 @@ import {createHash} from 'node:crypto';
 import {withBrowser} from '../../tools/cdp.mjs';
 import {encodeLabCode} from '../../src/io/labcode.ts';
 import {loadCode,saveCode} from '../../src/io/save.ts';
+import {commitOp} from '../../src/sim/edit.ts';
 import {KINDS} from '../../src/content/kinds.ts';
 const width=Number(process.argv.find(s=>s.startsWith('--width='))?.split('=')[1]??1440),height=width===1440?1000:860;
 const baseline=process.argv.includes('--baseline');
 const out=`scratch/d084/${width}${baseline?'-baseline':''}`;fs.mkdirSync(out,{recursive:true});
-const rd=Array(1024).fill('0');for(let x=5;x<=12;x++)rd[7*32+x]='1';
+const rd=Array(1024).fill('0');
 const rawCode=encodeLabCode({v:1,n:32,seed:20261084,day:0,money:20000,nm:'D084 frontage',df:3,ter:'2'.repeat(1024),tre:'0'.repeat(1024),rd:rd.join(''),bl:[]},{deflate:true});
 const loaded=loadCode(rawCode,KINDS,JSON.parse(fs.readFileSync('src/content/samples/d009-live.json')).vrank);assert.ok(loaded.ok,loaded.error);
+const roadBuild=commitOp(loaded.sim,{k:'line',tool:'alley',x0:5,z0:7,x1:12,z1:7},0);
+assert.equal(roadBuild.placed,8,'fixture roads are real native edits with history');
 const code=saveCode(loaded.sim,loaded.template,loaded.start);
+const replay=loadCode(code,KINDS,JSON.parse(fs.readFileSync('src/content/samples/d009-live.json')).vrank);
+assert.ok(replay.ok && replay.replayed,'fixture must fully replay before browser import');
 const report={width,height,source:baseline?'e0508afacaf660bc5864d0cc136c22bcedb7f5bb':process.env.GITHUB_SHA,shots:[],passed:false,errors:[]};
 const record=()=>fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));
 record();
 try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scratch/d084-baseline'):path.resolve('dist')},async({open,page})=>{
  const settle=()=>page.evaluate('for(let i=0;i<160;i++)__gt.spin(0);new Promise(r=>{let n=0;function f(){if(++n===8)r();else requestAnimationFrame(f)}requestAnimationFrame(f)})');
- const shot=async(name)=>{await settle();const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
+ const shot=async(name)=>{await settle();await page.evaluate(`new Promise((resolve,reject)=>{const start=performance.now();function check(){if(document.querySelector('#toasts')?.childElementCount===0 && !document.getAnimations().some(a=>a.playState==='running'))setTimeout(resolve,500);else if(performance.now()-start>10000)reject(new Error('Native UI did not settle'));else setTimeout(check,50)}check()})`);const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
  for (const enabled of (baseline?[false]:[false,true])) {
   report.phase='open '+(enabled?'existing isolated city':'new isolated city');record();
   let openTimer;try{await Promise.race([open('sample='+(enabled?'mine':'newcity')+'&streetFrontage='+(enabled?'1':'0')),new Promise((_,reject)=>{openTimer=setTimeout(()=>reject(new Error('Open timed out; no modal accepted')),90000)})]);}finally{clearTimeout(openTimer);}
@@ -31,6 +36,7 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
   await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x:button[0],y:button[1],button:'left',buttons:1,clickCount:1});
   await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:button[0],y:button[1],button:'left',buttons:0,clickCount:1});await settle();
   assert.equal(await page.evaluate('__gt.ui().dock'),'build','paste UI creates an editable city');
+  report.importNotices=await page.evaluate("Array.from(document.querySelectorAll('#toasts .toast')).map(t=>({text:t.textContent,bad:t.classList.contains('bad')}))");assert.ok(!report.importNotices.some(t=>t.bad),'native import must not warn of history mismatch');record();
   await page.evaluate('__gt.simPlay(false);__gt.view(9,9,2);__gt.tool("civic","heritageGranary")');await settle();
   const before=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
   const [x,y]=await page.evaluate('__gt.cellScreen(8,8)');
