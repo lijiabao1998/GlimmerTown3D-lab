@@ -1,0 +1,382 @@
+{
+  "schema": 1,
+  "qualification": "Repair PR qualification only. Main-base PR, final main CI, Pages and HTTPS bytes are not yet complete.",
+  "head": "62571d6243f6b50168ac00a8b169bcb3cb35f744",
+  "tree": "2bd795a3f56b076b5eaae92d2cc99273bd74361c",
+  "syntheticMerge": "ddc3704d7c90f146c313a2b48683b2e1682eff5b",
+  "mainAtPreparation": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+  "runs": [
+    {
+      "id": 40107701484,
+      "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40107701484",
+      "jobs": [
+        {
+          "id": 120912861406,
+          "name": "node-frame",
+          "result": "success"
+        },
+        {
+          "id": 120912861535,
+          "name": "d061",
+          "result": "success"
+        },
+        {
+          "id": 120912861551,
+          "name": "d060 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861574,
+          "name": "d081 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861578,
+          "name": "d073 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861581,
+          "name": "d063 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861583,
+          "name": "d079 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861586,
+          "name": "node-frame-d082",
+          "result": "success"
+        },
+        {
+          "id": 120912861587,
+          "name": "d073 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861589,
+          "name": "node-frame-d080",
+          "result": "success"
+        },
+        {
+          "id": 120912861599,
+          "name": "d069 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861600,
+          "name": "node-frame-d079",
+          "result": "success"
+        },
+        {
+          "id": 120912861604,
+          "name": "build",
+          "result": "success"
+        },
+        {
+          "id": 120912861613,
+          "name": "d070 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861615,
+          "name": "d072 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861620,
+          "name": "d079 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861622,
+          "name": "d077 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861626,
+          "name": "d059",
+          "result": "success"
+        },
+        {
+          "id": 120912861641,
+          "name": "d070 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861645,
+          "name": "d072 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861647,
+          "name": "d079 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861650,
+          "name": "d077 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861656,
+          "name": "d064 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861667,
+          "name": "d069 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861682,
+          "name": "d072 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861698,
+          "name": "d060 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861713,
+          "name": "d080 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861718,
+          "name": "d074 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861722,
+          "name": "node-frame-d081",
+          "result": "success"
+        },
+        {
+          "id": 120912861740,
+          "name": "node",
+          "result": "success"
+        },
+        {
+          "id": 120912861746,
+          "name": "d077 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861751,
+          "name": "d062",
+          "result": "success"
+        },
+        {
+          "id": 120912861753,
+          "name": "d064 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861761,
+          "name": "d055",
+          "result": "success"
+        },
+        {
+          "id": 120912861762,
+          "name": "d070 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861777,
+          "name": "d076 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861797,
+          "name": "d060 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861812,
+          "name": "d074 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861819,
+          "name": "d071 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861841,
+          "name": "d074 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861860,
+          "name": "d064 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861869,
+          "name": "d080 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861879,
+          "name": "d081 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861885,
+          "name": "d078 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861887,
+          "name": "d080 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861901,
+          "name": "d076 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861905,
+          "name": "d073 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861906,
+          "name": "d078 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861911,
+          "name": "d076 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861929,
+          "name": "d069 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861932,
+          "name": "d068 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912861933,
+          "name": "d071 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861966,
+          "name": "d068 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912861967,
+          "name": "d068 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912861988,
+          "name": "d071 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912862002,
+          "name": "d082 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912862014,
+          "name": "d063 (1440)",
+          "result": "success"
+        },
+        {
+          "id": 120912862016,
+          "name": "d081 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912862017,
+          "name": "d082 (412)",
+          "result": "success"
+        },
+        {
+          "id": 120912862023,
+          "name": "d078 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912862042,
+          "name": "d082 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912862060,
+          "name": "d063 (360)",
+          "result": "success"
+        },
+        {
+          "id": 120912862313,
+          "name": "d083-native-release",
+          "result": "skipped"
+        },
+        {
+          "id": 120912936445,
+          "name": "browser",
+          "result": "success"
+        },
+        {
+          "id": 120912936446,
+          "name": "screenshots",
+          "result": "success"
+        },
+        {
+          "id": 120936488182,
+          "name": "smoke",
+          "result": "success"
+        },
+        {
+          "id": 120936560567,
+          "name": "pages",
+          "result": "skipped"
+        }
+      ]
+    },
+    {
+      "id": 40107701443,
+      "result": "success",
+      "jobs": 5
+    },
+    {
+      "id": 40107701441,
+      "result": "success",
+      "jobs": 1
+    }
+  ],
+  "browser": {
+    "buildSha256": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+    "d082ArtifactIds": {
+      "360": 12566319122,
+      "412": 12566730894,
+      "1440": 12566294642
+    },
+    "verifiedPngs": 492,
+    "byteIdenticalToPriorReviewedPngs": 492,
+    "coverageContracts": 54,
+    "missingRequiredProbes": 0,
+    "d083ArtifactIds": {
+      "360": 12565546929,
+      "412": 12565521230,
+      "1440": 12565351544
+    },
+    "d083VerifiedPngs": 39,
+    "d083SavedNewOwnersEachWidth": 8,
+    "generalBrowserArtifact": 12568205524
+  },
+  "nodeArtifact": 12568192717
+}

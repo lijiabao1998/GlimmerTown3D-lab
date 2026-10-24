@@ -1,0 +1,129 @@
+{
+  "schema": 1,
+  "phase": "integration",
+  "qualification": "Historical rejected-ten source only; not current accepted-nine, browser, merge or deployment success.",
+  "commit": "0b6da7aa384e5a65c07221eed9301aa4a94cd4ba",
+  "tree": "34a6e740e1b13c20814d4f3bcc0d48e40e84f8cd",
+  "archiveSha256": "7ebcd66f81ee85e610c590ec2c4e03af79f085d6db3dfc26e7aead3522102417",
+  "trackedFiles": 1980,
+  "verifierControls": {
+    "positive": 1,
+    "negative": 3
+  },
+  "commands": [
+    {
+      "id": "geometry",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/d082/geometry-test.mjs"
+      ],
+      "sourceSha256": "6044b5bb8204c7e9b008d05687e15bd4fd59bbc747a7bbdc7d22f9791b480dcd",
+      "started": "2026-10-24T17:16:53.449Z",
+      "finished": "2026-10-24T17:16:54.390Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "geometry.stdout.log",
+      "stderr": "geometry.stderr.log"
+    },
+    {
+      "id": "architecture",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/unit-d082-architecture-contract.mjs"
+      ],
+      "sourceSha256": "45377104d5a61d55be21d5f1770e34ce9836499ab5ce1affd39f22b622334498",
+      "started": "2026-10-24T17:16:54.391Z",
+      "finished": "2026-10-24T17:16:54.497Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "architecture.stdout.log",
+      "stderr": "architecture.stderr.log"
+    },
+    {
+      "id": "integration",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/unit-d082.mjs"
+      ],
+      "sourceSha256": "2ae3eea1bb3ada5ec4349545299357365d6408a05f171e0fc8cc13e79ac6d260",
+      "started": "2026-10-24T17:16:54.497Z",
+      "finished": "2026-10-24T17:17:57.440Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "integration.stdout.log",
+      "stderr": "integration.stderr.log"
+    },
+    {
+      "id": "historical-isolation",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/test-d082-historical-isolation.mjs"
+      ],
+      "sourceSha256": "8b9f6db905b87355d4cb3976fd1351c10783613ef19e23f76f26cd418e49b4b0",
+      "started": "2026-10-24T17:17:57.443Z",
+      "finished": "2026-10-24T17:17:58.210Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "historical-isolation.stdout.log",
+      "stderr": "historical-isolation.stderr.log"
+    },
+    {
+      "id": "browser-surface-api",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/test-d082-browser-surfaces.mjs"
+      ],
+      "sourceSha256": "ff9b98292bb0f2cb8004f356afd3fc0673a73677b489aa3e04959a60a2de1425",
+      "started": "2026-10-24T17:17:58.210Z",
+      "finished": "2026-10-24T17:18:26.360Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "browser-surface-api.stdout.log",
+      "stderr": "browser-surface-api.stderr.log"
+    },
+    {
+      "id": "partition-inventory",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        "tools/unit-partitions.test.mjs"
+      ],
+      "sourceSha256": "0894bdfd61be9dc24fd620f5d34446f18cbb9086cab899a652d0ed0d3d090c6a",
+      "started": "2026-10-24T17:18:26.361Z",
+      "finished": "2026-10-24T17:18:27.012Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "partition-inventory.stdout.log",
+      "stderr": "partition-inventory.stderr.log"
+    },
+    {
+      "id": "ci-integrity",
+      "command": [
+        "node",
+        "--experimental-strip-types",
+        ".github/scripts/ci-integrity.test.mjs"
+      ],
+      "sourceSha256": "f324be5cf6093cf00b4df137066268614a8d9f7dc56bf93144d52d38b821d30e",
+      "started": "2026-10-24T17:18:27.012Z",
+      "finished": "2026-10-24T17:18:27.134Z",
+      "exitCode": 0,
+      "signal": null,
+      "error": null,
+      "stdout": "ci-integrity.stdout.log",
+      "stderr": "ci-integrity.stderr.log"
+    }
+  ],
+  "passed": true,
+  "sourcePreserved": true
+}
