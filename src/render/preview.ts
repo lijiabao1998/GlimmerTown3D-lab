@@ -1,6 +1,7 @@
 // 施工預覽（D011）：拖曳時每一格一片半透明方塊（能蓋＝工具色、不能蓋＝紅），貼在格頂上；只畫、不碰模擬（規則 2）。
 // 一個 InstancedMesh（一次 draw call）；場景重建後要重新加回去（同建築卡的框）。
 import * as THREE from 'three';
+import { StreetFrontage, frontageEdges } from './streetFrontage.ts';
 
 export interface PreviewCell { x: number; z: number; y: number; ok: boolean }
 
@@ -11,7 +12,16 @@ export class Preview {
   private readonly okColor = new THREE.Color();
   private readonly badColor = new THREE.Color(0xff5a4a);
   private readonly m = new THREE.Matrix4();
-  constructor(capacity = 4096) { this.mesh = this.make(capacity); }
+  private readonly frontage: StreetFrontage | null;
+  constructor(capacity = 4096, streetFrontage = false) {
+    this.mesh = this.make(capacity);
+    this.frontage = streetFrontage ? new StreetFrontage() : null;
+    if (this.frontage) this.mesh.add(this.frontage.mesh);
+  }
+  setFrontage(n: number, road: ArrayLike<number>, cells: readonly PreviewCell[]) {
+    this.frontage?.set(frontageEdges(n, road, cells));
+  }
+  frontageCount() { return this.frontage?.mesh.count ?? 0; }
   private make(capacity: number) {
     const mesh = new THREE.InstancedMesh(this.geo, this.mat, capacity);
     mesh.count = 0;
@@ -26,6 +36,7 @@ export class Preview {
     while (cap < need) cap *= 2;
     const old = this.mesh, parent = old.parent;
     this.mesh = this.make(cap);
+    if (this.frontage) this.mesh.add(this.frontage.mesh);
     parent?.remove(old); parent?.add(this.mesh);
     old.dispose();
   }
@@ -43,6 +54,6 @@ export class Preview {
     this.mesh.instanceMatrix.needsUpdate = true;
     if (this.mesh.instanceColor) this.mesh.instanceColor.needsUpdate = true;
   }
-  clear() { this.mesh.count = 0; }
-  dispose() { this.mesh.dispose(); this.geo.dispose(); this.mat.dispose(); }
+  clear() { this.mesh.count = 0; this.frontage?.clear(); }
+  dispose() { this.frontage?.dispose(); this.mesh.dispose(); this.geo.dispose(); this.mat.dispose(); }
 }

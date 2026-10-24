@@ -1,0 +1,35 @@
+name: d084-frontage-candidate
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update && sudo apt-get install -y fonts-wqy-microhei
+      - run: node --experimental-strip-types proposals/d084/frontage-check.mjs
+      - run: node --experimental-strip-types proposals/d084/source-check.mjs
+      - run: npm run typecheck && npm run build
+      - run: node --experimental-strip-types proposals/d084/browser-check.mjs --width=${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d084-frontage-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d084/
+          if-no-files-found: error

@@ -1,0 +1,37 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+import {withBrowser} from '../../tools/cdp.mjs';
+import {encodeLabCode} from '../../src/io/labcode.ts';
+const width=Number(process.argv.find(s=>s.startsWith('--width='))?.split('=')[1]??1440),height=width===1440?1000:860;
+const out=`scratch/d084/${width}`;fs.mkdirSync(out,{recursive:true});
+const rd=Array(1024).fill('0');for(let x=5;x<=12;x++)rd[7*32+x]='1';
+const code=encodeLabCode({v:1,n:32,seed:20261084,day:0,money:20000,nm:'D084 frontage',df:3,ter:'2'.repeat(1024),tre:'0'.repeat(1024),rd:rd.join(''),bl:[]},{deflate:true});
+const report={width,height,source:process.env.GITHUB_SHA,shots:[],passed:false,errors:[]};
+const record=()=>fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));
+record();
+try {await withBrowser({width,height,port:8644},async({open,page})=>{
+ const settle=()=>page.evaluate('new Promise(r=>{let n=0;function f(){if(++n===8)r();else requestAnimationFrame(f)}requestAnimationFrame(f)})');
+ const shot=async(name)=>{await settle();const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
+ for (const enabled of [false,true]) {
+  await open('sample=newcity&streetFrontage='+(enabled?'1':'0'));await page.evaluate('document.fonts.ready');
+  assert.equal(await page.evaluate('__gt.webgl2'),true);
+  assert.equal((await page.evaluate(`__gt.loadCode(${JSON.stringify(code)})`)).ok,true);
+  await page.evaluate('__gt.simPlay(false);__gt.view(9,9,2);__gt.tool("civic","heritageGranary")');await settle();
+  const before=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
+  const [x,y]=await page.evaluate('__gt.cellScreen(8,8)');
+  assert.ok(x>0&&x<width&&y>0&&y<height);
+  await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});await settle();
+  assert.equal(await page.evaluate('__gt.previewCount()'),4,'actual native footprint');
+  assert.equal(await page.evaluate('__gt.frontageCount()'),enabled?2:0,'only the two shared north edges');
+  assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),before,'held preview changes no world');
+  await shot(enabled?'candidate-held':'legacy-held');
+  await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
+  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x,y,button:'left',buttons:0,clickCount:1});await settle();
+  assert.equal(await page.evaluate('__gt.frontageCount()'),0,'cancel clears strips');
+  assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),before,'cancel preserves world');
+  await shot(enabled?'candidate-cancelled':'legacy-cancelled');
+ }
+ report.errors=page.errors;assert.deepEqual(page.errors,[]);report.passed=true;record();
+});}catch(e){report.failure=String(e.stack??e);record();throw e;}

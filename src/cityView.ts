@@ -340,7 +340,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const dropped = new Set<string>();
   const newJid = () => 'c' + Date.now().toString(36) + Math.floor(Math.random() * 2 ** 32).toString(36);   // 介面層：日誌編號只要不撞
   const dropJournal = (id: string) => { if (!id) return; dropped.add(id); if (mineRows?.id === id) mineRows = null; jstore?.drop(id).catch(() => { /* 刪不掉就留著，不影響新城 */ }); };
-  const preview = new Preview();
+  const preview = new Preview(4096, q.get('streetFrontage') === '1');
   const resHints = new ResourceHints();                                     // D040：資源圖（油田黃、礦藏藍）；選了油井、礦場工具或 ☰「顯示資源圖」才畫
   let showRes = false;
   const haz = new HazardMarks();                                            // D026：災禍標記（一個 InstancedMesh，空的不畫）
@@ -1459,6 +1459,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     if (op.k === 'tap' && stroke.moved) { preview.clear(); bui.hideCost(); lastPreview = null; invalidate(); return; }   // 點的工具：拖了就取消（實驗線 T436）
     const pv = previewOp(sim, op);
     preview.set(pv.cells.map(q => ({ x: q.x, z: q.z, y: Math.max(0, tileTop(city!, q.z * n + q.x)), ok: q.ok })), toolColor());
+    preview.setFrontage(n, city.road, op.k === 'tap' && op.tool !== 'doze' ? pv.cells.map(c => ({ ...c, ok: c.ok || !!c.foot, y: Math.max(0, tileTop(city!, c.z * n + c.x)) })) : []);
     lastPreview = pv;
     const diagnosis = diagnoseSite(sim, op, pv);
     if (stroke.pid >= 0) siteEstimate = diagnosis;
@@ -2119,6 +2120,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     cam: () => ({ pos: cam.position.toArray(), target: controls.target.toArray(), zoom: cam.zoom }),
     stroke: () => stroke ? { a: stroke.a, b: stroke.b, moved: stroke.moved, preview: lastPreview ? { count: lastPreview.count, total: lastPreview.total, cells: lastPreview.cells.length } : null } : null,
     previewCount: () => preview.mesh.count,
+    frontageCount: () => preview.frontageCount(),
     save: () => sim ? saveCode(sim, template, startCode) : null,
     saved: () => readSave(),
     saveNow: () => saveNow(),
