@@ -7,6 +7,8 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {pathToFileURL} from 'node:url';
 import {ROOT} from './cdp.mjs';
+import {D083_ADDED,d083PriorSourceFiles} from './d083-scope.mjs';
+import {d083ScopeGuards} from './unit-d083-scope.mjs';
 import {D082_ADDED,D082_LEGACY_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
 import {D082_CURRENT_PATHS,D082_REVIEWED_SOURCES,validateD082RestorationLease} from './d082-source-restoration.mjs';
 import {D082_185_ART_PATH,D082_185_PREVIOUS_ART_SHA,D082_185_REVIEWED_SOURCE,D082_185_COMPONENTS,composeReviewed185Art,validateD082185SourceLease} from './d082-185-approved-source.mjs';
@@ -17,8 +19,10 @@ const BASELINE='2cd43c424dcc909dcfa6ac55275406d2bc527ce0';
 const read=f=>fs.readFileSync(path.join(ROOT,f),'utf8');
 const git=(...args)=>execFileSync('git',args,{cwd:ROOT,encoding:'utf8',maxBuffer:64*1024*1024});
 export function d082ScopeGuards(){
+ const d083=d083ScopeGuards();
  const baseline=git('ls-tree','-r','--name-only',BASELINE,'--','src').trim().split('\n').sort();
- const current=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
+ const actual=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
+ const current=d083PriorSourceFiles(actual,read);
  const legacy=JSON.parse(read('fixtures/d082-art-scope.json')),lease=JSON.parse(read('fixtures/d082-source-restoration-v1.json'));
  assert.equal(baseline.length,227);assert.equal(assertD082LegacyInventory(Object.keys(legacy.after)),baseline.length+2);
  assert.equal(D082_LEGACY_ADDED.size,2);assert.equal(D082_ADDED.size,4);
@@ -40,7 +44,7 @@ export function d082ScopeGuards(){
  assert.throws(()=>assertD082Inventory(Object.keys(legacy.after)),/exact source inventory/,'old 229-path inventory cannot pass current 231-path phase');mutations++;
  assert.throws(()=>assertD082LegacyInventory(current),/exact original source inventory/,'current phase cannot silently replace archived 229-path inventory');mutations++;
  assert.throws(()=>d082HistoricalBytes('src/unauthorized.ts',()=>assert.fail('unknown path must not read')),/belongs to D082 source inventory/);
- const snapshot=new Map(current.map(file=>[file,read(file)])),fromSnapshot=file=>snapshot.get(file);
+ const snapshot=new Map([...current,...D083_ADDED].map(file=>[file,read(file)])),fromSnapshot=file=>snapshot.get(file);
  assert.equal(assertD082Scope(fromSnapshot),231,'injected complete snapshot is the actual source of bytes');
  for(const target of current){
   const mutated=file=>fromSnapshot(file)+(file===target?'\n// unauthorized mutation':'');
@@ -125,6 +129,6 @@ export function d082ScopeGuards(){
   }
  }
  const windowsGuard=reviewedWindowsGuards();assert.equal(windowsGuard.passed,true);
- return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),approved185Source: D082_185_REVIEWED_SOURCE,sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved185 source-only hash update and independently reviewed inline packaging; original231 paths/four additions,227/229 phases,3202 previous controls,179 pins,900/487 and409/443 evidence remain. No runtime phase-routing or report change.'};
+ return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),approved185Source: D082_185_REVIEWED_SOURCE,sourceRestorationNegativeControls:mutations,windowsGuard,d083SourceBoundary:d083,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved185 source-only hash update and independently reviewed inline packaging; original231 paths/four additions,227/229 phases,3202 previous controls,179 pins,900/487 and409/443 evidence remain. No runtime phase-routing or report change.'};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(d082ScopeGuards(),null,2));

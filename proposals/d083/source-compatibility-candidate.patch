@@ -1,0 +1,112 @@
+diff --git a/tools/d081-scope.mjs b/tools/d081-scope.mjs
+index 64968c9..631c5cd 100644
+--- a/tools/d081-scope.mjs
++++ b/tools/d081-scope.mjs
+@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
+ import {createHash} from 'node:crypto';
+ import {ROOT} from './cdp.mjs';
+ import {D082_ADDED,assertD082Scope,d082HistoricalBytes} from './d082-scope.mjs';
++import {D083_ADDED} from './d083-scope.mjs';
+ import {d081TouchLeaseHistoricalBytes} from './d081-touch-lease-scope.mjs';
+
+ const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+@@ -13,7 +14,7 @@ const M = JSON.parse(diskRead('fixtures/d081-art-scope.json'));
+ const baseline = JSON.parse(diskRead('fixtures/d081-source-before.json'));
+ const expectedFiles = [...Object.keys(M.before),...M.added].sort();
+ const modified = new Set(M.modified);
+-export const D081_ADDED = new Set([...M.added,...D082_ADDED]);
++export const D081_ADDED = new Set([...M.added,...D082_ADDED,...D083_ADDED]);
+
+ assert.equal(M.baseline,'7ec70a96b01437ab4576b0962905be16b1591e79','D081 fixed D080 candidate baseline');
+ const D080M = JSON.parse(diskRead('fixtures/d080-art-scope.json'));
+@@ -78,7 +79,7 @@ export function assertD081Scope(read=diskRead) {
+   assertD082Scope(read);
+   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
+     .filter(entry=>entry.isFile())
+-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D082_ADDED.has(file)).sort();
++    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D082_ADDED.has(file)&&!D083_ADDED.has(file)).sort();
+   assertD081Inventory(files);
+   const snapshot = new Map();
+   for(const file of files) {
+diff --git a/tools/d082-scope.mjs b/tools/d082-scope.mjs
+index 6577133..93213d7 100644
+--- a/tools/d082-scope.mjs
++++ b/tools/d082-scope.mjs
+@@ -4,6 +4,7 @@ import path from 'node:path';
+ import assert from 'node:assert/strict';
+ import {createHash} from 'node:crypto';
+ import {ROOT} from './cdp.mjs';
++import {D083_ADDED,assertD083Scope,d083HistoricalBytes,isD083ReviewedSource} from './d083-scope.mjs';
+ import {D082_CURRENT_ADDITIONS,assertD082CurrentInventory,d082RestorationInput} from './d082-source-restoration.mjs';
+
+
+@@ -69,13 +70,15 @@ function historical(file,current) {
+ }
+
+ export function d082HistoricalBytes(file,read=diskRead) {
+-  const current=d082RestorationInput(file,read);
++  if(D083_ADDED.has(file))return d083HistoricalBytes(file,read);
++  const current=d082RestorationInput(file,name=>d083HistoricalBytes(name,read));
+   if(D082_ADDED.has(file))return '';
+   return historical(file,current);
+ }
+
+ // Approved fixed-source allowance: no additional file becomes an addition or leaves historical inventory.
+ export function isD082ReviewedExistingSource(file,read=diskRead){
++  if(isD083ReviewedSource(file,read))return true;
+   if(file!=='src/render/windows.ts')return false;
+   const original=d082HistoricalBytes(file,read);
+   assert.equal(sha(original),M.before[file],'reviewed existing source restores exact published bytes');
+@@ -86,9 +89,10 @@ export function assertD082LegacyInventory(files){assert.deepEqual([...files].sor
+ export const assertD082Inventory=assertD082CurrentInventory;
+
+ export function assertD082Scope(read=diskRead) {
++  assertD083Scope(read);
+   const files=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true})
+     .filter(entry=>entry.isFile())
+-    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).sort();
++    .map(entry=>path.relative(ROOT,path.join(entry.parentPath,entry.name)).replaceAll('\\','/')).filter(file=>!D083_ADDED.has(file)).sort();
+   assertD082Inventory(files);
+   for(const file of files)d082HistoricalBytes(file,read);
+   return files.length;
+diff --git a/tools/unit-d082-scope.mjs b/tools/unit-d082-scope.mjs
+index e19b989..e3deabe 100644
+--- a/tools/unit-d082-scope.mjs
++++ b/tools/unit-d082-scope.mjs
+@@ -7,6 +7,8 @@ import {execFileSync} from 'node:child_process';
+ import {createHash} from 'node:crypto';
+ import {pathToFileURL} from 'node:url';
+ import {ROOT} from './cdp.mjs';
++import {D083_ADDED} from './d083-scope.mjs';
++import {d083ScopeGuards} from './unit-d083-scope.mjs';
+ import {D082_ADDED,D082_LEGACY_ADDED,d082HistoricalBytes,assertD082Scope,assertD082Inventory,assertD082LegacyInventory} from './d082-scope.mjs';
+ import {D082_CURRENT_PATHS,D082_REVIEWED_SOURCES,validateD082RestorationLease} from './d082-source-restoration.mjs';
+ import {D082_185_ART_PATH,D082_185_PREVIOUS_ART_SHA,D082_185_REVIEWED_SOURCE,D082_185_COMPONENTS,composeReviewed185Art,validateD082185SourceLease} from './d082-185-approved-source.mjs';
+@@ -17,8 +19,9 @@ const BASELINE='2cd43c424dcc909dcfa6ac55275406d2bc527ce0';
+ const read=f=>fs.readFileSync(path.join(ROOT,f),'utf8');
+ const git=(...args)=>execFileSync('git',args,{cwd:ROOT,encoding:'utf8',maxBuffer:64*1024*1024});
+ export function d082ScopeGuards(){
++ const d083=d083ScopeGuards();
+  const baseline=git('ls-tree','-r','--name-only',BASELINE,'--','src').trim().split('\n').sort();
+- const current=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();
++ const current=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).filter(file=>!D083_ADDED.has(file)).sort();
+  const legacy=JSON.parse(read('fixtures/d082-art-scope.json')),lease=JSON.parse(read('fixtures/d082-source-restoration-v1.json'));
+  assert.equal(baseline.length,227);assert.equal(assertD082LegacyInventory(Object.keys(legacy.after)),baseline.length+2);
+  assert.equal(D082_LEGACY_ADDED.size,2);assert.equal(D082_ADDED.size,4);
+@@ -40,7 +43,7 @@ export function d082ScopeGuards(){
+  assert.throws(()=>assertD082Inventory(Object.keys(legacy.after)),/exact source inventory/,'old 229-path inventory cannot pass current 231-path phase');mutations++;
+  assert.throws(()=>assertD082LegacyInventory(current),/exact original source inventory/,'current phase cannot silently replace archived 229-path inventory');mutations++;
+  assert.throws(()=>d082HistoricalBytes('src/unauthorized.ts',()=>assert.fail('unknown path must not read')),/belongs to D082 source inventory/);
+- const snapshot=new Map(current.map(file=>[file,read(file)])),fromSnapshot=file=>snapshot.get(file);
++ const snapshot=new Map([...current,...D083_ADDED].map(file=>[file,read(file)])),fromSnapshot=file=>snapshot.get(file);
+  assert.equal(assertD082Scope(fromSnapshot),231,'injected complete snapshot is the actual source of bytes');
+  for(const target of current){
+   const mutated=file=>fromSnapshot(file)+(file===target?'\n// unauthorized mutation':'');
+@@ -125,6 +128,6 @@ export function d082ScopeGuards(){
+   }
+  }
+  const windowsGuard=reviewedWindowsGuards();assert.equal(windowsGuard.passed,true);
+- return {passed:true,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),approved185Source: D082_185_REVIEWED_SOURCE,sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved185 source-only hash update and independently reviewed inline packaging; original231 paths/four additions,227/229 phases,3202 previous controls,179 pins,900/487 and409/443 evidence remain. No runtime phase-routing or report change.'};
++ return {passed:true,d083,baseline:BASELINE,baselineSources:baseline.length,legacyAfterSources:Object.keys(legacy.after).length,currentSources:current.length,currentAdditions:D082_ADDED.size,reviewedSources:Object.keys(D082_REVIEWED_SOURCES),approved185Source: D082_185_REVIEWED_SOURCE,sourceRestorationNegativeControls:mutations,windowsGuard,negativeControls:mutations+windowsGuard.negativeControls,qualification:'Exact approved185 source-only hash update and independently reviewed inline packaging; original231 paths/four additions,227/229 phases,3202 previous controls,179 pins,900/487 and409/443 evidence remain. No runtime phase-routing or report change.'};
+ }
+ if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)console.log(JSON.stringify(d082ScopeGuards(),null,2));

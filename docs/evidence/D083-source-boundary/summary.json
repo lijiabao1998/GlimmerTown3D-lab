@@ -1,0 +1,134 @@
+{
+  "recordedAt": "2026-10-24T00:49:32.112Z",
+  "status": "finite-source-boundary-repair-complete; inherited-D082-release-gates-unresolved",
+  "preRepairHead": "2e85efbc265efcc4c214e21365839d0a842f995e",
+  "branch": "codex/d083-isolated-compat-20261023",
+  "pr": 37,
+  "productSrcChanged": false,
+  "sourceQualification": {
+    "priorInventory": 231,
+    "currentInventory": 236,
+    "exactChanged": 7,
+    "exactAdded": 5,
+    "originalSourceNegativeControls": 2900,
+    "windowsNegativeControls": 344,
+    "windowsPositiveControls": 21,
+    "priorTotalNegativeControls": 3244,
+    "d083NegativeControls": 55,
+    "windowsPredicateExact": true,
+    "oldGuardsUnchanged": 15
+  },
+  "executed": {
+    "d053": {
+      "passed": true,
+      "checks": 12
+    },
+    "d054": {
+      "passed": true,
+      "checks": 13
+    },
+    "touchSources": {
+      "passed": true,
+      "checks": 14
+    },
+    "approvedNine": {
+      "complete": true,
+      "geometryCases": 324,
+      "priorModels": 130,
+      "negativeControls": 234
+    },
+    "nineScenes": {
+      "complete": true,
+      "geometryCases": 324,
+      "distinctNew": 9,
+      "priorModels": 130,
+      "scenePairs": 12,
+      "frames": 180,
+      "negativeControls": 63
+    },
+    "ciIntegrityWindows": {
+      "command": "node --test .github/scripts/ci-integrity.test.mjs tools/unit-partitions.test.mjs",
+      "tests": 261,
+      "passed": 258,
+      "failed": 3,
+      "workflowInventoryAndMandatoryJobsPassed": true,
+      "failures": [
+        {
+          "action": "fs.symlinkSync",
+          "target": "temporary CI mock dist/link -> ../ci-build.json",
+          "status": "denied by Windows OS",
+          "reason": "EPERM; not retried"
+        },
+        {
+          "action": "spawn real Node CLI from URL.pathname",
+          "target": "tools/unit.mjs and tools/unit-partition.mjs",
+          "status": "technical-failure",
+          "reason": "old URL pathname produces C:\\C:\\... on Windows; MODULE_NOT_FOUND"
+        },
+        {
+          "action": "spawn bash tee fixture",
+          "target": "temporary frame runner console.log",
+          "status": "technical-failure",
+          "reason": "child status null instead of7; precise OS cause not established"
+        }
+      ],
+      "rawLog": {
+        "file": "ci-integrity-windows.txt.gz",
+        "bytes": 23930,
+        "sha256": "f7d6a1e4810db258de9c8cf74fc4873b98a098a45ebcd0c1abd73fdb456a6764"
+      }
+    }
+  },
+  "oldCI": {
+    "run": 40009825802,
+    "status": "completed",
+    "conclusion": "failure",
+    "updatedAt": "2026-10-23T20:40:16Z",
+    "counts": {
+      "failure": 10,
+      "success": 55,
+      "skipped": 1
+    },
+    "sameHeadRerun": false
+  },
+  "environmentRetry": {
+    "initialMissingHistoricalBlobs": true,
+    "platformDenied": false,
+    "finalSourceTestsPassed": true
+  },
+  "remaining": [
+    {
+      "target": "tools/d082/geometry-test.mjs:55",
+      "status": "technical-failure",
+      "reason": "old ten polygon-model contract versus accepted nine procedural models; old rejected126 variants replaced by accepted154 variants"
+    },
+    {
+      "target": "tools/unit-d082-architecture-contract.mjs:36",
+      "status": "technical-failure",
+      "reason": "actual nine-model source differs from immutable ten-model repair checkpoint"
+    },
+    {
+      "target": "tools/d082-frame.mjs:91",
+      "status": "technical-failure",
+      "reason": "old frozen ten-model whole-scene equality59802 versus accepted-nine native60196; existing nine qualification proves60196<=60236 but does not satisfy frozen equality"
+    },
+    {
+      "target": "tools/d082-browser-surfaces.mjs",
+      "status": "technical-failure",
+      "reason": "old forced ten-slot scene, neighbor variants and ordered tree instances differ from frozen qualification; paired coverage unresolved"
+    },
+    {
+      "target": "D083 complete independent whole-scene qualification",
+      "status": "pending",
+      "reason": "existing successful actual UI/native integration evidence does not substitute for all mandatory release gates"
+    }
+  ],
+  "ready": false,
+  "merged": false,
+  "deployed": false,
+  "newHeadCI": "pending new code commit and normal push; do not rerun unchanged old head",
+  "ciSourceDependency": {
+    "additionalReadOnlyFetch": "7deb34881b38679b1d0396e21eb9e57ad2ee9a0c",
+    "existingCommandsAndThresholdsUnchanged": true
+  }
+}

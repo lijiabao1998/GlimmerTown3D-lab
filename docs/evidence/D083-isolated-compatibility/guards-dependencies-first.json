@@ -1,0 +1,192 @@
+{
+  "source": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e plus local finite compatibility edits",
+  "node": "v24.15.0",
+  "groups": [
+    {
+      "key": "d052",
+      "file": "tools/unit-d052.mjs",
+      "symbol": "d052Guards",
+      "checks": [
+        {
+          "passed": true,
+          "name": "D052 original main action controls retain their independently verified c1ac6154 SHA256 fingerprints"
+        },
+        {
+          "passed": true,
+          "name": "D052 paused paid/free/repeat/failure research, real successful/quota/journal-fallback saves and exact original action effects"
+        },
+        {
+          "passed": true,
+          "name": "D052 ecoReg capacity and coach refresh together; original cooldown, allocation, raw roads and state retained"
+        },
+        {
+          "passed": true,
+          "name": "D052 four budgets at both clamps and adjacent steps; real recoverCov, schoolLunch load quirk, history and saves retained"
+        },
+        {
+          "passed": true,
+          "name": "D052 actual fee/label/accessibility text: paid, resume, sandbox, active, completed and prerequisite lock"
+        },
+        {
+          "passed": true,
+          "name": "D052 population 49/50/51 and Lv.3 exact eligibility; sandbox, active legacy drop and offer ordering preserved"
+        },
+        {
+          "passed": true,
+          "name": "D052 real advance/simDay updates open panel progress, completion, unlocks, funds/date and single commission payout"
+        },
+        {
+          "passed": true,
+          "name": "D052 pending load rate/ETA and recent settlement estimates; facilities, C6 and paused specialization preserve original speed"
+        },
+        {
+          "passed": true,
+          "name": "D052 complete raw model/save/storage/journal/RNG read-only checks and 20 uninterrupted paired daily trajectories"
+        },
+        {
+          "passed": true,
+          "name": "D052 stable unchanged button identities, focus and scroll with current one-shot actions at DOM boundary"
+        },
+        {
+          "passed": true,
+          "name": "D052 actual reconciliation helper retains keyed identities, current handlers/attributes/styles/text and removes obsolete rows"
+        },
+        {
+          "passed": true,
+          "name": "D052 legacy keyed moves restore focus and scroll while honestly losing unavailable atomic pointer capture"
+        },
+        {
+          "passed": true,
+          "name": "D052 one original daily promotion reorders actual offers, retaining moved control focus/capture and its new acceptance index"
+        },
+        {
+          "passed": true,
+          "name": "D052 actual press gate handles click ordering, latest render, no-click/cancel, two pointers, new-press timer race and lifecycle"
+        },
+        {
+          "passed": true,
+          "name": "D052 held panels freeze all presentation while model/HUD/save remain immediate; real promoted offer accepts by current ID"
+        },
+        {
+          "passed": true,
+          "name": "D052 actual close/backdrop/city cleanup discards queued render and reopening accepts exactly once"
+        },
+        {
+          "passed": true,
+          "name": "D052 valid behavior mutations are rejected by independent assertions",
+          "detail": "35 valid actual-source/helper mutations rejected by behavioral assertions"
+        },
+        {
+          "passed": true,
+          "name": "D052 actual press gate and renderer wiring mutations are rejected",
+          "detail": "8 additional actual gate/wiring mutations rejected"
+        }
+      ],
+      "passed": true,
+      "start": "2026-10-23T18:46:06.682Z",
+      "end": "2026-10-23T18:46:24.369Z"
+    },
+    {
+      "key": "d081touch",
+      "file": "tools/unit-d081-touch-lease.mjs",
+      "symbol": "d081TouchLeaseGuards",
+      "checks": [
+        {
+          "passed": true,
+          "name": "D081 touch lease actual renderer next-task freshness and delayed acceptance seed1 reversefalse"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease actual renderer next-task freshness and delayed acceptance seed1 reversetrue"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease actual renderer next-task freshness and delayed acceptance seed5 reversefalse"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease actual renderer next-task freshness and delayed acceptance seed5 reversetrue"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease unaltered PR33 source fails new structural protection control"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease unrelated click cannot resolve released offer; later days remain fresh"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease late cancellation after fallback releases pending structural reconciliation"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease two contacts retain independent activation and reject second acceptance"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease close/reopen discards stale lease and queued presentation"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease reused pointer ID cannot silently discard an older unresolved target"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease reused pointer ID on #cmX cannot cancel an older offer lease"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease reused pointer ID on #tc cannot cancel an older offer lease"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease resource saturation conservatively preserves slots until explicit close"
+        },
+        {
+          "passed": true,
+          "name": "D081 touch lease constructed actual-source early-release and dropped-freshness mutations are rejected"
+        }
+      ],
+      "passed": true,
+      "start": "2026-10-23T18:46:24.370Z",
+      "end": "2026-10-23T18:46:27.948Z"
+    },
+    {
+      "key": "d055native",
+      "file": "tools/unit-d055-native.mjs",
+      "symbol": "d055NativeGuards",
+      "checks": [
+        {
+          "passed": true,
+          "name": "D055 native catalogue: seven food tools, 18 unchanged civic tools, 25 unique facilities and original sizes/prices",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "name": "D055 preview and rejection: complete footprint, one charged root, no history/money changes, blocked last square and clipped map edge",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "name": "D055 all seven native builds: one event, complete occupancy and tree/zone clearing, replay, full undo, reference demolition",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "name": "D055 save/load/save/load: all seven root sizes/reference tiles and append-only history survive",
+          "detail": ""
+        },
+        {
+          "passed": true,
+          "name": "D055 seasonal parity: 24 days per season, player-built seven facilities vs identical initially imported facilities",
+          "detail": "season 0: 744 food / 24 days; season 1: 736 food / 24 days; season 2: 960 food / 24 days; season 3: 394 food / 24 days"
+        }
+      ],
+      "passed": true,
+      "start": "2026-10-23T18:46:27.949Z",
+      "end": "2026-10-23T18:46:28.406Z"
+    }
+  ],
+  "passed": true
+}

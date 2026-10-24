@@ -1,0 +1,77 @@
+{
+  "source": "7bc5609d92ca7a9971f3a2ac0ff80a86ddacd07e plus local finite compatibility edits",
+  "node": "v24.15.0",
+  "groups": [
+    {
+      "key": "d053",
+      "file": "tools/unit-d053.mjs",
+      "symbol": "d053Guards",
+      "checks": [
+        {
+          "passed": true,
+          "name": "D053 native click origin and cleanup safety",
+          "detail": "real origin guard: old canvas release rejected, native UI/keyboard/canvas click retained, two pointers, cancel, lifetime cleanup, reused-ID race; 3 mutations rejected"
+        },
+        {
+          "passed": false,
+          "name": "D053 original154 + explicit D055 gameplay and D056 art scope",
+          "detail": "AssertionError [ERR_ASSERTION]: D082 exact source inventory\n+ actual - expected\n... Skipped lines\n\n  [\n    'src/cityView.ts',\n    'src/content/arche.ts',\n    'src/content/blocks.ts',\n    'src/content/britishCampuses.ts',\n...\n    'src/content/britishNeighbourhoodPavilions.ts',\n+   'src/content/britishRuralHeritage.ts',\n    'src/content/britishServiceLodges.ts',\n    'src/content/britishStreets.ts',\n    'src/content/britishTowers.ts',\n    'src/content/britishTransitUtilityPavilions.ts',\n    'src/content/britishVillage.ts',\n...\n    'src/render/britishNeighbourhoodPavilionsArt.ts',\n+   'src/render/britishRuralHeritageArt.ts',\n    'src/render/britishServiceLodgesArt.ts',\n    'src/render/britishStreetArt.ts',\n    'src/render/britishTowerArt.ts',\n    'src/render/britishTransitUtilityPavilionsArt.ts',\n    'src/render/britishVillageArt.ts',\n...\n    'src/render/d082Repair179v1Data.ts',\n+   'src/render/d083AcceptedModels.d.mts',\n+   'src/render/d083AcceptedModels.mjs',\n    'src/render/digest.ts',\n    'src/render/ground.ts',\n    'src/render/hazard.ts',\n    'src/render/kindArt.ts',\n    'src/render/landArt.ts',\n...\n    'src/sim/eventRegistry.ts',\n+   'src/sim/heritageBuild.ts',\n    'src/sim/history.ts',\n    'src/sim/replay.ts',\n    'src/sim/restyle.ts',\n    'src/sim/rng.ts',\n    'src/sim/rules/build.ts',\n\n    at assertD082CurrentInventory (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d082-source-restoration.mjs:75:9)\n    at assertD082Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d082-scope.mjs:92:3)\n    at assertD081Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d081-scope.mjs:78:3)\n    at assertD080Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d080-scope.mjs:77:3)\n    at assertD079Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d079-scope.mjs:77:3)\n    at assertD078Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d078-scope.mjs:74:3)\n    at assertD077Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d077-scope.mjs:74:3)\n    at assertD076Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d076-scope.mjs:76:3)\n    at assertD074Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d074-scope.mjs:74:3)\n    at assertD073Scope (file:///C:/Users/Leon1/Documents/Codex/2026-10-23/task-2/GlimmerTown3D-lab-d083-repair/tools/d073-scope.mjs:73:3)"
+        },
+        {
+          "passed": true,
+          "name": "D053 25-tool metadata (18 original civic), base cost and all rank/mode locks",
+          "detail": "18 unchanged civic + 7 food tools × 26 levels × 2 modes; original names, IDs, costs, groups, units and selection locks"
+        },
+        {
+          "passed": true,
+          "name": "D053 rank presentation versus untouched authoritative ladder",
+          "detail": "all 26 original rank records unchanged; unavailable Lv.6/8/12/17 qualified; Lv.22 actual; Lv.26 honor verbatim"
+        },
+        {
+          "passed": true,
+          "name": "D053 actual promotion notification truth",
+          "detail": "actual simDay promotion toast loop qualifies four unavailable milestones, actual Lv.22 and unchanged Lv.26"
+        },
+        {
+          "passed": true,
+          "name": "D053 deep read-only helper queries",
+          "detail": "16 rank/mode states: full model, exact save bytes, RNG calls and all imported definitions unchanged"
+        },
+        {
+          "passed": true,
+          "name": "D053 placement and cost claims match real preview rules",
+          "detail": "all 18 original civic tools checked against actual preview: base/tree/tech/spec/sandbox price; land/road/building/ruin/crater; pipe reuse; oil/ore; sewage 0/1/2 water; 3×3 footprint"
+        },
+        {
+          "passed": true,
+          "name": "D053 uninterrupted model/report/save/RNG control trajectories",
+          "detail": "36 uninterrupted paired days across buildable, active-research high-rank and sandbox cities; exact reports/model/save/RNG"
+        },
+        {
+          "passed": true,
+          "name": "D053 actual catalog module state and held control lifecycle",
+          "detail": "actual catalog: 33 rows (original25 plus exact D083 eight), group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks"
+        },
+        {
+          "passed": true,
+          "name": "D053 actual growth panel and visible refresh integration",
+          "detail": "actual rank/open/catalog/syncUi: 8 retained-rank states; 0/50/100% clamps; live visible-only refresh; held presentation; close/pagehide; no pause/save/history/RNG"
+        },
+        {
+          "passed": true,
+          "name": "D053 actual city selection, placement and undo integration",
+          "detail": "25 shipped pickCivic→setTool→commitStroke paired against original commitOp/undo; 8 rank/mode locks; tap drag cancellation"
+        },
+        {
+          "passed": true,
+          "name": "D053 behavior mutation sensitivity",
+          "detail": "24 valid helper/catalog/action/growth/toast mutations rejected by behavioral assertions"
+        }
+      ],
+      "passed": false,
+      "start": "2026-10-23T19:00:48.287Z",
+      "end": "2026-10-23T19:01:34.175Z"
+    }
+  ],
+  "passed": false
+}

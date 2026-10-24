@@ -1,6 +1,7 @@
 // Physical verification of only the two approved185 revisions. No phase routing.
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import * as T from 'three';
 import {ROOT} from './cdp.mjs';import {APPROVED_185,TARGETS,LEGACY,drawCase,caseBytes,caseSignature,assertCase,sha} from './d082-redesign-support.mjs';
+import {d083PriorScopeSource} from './d083-scope.mjs';
 import {assertExterior,assertSolidRelationships,solidFaces} from './d082-redesign-surfaces.mjs';import {approved185Solids} from './d082-185-envelope.mjs';import {joinedExterior} from './d082-179v1-envelope.mjs';
 const V=p=>new T.Vector3(...p),key=p=>p.map(v=>Math.round(v*1e8)).join(',');
 function triangles(r){return r.G.flatMap(g=>g.owners.map((_,t)=>[0,1,2].map(j=>{const[x,y,z]=g.pos.slice(t*9+j*3,t*9+j*3+3);return[(x-r.x0)/r.s,(y-r.y0)/r.H,(z-r.z0)/r.s];})));}
@@ -9,7 +10,7 @@ function topology(ts,groundArea){let volume=0;const es=new Map();for(const p of 
  const outgoing=new Map(),incoming=new Map();for(const e of boundary){assert.ok(!outgoing.has(e.A));assert.ok(!incoming.has(e.B));outgoing.set(e.A,e);incoming.set(e.B,e);}assert.deepEqual([...outgoing.keys()].sort(),[...incoming.keys()].sort());const seen=new Set();let loops=0;for(const e of boundary)if(!seen.has(e.A)){loops++;let p=e;do{assert.ok(!seen.has(p.A));seen.add(p.A);p=outgoing.get(p.B);assert.ok(p);}while(p.A!==e.A);}assert.equal(loops,1);
  const area=Math.abs(boundary.reduce((n,e)=>n+e.a[0]*e.b[2]-e.a[2]*e.b[0],0)/2);assert.ok(Math.abs(area-groundArea)<1e-9);assert.ok(volume>0);return{triangles:ts.length,edges:es.size,groundLoops:loops,groundArea:area,positiveNormalizedVolume:volume};}
 const preserved=APPROVED_185.preservedProtectedCode;assert.equal(preserved.baseline,'ce33e3eb73ab3602c16ff383c9fc5d194947ae64');assert.equal(Object.keys(preserved.files).length,14);assert.equal(preserved.regions.length,5);
-for(const[file,pin]of Object.entries(preserved.files))assert.equal(sha(fs.readFileSync(path.join(ROOT,file))),pin,'unchanged protected phase/report/probe source '+file);
+for(const[file,pin]of Object.entries(preserved.files)){const current=fs.readFileSync(path.join(ROOT,file));const original=file==='tools/d082-scope.mjs'?Buffer.from(d083PriorScopeSource(current.toString('utf8'))):current;assert.equal(sha(original),pin,'unchanged protected phase/report/probe source '+file);}
 for(const r of preserved.regions){const s=fs.readFileSync(path.join(ROOT,r.file),'utf8'),start=s.indexOf(r.start);assert.ok(start>=0);const end=r.end?s.indexOf(r.end,start):s.length;assert.ok(end>start);assert.equal(sha(s.slice(start,end)),r.sha256,'unchanged camera, budget, catalog or injected-reader function '+r.file);}
 const report={qualification:'Only explicitly approved185v1/v2. Prior source/geometry/coordinates remain immutable history; every surviving old point stays mandatory. No other model, runtime phase routing, report compatibility, merge or deployment.',approval:APPROVED_185.approval,preservedProtectedFiles:14,preservedCameraBudgetCatalogReaderRegions:5,complete:false,geometryCases:0,unchangedTargets:[],priorModels:[],approved:[],negativeControls:0};
 for(const t of TARGETS){const key=t.k+':'+t.v,approved=APPROVED_185.slots[key],old=APPROVED_185.unchangedTargets[key],cases=approved?.affine??old.affine;

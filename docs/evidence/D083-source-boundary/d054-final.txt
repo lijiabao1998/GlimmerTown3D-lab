@@ -1,0 +1,15 @@
+OK D054 original154 + explicit D055 gameplay and D056 art scope 154 original files protected; D055 gameplay pinned, D056 art pinned and tiny dispatch inverses reconstruct exact baseline bytes
+OK D054 original authoritative baseline semantics original low-funds line builds cheap cell after refused bridge; rectangle all-or-nothing; negative-money sandbox refuses $0 despite original preview flag
+OK D054 selected tool names and D053 guidance all 35 tools retain authoritative names and gestures; all facility placement/use comes from extended D053 notes
+OK D054 mixed selection reasons and megaproject counting mixed/none/same pipe/same zone/tree zone/protected Lv2 doze/outside; 3脳3 footprint stays one job; provided preview is not mutated or aliased
+OK D054 exact finances and operation policy exact fractional discounts/tree cost/funds/shortfall and round-trip display; equality/$0/negative/sandbox truth; actual gesture policy
+OK D054 finite oil/ore reserves and legal exhausted rebuild oil/ore fresh, partial, 1-unit and exhausted stocks; legal remove/rebuild never replenishes; wrong resource and gas excluded
+OK D054 actual result diagnostics preserve captured reasons result reports actual placed/spent/reason/armed/protected skip; preserves original mixed reasons and captured day; no total-money inference
+OK D054 current sewage contact distinct from water placement same legal shoreline with disconnected, touching, two networks, connected identity, sewer-main and corner-only cases; no service/past-day promise
+OK D054 authoritative preview and pure query call boundaries original count/ok/cost consumed directly; only rejected roots re-previewed for reason; one current sewer-component query only for sewage
+OK D054 deep query purity and snapshot isolation five finances/modes 脳 35 tool queries twice; full model/typed arrays/Map/Set/save/RNG/metadata unchanged; frozen inputs and returned snapshot isolation
+OK D054 real paired commit undo history save RNG 14 original/no-query versus candidate/query real commit + result + undo pairs with exact cost/state/history/save/RNG
+OK D054 36 uninterrupted paired day trajectories 36 uninterrupted original/candidate paired days across ordinary, active-research and sandbox cities with interleaved commits/undo; all reports/state/history/save/RNG equal
+OK D054 behavior mutation sensitivity 23 executable guidance/count/reason/finance/resource/network/result/state/RNG mutations rejected by behavior
+(node:29200) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
