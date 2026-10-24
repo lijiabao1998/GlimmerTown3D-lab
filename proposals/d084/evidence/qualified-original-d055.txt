@@ -1,0 +1,8 @@
+PASS D055 fresh golden provenance: original lab commit, source hashes and case digest
+PASS D055 seven tool IDs and original COST values
+PASS D055 original lab VM reproduces 902 fresh golden maps
+PASS D055 3D parity: 2511 operations; terrain, footprint, money, tree surcharge, tech, sandbox, snapshots, fields, doze and undo
+PASS D055 explicit successful roots, all references, unique snapshots, full money and tile undo
+PASS D055 mutation sensitivity: seven costs and seven root kinds
+(node:5) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

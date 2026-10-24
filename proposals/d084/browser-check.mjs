@@ -21,8 +21,9 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
  const shot=async(name)=>{await settle();const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
  for (const enabled of (baseline?[false]:[false,true])) {
   await open('sample=newcity&streetFrontage='+(enabled?'1':'0'));await page.evaluate('document.fonts.ready');
+  if(width!==1440)await page.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
   assert.equal(await page.evaluate('__gt.webgl2'),true);
-  await page.evaluate('__gt.menu("paste")');
+  await page.evaluate('__gt.simPlay(false);__gt.clearSave();__gt.menu("paste")');
   await page.evaluate(`document.querySelector('#dlg textarea').value=${JSON.stringify(code)}`);
   const button=await page.evaluate("(()=>{const r=document.querySelector('#dlgOk').getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})()");
   await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x:button[0],y:button[1],button:'left',buttons:1,clickCount:1});
@@ -32,23 +33,30 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
   const before=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
   const [x,y]=await page.evaluate('__gt.cellScreen(8,8)');
   assert.ok(x>0&&x<width&&y>0&&y<height);
-  await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});await settle();
+  if(width===1440)await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x,y,button:'left',buttons:1,clickCount:1});
+  else await page.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x,y,id:1,radiusX:1,radiusY:1,force:1}]});await settle();
   report.pointer=await page.evaluate(`({ui:__gt.ui(),stroke:__gt.stroke(),hit:document.elementFromPoint(${x},${y})?.tagName})`);record();
   await shot(enabled?'candidate-precheck':'legacy-precheck');
   assert.equal(await page.evaluate('__gt.previewCount()'),4,'actual native footprint');
   assert.equal(await page.evaluate('__gt.frontageCount?.() ?? 0'),enabled?2:0,'only the two shared north edges');
   assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),before,'held preview changes no world');
   await shot(enabled?'candidate-held':'legacy-held');
+  for(const [label,zoom]of [['near',3],['far',.8]]){await page.evaluate(`__gt.view(9,9,${zoom})`);await shot((enabled?'candidate-':'legacy-')+label);}
+  await page.evaluate('__gt.view(9,9,2)');await settle();
   await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
-  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x,y,button:'left',buttons:0,clickCount:1});await settle();
+  if(width===1440)await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x,y,button:'left',buttons:0,clickCount:1});
+  else await page.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await settle();
   assert.equal(await page.evaluate('__gt.frontageCount?.() ?? 0'),0,'cancel clears strips');
   assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),before,'cancel preserves world');
   await shot(enabled?'candidate-cancelled':'legacy-cancelled');
  }
  if(!baseline){
   const reference=JSON.parse(fs.readFileSync(`scratch/d084/${width}-baseline/report.json`));
-  for(const name of ['legacy-precheck','legacy-held','legacy-cancelled']) assert.equal(report.shots.find(s=>s.name===name).sha256,reference.shots.find(s=>s.name===name).sha256,'disabled whole PNG equals published main '+name);
+  for(const name of ['legacy-precheck','legacy-held','legacy-near','legacy-far','legacy-cancelled']) assert.equal(report.shots.find(s=>s.name===name).sha256,reference.shots.find(s=>s.name===name).sha256,'disabled whole PNG equals published main '+name);
   report.baselineWholeFrameEqual=true;
+  const a=report.shots.find(s=>s.name==='legacy-held').stats,b=report.shots.find(s=>s.name==='candidate-held').stats;
+  assert.ok(b.calls<=a.calls+1,'at most one additional native draw call');assert.ok(b.triangles<=a.triangles+32,'at most 16 thin strips / 32 triangles');
+  report.nativeBudgetDelta={calls:b.calls-a.calls,triangles:b.triangles-a.triangles};
  }
  report.errors=page.errors;assert.deepEqual(page.errors,[]);report.passed=true;record();
 });}catch(e){report.failure=String(e.stack??e);record();throw e;}
