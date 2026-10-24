@@ -1,0 +1,887 @@
+{
+  "passed": true,
+  "qualification": "Node-only original-cap and exact-cost-ledger preflight; no Chromium or PNG claim",
+  "negativeControls": 45,
+  "ledger": [
+    {
+      "slot": "179:2",
+      "originalCap": 182,
+      "before": 176,
+      "after": 180
+    },
+    {
+      "slot": "185:2",
+      "originalCap": 120,
+      "before": 112,
+      "after": 112
+    },
+    {
+      "slot": "154:2",
+      "originalCap": 342,
+      "before": 284,
+      "after": 312
+    }
+  ],
+  "whole": {
+    "before": 60164,
+    "after": 60196,
+    "published": 60236
+  },
+  "rows": [
+    {
+      "width": 1440,
+      "view": "whole-gallery",
+      "camera": {
+        "target": [
+          36,
+          0,
+          36
+        ],
+        "zoom": 0.7776000000000001,
+        "pos": [
+          151.2,
+          94.06040612287403,
+          151.2
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "original",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "front",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          200.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "rear",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          -125.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "view": "side",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          217.41740238538057,
+          94.06040612287403,
+          37.500000000000014
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 412,
+      "view": "whole-gallery",
+      "camera": {
+        "target": [
+          36,
+          0,
+          36
+        ],
+        "zoom": 0.6,
+        "pos": [
+          151.2,
+          94.06040612287403,
+          151.2
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 412,
+      "view": "original",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 412,
+      "view": "front",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          200.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 412,
+      "view": "rear",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          -125.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 412,
+      "view": "side",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          217.41740238538057,
+          94.06040612287403,
+          37.500000000000014
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 360,
+      "view": "whole-gallery",
+      "camera": {
+        "target": [
+          36,
+          0,
+          36
+        ],
+        "zoom": 0.6,
+        "pos": [
+          151.2,
+          94.06040612287403,
+          151.2
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 360,
+      "view": "original",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          169.7,
+          94.06040612287403,
+          152.7
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 360,
+      "view": "front",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          200.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 360,
+      "view": "rear",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          54.500000000000014,
+          94.06040612287403,
+          -125.41740238538057
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    },
+    {
+      "width": 360,
+      "view": "side",
+      "camera": {
+        "target": [
+          54.5,
+          0,
+          37.5
+        ],
+        "zoom": 8,
+        "pos": [
+          217.41740238538057,
+          94.06040612287403,
+          37.500000000000014
+        ]
+      },
+      "before": {
+        "triangles": 60164,
+        "calls": 9,
+        "wholeTriangles": 60164,
+        "main": {
+          "triangles": 40324,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19840,
+          "calls": 2
+        }
+      },
+      "after": {
+        "triangles": 60196,
+        "calls": 9,
+        "wholeTriangles": 60196,
+        "main": {
+          "triangles": 40340,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19856,
+          "calls": 2
+        }
+      },
+      "published": {
+        "triangles": 60236,
+        "calls": 9,
+        "wholeTriangles": 60236,
+        "main": {
+          "triangles": 40402,
+          "calls": 7
+        },
+        "shadow": {
+          "triangles": 19834,
+          "calls": 2
+        }
+      },
+      "passed": true
+    }
+  ]
+}

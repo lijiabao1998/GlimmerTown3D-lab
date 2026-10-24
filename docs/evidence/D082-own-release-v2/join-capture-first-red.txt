@@ -1,0 +1,17 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: triangles budget 60196 <= 60164
+    at assertBudget (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d082-own-release/tools/d082-redesign-support.mjs:133:105)
+    at file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d082-own-release/scratch/own-release-first-red/join-capture-preflight.mjs:27:392 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

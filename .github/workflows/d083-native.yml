@@ -2,6 +2,8 @@ name: D083 native buildings
 on:
   push:
     branches: ['codex/d083-british-local-design']
+  pull_request:
+    branches: ['main', 'codex/d083-isolated-compat-20261023']
   workflow_dispatch:
 permissions:
   contents: read
@@ -24,6 +26,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: node --test tools/d083-release-trigger.test.mjs
       - run: npm run typecheck
       - name: Native ownership, placement, save replay, picking and original130 byte pins
         run: node --experimental-strip-types proposals/d083/native-integration-check.mjs
