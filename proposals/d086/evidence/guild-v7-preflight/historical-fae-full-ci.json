@@ -1,0 +1,417 @@
+{
+  "run": 40200161691,
+  "head": "fae5c91611b8af0a407e5ddadf6fbb07bf59b6f9",
+  "completeInventory": true,
+  "jobs": [
+    {
+      "id": 121189466855,
+      "name": "node-frame-d079",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:16:07Z"
+    },
+    {
+      "id": 121189466976,
+      "name": "d070 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:01:45Z"
+    },
+    {
+      "id": 121189466978,
+      "name": "node",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T15:07:39Z"
+    },
+    {
+      "id": 121189466980,
+      "name": "d081 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:12:54Z"
+    },
+    {
+      "id": 121189466984,
+      "name": "d062",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:13:03Z"
+    },
+    {
+      "id": 121189466986,
+      "name": "d070 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:03:45Z"
+    },
+    {
+      "id": 121189466987,
+      "name": "node-frame-d080",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:19:39Z"
+    },
+    {
+      "id": 121189466991,
+      "name": "d080 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:16:23Z"
+    },
+    {
+      "id": 121189466999,
+      "name": "node-frame",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:43:19Z"
+    },
+    {
+      "id": 121189467016,
+      "name": "d073 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:07:29Z"
+    },
+    {
+      "id": 121189467017,
+      "name": "d068 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:03:12Z"
+    },
+    {
+      "id": 121189467026,
+      "name": "node-frame-d081",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:34:15Z"
+    },
+    {
+      "id": 121189467027,
+      "name": "build",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:04:00Z"
+    },
+    {
+      "id": 121189467030,
+      "name": "d060 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:13:00Z"
+    },
+    {
+      "id": 121189467035,
+      "name": "d079 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:16:59Z"
+    },
+    {
+      "id": 121189467038,
+      "name": "d071 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:07:41Z"
+    },
+    {
+      "id": 121189467049,
+      "name": "d069 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:09:34Z"
+    },
+    {
+      "id": 121189467058,
+      "name": "d079 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:11:50Z"
+    },
+    {
+      "id": 121189467060,
+      "name": "d063 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:28:21Z"
+    },
+    {
+      "id": 121189467065,
+      "name": "d079 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:11:01Z"
+    },
+    {
+      "id": 121189467066,
+      "name": "d078 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:16:16Z"
+    },
+    {
+      "id": 121189467071,
+      "name": "d082 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:37:20Z"
+    },
+    {
+      "id": 121189467084,
+      "name": "d060 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:03:01Z"
+    },
+    {
+      "id": 121189467091,
+      "name": "d081 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:24:59Z"
+    },
+    {
+      "id": 121189467096,
+      "name": "d061",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:14:51Z"
+    },
+    {
+      "id": 121189467098,
+      "name": "d069 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:09:36Z"
+    },
+    {
+      "id": 121189467103,
+      "name": "d068 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:09:18Z"
+    },
+    {
+      "id": 121189467125,
+      "name": "d082 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:32:04Z"
+    },
+    {
+      "id": 121189467128,
+      "name": "d076 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:20:22Z"
+    },
+    {
+      "id": 121189467131,
+      "name": "d077 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:40:40Z"
+    },
+    {
+      "id": 121189467133,
+      "name": "d063 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:22:41Z"
+    },
+    {
+      "id": 121189467136,
+      "name": "d081 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:24:55Z"
+    },
+    {
+      "id": 121189467142,
+      "name": "d071 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:34:14Z"
+    },
+    {
+      "id": 121189467154,
+      "name": "d077 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:31:02Z"
+    },
+    {
+      "id": 121189467166,
+      "name": "d064 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:06:23Z"
+    },
+    {
+      "id": 121189467167,
+      "name": "node-frame-d082",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:52:48Z"
+    },
+    {
+      "id": 121189467168,
+      "name": "d082 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:41:00Z"
+    },
+    {
+      "id": 121189467173,
+      "name": "d074 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:22:39Z"
+    },
+    {
+      "id": 121189467185,
+      "name": "d076 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:20:21Z"
+    },
+    {
+      "id": 121189467190,
+      "name": "d078 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:41:02Z"
+    },
+    {
+      "id": 121189467192,
+      "name": "d076 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:52:44Z"
+    },
+    {
+      "id": 121189467223,
+      "name": "d064 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:36:53Z"
+    },
+    {
+      "id": 121189467239,
+      "name": "d072 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:25:50Z"
+    },
+    {
+      "id": 121189467268,
+      "name": "d055",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:29:20Z"
+    },
+    {
+      "id": 121189467273,
+      "name": "d071 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:34:18Z"
+    },
+    {
+      "id": 121189467291,
+      "name": "d064 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T15:06:04Z"
+    },
+    {
+      "id": 121189467293,
+      "name": "d077 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:31:07Z"
+    },
+    {
+      "id": 121189467296,
+      "name": "d078 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:59:13Z"
+    },
+    {
+      "id": 121189467298,
+      "name": "d073 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:37:12Z"
+    },
+    {
+      "id": 121189467300,
+      "name": "d072 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:43:21Z"
+    },
+    {
+      "id": 121189467306,
+      "name": "d080 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:44:05Z"
+    },
+    {
+      "id": 121189467307,
+      "name": "d073 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:38:46Z"
+    },
+    {
+      "id": 121189467341,
+      "name": "d080 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:48:13Z"
+    },
+    {
+      "id": 121189467342,
+      "name": "d072 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:32:00Z"
+    },
+    {
+      "id": 121189467364,
+      "name": "d059",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:44:29Z"
+    },
+    {
+      "id": 121189467370,
+      "name": "d063 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:39:05Z"
+    },
+    {
+      "id": 121189467378,
+      "name": "d070 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:39:17Z"
+    },
+    {
+      "id": 121189467394,
+      "name": "d060 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:39:07Z"
+    },
+    {
+      "id": 121189467396,
+      "name": "d069 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:39:47Z"
+    },
+    {
+      "id": 121189467397,
+      "name": "d074 (360)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:47:07Z"
+    },
+    {
+      "id": 121189467421,
+      "name": "d074 (412)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:47:34Z"
+    },
+    {
+      "id": 121189467429,
+      "name": "d068 (1440)",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:41:36Z"
+    },
+    {
+      "id": 121189467684,
+      "name": "d086-native-release",
+      "conclusion": "skipped",
+      "completed_at": "2026-10-25T13:59:58Z"
+    },
+    {
+      "id": 121189468245,
+      "name": "d083-native-release",
+      "conclusion": "skipped",
+      "completed_at": "2026-10-25T13:59:58Z"
+    },
+    {
+      "id": 121190439575,
+      "name": "browser",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T15:29:17Z"
+    },
+    {
+      "id": 121190439587,
+      "name": "screenshots",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T14:45:21Z"
+    },
+    {
+      "id": 121210456428,
+      "name": "smoke",
+      "conclusion": "success",
+      "completed_at": "2026-10-25T15:29:39Z"
+    },
+    {
+      "id": 121210546547,
+      "name": "pages",
+      "conclusion": "skipped",
+      "completed_at": "2026-10-25T15:29:39Z"
+    }
+  ],
+  "artAccepted": false,
+  "reason": "Historical fae has an actual upper-stair access gap; technical success is not art acceptance. Current V6 must obtain fresh exact-head CI and raw PNG review."
+}

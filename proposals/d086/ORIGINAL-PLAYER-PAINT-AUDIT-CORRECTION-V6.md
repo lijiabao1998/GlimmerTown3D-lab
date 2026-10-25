@@ -1,0 +1,13 @@
+# Additive correction: old painted-point membership
+
+This corrects the paint-inventory paragraph of the frozen V6 construction card and evidence receipt; those earlier files and all first-red reports remain unchanged. It does **not** change product geometry, the79 ordinary legal views, source/cache pins, required-surface semantics, thresholds or any acceptance gate.
+
+The earlier centroid-based fragment audit counted11,707 unique old painted points /12,224 per-intent incidences. An independent review found that a same-color merged triangle can cross an individual finish-intent boundary: its centroid is not a complete definition of that intent's painted required points. Therefore that earlier count must be read as a retained heuristic diagnostic, **not** the complete old-paint inventory.
+
+The corrected independent inventory uses each actual original world-Float32 triangle and unchanged required point. It computes barycentric weights, verifies triangle reconstruction, then pulls those weights back into the exact source triangle and intended polygon; actual triangle color, host and plane must agree. It changes neither point coordinates nor requiredness, and uses the original imprint polygon boundary scale. Maximum actual-triangle reconstruction error was approximately2.0611e−10.
+
+**Corrected result:11,857 unique required old painted points /12,375 incidences, all410 old intents, zero newly hidden points.** This adds159 previously missed points and removes9 centroid-only points lying outside the relevant intent. All complete original/current contract hashes and complete old-view ray-audit hashes were independently reproduced; the narrower membership correction does not substitute for those full proofs.
+
+`original-player-paint-audit-correction-v6.json` binds the corrected result and per-model IDs to both original/current contract hashes. `original-player-painted-point-membership-v6.json.gz` preserves the complete independent point inventory; its compressed and decoded SHA256 values are in that receipt. The original source is cbaf; revised procedural source is a30a; packed source is aa340, with full hashes in the JSON.
+
+The separate current full-required-surface result remains25,987 required samples per width, original48-only RED28 retained, and zero missing under the unchanged ordinary legal-camera union. The additional237 settled-OrbitControls/real-detail/near-scene numerical replay also remains separate. **None of these numerical records is raw Chrome evidence, visual art approval or an accepted-building increment.** Official native PNG/source joins and normal release gates remain pending.

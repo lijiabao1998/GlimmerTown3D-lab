@@ -1,0 +1,230 @@
+{
+  "schema": 1,
+  "reason": "Additive native catalogue43, same original25 + D083eight + D086ten. Current copies keep all old controls and explicitly extend only declared cardinality/dependency expectations.",
+  "copies": [
+    {
+      "from": "tools/unit-d053.mjs",
+      "to": "tools/unit-d053-d086.mjs",
+      "originalSha256": "d95183de66a5d8e617a1cef8ab2263b12bc233f5ca595d1b14297600b449e76a",
+      "currentSha256": "f8c73cbc39e92ecfefa18219459f895f76b68617366cb7723f3a189541ea8cd9",
+      "changes": [
+        {
+          "before": "catalogueWithD083",
+          "after": "catalogueWithD086"
+        },
+        {
+          "before": "'./d083-catalogue-compat.mjs'",
+          "after": "'./d086-catalogue-compat.mjs'"
+        },
+        {
+          "before": "CIVIC_TOOLS, FOOD_TOOLS, HERITAGE_TOOLS, FACILITY_TOOLS",
+          "after": "CIVIC_TOOLS, FOOD_TOOLS, HERITAGE_TOOLS, NATIVE_ART_TOOLS, FACILITY_TOOLS"
+        },
+        {
+          "before": "import { RURAL_HERITAGE_BUILDINGS }",
+          "after": "import { CIVIC_MARKET_BUILDINGS } from '../src/content/britishCivicMarkets.ts';\nimport { RURAL_HERITAGE_BUILDINGS }"
+        },
+        {
+          "before": "'RURAL_HERITAGE_BUILDINGS',strip(source)",
+          "after": "'RURAL_HERITAGE_BUILDINGS','CIVIC_MARKET_BUILDINGS',strip(source)"
+        },
+        {
+          "before": "(FACILITY_TOOLS,RANKS,RURAL_HERITAGE_BUILDINGS);",
+          "after": "(FACILITY_TOOLS,RANKS,RURAL_HERITAGE_BUILDINGS,CIVIC_MARKET_BUILDINGS);"
+        },
+        {
+          "before": "HERITAGE_TOOLS=d.HERITAGE_TOOLS;",
+          "after": "HERITAGE_TOOLS=d.HERITAGE_TOOLS,NATIVE_ART_TOOLS=d.NATIVE_ART_TOOLS;"
+        },
+        {
+          "before": "FOOD_TOOLS,HERITAGE_TOOLS}),",
+          "after": "FOOD_TOOLS,HERITAGE_TOOLS,NATIVE_ART_TOOLS}),"
+        },
+        {
+          "before": "summary.total,33",
+          "after": "summary.total,43"
+        },
+        {
+          "before": "i<21?32:33",
+          "after": "i<21?42:43"
+        },
+        {
+          "before": "h.rows().length,33",
+          "after": "h.rows().length,43"
+        },
+        {
+          "before": "locked==='false').length,32",
+          "after": "locked==='false').length,42"
+        },
+        {
+          "before": "['heritage',8],['all',33]",
+          "after": "['heritage',18],['all',43]"
+        },
+        {
+          "before": "33／33",
+          "after": "43／43"
+        },
+        {
+          "before": "32／33",
+          "after": "42／43"
+        },
+        {
+          "before": "actual catalog: 33 rows (original25 plus exact D083 eight)",
+          "after": "actual catalog: 43 rows (original25 plus exact D083 eight and exact D086ten)"
+        }
+      ]
+    },
+    {
+      "from": "tools/unit-d055-native.mjs",
+      "to": "tools/unit-d055-native-d086.mjs",
+      "originalSha256": "79a87e49c90c2dc09cb48ddd8a99d84b06bf6be647b66ad5f8cde888ded56833",
+      "currentSha256": "076844a55bf58df5e2228cdae5b63739bda2d0ae495708a979d704a3a2b48a29",
+      "changes": [
+        {
+          "before": "catalogueWithD083",
+          "after": "catalogueWithD086"
+        },
+        {
+          "before": "'./d083-catalogue-compat.mjs'",
+          "after": "'./d086-catalogue-compat.mjs'"
+        },
+        {
+          "before": ".size,33)",
+          "after": ".size,43)"
+        }
+      ]
+    },
+    {
+      "from": "tools/d053-capture.mjs",
+      "to": "tools/d053-capture-d086.mjs",
+      "originalSha256": "0f99d246e3ee61809e75879a046392eb92a0e2ab9efbff32a9ea0cc48317df92",
+      "currentSha256": "41a9e70bff1728ba083e546f758366c0bb75cb3a6558a9392aeaac26e199ac1c",
+      "changes": [
+        {
+          "before": "catalogueWithD083",
+          "after": "catalogueWithD086"
+        },
+        {
+          "before": "'./d083-catalogue-compat.mjs'",
+          "after": "'./d086-catalogue-compat.mjs'"
+        }
+      ]
+    },
+    {
+      "from": "tools/d055-capture.mjs",
+      "to": "tools/d055-capture-d086.mjs",
+      "originalSha256": "0c873fcac3f991b5663d81daa4f02e08b79aa0e437445770125ba39de08a6692",
+      "currentSha256": "cb5f364b4938819b37714f5f753b9e85d7a36c5f2bdd006653c8ad6013efae19",
+      "changes": [
+        {
+          "before": "catalogueWithD083",
+          "after": "catalogueWithD086"
+        },
+        {
+          "before": "'./d083-catalogue-compat.mjs'",
+          "after": "'./d086-catalogue-compat.mjs'"
+        }
+      ]
+    },
+    {
+      "from": "tools/smoke-d053.mjs",
+      "to": "tools/smoke-d053-d086.mjs",
+      "originalSha256": "739cc72906b9584a1468ee740cc60c0e4fc1509e26e4a1203fde92e8e6b81688",
+      "currentSha256": "097732db8a6707a98db08775e9f6f3a627852fce3e011e659b107bf3518ef1d9",
+      "changes": [
+        {
+          "before": "catalogueWithD083",
+          "after": "catalogueWithD086"
+        },
+        {
+          "before": "'./d083-catalogue-compat.mjs'",
+          "after": "'./d086-catalogue-compat.mjs'"
+        },
+        {
+          "before": "'./d053-capture.mjs'",
+          "after": "'./d053-capture-d086.mjs'"
+        },
+        {
+          "before": "D083_TOOL_IDS, catalogueWithD086",
+          "after": "BRITISH_CATALOGUE_IDS, catalogueWithD086"
+        },
+        {
+          "before": "heritage: D083_TOOL_IDS",
+          "after": "heritage: BRITISH_CATALOGUE_IDS"
+        }
+      ]
+    },
+    {
+      "from": "tools/d085-source-v1.test.mjs",
+      "to": "tools/d085-source-d086.test.mjs",
+      "originalSha256": "330ec1da444d563ba44a5b0438c9085fa93790cef5c416a2ea9f9cbed9fdaa95",
+      "currentSha256": "43865c75041678e33813013ed89e4fb9d966b90a800ed18ba14a009d5f55ce39",
+      "changes": [
+        {
+          "before": "'./d085-source-v1.mjs'",
+          "after": "'./d086-source-v1.mjs'"
+        }
+      ]
+    },
+    {
+      "from": "proposals/d083/native-integration-check.mjs",
+      "to": "proposals/d083/native-integration-check-d086.mjs",
+      "originalSha256": "dd1a83b03ee255acc3e36cebb7677ef64382a926a0fbb814c531d39b90ad7cbc",
+      "currentSha256": "fa74e3905ce32b6ab6d3f3a4e646bb9c84b1efe185d3bd9553ed1be994f94942",
+      "changes": [
+        {
+          "before": "import fs from 'node:fs';",
+          "after": "import {assertD086KindMetadata} from '../../tools/d086-kind-metadata-contract.mjs';\nimport fs from 'node:fs';"
+        },
+        {
+          "before": "assert.deepEqual(KINDS.data.kinds.slice(0,baseData.kinds.length),baseData.kinds);",
+          "after": "assertD086KindMetadata(KINDS.data.kinds.slice(0,baseData.kinds.length),baseData.kinds);"
+        }
+      ]
+    },
+    {
+      "from": "proposals/d083/native-browser-check.mjs",
+      "to": "proposals/d083/native-browser-check-d086.mjs",
+      "originalSha256": "9155d315a55844c26e73b94b62868a195bf9ed3e5fc53862fe97bae4a23d6d8e",
+      "currentSha256": "3a0c0aeb49187c5d2d918a723e0fc742611df1fe23a46194d45ae16f8f78e1b6",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),8)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),18)"
+        }
+      ]
+    },
+    {
+      "from": "tools/d083-release-trigger.test.mjs",
+      "to": "tools/d083-release-trigger-d086.test.mjs",
+      "originalSha256": "07cc4b5c8eda222496d73019dc7df3bd2e6f9795fa27cafd75e6f6e7971c0fc7",
+      "currentSha256": "912ff856c32475969370bf12b3a6cf17c4b993e8fc57971d189a38faa73f7465",
+      "changes": [
+        {
+          "before": "proposals/d083/native-browser-check.mjs",
+          "after": "proposals/d083/native-browser-check-d086.mjs"
+        },
+        {
+          "before": "proposals/d083/native-integration-check.mjs",
+          "after": "proposals/d083/native-integration-check-d086.mjs"
+        }
+      ]
+    },
+    {
+      "from": ".github/scripts/ci-integrity-release-v2.test.mjs",
+      "to": ".github/scripts/ci-integrity-d086.test.mjs",
+      "originalSha256": "c6b1c3b0f99e43eed2b9933c53874ac8d0e1fa8f5ac1b4e3374de941f2aa22b7",
+      "currentSha256": "c45d1d25960b10d2776233bbd0bddf02ecccb1855160a2caec792956257602bf",
+      "changes": [
+        {
+          "before": "'d082', 'd083-native-release'",
+          "after": "'d082', 'd086-native-release', 'd083-native-release'"
+        },
+        {
+          "before": "ci-integrity-release-v2\\.test",
+          "after": "ci-integrity-d086\\.test"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+Official CI first-red, not a geometry assertion failure. Run40177698241 / job121121860576, PR head6f72557fe668846dae74d0062d68f143af84eabe, checkout merge625d7ca144ab2d250bb8681f097efba2d430f2c0.
+2026-10-25T08:43:58.0847412Z OLD 193 0
+2026-10-25T08:43:58.1831465Z OLD 194 0
+2026-10-25T08:43:58.2364465Z NEW borough-iron-market
+2026-10-25T08:43:58.3039133Z NEW raised-guild-market
+2026-10-25T08:43:58.3670506Z NEW butter-market-colonnade
+2026-10-25T08:43:58.3803052Z NEW gothic-wool-exchange
+2026-10-25T08:43:58.4135162Z NEW georgian-customs-house
+2026-10-25T08:43:58.4244439Z NEW fan-plan-free-library
+2026-10-25T08:43:58.4513896Z NEW dutch-gabled-post-office
+2026-10-25T08:43:58.4727570Z NEW edwardian-board-school
+2026-10-25T08:43:58.4988568Z NEW interwar-fire-station
+2026-10-25T08:43:58.5102942Z NEW garden-cottage-clinic
+2026-10-25T08:43:58.5107618Z PASS current candidate 157
+2026-10-25T08:43:58.5411586Z ##[group]Run node proposals/d086/mesh-check.mjs
+2026-10-25T08:43:58.5412157Z [36;1mnode proposals/d086/mesh-check.mjs[0m
+2026-10-25T08:43:58.5412642Z [36;1mnode proposals/d086/facade-backing-check.mjs[0m
+2026-10-25T08:43:58.5464417Z shell: /usr/bin/bash -e {0}
+2026-10-25T08:43:58.5464955Z ##[endgroup]
+2026-10-25T08:43:58.7196157Z {"qualification":"Independent mesh-component validation; not full surface visibility, browser/art acceptance or publication.","models":[{"id":"borough-iron-market","slot":[87,3],"triangles":338,"weighted":676,"cap":1800,"solids":4,"minVolume":0.02368192771084335,"geometrySha256":"c36176aa1b10e76cf345894965a3286b693ac51759fffd38422e15cd78ebe9fb","bounds":[[0.097,0.903],[0,1],[0.157,0.943]]},{"id":"raised-guild-market","slot":[87,4],"triangles":336,"weighted":672,"cap":1800,"solids":18,"minVolume":0.00032999999999999956,"geometrySha256":"0372e268a47a2dafb1cc2f0ffaf5b8c3237ffd5f42d31aa90484cd245cd30817","bounds":[[0.145,0.96],[0,1],[0.145,0.88]]},{"id":"butter-market-colonnade","slot":[87,5],"triangles":536,"weighted":1072,"cap":1800,"solids":32,"minVolume":0.000380540540540539,"geometrySha256":"c33cd5bb2b42934b296d555cd046ea47870c4ecb8726dac33cdab4e18d19e213","bounds":[[0.11,0.89],[0,1],[0.12,0.95]]},{"id":"gothic-wool-exchange","slot":[91,3],"triangles":142,"weighted":284,"cap":1800,"solids":4,"minVolume":0.0038853107344632783,"geometrySha256":"7369bc9645b8b0b95881994af963be0ee423a1c06cbd36c10def0abc0834a88b","bounds":[[0.1,0.86],[0,1],[0.11,0.933]]},{"id":"georgian-customs-house","slot":[91,4],"triangles":286,"weighted":572,"cap":1800,"solids":8,"minVolume":0.0006273191489361673,"geometrySha256":"d905dee44d43136527eb1e992fdbbd481d8cccb790a1073e94db81c7456637ee","bounds":[[0.11699999999999999,0.883],[0,1],[0.11699999999999999,0.93]]},{"id":"fan-plan-free-library","slot":[14,5],"triangles":152,"weighted":304,"cap":1200,"solids":4,"minVolume":0.02266666666666666,"geometrySha256":"5b5868ad4ce76273c192a8a7016f78b1b4514940e4e3b7eb46c8b2f3a266dd6f","bounds":[[0.06543976095477039,0.9345602390452297],[0,1],[0.13,0.913]]},{"id":"dutch-gabled-post-office","slot":[15,5],"triangles":236,"weighted":472,"cap":1200,"solids":5,"minVolume":0.009276923076923075,"geometrySha256":"f303927e3f818545ce8f48ec0745d7543c397080f4909e80834680a9b5443bed","bounds":[[0.12,0.88],[0,1],[0.04,0.853]]},{"id":"edwardian-board-school","slot":[7,5],"triangles":218,"weighted":436,"cap":1200,"solids":7,"minVolume":0.0001935483870967716,"geometrySha256":"4fb9c45fbe549254798aaf88764211b6d92f790727389c661f8efa11d4ef074a","bounds":[[0.107,0.893],[0,1],[0.11699999999999999,0.843]]},{"id":"interwar-fire-station","slot":[6,5],"triangles":266,"weighted":532,"cap":1200,"solids":14,"minVolume":0.00012599999999999827,"geometrySha256":"3934dcbd9353377c1c5be7b02ca32739dfd762de0fd16bdd98944afa8e43ba7b","bounds":[[0.107,0.945],[0,1],[0.145,0.86]]},{"id":"garden-cottage-clinic","slot":[13,5],"triangles":146,"weighted":292,"cap":1200,"solids":7,"minVolume":0.00013333333333333182,"geometrySha256":"0290d6b989a25b4c0d375d59995d4adf1808b8193bfe7bd14ccc92bfe1c773fb","bounds":[[0.05138029879832731,0.9486197012016727],[0,1],[0.177,0.8232392344947549]]}],"negativeControls":309,"passed":true}
+2026-10-25T08:43:58.9632184Z node:fs:2482
+2026-10-25T08:43:58.9632665Z     return binding.writeFileUtf8(
+2026-10-25T08:43:58.9633214Z                    ^
+2026-10-25T08:43:58.9633395Z
+2026-10-25T08:43:58.9633800Z Error: ENOENT: no such file or directory, open 'scratch/d086-native-variant/facade-backing-current.json'
+2026-10-25T08:43:58.9634339Z     at Object.writeFileSync (node:fs:2482:20)
+2026-10-25T08:43:58.9634904Z     at file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/proposals/d086/facade-backing-check.mjs:36:64
+2026-10-25T08:43:58.9635500Z     at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+2026-10-25T08:43:58.9636015Z     at async node:internal/modules/esm/loader:647:26
+2026-10-25T08:43:58.9636485Z     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+2026-10-25T08:43:58.9637390Z   errno: -2,
+2026-10-25T08:43:58.9637688Z   code: 'ENOENT',
+2026-10-25T08:43:58.9637957Z   syscall: 'open',
+2026-10-25T08:43:58.9638356Z   path: 'scratch/d086-native-variant/facade-backing-current.json'
+2026-10-25T08:43:58.9638749Z }
+2026-10-25T08:43:58.9638844Z
+2026-10-25T08:43:58.9638998Z Node.js v24.21.0
+2026-10-25T08:43:58.9880931Z ##[error]Process completed with exit code 1.
+2026-10-25T08:44:00.1205809Z Artifact d086-native-node-625d7ca144ab2d250bb8681f097efba2d430f2c0.zip successfully finalized. Artifact ID 12592083900
+2026-10-25T08:44:00.1207023Z Artifact d086-native-node-625d7ca144ab2d250bb8681f097efba2d430f2c0 has been successfully uploaded! Final size is 40197 bytes. Artifact ID is 12592083900
+2026-10-25T08:44:00.1208211Z Artifact download URL: https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40177698241/artifacts/12592083900

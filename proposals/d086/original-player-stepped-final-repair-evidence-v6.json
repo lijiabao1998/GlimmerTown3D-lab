@@ -1,0 +1,642 @@
+{
+  "qualification": "Frozen numerical receipts and source/probe pins only. Mandatory official Chrome raw PNG/source join and visual art review remain pending; no accepted count/release claim.",
+  "proceduralSourceSha256": "a30a4c089a71537acc389b9387ec117ded4c508b5f403281ace477afaf97e61b",
+  "packedSourceSha256": "aa340cd05f885204da0a4aa2b49da9937eeee565dc79925c9c041bbd9ef668cf",
+  "widths": [
+    {
+      "width": 1440,
+      "required": 25987,
+      "first48Missing": 28,
+      "extraLegalRecovered": 28,
+      "remaining": 0
+    },
+    {
+      "width": 412,
+      "required": 25987,
+      "first48Missing": 28,
+      "extraLegalRecovered": 28,
+      "remaining": 0
+    },
+    {
+      "width": 360,
+      "required": 25987,
+      "first48Missing": 28,
+      "extraLegalRecovered": 28,
+      "remaining": 0
+    }
+  ],
+  "currentNativeModels": [
+    {
+      "id": "borough-iron-market",
+      "owner": 7,
+      "width": 1440,
+      "required": 3281,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "b488569fca1b0d426cd3c436d14d25b2dbc7d035287fbf0f341be106338060f0",
+      "coverage": {
+        "owner": 7,
+        "contractSha256": "b488569fca1b0d426cd3c436d14d25b2dbc7d035287fbf0f341be106338060f0",
+        "requiredSamples": 3281,
+        "coveredSamples": 3281,
+        "originalHits": 739,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 594,
+        "views": 4
+      }
+    },
+    {
+      "id": "borough-iron-market",
+      "owner": 7,
+      "width": 412,
+      "required": 3281,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "26e763c70e7701e64fbcc604895282b058b21ee16e3d11d8003df0b414e2bd84",
+      "coverage": {
+        "owner": 7,
+        "contractSha256": "26e763c70e7701e64fbcc604895282b058b21ee16e3d11d8003df0b414e2bd84",
+        "requiredSamples": 3281,
+        "coveredSamples": 3281,
+        "originalHits": 739,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 594,
+        "views": 4
+      }
+    },
+    {
+      "id": "borough-iron-market",
+      "owner": 7,
+      "width": 360,
+      "required": 3281,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "80dc6385f682716fc614a9413ef127f8a21897e43de1c529b40dd1743dd384c1",
+      "coverage": {
+        "owner": 7,
+        "contractSha256": "80dc6385f682716fc614a9413ef127f8a21897e43de1c529b40dd1743dd384c1",
+        "requiredSamples": 3281,
+        "coveredSamples": 3281,
+        "originalHits": 739,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 594,
+        "views": 4
+      }
+    },
+    {
+      "id": "raised-guild-market",
+      "owner": 8,
+      "width": 1440,
+      "required": 2703,
+      "first48Missing": 26,
+      "remaining": 0,
+      "contractSha256": "7273c7a24f5d0c951fb29f092f53225b06a3283a2b1e3510955806afe298e515",
+      "coverage": {
+        "owner": 8,
+        "contractSha256": "7273c7a24f5d0c951fb29f092f53225b06a3283a2b1e3510955806afe298e515",
+        "requiredSamples": 2703,
+        "coveredSamples": 2703,
+        "originalHits": 599,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 664,
+        "views": 16
+      }
+    },
+    {
+      "id": "raised-guild-market",
+      "owner": 8,
+      "width": 412,
+      "required": 2703,
+      "first48Missing": 26,
+      "remaining": 0,
+      "contractSha256": "f3cb1fbc7a3098d633305927d670d2f3760e52e4a7647a82d840245bdd72f468",
+      "coverage": {
+        "owner": 8,
+        "contractSha256": "f3cb1fbc7a3098d633305927d670d2f3760e52e4a7647a82d840245bdd72f468",
+        "requiredSamples": 2703,
+        "coveredSamples": 2703,
+        "originalHits": 599,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 664,
+        "views": 16
+      }
+    },
+    {
+      "id": "raised-guild-market",
+      "owner": 8,
+      "width": 360,
+      "required": 2703,
+      "first48Missing": 26,
+      "remaining": 0,
+      "contractSha256": "18ea4942053ad6350e6ad2e719f6f051007dfb9a53f58bb63e44412b32d32d9d",
+      "coverage": {
+        "owner": 8,
+        "contractSha256": "18ea4942053ad6350e6ad2e719f6f051007dfb9a53f58bb63e44412b32d32d9d",
+        "requiredSamples": 2703,
+        "coveredSamples": 2703,
+        "originalHits": 599,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 664,
+        "views": 16
+      }
+    },
+    {
+      "id": "butter-market-colonnade",
+      "owner": 9,
+      "width": 1440,
+      "required": 2363,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "7bf66b1699809d3c193625e6c32325c8a937c307d7baef32f78aed9dd69befaf",
+      "coverage": {
+        "owner": 9,
+        "contractSha256": "7bf66b1699809d3c193625e6c32325c8a937c307d7baef32f78aed9dd69befaf",
+        "requiredSamples": 2363,
+        "coveredSamples": 2363,
+        "originalHits": 609,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 1830,
+        "views": 17
+      }
+    },
+    {
+      "id": "butter-market-colonnade",
+      "owner": 9,
+      "width": 412,
+      "required": 2363,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "a9b2287f3d980b57819c0ea5e2205069dde0e20c5e6d381c1ac5ac1f6520b660",
+      "coverage": {
+        "owner": 9,
+        "contractSha256": "a9b2287f3d980b57819c0ea5e2205069dde0e20c5e6d381c1ac5ac1f6520b660",
+        "requiredSamples": 2363,
+        "coveredSamples": 2363,
+        "originalHits": 609,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 1830,
+        "views": 17
+      }
+    },
+    {
+      "id": "butter-market-colonnade",
+      "owner": 9,
+      "width": 360,
+      "required": 2363,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "7bf66b1699809d3c193625e6c32325c8a937c307d7baef32f78aed9dd69befaf",
+      "coverage": {
+        "owner": 9,
+        "contractSha256": "7bf66b1699809d3c193625e6c32325c8a937c307d7baef32f78aed9dd69befaf",
+        "requiredSamples": 2363,
+        "coveredSamples": 2363,
+        "originalHits": 609,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 1830,
+        "views": 17
+      }
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "owner": 10,
+      "width": 1440,
+      "required": 2184,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "59b6706f2e2d3a1c988a4ffe5f77c07bad7a590ba7125c9532391e541d65e78c",
+      "coverage": {
+        "owner": 10,
+        "contractSha256": "59b6706f2e2d3a1c988a4ffe5f77c07bad7a590ba7125c9532391e541d65e78c",
+        "requiredSamples": 2184,
+        "coveredSamples": 2184,
+        "originalHits": 541,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 133,
+        "views": 4
+      }
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "owner": 10,
+      "width": 412,
+      "required": 2184,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "761b8d693a6c38df975f88ab209784f8b177f54db6843abb718a7eabe81b773e",
+      "coverage": {
+        "owner": 10,
+        "contractSha256": "761b8d693a6c38df975f88ab209784f8b177f54db6843abb718a7eabe81b773e",
+        "requiredSamples": 2184,
+        "coveredSamples": 2184,
+        "originalHits": 541,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 133,
+        "views": 4
+      }
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "owner": 10,
+      "width": 360,
+      "required": 2184,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "c678de7952046353eb350dd2a939fdd5db0459fa6cad6721506684bd1dbb9dce",
+      "coverage": {
+        "owner": 10,
+        "contractSha256": "c678de7952046353eb350dd2a939fdd5db0459fa6cad6721506684bd1dbb9dce",
+        "requiredSamples": 2184,
+        "coveredSamples": 2184,
+        "originalHits": 541,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 133,
+        "views": 4
+      }
+    },
+    {
+      "id": "georgian-customs-house",
+      "owner": 11,
+      "width": 1440,
+      "required": 3815,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "d44995e980be958afbcc9ae797abd1c1860a0ea06b681c15223a077e937624fb",
+      "coverage": {
+        "owner": 11,
+        "contractSha256": "d44995e980be958afbcc9ae797abd1c1860a0ea06b681c15223a077e937624fb",
+        "requiredSamples": 3815,
+        "coveredSamples": 3815,
+        "originalHits": 679,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 272,
+        "views": 5
+      }
+    },
+    {
+      "id": "georgian-customs-house",
+      "owner": 11,
+      "width": 412,
+      "required": 3815,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "151de095c4ad428377ed0c0911c4eb53eb835e1e87f14492c52b7f0386c169c9",
+      "coverage": {
+        "owner": 11,
+        "contractSha256": "151de095c4ad428377ed0c0911c4eb53eb835e1e87f14492c52b7f0386c169c9",
+        "requiredSamples": 3815,
+        "coveredSamples": 3815,
+        "originalHits": 679,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 272,
+        "views": 5
+      }
+    },
+    {
+      "id": "georgian-customs-house",
+      "owner": 11,
+      "width": 360,
+      "required": 3815,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "dabd7683e699f8fc0614d8a57869cd79c08c240c10475eb34673b1dfea68b2c2",
+      "coverage": {
+        "owner": 11,
+        "contractSha256": "dabd7683e699f8fc0614d8a57869cd79c08c240c10475eb34673b1dfea68b2c2",
+        "requiredSamples": 3815,
+        "coveredSamples": 3815,
+        "originalHits": 679,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 272,
+        "views": 5
+      }
+    },
+    {
+      "id": "fan-plan-free-library",
+      "owner": 12,
+      "width": 1440,
+      "required": 2139,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "d3b8b4cc8e4990054a1498b9830c8901c72a0001235c85071cf80e8dec0bebea",
+      "coverage": {
+        "owner": 12,
+        "contractSha256": "d3b8b4cc8e4990054a1498b9830c8901c72a0001235c85071cf80e8dec0bebea",
+        "requiredSamples": 2139,
+        "coveredSamples": 2139,
+        "originalHits": 725,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 370,
+        "views": 6
+      }
+    },
+    {
+      "id": "fan-plan-free-library",
+      "owner": 12,
+      "width": 412,
+      "required": 2139,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "fd035250266acd78046081b25ff0e0c21e402931e56f9cba0c9aab6c7d4d048b",
+      "coverage": {
+        "owner": 12,
+        "contractSha256": "fd035250266acd78046081b25ff0e0c21e402931e56f9cba0c9aab6c7d4d048b",
+        "requiredSamples": 2139,
+        "coveredSamples": 2139,
+        "originalHits": 725,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 370,
+        "views": 6
+      }
+    },
+    {
+      "id": "fan-plan-free-library",
+      "owner": 12,
+      "width": 360,
+      "required": 2139,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "18223ee027b140284281fdd69a0c06a90c320b9ecef5818126772698f6555fb6",
+      "coverage": {
+        "owner": 12,
+        "contractSha256": "18223ee027b140284281fdd69a0c06a90c320b9ecef5818126772698f6555fb6",
+        "requiredSamples": 2139,
+        "coveredSamples": 2139,
+        "originalHits": 725,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 370,
+        "views": 6
+      }
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "owner": 13,
+      "width": 1440,
+      "required": 2760,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "58f3b8b4c2a1ffaee44fbe8573143894be34aa06e56a7a7c9ebae3a97a0bae4c",
+      "coverage": {
+        "owner": 13,
+        "contractSha256": "58f3b8b4c2a1ffaee44fbe8573143894be34aa06e56a7a7c9ebae3a97a0bae4c",
+        "requiredSamples": 2760,
+        "coveredSamples": 2760,
+        "originalHits": 742,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 206,
+        "views": 6
+      }
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "owner": 13,
+      "width": 412,
+      "required": 2760,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "91066a0a1b238b2dde2c2836dfb4e74fda267c1ac5596fba2ed48d5952dc87d7",
+      "coverage": {
+        "owner": 13,
+        "contractSha256": "91066a0a1b238b2dde2c2836dfb4e74fda267c1ac5596fba2ed48d5952dc87d7",
+        "requiredSamples": 2760,
+        "coveredSamples": 2760,
+        "originalHits": 742,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 206,
+        "views": 6
+      }
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "owner": 13,
+      "width": 360,
+      "required": 2760,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "8e748d99ecad6f378f423e683abc16e7622300cd2d0581095b4b4615e706122e",
+      "coverage": {
+        "owner": 13,
+        "contractSha256": "8e748d99ecad6f378f423e683abc16e7622300cd2d0581095b4b4615e706122e",
+        "requiredSamples": 2760,
+        "coveredSamples": 2760,
+        "originalHits": 742,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 206,
+        "views": 6
+      }
+    },
+    {
+      "id": "edwardian-board-school",
+      "owner": 14,
+      "width": 1440,
+      "required": 2897,
+      "first48Missing": 2,
+      "remaining": 0,
+      "contractSha256": "f978e462d97abb8c320a6301e4ec1e5f3232d7c11ec08536ec56880c9f4bc666",
+      "coverage": {
+        "owner": 14,
+        "contractSha256": "f978e462d97abb8c320a6301e4ec1e5f3232d7c11ec08536ec56880c9f4bc666",
+        "requiredSamples": 2897,
+        "coveredSamples": 2897,
+        "originalHits": 645,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 116,
+        "views": 7
+      }
+    },
+    {
+      "id": "edwardian-board-school",
+      "owner": 14,
+      "width": 412,
+      "required": 2897,
+      "first48Missing": 2,
+      "remaining": 0,
+      "contractSha256": "e6450a01bfc47329f231b38f13efcf4cbca5e7794e28627bc8260fef3e5cd69a",
+      "coverage": {
+        "owner": 14,
+        "contractSha256": "e6450a01bfc47329f231b38f13efcf4cbca5e7794e28627bc8260fef3e5cd69a",
+        "requiredSamples": 2897,
+        "coveredSamples": 2897,
+        "originalHits": 645,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 116,
+        "views": 7
+      }
+    },
+    {
+      "id": "edwardian-board-school",
+      "owner": 14,
+      "width": 360,
+      "required": 2897,
+      "first48Missing": 2,
+      "remaining": 0,
+      "contractSha256": "f18326be74a5f98be9df2d17ad6fd25e64beac0fa1accb45a15884446bce8394",
+      "coverage": {
+        "owner": 14,
+        "contractSha256": "f18326be74a5f98be9df2d17ad6fd25e64beac0fa1accb45a15884446bce8394",
+        "requiredSamples": 2897,
+        "coveredSamples": 2897,
+        "originalHits": 645,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 116,
+        "views": 7
+      }
+    },
+    {
+      "id": "interwar-fire-station",
+      "owner": 15,
+      "width": 1440,
+      "required": 2395,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "68ed7dbb641cd78a297c96e900558041d0f3d19a9837d8934c167956cf3c124a",
+      "coverage": {
+        "owner": 15,
+        "contractSha256": "68ed7dbb641cd78a297c96e900558041d0f3d19a9837d8934c167956cf3c124a",
+        "requiredSamples": 2395,
+        "coveredSamples": 2395,
+        "originalHits": 673,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 678,
+        "views": 5
+      }
+    },
+    {
+      "id": "interwar-fire-station",
+      "owner": 15,
+      "width": 412,
+      "required": 2395,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "c7a29c0e9a2eafb94af81e4c0c6d781a96ab1dc70a8425219b29f7d8c25f989a",
+      "coverage": {
+        "owner": 15,
+        "contractSha256": "c7a29c0e9a2eafb94af81e4c0c6d781a96ab1dc70a8425219b29f7d8c25f989a",
+        "requiredSamples": 2395,
+        "coveredSamples": 2395,
+        "originalHits": 673,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 678,
+        "views": 5
+      }
+    },
+    {
+      "id": "interwar-fire-station",
+      "owner": 15,
+      "width": 360,
+      "required": 2395,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "860b9e22d2681ae144d2b0eba8793086f92d7e84e6dab24f266110359fef7364",
+      "coverage": {
+        "owner": 15,
+        "contractSha256": "860b9e22d2681ae144d2b0eba8793086f92d7e84e6dab24f266110359fef7364",
+        "requiredSamples": 2395,
+        "coveredSamples": 2395,
+        "originalHits": 673,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 678,
+        "views": 5
+      }
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "owner": 16,
+      "width": 1440,
+      "required": 1450,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "cdbef07b083316d9d10e4864bccfc22983e4f0768b84fa0ec49439e9bc5cc93a",
+      "coverage": {
+        "owner": 16,
+        "contractSha256": "cdbef07b083316d9d10e4864bccfc22983e4f0768b84fa0ec49439e9bc5cc93a",
+        "requiredSamples": 1450,
+        "coveredSamples": 1450,
+        "originalHits": 592,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 246,
+        "views": 9
+      }
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "owner": 16,
+      "width": 412,
+      "required": 1450,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "38ef5e9c5be6ce2d870987fa13c6da672bf2e2bc14411f31f6094f8fbf1642b4",
+      "coverage": {
+        "owner": 16,
+        "contractSha256": "38ef5e9c5be6ce2d870987fa13c6da672bf2e2bc14411f31f6094f8fbf1642b4",
+        "requiredSamples": 1450,
+        "coveredSamples": 1450,
+        "originalHits": 592,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 246,
+        "views": 9
+      }
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "owner": 16,
+      "width": 360,
+      "required": 1450,
+      "first48Missing": 0,
+      "remaining": 0,
+      "contractSha256": "d640121bb6713078cf0afd0763abeb8b602c81a997dd4a426d19663411ad07fe",
+      "coverage": {
+        "owner": 16,
+        "contractSha256": "d640121bb6713078cf0afd0763abeb8b602c81a997dd4a426d19663411ad07fe",
+        "requiredSamples": 1450,
+        "coveredSamples": 1450,
+        "originalHits": 592,
+        "originalBlockedHits": 0,
+        "retainedInternalRecords": 246,
+        "views": 9
+      }
+    }
+  ],
+  "structural": {
+    "solids": 109,
+    "negativeControls": 12171,
+    "passed": true
+  },
+  "oldPaint": {
+    "oldIntents": 410,
+    "retained": 410,
+    "newIntents": 63,
+    "oldExteriorPaintProbes": 12224,
+    "uniqueOldRequiredPaintPoints": 11707,
+    "newlyHiddenOldPaintProbes": 0
+  },
+  "receipts": {
+    "nativeCurrent": {
+      "path": "scratch/d086-surface/native-v6-current-first/report.json",
+      "sha256": "e51ea147998b0222e0d7059a496bb0f07b74f25b24525fd4faa4ae804f9162a8",
+      "bytes": 18079
+    },
+    "structuralCurrent": {
+      "path": "scratch/d086-surface/structural-v6-current-first.json",
+      "sha256": "4d125b965f3bed0abb3c9af51a653583c598861b0675059e0412716ec630ee4e",
+      "bytes": 1956
+    },
+    "oldPaint": {
+      "path": "scratch/d086-original-player-stepped-final-repair-attempt-1/facade-intent-summary-sourcebound.json",
+      "sha256": "b5ed80ed401b56c46ff383bebe820bdfcb1cf9d824de7aef90f8ce55e5bf1a26",
+      "bytes": 143303
+    },
+    "isolatedSource": {
+      "path": "scratch/d086-original-player-stepped-final-repair-attempt-1/report.json",
+      "sha256": "68bdb8292b0196bfba8fa5473fdfc3b1ac29bdd49af474c9d60ccb46887903ad",
+      "bytes": 11031
+    },
+    "independentStatic": {
+      "path": "scratch/d086-original-architecture-review/combined-stepped-final-attempt-1/static-report.json",
+      "sha256": "6e6387357ccb41d9da8a27a55ce8c157877afaa13f76b96e2540e65ef9d2b1c2",
+      "bytes": 287401
+    }
+  },
+  "browserJoined": false,
+  "artAccepted": false
+}

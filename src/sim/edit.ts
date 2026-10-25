@@ -4,6 +4,8 @@
 import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRect, tap, undoTxn, pushTxn, ROAD_COST, COST, type BuildState, type Txn } from './rules/build.ts';
 import { RURAL_HERITAGE_BUILDINGS, ruralHeritageTool } from '../content/britishRuralHeritage.ts';
 import { canPlaceHeritage, heritagePlaceCost, tapHeritage } from './heritageBuild.ts';
+import { CIVIC_MARKET_BUILDINGS, civicMarketTool } from '../content/britishCivicMarkets.ts';
+import { tapNativeArtVariant } from './nativeArtVariant.ts';
 import { computePower, powerCap } from './rules/power.ts';
 import { rebuildCov, type SvcBudget } from './rules/fields.ts';
 import { applyPolicy, ensurePol, stepBudget, type PolicyResult } from './rules/policy.ts';
@@ -50,7 +52,8 @@ export const FOOD_TOOLS: CivicTool[] = [
  { id: 'tradepost', name: '外貿商行', short: '貿', label: '外貿', cost: COST.tradepost, size: 2 },
 ];
 export const HERITAGE_TOOLS:CivicTool[] = RURAL_HERITAGE_BUILDINGS.map(m=>({id:m.tool,name:m.name,short:m.short,cost:m.cost,size:m.size}));
-export const FACILITY_TOOLS = [...CIVIC_TOOLS, ...FOOD_TOOLS, ...HERITAGE_TOOLS];
+export const NATIVE_ART_TOOLS:CivicTool[] = CIVIC_MARKET_BUILDINGS.map(m=>({id:m.tool,name:m.name,short:m.short,label:m.short,cost:COST[m.baseTool as keyof typeof COST],size:m.size}));
+export const FACILITY_TOOLS = [...CIVIC_TOOLS, ...FOOD_TOOLS, ...HERITAGE_TOOLS, ...NATIVE_ART_TOOLS];
 export const toolSize = (id: string) => FACILITY_TOOLS.find(c => c.id === id)?.size ?? 1;
 // 工具列的鎖（實驗線 toolUnlocked458 63877、selectCatalogTool458 63932）：城市等級不夠就選不起來、提示解鎖等級。這是介面的鎖，規則（canPlace）本來就不看等級
 export function toolLock(s: Sim, id: string): string | null {
@@ -90,17 +93,18 @@ const hiBld = (t: Tile) => !!(t.bld && !t.bld.ref && t.bld.k <= 3 && t.bld.lv >=
 
 // 預覽：不改任何狀態，只問規則「這一格能不能蓋、要多少錢」
 export function previewOp(s: Sim, op: EditOp): OpPreview {
-  const heritage=!!ruralHeritageTool(op.tool);
-  if(heritage&&op.k!=='tap')return{cells:[],count:0,total:0,affordable:true,reason:'英式建築請點放'};
+  const heritage=!!ruralHeritageTool(op.tool), nativeArt=civicMarketTool(op.tool), nativeTool=nativeArt?.baseTool??op.tool;
+  if((heritage||nativeArt)&&op.k!=='tap')return{cells:[],count:0,total:0,affordable:true,reason:'英式建築請點放'};
+  if(nativeArt&&(!Number.isInteger(op.x0)||!Number.isInteger(op.z0)))return{cells:[],count:0,total:0,affordable:true,reason:'請選擇地圖格子'};
   const st = stateOf(s), cells: OpPreview['cells'] = [], multi = op.k === 'rect' && (op.x0 !== op.x1 || op.z0 !== op.z1);
   let total = 0, count = 0, reason: string | undefined;
   for (const [x, z] of cellsOf(op)) {
     if (!inMap(s, x, z)) continue;
     const t = s.w.tiles[z * s.w.N + x];
-    let r = heritage ? canPlaceHeritage(st, op.tool, x, z) : canPlace(st, op.tool, x, z);
+    let r = heritage ? canPlaceHeritage(st, op.tool, x, z) : canPlace(st, nativeTool, x, z);
     if (!r && op.tool in ZONE_OF && t.zone === ZONE_OF[op.tool] && !t.tree) r = '已經是這一區';   // 51664：同類重劃不動
     if (!r && op.tool === 'doze' && multi && hiBld(t)) r = '二級以上的建築要單獨拆';
-    const cost = r ? 0 : heritage ? heritagePlaceCost(st, op.tool, x, z) : placeCost(st, op.tool, x, z);
+    const cost = r ? 0 : heritage ? heritagePlaceCost(st, op.tool, x, z) : placeCost(st, nativeTool, x, z);
     if (!r) { total += cost; count++; } else reason ??= r;
     cells.push({ x, z, ok: !r, cost });
     const sz = op.k === 'tap' ? toolSize(op.tool) : 1;               // D044：多格建築（太空研究中心 3×3）預覽畫整塊占地，跟根格同一個 ok；造價只算根格
@@ -111,12 +115,12 @@ export function previewOp(s: Sim, op: EditOp): OpPreview {
 
 // 提交：照實驗線的手勢函式蓋（build.ts），再把這一筆交易碰過的格子逐格比對前後，記事件、同步城市模型
 export function commitOp(s: Sim, op: EditOp, now: number): EditResult {
-  const heritage=!!ruralHeritageTool(op.tool);
-  if(heritage&&op.k!=='tap')return{ok:false,placed:0,spent:0,events:[],reason:'英式建築請點放'};
+  const heritage=!!ruralHeritageTool(op.tool), nativeArt=civicMarketTool(op.tool);
+  if((heritage||nativeArt)&&op.k!=='tap')return{ok:false,placed:0,spent:0,events:[],reason:'英式建築請點放'};
   const pv = previewOp(s, op), st = stateOf(s), m0 = s.money, costs = new Map<number, number>();
   for (const c of pv.cells) if (c.ok && !c.foot) costs.set(c.z * s.w.N + c.x, c.cost);   // 每格的造價只看那一格（施工前先記；插入順序＝施工順序）
   let placed = 0, refused: string | undefined, txn: Txn | null = null, arm: { k: number; lv: number } | undefined, skipped = 0;
-  if (op.k === 'tap') { const r = heritage ? tapHeritage(st, op.tool, op.x0, op.z0) : tap(st, op.tool, op.x0, op.z0); placed = r.ok ? 1 : 0; txn = r.txn; }
+  if (op.k === 'tap') { const r = heritage ? tapHeritage(st, op.tool, op.x0, op.z0) : nativeArt ? tapNativeArtVariant(st, op.tool, op.x0, op.z0) : tap(st, op.tool, op.x0, op.z0); placed = r.ok ? 1 : 0; txn = r.txn; }
   else if (op.k === 'line') { const r = commitLine(st, op.tool, op.x0, op.z0, op.x1, op.z1); placed = r.built.filter(Boolean).length; txn = r.txn; }
   else { const r = commitRect(st, op.tool, op.x0, op.z0, op.x1, op.z1, now); placed = r.placed; txn = r.txn; refused = r.refused; arm = r.arm; skipped = r.skipped; }
   writeBack(s, st);

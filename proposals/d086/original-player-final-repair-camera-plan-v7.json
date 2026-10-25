@@ -1,0 +1,5691 @@
+{
+  "qualification": "Exact isolated source ordinary player camera plan. Original48 and all retained additional legal assertions stay. Every selected/extra required view needs actual raw PNG, source/cache/browser geometry join and unchanged frame/physics/ray rules. No inspection domain or accepted art.",
+  "sourceSha256": "f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25",
+  "worldSha256": "8ca1a33ec62f458eb65b1ae5815dbab86cce66bd620e683cc99c6b34ad81493e",
+  "original48": [
+    {
+      "id": "surface-e0-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e1-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e2-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 1.005309639148734
+    }
+  ],
+  "models": [
+    {
+      "id": "borough-iron-market",
+      "owner": 7,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "ad0debbed9c94e59a136e21e1e6026c9694e13501a87551df3d7d5fd2fd52111",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3281,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  68,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1871,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.43030909522789,
+                  88.24203007733601,
+                  -46.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1631,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1793,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1804,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "borough-iron-market",
+          "owner": 7,
+          "coverage": {
+            "owner": 7,
+            "contractSha256": "ad0debbed9c94e59a136e21e1e6026c9694e13501a87551df3d7d5fd2fd52111",
+            "requiredSamples": 3281,
+            "coveredSamples": 3281,
+            "originalHits": 739,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 594,
+            "views": 4
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "55427b4b00454ae832b44468ead7c540c7b5bf5cce94e67711bdae6ce0393cd1",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3281,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  68,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1871,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.43030909522789,
+                  88.24203007733601,
+                  -46.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1631,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1793,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1804,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "borough-iron-market",
+          "owner": 7,
+          "coverage": {
+            "owner": 7,
+            "contractSha256": "55427b4b00454ae832b44468ead7c540c7b5bf5cce94e67711bdae6ce0393cd1",
+            "requiredSamples": 3281,
+            "coveredSamples": 3281,
+            "originalHits": 739,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 594,
+            "views": 4
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "77a69951d5a7b79e1ccbf78faad934efe20ca6f6f38cd4787dcfc3340cf41b6e",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3281,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  68,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1871,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.43030909522789,
+                  88.24203007733601,
+                  -46.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1631,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -17.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1793,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  4,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1804,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "borough-iron-market",
+          "owner": 7,
+          "coverage": {
+            "owner": 7,
+            "contractSha256": "77a69951d5a7b79e1ccbf78faad934efe20ca6f6f38cd4787dcfc3340cf41b6e",
+            "requiredSamples": 3281,
+            "coveredSamples": 3281,
+            "originalHits": 739,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 594,
+            "views": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "raised-guild-market",
+      "owner": 8,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "31180e22fe37669f697c6a3f107c7bbc38a9a1fef74a2858ff4437678fd6f1aa",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3132,
+          "first48Missing": 112,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1334,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.579103663915774,
+                  25.990969662701353,
+                  -66.5791036639158
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1653,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y4",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74.00000000000001,
+                  52.25578117937446,
+                  -59
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1310,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1143,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y2",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.50966799187809,
+                  52.25578117937446,
+                  5.000000000000005
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1248,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -83.52260590631933,
+                  25.990969662701353,
+                  43.73833175487152
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1353,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y1",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  26.4303090952279
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1311,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  44.63655040935662,
+                  52.25578117937446,
+                  -78.6200297520881
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1218,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1265,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  9.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1105
+            },
+            {
+              "id": "surface-e1-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  93.6200297520881,
+                  52.25578117937446,
+                  -29.63655040935661
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1253
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1295
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1454
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  10.000000000000012,
+                  25.990969662701353,
+                  -96.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 794
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1469
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  8.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 22
+            },
+            {
+              "id": "new-stair-e0-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.766674627929405,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y320",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.068193619112165,
+                  25.990969662701353,
+                  82.54525350919252
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y340",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -24.622062672309042,
+                  25.990969662701353,
+                  100.1233354071119
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e9-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.22047968156183,
+                  77.66722676946227,
+                  -64.92123412779901
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "guild-gallery-legal-e0-y176",
+              "yaw": 3.07177948351002,
+              "elevation": 0.25132742228718347,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.061318033156734,
+                  25.990969662701353,
+                  -95.9815525246756
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e6-y86",
+              "yaw": 1.5009831567151233,
+              "elevation": 0.5235987755982988,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.28919098964988,
+                  52.25578117937446,
+                  11.313635278864956
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e9-y79",
+              "yaw": 1.3788101090755203,
+              "elevation": 0.8377580409572781,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  78.64703939665553,
+                  77.66722676946227,
+                  18.343632739311047
+                ],
+                "zoom": 2.75
+              }
+            }
+          ],
+          "id": "raised-guild-market",
+          "owner": 8,
+          "coverage": {
+            "owner": 8,
+            "contractSha256": "31180e22fe37669f697c6a3f107c7bbc38a9a1fef74a2858ff4437678fd6f1aa",
+            "requiredSamples": 3132,
+            "coveredSamples": 3132,
+            "originalHits": 552,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 636,
+            "views": 25
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "77af396fa2b8708e44aa53092a01a43fc19af6a1156b73308b0279976fbfb42e",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3132,
+          "first48Missing": 112,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1333,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.579103663915774,
+                  25.990969662701353,
+                  -66.5791036639158
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1653,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y4",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74.00000000000001,
+                  52.25578117937446,
+                  -59
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1310,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1143,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y2",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.50966799187809,
+                  52.25578117937446,
+                  5.000000000000005
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1248,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -83.52260590631933,
+                  25.990969662701353,
+                  43.73833175487152
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1353,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y1",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  26.4303090952279
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1311,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  44.63655040935662,
+                  52.25578117937446,
+                  -78.6200297520881
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1218,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1265,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  9.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1105
+            },
+            {
+              "id": "surface-e1-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  93.6200297520881,
+                  52.25578117937446,
+                  -29.63655040935661
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1253
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1295
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1454
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  10.000000000000012,
+                  25.990969662701353,
+                  -96.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 794
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1469
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  8.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 22
+            },
+            {
+              "id": "new-stair-e0-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.766674627929405,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y320",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.068193619112165,
+                  25.990969662701353,
+                  82.54525350919252
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y340",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -24.622062672309042,
+                  25.990969662701353,
+                  100.1233354071119
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e9-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.22047968156183,
+                  77.66722676946227,
+                  -64.92123412779901
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "guild-gallery-legal-e0-y176",
+              "yaw": 3.07177948351002,
+              "elevation": 0.25132742228718347,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.061318033156734,
+                  25.990969662701353,
+                  -95.9815525246756
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e6-y86",
+              "yaw": 1.5009831567151233,
+              "elevation": 0.5235987755982988,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.28919098964988,
+                  52.25578117937446,
+                  11.313635278864956
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e9-y79",
+              "yaw": 1.3788101090755203,
+              "elevation": 0.8377580409572781,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  78.64703939665553,
+                  77.66722676946227,
+                  18.343632739311047
+                ],
+                "zoom": 2.75
+              }
+            }
+          ],
+          "id": "raised-guild-market",
+          "owner": 8,
+          "coverage": {
+            "owner": 8,
+            "contractSha256": "77af396fa2b8708e44aa53092a01a43fc19af6a1156b73308b0279976fbfb42e",
+            "requiredSamples": 3132,
+            "coveredSamples": 3132,
+            "originalHits": 552,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 636,
+            "views": 25
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "b4e234936f58a91fa145396b2c787ef31f0e132ba05f21dd02cf8dbfaffbabc1",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3132,
+          "first48Missing": 112,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1334,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.579103663915774,
+                  25.990969662701353,
+                  -66.5791036639158
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1653,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y4",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  74.00000000000001,
+                  52.25578117937446,
+                  -59
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1310,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  -16.430309095227894
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1143,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y2",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.50966799187809,
+                  52.25578117937446,
+                  5.000000000000005
+                ],
+                "zoom": 2.75
+              },
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -28.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1248,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -83.52260590631933,
+                  25.990969662701353,
+                  43.73833175487152
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1353,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y1",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.73734286354668,
+                  88.24203007733601,
+                  26.4303090952279
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1311,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e1-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  44.63655040935662,
+                  52.25578117937446,
+                  -78.6200297520881
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1218,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1265,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  9.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1105
+            },
+            {
+              "id": "surface-e1-y3",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  93.6200297520881,
+                  52.25578117937446,
+                  -29.63655040935661
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1253
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.430309095227884,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1295
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  48.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1454
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  10.000000000000012,
+                  25.990969662701353,
+                  -96.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 794
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -61.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1469
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  8.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 22
+            },
+            {
+              "id": "new-stair-e0-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.766674627929405,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y320",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.068193619112165,
+                  25.990969662701353,
+                  82.54525350919252
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e0-y340",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -24.622062672309042,
+                  25.990969662701353,
+                  100.1233354071119
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "new-stair-e9-y179",
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  11.22047968156183,
+                  77.66722676946227,
+                  -64.92123412779901
+                ],
+                "zoom": 2.75
+              },
+              "gained": 1
+            },
+            {
+              "id": "guild-gallery-legal-e0-y176",
+              "yaw": 3.07177948351002,
+              "elevation": 0.25132742228718347,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.061318033156734,
+                  25.990969662701353,
+                  -95.9815525246756
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e6-y86",
+              "yaw": 1.5009831567151233,
+              "elevation": 0.5235987755982988,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  100.28919098964988,
+                  52.25578117937446,
+                  11.313635278864956
+                ],
+                "zoom": 2.75
+              }
+            },
+            {
+              "id": "guild-gallery-legal-e9-y79",
+              "yaw": 1.3788101090755203,
+              "elevation": 0.8377580409572781,
+              "camera": {
+                "target": [
+                  10,
+                  0,
+                  5
+                ],
+                "pos": [
+                  78.64703939665553,
+                  77.66722676946227,
+                  18.343632739311047
+                ],
+                "zoom": 2.75
+              }
+            }
+          ],
+          "id": "raised-guild-market",
+          "owner": 8,
+          "coverage": {
+            "owner": 8,
+            "contractSha256": "b4e234936f58a91fa145396b2c787ef31f0e132ba05f21dd02cf8dbfaffbabc1",
+            "requiredSamples": 3132,
+            "coveredSamples": 3132,
+            "originalHits": 552,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 636,
+            "views": 25
+          }
+        }
+      ]
+    },
+    {
+      "id": "butter-market-colonnade",
+      "owner": 9,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2363,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  80,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1081,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -77.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 986,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 954,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y3",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  -33.738331754871574
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1255,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1157,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  43.73833175487159
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1059,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1107,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1080,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 736,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  15.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 813,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.76667462792941,
+                  25.990969662701353,
+                  106.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y23",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.55298505824117,
+                  25.990969662701353,
+                  98.180993424849
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y69",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  110.50460935293493,
+                  25.990969662701353,
+                  41.276920675663305
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y91",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  117.21272164811218,
+                  25.990969662701353,
+                  3.233325372070592
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  14.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y327",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -39.13279604155117,
+                  25.990969662701353,
+                  89.89706098151999
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y342",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -15.281215316814535,
+                  25.990969662701353,
+                  101.27368140339442
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            }
+          ],
+          "id": "butter-market-colonnade",
+          "owner": 9,
+          "coverage": {
+            "owner": 9,
+            "contractSha256": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+            "requiredSamples": 2363,
+            "coveredSamples": 2363,
+            "originalHits": 609,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 1830,
+            "views": 17
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "134526689c306413cba2753ba427b04f8d04a6db356a918d94e12b1fb6ae1318",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2363,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  80,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1081,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -77.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 986,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 954,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y3",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  -33.738331754871574
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1255,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1157,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  43.73833175487159
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1059,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1107,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1080,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 736,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  15.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 813,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.76667462792941,
+                  25.990969662701353,
+                  106.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y23",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.55298505824117,
+                  25.990969662701353,
+                  98.180993424849
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y69",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  110.50460935293493,
+                  25.990969662701353,
+                  41.276920675663305
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y91",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  117.21272164811218,
+                  25.990969662701353,
+                  3.233325372070592
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  14.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y327",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -39.13279604155117,
+                  25.990969662701353,
+                  89.89706098151999
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y342",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -15.281215316814535,
+                  25.990969662701353,
+                  101.27368140339442
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            }
+          ],
+          "id": "butter-market-colonnade",
+          "owner": 9,
+          "coverage": {
+            "owner": 9,
+            "contractSha256": "134526689c306413cba2753ba427b04f8d04a6db356a918d94e12b1fb6ae1318",
+            "requiredSamples": 2363,
+            "coveredSamples": 2363,
+            "originalHits": 609,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 1830,
+            "views": 17
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2363,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  80,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1081,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -77.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 986,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 954,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y3",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  -33.738331754871574
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1255,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y5",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.738331754871595,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1157,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  109.52260590631931,
+                  25.990969662701353,
+                  43.73833175487159
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1059,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  54.73833175487152,
+                  25.990969662701353,
+                  98.52260590631934
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1107,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -22.738331754871574,
+                  25.990969662701353,
+                  -88.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1080,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y12",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -55.5791036639158,
+                  25.990969662701353,
+                  76.57910366391576
+                ],
+                "zoom": 2.75
+              },
+              "visible": 736,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  15.999999999999975,
+                  25.990969662701353,
+                  106.2281391840194
+                ],
+                "zoom": 2.75
+              },
+              "visible": 813,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  17.76667462792941,
+                  25.990969662701353,
+                  106.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y23",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  55.55298505824117,
+                  25.990969662701353,
+                  98.180993424849
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y69",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  110.50460935293493,
+                  25.990969662701353,
+                  41.276920675663305
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y91",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  117.21272164811218,
+                  25.990969662701353,
+                  3.233325372070592
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y181",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  14.23332537207062,
+                  25.990969662701353,
+                  -96.21272164811218
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y327",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -39.13279604155117,
+                  25.990969662701353,
+                  89.89706098151999
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y342",
+              "camera": {
+                "target": [
+                  16,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -15.281215316814535,
+                  25.990969662701353,
+                  101.27368140339442
+                ],
+                "zoom": 2.75
+              },
+              "gained": 0
+            }
+          ],
+          "id": "butter-market-colonnade",
+          "owner": 9,
+          "coverage": {
+            "owner": 9,
+            "contractSha256": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+            "requiredSamples": 2363,
+            "coveredSamples": 2363,
+            "originalHits": 609,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 1830,
+            "views": 17
+          }
+        }
+      ]
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "owner": 10,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "da52097578e096297647e2edf83a76e2bcc3a0e130174b389a22c3b2203939ff",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2184,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  86,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1236,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -71.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 755,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.59804789694306,
+                  88.24203007733601,
+                  -34.59804789694305
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1450,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -16.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1220,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "gothic-wool-exchange",
+          "owner": 10,
+          "coverage": {
+            "owner": 10,
+            "contractSha256": "da52097578e096297647e2edf83a76e2bcc3a0e130174b389a22c3b2203939ff",
+            "requiredSamples": 2184,
+            "coveredSamples": 2184,
+            "originalHits": 541,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 133,
+            "views": 4
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "4f63c739264e042de8180e19e2ad9db8635cd4061d9d4e0652161880f5dc00a4",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2184,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  86,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1236,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -71.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 755,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.59804789694306,
+                  88.24203007733601,
+                  -34.59804789694305
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1450,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -16.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1220,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "gothic-wool-exchange",
+          "owner": 10,
+          "coverage": {
+            "owner": 10,
+            "contractSha256": "4f63c739264e042de8180e19e2ad9db8635cd4061d9d4e0652161880f5dc00a4",
+            "requiredSamples": 2184,
+            "coveredSamples": 2184,
+            "originalHits": 541,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 133,
+            "views": 4
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "8c5deb267231a563979f8b2add4834a30e017fcb1b9d6724c1180cb195bd0b48",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2184,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  86,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1236,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y9",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -71.52260590631928,
+                  25.990969662701353,
+                  -33.73833175487164
+                ],
+                "zoom": 2.75
+              },
+              "visible": 755,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  61.59804789694306,
+                  88.24203007733601,
+                  -34.59804789694305
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1450,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  22,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -16.73833175487156,
+                  25.990969662701353,
+                  98.52260590631931
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1220,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "gothic-wool-exchange",
+          "owner": 10,
+          "coverage": {
+            "owner": 10,
+            "contractSha256": "8c5deb267231a563979f8b2add4834a30e017fcb1b9d6724c1180cb195bd0b48",
+            "requiredSamples": 2184,
+            "coveredSamples": 2184,
+            "originalHits": 541,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 133,
+            "views": 4
+          }
+        }
+      ]
+    },
+    {
+      "id": "georgian-customs-house",
+      "owner": 11,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "a50601210c0a1457cec17d3cf122775031dd8354bbcf57fbce5ae7c64a58f95b",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3815,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  92,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1595,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.59804789694305,
+                  88.24203007733601,
+                  -34.598047896943065
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2426,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  6.569690904772116,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1723,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  49.430309095227905,
+                  88.24203007733601,
+                  -46.73734286354668
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2272,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  67.59804789694306,
+                  88.24203007733601,
+                  44.59804789694306
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1668,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "georgian-customs-house",
+          "owner": 11,
+          "coverage": {
+            "owner": 11,
+            "contractSha256": "a50601210c0a1457cec17d3cf122775031dd8354bbcf57fbce5ae7c64a58f95b",
+            "requiredSamples": 3815,
+            "coveredSamples": 3815,
+            "originalHits": 679,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 272,
+            "views": 5
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "a66b9790a3ea1a11ae84e114f6721db4860dc1e8a847f5801b6598a13067a486",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3815,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  92,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1595,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.59804789694305,
+                  88.24203007733601,
+                  -34.598047896943065
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2426,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  6.569690904772116,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1723,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  49.430309095227905,
+                  88.24203007733601,
+                  -46.73734286354668
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2272,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  67.59804789694306,
+                  88.24203007733601,
+                  44.59804789694306
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1668,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "georgian-customs-house",
+          "owner": 11,
+          "coverage": {
+            "owner": 11,
+            "contractSha256": "a66b9790a3ea1a11ae84e114f6721db4860dc1e8a847f5801b6598a13067a486",
+            "requiredSamples": 3815,
+            "coveredSamples": 3815,
+            "originalHits": 679,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 272,
+            "views": 5
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "c006e7b311ded93026226b0b65f6aadec823aaf4be6d914cd94ca4ba7a833c9c",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 3815,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  92,
+                  52.25578117937446,
+                  69.00000000000001
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1595,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  -11.59804789694305,
+                  88.24203007733601,
+                  -34.598047896943065
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2426,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  6.569690904772116,
+                  88.24203007733601,
+                  56.73734286354669
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1723,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  49.430309095227905,
+                  88.24203007733601,
+                  -46.73734286354668
+                ],
+                "zoom": 2.75
+              },
+              "visible": 2272,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  28,
+                  0,
+                  5
+                ],
+                "pos": [
+                  67.59804789694306,
+                  88.24203007733601,
+                  44.59804789694306
+                ],
+                "zoom": 2.75
+              },
+              "visible": 1668,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "georgian-customs-house",
+          "owner": 11,
+          "coverage": {
+            "owner": 11,
+            "contractSha256": "c006e7b311ded93026226b0b65f6aadec823aaf4be6d914cd94ca4ba7a833c9c",
+            "requiredSamples": 3815,
+            "coveredSamples": 3815,
+            "originalHits": 679,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 272,
+            "views": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "fan-plan-free-library",
+      "owner": 12,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "5261bee9fbe6f81e8df76229937ec46d48565f8761f7db75e3adffee0eb4c104",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2139,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1488,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "visible": 821,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1004,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1188,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1325,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.4999999999999862,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1212,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "fan-plan-free-library",
+          "owner": 12,
+          "coverage": {
+            "owner": 12,
+            "contractSha256": "5261bee9fbe6f81e8df76229937ec46d48565f8761f7db75e3adffee0eb4c104",
+            "requiredSamples": 2139,
+            "coveredSamples": 2139,
+            "originalHits": 725,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 370,
+            "views": 6
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "c3f42459a969f2204204f79dbcdd378d5f7a80d67203056e2c4eb8915c441233",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2139,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1488,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "visible": 821,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1004,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1188,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1325,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.4999999999999862,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1212,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "fan-plan-free-library",
+          "owner": 12,
+          "coverage": {
+            "owner": 12,
+            "contractSha256": "c3f42459a969f2204204f79dbcdd378d5f7a80d67203056e2c4eb8915c441233",
+            "requiredSamples": 2139,
+            "coveredSamples": 2139,
+            "originalHits": 725,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 370,
+            "views": 6
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "5414d7b3fa82a34c4f8f3e693724df9ad5e3f8b7578268f324b62e8156be0020",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2139,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1488,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "visible": 821,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1004,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1188,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1325,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.4999999999999862,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1212,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "fan-plan-free-library",
+          "owner": 12,
+          "coverage": {
+            "owner": 12,
+            "contractSha256": "5414d7b3fa82a34c4f8f3e693724df9ad5e3f8b7578268f324b62e8156be0020",
+            "requiredSamples": 2139,
+            "coveredSamples": 2139,
+            "originalHits": 725,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 370,
+            "views": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "owner": 13,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "2369c4d1ec5b4cdb57af1f0fc5f481b086a182917de1a7d71a0cdf2bd2a795f6",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2760,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2029,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 903,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1191,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  9.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1249,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2000,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1700,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "dutch-gabled-post-office",
+          "owner": 13,
+          "coverage": {
+            "owner": 13,
+            "contractSha256": "2369c4d1ec5b4cdb57af1f0fc5f481b086a182917de1a7d71a0cdf2bd2a795f6",
+            "requiredSamples": 2760,
+            "coveredSamples": 2760,
+            "originalHits": 742,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 206,
+            "views": 6
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "84bd4940a6884c90e5ade50fa2a4e29a998848b9c2ea46b713071c63651f422e",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2760,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2029,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 903,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1191,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  9.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1249,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2000,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1700,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "dutch-gabled-post-office",
+          "owner": 13,
+          "coverage": {
+            "owner": 13,
+            "contractSha256": "84bd4940a6884c90e5ade50fa2a4e29a998848b9c2ea46b713071c63651f422e",
+            "requiredSamples": 2760,
+            "coveredSamples": 2760,
+            "originalHits": 742,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 206,
+            "views": 6
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "fc500066562f9d7718e2874041854bc5230c67d350269409254fa8ce5fb99320",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2760,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2029,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 903,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1191,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  9.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1249,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.93030909522786,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 2000,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1700,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "dutch-gabled-post-office",
+          "owner": 13,
+          "coverage": {
+            "owner": 13,
+            "contractSha256": "fc500066562f9d7718e2874041854bc5230c67d350269409254fa8ce5fb99320",
+            "requiredSamples": 2760,
+            "coveredSamples": 2760,
+            "originalHits": 742,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 206,
+            "views": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "edwardian-board-school",
+      "owner": 14,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "87dc0a5f42c53180e28546d065581570086d7d9619d6ff8a6e3fb6125b41ff3c",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2897,
+          "first48Missing": 2,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1678,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1428,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1494,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  36.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1741,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  15.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1096,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  17.26667462792941,
+                  25.990969662701353,
+                  113.71272164811218
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            },
+            {
+              "id": "retained-dense-e0-y345",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -10.699770321112958,
+                  25.990969662701353,
+                  110.27887398502875
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            }
+          ],
+          "id": "edwardian-board-school",
+          "owner": 14,
+          "coverage": {
+            "owner": 14,
+            "contractSha256": "87dc0a5f42c53180e28546d065581570086d7d9619d6ff8a6e3fb6125b41ff3c",
+            "requiredSamples": 2897,
+            "coveredSamples": 2897,
+            "originalHits": 645,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 116,
+            "views": 7
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "b2ccbebf6fc27de4025c02d0db4811e03fcc7eda7519f0f373878016b877f262",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2897,
+          "first48Missing": 2,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1678,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1428,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1494,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  36.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1741,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  15.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1096,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  17.26667462792941,
+                  25.990969662701353,
+                  113.71272164811218
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            },
+            {
+              "id": "retained-dense-e0-y345",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -10.699770321112958,
+                  25.990969662701353,
+                  110.27887398502875
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            }
+          ],
+          "id": "edwardian-board-school",
+          "owner": 14,
+          "coverage": {
+            "owner": 14,
+            "contractSha256": "b2ccbebf6fc27de4025c02d0db4811e03fcc7eda7519f0f373878016b877f262",
+            "requiredSamples": 2897,
+            "coveredSamples": 2897,
+            "originalHits": 645,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 116,
+            "views": 7
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "22cb921345f41992e34f8d781f970bf8ef2e348f8f75a70e24a0e01aa53b2da6",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2897,
+          "first48Missing": 2,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1678,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1428,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -5.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1494,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  36.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1741,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  15.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1096,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y1",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  17.26667462792941,
+                  25.990969662701353,
+                  113.71272164811218
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            },
+            {
+              "id": "retained-dense-e0-y345",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -10.699770321112958,
+                  25.990969662701353,
+                  110.27887398502875
+                ],
+                "zoom": 5.5
+              },
+              "gained": 1
+            }
+          ],
+          "id": "edwardian-board-school",
+          "owner": 14,
+          "coverage": {
+            "owner": 14,
+            "contractSha256": "22cb921345f41992e34f8d781f970bf8ef2e348f8f75a70e24a0e01aa53b2da6",
+            "requiredSamples": 2897,
+            "coveredSamples": 2897,
+            "originalHits": 645,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 116,
+            "views": 7
+          }
+        }
+      ]
+    },
+    {
+      "id": "interwar-fire-station",
+      "owner": 15,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "f4073ea49e57d983c607d3b41abd0a230d759b7b31fd220fa5240bbb6502b802",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2395,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1907,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1891,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.237342863546665,
+                  88.24203007733601,
+                  -8.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "visible": 647,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  60.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1934,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  21.499999999999975,
+                  25.990969662701353,
+                  113.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1646,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "interwar-fire-station",
+          "owner": 15,
+          "coverage": {
+            "owner": 15,
+            "contractSha256": "f4073ea49e57d983c607d3b41abd0a230d759b7b31fd220fa5240bbb6502b802",
+            "requiredSamples": 2395,
+            "coveredSamples": 2395,
+            "originalHits": 673,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 678,
+            "views": 5
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "7e250d964e6091bf960c3f20bc76bd2eeb2daf68d362a536a14433201d575c17",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2395,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1907,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1891,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.237342863546665,
+                  88.24203007733601,
+                  -8.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "visible": 647,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  60.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1934,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  21.499999999999975,
+                  25.990969662701353,
+                  113.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1646,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "interwar-fire-station",
+          "owner": 15,
+          "coverage": {
+            "owner": 15,
+            "contractSha256": "7e250d964e6091bf960c3f20bc76bd2eeb2daf68d362a536a14433201d575c17",
+            "requiredSamples": 2395,
+            "coveredSamples": 2395,
+            "originalHits": 673,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 678,
+            "views": 5
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "fa0c53eb60534c09ea4a3e220eea48d5c7ddcf79018f2b0838bc2492cffdc0b1",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 2395,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1907,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1891,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.237342863546665,
+                  88.24203007733601,
+                  -8.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "visible": 647,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  60.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1934,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y14",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  21.499999999999975,
+                  25.990969662701353,
+                  113.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1646,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "id": "interwar-fire-station",
+          "owner": 15,
+          "coverage": {
+            "owner": 15,
+            "contractSha256": "fa0c53eb60534c09ea4a3e220eea48d5c7ddcf79018f2b0838bc2492cffdc0b1",
+            "requiredSamples": 2395,
+            "coveredSamples": 2395,
+            "originalHits": 673,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 678,
+            "views": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "owner": 16,
+      "widths": [
+        {
+          "width": 1440,
+          "contractSha256": "a453f1e677516525a46dee8815f38b87359b4ad834c7dede590a6ae0a50aae86",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 1450,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1204,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 483,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 996,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1223,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.09804789694306,
+                  88.24203007733601,
+                  -27.09804789694305
+                ],
+                "zoom": 5.5
+              },
+              "visible": 597,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  27.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1125,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  66.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1189,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  51.98930331942498,
+                  25.990969662701353,
+                  110.72123082912576
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y339",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -8.776920675663348,
+                  25.990969662701353,
+                  107.0046093529349
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            }
+          ],
+          "id": "garden-cottage-clinic",
+          "owner": 16,
+          "coverage": {
+            "owner": 16,
+            "contractSha256": "a453f1e677516525a46dee8815f38b87359b4ad834c7dede590a6ae0a50aae86",
+            "requiredSamples": 1450,
+            "coveredSamples": 1450,
+            "originalHits": 592,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 246,
+            "views": 9
+          }
+        },
+        {
+          "width": 412,
+          "contractSha256": "a749afa14126ec77a4fb3a3daedbcdecc62b0c12baf25731699cf26655fbbba6",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 1450,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1204,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 483,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 996,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1223,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.09804789694306,
+                  88.24203007733601,
+                  -27.09804789694305
+                ],
+                "zoom": 5.5
+              },
+              "visible": 597,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  27.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1125,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  66.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1189,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  51.98930331942498,
+                  25.990969662701353,
+                  110.72123082912576
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y339",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -8.776920675663348,
+                  25.990969662701353,
+                  107.0046093529349
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            }
+          ],
+          "id": "garden-cottage-clinic",
+          "owner": 16,
+          "coverage": {
+            "owner": 16,
+            "contractSha256": "a749afa14126ec77a4fb3a3daedbcdecc62b0c12baf25731699cf26655fbbba6",
+            "requiredSamples": 1450,
+            "coveredSamples": 1450,
+            "originalHits": 592,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 246,
+            "views": 9
+          }
+        },
+        {
+          "width": 360,
+          "contractSha256": "ea18222da5e787a39c7179dc7d116910ededf64b0c64b2fa9bfdb6ebde6af166",
+          "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "required": 1450,
+          "first48Missing": 0,
+          "remaining": 0,
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1204,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "visible": 483,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -11.23833175487156,
+                  25.990969662701353,
+                  106.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "visible": 996,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1223,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y4",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.09804789694306,
+                  88.24203007733601,
+                  -27.09804789694305
+                ],
+                "zoom": 5.5
+              },
+              "visible": 597,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e2-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  27.499999999999986,
+                  88.24203007733601,
+                  68.50009637935628
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1125,
+              "retainedPreviousCamera": true
+            },
+            {
+              "id": "surface-e0-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  66.23833175487152,
+                  25.990969662701353,
+                  106.02260590631934
+                ],
+                "zoom": 5.5
+              },
+              "visible": 1189,
+              "retainedPreviousCamera": true
+            }
+          ],
+          "retainedAndNewExtras": [
+            {
+              "id": "retained-dense-e0-y14",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  51.98930331942498,
+                  25.990969662701353,
+                  110.72123082912576
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            },
+            {
+              "id": "retained-dense-e0-y339",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -8.776920675663348,
+                  25.990969662701353,
+                  107.0046093529349
+                ],
+                "zoom": 5.5
+              },
+              "gained": 0
+            }
+          ],
+          "id": "garden-cottage-clinic",
+          "owner": 16,
+          "coverage": {
+            "owner": 16,
+            "contractSha256": "ea18222da5e787a39c7179dc7d116910ededf64b0c64b2fa9bfdb6ebde6af166",
+            "requiredSamples": 1450,
+            "coveredSamples": 1450,
+            "originalHits": 592,
+            "originalBlockedHits": 0,
+            "retainedInternalRecords": 246,
+            "views": 9
+          }
+        }
+      ]
+    }
+  ]
+}

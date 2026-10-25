@@ -1,0 +1,15 @@
+// Independent numeric construction plan for the actual D086 door/lobby repairs.
+// Original v1/v2/v3 plans and their historical assertion files remain unchanged.
+import assert from 'node:assert/strict';
+import {STRUCTURAL_PLAN_V3} from './structural-plan-v3.mjs';
+import {planFaces,proveComponentSurface} from './structural-plan.mjs';
+const plan=structuredClone(STRUCTURAL_PLAN_V3);
+const library=plan['fan-plan-free-library'].solids.find(s=>s.name==='offset-entrance');assert.equal(library.a[2],.64);library.a[2]=.62;
+const fire=plan['interwar-fire-station'];let bay=0;const doors=[];
+for(const s of fire.solids){if(s.name==='portal-left'){const x=[.23,.44,.65][bay];assert.equal(s.a[1],x-.07);s.a[1]=x-.06;}if(s.name==='portal-right'){const x=[.23,.44,.65][bay];assert.equal(s.a[0],x+.07);s.a[0]=x+.06;}doors.push(s);if(s.name==='portal-lintel'){const x=[.23,.44,.65][bay++];doors.push({name:'closed-engine-bay-door',type:'box',a:[x-.075,x+.075,.77,.85,0,.345]});}}
+assert.equal(bay,3);fire.solids=doors;
+const clinic=plan['garden-cottage-clinic'];assert.equal(clinic.solids[3].name,'veranda-column-left');clinic.solids.splice(3,0,{name:'weather-vestibule',type:'box',a:[.375,.625,.50,.74,0,.29]});for(const s of clinic.solids.filter(s=>s.name.startsWith('veranda-column-'))){assert.equal(s.a[3],.71);s.a[3]=.75;}
+function freeze(x){if(x&&typeof x==='object'){for(const v of Object.values(x))freeze(v);Object.freeze(x);}return x;}
+export const STRUCTURAL_PLAN_V4=freeze(plan);
+export function assertStructuralPlanV4(model,{negativeControls=false}={}){const p=STRUCTURAL_PLAN_V4[model.id];assert.ok(p);assert.equal(model.parts[0]?.start,0);for(let i=0;i<model.parts.length;i++){const part=model.parts[i],end=model.parts[i+1]?.start??model.triangles.length;assert.ok(Number.isInteger(part.start)&&end>part.start&&end<=model.triangles.length);assert.ok(model.triangles.slice(part.start,end).every(t=>t.part===part.name&&t.structural===part.solid));}const parts=model.parts.map((part,i)=>({...part,end:model.parts[i+1]?.start??model.triangles.length})).filter(part=>part.solid);assert.deepEqual(parts.map(part=>part.name),p.solids.map(s=>s.name));let controls=0,triangles=0,maximumError=0;
+ for(const[part,i]of parts.map((part,i)=>[part,i])){const expected=planFaces(p.solids[i],p.height),ts=model.triangles.slice(part.start,part.end).map(t=>t.p),label=`construction-v4:${model.id}:${i}:${part.name}`,r=proveComponentSurface(expected,ts,label);triangles+=ts.length;maximumError=Math.max(maximumError,r.maximumError);if(negativeControls){for(let j=0;j<ts.length;j++){assert.throws(()=>proveComponentSurface(expected,ts.filter((_,k)=>j!==k),label));assert.throws(()=>proveComponentSurface(expected,ts.map((t,k)=>j===k?[...t].reverse():t),label));controls+=2;}for(const mutation of [[...ts,ts[0]],ts.map(t=>t.map(([x,y,z])=>[x,y+.0001,z])),ts.map(t=>t.map(([x,y,z])=>[x*.98,y,z]))]){assert.throws(()=>proveComponentSurface(expected,mutation,label));controls++;}}}return{id:model.id,solids:parts.length,triangles,maximumError,negativeControls:controls};}

@@ -1,0 +1,1945 @@
+{
+  "sourceSHA": "f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25",
+  "qualification": "All positive-area co-facing unlike-colour triangle intersections involving changed solids; ACTUAL NATIVE WORLD Float32 triangle geometry. Every full convex overlap polygon is classified against ground or the strict interior of the main deck rectangle, an actual closed subvolume of the L-deck. Other polygons remain unresolved; centroid rays alone cannot prove exposure if origin is inside another solid.",
+  "passedNoUnresolvedPairs": true,
+  "actualMainDeckClosedSubvolume": {
+    "lo": [
+      9.289999961853027,
+      0.44357141852378845,
+      4.289999961853027
+    ],
+    "hi": [
+      10.670000076293945,
+      0.488571435213089,
+      5.820000171661377
+    ]
+  },
+  "pairs": [
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.510978425608243,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 0,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.00045576209600994844,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.498326210533966,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        },
+        {
+          "i": 0,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.496615563341866
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 0,
+      "b": 225,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0004283101652724497,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.502666791280111,
+        0,
+        4.482205283148053
+      ],
+      "firstHits": [
+        {
+          "i": 0,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 225,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.435999870300293,
+          0,
+          5.303384627392997
+        ],
+        [
+          10.5,
+          0,
+          5.360000133514404
+        ],
+        [
+          10.435999870300293,
+          0,
+          5.360000133514404
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 0,
+      "b": 284,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0018116998673924911,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.457333246866863,
+        0,
+        5.341128298140601
+      ],
+      "firstHits": [
+        {
+          "i": 284,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 0,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.510978425608243,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.508695831821688,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 1,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.00007989097844784965,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.493224765192302,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 1,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.508695831821688,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.499869710601368,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 2,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0003089150002644203,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.48952186019001,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 2,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.499869710601368,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.499260985062524,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 3,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.000021305446104236125,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.486376911270288,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 3,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.499260985062524,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.490434863842202,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 4,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0003089150002608676,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.483231962350565,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 4,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999999998
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.490434863842202,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.488152270055647,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 5,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.00007989097844784965,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.479529057348273,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 5,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.510000228881836
+        ],
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.488152270055647,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 6,
+      "b": 224,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.000985330533129769,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.469384115449863,
+        0,
+        4.486666838328043
+      ],
+      "firstHits": [
+        {
+          "i": 6,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 224,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.96999979019165
+        ],
+        [
+          9.460000038146973,
+          0,
+          4.8999998569488525
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.96999979019165
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 6,
+      "b": 236,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.002240002403254948,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.481333414713541,
+        0,
+        4.946666479110718
+      ],
+      "firstHits": [
+        {
+          "i": 236,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 6,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.8999998569488525
+        ],
+        [
+          9.460000038146973,
+          0,
+          4.829999923706055
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.829999923706055
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.96999979019165
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 6,
+      "b": 237,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0067200072097648444,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.492000102996826,
+        0,
+        4.882499873638153
+      ],
+      "firstHits": [
+        {
+          "i": 6,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 237,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.52400016784668,
+          0,
+          5.360000133514404
+        ],
+        [
+          9.460000256130323,
+          0,
+          5.360000133514404
+        ],
+        [
+          9.460000038146973,
+          0,
+          5.359999895095825
+        ],
+        [
+          9.460000038146973,
+          0,
+          5.289999961853027
+        ],
+        [
+          9.52400016784668,
+          0,
+          5.289999961853027
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 6,
+      "b": 249,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.004480020065305013,
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.485600133623526,
+        0,
+        5.332000017166138
+      ],
+      "firstHits": [
+        {
+          "i": 249,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 6,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.460000038146973,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.440000057220459
+        ],
+        [
+          9.52400016784668,
+          0,
+          4.496615563341866
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 225,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0018116998673924911,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        9.502666791280111,
+        0,
+        4.458871892594261
+      ],
+      "firstHits": [
+        {
+          "i": 225,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999999999
+        },
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.435999870300293,
+          0,
+          4.440000057220459
+        ],
+        [
+          10.5,
+          0,
+          4.440000057220459
+        ],
+        [
+          10.5,
+          0,
+          4.510000228881836
+        ],
+        [
+          10.435999870300293,
+          0,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 260,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.004480020065329882,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.467999935150146,
+        0,
+        4.4750001430511475
+      ],
+      "firstHits": [
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 260,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.5,
+          0,
+          4.8999998569488525
+        ],
+        [
+          10.5,
+          0,
+          4.96999979019165
+        ],
+        [
+          10.435999870300293,
+          0,
+          4.96999979019165
+        ],
+        [
+          10.435999870300293,
+          0,
+          4.829999923706055
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 272,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.0067200072097648444,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.467999935150146,
+        0,
+        4.917499840259552
+      ],
+      "firstHits": [
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00010000000000000002
+        },
+        {
+          "i": 272,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.5,
+          0,
+          4.829999923706055
+        ],
+        [
+          10.5,
+          0,
+          4.8999998569488525
+        ],
+        [
+          10.435999870300293,
+          0,
+          4.829999923706055
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 273,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.002240002403254948,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.478666623433432,
+        0,
+        4.853333234786987
+      ],
+      "firstHits": [
+        {
+          "i": 273,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        },
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00010000000000000002
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.5,
+          0,
+          5.359999895095825
+        ],
+        [
+          10.5,
+          0,
+          5.360000133514404
+        ],
+        [
+          10.435999870300293,
+          0,
+          5.303384627392997
+        ],
+        [
+          10.435999870300293,
+          0,
+          5.289999961853027
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 284,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.00042831779468244235,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.467999935150146,
+        0,
+        5.328346154464064
+      ],
+      "firstHits": [
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 284,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.5,
+          0,
+          5.289999961853027
+        ],
+        [
+          10.5,
+          0,
+          5.359999895095825
+        ],
+        [
+          10.435999870300293,
+          0,
+          5.289999961853027
+        ]
+      ],
+      "classification": "full-polygon-ground-covered",
+      "a": 7,
+      "b": 285,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.002240002403254948,
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "centroid": [
+        10.478666623433432,
+        0,
+        5.31333327293396
+      ],
+      "firstHits": [
+        {
+          "i": 7,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.0001
+        },
+        {
+          "i": 285,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.0001
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.476867655500612,
+          0.4628571569919586,
+          4.510000228881836
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.416777668543739
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 8,
+      "b": 229,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.003769349214543638,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.422955824131714,
+        0.4628571569919586,
+        4.47892604210247
+      ],
+      "firstHits": [
+        {
+          "i": 8,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 229,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.96999979019165
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.829999923706055
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.829999923706055
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 8,
+      "b": 240,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.481333414713543,
+        0.4628571569919586,
+        4.87666654586792
+      ],
+      "firstHits": [
+        {
+          "i": 8,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 240,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.829999923706055
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.96999979019165
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.96999979019165
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 8,
+      "b": 241,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.438666661580404,
+        0.4628571569919586,
+        4.923333168029785
+      ],
+      "firstHits": [
+        {
+          "i": 8,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 241,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          5.429999828338623
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          5.289999961853027
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          5.289999961853027
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 8,
+      "b": 252,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.481333414713543,
+        0.4628571569919586,
+        5.336666584014893
+      ],
+      "firstHits": [
+        {
+          "i": 8,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 252,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          5.289999961853027
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          5.429999828338623
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          5.429999828338623
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 8,
+      "b": 253,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.438666661580404,
+        0.4628571569919586,
+        5.383333206176758
+      ],
+      "firstHits": [
+        {
+          "i": 8,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 253,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.510000228881836
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.369999885559082
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.369999885559082
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 228,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960040130659763,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.481333414713543,
+        0.4628571569919586,
+        4.416666666666667
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 228,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.369999885559082
+        ],
+        [
+          9.395999908447266,
+          0.4628571569919586,
+          4.416777668543739
+        ],
+        [
+          9.476867655500612,
+          0.4628571569919586,
+          4.510000228881836
+        ],
+        [
+          9.52400016784668,
+          0.4628571569919586,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 229,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.005190690916116125,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        9.448216910060456,
+        0.4628571569919586,
+        4.451694502966623
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 229,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.510000228881836
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.369999885559082
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.369999885559082
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 264,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960040130659763,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.521333376566568,
+        0.4628571569919586,
+        4.416666666666667
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 264,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.369999885559082
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.510000228881836
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.510000228881836
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 265,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960040130659763,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.478666623433432,
+        0.4628571569919586,
+        4.463333447774251
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 265,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.96999979019165
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.829999923706055
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.829999923706055
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 276,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.521333376566568,
+        0.4628571569919586,
+        4.87666654586792
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 276,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.829999923706055
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          4.96999979019165
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          4.96999979019165
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 277,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.478666623433432,
+        0.4628571569919586,
+        4.923333168029785
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 277,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          5.429999828338623
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          5.289999961853027
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          5.289999961853027
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 288,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.521333376566568,
+        0.4628571569919586,
+        5.336666584014893
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 288,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    },
+    {
+      "polygon3D": [
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          5.289999961853027
+        ],
+        [
+          10.435999870300293,
+          0.4628571569919586,
+          5.429999828338623
+        ],
+        [
+          10.564000129699707,
+          0.4628571569919586,
+          5.429999828338623
+        ]
+      ],
+      "classification": "full-polygon-inside-main-deck-closed-volume",
+      "a": 9,
+      "b": 289,
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "colors": [
+        "#55473d",
+        "#d5c7a7"
+      ],
+      "projectedArea": 0.008960009613019793,
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "centroid": [
+        10.478666623433432,
+        0.4628571569919586,
+        5.383333206176758
+      ],
+      "firstHits": [
+        {
+          "i": 9,
+          "part": "glazed-trading-storey",
+          "color": "#55473d",
+          "distance": 0.00009999999999998899
+        },
+        {
+          "i": 289,
+          "part": "undercroft-stone-pier",
+          "color": "#d5c7a7",
+          "distance": 0.00009999999999998899
+        }
+      ],
+      "externalCentroid": true
+    }
+  ],
+  "groups": {
+    "glazed-trading-storey/undercroft-stone-pier/{\"normal\":[0,-0.9999999999999999,0],\"d\":0}": {
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "plane": {
+        "normal": [
+          0,
+          -0.9999999999999999,
+          0
+        ],
+        "d": 0
+      },
+      "area": 0.01773896234065475,
+      "pairs": 9,
+      "directCentroidFirstHits": 9,
+      "fullPolygonGroundCovered": 9,
+      "fullPolygonInsideMainDeck": 0,
+      "unresolved": 0
+    },
+    "glazed-trading-storey/undercroft-stone-pier/{\"normal\":[0,-1,0],\"d\":0}": {
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "plane": {
+        "normal": [
+          0,
+          -1,
+          0
+        ],
+        "d": 0
+      },
+      "area": 0.01810113714667949,
+      "pairs": 9,
+      "directCentroidFirstHits": 9,
+      "fullPolygonGroundCovered": 9,
+      "fullPolygonInsideMainDeck": 0,
+      "unresolved": 0
+    },
+    "glazed-trading-storey/undercroft-stone-pier/{\"normal\":[0,1,0],\"d\":0.4628571569919586}": {
+      "parts": [
+        "glazed-trading-storey",
+        "undercroft-stone-pier"
+      ],
+      "plane": {
+        "normal": [
+          0,
+          1,
+          0
+        ],
+        "d": 0.4628571569919586
+      },
+      "area": 0.1075202374267974,
+      "pairs": 13,
+      "directCentroidFirstHits": 13,
+      "fullPolygonGroundCovered": 0,
+      "fullPolygonInsideMainDeck": 13,
+      "unresolved": 0
+    }
+  }
+}

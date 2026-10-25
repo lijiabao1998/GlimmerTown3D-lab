@@ -1,3 +1,6 @@
+// D086-BEGIN native-civic-market-import
+import { drawBritishCivicMarket } from './britishCivicMarketArt.ts';
+// D086-END native-civic-market-import
 // D083-BEGIN rural-heritage-import
 import { drawBritishRuralHeritage } from './britishRuralHeritageArt.ts';
 // D083-END rural-heritage-import
@@ -799,6 +802,9 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
+  // D086-BEGIN native-civic-market-dispatch
+  if (shape?.p?.nativeCivicMarket === true && drawBritishCivicMarket(new Pen(a))) { const result=USED; USED=null; return result; }
+  // D086-END native-civic-market-dispatch
   // D083-BEGIN rural-heritage-dispatch
   if (shape?.p?.ruralHeritage === true) {
     try { drawBritishRuralHeritage(new Pen(a)); return USED; } finally { USED = null; }

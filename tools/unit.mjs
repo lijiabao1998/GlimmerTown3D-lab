@@ -1,3 +1,4 @@
+import {d086GuardRoute} from './d086-current-guards-v6.mjs';
 // Node 端守衛（D003）：不開瀏覽器，直接跑模擬層與解碼器。用法：node tools/unit.mjs　退出碼 0＝綠、1＝紅
 // 模擬層 import 寫明 .ts，Node 22.18+ 可以直接跑（型別剝除）。
 import fs from 'node:fs';
@@ -498,7 +499,7 @@ const guard = async (file, fn) => {
   if (!selection.shouldRun(file, fn)) return;
   console.log(`START ${fn} (${file})`);
   try {
-    const m = await import(file);
+    const m = await import(d086GuardRoute(file));
     if (typeof m[fn] !== 'function') throw new Error(`${file} 沒有匯出 ${fn}`);
     await m[fn](log);
   } catch (e) {

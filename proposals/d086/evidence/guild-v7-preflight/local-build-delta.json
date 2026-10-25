@@ -1,0 +1,19 @@
+{
+  "qualification": "Local uncommitted V6 build vs actualfae CI build; not freshChrome performance or release acceptance.",
+  "rows": [
+    {
+      "path": "scratch/d086-official/eighth-ci/build/index.html",
+      "bytes": 2367092,
+      "gzip9": 578723,
+      "sha256": "646a0462695b9a615faedef2bb1eacc93a3614caeedbcf89872d18f50ed3ce67"
+    },
+    {
+      "path": "dist/index.html",
+      "bytes": 2376478,
+      "gzip9": 580362,
+      "sha256": "604c3f0cc607a07b2d6ee2759c7475cf517340e2c1bcec921c8fadc3ef28fc0b"
+    }
+  ],
+  "rawDelta": 9386,
+  "gzip9Delta": 1639
+}

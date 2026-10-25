@@ -1,0 +1,132 @@
+{
+  "qualification": "Reproducible code-generated native cache from authoritative procedural geometry; no Chrome or release acceptance claim.",
+  "proceduralSourceSha256": "cbaf9009d122d66915f0deb21b4540cba4b2e4816c2265a7d17536710a45cc73",
+  "candidateSourceSha256": "e5d5bc02b0c2b6601c115c2761e73f07030de73487ba68f22abb01c3eac5b84a",
+  "sourceBytes": 27897,
+  "candidateBytes": 599202,
+  "sourceGzipBytes": 9984,
+  "candidateGzipBytes": 92408,
+  "codec": "v1: exact Float64 round-trip decimal vectors, literal JSON -0, no reviver or rounding, indexed triangles, full native metadata; per-payload integrity and SHA256 reproducible CI proof",
+  "models": [
+    {
+      "meta": {
+        "id": "borough-iron-market",
+        "length": 65851,
+        "checksum": "96279a10"
+      },
+      "sha256": "874d18268dc96b4292ceeb7a5a8d0012c3a110ea7b3975a0e164b28ac6a0967a",
+      "points": 420,
+      "normals": 47,
+      "triangleCount": 784,
+      "originalBytes": 181672
+    },
+    {
+      "meta": {
+        "id": "raised-guild-market",
+        "length": 51175,
+        "checksum": "5231a164"
+      },
+      "sha256": "07a281b7eb3dc3a515faf754fc18056a356961ff93753fad3ea26ef5e9744d54",
+      "points": 288,
+      "normals": 19,
+      "triangleCount": 512,
+      "originalBytes": 126829
+    },
+    {
+      "meta": {
+        "id": "butter-market-colonnade",
+        "length": 84862,
+        "checksum": "53209f0f"
+      },
+      "sha256": "1be2b014c7d9531ff3d8dd5360fb192a96a2b8a08325805e8ac4de18cc5d4084",
+      "points": 332,
+      "normals": 104,
+      "triangleCount": 536,
+      "originalBytes": 172520
+    },
+    {
+      "meta": {
+        "id": "gothic-wool-exchange",
+        "length": 47146,
+        "checksum": "688009a1"
+      },
+      "sha256": "99e26b484f2f323a460dfb0a4b83e983d0c0f5a1e32926b336d0c5cc08d48380",
+      "points": 230,
+      "normals": 166,
+      "triangleCount": 444,
+      "originalBytes": 126319
+    },
+    {
+      "meta": {
+        "id": "georgian-customs-house",
+        "length": 66748,
+        "checksum": "e0037e6d"
+      },
+      "sha256": "7df0c661a2c0362f24a117b99c12e4a7faf512d5a448e567695e1630a4b89bf3",
+      "points": 428,
+      "normals": 61,
+      "triangleCount": 816,
+      "originalBytes": 188696
+    },
+    {
+      "meta": {
+        "id": "fan-plan-free-library",
+        "length": 61365,
+        "checksum": "f5e48d28"
+      },
+      "sha256": "ea3358404c0b9debf5c26009d7ce63f4bc6191b1db19b517b1d26ebc8905ee9b",
+      "points": 231,
+      "normals": 330,
+      "triangleCount": 446,
+      "originalBytes": 152064
+    },
+    {
+      "meta": {
+        "id": "dutch-gabled-post-office",
+        "length": 46922,
+        "checksum": "44b74bfd"
+      },
+      "sha256": "1f21ba973aaf8321b5c3337f83aac90a2dac67670776e062f2f8b2a66a3409de",
+      "points": 284,
+      "normals": 48,
+      "triangleCount": 556,
+      "originalBytes": 137956
+    },
+    {
+      "meta": {
+        "id": "edwardian-board-school",
+        "length": 47173,
+        "checksum": "acee56ff"
+      },
+      "sha256": "82b9dcceac1d2d4debfbff4df44951671401c1b6f0d8a55f27fa18d104cfc254",
+      "points": 306,
+      "normals": 34,
+      "triangleCount": 584,
+      "originalBytes": 136076
+    },
+    {
+      "meta": {
+        "id": "interwar-fire-station",
+        "length": 42654,
+        "checksum": "4f141d56"
+      },
+      "sha256": "c18264e789e7e7f8b1129cfe2184a10d332dde33e7f75c86a243df02d413efdf",
+      "points": 322,
+      "normals": 13,
+      "triangleCount": 600,
+      "originalBytes": 115202
+    },
+    {
+      "meta": {
+        "id": "garden-cottage-clinic",
+        "length": 35277,
+        "checksum": "d0c7fed4"
+      },
+      "sha256": "4607212131a71e1b13a3e001ec70f07a8067854b1731e669ceddf6a400eb4ab5",
+      "points": 156,
+      "normals": 127,
+      "triangleCount": 276,
+      "originalBytes": 81148
+    }
+  ]
+}

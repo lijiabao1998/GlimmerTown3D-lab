@@ -1,0 +1,959 @@
+{
+  "passed": true,
+  "createdUtc": "2026-10-25T15:34:49.395995+00:00",
+  "qualification": "Independent exact original-painted-point visibility on actual packed current native world and final frozen ordinary camera inventory. Original contracts, IDs, points, normals, required flags and D081 thresholds are unchanged. All full-contract view audits retained. This is not raw Chrome/art or release acceptance.",
+  "sourceEvidence": {
+    "oldActualSource": {
+      "file": "../GlimmerTown3D-lab-d086-geometry-v3/src/render/britishCivicMarketModels.mjs",
+      "sha256": "cbaf9009d122d66915f0deb21b4540cba4b2e4816c2265a7d17536710a45cc73"
+    },
+    "currentPackedSource": {
+      "file": "src/render/britishCivicMarketModels.mjs",
+      "sha256": "0c8bd1561226161d08e2fbaae6c03841b023604cc26cb5b62eee43ea9aa18a64"
+    },
+    "currentProceduralAuthority": {
+      "file": "proposals/d086/original-player-guild-gallery-procedural-authority.mjs",
+      "sha256": "f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25"
+    },
+    "currentFinalCameraPlan": {
+      "file": "proposals/d086/original-player-final-repair-camera-plan-v7.json",
+      "sha256": "34bf612b0a619ef9f6d92ea0ac4aef3ed724c1c758886aa93d25bc6f207d5a13"
+    },
+    "originalMembership": {
+      "file": "scratch/d086-original-architecture-review/old-painted-point-membership-attempt-1.json",
+      "sha256": "0d29940e9ef046cc0eac68f75cb2e56e6423c6666371ed3c082d56d70523c301"
+    },
+    "unchangedClassifier": {
+      "file": "tools/d081-frame.mjs",
+      "sha256": "2a6510fe84db1a233040df0dc2cda24ed1e1a40113518a41be506809cf2d73fb"
+    },
+    "replayScript": {
+      "file": "scratch/d086-independent-old-paint-v7h/replay-one.mjs",
+      "sha256": "cea2fbb3b17a64210217cd0f9974a32b11bc9d063b39fe7799c11cbab350f34c"
+    },
+    "negativeScript": {
+      "file": "scratch/d086-independent-old-paint-v7h/occlusion-negative.mjs",
+      "sha256": "9d568d4f5ee1fc2c561942d214915c4953d70406619aa49cd287ca76402218ac"
+    }
+  },
+  "originalIntents": 410,
+  "uniqueOriginalPaintPoints": 11857,
+  "originalPaintIncidences": 12375,
+  "widths": [
+    {
+      "width": 1440,
+      "models": 10,
+      "storedOrdinaryViews": 88,
+      "oldPaintExpected": 11857,
+      "oldPaintVisible": 11857,
+      "oldPaintHidden": 0,
+      "oldPaintIncidences": 12375
+    },
+    {
+      "width": 412,
+      "models": 10,
+      "storedOrdinaryViews": 88,
+      "oldPaintExpected": 11857,
+      "oldPaintVisible": 11857,
+      "oldPaintHidden": 0,
+      "oldPaintIncidences": 12375
+    },
+    {
+      "width": 360,
+      "models": 10,
+      "storedOrdinaryViews": 88,
+      "oldPaintExpected": 11857,
+      "oldPaintVisible": 11857,
+      "oldPaintHidden": 0,
+      "oldPaintIncidences": 12375
+    }
+  ],
+  "cases": 30,
+  "storedOrdinaryViewAudits": 264,
+  "newGuildStorefront": {
+    "removedV5Intents": 4,
+    "addedV6Intents": 9,
+    "allOtherV5IntentsExact": 469,
+    "everyNewIntentHasRequiredExteriorPaintAndFreshRayVisibility": true
+  },
+  "negativeControl": {
+    "file": "scratch/d086-independent-old-paint-v7h/occlusion-negative.json",
+    "sha256": "40d4a52433b36dd9e012550c623c205aa999ed812370e9d0512c13f0e490eea6",
+    "realPhysicalOccluderRejected": true,
+    "completeAuditRestoredExactly": true
+  },
+  "models": [
+    {
+      "id": "borough-iron-market",
+      "report": "scratch/d086-independent-old-paint-v7h/borough-iron-market.json",
+      "sha256": "ac1d6434a561797ce8893e0a22efde6cdad1b4f3ad2e2fd6e9cd1f4b1b42c635",
+      "originalIntents": 65,
+      "uniqueOldPaintPoints": 1945,
+      "oldPaintIncidences": 2009,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 65
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 4,
+          "oldPaintExpected": 1945,
+          "oldPaintVisible": 1945,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3281,
+          "oldEntireRequiredStillVisible": 3281,
+          "currentContractSHA": "ad0debbed9c94e59a136e21e1e6026c9694e13501a87551df3d7d5fd2fd52111",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/borough-iron-market-1440.json.gz",
+            "sha256": "6b428330c3ee5fd81d2f07a1066dffc66946f02fddeac85e677d684162177ad3",
+            "bytes": 593255
+          }
+        },
+        {
+          "width": 412,
+          "views": 4,
+          "oldPaintExpected": 1945,
+          "oldPaintVisible": 1945,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3281,
+          "oldEntireRequiredStillVisible": 3281,
+          "currentContractSHA": "55427b4b00454ae832b44468ead7c540c7b5bf5cce94e67711bdae6ce0393cd1",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/borough-iron-market-412.json.gz",
+            "sha256": "c10bcbdee0f6b509a4a225b3cf883e927bb423a08a51e262174f5b3519bbf3f6",
+            "bytes": 593325
+          }
+        },
+        {
+          "width": 360,
+          "views": 4,
+          "oldPaintExpected": 1945,
+          "oldPaintVisible": 1945,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3281,
+          "oldEntireRequiredStillVisible": 3281,
+          "currentContractSHA": "77a69951d5a7b79e1ccbf78faad934efe20ca6f6f38cd4787dcfc3340cf41b6e",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/borough-iron-market-360.json.gz",
+            "sha256": "1fa64f62515cd270ac45f4634d18e4f4caf9e2291b50aaedc160f1ebf78d25cd",
+            "bytes": 593646
+          }
+        }
+      ],
+      "oldContractSHA": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+      "oldWholeContractCanonicalSHA": "d904a6fa4724449ca335dcc6be1617c6d8814ea3f5e25c107d9ec9688cf35467"
+    },
+    {
+      "id": "raised-guild-market",
+      "report": "scratch/d086-independent-old-paint-v7h/raised-guild-market.json",
+      "sha256": "56db9b5065ec8b31edb446691572b11303b0ba954d9252ea03c61fad8dbb6d7f",
+      "originalIntents": 28,
+      "uniqueOldPaintPoints": 587,
+      "oldPaintIncidences": 639,
+      "finiteV5FacadeDelta": {
+        "removed": 4,
+        "added": 9,
+        "addedIndices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "allOtherPreviousIntentsExact": 44
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 25,
+          "oldPaintExpected": 587,
+          "oldPaintVisible": 587,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2197,
+          "oldEntireRequiredStillVisible": 1742,
+          "currentContractSHA": "31180e22fe37669f697c6a3f107c7bbc38a9a1fef74a2858ff4437678fd6f1aa",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [
+            {
+              "intent": 0,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 1,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 2,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 3,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 4,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 5,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 6,
+              "name": "door-reveal",
+              "requiredPaint": 32,
+              "hidden": []
+            },
+            {
+              "intent": 7,
+              "name": "entry-door",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 8,
+              "name": "door-leaf-joint",
+              "requiredPaint": 8,
+              "hidden": []
+            }
+          ],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/raised-guild-market-1440.json.gz",
+            "sha256": "e2fcbf34a509e9d570a201ebd6d1e825a0358ba095cc5063820cfa57c1d28c72",
+            "bytes": 2901474
+          }
+        },
+        {
+          "width": 412,
+          "views": 25,
+          "oldPaintExpected": 587,
+          "oldPaintVisible": 587,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2197,
+          "oldEntireRequiredStillVisible": 1742,
+          "currentContractSHA": "77af396fa2b8708e44aa53092a01a43fc19af6a1156b73308b0279976fbfb42e",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [
+            {
+              "intent": 0,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 1,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 2,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 3,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 4,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 5,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 6,
+              "name": "door-reveal",
+              "requiredPaint": 32,
+              "hidden": []
+            },
+            {
+              "intent": 7,
+              "name": "entry-door",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 8,
+              "name": "door-leaf-joint",
+              "requiredPaint": 8,
+              "hidden": []
+            }
+          ],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/raised-guild-market-412.json.gz",
+            "sha256": "d0e183c0cd204ec9e2c93876495de5020716f29d479a39137e025952875907d7",
+            "bytes": 2902903
+          }
+        },
+        {
+          "width": 360,
+          "views": 25,
+          "oldPaintExpected": 587,
+          "oldPaintVisible": 587,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2197,
+          "oldEntireRequiredStillVisible": 1742,
+          "currentContractSHA": "b4e234936f58a91fa145396b2c787ef31f0e132ba05f21dd02cf8dbfaffbabc1",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [
+            {
+              "intent": 0,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 1,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 2,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 3,
+              "name": "window-stone-reveal",
+              "requiredPaint": 48,
+              "hidden": []
+            },
+            {
+              "intent": 4,
+              "name": "window-glazing",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 5,
+              "name": "window-mullion",
+              "requiredPaint": 8,
+              "hidden": []
+            },
+            {
+              "intent": 6,
+              "name": "door-reveal",
+              "requiredPaint": 32,
+              "hidden": []
+            },
+            {
+              "intent": 7,
+              "name": "entry-door",
+              "requiredPaint": 16,
+              "hidden": []
+            },
+            {
+              "intent": 8,
+              "name": "door-leaf-joint",
+              "requiredPaint": 8,
+              "hidden": []
+            }
+          ],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/raised-guild-market-360.json.gz",
+            "sha256": "3bf9a062e16c02fbd99d5922671ea248b9646b2cbd9b7fd073f0366b9fa29bfa",
+            "bytes": 2902934
+          }
+        }
+      ],
+      "oldContractSHA": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+      "oldWholeContractCanonicalSHA": "01363bcae83369b9d7e1cf22b9398aa1adaf85a81e669e9e2458811663f84b1f"
+    },
+    {
+      "id": "butter-market-colonnade",
+      "report": "scratch/d086-independent-old-paint-v7h/butter-market-colonnade.json",
+      "sha256": "fdb657a1535035d2b2ee19d4b607c327bf0092d9019ffeec20104318e0232463",
+      "originalIntents": 0,
+      "uniqueOldPaintPoints": 0,
+      "oldPaintIncidences": 0,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 36
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 17,
+          "oldPaintExpected": 0,
+          "oldPaintVisible": 0,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2047,
+          "oldEntireRequiredStillVisible": 1045,
+          "currentContractSHA": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/butter-market-colonnade-1440.json.gz",
+            "sha256": "eff3fde4c9d0c98a7deb6db64fb5f1db3dfe6ca219d6eacae347f4db273ba3e6",
+            "bytes": 1077379
+          }
+        },
+        {
+          "width": 412,
+          "views": 17,
+          "oldPaintExpected": 0,
+          "oldPaintVisible": 0,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2047,
+          "oldEntireRequiredStillVisible": 1045,
+          "currentContractSHA": "134526689c306413cba2753ba427b04f8d04a6db356a918d94e12b1fb6ae1318",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/butter-market-colonnade-412.json.gz",
+            "sha256": "a34212569936af481277c0fab0058ffb3233f1d118842b4ce14d7a6dd399fe78",
+            "bytes": 1077776
+          }
+        },
+        {
+          "width": 360,
+          "views": 17,
+          "oldPaintExpected": 0,
+          "oldPaintVisible": 0,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2047,
+          "oldEntireRequiredStillVisible": 1045,
+          "currentContractSHA": "8a558072976208109672a77fe4316726f56b8ee7fffe957e9e338775d5258f09",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/butter-market-colonnade-360.json.gz",
+            "sha256": "48f0d3caf33fbdf7c79f267eef2ac3c30024c771322360d8862995c51f8b0980",
+            "bytes": 1077557
+          }
+        }
+      ],
+      "oldContractSHA": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+      "oldWholeContractCanonicalSHA": "2186cdd8af1d3c56fe2defcdb8c77d0c1868a02c1c267b37c405020995395cae"
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "report": "scratch/d086-independent-old-paint-v7h/gothic-wool-exchange.json",
+      "sha256": "dc1e10e3294b0b74fbb05e2330eb80f761f4d2e297cf88bedbda8e1c025f8900",
+      "originalIntents": 49,
+      "uniqueOldPaintPoints": 1339,
+      "oldPaintIncidences": 1372,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 49
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 4,
+          "oldPaintExpected": 1339,
+          "oldPaintVisible": 1339,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2184,
+          "oldEntireRequiredStillVisible": 2184,
+          "currentContractSHA": "da52097578e096297647e2edf83a76e2bcc3a0e130174b389a22c3b2203939ff",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/gothic-wool-exchange-1440.json.gz",
+            "sha256": "be0442b273fdc061d31fe329dc0cf099d98232a057f086f841cf22db23e4bb1e",
+            "bytes": 369119
+          }
+        },
+        {
+          "width": 412,
+          "views": 4,
+          "oldPaintExpected": 1339,
+          "oldPaintVisible": 1339,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2184,
+          "oldEntireRequiredStillVisible": 2184,
+          "currentContractSHA": "4f63c739264e042de8180e19e2ad9db8635cd4061d9d4e0652161880f5dc00a4",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/gothic-wool-exchange-412.json.gz",
+            "sha256": "dd1ad1d38b9ce897680e486cd2a0f3ac8f02eccb94e0d2d6f4df802dc9a9ffec",
+            "bytes": 368909
+          }
+        },
+        {
+          "width": 360,
+          "views": 4,
+          "oldPaintExpected": 1339,
+          "oldPaintVisible": 1339,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2184,
+          "oldEntireRequiredStillVisible": 2184,
+          "currentContractSHA": "8c5deb267231a563979f8b2add4834a30e017fcb1b9d6724c1180cb195bd0b48",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/gothic-wool-exchange-360.json.gz",
+            "sha256": "75298cb39f2cf2bd681dedcbb7a2b7559f97f17f983a3dfc91eab96eb6a37fcc",
+            "bytes": 369557
+          }
+        }
+      ],
+      "oldContractSHA": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+      "oldWholeContractCanonicalSHA": "c729fe4c664e8605c9de2e3e56a3647e2ac308f943646e01bd27269a7bb13b7d"
+    },
+    {
+      "id": "georgian-customs-house",
+      "report": "scratch/d086-independent-old-paint-v7h/georgian-customs-house.json",
+      "sha256": "03e184c8b64cf60681884e831b39bd993fc8c382d4fe2187722f13a81302fcdd",
+      "originalIntents": 75,
+      "uniqueOldPaintPoints": 2027,
+      "oldPaintIncidences": 2172,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 78
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 5,
+          "oldPaintExpected": 2027,
+          "oldPaintVisible": 2027,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3764,
+          "oldEntireRequiredStillVisible": 3643,
+          "currentContractSHA": "a50601210c0a1457cec17d3cf122775031dd8354bbcf57fbce5ae7c64a58f95b",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/georgian-customs-house-1440.json.gz",
+            "sha256": "f987490d4138a18f8097c75e53330603f7ecd9dd7530358fa795c93f2b3f379f",
+            "bytes": 596589
+          }
+        },
+        {
+          "width": 412,
+          "views": 5,
+          "oldPaintExpected": 2027,
+          "oldPaintVisible": 2027,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3764,
+          "oldEntireRequiredStillVisible": 3643,
+          "currentContractSHA": "a66b9790a3ea1a11ae84e114f6721db4860dc1e8a847f5801b6598a13067a486",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/georgian-customs-house-412.json.gz",
+            "sha256": "35dbc6b1f61875076c6f69123df58fdb2dac2aceab102c37a2822dbedbdc8444",
+            "bytes": 596015
+          }
+        },
+        {
+          "width": 360,
+          "views": 5,
+          "oldPaintExpected": 2027,
+          "oldPaintVisible": 2027,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 3764,
+          "oldEntireRequiredStillVisible": 3643,
+          "currentContractSHA": "c006e7b311ded93026226b0b65f6aadec823aaf4be6d914cd94ca4ba7a833c9c",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/georgian-customs-house-360.json.gz",
+            "sha256": "00af63a9773ab8775a8aaf3c4ea8c3560eb6b8557b5563da5846b0348410caff",
+            "bytes": 596888
+          }
+        }
+      ],
+      "oldContractSHA": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+      "oldWholeContractCanonicalSHA": "3ea444ede99e5eb06b7255a271428aca5712bbd83f0b74b655cebcd88450d219"
+    },
+    {
+      "id": "fan-plan-free-library",
+      "report": "scratch/d086-independent-old-paint-v7h/fan-plan-free-library.json",
+      "sha256": "647c0903cd66041f0112c868c453dc894c22187f234d4ce968455e4c111f5cae",
+      "originalIntents": 37,
+      "uniqueOldPaintPoints": 1122,
+      "oldPaintIncidences": 1178,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 37
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 6,
+          "oldPaintExpected": 1122,
+          "oldPaintVisible": 1122,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2139,
+          "oldEntireRequiredStillVisible": 2139,
+          "currentContractSHA": "5261bee9fbe6f81e8df76229937ec46d48565f8761f7db75e3adffee0eb4c104",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/fan-plan-free-library-1440.json.gz",
+            "sha256": "7a0b3eb3121507581ff814a494b5116f07f591d2aab2ad63915af893c035df14",
+            "bytes": 560204
+          }
+        },
+        {
+          "width": 412,
+          "views": 6,
+          "oldPaintExpected": 1122,
+          "oldPaintVisible": 1122,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2139,
+          "oldEntireRequiredStillVisible": 2139,
+          "currentContractSHA": "c3f42459a969f2204204f79dbcdd378d5f7a80d67203056e2c4eb8915c441233",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/fan-plan-free-library-412.json.gz",
+            "sha256": "b3ec2f41a6a203b12f7d944d888140982d9478333828d5019986068ca7b73f65",
+            "bytes": 560422
+          }
+        },
+        {
+          "width": 360,
+          "views": 6,
+          "oldPaintExpected": 1122,
+          "oldPaintVisible": 1122,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2139,
+          "oldEntireRequiredStillVisible": 2139,
+          "currentContractSHA": "5414d7b3fa82a34c4f8f3e693724df9ad5e3f8b7578268f324b62e8156be0020",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/fan-plan-free-library-360.json.gz",
+            "sha256": "77536df1569293e8c0ccd581e253f99e2017733b1acfb30292e9f14ef15872bd",
+            "bytes": 560256
+          }
+        }
+      ],
+      "oldContractSHA": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+      "oldWholeContractCanonicalSHA": "b11f5e05295b126fca30665a7a228fe29a91c371df6b48e2193135a6a2e17ecd"
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "report": "scratch/d086-independent-old-paint-v7h/dutch-gabled-post-office.json",
+      "sha256": "43a5e4d63493f0a235a1bf881fe969f7f4517f7d894d167e7ddf5c9910e4a001",
+      "originalIntents": 40,
+      "uniqueOldPaintPoints": 1486,
+      "oldPaintIncidences": 1558,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 40
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 6,
+          "oldPaintExpected": 1486,
+          "oldPaintVisible": 1486,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2760,
+          "oldEntireRequiredStillVisible": 2760,
+          "currentContractSHA": "2369c4d1ec5b4cdb57af1f0fc5f481b086a182917de1a7d71a0cdf2bd2a795f6",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/dutch-gabled-post-office-1440.json.gz",
+            "sha256": "9cb66c0ae631a348fee70a1670d93daa0b43b733d986459f7762fadcd38df0bc",
+            "bytes": 548547
+          }
+        },
+        {
+          "width": 412,
+          "views": 6,
+          "oldPaintExpected": 1486,
+          "oldPaintVisible": 1486,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2760,
+          "oldEntireRequiredStillVisible": 2760,
+          "currentContractSHA": "84bd4940a6884c90e5ade50fa2a4e29a998848b9c2ea46b713071c63651f422e",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/dutch-gabled-post-office-412.json.gz",
+            "sha256": "d494fec3350698e0a9049f58916dd7304c0334521eff1efd5cd933bed2e8b61a",
+            "bytes": 547640
+          }
+        },
+        {
+          "width": 360,
+          "views": 6,
+          "oldPaintExpected": 1486,
+          "oldPaintVisible": 1486,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2760,
+          "oldEntireRequiredStillVisible": 2760,
+          "currentContractSHA": "fc500066562f9d7718e2874041854bc5230c67d350269409254fa8ce5fb99320",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/dutch-gabled-post-office-360.json.gz",
+            "sha256": "39321dd53b6e30143e023099d2ceee58c48a9eabd62107e70edc65a9407b0464",
+            "bytes": 548662
+          }
+        }
+      ],
+      "oldContractSHA": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+      "oldWholeContractCanonicalSHA": "8f924b50f2239e145908c5adef5c26878114d029b5b4def9cdf0c947fdfa052f"
+    },
+    {
+      "id": "edwardian-board-school",
+      "report": "scratch/d086-independent-old-paint-v7h/edwardian-board-school.json",
+      "sha256": "a8a7a703fe47d170ca864c25f07df9ed3c20c291cd79dee4d641f9dd9d1fc610",
+      "originalIntents": 53,
+      "uniqueOldPaintPoints": 1692,
+      "oldPaintIncidences": 1740,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 57
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 7,
+          "oldPaintExpected": 1692,
+          "oldPaintVisible": 1692,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2841,
+          "oldEntireRequiredStillVisible": 2765,
+          "currentContractSHA": "87dc0a5f42c53180e28546d065581570086d7d9619d6ff8a6e3fb6125b41ff3c",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/edwardian-board-school-1440.json.gz",
+            "sha256": "e0f0d15d199ad614342541c0423fa3e4167d8b4bc1c88c4c0173c0d5cb6914e5",
+            "bytes": 599256
+          }
+        },
+        {
+          "width": 412,
+          "views": 7,
+          "oldPaintExpected": 1692,
+          "oldPaintVisible": 1692,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2841,
+          "oldEntireRequiredStillVisible": 2765,
+          "currentContractSHA": "b2ccbebf6fc27de4025c02d0db4811e03fcc7eda7519f0f373878016b877f262",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/edwardian-board-school-412.json.gz",
+            "sha256": "e8a889c99417f5fd59c1dc6ec1b961ffb3bddf244f39641593d9910addd8755e",
+            "bytes": 598081
+          }
+        },
+        {
+          "width": 360,
+          "views": 7,
+          "oldPaintExpected": 1692,
+          "oldPaintVisible": 1692,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2841,
+          "oldEntireRequiredStillVisible": 2765,
+          "currentContractSHA": "22cb921345f41992e34f8d781f970bf8ef2e348f8f75a70e24a0e01aa53b2da6",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/edwardian-board-school-360.json.gz",
+            "sha256": "0f0d7c0e83a389850ff30c7d3fc47250c320c9806c6531f0b3bfc88aa58bd35a",
+            "bytes": 599594
+          }
+        }
+      ],
+      "oldContractSHA": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+      "oldWholeContractCanonicalSHA": "0c90fd1d15602e16e31b9a94e25e7e2bfcf1e1f37dae90f42750923779f32c15"
+    },
+    {
+      "id": "interwar-fire-station",
+      "report": "scratch/d086-independent-old-paint-v7h/interwar-fire-station.json",
+      "sha256": "20c11006936f07a9571ab070e4d654e3634b2f0ddf16746f670f799231516495",
+      "originalIntents": 46,
+      "uniqueOldPaintPoints": 1183,
+      "oldPaintIncidences": 1199,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 46
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 5,
+          "oldPaintExpected": 1183,
+          "oldPaintVisible": 1183,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2408,
+          "oldEntireRequiredStillVisible": 2365,
+          "currentContractSHA": "f4073ea49e57d983c607d3b41abd0a230d759b7b31fd220fa5240bbb6502b802",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/interwar-fire-station-1440.json.gz",
+            "sha256": "e4e64dca4dcab810a3d7b36d535a8bff866f7783f10db74742968ffd58bf90ae",
+            "bytes": 464913
+          }
+        },
+        {
+          "width": 412,
+          "views": 5,
+          "oldPaintExpected": 1183,
+          "oldPaintVisible": 1183,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2408,
+          "oldEntireRequiredStillVisible": 2365,
+          "currentContractSHA": "7e250d964e6091bf960c3f20bc76bd2eeb2daf68d362a536a14433201d575c17",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/interwar-fire-station-412.json.gz",
+            "sha256": "0acabd2c372b019d528c25a56e05e40bfd4322595ef6577d5efe91069de909cf",
+            "bytes": 464583
+          }
+        },
+        {
+          "width": 360,
+          "views": 5,
+          "oldPaintExpected": 1183,
+          "oldPaintVisible": 1183,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 2408,
+          "oldEntireRequiredStillVisible": 2365,
+          "currentContractSHA": "fa0c53eb60534c09ea4a3e220eea48d5c7ddcf79018f2b0838bc2492cffdc0b1",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/interwar-fire-station-360.json.gz",
+            "sha256": "712e5c672a21bf938b59bfca421e30ea3161d96eac190df96b05c1e211221d24",
+            "bytes": 465159
+          }
+        }
+      ],
+      "oldContractSHA": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+      "oldWholeContractCanonicalSHA": "670f76dcd8f82bc6721b593de0932219c61f7afc3878e381c7d08ffc1526f558"
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "report": "scratch/d086-independent-old-paint-v7h/garden-cottage-clinic.json",
+      "sha256": "b6986abae9eb61939a0ff2af393e136db2f1a3a38428613cd92d9886e0bcf450",
+      "originalIntents": 17,
+      "uniqueOldPaintPoints": 476,
+      "oldPaintIncidences": 508,
+      "finiteV5FacadeDelta": {
+        "removed": 0,
+        "added": 0,
+        "addedIndices": [],
+        "allOtherPreviousIntentsExact": 17
+      },
+      "widths": [
+        {
+          "width": 1440,
+          "views": 9,
+          "oldPaintExpected": 476,
+          "oldPaintVisible": 476,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 1450,
+          "oldEntireRequiredStillVisible": 1450,
+          "currentContractSHA": "a453f1e677516525a46dee8815f38b87359b4ad834c7dede590a6ae0a50aae86",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/garden-cottage-clinic-1440.json.gz",
+            "sha256": "b53ae19f373f689117cfdb763f1f46f6d0d00c2ed29089bf302ceb4c3e730e3f",
+            "bytes": 531831
+          }
+        },
+        {
+          "width": 412,
+          "views": 9,
+          "oldPaintExpected": 476,
+          "oldPaintVisible": 476,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 1450,
+          "oldEntireRequiredStillVisible": 1450,
+          "currentContractSHA": "a749afa14126ec77a4fb3a3daedbcdecc62b0c12baf25731699cf26655fbbba6",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/garden-cottage-clinic-412.json.gz",
+            "sha256": "7e394767531473b7886dc534a0ecd37dda5c6fdff4198c67cb89a534c4c79ae0",
+            "bytes": 532001
+          }
+        },
+        {
+          "width": 360,
+          "views": 9,
+          "oldPaintExpected": 476,
+          "oldPaintVisible": 476,
+          "oldPaintHidden": [],
+          "oldEntireRequired": 1450,
+          "oldEntireRequiredStillVisible": 1450,
+          "currentContractSHA": "ea18222da5e787a39c7179dc7d116910ededf64b0c64b2fa9bfdb6ebde6af166",
+          "currentSourceGeometrySHA": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+          "newAddedPaintIntents": [],
+          "evidence": {
+            "file": "/tmp/d086-independent-old-paint-v7h/garden-cottage-clinic-360.json.gz",
+            "sha256": "51d16c78c09447235fdd75e23bf4005e0e948aa41be14d83cc85653934f3949f",
+            "bytes": 532216
+          }
+        }
+      ],
+      "oldContractSHA": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+      "oldWholeContractCanonicalSHA": "d8b12c9be4578897d2d47070f41e4c35d7645e20c1f2893b449e96ac7e559130"
+    }
+  ],
+  "limitations": [
+    "Preserved original 412-generated historical probe inventory is replayed unchanged at all three new viewports; it is not replaced by newly sampled current points. Each entire current viewport contract is independently regenerated and joined to the final source-bound camera plan.",
+    "Old non-paint required points inside real redesigned solids are not falsely relabelled visible; their whole-contract audit results remain recorded. This proof asserts only the explicit immutable original paint obligations. Current entire required-surface gate is separate.",
+    "Original point membership uses the previously reviewed barycentric pullback with original boundary handling; exact point/incidence ID rows were independently regenerated and compared before ray replay.",
+    "No product, source, workflow, gate, required-point inventory or threshold was edited by this replay. The one extra mesh existed only inside a disposable negative-control scene and was removed with exact complete-audit restoration.",
+    "Fresh official Chrome original PNG art review remains mandatory for the guild access repair."
+  ]
+}

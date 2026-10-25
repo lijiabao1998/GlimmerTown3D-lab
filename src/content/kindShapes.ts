@@ -1,3 +1,6 @@
+// D086-BEGIN native-civic-market-shape-import
+import { CIVIC_MARKET_BUILDINGS } from './britishCivicMarkets.ts';
+// D086-END native-civic-market-shape-import
 // D083-BEGIN rural-heritage-import
 import { RURAL_HERITAGE_KINDS } from './britishRuralHeritage.ts';
 // D083-END rural-heritage-import
@@ -279,7 +282,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D080-BEGIN community-building-shape
 // D081-BEGIN field-study-lodge-shape
 // D082-BEGIN coastal-recreation-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false): Shape | null => {
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false, nativeCivicMarket = false): Shape | null => {
+  // D086-BEGIN native-civic-market-shape
+  if (nativeCivicMarket && CIVIC_MARKET_BUILDINGS.some(m => m.k === k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge, coastalRecreation);
+    return previous ? { ...previous, p: { ...previous.p, nativeCivicMarket: true } } : null;
+  }
+  // D086-END native-civic-market-shape
   // D083-BEGIN rural-heritage-shape
   if (RURAL_HERITAGE_KINDS.has(k)) return S('hall', { ruralHeritage: true });
   // D083-END rural-heritage-shape

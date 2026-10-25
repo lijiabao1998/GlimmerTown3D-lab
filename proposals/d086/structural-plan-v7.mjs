@@ -1,0 +1,11 @@
+// Finite actual-architecture V7 plan. V1–V4/historical tests stay immutable.
+// Exact final-review procedural authority: f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25.
+// Beyond V6 only guild circulation: supported L-gallery, lapped closed eight-tread flight, lower storefront entrance.
+import assert from 'node:assert/strict';
+import plan from './structural-plan-v7.json' with {type:'json'};
+import {galleryConstructionFaces as constructionFaces} from './structural-gallery-plan.mjs';
+import {proveComponentSurface} from './structural-plan.mjs';
+function freeze(x){if(x&&typeof x==='object'){for(const v of Object.values(x))freeze(v);Object.freeze(x);}return x;}
+export const STRUCTURAL_PLAN_V7=freeze(plan);
+export function assertStructuralPlanV7(model,{negativeControls=false}={}){const p=STRUCTURAL_PLAN_V7[model.id];assert.ok(p);assert.equal(model.parts[0]?.start,0);for(let i=0;i<model.parts.length;i++){const part=model.parts[i],end=model.parts[i+1]?.start??model.triangles.length;assert.ok(Number.isInteger(part.start)&&end>part.start&&end<=model.triangles.length);assert.ok(model.triangles.slice(part.start,end).every(t=>t.part===part.name&&t.structural===part.solid));}const parts=model.parts.map((part,i)=>({...part,end:model.parts[i+1]?.start??model.triangles.length})).filter(part=>part.solid);assert.deepEqual(parts.map(part=>part.name),p.solids.map(s=>s.name));let controls=0,triangles=0,maximumError=0;
+ for(const[part,i]of parts.map((part,i)=>[part,i])){const expected=constructionFaces(p.solids[i],p.height),ts=model.triangles.slice(part.start,part.end).map(t=>t.p),label=`construction-v7:${model.id}:${i}:${part.name}`,r=proveComponentSurface(expected,ts,label);triangles+=ts.length;maximumError=Math.max(maximumError,r.maximumError);if(negativeControls){for(let j=0;j<ts.length;j++){assert.throws(()=>proveComponentSurface(expected,ts.filter((_,k)=>j!==k),label));assert.throws(()=>proveComponentSurface(expected,ts.map((t,k)=>j===k?[...t].reverse():t),label));controls+=2;}for(const mutation of [[...ts,ts[0]],ts.map(t=>t.map(([x,y,z])=>[x,y+.0001,z])),ts.map(t=>t.map(([x,y,z])=>[x*.98,y,z]))]){assert.throws(()=>proveComponentSurface(expected,mutation,label));controls++;}}}return{id:model.id,solids:parts.length,triangles,maximumError,negativeControls:controls};}

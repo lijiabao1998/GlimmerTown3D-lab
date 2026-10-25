@@ -1,0 +1,5 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+import{createCivicMarketDesign,MODEL_IDS}from'../../src/render/britishCivicMarketModels.mjs';import{STRUCTURAL_PLAN,assertStructuralPlan}from'./structural-plan.mjs';
+assert.deepEqual(Object.keys(STRUCTURAL_PLAN),MODEL_IDS);const report={qualification:'Independent numerical structural plane-area coverage. Not complete scene visibility, browser imagery or release.',models:[],passed:false};
+const label=process.argv.find(a=>a.startsWith('--label='))?.slice(8)??'first';assert.match(label,/^[a-zA-Z0-9_-]+$/);const out=`scratch/d086-surface/structural-${label}.json`;assert.ok(!fs.existsSync(out));fs.mkdirSync('scratch/d086-surface',{recursive:true});
+try{for(const id of MODEL_IDS){const r=assertStructuralPlan(createCivicMarketDesign(id),{negativeControls:true});report.models.push(r);console.log(JSON.stringify(r));}report.passed=true;}finally{report.sourceSha256=createHash('sha256').update(fs.readFileSync('src/render/britishCivicMarketModels.mjs')).digest('hex');fs.writeFileSync(out,JSON.stringify(report,null,2));}

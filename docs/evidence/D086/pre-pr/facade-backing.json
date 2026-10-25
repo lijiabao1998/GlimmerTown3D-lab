@@ -1,0 +1,207 @@
+{
+  "qualification": "Independent actual-source facade backing test. Existing surface classification, topology, old artwork and all original budgets remain separate mandatory gates.",
+  "modelSourceSha256": "bd588212b2c0cc61f91bc3dc234e3448869ffadddef9fd1d58fb64199b1925ab",
+  "maxNormalizedBackingGap": 0.006,
+  "epsilon": 0.000001,
+  "samples": 520,
+  "models": [
+    {
+      "id": "borough-iron-market",
+      "samples": 75,
+      "maxGap": 0.0020000000000000304,
+      "failures": []
+    },
+    {
+      "id": "raised-guild-market",
+      "samples": 35,
+      "maxGap": 0.0020000000000000304,
+      "failures": []
+    },
+    {
+      "id": "butter-market-colonnade",
+      "samples": 0,
+      "maxGap": 0,
+      "failures": []
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "samples": 60,
+      "maxGap": 0.002000000000000132,
+      "failures": []
+    },
+    {
+      "id": "georgian-customs-house",
+      "samples": 95,
+      "maxGap": 0.0020000000000000304,
+      "failures": []
+    },
+    {
+      "id": "fan-plan-free-library",
+      "samples": 45,
+      "maxGap": 0.0020000000000001752,
+      "failures": []
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "samples": 50,
+      "maxGap": 0.0020000000000000304,
+      "failures": []
+    },
+    {
+      "id": "edwardian-board-school",
+      "samples": 65,
+      "maxGap": 0.0020000000000000304,
+      "failures": []
+    },
+    {
+      "id": "interwar-fire-station",
+      "samples": 75,
+      "maxGap": 0.004000000000000032,
+      "failures": []
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "samples": 20,
+      "maxGap": 0.002000000000000032,
+      "failures": []
+    }
+  ],
+  "negativeControls": [
+    {
+      "id": "borough-iron-market",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "borough-iron-market",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "borough-iron-market",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "raised-guild-market",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "raised-guild-market",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "raised-guild-market",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "georgian-customs-house",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "georgian-customs-house",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "georgian-customs-house",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "fan-plan-free-library",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "fan-plan-free-library",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "fan-plan-free-library",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "edwardian-board-school",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "edwardian-board-school",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "edwardian-board-school",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "interwar-fire-station",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "interwar-fire-station",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "interwar-fire-station",
+      "mutation": "missing structural backing",
+      "rejected": true
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "mutation": "move complete panel outward .05",
+      "rejected": true
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "mutation": "reverse facade direction",
+      "rejected": true
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "mutation": "missing structural backing",
+      "rejected": true
+    }
+  ],
+  "passed": true
+}

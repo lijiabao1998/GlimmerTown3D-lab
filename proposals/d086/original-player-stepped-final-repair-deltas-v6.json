@@ -1,0 +1,81 @@
+[
+  {
+    "id": "fire-proud-stone-service-link",
+    "model": "interwar-fire-station",
+    "meaning": "Ground-bearing stone service connector with a deliberate .02 front return and .02 roof step, attached into both original masses without co-facing brick/stone overlaps.",
+    "changes": [
+      [
+        "tower-link-walk',.74,.81,.28,.34,.40,.43",
+        "tower-link-walk',.74,.81,.28,.34,0,.43"
+      ],
+      [
+        "tower-link-walk',.74,.81,.28,.34,0,.43",
+        "tower-link-walk',.74,.81,.28,.36,0,.45"
+      ]
+    ]
+  },
+  {
+    "id": "customs-secure-double-gateway",
+    "model": "georgian-customs-house",
+    "meaning": "Ground-bearing enlarged stone jambs and real thick closed timber double gate carry the full pediment, preserving the U-shaped customs court.",
+    "changes": [
+      [
+        "b.box('west-gate-pier',.35,.40,.82,.91,0,.32,C.stone);b.box('east-gate-pier',.60,.65,.82,.91,0,.32,C.stone);",
+        "b.box('west-gate-pier',.32,.405,.80,.94,0,.34,C.stone);b.box('east-gate-pier',.595,.68,.80,.94,0,.34,C.stone);b.box('secure-double-gate',.39,.61,.805,.935,0,.35,C.oak);b.door(.5,.936,0,.18,.30,C.oak);"
+      ]
+    ]
+  },
+  {
+    "id": "school-closed-two-louvre-belfry",
+    "model": "edwardian-board-school",
+    "meaning": "Closed roof-seated belfry with two broad louvre bands on each end; same gabled crown, actual hall-roof penetration.",
+    "changes": [
+      [
+        "b.box('bellcote-left',.46,.48,.46,.52,.65,.83,C.stone);b.box('bellcote-right',.52,.54,.46,.52,.65,.83,C.stone);b.gable('bellcote-cap',.445,.555,.445,.535,.83,.85,.93,C.stone,C.slate);",
+        "b.gable('roof-seated-louvred-belfry',.445,.555,.445,.535,.60,.85,.93,C.stone,C.slate);for(const back of [false,true])for(const y of [.765,.805])b.panel('belfry-louvre',.47,.53,back?.444:.536,y,y+.017,C.dark,back);"
+      ]
+    ]
+  },
+  {
+    "id": "guild-fully-bearing-glazed-trading-storey",
+    "model": "raised-guild-market",
+    "meaning": "Full enclosed glazed lower trading storey with continuously splayed timber bearing cornice; retains all six original stone piers as engaged supports, original jettied chamber, all eight steps and ground-bearing landing.",
+    "changes": [
+      [
+        " box(name,x0,x1,z0,z1,y0,y1,color,solid=true)",
+        " bearingStorey(name,inner,outer,wallTop,top,color){this.part(name);const [x0,x1,z0,z1]=inner,[X0,X1,Z0,Z1]=outer,lo=[[x0,0,z0],[x1,0,z0],[x1,0,z1],[x0,0,z1]],waist=lo.map(([x,y,z])=>[x,wallTop,z]),hi=[[X0,top,Z0],[X1,top,Z0],[X1,top,Z1],[X0,top,Z1]];this.face(lo,[0,-1,0],color);this.face(hi,[0,1,0],color);for(let i=0;i<4;i++){const j=(i+1)%4,away=[(lo[i][0]+lo[j][0])/2-(x0+x1)/2,0,(lo[i][2]+lo[j][2])/2-(z0+z1)/2];this.face([lo[i],lo[j],waist[j],waist[i]],away,color);this.face([waist[i],waist[j],hi[j],hi[i]],[away[0],-.1,away[2]],color);}return this;}\n box(name,x0,x1,z0,z1,y0,y1,color,solid=true)"
+      ],
+      [
+        "const b=new Architecture('raised-guild-market');",
+        "const b=new Architecture('raised-guild-market');b.bearingStorey('glazed-trading-storey',[.23,.75,.22,.68],[.13,.85,.13,.78],.24,.36,C.timber);for(const back of [false,true])b.window(.49,back?.219:.681,.04,.35,.16,3,1,back);b.sideWindows(.229,.27,.63,.04,.12,.16,2,true,2,1);b.sideWindows(.751,.27,.63,.04,.12,.16,2,false,2,1);"
+      ],
+      [
+        "upper-stair-landing',.82,.96,.75,.88,.34,.38",
+        "upper-stair-landing',.82,.96,.75,.88,0,.38"
+      ]
+    ]
+  },
+  {
+    "id": "butter-visible-capitals-and-framed-bays",
+    "model": "butter-market-colonnade",
+    "meaning": "Enclosed classical market with eight visible tapered capitals and three separately framed glazed bays between engaged columns on each side, central bays having real visible two-light mullions.",
+    "changes": [
+      [
+        " box(name,x0,x1,z0,z1,y0,y1,color,solid=true)",
+        " bearingStorey(name,inner,outer,wallTop,top,color){this.part(name);const [x0,x1,z0,z1]=inner,[X0,X1,Z0,Z1]=outer,lo=[[x0,0,z0],[x1,0,z0],[x1,0,z1],[x0,0,z1]],waist=lo.map(([x,y,z])=>[x,wallTop,z]),hi=[[X0,top,Z0],[X1,top,Z0],[X1,top,Z1],[X0,top,Z1]];this.face(lo,[0,-1,0],color);this.face(hi,[0,1,0],color);for(let i=0;i<4;i++){const j=(i+1)%4,away=[(lo[i][0]+lo[j][0])/2-(x0+x1)/2,0,(lo[i][2]+lo[j][2])/2-(z0+z1)/2];this.face([lo[i],lo[j],waist[j],waist[i]],away,color);this.face([waist[i],waist[j],hi[j],hi[i]],[away[0],-.1,away[2]],color);}return this;}\n box(name,x0,x1,z0,z1,y0,y1,color,solid=true)"
+      ],
+      [
+        "const b=new Architecture('butter-market-colonnade');",
+        "const b=new Architecture('butter-market-colonnade');b.bearingStorey('enclosed-glazed-market-hall',[.21,.79,.22,.76],[.085,.915,.095,.885],.39,.45,C.stone);for(const left of [true,false])for(const [z,cols]of [[.31,1],[.49,2],[.67,1]]){const s=b.parts.length;b.window(0,0,.08,.11,.18,cols,1);b.transform(s,left?.209:.791,z,left?-Math.PI/2:Math.PI/2);}b.box('pedimented-market-entry',.35,.65,.70,.96,0,.45,C.stone);b.panel('market-double-door',.40,.60,.961,0,.34,C.oak);b.panel('market-door-leaf-joint',.498,.502,.962,0,.34,C.dark);for(const x of [.28,.72])b.window(x,.761,.08,.10,.18,2,2);for(const x of [.32,.5,.68])b.window(x,.219,.08,.10,.18,2,2,true);"
+      ],
+      [
+        " box(name,x0,x1,z0,z1,y0,y1,color,solid=true)",
+        " taperedCapital(name,x,z,y0,y1,lx,lz,hx,hz,color){this.part(name);const lo=[[x-lx,y0,z-lz],[x+lx,y0,z-lz],[x+lx,y0,z+lz],[x-lx,y0,z+lz]],hi=[[x-hx,y1,z-hz],[x+hx,y1,z-hz],[x+hx,y1,z+hz],[x-hx,y1,z+hz]];this.face(lo,[0,-1,0],color);this.face(hi,[0,1,0],color);for(let i=0;i<4;i++){const j=(i+1)%4;this.face([lo[i],lo[j],hi[j],hi[i]],[(lo[i][0]+lo[j][0])/2-x,-.01,(lo[i][2]+lo[j][2])/2-z],color);}return this;}\n box(name,x0,x1,z0,z1,y0,y1,color,solid=true)"
+      ],
+      [
+        "b.box('column-capital',x-.044,x+.044,z-.04,z+.04,.40,.44,C.cream);",
+        "b.taperedCapital('tapered-stone-capital',x,z,.34,.44,.016,.016,.064,.0562,C.cream);"
+      ]
+    ]
+  }
+]
