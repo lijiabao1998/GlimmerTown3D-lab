@@ -94,7 +94,7 @@
       "source": "proposals/d086/native-browser-v6-check.mjs",
       "target": "proposals/d087/native-browser-check.mjs",
       "sourceSha256": "67cd3d7f6d9fa7be1c9baedbd50e62c09aad99cdfc054d538e17f2de7d0a2af0",
-      "targetSha256": "c029ba1705e1dcbe9103a9f228c55339e741a013065499b5bf4a9ef7f17badc9",
+      "targetSha256": "eb2f8b5bea13b88e88241c2faff1648882a0bc85da0144a81708a092fb64a031",
       "replacements": [
         [
           "CIVIC_MARKET_BUILDINGS",
@@ -187,6 +187,14 @@
         [
           "'./browser-required-diagnostic.mjs'",
           "'../d086/browser-required-diagnostic.mjs'"
+        ],
+        [
+          "// Additive close pairs retain all twenty original front/back views above.",
+          "// Additive close pairs retain all twenty-two original front/back views above."
+        ],
+        [
+          "PNGs including additive legal-zoom detail pairs; ten actual UI placements/picks/save reload",
+          "PNGs including additive legal-zoom detail pairs; eleven actual UI placements/picks/save reload"
         ]
       ]
     },

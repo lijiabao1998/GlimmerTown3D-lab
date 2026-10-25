@@ -72,7 +72,7 @@ try{await withBrowser({width,height,port,root},async({open,page})=>{
   const worldBefore=await page.evaluate('JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList()])');
   await page.evaluate(`__gt.view(16,9,${width===1440?1.1:.6})`);await shot('eleven-context');
   for(const b of current){const m=MODELS.find(m=>m.k===b.k&&m.v===b.v),zoom=Math.min(8,(width===1440?8:5.5)/m.size);await page.evaluate(`__gt.focusBuilding(${b.id},${zoom})`);await settle();const pick=await page.evaluate(`__gt.pickTest(${b.id})`);assert.equal(pick?.got?.id,b.id,'actual browser raycast picks '+m.id);manifest.placements.find(p=>p.owner===b.id).browserPick=pick;await shot(m.id+'-front',b,m);await page.evaluate('__gt.spin(Math.PI)');await settle();await shot(m.id+'-back',b,m);}
-  // Additive close pairs retain all twenty original front/back views above.
+  // Additive close pairs retain all twenty-two original front/back views above.
   // Use only existing legal zoom and ordinary front/back angle; nothing hidden.
   for(const b of current){const m=MODELS.find(m=>m.k===b.k&&m.v===b.v);for(const side of['front','back']){await page.evaluate(`__gt.focusBuilding(${b.id},1)`);if(side==='back')await page.evaluate('__gt.spin(Math.PI)');await settle();const camera=await page.evaluate('__gt.cam()'),fit=d086DetailZoom({camera,model:build.modelReferences[m.id],building:{...b,H:m.H},viewport:{W:width,H:height}});await page.evaluate(`__gt.focusBuilding(${b.id},${fit.zoom})`);if(side==='back')await page.evaluate('__gt.spin(Math.PI)');await settle();await shot(m.id+'-detail-'+side,b,m);manifest.shots.at(-1).detailFraming=fit;write();}}
   manifest.surfaceCapture=await collectLegalPlayerSurfaceShots({page,plan:JSON.parse(fs.readFileSync('proposals/d087/native-camera-plan.json')),models:MODELS,current,build,width,height,sourceSha:JSON.parse(fs.readFileSync('fixtures/d087/compiled-cache.json')).proceduralSourceSha256,settle,frames,shot,manifest,write});write();
@@ -84,5 +84,5 @@ try{await withBrowser({width,height,port,root},async({open,page})=>{
   assert.deepEqual(page.errors,[]);assert.ok(page.requests.every(u=>u.startsWith(`http://127.0.0.1:${port}/`)));manifest.chrome=page.chrome;manifest.pageUrl=await page.evaluate('location.href');
   assertRequiredDiagnostic(manifest.requiredGeometryDiagnostic);
  }finally{manifest.errors=[...page.errors];manifest.requests=[...page.requests];write();}
-});manifest.complete=true;write();console.log('COMPLETE NATIVE',width,manifest.shots.length,'PNGs including additive legal-zoom detail pairs; ten actual UI placements/picks/save reload');
+});manifest.complete=true;write();console.log('COMPLETE NATIVE',width,manifest.shots.length,'PNGs including additive legal-zoom detail pairs; eleven actual UI placements/picks/save reload');
 }catch(e){manifest.failure=e.stack??String(e);write();throw e;}

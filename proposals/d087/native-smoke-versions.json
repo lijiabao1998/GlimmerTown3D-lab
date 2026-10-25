@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "baseline": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "scope": "Finite current D053 native smoke catalogue43+11 repair. Original sources and assertion/interaction bytes retained; no product or threshold change.",
+  "copies": [
+    {
+      "source": "tools/smoke-d053-d086.mjs",
+      "target": "tools/smoke-d053-d087.mjs",
+      "changes": [
+        {
+          "before": "from './d053-capture-d086.mjs';",
+          "after": "from './d053-capture-d087.mjs';",
+          "count": 1
+        },
+        {
+          "before": "import { BRITISH_CATALOGUE_IDS, catalogueWithD086 } from './d086-catalogue-compat.mjs';",
+          "after": "import { BRITISH_CATALOGUE_IDS as D086_BRITISH_CATALOGUE_IDS } from './d086-catalogue-compat.mjs';\nimport { D087_TOOL_IDS, catalogueWithD087 as catalogueWithD086 } from './d087-catalogue-compat.mjs';\nconst BRITISH_CATALOGUE_IDS = Object.freeze([...D086_BRITISH_CATALOGUE_IDS,...D087_TOOL_IDS]);",
+          "count": 1
+        }
+      ],
+      "sourceSha256": "097732db8a6707a98db08775e9f6f3a627852fce3e011e659b107bf3518ef1d9",
+      "header": "// D087 finite current smoke contract. tools/smoke-d053-d086.mjs remains byte-exact at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n// Only the explicit catalogue/capture seams below are extended; all original checks, inputs and thresholds remain.\n",
+      "targetSha256": "407265e3208690794c6e7d1003f53bdd345359d3fe8767a1cf8b66a894d9a7c0"
+    },
+    {
+      "source": "tools/d053-capture-d086.mjs",
+      "target": "tools/d053-capture-d087.mjs",
+      "changes": [
+        {
+          "before": "import {catalogueWithD086} from './d086-catalogue-compat.mjs';",
+          "after": "import {catalogueWithD087 as catalogueWithD086} from './d087-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(ui.catalog.tools.map(t=>t.id).sort(),catalogueWithD086(D055_CATALOG_IDS).sort());",
+          "after": "assert.deepEqual(ui.catalog.tools.map(t=>t.id),catalogueWithD086(D055_CATALOG_IDS),'D087 exact retained43 then new11 catalogue order');assert.deepEqual(ui.catalog.tools.map(t=>t.id).sort(),catalogueWithD086(D055_CATALOG_IDS).sort());",
+          "count": 1
+        },
+        {
+          "before": "'tools/d053-scenes.mjs','tools/d053-capture.mjs'",
+          "after": "'tools/d053-scenes.mjs','tools/d053-capture.mjs','tools/d053-capture-d086.mjs','tools/d053-capture-d087.mjs','tools/smoke-d053-d087.mjs','tools/d087-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ],
+      "sourceSha256": "41a9e70bff1728ba083e546f758366c0bb75cb3a6558a9392aeaac26e199ac1c",
+      "header": "// D087 finite current smoke contract. tools/d053-capture-d086.mjs remains byte-exact at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n// Only the explicit catalogue/capture seams below are extended; all original checks, inputs and thresholds remain.\n",
+      "targetSha256": "057b1f0c2d75eb4c05f84c9287a12c5b67acac425d524911a51c4161b012990a"
+    }
+  ],
+  "rootRoute": {
+    "file": "tools/smoke.mjs",
+    "before": "import { d053Smoke } from './smoke-d053-d086.mjs';",
+    "after": "import { d053Smoke } from './smoke-d053-d087.mjs';",
+    "count": 1,
+    "sourceSha256": "16daf0f302065ce4c648b1d60f75d1b16e11ce01b3a5f4fa66e7f4270e68c1f4",
+    "targetSha256": "ec02ccfe3864bb61c2c58b046bacf5fbd3fd9f2cd3b3c81953d8619f212cbdfa"
+  }
+}
