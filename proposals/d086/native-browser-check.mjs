@@ -1,6 +1,7 @@
 import{execFileSync}from'node:child_process';
 import{CIVIC_MARKET_BUILDINGS as CURRENT_MODELS}from'../../src/content/britishCivicMarkets.ts';
 import{verifyD086BrowserProduct}from'./browser-provenance.mjs';
+import{collectD086RebuildPerformance}from'./browser-performance.mjs';
 // Actual immutable production HTML. Real native UI/pointer input, no scene adapter.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -67,6 +68,7 @@ try{await withBrowser({width,height,port,root},async({open,page})=>{
   const finalCode=await page.evaluate('__gt.save()');assert.ok(finalCode);fs.writeFileSync(path.join(out,'actual-ui-day9.code.txt'),finalCode);await page.evaluate('__gt.saveNow()');await page.evaluate('__gt.journalFlush()');
   await open('sample=mine');await settle();assert.equal(await page.evaluate('__gt.ui().dock'),'build');assert.equal(await page.evaluate('__gt.buildingCount()'),16);const reload=await buildings();assert.deepEqual(reload.filter(b=>MODELS.some(m=>m.k===b.k&&m.v===b.v)).map(b=>[b.id,b.k,b.v,b.x,b.z,b.size]),current.map(b=>[b.id,b.k,b.v,b.x,b.z,b.size]));manifest.actualBrowserSaveReload={passed:true,sample:await page.evaluate('__gt.sample'),note:await page.evaluate('__gt.loadNote()'),buildings:16,newOwnersRetained:10};
   await page.evaluate(`__gt.view(16,9,${width===1440?1.1:.6});__gt.simPlay(false)`);await shot('saved-reloaded');
+  manifest.rebuildPerformance=await collectD086RebuildPerformance(page,{record:r=>{manifest.rebuildPerformance=r;write();}});
   assert.deepEqual(page.errors,[]);assert.ok(page.requests.every(u=>u.startsWith(`http://127.0.0.1:${port}/`)));manifest.chrome=page.chrome;manifest.pageUrl=await page.evaluate('location.href');
  }finally{manifest.errors=[...page.errors];manifest.requests=[...page.requests];write();}
 });manifest.complete=true;write();console.log('COMPLETE NATIVE',width,manifest.shots.length,'PNGs; ten actual UI placements/picks/save reload');

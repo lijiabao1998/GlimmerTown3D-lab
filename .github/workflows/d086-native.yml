@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Source leases, finite current versions and mandatory release graph negatives
-        run: node --test tools/d086-source-v1.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs
+        run: node --test tools/d086-source-v1.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/facade-clean-workspace.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs
       - run: npm run typecheck
       - name: Immutable immediate baseline and original affected historical contracts
         run: |
@@ -38,6 +38,8 @@ jobs:
         run: |
           node proposals/d086/model-audit.mjs --baseline
           node proposals/d086/model-audit.mjs
+      - name: Current and immutable old production scenes, exact owner ledger and unchanged frame ceilings
+        run: node proposals/d086/scene-budget-check.mjs --label=ci
       - name: Current closed meshes, architectural facade backing and negative controls
         run: |
           node proposals/d086/mesh-check.mjs
@@ -69,6 +71,7 @@ jobs:
             scratch/d086-mesh/
             scratch/d086-native-variant/
             scratch/d086-historical/
+            scratch/d086-scene-budget/
           if-no-files-found: error
           retention-days: 30
   native-game:
@@ -100,10 +103,37 @@ jobs:
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Real catalogue, mouse/touch placement, construction, picking, front/back and save reload
         run: node proposals/d086/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+      - name: Exact real raw PNG inventory and independent production frame join
+        run: node proposals/d086/browser-frame-qualification.mjs --manifest=scratch/d086-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: d086-native-game-${{ matrix.width }}-${{ github.sha }}
           path: scratch/d086-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  surface-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Independent numerical wall and roof plan, topology and unchanged camera negatives
+        run: |
+          node --test proposals/d086/surface-qualification.test.mjs
+          node proposals/d086/structural-plan-check.mjs --label=ci
+      - name: Every unchanged full-scene required surface remains mandatory
+        run: node proposals/d086/native-surface-plan.mjs --label=ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d086-native-surfaces-${{ github.sha }}
+          path: scratch/d086-surface/
           if-no-files-found: error
           retention-days: 30

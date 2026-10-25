@@ -7,6 +7,7 @@ import{createCivicMarketDesign}from'../../src/render/britishCivicMarketModels.mj
 const V=p=>new THREE.Vector3(...p),EPS=1e-6,MAX_GAP=.006,sha=b=>createHash('sha256').update(b).digest('hex');
 const level=process.argv.find(x=>x.startsWith('--label='))?.slice(8)??'current';assert.match(level,/^[a-zA-Z0-9_-]+$/);
 const out=`scratch/d086-native-variant/facade-backing-${level}.json`;assert.ok(!fs.existsSync(out),'preserve original review receipts; choose a new label');
+fs.mkdirSync('scratch/d086-native-variant',{recursive:true});
 export function backing(model){
  const solid=model.triangles.filter(t=>t.structural),rows=[];
  for(const [partIndex,part]of model.parts.entries()){

@@ -1,0 +1,15 @@
+// In-memory mathematical experiment only. Never replaces product model or source.
+import fs from 'node:fs';import assert from 'node:assert/strict';import{gzipSync}from'node:zlib';import * as THREE from 'three';
+import{CIVIC_MARKET_BUILDINGS as MODELS}from'../../src/content/britishCivicMarkets.ts';import{createCivicMarketDesign}from'../../src/render/britishCivicMarketModels.mjs';
+import{Geo}from'../../src/render/scene.ts';import{planSurfaceCoverage,VIEWPORTS}from'./surface-contract.mjs';
+const out='scratch/d086-surface/closed-finish-study';assert.ok(!fs.existsSync(out));fs.mkdirSync(out,{recursive:true});const report={qualification:'Hypothetical closed finish-prism experiment, NOT actual product source, budget acceptance or browser coverage. Original geometry/required contracts remain untouched.',models:[]};
+const V=p=>new THREE.Vector3(...p);function tri(ps){const n=V(ps[1]).sub(V(ps[0])).cross(V(ps[2]).sub(V(ps[0]))).normalize();return{p:ps,n:n.toArray()};}const split=p=>Array.from({length:p.length-2},(_,i)=>tri([p[0],p[i+1],p[i+2]]));
+for(const m of MODELS){const model=createCivicMarketDesign(m.id),ts=[],labels=[];let replaced=0;
+ for(const[p,i]of model.parts.map((p,i)=>[p,i])){let subset=model.triangles.slice(p.start,model.parts[i+1]?.start??model.triangles.length);
+  if(!p.solid&&p.faces.length===1&&p.faces[0].points.length===4){const front=p.faces[0].points,n=V(front[1]).sub(V(front[0])).cross(V(front[2]).sub(V(front[0]))).normalize(),back=front.map(p=>V(p).addScaledVector(n,-.004).toArray());subset=[...split(front),...split([...back].reverse()),...front.flatMap((a,j)=>split([a,back[j],back[(j+1)%4],front[(j+1)%4]]))];replaced++;}
+  for(const t of subset){ts.push(t);labels.push(p.name);}
+ }
+ const G=[new Geo({ext:true}),new Geo(),new Geo()];for(const g of G)g.owner=1;for(const t of ts){const ps=t.p.map(([x,y,z])=>[3+x*m.size,y*m.H,4+z*m.size]);G[1].triangle(...ps,t.n,new THREE.Color('#cccccc'));}
+ const scene=new THREE.Scene(),material=new THREE.MeshBasicMaterial({side:THREE.FrontSide}),meshes=G.map(g=>new THREE.Mesh(g.geometry(),material));meshes.forEach(m=>scene.add(m));const o={scene,meshes,owners:G.map(g=>Int32Array.from(g.owners)),n:40},b={id:1,x:3,z:4,size:m.size};
+ try{const r=planSurfaceCoverage(o,b,VIEWPORTS[1]),missingByPart={};for(const p of r.missing){const name=labels[p.triangle];missingByPart[name]=(missingByPart[name]??0)+1;}const row={id:m.id,replacedPanels:replaced,triangles:ts.length,weighted:ts.length*2,required:r.contract.requiredSamples.length,closedComponents:r.contract.closedComponents.length,rejectedComponents:r.contract.rejectedComponents.length,missing:r.missing.length,downwardMissing:r.missing.filter(p=>p.normal[1]<-.1).length,missingByPart};report.models.push(row);fs.writeFileSync(`${out}/${m.id}.json.gz`,gzipSync(JSON.stringify(r),{mtime:0}));console.log(JSON.stringify(row));}finally{meshes.forEach(m=>m.geometry.dispose());material.dispose();}
+}fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));

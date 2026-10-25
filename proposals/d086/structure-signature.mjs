@@ -29,4 +29,3 @@ export function fieldStudyLodgeStructureSignature(r,{architectureOnly=false}={})
   }representations.push(patches.sort().join('/'));
  }return sha(representations.sort()[0]);
 }
-
