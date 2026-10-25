@@ -1,0 +1,8 @@
+/workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d085-own/proposals/d085/browser-check.mjs:76
+  await click('#menuBtn');assert.match(await page.evaluate('document.querySelector('[data-m="frontage"]').textContent'),/開啟道路共邊/);await shot('control-off-menu');
+                                                                                     ^^^^^^
+
+SyntaxError: Invalid left-hand side in assignment
+    at checkSyntax (node:internal/main/check_syntax:72:5)
+
+Node.js v24.19.0

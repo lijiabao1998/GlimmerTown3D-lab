@@ -1301,6 +1301,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'chronicle', label: '大事記', note: '政策、預算、研究、城市方向的歷史（D039）', icon: 'day' as const }] : []),
         ...(sim ? [{ id: 'commission', label: '委託', note: '市長委託三選一、進度與放棄（D045）', icon: 'paste' as const }] : []),
         ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
+        ...(q.get('streetFrontageControl') === '1' ? [{ id: 'frontage', label: preview.frontageEnabled ? '關閉道路共邊提示' : '開啟道路共邊提示', note: '只標道路共邊，不代表入口或道路連通', icon: 'layers' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
       ] },
     ];
@@ -1335,6 +1336,11 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'tech') openTech();
     else if (id === 'commission') openCommission();
     else if (id === 'chronicle') openChronicle();
+    else if (id === 'frontage' && q.get('streetFrontageControl') === '1') {
+      preview.setFrontageEnabled(!preview.frontageEnabled);
+      invalidate();
+      bui.toast(preview.frontageEnabled ? '道路共邊提示已開啟；請重新選取建造位置' : '道路共邊提示已關閉');
+    }
     else if (id === 'resview') { showRes = !showRes; syncRes(); invalidate(); bui.toast(showRes ? '資源圖：油田（黃）、礦藏（藍）' : '資源圖已隱藏'); }   // D040
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';

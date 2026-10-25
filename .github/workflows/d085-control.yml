@@ -1,0 +1,49 @@
+name: d085-native-control-candidate
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-preview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update && sudo apt-get install -y fonts-wqy-microhei
+      - name: Fixed CPU SVG raster diagnostic; WebGL remains original SwiftShader
+        run: |
+          CHROME_BIN="$(command -v google-chrome)"
+          printf '#!/usr/bin/env bash\nexec "%s" --disable-gpu-rasterization "$@"\n' "$CHROME_BIN" > "$RUNNER_TEMP/d085-chrome"
+          chmod +x "$RUNNER_TEMP/d085-chrome"
+          echo "CHROME_PATH=$RUNNER_TEMP/d085-chrome" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
+      - run: node --test tools/d085-control.test.mjs tools/d085-source-v1.test.mjs tools/d084-opt-in.test.mjs tools/d082-release-source-v2.test.mjs
+      - run: npm run typecheck && npm run build
+      - name: Rebuild immutable 1e7b43e baseline and verify original published bytes
+        run: |
+          mkdir -p scratch/d085-baseline
+          git worktree add --detach scratch/d085-baseline-source 1e7b43e96097969fac33b57c37fe02444cefb15c
+          (cd scratch/d085-baseline-source && npm ci && npm run build)
+          cp scratch/d085-baseline-source/dist/index.html scratch/d085-baseline/index.html
+          echo '9fb533c5263f8366c5c9e8122dfe36139927ab1f22bfedb66f908e0a0f427a14  scratch/d085-baseline/index.html' | sha256sum --check
+      - run: node --experimental-strip-types proposals/d085/browser-check.mjs --width=${{ matrix.width }} --baseline
+      - run: node --experimental-strip-types proposals/d085/browser-check.mjs --width=${{ matrix.width }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d085-control-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d085/
+          if-no-files-found: error
