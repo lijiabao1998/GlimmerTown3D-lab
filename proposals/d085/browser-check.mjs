@@ -67,12 +67,15 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
   assert.ok(b.calls<=a.calls+1,'at most one additional native draw call');assert.ok(b.triangles<=a.triangles+32,'at most 16 thin strips / 32 triangles');
   report.nativeBudgetDelta={calls:b.calls-a.calls,triangles:b.triangles-a.triangles};
   // D085: real native menu button, not the __gt.menu test shortcut.
+  const bounded=async(label,action)=>{report.phase=label;record();let timer;try{return await Promise.race([action(),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error(label+' timed out; no modal accepted')),20000)})]);}finally{clearTimeout(timer);}};
   const click=async(selector)=>{
+    return bounded('native click '+selector,async()=>{
     const [cx,cy]=await page.evaluate(`(()=>{const b=document.querySelector(${JSON.stringify(selector)});if(!b)throw Error('Missing native control');b.scrollIntoView({block:'center'});const r=b.getBoundingClientRect();return[r.x+r.width/2,r.y+r.height/2]})()`);
     await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x:cx,y:cy,button:'left',buttons:1,clickCount:1});
     await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:cx,y:cy,button:'left',buttons:0,clickCount:1});await settle();
+    });
   };
-  await open('sample=mine&streetFrontageControl=1');await page.evaluate('document.fonts.ready;__gt.simPlay(false)');await settle();
+  await bounded('open control fixture',()=>open('sample=mine&streetFrontageControl=1'));await page.evaluate('document.fonts.ready;__gt.simPlay(false)');await settle();
   const stable=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
   await click('#menuBtn');assert.match(await page.evaluate(`document.querySelector('[data-m="frontage"]').textContent`),/開啟道路共邊/);await page.evaluate(`document.querySelector('[data-m="frontage"]').scrollIntoView({block:'center'})`);await shot('control-off-menu');
   await click('[data-m="frontage"]');
@@ -92,13 +95,20 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
   await click('#menuBtn');await click('[data-m="frontage"]');[hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),2);
   await page.evaluate('__gt.tool("road","alley")');assert.equal(await page.evaluate('__gt.frontageCount()'),0,'tool switch clears gold');
   await page.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
-  await open('sample=mine&streetFrontageControl=1');await page.evaluate('__gt.simPlay(false)');await settle();
+  await bounded('reload control fixture',()=>open('sample=mine&streetFrontageControl=1'));await page.evaluate('__gt.simPlay(false)');await settle();
   assert.equal(await page.evaluate('__gt.frontageCount()'),0,'reload has no orphan gold');
   await click('#menuBtn');assert.match(await page.evaluate(`document.querySelector('[data-m="frontage"]').textContent`),/開啟道路共邊/);await page.evaluate(`document.querySelector('[data-m="frontage"]').scrollIntoView({block:'center'})`);await shot('control-reloaded-off');await click('#menuX');
   // Native export/import transition while enabled must clear transient render state.
   await click('#menuBtn');await click('[data-m="frontage"]');
   await page.evaluate('__gt.tool("civic","heritageGranary");__gt.view(9,9,2)');[hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),2);
   await page.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});await settle();await click('#menuBtn');
+  // This fresh withBrowser profile contains only our synthetic fixture. Keep its
+  // live world/history intact while removing its persisted copy, so this test
+  // exercises scene import rather than accepting an overwrite confirmation.
+  const beforeImport=await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])');
+  assert.equal(await page.evaluate('__gt.clearSave()'),true,'only the isolated fixture persisted copy is cleared');
+  assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),beforeImport,'fixture isolation leaves live save/history bytes unchanged');
+  report.importIsolation={freshBrowserProfile:true,persistedFixtureCleared:true,liveBytesUnchanged:true,overwriteConfirmationTested:false};record();
   await click('[data-m="paste"]');
   await page.evaluate(`document.querySelector('#dlg textarea').value=${JSON.stringify(code)}`);await click('#dlgOk');
   assert.equal(await page.evaluate('__gt.frontageCount()'),0,'import scene contains no orphan gold');
