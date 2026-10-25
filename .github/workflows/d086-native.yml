@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Source leases, finite current versions and mandatory release graph negatives
-        run: node --test tools/d086-source-v4.test.mjs tools/d086-source-v4-lease.test.mjs tools/d086-validation-v4.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-v2-clean-workspace.test.mjs proposals/d086/facade-imprint-v2-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs proposals/d086/browser-required-diagnostic.test.mjs proposals/d086/browser-geometry-compare-v3.test.mjs tools/d086-source-v4-contract.test.mjs tools/d086-current-guards-v4.test.mjs proposals/d086/freeze-source-v4.test.mjs proposals/d086/original-camera-restoration.test.mjs proposals/d086/direct-basis-determinism.test.mjs proposals/d086/precompiled-cache-qualification.test.mjs proposals/d086/browser-cache-observation.test.mjs proposals/d086/native-first-use-cache-copy.test.mjs proposals/d086/browser-startup-cache-contract.test.mjs
+        run: node --test tools/d086-source-v5.test.mjs tools/d086-source-v5-lease.test.mjs tools/d086-validation-v5.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-v3-clean-workspace.test.mjs proposals/d086/facade-imprint-v3-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs proposals/d086/browser-required-diagnostic.test.mjs proposals/d086/browser-geometry-compare-v5.test.mjs tools/d086-source-v5-contract.test.mjs tools/d086-current-guards-v5.test.mjs proposals/d086/freeze-source-v5.test.mjs proposals/d086/original-camera-restoration.test.mjs proposals/d086/direct-basis-determinism.test.mjs proposals/d086/precompiled-cache-v5-qualification.test.mjs proposals/d086/browser-cache-observation-v5.test.mjs proposals/d086/native-first-use-cache-copy.test.mjs proposals/d086/browser-cache-v5-copies.test.mjs proposals/d086/native-browser-v5-copy.test.mjs proposals/d086/browser-legal-surface-capture.test.mjs proposals/d086/browser-surface-qualification-v6.test.mjs proposals/d086/native-surface-plan-v6.test.mjs proposals/d086/precompiled-cache-v5-copy.test.mjs tools/d086-coastal-current-guard.test.mjs proposals/d086/browser-startup-cache-contract.test.mjs
       - run: npm run typecheck
       - name: Immutable immediate baseline and original affected historical contracts
         run: |
@@ -49,12 +49,18 @@ jobs:
           git worktree add --detach ../GlimmerTown3D-lab-d086-geometry-v3 cc8280f30e7b4115c6ffff2df27ca6ca7aa0baba
           ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d086-geometry-v3/node_modules
           node proposals/d086/geometry-v3-contracts.mjs --label=ci
+      - name: Actual immutable V4 cache and original inherited coastal integration
+        run: |
+          git worktree add --detach ../GlimmerTown3D-lab-d086-cache-v4 f636cfa0bb89b4336551840f647d14914759f97c
+          ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d086-cache-v4/node_modules
+          node proposals/d086/cache-v4-contracts.mjs --label=ci
+          node proposals/d086/coastal-accepted-nine-historical.mjs --label=ci
       - name: Reproducible exact procedural cache including all signed-zero payload bytes
-        run: node proposals/d086/precompiled-cache-qualification.mjs src/render/britishCivicMarketModels.mjs fixtures/d086/compiled-cache-v4.json
+        run: node proposals/d086/precompiled-cache-v5-qualification.mjs src/render/britishCivicMarketModels.mjs fixtures/d086/compiled-cache-v5.json
       - name: Exact production geometry parity and optimized compile negative controls
         run: |
-          node proposals/d086/compile-optimization-current-check.mjs
-          node proposals/d086/compile-optimization-invariants.mjs src/render/britishCivicMarketModels.mjs scratch/d086-compile-v3/invariants.json
+          node proposals/d086/precompiled-cache-v5-parity.mjs
+          node proposals/d086/compile-optimization-invariants.mjs src/render/britishCivicMarketModels.mjs scratch/d086-cache-v5-parity/invariants.json
       - name: Actual prior147 binary and all157 canonical architectural identities
         run: |
           node proposals/d086/model-audit.mjs --baseline
@@ -64,7 +70,7 @@ jobs:
       - name: Current closed meshes, architectural facade backing and negative controls
         run: |
           node proposals/d086/mesh-check.mjs
-          node proposals/d086/facade-imprint-v2-check.mjs --label=ci
+          node proposals/d086/facade-imprint-v3-check.mjs --label=ci
       - name: Current native fiscal, services, RNG, history, save, construction and undo
         run: node proposals/d086/native-variant-check.mjs
       - name: Current catalogue43 retains every original interaction and negative control
@@ -99,8 +105,10 @@ jobs:
             scratch/d086-historical/
             scratch/d086-first-candidate-contracts/
             scratch/d086-geometry-v2-contracts/
-            scratch/d086-compile-v3/*.json
-            scratch/d086-compile-v3/*.log
+            scratch/d086-cache-v5-parity/*.json
+            scratch/d086-cache-v5-parity/*.log
+            scratch/d086-cache-v4-contracts/
+            scratch/d086-coastal-accepted-nine-history/
             scratch/d086-geometry-v3-contracts/
             scratch/d086-facade-imprint/
             scratch/d086-scene-budget/
@@ -134,9 +142,11 @@ jobs:
           test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Real catalogue, mouse/touch placement, construction, picking, front/back and save reload
-        run: node proposals/d086/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+        run: node proposals/d086/native-browser-v5-check.mjs --width=${{ matrix.width }} --attempt=1
       - name: Exact real raw PNG inventory and independent production frame join
         run: node proposals/d086/browser-frame-qualification.mjs --manifest=scratch/d086-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json
+      - name: Every original required surface joins actual ordinary-player PNGs and native full-scene frames
+        run: node proposals/d086/browser-surface-qualification-v6.mjs --manifest=scratch/d086-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json --build=scratch/d086-native-build/attempt-1 --cache-manifest=fixtures/d086/compiled-cache-v5.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -172,7 +182,7 @@ jobs:
           test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Separate fresh native page first-use CPU6 and thirty actual commits
-        run: node proposals/d086/native-first-use-cache-check.mjs --width=${{ matrix.width }} --attempt=1
+        run: node proposals/d086/native-first-use-cache-check-v5.mjs --width=${{ matrix.width }} --attempt=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -208,7 +218,7 @@ jobs:
           test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Fresh-profile load, parse, CPU1/CPU6 startup and zero prewarm measurements
-        run: node proposals/d086/native-startup-cache-check.mjs --width=${{ matrix.width }} --attempt=1
+        run: node proposals/d086/native-startup-cache-check-v5.mjs --width=${{ matrix.width }} --attempt=1
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -231,10 +241,10 @@ jobs:
       - run: npm ci
       - name: Independent numerical wall and roof plan, topology and unchanged camera negatives
         run: |
-          node --test proposals/d086/structural-plan-v4.test.mjs proposals/d086/structural-plan-v2.test.mjs
-          node proposals/d086/structural-plan-v4-check.mjs --label=ci
+          node --test proposals/d086/structural-plan-v6.test.mjs proposals/d086/structural-plan-v2.test.mjs
+          node proposals/d086/structural-plan-v6-check.mjs --label=ci
       - name: Every unchanged full-scene required surface remains mandatory
-        run: node proposals/d086/native-surface-plan.mjs --label=ci
+        run: node proposals/d086/native-surface-plan-v6.mjs --label=ci
       - uses: actions/upload-artifact@v4
         if: always()
         with:

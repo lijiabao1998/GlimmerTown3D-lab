@@ -1,0 +1,23 @@
+{
+  "schema": 5,
+  "baseline": "f636cfa0bb89b4336551840f647d14914759f97c",
+  "reason": "Only V4-to-V5 source-lease imports. Every historical assertion is immutable; current router composes the separate finite coastal-call correction over all V4 routes.",
+  "copies": [
+    {
+      "source": "tools/d086-source-v4.test.mjs",
+      "target": "tools/d086-source-v5.test.mjs",
+      "sourceSha256": "db6ab59b3cec1e07ad1f22a088a8d9f0d4bdf6843bc8f6ae6a002c561669afc9",
+      "targetSha256": "ee0388b78e3ce6da1b76278e3ea9f75759130c5c3be98aae920cfdeb007d29d4",
+      "before": "'./d086-source-v4.mjs'",
+      "after": "'./d086-source-v5.mjs'"
+    },
+    {
+      "source": "tools/d085-source-d086-v4.test.mjs",
+      "target": "tools/d085-source-d086-v5.test.mjs",
+      "sourceSha256": "80610ccd2516dc70437064501a517f616f837e6ba205b7032cf206c3816ed969",
+      "targetSha256": "26e04a9277231f07daedb7d495f0dc6d7ab88b067fc58994f5b57fe2854fdc25",
+      "before": "'./d086-source-v4.mjs'",
+      "after": "'./d086-source-v5.mjs'"
+    }
+  ]
+}
