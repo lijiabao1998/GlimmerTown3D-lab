@@ -1,9 +1,10 @@
+import {d084PriorInventory} from './d084-source-v2.mjs';
 // Mandatory independent current-mesh proofs, separate from immutable historical tests.
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {spawnSync}from'node:child_process';import{createHash}from'node:crypto';import{pathToFileURL}from'node:url';import{ROOT}from'./cdp.mjs';import{D083_CURRENT_PATHS}from'./d083-scope.mjs';import{releaseSourceManifest}from'./d082-release-source-v2.mjs';
 const hash=f=>createHash('sha256').update(fs.readFileSync(path.join(ROOT,f))).digest('hex');
 export function d082ReleaseMeshV2(log=()=>{}){
  const directory=path.join(ROOT,'scratch/d082-release-mesh-v2');fs.mkdirSync(directory,{recursive:true});
- const sources=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();assert.deepEqual(sources,[...D083_CURRENT_PATHS,...Object.keys(releaseSourceManifest().added)].sort(),'exact outer current237 source inventory');const sourcePins=Object.fromEntries(sources.map(f=>[f,hash(f)])),commands=[];
+ const sources=fs.readdirSync(path.join(ROOT,'src'),{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>path.relative(ROOT,path.join(e.parentPath,e.name)).replaceAll('\\','/')).sort();assert.deepEqual(d084PriorInventory(sources,f=>fs.readFileSync(path.join(ROOT,f),'utf8')),[...D083_CURRENT_PATHS,...Object.keys(releaseSourceManifest().added)].sort(),'exact outer current237 source inventory');const sourcePins=Object.fromEntries(sources.map(f=>[f,hash(f)])),commands=[];
  const guardNames=['build','triangulate','conform','provenance','verify','components','envelope','exterior','windows','join-contract','join-contract.test','join-reconstruct','join-envelope','join-uv','join-intersections'],guardPins=Object.fromEntries(guardNames.map(n=>{const f='tools/d082-remaining-geometry-'+n+'.mjs';return[f,hash(f)]}));
  const env={...process.env};for(const key of Object.keys(env))if(key.startsWith('D082_'))delete env[key];
  for(const name of ['provenance','verify','components','envelope','exterior','windows','join-intersections']){

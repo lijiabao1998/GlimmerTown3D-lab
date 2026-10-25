@@ -1,0 +1,15 @@
+✔ historical approved-mesh assertion remains unchanged and rejects revised geometry (260.872196ms)
+✔ wrong version, mesh and unexpected emitter or data fail closed (5.376723ms)
+✔ required downward obstruction survives current revision unchanged, never exempted (186.971783ms)
+✔ captured provenance requires every exact source and exact build (2.970138ms)
+✔ finite new geometry revision maps only exact current bytes to immutable approved source (9.306156ms)
+✔ D084 finite exact preimages match independent released Git, fail closed for every source mutation (26.793863ms)
+✔ D084 inventory composition rejects unknown and duplicate source paths without loosening D083 (8.692151ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 926.280246

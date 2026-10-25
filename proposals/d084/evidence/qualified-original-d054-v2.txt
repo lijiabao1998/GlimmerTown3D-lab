@@ -1,0 +1,8 @@
+OK D054 UI actual site panel content and retained-control lifecycle actual sitePanel accessible shell, captured/current distinction, held updates/latest flush, row/button/focus/scroll/capture retention, second pointer, cancel, blur/pagehide, close/backdrop
+OK D054 UI actual on-map diagnostic wording actual cost text preserves counts/mixed reasons/exact money/gesture funding rule/negative sandbox/resource/gas/network qualifications
+OK D054 UI actual commit and undo integration parity 8 real preview→runOp→actual result→open details→undo wrappers paired with unchanged simulation; exact models/history/saves/costs/RNG and original save triggers
+OK D054 UI actual warmup refresh interruption and pipe-layer integration actual warmup pid−1 exclusion, held-stroke day/funds refresh, open interruption, held close across real day, captured estimate age, closed-panel quietness, water→sewage→other layer, dragged tap cancellation
+OK D054 UI actual idle product preparation purity actual eight-pass idle and timer-fallback preparation; same local diagnostics/text path; tools/snapshots/model/history/save/RNG unchanged, six paired future days, genuine-stroke skip, failure/unloaded cleanup, native timing untouched
+OK D054 UI actual UI mutation sensitivity 26 real-source panel/render/close/commit/undo/warmup/refresh/layer/purity mutations rejected by behavioral assertions
+(node:12) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "baseline": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+  "qualification": "D084 finite candidate source contract; does not replace or suppress any historical guard",
+  "files": {
+    "src/cityView.ts": {
+      "beforeSha256": "a2f925605c7fc9b30e87fdc39b8784f77c8bf11a8b12fe9da4b7268f2a2429f6",
+      "afterSha256": "7b69981b6d4d5ae9ac48849132a401ef0580bd4fcb32bf589ec45b30724b43eb"
+    },
+    "src/render/preview.ts": {
+      "beforeSha256": "ae1804013c200f255cc73b479e90d9aa94ddb5dd1757a6eb1f320218d4a18511",
+      "afterSha256": "704778d51098b8900c6072aad2f0dbdf8db71bbf86c0a2e66140d16a0ee1679a"
+    },
+    "src/render/streetFrontage.ts": {
+      "beforeSha256": null,
+      "afterSha256": "032ba98b0fa7981a7db7516ec02e930bad063974abbd300ecceecad8a4741687"
+    }
+  }
+}

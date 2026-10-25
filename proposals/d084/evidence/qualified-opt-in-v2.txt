@@ -1,0 +1,16 @@
+(node:18) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual opt-in call skips all frontage inputs and method access when disabled (3.437732ms)
+✔ actual enabled Preview draws shared edge without changing input world (1.464271ms)
+✔ enabled missing API is not swallowed; unconditional call and disabled enabled-path mutations fail (2.259152ms)
+✔ D084 finite exact preimages match independent released Git, fail closed for every source mutation (19.80736ms)
+✔ D084 inventory composition rejects unknown and duplicate source paths without loosening D083 (5.095014ms)
+✔ D084 outer mesh inventory validates every actual addition before unchanged historical exact list (8.135745ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 174.301536

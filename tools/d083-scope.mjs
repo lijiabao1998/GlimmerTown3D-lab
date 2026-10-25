@@ -1,3 +1,4 @@
+import {D084_CHANGED,D084_ADDED,d084PriorSource,d084PriorInventory} from './d084-source-v2.mjs';
 import {releaseHistoricalSource,releaseSourceManifest} from './d082-release-source-v2.mjs';
 // Finite D083 source accounting only. Runtime imports always use the product.
 import fs from 'node:fs';
@@ -21,7 +22,7 @@ assert.deepEqual(Object.keys(prior).sort(), D082_CURRENT_PATHS, 'exact D082 231-
 assert.deepEqual(Object.keys(manifest.added).sort(), added, 'only five exact D083 additions');
 assert.deepEqual(Object.keys(manifest.modified).sort(), modified, 'only seven exact D083 changes');
 // Outer current additions include the explicitly versioned D082 technical file; historical added stays five.
-export const D083_ADDED = new Set([...added,...Object.keys(releaseSourceManifest().added)]);
+export const D083_ADDED = new Set([...added,...Object.keys(releaseSourceManifest().added),...D084_ADDED]);
 export const D083_CHANGED = Object.freeze([...added, ...modified]);
 export const D083_CURRENT_PATHS = Object.freeze([...D082_CURRENT_PATHS, ...added].sort());
 const pins = { ...prior, ...manifest.added };
@@ -31,6 +32,7 @@ for (const [file, entry] of Object.entries(manifest.modified)) {
   pins[file] = entry.afterSha256;
 }
 export function d083HistoricalBytes(file, read = diskRead) {
+  if(D084_ADDED.includes(file))return d084PriorSource(file,read(file));
   if(Object.hasOwn(releaseSourceManifest().added,file))return releaseHistoricalSource(file,read);
   assert.ok(Object.hasOwn(pins, file), file + ' belongs to D083 source inventory');
   assert.equal(typeof read, 'function', file + ' exact allowed source: reader required');
@@ -63,6 +65,7 @@ export function d083PriorSourceFiles(files, read = diskRead) {
   return priorFiles.filter(file => !D083_ADDED.has(file));
 }
 export function isD083ReviewedSource(file, read = diskRead) {
+  if(D084_CHANGED.includes(file)){d084PriorSource(file,read(file));return true;}
   if (!D083_CHANGED.includes(file)&&!Object.hasOwn(releaseSourceManifest().added,file)) return false;
   d083HistoricalBytes(file, read);
   return true;
@@ -96,6 +99,7 @@ export function d083PriorScopeSource(current) {
 
 // v2 has an explicit additional inventory; original D083 236-path assertion remains intact.
 function releasePriorInventory(files,read){
+ files=d084PriorInventory(files,read);
  const added=Object.keys(releaseSourceManifest().added);
  assert.deepEqual([...files].sort(),[...D083_CURRENT_PATHS,...added].sort(),'exact release-v2 source inventory');
  for(const file of added)releaseHistoricalSource(file,read);

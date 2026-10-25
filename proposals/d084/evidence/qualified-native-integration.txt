@@ -1,0 +1,9 @@
+OK append-only catalogue, eight tools, old rows and gallery coordinates retained
+OK immutable accepted source, finite12-triangle containment correction and exact native affine emission
+OK all130 previously accepted model byte pins retained
+OK every tile blocks roads, water, ruins, craters, buildings and foreign layers without partial writes
+OK insufficient funds, sandbox, tree surcharge, tech and transaction controls
+OK real commitOp places eight four-tile owned buildings; exact save/load/history replay
+OK native child-tile demolition and undo/refund restore complete footprints
+OK nine native days complete construction; regular scene owner attributes and raycast picking
+{"passed":true,"checks":8,"negativeControls":114,"blockedFootprintCases":704,"affineCases":24,"oldAcceptedModelCases":130,"pickedOwners":8}

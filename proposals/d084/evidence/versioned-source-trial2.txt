@@ -1,0 +1,43 @@
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /exact allowed source/. Input:
+
+'AssertionError [ERR_ASSERTION]: src/cityView.ts actual D084 source required\n' +
+  '+ actual - expected\n' +
+  '\n' +
+  "+ 'undefined'\n" +
+  "- 'string'\n"
+
+    at Module.d083ScopeGuards (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/unit-d083-scope.mjs:28:12)
+    at [eval]:1:61 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: AssertionError [ERR_ASSERTION]: src/cityView.ts actual D084 source required
+  + actual - expected
+  
+  + 'undefined'
+  - 'string'
+  
+      at d084PriorSource (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/d084-source-v1.mjs:15:9)
+      at releaseHistoricalSource (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/d082-release-source-v2.mjs:22:39)
+      at d083HistoricalBytes (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/d083-scope.mjs:39:19)
+      at file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/unit-d083-scope.mjs:28:25
+      at getActual (node:assert:611:5)
+      at strict.throws (node:assert:759:24)
+      at Module.d083ScopeGuards (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d084-own/tools/unit-d083-scope.mjs:28:12)
+      at [eval]:1:61 {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'undefined',
+    expected: 'string',
+    operator: 'strictEqual',
+    diff: 'simple'
+  },
+  expected: /exact allowed source/,
+  operator: 'throws',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

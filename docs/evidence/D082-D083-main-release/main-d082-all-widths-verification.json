@@ -1,0 +1,26 @@
+{
+  "sourceCommit": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+  "ciRun": 40122805423,
+  "buildSha256": "020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1",
+  "widths": [
+    {
+      "width": 1440,
+      "pngHashesVerifiedAndIdenticalPR39": 164,
+      "coverageContracts": 18,
+      "coveragePassed": true
+    },
+    {
+      "width": 412,
+      "pngHashesVerifiedAndIdenticalPR39": 164,
+      "coverageContracts": 18,
+      "coveragePassed": true
+    },
+    {
+      "width": 360,
+      "pngHashesVerifiedAndIdenticalPR39": 164,
+      "coverageContracts": 18,
+      "coveragePassed": true
+    }
+  ],
+  "totalPNGs": 492
+}
