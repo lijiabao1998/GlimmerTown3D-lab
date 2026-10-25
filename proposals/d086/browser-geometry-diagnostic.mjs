@@ -1,6 +1,8 @@
 // Read-only official-CI diagnosis of the existing __gt.sceneDigest closure.
 // No browser launch, source hooks, page writes, breakpoints or hash normalization.
 import assert from 'node:assert/strict';import{createHash}from'node:crypto';
+// Scope wrapper metadata only; never evaluates variables or getters.
+export const SCOPE_DESCRIPTION="function(){const d=Object.getOwnPropertyDescriptor(this,'description');return typeof d?.value==='string'?d.value:null;}";
 const ATTRS=['position','normal','uv','color','wStyle','wGlass','wBand','aCon'];
 export const DIAGNOSTIC_SNAPSHOT='(()=>({timeOrigin:performance.timeOrigin,url:location.href,save:__gt.save(),history:__gt.history(),buildings:__gt.buildingList(),sim:__gt.sim(),digest:__gt.sceneDigest()}))()';
 const sha=x=>createHash('sha256').update(typeof x==='string'?x:JSON.stringify(x)).digest('hex'),hex=h=>(h>>>0).toString(16).padStart(8,'0');
@@ -23,18 +25,30 @@ export const EXPORT_OTHER_WORDS=`function(){
 function result(r,label){assert.ok(!r.exceptionDetails,label+' must not throw');assert.ok(r.result,label+' has result');return r.result;}
 export async function collectD086BrowserGeometryDiagnostic(page,{provenance,record=()=>{}}={}){
  for(const k of['buildSha256','sourceTreeSha256','modelSourceSha256'])assert.match(provenance?.[k]??'',/^[a-f0-9]{64}$/);assert.match(provenance.sourceCommit??'',/^[a-f0-9]{40}$/);const group='d086-known-scene-readonly',receipt={qualification:'Exact raw words read from ONLY the actual built object captured by existing __gt.sceneDigest in the immutable official CI page. Not a fixed join or acceptance; original exact join remains mandatory.',provenance:{...provenance},passed:false};
- try{const before=await page.evaluate(DIAGNOSTIC_SNAPSHOT);assert.equal(before.sim.playing,false);assert.equal(typeof before.save,'string');assert.ok(before.save);receipt.before={timeOrigin:before.timeOrigin,url:before.url,worldSha256:sha([before.save,before.history,before.buildings,before.sim]),sceneDigest:before.digest};record(structuredClone(receipt));
+ try{receipt.browserVersion=await page.send('Browser.getVersion');const before=await page.evaluate(DIAGNOSTIC_SNAPSHOT);assert.equal(before.sim.playing,false);assert.equal(typeof before.save,'string');assert.ok(before.save);receipt.before={timeOrigin:before.timeOrigin,url:before.url,worldSha256:sha([before.save,before.history,before.buildings,before.sim]),sceneDigest:before.digest};record(structuredClone(receipt));
   const fn=result(await page.send('Runtime.evaluate',{expression:'__gt.sceneDigest',objectGroup:group,returnByValue:false}),'existing hook');assert.equal(fn.type,'function');assert.ok(fn.objectId);const text=result(await page.send('Runtime.callFunctionOn',{objectId:fn.objectId,functionDeclaration:'function(){return Function.prototype.toString.call(this);}',returnByValue:true}),'existing hook text').value;assert.equal(typeof text,'string');assert.ok(text.length<300);const match=/^\s*\(\s*\)\s*=>\s*([A-Za-z_$][\w$]*)\s*\?\s*([A-Za-z_$][\w$]*)\s*\(\s*\1\s*\)\s*:\s*null\s*$/.exec(text);assert.ok(match,'only exact existing sceneDigest closure shape');const binding=match[1];receipt.hookSha256=sha(text);
-  const properties=await page.send('Runtime.getProperties',{objectId:fn.objectId,ownProperties:true}),scope=properties.internalProperties?.find(p=>p.name==='[[Scopes]]');assert.ok(scope?.value?.objectId,'existing function closure scopes');const list=await page.send('Runtime.getProperties',{objectId:scope.value.objectId,ownProperties:true});let built=null;
-  // CDP's synthetic Scope object cannot be dereferenced by callFunctionOn.
-  // Read descriptors from ONLY the first existing Closure scope, retain only
-  // the exact inferred binding, and never export any scope-variable listing.
-  // Module/Global scopes and unrelated object values are never inspected.
-  const entry=(list.result??[]).find(e=>/^\d+$/.test(e.name)&&/^Closure(?:\s|$)/.test(e.value?.description??''));assert.ok(entry?.value?.objectId,'single actual Closure scope');
-  const descriptorResult=await page.send('Runtime.getProperties',{objectId:entry.value.objectId,ownProperties:true});
-  const candidate=descriptorResult.result?.find(p=>p.name===binding)?.value;
-  if(candidate?.objectId){const check=result(await page.send('Runtime.callFunctionOn',{objectId:candidate.objectId,functionDeclaration:"function(){const d=Object.getOwnPropertyDescriptors(this);return typeof d.buildingMeshes?.value==='function'&&typeof d.pickOwners?.value==='function';}",returnByValue:true}),'known built methods');if(check.value===true)built=candidate.objectId;}
-  assert.ok(built,'actual built object captured by existing hook');const words=result(await page.send('Runtime.callFunctionOn',{objectId:built,functionDeclaration:EXPORT_OTHER_WORDS,returnByValue:true}),'drawn Float32 words').value;receipt.geometry=words;receipt.exactDigest=assertD086LiveGeometryWords(words,before.digest);receipt.browserVersion=await page.send('Browser.getVersion');
+  const properties=await page.send('Runtime.getProperties',{objectId:fn.objectId,ownProperties:true}),scope=properties.internalProperties?.find(p=>p.name==='[[Scopes]]');assert.ok(scope?.value?.objectId,'existing function closure scopes');const list=await page.send('Runtime.getProperties',{objectId:scope.value.objectId,ownProperties:true});assert.ok(!list.exceptionDetails&&Array.isArray(list.result),'actual lexical scope list');
+  // The label is not the identity selector. Search a bounded lexical chain for
+  // ONLY the inferred binding and require a unique structurally verified built
+  // object. Global/Module/With/Eval objects are never dereferenced. Synthetic
+  // wrappers may expose their label as an own data property instead of the
+  // RemoteObject description; that fallback reads metadata only, never getters.
+  const entries=list.result.filter(e=>/^\d+$/.test(e.name)).sort((a,b)=>+a.name-+b.name);assert.ok(entries.length>0&&entries.length<=16,'bounded actual lexical chain');
+  receipt.scopeMetadata=entries.map(e=>({index:+e.name,type:e.value?.type??null,subtype:e.value?.subtype??null,className:e.value?.className??null,description:e.value?.description??null}));record(structuredClone(receipt));
+  const allowed=d=>/^(?:Closure|Block|Local|Script)(?:\s|$)/i.test(d??''),forbidden=d=>/^(?:Global|Module|With|Eval|Catch|Wasm)(?:\s|$)/i.test(d??'');const candidates=[];
+  for(const[e,meta]of entries.map((e,i)=>[e,receipt.scopeMetadata[i]])){
+   if(forbidden(meta.description))continue;let description=meta.description;
+   if(!allowed(description)){assert.ok(e.value?.objectId,'scope metadata object');description=result(await page.send('Runtime.callFunctionOn',{objectId:e.value.objectId,functionDeclaration:SCOPE_DESCRIPTION,returnByValue:true}),'scope wrapper metadata only').value;meta.wrapperDescription=typeof description==='string'?description:null;record(structuredClone(receipt));if(forbidden(description))continue;assert.ok(allowed(description),'unknown scope wrapper must not expose variables');}
+   assert.ok(e.value?.objectId,'bounded lexical scope object');let descriptorResult=await page.send('Runtime.getProperties',{objectId:e.value.objectId,ownProperties:true});assert.ok(!descriptorResult.exceptionDetails&&Array.isArray(descriptorResult.result),'lexical descriptors');
+   let candidate=descriptorResult.result.find(p=>p.name===binding)?.value;
+   // Some protocol versions preserve the documented {description, object}
+   // synthetic wrapper rather than unwrapping it in getProperties.
+   if(!candidate){const ds=descriptorResult.result.find(p=>p.name==='description')?.value,os=descriptorResult.result.find(p=>p.name==='object')?.value;if(ds?.type==='string'&&allowed(ds.value)&&os?.objectId){meta.wrapperUnwrapped=true;descriptorResult=await page.send('Runtime.getProperties',{objectId:os.objectId,ownProperties:true});assert.ok(!descriptorResult.exceptionDetails&&Array.isArray(descriptorResult.result));candidate=descriptorResult.result.find(p=>p.name===binding)?.value;}}
+   if(!candidate?.objectId)continue;
+   const check=result(await page.send('Runtime.callFunctionOn',{objectId:candidate.objectId,functionDeclaration:"function(){const d=Object.getOwnPropertyDescriptors(this);return typeof d.buildingMeshes?.value==='function'&&typeof d.pickOwners?.value==='function';}",returnByValue:true}),'known built methods');if(check.value===true)candidates.push({objectId:candidate.objectId,scopeIndex:+e.name});
+  }
+  assert.equal(candidates.length,1,'unique actual built object captured by existing hook');const built=candidates[0].objectId;receipt.resolvedScopeIndex=candidates[0].scopeIndex;
+  assert.ok(built,'actual built object captured by existing hook');const words=result(await page.send('Runtime.callFunctionOn',{objectId:built,functionDeclaration:EXPORT_OTHER_WORDS,returnByValue:true}),'drawn Float32 words').value;receipt.geometry=words;receipt.exactDigest=assertD086LiveGeometryWords(words,before.digest);
   const after=await page.evaluate(DIAGNOSTIC_SNAPSHOT);assert.deepEqual(after,before,'read-only inspector export never changes world, live geometry or document');receipt.after={timeOrigin:after.timeOrigin,url:after.url,worldSha256:sha([after.save,after.history,after.buildings,after.sim]),sceneDigest:after.digest};receipt.worldUnchanged=true;receipt.passed=true;return structuredClone(receipt);
  }catch(error){receipt.error=error.stack??String(error);throw error;}
  finally{try{await page.send('Runtime.releaseObjectGroup',{objectGroup:group});}finally{record(structuredClone(receipt));}}
