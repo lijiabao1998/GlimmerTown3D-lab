@@ -1,0 +1,9 @@
+{
+  "qualification":"No actual Chromium screenshot or browser placement success; environment launch failures preserved.",
+  "frozenBuild":"scratch/d086-native-build/attempt-1/index.html",
+  "buildSha256":"42f844f6bdeb83a8730bc7462b2bbefe074f93246f1a737ebc5cbaa95eeb7993",
+  "attempt1":{"command":"node proposals/d086/native-browser-check.mjs --width=1440 --attempt=1","executed":true,"browserStarted":false,"screenshots":0,"error":"Chrome automatic fresh-profile retry also failed: process_singleton socket() failed: Operation not permitted; crashpad database required","manifest":"browser-1440-attempt-1/manifest.json"},
+  "supportedEscalation":{"command":"node proposals/d086/native-browser-check.mjs --width=1440 --attempt=2 --root=scratch/d086-native-build/attempt-1","scriptExecuted":false,"browserStarted":false,"error":"bwrap: Can't create file at /home/agent/.codex/sessions: Read-only file system"},
+  "pending":["1440 actual native browser capture","412 actual native browser capture","360 actual native browser capture"],
+  "boundary":"No access or permission requested to the denied sessions path; no filesystem/socket workaround, flags change, alternate executor or remote CI route attempted. Node qualification continues independently."
+}

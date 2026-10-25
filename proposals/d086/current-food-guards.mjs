@@ -1,0 +1,1 @@
+import {d055NativeGuards} from '../../tools/unit-d055-native-d086.mjs';let failed=0;await d055NativeGuards((ok,n,d)=>{console.log(ok?'OK':'NG',n,d??'');if(!ok)failed++;});if(failed)process.exitCode=1;

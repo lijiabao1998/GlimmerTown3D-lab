@@ -1,0 +1,109 @@
+name: D086 native British civic markets
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: d086-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      artifact-id: ${{ steps.build.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Source leases, finite current versions and mandatory release graph negatives
+        run: node --test tools/d086-source-v1.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs
+      - run: npm run typecheck
+      - name: Immutable immediate baseline and original affected historical contracts
+        run: |
+          git worktree add --detach ../GlimmerTown3D-lab-d086-baseline 77b8616382f6115711b2b8eb39735a769b859cde
+          ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d086-baseline/node_modules
+          node proposals/d086/historical-contracts.mjs
+      - name: Actual prior147 binary and all157 canonical architectural identities
+        run: |
+          node proposals/d086/model-audit.mjs --baseline
+          node proposals/d086/model-audit.mjs
+      - name: Current closed meshes, architectural facade backing and negative controls
+        run: |
+          node proposals/d086/mesh-check.mjs
+          node proposals/d086/facade-backing-check.mjs
+      - name: Current native fiscal, services, RNG, history, save, construction and undo
+        run: node proposals/d086/native-variant-check.mjs
+      - name: Current catalogue43 retains every original interaction and negative control
+        run: |
+          node tools/unit-d053-d086.mjs
+          node proposals/d086/current-food-guards.mjs
+      - name: Actual native product build with exact source identity
+        run: |
+          node proposals/d086/native-browser-build.mjs --attempt=1
+          printf '%s\n' "$GITHUB_SHA" > scratch/d086-native-build/attempt-1/source-commit.txt
+          (cd scratch/d086-native-build/attempt-1 && sha256sum index.html provenance.json > index.sha256)
+      - uses: actions/upload-artifact@v4
+        id: build
+        with:
+          name: d086-native-build-${{ github.sha }}
+          path: scratch/d086-native-build/attempt-1/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d086-native-node-${{ github.sha }}
+          path: |
+            scratch/d086-audit/
+            scratch/d086-mesh/
+            scratch/d086-native-variant/
+            scratch/d086-historical/
+          if-no-files-found: error
+          retention-days: 30
+  native-game:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: scratch/d086-native-build/attempt-1/
+          merge-multiple: true
+      - name: Verify exact same build and source SHA
+        run: |
+          test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+          (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
+      - name: Real catalogue, mouse/touch placement, construction, picking, front/back and save reload
+        run: node proposals/d086/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d086-native-game-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d086-native-evidence/
+          if-no-files-found: error
+          retention-days: 30

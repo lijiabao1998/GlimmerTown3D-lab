@@ -1,0 +1,8 @@
+export type Point = [number, number, number];
+export interface CivicMarketDesign { id:string; triangles:{p:Point[];n:Point;color:string;part:string;structural:boolean}[];parts:{name:string;solid:boolean;faces:{points:Point[];color:string}[];start:number}[] }
+export const MODEL_IDS: readonly string[];
+export function createCivicMarketDesign(id:string):CivicMarketDesign;
+export function emitCivicMarketDesign(p:import('./kindArt.ts').Pen,id:string):CivicMarketDesign;
+export function normal(p:Point[]):Point;
+export function subtract(a:Point,b:Point):Point;
+export function cross(a:Point,b:Point):Point;

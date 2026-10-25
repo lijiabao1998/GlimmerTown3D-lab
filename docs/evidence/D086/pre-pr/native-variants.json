@@ -1,0 +1,278 @@
+{
+  "qualification": "Focused native functionality and existing-base-tool equivalence only. Geometry, raw browser, full CI and publication not inferred.",
+  "passed": true,
+  "checks": [
+    {
+      "name": "ten exact append-only variants, original metadata/defaults and eight heritage tools retained",
+      "passed": true
+    },
+    {
+      "name": "all ten reuse exact native fiscal, RNG, world, service grids and transaction semantics",
+      "passed": true
+    },
+    {
+      "name": "all inherited blocker outcomes and insufficient funds match base without partial placement",
+      "passed": true
+    },
+    {
+      "name": "ten native owners retain exact explicit variants through save/load and journal replay",
+      "passed": true
+    },
+    {
+      "name": "native root/child demolition and refund undo restore each explicit variant and footprint",
+      "passed": true
+    },
+    {
+      "name": "nine real simulation days retain native construction, service/fiscal parity and saves",
+      "passed": true
+    }
+  ],
+  "comparisons": 600,
+  "negativeControls": 90,
+  "blockedCases": 195,
+  "owners": [
+    {
+      "id": 1,
+      "k": 87,
+      "lv": 1,
+      "v": 3,
+      "age": 0,
+      "x": 3,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 2,
+      "k": 87,
+      "lv": 1,
+      "v": 4,
+      "age": 0,
+      "x": 9,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 3,
+      "k": 87,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 15,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 4,
+      "k": 91,
+      "lv": 1,
+      "v": 3,
+      "age": 0,
+      "x": 21,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 5,
+      "k": 91,
+      "lv": 1,
+      "v": 4,
+      "age": 0,
+      "x": 27,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 6,
+      "k": 14,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 3,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 7,
+      "k": 15,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 9,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 8,
+      "k": 7,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 15,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 9,
+      "k": 6,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 21,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 10,
+      "k": 13,
+      "lv": 1,
+      "v": 5,
+      "age": 0,
+      "x": 27,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    }
+  ],
+  "placeEvents": 10,
+  "finishedOwners": [
+    {
+      "id": 1,
+      "k": 87,
+      "lv": 1,
+      "v": 3,
+      "age": 9,
+      "x": 3,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 2,
+      "k": 87,
+      "lv": 1,
+      "v": 4,
+      "age": 9,
+      "x": 9,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 3,
+      "k": 87,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 15,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 4,
+      "k": 91,
+      "lv": 1,
+      "v": 3,
+      "age": 9,
+      "x": 21,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 5,
+      "k": 91,
+      "lv": 1,
+      "v": 4,
+      "age": 9,
+      "x": 27,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 6,
+      "k": 14,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 3,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 7,
+      "k": 15,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 9,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 8,
+      "k": 7,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 15,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 9,
+      "k": 6,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 21,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 10,
+      "k": 13,
+      "lv": 1,
+      "v": 5,
+      "age": 9,
+      "x": 27,
+      "z": 12,
+      "size": 1,
+      "abandoned": false,
+      "builtDay": 0
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+// Unchanged affected historical contracts on exact77b8616. Never a replacement
+// for current-head old147/current10 tests or original complete CI.
+import fs from'node:fs';import path from'node:path';import assert from'node:assert/strict';import{spawnSync,execFileSync}from'node:child_process';
+const root=path.resolve('../GlimmerTown3D-lab-d086-baseline'),out=path.resolve('scratch/d086-historical');fs.mkdirSync(out,{recursive:true});assert.equal(execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),'77b8616382f6115711b2b8eb39735a769b859cde');
+const commands=[['d053',['tools/unit-d053.mjs']],['d085-source',['--test','tools/d085-source-v1.test.mjs','tools/d083-release-trigger.test.mjs','.github/scripts/ci-integrity-release-v2.test.mjs']],['d083-native',['proposals/d083/native-integration-check.mjs']]];
+const report=[];for(const[name,args]of commands){const r=spawnSync(process.execPath,args,{cwd:root,encoding:'utf8',maxBuffer:32e6});fs.writeFileSync(path.join(out,name+'.log'),(r.stdout??'')+(r.stderr??''));report.push({name,args,status:r.status,error:r.error?.message});fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));assert.equal(r.status,0,name+' original baseline contract');}
+assert.equal(execFileSync('git',['status','--porcelain','--untracked-files=no'],{cwd:root,encoding:'utf8'}).trim(),'','immutable baseline trackedsource remains unchanged');

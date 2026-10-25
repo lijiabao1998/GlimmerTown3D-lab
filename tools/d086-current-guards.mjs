@@ -1,0 +1,7 @@
+// Explicit two-module current-version routing. Registration/partition inventory
+// stays exhaustive/disjoint; the unchanged historical versions run separately.
+import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
+const sha=x=>createHash('sha256').update(x).digest('hex');
+export function assertD086CurrentGuardVersions(){const bytes=fs.readFileSync(new URL('../fixtures/d086/current-guard-versions.json',import.meta.url),'utf8');assert.equal(sha(bytes),'63231eb2431e158ec15148c29457cef74f498242c7308bdc819c95d2e94324ff');const m=JSON.parse(bytes);for(const r of m.copies){let original=fs.readFileSync(new URL('../'+r.from,import.meta.url),'utf8');assert.equal(sha(original),r.originalSha256,r.from+' original immutable assertion source');for(const c of r.changes){assert.ok(original.includes(c.before));original=original.split(c.before).join(c.after);}const expected='// D086 current-version contract. Original '+r.from+' remains unchanged and tested on77b8616.\n'+original;const actual=fs.readFileSync(new URL('../'+r.to,import.meta.url),'utf8');assert.equal(actual,expected,r.to+' only declared finite version changes');assert.equal(sha(actual),r.currentSha256);}return m.copies;}
+const ROUTES=Object.freeze({'./unit-d053.mjs':'./unit-d053-d086.mjs','./unit-d055-native.mjs':'./unit-d055-native-d086.mjs'});
+export function d086GuardRoute(file){if(!Object.hasOwn(ROUTES,file))return file;assertD086CurrentGuardVersions();return ROUTES[file];}

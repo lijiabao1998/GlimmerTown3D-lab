@@ -30,7 +30,7 @@ jobs:
           chmod +x "$RUNNER_TEMP/d085-chrome"
           echo "CHROME_PATH=$RUNNER_TEMP/d085-chrome" >> "$GITHUB_ENV"
           "$CHROME_BIN" --version
-      - run: node --test tools/d085-control.test.mjs tools/d085-source-v1.test.mjs tools/d084-opt-in.test.mjs tools/d082-release-source-v2.test.mjs
+      - run: node --test tools/d085-control.test.mjs tools/d085-source-d086.test.mjs tools/d084-opt-in.test.mjs tools/d082-release-source-v2.test.mjs
       - run: npm run typecheck && npm run build
       - name: Rebuild immutable 1e7b43e baseline and verify original published bytes
         run: |

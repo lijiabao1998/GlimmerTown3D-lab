@@ -1,0 +1,16 @@
+{
+  "schema":1,"baseline":"77b8616382f6115711b2b8eb39735a769b859cde","goal":200,"acceptedPublished":147,"remaining":53,
+  "batch":"D086","qualification":"Frozen candidate scope, not accepted art or release",
+  "models":[
+    {"k":87,"v":3,"id":"borough-iron-market","name":"鐵玻璃市集","baseTool":"market","tool":"britishIronMarket","size":2,"H":1.15,"cap":1800},
+    {"k":87,"v":4,"id":"raised-guild-market","name":"架高公會市場","baseTool":"market","tool":"britishGuildMarket","size":2,"H":1.35,"cap":1800},
+    {"k":87,"v":5,"id":"butter-market-colonnade","name":"石柱奶油市場","baseTool":"market","tool":"britishButterMarket","size":2,"H":0.95,"cap":1800},
+    {"k":91,"v":3,"id":"gothic-wool-exchange","name":"哥德羊毛交易所","baseTool":"tradepost","tool":"britishWoolExchange","size":2,"H":1.9,"cap":1800},
+    {"k":91,"v":4,"id":"georgian-customs-house","name":"喬治式外貿商館","baseTool":"tradepost","tool":"britishCustomsHouse","size":2,"H":1.35,"cap":1800},
+    {"k":14,"v":5,"id":"fan-plan-free-library","name":"放射閱覽圖書館","baseTool":"library","tool":"britishFreeLibrary","size":1,"H":0.9,"cap":1200},
+    {"k":15,"v":5,"id":"dutch-gabled-post-office","name":"階梯山牆郵局","baseTool":"post","tool":"britishSortingPost","size":1,"H":1.05,"cap":1200},
+    {"k":7,"v":5,"id":"edwardian-board-school","name":"愛德華公學","baseTool":"school","tool":"britishBoardSchool","size":1,"H":0.85,"cap":1200},
+    {"k":6,"v":5,"id":"interwar-fire-station","name":"三車庫消防站","baseTool":"fire","tool":"britishFireStation","size":1,"H":1.25,"cap":1200},
+    {"k":13,"v":5,"id":"garden-cottage-clinic","name":"花園村舍診所","baseTool":"clinic","tool":"britishGardenClinic","size":1,"H":0.85,"cap":1200}
+  ]
+}
