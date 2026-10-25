@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Source leases, finite current versions and mandatory release graph negatives
-        run: node --test tools/d086-source-v2.test.mjs tools/d086-source-v2-lease.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-clean-workspace.test.mjs proposals/d086/facade-imprint-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs
+        run: node --test tools/d086-source-v2.test.mjs tools/d086-source-v2-lease.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-clean-workspace.test.mjs proposals/d086/facade-imprint-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs
       - run: npm run typecheck
       - name: Immutable immediate baseline and original affected historical contracts
         run: |
@@ -118,6 +118,42 @@ jobs:
         if: always()
         with:
           name: d086-native-game-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d086-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  native-input-performance:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: scratch/d086-native-build/attempt-1/
+          merge-multiple: true
+      - name: Verify exact same build and source SHA
+        run: |
+          test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+          (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
+      - name: Separate fresh native page first-use CPU6 and thirty actual commits
+        run: node proposals/d086/native-first-use-check.mjs --width=${{ matrix.width }} --attempt=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d086-native-first-use-${{ matrix.width }}-${{ github.sha }}
           path: scratch/d086-native-evidence/
           if-no-files-found: error
           retention-days: 30

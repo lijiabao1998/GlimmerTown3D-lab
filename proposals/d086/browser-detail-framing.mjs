@@ -1,0 +1,8 @@
+// Capture-only legal zoom selection; product controls, camera position/elevation,
+// scene and clipping stay unchanged. Preserve the complete uncropped raw frame.
+import assert from'node:assert/strict';import * as THREE from'three';
+export function d086DetailZoom({camera,model,building,viewport,n=40}){
+ assert.ok([1440,412,360].includes(viewport.W));assert.ok(Number.isFinite(viewport.H)&&viewport.H>0);assert.ok(n>0&&camera?.pos?.length===3&&camera?.target?.length===3);assert.ok(camera.pos.every(Number.isFinite)&&camera.target.every(Number.isFinite));assert.ok(camera.zoom>=.6&&camera.zoom<=8);assert.ok(model.triangles.length>0);const eye=new THREE.Vector3(...camera.pos),target=new THREE.Vector3(...camera.target),v=eye.clone().sub(target),elevation=Math.asin(v.y/v.length());assert.ok(elevation>=Math.PI*.08&&elevation<=Math.PI*.32,'unchanged legal player elevation');
+ const half=n*.42,aspect=viewport.W/viewport.H,c=new THREE.OrthographicCamera(-half*aspect,half*aspect,half,-half,.1,240);c.position.copy(eye);c.zoom=1;c.lookAt(target);c.updateProjectionMatrix();c.updateMatrixWorld();
+ const p=model.triangles.flatMap(t=>t.p.map(([x,y,z])=>new THREE.Vector3(building.x+x*building.size,building.y0+y*building.H,building.z+z*building.size).project(c)));assert.ok(p.every(q=>q.toArray().every(Number.isFinite)&&q.z>-1&&q.z<1));const x=Math.max(...p.map(q=>Math.abs(q.x))),y=Math.max(...p.map(q=>Math.abs(q.y)));assert.ok(x>0&&y>0);const zoom=Math.min(8,.86/x,.55/y);assert.ok(zoom>=.6,'full model must fit within existing legal zoom range');return{zoom,originalZoom:camera.zoom,ndcMaxX:x*zoom,ndcMaxY:y*zoom,vertices:p.length,legalElevation:elevation,near:.1,far:240,mode:'legal-zoom-only-full-raw-frame'};
+}

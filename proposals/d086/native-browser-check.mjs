@@ -3,6 +3,8 @@ import{CIVIC_MARKET_BUILDINGS as CURRENT_MODELS}from'../../src/content/britishCi
 import{verifyD086BrowserProduct}from'./browser-provenance.mjs';
 import{collectD086RebuildPerformance}from'./browser-performance.mjs';
 import{awaitD086CaptureQuiet}from'./browser-capture-quiet.mjs';
+import{d086DetailZoom}from'./browser-detail-framing.mjs';
+import{collectD086BrowserGeometryDiagnostic}from'./browser-geometry-diagnostic.mjs';
 // Actual immutable production HTML. Real native UI/pointer input, no scene adapter.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -60,11 +62,15 @@ try{await withBrowser({width,height,port,root},async({open,page})=>{
   await page.evaluate('__gt.simStep(4);__gt.setDayFrac(0);__gt.setVisT(2.2)');assert.deepEqual((await page.evaluate('__gt.conCheck()')).bad,[]);await shot('construction-day4');
   await page.evaluate('__gt.simStep(5);__gt.setDayFrac(0);__gt.setVisT(2.2)');await settle();const rows=await buildings(),current=rows.filter(b=>MODELS.some(m=>m.k===b.k&&m.v===b.v));assert.equal(current.length,10);assert.ok(current.every(b=>b.age>=9));manifest.completedBuildings=current;
   const boxes=await page.evaluate('__gt.ownerBoxes()');manifest.nativeOwnerBoxes=boxes;manifest.meshStats=await page.evaluate('__gt.meshStats()');manifest.sceneDigest=await page.evaluate('__gt.sceneDigest()');
+  const geometryFile=path.join(out,'live-other-geometry.json');assert.ok(!fs.existsSync(geometryFile),'preserve diagnostic receipt');await collectD086BrowserGeometryDiagnostic(page,{provenance:{buildSha256:manifest.buildSha256,sourceTreeSha256:manifest.sourceTreeSha256,modelSourceSha256:manifest.modelSourceSha256,sourceCommit:manifest.sourceCommit},record:r=>fs.writeFileSync(geometryFile,JSON.stringify(r))});
   // Frozen generated mesh parity, not an independent architectural acceptance claim.
   for(const b of current){const m=MODELS.find(m=>m.k===b.k&&m.v===b.v),model=build.modelReferences[m.id],pos=model.triangles.flatMap(t=>t.p.map(([x,y,z])=>[b.x+x*m.size,b.y0+y*m.H,b.z+z*m.size])),box=boxes[b.id];assert.ok(box);assert.equal(box[0],model.triangles.length);const expected=[0,1,2].map(k=>Math.min(...pos.map(p=>p[k]))).concat([0,1,2].map(k=>Math.max(...pos.map(p=>p[k]))));assert.deepEqual(box.slice(1),expected,'actual native exact CPU bounds');}
   const worldBefore=await page.evaluate('JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList()])');
   await page.evaluate(`__gt.view(16,9,${width===1440?1.1:.6})`);await shot('ten-context');
   for(const b of current){const m=MODELS.find(m=>m.k===b.k&&m.v===b.v),zoom=Math.min(8,(width===1440?8:5.5)/m.size);await page.evaluate(`__gt.focusBuilding(${b.id},${zoom})`);await settle();const pick=await page.evaluate(`__gt.pickTest(${b.id})`);assert.equal(pick?.got?.id,b.id,'actual browser raycast picks '+m.id);manifest.placements.find(p=>p.owner===b.id).browserPick=pick;await shot(m.id+'-front',b,m);await page.evaluate('__gt.spin(Math.PI)');await settle();await shot(m.id+'-back',b,m);}
+  // Additive close pairs retain all twenty original front/back views above.
+  // Use only existing legal zoom and ordinary front/back angle; nothing hidden.
+  for(const b of current){const m=MODELS.find(m=>m.k===b.k&&m.v===b.v);for(const side of['front','back']){await page.evaluate(`__gt.focusBuilding(${b.id},1)`);if(side==='back')await page.evaluate('__gt.spin(Math.PI)');await settle();const camera=await page.evaluate('__gt.cam()'),fit=d086DetailZoom({camera,model:build.modelReferences[m.id],building:{...b,H:m.H},viewport:{W:width,H:height}});await page.evaluate(`__gt.focusBuilding(${b.id},${fit.zoom})`);if(side==='back')await page.evaluate('__gt.spin(Math.PI)');await settle();await shot(m.id+'-detail-'+side,b,m);manifest.shots.at(-1).detailFraming=fit;write();}}
   assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history(),__gt.buildingList()])'),worldBefore,'camera/selection probes preserve actual save/history');
   const finalCode=await page.evaluate('__gt.save()');assert.ok(finalCode);fs.writeFileSync(path.join(out,'actual-ui-day9.code.txt'),finalCode);await page.evaluate('__gt.saveNow()');await page.evaluate('__gt.journalFlush()');
   await open('sample=mine');await settle();assert.equal(await page.evaluate('__gt.ui().dock'),'build');assert.equal(await page.evaluate('__gt.buildingCount()'),16);const reload=await buildings();assert.deepEqual(reload.filter(b=>MODELS.some(m=>m.k===b.k&&m.v===b.v)).map(b=>[b.id,b.k,b.v,b.x,b.z,b.size]),current.map(b=>[b.id,b.k,b.v,b.x,b.z,b.size]));manifest.actualBrowserSaveReload={passed:true,sample:await page.evaluate('__gt.sample'),note:await page.evaluate('__gt.loadNote()'),buildings:16,newOwnersRetained:10};
@@ -72,5 +78,5 @@ try{await withBrowser({width,height,port,root},async({open,page})=>{
   manifest.rebuildPerformance=await collectD086RebuildPerformance(page,{record:r=>{manifest.rebuildPerformance=r;write();}});
   assert.deepEqual(page.errors,[]);assert.ok(page.requests.every(u=>u.startsWith(`http://127.0.0.1:${port}/`)));manifest.chrome=page.chrome;manifest.pageUrl=await page.evaluate('location.href');
  }finally{manifest.errors=[...page.errors];manifest.requests=[...page.requests];write();}
-});manifest.complete=true;write();console.log('COMPLETE NATIVE',width,manifest.shots.length,'PNGs; ten actual UI placements/picks/save reload');
+});manifest.complete=true;write();console.log('COMPLETE NATIVE',width,manifest.shots.length,'PNGs including additive legal-zoom detail pairs; ten actual UI placements/picks/save reload');
 }catch(e){manifest.failure=e.stack??String(e);write();throw e;}
