@@ -1,0 +1,87 @@
+{
+  "qualification": "Source-bound current actual architecture and ordinary-player numerical evidence. Not official raw-image art acceptance or release.",
+  "proceduralSource": {
+    "path": "proposals/d086/original-player-guild-gallery-procedural-authority.mjs",
+    "sha256": "f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25"
+  },
+  "packedSource": {
+    "path": "src/render/britishCivicMarketModels.mjs",
+    "sha256": "0c8bd1561226161d08e2fbaae6c03841b023604cc26cb5b62eee43ea9aa18a64"
+  },
+  "cameraPlan": {
+    "path": "proposals/d086/original-player-final-repair-camera-plan-v7.json",
+    "sha256": "34bf612b0a619ef9f6d92ea0ac4aef3ed724c1c758886aa93d25bc6f207d5a13"
+  },
+  "structuralPlan": {
+    "path": "proposals/d086/structural-plan-v7.json",
+    "sha256": "e09b32073e2e7b29821588154654368ba312cacbdf1fb13ffe8d146eeb83cce1"
+  },
+  "finiteSourceEdits": {
+    "path": "proposals/d086/original-player-guild-gallery-deltas-v7.json",
+    "sha256": "96dbe9a5b4b11255e3de213301c08908f4086db82a02a1148d9992a7ab199973"
+  },
+  "originalD081": {
+    "path": "tools/d081-frame.mjs",
+    "sha256": "2a6510fe84db1a233040df0dc2cda24ed1e1a40113518a41be506809cf2d73fb"
+  },
+  "nativeReport": {
+    "path": "/tmp/d086-guild-access-v7h/all-native/report.json",
+    "sha256": "b13925c0af29f6042d6a2e1832355571a75ca86ad1de22adac0dc792072c3b7f"
+  },
+  "exactStoredCameraReplay": {
+    "path": "/tmp/d086-guild-access-v7h/all-native/stored-view-replay/report.json",
+    "sha256": "5c9d3c9732c9e69953ef82c6441a3e64d5df023a6c37c8eaf37b7e4c88edf570"
+  },
+  "exactCurrentNativeArrayParity": {
+    "path": "/tmp/d086-guild-access-v7h/current-native-exact-parity.json",
+    "sha256": "848fc701f2870c407a908c6c9942266bdda43ad0d5133fc443e3faa4e03f4577"
+  },
+  "currentStructural": {
+    "path": "scratch/d086-surface/structural-v7-final-current.json",
+    "sha256": "c3c8440700b13d376ca4027e817bf4a941953f26a9ae5a22e4b392910d962c62"
+  },
+  "independentPhysicalReview": {
+    "path": "scratch/d086-independent-guild-v7e/v7h-review.json",
+    "sha256": "bb857a950c90a065f040384c0ec1ff7d40b6cb29d998a9756ba4a101b84de4ea"
+  },
+  "independentCompleteCoplanarReview": {
+    "path": "scratch/d086-independent-guild-v7e/v7h-all-coplanar-pairs-v2.json",
+    "sha256": "3f29ea13e32e6ca79d69c616fe93ebb9932a6c9f77d44b9fc7ff1a57ca7388d5"
+  },
+  "cases": [
+    {
+      "width": 1440,
+      "models": 10,
+      "required": 26416,
+      "original48Missing": 114,
+      "storedViews": 88,
+      "remaining": 0
+    },
+    {
+      "width": 412,
+      "models": 10,
+      "required": 26416,
+      "original48Missing": 114,
+      "storedViews": 88,
+      "remaining": 0
+    },
+    {
+      "width": 360,
+      "models": 10,
+      "required": 26416,
+      "original48Missing": 114,
+      "storedViews": 88,
+      "remaining": 0
+    }
+  ],
+  "structuralTotals": {
+    "solids": 102,
+    "triangles": 6034,
+    "negativeControls": 12374
+  },
+  "allOriginal79CamerasRetained": true,
+  "sourceGeometrySha256": "1bf7b4418bab1541041b56b7dc797649adc4cdc01af9a4d901068dfdb410d5bc",
+  "browserJoined": false,
+  "artAccepted": false,
+  "originalPaintPointReplay": "Separate independent replay of unchanged 11857 unique / 12375 incidence original paint points is pending; raw intent/backing preservation is not substituted for that proof."
+}

@@ -173,3 +173,5 @@
 | 2026-10-24 | D084 v2 候選修復 | 保留完整 CI 五項首紅；預設關閉不讀 frontage 參數，原 D054 六組／26 負控不變全過；外層精確新增來源契約，七組 mesh qualification 全過 | 最終 head Chromium／全 CI 待跑；圖審未完成，未合併未發布 |
 
 - D085（候選，2026-10-25）：原生道路共邊提示開關。只讀 UI/render 狀態，重用 D084 金線；固定來源契約與生命週期負控。本地 focused、型別、建置及歷史 D054/mesh 通過；真三尺寸與全 CI 尚待，未圖審／合併／發布。首次測試語法錯誤與修復保留於 proposals/d085/evidence。
+
+- 2026-10-25 D086 GUILD ACCESS V7 CANDIDATE: actual gallery/landing/closed stair and lower storefront door repair; 498 current Node tests, 16 immutable fae groups, 30 required-surface cases and all11,857 old paint points pass locally. Cached/procedural157-model parity and native/fiscal/save/undo guards retained. Official fae full CI green but its real art blocker remains historical; new exact-head Chrome/raw PNG/performance/full CI and visual review are pending. Published147, candidate10, no merge/deploy. See proposals/d086/evidence/guild-v7-preflight.

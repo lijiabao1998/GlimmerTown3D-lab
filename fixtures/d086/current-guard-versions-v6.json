@@ -1,0 +1,23 @@
+{
+  "schema": 6,
+  "baseline": "fae5c91611b8af0a407e5ddadf6fbb07bf59b6f9",
+  "reason": "Only exact V5-to-V6 source-lease imports; every prior assertion and unit route remains unchanged. The real guild access revision affects one current product model file only.",
+  "copies": [
+    {
+      "source": "tools/d086-source-v5.test.mjs",
+      "target": "tools/d086-source-v6.test.mjs",
+      "sourceSha256": "ee0388b78e3ce6da1b76278e3ea9f75759130c5c3be98aae920cfdeb007d29d4",
+      "targetSha256": "700f7cc3578134befccc6faaa4853820d367de93b6d0782bd4636a3cfc45be75",
+      "before": "'./d086-source-v5.mjs'",
+      "after": "'./d086-source-v6.mjs'"
+    },
+    {
+      "source": "tools/d085-source-d086-v5.test.mjs",
+      "target": "tools/d085-source-d086-v6.test.mjs",
+      "sourceSha256": "26e04a9277231f07daedb7d495f0dc6d7ab88b067fc58994f5b57fe2854fdc25",
+      "targetSha256": "a36bf7f6718cdfa522dd1b53ba925161e8bf1bc465075568ef82720e30cbb73b",
+      "before": "'./d086-source-v5.mjs'",
+      "after": "'./d086-source-v6.mjs'"
+    }
+  ]
+}

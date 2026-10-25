@@ -1,0 +1,81 @@
+{
+  "baseline": "fae5c91611b8af0a407e5ddadf6fbb07bf59b6f9",
+  "pairs": [
+    [
+      "d086-source-v5",
+      "d086-source-v6"
+    ],
+    [
+      "d086-current-guards-v5",
+      "d086-current-guards-v6"
+    ],
+    [
+      "freeze-source-v5",
+      "freeze-source-v6"
+    ],
+    [
+      "d086-validation-v5",
+      "d086-validation-v6"
+    ],
+    [
+      "browser-geometry-compare-v5",
+      "browser-geometry-compare-v6"
+    ],
+    [
+      "precompiled-cache-v5",
+      "precompiled-cache-v6"
+    ],
+    [
+      "compiled-cache-v5.json",
+      "compiled-cache-v6.json"
+    ],
+    [
+      "browser-cache-observation-v5",
+      "browser-cache-observation-v6"
+    ],
+    [
+      "browser-cache-v5-copies",
+      "browser-cache-v6-copies"
+    ],
+    [
+      "native-first-use-cache-check-v5",
+      "native-first-use-cache-check-v6"
+    ],
+    [
+      "native-startup-cache-check-v5",
+      "native-startup-cache-check-v6"
+    ],
+    [
+      "native-browser-v5",
+      "native-browser-v6"
+    ],
+    [
+      "facade-imprint-v3",
+      "facade-imprint-v4"
+    ],
+    [
+      "structural-plan-v6",
+      "structural-plan-v7"
+    ],
+    [
+      "native-surface-plan-v6",
+      "native-surface-plan-v7"
+    ],
+    [
+      "browser-surface-qualification-v6",
+      "browser-surface-qualification-v7"
+    ],
+    [
+      "d086-cache-v5-parity",
+      "d086-cache-v6-parity"
+    ]
+  ],
+  "anchor": "      - name: Reproducible exact procedural cache including all signed-zero payload bytes\n",
+  "addition": "      - name: Actual immutable V5 source, full cache and ordinary-player surface contracts\n        run: |\n          git worktree add --detach ../GlimmerTown3D-lab-d086-cache-v5 fae5c91611b8af0a407e5ddadf6fbb07bf59b6f9\n          ln -s \"$PWD/node_modules\" ../GlimmerTown3D-lab-d086-cache-v5/node_modules\n          node proposals/d086/cache-v5-contracts.mjs --label=ci\n",
+  "testAnchor": "proposals/d086/browser-startup-cache-contract.test.mjs",
+  "testAddition": " proposals/d086/guild-access-v7.test.mjs proposals/d086/v6-workflow-copy.test.mjs proposals/british-program/ledger-check.test.mjs",
+  "ledgerAnchor": "          node proposals/d086/model-audit.mjs\n",
+  "ledgerAddition": "          node proposals/british-program/ledger-check.mjs\n",
+  "artifactAnchor": "            scratch/d086-cache-v4-contracts/",
+  "artifactAddition": "\n            scratch/d086-cache-v5-contracts/"
+}

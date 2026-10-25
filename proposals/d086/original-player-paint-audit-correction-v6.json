@@ -1,0 +1,1791 @@
+{
+  "qualification": "Additive correction to the old-paint membership inventory ONLY. Full original D081 required-surface results stay separate and unchanged. No product, camera, classifier, threshold, historical probe or gate edits. Numerical independent audit is not Chrome or art approval.",
+  "sourceSha256": "a30a4c089a71537acc389b9387ec117ded4c508b5f403281ace477afaf97e61b",
+  "oldSourceSha256": "cbaf9009d122d66915f0deb21b4540cba4b2e4816c2265a7d17536710a45cc73",
+  "packedSourceSha256": "aa340cd05f885204da0a4aa2b49da9937eeee565dc79925c9c041bbd9ef668cf",
+  "previousHeuristic": {
+    "unique": 11707,
+    "incidences": 12224,
+    "summarySha256": "b5ed80ed401b56c46ff383bebe820bdfcb1cf9d824de7aef90f8ce55e5bf1a26"
+  },
+  "corrected": {
+    "unique": 11857,
+    "incidences": 12375,
+    "oldIntents": 410,
+    "additionalUnique": 159,
+    "centroidOnlyOutsideIntent": 9,
+    "hidden": 0,
+    "passed": true
+  },
+  "method": "Each unchanged required point is located in its actual old world-Float32 triangle; barycentric weights pull it back into the exact source triangle and original intended polygon. Actual triangle color/host/plane required. No centroid or whole-triangle membership shortcut, no moved points or changed requiredness/rays. The original imprint polygon boundary scale is retained.",
+  "fullIndependentReceipt": {
+    "file": "original-player-painted-point-membership-v6.json.gz",
+    "gzipSha256": "97d10b252561c2dc31ce27bda98f8998cab368445ea1bb40d6583689426de6db",
+    "jsonSha256": "0d29940e9ef046cc0eac68f75cb2e56e6423c6666371ed3c082d56d70523c301",
+    "bytes": 40990,
+    "decodedBytes": 681613
+  },
+  "models": [
+    {
+      "id": "borough-iron-market",
+      "oldIntents": 65,
+      "uniqueOldPaintPoints": 1945,
+      "incidences": 2009,
+      "oldCentroidSelection": 1939,
+      "additionalPerPoint": [
+        "mesh-1-triangle-1321-barycentric-1",
+        "mesh-1-triangle-1321-barycentric-2",
+        "mesh-1-triangle-1325-barycentric-2",
+        "mesh-1-triangle-1325-barycentric-3",
+        "original-southeast-grid-10-5",
+        "original-southeast-grid-11-3"
+      ],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 2.0610788557373008e-10,
+      "oldContractSha256": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+      "currentContractSha256": "26e763c70e7701e64fbcc604895282b058b21ee16e3d11d8003df0b414e2bd84",
+      "oldRequiredContractSize": 3281,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              4,
+              0,
+              5
+            ],
+            "pos": [
+              68,
+              52.25578117937446,
+              69.00000000000001
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+          "visible": 1871
+        },
+        {
+          "id": "surface-e2-y7",
+          "camera": {
+            "target": [
+              4,
+              0,
+              5
+            ],
+            "pos": [
+              -17.43030909522789,
+              88.24203007733601,
+              -46.73734286354669
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+          "visible": 1631
+        },
+        {
+          "id": "surface-e2-y13",
+          "camera": {
+            "target": [
+              4,
+              0,
+              5
+            ],
+            "pos": [
+              -17.430309095227884,
+              88.24203007733601,
+              56.73734286354669
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+          "visible": 1793
+        },
+        {
+          "id": "surface-e2-y3",
+          "camera": {
+            "target": [
+              4,
+              0,
+              5
+            ],
+            "pos": [
+              55.73734286354668,
+              88.24203007733601,
+              -16.430309095227894
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "a4bf20b7242a4af3446971082e726fd192d4aa2c0fda73e01736e2a0e381c0cc",
+          "visible": 1804
+        }
+      ]
+    },
+    {
+      "id": "raised-guild-market",
+      "oldIntents": 28,
+      "uniqueOldPaintPoints": 587,
+      "incidences": 639,
+      "oldCentroidSelection": 568,
+      "additionalPerPoint": [
+        "mesh-1-triangle-1617-barycentric-2",
+        "mesh-1-triangle-1617-barycentric-3",
+        "mesh-1-triangle-1618-barycentric-2",
+        "mesh-1-triangle-1618-barycentric-3",
+        "mesh-1-triangle-1619-barycentric-1",
+        "mesh-1-triangle-1619-barycentric-2",
+        "original-southeast-grid-15-4",
+        "original-southeast-grid-16-2",
+        "original-southeast-grid-17-2",
+        "original-southeast-grid-18-2",
+        "original-southeast-grid-18-4",
+        "original-southeast-grid-19-2",
+        "mesh-1-triangle-1593-barycentric-2",
+        "mesh-1-triangle-1593-barycentric-3",
+        "mesh-1-triangle-1594-barycentric-2",
+        "mesh-1-triangle-1594-barycentric-3",
+        "mesh-1-triangle-1595-barycentric-2",
+        "mesh-1-triangle-1595-barycentric-3",
+        "mesh-1-triangle-1633-barycentric-3"
+      ],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 5.0089517297348945e-11,
+      "oldContractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+      "currentContractSha256": "f3cb1fbc7a3098d633305927d670d2f3760e52e4a7647a82d840245bdd72f468",
+      "oldRequiredContractSize": 2197,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              74,
+              52.25578117937446,
+              69.00000000000001
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1150
+        },
+        {
+          "id": "surface-e0-y8",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -61.579103663915774,
+              25.990969662701353,
+              -66.5791036639158
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 772
+        },
+        {
+          "id": "surface-e0-y13",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -28.73833175487156,
+              25.990969662701353,
+              98.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1306
+        },
+        {
+          "id": "surface-e1-y4",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              74.00000000000001,
+              52.25578117937446,
+              -59
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 854
+        },
+        {
+          "id": "surface-e2-y3",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              61.73734286354668,
+              88.24203007733601,
+              -16.430309095227894
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 839
+        },
+        {
+          "id": "surface-e1-y2",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              100.50966799187809,
+              52.25578117937446,
+              5.000000000000005
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 643
+        },
+        {
+          "id": "surface-e0-y7",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -28.738331754871574,
+              25.990969662701353,
+              -88.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 970
+        },
+        {
+          "id": "surface-e0-y11",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -83.52260590631933,
+              25.990969662701353,
+              43.73833175487152
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1047
+        },
+        {
+          "id": "surface-e2-y1",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              61.73734286354668,
+              88.24203007733601,
+              26.4303090952279
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1108
+        },
+        {
+          "id": "surface-e1-y5",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              44.63655040935662,
+              52.25578117937446,
+              -78.6200297520881
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 852
+        },
+        {
+          "id": "surface-e0-y5",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              48.738331754871595,
+              25.990969662701353,
+              -88.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 854
+        },
+        {
+          "id": "retained-dense-e0-y181",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              8.23332537207062,
+              25.990969662701353,
+              -96.21272164811218
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1063
+        },
+        {
+          "id": "new-stair-e0-y179",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              11.766674627929405,
+              25.990969662701353,
+              -96.21272164811218
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 842
+        },
+        {
+          "id": "new-stair-e0-y320",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -55.068193619112165,
+              25.990969662701353,
+              82.54525350919252
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1119
+        },
+        {
+          "id": "new-stair-e0-y340",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              -24.622062672309042,
+              25.990969662701353,
+              100.1233354071119
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 1306
+        },
+        {
+          "id": "new-stair-e9-y179",
+          "camera": {
+            "target": [
+              10,
+              0,
+              5
+            ],
+            "pos": [
+              11.22047968156183,
+              77.66722676946227,
+              -64.92123412779901
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "f09ab52ce5ac693ba92006528689fb00c861632d93f6d80d0543142e5285fe44",
+          "visible": 831
+        }
+      ]
+    },
+    {
+      "id": "butter-market-colonnade",
+      "oldIntents": 0,
+      "uniqueOldPaintPoints": 0,
+      "incidences": 0,
+      "oldCentroidSelection": 0,
+      "additionalPerPoint": [],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 0,
+      "oldContractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+      "currentContractSha256": "a9b2287f3d980b57819c0ea5e2205069dde0e20c5e6d381c1ac5ac1f6520b660",
+      "oldRequiredContractSize": 2047,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              80,
+              52.25578117937446,
+              69.00000000000001
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 683
+        },
+        {
+          "id": "surface-e0-y9",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -77.52260590631928,
+              25.990969662701353,
+              -33.73833175487164
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 311
+        },
+        {
+          "id": "surface-e0-y13",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -22.73833175487156,
+              25.990969662701353,
+              98.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 606
+        },
+        {
+          "id": "surface-e0-y3",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              109.52260590631931,
+              25.990969662701353,
+              -33.738331754871574
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 513
+        },
+        {
+          "id": "surface-e0-y5",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              54.738331754871595,
+              25.990969662701353,
+              -88.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 503
+        },
+        {
+          "id": "surface-e0-y1",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              109.52260590631931,
+              25.990969662701353,
+              43.73833175487159
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 592
+        },
+        {
+          "id": "surface-e0-y15",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              54.73833175487152,
+              25.990969662701353,
+              98.52260590631934
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 687
+        },
+        {
+          "id": "surface-e0-y7",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -22.738331754871574,
+              25.990969662701353,
+              -88.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 470
+        },
+        {
+          "id": "surface-e0-y12",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -55.5791036639158,
+              25.990969662701353,
+              76.57910366391576
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 376
+        },
+        {
+          "id": "surface-e0-y14",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              15.999999999999975,
+              25.990969662701353,
+              106.2281391840194
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 544
+        },
+        {
+          "id": "retained-dense-e0-y1",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              17.76667462792941,
+              25.990969662701353,
+              106.21272164811218
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 647
+        },
+        {
+          "id": "retained-dense-e0-y23",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              55.55298505824117,
+              25.990969662701353,
+              98.180993424849
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 706
+        },
+        {
+          "id": "retained-dense-e0-y69",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              110.50460935293493,
+              25.990969662701353,
+              41.276920675663305
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 612
+        },
+        {
+          "id": "retained-dense-e0-y91",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              117.21272164811218,
+              25.990969662701353,
+              3.233325372070592
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 517
+        },
+        {
+          "id": "retained-dense-e0-y181",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              14.23332537207062,
+              25.990969662701353,
+              -96.21272164811218
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 440
+        },
+        {
+          "id": "retained-dense-e0-y327",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -39.13279604155117,
+              25.990969662701353,
+              89.89706098151999
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 597
+        },
+        {
+          "id": "retained-dense-e0-y342",
+          "camera": {
+            "target": [
+              16,
+              0,
+              5
+            ],
+            "pos": [
+              -15.281215316814535,
+              25.990969662701353,
+              101.27368140339442
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "6738a11b60ddd3c84041acd6a328ef48091641bcfcffe813d0d70c60746bf523",
+          "visible": 612
+        }
+      ]
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "oldIntents": 49,
+      "uniqueOldPaintPoints": 1339,
+      "incidences": 1372,
+      "oldCentroidSelection": 1337,
+      "additionalPerPoint": [
+        "mesh-1-triangle-2935-barycentric-3",
+        "mesh-1-triangle-2936-barycentric-1",
+        "mesh-1-triangle-2938-barycentric-2",
+        "mesh-1-triangle-2938-barycentric-3",
+        "mesh-1-triangle-2939-barycentric-2",
+        "mesh-1-triangle-2939-barycentric-3",
+        "mesh-1-triangle-2940-barycentric-1",
+        "mesh-1-triangle-2940-barycentric-2",
+        "original-southeast-grid-5-2"
+      ],
+      "centroidOnlyOutsideIntent": [
+        "mesh-1-triangle-2933-barycentric-3",
+        "original-southeast-grid-0-4",
+        "original-southeast-grid-1-4",
+        "mesh-1-triangle-2937-barycentric-1",
+        "original-southeast-grid-4-0",
+        "original-southeast-grid-5-0",
+        "original-southeast-grid-6-0"
+      ],
+      "hidden": [],
+      "maximumPullbackError": 2.7972743273022633e-12,
+      "oldContractSha256": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+      "currentContractSha256": "761b8d693a6c38df975f88ab209784f8b177f54db6843abb718a7eabe81b773e",
+      "oldRequiredContractSize": 2184,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              22,
+              0,
+              5
+            ],
+            "pos": [
+              86,
+              52.25578117937446,
+              69.00000000000001
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+          "visible": 1236
+        },
+        {
+          "id": "surface-e0-y9",
+          "camera": {
+            "target": [
+              22,
+              0,
+              5
+            ],
+            "pos": [
+              -71.52260590631928,
+              25.990969662701353,
+              -33.73833175487164
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+          "visible": 755
+        },
+        {
+          "id": "surface-e2-y4",
+          "camera": {
+            "target": [
+              22,
+              0,
+              5
+            ],
+            "pos": [
+              61.59804789694306,
+              88.24203007733601,
+              -34.59804789694305
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+          "visible": 1450
+        },
+        {
+          "id": "surface-e0-y13",
+          "camera": {
+            "target": [
+              22,
+              0,
+              5
+            ],
+            "pos": [
+              -16.73833175487156,
+              25.990969662701353,
+              98.52260590631931
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "4eaceab574e890b91e2200aa6f70d6b2e3327173b63e0af1eaed9435b0d8c626",
+          "visible": 1220
+        }
+      ]
+    },
+    {
+      "id": "georgian-customs-house",
+      "oldIntents": 75,
+      "uniqueOldPaintPoints": 2027,
+      "incidences": 2172,
+      "oldCentroidSelection": 2027,
+      "additionalPerPoint": [],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 9.227385961815365e-11,
+      "oldContractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+      "currentContractSha256": "151de095c4ad428377ed0c0911c4eb53eb835e1e87f14492c52b7f0386c169c9",
+      "oldRequiredContractSize": 3764,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              28,
+              0,
+              5
+            ],
+            "pos": [
+              92,
+              52.25578117937446,
+              69.00000000000001
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+          "visible": 1446
+        },
+        {
+          "id": "surface-e2-y8",
+          "camera": {
+            "target": [
+              28,
+              0,
+              5
+            ],
+            "pos": [
+              -11.59804789694305,
+              88.24203007733601,
+              -34.598047896943065
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+          "visible": 2412
+        },
+        {
+          "id": "surface-e2-y13",
+          "camera": {
+            "target": [
+              28,
+              0,
+              5
+            ],
+            "pos": [
+              6.569690904772116,
+              88.24203007733601,
+              56.73734286354669
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+          "visible": 1599
+        },
+        {
+          "id": "surface-e2-y5",
+          "camera": {
+            "target": [
+              28,
+              0,
+              5
+            ],
+            "pos": [
+              49.430309095227905,
+              88.24203007733601,
+              -46.73734286354668
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+          "visible": 2260
+        },
+        {
+          "id": "surface-e2-y0",
+          "camera": {
+            "target": [
+              28,
+              0,
+              5
+            ],
+            "pos": [
+              67.59804789694306,
+              88.24203007733601,
+              44.59804789694306
+            ],
+            "zoom": 2.75
+          },
+          "contractSha256": "51378446414273aeb127e46d1d12b6a76422834cf23b5656b66bd22a4e4aefb0",
+          "visible": 1521
+        }
+      ]
+    },
+    {
+      "id": "fan-plan-free-library",
+      "oldIntents": 37,
+      "uniqueOldPaintPoints": 1122,
+      "incidences": 1178,
+      "oldCentroidSelection": 1112,
+      "additionalPerPoint": [
+        "mesh-1-triangle-4197-barycentric-3",
+        "mesh-1-triangle-4198-barycentric-1",
+        "mesh-1-triangle-4200-barycentric-2",
+        "mesh-1-triangle-4200-barycentric-3",
+        "mesh-1-triangle-4201-barycentric-2",
+        "mesh-1-triangle-4201-barycentric-3",
+        "mesh-1-triangle-4202-barycentric-1",
+        "mesh-1-triangle-4202-barycentric-2",
+        "original-southeast-grid-7-10",
+        "original-southeast-grid-8-10",
+        "original-southeast-grid-9-10",
+        "original-southeast-grid-10-8"
+      ],
+      "centroidOnlyOutsideIntent": [
+        "mesh-1-triangle-4195-barycentric-3",
+        "mesh-1-triangle-4199-barycentric-1"
+      ],
+      "hidden": [],
+      "maximumPullbackError": 7.608859291972535e-13,
+      "oldContractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+      "currentContractSha256": "fd035250266acd78046081b25ff0e0c21e402931e56f9cba0c9aab6c7d4d048b",
+      "oldRequiredContractSize": 2139,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              67.5,
+              52.25578117937446,
+              76.50000000000001
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 1488
+        },
+        {
+          "id": "surface-e2-y8",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -36.09804789694305,
+              88.24203007733601,
+              -27.098047896943065
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 821
+        },
+        {
+          "id": "surface-e2-y3",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              55.23734286354668,
+              88.24203007733601,
+              -8.930309095227894
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 1004
+        },
+        {
+          "id": "surface-e2-y13",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -17.930309095227884,
+              88.24203007733601,
+              64.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 1188
+        },
+        {
+          "id": "surface-e2-y15",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              24.93030909522786,
+              88.24203007733601,
+              64.2373428635467
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 1325
+        },
+        {
+          "id": "surface-e2-y14",
+          "camera": {
+            "target": [
+              3.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              3.4999999999999862,
+              88.24203007733601,
+              68.50009637935628
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "1db8d6315d84d700195f0ea1cb950d8f61358d00a48134e6ea443ecd868e8f51",
+          "visible": 1212
+        }
+      ]
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "oldIntents": 40,
+      "uniqueOldPaintPoints": 1486,
+      "incidences": 1558,
+      "oldCentroidSelection": 1486,
+      "additionalPerPoint": [],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 1.1181214108351666e-12,
+      "oldContractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+      "currentContractSha256": "91066a0a1b238b2dde2c2836dfb4e74fda267c1ac5596fba2ed48d5952dc87d7",
+      "oldRequiredContractSize": 2760,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              73.5,
+              52.25578117937446,
+              76.50000000000001
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 2029
+        },
+        {
+          "id": "surface-e2-y7",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -11.93030909522789,
+              88.24203007733601,
+              -39.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 903
+        },
+        {
+          "id": "surface-e2-y5",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              30.930309095227905,
+              88.24203007733601,
+              -39.23734286354668
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 1191
+        },
+        {
+          "id": "surface-e2-y14",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              9.499999999999986,
+              88.24203007733601,
+              68.50009637935628
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 1249
+        },
+        {
+          "id": "surface-e2-y15",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              30.93030909522786,
+              88.24203007733601,
+              64.2373428635467
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 2000
+        },
+        {
+          "id": "surface-e2-y13",
+          "camera": {
+            "target": [
+              9.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -11.930309095227884,
+              88.24203007733601,
+              64.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "a8620573c27f5c85d88b7a7be572fcc4a0c090f95bb7175a0a77270049357756",
+          "visible": 1700
+        }
+      ]
+    },
+    {
+      "id": "edwardian-board-school",
+      "oldIntents": 53,
+      "uniqueOldPaintPoints": 1692,
+      "incidences": 1740,
+      "oldCentroidSelection": 1687,
+      "additionalPerPoint": [
+        "mesh-1-triangle-5295-barycentric-1",
+        "mesh-1-triangle-5295-barycentric-2",
+        "mesh-1-triangle-5298-barycentric-2",
+        "mesh-1-triangle-5298-barycentric-3",
+        "original-southeast-grid-13-11"
+      ],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 2.3825000327405417e-12,
+      "oldContractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+      "currentContractSha256": "e6450a01bfc47329f231b38f13efcf4cbca5e7794e28627bc8260fef3e5cd69a",
+      "oldRequiredContractSize": 2841,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              79.5,
+              52.25578117937446,
+              76.50000000000001
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1606
+        },
+        {
+          "id": "surface-e2-y7",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -5.930309095227891,
+              88.24203007733601,
+              -39.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1374
+        },
+        {
+          "id": "surface-e2-y13",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -5.930309095227884,
+              88.24203007733601,
+              64.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1426
+        },
+        {
+          "id": "surface-e2-y15",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              36.930309095227855,
+              88.24203007733601,
+              64.2373428635467
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1663
+        },
+        {
+          "id": "surface-e2-y14",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              15.499999999999986,
+              88.24203007733601,
+              68.50009637935628
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1028
+        },
+        {
+          "id": "retained-dense-e0-y1",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              17.26667462792941,
+              25.990969662701353,
+              113.71272164811218
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1628
+        },
+        {
+          "id": "retained-dense-e0-y345",
+          "camera": {
+            "target": [
+              15.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -10.699770321112958,
+              25.990969662701353,
+              110.27887398502875
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "57926667cea4f0f064a045a406f88b052801e7e02dbecc91b8cf798cd7cc5075",
+          "visible": 1170
+        }
+      ]
+    },
+    {
+      "id": "interwar-fire-station",
+      "oldIntents": 46,
+      "uniqueOldPaintPoints": 1183,
+      "incidences": 1199,
+      "oldCentroidSelection": 1125,
+      "additionalPerPoint": [
+        "mesh-1-triangle-5470-barycentric-2",
+        "mesh-1-triangle-5470-barycentric-3",
+        "mesh-1-triangle-5471-barycentric-2",
+        "mesh-1-triangle-5471-barycentric-3",
+        "mesh-1-triangle-5472-barycentric-2",
+        "mesh-1-triangle-5472-barycentric-3",
+        "mesh-1-triangle-5473-barycentric-2",
+        "mesh-1-triangle-5473-barycentric-3",
+        "mesh-1-triangle-5474-barycentric-2",
+        "mesh-1-triangle-5474-barycentric-3",
+        "mesh-1-triangle-5475-barycentric-1",
+        "mesh-1-triangle-5475-barycentric-2",
+        "mesh-1-triangle-5480-barycentric-2",
+        "mesh-1-triangle-5480-barycentric-3",
+        "mesh-1-triangle-5485-barycentric-2",
+        "mesh-1-triangle-5485-barycentric-3",
+        "original-southeast-grid-23-9",
+        "mesh-1-triangle-5463-barycentric-2",
+        "mesh-1-triangle-5463-barycentric-3",
+        "mesh-1-triangle-5464-barycentric-2",
+        "mesh-1-triangle-5464-barycentric-3",
+        "mesh-1-triangle-5465-barycentric-2",
+        "mesh-1-triangle-5465-barycentric-3",
+        "mesh-1-triangle-5466-barycentric-2",
+        "mesh-1-triangle-5466-barycentric-3",
+        "mesh-1-triangle-5467-barycentric-2",
+        "mesh-1-triangle-5467-barycentric-3",
+        "mesh-1-triangle-5489-barycentric-2",
+        "mesh-1-triangle-5489-barycentric-3",
+        "mesh-1-triangle-5495-barycentric-2",
+        "mesh-1-triangle-5495-barycentric-3",
+        "mesh-1-triangle-5497-barycentric-2",
+        "mesh-1-triangle-5497-barycentric-3",
+        "mesh-1-triangle-5498-barycentric-2",
+        "mesh-1-triangle-5498-barycentric-3",
+        "mesh-1-triangle-5499-barycentric-2",
+        "mesh-1-triangle-5499-barycentric-3",
+        "original-southeast-grid-18-13",
+        "original-southeast-grid-21-14",
+        "mesh-1-triangle-5459-barycentric-2",
+        "mesh-1-triangle-5459-barycentric-3",
+        "mesh-1-triangle-5482-barycentric-1",
+        "mesh-1-triangle-5482-barycentric-2",
+        "mesh-1-triangle-5490-barycentric-2",
+        "mesh-1-triangle-5490-barycentric-3",
+        "mesh-1-triangle-5491-barycentric-2",
+        "mesh-1-triangle-5491-barycentric-3",
+        "mesh-1-triangle-5492-barycentric-2",
+        "mesh-1-triangle-5492-barycentric-3",
+        "mesh-1-triangle-5493-barycentric-2",
+        "mesh-1-triangle-5493-barycentric-3",
+        "mesh-1-triangle-5494-barycentric-1",
+        "mesh-1-triangle-5494-barycentric-2",
+        "mesh-1-triangle-5496-barycentric-1",
+        "mesh-1-triangle-5496-barycentric-2",
+        "original-southeast-grid-16-18",
+        "original-southeast-grid-19-19",
+        "original-southeast-grid-20-17"
+      ],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 1.7851628172645798e-11,
+      "oldContractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+      "currentContractSha256": "c7a29c0e9a2eafb94af81e4c0c6d781a96ab1dc70a8425219b29f7d8c25f989a",
+      "oldRequiredContractSize": 2408,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              21.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              85.5,
+              52.25578117937446,
+              76.50000000000001
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+          "visible": 1881
+        },
+        {
+          "id": "surface-e0-y13",
+          "camera": {
+            "target": [
+              21.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -17.23833175487156,
+              25.990969662701353,
+              106.02260590631931
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+          "visible": 1888
+        },
+        {
+          "id": "surface-e2-y9",
+          "camera": {
+            "target": [
+              21.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -30.237342863546665,
+              88.24203007733601,
+              -8.93030909522793
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+          "visible": 644
+        },
+        {
+          "id": "surface-e0-y15",
+          "camera": {
+            "target": [
+              21.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              60.23833175487152,
+              25.990969662701353,
+              106.02260590631934
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+          "visible": 1907
+        },
+        {
+          "id": "surface-e0-y14",
+          "camera": {
+            "target": [
+              21.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              21.499999999999975,
+              25.990969662701353,
+              113.7281391840194
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "37384f9954899d72c867fa22e42443b92e4795c3f272aaac99d89e8f00fa9bd0",
+          "visible": 1618
+        }
+      ]
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "oldIntents": 17,
+      "uniqueOldPaintPoints": 476,
+      "incidences": 508,
+      "oldCentroidSelection": 426,
+      "additionalPerPoint": [
+        "mesh-1-triangle-6016-barycentric-2",
+        "mesh-1-triangle-6016-barycentric-3",
+        "mesh-1-triangle-6017-barycentric-2",
+        "mesh-1-triangle-6017-barycentric-3",
+        "mesh-1-triangle-6018-barycentric-2",
+        "mesh-1-triangle-6018-barycentric-3",
+        "mesh-1-triangle-6027-barycentric-2",
+        "mesh-1-triangle-6027-barycentric-3",
+        "mesh-1-triangle-6028-barycentric-2",
+        "mesh-1-triangle-6028-barycentric-3",
+        "mesh-1-triangle-6029-barycentric-1",
+        "mesh-1-triangle-6029-barycentric-2",
+        "mesh-1-triangle-6030-barycentric-2",
+        "mesh-1-triangle-6030-barycentric-3",
+        "mesh-1-triangle-6031-barycentric-2",
+        "mesh-1-triangle-6031-barycentric-3",
+        "mesh-1-triangle-6032-barycentric-2",
+        "mesh-1-triangle-6032-barycentric-3",
+        "mesh-1-triangle-6033-barycentric-2",
+        "mesh-1-triangle-6033-barycentric-3",
+        "mesh-1-triangle-6034-barycentric-2",
+        "mesh-1-triangle-6034-barycentric-3",
+        "original-southeast-grid-9-2",
+        "original-southeast-grid-10-1",
+        "original-southeast-grid-14-1",
+        "mesh-1-triangle-6080-barycentric-2",
+        "mesh-1-triangle-6080-barycentric-3",
+        "mesh-1-triangle-6081-barycentric-2",
+        "mesh-1-triangle-6081-barycentric-3",
+        "mesh-1-triangle-6082-barycentric-2",
+        "mesh-1-triangle-6082-barycentric-3",
+        "mesh-1-triangle-6091-barycentric-2",
+        "mesh-1-triangle-6091-barycentric-3",
+        "mesh-1-triangle-6092-barycentric-2",
+        "mesh-1-triangle-6092-barycentric-3",
+        "mesh-1-triangle-6093-barycentric-1",
+        "mesh-1-triangle-6093-barycentric-2",
+        "mesh-1-triangle-6094-barycentric-2",
+        "mesh-1-triangle-6094-barycentric-3",
+        "mesh-1-triangle-6095-barycentric-2",
+        "mesh-1-triangle-6095-barycentric-3",
+        "mesh-1-triangle-6096-barycentric-2",
+        "mesh-1-triangle-6096-barycentric-3",
+        "mesh-1-triangle-6097-barycentric-2",
+        "mesh-1-triangle-6097-barycentric-3",
+        "mesh-1-triangle-6098-barycentric-2",
+        "mesh-1-triangle-6098-barycentric-3",
+        "original-southeast-grid-3-17",
+        "original-southeast-grid-3-18",
+        "original-southeast-grid-7-18"
+      ],
+      "centroidOnlyOutsideIntent": [],
+      "hidden": [],
+      "maximumPullbackError": 3.694342477045124e-13,
+      "oldContractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+      "currentContractSha256": "38ef5e9c5be6ce2d870987fa13c6da672bf2e2bc14411f31f6094f8fbf1642b4",
+      "oldRequiredContractSize": 1450,
+      "completeOldViewAudits": [
+        {
+          "id": "original",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              91.5,
+              52.25578117937446,
+              76.50000000000001
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1204
+        },
+        {
+          "id": "surface-e2-y7",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              6.069690904772109,
+              88.24203007733601,
+              -39.23734286354669
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 483
+        },
+        {
+          "id": "surface-e0-y13",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -11.23833175487156,
+              25.990969662701353,
+              106.02260590631931
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 996
+        },
+        {
+          "id": "surface-e2-y15",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              48.930309095227855,
+              88.24203007733601,
+              64.2373428635467
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1223
+        },
+        {
+          "id": "surface-e2-y4",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              67.09804789694306,
+              88.24203007733601,
+              -27.09804789694305
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 597
+        },
+        {
+          "id": "surface-e2-y14",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              27.499999999999986,
+              88.24203007733601,
+              68.50009637935628
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1125
+        },
+        {
+          "id": "surface-e0-y15",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              66.23833175487152,
+              25.990969662701353,
+              106.02260590631934
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1189
+        },
+        {
+          "id": "retained-dense-e0-y14",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              51.98930331942498,
+              25.990969662701353,
+              110.72123082912576
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1136
+        },
+        {
+          "id": "retained-dense-e0-y339",
+          "camera": {
+            "target": [
+              27.5,
+              0,
+              12.5
+            ],
+            "pos": [
+              -8.776920675663348,
+              25.990969662701353,
+              107.0046093529349
+            ],
+            "zoom": 5.5
+          },
+          "contractSha256": "f8faee74a9e8794b03ff6d546e5b5609914d88f7eb33ccc1ec3be8365d22ce3b",
+          "visible": 1025
+        }
+      ]
+    }
+  ],
+  "browserJoined": false,
+  "artAccepted": false
+}

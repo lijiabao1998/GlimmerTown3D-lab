@@ -1,0 +1,116 @@
+{
+  "schema": "d086-independent-raw-art-review-v1",
+  "inventorySha256": "63391173f8957ed9dabedcb024c96ddfbaa880f9613c643a3444067615c89b86",
+  "result": "NOT_ACCEPTED_GUILD_ACCESS_BLOCKER",
+  "scope": "Direct viewing of all 60 raw original front/back details at 1440/412/360 plus all 6 raw catalogue/context originals. No renders, crops, edits or product/gate writes.",
+  "models": [
+    {
+      "id": "borough-iron-market",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Distinct tall barrel-roof brick market nave with lower aisle roofs, entrance porch and repeated glazing. No additional visual blocker in six originals."
+    },
+    {
+      "id": "raised-guild-market",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "BLOCKER: detached access logic. Stair reaches right corner, elevated front door is centred well left; narrow floor lip is not a credible walkable gallery. Lower glazed storey has no explicit exterior door in these views; repair must explain credible lower circulation. Other mass/roof/glazing remain distinctive."
+    },
+    {
+      "id": "butter-market-colonnade",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Broad low hipped roof, pediment entrance and genuine tapered engaged capitals, columns and glazed bays remain visible. Small dark roof mark is retained as independently diagnosed pediment-tip cast shadow, not relabelled as z-fight. No additional visual blocker."
+    },
+    {
+      "id": "gothic-wool-exchange",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Tall pointed tower, steep hall roof, projecting entrance and narrow tall glazing distinguish the civic trading hall. No additional visual blocker; specific commercial use is not uniquely inferable from unlabelled pixels alone."
+    },
+    {
+      "id": "georgian-customs-house",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Symmetrical multi-wing, double-chimney composition with substantial gated entrance and regular two-storey fenestration. No additional visual blocker."
+    },
+    {
+      "id": "fan-plan-free-library",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Faceted reading-room rear and radiating roof wings distinguish the compact red-brick public building. Ground entrance is legible; no additional visual blocker. Library function relies partly on catalogue identity."
+    },
+    {
+      "id": "dutch-gabled-post-office",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Twin stepped front gables and paired doors contrast with rear roof and service projection. No additional visual blocker. Postal use relies partly on catalogue identity."
+    },
+    {
+      "id": "edwardian-board-school",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Paired classroom wings, central entrance and supported roof belfry read as a small civic school. Repeated classroom windows remain legible; no additional visual blocker."
+    },
+    {
+      "id": "interwar-fire-station",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Three red engine-bay doors, flat-roof station and tall hose tower are legible. Stone service-link appears joined, without prior unlike-colour co-facing seam. No additional visual blocker."
+    },
+    {
+      "id": "garden-cottage-clinic",
+      "frontBackWidthsViewed": [
+        1440,
+        412,
+        360
+      ],
+      "judgment": "Low cottage wings, central entrance, hipped roofs and chimney form a distinct small institutional cottage. No additional visual blocker. Clinic function relies partly on catalogue identity."
+    }
+  ],
+  "visualFindings": {
+    "distinctiveArchitecturalMassing": true,
+    "noAdditionalBlockerFoundInOtherNine": true,
+    "noObservedModelUiClippingInDetails": true,
+    "noObservedOpenMeshHoles": true,
+    "noObservedNewConflictingFacadeOverlap": true,
+    "guildUpperRouteCredible": false
+  },
+  "catalogueAndContext": "Catalogue is responsive at each width; lower cards terminate in a scrolling viewport above the fixed footer, not a claim that every card is visible. Context demonstrates actual shared world but is too distant to judge small details or access. Specific D086 variant cards are not shown in the initial catalogue view.",
+  "limitations": [
+    "Static front/back images do not prove all-angle visibility, collision, interior circulation, dynamic shadow behaviour or gameplay functionality; separate frozen technical gates remain required.",
+    "Small panes and capital details reduce to few native render-target pixels at 360; no higher-resolution image or concept substitution was used.",
+    "Some intended uses require catalogue/source identity and are not uniquely recognisable from an unlabelled miniature alone.",
+    "The butter roof shadow attribution cites the existing independent ray diagnostic, not a new shadow-map simulation.",
+    "This is independent assistant art review, not owner personal acceptance or release authorization.",
+    "Official CI result and CPU/startup pass were reported by parent; this review independently joins source identities and original PNG bytes but does not rerun CI."
+  ],
+  "nextRequired": "Repair genuine guild stair/entry circulation with physical supported geometry, preserve original D081 and historical contracts, regenerate exact cache/source guards and repeat relevant official native raw art/technical gates; do not merge current guild as accepted."
+}
