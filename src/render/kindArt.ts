@@ -1,3 +1,6 @@
+// D087-BEGIN working-rural-import
+import { drawBritishWorkingRural } from './britishWorkingRuralArt.ts';
+// D087-END working-rural-import
 // D086-BEGIN native-civic-market-import
 import { drawBritishCivicMarket } from './britishCivicMarketArt.ts';
 // D086-END native-civic-market-import
@@ -802,6 +805,9 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
+  // D087-BEGIN working-rural-dispatch
+  if (shape?.p?.nativeWorkingRural === true && drawBritishWorkingRural(new Pen(a))) { const result=USED; USED=null; return result; }
+  // D087-END working-rural-dispatch
   // D086-BEGIN native-civic-market-dispatch
   if (shape?.p?.nativeCivicMarket === true && drawBritishCivicMarket(new Pen(a))) { const result=USED; USED=null; return result; }
   // D086-END native-civic-market-dispatch

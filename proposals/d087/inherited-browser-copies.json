@@ -1,0 +1,22 @@
+{
+  "baseline": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "qualification": "Only actual heritage catalogue total18to29; original eight/ten target placements, dock size, captures, thresholds and every remaining assertion unchanged.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-browser-check-d086.mjs",
+      "target": "proposals/d083/native-browser-check-d087.mjs",
+      "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),18)",
+      "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)",
+      "sourceSha256": "3a0c0aeb49187c5d2d918a723e0fc742611df1fe23a46194d45ae16f8f78e1b6",
+      "targetSha256": "91ccbb66005a3df9ba38b99b4f6cee00815e751d1a01c7f9fbfbbfed5e050bb7"
+    },
+    {
+      "source": "proposals/d086/native-browser-v6-check.mjs",
+      "target": "proposals/d086/native-browser-v6-check-d087.mjs",
+      "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),18)",
+      "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)",
+      "sourceSha256": "67cd3d7f6d9fa7be1c9baedbd50e62c09aad99cdfc054d538e17f2de7d0a2af0",
+      "targetSha256": "cd17f7b34edd0a5b1e0decff6ded1ecaa1f79a9c780982fe15def39b3190a0eb"
+    }
+  ]
+}

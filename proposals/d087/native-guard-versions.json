@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "baseline": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "reason": "Only explicit new catalogue dependencies/counts and one appended production shape flag; all old assertion bytes otherwise retained.",
+  "copies": [
+    {
+      "source": "tools/unit-d052-d086.mjs",
+      "target": "tools/unit-d052-d087.mjs",
+      "sourceSha256": "641cf2e7a9a4a9f7365a4da83ccad308cff5265dba7f9f4c695c646fda553cf2",
+      "targetSha256": "d44c409dec9d25158160915aaa214d574695ff6b1f0d37e60cb46c80fd5ca23d",
+      "header": "// D087 finite current contract. Original tools/unit-d052-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "NATIVE_ART_TOOLS, TOOL_PRICE",
+          "after": "NATIVE_ART_TOOLS, WORKING_RURAL_TOOLS, TOOL_PRICE",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d053-d086.mjs",
+      "target": "tools/unit-d053-d087.mjs",
+      "sourceSha256": "f8c73cbc39e92ecfefa18219459f895f76b68617366cb7723f3a189541ea8cd9",
+      "targetSha256": "d59f430819f478662e7addf30cffbdd57f0ffda03f398763a8cb8d83ff64d416",
+      "header": "// D087 finite current contract. Original tools/unit-d053-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "NATIVE_ART_TOOLS, FACILITY_TOOLS",
+          "after": "NATIVE_ART_TOOLS, WORKING_RURAL_TOOLS, FACILITY_TOOLS",
+          "count": 1
+        },
+        {
+          "before": "import { CIVIC_MARKET_BUILDINGS } from '../src/content/britishCivicMarkets.ts';",
+          "after": "import { CIVIC_MARKET_BUILDINGS } from '../src/content/britishCivicMarkets.ts';\nimport { WORKING_RURAL_BUILDINGS } from '../src/content/britishWorkingRural.ts';",
+          "count": 1
+        },
+        {
+          "before": "catalogueWithD086",
+          "after": "catalogueWithD087",
+          "count": 2
+        },
+        {
+          "before": "'./d086-catalogue-compat.mjs'",
+          "after": "'./d087-catalogue-compat.mjs'",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(summary.total,43); assert.equal(summary.available,i<21?42:43);",
+          "after": "assert.equal(summary.total,54); assert.equal(summary.available,i<21?53:54);",
+          "count": 1
+        },
+        {
+          "before": "'CIVIC_MARKET_BUILDINGS',strip(source)",
+          "after": "'CIVIC_MARKET_BUILDINGS','WORKING_RURAL_BUILDINGS',strip(source)",
+          "count": 1
+        },
+        {
+          "before": "RURAL_HERITAGE_BUILDINGS,CIVIC_MARKET_BUILDINGS);",
+          "after": "RURAL_HERITAGE_BUILDINGS,CIVIC_MARKET_BUILDINGS,WORKING_RURAL_BUILDINGS);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(h.rows().length,43);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,42);",
+          "after": "assert.equal(h.rows().length,54);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,53);",
+          "count": 1
+        },
+        {
+          "before": "['heritage',18],['all',43]",
+          "after": "['heritage',29],['all',54]",
+          "count": 1
+        },
+        {
+          "before": "/43／43",
+          "after": "/54／54",
+          "count": 3
+        },
+        {
+          "before": "/42／43",
+          "after": "/53／54",
+          "count": 1
+        },
+        {
+          "before": "actual catalog: 43 rows (original25 plus exact D083 eight and exact D086ten)",
+          "after": "actual catalog: 54 rows (original25 plus exact D083 eight, D086ten and D087eleven)",
+          "count": 1
+        },
+        {
+          "before": "NATIVE_ART_TOOLS=d.NATIVE_ART_TOOLS;",
+          "after": "NATIVE_ART_TOOLS=d.NATIVE_ART_TOOLS,WORKING_RURAL_TOOLS=d.WORKING_RURAL_TOOLS;",
+          "count": 1
+        },
+        {
+          "before": "HERITAGE_TOOLS,NATIVE_ART_TOOLS}),calls",
+          "after": "HERITAGE_TOOLS,NATIVE_ART_TOOLS,WORKING_RURAL_TOOLS}),calls",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d054-ui-d086.mjs",
+      "target": "tools/unit-d054-ui-d087.mjs",
+      "sourceSha256": "04493e127abf3344a43a9e6bbc1d9a886133fe78effd66fa9b15c975935da2e7",
+      "targetSha256": "c739645d475aa176d3e2c4e6e323d610308c9d1627f4142e0c6119fc0e0fe642",
+      "header": "// D087 finite current contract. Original tools/unit-d054-ui-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "NATIVE_ART_TOOLS, FACILITY_TOOLS",
+          "after": "NATIVE_ART_TOOLS, WORKING_RURAL_TOOLS, FACILITY_TOOLS",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d055-native-d086.mjs",
+      "target": "tools/unit-d055-native-d087.mjs",
+      "sourceSha256": "076844a55bf58df5e2228cdae5b63739bda2d0ae495708a979d704a3a2b48a29",
+      "targetSha256": "c654c0cd03553a31e0333946b5017397d5dc498d70f3cdd00d2cfa2c0862dff5",
+      "header": "// D087 finite current contract. Original tools/unit-d055-native-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "catalogueWithD086",
+          "after": "catalogueWithD087",
+          "count": 2
+        },
+        {
+          "before": "'./d086-catalogue-compat.mjs'",
+          "after": "'./d087-catalogue-compat.mjs'",
+          "count": 1
+        },
+        {
+          "before": "new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,43",
+          "after": "new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,54",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d081-touch-lease-d086.mjs",
+      "target": "tools/unit-d081-touch-lease-d087.mjs",
+      "sourceSha256": "b93e537ccfd7b2db2e169b88baec945f86954086256ae361ac1398f0b095851e",
+      "targetSha256": "9ab5921dad7563de4fdadcf951be2af5e493e4b25a26f3bcf9c97c720818ccb7",
+      "header": "// D087 finite current contract. Original tools/unit-d081-touch-lease-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "'./unit-d052-d086.mjs?d081-touch-lease'",
+          "after": "'./unit-d052-d087.mjs?d081-touch-lease'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d082-release-integration-d086.mjs",
+      "target": "tools/d082-release-integration-d087.mjs",
+      "sourceSha256": "1d24677d8113a33b11c743d7011a10fb3bd81176da883d1dee9d571707f235a5",
+      "targetSha256": "f12c23769e8c44e509c4e3014c3bd23b37f547d2f51393a249f7a9c0e470fc87",
+      "header": "// D087 finite current contract. Original tools/d082-release-integration-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "/fieldStudyLodgeOn, coastalRecreationOn, true\\)/",
+          "after": "/fieldStudyLodgeOn, coastalRecreationOn, true, true\\)/",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d082-release-d086.mjs",
+      "target": "tools/unit-d082-release-d087.mjs",
+      "sourceSha256": "5b58df9dfdc3390bfcf6a7219f47e58f649361d4a7fc2b4b0d72665ef6d83e70",
+      "targetSha256": "d468f4ca5ed809c6e9d0d9c76bc9f71a37350aa170433d9cb04c73c5933a1491",
+      "header": "// D087 finite current contract. Original tools/unit-d082-release-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "'./d082-release-integration-d086.mjs'",
+          "after": "'./d082-release-integration-d087.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

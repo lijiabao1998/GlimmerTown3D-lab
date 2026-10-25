@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Source leases, finite current versions and mandatory release graph negatives
-        run: node --test tools/d086-source-v6.test.mjs tools/d086-source-v6-lease.test.mjs tools/d086-validation-v6.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-v4-clean-workspace.test.mjs proposals/d086/facade-imprint-v4-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs proposals/d086/browser-required-diagnostic.test.mjs proposals/d086/browser-geometry-compare-v6.test.mjs tools/d086-source-v6-contract.test.mjs tools/d086-current-guards-v6.test.mjs proposals/d086/freeze-source-v6.test.mjs proposals/d086/original-camera-restoration.test.mjs proposals/d086/direct-basis-determinism.test.mjs proposals/d086/precompiled-cache-v6-qualification.test.mjs proposals/d086/browser-cache-observation-v6.test.mjs proposals/d086/native-first-use-cache-copy.test.mjs proposals/d086/browser-cache-v6-copies.test.mjs proposals/d086/native-browser-v6-copy.test.mjs proposals/d086/browser-legal-surface-capture.test.mjs proposals/d086/browser-surface-qualification-v7.test.mjs proposals/d086/native-surface-plan-v7.test.mjs proposals/d086/precompiled-cache-v6-copy.test.mjs tools/d086-coastal-current-guard.test.mjs proposals/d086/browser-startup-cache-contract.test.mjs proposals/d086/guild-access-v7.test.mjs proposals/d086/v6-workflow-copy.test.mjs proposals/british-program/ledger-check.test.mjs
+        run: node proposals/d087/inherited-test-runner.mjs
       - run: npm run typecheck
       - name: Immutable immediate baseline and original affected historical contracts
         run: |
@@ -78,13 +78,13 @@ jobs:
           node proposals/d086/mesh-check.mjs
           node proposals/d086/facade-imprint-v4-check.mjs --label=ci
       - name: Current native fiscal, services, RNG, history, save, construction and undo
-        run: node proposals/d086/native-variant-check.mjs
-      - name: Current catalogue43 retains every original interaction and negative control
+        run: node proposals/d086/native-variant-check-d087.mjs
+      - name: Current catalogue54 retains all original43 interactions and negative controls
         run: |
-          node tools/unit-d053-d086.mjs
-          node proposals/d086/current-food-guards.mjs
+          node tools/unit-d053-d087.mjs
+          node proposals/d087/native-current-food-guards.mjs
       - name: Current inherited research, construction UI and touch lease negative controls
-        run: node proposals/d086/current-inherited-ui-guards.mjs
+        run: node proposals/d087/native-current-inherited-ui-guards.mjs
       - name: Actual native product build with exact source identity
         run: |
           node proposals/d086/native-browser-build.mjs --attempt=1
@@ -106,6 +106,8 @@ jobs:
           name: d086-native-node-${{ github.sha }}
           path: |
             scratch/d086-audit/
+            scratch/d087-inherited-tests/
+            scratch/d087-native/
             scratch/d086-mesh/
             scratch/d086-native-variant/
             scratch/d086-historical/
@@ -149,7 +151,7 @@ jobs:
           test "$(cat scratch/d086-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Real catalogue, mouse/touch placement, construction, picking, front/back and save reload
-        run: node proposals/d086/native-browser-v6-check.mjs --width=${{ matrix.width }} --attempt=1
+        run: node proposals/d086/native-browser-v6-check-d087.mjs --width=${{ matrix.width }} --attempt=1
       - name: Exact real raw PNG inventory and independent production frame join
         run: node proposals/d086/browser-frame-qualification.mjs --manifest=scratch/d086-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json
       - name: Every original required surface joins actual ordinary-player PNGs and native full-scene frames

@@ -6,6 +6,9 @@ import { drawBritishStreet } from './britishStreetArt.ts';
 // 建築是量體佔位：高度量自 2D 實驗線的精靈圖（src/content/lab-kinds.json），外形只分幾類；逐種配方是 D004 的事。
 // 畫面全部由程式生成，沒有任何外部素材（CLAUDE.md 規則 7）。
 import * as THREE from 'three';
+// D087-BEGIN exact-working-rural-precedence
+import { workingRuralSlot } from '../content/britishWorkingRural.ts';
+// D087-END exact-working-rural-precedence
 import type { City, CityBuilding } from '../sim/city.ts';
 import { hash2 } from '../sim/rng.ts';
 import type { Style } from './styles.ts';
@@ -291,7 +294,7 @@ export function buildCityScene(c: City, look: KindLook, style: Style, blocks?: B
     if (blocks && b.k >= 1 && b.k <= 3) continue;               // D004：住商工交給街區配方（下面）
 // D059-BEGIN village-civic
     const shape = civic && b.k > 3 ? civic.shape(b.k) : null, rect = [b.x, b.z, b.x + s, b.z + s];
-    const village = blocks?.villageArt && blocks.detail ? villageKind(b.k) : null;
+    const village = blocks?.villageArt && blocks.detail && !(shape?.p?.nativeWorkingRural === true && workingRuralSlot(b.k,b.v)) ? villageKind(b.k) : null;
     if (shape) {                                               // D007：非住商工照造型表畫
       let y0 = 0;
       for (let dz = 0; dz < s; dz++) for (let dx = 0; dx < s; dx++) y0 = Math.max(y0, top[(b.z + dz) * n + b.x + dx]);

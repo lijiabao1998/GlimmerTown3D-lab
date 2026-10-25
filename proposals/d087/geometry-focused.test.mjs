@@ -1,0 +1,12 @@
+import test from'node:test';import assert from'node:assert/strict';import{createHash}from'node:crypto';
+import{MODEL_IDS,createWorkingRuralDesign,emitWorkingRuralDesign}from'../../src/render/britishWorkingRuralModels.mjs';
+import{assertStructure,STRUCTURE_PLAN}from'./structure-plan.mjs';import{assertClosedModel}from'./mesh-contract.mjs';import{rawFacadeReference,assertFacadeImprint,facadeNegatives,INTENTS}from'./facade-contract.mjs';import scope from'./scope.json'with{type:'json'};
+const raw=await rawFacadeReference(),models=MODEL_IDS.map(createWorkingRuralDesign),sha=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
+test('exact eleven new frozen IDs; all eleven unique full geometry',()=>{assert.deepEqual(MODEL_IDS,scope.models.map(m=>m.id));assert.deepEqual(Object.keys(STRUCTURE_PLAN),MODEL_IDS);assert.equal(new Set(models.map(m=>sha(m.triangles))).size,11);assert.throws(()=>createWorkingRuralDesign('not-a-building'));});
+for(const [i,id]of MODEL_IDS.entries()){
+ test(id+': original1800cap / normalized parcel / actual deterministic emission',()=>{const m=models[i];assert.ok(m.triangles.length*2<=scope.models[i].cap);assert.ok(m.triangles.length>=100);for(const t of m.triangles)for(const p of t.p)for(const v of p)assert.ok(v>=0&&v<=1&&Number.isFinite(v));assert.deepEqual(createWorkingRuralDesign(id),m);const a=[];emitWorkingRuralDesign({a:{y0:.125,O:{triangle:(...x)=>a.push(x)}},H:scope.models[i].H,X:x=>3+x*scope.models[i].size,Z:z=>4+z*scope.models[i].size},id);assert.equal(a.length,m.triangles.length);const first=createWorkingRuralDesign(id);first.triangles[0].p[0][0]=999;assert.deepEqual(createWorkingRuralDesign(id),m,'consumer mutation never poisons cached geometry');});
+ test(id+': independently planned complete oriented structural surfaces',()=>assertStructure(models[i],{negativeControls:true}));
+ test(id+': every actual part closed / positive volume / missing+duplicate+reversed controls',()=>assertClosedModel(models[i],{negativeControls:true}));
+ test(id+': full raw facade paint / unchanged original backing thresholds / nine adversarial controls',()=>{const r=raw.module.createWorkingRuralDesign(id),v=assertFacadeImprint(models[i],r);assert.equal(v.intents,INTENTS[i]);assert.ok(v.samples>0);assert.equal(facadeNegatives(models[i],r).length,9);});
+}
+test('no renderer/tool/scene state dependency in returned model',()=>{for(const m of models)assert.deepEqual(Object.keys(m),['id','triangles','parts','facades']);assert.equal(models.reduce((s,m)=>s+m.facades.length,0),475);});

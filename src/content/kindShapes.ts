@@ -1,3 +1,6 @@
+// D087-BEGIN working-rural-import
+import { WORKING_RURAL_BUILDINGS } from './britishWorkingRural.ts';
+// D087-END working-rural-import
 // D086-BEGIN native-civic-market-shape-import
 import { CIVIC_MARKET_BUILDINGS } from './britishCivicMarkets.ts';
 // D086-END native-civic-market-shape-import
@@ -282,7 +285,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D080-BEGIN community-building-shape
 // D081-BEGIN field-study-lodge-shape
 // D082-BEGIN coastal-recreation-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false, nativeCivicMarket = false): Shape | null => {
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false, nativeCivicMarket = false, nativeWorkingRural = false): Shape | null => {
+  // D087-BEGIN working-rural-shape
+  if (nativeWorkingRural && WORKING_RURAL_BUILDINGS.some(m => m.k === k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge, coastalRecreation, nativeCivicMarket);
+    return previous ? { ...previous, p: { ...previous.p, nativeWorkingRural: true } } : null;
+  }
+  // D087-END working-rural-shape
   // D086-BEGIN native-civic-market-shape
   if (nativeCivicMarket && CIVIC_MARKET_BUILDINGS.some(m => m.k === k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge, coastalRecreation);

@@ -1,0 +1,23 @@
+{
+  "sourceSha256": "646b98cad57a70eb8afaa9eb708a22bfb62321b9b3c70114203656c8d17cd8bc",
+  "cachedSourceSha256": "b860f45d449fd5284239e6babd4e25507f1bba2558a4a6e0fd47050bbfeeb6c9",
+  "planSha256": "44573356ed410ca92c813a3214365b55e26e6cdfbebe590a1002f9ca1b0dfaa9",
+  "nativeReport": {
+    "path": "/tmp/d087-native-second/report.json",
+    "sha256": "5e43dfbf4048046b5fa5829fd6e16f672e174bbf301a97a3c766a33d482f5311"
+  },
+  "nativePaintReport": {
+    "path": "/tmp/d087-native-paint-second/report.json",
+    "sha256": "c8b3a89dd65bd52b3540763742de014a39c2b9da189561bc7e32ce21c8ef17b2"
+  },
+  "cases": 33,
+  "requiredPerWidth": 24441,
+  "requiredAllWidths": 73323,
+  "missing": 0,
+  "paintIntents": 475,
+  "paintCases": 1425,
+  "paintMissing": 0,
+  "viewsPerWidth": 45,
+  "browserJoined": false,
+  "qualification": "Local native numeric checkpoint only. Official Chrome and independent visual acceptance pending."
+}

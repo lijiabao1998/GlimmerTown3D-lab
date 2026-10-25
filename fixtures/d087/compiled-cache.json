@@ -1,0 +1,144 @@
+{
+  "qualification": "Reproducible code-generated native cache from authoritative procedural geometry; no Chrome or release acceptance claim.",
+  "proceduralSourceSha256": "646b98cad57a70eb8afaa9eb708a22bfb62321b9b3c70114203656c8d17cd8bc",
+  "candidateSourceSha256": "b860f45d449fd5284239e6babd4e25507f1bba2558a4a6e0fd47050bbfeeb6c9",
+  "sourceBytes": 33481,
+  "candidateBytes": 512481,
+  "sourceGzipBytes": 11538,
+  "candidateGzipBytes": 82507,
+  "codec": "v1: exact Float64 round-trip decimal vectors, literal JSON -0, no reviver or rounding, indexed triangles, full native metadata; per-payload integrity and SHA256 reproducible CI proof",
+  "models": [
+    {
+      "meta": {
+        "id": "horse-engine-threshing-farm",
+        "length": 37490,
+        "checksum": "4d894c30"
+      },
+      "sha256": "f2cfada3d8c672c072380f19593647134a11e2039e5c237ad8dabde1b94846d7",
+      "points": 167,
+      "normals": 139,
+      "triangleCount": 310,
+      "originalBytes": 91255
+    },
+    {
+      "meta": {
+        "id": "octagonal-dairy-cattle-farm",
+        "length": 27880,
+        "checksum": "db42692b"
+      },
+      "sha256": "7bbf9d01a2746a72cfcdae7717dcd07e3fa39ae374c258fdeb3a5ec15d3205ba",
+      "points": 117,
+      "normals": 98,
+      "triangleCount": 222,
+      "originalBytes": 63870
+    },
+    {
+      "meta": {
+        "id": "lakeland-bank-barn-ranch",
+        "length": 16551,
+        "checksum": "0af7944e"
+      },
+      "sha256": "702f82ac39d1b8aab6749074c442e194c6c35a07e399f53db3dd1bd03339a93d",
+      "points": 104,
+      "normals": 20,
+      "triangleCount": 192,
+      "originalBytes": 44835
+    },
+    {
+      "meta": {
+        "id": "corbelled-stone-piggery",
+        "length": 39257,
+        "checksum": "b1b95b15"
+      },
+      "sha256": "4576d0ded412ecac7d8cfa47b1c0876d719aa9648f2d8e62410ad2f165cb4c15",
+      "points": 173,
+      "normals": 104,
+      "triangleCount": 302,
+      "originalBytes": 85501
+    },
+    {
+      "meta": {
+        "id": "e-plan-model-farm",
+        "length": 49897,
+        "checksum": "aacebd4a"
+      },
+      "sha256": "18299553c7e0fff09af7f6fbc4d54b8cd6be26fd98b627f77c88f30efdb35f31",
+      "points": 269,
+      "normals": 81,
+      "triangleCount": 494,
+      "originalBytes": 124030
+    },
+    {
+      "meta": {
+        "id": "curvilinear-wall-glasshouse",
+        "length": 43663,
+        "checksum": "be758e0d"
+      },
+      "sha256": "28cfe94c04c344e5be787d540958f0ae6300edecb1db41fd20f420098df1699e",
+      "points": 228,
+      "normals": 127,
+      "triangleCount": 448,
+      "originalBytes": 127672
+    },
+    {
+      "meta": {
+        "id": "ridge-furrow-market-garden",
+        "length": 49788,
+        "checksum": "1c71b585"
+      },
+      "sha256": "3b1d6ee74667a6a7838a6ffdb9172271d693a69d86f1f2b17fd70b060c090183",
+      "points": 256,
+      "normals": 152,
+      "triangleCount": 504,
+      "originalBytes": 144056
+    },
+    {
+      "meta": {
+        "id": "five-bay-productive-glasshouse",
+        "length": 66228,
+        "checksum": "484ea70e"
+      },
+      "sha256": "93bf940c4f995c62d34be168398c176491e0cd5346d0863975ad868798080157",
+      "points": 343,
+      "normals": 248,
+      "triangleCount": 674,
+      "originalBytes": 183703
+    },
+    {
+      "meta": {
+        "id": "central-kiln-maltings",
+        "length": 34531,
+        "checksum": "6052f9f5"
+      },
+      "sha256": "375c26bcec0d4287aa76b7a576b16128221c33e35bbe68d7123f00574b89ca86",
+      "points": 221,
+      "normals": 34,
+      "triangleCount": 430,
+      "originalBytes": 100046
+    },
+    {
+      "meta": {
+        "id": "l-plan-smoking-food-works",
+        "length": 37033,
+        "checksum": "36949c0c"
+      },
+      "sha256": "d71a8d8ea5d6a320896c0372f071b091617b85a9584262aa5488c6b044a737bd",
+      "points": 240,
+      "normals": 25,
+      "triangleCount": 464,
+      "originalBytes": 108002
+    },
+    {
+      "meta": {
+        "id": "stepped-confectionery-works",
+        "length": 56179,
+        "checksum": "64a121a2"
+      },
+      "sha256": "e2cbc4e5ef9a0a65523cf6acf5d591e1b98cdc1e2400e11ff9812c85d52ea9cd",
+      "points": 388,
+      "normals": 17,
+      "triangleCount": 752,
+      "originalBytes": 174112
+    }
+  ]
+}

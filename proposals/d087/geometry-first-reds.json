@@ -1,0 +1,5798 @@
+{
+  "qualification": "Preserved original required points from initial own-cloud diagnostics; not a replacement for current full native gates or official Chrome.",
+  "attempts": [
+    {
+      "path": "/tmp/d087-geometry-structural-first/corbelled-stone-piggery-412.json.gz",
+      "sha256": "a0a5411768511674d2b614eb922d7071462c74f2d838a201e52281e2d33dc586",
+      "sourceSha256": "816e77ac9c44e41378a1e7e0f5085eb3145479fb96d0e00aa0fcd014214d9f5b",
+      "id": "corbelled-stone-piggery",
+      "width": 412,
+      "contractSha256": "74b6032902ec4d0b0b8cb8f19462377d457d032eb16c4156dde985f4db1b6e91",
+      "sourceGeometrySha256": "28bd15fbe9c4727870bb33f882b04f1f67062f6542873cc46bc6aa96d3f0b387",
+      "missing": [
+        {
+          "id": "mesh-1-triangle-4-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 4,
+          "point": [
+            4.253333489100138,
+            0.1094252864519755,
+            4.559999942779541
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.002947452170660725
+          }
+        }
+      ]
+    },
+    {
+      "path": "/tmp/d087-geometry-structural-first/five-bay-productive-glasshouse-412.json.gz",
+      "sha256": "3655b0580a2989f3aed33ffc014a37919a14e5d3a1aff2450e66709493874aaa",
+      "sourceSha256": "816e77ac9c44e41378a1e7e0f5085eb3145479fb96d0e00aa0fcd014214d9f5b",
+      "id": "five-bay-productive-glasshouse",
+      "width": 412,
+      "contractSha256": "eb6a4c3376ddfc049deaa50590cc4aacc6ff3659c8da5e8ccba0182efa5459bf",
+      "sourceGeometrySha256": "f85ace000f12db1a7c9f256c4c50b7f9202bb6c517830562f363b2172a335676",
+      "missing": [
+        {
+          "id": "mesh-1-triangle-16-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 16,
+          "point": [
+            3.2720000743865967,
+            0.43902438879013056,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 83,
+            "distance": 0.049380186305828355
+          }
+        },
+        {
+          "id": "mesh-1-triangle-16-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 16,
+          "point": [
+            3.227200078964233,
+            0.43902438879013067,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 86,
+            "distance": 0.04046591198721605
+          }
+        },
+        {
+          "id": "mesh-1-triangle-16-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 16,
+          "point": [
+            3.255200052261352,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 83,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-16-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 16,
+          "point": [
+            3.333600091934204,
+            0.4390243887901306,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 83,
+            "distance": 0.029624111783497276
+          }
+        },
+        {
+          "id": "mesh-1-triangle-17-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 17,
+          "point": [
+            3.4960000991821287,
+            0.4390243887901306,
+            4.868000221252442
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": null
+        },
+        {
+          "id": "mesh-1-triangle-18-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 18,
+          "point": [
+            4.816666762034098,
+            0.43902438879013056,
+            5.040000120798746
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 165,
+            "distance": 0.027429054209831327
+          }
+        },
+        {
+          "id": "mesh-1-triangle-18-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 18,
+          "point": [
+            4.798000049591065,
+            0.43902438879013067,
+            5.25600004196167
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 168,
+            "distance": 0.04426058442639974
+          }
+        },
+        {
+          "id": "mesh-1-triangle-18-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 18,
+          "point": [
+            4.826000118255616,
+            0.43902438879013067,
+            5.128000164031983
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 165,
+            "distance": 0.01645343252589787
+          }
+        },
+        {
+          "id": "mesh-1-triangle-18-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 18,
+          "point": [
+            4.826000118255616,
+            0.4390243887901306,
+            4.7360001564025875
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 165,
+            "distance": 0.016453432525897926
+          }
+        },
+        {
+          "id": "mesh-1-triangle-19-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 19,
+          "point": [
+            4.6160000165303545,
+            0.43902438879013056,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 171,
+            "distance": 0.049380186305828355
+          }
+        },
+        {
+          "id": "mesh-1-triangle-19-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 19,
+          "point": [
+            4.5712000846862795,
+            0.43902438879013067,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 174,
+            "distance": 0.040465979236226635
+          }
+        },
+        {
+          "id": "mesh-1-triangle-19-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 19,
+          "point": [
+            4.599199962615967,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 171,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-19-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 19,
+          "point": [
+            4.677600002288818,
+            0.4390243887901306,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 171,
+            "distance": 0.02962411178349733
+          }
+        },
+        {
+          "id": "mesh-1-triangle-20-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 20,
+          "point": [
+            4.392000039418538,
+            0.43902438879013056,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 149,
+            "distance": 0.049380186305828355
+          }
+        },
+        {
+          "id": "mesh-1-triangle-20-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 20,
+          "point": [
+            4.330399990081787,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 149,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-20-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 20,
+          "point": [
+            4.408800029754639,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 149,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-20-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 20,
+          "point": [
+            4.436800098419189,
+            0.4390243887901306,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 146,
+            "distance": 0.040465844738429846
+          }
+        },
+        {
+          "id": "mesh-1-triangle-21-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 21,
+          "point": [
+            4.0560000737508135,
+            0.43902438879013056,
+            5.633333524068196
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 127,
+            "distance": 0.09777263098029298
+          }
+        },
+        {
+          "id": "mesh-1-triangle-21-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 21,
+          "point": [
+            3.9944000244140625,
+            0.43902438879013067,
+            5.708000183105469
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 127,
+            "distance": 0.058659578588175554
+          }
+        },
+        {
+          "id": "mesh-1-triangle-21-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 21,
+          "point": [
+            4.072800064086914,
+            0.43902438879013067,
+            5.708000183105469
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 127,
+            "distance": 0.058659578588175554
+          }
+        },
+        {
+          "id": "mesh-1-triangle-21-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 21,
+          "point": [
+            4.1008001327514645,
+            0.4390243887901306,
+            5.484000205993652
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 124,
+            "distance": 0.07030215234587195
+          }
+        },
+        {
+          "id": "mesh-1-triangle-22-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 22,
+          "point": [
+            3.7200000286102295,
+            0.43902438879013056,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 105,
+            "distance": 0.049380186305828355
+          }
+        },
+        {
+          "id": "mesh-1-triangle-22-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 22,
+          "point": [
+            3.658400011062622,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 105,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-22-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 22,
+          "point": [
+            3.7368000507354733,
+            0.43902438879013067,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 105,
+            "distance": 0.02962411178349683
+          }
+        },
+        {
+          "id": "mesh-1-triangle-22-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 22,
+          "point": [
+            3.7648000240325925,
+            0.4390243887901306,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 102,
+            "distance": 0.04046591198721655
+          }
+        },
+        {
+          "id": "mesh-1-triangle-23-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 23,
+          "point": [
+            3.3606667518615723,
+            0.43902438879013056,
+            5.366666793823242
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 83,
+            "distance": 0.09877037261165666
+          }
+        },
+        {
+          "id": "mesh-1-triangle-23-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 23,
+          "point": [
+            3.280400085449219,
+            0.43902438879013067,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 86,
+            "distance": 0.10985314747752639
+          }
+        },
+        {
+          "id": "mesh-1-triangle-23-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 23,
+          "point": [
+            3.3868000984191897,
+            0.43902438879013067,
+            5.4520000457763675
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 83,
+            "distance": 0.05925822356699373
+          }
+        },
+        {
+          "id": "mesh-1-triangle-23-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 23,
+          "point": [
+            3.4148000717163085,
+            0.4390243887901306,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 80,
+            "distance": 0.06937723549031011
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.7046667734781895,
+            0.43902438879013056,
+            5.040000120798746
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 162,
+            "distance": 0.15556935714903497
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.6244001388549805,
+            0.43902438879013067,
+            5.128000164031983
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 177,
+            "distance": 0.14157551785404388
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.73080005645752,
+            0.43902438879013067,
+            5.25600004196167
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 168,
+            "distance": 0.11364770463314522
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.75880012512207,
+            0.4390243887901306,
+            4.7360001564025875
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 162,
+            "distance": 0.04295961299711709
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.303333441416422,
+            0.43902438879013056,
+            5.366666793823242
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 149,
+            "distance": 0.09877037261165666
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.24920015335083,
+            0.43902438879013067,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 152,
+            "distance": 0.06937735077425722
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.277200031280517,
+            0.43902438879013067,
+            5.4520000457763675
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 149,
+            "distance": 0.05925822356699373
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.38360013961792,
+            0.4390243887901306,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 146,
+            "distance": 0.10985296494517466
+          }
+        },
+        {
+          "id": "mesh-1-triangle-26-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 26,
+          "point": [
+            3.967333396275838,
+            0.43902438879013056,
+            5.446666876475016
+          ],
+          "normal": [
+            0,
+            0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 127,
+            "distance": 0.1955552619605858
+          }
+        },
+        {
+          "id": "mesh-1-triangle-26-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 26,
+          "point": [
+            3.913200044631958,
+            0.43902438879013067,
+            5.372000217437744
+          ],
+          "normal": [
+            0,
+            0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 130,
+            "distance": 0.12052530624335622
+          }
+        },
+        {
+          "id": "mesh-1-triangle-26-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 26,
+          "point": [
+            3.941200017929077,
+            0.43902438879013067,
+            5.5960001945495605
+          ],
+          "normal": [
+            0,
+            0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 127,
+            "distance": 0.11732915717635128
+          }
+        },
+        {
+          "id": "mesh-1-triangle-26-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 26,
+          "point": [
+            4.047600126266479,
+            0.4390243887901306,
+            5.372000217437744
+          ],
+          "normal": [
+            0,
+            0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 124,
+            "distance": 0.19083728287153096
+          }
+        },
+        {
+          "id": "mesh-1-triangle-27-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 27,
+          "point": [
+            3.631333351135254,
+            0.43902438879013056,
+            5.366666793823242
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 105,
+            "distance": 0.09877037261165666
+          }
+        },
+        {
+          "id": "mesh-1-triangle-27-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 27,
+          "point": [
+            3.5772000312805172,
+            0.43902438879013067,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 108,
+            "distance": 0.06937723549030961
+          }
+        },
+        {
+          "id": "mesh-1-triangle-27-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 27,
+          "point": [
+            3.6052000045776365,
+            0.43902438879013067,
+            5.4520000457763675
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 105,
+            "distance": 0.05925822356699373
+          }
+        },
+        {
+          "id": "mesh-1-triangle-27-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 27,
+          "point": [
+            3.711600017547607,
+            0.4390243887901306,
+            5.3240001678466795
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 102,
+            "distance": 0.10985314747752645
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            3.832000096638997,
+            0.43902438879013056,
+            4.93333355585734
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": null
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            3.563200092315674,
+            0.43902438879013067,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 111,
+            "distance": 0.07901444248000389
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            3.697600078582764,
+            0.4390243887901306,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 99,
+            "distance": 0.15803871673783038
+          }
+        },
+        {
+          "id": "mesh-1-triangle-29-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 29,
+          "point": [
+            4.3696002006530765,
+            0.43902438879013067,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 143,
+            "distance": 0.1580385485159712
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            4.0560000737508135,
+            0.43902438879013056,
+            4.93333355585734
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 118,
+            "distance": 0.1569891385863187
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.8320000648498533,
+            0.43902438879013067,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": null
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.9664000511169433,
+            0.4390243887901306,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 118,
+            "distance": 0.22246105064848004
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            4.280000130335489,
+            0.43902438879013056,
+            4.93333355585734
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 140,
+            "distance": 0.11605719927271818
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            4.100800085067749,
+            0.43902438879013067,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 121,
+            "distance": 0.12291691847161856
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            4.2352001667022705,
+            0.43902438879013067,
+            5.064000225067138
+          ],
+          "normal": [
+            0,
+            1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 155,
+            "distance": 0.07901444248008338
+          }
+        },
+        {
+          "id": "mesh-1-triangle-68-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 68,
+          "point": [
+            3.183333396911621,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-68-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 68,
+          "point": [
+            3.2020000457763667,
+            0.4170731604099273,
+            5.323999977111817
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 0,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-68-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 68,
+          "point": [
+            3.174000072479248,
+            0.4170731604099273,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-68-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 68,
+          "point": [
+            3.174000072479248,
+            0.41707316040992737,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-69-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 69,
+          "point": [
+            3.384000062942505,
+            0.41707316040992737,
+            4.833333333333333
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-69-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 69,
+          "point": [
+            3.2944000720977784,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-69-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 69,
+          "point": [
+            3.428800058364868,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-69-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 69,
+          "point": [
+            3.4288000583648683,
+            0.41707316040992737,
+            5.004000091552735
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-70-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 70,
+          "point": [
+            3.384000062942505,
+            0.41707316040992737,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 7,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-70-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 70,
+          "point": [
+            3.428800058364868,
+            0.4170731604099273,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 7,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-70-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 70,
+          "point": [
+            3.400800085067749,
+            0.4170731604099273,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 7,
+            "distance": 0.4170631604099272
+          }
+        },
+        {
+          "id": "mesh-1-triangle-70-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 70,
+          "point": [
+            3.3224000453948976,
+            0.41707316040992737,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 0,
+            "distance": 0.4170631604099274
+          }
+        },
+        {
+          "id": "mesh-1-triangle-71-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 71,
+          "point": [
+            3.2953333854675293,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-71-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 71,
+          "point": [
+            3.269200038909912,
+            0.4170731604099273,
+            5.323999977111816
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 7,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-71-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 71,
+          "point": [
+            3.241200065612793,
+            0.4170731604099273,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-71-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 71,
+          "point": [
+            3.375600051879883,
+            0.41707316040992737,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-75-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 75,
+          "point": [
+            3.496000051498413,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-75-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 75,
+          "point": [
+            3.496000051498413,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-75-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 75,
+          "point": [
+            3.496000051498413,
+            0.421463406085968,
+            4.747999954223633
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-75-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 75,
+          "point": [
+            3.496000051498413,
+            0.43024389743804936,
+            4.7479999542236335
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-76-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 76,
+          "point": [
+            3.496000051498413,
+            0.4317073126633961,
+            5.046666781107584
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-76-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 76,
+          "point": [
+            3.496000051498413,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-76-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 76,
+          "point": [
+            3.496000051498413,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-76-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 76,
+          "point": [
+            3.496000051498413,
+            0.4258536517620086,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-90-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 90,
+          "point": [
+            3.5193333625793457,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-90-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 90,
+          "point": [
+            3.5380000114440917,
+            0.4170731604099273,
+            5.323999977111817
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 11,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-90-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 90,
+          "point": [
+            3.5100000381469725,
+            0.4170731604099273,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-90-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 90,
+          "point": [
+            3.5100000381469725,
+            0.41707316040992737,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-91-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 91,
+          "point": [
+            3.7200000286102295,
+            0.41707316040992737,
+            4.833333333333333
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-91-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 91,
+          "point": [
+            3.6304000377655026,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-91-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 91,
+          "point": [
+            3.7648000240325925,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-91-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 91,
+          "point": [
+            3.7648000240325925,
+            0.41707316040992737,
+            5.004000091552735
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-92-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 92,
+          "point": [
+            3.7200000286102295,
+            0.41707316040992737,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 6,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-92-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 92,
+          "point": [
+            3.7648000240325925,
+            0.4170731604099273,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 6,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-92-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 92,
+          "point": [
+            3.7368000507354733,
+            0.4170731604099273,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 6,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-92-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 92,
+          "point": [
+            3.658400011062622,
+            0.41707316040992737,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 6,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-93-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 93,
+          "point": [
+            3.631333351135254,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-93-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 93,
+          "point": [
+            3.6052000045776365,
+            0.4170731604099273,
+            5.323999977111816
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 11,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-93-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 93,
+          "point": [
+            3.5772000312805172,
+            0.4170731604099273,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-93-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 93,
+          "point": [
+            3.711600017547607,
+            0.41707316040992737,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 14,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-97-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 97,
+          "point": [
+            3.8320000171661377,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.33599020408630365
+          }
+        },
+        {
+          "id": "mesh-1-triangle-97-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 97,
+          "point": [
+            3.8320000171661373,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-97-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 97,
+          "point": [
+            3.8320000171661373,
+            0.421463406085968,
+            4.747999954223633
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-97-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 97,
+          "point": [
+            3.8320000171661377,
+            0.43024389743804936,
+            4.7479999542236335
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.33599020408630365
+          }
+        },
+        {
+          "id": "mesh-1-triangle-98-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 98,
+          "point": [
+            3.8320000171661377,
+            0.4317073126633961,
+            5.046666781107584
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.33599020408630365
+          }
+        },
+        {
+          "id": "mesh-1-triangle-98-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 98,
+          "point": [
+            3.8320000171661373,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-98-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 98,
+          "point": [
+            3.8320000171661373,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-98-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 98,
+          "point": [
+            3.8320000171661377,
+            0.4258536517620086,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.33599020408630365
+          }
+        },
+        {
+          "id": "mesh-1-triangle-109-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 109,
+          "point": [
+            3.496000051498413,
+            0.4317073126633962,
+            5.046666781107584
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-109-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 109,
+          "point": [
+            3.496000051498413,
+            0.4258536517620087,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-109-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 109,
+          "point": [
+            3.496000051498413,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-109-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 109,
+          "point": [
+            3.496000051498413,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-110-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 110,
+          "point": [
+            3.496000051498413,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-110-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 110,
+          "point": [
+            3.496000051498413,
+            0.4302438974380493,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-110-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 110,
+          "point": [
+            3.496000051498413,
+            0.421463406085968,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-110-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 110,
+          "point": [
+            3.496000051498413,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 66,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-112-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 112,
+          "point": [
+            3.8553333282470703,
+            0.41707316040992737,
+            5.233333428700765
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 14,
+            "distance": 0.41706316040992747
+          }
+        },
+        {
+          "id": "mesh-1-triangle-112-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 112,
+          "point": [
+            3.8739999771118163,
+            0.4170731604099273,
+            5.46800012588501
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 10,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-112-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 112,
+          "point": [
+            3.846000003814697,
+            0.4170731604099273,
+            5.2440001487731935
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 14,
+            "distance": 0.4170631604099272
+          }
+        },
+        {
+          "id": "mesh-1-triangle-112-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 112,
+          "point": [
+            3.846000003814697,
+            0.41707316040992737,
+            4.988000011444091
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-113-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 113,
+          "point": [
+            4.056000153223673,
+            0.41707316040992737,
+            4.833333333333333
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-113-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 113,
+          "point": [
+            3.966400098800659,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 1,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-113-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 113,
+          "point": [
+            4.100800180435181,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 12,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-113-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 113,
+          "point": [
+            4.100800180435181,
+            0.41707316040992737,
+            5.004000091552735
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099274
+          }
+        },
+        {
+          "id": "mesh-1-triangle-114-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 114,
+          "point": [
+            4.0560000737508135,
+            0.41707316040992737,
+            5.633333524068196
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 5,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-114-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 114,
+          "point": [
+            4.1008001327514645,
+            0.4170731604099273,
+            5.484000205993652
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 5,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-114-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 114,
+          "point": [
+            4.0728000640869135,
+            0.4170731604099273,
+            5.708000183105469
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 5,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-114-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 114,
+          "point": [
+            3.9944000244140625,
+            0.41707316040992737,
+            5.708000183105469
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 5,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-115-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 115,
+          "point": [
+            3.967333396275838,
+            0.41707316040992737,
+            5.233333428700765
+          ],
+          "normal": [
+            0,
+            -0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099274
+          }
+        },
+        {
+          "id": "mesh-1-triangle-115-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 115,
+          "point": [
+            3.941200017929077,
+            0.4170731604099273,
+            5.46800012588501
+          ],
+          "normal": [
+            0,
+            -0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 10,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-115-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 115,
+          "point": [
+            3.913200044631958,
+            0.4170731604099273,
+            4.988000011444091
+          ],
+          "normal": [
+            0,
+            -0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 14,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-115-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 115,
+          "point": [
+            4.047600126266479,
+            0.41707316040992737,
+            5.2440001487731935
+          ],
+          "normal": [
+            0,
+            -0.9999999999999999,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-119-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 119,
+          "point": [
+            4.168000221252441,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 141,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-119-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 119,
+          "point": [
+            4.168000221252441,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 141,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-119-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 119,
+          "point": [
+            4.168000221252441,
+            0.421463406085968,
+            4.747999954223633
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 141,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-119-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 119,
+          "point": [
+            4.168000221252441,
+            0.43024389743804936,
+            4.7479999542236335
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 141,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-120-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 120,
+          "point": [
+            4.168000221252441,
+            0.4317073126633961,
+            5.046666781107584
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 142,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-120-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 120,
+          "point": [
+            4.168000221252441,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 142,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-120-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 120,
+          "point": [
+            4.168000221252441,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 142,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-120-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 120,
+          "point": [
+            4.168000221252441,
+            0.4258536517620086,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 142,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-131-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 131,
+          "point": [
+            3.8320000171661377,
+            0.4317073126633962,
+            5.046666781107584
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 76,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-131-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 131,
+          "point": [
+            3.8320000171661373,
+            0.4258536517620087,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 76,
+            "distance": 0.3359899656677241
+          }
+        },
+        {
+          "id": "mesh-1-triangle-131-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 131,
+          "point": [
+            3.8320000171661373,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 76,
+            "distance": 0.3359899656677241
+          }
+        },
+        {
+          "id": "mesh-1-triangle-131-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 131,
+          "point": [
+            3.8320000171661377,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 76,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-132-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 132,
+          "point": [
+            3.8320000171661377,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 75,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-132-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 132,
+          "point": [
+            3.8320000171661373,
+            0.4302438974380493,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 75,
+            "distance": 0.3359899656677241
+          }
+        },
+        {
+          "id": "mesh-1-triangle-132-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 132,
+          "point": [
+            3.8320000171661373,
+            0.421463406085968,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 75,
+            "distance": 0.3359899656677241
+          }
+        },
+        {
+          "id": "mesh-1-triangle-132-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 132,
+          "point": [
+            3.8320000171661377,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 75,
+            "distance": 0.33598996566772454
+          }
+        },
+        {
+          "id": "mesh-1-triangle-134-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 134,
+          "point": [
+            4.191333452860514,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-134-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 134,
+          "point": [
+            4.210000038146973,
+            0.4170731604099273,
+            5.323999977111817
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 9,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-134-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 134,
+          "point": [
+            4.182000160217285,
+            0.4170731604099273,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-134-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 134,
+          "point": [
+            4.182000160217285,
+            0.41707316040992737,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099274
+          }
+        },
+        {
+          "id": "mesh-1-triangle-135-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 135,
+          "point": [
+            4.392000198364258,
+            0.41707316040992737,
+            4.833333333333333
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099274
+          }
+        },
+        {
+          "id": "mesh-1-triangle-135-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 135,
+          "point": [
+            4.302400207519531,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 14,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-135-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 135,
+          "point": [
+            4.436800193786621,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.41706316040992725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-135-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 135,
+          "point": [
+            4.436800193786621,
+            0.41707316040992737,
+            5.004000091552735
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-136-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 136,
+          "point": [
+            4.392000039418538,
+            0.41707316040992737,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 4,
+            "distance": 0.41706316040992747
+          }
+        },
+        {
+          "id": "mesh-1-triangle-136-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 136,
+          "point": [
+            4.436800098419189,
+            0.4170731604099273,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 4,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-136-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 136,
+          "point": [
+            4.408800029754639,
+            0.4170731604099273,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 4,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-136-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 136,
+          "point": [
+            4.330399990081787,
+            0.41707316040992737,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 4,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-137-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 137,
+          "point": [
+            4.303333441416422,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-137-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 137,
+          "point": [
+            4.277200031280517,
+            0.4170731604099273,
+            5.323999977111816
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 9,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-137-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 137,
+          "point": [
+            4.24920015335083,
+            0.4170731604099273,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 15,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-137-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 137,
+          "point": [
+            4.38360013961792,
+            0.41707316040992737,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-141-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 141,
+          "point": [
+            4.504000186920166,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-141-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 141,
+          "point": [
+            4.504000186920166,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-141-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 141,
+          "point": [
+            4.504000186920166,
+            0.421463406085968,
+            4.747999954223633
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-141-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 141,
+          "point": [
+            4.504000186920166,
+            0.43024389743804936,
+            4.7479999542236335
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-142-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 142,
+          "point": [
+            4.504000186920166,
+            0.4317073126633961,
+            5.046666781107584
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-142-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 142,
+          "point": [
+            4.504000186920166,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-142-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 142,
+          "point": [
+            4.504000186920166,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-142-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 142,
+          "point": [
+            4.504000186920166,
+            0.4258536517620086,
+            5.132000160217285
+          ],
+          "normal": [
+            0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 35,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-153-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 153,
+          "point": [
+            4.168000221252441,
+            0.4317073126633962,
+            5.046666781107584
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-153-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 153,
+          "point": [
+            4.168000221252441,
+            0.4258536517620087,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-153-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 153,
+          "point": [
+            4.168000221252441,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-153-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 153,
+          "point": [
+            4.168000221252441,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 98,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-154-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 154,
+          "point": [
+            4.168000221252441,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-154-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 154,
+          "point": [
+            4.168000221252441,
+            0.4302438974380493,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-154-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 154,
+          "point": [
+            4.168000221252441,
+            0.421463406085968,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-154-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 154,
+          "point": [
+            4.168000221252441,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.3359902040863041
+          }
+        },
+        {
+          "id": "mesh-1-triangle-156-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 156,
+          "point": [
+            4.527333418528238,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-156-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 156,
+          "point": [
+            4.546000003814697,
+            0.4170731604099273,
+            5.323999977111817
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 3,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-156-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 156,
+          "point": [
+            4.51800012588501,
+            0.4170731604099273,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-156-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 156,
+          "point": [
+            4.51800012588501,
+            0.41707316040992737,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-157-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 157,
+          "point": [
+            4.728000164031982,
+            0.41707316040992737,
+            4.833333333333333
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-157-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 157,
+          "point": [
+            4.6384001731872555,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-157-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 157,
+          "point": [
+            4.772800159454345,
+            0.4170731604099273,
+            4.7479999542236335
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-157-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 157,
+          "point": [
+            4.772800159454346,
+            0.41707316040992737,
+            5.004000091552735
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-158-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 158,
+          "point": [
+            4.728000005086263,
+            0.41707316040992737,
+            5.473333358764648
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-158-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 158,
+          "point": [
+            4.772800064086914,
+            0.4170731604099273,
+            5.388000106811523
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-158-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 158,
+          "point": [
+            4.744799995422364,
+            0.4170731604099273,
+            5.515999984741211
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-158-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 158,
+          "point": [
+            4.666399955749512,
+            0.41707316040992737,
+            5.51599998474121
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 3,
+            "distance": 0.41706316040992736
+          }
+        },
+        {
+          "id": "mesh-1-triangle-159-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 159,
+          "point": [
+            4.6393334070841465,
+            0.41707316040992737,
+            5.15333334604899
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-159-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 159,
+          "point": [
+            4.613199996948243,
+            0.4170731604099273,
+            5.323999977111816
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-159-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 159,
+          "point": [
+            4.585200119018555,
+            0.4170731604099273,
+            4.939999961853028
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 13,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-159-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 159,
+          "point": [
+            4.719600105285645,
+            0.41707316040992737,
+            5.196000099182129
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 8,
+            "distance": 0.4170631604099273
+          }
+        },
+        {
+          "id": "mesh-1-triangle-175-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 175,
+          "point": [
+            4.504000186920166,
+            0.4317073126633962,
+            5.046666781107584
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-175-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 175,
+          "point": [
+            4.504000186920166,
+            0.4258536517620087,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-175-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 175,
+          "point": [
+            4.504000186920166,
+            0.43463414311409,
+            5.132000160217285
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-175-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 175,
+          "point": [
+            4.504000186920166,
+            0.43463414311409,
+            4.876000022888183
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 120,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-176-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 176,
+          "point": [
+            4.504000186920166,
+            0.42439023653666175,
+            4.833333333333333
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-176-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 176,
+          "point": [
+            4.504000186920166,
+            0.4302438974380493,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-176-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 176,
+          "point": [
+            4.504000186920166,
+            0.421463406085968,
+            4.7479999542236335
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-176-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 176,
+          "point": [
+            4.504000186920166,
+            0.421463406085968,
+            5.004000091552735
+          ],
+          "normal": [
+            -0.9999999999999999,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 119,
+            "distance": 0.335989965667725
+          }
+        },
+        {
+          "id": "mesh-1-triangle-181-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 181,
+          "point": [
+            3.426666736602783,
+            0.36219511429468787,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 61,
+            "distance": 0.8969426972089494
+          }
+        },
+        {
+          "id": "mesh-1-triangle-181-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 181,
+          "point": [
+            3.3120000839233397,
+            0.392926824092865,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 63,
+            "distance": 0.899990095367432
+          }
+        },
+        {
+          "id": "mesh-1-triangle-181-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 181,
+          "point": [
+            3.3120000839233397,
+            0.21731706857681277,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 63,
+            "distance": 0.899990095367432
+          }
+        },
+        {
+          "id": "mesh-1-triangle-182-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 182,
+          "point": [
+            4.286666790644327,
+            0.14634146293004352,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 45,
+            "distance": 0.899990095367432
+          }
+        },
+        {
+          "id": "mesh-1-triangle-182-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 182,
+          "point": [
+            3.8280001163482664,
+            0.08780487775802613,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 54,
+            "distance": 0.5982756614249105
+          }
+        },
+        {
+          "id": "mesh-1-triangle-182-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 182,
+          "point": [
+            4.516000127792358,
+            0.08780487775802613,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 41,
+            "distance": 0.6348474599440141
+          }
+        },
+        {
+          "id": "mesh-1-triangle-182-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 182,
+          "point": [
+            4.516000127792358,
+            0.2634146332740784,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 41,
+            "distance": 0.6348474599440141
+          }
+        },
+        {
+          "id": "mesh-1-triangle-183-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 183,
+          "point": [
+            4.000000079472859,
+            0.36219511429468787,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 51,
+            "distance": 1.1399903433227543
+          }
+        },
+        {
+          "id": "mesh-1-triangle-183-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 183,
+          "point": [
+            4.3440001010894775,
+            0.392926824092865,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 45,
+            "distance": 0.899990095367432
+          }
+        },
+        {
+          "id": "mesh-1-triangle-183-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 183,
+          "point": [
+            3.656000089645386,
+            0.21731706857681277,
+            4.679999828338623
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 57,
+            "distance": 0.899990095367432
+          }
+        },
+        {
+          "id": "mesh-1-triangle-198-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 198,
+          "point": [
+            4.606666564941406,
+            0.504878044128418,
+            4.453333377838135
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.004414232007292629
+          }
+        },
+        {
+          "id": "mesh-1-triangle-198-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 198,
+          "point": [
+            4.643999862670898,
+            0.504878044128418,
+            4.47200002670288
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.013466972090201146
+          }
+        },
+        {
+          "id": "mesh-1-triangle-199-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 199,
+          "point": [
+            4.6533331871032715,
+            0.504878044128418,
+            4.4066667556762695
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.015730157110928344
+          }
+        },
+        {
+          "id": "mesh-1-triangle-199-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 199,
+          "point": [
+            4.6159998893737795,
+            0.504878044128418,
+            4.388000106811524
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.0066774170280198275
+          }
+        },
+        {
+          "id": "mesh-1-triangle-199-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 199,
+          "point": [
+            4.671999835968018,
+            0.504878044128418,
+            4.388000106811524
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.020256527152382686
+          }
+        },
+        {
+          "id": "mesh-1-triangle-199-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 199,
+          "point": [
+            4.671999835968018,
+            0.504878044128418,
+            4.4440000534057615
+          ],
+          "normal": [
+            0,
+            -1,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 188,
+            "distance": 0.020256527152382686
+          }
+        }
+      ]
+    },
+    {
+      "path": "/tmp/d087-geometry-structural-first/ridge-furrow-market-garden-412.json.gz",
+      "sha256": "d7d2013f7668a916dedb28dc89fab6150690bc89bbef18352894d162c075230b",
+      "sourceSha256": "816e77ac9c44e41378a1e7e0f5085eb3145479fb96d0e00aa0fcd014214d9f5b",
+      "id": "ridge-furrow-market-garden",
+      "width": 412,
+      "contractSha256": "5cb1c95000ce0cc686455f4b4c4ffa357d154a588feb7cfe9055e90f346c4d5b",
+      "sourceGeometrySha256": "dc6c62c144d6a5356e397619c3650c2a865b8e3e501113f32f3323c40159fdf7",
+      "missing": [
+        {
+          "id": "mesh-1-triangle-24-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.5333333015441895,
+            0.5653846263885498,
+            4.740000089009603
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 21,
+            "distance": 0.326646730817464
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.480000019073486,
+            0.49000000953674316,
+            4.564000129699707
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 21,
+            "distance": 0.39197796015950387
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.559999942779541,
+            0.6030769348144531,
+            4.564000129699707
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 23,
+            "distance": 0.19619284035722448
+          }
+        },
+        {
+          "id": "mesh-1-triangle-24-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 24,
+          "point": [
+            4.559999942779541,
+            0.6030769348144531,
+            5.0920000076293945
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 22,
+            "distance": 0.19619284035722448
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.4666666984558105,
+            0.4711538553237915,
+            5.179999987284342
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 20,
+            "distance": 0.4083107674950138
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.519999980926514,
+            0.5465384721755981,
+            5.355999946594238
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 21,
+            "distance": 0.34297953815297394
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.440000057220459,
+            0.4334615468978882,
+            5.355999946594238
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 20,
+            "distance": 0.44097638216603374
+          }
+        },
+        {
+          "id": "mesh-1-triangle-25-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 25,
+          "point": [
+            4.440000057220459,
+            0.4334615468978882,
+            4.828000068664551
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 21,
+            "distance": 0.44097638216603374
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            4.133333206176758,
+            0.5653846263885498,
+            4.740000089009603
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 20,
+            "distance": 0.8166315349900277
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            4.079999923706055,
+            0.49000000953674316,
+            4.564000129699707
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 19,
+            "distance": 0.8483946168834436
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            4.159999847412109,
+            0.6030769348144531,
+            4.564000129699707
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 27,
+            "distance": 0.19619284035722448
+          }
+        },
+        {
+          "id": "mesh-1-triangle-28-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 28,
+          "point": [
+            4.159999847412109,
+            0.6030769348144531,
+            5.0920000076293945
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 26,
+            "distance": 0.19619284035722448
+          }
+        },
+        {
+          "id": "mesh-1-triangle-29-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 29,
+          "point": [
+            4.066666603088379,
+            0.4711538553237915,
+            5.179999987284342
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 19,
+            "distance": 0.8157636700802342
+          }
+        },
+        {
+          "id": "mesh-1-triangle-29-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 29,
+          "point": [
+            4.119999885559082,
+            0.5465384721755981,
+            5.355999946594238
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 20,
+            "distance": 0.8329643423255377
+          }
+        },
+        {
+          "id": "mesh-1-triangle-29-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 29,
+          "point": [
+            4.039999961853027,
+            0.4334615468978882,
+            5.355999946594238
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 19,
+            "distance": 0.750501776473816
+          }
+        },
+        {
+          "id": "mesh-1-triangle-29-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 29,
+          "point": [
+            4.039999961853027,
+            0.4334615468978882,
+            4.828000068664551
+          ],
+          "normal": [
+            0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 19,
+            "distance": 0.750501776473816
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.9333333174387612,
+            0.4711538553237915,
+            5.179999987284342
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 18,
+            "distance": 0.815763021991368
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.959999990463257,
+            0.4334615468978882,
+            4.828000068664551
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 18,
+            "distance": 0.7505011802320587
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.959999990463257,
+            0.4334615468978882,
+            5.355999946594238
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 18,
+            "distance": 0.7505011802320587
+          }
+        },
+        {
+          "id": "mesh-1-triangle-30-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 30,
+          "point": [
+            3.8799999713897706,
+            0.5465384721755981,
+            5.355999946594238
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 39,
+            "distance": 0.8329642062686073
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            3.8666666348775225,
+            0.5653846263885498,
+            4.740000089009603
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 39,
+            "distance": 0.8166313729681686
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            3.839999961853027,
+            0.6030769348144531,
+            5.0920000076293945
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 33,
+            "distance": 0.1961929183768137
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            3.839999961853027,
+            0.6030769348144531,
+            4.564000129699707
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 32,
+            "distance": 0.1961929183768137
+          }
+        },
+        {
+          "id": "mesh-1-triangle-31-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 31,
+          "point": [
+            3.9199999809265136,
+            0.49000000953674316,
+            4.564000129699707
+          ],
+          "normal": [
+            -0.8163517172424625,
+            -0.577555082875463,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 18,
+            "distance": 0.8483939428710228
+          }
+        },
+        {
+          "id": "mesh-1-triangle-34-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 34,
+          "point": [
+            3.533333301544189,
+            0.4711538553237915,
+            5.179999987284342
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 39,
+            "distance": 0.40831047544138094
+          }
+        },
+        {
+          "id": "mesh-1-triangle-34-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 34,
+          "point": [
+            3.5599999427795415,
+            0.4334615468978882,
+            4.828000068664551
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 38,
+            "distance": 0.44097609011240196
+          }
+        },
+        {
+          "id": "mesh-1-triangle-34-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 34,
+          "point": [
+            3.5599999427795415,
+            0.4334615468978882,
+            5.355999946594238
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 39,
+            "distance": 0.44097609011240196
+          }
+        },
+        {
+          "id": "mesh-1-triangle-34-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 34,
+          "point": [
+            3.4800000190734863,
+            0.5465384721755981,
+            5.355999946594238
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 38,
+            "distance": 0.3429792460993416
+          }
+        },
+        {
+          "id": "mesh-1-triangle-35-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 35,
+          "point": [
+            3.46666669845581,
+            0.5653846263885498,
+            4.740000089009603
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 38,
+            "distance": 0.3266464387638311
+          }
+        },
+        {
+          "id": "mesh-1-triangle-35-barycentric-1",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 35,
+          "point": [
+            3.4400000572204594,
+            0.6030769348144531,
+            5.0920000076293945
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 37,
+            "distance": 0.19619248902135825
+          }
+        },
+        {
+          "id": "mesh-1-triangle-35-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 35,
+          "point": [
+            3.4400000572204594,
+            0.6030769348144531,
+            4.564000129699707
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 36,
+            "distance": 0.19619248902135825
+          }
+        },
+        {
+          "id": "mesh-1-triangle-35-barycentric-3",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 35,
+          "point": [
+            3.5199999809265137,
+            0.49000000953674316,
+            4.564000129699707
+          ],
+          "normal": [
+            -0.8163520418616059,
+            -0.5775546240386158,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 38,
+            "distance": 0.3919776681058715
+          }
+        }
+      ]
+    },
+    {
+      "path": "/tmp/d087-geometry-structural-second/corbelled-stone-piggery-412.json.gz",
+      "sha256": "a0a5411768511674d2b614eb922d7071462c74f2d838a201e52281e2d33dc586",
+      "sourceSha256": "7fc09b5556ca646547769a1bfaaf9acc06ff38e4f1e96da21254a2a1196e150d",
+      "id": "corbelled-stone-piggery",
+      "width": 412,
+      "contractSha256": "74b6032902ec4d0b0b8cb8f19462377d457d032eb16c4156dde985f4db1b6e91",
+      "sourceGeometrySha256": "28bd15fbe9c4727870bb33f882b04f1f67062f6542873cc46bc6aa96d3f0b387",
+      "missing": [
+        {
+          "id": "mesh-1-triangle-4-barycentric-0",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 4,
+          "point": [
+            4.253333489100138,
+            0.1094252864519755,
+            4.559999942779541
+          ],
+          "normal": [
+            0,
+            0,
+            1
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 97,
+            "distance": 0.002947452170660725
+          }
+        }
+      ]
+    },
+    {
+      "path": "/tmp/d087-geometry-facade-first/lakeland-bank-barn-ranch-412.json.gz",
+      "sha256": "6f6f7992ca49d1bdcebe02e86a6640fa1a20d32aa39b441694f7a3d551b6749e",
+      "sourceSha256": "0f6e5ef419b25346ea02d8b60df7a00cb252b5d17b6ba91b763e21ac0e9a9440",
+      "id": "lakeland-bank-barn-ranch",
+      "width": 412,
+      "contractSha256": "db7ea603b93e73c7e69bde2ccc85ef0392fbc0936951006ed9e9ee6b6e41ba68",
+      "sourceGeometrySha256": "9c9b45caf7354216358430375a948936e8e044ba94f3115bd6834dc47bb8c196",
+      "missing": [
+        {
+          "id": "mesh-1-triangle-137-barycentric-2",
+          "source": "fixed-triangle",
+          "mesh": 1,
+          "triangle": 137,
+          "point": [
+            4.480000019073486,
+            0.07228260636329652,
+            4.8199999809265135
+          ],
+          "normal": [
+            -1,
+            0,
+            0
+          ],
+          "required": true,
+          "reason": "owner-only exterior surface",
+          "blocker": {
+            "mesh": 1,
+            "triangle": 92,
+            "distance": 0.11998988555908241
+          }
+        }
+      ]
+    }
+  ]
+}
