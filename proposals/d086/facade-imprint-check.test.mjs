@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {originalFacadeDesigns,assertFacadeImprint,facadeNegatives,checkFacadeImprints} from './facade-imprint-check.mjs';
+import {createCivicMarketDesign,MODEL_IDS,emitCivicMarketDesign} from '../../src/render/britishCivicMarketModels.mjs';
+const original=await originalFacadeDesigns();
+for(const id of MODEL_IDS)test('current complete independent facade contract: '+id,()=>{const m=createCivicMarketDesign(id),raw=original.createCivicMarketDesign(id),r=assertFacadeImprint(m,raw),bad=facadeNegatives(m,raw);assert.equal(bad.length,r.intents?9:0);});
+test('original 520 centre/corner samples,27 original plus54 additional negatives stay non-vacuous',async()=>{const r=await checkFacadeImprints();assert.equal(r.samples,520);assert.equal(r.negativeControls,81);});
+test('public model clones cannot mutate cached render geometry or intent metadata',()=>{for(const id of MODEL_IDS){const expected=createCivicMarketDesign(id),copy=createCivicMarketDesign(id);copy.triangles[0].p[0][0]+=100;copy.parts[0].faces[0].points[0][0]+=100;if(copy.facades.length)copy.facades[0].faces[0].color='#000000';assert.deepEqual(createCivicMarketDesign(id),expected);let count=0;const canonical=emitCivicMarketDesign({X:x=>x,Z:z=>z,H:1,a:{y0:0,O:{triangle(){count++;}}}},id);assert.equal(count,expected.triangles.length);assert.ok(Object.isFrozen(canonical));assert.ok(Object.isFrozen(canonical.triangles[0].p[0]));assert.throws(()=>{canonical.triangles[0].p[0][0]+=1;},TypeError);assert.deepEqual(createCivicMarketDesign(id),expected);}});
+test('invalid exact model IDs never enter cache',()=>{for(const id of[null,undefined,0,NaN,{},'constructor','borough-iron-market '])assert.throws(()=>createCivicMarketDesign(id));});

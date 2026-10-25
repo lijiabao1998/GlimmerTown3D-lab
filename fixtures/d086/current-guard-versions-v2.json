@@ -1,0 +1,60 @@
+{
+  "schema": 2,
+  "reason": "Exact single-product-file repair composes source-v1; current copies change only the finite source lease import.",
+  "copies": [
+    {
+      "source": "tools/d086-source-v1.test.mjs",
+      "target": "tools/d086-source-v2.test.mjs",
+      "sourceSha256": "c5dfae1416058c8ac75458c7fd88e25dbc8cc656145ac8b789700f65d4011fba",
+      "targetSha256": "8e55e0802efc3d7094151625dffed66c6c63dc55dbd48b830894371bf16a0db6",
+      "before": "'./d086-source-v1.mjs'",
+      "after": "'./d086-source-v2.mjs'"
+    },
+    {
+      "source": "tools/d085-source-d086.test.mjs",
+      "target": "tools/d085-source-d086-v2.test.mjs",
+      "sourceSha256": "43865c75041678e33813013ed89e4fb9d966b90a800ed18ba14a009d5f55ce39",
+      "targetSha256": "55169ffcfe1e9fc09b5200ed34e4ee1da8392f081e94854275cd61f6f7784ff6",
+      "before": "'./d086-source-v1.mjs'",
+      "after": "'./d086-source-v2.mjs'"
+    }
+  ],
+  "dependencyCopies": [
+    {
+      "from": "tools/unit-d052.mjs",
+      "to": "tools/unit-d052-d086.mjs",
+      "originalSha256": "7879748f4c88ea6c5eb4b8f7aed6e59c9d85be0f79e080a7d61e8c425b05dda3",
+      "currentSha256": "641cf2e7a9a4a9f7365a4da83ccad308cff5265dba7f9f4c695c646fda553cf2",
+      "changes": [
+        {
+          "before": "HERITAGE_TOOLS, TOOL_PRICE",
+          "after": "HERITAGE_TOOLS, NATIVE_ART_TOOLS, TOOL_PRICE"
+        }
+      ]
+    },
+    {
+      "from": "tools/unit-d054-ui.mjs",
+      "to": "tools/unit-d054-ui-d086.mjs",
+      "originalSha256": "e024a87ffbe63b904451bcc3511ee915a808bebdd845340362e898bae5ace6e8",
+      "currentSha256": "04493e127abf3344a43a9e6bbc1d9a886133fe78effd66fa9b15c975935da2e7",
+      "changes": [
+        {
+          "before": "HERITAGE_TOOLS, FACILITY_TOOLS",
+          "after": "HERITAGE_TOOLS, NATIVE_ART_TOOLS, FACILITY_TOOLS"
+        }
+      ]
+    },
+    {
+      "from": "tools/unit-d081-touch-lease.mjs",
+      "to": "tools/unit-d081-touch-lease-d086.mjs",
+      "originalSha256": "e7408647821c3e1ca95cd3ad9f22c92e2b108ed57bdada6615a9f64c2dce8766",
+      "currentSha256": "b93e537ccfd7b2db2e169b88baec945f86954086256ae361ac1398f0b095851e",
+      "changes": [
+        {
+          "before": "'./unit-d052.mjs?d081-touch-lease'",
+          "after": "'./unit-d052-d086.mjs?d081-touch-lease'"
+        }
+      ]
+    }
+  ]
+}
