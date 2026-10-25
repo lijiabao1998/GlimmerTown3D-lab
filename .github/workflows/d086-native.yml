@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Source leases, finite current versions and mandatory release graph negatives
-        run: node --test tools/d086-source-v2.test.mjs tools/d086-source-v2-lease.test.mjs tools/d086-validation.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-clean-workspace.test.mjs proposals/d086/facade-imprint-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs proposals/d086/browser-required-diagnostic.test.mjs proposals/d086/browser-geometry-compare.test.mjs
+        run: node --test tools/d086-source-v3.test.mjs tools/d086-source-v3-lease.test.mjs tools/d086-validation-v3.test.mjs tools/d083-release-trigger-d086.test.mjs proposals/d086/browser-provenance.test.mjs proposals/d086/inherited-ui-guard-deltas.test.mjs proposals/d086/facade-imprint-v2-clean-workspace.test.mjs proposals/d086/facade-imprint-v2-check.test.mjs proposals/d086/browser-capture-quiet.test.mjs proposals/d086/scene-budget.test.mjs proposals/d086/browser-frame-qualification.test.mjs proposals/d086/browser-performance.test.mjs proposals/d086/browser-first-use-performance.test.mjs proposals/d086/native-first-use-fixture.test.mjs proposals/d086/browser-detail-framing.test.mjs proposals/d086/browser-geometry-diagnostic.test.mjs proposals/d086/browser-required-diagnostic.test.mjs proposals/d086/browser-geometry-compare-v3.test.mjs tools/d086-source-v3-contract.test.mjs tools/d086-current-guards-v3.test.mjs proposals/d086/freeze-source-v3.test.mjs proposals/d086/inspection-camera.test.mjs proposals/d086/direct-basis-determinism.test.mjs
       - run: npm run typecheck
       - name: Immutable immediate baseline and original affected historical contracts
         run: |
@@ -39,6 +39,15 @@ jobs:
           git worktree add --detach ../GlimmerTown3D-lab-d086-first-candidate 4b0bbcdafaa3b3df615633c7eb2fa236242f07fc
           ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d086-first-candidate/node_modules
           node proposals/d086/first-candidate-contracts.mjs
+      - name: Immutable immediate geometry V2 source, facade, structural and workflow assertions
+        run: |
+          git worktree add --detach ../GlimmerTown3D-lab-d086-geometry-v2 207404e1479593cd748b6e71bbe9c2d7e3c1042a
+          ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d086-geometry-v2/node_modules
+          node proposals/d086/geometry-v2-contracts.mjs
+      - name: Exact production geometry parity and optimized compile negative controls
+        run: |
+          node proposals/d086/compile-optimization-current-check.mjs
+          node proposals/d086/compile-optimization-invariants.mjs src/render/britishCivicMarketModels.mjs scratch/d086-compile-v3/invariants.json
       - name: Actual prior147 binary and all157 canonical architectural identities
         run: |
           node proposals/d086/model-audit.mjs --baseline
@@ -48,7 +57,7 @@ jobs:
       - name: Current closed meshes, architectural facade backing and negative controls
         run: |
           node proposals/d086/mesh-check.mjs
-          node proposals/d086/facade-imprint-check.mjs --label=ci
+          node proposals/d086/facade-imprint-v2-check.mjs --label=ci
       - name: Current native fiscal, services, RNG, history, save, construction and undo
         run: node proposals/d086/native-variant-check.mjs
       - name: Current catalogue43 retains every original interaction and negative control
@@ -79,6 +88,8 @@ jobs:
             scratch/d086-native-variant/
             scratch/d086-historical/
             scratch/d086-first-candidate-contracts/
+            scratch/d086-geometry-v2-contracts/
+            scratch/d086-compile-v3/
             scratch/d086-facade-imprint/
             scratch/d086-scene-budget/
           if-no-files-found: error
@@ -172,8 +183,8 @@ jobs:
       - run: npm ci
       - name: Independent numerical wall and roof plan, topology and unchanged camera negatives
         run: |
-          node --test proposals/d086/structural-plan-v3.test.mjs proposals/d086/structural-plan-v2.test.mjs
-          node proposals/d086/structural-plan-v3-check.mjs --label=ci
+          node --test proposals/d086/structural-plan-v4.test.mjs proposals/d086/structural-plan-v2.test.mjs
+          node proposals/d086/structural-plan-v4-check.mjs --label=ci
       - name: Every unchanged full-scene required surface remains mandatory
         run: node proposals/d086/native-surface-plan.mjs --label=ci
       - uses: actions/upload-artifact@v4

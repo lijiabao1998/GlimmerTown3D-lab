@@ -1,4 +1,4 @@
-import {d084PriorInventory} from './d086-source-v2.mjs';
+import {d084PriorInventory} from './d086-source-v3.mjs';
 // Mandatory independent current-mesh proofs, separate from immutable historical tests.
 import fs from 'node:fs';import path from 'node:path';import assert from 'node:assert/strict';import {spawnSync}from'node:child_process';import{createHash}from'node:crypto';import{pathToFileURL}from'node:url';import{ROOT}from'./cdp.mjs';import{D083_CURRENT_PATHS}from'./d083-scope.mjs';import{releaseSourceManifest}from'./d082-release-source-v2.mjs';
 const hash=f=>createHash('sha256').update(fs.readFileSync(path.join(ROOT,f))).digest('hex');

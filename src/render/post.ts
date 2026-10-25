@@ -95,7 +95,7 @@ export class Pipeline {
   }
 
   // cssW/cssH＝畫布的 CSS 尺寸；dpr＝實際像素比。像素風用 CSS 尺寸除以 pixelCss，其餘用裝置像素
-  render(renderer: THREE.WebGLRenderer, scene: THREE.Scene, cam: THREE.OrthographicCamera, style: Style, cssW: number, cssH: number, dpr: number) {
+  render(renderer: THREE.WebGLRenderer, scene: THREE.Scene, cam: THREE.OrthographicCamera | THREE.PerspectiveCamera, style: Style, cssW: number, cssH: number, dpr: number) {
     const w = style.pixelCss > 1 ? Math.max(1, Math.floor(cssW / style.pixelCss)) : Math.max(1, Math.floor(cssW * dpr));
     const h = style.pixelCss > 1 ? Math.max(1, Math.floor(cssH / style.pixelCss)) : Math.max(1, Math.floor(cssH * dpr));
     if (this.rt.width !== w || this.rt.height !== h) this.rt.setSize(w, h);

@@ -1,0 +1,23 @@
+{
+  "schema": 3,
+  "baseline": "207404e1479593cd748b6e71bbe9c2d7e3c1042a",
+  "reason": "Only V2-to-V3 source-lease import seams. Every original assertion byte and complete V1/V2 guard proof remains unchanged.",
+  "copies": [
+    {
+      "source": "tools/d086-source-v2.test.mjs",
+      "target": "tools/d086-source-v3.test.mjs",
+      "sourceSha256": "8e55e0802efc3d7094151625dffed66c6c63dc55dbd48b830894371bf16a0db6",
+      "targetSha256": "a124242ae1b799c2da94b0ead4a55f78d0782c629c1b89a85b8181d750cf5a67",
+      "before": "'./d086-source-v2.mjs'",
+      "after": "'./d086-source-v3.mjs'"
+    },
+    {
+      "source": "tools/d085-source-d086-v2.test.mjs",
+      "target": "tools/d085-source-d086-v3.test.mjs",
+      "sourceSha256": "55169ffcfe1e9fc09b5200ed34e4ee1da8392f081e94854275cd61f6f7784ff6",
+      "targetSha256": "a198dc6b59ec392d0e631f7caa99176f5b1e975fb5127dda82b5dbd834c75c69",
+      "before": "'./d086-source-v2.mjs'",
+      "after": "'./d086-source-v3.mjs'"
+    }
+  ]
+}
