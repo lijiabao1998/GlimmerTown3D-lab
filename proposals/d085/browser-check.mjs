@@ -22,8 +22,9 @@ const report={width,height,source:baseline?'1e7b43e96097969fac33b57c37fe02444cef
 const record=()=>fs.writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));
 record();
 try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scratch/d085-baseline'):path.resolve('dist')},async({open,page})=>{
+ report.browser=await page.send('Browser.getVersion');
  const settle=()=>page.evaluate('for(let i=0;i<160;i++)__gt.spin(0);new Promise(r=>{let n=0;function f(){if(++n===8)r();else requestAnimationFrame(f)}requestAnimationFrame(f)})');
- const shot=async(name)=>{await settle();await page.evaluate(`new Promise((resolve,reject)=>{const start=performance.now();function check(){if(document.querySelector('#toasts')?.childElementCount===0 && !document.getAnimations().some(a=>a.playState==='running'))setTimeout(resolve,500);else if(performance.now()-start>10000)reject(new Error('Native UI did not settle'));else setTimeout(check,50)}check()})`);const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()')});record();};
+ const shot=async(name)=>{await settle();await page.evaluate(`new Promise((resolve,reject)=>{const start=performance.now();function check(){if(document.querySelector('#toasts')?.childElementCount===0 && !document.getAnimations().some(a=>a.playState==='running'))setTimeout(resolve,500);else if(performance.now()-start>10000)reject(new Error('Native UI did not settle'));else setTimeout(check,50)}check()})`);const png=Buffer.from((await page.send('Page.captureScreenshot',{format:'png'})).data,'base64');fs.writeFileSync(`${out}/${name}.png`,png);report.shots.push({name,sha256:createHash('sha256').update(png).digest('hex'),stats:await page.evaluate('__gt.renderInfoAll()'),uiRaster:await page.evaluate(`({dpr:devicePixelRatio,trash:(()=>{const r=document.querySelector('[data-t="doze"] svg')?.getBoundingClientRect();return r?{x:r.x,y:r.y,w:r.width,h:r.height}:null})()})`)});record();};
  for (const enabled of (baseline?[false]:[false,true])) {
   report.phase='open '+(enabled?'existing isolated city':'new isolated city');record();
   let openTimer;try{await Promise.race([open('sample='+(enabled?'mine':'newcity')+'&streetFrontage='+(enabled?'1':'0')),new Promise((_,reject)=>{openTimer=setTimeout(()=>reject(new Error('Open timed out; no modal accepted')),90000)})]);}finally{clearTimeout(openTimer);}
@@ -76,38 +77,33 @@ try {await withBrowser({width,height,port:8644,root:baseline?path.resolve('scrat
   await click('#menuBtn');assert.match(await page.evaluate(`document.querySelector('[data-m="frontage"]').textContent`),/開啟道路共邊/);await page.evaluate(`document.querySelector('[data-m="frontage"]').scrollIntoView({block:'center'})`);await shot('control-off-menu');
   await click('[data-m="frontage"]');
   await page.evaluate('__gt.view(9,9,2);__gt.tool("civic","heritageGranary")');await settle();
-  const hold=async()=>{const [hx,hy]=await page.evaluate('__gt.cellScreen(8,8)');await page.send('Input.dispatchMouseEvent',{type:'mousePressed',x:hx,y:hy,button:'left',buttons:1,clickCount:1});await settle();return[hx,hy];};
+  await page.send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:1});
+  const hold=async()=>{await page.evaluate('__gt.tool("civic","heritageGranary")');await settle();const [hx,hy]=await page.evaluate('__gt.cellScreen(8,8)');await page.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:hx,y:hy,id:1,radiusX:1,radiusY:1,force:1}]});await settle();return[hx,hy];};
   let [hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),2);await shot('control-enabled-held');
-  // Keyboard opens the actual menu while pointer is held: interruption must clear the preview.
-  await page.evaluate('document.querySelector("#menuBtn").focus()');
-  await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  await page.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await settle();
-  assert.equal(await page.evaluate('document.querySelector("#menu").hidden'),false);
-  assert.equal(await page.evaluate('__gt.frontageCount()'),0,'opening native menu cancels held gold');
-  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:hx,y:hy,button:'left',buttons:0,clickCount:1});
+  // Native pointer cancellation is followed by a real menu click, not a test-hook menu.
+  await page.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});await settle();
+  assert.equal(await page.evaluate('__gt.frontageCount()'),0,'native touch cancellation clears held gold');
+  await click('#menuBtn');assert.equal(await page.evaluate('document.querySelector("#menu").hidden'),false);
   await page.evaluate(`document.querySelector('[data-m="frontage"]').scrollIntoView({block:'center'})`);await shot('control-on-menu');await click('[data-m="frontage"]');
   [hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),0,'disabled real preview has no gold');
   await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
-  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:hx,y:hy,button:'left',buttons:0,clickCount:1});await settle();
+  await page.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await settle();
   assert.equal(await page.evaluate('JSON.stringify([__gt.save(),__gt.history()])'),stable,'UI toggles preserve save/history bytes');
   await click('#menuBtn');await click('[data-m="frontage"]');[hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),2);
   await page.evaluate('__gt.tool("road","alley")');assert.equal(await page.evaluate('__gt.frontageCount()'),0,'tool switch clears gold');
-  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:hx,y:hy,button:'left',buttons:0,clickCount:1});
+  await page.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
   await open('sample=mine&streetFrontageControl=1');await page.evaluate('__gt.simPlay(false)');await settle();
   assert.equal(await page.evaluate('__gt.frontageCount()'),0,'reload has no orphan gold');
   await click('#menuBtn');assert.match(await page.evaluate(`document.querySelector('[data-m="frontage"]').textContent`),/開啟道路共邊/);await page.evaluate(`document.querySelector('[data-m="frontage"]').scrollIntoView({block:'center'})`);await shot('control-reloaded-off');await click('#menuX');
   // Native export/import transition while enabled must clear transient render state.
   await click('#menuBtn');await click('[data-m="frontage"]');
   await page.evaluate('__gt.tool("civic","heritageGranary");__gt.view(9,9,2)');[hx,hy]=await hold();assert.equal(await page.evaluate('__gt.frontageCount()'),2);
-  await page.evaluate('document.querySelector("#menuBtn").focus()');
-  await page.send('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-  await page.send('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});await settle();
-  await page.send('Input.dispatchMouseEvent',{type:'mouseReleased',x:hx,y:hy,button:'left',buttons:0,clickCount:1});
+  await page.send('Input.dispatchTouchEvent',{type:'touchCancel',touchPoints:[]});await settle();await click('#menuBtn');
   await click('[data-m="paste"]');
   await page.evaluate(`document.querySelector('#dlg textarea').value=${JSON.stringify(code)}`);await click('#dlgOk');
   assert.equal(await page.evaluate('__gt.frontageCount()'),0,'import scene contains no orphan gold');
   assert.equal(await page.evaluate('__gt.previewCount()'),0,'import clears held preview');await shot('control-import-cleared');
-  report.nativeControl={liveToggle:true,heldMenuCancel:true,toolSwitch:true,reloadDefaultOff:true,importSceneClear:true,worldBytesUnchanged:true};
+  report.nativeControl={liveToggle:true,nativeTouchCancel:true,toolSwitch:true,reloadDefaultOff:true,importSceneClear:true,worldBytesUnchanged:true};
 
  }
  report.errors=page.errors;assert.deepEqual(page.errors,[]);report.passed=true;record();

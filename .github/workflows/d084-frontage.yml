@@ -24,6 +24,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: sudo apt-get update && sudo apt-get install -y fonts-wqy-microhei
+      - name: Fixed CPU SVG raster diagnostic; WebGL remains original SwiftShader
+        run: |
+          CHROME_BIN="$(command -v google-chrome)"
+          printf '#!/usr/bin/env bash\nexec "%s" --disable-gpu-rasterization "$@"\n' "$CHROME_BIN" > "$RUNNER_TEMP/d085-chrome"
+          chmod +x "$RUNNER_TEMP/d085-chrome"
+          echo "CHROME_PATH=$RUNNER_TEMP/d085-chrome" >> "$GITHUB_ENV"
+          "$CHROME_BIN" --version
       - run: node --experimental-strip-types proposals/d084/frontage-check.mjs
       - run: node --experimental-strip-types proposals/d084/source-check.mjs
       - run: node --test tools/d084-opt-in.test.mjs tools/d084-source-v2.test.mjs tools/d082-release-source-v2.test.mjs
