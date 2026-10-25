@@ -1,4 +1,4 @@
-import {D084_CHANGED,D084_ADDED,d084PriorSource,d084PriorInventory} from './d086-source-v3.mjs';
+import {D084_CHANGED,D084_ADDED,d084PriorSource,d084PriorInventory} from './d086-source-v4.mjs';
 import {releaseHistoricalSource,releaseSourceManifest} from './d082-release-source-v2.mjs';
 // Finite D083 source accounting only. Runtime imports always use the product.
 import fs from 'node:fs';
