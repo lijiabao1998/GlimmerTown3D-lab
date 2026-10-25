@@ -12,11 +12,24 @@ export class Preview {
   private readonly okColor = new THREE.Color();
   private readonly badColor = new THREE.Color(0xff5a4a);
   private readonly m = new THREE.Matrix4();
-  private readonly frontage: StreetFrontage | null;
+  private frontage: StreetFrontage | null;
   constructor(capacity = 4096, streetFrontage = false) {
     this.mesh = this.make(capacity);
     this.frontage = streetFrontage ? new StreetFrontage() : null;
     if (this.frontage) this.mesh.add(this.frontage.mesh);
+  }
+  // D085: UI-only toggle. Detach and dispose before disabling; never leave a gold child behind.
+  setFrontageEnabled(enabled: boolean) {
+    this.clear();
+    if (enabled === this.frontageEnabled) return;
+    if (enabled) {
+      this.frontage = new StreetFrontage();
+      this.mesh.add(this.frontage.mesh);
+    } else if (this.frontage) {
+      this.mesh.remove(this.frontage.mesh);
+      this.frontage.dispose();
+      this.frontage = null;
+    }
   }
   get frontageEnabled() { return this.frontage !== null; }
   setFrontage(n: number, road: ArrayLike<number>, cells: readonly PreviewCell[]) {

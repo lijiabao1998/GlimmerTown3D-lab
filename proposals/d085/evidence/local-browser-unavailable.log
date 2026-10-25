@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Chrome 沒有起來（重開一次也失敗）：第 1 次 Chrome 結束了（結束碼 signal）；第 2 次 Chrome 結束了（結束碼 signal）
+  stderr 尾巴：[32:32:1025/121154.134395:ERROR:third_party/crashpad/crashpad/util/file/filesystem_posix.cc:63] mkdir : No such file or directory (2)
+chrome_crashpad_handler: --database is required
+Try 'chrome_crashpad_handler --help' for more information.
+[32:32:1025/121154.135920:FATAL:chrome/browser/process_singleton_posix.cc:297] Check failed: . socket() failed: Operation not permitted (1)
+[49:49:0100/000000.172418:ERROR:content/zygote/zygote_linux.cc:662] write: Broken pipe (32)
+[50:50:0100/000000.172469:ERROR:content/zygote/zygote_linux.cc:662] write: Broken pipe (32)
+    at withBrowser (file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d085-own/tools/cdp.mjs:114:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///workspace/shared/own-cloud-migration-20261024/GlimmerTown3D-lab-d085-own/proposals/d085/browser-check.mjs:24:6
+
+Node.js v24.19.0

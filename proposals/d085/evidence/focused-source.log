@@ -1,0 +1,24 @@
+✔ finite new geometry revision maps only exact current bytes to immutable approved source (6.043476ms)
+(node:66) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ actual opt-in call skips all frontage inputs and method access when disabled (3.588238ms)
+✔ actual enabled Preview draws shared edge without changing input world (1.431031ms)
+✔ enabled missing API is not swallowed; unconditional call and disabled enabled-path mutations fail (2.863114ms)
+(node:67) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ real Preview repeated enable/disable detaches and disposes all gold resources without world changes (6.094112ms)
+✔ growth, cancel and reconstructed scene cannot retain an orphan gold mesh (0.452824ms)
+✔ native menu branch is explicitly gated, cancels held build first, requires actual API and writes only rendering state (1.516641ms)
+✔ resource-leak negative controls fail the same real Three lifecycle assertions (9.091598ms)
+✔ actual full onMenu rejects forged toggle when opt-in is absent and enabled path leaves world/save/RNG untouched (2.958466ms)
+✔ setting same state deliberately interrupts and requires fresh placement without allocating duplicate geometry (0.25887ms)
+✔ exact new source returns only independently fetched published preimages; no extra edit can pass (23.734589ms)
+✔ current complete inventory qualified, unknown/missing/duplicate paths rejected by unchanged historical inventory (187.592633ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 304.729467
