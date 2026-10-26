@@ -1,0 +1,97 @@
+{
+  "qualification": "Write-once first-red inputs and outcomes retained. No false-pass or camera/probe exemption. Complete original local contracts remain separately SHA-pinned.",
+  "files": {
+    "access-first.txt": {
+      "sha256": "64e5327b2aaadf9b9faeb456a177d59b71682d41122d16552ebed9d6767ab00c",
+      "bytes": 6550
+    },
+    "access-focused-first.txt": {
+      "sha256": "3583352dfff6389764c2e2e99a3abd693589b447b175da1b2d2536df21917ae1",
+      "bytes": 1796
+    },
+    "bare-first-ray-source.mjs": {
+      "sha256": "f8de38684dad861a192f514638b508a0a1da45a4fe72e537f5abed985576b657",
+      "bytes": 30900
+    },
+    "bare-first-rays.txt": {
+      "sha256": "271bd2f441291441c1fbd2ff3ff371b33f45b0ef6f83371c3758e1a03fd2f0bc",
+      "bytes": 2534
+    },
+    "bare-first-red.json": {
+      "sha256": "34592a8bbd1e70855cdc877049550ff93d10bcb5b341d54eb46126de0552becf",
+      "bytes": 438
+    },
+    "bare-first-source.mjs": {
+      "sha256": "9874922599c4f4d7de8c24dbdd38761b45f911810c99473e4a151d98179b7d21",
+      "bytes": 30719
+    },
+    "bare-joints-v2-source.mjs": {
+      "sha256": "a3743fdc2a6a60b1be2a4133ef20d1455833dc45a2e50da95f18908870ec8d16",
+      "bytes": 30902
+    },
+    "card-invariants-first.txt": {
+      "sha256": "82922cddb25284e65fce903998bcd0ceabb376fcdd3ad936cc37518036fa01b7",
+      "bytes": 1264
+    },
+    "coplanar-first.txt": {
+      "sha256": "ae03d2843bdf1571c5b4b822283602f2dc4f12618199bc7b93373a0b4dd53c76",
+      "bytes": 1198
+    },
+    "detailed-first-counts.txt": {
+      "sha256": "e70e70ebbc09f79589015559f713de19d85f15e57585d25478f504d51ca44514",
+      "bytes": 3706
+    },
+    "detailed-first-source.mjs": {
+      "sha256": "4b00028095ee3bd87f1a92884606f5b06c6fcbb40b39087974fb894506dad1fb",
+      "bytes": 37238
+    },
+    "detailed-v2-source.mjs": {
+      "sha256": "5471561eaad5b4c3d6691c11032a513e6fe839d13b48edb6958b256a1366df7a",
+      "bytes": 37244
+    },
+    "detailed-v3-source.mjs": {
+      "sha256": "389e701e8801d7d571da1c80d30acf1ab95d71057de6e7255adda5cee99d3238",
+      "bytes": 37228
+    },
+    "detailed-v4-b985-source.mjs": {
+      "sha256": "b985466318fc2e2f757a308e9a1677d4f598613bee9c3ef140200972f8d9f31b",
+      "bytes": 37228
+    },
+    "detailed-v5-shoulder-source.mjs": {
+      "sha256": "4944ad3ce085f57233440dc7edf6067b6923999603afcbff324a1b70d7d77e4c",
+      "bytes": 37230
+    },
+    "double-court-coplanar-first-red.json": {
+      "sha256": "84213cdef5fba05d207a4e75ebd98a1309cd5992a041a3c536c076e064715fbf",
+      "bytes": 8705
+    },
+    "first-bare-missing-probes.json": {
+      "sha256": "7f79696f661a64697c95318b0d6333085fc10a840806b344f40e375e7b734b00",
+      "bytes": 5580
+    },
+    "first-hidden-paint.json": {
+      "sha256": "89eb8c651a9ae5f5f8a757f7e39c9edbb2487a80c2ccf5ccae48c4c3ff951901",
+      "bytes": 18358
+    },
+    "geometry-focused-first.txt": {
+      "sha256": "190282511784ea23335a9ebd1118aa45a201f63b6466fc8b4f19f9a70bc7a1e0",
+      "bytes": 5530
+    },
+    "native-longhouse-first-red.json": {
+      "sha256": "4a600ed2846954828f91492f40d1544e960e0af0af48768a02268e9479d2674f",
+      "bytes": 358
+    },
+    "precompiled-cache-first-tests.txt": {
+      "sha256": "5a862ac454e21a74275e3b09f8d311b103e68a5945c35fdd14fdabe014585f53",
+      "bytes": 4634
+    },
+    "shoulder-first-source.mjs": {
+      "sha256": "8f58ae077fd89ec91a978f21a983df54fd2e3977adc31aa34d122cf6b85dbd0d",
+      "bytes": 37230
+    },
+    "shoulder-hidden-paint.json": {
+      "sha256": "2008019d2f6650924132516da0fd34f9055043d5f7ec1979a5ea3085e05925f3",
+      "bytes": 5576
+    }
+  }
+}

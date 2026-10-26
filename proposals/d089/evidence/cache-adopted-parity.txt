@@ -1,0 +1,1 @@
+{"passed":true,"out":"/tmp/GlimmerTown3D-lab-d089-own/scratch/d089-cache-parity/adopted-final","models":190,"scenes":5,"qualification":{"passed":true,"sourceSha256":"1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf","candidateSha256":"a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39","models":11}}

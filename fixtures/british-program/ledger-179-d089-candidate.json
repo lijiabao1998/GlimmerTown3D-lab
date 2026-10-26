@@ -1,0 +1,405 @@
+{
+  "schema": 4,
+  "program": "Twenty-wave British architectural program",
+  "publishedBaseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "publishedCount": 179,
+  "targetCount": 200,
+  "publishedWaveCount": 18,
+  "targetWaveCount": 20,
+  "publishedModelDigest": "2d6aea0cb838d2311001d010464cd7f29851cc91beb5bc04434915d4de15c239",
+  "publishedWaves": [
+    {
+      "wave": 1,
+      "card": "D068",
+      "slots": [
+        "65:0",
+        "86:0",
+        "91:0",
+        "98:0",
+        "99:0",
+        "57:0",
+        "64:0",
+        "110:0",
+        "167:0",
+        "168:0"
+      ],
+      "publishedCountBefore": 0,
+      "publishedCountAfter": 10,
+      "releasedCommit": "ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883",
+      "publicationReceipt": "LOG.md",
+      "verifiedPublishedBySubsequentImmutableBaseline": "ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883"
+    },
+    {
+      "wave": 2,
+      "card": "D069",
+      "slots": [
+        "65:1",
+        "86:1",
+        "91:1",
+        "98:1",
+        "99:1",
+        "57:1",
+        "64:1",
+        "110:1",
+        "167:1",
+        "168:1"
+      ],
+      "publishedCountBefore": 10,
+      "publishedCountAfter": 20,
+      "releasedCommit": "bece722ed2480a3728a274c90bd0170eb52cf389",
+      "publicationReceipt": "LOG.md",
+      "verifiedPublishedBySubsequentImmutableBaseline": "bece722ed2480a3728a274c90bd0170eb52cf389"
+    },
+    {
+      "wave": 3,
+      "card": "D070",
+      "slots": [
+        "65:2",
+        "86:2",
+        "91:2",
+        "98:2",
+        "99:2",
+        "57:2",
+        "64:2",
+        "110:2",
+        "167:2",
+        "168:2"
+      ],
+      "publishedCountBefore": 20,
+      "publishedCountAfter": 30,
+      "releasedCommit": "1c40e13a219adb90827acd3b60fb6b7623600b63",
+      "publicationReceipt": "LOG.md",
+      "verifiedPublishedBySubsequentImmutableBaseline": "1c40e13a219adb90827acd3b60fb6b7623600b63"
+    },
+    {
+      "wave": 4,
+      "card": "D071",
+      "slots": [
+        "32:0",
+        "32:1",
+        "32:2",
+        "45:0",
+        "45:1",
+        "45:2",
+        "108:0",
+        "108:1",
+        "108:2",
+        "109:0"
+      ],
+      "publishedCountBefore": 30,
+      "publishedCountAfter": 40,
+      "verifiedPublishedBySubsequentImmutableBaseline": "f689c35d8d061498779321149ccce4443f0ce6de"
+    },
+    {
+      "wave": 5,
+      "card": "D072",
+      "slots": [
+        "109:1",
+        "109:2",
+        "48:0",
+        "48:1",
+        "48:2",
+        "115:0",
+        "115:1",
+        "115:2",
+        "31:0",
+        "31:1"
+      ],
+      "publishedCountBefore": 40,
+      "publishedCountAfter": 50,
+      "verifiedPublishedBySubsequentImmutableBaseline": "a69397ed0900b1f0a27bdc3be8e1616d2973fc43"
+    },
+    {
+      "wave": 6,
+      "card": "D073",
+      "slots": [
+        "31:2",
+        "61:0",
+        "61:1",
+        "61:2",
+        "82:0",
+        "82:1",
+        "82:2",
+        "83:0",
+        "83:1",
+        "83:2"
+      ],
+      "publishedCountBefore": 50,
+      "publishedCountAfter": 60,
+      "verifiedPublishedBySubsequentImmutableBaseline": "a5674d9bdbfbf439319b50e26c3f864864ab5363"
+    },
+    {
+      "wave": 7,
+      "card": "D074",
+      "slots": [
+        "23:0",
+        "23:1",
+        "23:2",
+        "23:3",
+        "23:4",
+        "54:0",
+        "54:1",
+        "54:2",
+        "47:0",
+        "47:1"
+      ],
+      "publishedCountBefore": 60,
+      "publishedCountAfter": 70,
+      "verifiedPublishedBySubsequentImmutableBaseline": "94024b6e2195f4d545de1f1af770dfbe98c1777a"
+    },
+    {
+      "wave": 8,
+      "card": "D076",
+      "slots": [
+        "131:0",
+        "131:1",
+        "131:2",
+        "107:0",
+        "107:1",
+        "107:2",
+        "149:0",
+        "149:1",
+        "149:2",
+        "149:3"
+      ],
+      "publishedCountBefore": 70,
+      "publishedCountAfter": 80,
+      "verifiedPublishedBySubsequentImmutableBaseline": "7d4df8a907368a25f1ff92958b8b70ae85b8ad1c"
+    },
+    {
+      "wave": 9,
+      "card": "D077",
+      "slots": [
+        "164:0",
+        "164:1",
+        "164:2",
+        "119:0",
+        "119:1",
+        "119:2",
+        "116:0",
+        "149:4",
+        "81:0",
+        "81:1"
+      ],
+      "publishedCountBefore": 80,
+      "publishedCountAfter": 90,
+      "verifiedPublishedBySubsequentImmutableBaseline": "22da5314145f96aaa83cfb739c382b86e1d5b0f3"
+    },
+    {
+      "wave": 10,
+      "card": "D078",
+      "slots": [
+        "81:2",
+        "84:0",
+        "84:1",
+        "84:2",
+        "85:0",
+        "85:1",
+        "85:2",
+        "130:0",
+        "130:1",
+        "130:2"
+      ],
+      "publishedCountBefore": 90,
+      "publishedCountAfter": 100,
+      "verifiedPublishedBySubsequentImmutableBaseline": "46771cdc00f33759e0a3c45ddf05c3387d4bb4fc"
+    },
+    {
+      "wave": 11,
+      "card": "D079",
+      "slots": [
+        "21:0",
+        "21:1",
+        "21:2",
+        "29:0",
+        "29:1",
+        "29:2",
+        "29:3",
+        "37:0",
+        "37:1",
+        "37:2"
+      ],
+      "publishedCountBefore": 100,
+      "publishedCountAfter": 110,
+      "verifiedPublishedBySubsequentImmutableBaseline": "23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e"
+    },
+    {
+      "wave": 12,
+      "card": "D080",
+      "slots": [
+        "21:3",
+        "21:4",
+        "29:4",
+        "127:0",
+        "127:1",
+        "127:2",
+        "120:0",
+        "120:1",
+        "120:2",
+        "72:0"
+      ],
+      "publishedCountBefore": 110,
+      "publishedCountAfter": 120,
+      "verifiedPublishedBySubsequentImmutableBaseline": "7ec70a96b01437ab4576b0962905be16b1591e79"
+    },
+    {
+      "wave": 13,
+      "card": "D081",
+      "slots": [
+        "160:0",
+        "160:1",
+        "160:2",
+        "160:3",
+        "160:4",
+        "182:0",
+        "182:1",
+        "182:2",
+        "72:1",
+        "72:2"
+      ],
+      "publishedCountBefore": 120,
+      "publishedCountAfter": 130,
+      "verifiedPublishedBySubsequentImmutableBaseline": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0"
+    },
+    {
+      "wave": 14,
+      "card": "D082",
+      "slots": [
+        "179:0",
+        "179:1",
+        "179:2",
+        "185:0",
+        "185:1",
+        "185:2",
+        "154:0",
+        "154:1",
+        "154:2"
+      ],
+      "publishedCountBefore": 130,
+      "publishedCountAfter": 139,
+      "releasedCommit": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+      "publicationReceipt": "docs/D082-D083-main-release-receipt.md"
+    },
+    {
+      "wave": 15,
+      "card": "D083",
+      "slots": [
+        "187:0",
+        "188:0",
+        "189:0",
+        "190:0",
+        "191:0",
+        "192:0",
+        "193:0",
+        "194:0"
+      ],
+      "publishedCountBefore": 139,
+      "publishedCountAfter": 147,
+      "releasedCommit": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+      "publicationReceipt": "docs/D082-D083-main-release-receipt.md"
+    },
+    {
+      "wave": 16,
+      "card": "D086",
+      "slots": [
+        "87:3",
+        "87:4",
+        "87:5",
+        "91:3",
+        "91:4",
+        "14:5",
+        "15:5",
+        "7:5",
+        "6:5",
+        "13:5"
+      ],
+      "publishedCountBefore": 147,
+      "publishedCountAfter": 157,
+      "releasedCommit": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+      "publicationReceipt": "docs/evidence/D086-release/verified-publication.json",
+      "publicationReceiptSha256": "b0ddd51fc4bdd1c7bc8dd2a7afe218536fc4213443ea042dd27e4bc3904c4f67"
+    },
+    {
+      "wave": 17,
+      "card": "D087",
+      "slots": [
+        "22:16",
+        "23:5",
+        "23:6",
+        "23:7",
+        "53:3",
+        "63:3",
+        "63:4",
+        "63:5",
+        "57:3",
+        "57:4",
+        "57:5"
+      ],
+      "publishedCountBefore": 157,
+      "publishedCountAfter": 168,
+      "releasedCommit": "cdd541da74973dba2ca73b782936c012d315add9",
+      "publicationReceipt": "docs/evidence/D087-release/verified-publication.json",
+      "publicationReceiptSha256": "151d54a6f1019367e83e4bc50dece8d24bfbea0c8b55c0bf4c4fbd5a274a13e2"
+    },
+    {
+      "wave": 18,
+      "card": "D088",
+      "count": 11,
+      "slots": [
+        "11:5",
+        "11:6",
+        "52:1",
+        "12:5",
+        "12:6",
+        "13:6",
+        "13:7",
+        "7:6",
+        "7:7",
+        "14:6",
+        "15:6"
+      ],
+      "publishedCountBefore": 168,
+      "publishedCountAfter": 179,
+      "releasedCommit": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+      "publicationReceipt": "docs/evidence/D088-release/verified-publication.json",
+      "publicationReceiptSha256": "ae3e9ec6e698b76d54fd03b63141ed98c7025bb0ec8f52c876384503e15e25f6"
+    }
+  ],
+  "candidate": {
+    "wave": 19,
+    "card": "D089",
+    "state": "candidate-not-accepted",
+    "pullRequest": null,
+    "publishedCountBefore": 179,
+    "candidateCount": 11,
+    "verifiedPublishedCountAfter": null,
+    "remainingPublished": 21,
+    "remainingOnlyAfterVerifiedPublication": 10,
+    "slots": [
+      "87:6",
+      "87:7",
+      "87:8",
+      "91:5",
+      "91:6",
+      "57:6",
+      "57:7",
+      "57:8",
+      "22:17",
+      "53:4",
+      "63:6"
+    ]
+  },
+  "prospective": [
+    {
+      "wave": 20,
+      "count": 10
+    }
+  ],
+  "excluded": {
+    "D075": "abandoned replacement candidate; D076 is wave8",
+    "D084": "function card;0 buildings",
+    "D085": "function card;0 buildings",
+    "supersededD082": "only9accepted slots; no abandoned tenth"
+  },
+  "qualification": "Authoritative published179 follows exact D088 main/Pages/public receipt. D089 eleven remain candidates. D090 ten are allocation only, never acceptance."
+}

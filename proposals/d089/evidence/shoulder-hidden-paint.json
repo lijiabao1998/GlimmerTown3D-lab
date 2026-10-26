@@ -1,0 +1,252 @@
+[
+  {
+    "id": "cross-vault-produce-market",
+    "intents": 48,
+    "hidden": [],
+    "required": 2203,
+    "missing": 0
+  },
+  {
+    "id": "crescent-stall-market",
+    "intents": 51,
+    "hidden": [],
+    "required": 2345,
+    "missing": 0
+  },
+  {
+    "id": "triangular-court-produce-market",
+    "intents": 42,
+    "hidden": [],
+    "required": 1816,
+    "missing": 0
+  },
+  {
+    "id": "crowstepped-merchant-counting-house",
+    "intents": 68,
+    "hidden": [],
+    "required": 3117,
+    "missing": 0
+  },
+  {
+    "id": "elliptical-commodity-exchange",
+    "intents": 38,
+    "hidden": [],
+    "required": 1907,
+    "missing": 0
+  },
+  {
+    "id": "long-range-roller-flour-mill",
+    "intents": 64,
+    "hidden": [],
+    "required": 2766,
+    "missing": 0
+  },
+  {
+    "id": "bow-ended-estate-creamery",
+    "intents": 43,
+    "hidden": [],
+    "required": 1788,
+    "missing": 0
+  },
+  {
+    "id": "cranked-cider-press-works",
+    "intents": 35,
+    "hidden": [],
+    "required": 1614,
+    "missing": 0
+  },
+  {
+    "id": "dartmoor-longhouse-arable-farm",
+    "intents": 26,
+    "hidden": [],
+    "required": 1397,
+    "missing": 0
+  },
+  {
+    "id": "double-court-arable-estate-farm",
+    "intents": 54,
+    "hidden": [
+      {
+        "index": 32,
+        "name": "window-stone-reveal",
+        "hostPart": 0,
+        "area": 0.004337777777777781,
+        "fragments": 8,
+        "witness": null,
+        "source": {
+          "name": "window-stone-reveal",
+          "solid": false,
+          "faces": [
+            {
+              "points": [
+                [
+                  0.1,
+                  0.0874074074074074,
+                  0.453
+                ],
+                [
+                  0.1,
+                  0.0874074074074074,
+                  0.547
+                ],
+                [
+                  0.1,
+                  0.21629629629629632,
+                  0.547
+                ],
+                [
+                  0.1,
+                  0.21629629629629632,
+                  0.453
+                ]
+              ],
+              "color": "#e6d7bb"
+            }
+          ],
+          "hostPart": 0,
+          "hostFace": 6,
+          "originalGap": 0.0010000000000000009,
+          "sourcePart": 0
+        }
+      },
+      {
+        "index": 33,
+        "name": "window-glazing",
+        "hostPart": 0,
+        "area": 0.0077777777777778,
+        "fragments": 2,
+        "witness": null,
+        "source": {
+          "name": "window-glazing",
+          "solid": false,
+          "faces": [
+            {
+              "points": [
+                [
+                  0.1,
+                  0.0962962962962963,
+                  0.46499999999999997
+                ],
+                [
+                  0.1,
+                  0.0962962962962963,
+                  0.535
+                ],
+                [
+                  0.1,
+                  0.2074074074074074,
+                  0.535
+                ],
+                [
+                  0.1,
+                  0.2074074074074074,
+                  0.46499999999999997
+                ]
+              ],
+              "color": "#759399"
+            }
+          ],
+          "hostPart": 0,
+          "hostFace": 6,
+          "originalGap": 0.0020000000000000018,
+          "sourcePart": 0
+        }
+      },
+      {
+        "index": 38,
+        "name": "window-stone-reveal",
+        "hostPart": 1,
+        "area": 0.004337777777777774,
+        "fragments": 8,
+        "witness": null,
+        "source": {
+          "name": "window-stone-reveal",
+          "solid": false,
+          "faces": [
+            {
+              "points": [
+                [
+                  0.9,
+                  0.0874074074074074,
+                  0.547
+                ],
+                [
+                  0.9,
+                  0.0874074074074074,
+                  0.453
+                ],
+                [
+                  0.9,
+                  0.21629629629629632,
+                  0.453
+                ],
+                [
+                  0.9,
+                  0.21629629629629632,
+                  0.547
+                ]
+              ],
+              "color": "#e6d7bb"
+            }
+          ],
+          "hostPart": 1,
+          "hostFace": 3,
+          "originalGap": 0.0010000000000000009,
+          "sourcePart": 1
+        }
+      },
+      {
+        "index": 39,
+        "name": "window-glazing",
+        "hostPart": 1,
+        "area": 0.0077777777777778,
+        "fragments": 2,
+        "witness": null,
+        "source": {
+          "name": "window-glazing",
+          "solid": false,
+          "faces": [
+            {
+              "points": [
+                [
+                  0.9,
+                  0.0962962962962963,
+                  0.535
+                ],
+                [
+                  0.9,
+                  0.0962962962962963,
+                  0.46499999999999997
+                ],
+                [
+                  0.9,
+                  0.2074074074074074,
+                  0.46499999999999997
+                ],
+                [
+                  0.9,
+                  0.2074074074074074,
+                  0.535
+                ]
+              ],
+              "color": "#759399"
+            }
+          ],
+          "hostPart": 1,
+          "hostFace": 3,
+          "originalGap": 0.0020000000000000018,
+          "sourcePart": 1
+        }
+      }
+    ],
+    "required": 2006,
+    "missing": 0
+  },
+  {
+    "id": "detached-propagation-glasshouses",
+    "intents": 59,
+    "hidden": [],
+    "required": 2506,
+    "missing": 0
+  }
+]

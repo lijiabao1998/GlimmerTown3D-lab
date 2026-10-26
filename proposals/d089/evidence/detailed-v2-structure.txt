@@ -1,0 +1,11 @@
+{"id":"cross-vault-produce-market","solids":2,"triangles":448,"negativeControls":902}
+{"id":"crescent-stall-market","solids":2,"triangles":502,"negativeControls":1010}
+{"id":"triangular-court-produce-market","solids":5,"triangles":392,"negativeControls":799}
+{"id":"crowstepped-merchant-counting-house","solids":4,"triangles":688,"negativeControls":1388}
+{"id":"elliptical-commodity-exchange","solids":3,"triangles":392,"negativeControls":793}
+{"id":"long-range-roller-flour-mill","solids":3,"triangles":548,"negativeControls":1105}
+{"id":"bow-ended-estate-creamery","solids":3,"triangles":326,"negativeControls":661}
+{"id":"cranked-cider-press-works","solids":3,"triangles":304,"negativeControls":617}
+{"id":"dartmoor-longhouse-arable-farm","solids":6,"triangles":272,"negativeControls":562}
+{"id":"double-court-arable-estate-farm","solids":9,"triangles":520,"negativeControls":1067}
+{"id":"detached-propagation-glasshouses","solids":4,"triangles":536,"negativeControls":1084}

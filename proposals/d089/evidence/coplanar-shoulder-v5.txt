@@ -1,0 +1,11 @@
+{"id":"cross-vault-produce-market","overlaps":140,"exposed":0}
+{"id":"crescent-stall-market","overlaps":16,"exposed":0}
+{"id":"triangular-court-produce-market","overlaps":164,"exposed":0}
+{"id":"crowstepped-merchant-counting-house","overlaps":34,"exposed":0}
+{"id":"elliptical-commodity-exchange","overlaps":68,"exposed":0}
+{"id":"long-range-roller-flour-mill","overlaps":76,"exposed":0}
+{"id":"bow-ended-estate-creamery","overlaps":20,"exposed":0}
+{"id":"cranked-cider-press-works","overlaps":25,"exposed":0}
+{"id":"dartmoor-longhouse-arable-farm","overlaps":8,"exposed":0}
+{"id":"double-court-arable-estate-farm","overlaps":224,"exposed":0}
+{"id":"detached-propagation-glasshouses","overlaps":0,"exposed":0}

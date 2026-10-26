@@ -1,0 +1,23 @@
+✔ cross-vault-produce-market: every real ground door has a full-width connected unobstructed route (54.587147ms)
+✔ crescent-stall-market: every real ground door has a full-width connected unobstructed route (32.551966ms)
+✔ triangular-court-produce-market: every real ground door has a full-width connected unobstructed route (23.893186ms)
+✔ crowstepped-merchant-counting-house: every real ground door has a full-width connected unobstructed route (43.21487ms)
+✔ elliptical-commodity-exchange: every real ground door has a full-width connected unobstructed route (25.014179ms)
+✔ long-range-roller-flour-mill: every real ground door has a full-width connected unobstructed route (47.503576ms)
+✔ bow-ended-estate-creamery: every real ground door has a full-width connected unobstructed route (15.084566ms)
+✔ cranked-cider-press-works: every real ground door has a full-width connected unobstructed route (12.78156ms)
+✔ dartmoor-longhouse-arable-farm: every real ground door has a full-width connected unobstructed route (11.136224ms)
+✔ double-court-arable-estate-farm: every real ground door has a full-width connected unobstructed route (24.039588ms)
+✔ detached-propagation-glasshouses: every real ground door has a full-width connected unobstructed route (17.98749ms)
+✔ route proof detects a real off-centre obstacle, not just centre rays (4.964796ms)
+✔ whole route proof rejects reversed opening, raised threshold, lost door and narrow slot (11.376898ms)
+✔ straight wide barn routes do not invent backward square turns; widths are unchanged (3.512754ms)
+✔ court and propagation detours preserve full aperture width at every finite joint (9.98749ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 490.716412

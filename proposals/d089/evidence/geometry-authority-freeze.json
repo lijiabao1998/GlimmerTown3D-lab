@@ -1,0 +1,7 @@
+{
+  "qualification": "Frozen source authority for unaccepted D089 candidate. No geometry changes or diagnostic shim removal; browser/art acceptance pending.",
+  "authoringSourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "proceduralSourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "exactRemovedAuthoringShim": "",
+  "accepted": false
+}

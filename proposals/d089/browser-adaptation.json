@@ -1,0 +1,487 @@
+{
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "qualification": "Finite new eleven-model harness adaptation from actual verified c023. Every threshold, assertion and old suite remains. Cache source identity pins the actual independently qualified procedural authority, not acceptance of browser/cache/release.",
+  "copies": [
+    {
+      "source": "proposals/d088/browser-provenance.mjs",
+      "target": "proposals/d089/browser-provenance.mjs",
+      "sourceSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "targetSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d088/browser-first-use-performance.mjs",
+      "target": "proposals/d089/browser-first-use-performance.mjs",
+      "sourceSha256": "173e8e7fa8e7ee5f11570b5806d5f4d17bbac482494a4b09fea99f7ac7e746ae",
+      "targetSha256": "346758ec92d351d691776e63efc71cf561f777992455436628a4c74375fc3e5a",
+      "replacements": [
+        [
+          "m.size===1",
+          "[2,3,5].includes(m.size)",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-startup-cache-contract.mjs",
+      "target": "proposals/d089/browser-startup-cache-contract.mjs",
+      "sourceSha256": "72f4305152b6379ce69a7b6e9791712e7635ab40037f6d67471e4f03310e0fa3",
+      "targetSha256": "76ad215466488e7871ea44e39289e0748a106e27e15675b633b21617ac18190a",
+      "replacements": [
+        [
+          "cdd541da74973dba2ca73b782936c012d315add9",
+          "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+          1
+        ],
+        [
+          "a01e6596b57e758a2885beeafa1c4fd3b7cd649a6876cd2ef52caa1a804ddb2a",
+          "c33a89f92202e7df28285a830616722c32078e411510d58a587f18ebcf7f9aa1",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-browser-build.mjs",
+      "target": "proposals/d089/native-browser-build.mjs",
+      "sourceSha256": "e441159c7acff7324f2dada962219b73c67dab6be29ac6e44e3dfb30906c544a",
+      "targetSha256": "be11df4bef5b930ffa4d91f7059fffb52d95af2502436f9b9a6af01990f0fc4a",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          1
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServicesModels",
+          "britishMarketEstateModels",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "createPublicServiceDesign",
+          "createMarketEstateDesign",
+          2
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-browser-check.mjs",
+      "target": "proposals/d089/native-browser-check.mjs",
+      "sourceSha256": "0ae89f77d78882f2ecad5d34073ffe8359d862b15828266cdb6572d3f4455d9f",
+      "targetSha256": "1e221f12516d5c5c65d45edd4dd92f96aa42e86a6ba87fe471d7029f0d8e0cbc",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          4
+        ],
+        [
+          "D088",
+          "D089",
+          1
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServicesModels",
+          "britishMarketEstateModels",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "length'),40);await shot('catalogue')",
+          "length'),51);await shot('catalogue')",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-frame-qualification.mjs",
+      "target": "proposals/d089/browser-frame-qualification.mjs",
+      "sourceSha256": "a47cce4fa2532b46f26f7bf3deb8da095edfa52ea72cb3529dfb0cb28f9ac792",
+      "targetSha256": "c5bbd8fea97f1e28700fd4c242a6836d8fe1785746a8eb27946e3d1c896f7da8",
+      "replacements": [
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/scene-budget-check.mjs",
+      "target": "proposals/d089/scene-budget-check.mjs",
+      "sourceSha256": "d70dffbe1f22c8fad69e4593cdcaf76277f1aada4e4c5b5ca5d4f11150239664",
+      "targetSha256": "67a0810a8af4e6e6be92873ed378857f6f2ed3af460adab6e50c74179b469dfd",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          3
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "cdd541da74973dba2ca73b782936c012d315add9",
+          "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+          2
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-first-use-cache-check.mjs",
+      "target": "proposals/d089/native-first-use-cache-check.mjs",
+      "sourceSha256": "84f7a699963554ce7b89aef053ae78d67b36f2f56e942fc4b896601860562ec8",
+      "targetSha256": "cc1dc875a82ac52deae437d3cb0836b882823f385e5984d3ebbc76435fa95ee2",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          3
+        ],
+        [
+          "D088",
+          "D089",
+          1
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServicesModels",
+          "britishMarketEstateModels",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "20261088",
+          "20261089",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-startup-cache-check.mjs",
+      "target": "proposals/d089/native-startup-cache-check.mjs",
+      "sourceSha256": "4331900b7dc3ede825e8f47ee0f16b73123b1f0ea8f304add1baba41328ab720",
+      "targetSha256": "dd9b45a5ec2398dcb1ba99c5f167f9370a0583c6beaf3290996d267955e3299c",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          5
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-provenance.test.mjs",
+      "target": "proposals/d089/browser-provenance.test.mjs",
+      "sourceSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "targetSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d088/browser-startup-cache-contract.test.mjs",
+      "target": "proposals/d089/browser-startup-cache-contract.test.mjs",
+      "sourceSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "targetSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d088/browser-first-use-performance.test.mjs",
+      "target": "proposals/d089/browser-first-use-performance.test.mjs",
+      "sourceSha256": "ae9f493d24e24ed238f45a9905c67414760d0be1173729e0847d7b5b6cb3f62f",
+      "targetSha256": "716e6b97d8f3623d5d967ef42f3cb54a020db87e51232ea65b3e63cf903d872d",
+      "replacements": [
+        [
+          "size:1",
+          "size:[2,3,5][i%3]",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-frame-qualification.test.mjs",
+      "target": "proposals/d089/browser-frame-qualification.test.mjs",
+      "sourceSha256": "fde4ae1331aaec847798992cda156e2c81cf1a518ff33436dfb0602f3de57809",
+      "targetSha256": "63e19b6d24913b3dee599f0c770407a9887af26016c29195f0abe94a110d5440",
+      "replacements": [
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-surface-qualification.mjs",
+      "target": "proposals/d089/browser-surface-qualification.mjs",
+      "sourceSha256": "ef66c9ebe2a1cdaa7d958ecc51dc47e3cf687d97009b8129fb113d8784a8bb06",
+      "targetSha256": "dbfe4bbdffebfeb2f616bf952e7551fcc17cc7e8eff04f8e606d4de16a9ff02a",
+      "replacements": [
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServicesModels",
+          "britishMarketEstateModels",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "createPublicServiceDesign",
+          "createMarketEstateDesign",
+          2
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-surface-qualification.test.mjs",
+      "target": "proposals/d089/browser-surface-qualification.test.mjs",
+      "sourceSha256": "74c4380975dc0aff4aa237f95c1bc60f1bed1489a8f125dc2802610afb0fa021",
+      "targetSha256": "0f6dbd498d121e6d4568e471420f9da14c9c052644926fe7355b1b7aa6cc50b2",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          1
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-cache-observation.mjs",
+      "target": "proposals/d089/browser-cache-observation.mjs",
+      "sourceSha256": "5824d0b24c412ceec2fab4e25f907a970c57fc8215df264e9a20ed8448202c72",
+      "targetSha256": "d4948bafe5b8695afe70423f7103a14fa638758914e0463338664da6f964c4a8",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          1
+        ],
+        [
+          "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+          "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/browser-cache-observation.test.mjs",
+      "target": "proposals/d089/browser-cache-observation.test.mjs",
+      "sourceSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "targetSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d088/scene-budget-support.mjs",
+      "target": "proposals/d089/scene-budget-support.mjs",
+      "sourceSha256": "c5ae212ce11306c5fd4b14dcae28f05eb2b7cb2c2f149847c9f53d527cae6b3d",
+      "targetSha256": "c9d3189063cc8f0c0269e9ae280d4820ee1915d4ebfafce859ff5aa5d6dd70bb",
+      "replacements": [
+        [
+          "D088",
+          "D089",
+          1
+        ],
+        [
+          "Array(20).fill(true),native",
+          "Array(21).fill(true),native",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-scene-fixture.mjs",
+      "target": "proposals/d089/native-scene-fixture.mjs",
+      "sourceSha256": "96323ade3add474b981b9710c6a38bc533a57f2ea7185129c96fdd06d63a70c2",
+      "targetSha256": "f7d307346fab75b23967e2503e3d035262ca36f747d5914c9643bf1ec4ddf548",
+      "replacements": [
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "20261088",
+          "20261089",
+          1
+        ],
+        [
+          "英式公共服務街",
+          "英式市場與莊園街",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/native-fixture.test.mjs",
+      "target": "proposals/d089/native-fixture.test.mjs",
+      "sourceSha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "targetSha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d088/native-first-use-fixture.test.mjs",
+      "target": "proposals/d089/native-first-use-fixture.test.mjs",
+      "sourceSha256": "7e6767cb3fbb902c724e14de6902564d16e88e09d207b484c611cdae145c7f2e",
+      "targetSha256": "cd97e635f1785d7e87b343506e19572961faf0bcdfe9a55b1399a98de5cb7286",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          1
+        ],
+        [
+          "PUBLIC_SERVICE_BUILDINGS",
+          "MARKET_ESTATE_BUILDINGS",
+          1
+        ],
+        [
+          "britishPublicServices.ts",
+          "britishMarketEstates.ts",
+          1
+        ],
+        [
+          "createPublicServiceDesign",
+          "createMarketEstateDesign",
+          1
+        ],
+        [
+          "emitPublicServiceDesign",
+          "emitMarketEstateDesign",
+          1
+        ],
+        [
+          "including every frozen 1×1 public-service parcel",
+          "including the frozen 2×2, 3×3 and 5×5 market/estate parcels",
+          1
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d088/model-audit.mjs",
+      "target": "proposals/d089/model-audit.mjs",
+      "sourceSha256": "6ac074247a3a639ab028d32c642d3edad847f6d46db31d1ebfbd7d610fbcb33a",
+      "targetSha256": "e82e166f1fd62f74f5dba35daa368721da565f32d5e0d4d7e33cb972ec67a15c",
+      "replacements": [
+        [
+          "d088",
+          "d089",
+          4
+        ],
+        [
+          "old168",
+          "old179",
+          1
+        ],
+        [
+          "original168",
+          "original179",
+          1
+        ],
+        [
+          "published-168-models",
+          "published-179-models",
+          1
+        ],
+        [
+          "baseline?20:21",
+          "baseline?21:22",
+          1
+        ],
+        [
+          "oldCount:168",
+          "oldCount:179",
+          2
+        ],
+        [
+          "baseline?168:179",
+          "baseline?179:190",
+          1
+        ],
+        [
+          "unchanged1200 cap",
+          "unchanged1800 cap",
+          1
+        ],
+        [
+          "../british-program/ledger-current-v3.mjs",
+          "../british-program/ledger-current-v4.mjs",
+          1
+        ]
+      ]
+    }
+  ]
+}

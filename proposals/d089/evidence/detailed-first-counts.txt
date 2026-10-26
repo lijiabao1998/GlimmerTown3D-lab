@@ -1,0 +1,41 @@
+{"id":"cross-vault-produce-market","parts":2,"weighted":896,"intents":48}
+{"id":"crescent-stall-market","parts":2,"weighted":1004,"intents":51}
+{"id":"triangular-court-produce-market","parts":5,"weighted":784,"intents":42}
+{"id":"crowstepped-merchant-counting-house","parts":4,"weighted":1376,"intents":68}
+{"id":"elliptical-commodity-exchange","parts":3,"weighted":784,"intents":38}
+{"id":"long-range-roller-flour-mill","parts":3,"weighted":1096,"intents":64}
+bow-ended-estate-creamery Error: aligned structural backing bow-ended-estate-creamery window-stone-reveal
+    at requireGeometry (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:88:84)
+    at imprintFacadeModel (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:114:395)
+    at imprintFacades (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:121:9)
+    at cachedDesign (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:125:164)
+    at buildBritishMarketEstate (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:85:69)
+    at file:///tmp/GlimmerTown3D-lab-d089-own/[eval1]:1:197
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:224:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)
+{"id":"cranked-cider-press-works","parts":3,"weighted":608,"intents":35}
+dartmoor-longhouse-arable-farm Error: aligned structural backing dartmoor-longhouse-arable-farm window-stone-reveal
+    at requireGeometry (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:88:84)
+    at imprintFacadeModel (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:114:395)
+    at imprintFacades (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:121:9)
+    at cachedDesign (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:125:164)
+    at buildBritishMarketEstate (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:85:69)
+    at file:///tmp/GlimmerTown3D-lab-d089-own/[eval1]:1:197
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:224:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)
+{"id":"double-court-arable-estate-farm","parts":9,"weighted":1040,"intents":54}
+detached-propagation-glasshouses Error: entire finish stays within host detached-propagation-glasshouses window-stone-reveal
+    at requireGeometry (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:88:84)
+    at imprintFacadeModel (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:114:643)
+    at imprintFacades (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:121:9)
+    at cachedDesign (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:125:164)
+    at buildBritishMarketEstate (file:///tmp/GlimmerTown3D-lab-d089-own/src/render/britishMarketEstateModels.mjs:85:69)
+    at file:///tmp/GlimmerTown3D-lab-d089-own/[eval1]:1:197
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:224:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)

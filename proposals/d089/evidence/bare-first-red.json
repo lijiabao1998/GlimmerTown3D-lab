@@ -1,0 +1,14 @@
+{
+  "sourceSha256": "9874922599c4f4d7de8c24dbdd38761b45f911810c99473e4a151d98179b7d21",
+  "phase": "bare solid construction before facade",
+  "failure": {
+    "id": "bow-ended-estate-creamery",
+    "message": "D089 non-simple face",
+    "cause": "Duplicated north-east arc endpoint adjacent to explicit same endpoint in bow polygon."
+  },
+  "counts": {
+    "implementedBuilders": 11,
+    "successfullyBuilt": 10
+  },
+  "accepted": false
+}

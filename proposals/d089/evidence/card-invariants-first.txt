@@ -1,0 +1,18 @@
+✔ cross-vault exposes both equal lower arms and four grounded ends, with unequal perpendicular heights (38.073564ms)
+✔ crescent is an open annular range, not a filled half-disc or closed court (23.44927ms)
+✔ triangular market retains a .18 open gateway and at least .22-wide meaningful central yard (20.322761ms)
+✔ counting-house two grounded stair-step gables genuinely rise to1.22 and lower hall stays subordinate (30.597832ms)
+✔ exchange preserves elongated oval≥1.75, high long keel, two unequal below-springing grounded blocks (13.390355ms)
+✔ long processing mill has27 actual simple openings, not a dominant square tower recipe (24.318342ms)
+✔ bow creamery has an occupied long rounded end with eight real curved-facet windows and higher gable clerestory (11.680994ms)
+✔ longhouse chimney bottom is fully roof seated; moving it upward fails physical full-corner support (20.159394ms)
+✔ double court has two actual open1.15-deep/2.3-wide world-cell yards and separate one-cell gates (28.329213ms)
+✔ all actual glasshouse roofs/ends preserve .155 lanes and separate potting gap≥.16; projecting roofs fail (20.940553ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 372.512621

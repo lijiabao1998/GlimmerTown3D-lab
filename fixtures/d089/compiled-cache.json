@@ -1,0 +1,144 @@
+{
+  "qualification": "Reproducible code-generated native cache from authoritative procedural geometry; no Chrome or release acceptance claim.",
+  "proceduralSourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "candidateSourceSha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39",
+  "sourceBytes": 37288,
+  "candidateBytes": 540643,
+  "sourceGzipBytes": 12529,
+  "candidateGzipBytes": 92244,
+  "codec": "v1: exact Float64 round-trip decimal vectors, literal JSON -0, no reviver or rounding, indexed triangles, full native metadata; per-payload integrity and SHA256 reproducible CI proof",
+  "models": [
+    {
+      "meta": {
+        "id": "cross-vault-produce-market",
+        "length": 38062,
+        "checksum": "dc13e725"
+      },
+      "sha256": "01b6e9413271e3fe82d6de3172927cc6222f7441117b984a6dfc8b27e05f26e7",
+      "points": 228,
+      "normals": 35,
+      "triangleCount": 448,
+      "originalBytes": 110178
+    },
+    {
+      "meta": {
+        "id": "crescent-stall-market",
+        "length": 65664,
+        "checksum": "0576be17"
+      },
+      "sha256": "cf39ef39c906ceba98e197653e47a429e4075b4782b6f30a64cc4656c3dfd56c",
+      "points": 255,
+      "normals": 351,
+      "triangleCount": 502,
+      "originalBytes": 155969
+    },
+    {
+      "meta": {
+        "id": "triangular-court-produce-market",
+        "length": 46243,
+        "checksum": "bd7eef51"
+      },
+      "sha256": "4530628e496393f9085e868bfefd3a535887a3f096182e58c58d25c706825d52",
+      "points": 204,
+      "normals": 186,
+      "triangleCount": 388,
+      "originalBytes": 113019
+    },
+    {
+      "meta": {
+        "id": "crowstepped-merchant-counting-house",
+        "length": 57695,
+        "checksum": "9574beda"
+      },
+      "sha256": "f0e38cae3be8d361a4557cd8f4aff0af2f51bbf1700127798d01abca7eb9f9b6",
+      "points": 352,
+      "normals": 38,
+      "triangleCount": 688,
+      "originalBytes": 170791
+    },
+    {
+      "meta": {
+        "id": "elliptical-commodity-exchange",
+        "length": 50724,
+        "checksum": "c934b624"
+      },
+      "sha256": "2254f66ef33f4a8f90ac3739c182a0374018ec798d5442c6f2ca706bf9c8bd06",
+      "points": 202,
+      "normals": 216,
+      "triangleCount": 392,
+      "originalBytes": 124235
+    },
+    {
+      "meta": {
+        "id": "long-range-roller-flour-mill",
+        "length": 41715,
+        "checksum": "997cdb09"
+      },
+      "sha256": "213988f661cd202f96be2b901181f08d41127d4bf30baddcce624c21621f3750",
+      "points": 280,
+      "normals": 31,
+      "triangleCount": 548,
+      "originalBytes": 126920
+    },
+    {
+      "meta": {
+        "id": "bow-ended-estate-creamery",
+        "length": 39535,
+        "checksum": "b7151801"
+      },
+      "sha256": "d0325ca31922fe2f24714d101417a23ea2097e1666ae29743e91f322a3c49bf5",
+      "points": 169,
+      "normals": 122,
+      "triangleCount": 326,
+      "originalBytes": 91727
+    },
+    {
+      "meta": {
+        "id": "cranked-cider-press-works",
+        "length": 29781,
+        "checksum": "5a8338a3"
+      },
+      "sha256": "717cacc8aa9c5e9ec056294c16a05c03c8476bee9db98af6f048fbec4f07df60",
+      "points": 158,
+      "normals": 98,
+      "triangleCount": 304,
+      "originalBytes": 76068
+    },
+    {
+      "meta": {
+        "id": "dartmoor-longhouse-arable-farm",
+        "length": 20808,
+        "checksum": "3a7ae6ff"
+      },
+      "sha256": "5e5ebc8ea9db8a42c30978f2df2b59785f874235a28ccfe9bf121aa129c23fd7",
+      "points": 148,
+      "normals": 19,
+      "triangleCount": 272,
+      "originalBytes": 57111
+    },
+    {
+      "meta": {
+        "id": "double-court-arable-estate-farm",
+        "length": 42964,
+        "checksum": "afce5e17"
+      },
+      "sha256": "9784329163320a1bf916a945e6105dd49ca826f0c867e97b11b402544733a0ae",
+      "points": 278,
+      "normals": 32,
+      "triangleCount": 520,
+      "originalBytes": 118545
+    },
+    {
+      "meta": {
+        "id": "detached-propagation-glasshouses",
+        "length": 49013,
+        "checksum": "51e45d40"
+      },
+      "sha256": "4308a3f338274fd1e70a8a4c11f965e8e0defc29b3e4d085ba01ef9e51e6be43",
+      "points": 276,
+      "normals": 130,
+      "triangleCount": 536,
+      "originalBytes": 135358
+    }
+  ]
+}

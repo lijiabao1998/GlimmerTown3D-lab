@@ -1,0 +1,33 @@
+{
+  "qualification": "Preserved real native scene dispatch first-red, not a geometry budget waiver. Model-only190 uniqueness had passed but actual22:17 villageArt rendered388 instead of544 weighted triangles.",
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "oldSceneSha256": "b2de403fcb812c6d7333164475d1318fe56621e8c6ce4eeddeb5f04ad3d361c2",
+  "firstLeaseSha256": "d28a01fbf75af56cb00680bddb94b9721b59d976640a8fc94089ffec4a9fff7f",
+  "modelSha256": "5471561eaad5b4c3d6691c11032a513e6fe839d13b48edb6958b256a1366df7a",
+  "target": {
+    "k": 22,
+    "v": 17,
+    "id": "dartmoor-longhouse-arable-farm",
+    "actualWeighted": 388,
+    "requiredCompleteWeighted": 544
+  },
+  "allOtherTenMatched": true,
+  "repair": "Exact nativeMarketEstates opt-in and marketEstateSlot predicate before village override; preserve all old and disabled/invalid behavior.",
+  "files": [
+    {
+      "file": "native-longhouse-first-red.log",
+      "sha256": "7fe2e209e6e2059e5df866b47a441c43692d554d00d835dddcebd4924838c35c",
+      "bytes": 540
+    },
+    {
+      "file": "native-longhouse-first-red.json",
+      "sha256": "4a600ed2846954828f91492f40d1544e960e0af0af48768a02268e9479d2674f",
+      "bytes": 358
+    },
+    {
+      "file": "native-longhouse-first-red-models.mjs",
+      "sha256": "5471561eaad5b4c3d6691c11032a513e6fe839d13b48edb6958b256a1366df7a",
+      "bytes": 37244
+    }
+  ]
+}

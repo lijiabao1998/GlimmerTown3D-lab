@@ -1,3 +1,6 @@
+// D089-BEGIN market-estate-import
+import { MARKET_ESTATE_BUILDINGS } from './britishMarketEstates.ts';
+// D089-END market-estate-import
 // D088-BEGIN public-service-import
 import { PUBLIC_SERVICE_BUILDINGS } from './britishPublicServices.ts';
 // D088-END public-service-import
@@ -288,7 +291,13 @@ export const KIND_SHAPES: Record<number, Shape> = {
 // D080-BEGIN community-building-shape
 // D081-BEGIN field-study-lodge-shape
 // D082-BEGIN coastal-recreation-shape
-export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false, nativeCivicMarket = false, nativeWorkingRural = false, nativePublicServices = false): Shape | null => {
+export const shapeOf = (k: number, heritage = true, tower = false, metropolis = false, landmark = false, facility = false, commerceVariant = false, commerceThird = false, education = false, campus = false, emergencyHotel = false, farmMemorial = false, healthResponse = false, serviceLodge = false, neighbourhoodPavilion = false, transitUtilityPavilion = false, communityBuilding = false, fieldStudyLodge = false, coastalRecreation = false, nativeCivicMarket = false, nativeWorkingRural = false, nativePublicServices = false, nativeMarketEstates = false): Shape | null => {
+  // D089-BEGIN market-estate-shape
+  if (nativeMarketEstates && MARKET_ESTATE_BUILDINGS.some(m => m.k === k)) {
+    const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge, coastalRecreation, nativeCivicMarket, nativeWorkingRural, nativePublicServices);
+    return previous ? { ...previous, p: { ...previous.p, nativeMarketEstates: true } } : null;
+  }
+  // D089-END market-estate-shape
   // D088-BEGIN public-service-shape
   if (nativePublicServices && PUBLIC_SERVICE_BUILDINGS.some(m => m.k === k)) {
     const previous = shapeOf(k, heritage, tower, metropolis, landmark, facility, commerceVariant, commerceThird, education, campus, emergencyHotel, farmMemorial, healthResponse, serviceLodge, neighbourhoodPavilion, transitUtilityPavilion, communityBuilding, fieldStudyLodge, coastalRecreation, nativeCivicMarket, nativeWorkingRural);

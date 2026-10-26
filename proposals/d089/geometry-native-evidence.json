@@ -1,0 +1,278 @@
+{
+  "qualification": "Complete numerical/source evidence only. Browser raw geometry/image join is a separate mandatory gate.",
+  "sourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "cachedSourceSha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39",
+  "planSha256": "5eff0b61a1fdfa3de1805eae8c4d0dcad3a4209709ec1c7ea9df01e9f922543b",
+  "nativeReport": {
+    "file": "evidence/native-cached-final-report.json",
+    "sha256": "426dbbd647697e195c56f22de5b1e30aca831ccae178c861255b12893c7cd85d"
+  },
+  "nativePaintReport": {
+    "file": "evidence/native-cached-final-paint-report.json",
+    "sha256": "72607f939a178f8b8bef3744b40026c235512a71968dcbd7fee5d8aadc8aef3a"
+  },
+  "cache": {
+    "passed": true,
+    "sourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+    "candidateSha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39",
+    "models": 11
+  },
+  "cases": 33,
+  "requiredPerWidth": 23553,
+  "requiredAllWidths": 70659,
+  "missing": 0,
+  "paintIntents": 528,
+  "paintCases": 1584,
+  "paintMissing": 0,
+  "viewsPerWidth": [
+    {
+      "width": 1440,
+      "views": 43,
+      "paintExtra": 0
+    },
+    {
+      "width": 412,
+      "views": 43,
+      "paintExtra": 0
+    },
+    {
+      "width": 360,
+      "views": 43,
+      "paintExtra": 0
+    }
+  ],
+  "contracts": [
+    {
+      "file": "cross-vault-produce-market-1440.json.gz",
+      "bytes": 408313,
+      "sha256": "28b13e91d6eb7667d7a74627e78ff5d4ac04b39136de8cfc3bd53296126ca12d",
+      "contractSha256": "299e5293da7b027c341bc066044bf7057f0e275d02f9e8f5fd6f930c4fecf70f",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "cross-vault-produce-market-412.json.gz",
+      "bytes": 407900,
+      "sha256": "65ea4a2d1a07489dc845fbbf8e9268f02ac708db7c3efb76efbf9a3fb22d5d69",
+      "contractSha256": "c87b9edd79a7d39455953b520591ce4af79be7226b083a46575d885fc17ae84f",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "cross-vault-produce-market-360.json.gz",
+      "bytes": 408249,
+      "sha256": "8431b0c331081e45c7bbe8a97cdc53e1c5fa7d26d952e9f101ee5b4d1b503ce5",
+      "contractSha256": "96dfea7cc85a915ea8ee5fd06b5bd6dd7725065988a3cd1160918b0dd57c43eb",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crescent-stall-market-1440.json.gz",
+      "bytes": 462506,
+      "sha256": "3c30c7bb4c6a543c601d9ba8b5e339f2626b79df3cdb2d05725eaf7a9a4b361b",
+      "contractSha256": "02d44ad794186ac97f1012f1dd86c99f069405b867d5ea8abe6696570f95e4b2",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crescent-stall-market-412.json.gz",
+      "bytes": 462291,
+      "sha256": "ae0cd34fc8f9b48f203394a91e41c2998181408bd1bcf4c6ebb1d19b4a4042c8",
+      "contractSha256": "967bf14ff89274408d4412950fb54ad9f5bbe23ed1cdcd80f87b5c5706d87862",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crescent-stall-market-360.json.gz",
+      "bytes": 462482,
+      "sha256": "f3a92dd7e1260097afddbba2345c09b3452d1ffa1570b1873d4f26db93fd7c13",
+      "contractSha256": "7df8239230256a4105dbe61eacb84554b5a32e9126cd2f455d4409cd836a8e98",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "triangular-court-produce-market-1440.json.gz",
+      "bytes": 422394,
+      "sha256": "7fc219bd5c84b8cd9a56fdd5daabef6a2c698cc0d48d5c4766c0e1bf226c89b1",
+      "contractSha256": "9c09d89c335e8d2416937dc01b49b538c4601e1bbdcb107a15e56f4637d23f4f",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "triangular-court-produce-market-412.json.gz",
+      "bytes": 422127,
+      "sha256": "a4b7280a42cbd7ddf3667805bce83a2733c7e2655968bd2a0790cf38b5a6e513",
+      "contractSha256": "8f1f5393bf9fce235ac676546c7f479ccb5c917a78727d24160f9af313701652",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "triangular-court-produce-market-360.json.gz",
+      "bytes": 422329,
+      "sha256": "20f348dff3d3d4c4a51cc9a8cd79e273cfd718b346f5577e0642ed607f426b6d",
+      "contractSha256": "9c09d89c335e8d2416937dc01b49b538c4601e1bbdcb107a15e56f4637d23f4f",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crowstepped-merchant-counting-house-1440.json.gz",
+      "bytes": 416431,
+      "sha256": "56ed2dfdcaae6cf7bdddf5704a2ccf1bbd177ae42c5d17d635e18c6ad906d981",
+      "contractSha256": "469fc7bde6d7e9b3f3c900f44011e3c5b59d48f2e91f5c89b44ad0730b6fd488",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crowstepped-merchant-counting-house-412.json.gz",
+      "bytes": 416374,
+      "sha256": "83fbd5846615c5a37ca1340e8ac2c48aa8ba47b7b01538037a942e2b8b0d12be",
+      "contractSha256": "eb96bc2af690c7dca6d9657cc81538cbe0a21dc276b8e7577418dc22880b93aa",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "crowstepped-merchant-counting-house-360.json.gz",
+      "bytes": 416389,
+      "sha256": "ca4892a92698254b6ea5780cd6d50153bf575a0722fc0fd83a3595c665417dab",
+      "contractSha256": "469fc7bde6d7e9b3f3c900f44011e3c5b59d48f2e91f5c89b44ad0730b6fd488",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "elliptical-commodity-exchange-1440.json.gz",
+      "bytes": 297286,
+      "sha256": "2cbc076f8f41bbb8be0d670267c6d89ee7dac00e279fff8ec13a75e8c4f9fbe7",
+      "contractSha256": "be6a828176bd0b5e94150143e83d1b0fa998fd34eca96a5014f24af2c7bdc8d8",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "elliptical-commodity-exchange-412.json.gz",
+      "bytes": 297319,
+      "sha256": "3030e920dfacd0c33068222f7dca8abfe7f681e72c31a9ce039c3722af135712",
+      "contractSha256": "b330182b17651fa7e925da3b84aa557b24b9fbb60e5156a5e496e5ba13ffb474",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "elliptical-commodity-exchange-360.json.gz",
+      "bytes": 297266,
+      "sha256": "2dc95c9f161031259b6095b3d451d4d47ebb4e846b812255eb395b34aefe1742",
+      "contractSha256": "be6a828176bd0b5e94150143e83d1b0fa998fd34eca96a5014f24af2c7bdc8d8",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "long-range-roller-flour-mill-1440.json.gz",
+      "bytes": 403229,
+      "sha256": "4187489dea8c3ff62d492a2b2a3a216a2687916209601f13ba6badeddc7c2b17",
+      "contractSha256": "51772f95c4dcb74e85a3daa391cfeb3adcbac584129daf38f77d1c7e8604339b",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "long-range-roller-flour-mill-412.json.gz",
+      "bytes": 403043,
+      "sha256": "70b5fc20f9ad50384dc2b54acd9790e56ad6063754ed4545661eda65332cf91b",
+      "contractSha256": "08ba25dd6bb2e4f95e9320aeb51c98f4350f7418bf0e6bacd2dad99b6c7eefca",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "long-range-roller-flour-mill-360.json.gz",
+      "bytes": 404146,
+      "sha256": "b5ea8cb463fae453bcf643b0120ed898a303f8fe393079192adaa315f7369963",
+      "contractSha256": "012d542393c617d9407f4756063f62da26d84e0a1283afbeb7753fca3ee27f2a",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "bow-ended-estate-creamery-1440.json.gz",
+      "bytes": 318599,
+      "sha256": "a55dea5f1c778a10cad6c38f73a52721ce162071583f7d2f76515ac2a84769fe",
+      "contractSha256": "41277d776f009e688f2bb8550be70cd49f16d636c3745e69d4e1480d2f229bb2",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "bow-ended-estate-creamery-412.json.gz",
+      "bytes": 319375,
+      "sha256": "30e298629d8a9dedcdb3ccae7d690b3a459f7b2ad842ff567cba366d984a582b",
+      "contractSha256": "2ef2f6295eda873899a99195b2e2af9c4165a3641ed9966a2048971bc1da5498",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "bow-ended-estate-creamery-360.json.gz",
+      "bytes": 319002,
+      "sha256": "0d8cec23cd2a5a459f76454e319aedfe6c89529b36f66d89c51604ea1dada1d4",
+      "contractSha256": "9777175941833530407e9821eb0d7f104d77a4bd65cc7e4fe68d8eed94115488",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "cranked-cider-press-works-1440.json.gz",
+      "bytes": 288211,
+      "sha256": "2e9f5f64b9aeff6bf21ca7d469fa861478d9b4a3a150ccdcb04e02e383b79e4d",
+      "contractSha256": "9f04e49e360a0d9973097c91625761c85161ef30e2bbda498c592174bd79cb8f",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "cranked-cider-press-works-412.json.gz",
+      "bytes": 287514,
+      "sha256": "7056d9b581401ffc5db5772816f0d53e66456e12c35e732f2fbfdea95387b700",
+      "contractSha256": "847d811e15e038bec2c7b71b187f9f6da1364c5143df31688f2c03ded9601640",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "cranked-cider-press-works-360.json.gz",
+      "bytes": 287633,
+      "sha256": "3f112db38d738e3a515792dba9c9ef917c02c8ef47bfe9e175090e99f1e424b4",
+      "contractSha256": "5862a30b4f485be7b0757f41f0d3bb50f829d20ca2cf5eaecfe4bf24103ca5d9",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "dartmoor-longhouse-arable-farm-1440.json.gz",
+      "bytes": 236359,
+      "sha256": "aaaa686e39d4e1283f17d6cbbd4266ed7355344dbd5e2c5788e5dbd997245ecb",
+      "contractSha256": "c52eda68007a3fb6491c296b8fef89604e14ef47721471fe1cc2c1612e467197",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "dartmoor-longhouse-arable-farm-412.json.gz",
+      "bytes": 235855,
+      "sha256": "28ec8a2ac12329fa742930f5957d272e451d6913259892fccc3ed458a5f758d1",
+      "contractSha256": "0307c6dc7350a18e857dabd44fc508601b18800b01c57a36087d11d12843ddf3",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "dartmoor-longhouse-arable-farm-360.json.gz",
+      "bytes": 236372,
+      "sha256": "cd182c879817c6fbfaecbf62d82f4a984dc69345854dc6e70f493416ee8551bd",
+      "contractSha256": "c52eda68007a3fb6491c296b8fef89604e14ef47721471fe1cc2c1612e467197",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "double-court-arable-estate-farm-1440.json.gz",
+      "bytes": 429196,
+      "sha256": "38317a6955386d3f004b0873645981d9368eddf514532193829a1e6bc4d9e44a",
+      "contractSha256": "2366a480626ed69468c56ab2b4f6b072f22a71b6c32e7186ce295b038ef9ac30",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "double-court-arable-estate-farm-412.json.gz",
+      "bytes": 429150,
+      "sha256": "df702d20c0fd47c7562083594c941027b7e7aa973b7f766347fb7d0dc10c977c",
+      "contractSha256": "92d4b714978dff376dba330e19db08d7904f7f7d468761206d4015642e30f6e5",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "double-court-arable-estate-farm-360.json.gz",
+      "bytes": 429199,
+      "sha256": "b5d174b9d7859da40fbbba4a97bf98d9690fcf2e536e2e2b9c22a93783181338",
+      "contractSha256": "2ea8448cc762e262782b043ef855de99c989f49375941a865f6943c817036582",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "detached-propagation-glasshouses-1440.json.gz",
+      "bytes": 325212,
+      "sha256": "e7facc877e5497863c273832c46a7961d997a8e77dc5d4cf83b522b2dfc5e453",
+      "contractSha256": "28170c1f973ad036ae3e58c3948cb0cbc08f96ddeeb95fc83dad77e8a6655e81",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "detached-propagation-glasshouses-412.json.gz",
+      "bytes": 324981,
+      "sha256": "e2377b3093290f6ed323d1826c40965d6734cc71ffbed2e05d6d7b5e765a9aee",
+      "contractSha256": "0d790f2348841ece236eacd57c3a81fdb83bfcd4216430452a389fd202e7554d",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    },
+    {
+      "file": "detached-propagation-glasshouses-360.json.gz",
+      "bytes": 325190,
+      "sha256": "8575789f37a34900fcba1e8536c0ffc8cd9f573813583f7b0910c2fdbc8bf0ad",
+      "contractSha256": "c59fa17da3b50c9d24e0db09a9cd7a9998cdd6b5d24d9454d14e6799ef8211c9",
+      "sourceGeometrySha256": "3887e9968c063d007ecd73cc6db229e2f9b3f2b1156c7c5eb1970fad9bd19411"
+    }
+  ],
+  "browserJoined": false
+}

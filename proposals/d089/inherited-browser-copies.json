@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "qualification": "Exactly one current heritage catalogue count40→51 per actual old8/10/11/11 browser test. Every original target/input/geometry/performance/surface assertion remains unchanged.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-browser-check-d088.mjs",
+      "target": "proposals/d083/native-browser-check-d089.mjs",
+      "sourceSha256": "7c851a9be4802dce1adf86efe974e8b9cf6a2834dcc1765b05f67d0564ee0135",
+      "targetSha256": "4def20942dc95df8891b7ad67f775e3d2a30586df4a68004e4616a2f6825fd7d",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-browser-v6-check-d088.mjs",
+      "target": "proposals/d086/native-browser-v6-check-d089.mjs",
+      "sourceSha256": "76afe4b43ac957f84f42098a8260bed47d959db1acc5408cd1743ca2e7ab2f8c",
+      "targetSha256": "41b6ebb86a11b55d0271ef774a466741e82599c9fa14c521d4d95285cbbcca57",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-browser-check-d088.mjs",
+      "target": "proposals/d087/native-browser-check-d089.mjs",
+      "sourceSha256": "c870da4af2364ff06e6cd1b9f5a55a4328ec93fc06c1ca6d743fe1badf44a388",
+      "targetSha256": "b4721d7fe9fcbf8d66556bec403644114130c555e099f9c181d874d78fb160e1",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d088/native-browser-check.mjs",
+      "target": "proposals/d088/native-browser-check-d089.mjs",
+      "sourceSha256": "0ae89f77d78882f2ecad5d34073ffe8359d862b15828266cdb6572d3f4455d9f",
+      "targetSha256": "49e9cbf828daccc0065889403fcd244f543d8ebbe93a1d89469347e54ba2ce8b",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

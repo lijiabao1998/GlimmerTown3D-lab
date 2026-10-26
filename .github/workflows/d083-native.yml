@@ -27,10 +27,10 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: node --test tools/d083-release-trigger-d088.test.mjs
+      - run: node --test tools/d083-release-trigger-d089.test.mjs
       - run: npm run typecheck
       - name: Native ownership, placement, save replay, picking and original130 byte pins
-        run: node --experimental-strip-types proposals/d083/native-integration-check-d088.mjs
+        run: node --experimental-strip-types proposals/d083/native-integration-check-d089.mjs
       - name: Unchanged original food/build parity and mutation controls
         run: node --experimental-strip-types tools/unit-d055-build.mjs
       - run: npm run build
@@ -54,6 +54,7 @@ jobs:
             scratch/d083-native-evidence/
             scratch/d087-native/d083-current/
             scratch/d088-native/d083-current/
+            scratch/d089-native/d083-current/
           if-no-files-found: error
           retention-days: 30
   inherited-geometry-envelope:
@@ -107,7 +108,7 @@ jobs:
           test "$(cat dist/source-commit.txt)" = "$GITHUB_SHA"
           sha256sum --check dist/index.sha256
       - name: Real catalogue, mouse/touch placement, construction, picking and save reload
-        run: node --experimental-strip-types proposals/d083/native-browser-check-d088.mjs --width=${{ matrix.width }} --attempt=1
+        run: node --experimental-strip-types proposals/d083/native-browser-check-d089.mjs --width=${{ matrix.width }} --attempt=1
       - name: Unchanged original food placement, refund and commission UI functions
         run: node --experimental-strip-types proposals/d083/native-legacy-ui-check.mjs --width=${{ matrix.width }} --attempt=1
       - uses: actions/upload-artifact@v4
