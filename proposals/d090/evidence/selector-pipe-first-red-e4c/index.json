@@ -1,0 +1,78 @@
+{
+  "state": "PRESERVED_REAL_FULL_CI_FAILURE_NOT_ACCEPTED",
+  "candidate": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+  "tree": "19bb749a71e43491fb6b2245196bc55e0e3f799e",
+  "ciCheckout": "651a80202c7597a585c8389390decdba52e659a0",
+  "run": 40358199917,
+  "jobs": {
+    "total": 72,
+    "success": 63,
+    "skipped": 7,
+    "failure": 2
+  },
+  "originalBrowserArtifact": {
+    "id": 12673593267,
+    "bytes": 12169270,
+    "sha256": "0ffc84f6acc28fd38821a4fc4451dee5bcbde5d77c9d0366378a6c24bddee57b"
+  },
+  "entries": [
+    {
+      "file": "browser.exact.log.gz",
+      "compressedBytes": 61998,
+      "compressedSha256": "0a80a52ec06dca9523dd16df2d3fa5d5abeecc435dd7914351c9e2f239faebcb",
+      "originalBytes": 224657,
+      "originalSha256": "c428ff40a4bf3af6f891e52c2fe7a7989d6d07ab38e4f209e502adc91dd669af"
+    },
+    {
+      "file": "aggregate.exact.log.gz",
+      "compressedBytes": 6208,
+      "compressedSha256": "6065b12b6d0a56b09c69e9a2d1b772dc61b32a151ed075d52aef246abc1bc270",
+      "originalBytes": 22538,
+      "originalSha256": "1a6fe9fd0ed26fbf86e78d4445122dc08ace6445675ffaa9a825a21fa2dfe0f6"
+    },
+    {
+      "file": "state.json.gz",
+      "compressedBytes": 16847,
+      "compressedSha256": "b4367449b2c5b35d79bf7a77ec333e2ac1d02f43fa227a543ad8a715a497ae1b",
+      "originalBytes": 905803,
+      "originalSha256": "df5c5739d335d2ba434d74e4ba5745f5bf6f1bc087f5f7127549cff27a026f57"
+    },
+    {
+      "file": "smoke-evidence.json.gz",
+      "compressedBytes": 83554,
+      "compressedSha256": "898224f4769c102b7ca963faac19fd00000038b6bed34d81398085c7b20f827a",
+      "originalBytes": 1798360,
+      "originalSha256": "f2cba06c8f3e39017bb7c5855d0c5ce974b36bc778b4596aa6f54dd737126141"
+    },
+    {
+      "file": "old6c-browser.exact.log.gz",
+      "compressedBytes": 61694,
+      "compressedSha256": "30b2249b65003bc0ffa38708a5ac51e15358445a2ef8082431b5a4e6f27df0fb",
+      "originalBytes": 223458,
+      "originalSha256": "4851b0e018fbcb219f4c18a23fb123324873d991bd55c4b6ccca89bd4c89647c"
+    },
+    {
+      "file": "complete-jobs.json.gz",
+      "compressedBytes": 12415,
+      "compressedSha256": "4319d3581e36976e2434332bbce1435692ff7d6be17cadb87e4e0bc8c9275494",
+      "originalBytes": 197799,
+      "originalSha256": "de3acb33a33e015469d6edd6a552b1be56e1f2f2a068ff8f57a1b62677ae7b29"
+    },
+    {
+      "file": "original.png",
+      "bytes": 95726,
+      "sha256": "92ddd7fa331a381f1767545fa753e0a4926378081a632edf2f9b965da2f3da94"
+    },
+    {
+      "file": "diagnosis.json",
+      "bytes": 4425,
+      "sha256": "5e954a9f965d1b548e88dd6a154ca2f2e98d3921fd708e19f2493df47bb5f0e6"
+    },
+    {
+      "file": "independent-initial-diagnosis.json",
+      "bytes": 6747,
+      "sha256": "2ea9106b18f125fb0c6f8fcde07c9e8181bb96d29b93b62745d3623ae2bb1a95"
+    }
+  ],
+  "qualification": "Every compressed file decompresses to the exact original logged/archived bytes. Synthetic fixture data, original unedited native screenshot. No assertion, threshold or product change in this evidence. Prior6c same assertion before cancellation is explicitly retained; neither failed run is reclassified as passing."
+}

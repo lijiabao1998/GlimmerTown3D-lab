@@ -1,0 +1,30 @@
+{
+  "qualification": "Inert earlier-index preimages retained for the archived first-red lineage; final current14-copy lineage uses its own explicit shifted paths. Every byte matches original e4c. No current code/test change.",
+  "baseline": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+  "rows": [
+    {
+      "file": "proposals/d090/evidence/selector-pipes-validation-preimages/08-proposals--d090--foundation-routing.test.mjs",
+      "original": "proposals/d090/foundation-routing.test.mjs",
+      "bytes": 3155,
+      "sha256": "c09f36d420494ff690c2c94a38bf7904445462293e08a64d7c43457fc9a3ce52"
+    },
+    {
+      "file": "proposals/d090/evidence/selector-pipes-validation-preimages/09-proposals--d090--foundation-test-runner.mjs",
+      "original": "proposals/d090/foundation-test-runner.mjs",
+      "bytes": 4547,
+      "sha256": "ddabbb8a75fc074ddcf3d69e795c5c015e1b914e8d4756560c41dab02a2a7226"
+    },
+    {
+      "file": "proposals/d090/evidence/selector-pipes-validation-preimages/10-proposals--d090--foundation-runner.test.mjs",
+      "original": "proposals/d090/foundation-runner.test.mjs",
+      "bytes": 4283,
+      "sha256": "0597c7e5a1ceac7c9898a7c6a86163c84dddaf2516e9f00915ee8b4fdf5ccb9e"
+    },
+    {
+      "file": "proposals/d090/evidence/selector-pipes-validation-preimages/11-proposals--d090--foundation-routing-contract.mjs",
+      "original": "proposals/d090/foundation-routing-contract.mjs",
+      "bytes": 3377,
+      "sha256": "69f22f2368ab36a10eef821b8d56cbd341deefb787e083b6a437d07599501ee3"
+    }
+  ]
+}

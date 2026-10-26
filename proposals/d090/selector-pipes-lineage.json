@@ -1,0 +1,478 @@
+{
+  "schema": 1,
+  "baseline": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+  "qualification": "Finite validation-only copies and exact four new utility pipe expectations; prior actual Chrome failures remain failed. No product, original assertion, workflow YAML, camera or threshold changes.",
+  "copies": [
+    {
+      "source": "tools/smoke-d053-d090.mjs",
+      "target": "tools/smoke-d053-d090-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "2b9f9956b929040228a42709b45618f947db7eafe094924da062832374ec59e9",
+      "targetSha256": "97566fdc2920669c70bbe297aed76091123b5db1b555c8ed0c7e9c0ecfd0d96a",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "from './d053-capture-d090.mjs';",
+          "after": "from './d053-capture-d090-pipes-v2.mjs';",
+          "count": 1
+        },
+        {
+          "before": "const BRITISH_CATALOGUE_IDS =",
+          "after": "import {UTILITY_HERITAGE_BUILDINGS} from '../src/content/britishUtilityHeritage.ts';\nimport {assertD090PipeCatalogue,assertD090SelectedPipeState} from './d053-pipes-d090-v2.mjs';\nassertD090PipeCatalogue(UTILITY_HERITAGE_BUILDINGS);\nconst BRITISH_CATALOGUE_IDS =",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe','sewage'].includes(t.id));",
+          "after": "assertD090SelectedPipeState(t.id,await p.ev('__gt.ui()'),await p.ev('__gt.pipesShown()'));",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/00-tools--smoke-d053-d090.mjs"
+    },
+    {
+      "source": "tools/d053-capture-d090.mjs",
+      "target": "tools/d053-capture-d090-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "9ad96802f3c0207c8b2ee2bb9b645044497457b37e5cb8f0fb03c5e96c7d5500",
+      "targetSha256": "05be42d1ba6c459383e96867e803fdb736c56f1a985f7f19348cbff79859dbd7",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "'tools/d090-catalogue-compat.mjs'",
+          "after": "'tools/d090-catalogue-compat.mjs','tools/d053-capture-d090-pipes-v2.mjs','tools/smoke-d053-d090-pipes-v2.mjs','tools/d053-pipes-d090-v2.mjs','src/content/britishUtilityHeritage.ts'",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/01-tools--d053-capture-d090.mjs"
+    },
+    {
+      "source": "proposals/d090/native-smoke-versions.mjs",
+      "target": "proposals/d090/native-smoke-versions-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "1443af51c9d50fe49da77dda9ddb14abc5ee8a7740d9fc2b8414b431b6d5b117",
+      "targetSha256": "ef070e5c16e6e584cf83632ca63a2513d6456feea8e3c85af1f8b7d94c030615",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "'df8a6e00d2132b881309c33142c71ab2fc3da2b991d002eb026c0a36ac02455e'",
+          "after": "\"dfb62155581b30c3712e6dc05f5823c09e40f4a034c58b696ace7b9f03fab872\"",
+          "count": 1
+        },
+        {
+          "before": "read('proposals/d090/native-smoke-versions.json')",
+          "after": "read('proposals/d090/native-smoke-versions-pipes-v2.json')",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(m.copies.length,2);",
+          "after": "assert.equal(m.copies.length,4);",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/02-proposals--d090--native-smoke-versions.mjs"
+    },
+    {
+      "source": "proposals/d090/native-smoke-versions.test.mjs",
+      "target": "proposals/d090/native-smoke-versions-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "ff5fc5e8278017caf21b2681f79784a49175eeeff207112cb59078d01e8f3034",
+      "targetSha256": "0968ae2243d5342a8aba6a4dc6127b53c6874184b77994d791f5c62bd9237e36",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "'./native-smoke-versions.mjs'",
+          "after": "'./native-smoke-versions-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "tools/smoke-d053-d090.mjs",
+          "after": "tools/smoke-d053-d090-pipes-v2.mjs",
+          "count": 4
+        },
+        {
+          "before": "tools/d053-capture-d090.mjs",
+          "after": "tools/d053-capture-d090-pipes-v2.mjs",
+          "count": 5
+        },
+        {
+          "before": "proposals/d090/native-smoke-versions.json",
+          "after": "proposals/d090/native-smoke-versions-pipes-v2.json",
+          "count": 2
+        },
+        {
+          "before": "{copies:2,rootRoute:",
+          "after": "{copies:4,rootRoute:",
+          "count": 1
+        },
+        {
+          "before": "['show',baseline+':'+r.source]",
+          "after": "['show',(r.sourceCommit??baseline)+':'+r.source]",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/03-proposals--d090--native-smoke-versions.test.mjs"
+    },
+    {
+      "source": "tools/smoke.mjs",
+      "target": "tools/smoke.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "4bed5eee2aec80624e498e25ec01e2bdfb89e84e2a9c853cb67ac3dfb85b7889",
+      "targetSha256": "f404cd546f11f6554f23ab8bc7b9acbbeeefa1c7c7531d40bf6d4c2e750a8298",
+      "header": "",
+      "changes": [
+        {
+          "before": "import { d053Smoke } from './smoke-d053-d090.mjs';",
+          "after": "import { d053Smoke } from './smoke-d053-d090-pipes-v2.mjs';",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/04-tools--smoke.mjs"
+    },
+    {
+      "source": "proposals/d090/inherited-test-contract.mjs",
+      "target": "proposals/d090/inherited-test-contract-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "06e640ab6a277186f7e3d398f73c4c93fe13669df2866d5cdb18f22f5bfc6012",
+      "targetSha256": "8ca803480aa611d10fd47fffd3b688610032369a55072654edd3de1c4c9201f0",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "import fs from'node:fs';",
+          "after": "import{assertFrozenCurrentSource}from'./foundation-routing-contract-pipes-v2.mjs';\nimport fs from'node:fs';",
+          "count": 1
+        },
+        {
+          "before": " assert.equal(sha(bytes),DOMAIN_MANIFEST_SHA,",
+          "after": " assertFrozenCurrentSource(source);assert.equal(sha(bytes),DOMAIN_MANIFEST_SHA,",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/inherited-test-domains.json'",
+          "after": "'proposals/d090/inherited-test-domains-pipes-v2.json'",
+          "count": 1
+        },
+        {
+          "before": "'95558e65313600691ba0e2721d9a9b98c39b06dbe7dd029136c2d47a2b0ad5d2'",
+          "after": "\"c5beffc89693b39a03f589db3082d630640cf92085da2c56c45bd6fcfbf0bb75\"",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/05-proposals--d090--inherited-test-contract.mjs"
+    },
+    {
+      "source": "proposals/d090/inherited-test-contract.test.mjs",
+      "target": "proposals/d090/inherited-test-contract-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "801047a267619179a31388ae9aa7ae72fad8bde88c892d574615293b10123425",
+      "targetSha256": "e15fc9cba157a9a89e5390b481bdbae4de3a6b168d4d8dcda79a801efccb31fc",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'./inherited-test-contract.mjs'",
+          "after": "'./inherited-test-contract-pipes-v2.mjs'",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/06-proposals--d090--inherited-test-contract.test.mjs"
+    },
+    {
+      "source": "proposals/d090/inherited-test-runner.mjs",
+      "target": "proposals/d090/inherited-test-runner.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "fe3b283008327e035e3446f30a4aeee4943324ec4893e4bd410fad075cd189d4",
+      "targetSha256": "eae1ecaab58f967d2b2d48c56cea3a3c52d5677f4fa855a1edbdcb8d4a9c0080",
+      "header": "",
+      "changes": [
+        {
+          "before": "'./inherited-test-contract.mjs'",
+          "after": "'./inherited-test-contract-pipes-v2.mjs'",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/07-proposals--d090--inherited-test-runner.mjs"
+    },
+    {
+      "source": "tools/d090-validation.mjs",
+      "target": "tools/d090-validation-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "84f5940548bb92888941f5843eb950069dcc8a9ee784ed26eb3794c24d08513d",
+      "targetSha256": "b44ce5b8c634028ef35529596b0a295b50f18c79874ede5bf81434fbf584aeeb",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "import fs from'node:fs';",
+          "after": "import{assertFrozenCurrentSource}from'../proposals/d090/foundation-routing-contract-pipes-v2.mjs';\nimport fs from'node:fs';",
+          "count": 1
+        },
+        {
+          "before": "'../proposals/d090/inherited-test-contract.mjs'",
+          "after": "'../proposals/d090/inherited-test-contract-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(sha(source('proposals/d090/inherited-test-runner.mjs')),INHERITED_RUNNER_SHA,",
+          "after": "assertFrozenCurrentSource(source);const actual=source('proposals/d090/inherited-test-runner.mjs'),before=\"'./inherited-test-contract.mjs'\",after=\"'./inherited-test-contract-pipes-v2.mjs'\";assert.equal(actual.split(after).length,2,'one new current-domain import');assert.equal(actual.split(before).length,1,'no stale current-domain import');assert.equal(sha(actual.replace(after,before)),INHERITED_RUNNER_SHA,",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/08-tools--d090-validation.mjs"
+    },
+    {
+      "source": "tools/d090-validation.test.mjs",
+      "target": "tools/d090-validation-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "95674e1827b8d62ae848ab135fd5aaffb726ff7d8c2d1e5727f7bf19a8b56371",
+      "targetSha256": "3ff9d3d8616b5657193be21b5645609480662a4d7c081ceebee6e6d222a092e0",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'./d090-validation.mjs'",
+          "after": "'./d090-validation-pipes-v2.mjs'",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/09-tools--d090-validation.test.mjs"
+    },
+    {
+      "source": "proposals/d090/foundation-routing.test.mjs",
+      "target": "proposals/d090/foundation-routing-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "c09f36d420494ff690c2c94a38bf7904445462293e08a64d7c43457fc9a3ce52",
+      "targetSha256": "512317523b457762e100674e34e8da7c0af393b1cacf6923517e905791ba09b6",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'./foundation-routing-contract.mjs'",
+          "after": "'./foundation-routing-contract-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/foundation-routing.json'",
+          "after": "'proposals/d090/foundation-routing-pipes-v2.json'",
+          "count": 1
+        },
+        {
+          "before": "FOUNDATION_BASELINE+':'+f",
+          "after": "(m.originalTestSources[f]??FOUNDATION_BASELINE)+':'+f",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(m.historical.length,6)",
+          "after": "assert.equal(m.historical.length,10)",
+          "count": 1
+        },
+        {
+          "before": "closed current and six actual6c domains",
+          "after": "closed current, eight actual6c and two actuale4c test files",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/10-proposals--d090--foundation-routing.test.mjs"
+    },
+    {
+      "source": "proposals/d090/foundation-test-runner.mjs",
+      "target": "proposals/d090/foundation-test-runner.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "ddabbb8a75fc074ddcf3d69e795c5c015e1b914e8d4756560c41dab02a2a7226",
+      "targetSha256": "ee06a333a38efbe50f5b27dbc2ed6c6772adea85ca9dffbbb00dac6a330d56e3",
+      "header": "",
+      "changes": [
+        {
+          "before": "'./foundation-routing-contract.mjs'",
+          "after": "'./foundation-routing-contract-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "// Mandatory actual6c + actual current domains.",
+          "after": "// Mandatory actual6c + actuale4c + actual current domains.",
+          "count": 1
+        },
+        {
+          "before": "qualification:'Exact historical6c and actual current Node tests only; no browser/art/release inference.'",
+          "after": "qualification:'Exact historical6c/e4c Node provenance and actual current Node tests only; original stale Chrome failure remains failed, no browser/art/release inference.'",
+          "count": 1
+        },
+        {
+          "before": "const history=path.resolve(opt('history-dir')??'../GlimmerTown3D-lab-d090-foundation-6c');if(!fs.existsSync(history))git(root,'worktree','add','--detach',history,FOUNDATION_BASELINE);assert.equal(git(history,'rev-parse','HEAD').trim(),FOUNDATION_BASELINE);assert.equal(git(history,'status','--porcelain','--untracked-files=no').trim(),'');for(const f of['package.json','package-lock.json'])assert.equal(fs.readFileSync(path.join(root,f),'utf8'),git(history,'show',FOUNDATION_BASELINE+':'+f),'unchanged locked dependency source');if(!fs.existsSync(path.join(history,'node_modules')))fs.symlinkSync(path.join(root,'node_modules'),path.join(history,'node_modules'),'dir');",
+          "after": "const historyBase=path.resolve(opt('history-dir')??'../GlimmerTown3D-lab-d090-foundation-6c');const domains=m.historicalDomains.map((d,i)=>{const history=i?historyBase+'-'+d.source.slice(0,8):historyBase;if(!fs.existsSync(history))git(root,'worktree','add','--detach',history,d.source);assert.equal(git(history,'rev-parse','HEAD').trim(),d.source);assert.equal(git(history,'status','--porcelain','--untracked-files=no').trim(),'');for(const f of['package.json','package-lock.json'])assert.equal(fs.readFileSync(path.join(root,f),'utf8'),git(history,'show',d.source+':'+f),'unchanged locked dependency source');if(!fs.existsSync(path.join(history,'node_modules')))fs.symlinkSync(path.join(root,'node_modules'),path.join(history,'node_modules'),'dir');return[d.name,history,d.files,d.source];});",
+          "count": 1
+        },
+        {
+          "before": "for(const [name,cwd,files]of[['actual-immutable-6c',history,m.historical],...partial?[]:[['actual-current',root,m.current]]]){",
+          "after": "for(const [name,cwd,files,source]of[...domains,...partial?[]:[['actual-current',root,m.current,head]]]){",
+          "count": 1
+        },
+        {
+          "before": "if(cwd===history){for(const[f,h]of Object.entries(before))assert.equal(h,sha(git(history,'show',FOUNDATION_BASELINE+':'+f)));for(const f of files){const original=git(history,'show',FOUNDATION_BASELINE+':'+f);",
+          "after": "if(cwd!==root){for(const[f,h]of Object.entries(before))assert.equal(h,sha(git(cwd,'show',source+':'+f)));for(const f of files){const original=git(cwd,'show',source+':'+f);",
+          "count": 1
+        },
+        {
+          "before": "source:cwd===history?FOUNDATION_BASELINE:head",
+          "after": "source",
+          "count": 1
+        },
+        {
+          "before": "if(cwd===history){assert.equal(git(history,'rev-parse','HEAD').trim(),FOUNDATION_BASELINE);assert.equal(git(history,'status','--porcelain','--untracked-files=no').trim(),'');}",
+          "after": "if(cwd!==root){assert.equal(git(cwd,'rev-parse','HEAD').trim(),source);assert.equal(git(cwd,'status','--porcelain','--untracked-files=no').trim(),'');}",
+          "count": 1
+        },
+        {
+          "before": "report.checks.length===2&&report.checks.every",
+          "after": "report.checks.length===3&&report.checks.every",
+          "count": 1
+        },
+        {
+          "before": "partial&&report.checks.length===1&&report.checks[0].status===0&&!report.checks[0].signal&&!report.checks[0].error",
+          "after": "partial&&report.checks.length===2&&report.checks.every(r=>r.status===0&&!r.signal&&!r.error)",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/11-proposals--d090--foundation-test-runner.mjs"
+    },
+    {
+      "source": "proposals/d090/foundation-runner.test.mjs",
+      "target": "proposals/d090/foundation-runner-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "0597c7e5a1ceac7c9898a7c6a86163c84dddaf2516e9f00915ee8b4fdf5ccb9e",
+      "targetSha256": "f7e61db775d15148bf7f9c92b91ef8b5a699ff81d1e1b5a5f3c5f05e1db37ae2",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "m={historical:['old.test.mjs'],current:['current.test.mjs']}",
+          "after": "m={historical:['old.test.mjs','old-runner.test.mjs'],historicalDomains:[{name:'actual-immutable-6c',source:base,files:['old.test.mjs']},{name:'actual-immutable-e4c',source:'e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc',files:['old-runner.test.mjs']}],current:['current.test.mjs']}",
+          "count": 1
+        },
+        {
+          "before": "options.wrongHead?'bad':base",
+          "after": "options.wrongHead?'bad':cwd===hist?base:'e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc'",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(r.calls.length,2)",
+          "after": "assert.equal(r.calls.length,3)",
+          "count": 2
+        },
+        {
+          "before": "assert.deepEqual(Array.from(r.calls[1].args),['--test','current.test.mjs']);",
+          "after": "assert.deepEqual(Array.from(r.calls[1].args),['--test','old-runner.test.mjs']);assert.deepEqual(Array.from(r.calls[2].args),['--test','current.test.mjs']);assert.equal(new Set(r.calls.map(c=>c.cwd)).size,3);",
+          "count": 1
+        },
+        {
+          "before": "for(const index of[0,1])",
+          "after": "for(const index of[0,1,2])",
+          "count": 1
+        },
+        {
+          "before": "endsWith('.txt')).length,2)",
+          "after": "endsWith('.txt')).length,3)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(r.calls.length,1)",
+          "after": "assert.equal(r.calls.length,2)",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/12-proposals--d090--foundation-runner.test.mjs"
+    },
+    {
+      "source": "proposals/d090/foundation-routing-contract.mjs",
+      "target": "proposals/d090/foundation-routing-contract-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "69f22f2368ab36a10eef821b8d56cbd341deefb787e083b6a437d07599501ee3",
+      "targetSha256": "b4fa4dbda31446e18b884c369ea1cebd8cfb92d7ba6f0dff5c325a29239ecb53",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'80dac720b1fc7cf90989c472c0cade95f73b09f60389f980d2f7414b023c7ffb'",
+          "after": "\"4eee655808be8e9823b41a221bdbe6ff8e67338ae3e34bd3311d4f5accf6ac38\"",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/foundation-routing.json'",
+          "after": "'proposals/d090/foundation-routing-pipes-v2.json'",
+          "count": 1
+        },
+        {
+          "before": "export function actualTestInventory()",
+          "after": "export function assertFrozenCurrentSource(source=read,paths=fs.readdirSync('src',{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>e.parentPath+'/'+e.name).sort()){const bytes=source('fixtures/d090/source.json');assert.equal(sha(bytes),'e30677d68cff47dfead05eac5ac9cde406a1958ebf10942c5f5d0fae8a26f7d0');const m=JSON.parse(bytes),expected={...m.baselineFiles,...Object.fromEntries(Object.entries(m.modified).map(([f,r])=>[f,r.afterSha256])),...m.added};assert.equal(Object.keys(expected).length,263);assert.deepEqual(paths,Object.keys(expected).sort());for(const f of paths)assert.equal(sha(source(f)),expected[f],'actual current source must match before any historical domain '+f);return expected;}\nexport function actualTestInventory()",
+          "count": 1
+        },
+        {
+          "before": " assert.equal(sha(bytes),FOUNDATION_ROUTING_SHA);",
+          "after": " assertFrozenCurrentSource(source);assert.equal(sha(bytes),FOUNDATION_ROUTING_SHA);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(m.historical.length,6);assert.equal(new Set(m.historical).size,6);",
+          "after": "assert.equal(m.historical.length,10);assert.equal(new Set(m.historical).size,10);assert.deepEqual(m.historicalDomains.map(d=>[d.name,d.source,d.files.length]),[['actual-immutable-6c',FOUNDATION_BASELINE,8],['actual-immutable-e4c','e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc',2]]);assert.deepEqual(m.historicalDomains.flatMap(d=>d.files),m.historical);",
+          "count": 1
+        }
+      ],
+      "preimage": "proposals/d090/evidence/selector-pipes-validation-preimages/13-proposals--d090--foundation-routing-contract.mjs"
+    }
+  ],
+  "preserved": {
+    "proposals/d090/native-smoke-versions.json": "df8a6e00d2132b881309c33142c71ab2fc3da2b991d002eb026c0a36ac02455e",
+    "proposals/d090/native-smoke-versions.mjs": "1443af51c9d50fe49da77dda9ddb14abc5ee8a7740d9fc2b8414b431b6d5b117",
+    "proposals/d090/foundation-routing.json": "80dac720b1fc7cf90989c472c0cade95f73b09f60389f980d2f7414b023c7ffb",
+    "proposals/d090/foundation-routing-contract.mjs": "69f22f2368ab36a10eef821b8d56cbd341deefb787e083b6a437d07599501ee3",
+    "proposals/d090/foundation-copy-lineage.json": "cd4b01a1ad574d5bf4c6f541d4fedfe978fbd87ec293a0508ab5d58ead35c10c",
+    "proposals/d090/inherited-test-domains.json": "95558e65313600691ba0e2721d9a9b98c39b06dbe7dd029136c2d47a2b0ad5d2",
+    "proposals/d090/inherited-test-contract.mjs": "06e640ab6a277186f7e3d398f73c4c93fe13669df2866d5cdb18f22f5bfc6012"
+  },
+  "workflows": {
+    ".github/workflows/ci.yml": "be419e18a1362d00ec8a69082d02ae7cab34df88784abbf7a75b75dbd3509600",
+    ".github/workflows/d056-art.yml": "241fcfa3bc7b9999e9edb2be50501d5ad7c0e47ccc526efc33128a9fe1514888",
+    ".github/workflows/d057-art.yml": "3bdc40296ab11ff596b7200762544341f97e7a9022f3c45fb1a9004ea025f35b",
+    ".github/workflows/d058-preview.yml": "0f3ae210eacc1fcc8f311fc4cda4ba311d58b8c158d0e87865bc57c273c26509",
+    ".github/workflows/d066-preview.yml": "ae7749119c01977e5d705b1efca669b7f72eceeee092a03e0175224d23d17d35",
+    ".github/workflows/d067-preview.yml": "ad6b2f24c33c40a99989baf9053566c38970d6616b94bbb93041e1eec8c4d2a7",
+    ".github/workflows/d068-preview.yml": "db98d83eb9881b4d583b9030bd4db8d54084fba6835409e8adb5af563a41643d",
+    ".github/workflows/d069-preview.yml": "b72f1f538c3f8b5ee27ca1f35a1cf29ef95552723297b2db5d6b492db78a5d86",
+    ".github/workflows/d070-preview.yml": "1e3b44a289de9e838456caa5857ea6b61324d71e59eed319e65712a76bdba411",
+    ".github/workflows/d071-preview.yml": "e2eb425299cbcfb91a409404ad6e603f74c90deb9b363d32a376834bfb21b4ae",
+    ".github/workflows/d072-preview.yml": "a3732bcb714717e889d84d08bb060e2de789becba5ae5631b14c703997e7a62f",
+    ".github/workflows/d073-preview.yml": "572bec5adece184c38923bb735d4a7cccc4e5d2cacc8a523ea01ea40c47b8aba",
+    ".github/workflows/d074-preview.yml": "3f2822fd5fc18921bcda95ef95fa60cb414dad246c883d56f9190fce7ce30aaa",
+    ".github/workflows/d074-touch-diagnostic.yml": "a3c77ca9eeb461be248e3d7a2e85c697d0f0568f576c82394459c8c274fe3d5d",
+    ".github/workflows/d074-touch-repair.yml": "93b51f3426025242bcb70fdd74284669504df871c60beb6b56557f5c7db101c5",
+    ".github/workflows/d076-inspect.yml": "3ab8e2c2c99fd206bc876114f3755578d3d372d203a3cdf00455e52f3fd4ca23",
+    ".github/workflows/d076-preview.yml": "a9af7eceb373f8a82f360fec83fe64041af169fe0bca76a3606d43d9f69e5111",
+    ".github/workflows/d077-inspect.yml": "fa13489af13bf40e618c8653ee91a2ecb7c70cbe0883a66bf7551de8d865212a",
+    ".github/workflows/d077-preview.yml": "d15f6cf042dd1727575eda9aec60d457588bfc1e23f1a247fb20993f38249031",
+    ".github/workflows/d078-inspect.yml": "5f750e84a9e99e42caf11d2f2036279b45dc7794e1398465efba742c9e15e8fc",
+    ".github/workflows/d079-inspect.yml": "719f9e1d72695f4e4cd54c4fe1d82fe922ea2d6e8175561d8df25d1b389c2320",
+    ".github/workflows/d080-inspect.yml": "e6b5bfb73670af8e0f0e36cb6027809ce889efc63d49b38284d8fb51d9fda095",
+    ".github/workflows/d081-inspect.yml": "cfb37e07b449a81ee5f9f0f32134f6205e5974c741376a2307bff2fee3d62fdd",
+    ".github/workflows/d081-touch-lease.yml": "5413c50e99012975611bdd12203a8f1ffa2de3dafea5a9a42f5cb9337ec3e390",
+    ".github/workflows/d082-179v1-proposal.yml": "b131a214a0fef596cfc17c1a761244433b658fdddaadd2a82acd24079bd49f94",
+    ".github/workflows/d082-redesign.yml": "cfece8f196a52cf14fdd82dc6cf6da427a88e191debf81966e091e9f108777a3",
+    ".github/workflows/d082-review.yml": "13977d3aac8e410d6f923232607a4dc685750cb421cb104a94e6bdcbaa4577bd",
+    ".github/workflows/d083-native.yml": "3d6e56e793489eb90cd1623b0d79a0a6d8457191cfa92b3f20b227817a888964",
+    ".github/workflows/d084-frontage.yml": "edc34cf67d02eef6bedd974aa77addc740abe36dcbc9ea18ac9c667e840374c7",
+    ".github/workflows/d085-control.yml": "2bd085e49ed1f36f2baac49bdfc26cbdbf86eb41930cd1fef706512e02bf285f",
+    ".github/workflows/d086-native.yml": "c1a12caec58ba8d7d241195e391e3ea1851e4da46c37a116b3a64cb93a1072a4",
+    ".github/workflows/d087-native.yml": "94060b1eeb88c3a9d5078b926bc15c9c494ec2bfb9e16369c2d0f229ed390010",
+    ".github/workflows/d088-native.yml": "9cd541728fafd2be22db3c608027dc88cb56bc710dd4334d2db6947898643754",
+    ".github/workflows/d089-native.yml": "a469e54a16e5a3283c6e62122ae8299475249682bf31148dac42d1bb91e38dfb",
+    ".github/workflows/d090-native.yml": "d4fbcd8dcc129d3ae2267d3d92369c6bcf94697fbccd92ca26db7077f6755153"
+  },
+  "newIndependentFiles": {
+    "tools/d053-pipes-d090-v2.mjs": "71f682ed604e81175d53ffb23f641a157c599ca63b81698cd79ac3a8294a1a8d",
+    "proposals/d090/native-selector-pipes-v2.test.mjs": "3a041b0737536b5d7bb42569aca78c501747d6535e21632cdfbfd067243c4514"
+  },
+  "inheritedDomain": {
+    "before": "proposals/d090/inherited-test-domains.json",
+    "after": "proposals/d090/inherited-test-domains-pipes-v2.json",
+    "afterSha256": "c5beffc89693b39a03f589db3082d630640cf92085da2c56c45bd6fcfbf0bb75",
+    "old": "proposals/d090/native-smoke-versions.test.mjs",
+    "current": "proposals/d090/native-smoke-versions-pipes-v2.test.mjs"
+  },
+  "newPinnedManifests": {
+    "proposals/d090/native-smoke-versions-pipes-v2.json": "dfb62155581b30c3712e6dc05f5823c09e40f4a034c58b696ace7b9f03fab872",
+    "proposals/d090/foundation-copy-lineage-pipes-v2.json": "8bb84ed2670eed669b2b6cfa72eca79c61de54d5584af0603eddcde634dff195",
+    "proposals/d090/foundation-routing-pipes-v2.json": "4eee655808be8e9823b41a221bdbe6ff8e67338ae3e34bd3311d4f5accf6ac38"
+  }
+}

@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "reason": "Only exact76+10 catalogue/capture and source inventory seams; every original smoke interaction and threshold retained. Current successor preserves original failed smoke and extends only four independently named water/sewage expectations plus current source provenance.",
+  "copies": [
+    {
+      "source": "tools/smoke-d053-d089.mjs",
+      "target": "tools/smoke-d053-d090.mjs",
+      "sourceSha256": "447a758291b7596f2e4ab50a939a5da50b13de318ab3389763bd93facfcefa62",
+      "targetSha256": "2b9f9956b929040228a42709b45618f947db7eafe094924da062832374ec59e9",
+      "header": "// D090 finite current contract. Original tools/smoke-d053-d089.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "from './d053-capture-d089.mjs';",
+          "after": "from './d053-capture-d090.mjs';",
+          "count": 1
+        },
+        {
+          "before": "import { D087_TOOL_IDS, D088_TOOL_IDS, D089_TOOL_IDS, catalogueWithD089 as catalogueWithD086 } from './d089-catalogue-compat.mjs';",
+          "after": "import { D087_TOOL_IDS, D088_TOOL_IDS, D089_TOOL_IDS, D090_TOOL_IDS, catalogueWithD090 as catalogueWithD086 } from './d090-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "Object.freeze([...D086_BRITISH_CATALOGUE_IDS,...D087_TOOL_IDS,...D088_TOOL_IDS,...D089_TOOL_IDS]);",
+          "after": "Object.freeze([...D086_BRITISH_CATALOGUE_IDS,...D087_TOOL_IDS,...D088_TOOL_IDS,...D089_TOOL_IDS,...D090_TOOL_IDS]);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d053-capture-d089.mjs",
+      "target": "tools/d053-capture-d090.mjs",
+      "sourceSha256": "ec891d689c0051a2e9b145f221992c2eb55ca7bfdb5a0a3fbee0c0b78c40980a",
+      "targetSha256": "9ad96802f3c0207c8b2ee2bb9b645044497457b37e5cb8f0fb03c5e96c7d5500",
+      "header": "// D090 finite current contract. Original tools/d053-capture-d089.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "import {catalogueWithD089 as catalogueWithD086} from './d089-catalogue-compat.mjs';",
+          "after": "import {catalogueWithD090 as catalogueWithD086} from './d090-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "'D089 exact retained65 then new11 catalogue order'",
+          "after": "'D090 exact retained76 then new10 catalogue order'",
+          "count": 1
+        },
+        {
+          "before": "'tools/d089-catalogue-compat.mjs'",
+          "after": "'tools/d089-catalogue-compat.mjs','tools/d053-capture-d090.mjs','tools/smoke-d053-d090.mjs','tools/d090-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/smoke-d053-d090.mjs",
+      "target": "tools/smoke-d053-d090-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "2b9f9956b929040228a42709b45618f947db7eafe094924da062832374ec59e9",
+      "targetSha256": "97566fdc2920669c70bbe297aed76091123b5db1b555c8ed0c7e9c0ecfd0d96a",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "from './d053-capture-d090.mjs';",
+          "after": "from './d053-capture-d090-pipes-v2.mjs';",
+          "count": 1
+        },
+        {
+          "before": "const BRITISH_CATALOGUE_IDS =",
+          "after": "import {UTILITY_HERITAGE_BUILDINGS} from '../src/content/britishUtilityHeritage.ts';\nimport {assertD090PipeCatalogue,assertD090SelectedPipeState} from './d053-pipes-d090-v2.mjs';\nassertD090PipeCatalogue(UTILITY_HERITAGE_BUILDINGS);\nconst BRITISH_CATALOGUE_IDS =",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(await p.ev('__gt.pipesShown()'),['water','wpipe','sewage'].includes(t.id));",
+          "after": "assertD090SelectedPipeState(t.id,await p.ev('__gt.ui()'),await p.ev('__gt.pipesShown()'));",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d053-capture-d090.mjs",
+      "target": "tools/d053-capture-d090-pipes-v2.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "9ad96802f3c0207c8b2ee2bb9b645044497457b37e5cb8f0fb03c5e96c7d5500",
+      "targetSha256": "05be42d1ba6c459383e96867e803fdb736c56f1a985f7f19348cbff79859dbd7",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "'tools/d090-catalogue-compat.mjs'",
+          "after": "'tools/d090-catalogue-compat.mjs','tools/d053-capture-d090-pipes-v2.mjs','tools/smoke-d053-d090-pipes-v2.mjs','tools/d053-pipes-d090-v2.mjs','src/content/britishUtilityHeritage.ts'",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "rootRoute": {
+    "file": "tools/smoke.mjs",
+    "before": "import { d053Smoke } from './smoke-d053-d089.mjs';",
+    "after": "import { d053Smoke } from './smoke-d053-d090-pipes-v2.mjs';",
+    "count": 1,
+    "sourceSha256": "d8daa3ddd2978153dbe0975e814f6631caa84f42689e200eb3f6fb1d4bd1e2c8",
+    "targetSha256": "f404cd546f11f6554f23ab8bc7b9acbbeeefa1c7c7531d40bf6d4c2e750a8298"
+  }
+}

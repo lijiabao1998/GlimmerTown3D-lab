@@ -1,7 +1,7 @@
 // Execute the exact old source-version trees and the actual current compatible
 // assertions. Never intercept filesystem reads, alter old assertions or omit reds.
 import fs from'node:fs';import path from'node:path';import assert from'node:assert/strict';import{execFileSync,spawnSync}from'node:child_process';
-import{assertInheritedDomains,domainPlan,sha,INHERITED_BASELINE}from'./inherited-test-contract.mjs';
+import{assertInheritedDomains,domainPlan,sha,INHERITED_BASELINE}from'./inherited-test-contract-pipes-v2.mjs';
 import{assertInheritedWorkflowSet}from'../../tools/d090-validation.mjs';
 const options=process.argv.slice(2);assert.ok(options.every(x=>/^--suite=(all|d086|d087|d088|d089)$/.test(x)));assert.ok(options.length<=1);const suite=options[0]?.slice(8)??'all',m=assertInheritedDomains(),root=process.cwd(),out=path.resolve('scratch/d090-inherited-tests-'+suite);assert.ok(!fs.existsSync(out),'preserve every attempt');fs.mkdirSync(out,{recursive:true});
 const git=(cwd,...args)=>execFileSync('git',args,{cwd,encoding:'utf8',maxBuffer:32e6});

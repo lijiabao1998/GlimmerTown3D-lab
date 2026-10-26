@@ -1,0 +1,43 @@
+(node:77) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ independent ten exact IDs/base tools and four pipe exceptions match actual product descriptors (1.977359ms)
+✔ every missing, duplicate, reordered, wrong ID/base or extra descriptor rejects (15.486624ms)
+✔ all76 original true/false expectations unchanged; exactly four new true and six new false (0.55627ms)
+✔ all86 actual selected-state expectations reject wrong mode, wrong selected ID and wrong observed pipes (20.62498ms)
+✔ actual frozen syncPipes agrees with independent exact-ID expectation across all86 and unknown/modes/transitions (57.056012ms)
+✔ actual syncPipes missing-water/missing-sewage/broad-category/mode/transition mutants fail exact observation (186.149105ms)
+✔ actual browser copy retains entire86-selector loop, native taps and observations rather than helper-only simulation (0.495549ms)
+✔ all new current copies and only three existing entrypoint changes reproduce from actual immutable e4c (98.113285ms)
+✔ complete current source rejects missing/duplicate/extra and stale model before any historical preimage is inspected (204.339094ms)
+✖ every inherited suite uses the full current smoke successor, while original bytes and actual historical runner domains remain mandatory (11.308275ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 9
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 802.873966
+
+✖ failing tests:
+
+test at proposals/d090/native-selector-pipes-v2.test.mjs:20:1
+✖ every inherited suite uses the full current smoke successor, while original bytes and actual historical runner domains remain mandatory (11.308275ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(!current.includes('proposals/d090/native-smoke-versions.test.mjs'))
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-selector-pipes-v2.test.mjs:20:402)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
