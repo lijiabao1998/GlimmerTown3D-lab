@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: every new native scene owner actually uses its complete model\n\n388 !== 544\n\n    at qualifySceneBudgets (file:///tmp/GlimmerTown3D-lab-d089-own/proposals/d089/scene-budget-check.mjs:15:318)\n    at async file:///tmp/GlimmerTown3D-lab-d089-own/proposals/d089/scene-budget-check.mjs:24:384"
+}

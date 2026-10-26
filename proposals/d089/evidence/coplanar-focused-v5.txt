@@ -1,0 +1,20 @@
+✔ cross-vault-produce-market: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (76.305887ms)
+✔ crescent-stall-market: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (42.834266ms)
+✔ triangular-court-produce-market: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (28.406482ms)
+✔ crowstepped-merchant-counting-house: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (68.125877ms)
+✔ elliptical-commodity-exchange: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (27.326111ms)
+✔ long-range-roller-flour-mill: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (64.151148ms)
+✔ bow-ended-estate-creamery: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (19.63913ms)
+✔ cranked-cider-press-works: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (19.847984ms)
+✔ dartmoor-longhouse-arable-farm: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (20.489503ms)
+✔ double-court-arable-estate-farm: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (43.53882ms)
+✔ detached-propagation-glasshouses: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (34.896356ms)
+✔ duplicating a real complete closed part fails even with unchanged colour and material (52.065248ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1036.955225

@@ -1,0 +1,13 @@
+✔ all retained first-red sources/logs are exact byte-pinned and nonempty (1.454436ms)
+✔ original duplicated creamery endpoint still fails actual geometry construction (5.056895ms)
+✔ original nine missing bare samples reproduce with unchanged actual Float32/original48 (529.471544ms)
+✔ first courtyard doors remain genuinely blocked; later route logic cannot label them accessible (37.487253ms)
+✔ actual b985 exterior co-faces remain RED with the unchanged full-polygon diagnostic (99.445262ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1279.744472

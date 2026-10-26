@@ -1,0 +1,446 @@
+{
+  "qualification": "Geometry worker scoped handoff only. No public upload, CI, art or release approval implied. Parent-owned native/source/workflow/fixture files are separate.",
+  "actualSourceSha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39",
+  "authoritySha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "planSha256": "5eff0b61a1fdfa3de1805eae8c4d0dcad3a4209709ec1c7ea9df01e9f922543b",
+  "runtimeTestDocumentFiles": 29,
+  "evidenceFiles": 58,
+  "totalBytes": 2201818,
+  "files": [
+    {
+      "file": "proposals/d089/evidence/access-first-checker.mjs",
+      "bytes": 3907,
+      "sha256": "22cce6eb59da11c6cd45f61d5f7803dc95a85504fe9114e627e4ccec5126e392"
+    },
+    {
+      "file": "proposals/d089/evidence/access-first.txt",
+      "bytes": 6550,
+      "sha256": "64e5327b2aaadf9b9faeb456a177d59b71682d41122d16552ebed9d6767ab00c"
+    },
+    {
+      "file": "proposals/d089/evidence/access-focused-first.txt",
+      "bytes": 1796,
+      "sha256": "3583352dfff6389764c2e2e99a3abd693589b447b175da1b2d2536df21917ae1"
+    },
+    {
+      "file": "proposals/d089/evidence/access-v3.txt",
+      "bytes": 5079,
+      "sha256": "23c78ba44ad52f5f673ed59f82231b666558fd5600ba11afbe41738074652213"
+    },
+    {
+      "file": "proposals/d089/evidence/access-v4-checker.mjs",
+      "bytes": 4134,
+      "sha256": "df1f32b2416f5835a6311d9f763f28e943ffed03867998181c6bde1357cd4b6c"
+    },
+    {
+      "file": "proposals/d089/evidence/access-v4.txt",
+      "bytes": 8811,
+      "sha256": "c27aa42baad9418f1fb3c47e28db80226715708afcd6c00eaada81e346f04fa8"
+    },
+    {
+      "file": "proposals/d089/evidence/access-v5.txt",
+      "bytes": 25383,
+      "sha256": "91a9974af75cf93ff7490ae72e519adea6ce2eb00f242365a7ba82040bd7706a"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-first-ray-source.mjs",
+      "bytes": 30900,
+      "sha256": "f8de38684dad861a192f514638b508a0a1da45a4fe72e537f5abed985576b657"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-first-rays.txt",
+      "bytes": 2534,
+      "sha256": "271bd2f441291441c1fbd2ff3ff371b33f45b0ef6f83371c3758e1a03fd2f0bc"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-first-red.json",
+      "bytes": 438,
+      "sha256": "34592a8bbd1e70855cdc877049550ff93d10bcb5b341d54eb46126de0552becf"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-first-source.mjs",
+      "bytes": 30719,
+      "sha256": "9874922599c4f4d7de8c24dbdd38761b45f911810c99473e4a151d98179b7d21"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-joints-v2-all-rays.txt",
+      "bytes": 7385,
+      "sha256": "17a91147820b0239653d6d160d61b2b2deaa75070daf3d3111ed7705c0067ea3"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-joints-v2-rays.txt",
+      "bytes": 2458,
+      "sha256": "f26446fa73178cd11d744a2059f9672e737498ccf440017204fa3376ed559cfc"
+    },
+    {
+      "file": "proposals/d089/evidence/bare-joints-v2-source.mjs",
+      "bytes": 30902,
+      "sha256": "a3743fdc2a6a60b1be2a4133ef20d1455833dc45a2e50da95f18908870ec8d16"
+    },
+    {
+      "file": "proposals/d089/evidence/cache-adopted-parity.txt",
+      "bytes": 331,
+      "sha256": "b304eebc3ae18c64f4ff79f4b7f0c61c926cb05a7f775c489e8ae918e01dae2d"
+    },
+    {
+      "file": "proposals/d089/evidence/cache-adopted-qualification.txt",
+      "bytes": 4740,
+      "sha256": "81562c9717ff267a02e52b39f59f814353094b95ea62fff695107b5353e70909"
+    },
+    {
+      "file": "proposals/d089/evidence/cache-adoption.json",
+      "bytes": 503,
+      "sha256": "1c1863123098dd37458273ce166ee46b34dc20ad8deca7ec2a9630e7470a0cfb"
+    },
+    {
+      "file": "proposals/d089/evidence/cache-pre-adoption-parity.json",
+      "bytes": 28105,
+      "sha256": "24c1fa7a4e3dcbd0324c19fb3cc13f94d98fe7357bd4d5d45aded98a3e4b04d2"
+    },
+    {
+      "file": "proposals/d089/evidence/cache-pre-adoption-parity.txt",
+      "bytes": 40,
+      "sha256": "15efa53e72cfecd24101b65544912cf018f433855fd2a8a62b18cf82ebf260c9"
+    },
+    {
+      "file": "proposals/d089/evidence/card-invariants-first.txt",
+      "bytes": 1264,
+      "sha256": "82922cddb25284e65fce903998bcd0ceabb376fcdd3ad936cc37518036fa01b7"
+    },
+    {
+      "file": "proposals/d089/evidence/coplanar-first.json",
+      "bytes": 493780,
+      "sha256": "4b9eda4f21a3ab31e0bcf64b34e3f705e25722fcd10c882ddcbc200c7859329c"
+    },
+    {
+      "file": "proposals/d089/evidence/coplanar-first.txt",
+      "bytes": 1198,
+      "sha256": "ae03d2843bdf1571c5b4b822283602f2dc4f12618199bc7b93373a0b4dd53c76"
+    },
+    {
+      "file": "proposals/d089/evidence/coplanar-focused-v5.txt",
+      "bytes": 1732,
+      "sha256": "1997dbbec52bef99a02467d0d676bae79e515ec965c64a537d831f6b353b6b8b"
+    },
+    {
+      "file": "proposals/d089/evidence/coplanar-shoulder-v5.json",
+      "bytes": 304601,
+      "sha256": "22557972bd7d4f386af1633b83d02f351c76ee5b898cfc773ce5d1bfa1366d38"
+    },
+    {
+      "file": "proposals/d089/evidence/coplanar-shoulder-v5.txt",
+      "bytes": 710,
+      "sha256": "69da91badedd2fa5df0a832c62c23ef2b43e3084399d893a04a1f99b59a26990"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-first-counts.txt",
+      "bytes": 3706,
+      "sha256": "e70e70ebbc09f79589015559f713de19d85f15e57585d25478f504d51ca44514"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-first-source.mjs",
+      "bytes": 37238,
+      "sha256": "4b00028095ee3bd87f1a92884606f5b06c6fcbb40b39087974fb894506dad1fb"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v2-counts.txt",
+      "bytes": 846,
+      "sha256": "c1c5aded9c00a5b09aeccf90ff4c73665feb95e03b36a4011ba42d9c296b2f45"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v2-painted-rays.txt",
+      "bytes": 8346,
+      "sha256": "c16133b6a0a6a627bf77acff57542e1d8914008e90bf81c23d4151232c4be6b5"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v2-rays.txt",
+      "bytes": 1092,
+      "sha256": "5e604325d555184e35f5f9dd91d4a10671bbae5a79a4fba5f6f1789549131b8f"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v2-source.mjs",
+      "bytes": 37244,
+      "sha256": "5471561eaad5b4c3d6691c11032a513e6fe839d13b48edb6958b256a1366df7a"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v2-structure.txt",
+      "bytes": 978,
+      "sha256": "609e8debf7b667ebe8f0a41aa842d012a274703797313b253684829e5524b591"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v3-source.mjs",
+      "bytes": 37228,
+      "sha256": "389e701e8801d7d571da1c80d30acf1ab95d71057de6e7255adda5cee99d3238"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v4-b985-source.mjs",
+      "bytes": 37228,
+      "sha256": "b985466318fc2e2f757a308e9a1677d4f598613bee9c3ef140200972f8d9f31b"
+    },
+    {
+      "file": "proposals/d089/evidence/detailed-v5-shoulder-source.mjs",
+      "bytes": 37230,
+      "sha256": "4944ad3ce085f57233440dc7edf6067b6923999603afcbff324a1b70d7d77e4c"
+    },
+    {
+      "file": "proposals/d089/evidence/double-court-coplanar-first-red.json",
+      "bytes": 8705,
+      "sha256": "84213cdef5fba05d207a4e75ebd98a1309cd5992a041a3c536c076e064715fbf"
+    },
+    {
+      "file": "proposals/d089/evidence/facade-v6-painted-rays.txt",
+      "bytes": 1006,
+      "sha256": "abbf3e4ed8287904570a8bc2d72cf75ba7ac48ba1877a4eed14f8019dc8ec375"
+    },
+    {
+      "file": "proposals/d089/evidence/final-isolated-painted-witnesses.json",
+      "bytes": 1404,
+      "sha256": "7ae4b64ec958cbe37b62316b9c49ac93ad335e38951a63d20d8b77b88d9b120a"
+    },
+    {
+      "file": "proposals/d089/evidence/first-bare-missing-probes.json",
+      "bytes": 5580,
+      "sha256": "7f79696f661a64697c95318b0d6333085fc10a840806b344f40e375e7b734b00"
+    },
+    {
+      "file": "proposals/d089/evidence/first-hidden-paint.json",
+      "bytes": 18358,
+      "sha256": "89eb8c651a9ae5f5f8a757f7e39c9edbb2487a80c2ccf5ccae48c4c3ff951901"
+    },
+    {
+      "file": "proposals/d089/evidence/first-red-manifest.json",
+      "bytes": 3562,
+      "sha256": "bbc72d941c5e568ba5da669ef53161c227883013101f5c40e153c28890a19ab1"
+    },
+    {
+      "file": "proposals/d089/evidence/first-red-replay.txt",
+      "bytes": 620,
+      "sha256": "706614ded73b216b282534d5823d81ed7843c6197a3e32300535a708dbfec107"
+    },
+    {
+      "file": "proposals/d089/evidence/geometry-authority-freeze.json",
+      "bytes": 406,
+      "sha256": "af2d11451c8899b7d60ac75ca46608e6c426c90184442b07341ed4f33ab01a72"
+    },
+    {
+      "file": "proposals/d089/evidence/geometry-focused-first.txt",
+      "bytes": 5530,
+      "sha256": "190282511784ea23335a9ebd1118aa45a201f63b6466fc8b4f19f9a70bc7a1e0"
+    },
+    {
+      "file": "proposals/d089/evidence/geometry-shoulder-v5.txt",
+      "bytes": 7212,
+      "sha256": "fe11e37d0307533d312f1d55b152db1f1bfb7efc790a2a175c12c69af0695125"
+    },
+    {
+      "file": "proposals/d089/evidence/native-cached-final-paint-report.json",
+      "bytes": 4989,
+      "sha256": "72607f939a178f8b8bef3744b40026c235512a71968dcbd7fee5d8aadc8aef3a"
+    },
+    {
+      "file": "proposals/d089/evidence/native-cached-final-paint.txt",
+      "bytes": 3029,
+      "sha256": "c76061cdeb5f653a2073ce4270bd61ca977083fb137fa78562da4ec29e59dde9"
+    },
+    {
+      "file": "proposals/d089/evidence/native-cached-final-rays.txt",
+      "bytes": 10256,
+      "sha256": "a288e2a7c29e2c028b66488bf39c6c61bbbe9a8b36c90482df21253191ce23f8"
+    },
+    {
+      "file": "proposals/d089/evidence/native-cached-final-report.json",
+      "bytes": 81078,
+      "sha256": "426dbbd647697e195c56f22de5b1e30aca831ccae178c861255b12893c7cd85d"
+    },
+    {
+      "file": "proposals/d089/evidence/native-detailed-v4-rays.txt",
+      "bytes": 10256,
+      "sha256": "6a75514b7c7b2e658d4c2924fa2466957a7e6c125b220018831e574aa1e0d095"
+    },
+    {
+      "file": "proposals/d089/evidence/native-shoulder-v5-rays.txt",
+      "bytes": 10256,
+      "sha256": "47639b2062430b5ed3ef80ec257a6a8e701740a9b1101ddcdac019bbee77a940"
+    },
+    {
+      "file": "proposals/d089/evidence/plan-and-history-final-tests.txt",
+      "bytes": 855,
+      "sha256": "6b8691bb6c1033b190cb9cd26514d851556c9d74d61468dc8f3e856444fc0457"
+    },
+    {
+      "file": "proposals/d089/evidence/precompiled-cache-first-tests.txt",
+      "bytes": 4634,
+      "sha256": "5a862ac454e21a74275e3b09f8d311b103e68a5945c35fdd14fdabe014585f53"
+    },
+    {
+      "file": "proposals/d089/evidence/shoulder-first-source.mjs",
+      "bytes": 37230,
+      "sha256": "8f58ae077fd89ec91a978f21a983df54fd2e3977adc31aa34d122cf6b85dbd0d"
+    },
+    {
+      "file": "proposals/d089/evidence/shoulder-hidden-paint.json",
+      "bytes": 5576,
+      "sha256": "2008019d2f6650924132516da0fd34f9055043d5f7ec1979a5ea3085e05925f3"
+    },
+    {
+      "file": "proposals/d089/evidence/shoulder-repair-preflight.txt",
+      "bytes": 1138,
+      "sha256": "abc6e4e792b7cfb72065e4cfbc15e0f10253fa97ffc6fa5c3f8beeefda5c149a"
+    },
+    {
+      "file": "proposals/d089/evidence/shoulder-repair-v2-preflight.txt",
+      "bytes": 897,
+      "sha256": "decc9ce7a719b01d2c5d526bd10c64e5929ec0eae7b577b1e1ce1a52b785ef99"
+    },
+    {
+      "file": "proposals/d089/evidence/shoulder-v5-painted-rays.txt",
+      "bytes": 3079,
+      "sha256": "979a11e3082c26d6036a11fc796bac12f6cffb367761cc2a2aae2425e33cb2ee"
+    },
+    {
+      "file": "proposals/d089/facade-contract.mjs",
+      "bytes": 1109,
+      "sha256": "f8ac4bcf53195382e2ca68d887af842002f9be204e713ec5cdda691484d2e541"
+    },
+    {
+      "file": "proposals/d089/facade-exterior-area.mjs",
+      "bytes": 4525,
+      "sha256": "a3b63a84e00b6f55b95d3f4196f99e0de9790f99a4a4149ed41dea18ffaa8d70"
+    },
+    {
+      "file": "proposals/d089/facade-isolated-check.mjs",
+      "bytes": 1272,
+      "sha256": "e830b729a39cd10e4cb38915ef0d0086f1bdd7075e5dd25078b3099880d38c8d"
+    },
+    {
+      "file": "proposals/d089/facade-native-paint-check.mjs",
+      "bytes": 1937,
+      "sha256": "97a8dba706006b5489ff8e7f88155d3e9e521852bd90a724d5c9355067ccf267"
+    },
+    {
+      "file": "proposals/d089/geometry-access.mjs",
+      "bytes": 4138,
+      "sha256": "22578f4b9337192bd84ce7719c3ca957fcdc7393858b912529914a89fdcce4e4"
+    },
+    {
+      "file": "proposals/d089/geometry-access.test.mjs",
+      "bytes": 2467,
+      "sha256": "caee035184d4a4349e60d0f5156c8f32ec7627d1b8dec496ddf5e387da8c6a8f"
+    },
+    {
+      "file": "proposals/d089/geometry-card-invariants.test.mjs",
+      "bytes": 5546,
+      "sha256": "8358fcda110a081768bbeb254c3d964ce3fae381fdd3914704c0da63cc385c34"
+    },
+    {
+      "file": "proposals/d089/geometry-coplanar.mjs",
+      "bytes": 3459,
+      "sha256": "de1ea714979d6007c0da20c5ef142bc04a5ca81dc5954870614228518874ee3c"
+    },
+    {
+      "file": "proposals/d089/geometry-coplanar.test.mjs",
+      "bytes": 1384,
+      "sha256": "b8416a9c348191ec3c56f98b05bafba42e8d30f7cdd62fd43f313faf7992444a"
+    },
+    {
+      "file": "proposals/d089/geometry-evidence.test.mjs",
+      "bytes": 3351,
+      "sha256": "ab6ed9385ae4f39669b6d9d3a0247b520fae0d4a6040c421a203c74084cefe5c"
+    },
+    {
+      "file": "proposals/d089/geometry-focused.test.mjs",
+      "bytes": 2541,
+      "sha256": "3f4e61be2556fcb9a719b27d4258dd1c3fcbf46f994ad043e40f6fb442f061b7"
+    },
+    {
+      "file": "proposals/d089/geometry-freeze-camera-plan.mjs",
+      "bytes": 4645,
+      "sha256": "33d5b4f4832858195dd745468a17d448514faeb9b317a8a5d6181e290a669d3a"
+    },
+    {
+      "file": "proposals/d089/geometry-implementation-notes.md",
+      "bytes": 7634,
+      "sha256": "5f2522866f522f9b63e2a96eba01c3fa96f30b5b096973cfa5852dcb82ad9dc8"
+    },
+    {
+      "file": "proposals/d089/geometry-native-evidence.json",
+      "bytes": 13547,
+      "sha256": "5f9ac30400a6760783b120900e96ae2db49b6e6fcf514131beb2aa846a24c8e0"
+    },
+    {
+      "file": "proposals/d089/geometry-native-preflight.mjs",
+      "bytes": 2556,
+      "sha256": "4dfbfcda79b0913e4ddb47b157bee2a66fbef4a95f521edf0420283cebb52e80"
+    },
+    {
+      "file": "proposals/d089/geometry-plan.test.mjs",
+      "bytes": 3323,
+      "sha256": "e4ef22f0c85140bee164a1d31925b5a7d809d694cb5e180c391eddac56f19e03"
+    },
+    {
+      "file": "proposals/d089/geometry-surface-preflight.mjs",
+      "bytes": 3660,
+      "sha256": "d91ccf3f503b0eca0763ec5164f26ab87603d1aac857399fb2b766a5e3d984ca"
+    },
+    {
+      "file": "proposals/d089/mesh-contract.mjs",
+      "bytes": 1654,
+      "sha256": "e7f02a800fdc263e3b1145c27fd58615411eaf0f21f34c661e1686b988d614ed"
+    },
+    {
+      "file": "proposals/d089/model-cache-parity.mjs",
+      "bytes": 5218,
+      "sha256": "b7cb980145b9b9876c8edc53e0c09a99bbc19c832506c17695ed57895e78c4e6"
+    },
+    {
+      "file": "proposals/d089/native-camera-plan.json",
+      "bytes": 81943,
+      "sha256": "5eff0b61a1fdfa3de1805eae8c4d0dcad3a4209709ec1c7ea9df01e9f922543b"
+    },
+    {
+      "file": "proposals/d089/native-surface-plan.mjs",
+      "bytes": 4094,
+      "sha256": "c4b9cb18e1e3e42b83d1f01fb79d550bbc232a9f45477cc89fdbb47b4166062a"
+    },
+    {
+      "file": "proposals/d089/precompiled-cache-parity.mjs",
+      "bytes": 2434,
+      "sha256": "5581a67177630e9c63e0bab8f1bdbaf4cee7c97fdb22967dfea1fa6f7a592ada"
+    },
+    {
+      "file": "proposals/d089/precompiled-cache-qualification.mjs",
+      "bytes": 3714,
+      "sha256": "8ebebf48d7a581ded9ef1ce5d1eaec30ce44759adbfbba0ea09d4c4bbc389f4c"
+    },
+    {
+      "file": "proposals/d089/precompiled-cache-qualification.test.mjs",
+      "bytes": 14702,
+      "sha256": "f3eacdb195727969387c1b3ccf704bb271ad143e9915276c59b170297b446d5a"
+    },
+    {
+      "file": "proposals/d089/precompiled-cache.mjs",
+      "bytes": 9303,
+      "sha256": "08096fa1df654e74e54abbc8d8bef067f26b8626f7958d2dff51cc8e92d5dc63"
+    },
+    {
+      "file": "proposals/d089/procedural-authority.mjs",
+      "bytes": 37288,
+      "sha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf"
+    },
+    {
+      "file": "proposals/d089/structure-plan.mjs",
+      "bytes": 7471,
+      "sha256": "48ad2e033f59fee14d95f26a8e19aab4047b26b404c4e07c936f7cdee9772918"
+    },
+    {
+      "file": "src/render/britishMarketEstateModels.d.mts",
+      "bytes": 1468,
+      "sha256": "16417b079d4e978572c0a29535b0618d340b98a798494283cc669784dd46766b"
+    },
+    {
+      "file": "src/render/britishMarketEstateModels.mjs",
+      "bytes": 540643,
+      "sha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39"
+    }
+  ]
+}

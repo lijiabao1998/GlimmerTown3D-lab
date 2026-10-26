@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "copies": [
+    {
+      "source": ".github/scripts/ci-integrity-d088.test.mjs",
+      "target": ".github/scripts/ci-integrity-d089.test.mjs",
+      "sourceSha256": "705f338497809c12ee601784a0bc075cd9f5891e1c4eaf51d3997e8e63165ee9",
+      "targetSha256": "4b7f6fcb7a3dee71bc80b6f8586dfade5372d097493db38aa9f1c0b58f701c41",
+      "changes": [
+        {
+          "before": "'d088-native-release', 'd083-native-release'",
+          "after": "'d088-native-release', 'd089-native-release', 'd083-native-release'",
+          "count": 1
+        },
+        {
+          "before": "ci-integrity-d088\\.test",
+          "after": "ci-integrity-d089\\.test",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d083-release-trigger-d088.test.mjs",
+      "target": "tools/d083-release-trigger-d089.test.mjs",
+      "sourceSha256": "8dd58f1c74af51788e8a5252f897426f164231c2de2dbbd4a05bc466e6fa98c7",
+      "targetSha256": "29484dc104cd7164770511d15bbc9f34d600a7c03243e7c17bfc8f3b639389c2",
+      "changes": [
+        {
+          "before": "native-browser-check-d088.mjs",
+          "after": "native-browser-check-d089.mjs",
+          "count": 2
+        },
+        {
+          "before": "native-integration-check-d088.mjs",
+          "after": "native-integration-check-d089.mjs",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d085-source-d088.test.mjs",
+      "target": "tools/d085-source-d089.test.mjs",
+      "sourceSha256": "5d9e451825014340180164b781ba8b6d66618becfaa3841c8e95c3f434d780c0",
+      "targetSha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
+      "changes": [
+        {
+          "before": "'./d088-source.mjs'",
+          "after": "'./d089-source.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

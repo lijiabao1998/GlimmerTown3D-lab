@@ -1,0 +1,74 @@
+{
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "source": ".github/workflows/d088-native.yml",
+  "target": ".github/workflows/d089-native.yml",
+  "beforeSha256": "5ebdddc2a49eab92947d80d8fd3e56c76f9e939ffe808e73f204c6dcbf666034",
+  "afterSha256": "c2cc05ae0969fcb765fc5d52eacda1d38cc0d2ab62ad1277b386e11a98e40e69",
+  "replacements": [
+    [
+      "d088",
+      "d089",
+      56
+    ],
+    [
+      "D088",
+      "D089",
+      1
+    ],
+    [
+      "British public services eleven",
+      "British markets and estates eleven",
+      1
+    ],
+    [
+      "cdd541da74973dba2ca73b782936c012d315add9",
+      "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+      1
+    ],
+    [
+      "published168",
+      "published179",
+      1
+    ],
+    [
+      "Original168",
+      "Original179",
+      1
+    ],
+    [
+      "britishPublicServicesModels",
+      "britishMarketEstateModels",
+      1
+    ],
+    [
+      "proposals/british-program/ledger-current-v3.test.mjs",
+      "proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs",
+      1
+    ],
+    [
+      "Current old D083 eight, D086 ten and D087 eleven native regressions",
+      "Current old D083 eight, D086 ten, D087 eleven and D088 eleven native regressions",
+      1
+    ],
+    [
+      "          node --test proposals/d087/native-variant-d089.test.mjs",
+      "          node --test proposals/d087/native-variant-d089.test.mjs proposals/d088/native-integration-d089.test.mjs",
+      1
+    ],
+    [
+      "node proposals/d087/native-browser-build.mjs --attempt=1",
+      "node proposals/d088/native-browser-build.mjs --attempt=1",
+      1
+    ],
+    [
+      "baseline/scratch/d087-native-build/",
+      "baseline/scratch/d088-native-build/",
+      2
+    ],
+    [
+      "genuine public-service door routes",
+      "genuine market/estate door routes",
+      1
+    ]
+  ]
+}

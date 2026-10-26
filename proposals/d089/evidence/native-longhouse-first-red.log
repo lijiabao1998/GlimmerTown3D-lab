@@ -1,0 +1,19 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: every new native scene owner actually uses its complete model
+
+388 !== 544
+
+    at qualifySceneBudgets (file:///tmp/GlimmerTown3D-lab-d089-own/proposals/d089/scene-budget-check.mjs:15:318)
+    at async file:///tmp/GlimmerTown3D-lab-d089-own/proposals/d089/scene-budget-check.mjs:24:384 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 388,
+  expected: 544,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

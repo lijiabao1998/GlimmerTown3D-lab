@@ -1,0 +1,15 @@
+✔ all retained first-red sources/logs are exact byte-pinned and nonempty (1.554268ms)
+✔ original duplicated creamery endpoint still fails actual geometry construction (4.486517ms)
+✔ original nine missing bare samples reproduce with unchanged actual Float32/original48 (494.522406ms)
+✔ first courtyard doors remain genuinely blocked; later route logic cannot label them accessible (36.247757ms)
+✔ actual b985 exterior co-faces remain RED with the unchanged full-polygon diagnostic (78.922663ms)
+✔ finite exact final plan/cache/authority source identity; original48 without any inspection domain (1.678395ms)
+✔ every stored selected view is exact original camera on independently recreated native paid day9 world (55.834057ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1213.922572

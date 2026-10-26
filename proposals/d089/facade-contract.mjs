@@ -1,0 +1,5 @@
+import{authoritativeProceduralSource}from'./precompiled-cache.mjs';
+// D089 keeps the D088 complete host-polygon checker and all9 negative controls.
+import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';export{assertFacadeImprint,facadeNegatives}from'../d088/facade-imprint-geometry.mjs';
+export const INTENTS=[48,51,42,68,38,64,43,35,26,54,59];
+export async function rawFacadeReference(){const bytes=fs.readFileSync(new URL('../../src/render/britishMarketEstateModels.mjs',import.meta.url)),source=authoritativeProceduralSource(bytes.toString()),from='freezeModel(imprintFacades(normaliseHeight(BUILDERS[i](),HEIGHTS[i])))',to='freezeModel(normaliseHeight(BUILDERS[i](),HEIGHTS[i]))';assert.equal(source.split(from).length,2,'exact one raw facade seam');assert.equal(source.split("from 'three'").length,2);return{sourceSha256:createHash('sha256').update(bytes).digest('hex'),module:await import('data:text/javascript;base64,'+Buffer.from(source.replace(from,to).replace("from 'three'","from "+JSON.stringify(import.meta.resolve('three')))).toString('base64'))};}

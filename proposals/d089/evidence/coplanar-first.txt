@@ -1,0 +1,11 @@
+{"id":"cross-vault-produce-market","overlaps":140,"exposed":0,"parts":[]}
+{"id":"crescent-stall-market","overlaps":16,"exposed":0,"parts":[]}
+{"id":"triangular-court-produce-market","overlaps":164,"exposed":0,"parts":[]}
+{"id":"crowstepped-merchant-counting-house","overlaps":34,"exposed":0,"parts":[]}
+{"id":"elliptical-commodity-exchange","overlaps":68,"exposed":0,"parts":[]}
+{"id":"long-range-roller-flour-mill","overlaps":76,"exposed":0,"parts":[]}
+{"id":"bow-ended-estate-creamery","overlaps":20,"exposed":0,"parts":[]}
+{"id":"cranked-cider-press-works","overlaps":25,"exposed":0,"parts":[]}
+{"id":"dartmoor-longhouse-arable-farm","overlaps":8,"exposed":0,"parts":[]}
+{"id":"double-court-arable-estate-farm","overlaps":436,"exposed":208,"parts":["west-continuous-estate-range / north-west-entrance-range","west-continuous-estate-range / south-west-entrance-range","west-continuous-estate-range / central-dividing-threshing-barn","east-continuous-estate-range / north-east-entrance-range","east-continuous-estate-range / south-east-entrance-range","east-continuous-estate-range / central-dividing-threshing-barn"]}
+{"id":"detached-propagation-glasshouses","overlaps":0,"exposed":0,"parts":[]}

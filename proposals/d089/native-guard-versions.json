@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "baseline": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "reason": "Exact current76 catalogue dependencies/counts and append-only shape flag; all undeclared inherited assertion bytes retained.",
+  "copies": [
+    {
+      "source": "tools/unit-d052-d088.mjs",
+      "target": "tools/unit-d052-d089.mjs",
+      "sourceSha256": "7514fa56300a49c413d7811dff9075cb5c9ddebe151f68d09870adb7496b5b6f",
+      "targetSha256": "9ebd8a453c3a2706d4d4956c59029e09674c1852deebd036df8fdc7cf45392d4",
+      "header": "// D089 finite current contract. Original tools/unit-d052-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "PUBLIC_SERVICE_TOOLS, TOOL_PRICE",
+          "after": "PUBLIC_SERVICE_TOOLS, MARKET_ESTATE_TOOLS, TOOL_PRICE",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d053-d088.mjs",
+      "target": "tools/unit-d053-d089.mjs",
+      "sourceSha256": "782c9056e9a2d7602dc81843af8266998ce0af6760bccf479c8796a464355542",
+      "targetSha256": "e50ef52ef18bff0ce3a5e4e33a69ae3d645a3f2396db6ff3d8ea9eb1daa23f6e",
+      "header": "// D089 finite current contract. Original tools/unit-d053-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "PUBLIC_SERVICE_TOOLS, FACILITY_TOOLS",
+          "after": "PUBLIC_SERVICE_TOOLS, MARKET_ESTATE_TOOLS, FACILITY_TOOLS",
+          "count": 1
+        },
+        {
+          "before": "import { PUBLIC_SERVICE_BUILDINGS } from '../src/content/britishPublicServices.ts';",
+          "after": "import { PUBLIC_SERVICE_BUILDINGS } from '../src/content/britishPublicServices.ts';\nimport { MARKET_ESTATE_BUILDINGS } from '../src/content/britishMarketEstates.ts';",
+          "count": 1
+        },
+        {
+          "before": "catalogueWithD088",
+          "after": "catalogueWithD089",
+          "count": 2
+        },
+        {
+          "before": "'./d088-catalogue-compat.mjs'",
+          "after": "'./d089-catalogue-compat.mjs'",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(summary.total,65); assert.equal(summary.available,i<21?64:65);",
+          "after": "assert.equal(summary.total,76); assert.equal(summary.available,i<21?75:76);",
+          "count": 1
+        },
+        {
+          "before": "'PUBLIC_SERVICE_BUILDINGS',strip(source)",
+          "after": "'PUBLIC_SERVICE_BUILDINGS','MARKET_ESTATE_BUILDINGS',strip(source)",
+          "count": 1
+        },
+        {
+          "before": "WORKING_RURAL_BUILDINGS,PUBLIC_SERVICE_BUILDINGS);",
+          "after": "WORKING_RURAL_BUILDINGS,PUBLIC_SERVICE_BUILDINGS,MARKET_ESTATE_BUILDINGS);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(h.rows().length,65);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,64);",
+          "after": "assert.equal(h.rows().length,76);assert.equal(h.rows().filter(r=>r.dataset.locked==='false').length,75);",
+          "count": 1
+        },
+        {
+          "before": "['heritage',40],['all',65]",
+          "after": "['heritage',51],['all',76]",
+          "count": 1
+        },
+        {
+          "before": "/65／65",
+          "after": "/76／76",
+          "count": 3
+        },
+        {
+          "before": "/64／65",
+          "after": "/75／76",
+          "count": 1
+        },
+        {
+          "before": "actual catalog: 65 rows (original25 plus exact D083 eight, D086ten, D087eleven and D088eleven)",
+          "after": "actual catalog: 76 rows (original25 plus exact D083 eight, D086ten, D087eleven, D088eleven and D089eleven)",
+          "count": 1
+        },
+        {
+          "before": "PUBLIC_SERVICE_TOOLS=d.PUBLIC_SERVICE_TOOLS;",
+          "after": "PUBLIC_SERVICE_TOOLS=d.PUBLIC_SERVICE_TOOLS,MARKET_ESTATE_TOOLS=d.MARKET_ESTATE_TOOLS;",
+          "count": 1
+        },
+        {
+          "before": "WORKING_RURAL_TOOLS,PUBLIC_SERVICE_TOOLS}),calls",
+          "after": "WORKING_RURAL_TOOLS,PUBLIC_SERVICE_TOOLS,MARKET_ESTATE_TOOLS}),calls",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d054-ui-d088.mjs",
+      "target": "tools/unit-d054-ui-d089.mjs",
+      "sourceSha256": "a53015864f1b5658579988a1e74209eab7941ce13f04f36f798852524250a782",
+      "targetSha256": "fae132cd353724664036d45c520984daa2c8de1573feae518df44e83c611c963",
+      "header": "// D089 finite current contract. Original tools/unit-d054-ui-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "PUBLIC_SERVICE_TOOLS, FACILITY_TOOLS",
+          "after": "PUBLIC_SERVICE_TOOLS, MARKET_ESTATE_TOOLS, FACILITY_TOOLS",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d055-native-d088.mjs",
+      "target": "tools/unit-d055-native-d089.mjs",
+      "sourceSha256": "8ed7bc32e4395b656e784ca8b6d82a9ba0f46d0c510e911aaae339ad92abafb2",
+      "targetSha256": "41d89255417073af6320b558ff0b3339ce781e4613a6583e14474e456ce1dde9",
+      "header": "// D089 finite current contract. Original tools/unit-d055-native-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "catalogueWithD088",
+          "after": "catalogueWithD089",
+          "count": 2
+        },
+        {
+          "before": "'./d088-catalogue-compat.mjs'",
+          "after": "'./d089-catalogue-compat.mjs'",
+          "count": 1
+        },
+        {
+          "before": "new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,65",
+          "after": "new Set(E.FACILITY_TOOLS.map(t=>t.id)).size,76",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d081-touch-lease-d088.mjs",
+      "target": "tools/unit-d081-touch-lease-d089.mjs",
+      "sourceSha256": "b89e79831a0b6a6675a367a630224ef060317d0e4612cb6590924dc614f4d965",
+      "targetSha256": "e9c7d7259a588573b226de78bc84557d21ee9df2db29348fa291388fc6473844",
+      "header": "// D089 finite current contract. Original tools/unit-d081-touch-lease-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "'./unit-d052-d088.mjs?d081-touch-lease'",
+          "after": "'./unit-d052-d089.mjs?d081-touch-lease'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d082-release-integration-d088.mjs",
+      "target": "tools/d082-release-integration-d089.mjs",
+      "sourceSha256": "96cd03330b17da55aeb3f1f7195bbf1692f71db0fc6b29131f1f75569dccf6f1",
+      "targetSha256": "09a73a6ffaba1bfe611a98a966256d13ab5650c406974aea7f067014d03d7da3",
+      "header": "// D089 finite current contract. Original tools/d082-release-integration-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "/fieldStudyLodgeOn, coastalRecreationOn, true, true, true\\)/",
+          "after": "/fieldStudyLodgeOn, coastalRecreationOn, true, true, true, true\\)/",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/unit-d082-release-d088.mjs",
+      "target": "tools/unit-d082-release-d089.mjs",
+      "sourceSha256": "fdff4928da6aae21c48d67d76d19b22e5c7db9f0c1f66c6107b2fa78d6816079",
+      "targetSha256": "e2727e34024af998a0b959f29811b53681c02528c079ef5c9cc9dbd5d9c8624f",
+      "header": "// D089 finite current contract. Original tools/unit-d082-release-d088.mjs remains byte-exact at c023a2da0e4999d43e3d4216e800c4c96d06a3c1.\n",
+      "changes": [
+        {
+          "before": "'./d082-release-integration-d088.mjs'",
+          "after": "'./d082-release-integration-d089.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,8 @@ import { kindTableFrom, type KindData } from './kindTable.ts';
 import { withRuralHeritageKinds } from './britishRuralHeritage.ts';
 import { withCivicMarketVariants, withCivicMarketHeights } from './britishCivicMarkets.ts';
 import { withWorkingRuralVariants } from './britishWorkingRural.ts';
+import { withMarketEstateVariants } from './britishMarketEstates.ts';
 import { withPublicServiceVariants, withPublicServiceHeights } from './britishPublicServices.ts';
 
 // JSON 推出來的型別比 KindData 細（每種的等級鍵不同），經 unknown 轉；內容的正確性由 tools/unit.mjs 逐項驗
-export const KINDS = withPublicServiceHeights(withCivicMarketHeights(kindTableFrom(withPublicServiceVariants(withWorkingRuralVariants(withCivicMarketVariants(withRuralHeritageKinds(data as unknown as KindData)))))));
+export const KINDS = withPublicServiceHeights(withCivicMarketHeights(kindTableFrom(withMarketEstateVariants(withPublicServiceVariants(withWorkingRuralVariants(withCivicMarketVariants(withRuralHeritageKinds(data as unknown as KindData))))))));

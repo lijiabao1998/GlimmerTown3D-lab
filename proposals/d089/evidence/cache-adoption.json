@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "sourceSha256": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+  "candidateSha256": "a94ce0706f0b970f44b4dc29596748ed783aa34187a734a1895a96a5e515af39",
+  "models": 11,
+  "qualification": "Exact regenerated product cache adopted after independent code/word review. Browser/cold performance/art/publication pending.",
+  "oldSourceRetained": "proposals/d089/procedural-authority.mjs",
+  "bytes": 540643,
+  "sourceGzipBytes": 12529,
+  "candidateGzipBytes": 92244
+}
