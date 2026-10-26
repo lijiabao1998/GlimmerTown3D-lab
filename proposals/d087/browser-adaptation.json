@@ -1,0 +1,629 @@
+{
+  "baseline": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "qualification": "Finite new eleven-model harness adaptation. All inherited assertions and bounds outside listed source/fixture/cardinality seams remain exact. Old tests still run separately.",
+  "copies": [
+    {
+      "source": "proposals/d086/browser-provenance.mjs",
+      "target": "proposals/d087/browser-provenance.mjs",
+      "sourceSha256": "b739ebc91afccb629fd21c3738dbe247e36d53fca5b6dc345a5b7aa80d7d906a",
+      "targetSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "replacements": [
+        [
+          "current ten descriptors",
+          "current eleven descriptors"
+        ],
+        [
+          "models.length,10",
+          "models.length,11"
+        ],
+        [
+          ".size,10",
+          ".size,11"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-first-use-performance.mjs",
+      "target": "proposals/d087/browser-first-use-performance.mjs",
+      "sourceSha256": "96e904d8f18723838e93ba37479a51fb2397ec06e5d260f0cb65fa6be3f9278e",
+      "targetSha256": "346758ec92d351d691776e63efc71cf561f777992455436628a4c74375fc3e5a",
+      "replacements": [
+        [
+          "models.length===10",
+          "models.length===11"
+        ],
+        [
+          "complete ten-model",
+          "complete eleven-model"
+        ],
+        [
+          ".size,10",
+          ".size,11"
+        ],
+        [
+          "[1,2].includes(m.size)",
+          "[2,3,5].includes(m.size)"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-startup-cache-contract.mjs",
+      "target": "proposals/d087/browser-startup-cache-contract.mjs",
+      "sourceSha256": "f26977945ddbdf18527564135fd0cd04f006eee934ce85551dab3fe6e66376cc",
+      "targetSha256": "e33a9895ec7c6d53716d5a87fbfb4c8bfdd1d4bc94ff169992e7086ecc028a5a",
+      "replacements": [
+        [
+          "cc8280f30e7b4115c6ffff2df27ca6ca7aa0baba",
+          "b4275bda73e72a9fb48343376fccaab52bbc8e84"
+        ],
+        [
+          "b6612779d7010c6d58242424febdec7c3920fbb4aba67328c7bec8535af87bef",
+          "604c3f0cc607a07b2d6ee2759c7475cf517340e2c1bcec921c8fadc3ef28fc0b"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/native-browser-build.mjs",
+      "target": "proposals/d087/native-browser-build.mjs",
+      "sourceSha256": "02f5d73c6bb71dae5e28ec0011fc0465ee22da5669d83ca6c1bba1660423f3cb",
+      "targetSha256": "284c6a0508db98916a2fc56f16157c9219bc9f7e5698938dd36813a173047af4",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "d086-native",
+          "d087-native"
+        ],
+        [
+          "createCivicMarketDesign",
+          "createWorkingRuralDesign"
+        ],
+        [
+          "britishCivicMarketModels.mjs",
+          "britishWorkingRuralModels.mjs"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/native-browser-v6-check.mjs",
+      "target": "proposals/d087/native-browser-check.mjs",
+      "sourceSha256": "67cd3d7f6d9fa7be1c9baedbd50e62c09aad99cdfc054d538e17f2de7d0a2af0",
+      "targetSha256": "eb2f8b5bea13b88e88241c2faff1648882a0bc85da0144a81708a092fb64a031",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "d086-native",
+          "d087-native"
+        ],
+        [
+          "D086-native",
+          "D087-native"
+        ],
+        [
+          "britishCivicMarketModels.mjs",
+          "britishWorkingRuralModels.mjs"
+        ],
+        [
+          "const baseRaw={v:1,n:40,seed:20261086,day:0,money:20000,nm:'英式市集與市民街',df:1,ter:'2'.repeat(1600),tre:'0'.repeat(1600),bl:[[26*40+2,65,1,0,40],[25*40+13,87,1,0,40],[26*40+20,169,1,0,40],[6*40+34,179,1,1,40],[10*40+34,185,1,1,40],[18*40+34,23,1,0,40]]};",
+          "const baseRaw=initialRaw();"
+        ],
+        [
+          "const coords=i=>[3+(i%5)*6,4+Math.floor(i/5)*8];",
+          "const coords=nativeSite;"
+        ],
+        [
+          "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),18)",
+          "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)"
+        ],
+        [
+          "document.querySelectorAll(\"#civicSub button\").length'),10",
+          "document.querySelectorAll(\"#civicSub button\").length'),11"
+        ],
+        [
+          "separate ten-entry dock",
+          "separate eleven-entry dock"
+        ],
+        [
+          "current.length,10",
+          "current.length,11"
+        ],
+        [
+          "__gt.buildingCount()'),16",
+          "__gt.buildingCount()'),17"
+        ],
+        [
+          "buildings:16,newOwnersRetained:10",
+          "buildings:17,newOwnersRetained:11"
+        ],
+        [
+          "ten-context",
+          "eleven-context"
+        ],
+        [
+          "proposals/d086/original-player-final-repair-camera-plan-v7.json",
+          "proposals/d087/native-camera-plan.json"
+        ],
+        [
+          "fixtures/d086/compiled-cache-v6.json",
+          "fixtures/d087/compiled-cache.json"
+        ],
+        [
+          "import{execFileSync}from'node:child_process';",
+          "import{execFileSync}from'node:child_process';\nimport {initialRaw,nativeSite} from './native-scene-fixture.mjs';"
+        ],
+        [
+          "'./browser-legal-surface-capture.mjs'",
+          "'../d086/browser-legal-surface-capture.mjs'"
+        ],
+        [
+          "'./browser-performance.mjs'",
+          "'../d086/browser-performance.mjs'"
+        ],
+        [
+          "'./browser-capture-quiet.mjs'",
+          "'../d086/browser-capture-quiet.mjs'"
+        ],
+        [
+          "'./browser-detail-framing.mjs'",
+          "'../d086/browser-detail-framing.mjs'"
+        ],
+        [
+          "'./browser-geometry-diagnostic.mjs'",
+          "'../d086/browser-geometry-diagnostic.mjs'"
+        ],
+        [
+          "'./browser-required-diagnostic.mjs'",
+          "'../d086/browser-required-diagnostic.mjs'"
+        ],
+        [
+          "// Additive close pairs retain all twenty original front/back views above.",
+          "// Additive close pairs retain all twenty-two original front/back views above."
+        ],
+        [
+          "PNGs including additive legal-zoom detail pairs; ten actual UI placements/picks/save reload",
+          "PNGs including additive legal-zoom detail pairs; eleven actual UI placements/picks/save reload"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-frame-qualification.mjs",
+      "target": "proposals/d087/browser-frame-qualification.mjs",
+      "sourceSha256": "4c5c26414f5c6fd0214da538964dc97d982fb3cc1ea2b6f8e86e0c94efd97b87",
+      "targetSha256": "e5365d46089fd2f82963941b3de2a0b214cf6b3709283d548d71b838ffb5c7c6",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "m.placements?.length,10",
+          "m.placements?.length,11"
+        ],
+        [
+          "native ten actual placements",
+          "native eleven actual placements"
+        ],
+        [
+          "ten-context",
+          "eleven-context"
+        ],
+        [
+          "newOwnersRetained,10",
+          "newOwnersRetained,11"
+        ],
+        [
+          "expectedOwners.length,10",
+          "expectedOwners.length,11"
+        ],
+        [
+          "report.completeFrames.length,42",
+          "report.completeFrames.length,46"
+        ],
+        [
+          "all25 original plus20 additive",
+          "all27 original plus22 additive"
+        ],
+        [
+          "'./browser-performance.mjs'",
+          "'../d086/browser-performance.mjs'"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/scene-budget-check.mjs",
+      "target": "proposals/d087/scene-budget-check.mjs",
+      "sourceSha256": "dd3e9d079db057d26288452ec24868d90c619e2b02624a68f790f8dcd86d1c11",
+      "targetSha256": "6f255d0701ce7b2e06ccb76e8028e68a5e198a0a3bf3179c4655d1b3e66c9362",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "../GlimmerTown3D-lab-d086-baseline",
+          "../GlimmerTown3D-lab-d087-baseline"
+        ],
+        [
+          "repeats*10",
+          "repeats*11"
+        ],
+        [
+          "d086-scene-budget",
+          "d087-scene-budget"
+        ],
+        [
+          "77b8616382f6115711b2b8eb39735a769b859cde",
+          "b4275bda73e72a9fb48343376fccaab52bbc8e84"
+        ],
+        [
+          "proposals/d086/scope.json",
+          "proposals/d087/scope.json"
+        ],
+        [
+          "before:now.emit(b,false).weighted,after:now.emit(b,true).weighted",
+          "before:ownerWeight(legacy,b.id),after:ownerWeight(current,b.id)"
+        ],
+        [
+          "assertLedger(legacy,current,ledger,caps);",
+          "for(const b of city.buildings.filter(b=>targetIds.has(String(b.id))))assert.equal(ownerWeight(current,b.id),now.emit(b,true).weighted,\"every new native scene owner actually uses its complete model\");assertLedger(legacy,current,ledger,caps);"
+        ],
+        [
+          "export async function qualifySceneBudgets",
+          "const ownerWeight=(o,id)=>[\"walls\",\"other\",\"dress\"].reduce((n,k,i)=>n+(o.digest.meshes[k].ownerTris[id]??0)*(i<2?2:1),0);\nexport async function qualifySceneBudgets"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/native-first-use-cache-check-v6.mjs",
+      "target": "proposals/d087/native-first-use-cache-check.mjs",
+      "sourceSha256": "53989f120a2bbc6df1144d6e283550f882697388edae112dabe31c0cd54f5799",
+      "targetSha256": "e68b03dcd4f04ebc7a3d2fa45df371b3b14aa7383487067fcd97dd57c455257d",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "d086-native",
+          "d087-native"
+        ],
+        [
+          "./browser-cache-observation-v6.mjs",
+          "./browser-cache-observation.mjs"
+        ],
+        [
+          "fixtures/d086/compiled-cache-v6.json",
+          "fixtures/d087/compiled-cache.json"
+        ],
+        [
+          "britishCivicMarketModels.mjs",
+          "britishWorkingRuralModels.mjs"
+        ],
+        [
+          "seed:20261086",
+          "seed:20261087"
+        ],
+        [
+          "D086 first native input timing",
+          "D087 first native input timing"
+        ],
+        [
+          "bl:[[26*40+2,65,1,0,40],[25*40+13,87,1,0,40],[26*40+20,169,1,0,40],[6*40+34,179,1,1,40],[10*40+34,185,1,1,40],[18*40+34,23,1,0,40]]",
+          "bl:[[2*40+36,65,1,0,40],[8*40+36,87,1,0,40],[14*40+36,169,1,0,40],[20*40+36,179,1,1,40],[26*40+36,185,1,1,40],[32*40+36,23,1,0,40]]"
+        ],
+        [
+          "const x=6+(i%5)*6,z=3+Math.floor(i/5)*6+repetition*12;",
+          "const x=2+(i%6)*6,z=2+Math.floor(i/6)*6+repetition*12;"
+        ],
+        [
+          "report.records.length,30",
+          "report.records.length,33"
+        ],
+        [
+          "r.firstNativeAttempt).length,10",
+          "r.firstNativeAttempt).length,11"
+        ],
+        [
+          "report.medians.length,10",
+          "report.medians.length,11"
+        ],
+        [
+          "__gt.buildingCount()'),36",
+          "__gt.buildingCount()'),39"
+        ],
+        [
+          "report.cacheObservations.length===30",
+          "report.cacheObservations.length===33"
+        ],
+        [
+          "'./browser-capture-quiet.mjs'",
+          "'../d086/browser-capture-quiet.mjs'"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/native-startup-cache-check-v6.mjs",
+      "target": "proposals/d087/native-startup-cache-check.mjs",
+      "sourceSha256": "d72c282416516b753220845c1caf0e18d226d2a5ce20bcf3d5c6e20bf1b56565",
+      "targetSha256": "532e2cff66d75fd4dafdb00f1ec3d592d148359a3f445774d851e06c106c5189",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "d086-native",
+          "d087-native"
+        ],
+        [
+          "./browser-cache-observation-v6.mjs",
+          "./browser-cache-observation.mjs"
+        ],
+        [
+          "fixtures/d086/compiled-cache-v6.json",
+          "fixtures/d087/compiled-cache.json"
+        ],
+        [
+          "__gt.d086CacheInfo",
+          "__gt.d087CacheInfo"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-provenance.test.mjs",
+      "target": "proposals/d087/browser-provenance.test.mjs",
+      "sourceSha256": "0357d82c628e70a555e3ca4bfed4189f66b8e145939182ad3874143dc6d9da4f",
+      "targetSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "replacements": [
+        [
+          "length:10",
+          "length:11"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-startup-cache-contract.test.mjs",
+      "target": "proposals/d087/browser-startup-cache-contract.test.mjs",
+      "sourceSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "targetSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d086/browser-first-use-performance.test.mjs",
+      "target": "proposals/d087/browser-first-use-performance.test.mjs",
+      "sourceSha256": "9b026b1b0016ae4f925ef28d19e3b961f6da39e1c88a937cef98dbb8e80280cc",
+      "targetSha256": "716e6b97d8f3623d5d967ef42f3cb54a020db87e51232ea65b3e63cf903d872d",
+      "replacements": [
+        [
+          "length:10",
+          "length:11"
+        ],
+        [
+          "size:i<5?2:1",
+          "size:[2,3,5][i%3]"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-frame-qualification.test.mjs",
+      "target": "proposals/d087/browser-frame-qualification.test.mjs",
+      "sourceSha256": "1e4949f46818e14d63f8f5a061edc0306c01e209f8152075d23558d902b8a426",
+      "targetSha256": "f33c5a11f6b17dd2a645748ac6825184f86b88ef919853b0b8e63ad3764de0b1",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "ten-context",
+          "eleven-context"
+        ],
+        [
+          "newOwnersRetained:10",
+          "newOwnersRetained:11"
+        ],
+        [
+          "fixture()).length,45",
+          "fixture()).length,49"
+        ],
+        [
+          "m.shots.splice(23,1)",
+          "m.shots.splice(27,1)"
+        ],
+        [
+          "m.shots[24]",
+          "m.shots[28]"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/native-surface-plan-v7.mjs",
+      "target": "proposals/d087/native-surface-plan.mjs",
+      "sourceSha256": "dee964a5391194167bf7c41c8b12944db355b06a8fe4c7ed5719364f5dd0de43",
+      "targetSha256": "4695f80079ea18b5c68c900dac66e6e2a73d8d038ca75ad3b1eb1739d467a42e",
+      "replacements": [
+        [
+          "./surface-contract.mjs",
+          "../d086/surface-contract.mjs"
+        ],
+        [
+          "./precompiled-cache-v6-qualification.mjs",
+          "./precompiled-cache-qualification.mjs"
+        ],
+        [
+          "./original-player-final-repair-camera-plan-v7.json",
+          "./native-camera-plan.json"
+        ],
+        [
+          "britishCivicMarketModels.mjs",
+          "britishWorkingRuralModels.mjs"
+        ],
+        [
+          "scratch/d086-surface/native-v7-",
+          "scratch/d087-surface/native-"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-surface-qualification-v7.mjs",
+      "target": "proposals/d087/browser-surface-qualification.mjs",
+      "sourceSha256": "17e583eb9842b9f242247f1923d5687dcd99edc62105eadf987e0e245650d09e",
+      "targetSha256": "e24a9424cbd73baaaa32063d095ead0d0bb7f7849729b549344cb78b59726d2a",
+      "replacements": [
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "./browser-surface-evidence.mjs",
+          "../d086/browser-surface-evidence.mjs"
+        ],
+        [
+          "./browser-geometry-diagnostic.mjs",
+          "../d086/browser-geometry-diagnostic.mjs"
+        ],
+        [
+          "./browser-legal-surface-capture.mjs",
+          "../d086/browser-legal-surface-capture.mjs"
+        ],
+        [
+          "./native-surface-plan-v7.mjs",
+          "./native-surface-plan.mjs"
+        ],
+        [
+          "./surface-contract.mjs",
+          "../d086/surface-contract.mjs"
+        ],
+        [
+          "./original-player-final-repair-camera-plan-v7.json",
+          "./native-camera-plan.json"
+        ],
+        [
+          "surface-qualification-v7.json",
+          "surface-qualification.json"
+        ],
+        [
+          "surface-v7-${r.id}",
+          "surface-${r.id}"
+        ],
+        [
+          "import*as THREE from'three';",
+          "import*as THREE from'three';\nimport {createWorkingRuralDesign} from '../../src/render/britishWorkingRuralModels.mjs';\nimport {paintWitnesses} from './facade-exterior-area.mjs';"
+        ],
+        [
+          "const coverage=assertSurfaceCoverage(audits,contract,'actual raw original-player full-surface coverage'),result=",
+          "const coverage=assertSurfaceCoverage(audits,contract,'actual raw original-player full-surface coverage');const painted=paintWitnesses(createWorkingRuralDesign(model.id),o,b,vp,contract,shots.map(s=>({id:s.id,camera:s.camera})));assert.deepEqual(painted.hidden,[],'every actual painted intent has a physical witness');assert.ok(painted.intents.every(p=>p.area>0&&p.witness&&shots.some(s=>s.id===p.witness.view)),'every painted-intent witness belongs to an ACTUAL captured raw frame, never an uncaptured oracle view');const result="
+        ],
+        [
+          "frames,audits,coverage,passed:true",
+          "frames,audits,coverage,painted,passed:true"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-surface-qualification-v7.test.mjs",
+      "target": "proposals/d087/browser-surface-qualification.test.mjs",
+      "sourceSha256": "c760d8fe63ec5c388ee7ae1eab53cca6f9a60c7e9f273a8ee38c2b898d19f603",
+      "targetSha256": "24067ee0c996e6db9d66ece250e75e521f5402b9ef733dd7215dcb27adfa87ab",
+      "replacements": [
+        [
+          "./browser-surface-qualification-v7.mjs",
+          "./browser-surface-qualification.mjs"
+        ],
+        [
+          "./browser-legal-surface-capture.mjs",
+          "../d086/browser-legal-surface-capture.mjs"
+        ],
+        [
+          "CIVIC_MARKET_BUILDINGS",
+          "WORKING_RURAL_BUILDINGS"
+        ],
+        [
+          "britishCivicMarkets.ts",
+          "britishWorkingRural.ts"
+        ],
+        [
+          "./original-player-final-repair-camera-plan-v7.json",
+          "./native-camera-plan.json"
+        ],
+        [
+          "./browser-geometry-diagnostic.mjs",
+          "../d086/browser-geometry-diagnostic.mjs"
+        ],
+        [
+          "inventory()).length,10",
+          "inventory()).length,11"
+        ],
+        [
+          "proposals/d086/browser-surface-qualification-v7.mjs",
+          "proposals/d087/browser-surface-qualification.mjs"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-cache-observation-v6.mjs",
+      "target": "proposals/d087/browser-cache-observation.mjs",
+      "sourceSha256": "4a92282471e77a7f61fafc7e5b184116703badeea2516566867146ce3d30c42e",
+      "targetSha256": "e7d1ac576804c1f15407188cf7e12765d1a95781f2b1af405a28d5134c794142",
+      "replacements": [
+        [
+          "f4850b85d4ff9751ba3c600db43cc4b26c58bb9efbff04efa4be53c02d579f25",
+          "646b98cad57a70eb8afaa9eb708a22bfb62321b9b3c70114203656c8d17cd8bc"
+        ],
+        [
+          "__gt.d086CacheInfo",
+          "__gt.d087CacheInfo"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d086/browser-cache-observation-v6.test.mjs",
+      "target": "proposals/d087/browser-cache-observation.test.mjs",
+      "sourceSha256": "546d940a944983c5fb2d75701511aa02b135552fa5a5c6e8cd62976a2df51133",
+      "targetSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "replacements": [
+        [
+          "./browser-cache-observation-v6.mjs",
+          "./browser-cache-observation.mjs"
+        ]
+      ]
+    }
+  ]
+}

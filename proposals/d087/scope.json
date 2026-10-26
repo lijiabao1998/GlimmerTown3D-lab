@@ -1,0 +1,20 @@
+{
+  "schema":1,
+  "baseline":"b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "baselineTree":"237bac99636e90c6a18cce3a5fb8384093cfdbed",
+  "batch":"D087","wave":17,"goal":200,"acceptedPublished":157,"remaining":43,
+  "qualification":"Frozen pre-code eleven-model scope. No candidate is accepted or published by this file.",
+  "models":[
+    {"k":22,"v":16,"id":"horse-engine-threshing-farm","name":"馬力圓屋穀場","short":"穀場","baseTool":"farm","tool":"britishEngineFarm","size":2,"H":1.05,"cap":1800},
+    {"k":23,"v":5,"id":"octagonal-dairy-cattle-farm","name":"八角乳房牧場","short":"乳場","baseTool":"ranch","tool":"britishDairyFarm","size":2,"H":0.95,"cap":1800},
+    {"k":23,"v":6,"id":"lakeland-bank-barn-ranch","name":"坡道雙層牧舍","short":"坡舍","baseTool":"ranch","tool":"britishBankBarn","size":2,"H":0.95,"cap":1800},
+    {"k":23,"v":7,"id":"corbelled-stone-piggery","name":"疊石豬舍農場","short":"豬舍","baseTool":"ranch","tool":"britishStonePiggery","size":2,"H":0.68,"cap":1800},
+    {"k":53,"v":3,"id":"e-plan-model-farm","name":"三翼示範農場","short":"大農","baseTool":"bigFarm","tool":"britishModelFarm","size":5,"H":1.35,"cap":1800},
+    {"k":63,"v":3,"id":"curvilinear-wall-glasshouse","name":"曲面靠牆溫室","short":"曲室","baseTool":"greenhouse","tool":"britishCurvedGlasshouse","size":2,"H":0.80,"cap":1800},
+    {"k":63,"v":4,"id":"ridge-furrow-market-garden","name":"連脊園藝溫室","short":"連脊","baseTool":"greenhouse","tool":"britishRidgeGlasshouse","size":2,"H":0.70,"cap":1800},
+    {"k":63,"v":5,"id":"five-bay-productive-glasshouse","name":"五灣生產溫室","short":"五灣","baseTool":"greenhouse","tool":"britishBayGlasshouse","size":2,"H":0.90,"cap":1800},
+    {"k":57,"v":3,"id":"central-kiln-maltings","name":"中央窯麥芽工場","short":"麥芽","baseTool":"foodPlant","tool":"britishMaltings","size":3,"H":1.55,"cap":1800},
+    {"k":57,"v":4,"id":"l-plan-smoking-food-works","name":"轉角燻製工場","short":"燻製","baseTool":"foodPlant","tool":"britishSmokingWorks","size":3,"H":1.65,"cap":1800},
+    {"k":57,"v":5,"id":"stepped-confectionery-works","name":"階層糖果工場","short":"糖廠","baseTool":"foodPlant","tool":"britishConfectioneryWorks","size":3,"H":1.85,"cap":1800}
+  ]
+}

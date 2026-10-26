@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "baseline": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "reason": "Independent exact old157-plus-eleven metadata validation and finite catalogue/dependency/receipt-path seams only. Every original behavioral assertion retained.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-integration-check-d086.mjs",
+      "target": "proposals/d083/native-integration-check-d087.mjs",
+      "sourceSha256": "fa74e3905ce32b6ab6d3f3a4e646bb9c84b1efe185d3bd9553ed1be994f94942",
+      "targetSha256": "11fc427896fb8dad2f52bbdcf0e4249247ec657a4d05efb8498e38e9d42e7d48",
+      "header": "// D087 finite current contract. Original proposals/d083/native-integration-check-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "assertD086KindMetadata",
+          "after": "assertD087KindMetadata",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d086-kind-metadata-contract.mjs'",
+          "after": "'../../tools/d087-kind-metadata-contract.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d083-native-evidence'",
+          "after": "'scratch/d087-native/d083-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-variant-check.mjs",
+      "target": "proposals/d086/native-variant-check-d087.mjs",
+      "sourceSha256": "58bbb293917c92d85a62b7d23dc987ca0c6e4612476ae878e1d61bedbe936b83",
+      "targetSha256": "9fd21fc76c384f25c02ef1dc719d437eed6ed54ee0ffd2096d553a978b413bff",
+      "header": "// D087 finite current contract. Original proposals/d086/native-variant-check.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "import assert from 'node:assert/strict';",
+          "after": "import assert from 'node:assert/strict';\nimport {checkedD087Predecessor} from '../../tools/d087-kind-metadata-contract.mjs';",
+          "count": 1
+        },
+        {
+          "before": "oldKT=kindTableFrom(base);",
+          "after": "oldKT=kindTableFrom(base);\nconst d087PriorRows=checkedD087Predecessor(KINDS.data.kinds,withCivicMarketVariants(base).kinds);",
+          "count": 1
+        },
+        {
+          "before": "const row=KINDS.data.kinds.find(r=>r.k===old.k)",
+          "after": "const row=d087PriorRows.find(r=>r.k===old.k)",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d086-native-variant'",
+          "after": "'scratch/d087-native/d086-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d055-capture-d086.mjs",
+      "target": "tools/d055-capture-d087.mjs",
+      "sourceSha256": "cb5f364b4938819b37714f5f753b9e85d7a36c5f2bdd006653c8ad6013efae19",
+      "targetSha256": "4ca9daec5aa1b0603118f39ad5d33c1cbbc66a9611e7dcf2d92ed5d6ff572c01",
+      "header": "// D087 finite current contract. Original tools/d055-capture-d086.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "catalogueWithD086",
+          "after": "catalogueWithD087",
+          "count": 2
+        },
+        {
+          "before": "'./d086-catalogue-compat.mjs'",
+          "after": "'./d087-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/current-inherited-ui-guards.mjs",
+      "target": "proposals/d087/native-current-inherited-ui-guards.mjs",
+      "sourceSha256": "1786281a00a39985d91e1869d1464ebb84de604f12970960c260d558f138f280",
+      "targetSha256": "186713b6b5bb1df2a514e78f210b350d9c5aefd130b23dd339581633a1c335a5",
+      "header": "// D087 finite current contract. Original proposals/d086/current-inherited-ui-guards.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "assertD086CurrentGuardVersionsV2",
+          "after": "assertD087CurrentGuardVersions",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d086-current-guards-v2.mjs'",
+          "after": "'../../tools/d087-current-guards.mjs'",
+          "count": 1
+        },
+        {
+          "before": "unit-d052-d086.mjs",
+          "after": "unit-d052-d087.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d054-ui-d086.mjs",
+          "after": "unit-d054-ui-d087.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d081-touch-lease-d086.mjs",
+          "after": "unit-d081-touch-lease-d087.mjs",
+          "count": 1
+        },
+        {
+          "before": "scratch/d086-native-variant",
+          "after": "scratch/d087-native/current-inherited-ui",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/current-food-guards.mjs",
+      "target": "proposals/d087/native-current-food-guards.mjs",
+      "sourceSha256": "8d204c87b047d4135cbd4f544a0ec9fa27f6396b078ad0a7a3fee1283dc776f2",
+      "targetSha256": "eb327c5a7d2faf097b08c4718272709c8eb18e8572991416576628f2d7048c43",
+      "header": "// D087 finite current contract. Original proposals/d086/current-food-guards.mjs is unchanged at b4275bda73e72a9fb48343376fccaab52bbc8e84.\n",
+      "changes": [
+        {
+          "before": "'../../tools/unit-d055-native-d086.mjs'",
+          "after": "'../../tools/unit-d055-native-d087.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}
