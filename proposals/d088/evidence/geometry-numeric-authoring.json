@@ -1,0 +1,252 @@
+{
+  "qualification": "Authoring source-level full numerical geometry check; not raw browser or art acceptance.",
+  "sourceSha256": "6abd2ee0a886a499d1c6b04adef09163a77e88767e0b57db7f742d31eae1767c",
+  "models": [
+    {
+      "id": "quadrangular-county-constabulary",
+      "parts": 4,
+      "weighted": 912,
+      "structure": {
+        "id": "quadrangular-county-constabulary",
+        "solids": 4,
+        "triangles": 456,
+        "negativeControls": 924
+      },
+      "meshNegatives": 12,
+      "facade": {
+        "id": "quadrangular-county-constabulary",
+        "intents": 47,
+        "samples": 80,
+        "paintedFaces": 8,
+        "paintTriangles": 390
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 3
+    },
+    {
+      "id": "chamfered-mansard-police-house",
+      "parts": 3,
+      "weighted": 712,
+      "structure": {
+        "id": "chamfered-mansard-police-house",
+        "solids": 3,
+        "triangles": 356,
+        "negativeControls": 721
+      },
+      "meshNegatives": 9,
+      "facade": {
+        "id": "chamfered-mansard-police-house",
+        "intents": 38,
+        "samples": 65,
+        "paintedFaces": 7,
+        "paintTriangles": 294
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    },
+    {
+      "id": "rural-constable-cottage-and-office",
+      "parts": 4,
+      "weighted": 640,
+      "structure": {
+        "id": "rural-constable-cottage-and-office",
+        "solids": 4,
+        "triangles": 320,
+        "negativeControls": 652
+      },
+      "meshNegatives": 12,
+      "facade": {
+        "id": "rural-constable-cottage-and-office",
+        "intents": 33,
+        "samples": 55,
+        "paintedFaces": 6,
+        "paintTriangles": 262
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    },
+    {
+      "id": "butterfly-ward-cottage-hospital",
+      "parts": 3,
+      "weighted": 752,
+      "structure": {
+        "id": "butterfly-ward-cottage-hospital",
+        "solids": 3,
+        "triangles": 376,
+        "negativeControls": 761
+      },
+      "meshNegatives": 9,
+      "facade": {
+        "id": "butterfly-ward-cottage-hospital",
+        "intents": 48,
+        "samples": 80,
+        "paintedFaces": 8,
+        "paintTriangles": 326
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 3
+    },
+    {
+      "id": "staggered-isolation-pavilion-hospital",
+      "parts": 4,
+      "weighted": 904,
+      "structure": {
+        "id": "staggered-isolation-pavilion-hospital",
+        "solids": 4,
+        "triangles": 452,
+        "negativeControls": 916
+      },
+      "meshNegatives": 12,
+      "facade": {
+        "id": "staggered-isolation-pavilion-hospital",
+        "intents": 50,
+        "samples": 85,
+        "paintedFaces": 11,
+        "paintTriangles": 393
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 4
+    },
+    {
+      "id": "splayed-h-plan-health-centre",
+      "parts": 5,
+      "weighted": 688,
+      "structure": {
+        "id": "splayed-h-plan-health-centre",
+        "solids": 5,
+        "triangles": 344,
+        "negativeControls": 703
+      },
+      "meshNegatives": 15,
+      "facade": {
+        "id": "splayed-h-plan-health-centre",
+        "intents": 45,
+        "samples": 75,
+        "paintedFaces": 11,
+        "paintTriangles": 276
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    },
+    {
+      "id": "twin-apsidal-dispensary",
+      "parts": 4,
+      "weighted": 600,
+      "structure": {
+        "id": "twin-apsidal-dispensary",
+        "solids": 4,
+        "triangles": 300,
+        "negativeControls": 612
+      },
+      "meshNegatives": 12,
+      "facade": {
+        "id": "twin-apsidal-dispensary",
+        "intents": 36,
+        "samples": 60,
+        "paintedFaces": 12,
+        "paintTriangles": 232
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    },
+    {
+      "id": "radial-folded-roof-primary-school",
+      "parts": 1,
+      "weighted": 956,
+      "structure": {
+        "id": "radial-folded-roof-primary-school",
+        "solids": 1,
+        "triangles": 478,
+        "negativeControls": 959
+      },
+      "meshNegatives": 3,
+      "facade": {
+        "id": "radial-folded-roof-primary-school",
+        "intents": 56,
+        "samples": 100,
+        "paintedFaces": 20,
+        "paintTriangles": 368
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 4
+    },
+    {
+      "id": "garden-classroom-pavilion-school",
+      "parts": 5,
+      "weighted": 896,
+      "structure": {
+        "id": "garden-classroom-pavilion-school",
+        "solids": 5,
+        "triangles": 448,
+        "negativeControls": 911
+      },
+      "meshNegatives": 15,
+      "facade": {
+        "id": "garden-classroom-pavilion-school",
+        "intents": 45,
+        "samples": 80,
+        "paintedFaces": 13,
+        "paintTriangles": 354
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 4
+    },
+    {
+      "id": "cruciform-public-reading-library",
+      "parts": 3,
+      "weighted": 1040,
+      "structure": {
+        "id": "cruciform-public-reading-library",
+        "solids": 3,
+        "triangles": 520,
+        "negativeControls": 1049
+      },
+      "meshNegatives": 9,
+      "facade": {
+        "id": "cruciform-public-reading-library",
+        "intents": 49,
+        "samples": 65,
+        "paintedFaces": 9,
+        "paintTriangles": 481
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    },
+    {
+      "id": "streamline-corner-sorting-post-office",
+      "parts": 3,
+      "weighted": 728,
+      "structure": {
+        "id": "streamline-corner-sorting-post-office",
+        "solids": 3,
+        "triangles": 364,
+        "negativeControls": 737
+      },
+      "meshNegatives": 9,
+      "facade": {
+        "id": "streamline-corner-sorting-post-office",
+        "intents": 42,
+        "samples": 70,
+        "paintedFaces": 11,
+        "paintTriangles": 292
+      },
+      "facadeNegatives": 9,
+      "groundDoors": 2
+    }
+  ],
+  "totals": {
+    "parts": 39,
+    "triangles": 4414,
+    "structureNegatives": 8945,
+    "meshNegatives": 117,
+    "intents": 489,
+    "backingSamples": 815,
+    "facadeNegatives": 99,
+    "doors": 30
+  },
+  "fullReceipt": {
+    "file": "scratch/d088-geometry/complete-current-numeric.json",
+    "sha256": "a63dd360368f6b0739227e7314678a0fde2bd507ddc2656c3a62fe181e1c0980"
+  },
+  "passed": true
+}

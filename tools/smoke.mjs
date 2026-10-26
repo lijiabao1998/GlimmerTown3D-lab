@@ -51,7 +51,7 @@ import { d049Smoke } from './smoke-d049.mjs';
 import { d050Smoke, d050CopyImageGuard } from './smoke-d050.mjs';
 import { d051Smoke, d051ImportImageGuard } from './smoke-d051.mjs';
 import { d052Smoke } from './smoke-d052.mjs';
-import { d053Smoke } from './smoke-d053-d087.mjs';
+import { d053Smoke } from './smoke-d053-d088.mjs';
 import { d054Smoke } from './smoke-d054.mjs';
 
 const HASH = '1750cc89';   // D001 定下的種子 5162026 事件雜湊；生成規則一改這裡就紅（要改就在卡面寫明為什麼）

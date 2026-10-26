@@ -1,0 +1,144 @@
+{
+  "qualification": "Reproducible code-generated native cache from authoritative procedural geometry; no Chrome or release acceptance claim.",
+  "proceduralSourceSha256": "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+  "candidateSourceSha256": "5f20f941cfac8ac56ce91e67edbf38d1d6fc0346fd1af1afc53be5e2ea84e83e",
+  "sourceBytes": 38210,
+  "candidateBytes": 469752,
+  "sourceGzipBytes": 12676,
+  "candidateGzipBytes": 86646,
+  "codec": "v1: exact Float64 round-trip decimal vectors, literal JSON -0, no reviver or rounding, indexed triangles, full native metadata; per-payload integrity and SHA256 reproducible CI proof",
+  "models": [
+    {
+      "meta": {
+        "id": "quadrangular-county-constabulary",
+        "length": 32546,
+        "checksum": "d04e6583"
+      },
+      "sha256": "1e0e9412cd426ba1a85556119032b94464f9641c892a3aee7bf661c825c4950b",
+      "points": 236,
+      "normals": 54,
+      "triangleCount": 456,
+      "originalBytes": 90372
+    },
+    {
+      "meta": {
+        "id": "chamfered-mansard-police-house",
+        "length": 27421,
+        "checksum": "50c53122"
+      },
+      "sha256": "655e28789be52ea4c8f5ddb033e650bd5ecb86200159ba1c7b6c260cf39d1255",
+      "points": 184,
+      "normals": 57,
+      "triangleCount": 356,
+      "originalBytes": 76622
+    },
+    {
+      "meta": {
+        "id": "rural-constable-cottage-and-office",
+        "length": 23078,
+        "checksum": "0238d3bb"
+      },
+      "sha256": "a76da7883b7ee816a74df974616e9d7b39c4ccb8148ac06ea3b6bb9ff0e5567d",
+      "points": 168,
+      "normals": 38,
+      "triangleCount": 320,
+      "originalBytes": 65876
+    },
+    {
+      "meta": {
+        "id": "butterfly-ward-cottage-hospital",
+        "length": 43622,
+        "checksum": "0447f8a4"
+      },
+      "sha256": "ab089d1823868cba77f37584361076c21649ee8c79479cd669134b411873e4b5",
+      "points": 194,
+      "normals": 202,
+      "triangleCount": 376,
+      "originalBytes": 103872
+    },
+    {
+      "meta": {
+        "id": "staggered-isolation-pavilion-hospital",
+        "length": 31367,
+        "checksum": "3129ddaa"
+      },
+      "sha256": "1792feb3d60bc40fe0b538f571b09a30391377f274e14256a3946f9296454e2c",
+      "points": 234,
+      "normals": 36,
+      "triangleCount": 452,
+      "originalBytes": 91747
+    },
+    {
+      "meta": {
+        "id": "splayed-h-plan-health-centre",
+        "length": 42045,
+        "checksum": "3ff2d99a"
+      },
+      "sha256": "eaf92c81ecbba0beef646a61bb3bc3086e4534f2e31b8dc352268cee52e15318",
+      "points": 182,
+      "normals": 192,
+      "triangleCount": 344,
+      "originalBytes": 93952
+    },
+    {
+      "meta": {
+        "id": "twin-apsidal-dispensary",
+        "length": 35148,
+        "checksum": "a3913b5a"
+      },
+      "sha256": "773cb3bde3afcc75ee8bd8ed01a8cdc1899d7ad6892f022d8fddc91d26fa9071",
+      "points": 158,
+      "normals": 146,
+      "triangleCount": 300,
+      "originalBytes": 83332
+    },
+    {
+      "meta": {
+        "id": "radial-folded-roof-primary-school",
+        "length": 77473,
+        "checksum": "925759a9"
+      },
+      "sha256": "fe1f8ffe51820a1aa7cc194ef7eb0a023de223f318b9c76721f97018597f3d1e",
+      "points": 241,
+      "normals": 388,
+      "triangleCount": 478,
+      "originalBytes": 177824
+    },
+    {
+      "meta": {
+        "id": "garden-classroom-pavilion-school",
+        "length": 33156,
+        "checksum": "283202da"
+      },
+      "sha256": "5427feee65c8a2eab22ca707580a2db1025876f7f8f14397b1721761622ca669",
+      "points": 234,
+      "normals": 28,
+      "triangleCount": 448,
+      "originalBytes": 94669
+    },
+    {
+      "meta": {
+        "id": "cruciform-public-reading-library",
+        "length": 32643,
+        "checksum": "4a288307"
+      },
+      "sha256": "7b0345a32f915876898a16b8c1c3a44a321ed4dc1acbff9e5ccfd6375e1323f4",
+      "points": 266,
+      "normals": 34,
+      "triangleCount": 520,
+      "originalBytes": 102985
+    },
+    {
+      "meta": {
+        "id": "streamline-corner-sorting-post-office",
+        "length": 32635,
+        "checksum": "b697d568"
+      },
+      "sha256": "df2a22e9e5d6939034f23ec7d5f52d69c6efa3001f048911d7e12ef7accf2686",
+      "points": 188,
+      "normals": 62,
+      "triangleCount": 364,
+      "originalBytes": 86175
+    }
+  ]
+}

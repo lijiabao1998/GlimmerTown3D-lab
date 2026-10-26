@@ -1,0 +1,3012 @@
+{
+  "qualification": "Frozen actual native camera inventory. Original D081 full required contract and48 player cameras unchanged; additional paint witnesses remain separately hashed. Exact cached source binds complete procedural authority by finite reconstruction and whole179-model/five-scene signed-word parity. NOT raw browser/art acceptance.",
+  "sourceSha256": "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+  "cachedSourceSha256": "5f20f941cfac8ac56ce91e67edbf38d1d6fc0346fd1af1afc53be5e2ea84e83e",
+  "worldSha256": "8264e8b7ca233bc884fd80042bf1c7954e8c31a66e5904197a538f3613cbd3bc",
+  "original48": [
+    {
+      "id": "surface-e0-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e0-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 0.25132742228718347
+    },
+    {
+      "id": "surface-e1-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e1-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 0.5235987755982988
+    },
+    {
+      "id": "surface-e2-y0",
+      "yaw": 0.7853981633974483,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y1",
+      "yaw": 1.1780972450961724,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y2",
+      "yaw": 1.5707963267948966,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y3",
+      "yaw": 1.9634954084936207,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y4",
+      "yaw": 2.356194490192345,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y5",
+      "yaw": 2.748893571891069,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y6",
+      "yaw": 3.141592653589793,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y7",
+      "yaw": 3.5342917352885173,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y8",
+      "yaw": 3.9269908169872414,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y9",
+      "yaw": 4.319689898685965,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y10",
+      "yaw": 4.71238898038469,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y11",
+      "yaw": 5.105088062083413,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y12",
+      "yaw": 5.497787143782138,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y13",
+      "yaw": 5.8904862254808625,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y14",
+      "yaw": 6.283185307179586,
+      "elevation": 1.005309639148734
+    },
+    {
+      "id": "surface-e2-y15",
+      "yaw": 6.67588438887831,
+      "elevation": 1.005309639148734
+    }
+  ],
+  "models": [
+    {
+      "id": "quadrangular-county-constabulary",
+      "owner": 7,
+      "slot": [
+        11,
+        5
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "0c4ae51e005958acede67275df13e01ffe50574ab8505aa069e88620e70e20db",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -48.237342863546665,
+                  88.24203007733601,
+                  -16.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 4.319689898685965,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  43.09804789694305,
+                  88.24203007733601,
+                  44.09804789694306
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 0.7853981633974483,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "a1089c7ad4513c1ecf335b58c73c4f918e9f72d5cb4ccb793334e842ba5cd6df",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -48.237342863546665,
+                  88.24203007733601,
+                  -16.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 4.319689898685965,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  43.09804789694305,
+                  88.24203007733601,
+                  44.09804789694306
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 0.7853981633974483,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "df7f52de1c48ecf3400611c0afe34c9e2dc454cd52f52544f40c46211baff70b",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y9",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -48.237342863546665,
+                  88.24203007733601,
+                  -16.93030909522793
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 4.319689898685965,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y0",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  43.09804789694305,
+                  88.24203007733601,
+                  44.09804789694306
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 0.7853981633974483,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  55.23734286354668,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "chamfered-mansard-police-house",
+      "owner": 8,
+      "slot": [
+        11,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2022,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "b67ac821a69b8dc42aae73cf2bd34eec4091b68505936ef2091fa161cb99a2bb",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -29.238331754871574,
+                  25.990969662701353,
+                  -89.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2022,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "45bbccc73aefca90e1878004ab1adcded96b7aebd2c98bca5245a40d6f70e0a0",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -29.238331754871574,
+                  25.990969662701353,
+                  -89.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2022,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "b67ac821a69b8dc42aae73cf2bd34eec4091b68505936ef2091fa161cb99a2bb",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y7",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -29.238331754871574,
+                  25.990969662701353,
+                  -89.02260590631931
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "rural-constable-cottage-and-office",
+      "owner": 9,
+      "slot": [
+        52,
+        1
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 1819,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "4e16e864a9d6e9f57a11f9fc24d2a8bd535d35e0d7461a1e52044278c88c05e2",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -78.02260590631933,
+                  25.990969662701353,
+                  43.23833175487152
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 0.25132742228718347
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.23734286354667,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 1819,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "078b91d269a2886c90e53fb798ff80f820a947023b6baa8b1610de96137ff542",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -78.02260590631933,
+                  25.990969662701353,
+                  43.23833175487152
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 0.25132742228718347
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.23734286354667,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 1819,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "4e16e864a9d6e9f57a11f9fc24d2a8bd535d35e0d7461a1e52044278c88c05e2",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -5.930309095227891,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y11",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -78.02260590631933,
+                  25.990969662701353,
+                  43.23833175487152
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 0.25132742228718347
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  67.23734286354667,
+                  88.24203007733601,
+                  -16.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "butterfly-ward-cottage-hospital",
+      "owner": 10,
+      "slot": [
+        12,
+        5
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 1984,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "300a8f915bd72eb4be44dd887c2f0ce809188ad83b8c9d6d10d1d3e5e3b28322",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -35.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  56.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 1984,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "d2bc654ba4f77fd4bbe93f5a6190af0f3b6b84a6e587f9fa9cb78d5eff725140",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -35.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  56.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 1984,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "72a1544255d1d79ce82e398b430922e6606c83c23566d648529e05233838e947",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -35.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  56.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  42.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "staggered-isolation-pavilion-hospital",
+      "owner": 11,
+      "slot": [
+        12,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "a73985326699eebd1a3bb0a8e38109c7a2ddd13d855a05194db5ee35fc9902e3",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772116,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "e065a804ea692207f3e56db9184cfed49b16970a833eaa3a34cd15bfa67f9ce5",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772116,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2277,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "5915bb405fb604b0b8be64eb4df9bec57c9df23356e0c307b253ce4b18dafa8e",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  68.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -47.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  6.069690904772116,
+                  88.24203007733601,
+                  56.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  4.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -47.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "splayed-h-plan-health-centre",
+      "owner": 12,
+      "slot": [
+        13,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 1785,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "3501477088a6b0b03b2c63fc26d13b8934b3ccc1171988128c2d50f705c0821d",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.5000000000000124,
+                  25.990969662701353,
+                  -88.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.141592653589793,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 1785,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "09c35a091b9f38928b6d2687cc96eca7372da6c5c3f92c965549b2a0115851e7",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.5000000000000124,
+                  25.990969662701353,
+                  -88.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.141592653589793,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 1785,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "9df2965f4b1b65c4148cfd2508cdbbe23867b66ae441c1361dfd2f965cf7962c",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.93030909522789,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -17.930309095227884,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  24.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e0-y6",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  3.5000000000000124,
+                  25.990969662701353,
+                  -88.7281391840194
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.141592653589793,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "twin-apsidal-dispensary",
+      "owner": 13,
+      "slot": [
+        13,
+        7
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 1768,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "f478ed02455e17dbe69dcb8da6985950811766331bf5fc6be0ae29d3b1d88f51",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -42.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 1768,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "f472ab370482b34f207b622aff419253e571bf160db9500bd425f656f8121554",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -42.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 1768,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "973c3a44aee4fdd6104e14c3dbe4c72126841ec2307d4e7c96bbf79f577f7b5d",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -30.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -42.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  9.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  30.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "radial-folded-roof-primary-school",
+      "owner": 14,
+      "slot": [
+        7,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2612,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "c0ccc533425b64f816e96191a2ab8c700421eff12311d5d6d5a10ad8f5bf1783",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -56.079103663915774,
+                  25.990969662701353,
+                  -59.0791036639158
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2612,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "7fcaa4f0f77c6bda19fb2f96abd47e4e6c6848d4074a524ba4329c9ba008cc49",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -56.079103663915774,
+                  25.990969662701353,
+                  -59.0791036639158
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2612,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "6f95deb1a451f363be24a9c60c935666ab827aa5df592dfbe12837d9bcd747bb",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  79.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e0-y8",
+              "camera": {
+                "target": [
+                  15.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -56.079103663915774,
+                  25.990969662701353,
+                  -59.0791036639158
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 0.25132742228718347
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "garden-classroom-pavilion-school",
+      "owner": 15,
+      "slot": [
+        7,
+        7
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2155,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "efc9f0161fa7bd49306fb22bc8c72ad0ace0b9f8bd46304aba9090ddfbbd4eff",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  0.06969090477211637,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.23734286354667,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2155,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "a4f3df75d503955f607e6163932f4352db12696866ed4b7ebbb9d76c6e40dcba",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  0.06969090477211637,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.23734286354667,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2155,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "bc1ddc2309e6f5d2ffa3dc66f2bbc33e7832f2190deca5fef4d950daaf78d1b6",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  85.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -18.09804789694305,
+                  88.24203007733601,
+                  -27.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  42.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y13",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  0.06969090477211637,
+                  88.24203007733601,
+                  64.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.8904862254808625,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y3",
+              "camera": {
+                "target": [
+                  21.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  73.23734286354667,
+                  88.24203007733601,
+                  -8.930309095227894
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 1.9634954084936207,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "cruciform-public-reading-library",
+      "owner": 16,
+      "slot": [
+        14,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2668,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "3a50cca1853b2f402ece3556634df42d808cfd1d13803c6963980f09bbf1da25",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -24.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2668,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "cb469c20a8d850fdf5717b645d8b1184a99cf3b6a974e9971f566e8fa6075023",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -24.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2668,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "a0c077152bcfc2d3c05f736283e7813a166720e30504fccd88256e3971d4d4b9",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  91.5,
+                  52.25578117937446,
+                  76.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y7",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  6.069690904772109,
+                  88.24203007733601,
+                  -39.23734286354669
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.5342917352885173,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y15",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227855,
+                  88.24203007733601,
+                  64.2373428635467
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 6.67588438887831,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  -24.237342863546694,
+                  88.24203007733601,
+                  33.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y5",
+              "camera": {
+                "target": [
+                  27.5,
+                  0,
+                  12.5
+                ],
+                "pos": [
+                  48.930309095227905,
+                  88.24203007733601,
+                  -39.23734286354668
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 2.748893571891069,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    },
+    {
+      "id": "streamline-corner-sorting-post-office",
+      "owner": 17,
+      "slot": [
+        15,
+        6
+      ],
+      "widths": [
+        {
+          "width": 1440,
+          "required": 2075,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "5fa38b7d03785624e35915c849043cd84de711cda39f48b3d62c24fe755d4257",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  84.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -19.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -48.237342863546694,
+                  88.24203007733601,
+                  41.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 412,
+          "required": 2075,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "8f8a70aae1eb06bbf1c5c884982e34c2b13ff3576ac931819edfaa87cec66b24",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  84.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -19.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -48.237342863546694,
+                  88.24203007733601,
+                  41.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        },
+        {
+          "width": 360,
+          "required": 2075,
+          "first48Missing": 0,
+          "missing": 0,
+          "contractSha256": "5fa38b7d03785624e35915c849043cd84de711cda39f48b3d62c24fe755d4257",
+          "sourceGeometrySha256": "7914c7e5586afc6fc644d3efb29a5c51a7a1cd148a074035ca723c22f9813cc2",
+          "selected": [
+            {
+              "id": "original",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  67.5,
+                  52.25578117937446,
+                  84.50000000000001
+                ],
+                "zoom": 5.5
+              }
+            },
+            {
+              "id": "surface-e2-y8",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -36.09804789694305,
+                  88.24203007733601,
+                  -19.098047896943065
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 3.9269908169872414,
+              "elevation": 1.005309639148734
+            },
+            {
+              "id": "surface-e2-y11",
+              "camera": {
+                "target": [
+                  3.5,
+                  0,
+                  20.5
+                ],
+                "pos": [
+                  -48.237342863546694,
+                  88.24203007733601,
+                  41.93030909522786
+                ],
+                "zoom": 5.5
+              },
+              "yaw": 5.105088062083413,
+              "elevation": 1.005309639148734
+            }
+          ],
+          "retainedAndNewExtras": [],
+          "remaining": 0
+        }
+      ]
+    }
+  ]
+}

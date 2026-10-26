@@ -34,7 +34,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: CI provenance and fail-closed gate negative controls
-        run: node --test .github/scripts/ci-integrity-d087.test.mjs tools/unit-partitions-release-v2.test.mjs
+        run: node --test .github/scripts/ci-integrity-d088.test.mjs tools/unit-partitions-release-v2.test.mjs
       - name: Versioned source missing/stale negatives and fresh historical receipt regression
         run: node --test tools/d082-release-source-v2.test.mjs tools/d082-historical-release.test.mjs tools/d082-release-conflicts-v2.test.mjs
       - run: npm run build
@@ -555,7 +555,7 @@ jobs:
       - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
       - run: npm run build
       - name: D055 native food trade capture
-        run: node tools/d055-capture-d087.mjs --phase=after
+        run: node tools/d055-capture-d088.mjs --phase=after
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -739,8 +739,15 @@ jobs:
       actions: read
     uses: ./.github/workflows/d087-native.yml
 
+  d088-native-release:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/d088-native.yml
+
   pages:
-    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079, d080, d081, d082, d086-native-release, d087-native-release, d083-native-release]
+    needs: [smoke, d055, d059, d060, d061, d062, d063, d064, d068, d069, d070, d071, d072, d073, d074, d076, d077, d078, d079, d080, d081, d082, d086-native-release, d087-native-release, d088-native-release, d083-native-release]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-24.04   # D060：釘版。ubuntu-latest 於 2026-10-19 起改指 Ubuntu 26（字型與 Chrome 會變，逐位元組的 PNG golden 會動）
     permissions:

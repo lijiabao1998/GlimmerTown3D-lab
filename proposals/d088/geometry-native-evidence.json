@@ -1,0 +1,52 @@
+{
+  "sourceSha256": "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+  "cachedSourceSha256": "5f20f941cfac8ac56ce91e67edbf38d1d6fc0346fd1af1afc53be5e2ea84e83e",
+  "planSha256": "86700565d82972249baf33ee16d0a3d68ed4be48ce234bd58053f98a2f90b6e9",
+  "nativeReport": {
+    "path": "/tmp/d088-native-cached-first/report.json",
+    "sha256": "44251b69fd41380e3d6833db6d114f297f47886d9caea9343387c824d12523c0"
+  },
+  "nativePaintReport": {
+    "path": "/tmp/d088-native-paint-cached-first/report.json",
+    "sha256": "ba5a8086325ededa88721c2ffb5599154079f75f61920486ccd6273fee6b1bf6"
+  },
+  "cache": {
+    "passed": true,
+    "sourceSha256": "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+    "candidateSha256": "5f20f941cfac8ac56ce91e67edbf38d1d6fc0346fd1af1afc53be5e2ea84e83e",
+    "models": 11
+  },
+  "priorAuthoring": {
+    "sourceSha256": "6abd2ee0a886a499d1c6b04adef09163a77e88767e0b57db7f742d31eae1767c",
+    "completeRecords": 29,
+    "all29CompleteGzipBytesEqual": true,
+    "completedRun": false,
+    "explanation": "First local run ended before report without a retained trustworthy process status; incomplete, never claimed33 pass. Every completed original record preserved byte-exact. Complete cached rerun below passes all33 with512MB test-only Node heap."
+  },
+  "cases": 33,
+  "requiredPerWidth": 23442,
+  "requiredAllWidths": 70326,
+  "missing": 0,
+  "paintIntents": 489,
+  "paintCases": 1467,
+  "paintMissing": 0,
+  "viewsPerWidth": [
+    {
+      "width": 1440,
+      "views": 43,
+      "paintExtra": 0
+    },
+    {
+      "width": 412,
+      "views": 43,
+      "paintExtra": 0
+    },
+    {
+      "width": 360,
+      "views": 43,
+      "paintExtra": 0
+    }
+  ],
+  "browserJoined": false,
+  "qualification": "Exact source-bound current cached native numerical checkpoint only; official real Chrome/raw image and independent visual acceptance still pending."
+}

@@ -1,0 +1,3 @@
+// Additive proof that every current D088 host also satisfies the original full-plane verifier.
+import test from'node:test';import assert from'node:assert/strict';import{MODEL_IDS,createPublicServiceDesign}from'../../src/render/britishPublicServicesModels.mjs';import{rawFacadeReference}from'./facade-contract.mjs';import{assertFacadeImprint as original}from'../d086/facade-imprint-check.mjs';import{assertFacadeImprint as current}from'./facade-imprint-geometry.mjs';
+const raw=await rawFacadeReference();for(const id of MODEL_IDS)test(id+': unchanged original facade verifier agrees exactly',()=>{const m=createPublicServiceDesign(id),r=raw.module.createPublicServiceDesign(id);assert.deepEqual(current(m,r),original(m,r));});

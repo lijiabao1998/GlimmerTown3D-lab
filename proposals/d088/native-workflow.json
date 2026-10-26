@@ -1,0 +1,61 @@
+{
+  "baseline": "cdd541da74973dba2ca73b782936c012d315add9",
+  "source": ".github/workflows/d087-native.yml",
+  "target": ".github/workflows/d088-native.yml",
+  "beforeSha256": "131562041ddef539f769f39afd10e7d6508941045b4248d7860fe4288283adf6",
+  "afterSha256": "5ebdddc2a49eab92947d80d8fd3e56c76f9e939ffe808e73f204c6dcbf666034",
+  "replacements": [
+    [
+      "d087",
+      "d088"
+    ],
+    [
+      "D087",
+      "D088"
+    ],
+    [
+      "British working rural eleven",
+      "British public services eleven"
+    ],
+    [
+      "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+      "cdd541da74973dba2ca73b782936c012d315add9"
+    ],
+    [
+      "published157",
+      "published168"
+    ],
+    [
+      "Original157",
+      "Original168"
+    ],
+    [
+      "britishWorkingRuralModels",
+      "britishPublicServicesModels"
+    ],
+    [
+      "proposals/british-program/ledger-current.test.mjs",
+      "proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs"
+    ],
+    [
+      "genuine bank route",
+      "genuine public-service door routes"
+    ],
+    [
+      "proposals/d086/native-browser-build.mjs",
+      "proposals/d087/native-browser-build.mjs"
+    ],
+    [
+      "baseline/scratch/d086-native-build",
+      "baseline/scratch/d087-native-build"
+    ],
+    [
+      "Current old D083 eight and D086 ten native regressions",
+      "Current old D083 eight, D086 ten and D087 eleven native regressions"
+    ],
+    [
+      "node proposals/d086/native-variant-check-d088.mjs",
+      "node proposals/d086/native-variant-check-d088.mjs\n          node --test proposals/d087/native-variant-d088.test.mjs"
+    ]
+  ]
+}

@@ -1,3 +1,6 @@
+// D088-BEGIN public-service-import
+import { drawBritishPublicServices } from './britishPublicServicesArt.ts';
+// D088-END public-service-import
 // D087-BEGIN working-rural-import
 import { drawBritishWorkingRural } from './britishWorkingRuralArt.ts';
 // D087-END working-rural-import
@@ -805,6 +808,9 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
+  // D088-BEGIN public-service-dispatch
+  if (shape?.p?.nativePublicServices === true && drawBritishPublicServices(new Pen(a))) { const result=USED; USED=null; return result; }
+  // D088-END public-service-dispatch
   // D087-BEGIN working-rural-dispatch
   if (shape?.p?.nativeWorkingRural === true && drawBritishWorkingRural(new Pen(a))) { const result=USED; USED=null; return result; }
   // D087-END working-rural-dispatch

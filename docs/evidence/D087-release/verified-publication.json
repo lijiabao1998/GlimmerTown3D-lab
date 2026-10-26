@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "verifiedAt": "2026-10-26T01:57:30.477Z",
+  "program": "British 20-wave / 200 accepted-and-published buildings",
+  "wave": 17,
+  "card": "D087",
+  "pullRequest": 43,
+  "state": "accepted-and-published",
+  "base": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+  "candidate": "a380234d2610505631fa7e9da7d676a99f696f06",
+  "main": "cdd541da74973dba2ca73b782936c012d315add9",
+  "gitTree": "a5713cb51ad107674963bfde8696324afe6a6eff",
+  "mainCI": {
+    "run": 40248305031,
+    "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40248305031",
+    "totalJobs": 93,
+    "success": 93,
+    "skipped": 0,
+    "pagesCompletedAt": "2026-10-26T01:52:43Z",
+    "completeApiSha256": "f653902c44b0696bec767facb93f19ce85ed21d6a153f2de20ba2b99eae632fc"
+  },
+  "candidateQualification": {
+    "receiptSha256": "d912f4b73ba155be760f390581c2c9a519df668c49d2f585d5910b4a35b57a5c",
+    "fullCI": {
+      "run": 40239588823,
+      "success": 65,
+      "mainOnlySkips": 4,
+      "completeJobs": 69
+    },
+    "dedicatedCI": {
+      "run": 40239588906,
+      "success": 11
+    },
+    "codeBlockingFindings": 0,
+    "visualBlockingFindings": 0,
+    "actualVisualReviewSha256": "22ea53d69f6923d04beb6762624937d1dff25c3f7048d767217306f601d8fc58"
+  },
+  "mainEvidence": {
+    "sourceFiles": 248,
+    "buildSha256": "a01e6596b57e758a2885beeafa1c4fd3b7cd649a6876cd2ef52caa1a804ddb2a",
+    "buildBytes": 2870250,
+    "rawPNGs": 564,
+    "requiredSurfaceProbes": 73323,
+    "sourceBuildReceiptSha256": "d240cbbfc8d8ea1901ea0e4c5ef2363c0d3769421a1b0f88c4c5061e4fb05da4",
+    "nativeBuildReceiptSha256": "3b16eefde6162f94d664c981499b43e2cbead790197b0eba37bb763f05c7c894",
+    "technicalReceiptSha256": "027522fc38a75c3f2b7cecc63109d0e25c2068541ffb98fd5cce0b0db5d22c8f",
+    "reviewIndexSha256": "a4771893986de757291cec5331859716b5f3acbd6c42cef77956f0d9ff2695ad",
+    "artReceiptSha256": "0d6ece96cfae6dc0f10a3876bf3309d231aaf671dfbf802011b65053c9259a2e",
+    "coldSamples": 99,
+    "startupProfiles": 24,
+    "native": [
+      {
+        "width": 1440,
+        "frameReportSha256": "ea51c48ae744b018a5ad99acf8edf3aefa4ff273f397fc21f7bd927dd219c152",
+        "surfaceReportSha256": "568920d82bf4d61861cd3aa60be00829abd353c2003b62132c09567ca8dd98ea",
+        "manifestSha256": "565b8b035438eff3bf1391c58798082170033fbcf3014c75c1ff4b9f78bc509c"
+      },
+      {
+        "width": 412,
+        "frameReportSha256": "fd1688fcce814cd03f4b088f6a9fe00e23468c5b968633de073121dd8b437cb8",
+        "surfaceReportSha256": "d1a443089e33679ab752f81fad9b7f5f4450f93ce3a945f02efa2deb6042257c",
+        "manifestSha256": "b35f87c9850fdefeeefaa6d3b73ef33aaba36f350372ded0f1eafa34f5a03daa"
+      },
+      {
+        "width": 360,
+        "frameReportSha256": "d9398c0838f0720c77e35d1c0f577b441a833acc062d01bbae3932a541bc0aee",
+        "surfaceReportSha256": "10a0f47339eabcd7d5cd9c3c125fdbb6ee7691d469f15f691977475e8ea4c3d7",
+        "manifestSha256": "3ffeec6557981c079faa3aa3f544a5996e7dcec57094c3b2fe8d08f014f27041"
+      }
+    ],
+    "detailReview": "All66 main detail views individually joined:63 exact previously reviewed bytes and3 changed originals directly compared. All564 PNGs checked:558 exact across runs,3 changed original/repeat pairs; all282 main paused pairs exact. No cross-run camera normalization or threshold changes."
+  },
+  "publicChecks": [
+    {
+      "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+      "bytes": 2870250,
+      "sha256": "a01e6596b57e758a2885beeafa1c4fd3b7cd649a6876cd2ef52caa1a804ddb2a",
+      "htmlFile": "public-0155/root.html",
+      "headersFile": "public-0155/root.headers",
+      "headersSha256": "79729ae2730e769da8fb722d9d2e9d5ec80c99a3a312f1efc0d9d959b34e9146"
+    },
+    {
+      "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/?streetFrontageControl=1",
+      "bytes": 2870250,
+      "sha256": "a01e6596b57e758a2885beeafa1c4fd3b7cd649a6876cd2ef52caa1a804ddb2a",
+      "htmlFile": "public-0155/opt.html",
+      "headersFile": "public-0155/opt.headers",
+      "headersSha256": "9b1bab3339c302493bdad99142c44ebde5ac8d25f303ab2608e8dba211571acd"
+    }
+  ],
+  "publishedBefore": 157,
+  "candidateTotal": 168,
+  "verifiedPublishedAfter": 168,
+  "acceptedIncrement": 11,
+  "publishedWavesAfter": 17,
+  "remaining": 32,
+  "remainingWaves": [
+    11,
+    11,
+    10
+  ],
+  "slots": [
+    "22:16",
+    "23:5",
+    "23:6",
+    "23:7",
+    "53:3",
+    "63:3",
+    "63:4",
+    "63:5",
+    "57:3",
+    "57:4",
+    "57:5"
+  ],
+  "publishedModelDigest": "63009e7bf0a2d68ff8ac967c380553c5cdcc4c35648e8ee1f1f47f3f659cb8df",
+  "limits": {
+    "publicHttpBytesAreNotIndependentPublicWebglSession": true,
+    "physicalAndroidVerified": false,
+    "noInspectionCameraException": true,
+    "originalD081RulesAndThresholdsRetained": true,
+    "inheritedWallShadingDisclosed": true,
+    "inheritedHighDevDependencyPackages": 2,
+    "productionOnlyAuditFindings": 0
+  }
+}
