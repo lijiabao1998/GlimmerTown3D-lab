@@ -3,14 +3,15 @@
 import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
 import{assertInheritedDomains as assertPriorDomains,domainPlan as priorPlan}from'../d088/inherited-test-contract.mjs';
 import{assertD089NativeCheckCopies}from'../../tools/d089-native-check-versions.mjs';
+import{assertNativeFarmPrecedenceCopy}from'./native-farm-precedence-copy.mjs';
 export const INHERITED_BASELINE='c023a2da0e4999d43e3d4216e800c4c96d06a3c1';
 export const DOMAIN_MANIFEST='proposals/d089/inherited-test-domains.json';
-export const DOMAIN_MANIFEST_SHA='f1d3b323a1e05fa13d6f30367091a884fd729b63ab0d01f2bbad6d4f7e28af99';
+export const DOMAIN_MANIFEST_SHA='d4ff555a10cc7afc2cf15c88ff94272ca9071cc362acd8e5b17b62275cef6158';
 export const sha=x=>createHash('sha256').update(x).digest('hex');
 const read=f=>fs.readFileSync(f,'utf8');
 export function assertInheritedDomains(bytes=read(DOMAIN_MANIFEST),source=read){
- assert.equal(sha(bytes),DOMAIN_MANIFEST_SHA,'exact finite D089 current/historical manifest');const m=JSON.parse(bytes);assert.equal(m.schema,1);assert.equal(m.baseline,INHERITED_BASELINE);assert.equal(sha(source(m.priorManifest)),m.priorManifestSha256);const prior=assertPriorDomains(source(m.priorManifest),source);assertD089NativeCheckCopies(undefined,source);
- assert.equal(m.d088Originals.length,28);assert.equal(new Set(m.d088Originals.map(r=>r.file)).size,28);assert.equal(m.d088Originals.filter(r=>r.domain==='actual-current').length,18);assert.equal(m.d088Originals.filter(r=>r.domain==='actual-immutable-c023').length,10);assert.equal(m.c023ExtraHistorical.length,4);assert.equal(m.currentAdditions.length,17);assert.equal(new Set(m.currentAdditions).size,17);
+ assert.equal(sha(bytes),DOMAIN_MANIFEST_SHA,'exact finite D089 current/historical manifest');const m=JSON.parse(bytes);assert.equal(m.schema,1);assert.equal(m.baseline,INHERITED_BASELINE);assert.equal(sha(source(m.priorManifest)),m.priorManifestSha256);const prior=assertPriorDomains(source(m.priorManifest),source);assertD089NativeCheckCopies(undefined,source);assertNativeFarmPrecedenceCopy(source);
+ assert.equal(m.d088Originals.length,28);assert.equal(new Set(m.d088Originals.map(r=>r.file)).size,28);assert.equal(m.d088Originals.filter(r=>r.domain==='actual-current').length,18);assert.equal(m.d088Originals.filter(r=>r.domain==='actual-immutable-c023').length,10);assert.equal(m.c023ExtraHistorical.length,5);assert.equal(m.currentAdditions.length,19);assert.equal(new Set(m.currentAdditions).size,19);
  for(const r of [...m.d088Originals,...m.c023ExtraHistorical])assert.equal(sha(source(r.file)),r.sha256,r.file+' original assertions remain immutable');
  for(const r of m.d088Originals){assert.ok(['actual-current','actual-immutable-c023'].includes(r.domain));assert.deepEqual(r.currentCoverage,m.currentReplacements[r.file]??[r.file]);assert.equal(r.domain,Object.hasOwn(m.currentReplacements,r.file)?'actual-immutable-c023':'actual-current');}
  for(const [f,coverage]of Object.entries(m.currentReplacements)){assert.ok([...m.d088Originals,...m.c023ExtraHistorical].some(r=>r.file===f));assert.ok(coverage.length);for(const target of coverage)assert.ok(source(target).length>0,'named current replacement exists '+target);}

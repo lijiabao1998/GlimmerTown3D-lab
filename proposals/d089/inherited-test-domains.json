@@ -254,6 +254,11 @@
       "file": "proposals/d087/native-variant-d088.test.mjs",
       "sha256": "c194871e3b8e430fbcda2d571ba9da90003f6c74cf8e8cf10da6cca18e4b57da",
       "domain": "actual-immutable-c023"
+    },
+    {
+      "file": "proposals/d087/native-farm-precedence.test.mjs",
+      "sha256": "e34f3ce37253246ec24fbd0f9b2bd538dbb46c1262f5941cf7e1e49c06a93ffc",
+      "domain": "actual-immutable-c023"
     }
   ],
   "currentReplacements": {
@@ -277,6 +282,9 @@
     ],
     "proposals/d087/native-variant-d088.test.mjs": [
       "proposals/d087/native-variant-d089.test.mjs"
+    ],
+    "proposals/d087/native-farm-precedence.test.mjs": [
+      "proposals/d087/native-farm-precedence-d089.test.mjs"
     ],
     "proposals/d088/native-integration.test.mjs": [
       "proposals/d088/native-integration-d089.test.mjs",
@@ -320,7 +328,9 @@
     "proposals/d089/source-boundaries.test.mjs",
     "proposals/d089/original-camera-restoration.test.mjs",
     "proposals/british-program/ledger-current-v4.test.mjs",
-    "tools/d089-native-scene-dispatch.test.mjs"
+    "tools/d089-native-scene-dispatch.test.mjs",
+    "proposals/d089/native-farm-precedence-copy.test.mjs",
+    "proposals/d087/native-farm-precedence-d089.test.mjs"
   ],
   "currentLedgerSnapshots": [
     "proposals/british-program/ledger-check.test.mjs",
