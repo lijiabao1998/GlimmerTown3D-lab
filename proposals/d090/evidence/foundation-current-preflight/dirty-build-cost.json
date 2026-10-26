@@ -1,0 +1,16 @@
+{
+  "qualification": "Local dirty-tree build only; no official successor browser or release acceptance",
+  "bytes": 4244759,
+  "sha256": "4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229",
+  "comparedTo6c": {
+    "bytes": -80,
+    "gzipLevel9": -11
+  },
+  "comparedToPublished190": {
+    "bytes": 404399,
+    "gzipDefault": 72475,
+    "gzipLevel9": 71763
+  },
+  "gzipDefault": 913397,
+  "gzipLevel9": 907399
+}

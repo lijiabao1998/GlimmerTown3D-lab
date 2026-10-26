@@ -1,0 +1,1021 @@
+{
+  "qualification": "Complete current numerical/source proof plus independently re-audited union of ALL old selected views. Fresh exact-head raw geometry/image join remains mandatory.",
+  "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "cachedSourceSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "planSha256": "65ae2bc0280530821f0be7b164d8e903a7563da5838e1aee331ae3e16a582565",
+  "predecessorFiles": {
+    "native-camera-plan.json": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0",
+    "geometry-native-evidence.json": "793f06cd75fc82759a53e580849fb0545d8ee252a2f62786aa41c5274bb400dd",
+    "geometry-freeze-camera-plan.mjs": "ef951f96933aa141f88e76ab0ead924791ee7a68d15cb97b48771f6b27330841",
+    "evidence/native-cached-final-report.json": "3439b11648917f034df9e1dcb3d6ab5d0c8ad2ae59de3bb3010850ace4837366",
+    "evidence/native-cached-final-paint-report.json": "2e5222acb5544152066d8c52fc108cb545244f71795fa0b6fbb5fa0667826d85"
+  },
+  "nativeReport": {
+    "file": "evidence/foundation-v2/native-cached54b-final-report.json",
+    "sha256": "56e35636e040af4831487c403bf29a06d777dfda90e500f3683a3f9492b41486"
+  },
+  "nativePaintReport": {
+    "file": "evidence/foundation-v2/native-cached54b-final-paint-report.json",
+    "sha256": "045fd89e6fad189ac07721635366813a2401885a0d4ebcf274c381c5a7ba6ced"
+  },
+  "cache": {
+    "passed": true,
+    "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+    "candidateSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+    "models": 10
+  },
+  "cases": 30,
+  "requiredPerWidth": 18679,
+  "requiredAllWidths": 56037,
+  "missing": 0,
+  "paintIntents": 265,
+  "paintCases": 795,
+  "paintMissing": 0,
+  "viewsPerWidth": [
+    {
+      "width": 1440,
+      "views": 42,
+      "paintExtra": 0
+    },
+    {
+      "width": 412,
+      "views": 42,
+      "paintExtra": 0
+    },
+    {
+      "width": 360,
+      "views": 42,
+      "paintExtra": 0
+    }
+  ],
+  "newViews": [
+    {
+      "model": "castellated-tank-water-tower",
+      "width": 1440,
+      "id": "surface-e2-y5",
+      "camera": {
+        "target": [
+          3.5,
+          0,
+          4.5
+        ],
+        "pos": [
+          24.930309095227905,
+          88.24203007733601,
+          -47.23734286354668
+        ],
+        "zoom": 5.5
+      }
+    },
+    {
+      "model": "castellated-tank-water-tower",
+      "width": 412,
+      "id": "surface-e2-y5",
+      "camera": {
+        "target": [
+          3.5,
+          0,
+          4.5
+        ],
+        "pos": [
+          24.930309095227905,
+          88.24203007733601,
+          -47.23734286354668
+        ],
+        "zoom": 5.5
+      }
+    },
+    {
+      "model": "castellated-tank-water-tower",
+      "width": 360,
+      "id": "surface-e2-y5",
+      "camera": {
+        "target": [
+          3.5,
+          0,
+          4.5
+        ],
+        "pos": [
+          24.930309095227905,
+          88.24203007733601,
+          -47.23734286354668
+        ],
+        "zoom": 5.5
+      }
+    }
+  ],
+  "contracts": [
+    {
+      "file": "castellated-tank-water-tower-1440.json.gz",
+      "bytes": 447028,
+      "sha256": "6a46e381973fa9b9970ec8a577a509bdb75328e967ac5a4430aaef39ee33db3a",
+      "contractSha256": "112a605f42a4c699b3646dadd5da39b1151902ed3c7f25008192cef094f5149d",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "castellated-tank-water-tower-412.json.gz",
+      "bytes": 447196,
+      "sha256": "9384d1a4f1dbd4851822b1d6db755f69d05406517a743dbfe542e271c72c7ad0",
+      "contractSha256": "3d63021e518cc8eaf6cc4d1d7de837503edb192442300148bee2d7e2ed47db72",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "castellated-tank-water-tower-360.json.gz",
+      "bytes": 447010,
+      "sha256": "fde0afbfea0f55ff60846ee70e136a4e7627e6188b65729f0cd915e993c7076a",
+      "contractSha256": "112a605f42a4c699b3646dadd5da39b1151902ed3c7f25008192cef094f5149d",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-1440.json.gz",
+      "bytes": 284494,
+      "sha256": "14b5e9222c8233956682d584fe498756d63ff969a93aba6c9dc864e6c19ded07",
+      "contractSha256": "9ae3884827065b464cad9ce42082a08618954030d1628c84515fb0d68e332c26",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-412.json.gz",
+      "bytes": 284344,
+      "sha256": "71246eb9138e7fce0e55bf1f6ac99b0f7cc6c97c5c31769797374ce541f6f98b",
+      "contractSha256": "781801042594d1f6a3872141cd1b9751e7a5a5ca2bc39bf2add86554855f22d2",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-360.json.gz",
+      "bytes": 284557,
+      "sha256": "e757856ff690d749df9c03c73b21a61971168c0ac31f88aaede9e48af6f4a1a5",
+      "contractSha256": "a4e0905c90627c518d37d3bc57dd9ac6c846756c3376d027865c2b45dfbe0daa",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-1440.json.gz",
+      "bytes": 373021,
+      "sha256": "e980bcc649d55bc81a1ec418a848c774635c27f1d1692ea18c1f702a0f230367",
+      "contractSha256": "314b7762af2921bc137b63fe543e234f6566fe6a110580734c9fef335cf6b5b0",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-412.json.gz",
+      "bytes": 373457,
+      "sha256": "d1a237d959b3ed12841b644580e0d9dd1c88b1e9baba0fbca8a64151d7551a14",
+      "contractSha256": "4dc98cbc52c6f6882ebd8c1b3d114bb1c1088694bb01f433e1783e8fd9b60572",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-360.json.gz",
+      "bytes": 373047,
+      "sha256": "510c52bd7c091e26435de90fb03c84af5fe5986e162d2dfec7154985a2c96992",
+      "contractSha256": "fb65109514bde6d458b705b02d30c83fa4c625f6fcfa66d1ce40728ad82cf727",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-1440.json.gz",
+      "bytes": 283614,
+      "sha256": "ccb4e15353da7e7ab3d9808f78907b4cb6b770f8dd1b857b6393680dc03a3ce4",
+      "contractSha256": "ab19697f998ce3182a85fc1715e183263a418c8830618d3b653a94a76327a5ee",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-412.json.gz",
+      "bytes": 283437,
+      "sha256": "382d1e652dd325b73cd58456646e1ce42c16aa487301feee59ac7162c320377f",
+      "contractSha256": "81f46271c0e9f28f9f29e8af9b94c588d8bedafc201b2df0179ade691820d879",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-360.json.gz",
+      "bytes": 283684,
+      "sha256": "243b73157a27ea73d178ea5bbb80fbdb9e917ba30e1d4a4962c9f04ce3afce31",
+      "contractSha256": "2aa4b6385bd40ad30e45b85ea4e0add50e565210bc80df8527d1c6cb45983756",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-1440.json.gz",
+      "bytes": 401034,
+      "sha256": "e34ec199ddbfad795dcfad6bbf1862ea39cbe0acd99a086544fdde9e233ebc03",
+      "contractSha256": "bdbc720079f5058f38b70084e29f4693b12b974387735c6be76f199d58bb105d",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-412.json.gz",
+      "bytes": 401232,
+      "sha256": "3bc1b3a149075df6e800e31bcde10c7c17dab827903b2847cb86679eba4331b0",
+      "contractSha256": "bf3ced3fa5413e44b37b117894ab9edbe036493c3213f792e2b676ac84e5f32c",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-360.json.gz",
+      "bytes": 401092,
+      "sha256": "2428cc445b90381eee4b33209b9a6bcf8d92d28c261d0d8ad125a1070a4833e6",
+      "contractSha256": "ed0facb49bccbf45b8f3c946d13d8427810799a95892f6bef236e18f580fd20f",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "lectern-estate-doocot-1440.json.gz",
+      "bytes": 308050,
+      "sha256": "35dbb163dd4d9ba33747e7b25091e4b5bf2d2532c2e924e477016e4a84c0a832",
+      "contractSha256": "e0e514c4e75c7b2f5ba24597464fb74c593f96c799b1be5c07ff9e8858077bb6",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "lectern-estate-doocot-412.json.gz",
+      "bytes": 308399,
+      "sha256": "61d2724822b1a94125e098f9e1ff1c00fa90295277e979abbd11b4f7639b833b",
+      "contractSha256": "baf7f5a6715ca633b91798c7769d9201313b166fd83e39cdbe2c308ba19f339d",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "lectern-estate-doocot-360.json.gz",
+      "bytes": 308072,
+      "sha256": "3a75ba1d17b5919e76f8854f6f60276a8225d4de08e59a5bd9270b50f341ddae",
+      "contractSha256": "e0e514c4e75c7b2f5ba24597464fb74c593f96c799b1be5c07ff9e8858077bb6",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-1440.json.gz",
+      "bytes": 287587,
+      "sha256": "1a65c2efcbe911c2a5227fefb11fe11978fd3a8300d0e3a61af2225ed39723a7",
+      "contractSha256": "6b73bc65e46b26188b0ea4ae652b5f21d9e937672095f20f2f469dea758f1945",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-412.json.gz",
+      "bytes": 288224,
+      "sha256": "18577e26fee84b774e1b5ebaea48dbb66374f1daeaa8111166533175d79364ba",
+      "contractSha256": "0c1267b489c8b2ee7abb4ba1d55294f89df331478dc3b8ba1fdc4a7bd6bf08af",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-360.json.gz",
+      "bytes": 287582,
+      "sha256": "f05cfd90baa5d640e062c642b5314a1be314bd9a933241cd07c0ed0ddfacc1ca",
+      "contractSha256": "0c0338c5097dac1142beaf86608a546fb4ed209dffe4d569105e471155125f4a",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "cruciform-village-forge-1440.json.gz",
+      "bytes": 279451,
+      "sha256": "41a192449e182d6d690584bddf13cdb2fb2383def9af285cf7fd869d84fb15ed",
+      "contractSha256": "6af1bed20f380f5f56e29bbfd810a8e60c027c37a7c2c606325b6bb9c54880a2",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "cruciform-village-forge-412.json.gz",
+      "bytes": 278892,
+      "sha256": "7dc9a0a1ca72ba859998c4012fcfb35408e983e85ae39ef6d3e9aba08b64a7e5",
+      "contractSha256": "c298aa2a76c036a60df5a91c63cca009129b82bf3b13baa2171eb9197c412f83",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "cruciform-village-forge-360.json.gz",
+      "bytes": 279516,
+      "sha256": "4c201722598ca03b20aa0c12ba95c80816ebf37f4b509f8edfc504690973829f",
+      "contractSha256": "6af1bed20f380f5f56e29bbfd810a8e60c027c37a7c2c606325b6bb9c54880a2",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-1440.json.gz",
+      "bytes": 285985,
+      "sha256": "49677ee4480e91f71fb3833bc46631b6d3c3248fc6217f8bb69d262aecc553df",
+      "contractSha256": "e17978b7bc78c9ee8cbe009ea35349e0835f864c5b98784f5a2ca0ba36b10892",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-412.json.gz",
+      "bytes": 286209,
+      "sha256": "b7c701b0b14eb031a5a9779dc11d435aeda99fe32dd0992091c8d517d7773521",
+      "contractSha256": "564a36582a90b6183ce5e14157490d3820e5ee1bf3701b81b55188348d3eacaf",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-360.json.gz",
+      "bytes": 285965,
+      "sha256": "683eaf90dc90c7b3abe0d3bcae27158297af4e6a7a03e3f2ce95d17d1907bca7",
+      "contractSha256": "b69c01dc8453e139cc717679d3e1edf693a8a18097e711f2b22cceffb1b646c3",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-1440.json.gz",
+      "bytes": 308230,
+      "sha256": "6780391f2b816a1c0904c9e4bfff5cf232b16f8df8e39d420cf85333b9f1e7b9",
+      "contractSha256": "550533c156cd54e56eb0a8cef12c99b5932ebd0e1328da156ead9837816a7763",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-412.json.gz",
+      "bytes": 308302,
+      "sha256": "2254cee553d051980064529acb3b01206a71afb906f569aca23d0c183e28a746",
+      "contractSha256": "13ba9ca72f636e288dc93d67377e5447112ec0c73f951654011f8340edda5886",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-360.json.gz",
+      "bytes": 308199,
+      "sha256": "9aba8772e19c223053216f73b4a5187407bd6ec1ea7d57e2e9cb2d88714ffe99",
+      "contractSha256": "39ce8930960d69f37b862793988ee8069d77add1c24487d67075e3d1f1016244",
+      "sourceGeometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008"
+    }
+  ],
+  "unions": [
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 1440,
+      "file": "castellated-tank-water-tower-1440-retained-union.json.gz",
+      "bytes": 426033,
+      "sha256": "5a2ecf1d490a04bb387dd3f89ac78aa8e3f40ab19073102e54d069b9d7683f7b",
+      "required": 2377,
+      "paint": 21,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e1-y5",
+        "surface-e2-y15"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e1-y5",
+        "surface-e2-y15",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 412,
+      "file": "castellated-tank-water-tower-412-retained-union.json.gz",
+      "bytes": 426581,
+      "sha256": "1fefb4038504cb7d01718fef726e785a4d7df96bac0d4c19244af31c5c58581e",
+      "required": 2377,
+      "paint": 21,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e0-y4",
+        "surface-e2-y15"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e0-y4",
+        "surface-e2-y15",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 360,
+      "file": "castellated-tank-water-tower-360-retained-union.json.gz",
+      "bytes": 425998,
+      "sha256": "8f48560e425e412da82c909db253551dbad788a2ab63c30b5d256290d51833e3",
+      "required": 2377,
+      "paint": 21,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e1-y5",
+        "surface-e2-y15"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y13",
+        "surface-e1-y5",
+        "surface-e2-y15",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 1440,
+      "file": "tapered-circular-reservoir-tower-1440-retained-union.json.gz",
+      "bytes": 234885,
+      "sha256": "b9853fea77c5d20bb4cf86b15e5a4bfe700652d55a7e526b9af7c97a8324ca4f",
+      "required": 1479,
+      "paint": 15,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 412,
+      "file": "tapered-circular-reservoir-tower-412-retained-union.json.gz",
+      "bytes": 234796,
+      "sha256": "45c1e5d50c0361229084e2584c72f04ffbc8f564702a8cce6a872518311ffc7f",
+      "required": 1479,
+      "paint": 15,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 360,
+      "file": "tapered-circular-reservoir-tower-360-retained-union.json.gz",
+      "bytes": 234934,
+      "sha256": "fb0b65a08d0c673857d08f88010c399d990b01f30a80fcdb2bed67fb0c1606f9",
+      "required": 1479,
+      "paint": 15,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e0-y0",
+        "surface-e0-y4"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 1440,
+      "file": "romanesque-sewage-engine-house-1440-retained-union.json.gz",
+      "bytes": 314950,
+      "sha256": "70c7238d9cc477b4a72ba60ec356d8e56b02da961e16bc3e478ac16cc1f2b6ab",
+      "required": 2360,
+      "paint": 31,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 412,
+      "file": "romanesque-sewage-engine-house-412-retained-union.json.gz",
+      "bytes": 315357,
+      "sha256": "87592f20287b58e59080470b857f26fe70cb248747ca59b32dcb48218ea969e3",
+      "required": 2360,
+      "paint": 31,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 360,
+      "file": "romanesque-sewage-engine-house-360-retained-union.json.gz",
+      "bytes": 314973,
+      "sha256": "e51afa4857b912335457ec7a9a2e06688e21cb6219ee3383dba79a730cb6b868",
+      "required": 2360,
+      "paint": 31,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 1440,
+      "file": "circular-filterworks-and-valve-hall-1440-retained-union.json.gz",
+      "bytes": 238222,
+      "sha256": "e8e3dbc5ea3ed57fbdaafd1d5a3eb994d6b28571e92e2bc5a56ea78314a007f5",
+      "required": 1690,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 412,
+      "file": "circular-filterworks-and-valve-hall-412-retained-union.json.gz",
+      "bytes": 238126,
+      "sha256": "86ef8eff92ea7d7ace62f90236264b57ba22502a42227fb207e4a3ecac8f6b90",
+      "required": 1690,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 360,
+      "file": "circular-filterworks-and-valve-hall-360-retained-union.json.gz",
+      "bytes": 238284,
+      "sha256": "85505dd37ff6d758ff7fc08c8708a05145f8546aee7058d488e5679c49a234cc",
+      "required": 1690,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y8",
+        "surface-e2-y0",
+        "surface-e2-y12"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 1440,
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-1440-retained-union.json.gz",
+      "bytes": 329971,
+      "sha256": "acccf971f1f74b80621b6923f18dc65e462710adc6175bc093d77b45d042b579",
+      "required": 2102,
+      "paint": 25,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 412,
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-412-retained-union.json.gz",
+      "bytes": 330240,
+      "sha256": "27e3f17d2d77674003e3371f2782d27334fa20d04c9fd0ef07a9cadba9f2751b",
+      "required": 2102,
+      "paint": 25,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 360,
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-360-retained-union.json.gz",
+      "bytes": 330050,
+      "sha256": "5dc83d23b43806e2802ced272c170c6cbf16fb46f49ddaca01b454a6665623a7",
+      "required": 2102,
+      "paint": 25,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y6"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 1440,
+      "file": "lectern-estate-doocot-1440-retained-union.json.gz",
+      "bytes": 257221,
+      "sha256": "155f6b749dfd3cebb5e09fdbf8519abc72d3ed4987549799d205f61e0b2b18e2",
+      "required": 1701,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 412,
+      "file": "lectern-estate-doocot-412-retained-union.json.gz",
+      "bytes": 257530,
+      "sha256": "1ba9a0bb4efafeb817aeaffa1c165031c659ab588a551a06d6393f511df40d6e",
+      "required": 1701,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 360,
+      "file": "lectern-estate-doocot-360-retained-union.json.gz",
+      "bytes": 257244,
+      "sha256": "eea6796340f611ec6b3f260dbca32cba1a68fd4958c89712a32f5649a926e2cb",
+      "required": 1701,
+      "paint": 24,
+      "oldSelected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e1-y7",
+        "surface-e0-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 1440,
+      "file": "canted-t-plan-turnpike-lodge-1440-retained-union.json.gz",
+      "bytes": 240773,
+      "sha256": "fca0b6011e6577cf9a1ab78bf8d7ad8801c37efb617d42a810a64db7cc55d499",
+      "required": 1594,
+      "paint": 27,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 412,
+      "file": "canted-t-plan-turnpike-lodge-412-retained-union.json.gz",
+      "bytes": 241523,
+      "sha256": "44fd31901fc12b28a85cf559b9f46046d34125b38455f356a372ab3d798b78df",
+      "required": 1594,
+      "paint": 27,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 360,
+      "file": "canted-t-plan-turnpike-lodge-360-retained-union.json.gz",
+      "bytes": 240760,
+      "sha256": "6cde437e5ce68ac5790b56445c7b410a376abf984c85d8bd967fb1b374725143",
+      "required": 1594,
+      "paint": 27,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y11",
+        "surface-e2-y5"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 1440,
+      "file": "cruciform-village-forge-1440-retained-union.json.gz",
+      "bytes": 234111,
+      "sha256": "a6c0046e00cede2097a8244507b1b00e82023574f596ebcf85cfe59979a49d81",
+      "required": 1682,
+      "paint": 29,
+      "oldSelected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 412,
+      "file": "cruciform-village-forge-412-retained-union.json.gz",
+      "bytes": 233617,
+      "sha256": "c2ccf8e0caeb4bb0a9e1bdcdc19cda1a82a8e5ce40049ff54bd2c380cc047498",
+      "required": 1682,
+      "paint": 29,
+      "oldSelected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 360,
+      "file": "cruciform-village-forge-360-retained-union.json.gz",
+      "bytes": 234179,
+      "sha256": "e0b6ffe2f93efa5cc458049e9d2cf0a6f893797ab64467fac4ae07d2a49fc2c0",
+      "required": 1682,
+      "paint": 29,
+      "oldSelected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y7",
+        "surface-e2-y11",
+        "surface-e2-y3"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 1440,
+      "file": "segmental-roof-rural-firehouse-1440-retained-union.json.gz",
+      "bytes": 238554,
+      "sha256": "2a2fbc203e8a902ea58074b332482111068fb8b0cdb5fd7576940ea8fdd7f556",
+      "required": 1866,
+      "paint": 32,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 412,
+      "file": "segmental-roof-rural-firehouse-412-retained-union.json.gz",
+      "bytes": 238908,
+      "sha256": "42301b898fcef862be2f8b1cf200bb33c4391dea7afde5ca963419b1c6b3f75b",
+      "required": 1866,
+      "paint": 32,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 360,
+      "file": "segmental-roof-rural-firehouse-360-retained-union.json.gz",
+      "bytes": 238548,
+      "sha256": "d3a64f4e85a9368371f3132bef9b3871011ef7b34f4d7ac1efe1f54d1c697c93",
+      "required": 1866,
+      "paint": 32,
+      "oldSelected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "selected": [
+        "original",
+        "surface-e2-y8",
+        "surface-e2-y3",
+        "surface-e2-y2"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 1440,
+      "file": "paired-hexagonal-saddle-roof-reading-library-1440-retained-union.json.gz",
+      "bytes": 265648,
+      "sha256": "531fd8dffeea112dec7aa750db14a047483811403948dd1d13347dbdd3c1a48f",
+      "required": 1828,
+      "paint": 37,
+      "oldSelected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 412,
+      "file": "paired-hexagonal-saddle-roof-reading-library-412-retained-union.json.gz",
+      "bytes": 265822,
+      "sha256": "1cb83dc6585fb4ec9f58c50b98b0e82a31ff1b0eb1c5dbc98a2895c6e8398bd4",
+      "required": 1828,
+      "paint": 37,
+      "oldSelected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "extras": [],
+      "missing": 0
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 360,
+      "file": "paired-hexagonal-saddle-roof-reading-library-360-retained-union.json.gz",
+      "bytes": 265645,
+      "sha256": "288ff0ad2df4ce643a3bd6e308d89a69bf0984b43832de849731a8e9b73123b0",
+      "required": 1828,
+      "paint": 37,
+      "oldSelected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "selected": [
+        "original",
+        "surface-e0-y7",
+        "surface-e0-y4",
+        "surface-e0-y11"
+      ],
+      "extras": [],
+      "missing": 0
+    }
+  ],
+  "browserJoined": false
+}

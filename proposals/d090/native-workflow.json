@@ -4,7 +4,7 @@
   "source": ".github/workflows/d089-native.yml",
   "target": ".github/workflows/d090-native.yml",
   "beforeSha256": "c2cc05ae0969fcb765fc5d52eacda1d38cc0d2ab62ad1277b386e11a98e40e69",
-  "afterSha256": "b9849695f2dff1978f866c6d5e27198581f064ed146bfd4d01e328e3b4a99157",
+  "afterSha256": "d4fbcd8dcc129d3ae2267d3d92369c6bcf94697fbccd92ca26db7077f6755153",
   "replacements": [
     [
       "D089 native British markets and estates eleven",
@@ -89,6 +89,11 @@
     [
       "tools/d089-native-lifecycle.test.mjs",
       "tools/d089-native-lifecycle-d090.test.mjs",
+      1
+    ],
+    [
+      "        run: node --test tools/d090-*.test.mjs proposals/d090/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs",
+      "        run: node proposals/d090/foundation-test-runner.mjs",
       1
     ]
   ]

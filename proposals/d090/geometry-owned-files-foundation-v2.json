@@ -1,0 +1,166 @@
+{
+  "qualification": "Geometry-worker foundation-v2 handoff only; parent-owned source/cache/browser/validation routing deliberately excluded. Fresh Chrome/art acceptance pending.",
+  "files": [
+    {
+      "path": "proposals/d090/evidence/foundation-v2/README.md",
+      "bytes": 4722,
+      "sha256": "4cb823e486385cb8a3da8327e19e69ef6c952178f776ea00f82159c8286a3878"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/cached54b-helper-adaptation.json",
+      "bytes": 1871,
+      "sha256": "bc951ae0d2425bae38b55ea31cabb0d75d7e709334a0d829ea5bf37820017a50"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/castle-696-foundation.json",
+      "bytes": 831168,
+      "sha256": "f02603e1f533baf76371fd33d55ef13139c9d214a61f804df984806e7946ea14"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/castle-696-foundation.mjs",
+      "bytes": 4285,
+      "sha256": "702041f41f0d663ea9d0caa8139f0c129227a98ce248d2fda1e62e0f4e8ad42e"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/castle-696.json",
+      "bytes": 987228,
+      "sha256": "712c934b9e76f020da9258d9fe9e9b9c1dbb925c73fe9a7a7631529de80abe64"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/castle-696.mjs",
+      "bytes": 4098,
+      "sha256": "0894c170856820bbfe0ea79d03275fb1e1468cdd179c9bb7c67b4dbf6523cae1"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/contract-canonical-domain-diagnosis.json",
+      "bytes": 180437,
+      "sha256": "60071d9d0103b8da3494b7b86343d3bf1c08e99139e5e54633c405eee6d2f7a8"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/current-geometry-82-tests.txt",
+      "bytes": 9900,
+      "sha256": "1514e8f774f525d650ec04ad8f841519e50e0d610f60a8822276bc93a9741b26"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/diagnose-contract-canonical-domain.mjs",
+      "bytes": 2612,
+      "sha256": "2a07fc54ed1d47f592127d041016a28f7b618585c2130d0845f5de3895a47627"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-contract-delta.json",
+      "bytes": 547566,
+      "sha256": "4497161b1d83524233a12038b8c8f5d93b9b9275dbf3b605f5394c73e10217a4"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-contract-delta.mjs",
+      "bytes": 5186,
+      "sha256": "698ae9ea95cf5b140ae54f5b9e7589d6b03457cad532e926d6963ca8236859e0"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-delta.json",
+      "bytes": 630,
+      "sha256": "8bc3906eb636bb20b1cc34320c8f291e2333506c45a468c857c8abf2b7f27f31"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-form-delta.json",
+      "bytes": 1395,
+      "sha256": "b64530e24cdf22d13ca7a77cce00db5170124b6cb9b7bd8b86a27bebf0fbb5e4"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-native-run.mjs",
+      "bytes": 954,
+      "sha256": "35174cdbc639bac4af1c030eb612cfdc38b9246e8409b5128c4b59731d482c89"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-native-worker.mjs",
+      "bytes": 4138,
+      "sha256": "3fcfa0069f5e35f233592e088c4d7a73232ad761d2413b0b52dcecbdfe6efd9f"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/foundation-static.json",
+      "bytes": 61145,
+      "sha256": "d0ac7a8303c22c9f355a3c2d0026a0d2b577333d3703eb38d44bf2e8d530c00f"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/freeze-union-final.txt",
+      "bytes": 3280,
+      "sha256": "30a93201a64735c5e650a96bade9a79f8e67f18890e43480e4c552837dfe9023"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/freeze-union-first-attempt-exit.json",
+      "bytes": 1007,
+      "sha256": "46afa755a3e5d54ef19afc509256f3eb133c3860f4a06111750eeedb551a908d"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/freeze-union-first-attempt.mjs",
+      "bytes": 9491,
+      "sha256": "05e173d1706e419d1ebac7799180a4933a4a78488af14aadb9b7c3de3638a4cf"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/freeze-union-first-attempt.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/geometry-structure-ring-transition.json",
+      "bytes": 500,
+      "sha256": "8d2ad8d9977ebe4f70efc20425d67229fe05869de72e0e36b59c2e69debec911"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/native-cached54b-final-paint-report.json",
+      "bytes": 4571,
+      "sha256": "045fd89e6fad189ac07721635366813a2401885a0d4ebcf274c381c5a7ba6ced"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/native-cached54b-final-report.json",
+      "bytes": 76909,
+      "sha256": "56e35636e040af4831487c403bf29a06d777dfda90e500f3683a3f9492b41486"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/native-cached54b-final.txt",
+      "bytes": 2429,
+      "sha256": "b6518b114e53eb81b5da1cd999b9a3cded413354e102e28ed9d1b941b560e6a5"
+    },
+    {
+      "path": "proposals/d090/evidence/foundation-v2/structure-plan-before.mjs",
+      "bytes": 9396,
+      "sha256": "4d4286158a98da1bbc6ec5c8a0961d3cee656a98d68ace8f205bc051d1fb1dc9"
+    },
+    {
+      "path": "proposals/d090/geometry-foundation-v2-notes.md",
+      "bytes": 5684,
+      "sha256": "fc25302bdd1682b29fda505d58b34e96abd1bb421740870c694b2e8f0d9d68c8"
+    },
+    {
+      "path": "proposals/d090/geometry-freeze-camera-plan-foundation-v2.mjs",
+      "bytes": 9558,
+      "sha256": "23ea8bfcb959573baf6249d7518e4f4d55d066dfe44118e59143a68d6d914f00"
+    },
+    {
+      "path": "proposals/d090/geometry-native-evidence-foundation-v2.json",
+      "bytes": 32371,
+      "sha256": "51bba036944d6291410fc1c0600c8febe6a18e2febb2a9b34e8bbbdbfd586e73"
+    },
+    {
+      "path": "proposals/d090/native-camera-plan-foundation-v2.json",
+      "bytes": 79144,
+      "sha256": "65ae2bc0280530821f0be7b164d8e903a7563da5838e1aee331ae3e16a582565"
+    },
+    {
+      "path": "proposals/d090/structure-plan.mjs",
+      "bytes": 9396,
+      "sha256": "a8d08b4fd994ef033364bd6e59964b467831bd96f089e10b0c1ecffaaf76cd3e"
+    }
+  ],
+  "fileCount": 30,
+  "bytes": 2891071,
+  "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "cacheSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "planSha256": "65ae2bc0280530821f0be7b164d8e903a7563da5838e1aee331ae3e16a582565",
+  "evidenceSha256": "51bba036944d6291410fc1c0600c8febe6a18e2febb2a9b34e8bbbdbfd586e73",
+  "tests": {
+    "currentGeometryPassed": 82,
+    "failed": 0
+  },
+  "newTestFiles": []
+}

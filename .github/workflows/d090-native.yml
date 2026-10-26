@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Exact current source, inherited assertions, all native and browser negative controls
-        run: node --test tools/d090-*.test.mjs proposals/d090/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs
+        run: node proposals/d090/foundation-test-runner.mjs
       - run: npm run typecheck
       - name: Actual immutable published190 baseline
         run: |

@@ -1,0 +1,451 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "qualification": "Exact finite successor derivation from original5b, retaining every original6c delta then only documented foundation authority/PLAN reference. Six version-specific tests run immutable6c plus exact current-v2 copies under mandatory routing; no acceptance claim.",
+  "copies": [
+    {
+      "source": "proposals/d089/model-audit.mjs",
+      "target": "proposals/d090/model-audit.mjs",
+      "sourceSha256": "e82e166f1fd62f74f5dba35daa368721da565f32d5e0d4d7e33cb972ec67a15c",
+      "targetSha256": "dee7b9a530e3c646a3b889bf6fc8c88470e935c8af3a7649035c39e7346c4bef",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 4,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "old179",
+          "after": "old190",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "new11",
+          "after": "new10",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "ledger-current-v4",
+          "after": "ledger-current-v5",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "published-179",
+          "after": "published-190",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "baseline?21:22",
+          "after": "baseline?22:23",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "oldCount:179",
+          "after": "oldCount:190",
+          "count": 2,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "newCount:baseline?0:11",
+          "after": "newCount:baseline?0:10",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "original179",
+          "after": "original190",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "unchanged1800 cap",
+          "after": "frozen per-model cap",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        },
+        {
+          "before": "baseline?179:190",
+          "after": "baseline?190:200",
+          "count": 1,
+          "meaning": "Published190 plus exact new10, appended flag, independently frozen per-slot caps"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/scene-budget-support.mjs",
+      "target": "proposals/d090/scene-budget-support.mjs",
+      "sourceSha256": "c9d3189063cc8f0c0269e9ae280d4820ee1915d4ebfafce859ff5aa5d6dd70bb",
+      "targetSha256": "922627670656045664846df5bb3dfe4a9068c23c6124a8f162faef4e2b450655",
+      "changes": [
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "Array(21)",
+          "after": "Array(22)",
+          "count": 1,
+          "meaning": "Retain all22 prior flags then append new exact native flag"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/scene-budget-check.mjs",
+      "target": "proposals/d090/scene-budget-check.mjs",
+      "sourceSha256": "67a0810a8af4e6e6be92873ed378857f6f2ed3af460adab6e50c74179b469dfd",
+      "targetSha256": "c043767021f701ddeb61c818627f872063d3010efb544c3b9176a7f4ee13883e",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstates",
+          "after": "britishUtilityHeritage",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1,
+          "meaning": "Exact new native descriptor inventory"
+        },
+        {
+          "before": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+          "after": "5b41bac165ba2b29146e6835490357bebc3cd549",
+          "count": 2,
+          "meaning": "Actual immediate published baseline"
+        },
+        {
+          "before": "// Additive exact-source",
+          "after": "import{assertD090OwnerTransition}from'./scene-owner-transition.mjs';\n// Additive exact-source",
+          "count": 1,
+          "meaning": "Add narrowly versioned owner-set oracle; old scenes remain exact"
+        },
+        {
+          "before": "repeats*11",
+          "after": "repeats*10",
+          "count": 2,
+          "meaning": "Ten current models per copy, all original repetitions and bounds"
+        },
+        {
+          "before": "assert.deepEqual(current.digest.counts,legacy.digest.counts);",
+          "after": "const ownerExpansion=assertD090OwnerTransition(legacy.digest,current.digest,city.buildings.filter(b=>targetIds.has(String(b.id))));",
+          "count": 1,
+          "meaning": "Only unsupported old heritage v1 counterfactual has no mesh; prove exact three owner additions per copy and unchanged blocks/context. All old-scene count assertions stay intact."
+        },
+        {
+          "before": "report.authored.push({repeats,owners:",
+          "after": "report.authored.push({repeats,ownerExpansion,owners:",
+          "count": 1,
+          "meaning": "Retain complete finite owner-set evidence"
+        },
+        {
+          "before": "fs.mkdirSync(path.dirname(file),{recursive:true});try{const r=await qualifySceneBudgets();",
+          "after": "fs.mkdirSync(path.dirname(file),{recursive:true});const sourceAtStart=Object.fromEntries(fs.readdirSync('src',{recursive:true,withFileTypes:true}).filter(e=>e.isFile()).map(e=>{const f=e.parentPath+'/'+e.name;return[f,sha(fs.readFileSync(f))]}));const diagnosticSource=fs.readFileSync('src/render/britishUtilityHeritageModels.mjs','utf8');try{const r=await qualifySceneBudgets();for(const[f,h]of Object.entries(sourceAtStart))assert.equal(sha(fs.readFileSync(f)),h,'no source mutation during actual scene qualification '+f);assert.deepEqual(r.productSources,sourceAtStart,'exact measured source inventory');",
+          "count": 1,
+          "meaning": "Additive exact before/after source identity and first-red diagnostic capture"
+        },
+        {
+          "before": "JSON.stringify({passed:false,error:e.stack},null,2));throw e;",
+          "after": "JSON.stringify({passed:false,error:e.stack,sourceAtStart,modelSourceSha256:sha(diagnosticSource)},null,2));fs.writeFileSync(file+'.model-source.mjs',diagnosticSource);throw e;",
+          "count": 1,
+          "meaning": "Retain failed-run actual source bytes; never fabricate an uncaptured historical identity"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/scene-budget.test.mjs",
+      "target": "proposals/d090/scene-budget.test.mjs",
+      "sourceSha256": "0becfac7073a7b82c7db4dac5eb8ea28c5ad1a1e5d875e1fe621d0aa685c299f",
+      "targetSha256": "7df5ae9d7d932e9c244c0c1c04b5f0002365ac1319123497545507b1a66bdc8e",
+      "changes": [
+        {
+          "before": "st f=fixture();try{f.geo.setDrawRange(0,2);assert.throws(()=>f.measure());}finally{f.dispose();}});\n",
+          "after": "st f=fixture();try{f.geo.setDrawRange(0,2);assert.throws(()=>f.measure());}finally{f.dispose();}});\n\nimport fs from'node:fs';\ntest('D090 finite ten slots retain seven1200 and three1800 caps without relaxing any older frame budget',()=>{const scope=JSON.parse(fs.readFileSync('proposals/d090/scope.json'));assert.equal(scope.models.length,10);assert.equal(scope.models.filter(m=>m.size===1&&m.cap===1200).length,7);assert.equal(scope.models.filter(m=>m.size===2&&m.cap===1800).length,3);for(const m of scope.models){const slot=m.k+':'+m.v,caps={[slot]:m.cap},before={whole:100},row={slot,before:20,after:m.cap};assertLedger(before,{whole:80+m.cap},[row],caps);assert.throws(()=>assertLedger(before,{whole:81+m.cap},[{...row,after:m.cap+1}],caps));assert.throws(()=>assertLedger(before,{whole:80+m.cap},[row],{}));}});\n",
+          "count": 1,
+          "meaning": "Additive exact seven1200/three1800 per-model caps and negative controls; original23 frame tests unchanged"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/precompiled-cache.mjs",
+      "target": "proposals/d090/precompiled-cache.mjs",
+      "sourceSha256": "08096fa1df654e74e54abbc8d8bef067f26b8626f7958d2dff51cc8e92d5dc63",
+      "targetSha256": "63ddd655064f5b4bcd00a4b0ac9d6f239e648567acfe9448ae31b79b0a3c0ae5",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 2,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 5,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstateCacheInfo",
+          "after": "britishUtilityHeritageCacheInfo",
+          "count": 2,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "buildBritishMarketEstate",
+          "after": "buildBritishUtilityHeritage",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "emitBritishMarketEstate",
+          "after": "emitBritishUtilityHeritage",
+          "count": 4,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+          "after": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "count": 1,
+          "meaning": "Exact independently frozen new procedural authority; pending checkpoint is deliberately unqualified"
+        },
+        {
+          "before": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "after": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/precompiled-cache-qualification.mjs",
+      "target": "proposals/d090/precompiled-cache-qualification.mjs",
+      "sourceSha256": "8ebebf48d7a581ded9ef1ce5d1eaec30ce44759adbfbba0ea09d4c4bbc389f4c",
+      "targetSha256": "b2e5687b8fe6c1be5422e5ebd6cd3d5f057f0d083f5bd4b09605501171cc1b83",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "emitBritishMarketEstate",
+          "after": "emitBritishUtilityHeritage",
+          "count": 2,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+          "after": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "count": 1,
+          "meaning": "Exact independently frozen new procedural authority; pending checkpoint is deliberately unqualified"
+        },
+        {
+          "before": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "after": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/precompiled-cache-qualification.test.mjs",
+      "target": "proposals/d090/precompiled-cache-qualification.test.mjs",
+      "sourceSha256": "f3eacdb195727969387c1b3ccf704bb271ad143e9915276c59b170297b446d5a",
+      "targetSha256": "6c72821192700907a993a31319939e14f768f3ad1fe9922b039d3c9ebeb1f74c",
+      "changes": [
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstates",
+          "after": "britishUtilityHeritage",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstateCacheInfo",
+          "after": "britishUtilityHeritageCacheInfo",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "buildBritishMarketEstate",
+          "after": "buildBritishUtilityHeritage",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "emitBritishMarketEstate",
+          "after": "emitBritishUtilityHeritage",
+          "count": 1,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1,
+          "meaning": "Exact new native descriptor inventory"
+        },
+        {
+          "before": "assertPrecompiledCacheCandidate(reference,second).models,11",
+          "after": "assertPrecompiledCacheCandidate(reference,second).models,10",
+          "count": 1,
+          "meaning": "Exact new10 cache payload inventory"
+        },
+        {
+          "before": "api.info().decoded.length,11",
+          "after": "api.info().decoded.length,10",
+          "count": 1,
+          "meaning": "Exact new10 decode inventory"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/precompiled-cache-parity.mjs",
+      "target": "proposals/d090/precompiled-cache-parity.mjs",
+      "sourceSha256": "5581a67177630e9c63e0bab8f1bdbaf4cee7c97fdb22967dfea1fa6f7a592ada",
+      "targetSha256": "2807b8d28b9a720665861cbf28210e224f0002b60f1ef2cb0da02e36f4f5f205",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 5,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 2,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "report.models.length,190",
+          "after": "report.models.length,200",
+          "count": 1,
+          "meaning": "All actual200 parity mandatory"
+        },
+        {
+          "before": "models:190",
+          "after": "models:200",
+          "count": 1,
+          "meaning": "Report actual200"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/model-cache-parity.mjs",
+      "target": "proposals/d090/model-cache-parity.mjs",
+      "sourceSha256": "b7cb980145b9b9876c8edc53e0c09a99bbc19c832506c17695ed57895e78c4e6",
+      "targetSha256": "34784bd96cff889577ded02d2a3584004cef66bd5e32d848cf0700a772435640",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 2,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 3,
+          "meaning": "Exact wave/module/API identity; no assertion semantics"
+        },
+        {
+          "before": "{PUBLIC_SERVICE_BUILDINGS}]=await Promise.all",
+          "after": "{PUBLIC_SERVICE_BUILDINGS},{MARKET_ESTATE_BUILDINGS}]=await Promise.all",
+          "count": 1,
+          "meaning": "Add actual independently imported prior D089 native inventory; retain all older native inventory derivations"
+        },
+        {
+          "before": "'src/content/britishPublicServices.ts'].map(imp)",
+          "after": "'src/content/britishPublicServices.ts','src/content/britishMarketEstates.ts'].map(imp)",
+          "count": 1,
+          "meaning": "Add actual independently imported prior D089 native inventory; retain all older native inventory derivations"
+        },
+        {
+          "before": "WORKING_RURAL_BUILDINGS,PUBLIC_SERVICE_BUILDINGS,draw(k,v)",
+          "after": "WORKING_RURAL_BUILDINGS,PUBLIC_SERVICE_BUILDINGS,MARKET_ESTATE_BUILDINGS,draw(k,v)",
+          "count": 1,
+          "meaning": "Add actual independently imported prior D089 native inventory; retain all older native inventory derivations"
+        },
+        {
+          "before": "...a.PUBLIC_SERVICE_BUILDINGS.map(m=>[m.k,m.v]),...scope.models",
+          "after": "...a.PUBLIC_SERVICE_BUILDINGS.map(m=>[m.k,m.v]),...a.MARKET_ESTATE_BUILDINGS.map(m=>[m.k,m.v]),...scope.models",
+          "count": 1,
+          "meaning": "Add actual independently imported prior D089 native inventory; retain all older native inventory derivations"
+        },
+        {
+          "before": "Array(22)",
+          "after": "Array(23)",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": "slots.length,190",
+          "after": "slots.length,200",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": ".size,190",
+          "after": ".size,200",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": "published-179",
+          "after": "published-190",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": "all179 unchanged plus exact11",
+          "after": "all190 unchanged plus exact10",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": "native11",
+          "after": "native10",
+          "count": 2,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        },
+        {
+          "before": "native44",
+          "after": "native40",
+          "count": 1,
+          "meaning": "Exact new10/total200 and latest baseline flag counts; all complete word and scene assertions preserved"
+        }
+      ]
+    }
+  ]
+}

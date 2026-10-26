@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "changes": [
+    {
+      "file": "proposals/d090/browser-surface-qualification.mjs",
+      "beforeSha256": "3ed5c22771f99ee8415b0fd155d72e552942ecd6629d620786b43ec9fbeb436f",
+      "afterSha256": "9151d3e3bcf45f1391275dadddc31b7c7f7b231bf4306f58589ee7d265ae5144",
+      "changes": [
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "proposals/d090/native-browser-check.mjs",
+      "beforeSha256": "b72acada840bd698107f0cc00b2cdefb0f582abe777284822a2519f4dfe9fecf",
+      "afterSha256": "49037690ccc648d141b4120a886b64afe30c1f5ca89102920f7ece22c3b1de15",
+      "changes": [
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "proposals/d090/native-surface-plan.mjs",
+      "beforeSha256": "a2c1486aec4316446044a15dcd5281e918c1aaf6cadf34dfc6f29d3424e2d207",
+      "afterSha256": "da8fa032ad2f73b6941393d138f04acaa9fa4f8ceb82b12a5ba2f0cbb5c8454d",
+      "changes": [
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "file": "proposals/d090/browser-cache-observation.mjs",
+      "beforeSha256": "909f4a3bb0cefdf82f8d17415293aa3c990787f6898837cbc0ede3249bc78a1c",
+      "afterSha256": "ef9cc2043208333b009cb720b0b098a30fd37002dea2449557eef5f19295f446",
+      "changes": [
+        {
+          "before": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "after": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

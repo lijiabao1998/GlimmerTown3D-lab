@@ -1,0 +1,18 @@
+✔ exact source seam rejects broad edits, missing/doubled changes and unchanged old foundation (3.518744ms)
+✔ shape contract validates the complete exact lower-ring relation (synthetic unit fixture, not acceptance) (9.253924ms)
+✔ full-model relation kills changes outside the named lower ring, not just matching labels/counts (245.816485ms)
+✔ complete compilation comparison rejects arbitrary castle triangle corruption even when all named part faces match (113.085279ms)
+✔ v4 full-source transition is exactmodel-only and preserves complete immutable v1/v2/v3 ancestry (19.107592ms)
+✔ reject altered transition/source fixtures/d090/source.json (15.696822ms)
+✔ reject altered transition/source tools/d090-source.mjs (15.621328ms)
+✔ reject altered transition/source proposals/d090/evidence/source-lease-cache-v3/source.json (4.352602ms)
+✔ reject altered transition/source proposals/d090/evidence/source-lease-foundation-cache-v4/transition.json (13.721429ms)
+✔ broader source edit and rewritten predecessor cannot be resealed as foundation-only (17.746658ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 695.683703

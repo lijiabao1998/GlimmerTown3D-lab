@@ -3,7 +3,7 @@ import{authoritativeProceduralSource,PROCEDURAL_INFO,CACHED_INFO}from'./precompi
 // Regenerates from the untouched authoritative source in a fresh Node process.
 // Runtime's fast checksum is NOT represented as a cryptographic trust boundary.
 import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';import {fileURLToPath,pathToFileURL} from 'node:url';
-export const AUTHORITATIVE_SOURCE_SHA='11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37';
+export const AUTHORITATIVE_SOURCE_SHA='a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58';
 const root=fileURLToPath(new URL('../../',import.meta.url)),sourcePath=path.join(root,'proposals/d090/procedural-authority.mjs'),generator=path.join(root,'proposals/d090/precompiled-cache.mjs');
 export const sha256=value=>createHash('sha256').update(value).digest('hex');
 export function regeneratedCacheReference(){const source=authoritativeProceduralSource(fs.readFileSync(sourcePath,'utf8'));assert.equal(sha256(source),AUTHORITATIVE_SOURCE_SHA,'exact authoritative procedural source');const dir=fs.mkdtempSync(path.join(os.tmpdir(),'d090-cache-reference-'));try{const out=path.join(dir,'generated');execFileSync(process.execPath,[generator,out],{cwd:root,encoding:'utf8',timeout:60000});const candidate=fs.readFileSync(path.join(out,'candidate.mjs'),'utf8'),manifest=JSON.parse(fs.readFileSync(path.join(out,'manifest.json'),'utf8'));return{source,candidate,manifest};}finally{fs.rmSync(dir,{recursive:true,force:true});}}

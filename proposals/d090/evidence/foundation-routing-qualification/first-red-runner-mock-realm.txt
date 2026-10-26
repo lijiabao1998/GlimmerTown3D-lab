@@ -1,0 +1,523 @@
+✔ closed current and six actual6c domains retain every original source assertion and ledger (140.20426ms)
+✔ reject any historical assertion edit proposals/d090/browser-adaptation.test.mjs (2.301744ms)
+✔ reject any historical assertion edit proposals/d090/browser-cache-observation.test.mjs (1.726125ms)
+✔ reject any historical assertion edit proposals/d090/browser-first-use-performance.test.mjs (6.400201ms)
+✔ reject any historical assertion edit proposals/d090/browser-frame-qualification.test.mjs (1.021652ms)
+✔ reject any historical assertion edit proposals/d090/browser-provenance.test.mjs (0.56996ms)
+✔ reject any historical assertion edit proposals/d090/browser-startup-cache-contract.test.mjs (0.522639ms)
+✔ reject any historical assertion edit proposals/d090/browser-surface-qualification.test.mjs (1.29217ms)
+✔ reject any historical assertion edit proposals/d090/geometry-access.test.mjs (0.665925ms)
+✔ reject any historical assertion edit proposals/d090/geometry-card-invariants.test.mjs (0.831165ms)
+✔ reject any historical assertion edit proposals/d090/geometry-coplanar.test.mjs (0.571183ms)
+✔ reject any historical assertion edit proposals/d090/geometry-evidence.test.mjs (0.695349ms)
+✔ reject any historical assertion edit proposals/d090/geometry-finite-repair.test.mjs (0.531913ms)
+✔ reject any historical assertion edit proposals/d090/geometry-focused.test.mjs (1.135534ms)
+✔ reject any historical assertion edit proposals/d090/geometry-plan.test.mjs (0.961441ms)
+✔ reject any historical assertion edit proposals/d090/inherited-browser-copies.test.mjs (0.546845ms)
+✔ reject any historical assertion edit proposals/d090/inherited-test-contract.test.mjs (0.554007ms)
+✔ reject any historical assertion edit proposals/d090/native-farm-precedence-copy.test.mjs (1.189816ms)
+✔ reject any historical assertion edit proposals/d090/native-first-use-fixture.test.mjs (1.185159ms)
+✔ reject any historical assertion edit proposals/d090/native-fixture-provenance.test.mjs (1.146932ms)
+✔ reject any historical assertion edit proposals/d090/native-fixture.test.mjs (0.886287ms)
+✔ reject any historical assertion edit proposals/d090/native-smoke-versions.test.mjs (0.942022ms)
+✔ reject any historical assertion edit proposals/d090/native-version-contracts.test.mjs (1.477289ms)
+✔ reject any historical assertion edit proposals/d090/original-camera-restoration.test.mjs (1.08612ms)
+✔ reject any historical assertion edit proposals/d090/precompiled-cache-qualification.test.mjs (1.135664ms)
+✔ reject any historical assertion edit proposals/d090/scene-budget.test.mjs (1.879717ms)
+✔ reject any historical assertion edit proposals/d090/scene-owner-transition.test.mjs (0.943143ms)
+✔ reject any historical assertion edit proposals/d090/source-boundaries.test.mjs (1.123406ms)
+✔ reject any historical assertion edit proposals/d090/source-lease-history.test.mjs (0.872657ms)
+✔ reject any historical assertion edit tools/d090-native-catalogue.test.mjs (0.92136ms)
+✔ reject any historical assertion edit tools/d090-native-lifecycle.test.mjs (0.684033ms)
+✔ reject any historical assertion edit tools/d090-native-routing.test.mjs (0.846257ms)
+✔ reject any historical assertion edit tools/d090-native-scene-dispatch.test.mjs (1.133952ms)
+✔ reject any historical assertion edit tools/d090-native-ui-actions.test.mjs (0.87444ms)
+✔ reject any historical assertion edit tools/d090-native-workflow.test.mjs (1.187803ms)
+✔ reject any historical assertion edit tools/d090-source.test.mjs (1.251499ms)
+✔ reject any historical assertion edit tools/d090-validation.test.mjs (0.932959ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/geometry-card-invariants-foundation-v2.test.mjs (3.220411ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/geometry-finite-repair-foundation-v2.test.mjs (1.601678ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/geometry-plan-foundation-v2.test.mjs (1.21926ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/browser-adaptation-foundation-v2.test.mjs (1.243216ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/browser-surface-qualification-foundation-v2.test.mjs (1.405211ms)
+✔ new current copy retains every undeclared original assertion proposals/d090/precompiled-cache-qualification-foundation-v2.test.mjs (1.36458ms)
+✔ missing duplicate or extra actual current test cannot be omitted (0.890755ms)
+✔ missing duplicate or extra actual current test cannot be omitted (0.724643ms)
+✔ missing duplicate or extra actual current test cannot be omitted (0.574878ms)
+✔ frozen routing rejects drop history (0.617342ms)
+✔ frozen routing rejects drop current (0.971817ms)
+✔ frozen routing rejects drop ledger (0.445352ms)
+✔ frozen routing rejects extra route (0.511432ms)
+✔ frozen routing rejects skip runner (0.420144ms)
+✔ frozen routing rejects wrong baseline (0.508869ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/ci.yml (1.878866ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d056-art.yml (1.754538ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d083-native.yml (1.435386ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d085-control.yml (1.764553ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d086-native.yml (2.268344ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d087-native.yml (2.046168ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d088-native.yml (1.590501ms)
+✔ all eight inherited workflow bytes stay fixed .github/workflows/d089-native.yml (1.890784ms)
+✔ current workflow cannot omit history, add continue-on-error or alter timeout (6.456796ms)
+✔ pending source/plan is never a placeholder pass, and bindings reject malformed or resealed inputs (1.559093ms)
+✖ official command runs actual historical and current cwd separately and captures all263 source hashes before/after (13.388223ms)
+✖ original failure retained and both domains attempted 0 exit1 (3.909952ms)
+✖ original failure retained and both domains attempted 0 signal (3.556979ms)
+✖ original failure retained and both domains attempted 0 spawn (2.971145ms)
+✖ original failure retained and both domains attempted 1 exit1 (3.258548ms)
+✖ original failure retained and both domains attempted 1 signal (2.946878ms)
+✖ original failure retained and both domains attempted 1 spawn (3.354373ms)
+✔ reject overwrite (1.121823ms)
+✔ reject wrongHead (1.162765ms)
+✔ reject dirty (1.043375ms)
+✔ reject sourceDrift (2.51117ms)
+✔ official gate rejects optional/altered invocation --historical-only (0.999088ms)
+✔ official gate rejects optional/altered invocation --history-dir=/tmp/other (0.909963ms)
+✔ official gate rejects optional/altered invocation --out=/tmp/other (0.875912ms)
+✔ official gate rejects optional/altered invocation --skip-current (7.000997ms)
+✔ official gate rejects optional/altered invocation --out=a,--out=b (1.15952ms)
+✖ explicit local historical-only diagnostic cannot claim whole acceptance (3.406653ms)
+✔ exact source seam rejects broad edits, missing/doubled changes and unchanged old foundation (4.437242ms)
+✔ shape contract validates the complete exact lower-ring relation (synthetic unit fixture, not acceptance) (8.936984ms)
+✔ full-model relation kills changes outside the named lower ring, not just matching labels/counts (165.679602ms)
+✔ new D090 native workflow is exact bounded released workflow evolution, with all source/native/history/Chrome/performance/surface gates (2.481275ms)
+✔ new workflow rejects omitted or mutated gate width: [1440, 412, 360] (4.603629ms)
+✔ new workflow rejects omitted or mutated gate timeout-minutes: 25 (1.048402ms)
+✔ new workflow rejects omitted or mutated gate sha256sum --check index.sha256 (1.505372ms)
+✔ new workflow rejects omitted or mutated gate native-startup-cache-check.mjs (2.185018ms)
+✔ new workflow rejects omitted or mutated gate native-first-use-cache-check.mjs (1.227403ms)
+✔ new workflow rejects omitted or mutated gate native-surface-plan.mjs (1.124107ms)
+✔ new workflow rejects omitted or mutated gate browser-frame-qualification.mjs (0.84186ms)
+✔ new workflow rejects omitted or mutated gate browser-surface-qualification.mjs (1.065599ms)
+✔ new workflow rejects omitted or mutated gate geometry-access.test.mjs (0.837795ms)
+✔ new workflow rejects omitted or mutated gate model-audit.mjs --baseline (0.758125ms)
+✔ new job cannot become optional native-and-build (0.70233ms)
+✔ new job cannot become optional native-game (0.498763ms)
+✔ new job cannot become optional native-input-performance (0.86834ms)
+✔ new job cannot become optional native-startup-cache (0.610992ms)
+✔ new job cannot become optional surface-qualification (0.558773ms)
+✔ manifest cannot claim different baseline or silently omit actual old source assertions (2.183546ms)
+ℹ tests 99
+ℹ suites 0
+ℹ pass 91
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 524.575655
+
+✖ failing tests:
+
+test at proposals/d090/foundation-runner.test.mjs:4:1
+✖ official command runs actual historical and current cwd separately and captures all263 source hashes before/after (13.388223ms)
+  AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Values have same structure but are not reference-equal:
+  
+  ... Skipped lines
+  [
+    'src/f0.ts',
+    'src/f1.ts',
+    'src/f10.ts',
+    'src/f100.ts',
+    'src/f101.ts',
+    'src/f102.ts',
+    'src/f103.ts',
+    'src/f104.ts',
+    'src/f105.ts',
+    'src/f106.ts',
+    'src/f107.ts',
+    'src/f108.ts',
+    'src/f109.ts',
+    'src/f11.ts',
+    'src/f110.ts',
+    'src/f111.ts',
+    'src/f112.ts',
+    'src/f113.ts',
+    'src/f114.ts',
+    'src/f115.ts',
+    'src/f116.ts',
+    'src/f117.ts',
+    'src/f118.ts',
+    'src/f119.ts',
+    'src/f12.ts',
+    'src/f120.ts',
+    'src/f121.ts',
+    'src/f122.ts',
+    'src/f123.ts',
+    'src/f124.ts',
+    'src/f125.ts',
+    'src/f126.ts',
+    'src/f127.ts',
+    'src/f128.ts',
+    'src/f129.ts',
+    'src/f13.ts',
+    'src/f130.ts',
+    'src/f131.ts',
+    'src/f132.ts',
+    'src/f133.ts',
+    'src/f134.ts',
+    'src/f135.ts',
+    'src/f136.ts',
+    'src/f137.ts',
+    'src/f138.ts',
+    'src/f139.ts',
+    'src/f14.ts',
+    'src/f140.ts',
+    'src/f141.ts',
+  ...}
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:4:148)
+      at snapshot (evalmachine.<anonymous>:5:358)
+      at evalmachine.<anonymous>:8:15
+      at Script.runInContext (node:vm:149:12)
+      at Script.runInNewContext (node:vm:154:17)
+      at Object.runInNewContext (node:vm:310:38)
+      at run (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:3:1549)
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:4:135)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: node:assert:152
+      throw new AssertionError(obj);
+      ^
+    
+    AssertionError [ERR_ASSERTION]: Values have same structure but are not reference-equal:
+    
+    ... Skipped lines
+    [
+      'src/f0.ts',
+      'src/f1.ts',
+      'src/f10.ts',
+      'src/f100.ts',
+      'src/f101.ts',
+      'src/f102.ts',
+      'src/f103.ts',
+      'src/f104.ts',
+      'src/f105.ts',
+      'src/f106.ts',
+      'src/f107.ts',
+      'src/f108.ts',
+      'src/f109.ts',
+      'src/f11.ts',
+      'src/f110.ts',
+      'src/f111.ts',
+      'src/f112.ts',
+      'src/f113.ts',
+      'src/f114.ts',
+      'src/f115.ts',
+      'src/f116.ts',
+      'src/f117.ts',
+      'src/f118.ts',
+      'src/f119.ts',
+      'src/f12.ts',
+      'src/f120.ts',
+      'src/f121.ts',
+      'src/f122.ts',
+      'src/f123.ts',
+      'src/f124.ts',
+      'src/f125.ts',
+      'src/f126.ts',
+      'src/f127.ts',
+      'src/f128.ts',
+      'src/f129.ts',
+      'src/f13.ts',
+      'src/f130.ts',
+      'src/f131.ts',
+      'src/f132.ts',
+      'src/f133.ts',
+      'src/f134.ts',
+      'src/f135.ts',
+      'src/f136.ts',
+      'src/f137.ts',
+      'src/f138.ts',
+      'src/f139.ts',
+      'src/f14.ts',
+      'src/f140.ts',
+      'src/f141.ts',
+    ...}
+    
+        at snapshot (evalmachine.<anonymous>:5:358)
+        at evalmachine.<anonymous>:8:15
+        at Script.runInContext (node:vm:149:12)
+        at Script.runInNewContext (node:vm:154:17)
+        at Object.runInNewContext (node:vm:310:38)
+        at run (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:3:1549)
+        at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:4:135)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.start (node:internal/test_runner/test:1242:17),
+    expected: null,
+    operator: 'ifError',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 0 exit1 (3.909952ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 0 signal (3.556979ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 0 spawn (2.971145ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 1 exit1 (3.258548ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 1 signal (2.946878ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:5:222
+✖ original failure retained and both domains attempted 1 spawn (3.354373ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 2
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:5:368)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/foundation-runner.test.mjs:8:1
+✖ explicit local historical-only diagnostic cannot claim whole acceptance (3.406653ms)
+  AssertionError [ERR_ASSERTION]: ifError got unwanted exception: Values have same structure but are not reference-equal:
+  
+  ... Skipped lines
+  [
+    'src/f0.ts',
+    'src/f1.ts',
+    'src/f10.ts',
+    'src/f100.ts',
+    'src/f101.ts',
+    'src/f102.ts',
+    'src/f103.ts',
+    'src/f104.ts',
+    'src/f105.ts',
+    'src/f106.ts',
+    'src/f107.ts',
+    'src/f108.ts',
+    'src/f109.ts',
+    'src/f11.ts',
+    'src/f110.ts',
+    'src/f111.ts',
+    'src/f112.ts',
+    'src/f113.ts',
+    'src/f114.ts',
+    'src/f115.ts',
+    'src/f116.ts',
+    'src/f117.ts',
+    'src/f118.ts',
+    'src/f119.ts',
+    'src/f12.ts',
+    'src/f120.ts',
+    'src/f121.ts',
+    'src/f122.ts',
+    'src/f123.ts',
+    'src/f124.ts',
+    'src/f125.ts',
+    'src/f126.ts',
+    'src/f127.ts',
+    'src/f128.ts',
+    'src/f129.ts',
+    'src/f13.ts',
+    'src/f130.ts',
+    'src/f131.ts',
+    'src/f132.ts',
+    'src/f133.ts',
+    'src/f134.ts',
+    'src/f135.ts',
+    'src/f136.ts',
+    'src/f137.ts',
+    'src/f138.ts',
+    'src/f139.ts',
+    'src/f14.ts',
+    'src/f140.ts',
+    'src/f141.ts',
+  ...}
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:8:145)
+      at snapshot (evalmachine.<anonymous>:5:358)
+      at evalmachine.<anonymous>:8:15
+      at Script.runInContext (node:vm:149:12)
+      at Script.runInNewContext (node:vm:154:17)
+      at Object.runInNewContext (node:vm:310:38)
+      at run (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:3:1549)
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:8:93)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: node:assert:152
+      throw new AssertionError(obj);
+      ^
+    
+    AssertionError [ERR_ASSERTION]: Values have same structure but are not reference-equal:
+    
+    ... Skipped lines
+    [
+      'src/f0.ts',
+      'src/f1.ts',
+      'src/f10.ts',
+      'src/f100.ts',
+      'src/f101.ts',
+      'src/f102.ts',
+      'src/f103.ts',
+      'src/f104.ts',
+      'src/f105.ts',
+      'src/f106.ts',
+      'src/f107.ts',
+      'src/f108.ts',
+      'src/f109.ts',
+      'src/f11.ts',
+      'src/f110.ts',
+      'src/f111.ts',
+      'src/f112.ts',
+      'src/f113.ts',
+      'src/f114.ts',
+      'src/f115.ts',
+      'src/f116.ts',
+      'src/f117.ts',
+      'src/f118.ts',
+      'src/f119.ts',
+      'src/f12.ts',
+      'src/f120.ts',
+      'src/f121.ts',
+      'src/f122.ts',
+      'src/f123.ts',
+      'src/f124.ts',
+      'src/f125.ts',
+      'src/f126.ts',
+      'src/f127.ts',
+      'src/f128.ts',
+      'src/f129.ts',
+      'src/f13.ts',
+      'src/f130.ts',
+      'src/f131.ts',
+      'src/f132.ts',
+      'src/f133.ts',
+      'src/f134.ts',
+      'src/f135.ts',
+      'src/f136.ts',
+      'src/f137.ts',
+      'src/f138.ts',
+      'src/f139.ts',
+      'src/f14.ts',
+      'src/f140.ts',
+      'src/f141.ts',
+    ...}
+    
+        at snapshot (evalmachine.<anonymous>:5:358)
+        at evalmachine.<anonymous>:8:15
+        at Script.runInContext (node:vm:149:12)
+        at Script.runInNewContext (node:vm:154:17)
+        at Object.runInNewContext (node:vm:310:38)
+        at run (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:3:1549)
+        at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/foundation-runner.test.mjs:8:93)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:960:18),
+    expected: null,
+    operator: 'ifError',
+    diff: 'simple'
+  }

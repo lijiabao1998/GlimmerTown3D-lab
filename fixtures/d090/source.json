@@ -303,7 +303,7 @@
     "src/content/britishUtilityHeritage.ts": "59fbb30731812601c64e72feb96a4dbcf25ab5d3797c1ce2ec9380e1265405a9",
     "src/render/britishUtilityHeritageArt.ts": "d65bfab5d10f13f3e58dc4b9ccb3728e50ca3216c5980c3a6baa06a842e70018",
     "src/render/britishUtilityHeritageModels.d.mts": "c548979b30f7c43d133bf4e4cef55e71974e7bc0396cbf8b071f7536e51bdeca",
-    "src/render/britishUtilityHeritageModels.mjs": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+    "src/render/britishUtilityHeritageModels.mjs": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
     "src/sim/utilityHeritageVariant.ts": "640356217bb36e22368bb0a7f9aa8b2105e253707432e99c810a498926182d3d"
   }
 }

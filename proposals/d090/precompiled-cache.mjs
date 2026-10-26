@@ -2,7 +2,7 @@
 // Existing procedural compiler remains authoritative and byte-reconstructible.
 import vm from'node:vm';import*as THREE from'three';import fs from'node:fs';import path from'node:path';import assert from'node:assert/strict';import{createHash}from'node:crypto';import{pathToFileURL}from'node:url';import{gzipSync}from'node:zlib';
 export const PROCEDURAL_INFO="export function britishUtilityHeritageCacheInfo(){return{sourceSha256:'procedural-authoring-not-frozen',decoded:[],fallbacks:[],renderCachedModels:[],proceduralCachedModels:[...MODEL_CACHE.keys()]};}",CACHED_INFO="export function britishUtilityHeritageCacheInfo(){return readCompiledCacheInfo();}";
-export const BASE='11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37';const sha=x=>createHash('sha256').update(x).digest('hex');
+export const BASE='a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58';const sha=x=>createHash('sha256').update(x).digest('hex');
 export function cacheChecksum(s){let h=2166136261;for(let i=0;i<s.length;i++){const n=s.charCodeAt(i);if(n>127)throw Error('cache payload ASCII only');h=Math.imul(h^n,16777619)>>>0;}return h.toString(16).padStart(8,'0');}
 export function cacheDecode(json,{id,length,checksum}){
  const check=(ok,s)=>{if(!ok)throw Error('D090 cache '+s);};check(typeof json==='string'&&json.length===length&&cacheChecksum(json)===checksum,'payload integrity');

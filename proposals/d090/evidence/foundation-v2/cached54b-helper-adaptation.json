@@ -1,0 +1,49 @@
+{
+  "originalSha256": "50590344115c324292e4c4ee39566b5c39690c99644be117df7d2e7c1fc80fd0",
+  "adaptedSha256": "0bad094da65a22f72555345b0ef6517355342f4c8d9f15d6bb6d95349d7d1ced",
+  "root": "/workspace/shared/d090-private-cache-parity-54b809e2",
+  "literalChanges": [
+    {
+      "from": "from'./scene-budget-support.mjs'",
+      "to": "from'/tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scene-budget-support.mjs'",
+      "count": 1
+    },
+    {
+      "from": "from'./native-scene-fixture.mjs'",
+      "to": "from'/tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-scene-fixture.mjs'",
+      "count": 1
+    },
+    {
+      "from": "from'../d086/surface-contract.mjs'",
+      "to": "from'/tmp/GlimmerTown3D-lab-d090-own/proposals/d086/surface-contract.mjs'",
+      "count": 1
+    },
+    {
+      "from": "from'./facade-exterior-area.mjs'",
+      "to": "from'/tmp/GlimmerTown3D-lab-d090-own/proposals/d090/facade-exterior-area.mjs'",
+      "count": 1
+    },
+    {
+      "from": "from'../../src/render/britishUtilityHeritageModels.mjs'",
+      "to": "from'/workspace/shared/d090-private-cache-parity-54b809e2/src/render/britishUtilityHeritageModels.mjs'",
+      "count": 1
+    },
+    {
+      "from": "from'./scope.json'",
+      "to": "from'/tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scope.json'",
+      "count": 1
+    },
+    {
+      "from": "fs.readFileSync('proposals/d090/native-scene-fixture.mjs')",
+      "to": "fs.readFileSync('/tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-scene-fixture.mjs')",
+      "count": 2
+    },
+    {
+      "from": "path.resolve('proposals/d090/geometry-native-preflight.mjs')",
+      "to": "path.resolve('/workspace/shared/d090-first-browser-diagnosis/geometry-native-preflight-cached54b.mjs')",
+      "count": 1
+    }
+  ],
+  "prefixedWorkingDirectory": "/workspace/shared/d090-private-cache-parity-54b809e2",
+  "accepted": false
+}
