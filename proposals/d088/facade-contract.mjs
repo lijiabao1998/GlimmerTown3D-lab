@@ -1,0 +1,5 @@
+// D088 raw facade-intent reference seam; unchanged D087 verifier/thresholds.
+import{authoritativeProceduralSource}from'./precompiled-cache.mjs';import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
+import{assertFacadeImprint,facadeNegatives}from'./facade-imprint-geometry.mjs';export{assertFacadeImprint,facadeNegatives};
+export const INTENTS=[47,38,33,48,50,45,36,56,45,49,42];
+export async function rawFacadeReference(){const bytes=fs.readFileSync(new URL('../../src/render/britishPublicServicesModels.mjs',import.meta.url)),source=authoritativeProceduralSource(bytes.toString()),from='freezeModel(imprintFacades(BUILDERS[i]()))',to='freezeModel(BUILDERS[i]())';assert.equal(source.split(from).length,2);assert.equal(source.split("from 'three'").length,2);const raw=source.replace(from,to).replace("from 'three'","from "+JSON.stringify(import.meta.resolve('three')));return{sourceSha256:createHash('sha256').update(bytes).digest('hex'),module:await import('data:text/javascript;base64,'+Buffer.from(raw).toString('base64'))};}

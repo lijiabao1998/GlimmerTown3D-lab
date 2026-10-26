@@ -1,0 +1,6 @@
+{
+  "authoringSourceSha256": "6abd2ee0a886a499d1c6b04adef09163a77e88767e0b57db7f742d31eae1767c",
+  "proceduralSourceSha256": "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef",
+  "exactRemovedAuthoringShim": "// Pre-cache authoring phase. Final source-bound lazy cache is derived only after geometry qualification.\nexport function publicServiceCacheInfo(){return{phase:'procedural-authoring',sourceSha256:null,decoded:[],fallbacks:[],renderCachedModels:[],proceduralCachedModels:[...MODEL_CACHE.keys()]};}\n",
+  "qualification": "Only temporary diagnostic cache-info shim removed; all geometry functions and numeric bytes unchanged. Final compiled source must exactly reconstruct this full authority and pass complete model/native typed-word parity."
+}

@@ -4,6 +4,7 @@ import { FACILITY_TOOLS, type CivicTool } from '../sim/edit.ts';
 import { RURAL_HERITAGE_BUILDINGS } from '../content/britishRuralHeritage.ts';
 import { CIVIC_MARKET_BUILDINGS } from '../content/britishCivicMarkets.ts';
 import { WORKING_RURAL_BUILDINGS } from '../content/britishWorkingRural.ts';
+import { PUBLIC_SERVICE_BUILDINGS } from '../content/britishPublicServices.ts';
 import { RANKS } from '../sim/rules/rank.ts';
 
 export const FACILITY_GROUPS = [
@@ -15,7 +16,9 @@ export type FacilityGroup = typeof FACILITY_GROUPS[number]['id'];
 interface FacilityNote { group: Exclude<FacilityGroup, 'all'>; use: string; placement: string }
 const NATIVE_ART_USE:Readonly<Record<string,string>>={market:'農貿收入與市場覆蓋',tradepost:'產生外貿收入，支援外貿委託',library:'提供圖書館服務覆蓋',post:'提供郵政服務覆蓋',school:'提供學校教育覆蓋',fire:'提供消防服務覆蓋',clinic:'提供診所醫療覆蓋'};
 const WORKING_RURAL_USE:Readonly<Record<string,string>>={farm:'農業糧食生產',ranch:'牧業糧食生產',bigFarm:'大型糧食生產基地',greenhouse:'溫室農業生產',foodPlant:'將糧食盈餘加工為收入，不增加新的原料種類'};
+const PUBLIC_SERVICE_USE:Readonly<Record<string,string>>={police:'提供警察服務覆蓋',policeBox:'提供派出所警力覆蓋',hospital:'提供醫院醫療覆蓋',clinic:'提供診所醫療覆蓋',school:'提供學校教育覆蓋',library:'提供圖書館服務覆蓋',post:'提供郵政服務覆蓋'};
 export const FACILITY_NOTES: Readonly<Record<string, FacilityNote>> = {
+  ...Object.fromEntries(PUBLIC_SERVICE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:PUBLIC_SERVICE_USE[m.baseTool]+'；原設施服務、費用與施工規則不變',placement:'1×1陸地；原設施的地形、占地與阻擋規則均保留，以落點預覽為準。'}])),
   ...Object.fromEntries(WORKING_RURAL_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:WORKING_RURAL_USE[m.baseTool]+'；原設施生產、供電與費用規則不變',placement:`連續${m.size}×${m.size}${m.baseTool==='foodPlant'?'陸地':'草地'}；整塊占地、交通線、電力走廊與其他阻擋均依原設施規則，以落點預覽為準。`}])),
   ...Object.fromEntries(CIVIC_MARKET_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:NATIVE_ART_USE[m.baseTool]+'；原設施規則與費用不變',placement:`${m.size}×${m.size}陸地；原設施的地形、占地與阻擋規則均保留，以落點預覽為準。`}])),
   ...Object.fromEntries(RURAL_HERITAGE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:'英式歷史建築街景，不新增生產或運輸產能',placement:'連續2×2空陸地；整塊不能有交通線、電力走廊、建築或隕石坑。'}])),

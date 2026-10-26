@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "baseline": "cdd541da74973dba2ca73b782936c012d315add9",
+  "reason": "Only exact54+11 catalogue/capture and source inventory seams; all original smoke interactions and thresholds retained.",
+  "copies": [
+    {
+      "source": "tools/smoke-d053-d087.mjs",
+      "target": "tools/smoke-d053-d088.mjs",
+      "sourceSha256": "407265e3208690794c6e7d1003f53bdd345359d3fe8767a1cf8b66a894d9a7c0",
+      "targetSha256": "1a5f1dbbba3d825ad19f52f85f1eed6b75c40c5e0619fbfec450787e9c91c74d",
+      "header": "// D088 finite current contract. Original tools/smoke-d053-d087.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "from './d053-capture-d087.mjs';",
+          "after": "from './d053-capture-d088.mjs';",
+          "count": 1
+        },
+        {
+          "before": "import { D087_TOOL_IDS, catalogueWithD087 as catalogueWithD086 } from './d087-catalogue-compat.mjs';",
+          "after": "import { D087_TOOL_IDS, D088_TOOL_IDS, catalogueWithD088 as catalogueWithD086 } from './d088-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "Object.freeze([...D086_BRITISH_CATALOGUE_IDS,...D087_TOOL_IDS]);",
+          "after": "Object.freeze([...D086_BRITISH_CATALOGUE_IDS,...D087_TOOL_IDS,...D088_TOOL_IDS]);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d053-capture-d087.mjs",
+      "target": "tools/d053-capture-d088.mjs",
+      "sourceSha256": "057b1f0c2d75eb4c05f84c9287a12c5b67acac425d524911a51c4161b012990a",
+      "targetSha256": "df09e0971de151ba1659ac4c54a3db56c40731c5675c2239e02253edacd0bf75",
+      "header": "// D088 finite current contract. Original tools/d053-capture-d087.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "import {catalogueWithD087 as catalogueWithD086} from './d087-catalogue-compat.mjs';",
+          "after": "import {catalogueWithD088 as catalogueWithD086} from './d088-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "'D087 exact retained43 then new11 catalogue order'",
+          "after": "'D088 exact retained54 then new11 catalogue order'",
+          "count": 1
+        },
+        {
+          "before": "'tools/d087-catalogue-compat.mjs'",
+          "after": "'tools/d087-catalogue-compat.mjs','tools/d053-capture-d088.mjs','tools/smoke-d053-d088.mjs','tools/d088-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "rootRoute": {
+    "file": "tools/smoke.mjs",
+    "before": "import { d053Smoke } from './smoke-d053-d087.mjs';",
+    "after": "import { d053Smoke } from './smoke-d053-d088.mjs';",
+    "count": 1,
+    "sourceSha256": "ec02ccfe3864bb61c2c58b046bacf5fbd3fd9f2cd3b3c81953d8619f212cbdfa",
+    "targetSha256": "d9dbdd353753fbb73e76c0ac3b3fa00d5b9a86a799194b2a0176af8d7fd6da6d"
+  }
+}

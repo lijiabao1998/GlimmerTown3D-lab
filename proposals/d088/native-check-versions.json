@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "baseline": "cdd541da74973dba2ca73b782936c012d315add9",
+  "reason": "Exact old-native metadata validation followed only by finite checked predecessor for historical row assertions; every runtime behavior continues on actual current app. Current catalogue/capture/receipt seams only.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-integration-check-d087.mjs",
+      "target": "proposals/d083/native-integration-check-d088.mjs",
+      "sourceSha256": "11fc427896fb8dad2f52bbdcf0e4249247ec657a4d05efb8498e38e9d42e7d48",
+      "targetSha256": "2f11a3969899622acea63495ff3da96e6856dbc73eb6aea7e5ce669dd2a243a3",
+      "header": "// D088 finite current contract. Original proposals/d083/native-integration-check-d087.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "assertD087KindMetadata",
+          "after": "assertD088KindMetadata",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d087-kind-metadata-contract.mjs'",
+          "after": "'../../tools/d088-kind-metadata-contract.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d087-native/d083-current'",
+          "after": "'scratch/d088-native/d083-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-variant-check-d087.mjs",
+      "target": "proposals/d086/native-variant-check-d088.mjs",
+      "sourceSha256": "9fd21fc76c384f25c02ef1dc719d437eed6ed54ee0ffd2096d553a978b413bff",
+      "targetSha256": "658a03029028f5831a8c9cd594be36411026de7e0c6d07e7d085018e8feccd9c",
+      "header": "// D088 finite current contract. Original proposals/d086/native-variant-check-d087.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "checkedD087Predecessor",
+          "after": "checkedD088D086Predecessor",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d087-kind-metadata-contract.mjs'",
+          "after": "'../../tools/d088-kind-metadata-contract.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d087-native/d086-current'",
+          "after": "'scratch/d088-native/d086-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d055-capture-d087.mjs",
+      "target": "tools/d055-capture-d088.mjs",
+      "sourceSha256": "4ca9daec5aa1b0603118f39ad5d33c1cbbc66a9611e7dcf2d92ed5d6ff572c01",
+      "targetSha256": "ac3825a5abe074000ff8fb9c90bbdfc0abdc562043362c023db67180ea5828b9",
+      "header": "// D088 finite current contract. Original tools/d055-capture-d087.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "catalogueWithD087",
+          "after": "catalogueWithD088",
+          "count": 2
+        },
+        {
+          "before": "'./d087-catalogue-compat.mjs'",
+          "after": "'./d088-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-current-inherited-ui-guards.mjs",
+      "target": "proposals/d088/native-current-inherited-ui-guards.mjs",
+      "sourceSha256": "186713b6b5bb1df2a514e78f210b350d9c5aefd130b23dd339581633a1c335a5",
+      "targetSha256": "1975a45f28368ccf1dd6d46462d0cb5ce5b5a23f2e30805bb6d58a996c0d281e",
+      "header": "// D088 finite current contract. Original proposals/d087/native-current-inherited-ui-guards.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "assertD087CurrentGuardVersions",
+          "after": "assertD088CurrentGuardVersions",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d087-current-guards.mjs'",
+          "after": "'../../tools/d088-current-guards.mjs'",
+          "count": 1
+        },
+        {
+          "before": "unit-d052-d087.mjs",
+          "after": "unit-d052-d088.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d054-ui-d087.mjs",
+          "after": "unit-d054-ui-d088.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d081-touch-lease-d087.mjs",
+          "after": "unit-d081-touch-lease-d088.mjs",
+          "count": 1
+        },
+        {
+          "before": "scratch/d087-native/current-inherited-ui",
+          "after": "scratch/d088-native/current-inherited-ui",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-current-food-guards.mjs",
+      "target": "proposals/d088/native-current-food-guards.mjs",
+      "sourceSha256": "eb327c5a7d2faf097b08c4718272709c8eb18e8572991416576628f2d7048c43",
+      "targetSha256": "ef3773e0d6651032826a636f22a421ca1b80b7c286b56e6cb103f55c1845a124",
+      "header": "// D088 finite current contract. Original proposals/d087/native-current-food-guards.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "'../../tools/unit-d055-native-d087.mjs'",
+          "after": "'../../tools/unit-d055-native-d088.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-variant.test.mjs",
+      "target": "proposals/d087/native-variant-d088.test.mjs",
+      "sourceSha256": "fc4baa171bdcd0c1f3f5da4e66b05774f1f3b498673b8ff83592fabebfda1bfc",
+      "targetSha256": "c194871e3b8e430fbcda2d571ba9da90003f6c74cf8e8cf10da6cca18e4b57da",
+      "header": "// D088 finite current contract. Original proposals/d087/native-variant.test.mjs remains byte-exact at cdd541da74973dba2ca73b782936c012d315add9.\n",
+      "changes": [
+        {
+          "before": "import{KINDS}from'../../src/content/kinds.ts';",
+          "after": "import{KINDS}from'../../src/content/kinds.ts';\nimport{assertPublicServiceMetadata,BASE_DATA as D088_PRIOR_DATA,BASE_KINDS as D088_PRIOR_KINDS}from'../d088/native-integration-check.mjs';\nimport{checkedD088Predecessor}from'../../tools/d088-kind-metadata-contract.mjs';",
+          "count": 1
+        },
+        {
+          "before": "test('eleven exact frozen descriptors are independent of scope; registry is append-only',()=>{",
+          "after": "test('eleven exact frozen descriptors are independent of scope; registry is append-only',()=>{assertPublicServiceMetadata();const prior=checkedD088Predecessor(KINDS.data.kinds,D088_PRIOR_DATA.kinds);return ((KINDS)=>{",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(facilitySummary(0).total,54);assert.equal(facilitySummary(0).available,53);\n});",
+          "after": "assert.equal(facilitySummary(0).total,65);assert.equal(facilitySummary(0).available,64);\n})({...D088_PRIOR_KINDS,data:{...D088_PRIOR_DATA,kinds:prior}});});",
+          "count": 1
+        },
+        {
+          "before": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,54",
+          "after": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,65",
+          "count": 1
+        },
+        {
+          "before": "FACILITY_TOOLS.length,54",
+          "after": "FACILITY_TOOLS.length,65",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

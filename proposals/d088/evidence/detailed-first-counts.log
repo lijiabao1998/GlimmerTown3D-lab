@@ -1,0 +1,21 @@
+quadrangular-county-constabulary Error: entire finish stays within host quadrangular-county-constabulary door-reveal
+    at requireGeometry (file:///tmp/GlimmerTown3D-lab-d088-own/src/render/britishPublicServicesModels.mjs:90:84)
+    at imprintFacadeModel (file:///tmp/GlimmerTown3D-lab-d088-own/src/render/britishPublicServicesModels.mjs:116:643)
+    at imprintFacades (file:///tmp/GlimmerTown3D-lab-d088-own/src/render/britishPublicServicesModels.mjs:123:9)
+    at cachedDesign (file:///tmp/GlimmerTown3D-lab-d088-own/src/render/britishPublicServicesModels.mjs:127:164)
+    at createPublicServiceDesign (file:///tmp/GlimmerTown3D-lab-d088-own/src/render/britishPublicServicesModels.mjs:84:70)
+    at file:///tmp/GlimmerTown3D-lab-d088-own/[eval1]:1:264
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async node:internal/modules/esm/loader:224:26
+    at async ModuleLoader.executeModuleJob (node:internal/modules/esm/loader:221:20)
+chamfered-mansard-police-house {"parts":3,"triangles":356,"weighted":712,"facades":38,"structure":{"id":"chamfered-mansard-police-house","solids":3,"triangles":356,"negativeControls":0},"mesh":3}
+rural-constable-cottage-and-office {"parts":4,"triangles":320,"weighted":640,"facades":33,"structure":{"id":"rural-constable-cottage-and-office","solids":4,"triangles":320,"negativeControls":0},"mesh":4}
+butterfly-ward-cottage-hospital {"parts":3,"triangles":376,"weighted":752,"facades":48,"structure":{"id":"butterfly-ward-cottage-hospital","solids":3,"triangles":376,"negativeControls":0},"mesh":3}
+staggered-isolation-pavilion-hospital {"parts":4,"triangles":452,"weighted":904,"facades":50,"structure":{"id":"staggered-isolation-pavilion-hospital","solids":4,"triangles":452,"negativeControls":0},"mesh":4}
+splayed-h-plan-health-centre {"parts":5,"triangles":344,"weighted":688,"facades":45,"structure":{"id":"splayed-h-plan-health-centre","solids":5,"triangles":344,"negativeControls":0},"mesh":5}
+twin-apsidal-dispensary {"parts":4,"triangles":300,"weighted":600,"facades":36,"structure":{"id":"twin-apsidal-dispensary","solids":4,"triangles":300,"negativeControls":0},"mesh":4}
+radial-folded-roof-primary-school {"parts":1,"triangles":478,"weighted":956,"facades":56,"structure":{"id":"radial-folded-roof-primary-school","solids":1,"triangles":478,"negativeControls":0},"mesh":1}
+garden-classroom-pavilion-school {"parts":5,"triangles":448,"weighted":896,"facades":45,"structure":{"id":"garden-classroom-pavilion-school","solids":5,"triangles":448,"negativeControls":0},"mesh":5}
+cruciform-public-reading-library {"parts":3,"triangles":520,"weighted":1040,"facades":49,"structure":{"id":"cruciform-public-reading-library","solids":3,"triangles":520,"negativeControls":0},"mesh":3}
+streamline-corner-sorting-post-office {"parts":3,"triangles":364,"weighted":728,"facades":42,"structure":{"id":"streamline-corner-sorting-post-office","solids":3,"triangles":364,"negativeControls":0},"mesh":3}

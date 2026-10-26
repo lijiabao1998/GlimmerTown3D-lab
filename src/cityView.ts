@@ -104,9 +104,10 @@ import { inWinter } from './sim/rules/weather.ts';
 // D062-END weather-view-import
 import { STYLES, type Style } from './render/styles.ts';
 import { KINDS } from './content/kinds.ts';
-import { HERITAGE_TOOLS, NATIVE_ART_TOOLS, WORKING_RURAL_TOOLS } from './sim/edit.ts';
+import { HERITAGE_TOOLS, NATIVE_ART_TOOLS, WORKING_RURAL_TOOLS, PUBLIC_SERVICE_TOOLS } from './sim/edit.ts';
 import { civicMarketCacheInfo } from './render/britishCivicMarketModels.mjs';
 import { workingRuralCacheInfo } from './render/britishWorkingRuralModels.mjs';
+import { publicServiceCacheInfo } from './render/britishPublicServicesModels.mjs';
 import { ARCHE } from './content/arche.ts';
 import { starterLayout } from './content/starter.ts';
 import { gridOf, labPartition, partRow, drawPlan, BLOCK_MODES, type BlockMode, type DrawBlock } from './content/blocks.ts';
@@ -229,7 +230,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const fieldStudyLodgeOn = !['fieldStudyArt', 'communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
 // D082-BEGIN coastal-recreation-enabled
   const coastalRecreationOn = !['coastalArt', 'fieldStudyArt', 'communityArt', 'transitUtilityArt', 'neighbourhoodArt', 'serviceLodgeArt', 'healthResponseArt', 'farmMemorialArt', 'emergencyHotelArt', 'campusArt', 'educationArt', 'commerceThirdArt', 'commerceVariantArt', 'facilityArt', 'landmarkArt', 'metropolisArt', 'houseArt', 'towerArt', 'commerceArt', 'industryArt', 'villageArt', 'streetArt', 'britishArt', 'heritageArt'].some(key => q.get(key) === 'legacy');
-  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn, fieldStudyLodgeOn, coastalRecreationOn, true, true), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
+  const civic: CivicRender = { shape: k => k === 51 && q.get('spaceArt') === 'legacy' ? { type: 'landmark', p: { which: 'rocket' } } : q.get('britishArt') === 'legacy' ? KIND_SHAPES[k] ?? null : shapeOf(k, q.get('heritageArt') !== 'legacy', towerOn, metropolisOn, landmarkOn, facilityOn, commerceVariantOn, commerceThirdOn, educationOn, campusOn, emergencyHotelOn, farmMemorialOn, healthResponseOn, serviceLodgeOn, neighbourhoodPavilionOn, transitUtilityPavilionOn, communityBuildingOn, fieldStudyLodgeOn, coastalRecreationOn, true, true, true), colors: (k, lv) => kindColors(LOOKS, k, lv, KINDS.catColor(KINDS.cat(k))) };
 // D082-END coastal-recreation-enabled
 // D081-END field-study-lodge-enabled
 // D080-END community-building-enabled
@@ -1402,7 +1403,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function syncDock() {
     syncRes();
-    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : WORKING_RURAL_TOOLS.some(c => c.id === civicTool) ? WORKING_RURAL_TOOLS : NATIVE_ART_TOOLS.some(c => c.id === civicTool) ? NATIVE_ART_TOOLS : HERITAGE_TOOLS.some(c => c.id === civicTool) ? HERITAGE_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
+    bui.setDock({ mode: sim ? 'build' : 'view', tool, roadTool, roadTools: ROAD_TOOLS, civicTool, civicTools: (tool === 'food' ? FOOD_TOOLS : PUBLIC_SERVICE_TOOLS.some(c => c.id === civicTool) ? PUBLIC_SERVICE_TOOLS : WORKING_RURAL_TOOLS.some(c => c.id === civicTool) ? WORKING_RURAL_TOOLS : NATIVE_ART_TOOLS.some(c => c.id === civicTool) ? NATIVE_ART_TOOLS : HERITAGE_TOOLS.some(c => c.id === civicTool) ? HERITAGE_TOOLS : CIVIC_TOOLS).map(c => ({ id: c.id, name: c.name, short: c.short, cost: c.cost, label: c.label, lock: sim && toolLock(sim, c.id) ? c.unlockRank : undefined })), prices: TOOL_PRICE, playing, speed, speeds: SPEEDS, canUndo: !!sim && canUndo(sim), sandbox: sim?.diff === 3 });
     bui.setDay(sim ? `第 ${sim.day} 天` : '');
     bui.setCoach(coachText());
     const selected = tool ? labToolOf(tool, roadTool, civicTool) : null;
@@ -1444,7 +1445,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function setTool(t: ToolId | null, silent = false) {
     if (t && !sim) t = null;
     if (t === 'food' && !FOOD_TOOLS.some(c => c.id === civicTool)) civicTool = 'farm';
-    if (t === 'civic' && ![...CIVIC_TOOLS, ...HERITAGE_TOOLS, ...NATIVE_ART_TOOLS, ...WORKING_RURAL_TOOLS].some(c => c.id === civicTool)) civicTool = 'police';
+    if (t === 'civic' && ![...CIVIC_TOOLS, ...HERITAGE_TOOLS, ...NATIVE_ART_TOOLS, ...WORKING_RURAL_TOOLS, ...PUBLIC_SERVICE_TOOLS].some(c => c.id === civicTool)) civicTool = 'police';
     tool = t; stroke = null; lastPreview = null; preview.clear(); bui.hideCost();
     syncPipes();
     // 拿著工具：一指（滑鼠左鍵）拿來蓋，兩指照舊縮放、平移；放下工具：一指照舊轉鏡頭
@@ -1916,6 +1917,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     timing: () => ({ ...timing }),
     d086CacheInfo: () => civicMarketCacheInfo(),
     d087CacheInfo: () => workingRuralCacheInfo(),
+    d088CacheInfo: () => publicServiceCacheInfo(),
     owners: () => built!.owners(),
     buildingCount: () => liveBuildings(city!).length,
     kinds: () => ({ count: KINDS.data.kinds.length, source: KINDS.data.source.commit }),

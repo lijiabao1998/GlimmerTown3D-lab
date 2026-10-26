@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "baseline": "cdd541da74973dba2ca73b782936c012d315add9",
+  "qualification": "Exactly one heritage catalogue count29→40 per actual old8/10/11 browser test. All target identities, original docks, inputs, captures, geometry joins, limits and failures remain unchanged.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-browser-check-d087.mjs",
+      "target": "proposals/d083/native-browser-check-d088.mjs",
+      "sourceSha256": "91ccbb66005a3df9ba38b99b4f6cee00815e751d1a01c7f9fbfbbfed5e050bb7",
+      "targetSha256": "7c851a9be4802dce1adf86efe974e8b9cf6a2834dcc1765b05f67d0564ee0135",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-browser-v6-check-d087.mjs",
+      "target": "proposals/d086/native-browser-v6-check-d088.mjs",
+      "sourceSha256": "cd17f7b34edd0a5b1e0decff6ded1ecaa1f79a9c780982fe15def39b3190a0eb",
+      "targetSha256": "76afe4b43ac957f84f42098a8260bed47d959db1acc5408cd1743ca2e7ab2f8c",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-browser-check.mjs",
+      "target": "proposals/d087/native-browser-check-d088.mjs",
+      "sourceSha256": "eb2f8b5bea13b88e88241c2faff1648882a0bc85da0144a81708a092fb64a031",
+      "targetSha256": "c870da4af2364ff06e6cd1b9f5a55a4328ec93fc06c1ca6d743fe1badf44a388",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),29)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),40)",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

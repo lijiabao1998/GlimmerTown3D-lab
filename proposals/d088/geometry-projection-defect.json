@@ -1,0 +1,248 @@
+{
+  "qualification": "Exact first-red proof defect; product polygons and all original required surfaces unchanged by canonical-axis proof correction.",
+  "sourceSha256": "da563336582d88d6649623e5d2143b4d99440f6965538d33b5e0631791fb8acd",
+  "sourceDescription": "D088 bare second candidate, before facade detail; preserved source path scratch/d088-geometry/bare-second-source.mjs",
+  "originalProverSha256": "f91bd5ec2056ee8125ce785f344fce20e548da47115836f556fe2c4c12dd53a7",
+  "fixedProverSha256": "250bc0cd9d29780735df9ac7fc14293ab11f4776a7ad35a7c53b80ccd4d2ccd8",
+  "areaThreshold": 1e-10,
+  "planeKeyScale": 100000000,
+  "fixtures": [
+    {
+      "model": "chamfered-mansard-police-house",
+      "part": "chamfered-mansard-public-block",
+      "plane": "0.70710678:0:0.70710678:0.99702056",
+      "axes": {
+        "expected": [
+          2
+        ],
+        "actual": [
+          0,
+          0
+        ]
+      },
+      "expected": [
+        [
+          [
+            0.65,
+            0.48,
+            0.76
+          ],
+          [
+            0.51,
+            0.48,
+            0.9
+          ],
+          [
+            0.51,
+            0,
+            0.9
+          ],
+          [
+            0.65,
+            0,
+            0.76
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          [
+            0.51,
+            0,
+            0.9
+          ],
+          [
+            0.65,
+            0,
+            0.76
+          ],
+          [
+            0.6499999999999997,
+            0.48,
+            0.76
+          ]
+        ],
+        [
+          [
+            0.6499999999999997,
+            0.48,
+            0.76
+          ],
+          [
+            0.51,
+            0.48,
+            0.9
+          ],
+          [
+            0.51,
+            0,
+            0.9
+          ]
+        ]
+      ],
+      "originalError": "chamfered-mansard-police-house oriented area mismatch 0.70710678:0:0.70710678:0.99702056: 0.1344",
+      "canonicalResult": {
+        "planes": 1,
+        "maximumError": 0
+      }
+    },
+    {
+      "model": "splayed-h-plan-health-centre",
+      "part": "curved-central-lecture-room",
+      "plane": "0.70710678:0.70710678:0:0.71417785",
+      "axes": {
+        "expected": [
+          1
+        ],
+        "actual": [
+          0,
+          0
+        ]
+      },
+      "expected": [
+        [
+          [
+            0.62,
+            0.39,
+            0.22
+          ],
+          [
+            0.57,
+            0.44,
+            0.22
+          ],
+          [
+            0.57,
+            0.44,
+            0.5
+          ],
+          [
+            0.62,
+            0.39,
+            0.5
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          [
+            0.62,
+            0.39,
+            0.5
+          ],
+          [
+            0.62,
+            0.39,
+            0.22
+          ],
+          [
+            0.57,
+            0.44000000000000006,
+            0.22
+          ]
+        ],
+        [
+          [
+            0.57,
+            0.44000000000000006,
+            0.22
+          ],
+          [
+            0.57,
+            0.44000000000000006,
+            0.5
+          ],
+          [
+            0.62,
+            0.39,
+            0.5
+          ]
+        ]
+      ],
+      "originalError": "splayed-h-plan-health-centre oriented area mismatch 0.70710678:0.70710678:0:0.71417785: 0.028000000000000025",
+      "canonicalResult": {
+        "planes": 1,
+        "maximumError": 2.0816681711721685e-17
+      }
+    },
+    {
+      "model": "splayed-h-plan-health-centre",
+      "part": "curved-central-lecture-room",
+      "plane": "-0.70710678:0.70710678:0:0.00707107",
+      "axes": {
+        "expected": [
+          0
+        ],
+        "actual": [
+          0,
+          1
+        ]
+      },
+      "expected": [
+        [
+          [
+            0.43,
+            0.44,
+            0.22
+          ],
+          [
+            0.38,
+            0.39,
+            0.22
+          ],
+          [
+            0.38,
+            0.39,
+            0.5
+          ],
+          [
+            0.43,
+            0.44,
+            0.5
+          ]
+        ]
+      ],
+      "actual": [
+        [
+          [
+            0.43,
+            0.44,
+            0.5
+          ],
+          [
+            0.43,
+            0.44,
+            0.22
+          ],
+          [
+            0.38,
+            0.39,
+            0.22
+          ]
+        ],
+        [
+          [
+            0.38,
+            0.39,
+            0.22
+          ],
+          [
+            0.38,
+            0.39,
+            0.5
+          ],
+          [
+            0.43,
+            0.44,
+            0.5
+          ]
+        ]
+      ],
+      "originalError": "splayed-h-plan-health-centre oriented area mismatch -0.70710678:0.70710678:0:0.00707107: 0.005040000000000003",
+      "canonicalResult": {
+        "planes": 1,
+        "maximumError": 0
+      }
+    }
+  ]
+}

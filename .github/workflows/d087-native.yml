@@ -27,7 +27,7 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Exact current source, inherited assertions, all native and browser negative controls
-        run: node --test tools/d087-*.test.mjs proposals/d087/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs
+        run: node proposals/d088/inherited-test-runner.mjs --suite=d087
       - run: npm run typecheck
       - name: Actual immutable published157 baseline
         run: |
@@ -45,9 +45,9 @@ jobs:
           node proposals/d087/precompiled-cache-parity.mjs
       - name: Current old D083 eight and D086 ten native regressions
         run: |
-          node proposals/d083/native-integration-check-d087.mjs
-          node proposals/d086/native-variant-check-d087.mjs
-          node proposals/d087/native-current-inherited-ui-guards.mjs
+          node proposals/d083/native-integration-check-d088.mjs
+          node proposals/d086/native-variant-check-d088.mjs
+          node proposals/d088/native-current-inherited-ui-guards.mjs
       - name: Exact current native product and immutable published baseline builds
         run: |
           node proposals/d087/native-browser-build.mjs --attempt=1
@@ -69,6 +69,8 @@ jobs:
           name: d087-native-node-${{ github.sha }}
           path: |
             scratch/d087-*/
+            scratch/d088-inherited-tests-d087/
+            scratch/d088-native/
             scratch/d083-native-evidence/
             scratch/d086-native-variant/
           if-no-files-found: error
@@ -101,7 +103,7 @@ jobs:
           test "$(cat scratch/d087-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
           (cd scratch/d087-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Real catalogue, eleven mouse/touch placements, construction, picking and save reload
-        run: node proposals/d087/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+        run: node proposals/d087/native-browser-check-d088.mjs --width=${{ matrix.width }} --attempt=1
       - name: Every original raw PNG and independent complete production frame join
         run: node proposals/d087/browser-frame-qualification.mjs --manifest=scratch/d087-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json
       - name: Every required surface joins actual legal-player raw PNG and full native Uint32 arrays

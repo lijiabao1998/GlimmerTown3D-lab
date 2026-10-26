@@ -1,0 +1,429 @@
+{
+  "baseline": "cdd541da74973dba2ca73b782936c012d315add9",
+  "qualification": "Finite new eleven-model source/fixture/cardinality adaptation from actual verified cdd. All original performance, surfaces, actual-pointer, state and source assertions retained; old suites run separately.",
+  "copies": [
+    {
+      "source": "proposals/d087/browser-provenance.mjs",
+      "target": "proposals/d088/browser-provenance.mjs",
+      "sourceSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "targetSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d087/browser-first-use-performance.mjs",
+      "target": "proposals/d088/browser-first-use-performance.mjs",
+      "sourceSha256": "346758ec92d351d691776e63efc71cf561f777992455436628a4c74375fc3e5a",
+      "targetSha256": "173e8e7fa8e7ee5f11570b5806d5f4d17bbac482494a4b09fea99f7ac7e746ae",
+      "replacements": [
+        [
+          "[2,3,5].includes(m.size)",
+          "m.size===1"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-startup-cache-contract.mjs",
+      "target": "proposals/d088/browser-startup-cache-contract.mjs",
+      "sourceSha256": "e33a9895ec7c6d53716d5a87fbfb4c8bfdd1d4bc94ff169992e7086ecc028a5a",
+      "targetSha256": "72f4305152b6379ce69a7b6e9791712e7635ab40037f6d67471e4f03310e0fa3",
+      "replacements": [
+        [
+          "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+          "cdd541da74973dba2ca73b782936c012d315add9"
+        ],
+        [
+          "604c3f0cc607a07b2d6ee2759c7475cf517340e2c1bcec921c8fadc3ef28fc0b",
+          "a01e6596b57e758a2885beeafa1c4fd3b7cd649a6876cd2ef52caa1a804ddb2a"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-browser-build.mjs",
+      "target": "proposals/d088/native-browser-build.mjs",
+      "sourceSha256": "284c6a0508db98916a2fc56f16157c9219bc9f7e5698938dd36813a173047af4",
+      "targetSha256": "e441159c7acff7324f2dada962219b73c67dab6be29ac6e44e3dfb30906c544a",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "createWorkingRuralDesign",
+          "createPublicServiceDesign"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-browser-check.mjs",
+      "target": "proposals/d088/native-browser-check.mjs",
+      "sourceSha256": "eb2f8b5bea13b88e88241c2faff1648882a0bc85da0144a81708a092fb64a031",
+      "targetSha256": "0ae89f77d78882f2ecad5d34073ffe8359d862b15828266cdb6572d3f4455d9f",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "D087",
+          "D088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "length'),29);await shot('catalogue')",
+          "length'),40);await shot('catalogue')"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-frame-qualification.mjs",
+      "target": "proposals/d088/browser-frame-qualification.mjs",
+      "sourceSha256": "e5365d46089fd2f82963941b3de2a0b214cf6b3709283d548d71b838ffb5c7c6",
+      "targetSha256": "a47cce4fa2532b46f26f7bf3deb8da095edfa52ea72cb3529dfb0cb28f9ac792",
+      "replacements": [
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/scene-budget-check.mjs",
+      "target": "proposals/d088/scene-budget-check.mjs",
+      "sourceSha256": "6f255d0701ce7b2e06ccb76e8028e68a5e198a0a3bf3179c4655d1b3e66c9362",
+      "targetSha256": "d70dffbe1f22c8fad69e4593cdcaf76277f1aada4e4c5b5ca5d4f11150239664",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+          "cdd541da74973dba2ca73b782936c012d315add9"
+        ],
+        [
+          "old.scene(old.sample(id),false)",
+          "old.scene(old.sample(id),true)"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-first-use-cache-check.mjs",
+      "target": "proposals/d088/native-first-use-cache-check.mjs",
+      "sourceSha256": "e68b03dcd4f04ebc7a3d2fa45df371b3b14aa7383487067fcd97dd57c455257d",
+      "targetSha256": "84f7a699963554ce7b89aef053ae78d67b36f2f56e942fc4b896601860562ec8",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "D087",
+          "D088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "20261087",
+          "20261088"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-startup-cache-check.mjs",
+      "target": "proposals/d088/native-startup-cache-check.mjs",
+      "sourceSha256": "532e2cff66d75fd4dafdb00f1ec3d592d148359a3f445774d851e06c106c5189",
+      "targetSha256": "4331900b7dc3ede825e8f47ee0f16b73123b1f0ea8f304add1baba41328ab720",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-provenance.test.mjs",
+      "target": "proposals/d088/browser-provenance.test.mjs",
+      "sourceSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "targetSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d087/browser-startup-cache-contract.test.mjs",
+      "target": "proposals/d088/browser-startup-cache-contract.test.mjs",
+      "sourceSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "targetSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d087/browser-first-use-performance.test.mjs",
+      "target": "proposals/d088/browser-first-use-performance.test.mjs",
+      "sourceSha256": "716e6b97d8f3623d5d967ef42f3cb54a020db87e51232ea65b3e63cf903d872d",
+      "targetSha256": "ae9f493d24e24ed238f45a9905c67414760d0be1173729e0847d7b5b6cb3f62f",
+      "replacements": [
+        [
+          "size:[2,3,5][i%3]",
+          "size:1"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-frame-qualification.test.mjs",
+      "target": "proposals/d088/browser-frame-qualification.test.mjs",
+      "sourceSha256": "f33c5a11f6b17dd2a645748ac6825184f86b88ef919853b0b8e63ad3764de0b1",
+      "targetSha256": "fde4ae1331aaec847798992cda156e2c81cf1a518ff33436dfb0602f3de57809",
+      "replacements": [
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-surface-plan.mjs",
+      "target": "proposals/d088/native-surface-plan.mjs",
+      "sourceSha256": "4695f80079ea18b5c68c900dac66e6e2a73d8d038ca75ad3b1eb1739d467a42e",
+      "targetSha256": "3dbb99aff97107f56067dddca6cfb613b9eb23d42a60671e6626e1859d3c211c",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-surface-qualification.mjs",
+      "target": "proposals/d088/browser-surface-qualification.mjs",
+      "sourceSha256": "e24a9424cbd73baaaa32063d095ead0d0bb7f7849729b549344cb78b59726d2a",
+      "targetSha256": "ef66c9ebe2a1cdaa7d958ecc51dc47e3cf687d97009b8129fb113d8784a8bb06",
+      "replacements": [
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "createWorkingRuralDesign",
+          "createPublicServiceDesign"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-surface-qualification.test.mjs",
+      "target": "proposals/d088/browser-surface-qualification.test.mjs",
+      "sourceSha256": "24067ee0c996e6db9d66ece250e75e521f5402b9ef733dd7215dcb27adfa87ab",
+      "targetSha256": "74c4380975dc0aff4aa237f95c1bc60f1bed1489a8f125dc2802610afb0fa021",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-cache-observation.mjs",
+      "target": "proposals/d088/browser-cache-observation.mjs",
+      "sourceSha256": "e7d1ac576804c1f15407188cf7e12765d1a95781f2b1af405a28d5134c794142",
+      "targetSha256": "5824d0b24c412ceec2fab4e25f907a970c57fc8215df264e9a20ed8448202c72",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "646b98cad57a70eb8afaa9eb708a22bfb62321b9b3c70114203656c8d17cd8bc",
+          "2161e1c9c69f08ce69d59ee96f809fb271a9111a176068e4db6053bf761fffef"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/browser-cache-observation.test.mjs",
+      "target": "proposals/d088/browser-cache-observation.test.mjs",
+      "sourceSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "targetSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d087/scene-budget-support.mjs",
+      "target": "proposals/d088/scene-budget-support.mjs",
+      "sourceSha256": "c1a895ed04b7ed9757052ddc6afe0e5feac5007e84e8cec2d02dbea65933598b",
+      "targetSha256": "c5ae212ce11306c5fd4b14dcae28f05eb2b7cb2c2f149847c9f53d527cae6b3d",
+      "replacements": [
+        [
+          "D087",
+          "D088"
+        ],
+        [
+          "Array(19).fill(true),native",
+          "Array(20).fill(true),native"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-scene-fixture.mjs",
+      "target": "proposals/d088/native-scene-fixture.mjs",
+      "sourceSha256": "a5b3dd249f180214fd94919412bfa065bf70eb7df8392261bf7fad035a34213f",
+      "targetSha256": "96323ade3add474b981b9710c6a38bc533a57f2ea7185129c96fdd06d63a70c2",
+      "replacements": [
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "20261087",
+          "20261088"
+        ],
+        [
+          "英式農場與生產街",
+          "英式公共服務街"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/native-fixture.test.mjs",
+      "target": "proposals/d088/native-fixture.test.mjs",
+      "sourceSha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "targetSha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "replacements": []
+    },
+    {
+      "source": "proposals/d087/native-first-use-fixture.test.mjs",
+      "target": "proposals/d088/native-first-use-fixture.test.mjs",
+      "sourceSha256": "5ef6bf52df9d7c4abd8df7ccf56bc60c620e9d98dee3be3ef6cb95088fea9fe8",
+      "targetSha256": "7e6767cb3fbb902c724e14de6902564d16e88e09d207b484c611cdae145c7f2e",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "WORKING_RURAL_BUILDINGS",
+          "PUBLIC_SERVICE_BUILDINGS"
+        ],
+        [
+          "britishWorkingRural",
+          "britishPublicServices"
+        ],
+        [
+          "createWorkingRuralDesign",
+          "createPublicServiceDesign"
+        ],
+        [
+          "emitWorkingRuralDesign",
+          "emitPublicServiceDesign"
+        ],
+        [
+          "including 5×5",
+          "including every frozen 1×1 public-service parcel"
+        ]
+      ]
+    },
+    {
+      "source": "proposals/d087/model-audit.mjs",
+      "target": "proposals/d088/model-audit.mjs",
+      "sourceSha256": "1afb73c633cb46d9ff2fa6c6996f3a28e59fbd6eec9dde1e6f87ebe8bfc8431a",
+      "targetSha256": "6ac074247a3a639ab028d32c642d3edad847f6d46db31d1ebfbd7d610fbcb33a",
+      "replacements": [
+        [
+          "d087",
+          "d088"
+        ],
+        [
+          "old157",
+          "old168"
+        ],
+        [
+          "original157",
+          "original168"
+        ],
+        [
+          "published-157-models",
+          "published-168-models"
+        ],
+        [
+          "baseline?19:20",
+          "baseline?20:21"
+        ],
+        [
+          "oldCount:157",
+          "oldCount:168"
+        ],
+        [
+          "baseline?157:168",
+          "baseline?168:179"
+        ],
+        [
+          "unchanged1800 cap",
+          "unchanged1200 cap"
+        ],
+        [
+          "../british-program/ledger-current.mjs",
+          "../british-program/ledger-current-v3.mjs"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "qualification": "Preserved actual unaccepted authoring first reds. Large original required-probe arrays remain in write-once local archives; these exact sources, complete first-error logs and access collision polygons do not replace current or browser acceptance.",
+  "files": [
+    {
+      "file": "bare-first-source.mjs",
+      "sha256": "94a80a746fe8eeffc045e118919349aa4beafe389bbbbb551d0cc28aeebaa98e",
+      "bytes": 32478
+    },
+    {
+      "file": "bare-second-source.mjs",
+      "sha256": "da563336582d88d6649623e5d2143b4d99440f6965538d33b5e0631791fb8acd",
+      "bytes": 32775
+    },
+    {
+      "file": "detailed-first-source.mjs",
+      "sha256": "e28ad1dfbf30516564a55ccc72680915a1606ed8fb553561b7c185246370e543",
+      "bytes": 38496
+    },
+    {
+      "file": "detailed-second-before-office-gable.mjs",
+      "sha256": "85c8eb5b671451ec05330fe9d4d6888a0693ce484a3d20a32b7678fab2153fab",
+      "bytes": 38505
+    },
+    {
+      "file": "butterfly-access-first-red-source.mjs",
+      "sha256": "9461e005df434f975335248a209a56ee35566fefec5d7a16c839ecdce427202b",
+      "bytes": 38507
+    },
+    {
+      "file": "bare-first-ray.log",
+      "sha256": "29120702a32b945c171b1a228f2e296227e89c1a91bd2b9c40d829b9c793d948",
+      "bytes": 2629
+    },
+    {
+      "file": "bare-second-ray.log",
+      "sha256": "2a221b3a83ae3598b485f760354b729e852bef2185215b7412c15d18dc45f213",
+      "bytes": 2494
+    },
+    {
+      "file": "detailed-first-counts.log",
+      "sha256": "4fcb51134bedd7ea7896f601a4d9159bf4a2d34be2001609288aef688cfdb9a4",
+      "bytes": 3038
+    },
+    {
+      "file": "structure-original-projection-first-red.log",
+      "sha256": "0f33cdd8efc4950577785ad71015d32860447842fc941b859e1d75cd22b29ad8",
+      "bytes": 1169
+    },
+    {
+      "file": "access-first-full.json",
+      "sha256": "104c0cfde2a8682936a4c0ff41d2ee68a6c160a0a285aea3d6adca98b5fbf912",
+      "bytes": 22676
+    }
+  ],
+  "repairs": {
+    "bare-first-source.mjs": "H-clinic true narrow entrance-side gap; replaced with continuously connected full-width canted vestibule.",
+    "bare-second-source.mjs": "Exact 45-degree common-plane projection defect source; original full polygons and axes in geometry-projection-defect.json.",
+    "detailed-first-source.mjs": "Constabulary outer service-door reveal exceeded actual wall; moved real door inward and kept actual window separation.",
+    "detailed-second-before-office-gable.mjs": "Actual office roof hip did not match frozen gabled-report-office identity; actual roof changed to transverse gable.",
+    "butterfly-access-first-red-source.mjs": "Central door .16 approach physically obstructed by splayed wards; moved two entire ward roots outward .04, restoring .1966667 clear approach and original .18 requirement."
+  }
+}

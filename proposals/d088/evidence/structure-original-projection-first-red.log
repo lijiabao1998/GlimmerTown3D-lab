@@ -1,0 +1,56 @@
+{
+  id: 'quadrangular-county-constabulary',
+  solids: 4,
+  triangles: 64,
+  negativeControls: 140
+}
+chamfered-mansard-police-house chamfered-mansard-public-block oriented area mismatch 0.70710678:0:0.70710678:0.99702056: 0.1344
+{
+  id: 'rural-constable-cottage-and-office',
+  solids: 4,
+  triangles: 64,
+  negativeControls: 140
+}
+{
+  id: 'butterfly-ward-cottage-hospital',
+  solids: 3,
+  triangles: 48,
+  negativeControls: 105
+}
+{
+  id: 'staggered-isolation-pavilion-hospital',
+  solids: 4,
+  triangles: 60,
+  negativeControls: 132
+}
+splayed-h-plan-health-centre curved-central-lecture-room oriented area mismatch 0.70710678:0.70710678:0:0.71417785: 0.028000000000000025
+{
+  id: 'twin-apsidal-dispensary',
+  solids: 4,
+  triangles: 84,
+  negativeControls: 180
+}
+{
+  id: 'radial-folded-roof-primary-school',
+  solids: 1,
+  triangles: 126,
+  negativeControls: 255
+}
+{
+  id: 'garden-classroom-pavilion-school',
+  solids: 5,
+  triangles: 96,
+  negativeControls: 207
+}
+{
+  id: 'cruciform-public-reading-library',
+  solids: 3,
+  triangles: 48,
+  negativeControls: 105
+}
+{
+  id: 'streamline-corner-sorting-post-office',
+  solids: 3,
+  triangles: 84,
+  negativeControls: 177
+}
