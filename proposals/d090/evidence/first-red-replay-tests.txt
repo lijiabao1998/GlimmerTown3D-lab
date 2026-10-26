@@ -1,0 +1,13 @@
+✔ all first-red source/polygon/log evidence is immutable exact bytes (3.625411ms)
+✔ bare first16 co-facing polygons reproduce exactly despite original required-sample pass (66.709663ms)
+✔ original castle route remains physically blocked; no later route tolerance can waive it (47.347535ms)
+✔ original castle entry/leaf paint remains hidden on actual original48 rays and every old paint receipt reproduces (2257.271582ms)
+✔ first source-bound native process137 is retained as incomplete24/30, never batch acceptance (0.469299ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3197.557553

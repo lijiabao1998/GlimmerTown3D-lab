@@ -1,0 +1,1 @@
+OK D053 native click origin and cleanup safety real origin guard: old canvas release rejected, native UI/keyboard/canvas click retained, two pointers, cancel, lifetime cleanup, reused-ID race; 3 mutations rejected

@@ -1,0 +1,212 @@
+name: D090 native British utilities and heritage final ten
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: d090-native-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  native-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    outputs:
+      artifact-id: ${{ steps.build.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Exact current source, inherited assertions, all native and browser negative controls
+        run: node --test tools/d090-*.test.mjs proposals/d090/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs
+      - run: npm run typecheck
+      - name: Actual immutable published190 baseline
+        run: |
+          git worktree add --detach ../GlimmerTown3D-lab-d090-baseline 5b41bac165ba2b29146e6835490357bebc3cd549
+          ln -s "$PWD/node_modules" ../GlimmerTown3D-lab-d090-baseline/node_modules
+      - name: Original190 byte identities and ten distinct complete native buildings
+        run: |
+          node proposals/d090/model-audit.mjs --baseline
+          node proposals/d090/model-audit.mjs
+      - name: Every current old scene and ten/forty native owners retain budgets
+        run: node proposals/d090/scene-budget-check.mjs --label=ci
+      - name: Reproduce exact signed-zero-safe procedural mesh cache
+        run: |
+          node proposals/d090/precompiled-cache-qualification.mjs src/render/britishUtilityHeritageModels.mjs fixtures/d090/compiled-cache.json
+          node proposals/d090/precompiled-cache-parity.mjs
+      - name: Current old D083 eight, D086 ten, D087 eleven and D088 eleven and D089 eleven native regressions
+        run: |
+          node proposals/d083/native-integration-check-d090.mjs
+          node proposals/d086/native-variant-check-d090.mjs
+          node --test proposals/d087/native-variant-d090.test.mjs proposals/d088/native-integration-d090.test.mjs tools/d089-native-lifecycle-d090.test.mjs tools/d089-native-catalogue-d090.test.mjs tools/d089-native-ui-actions-d090.test.mjs tools/d089-native-scene-dispatch-d090.test.mjs
+          node proposals/d090/native-current-inherited-ui-guards.mjs
+      - name: Exact current native product and immutable published baseline builds
+        run: |
+          node proposals/d090/native-browser-build.mjs --attempt=1
+          (cd ../GlimmerTown3D-lab-d090-baseline && node proposals/d089/native-browser-build.mjs --attempt=1)
+          mkdir scratch/d090-native-build/attempt-1/baseline
+          cp ../GlimmerTown3D-lab-d090-baseline/scratch/d089-native-build/attempt-1/index.html ../GlimmerTown3D-lab-d090-baseline/scratch/d089-native-build/attempt-1/provenance.json scratch/d090-native-build/attempt-1/baseline/
+          printf '%s\n' "$GITHUB_SHA" > scratch/d090-native-build/attempt-1/source-commit.txt
+          (cd scratch/d090-native-build/attempt-1 && sha256sum index.html provenance.json baseline/index.html baseline/provenance.json > index.sha256)
+      - uses: actions/upload-artifact@v4
+        id: build
+        with:
+          name: d090-native-build-${{ github.sha }}
+          path: scratch/d090-native-build/attempt-1/
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d090-native-node-${{ github.sha }}
+          path: |
+            scratch/d090-*/
+            scratch/d083-native-evidence/
+            scratch/d086-native-variant/
+          if-no-files-found: error
+          retention-days: 30
+  native-game:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: scratch/d090-native-build/attempt-1/
+          merge-multiple: true
+      - name: Verify exact same build and source SHA
+        run: |
+          test "$(cat scratch/d090-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+          (cd scratch/d090-native-build/attempt-1 && sha256sum --check index.sha256)
+      - name: Real catalogue, ten mouse/touch placements, construction, picking and save reload
+        run: node proposals/d090/native-browser-check.mjs --width=${{ matrix.width }} --attempt=1
+      - name: Every original raw PNG and independent complete production frame join
+        run: node proposals/d090/browser-frame-qualification.mjs --manifest=scratch/d090-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json
+      - name: Every required surface joins actual legal-player raw PNG and full native Uint32 arrays
+        run: node proposals/d090/browser-surface-qualification.mjs --manifest=scratch/d090-native-evidence/browser-${{ matrix.width }}-attempt-1/manifest.json --build=scratch/d090-native-build/attempt-1 --cache-manifest=fixtures/d090/compiled-cache.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d090-native-game-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d090-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  native-input-performance:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: scratch/d090-native-build/attempt-1/
+          merge-multiple: true
+      - name: Verify exact same build and source SHA
+        run: |
+          test "$(cat scratch/d090-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+          (cd scratch/d090-native-build/attempt-1 && sha256sum --check index.sha256)
+      - name: Fresh actual page CPU6 first use and all30 distinct commits per width
+        run: node proposals/d090/native-first-use-cache-check.mjs --width=${{ matrix.width }} --attempt=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d090-native-first-use-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d090-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  native-startup-cache:
+    needs: native-and-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        width: [1440, 412, 360]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+      - uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.native-and-build.outputs.artifact-id }}
+          path: scratch/d090-native-build/attempt-1/
+          merge-multiple: true
+      - name: Verify exact same build and source SHA
+        run: |
+          test "$(cat scratch/d090-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+          (cd scratch/d090-native-build/attempt-1 && sha256sum --check index.sha256)
+      - name: Eight fresh profiles per width, original startup bound and empty-cache evidence
+        run: node proposals/d090/native-startup-cache-check.mjs --width=${{ matrix.width }} --attempt=1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d090-native-startup-${{ matrix.width }}-${{ github.sha }}
+          path: scratch/d090-native-evidence/
+          if-no-files-found: error
+          retention-days: 30
+  surface-qualification:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Independent complete solids, every facade and genuine utility/heritage door routes
+        run: node --test proposals/d090/geometry-focused.test.mjs proposals/d090/geometry-access.test.mjs
+      - name: All30 complete original-D081 native contracts, no omitted probes or alternate camera
+        run: node proposals/d090/native-surface-plan.mjs --label=ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: d090-native-surfaces-${{ github.sha }}
+          path: scratch/d090-surface/
+          if-no-files-found: error
+          retention-days: 30

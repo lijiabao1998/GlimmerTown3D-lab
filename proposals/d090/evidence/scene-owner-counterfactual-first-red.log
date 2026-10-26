@@ -1,0 +1,24 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    blocks: 0,
++   owners: 16
+-   owners: 13
+  }
+
+    at qualifySceneBudgets (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scene-budget-check.mjs:15:607)
+    at async file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scene-budget-check.mjs:24:384 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: { owners: 16, blocks: 0 },
+  expected: { owners: 13, blocks: 0 },
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

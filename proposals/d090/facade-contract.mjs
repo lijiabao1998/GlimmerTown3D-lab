@@ -1,0 +1,6 @@
+// Unchanged D088 complete actual host-polygon / paint-boundary verifier and its
+// nine adversarial controls. D090 includes true polygonal round-headed lights.
+import{authoritativeProceduralSource}from'./precompiled-cache.mjs';
+import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';export{assertFacadeImprint,facadeNegatives}from'../d088/facade-imprint-geometry.mjs';
+export const INTENTS=[21,15,31,24,25,24,27,29,32,37];
+export async function rawFacadeReference(){const bytes=fs.readFileSync(new URL('../../src/render/britishUtilityHeritageModels.mjs',import.meta.url));const source=authoritativeProceduralSource(bytes.toString());const from='freezeModel(imprintFacades(normaliseHeight(BUILDERS[i](),HEIGHTS[i])))',to='freezeModel(normaliseHeight(BUILDERS[i](),HEIGHTS[i]))';assert.equal(source.split(from).length,2,'one exact raw finish-intent seam');assert.equal(source.split("from 'three'").length,2);return{qualification:'Exact frozen procedural authority',sourceSha256:createHash('sha256').update(bytes).digest('hex'),module:await import('data:text/javascript;base64,'+Buffer.from(source.replace(from,to).replace("from 'three'","from "+JSON.stringify(import.meta.resolve('three')))).toString('base64'))};}

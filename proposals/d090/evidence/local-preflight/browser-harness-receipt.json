@@ -1,0 +1,175 @@
+{
+  "qualification": "Exact current source/cache validator and capture-inventory contract; all counts are derived from actual frozen plan and independently checked synthetic metadata. NOT actual Chrome, raw-image acceptance or publication.",
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "planSha256": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0",
+  "cache": {
+    "passed": true,
+    "sourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+    "candidateSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+    "models": 10
+  },
+  "newCopyReceipt": {
+    "file": "/tmp/d090-browser-new-copy-deltas.json",
+    "sha256": "a6b4f2be677dcd716b08fac094e191a2cd81371e990cf8f160646cc7d800f23e"
+  },
+  "inheritedBrowserManifestSha256": "f513a4be60831560fe349bf3358ef9311fa96fb0fddf46d5d8c0d7d4d09b120b",
+  "widths": [
+    {
+      "width": 1440,
+      "baseOriginals": 45,
+      "surfaceOriginals": 41,
+      "originals": 86,
+      "mandatoryPausedRepeats": 86,
+      "perModelLegalViews": [
+        {
+          "id": "castellated-tank-water-tower",
+          "views": 5
+        },
+        {
+          "id": "tapered-circular-reservoir-tower",
+          "views": 4
+        },
+        {
+          "id": "romanesque-sewage-engine-house",
+          "views": 4
+        },
+        {
+          "id": "circular-filterworks-and-valve-hall",
+          "views": 4
+        },
+        {
+          "id": "trefoil-apsed-mortuary-cemetery-chapel",
+          "views": 4
+        },
+        {
+          "id": "lectern-estate-doocot",
+          "views": 4
+        },
+        {
+          "id": "canted-t-plan-turnpike-lodge",
+          "views": 4
+        },
+        {
+          "id": "cruciform-village-forge",
+          "views": 4
+        },
+        {
+          "id": "segmental-roof-rural-firehouse",
+          "views": 4
+        },
+        {
+          "id": "paired-hexagonal-saddle-roof-reading-library",
+          "views": 4
+        }
+      ],
+      "actualChromeCaptured": false
+    },
+    {
+      "width": 412,
+      "baseOriginals": 45,
+      "surfaceOriginals": 41,
+      "originals": 86,
+      "mandatoryPausedRepeats": 86,
+      "perModelLegalViews": [
+        {
+          "id": "castellated-tank-water-tower",
+          "views": 5
+        },
+        {
+          "id": "tapered-circular-reservoir-tower",
+          "views": 4
+        },
+        {
+          "id": "romanesque-sewage-engine-house",
+          "views": 4
+        },
+        {
+          "id": "circular-filterworks-and-valve-hall",
+          "views": 4
+        },
+        {
+          "id": "trefoil-apsed-mortuary-cemetery-chapel",
+          "views": 4
+        },
+        {
+          "id": "lectern-estate-doocot",
+          "views": 4
+        },
+        {
+          "id": "canted-t-plan-turnpike-lodge",
+          "views": 4
+        },
+        {
+          "id": "cruciform-village-forge",
+          "views": 4
+        },
+        {
+          "id": "segmental-roof-rural-firehouse",
+          "views": 4
+        },
+        {
+          "id": "paired-hexagonal-saddle-roof-reading-library",
+          "views": 4
+        }
+      ],
+      "actualChromeCaptured": false
+    },
+    {
+      "width": 360,
+      "baseOriginals": 45,
+      "surfaceOriginals": 41,
+      "originals": 86,
+      "mandatoryPausedRepeats": 86,
+      "perModelLegalViews": [
+        {
+          "id": "castellated-tank-water-tower",
+          "views": 5
+        },
+        {
+          "id": "tapered-circular-reservoir-tower",
+          "views": 4
+        },
+        {
+          "id": "romanesque-sewage-engine-house",
+          "views": 4
+        },
+        {
+          "id": "circular-filterworks-and-valve-hall",
+          "views": 4
+        },
+        {
+          "id": "trefoil-apsed-mortuary-cemetery-chapel",
+          "views": 4
+        },
+        {
+          "id": "lectern-estate-doocot",
+          "views": 4
+        },
+        {
+          "id": "canted-t-plan-turnpike-lodge",
+          "views": 4
+        },
+        {
+          "id": "cruciform-village-forge",
+          "views": 4
+        },
+        {
+          "id": "segmental-roof-rural-firehouse",
+          "views": 4
+        },
+        {
+          "id": "paired-hexagonal-saddle-roof-reading-library",
+          "views": 4
+        }
+      ],
+      "actualChromeCaptured": false
+    }
+  ],
+  "totals": {
+    "modelWidthCases": 30,
+    "firstUseIndividualOperations": 90,
+    "startupProfiles": 24,
+    "originals": 258,
+    "mandatoryPausedRepeats": 258
+  }
+}

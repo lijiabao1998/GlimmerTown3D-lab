@@ -1,0 +1,13 @@
+✔ all30 first-use parcels are distinct, legal, paid and retain six contextual owners (42.209079ms)
+✔ removing either nearby water tile makes every sewage first-use site fail its real native preview (35.765612ms)
+✔ actual browser first-use imports the tested legal fixtures and requires all90 samples, not median-only acceptance (1.575468ms)
+✔ ten paid and forty stress native placements retain controls, full footprints and save replay (110.441142ms)
+✔ native/stress water is genuinely adjacent and never consumes a declared parcel (15.183965ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 388.574839

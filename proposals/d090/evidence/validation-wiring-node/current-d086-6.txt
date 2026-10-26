@@ -1,0 +1,7 @@
+OK ten exact append-only variants, original metadata/defaults and eight heritage tools retained
+OK all ten reuse exact native fiscal, RNG, world, service grids and transaction semantics
+OK all inherited blocker outcomes and insufficient funds match base without partial placement
+OK ten native owners retain exact explicit variants through save/load and journal replay
+OK native root/child demolition and refund undo restore each explicit variant and footprint
+OK nine real simulation days retain native construction, service/fiscal parity and saves
+{"passed":true,"checks":6,"comparisons":600,"negativeControls":90,"blockedCases":195}

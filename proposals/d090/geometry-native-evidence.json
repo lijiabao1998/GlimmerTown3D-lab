@@ -1,0 +1,257 @@
+{
+  "qualification": "Complete numerical/source evidence only. Browser raw geometry/image join is a separate mandatory gate.",
+  "sourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "cachedSourceSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+  "planSha256": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0",
+  "nativeReport": {
+    "file": "evidence/native-cached-final-report.json",
+    "sha256": "3439b11648917f034df9e1dcb3d6ab5d0c8ad2ae59de3bb3010850ace4837366"
+  },
+  "nativePaintReport": {
+    "file": "evidence/native-cached-final-paint-report.json",
+    "sha256": "2e5222acb5544152066d8c52fc108cb545244f71795fa0b6fbb5fa0667826d85"
+  },
+  "cache": {
+    "passed": true,
+    "sourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+    "candidateSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+    "models": 10
+  },
+  "cases": 30,
+  "requiredPerWidth": 18685,
+  "requiredAllWidths": 56055,
+  "missing": 0,
+  "paintIntents": 265,
+  "paintCases": 795,
+  "paintMissing": 0,
+  "viewsPerWidth": [
+    {
+      "width": 1440,
+      "views": 41,
+      "paintExtra": 0
+    },
+    {
+      "width": 412,
+      "views": 41,
+      "paintExtra": 0
+    },
+    {
+      "width": 360,
+      "views": 41,
+      "paintExtra": 0
+    }
+  ],
+  "contracts": [
+    {
+      "file": "castellated-tank-water-tower-1440.json.gz",
+      "bytes": 444672,
+      "sha256": "b19aebe6e5c30ee3498f029c97f002765c95a38bb6995f09a3d1638f7ee1364b",
+      "contractSha256": "3a2aebea9b1742e9526d36b57184250dbaa5890665a13e65c2ccaa7e40ea84d3",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "castellated-tank-water-tower-412.json.gz",
+      "bytes": 445215,
+      "sha256": "f4fa5480b58dacefc365bab80d71f4a5a9950e5d35b4f2496bd9c122cc8c8701",
+      "contractSha256": "9d4cf5e95333ce9a3bb9e63683d0183c231e7d15fc4ee73632bf17022fdd5e8b",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "castellated-tank-water-tower-360.json.gz",
+      "bytes": 444639,
+      "sha256": "0285f3f0bed62ba33e3ec627d43ae99d864606e4b42ae881973492b1e30113dd",
+      "contractSha256": "3a2aebea9b1742e9526d36b57184250dbaa5890665a13e65c2ccaa7e40ea84d3",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-1440.json.gz",
+      "bytes": 284570,
+      "sha256": "d5f401a48bad2c9c5cd56b399b163d83ead63050c2b3d5a7ad8ae3200744ea1d",
+      "contractSha256": "a0661dd9ef573125ee1d21a7af64d9b97c2ab4d4e41bb4c17f3f36a2da62fe3f",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-412.json.gz",
+      "bytes": 284387,
+      "sha256": "5c31379a6ffead4bd9a55cf54ec0d1b090ea1f40dc63e7c888701986cbaea2a0",
+      "contractSha256": "585e7edf2fdb7d16b11b1371e2b3cfa6dd757c85926a960b577cc1cdc317304d",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "tapered-circular-reservoir-tower-360.json.gz",
+      "bytes": 284538,
+      "sha256": "e687fa5960a967d2a5c3bff1d8e460693f5fd3933cd53c4eca559005fa9d1d88",
+      "contractSha256": "06b9faf16a56968225271a8e0fb317e10d9219e84c82e55dcac944983f7111ae",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-1440.json.gz",
+      "bytes": 373005,
+      "sha256": "2261d10f1119e14bae96e47c0c2e8a3da1061761925ed58e128ef7e1148690c2",
+      "contractSha256": "92a8f9f41029bf668f9f2197126c758e2a5456533318bc9822d336d2eb4d059e",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-412.json.gz",
+      "bytes": 373440,
+      "sha256": "6c6add7bb2e6f6cd9d95a14232646fdfd9235115fa35bb6aa690b46254c19741",
+      "contractSha256": "a21fd54e166f7ab5283068b56af1c0826bd97e88e5ba85058700440ff92fc774",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "romanesque-sewage-engine-house-360.json.gz",
+      "bytes": 373051,
+      "sha256": "0f9b78213c5d0003b7659de728e556da4a9221ad2eb4b326df143944a37580bf",
+      "contractSha256": "29681f724e4f4f9cfbfd3144bcaa01ff801df0c3d0725759554ea8cbee833299",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-1440.json.gz",
+      "bytes": 283657,
+      "sha256": "60c37eb25a7cd57be238cdc9a4ef4b52e4e194ead80064aa5049d86cbfb84c6d",
+      "contractSha256": "833d0f762e403e798f9cc0c43df854aa46cd6aefa09930cf2ec8fe2d9b6c0b89",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-412.json.gz",
+      "bytes": 283421,
+      "sha256": "2403e01ddeb917b24262d5975f138e9929e079c5fa928a54d2b2a06485c49cde",
+      "contractSha256": "74951df11b7a8b79fac5e8375ad175d7066b026be7df884bd2036b230fd33983",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "circular-filterworks-and-valve-hall-360.json.gz",
+      "bytes": 283679,
+      "sha256": "d1f44669b6598599a963e090b3b67ccffc6f5b5d37c4f872f1e62a3a905810ef",
+      "contractSha256": "9c05ac23c9caf9d8b4f926ec9e1b3170f8b3586234c989d08047431b0ea8ca28",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-1440.json.gz",
+      "bytes": 401051,
+      "sha256": "afc4843daee11968882a9af33cb4580aa0f591e08da343a6034ccd944f67479f",
+      "contractSha256": "4a7c7e20aab8bbeb3069675fcc632554bf5ad0ea8c4176da50a7bd89e7c3c3e9",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-412.json.gz",
+      "bytes": 401215,
+      "sha256": "680a9e30dcd0d8965eb8ff127b89ff402823a3c3f7f73459216f2ca88bdb131d",
+      "contractSha256": "c26bcd7db307f707951fa8089610d11b0d18cc5428641f63d73952c406dffc77",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "trefoil-apsed-mortuary-cemetery-chapel-360.json.gz",
+      "bytes": 401044,
+      "sha256": "121a2edeba7622d714ffcbd94e9ed72cbe918821211f1071e258f660c3af14d9",
+      "contractSha256": "0e44c0530604ae16de57d016c6b6f67d7324a915034623cc382e698f81df2cf0",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "lectern-estate-doocot-1440.json.gz",
+      "bytes": 308047,
+      "sha256": "438e2c4c6da6f3a6a24c2a26ed923c859d19897094157874422cf6735ec5ae29",
+      "contractSha256": "f8594d2ac695d4393ef7edda67515619a7a0ad5ab541c61ba427f9f240b23350",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "lectern-estate-doocot-412.json.gz",
+      "bytes": 308358,
+      "sha256": "067097d7f6a949c2cc3dc47c6c48cd4448e6208a9f53e220d5c4536dd186cc7a",
+      "contractSha256": "5049246aa5e871aa9e4512c9642e4438c161a8e220a1e029093e191c64be51d6",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "lectern-estate-doocot-360.json.gz",
+      "bytes": 308068,
+      "sha256": "bdf9b7ddf76dde195ded0b0d411b8411dadf302322c6cd81191324340ff525b2",
+      "contractSha256": "f8594d2ac695d4393ef7edda67515619a7a0ad5ab541c61ba427f9f240b23350",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-1440.json.gz",
+      "bytes": 287574,
+      "sha256": "70f356e9c2fe99b624c0ce79a77a4d59e55de07d3062eb2f5d458204e72a19e7",
+      "contractSha256": "df335b95a621271335eaa1483518b08c1b2cea53617f511bde723d01a9461303",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-412.json.gz",
+      "bytes": 288171,
+      "sha256": "f7a7373b065a34b3edf1d93c6d39d0d6e0b9579ea122994427c8e23380bae417",
+      "contractSha256": "8e2214e6c83839fae719115e6ce5531d16ad93fd6e91baa5939524048257c3ac",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "canted-t-plan-turnpike-lodge-360.json.gz",
+      "bytes": 287563,
+      "sha256": "3fd6b443dd2211c23ddf4165704ebcf0683d73f377b7fc712acc280280143bc1",
+      "contractSha256": "2c932c098bb5d8557f806965c6a54634f6fbdd7566832964f00d90ef92e2ea72",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "cruciform-village-forge-1440.json.gz",
+      "bytes": 279449,
+      "sha256": "093dfae607778bcfc504ed35c7c0e0f75a7bbc3dcf617adc108c84af554bb128",
+      "contractSha256": "b61f3e4d2f3904a9f3402b6782dfec1c7b38f1cca0ad918c6f7498640117012b",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "cruciform-village-forge-412.json.gz",
+      "bytes": 278878,
+      "sha256": "563d9694143e3f8824069db4d6e0e04459cca92b067344e47391534281dea2b7",
+      "contractSha256": "fa991b2d7f232d273e983435e30e96a43b6182a66470118d9dc1222d451f5aad",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "cruciform-village-forge-360.json.gz",
+      "bytes": 279517,
+      "sha256": "c008c3e3033caea020e505c67cde280114da18b36c1af5a50d7060428b69ab02",
+      "contractSha256": "b61f3e4d2f3904a9f3402b6782dfec1c7b38f1cca0ad918c6f7498640117012b",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-1440.json.gz",
+      "bytes": 285986,
+      "sha256": "f18ea3aab4b9f89732c21d5372de1147f8d626653437573f6281456c56301e19",
+      "contractSha256": "ad56e771e321c3b65fb271498c3b043b544cd2051ead6345d1614d3ce4ea1b00",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-412.json.gz",
+      "bytes": 286221,
+      "sha256": "222a61fddfe95c0d5aeeca9b6923ad038665f894a2d5b577c4cd81f84b376e3b",
+      "contractSha256": "e359ee653ee91b5482da518beda7ca6f0050b848745fa10f76650d5079b8347e",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "segmental-roof-rural-firehouse-360.json.gz",
+      "bytes": 285936,
+      "sha256": "1387ebeb8b960718447bb711d5fe500704018ea1a1e27f16e17e28914b28288d",
+      "contractSha256": "372520c585573b5aa7beb70236a2a5f73226a8b04baf9b4277145db415375287",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-1440.json.gz",
+      "bytes": 308257,
+      "sha256": "ebe71e9c7289c60310bf5977ce625040d0e3e13404b1e7fc5d0a8ceb2bc0c420",
+      "contractSha256": "22f53f95b8e57bcb158dc98635fdff5adf008b37dd3372dc31916d3d5c3d052a",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-412.json.gz",
+      "bytes": 308361,
+      "sha256": "a958ff1eb0d131009c9d3113661393ceadd46752a91d9dd6cc0adb7196522612",
+      "contractSha256": "d0e629fd6b3d692a6af25ae35ac4fe5caaffa1c7a17488be29033b927fff3e10",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    },
+    {
+      "file": "paired-hexagonal-saddle-roof-reading-library-360.json.gz",
+      "bytes": 308236,
+      "sha256": "6089c525af1338334d0d4dcd7cb22f72c0b54b43ad228eeac38b6764eb9cff2d",
+      "contractSha256": "1d420625d8c2af2c6c4f1a4b8868bc744af8e35da472e846a967630359fed70d",
+      "sourceGeometrySha256": "8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd"
+    }
+  ],
+  "browserJoined": false
+}

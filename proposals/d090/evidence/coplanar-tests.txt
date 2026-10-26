@@ -1,0 +1,19 @@
+✔ castellated-tank-water-tower: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (87.970542ms)
+✔ tapered-circular-reservoir-tower: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (26.228869ms)
+✔ romanesque-sewage-engine-house: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (53.061078ms)
+✔ circular-filterworks-and-valve-hall: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (19.687513ms)
+✔ trefoil-apsed-mortuary-cemetery-chapel: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (39.630792ms)
+✔ lectern-estate-doocot: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (25.032683ms)
+✔ canted-t-plan-turnpike-lodge: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (37.252161ms)
+✔ cruciform-village-forge: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (21.450795ms)
+✔ segmental-roof-rural-firehouse: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (22.818048ms)
+✔ paired-hexagonal-saddle-roof-reading-library: complete actual Float32 cross-part co-facing polygons are grounded or genuinely internal (14.765242ms)
+✔ duplicating a real complete closed part fails even with unchanged colour and material (29.798107ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 981.243165

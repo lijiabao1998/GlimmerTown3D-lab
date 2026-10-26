@@ -1,0 +1,41 @@
+{
+  "qualification": "Independent local code/security/native/cache/numerical review, not official Chrome, actual raw-image art, full CI or release approval.",
+  "reviewedSourceFiles": 381,
+  "allReviewedCurrentBytesMatched": true,
+  "productModelSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+  "authoritySha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "sourceLeaseSha256": "206865ab94b09267fc5365b155861c631971901da24d7088b37c6bc06861a5db",
+  "planSha256": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0",
+  "receipts": [
+    {
+      "file": "/workspace/shared/d090-independent-native-review-20261026T1348Z/review-code-geometry-cache.json",
+      "bytes": 15228,
+      "sha256": "c70d1344efa0036a6c281255b98b54cf3e3fe15a80e263fc9c9a213068dd874c"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-native-review-20261026T1348Z/final-index.json",
+      "bytes": 19171,
+      "sha256": "2025f4e3b0f3c10c24df4dd82df69a6b95b48e091f1a15c99e5382f1a83f38af"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-native-review-20261026T1348Z/reviewed-current-files.json",
+      "bytes": 64311,
+      "sha256": "c8585c923322ed57fb01904ff0b54c6ff574444a02869ed1c4e2a1a25797f8eb"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-native30-review-20261026T1427Z/review.json",
+      "bytes": 41323,
+      "sha256": "ad2d96896f0cf6cb16a9ee01e40c185f78b398fe605b011ec6250c6c425e1369"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-native30-review-20261026T1427Z/final-index.json",
+      "bytes": 18211,
+      "sha256": "bb1433dad38bc45d00fdf1fe45f16eed1922d8400edcdf689c133df0502bde4d"
+    }
+  ],
+  "localLimits": [
+    "D053 full source-scope exit137 retained; actual official partition still required.",
+    "Inherited known shadow aliasing and dev/build security limitations remain, not a vulnerability-free claim.",
+    "Actual Chrome/art/performance/publication remain pending."
+  ]
+}

@@ -1,0 +1,25 @@
+{"id":"castellated-tank-water-tower","intents":21,"hidden":[{"index":1,"name":"entry-door","hostPart":6,"area":0.02554999999999999,"fragments":4,"witness":null,"source":{"name":"entry-door","solid":false,"faces":[{"points":[[0.425,0,0.74],[0.575,0,0.74],[0.575,0.17500000000000002,0.74],[0.425,0.17500000000000002,0.74]],"color":"#35534d"}],"hostPart":6,"hostFace":1,"originalGap":0.0020000000000000018,"sourcePart":6}},{"index":2,"name":"door-leaf-joint","hostPart":6,"area":0.0007000000000000062,"fragments":2,"witness":null,"source":{"name":"door-leaf-joint","solid":false,"faces":[{"points":[[0.498,0,0.74],[0.502,0,0.74],[0.502,0.17500000000000002,0.74],[0.498,0.17500000000000002,0.74]],"color":"#35474d"}],"hostPart":6,"hostFace":1,"originalGap":0.0030000000000000027,"sourcePart":6}}],"required":2326,"missing":0}
+{"id":"tapered-circular-reservoir-tower","intents":15,"hidden":[],"required":1479,"missing":0}
+{"id":"romanesque-sewage-engine-house","intents":31,"hidden":[],"required":2360,"missing":0}
+{"id":"circular-filterworks-and-valve-hall","intents":24,"hidden":[],"required":1690,"missing":0}
+{"id":"trefoil-apsed-mortuary-cemetery-chapel","intents":25,"hidden":[],"required":2102,"missing":0}
+{"id":"lectern-estate-doocot","intents":24,"hidden":[],"required":1701,"missing":0}
+{"id":"canted-t-plan-turnpike-lodge","intents":27,"hidden":[],"required":1594,"missing":0}
+{"id":"cruciform-village-forge","intents":29,"hidden":[],"required":1678,"missing":0}
+{"id":"segmental-roof-rural-firehouse","intents":32,"hidden":[],"required":1866,"missing":0}
+{"id":"paired-hexagonal-saddle-roof-reading-library","intents":37,"hidden":[],"required":1828,"missing":0}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: all original probes and independent actual paint intents visible
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/facade-isolated-check.mjs:2:769 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

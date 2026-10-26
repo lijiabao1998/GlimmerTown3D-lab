@@ -1,0 +1,217 @@
+{
+  "sourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "qualification": "Complete actual native painted area and original-player first-hit witnesses. No Chrome/art claim.",
+  "models": [
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 1440,
+      "intents": 21,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 412,
+      "intents": 21,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 360,
+      "intents": 21,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 1440,
+      "intents": 15,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 412,
+      "intents": 15,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 360,
+      "intents": 15,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 1440,
+      "intents": 31,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 412,
+      "intents": 31,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 360,
+      "intents": 31,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 1440,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 412,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 360,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 1440,
+      "intents": 25,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 412,
+      "intents": 25,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 360,
+      "intents": 25,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 1440,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 412,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 360,
+      "intents": 24,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 1440,
+      "intents": 27,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 412,
+      "intents": 27,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 360,
+      "intents": 27,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 1440,
+      "intents": 29,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 412,
+      "intents": 29,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 360,
+      "intents": 29,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 1440,
+      "intents": 32,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 412,
+      "intents": 32,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 360,
+      "intents": 32,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 1440,
+      "intents": 37,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 412,
+      "intents": 37,
+      "hidden": [],
+      "extraViews": []
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 360,
+      "intents": 37,
+      "hidden": [],
+      "extraViews": []
+    }
+  ],
+  "passed": true
+}

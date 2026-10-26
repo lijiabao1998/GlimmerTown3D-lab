@@ -1,0 +1,101 @@
+{
+  "qualification": "Immutable first-red and preliminary diagnostic history. No first pass substitutes for repaired current native30, cache or actual Chrome evidence.",
+  "files": {
+    "bare-first-source.mjs": {
+      "bytes": 33252,
+      "sha256": "31a4cce72864ccca2d00d6d4044f3e64d65b189476eecd046942978731009584"
+    },
+    "bare-first-coplanar.json": {
+      "bytes": 203234,
+      "sha256": "65c125269e6300c4213f70e69f6a58818a54970c88be2f46b20e93bf592a0385"
+    },
+    "bare-first-ray.txt": {
+      "bytes": 2261,
+      "sha256": "f984fdf50752337a4ae3f1bdc1ead9b9f3a2f051f644c60988997551792b0923"
+    },
+    "bare-first-ray-report.json": {
+      "bytes": 3331,
+      "sha256": "b172337679df0b48d3df2b82787a549bb0f6c58f73a50e82e49b02f2dab0f928"
+    },
+    "bare-joints-second-source.mjs": {
+      "bytes": 33252,
+      "sha256": "1053fef0aa4032951a6ff884c6543a4bf6d6cb22cd0a77c38d6c5b4e8de66452"
+    },
+    "bare-joints-second-coplanar.json": {
+      "bytes": 164607,
+      "sha256": "330ca23148b0fbc7200e6afb4017ef79d73369b11b7e5063f75c98d191e4b173"
+    },
+    "bare-joints-second-structure.json": {
+      "bytes": 1207,
+      "sha256": "f89994a2c50ec73161f31cdda577021f3bf9b6e749d303b5ffdbb75d78a67cb9"
+    },
+    "bare-joints-second-structure-plan.mjs": {
+      "bytes": 9311,
+      "sha256": "94d18facea094998cd44dba997a5fb4d8d5f865859793b0c71cd0c6363e61a30"
+    },
+    "bare-joints-second-ray.txt": {
+      "bytes": 6793,
+      "sha256": "1e3929e8d84a5589f4d5fb9661ea13cc8b6aba3f6086a9f15eab0742adb65ff4"
+    },
+    "bare-joints-second-ray-report.json": {
+      "bytes": 9503,
+      "sha256": "cd567678abaf08d15b26c906455bf82f80e1acc2493802ea2549ddbd8ae51d3e"
+    },
+    "detailed-first-source.mjs": {
+      "bytes": 39369,
+      "sha256": "3d81bd835931aededbd5b508ee0389cf6fa81a325e83d09d04c5a1071e67fc00"
+    },
+    "detailed-first-counts.json": {
+      "bytes": 1481,
+      "sha256": "dd254462aca16e7886b9197297b764b17e6dfefbfa6950fa3b197929760b6efc"
+    },
+    "detailed-first-structure-plan.mjs": {
+      "bytes": 9334,
+      "sha256": "6243e24c8c04a9ae747ef472cf430f1bee82043909266d66b38fa02964462b43"
+    },
+    "detailed-first-geometry-access.mjs": {
+      "bytes": 3531,
+      "sha256": "a5765dd3819dbf57a60a9d741394760be27b3505da249c9529b35552958af197"
+    },
+    "detailed-first-access-structure.json": {
+      "bytes": 27036,
+      "sha256": "2da949ca93a1ed2206936d266685324f078c9dc9c8862d52340869f770b484cc"
+    },
+    "detailed-first-missing-lease.txt": {
+      "bytes": 1092,
+      "sha256": "974cb9f89c74f67e9561f571e1364aa614ced3f8048122ff644f9e47cbd6207c"
+    },
+    "detailed-first-paint.txt": {
+      "bytes": 2076,
+      "sha256": "8a7b96e1c3a7511da47b440558d4e724013cd0f47d93435f4407e257062a9ff8"
+    },
+    "detailed-first-castle-paint.json": {
+      "bytes": 75097,
+      "sha256": "ef695d89e338de586ecd8a265efe44b1b7a7807ed32b5275a8a97f23cb8fd75b"
+    },
+    "detailed-first-focused.txt": {
+      "bytes": 5377,
+      "sha256": "829bc2eacb6672b07554c7bd487c2896ffe6dbaa8f54302dce085d3c9f679bd3"
+    },
+    "detailed-first-card-access.txt": {
+      "bytes": 4899,
+      "sha256": "9729e526d11aefa20af0886991dbe8ab493c38cdd08469c9c3005fe5a0dfc796"
+    },
+    "detailed-first-facade.json": {
+      "bytes": 4802,
+      "sha256": "bfc07223435758ec7fee5aba4e874162de66be892a474f25e1ea62715dc1cef3"
+    },
+    "detailed-first-native-incomplete.txt": {
+      "bytes": 7481,
+      "sha256": "8ad855df6df39d4584c651f40387cd31a5d8985003c1b75a0dbd74b926127d5f"
+    },
+    "detailed-first-native-exit.json": {
+      "bytes": 385,
+      "sha256": "d172d21c69aa183363b3e994296d92a886e6bd06db40928a2e229014d0ffe66f"
+    },
+    "first-single-process-native-preflight.mjs": {
+      "bytes": 2556,
+      "sha256": "8fba6ebbe67de2398f706fa95ad4f36627b034dd28390e050a593b8833f8e1e3"
+    }
+  }
+}

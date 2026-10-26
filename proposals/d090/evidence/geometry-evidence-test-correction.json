@@ -1,0 +1,17 @@
+{
+  "qualification": "New unaccepted test-harness correction only; product/oracles/thresholds unchanged. Original tests/logs preserved.",
+  "corrections": [
+    "A local const original shadowed the original-source loader before initialization; renamed priorAccess.",
+    "Saved coface evidence was JSON, which represents signed zero as zero. Compare its exact original JSON serialization/hash; never transform actual source geometry or typed Float32 words."
+  ],
+  "files": {
+    "geometry-evidence-first-test.mjs": {
+      "bytes": 4162,
+      "sha256": "3d093344324031b78e9a67faf056f60cd6a590cb168f8e962369a32c82f1952c"
+    },
+    "geometry-evidence-first-test-red.txt": {
+      "bytes": 6428,
+      "sha256": "104a3939ca609ddf690113b47fb848087f2a062b52027d3a6c936cf09e7ed9ed"
+    }
+  }
+}

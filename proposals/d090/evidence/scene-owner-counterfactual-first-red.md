@@ -1,0 +1,7 @@
+# D090 authored counterfactual owner count: retained first red
+
+The first D090 Node scene-budget attempt failed at the copied D089 full-count equality: current16 owners versus disabled-counterfactual13, blocks0 on both. Old gallery/seed516/ai120 equality checks had already completed. This was not a failed D081 surface gate or permission to waive old scene counts.
+
+D083's existing rural-heritage dispatch only renders v0; with D090 disabled, the three newly introduced heritage v1 slots intentionally have no old mesh. With D090 enabled, all three genuinely draw. The new finite `scene-owner-transition.mjs` separately proves exactly those three owner additions per complete ten-model copy, unchanged other owners/blocks, complete actual arena sets and reported counts. Negative controls retain fail-closed behavior. Final exact-source complete scene rerun and independent review remain required.
+
+The first CLI preserved its complete assertion/error but did not serialize its partial in-memory product-source inventory before throwing. No exact model-source hash is retroactively invented for that attempt. Both bare geometry snapshots remain in their independent geometry evidence. The new CLI now records every source hash plus the exact model source on failure, checks source inventory before/after success, and rejects edits during measurement. This is a diagnostic preservation improvement, not normalization or a performance/art acceptance claim.

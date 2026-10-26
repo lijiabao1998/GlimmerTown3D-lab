@@ -1,0 +1,10 @@
+import test from'node:test';import assert from'node:assert/strict';import{MODEL_IDS,buildBritishUtilityHeritage}from'../../src/render/britishUtilityHeritageModels.mjs';import{assertGroundAccess,groundAccess}from'./geometry-access.mjs';import{constructionFaces}from'../d089/structure-plan.mjs';
+for(const id of MODEL_IDS)test(id+': every whole doorway and connected route clears all structural roofs/footprints',()=>assertGroundAccess(buildBritishUtilityHeritage(id)));
+const id='segmental-roof-rural-firehouse',fresh=()=>buildBritishUtilityHeritage(id),door=m=>m.facades.find(f=>f.name==='entry-door');
+test('missing actual door is not a usable entry',()=>{const m=fresh();m.facades.splice(m.facades.indexOf(door(m)),1);assert.throws(()=>assertGroundAccess(m));});
+test('raised door is not ground access',()=>{const m=fresh();door(m).faces[0].points.forEach(p=>p[1]+=.03);assert.throws(()=>assertGroundAccess(m));});
+test('narrowed doorway cannot keep full original route claim',()=>{const m=fresh(),f=door(m).faces[0],x=f.points.reduce((s,p)=>s+p[0]/f.points.length,0);f.points.forEach(p=>p[0]=x+(p[0]-x)*.9);assert.throws(()=>assertGroundAccess(m));});
+test('reversed entry approaches inside its actual occupied volume',()=>{const m=fresh();door(m).faces[0].points.reverse();assert.throws(()=>assertGroundAccess(m));});
+function obstacle(m,{floating=false}={}){const r=groundAccess(m)[0],[x,z]=r.points.at(-1),w=.04;const faces=constructionFaces({name:'physical-obstacle',type:'box',a:[x+.11,x+.11+w,z-.07,z-.03,floating?.30:0,floating?.40:.12]});m.parts.push({name:'physical-obstacle',solid:true,start:m.triangles.length,faces:faces.map(points=>({points,color:'#010203'}))});}
+test('off-centre real solid blocks full appliance width despite clear centre line',()=>{const m=fresh();obstacle(m);assert.throws(()=>assertGroundAccess(m));});
+test('elevated physical slab above route is also rejected, not only ground footprint',()=>{const m=fresh();obstacle(m,{floating:true});assert.throws(()=>assertGroundAccess(m));});

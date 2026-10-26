@@ -1,0 +1,77 @@
+✖ castellated-tank-water-tower: every whole doorway and connected route clears all structural roofs/footprints (58.777666ms)
+✔ tapered-circular-reservoir-tower: every whole doorway and connected route clears all structural roofs/footprints (15.06528ms)
+✔ romanesque-sewage-engine-house: every whole doorway and connected route clears all structural roofs/footprints (32.44633ms)
+✔ circular-filterworks-and-valve-hall: every whole doorway and connected route clears all structural roofs/footprints (14.976336ms)
+✔ trefoil-apsed-mortuary-cemetery-chapel: every whole doorway and connected route clears all structural roofs/footprints (22.527073ms)
+✔ lectern-estate-doocot: every whole doorway and connected route clears all structural roofs/footprints (24.936374ms)
+✔ canted-t-plan-turnpike-lodge: every whole doorway and connected route clears all structural roofs/footprints (13.498463ms)
+✔ cruciform-village-forge: every whole doorway and connected route clears all structural roofs/footprints (20.197991ms)
+✔ segmental-roof-rural-firehouse: every whole doorway and connected route clears all structural roofs/footprints (16.307877ms)
+✔ paired-hexagonal-saddle-roof-reading-library: every whole doorway and connected route clears all structural roofs/footprints (12.891015ms)
+✔ missing actual door is not a usable entry (2.043407ms)
+✔ raised door is not ground access (7.818442ms)
+✔ narrowed doorway cannot keep full original route claim (3.405865ms)
+✔ reversed entry approaches inside its actual occupied volume (5.98357ms)
+✔ off-centre real solid blocks full appliance width despite clear centre line (5.36185ms)
+✔ elevated physical slab above route is also rejected, not only ground footprint (3.452236ms)
+✔ castellated tower: enclosed battered footprint, four real grounded buttresses and shallow integral tooth profiles (72.807311ms)
+✔ reservoir: continuous shaft/cone/drum is one body, dominant real upper bulge, no lantern/open-leg substitution (19.582394ms)
+✔ sewage: genuinely elongated low boiler tail, tall transverse hall, round grounded flue and separate treatment rectangle (35.391298ms)
+✔ filterworks: actual hall >= .22 parcel area, unequal beds and >= .10 full building clearance, no central-gap route claim (14.106692ms)
+✔ trefoil: exactly three genuine lobed grounded conches, each below axial roof, all positively bonded (21.110673ms)
+✔ lectern: broad two-chamber mono-pitch and two integral stepped side walls, twelve actual flight-mouth intents (31.998533ms)
+✔ tollhouse: occupied long canted arm, real roof follows all six walls, grounded rear breast and usable diagonal door (13.611665ms)
+✔ forge: dominant broad hearth interrupts four unequal low working arms, not an applied chimney on a continuous cross ridge (20.420876ms)
+✔ firehouse: broad near-square single hall, actual inward hose setbacks, separate watch room and .40 appliance entry (23.735519ms)
+✔ library: two unequal occupied hexagons have a broad real join and opposed non-apical saddle corner heights (14.887331ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 25
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 446.763528
+
+✖ failing tests:
+
+test at proposals/d090/geometry-access.test.mjs:2:27
+✖ castellated-tank-water-tower: every whole doorway and connected route clears all structural roofs/footprints (58.777666ms)
+  AssertionError [ERR_ASSERTION]: complete door width and roof-clear joined route castellated-tank-water-tower:0
+  + actual - expected
+  
+  + [
+  +   {
+  +     area: 0.0044999999999999485,
+  +     faceIndex: 0,
+  +     part: 'battered-enclosed-reservoir-shaft',
+  +     route: 0
+  +   },
+  +   {
+  +     area: 0.000500051020408121,
+  +     faceIndex: 4,
+  +     part: 'battered-enclosed-reservoir-shaft',
+  +     route: 0
+  +   },
+  +   {
+  +     area: 0.0039999489795918275,
+  +     faceIndex: 4,
+  +     part: 'battered-enclosed-reservoir-shaft',
+  +     route: 0
+  +   }
+  + ]
+  - []
+  
+      at assertGroundAccess (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/geometry-access.mjs:10:107)
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/geometry-access.test.mjs:2:122)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: [ { part: 'battered-enclosed-reservoir-shaft', faceIndex: 0, route: 0, area: 0.0044999999999999485 }, { part: 'battered-enclosed-reservoir-shaft', faceIndex: 4, route: 0, area: 0.000500051020408121 }, { part: 'battered-enclosed-reservoir-shaft', faceIndex: 4, route: 0, area: 0.0039999489795918275 } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

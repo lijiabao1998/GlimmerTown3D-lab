@@ -14,13 +14,13 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前英式建築計畫：179／200 已驗證發布
+## 目前英式建築計畫：190／200 已驗證發布
 
-D088 十一棟公共服務建築已經正常合併至 `c023a2da0e4999d43e3d4216e800c4c96d06a3c1`。[main CI 40273761442](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40273761442) 的 **104 項工作全部成功**，含 Pages；2026-10-26 06:55–06:56 UTC 公開首頁及街區提示參數頁均與正式建置完全一致：3,319,760 bytes，SHA-256 `c33a89f92202e7df28285a830616722c32078e411510d58a587f18ebcf7f9aa1`。
+D089 十一棟市場／莊園建築已正常合併至 `5b41bac165ba2b29146e6835490357bebc3cd549`。[main CI40315970068](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40315970068) 的 **115項工作全部成功**，含 Pages；2026-10-26 13:15 UTC 公開首頁與街景參數頁均與正式建置完全一致：3,840,360 bytes，SHA-256 `da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde`。
 
-目前是 **18 波、179 棟正式發布，尚餘 21 棟**。D089 十一棟市場／莊園建築正在獨立候選分支施工，尚未驗收或發布；D090 最後十棟須從下一個已驗證 main 再開卡。模型與完整場景、原 D081 可見表面、三尺寸真 Chrome 原圖、效能、完整 CI、實際圖審及正式發布鏈都不能省略。
+目前 **19波、190棟正式發布，尚餘10棟**。最後一波[D090](docs/D090-british-utilities-heritage-ten.md)已從這個已驗證main凍結十棟公用／遺產建築卡並施工，仍是候選，不提前計200。原D081可見表面／合法玩家鏡頭、舊190及一般舊設施、原生建造與存檔、三尺寸真Chrome原圖、每筆冷啟動性能、完整CI與實際圖審全部保留。
 
-單一現況與歷史收據索引：[`BRITISH-200-PROGRAM`](docs/BRITISH-200-PROGRAM.md)、[D088 發布收據](docs/evidence/D088-release/verified-publication.json)。HTTP 位元組一致不冒充公網 WebGL 重播或 Android 實機測試；既有低解析度陰影邊紋及兩項開發／建置套件高風險警示仍明列。
+單一現況與歷史收據索引：[BRITISH-200-PROGRAM](docs/BRITISH-200-PROGRAM.md)、[D089發布收據](docs/evidence/D089-release/verified-publication.json)。HTTP位元組一致不冒充公網WebGL重播或Android實機測試；既有低解析度陰影邊紋及兩項開發／建置套件高風險警示仍明列。
 
 ## 歷史正式版：D082／D083 原生英式建築
 
