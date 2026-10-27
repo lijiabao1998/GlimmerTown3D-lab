@@ -1,9 +1,18 @@
-// 入口：依網址選模式。預設是 2D 城市（D003，業主 2026-09-25「全力做建造」）；?mode=history 是 300 年示範（D001／D002）。
-// 預設種子 5162026 搬自 2D 實驗線（lijiabao1998/GlimmerTown-lab 的 gallery.js／probe-civic.js 用 metroArtSeedWorld516(5162026) 拍樣張）。
-// 300 年示範只借了這個數字：它的世界生成與 2D 無關；2D 城市模式的種子城則是實驗線那座城本身（src/content/samples/seed516）。
+// D091 startup presentation wraps the unchanged city/history and save semantics.
 import { startHistory } from './historyView.ts';
 import { startCity, bootJournal } from './cityView.ts';
+import { createStartup } from './ui/startup.ts';
 
-// D013：城市模式開頁先開世界歷史的日誌（IndexedDB，非同步），讀好「我的城」那一條再開城
-if (new URLSearchParams(location.search).get('mode') === 'history') startHistory();
-else bootJournal().then(startCity, () => startCity());
+void createStartup().start(async stage => {
+  if (new URLSearchParams(location.search).get('mode') === 'history') {
+    await stage('正在建立世界歷史…');
+    startHistory();
+  } else {
+    await stage('正在讀取世界歷史與存檔…');
+    let boot;
+    try { boot = await bootJournal(); }
+    catch { /* Preserve the existing journal-unavailable fallback, not a new save policy. */ }
+    await stage(boot ? '正在建立你的城市…' : '世界歷史日誌暫不可用，正在以既有備援方式開城…');
+    startCity(boot);
+  }
+});
