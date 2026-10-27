@@ -110,7 +110,7 @@
     .startup-loader { height: 3px; border-radius: 3px; background: #d8ba7e20; overflow: hidden; margin: 24px 0 18px; }
     .startup-loader i { display: block; width: 40%; height: 100%; background: #d8ba7e; transform: translateX(-110%); will-change: transform; animation: startup-drift 1.8s linear infinite; }
     @keyframes startup-drift { to { transform: translateX(360%); } }
-    #startup[data-phase="welcome"] .startup-loader, #startup[data-phase="welcome"] .startup-wait, #startup:not([data-phase="welcome"]) .startup-actions, #startup[data-phase="error"] .startup-loader, .startup-mobile { display: none; }
+    #startup[data-phase="welcome"] .startup-loader, #startup[data-phase="welcome"] .startup-wait, #startup:not([data-phase="welcome"]) .startup-actions, #startup[data-phase="error"] .startup-loader, #startup[data-phase="error"] .startup-wait, .startup-mobile { display: none; }
     @media (max-width: 640px) {
       #startup { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
       .startup-card { max-width: 420px; grid-template-columns: 1fr; border-radius: 18px; }.startup-scene { min-height: 150px; }.startup-moon { width: 42px; height: 42px; top: 20px; right: 35px; }.startup-houses { inset: 65px -12px 18px; transform: scale(.75); transform-origin: bottom; }.startup-houses i { min-width: 50px; }.startup-scene > span { bottom: 12px; left: 20px; font-size: 8px; }.startup-copy { padding: 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 30px; margin-bottom: 18px; }.startup-desktop { display: none; }.startup-mobile { display: block; }#startup details { margin-top: 12px; }
@@ -120,7 +120,7 @@
   </style>
 </head>
 <body>
-  <section id="startup" role="dialog" aria-modal="true" aria-labelledby="startup-title" aria-describedby="startup-status" aria-busy="true" data-phase="preparing">
+  <section id="startup" role="dialog" aria-modal="true" aria-labelledby="startup-title" aria-describedby="startup-status" data-phase="preparing">
     <div class="startup-card">
       <div class="startup-scene" aria-hidden="true"><div class="startup-moon"></div><div class="startup-houses"><i></i><i></i><i></i><i></i><i></i></div><span>GLIMMER TOWN · 3D</span></div>
       <div class="startup-copy"><p class="startup-eyebrow">微光之中，自成一城</p><h1 id="startup-title">微光小鎮<span>你的故事，從這裡開始。</span></h1>

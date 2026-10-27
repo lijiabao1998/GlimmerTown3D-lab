@@ -12,7 +12,7 @@ void createStartup().start(async stage => {
     let boot;
     try { boot = await bootJournal(); }
     catch { /* Preserve the existing journal-unavailable fallback, not a new save policy. */ }
-    await stage(boot ? '正在建立你的城市…' : '世界歷史日誌暫不可用，正在以既有備援方式開城…');
+    await stage(boot?.store ? '正在建立你的城市…' : '世界歷史日誌暫不可用，正在以既有備援方式開城…');
     startCity(boot);
   }
 });

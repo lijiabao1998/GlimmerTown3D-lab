@@ -2,10 +2,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createStartup } from '../src/ui/startup.ts';
 export async function startupGuards() {
-  const names = ['window','document','location','requestAnimationFrame'];
+  const names = ['window','document','location','requestAnimationFrame','KeyboardEvent'];
   const saved = names.map(k => [k, Object.getOwnPropertyDescriptor(globalThis,k)]);
   const setup = (search='') => {
     const nodes = Object.fromEntries(['root','status','enter','retry'].map(k=>[k,{hidden:k==='retry',disabled:k==='enter',dataset:{},textContent:'',setAttribute(){},addEventListener(){},focus(){globalThis.document.activeElement=this;}}]));
+    globalThis.KeyboardEvent=class {constructor(key,shiftKey=false){this.key=key;this.shiftKey=shiftKey;this.target=nodes.root;}preventDefault(){this.prevented=true;}stopImmediatePropagation(){this.stopped=true;}};
+    nodes.root.querySelectorAll=()=>[nodes.enter,nodes.retry];
+    nodes.enter.getClientRects=()=>nodes.root.dataset.phase==='welcome'?[1]:[];
+    nodes.retry.getClientRects=()=>nodes.retry.hidden?[]:[1];
     nodes.root.querySelector = s=>nodes[s.replace('#startup-','')];
     nodes.root.contains = n=>Object.values(nodes).includes(n);
     const events = new Map(); let paints=0, reloads=0;
@@ -28,6 +32,8 @@ export async function startupGuards() {
     env=setup('?mode=history');const errorLog=console.error;console.error=()=>{};
     try {await createStartup().start(async()=>{throw new Error('intentional boot failure');});} finally {console.error=errorLog;}
     assert.equal(env.nodes.root.dataset.phase,'error');assert.equal(env.nodes.retry.hidden,false);assert.notEqual(env.nodes.root.hidden,true);assert.equal(env.events.size,6);
+    for(const shift of [false,true]){const e=new KeyboardEvent('Tab',shift);env.events.get('keydown')(e);assert.equal(e.prevented,true);assert.equal(document.activeElement,env.nodes.retry);}
+    const outside=new KeyboardEvent('x');outside.target={};env.events.get('keydown')(outside);assert.equal(outside.prevented,true);assert.equal(outside.stopped,true);
     env.nodes.retry.onclick();assert.equal(env.reloads(),1);
     const html=fs.readFileSync(new URL('../index.html',import.meta.url),'utf8');
     assert.match(html,/prefers-reduced-motion: reduce/);assert.match(html,/safe-area-inset-bottom/);assert.match(html,/aria-live="polite"/);assert.match(html,/id="startup"/);assert.match(html,/noscript/);
