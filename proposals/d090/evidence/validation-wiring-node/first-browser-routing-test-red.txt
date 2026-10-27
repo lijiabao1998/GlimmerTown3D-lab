@@ -1,0 +1,49 @@
+✖ all five inherited actual browser suites retain exact published assertions outside catalogue51→61 and remain mandatory (14.532046ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d083/native-browser-check-d089.mjs (21.700194ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d083/native-browser-check-d090.mjs (12.182363ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d086/native-browser-v6-check-d089.mjs (9.044937ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d086/native-browser-v6-check-d090.mjs (9.897263ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d087/native-browser-check-d089.mjs (10.132469ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d087/native-browser-check-d090.mjs (10.347724ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d088/native-browser-check-d089.mjs (9.870172ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d088/native-browser-check-d090.mjs (9.856071ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d089/native-browser-check.mjs (9.694341ms)
+✔ reject any inherited browser source/camera/assertion drift proposals/d089/native-browser-check-d090.mjs (10.400199ms)
+✔ reject unrouted old browser copy proposals/d083/native-browser-check-d090.mjs (4.370458ms)
+✔ reject unrouted old browser copy proposals/d086/native-browser-v6-check-d090.mjs (8.153931ms)
+✔ reject unrouted old browser copy proposals/d087/native-browser-check-d090.mjs (7.668923ms)
+✔ reject unrouted old browser copy proposals/d088/native-browser-check-d090.mjs (3.756552ms)
+✔ reject unrouted old browser copy proposals/d089/native-browser-check-d090.mjs (3.081062ms)
+✔ reject inherited browser manifest drop suite (0.674699ms)
+✔ reject inherited browser manifest duplicate suite (0.322887ms)
+✔ reject inherited browser manifest new seam (0.217879ms)
+✔ reject inherited browser manifest wrong count (0.40426ms)
+✔ reject inherited browser manifest source pin (0.223788ms)
+✔ reject inherited browser manifest output pin (0.186372ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 21
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 260.63199
+
+✖ failing tests:
+
+test at proposals/d090/inherited-browser-copies.test.mjs:4:1
+✖ all five inherited actual browser suites retain exact published assertions outside catalogue51→61 and remain mandatory (14.532046ms)
+  AssertionError [ERR_ASSERTION]: current browser copy must actually run proposals/d083/native-browser-check-d090.mjs
+      at verify (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/inherited-browser-copies.test.mjs:3:923)
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/inherited-browser-copies.test.mjs:4:131)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

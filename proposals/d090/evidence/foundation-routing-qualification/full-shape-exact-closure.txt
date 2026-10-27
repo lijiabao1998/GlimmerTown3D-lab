@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: current complete authority differs by only reviewed lower-ring source seam; actual cache restores that entire authority
+ok 1 - current complete authority differs by only reviewed lower-ring source seam; actual cache restores that entire authority
+  ---
+  duration_ms: 2.950926
+  type: 'test'
+  ...
+# Subtest: current actual full ten models retain nine complete originals and every castle feature except bounded physical foundation
+ok 2 - current actual full ten models retain nine complete originals and every castle feature except bounded physical foundation
+  ---
+  duration_ms: 656.587228
+  type: 'test'
+  ...
+# Subtest: exact source seam rejects broad edits, missing/doubled changes and unchanged old foundation
+ok 3 - exact source seam rejects broad edits, missing/doubled changes and unchanged old foundation
+  ---
+  duration_ms: 4.668008
+  type: 'test'
+  ...
+# Subtest: shape contract validates the complete exact lower-ring relation (synthetic unit fixture, not acceptance)
+ok 4 - shape contract validates the complete exact lower-ring relation (synthetic unit fixture, not acceptance)
+  ---
+  duration_ms: 10.626146
+  type: 'test'
+  ...
+# Subtest: full-model relation kills changes outside the named lower ring, not just matching labels/counts
+ok 5 - full-model relation kills changes outside the named lower ring, not just matching labels/counts
+  ---
+  duration_ms: 311.690746
+  type: 'test'
+  ...
+# Subtest: complete compilation comparison rejects arbitrary castle triangle corruption even when all named part faces match
+ok 6 - complete compilation comparison rejects arbitrary castle triangle corruption even when all named part faces match
+  ---
+  duration_ms: 132.746305
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 873.991579

@@ -1,0 +1,151 @@
+{
+  "adoptionReviewPassed": true,
+  "successorReleaseAccepted": false,
+  "originalOfficialHeadStillBlocked": true,
+  "sourceBefore": {
+    "head": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+    "authority": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+    "cache": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319"
+  },
+  "proposed": {
+    "authority": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+    "cache": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+    "repairNoteCommit": "6dcadbe7934a96426368b4e00a1187cb782107f6"
+  },
+  "conclusion": "No blocking physical or compiler issue found for bounded adoption. Entire lower foundation ground square widens 11.11 percent with unchanged shoulder and retained architectural form. Original card remains intact and additive repair note predates adoption. All original D081 camera/probe/classification/normal/frame thresholds remain unchanged.",
+  "static": {
+    "parts": 44,
+    "routes": 20,
+    "paintIntents": 265,
+    "otherNineModelsExact": true,
+    "allFacadesExact": true,
+    "exposedCofaces": 0
+  },
+  "contracts": {
+    "cases": 30,
+    "required": 56037,
+    "paint": 795,
+    "retainedActualCameras": 183,
+    "independentFreshCastleCameras": 21
+  },
+  "physicalDelta": {
+    "fixedIdsAndOrderRetained": 1968,
+    "fixedGeometryRecordsChangedPerWidth": 40,
+    "actualTrianglesChanged": 10,
+    "requiredToActualInterior": 10,
+    "coveredToRequired": 1,
+    "minActualFloat32InteriorMargin": 0.00008924441467497712,
+    "originalGridChanged": 44,
+    "originalGridAdded": 3,
+    "originalGridRemoved": 0,
+    "failed696P2P3StillRequired": true
+  },
+  "cache": {
+    "fullTwoSeamInverse": true,
+    "completeSignedModels": 10,
+    "fullSignedEmitterTransforms": 40,
+    "oneDecodeEach": true,
+    "noFallback": true,
+    "private200ModelParity": {
+      "file": "/workspace/shared/d090-private-cache-parity-54b809e2.json",
+      "sha256": "ba9ed3779b9afa07502cc262e19304fe3ab51158046419615c3d87c9b509113a",
+      "onlyChangedModelSlot": "10:5",
+      "unchangedOther199Leaves": true,
+      "oldThreeSceneLeavesExact": true
+    },
+    "freshIndependentCurrentFiveSceneLeaves": true
+  },
+  "limitations": [
+    "No proposed source has been accepted as a fresh browser render. Retained old-camera numerical replay is not replacement imagery.",
+    "Fresh cached source lease, full canonical native30 and original48/paint/plan, all mandatory current and historical tests, exact-head Chrome raw images, actual surfaces/words/frames, 90 input and 24 startup observations, independent art and release gates remain required.",
+    "Original 6c actual 412/1440 first-reds remain failures; no tolerance, view, probe or inspection exception.",
+    "Reviewer combined process exit137 is retained. Per-case v2 first report print had an absent aggregate pathname after proof write; v3 fixes only reporting and all30 per-case exit0."
+  ],
+  "evidence": [
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-static-review.json",
+      "bytes": 49665,
+      "sha256": "893b0e62bd0b3935c292d80f1182850b711912d6882a3d032247495451b148ca"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-cache-independent.json",
+      "bytes": 22968,
+      "sha256": "634dcdddde811df0d7d330235df43b644e7a37bb1f9f8c84b7235c5c9417e3a0"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-final.json",
+      "bytes": 14455,
+      "sha256": "b1aed39a105e8cb3b141fc54f9399027f9b5ca8444e7734b54c71859bbaed48b"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-scene-parity-leaf-rejoin.json",
+      "bytes": 18628,
+      "sha256": "09ea876292d7c12358099e6ef8614b0240ab950d95700e75b85ffb8aea4030e6"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-static-review.mjs",
+      "bytes": 6325,
+      "sha256": "d732babf4e0d2888ae78c536deab4b7d93fe2ecc8cd715eab1a5af7793f46c65"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-cache-independent.mjs",
+      "bytes": 5327,
+      "sha256": "7202e341d82bbbdc4067a048d1439ff722caffa87be1518553b132667fccf889"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review.mjs",
+      "bytes": 8013,
+      "sha256": "94711cdf8a787e0e5fe0ace7e6d0414e0eebe5a7397c2b948ff385d733bad72a"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-v2.mjs",
+      "bytes": 8186,
+      "sha256": "74dcb9aec1858cbca8a89af2eb9f024b0dd744c9a10476f2f2307fc10e067543"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-v3.mjs",
+      "bytes": 8212,
+      "sha256": "dda1b791f5ce3607540ad5a8f35b67ad0924ed2edb390852c836d4dfd0ce69d2"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-run.mjs",
+      "bytes": 2080,
+      "sha256": "4bdfea597438e6603927a45c2eea9000aeb5c62d64c3f69160c327f3a11ea159"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-scene-parity-leaf-rejoin.mjs",
+      "bytes": 2133,
+      "sha256": "3cc2015390128ce9dced9af63a3da80f0630b3a55de8a0e716a24217eeea984d"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-static-review.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-cache-independent.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review.exit",
+      "bytes": 4,
+      "sha256": "e3b9c2844b5a5c2677b3a2279db2ec8487491dd9a23d6b22fac153391b3bb63c"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-v2-castle412.exit",
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-contract-review-run.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "file": "/workspace/shared/d090-independent-official-review-20261026T1504Z/foundation-scene-parity-leaf-rejoin.exit",
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    }
+  ]
+}

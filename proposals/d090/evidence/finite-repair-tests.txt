@@ -1,0 +1,11 @@
+✔ original detailed source immutable and original inaccessible doorway remains red (47.03816ms)
+✔ all other nine complete detailed models remain exact, not just hashes or unchanged labels (346.368566ms)
+✔ castle preserves every original solid face and all eighteen non-door finishes; one genuinely grounded entrance addition (23.861439ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 560.674179

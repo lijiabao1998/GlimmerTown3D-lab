@@ -1,0 +1,100 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "source": ".github/workflows/d089-native.yml",
+  "target": ".github/workflows/d090-native.yml",
+  "beforeSha256": "c2cc05ae0969fcb765fc5d52eacda1d38cc0d2ab62ad1277b386e11a98e40e69",
+  "afterSha256": "d4fbcd8dcc129d3ae2267d3d92369c6bcf94697fbccd92ca26db7077f6755153",
+  "replacements": [
+    [
+      "D089 native British markets and estates eleven",
+      "D090 native British utilities and heritage final ten",
+      1
+    ],
+    [
+      "d089",
+      "d090",
+      57
+    ],
+    [
+      "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+      "5b41bac165ba2b29146e6835490357bebc3cd549",
+      1
+    ],
+    [
+      "published179",
+      "published190",
+      1
+    ],
+    [
+      "Original179 byte identities and eleven",
+      "Original190 byte identities and ten",
+      1
+    ],
+    [
+      "eleven/forty-four",
+      "ten/forty",
+      1
+    ],
+    [
+      "britishMarketEstateModels.mjs",
+      "britishUtilityHeritageModels.mjs",
+      1
+    ],
+    [
+      "D088 eleven native regressions",
+      "D088 eleven and D089 eleven native regressions",
+      1
+    ],
+    [
+      "node --test proposals/d087/native-variant-d090.test.mjs proposals/d088/native-integration-d090.test.mjs",
+      "node --test proposals/d087/native-variant-d090.test.mjs proposals/d088/native-integration-d090.test.mjs tools/d089-native-lifecycle.test.mjs tools/d089-native-catalogue-d090.test.mjs tools/d089-native-ui-actions-d090.test.mjs tools/d089-native-scene-dispatch-d090.test.mjs",
+      1
+    ],
+    [
+      "proposals/d088/native-browser-build.mjs",
+      "proposals/d089/native-browser-build.mjs",
+      1
+    ],
+    [
+      "baseline/scratch/d088-native-build",
+      "baseline/scratch/d089-native-build",
+      2
+    ],
+    [
+      "proposals/british-program/ledger-current-v4.test.mjs",
+      "proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs",
+      1
+    ],
+    [
+      "eleven mouse/touch",
+      "ten mouse/touch",
+      1
+    ],
+    [
+      "all33 distinct",
+      "all30 distinct",
+      1
+    ],
+    [
+      "genuine market/estate door routes",
+      "genuine utility/heritage door routes",
+      1
+    ],
+    [
+      "All33 complete",
+      "All30 complete",
+      1
+    ],
+    [
+      "tools/d089-native-lifecycle.test.mjs",
+      "tools/d089-native-lifecycle-d090.test.mjs",
+      1
+    ],
+    [
+      "        run: node --test tools/d090-*.test.mjs proposals/d090/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs",
+      "        run: node proposals/d090/foundation-test-runner.mjs",
+      1
+    ]
+  ]
+}

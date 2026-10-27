@@ -1,0 +1,82 @@
+[
+  {
+    "id": "castellated-tank-water-tower",
+    "parts": 9,
+    "triangles": 476,
+    "weighted": 952,
+    "cap": 1200,
+    "facades": 21
+  },
+  {
+    "id": "tapered-circular-reservoir-tower",
+    "parts": 2,
+    "triangles": 230,
+    "weighted": 460,
+    "cap": 1200,
+    "facades": 15
+  },
+  {
+    "id": "romanesque-sewage-engine-house",
+    "parts": 4,
+    "triangles": 480,
+    "weighted": 960,
+    "cap": 1200,
+    "facades": 31
+  },
+  {
+    "id": "circular-filterworks-and-valve-hall",
+    "parts": 4,
+    "triangles": 328,
+    "weighted": 656,
+    "cap": 1200,
+    "facades": 24
+  },
+  {
+    "id": "trefoil-apsed-mortuary-cemetery-chapel",
+    "parts": 8,
+    "triangles": 466,
+    "weighted": 932,
+    "cap": 1200,
+    "facades": 25
+  },
+  {
+    "id": "lectern-estate-doocot",
+    "parts": 3,
+    "triangles": 292,
+    "weighted": 584,
+    "cap": 1800,
+    "facades": 24
+  },
+  {
+    "id": "canted-t-plan-turnpike-lodge",
+    "parts": 3,
+    "triangles": 260,
+    "weighted": 520,
+    "cap": 1800,
+    "facades": 27
+  },
+  {
+    "id": "cruciform-village-forge",
+    "parts": 5,
+    "triangles": 308,
+    "weighted": 616,
+    "cap": 1800,
+    "facades": 29
+  },
+  {
+    "id": "segmental-roof-rural-firehouse",
+    "parts": 3,
+    "triangles": 348,
+    "weighted": 696,
+    "cap": 1200,
+    "facades": 32
+  },
+  {
+    "id": "paired-hexagonal-saddle-roof-reading-library",
+    "parts": 2,
+    "triangles": 300,
+    "weighted": 600,
+    "cap": 1200,
+    "facades": 37
+  }
+]

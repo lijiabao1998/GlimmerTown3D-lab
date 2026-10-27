@@ -1,0 +1,62 @@
+[
+  {
+    "id": "castellated-tank-water-tower",
+    "solids": 9,
+    "triangles": 244,
+    "negativeControls": 515
+  },
+  {
+    "id": "tapered-circular-reservoir-tower",
+    "solids": 2,
+    "triangles": 142,
+    "negativeControls": 290
+  },
+  {
+    "id": "romanesque-sewage-engine-house",
+    "solids": 4,
+    "triangles": 124,
+    "negativeControls": 260
+  },
+  {
+    "id": "circular-filterworks-and-valve-hall",
+    "solids": 4,
+    "triangles": 144,
+    "negativeControls": 300
+  },
+  {
+    "id": "trefoil-apsed-mortuary-cemetery-chapel",
+    "solids": 8,
+    "triangles": 190,
+    "negativeControls": 404
+  },
+  {
+    "id": "lectern-estate-doocot",
+    "solids": 3,
+    "triangles": 116,
+    "negativeControls": 241
+  },
+  {
+    "id": "canted-t-plan-turnpike-lodge",
+    "solids": 3,
+    "triangles": 68,
+    "negativeControls": 145
+  },
+  {
+    "id": "cruciform-village-forge",
+    "solids": 5,
+    "triangles": 92,
+    "negativeControls": 199
+  },
+  {
+    "id": "segmental-roof-rural-firehouse",
+    "solids": 3,
+    "triangles": 100,
+    "negativeControls": 209
+  },
+  {
+    "id": "paired-hexagonal-saddle-roof-reading-library",
+    "solids": 2,
+    "triangles": 44,
+    "negativeControls": 94
+  }
+]

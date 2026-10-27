@@ -1,0 +1,82 @@
+{
+  "qualification": "Exact provenance/delta and semantic review handoff, not a fake finite-copy inverse or acceptance waiver.",
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "ownership": "Native agent owns these three D090 files; originals and all other sources untouched by this follow-up. CI worker owns domain routing/manifests.",
+  "files": [
+    {
+      "original": "proposals/d089/native-scene-fixture.mjs",
+      "current": "proposals/d090/native-scene-fixture.mjs",
+      "baselineSha256": "f7d307346fab75b23967e2503e3d035262ca36f747d5914c9643bf1ec4ddf548",
+      "currentSha256": "0dec26c9a550c5316bba8dda0fc36a0e983c433c46adebf5537ce3d86626a263",
+      "exactUnifiedDiff": "/tmp/d090-native-fixture-provenance/native-scene-fixture.mjs.diff",
+      "diffSha256": "e55bd3db91019cd483f41d1e6ca091007c9dd60d7337b0926f5e13411717f071",
+      "classification": "New D090 semantic adaptation of D089 fixture; NOT a claimed bounded textual copy/inverse.",
+      "retained": [
+        "Six native contextual control rows are identical.",
+        "nativeSite(i) coordinate expression is byte-identical.",
+        "Native calls remain actual commitOp once per model, with original stepDay, load/save/replay paths.",
+        "repeats accepts only1/4; days requires a nonnegative integer; stress funds remain1e6; native initial funds remain30000."
+      ],
+      "changes": [
+        "Imports frozen D090 descriptors; 11/44 counts become10/40; labels/seed become D090.",
+        "initialRaw({repeats=1}={}) authors actual water in two3x3 neighbour cells for each sewage site; no water inside candidate footprints.",
+        "New stressSite(i,repetition) uses [3+(i%5)*6,4+floor(i/5)*4+repetition*7] for seven1x1 and three2x2 parcels; old D089 layout served up to5x5 estates.",
+        "Adds shared firstUseRaw/firstUseSite exports consumed directly by actual browser harness, preserving first-use n40/money80000/six controls/coordinate expression while adding legal sewage terrain."
+      ]
+    },
+    {
+      "original": "proposals/d089/native-fixture.test.mjs",
+      "current": "proposals/d090/native-fixture.test.mjs",
+      "baselineSha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "currentSha256": "ab2e760faf2f6ed1c43458ed1f966beae8bda624f5398f017cd05e6264872bd0",
+      "exactUnifiedDiff": "/tmp/d090-native-fixture-provenance/native-fixture.test.mjs.diff",
+      "diffSha256": "fdff6b7964ff97527527c72d5409ea2ca7588af80d8d2dbe6235fc221abf0887",
+      "classification": "New D090 current test implementation with explicitly carried semantic assertions and added negatives; NOT a byte-preserving copy claim.",
+      "retained": [
+        "Actual paid/stress placement through nativeQualificationCity, all target sizes, age>=9, each footprint cell owner.",
+        "One-copy target coordinates exactly nativeSite(i).",
+        "Complete city after save/load replay deep-equals original city; exactly six initial controls."
+      ],
+      "changes": [
+        "Uses direct actual KINDS/encodeLabCode/loadCode/saveCode/VRANK injection rather than importing renderer-heavy runtime; old test did not call renderer scene/emit in its body.",
+        "Counts11/44 and6+11*repeats become10/40 and6+10*repeats.",
+        "Asserts ordinary root has no own sz property, heritage root has sz; city footprint remains actual size.",
+        "Adds actual native/stress water and every-parcel land assertions; sewage sites have exactly two nearby water cells."
+      ]
+    },
+    {
+      "original": "proposals/d089/native-first-use-fixture.test.mjs",
+      "current": "proposals/d090/native-first-use-fixture.test.mjs",
+      "baselineSha256": "cd97e635f1785d7e87b343506e19572961faf0bcdfe9a55b1399a98de5cb7286",
+      "currentSha256": "94c9617dd0f1ca4f72610f7304df8fb312833e3d2c2846e84c0eed4c17e5ca0b",
+      "exactUnifiedDiff": "/tmp/d090-native-fixture-provenance/native-first-use-fixture.test.mjs.diff",
+      "diffSha256": "ae3d721f898ab22c2f37ade3fe5fba71d5d5c889f93d01b076e2816affba01ca",
+      "classification": "New D090 current fixture and harness-source contract, not direct textual copy of old inline-expression extractor.",
+      "retained": [
+        "Actual paid preview/commit for three repetitions per model; unique sites; full parcel owners; independent preserved six contextual building records.",
+        "One event per placement, native costs and total money subtraction; exact save/load building replay.",
+        "Required per-width record/first-attempt/median counts and every-record passed&&cpuRestored; retained three-commit median guard and prohibited synthetic simulation mutation/prewarming calls."
+      ],
+      "changes": [
+        "Imports the same shared firstUseRaw/Site functions as the actual browser instead of evaluating D089 inline raw/site strings.",
+        "11 models/33commits/39total/99allwidth samples become10/30/36/90, retaining all three repetitions and widths.",
+        "Price lookup uses actual FACILITY_TOOLS because three inherited heritage costs do not exist in COST; independent native catalogue test pins [400,400,500,500,350,180,180,250,400,280].",
+        "Adds absent ordinary sz versus four-cell heritage sz assertion.",
+        "Adds12 actual sewage negatives (2models*3repetitions*2water removals) requiring original nearwater rejection.",
+        "Adds exact browser import/raw/site/count/all-record acceptance tokens and four source mutants: all-land raw, wrongsites, reduced recordcount, bypassed per-record pass."
+      ]
+    }
+  ],
+  "currentTests": {
+    "tests": 5,
+    "passed": 5,
+    "log": "/tmp/d090-native-fixture-provenance/current-five-tests.log",
+    "logSha256": "ea6836d5aa9c43050507155dd540575bbe45eb709c18a44ccd544a813601719c"
+  },
+  "domainGuidance": [
+    "Retain the D089 original files unchanged on their exact supported5b source domain when their version-specific descriptors/assertions are no longer current-compatible.",
+    "Run these D090 tests as explicitly new current semantic coverage. Do not list them as byte-preserving copies with manufactured inverse.",
+    "Original D089 runtime assertions can additionally run in a separately generated finite D090 compatibility copy if the CI owner requires that exact-copy lineage; these files themselves make no such claim."
+  ],
+  "productWrites": false
+}

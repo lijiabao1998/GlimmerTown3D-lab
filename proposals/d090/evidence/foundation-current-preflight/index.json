@@ -1,0 +1,48 @@
+{
+  "qualification": "Exact locally adopted product model54b; Node/typecheck/build observations, not successor Chrome/art/release qualification.",
+  "authoritySha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "modelSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "sourceLeaseSha256": "e30677d68cff47dfead05eac5ac9cde406a1958ebf10942c5f5d0fae8a26f7d0",
+  "files": [
+    {
+      "file": "native200.json",
+      "bytes": 58169,
+      "sha256": "d4bd7a2e407f9e3c3aa404aa980ef1cccbb3cf1ac6ebb157650341009aa30fcc"
+    },
+    {
+      "file": "scene330.json",
+      "bytes": 376173,
+      "sha256": "e466a102710128e2c972ced09f0b2ef0adccc0624a46115dc64906966655b886"
+    },
+    {
+      "file": "native200.txt",
+      "bytes": 114,
+      "sha256": "6e188a81c72addfec5a9b7fb6db2ecc3d8ab453959bbf1d32e0206bf3fa0302b"
+    },
+    {
+      "file": "scene330.txt",
+      "bytes": 712,
+      "sha256": "ac050d1a845951387a49cd9490bb5b225336aadec64a9532bf2cbdd7ed736f59"
+    },
+    {
+      "file": "cache-qualification.txt",
+      "bytes": 212,
+      "sha256": "803afdd0d8101e7dec5a02617f5e0931a8a6ae218f3bd9abbb70d2414641860e"
+    },
+    {
+      "file": "typecheck.txt",
+      "bytes": 152,
+      "sha256": "f268b07197da008ac5dc2159ddfd70f404b066f4705a8c32d100cbeb67ae4eb2"
+    },
+    {
+      "file": "dirty-build-cost.json",
+      "bytes": 425,
+      "sha256": "67d960da4d43d0b33704ac2a8a6cb10f4071a3b2b3488a4a06532bb10c2facca"
+    },
+    {
+      "file": "independent-adoption-review.json",
+      "bytes": 6975,
+      "sha256": "18b0c92852bcd7c3dd8c585d201864daa7958e58ffa5cbd17843e9ca740c6918"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "sourceSha256": "31a4cce72864ccca2d00d6d4044f3e64d65b189476eecd046942978731009584",
+  "qualification": "Isolated original D081 Float32 geometry preflight ONLY; native integration and official Chrome pending.",
+  "models": [
+    {
+      "id": "castellated-tank-water-tower",
+      "width": 412,
+      "parts": 9,
+      "weighted": 488,
+      "required": 1449,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "164e768e8c8c1f0a186430a570167b59f736cd8589d90c5cfe2e18f7c507b2ab",
+      "partsMissing": {}
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "width": 412,
+      "parts": 2,
+      "weighted": 284,
+      "required": 1151,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "ecea4ef7be3b6778751cac8a4b92052610971f51e014ba1a8ee4aba7c8b6b326",
+      "partsMissing": {}
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "width": 412,
+      "parts": 4,
+      "weighted": 248,
+      "required": 999,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "d93cd06e1cfab024a1caa9176584f4cd5d87ca0166101c30a6c426f61def1626",
+      "partsMissing": {}
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "width": 412,
+      "parts": 4,
+      "weighted": 288,
+      "required": 994,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "fa23e47062fef9274d52ef121568c03b37915aa75bca81d15eb8ebae3f777832",
+      "partsMissing": {}
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "width": 412,
+      "parts": 8,
+      "weighted": 380,
+      "required": 997,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "36ce28540e80d3adf3fed1fb349c0d8d32407fa29aa3a01109ba64dbfd4d1406",
+      "partsMissing": {}
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "width": 412,
+      "parts": 3,
+      "weighted": 232,
+      "required": 1037,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "927f4a84f4818b9393a7df29772768e6a33140f225d221e27c8fef98f14f9120",
+      "partsMissing": {}
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "width": 412,
+      "parts": 3,
+      "weighted": 136,
+      "required": 882,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "8243445827c1fa83984ceadc08d58a5acea2e16e83b9e9ca0f9271cbde224c35",
+      "partsMissing": {}
+    },
+    {
+      "id": "cruciform-village-forge",
+      "width": 412,
+      "parts": 5,
+      "weighted": 184,
+      "required": 921,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "da53cf269489d5257477c56532e2a0baace493815f738def73d8310efc112a12",
+      "partsMissing": {}
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "width": 412,
+      "parts": 3,
+      "weighted": 200,
+      "required": 966,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "06ef7d802d0847d2d814d8a65e96f2e58a8727d51ebcddfa71653cc99c293ee1",
+      "partsMissing": {}
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "width": 412,
+      "parts": 2,
+      "weighted": 88,
+      "required": 861,
+      "first48Missing": 0,
+      "missing": 0,
+      "contractSha256": "5801846eea279c28df05bd76821a7a50111e2aad70d9f443d60351ff34fc704b",
+      "partsMissing": {}
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,442 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "priorManifest": "proposals/d089/inherited-test-domains.json",
+  "priorManifestSha256": "d4ff555a10cc7afc2cf15c88ff94272ca9071cc362acd8e5b17b62275cef6158",
+  "qualification": "All previous immutable domains and compatible current assertions retained. Exactly fourteen D089 source-version assertions execute actual immutable5b with named current replacements; sixteen compatible D089 originals remain current; original old11 lifecycle executes immutable5b and the exact finite metadata/catalogue copy executes all lifecycle assertions on current200. Current old D083/D086/D087/D088/D089 native behavior and full old190 bytes are mandatory independently. No read interception or blanket historical substitution.",
+  "originalCommand": "node --test tools/d089-*.test.mjs proposals/d089/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs",
+  "d089Originals": [
+    {
+      "file": "proposals/d089/browser-adaptation.test.mjs",
+      "sha256": "f942b1a342a63c117c31e88bc155f7cf69d393396e561c1eac973ccac9af9db3",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-adaptation.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-cache-observation.test.mjs",
+      "sha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-cache-observation.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-first-use-performance.test.mjs",
+      "sha256": "716e6b97d8f3623d5d967ef42f3cb54a020db87e51232ea65b3e63cf903d872d",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-first-use-performance.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-frame-qualification.test.mjs",
+      "sha256": "63e19b6d24913b3dee599f0c770407a9887af26016c29195f0abe94a110d5440",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-frame-qualification.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-provenance.test.mjs",
+      "sha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-provenance.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-startup-cache-contract.test.mjs",
+      "sha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-startup-cache-contract.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/browser-surface-qualification.test.mjs",
+      "sha256": "0f6dbd498d121e6d4568e471420f9da14c9c052644926fe7355b1b7aa6cc50b2",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/browser-surface-qualification.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-access.test.mjs",
+      "sha256": "caee035184d4a4349e60d0f5156c8f32ec7627d1b8dec496ddf5e387da8c6a8f",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-access.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-card-invariants.test.mjs",
+      "sha256": "8358fcda110a081768bbeb254c3d964ce3fae381fdd3914704c0da63cc385c34",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-card-invariants.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-coplanar.test.mjs",
+      "sha256": "b8416a9c348191ec3c56f98b05bafba42e8d30f7cdd62fd43f313faf7992444a",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-coplanar.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-evidence.test.mjs",
+      "sha256": "ab6ed9385ae4f39669b6d9d3a0247b520fae0d4a6040c421a203c74084cefe5c",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-evidence.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-focused.test.mjs",
+      "sha256": "3f4e61be2556fcb9a719b27d4258dd1c3fcbf46f994ad043e40f6fb442f061b7",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-focused.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/geometry-plan.test.mjs",
+      "sha256": "e4ef22f0c85140bee164a1d31925b5a7d809d694cb5e180c391eddac56f19e03",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/geometry-plan.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/inherited-test-contract.test.mjs",
+      "sha256": "6df3bf4023389b377b98fdc3859f0229658301e8c41bdf2225148da99fa1438d",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/inherited-test-contract.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/native-farm-precedence-copy.test.mjs",
+      "sha256": "730ea249725d36a05cbced732f4504cbcfbd58ae375fea9192e28e9a430c702d",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/native-farm-precedence-copy.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/native-first-use-fixture.test.mjs",
+      "sha256": "cd97e635f1785d7e87b343506e19572961faf0bcdfe9a55b1399a98de5cb7286",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/native-first-use-fixture.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/native-fixture.test.mjs",
+      "sha256": "c564296ab70977e1bede0025d496bd8695fc72ce0a0671836fd3e1294c1a5fef",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/native-fixture.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/native-smoke-versions.test.mjs",
+      "sha256": "a3d57cb442b9d082136f609b18e6adab9288f13f5f023bc1f8853173365bf9c7",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/native-smoke-versions.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/native-version-contracts.test.mjs",
+      "sha256": "e9f0b5c503c7abb38001e7f4073fdab78f8bcc220db063e033069e694396385d",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/native-version-contracts.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/original-camera-restoration.test.mjs",
+      "sha256": "37385d666cf3a0691e5048ea3e50412cece67ab669db2454ffceb4c4a00f1497",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/original-camera-restoration.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/precompiled-cache-qualification.test.mjs",
+      "sha256": "f3eacdb195727969387c1b3ccf704bb271ad143e9915276c59b170297b446d5a",
+      "domain": "actual-current",
+      "currentCoverage": [
+        "proposals/d089/precompiled-cache-qualification.test.mjs"
+      ]
+    },
+    {
+      "file": "proposals/d089/source-boundaries.test.mjs",
+      "sha256": "baf166096ea2335c4b7c2691c848f318d6dd2310fcbb6754e27037a29ed7de27",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "proposals/d090/source-boundaries.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-catalogue.test.mjs",
+      "sha256": "84621cf9cb2cf331359de98321574fe67561b9d83ee578f2c063f276263bc3bf",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d089-native-catalogue-d090.test.mjs",
+        "tools/d090-native-catalogue.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-lifecycle.test.mjs",
+      "sha256": "602bfad67eae5bd36eaab30ef92e56620b7876f144a08300eadbd9bc21a8cb56",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d089-native-lifecycle-d090.test.mjs",
+        "tools/d090-native-lifecycle.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-routing.test.mjs",
+      "sha256": "b6dcf65358267ac4b6d9f717b9815ddb97558a0bd7999462fa787bb64ee8b7a3",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d090-native-routing.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-scene-dispatch.test.mjs",
+      "sha256": "ecc07a7b8981ccf552ebeca1f45fca633509fe8b738ec4a0267939cc1296b3e1",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d089-native-scene-dispatch-d090.test.mjs",
+        "tools/d090-native-scene-dispatch.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-ui-actions.test.mjs",
+      "sha256": "62ba27bfe95622f968e9621a8f5fb209e3bbcd7cdd49f252f616e88593e02d3c",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d089-native-ui-actions-d090.test.mjs",
+        "tools/d090-native-ui-actions.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-native-workflow.test.mjs",
+      "sha256": "16e22c2b934f22fc80f8f3be16137057b4edd2e311a282f047531a9650e6bd1d",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d090-native-workflow.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-source.test.mjs",
+      "sha256": "84105213786bb11403a300b50635925bb1291dff02f201a94938cfa3033cd53a",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d090-source.test.mjs"
+      ]
+    },
+    {
+      "file": "tools/d089-validation.test.mjs",
+      "sha256": "7c3581d579aff8171e56429ae737452946f318955456918bf9b139683a603391",
+      "domain": "actual-immutable-5b41",
+      "currentCoverage": [
+        "tools/d090-validation.test.mjs"
+      ]
+    }
+  ],
+  "published5bExtraHistorical": [
+    {
+      "file": ".github/scripts/ci-integrity-d089.test.mjs",
+      "sha256": "4b7f6fcb7a3dee71bc80b6f8586dfade5372d097493db38aa9f1c0b58f701c41",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "tools/d083-release-trigger-d089.test.mjs",
+      "sha256": "29484dc104cd7164770511d15bbc9f34d600a7c03243e7c17bfc8f3b639389c2",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "tools/d085-source-d089.test.mjs",
+      "sha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "proposals/d087/native-variant-d089.test.mjs",
+      "sha256": "2f0f2e36a4ef8d8b4fcd46a61222c9049876196c5407f6c1ac76e18ef7c09337",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "proposals/d087/native-farm-precedence-d089.test.mjs",
+      "sha256": "1a6e17f0345480774863c23bafdae49cdc17be0954d60cc6acabbc9846596609",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "proposals/d088/native-integration-d089.test.mjs",
+      "sha256": "3a734a8c182cfda2f179f4308dad37088018333c28b88b770dfdd8604e69c7be",
+      "domain": "actual-immutable-5b41"
+    },
+    {
+      "file": "proposals/d088/native-ui-actions-d089.test.mjs",
+      "sha256": "451296f121a85fd063c57ca099f4c6abedf235220a0e2c0506851e117ca75a4f",
+      "domain": "actual-immutable-5b41"
+    }
+  ],
+  "currentReplacements": {
+    ".github/scripts/ci-integrity-d089.test.mjs": [
+      ".github/scripts/ci-integrity-d090.test.mjs"
+    ],
+    "tools/d083-release-trigger-d089.test.mjs": [
+      "tools/d083-release-trigger-d090.test.mjs"
+    ],
+    "tools/d085-source-d089.test.mjs": [
+      "tools/d085-source-d090.test.mjs"
+    ],
+    "tools/d089-source.test.mjs": [
+      "tools/d090-source.test.mjs"
+    ],
+    "tools/d089-validation.test.mjs": [
+      "tools/d090-validation.test.mjs"
+    ],
+    "tools/d089-native-workflow.test.mjs": [
+      "tools/d090-native-workflow.test.mjs"
+    ],
+    "proposals/d087/native-variant-d089.test.mjs": [
+      "proposals/d087/native-variant-d090.test.mjs"
+    ],
+    "proposals/d087/native-farm-precedence-d089.test.mjs": [
+      "proposals/d087/native-farm-precedence-d090.test.mjs"
+    ],
+    "proposals/d088/native-integration-d089.test.mjs": [
+      "proposals/d088/native-integration-d090.test.mjs"
+    ],
+    "proposals/d088/native-ui-actions-d089.test.mjs": [
+      "proposals/d088/native-ui-actions-d090.test.mjs"
+    ],
+    "tools/d089-native-catalogue.test.mjs": [
+      "tools/d089-native-catalogue-d090.test.mjs",
+      "tools/d090-native-catalogue.test.mjs"
+    ],
+    "tools/d089-native-routing.test.mjs": [
+      "tools/d090-native-routing.test.mjs"
+    ],
+    "tools/d089-native-ui-actions.test.mjs": [
+      "tools/d089-native-ui-actions-d090.test.mjs",
+      "tools/d090-native-ui-actions.test.mjs"
+    ],
+    "tools/d089-native-scene-dispatch.test.mjs": [
+      "tools/d089-native-scene-dispatch-d090.test.mjs",
+      "tools/d090-native-scene-dispatch.test.mjs"
+    ],
+    "proposals/d089/inherited-test-contract.test.mjs": [
+      "proposals/d090/inherited-test-contract.test.mjs"
+    ],
+    "proposals/d089/native-farm-precedence-copy.test.mjs": [
+      "proposals/d090/native-farm-precedence-copy.test.mjs"
+    ],
+    "proposals/d089/native-smoke-versions.test.mjs": [
+      "proposals/d090/native-smoke-versions.test.mjs"
+    ],
+    "proposals/d089/native-version-contracts.test.mjs": [
+      "proposals/d090/native-version-contracts.test.mjs"
+    ],
+    "proposals/d089/original-camera-restoration.test.mjs": [
+      "proposals/d090/original-camera-restoration.test.mjs"
+    ],
+    "proposals/d089/source-boundaries.test.mjs": [
+      "proposals/d090/source-boundaries.test.mjs"
+    ],
+    "tools/d089-native-lifecycle.test.mjs": [
+      "tools/d089-native-lifecycle-d090.test.mjs",
+      "tools/d090-native-lifecycle.test.mjs"
+    ]
+  },
+  "currentAdditions": [
+    ".github/scripts/ci-integrity-d090.test.mjs",
+    "tools/d083-release-trigger-d090.test.mjs",
+    "tools/d085-source-d090.test.mjs",
+    "tools/d090-source.test.mjs",
+    "tools/d090-validation.test.mjs",
+    "tools/d090-native-workflow.test.mjs",
+    "proposals/d090/inherited-test-contract.test.mjs",
+    "proposals/d090/native-version-contracts.test.mjs",
+    "tools/d090-native-lifecycle.test.mjs",
+    "tools/d090-native-catalogue.test.mjs",
+    "tools/d090-native-routing.test.mjs",
+    "tools/d090-native-ui-actions.test.mjs",
+    "tools/d090-native-scene-dispatch.test.mjs",
+    "proposals/d090/native-smoke-versions-pipes-v2.test.mjs",
+    "proposals/d090/source-boundaries.test.mjs",
+    "proposals/d090/original-camera-restoration.test.mjs",
+    "proposals/british-program/ledger-current-v5.test.mjs",
+    "proposals/d090/native-farm-precedence-copy.test.mjs",
+    "proposals/d087/native-farm-precedence-d090.test.mjs",
+    "tools/d089-native-catalogue-d090.test.mjs",
+    "tools/d089-native-ui-actions-d090.test.mjs",
+    "tools/d089-native-scene-dispatch-d090.test.mjs",
+    "tools/d089-native-lifecycle-d090.test.mjs"
+  ],
+  "currentLedgerSnapshots": [
+    "proposals/british-program/ledger-check.test.mjs",
+    "proposals/british-program/ledger-current.test.mjs",
+    "proposals/british-program/ledger-current-v3.test.mjs",
+    "proposals/british-program/ledger-current-v4.test.mjs"
+  ],
+  "currentCopies": [
+    {
+      "source": ".github/scripts/ci-integrity-d089.test.mjs",
+      "target": ".github/scripts/ci-integrity-d090.test.mjs",
+      "sourceSha256": "4b7f6fcb7a3dee71bc80b6f8586dfade5372d097493db38aa9f1c0b58f701c41",
+      "targetSha256": "9a1c3c713156340cae0c8539ba4405bee560bc038866912763d136cbeaf5c94a",
+      "changes": [
+        {
+          "before": "'d089-native-release', 'd083-native-release'",
+          "after": "'d089-native-release', 'd090-native-release', 'd083-native-release'",
+          "count": 1
+        },
+        {
+          "before": "ci-integrity-d089\\.test",
+          "after": "ci-integrity-d090\\.test",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d083-release-trigger-d089.test.mjs",
+      "target": "tools/d083-release-trigger-d090.test.mjs",
+      "sourceSha256": "29484dc104cd7164770511d15bbc9f34d600a7c03243e7c17bfc8f3b639389c2",
+      "targetSha256": "9947a0a364d3278a7ac5c70be4e74299cea0b289c77e495dba78ca245ea3d440",
+      "changes": [
+        {
+          "before": "native-browser-check-d089.mjs",
+          "after": "native-browser-check-d090.mjs",
+          "count": 2
+        },
+        {
+          "before": "native-integration-check-d089.mjs",
+          "after": "native-integration-check-d090.mjs",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d085-source-d089.test.mjs",
+      "target": "tools/d085-source-d090.test.mjs",
+      "sourceSha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
+      "targetSha256": "501a180cbe743b1cdaf22b2e422bb8fc4fc73f54cd8249eb0f5259c8c3edb307",
+      "changes": [
+        {
+          "before": "'./d089-source.mjs'",
+          "after": "'./d090-source.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

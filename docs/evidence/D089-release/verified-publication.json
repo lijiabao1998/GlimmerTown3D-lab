@@ -1,0 +1,170 @@
+{
+  "schema": 1,
+  "verifiedAt": "2026-10-26T13:17:40.821Z",
+  "program": "British20-wave/200-building program",
+  "wave": 19,
+  "card": "D089",
+  "pullRequest": 45,
+  "pullRequestUrl": "https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/45",
+  "state": "ACCEPTED_MERGED_PAGES_PUBLISHED_PUBLIC_BYTE_VERIFIED",
+  "base": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+  "candidate": "5c1eed2f6566d4b74a58f4ab6ca59055e00c6495",
+  "main": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "gitTree": "f2fd2ef0f103c428097ba5506a816ba14cc2bdab",
+  "mainCI": {
+    "run": 40315970068,
+    "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40315970068",
+    "totalJobs": 115,
+    "success": 115,
+    "skipped": 0,
+    "pagesJob": 121591255479,
+    "pagesCompletedAt": "2026-10-26T13:11:53Z",
+    "completeApi": {
+      "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/final-main-api.json",
+      "bytes": 517383,
+      "sha256": "e87fc8b4558e57b06da7e82b9e748073ad6618947bd79238e65d2b3190b0f8a9"
+    }
+  },
+  "candidateQualification": {
+    "path": "/tmp/d089-official-5c1eed2f/candidate-qualified-premerge.json",
+    "bytes": 9668,
+    "sha256": "4a9dceda72a9bb1d1d06d568a6ca49c5efb2d6cee47676ab742a45f01c9d0a1a"
+  },
+  "mainEvidence": {
+    "sourceFiles": 258,
+    "trackedFiles": 3247,
+    "buildSha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde",
+    "buildBytes": 3840360,
+    "rawPNGs": 552,
+    "pausedPairs": 276,
+    "actualMainCameraCases": 33,
+    "requiredSurfaceObservations": 70659,
+    "paintIntentObservations": 1584,
+    "coldSamples": 99,
+    "startupProfiles": 24,
+    "sourceBuild": {
+      "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/build-source-join.json",
+      "bytes": 716,
+      "sha256": "ea3976172e20cb4945c1311a138d5a1f04ececbc99b4ac929f01221cb93ed5df"
+    },
+    "technical": {
+      "path": "/workspace/shared/d089-independent-main-review-20261026T1200Z/main-technical-review.json",
+      "bytes": 56733,
+      "sha256": "1ba137cc29defe394ec39b9b487971415ef3fc467b3bfaef98a37b98c0fd0ea4"
+    },
+    "technicalIndex": {
+      "path": "/workspace/shared/d089-independent-main-review-20261026T1200Z/review-index.json",
+      "bytes": 15502,
+      "sha256": "f3c465363dd586024581da3c3e0347b457eb0b9a4d2e9b7b83b7d537b8c33f58"
+    },
+    "art": {
+      "path": "/workspace/shared/d089-independent-main-art-20261026T1206Z/FINAL-MAIN-ART-CONTINUITY.json",
+      "bytes": 47960,
+      "sha256": "99165566eccf38f1ecdd0cec3aeb7752c03542824102824a13a7ceba5276da2b"
+    },
+    "performance": {
+      "path": "/workspace/shared/d089-independent-performance-main-complete-20261026T1212Z/review-receipt.json",
+      "bytes": 35363,
+      "sha256": "6163e348c9a9fb799da5b1ded012b993dfdf452034cf9ec4596ffa4d6bba004b"
+    },
+    "nativeAudit": {
+      "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/node/d089-audit/candidate.json",
+      "bytes": 55277,
+      "sha256": "f4f83d384f87c461ca1f45dc263318437fee1d7fc958a7c907c6566084508cd7"
+    },
+    "artifacts": {
+      "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/d089-main-complete-artifact-api.json",
+      "bytes": 12060,
+      "sha256": "5dd84fa115fcaeb42684532ab47ac0b1e59312380b7ec73437966e4e8ae46ccd"
+    },
+    "pngContinuity": {
+      "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/all-png-continuity.json",
+      "bytes": 185628,
+      "sha256": "212ddb1142b8b0533085fe0cb5d48453a8d5d375faa968a37c12a9832f2bf5e4"
+    },
+    "visualContinuity": "544/552 PNGs byte-identical to qualified candidate;4 changed originals personally inspected with their counterparts, all276 main paused pairs exact. Actual-camera terrain/UI-composite differences retained and freshly requalified without normalization.",
+    "rawGeometryScope": "Complete exportedOTHER mesh signedUint32/Int32 words; walls/dressing retain original full-scene digest/frame joins, not a raw-word export claim.",
+    "performanceMaxima": {
+      "previewMs": 2,
+      "commitMs": 246,
+      "rebuildMs": 77.09999999997672,
+      "rebuildAllMs": 86.40000000002328
+    },
+    "priorCandidateNearLimitCommitMs": 391.80000000001746,
+    "bundleIncreaseBytes": 520600,
+    "bundleIncreaseGzipBytes": 91758
+  },
+  "publicFetchedStart": "2026-10-26T13:15:40Z",
+  "publicFetchedEnd": "2026-10-26T13:15:54Z",
+  "publicChecks": [
+    {
+      "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+      "http": 200,
+      "bytes": 3840360,
+      "sha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde",
+      "exactMainBuildBytes": true,
+      "html": {
+        "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/public-1315/root.html",
+        "bytes": 3840360,
+        "sha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde"
+      },
+      "headers": {
+        "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/public-1315/root.headers",
+        "bytes": 792,
+        "sha256": "c84f71c5934d4559e33963bc05f9d4b5dcf9e5c59705dd2ade49b6b64ee1ed2c"
+      }
+    },
+    {
+      "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/?streetFrontageControl=1",
+      "http": 200,
+      "bytes": 3840360,
+      "sha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde",
+      "exactMainBuildBytes": true,
+      "html": {
+        "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/public-1315/opt.html",
+        "bytes": 3840360,
+        "sha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde"
+      },
+      "headers": {
+        "path": "/workspace/shared/own-cloud-migration-20261024/d089-main-5b41bac1/public-1315/opt.headers",
+        "bytes": 788,
+        "sha256": "403d34ac19e9c2f6571d5ed423db23ef8b1c73beaaa817b79ef39a490a378dcc"
+      }
+    }
+  ],
+  "publishedBefore": 179,
+  "candidateTotal": 190,
+  "verifiedPublishedAfter": 190,
+  "acceptedIncrement": 11,
+  "publishedWavesAfter": 19,
+  "remaining": 10,
+  "remainingWaves": 1,
+  "slots": [
+    "87:6",
+    "87:7",
+    "87:8",
+    "91:5",
+    "91:6",
+    "57:6",
+    "57:7",
+    "57:8",
+    "22:17",
+    "53:4",
+    "63:6"
+  ],
+  "publishedModelDigest": "8e78070cce4fffab8fbb5800a87aa18efeadbdd777beb23663c925875ae37e1c",
+  "limits": {
+    "publicHttpBytesAreNotIndependentPublicWebglSession": true,
+    "physicalAndroidVerified": false,
+    "noInspectionCameraException": true,
+    "originalD081RulesAndThresholdsRetained": true,
+    "allOriginalFirstRedsRetained": true,
+    "coarseInheritedShadowLimitationDisclosed": true,
+    "realCameraDriftAndGPUCompositingResidualsRetained": true,
+    "inheritedTwoHighDevBuildPackageFindingsRemainDisclosed": true,
+    "noNewDependencyAuditClaim": true,
+    "wholeAppHeapIsNotExclusiveCacheRetention": true,
+    "genericEditorWarmEditExistsButNoTargetModelPrewarm": true
+  },
+  "next": "StartD090 final10 from this nowverified190 main, freeze card before code, preserve all190 and exact final200 gates. Final documentation/evidence ledger reconciled only after realpublication."
+}

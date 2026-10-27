@@ -1,0 +1,276 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "reason": "Actual current200 metadata validated first; old actual lifecycle/UI/geometry still exercised; only finite current catalogue/harness/source-literal seams.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-integration-check-d089.mjs",
+      "target": "proposals/d083/native-integration-check-d090.mjs",
+      "sourceSha256": "3215e94b0b424d4e57b4b14e6f6555f5dc6ca89c3ff5d54a88dd7ab14e20ef08",
+      "targetSha256": "5fc7af21f14c7c830850d55f4e55dcecf5a5eab85597d8757911919a819253c9",
+      "header": "// D090 finite current contract. Original proposals/d083/native-integration-check-d089.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "assertD089PreD086KindMetadata",
+          "after": "assertD090PreD086KindMetadata",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d089-kind-metadata-contract.mjs'",
+          "after": "'../../tools/d090-kind-metadata-contract.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d089-native/d083-current'",
+          "after": "'scratch/d090-native/d083-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-variant-check-d089.mjs",
+      "target": "proposals/d086/native-variant-check-d090.mjs",
+      "sourceSha256": "59b06f9265fa0535a5a039b98cd1cdd22b8187d9a215bff4bc6aff9e6ee1f939",
+      "targetSha256": "609601e9c55746ef8318633435b902725b63c64ea23cb4539a65f783a2c0f869",
+      "header": "// D090 finite current contract. Original proposals/d086/native-variant-check-d089.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "checkedD089D086Predecessor",
+          "after": "checkedD090D086Predecessor",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d089-kind-metadata-contract.mjs'",
+          "after": "'../../tools/d090-kind-metadata-contract.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'scratch/d089-native/d086-current'",
+          "after": "'scratch/d090-native/d086-current'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d055-capture-d089.mjs",
+      "target": "tools/d055-capture-d090.mjs",
+      "sourceSha256": "36763069ae296103bef7cbeda4f47e0b4c0c41bf43a9773f419c1f15588a3168",
+      "targetSha256": "5c8fb4054e9b3e5d97cc5119efe1993a6347dc08483f6e11ce86fd603d226b09",
+      "header": "// D090 finite current contract. Original tools/d055-capture-d089.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "catalogueWithD089",
+          "after": "catalogueWithD090",
+          "count": 2
+        },
+        {
+          "before": "'./d089-catalogue-compat.mjs'",
+          "after": "'./d090-catalogue-compat.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-current-inherited-ui-guards.mjs",
+      "target": "proposals/d090/native-current-inherited-ui-guards.mjs",
+      "sourceSha256": "ae5d6d37db8c81a06c4d586a415a9213643897c24c752db9490030093e363d91",
+      "targetSha256": "3653c5ec958d9848a417722189f5ab90abbd9f61d08fda36d2bf5f56846c703e",
+      "header": "// D090 finite current contract. Original proposals/d089/native-current-inherited-ui-guards.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "assertD089CurrentGuardVersions",
+          "after": "assertD090CurrentGuardVersions",
+          "count": 2
+        },
+        {
+          "before": "'../../tools/d089-current-guards.mjs'",
+          "after": "'../../tools/d090-current-guards.mjs'",
+          "count": 1
+        },
+        {
+          "before": "unit-d052-d089.mjs",
+          "after": "unit-d052-d090.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d054-ui-d089.mjs",
+          "after": "unit-d054-ui-d090.mjs",
+          "count": 1
+        },
+        {
+          "before": "unit-d081-touch-lease-d089.mjs",
+          "after": "unit-d081-touch-lease-d090.mjs",
+          "count": 1
+        },
+        {
+          "before": "scratch/d089-native/current-inherited-ui",
+          "after": "scratch/d090-native/current-inherited-ui",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-current-food-guards.mjs",
+      "target": "proposals/d090/native-current-food-guards.mjs",
+      "sourceSha256": "a48d6b4980d15b87b111ff416e730a81250fe033c8af79a03c9dc959d7c3655a",
+      "targetSha256": "6df985ae26d638a958a95456fe1ddf104c9517ed47ea62eae4d77911bff9a655",
+      "header": "// D090 finite current contract. Original proposals/d089/native-current-food-guards.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "'../../tools/unit-d055-native-d089.mjs'",
+          "after": "'../../tools/unit-d055-native-d090.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-variant-d089.test.mjs",
+      "target": "proposals/d087/native-variant-d090.test.mjs",
+      "sourceSha256": "2f0f2e36a4ef8d8b4fcd46a61222c9049876196c5407f6c1ac76e18ef7c09337",
+      "targetSha256": "47f9c014a5e2dd22aabfd46ea48f583d6f1e365b40284cbc9ddc1b0be2986cbd",
+      "header": "// D090 finite current contract. Original proposals/d087/native-variant-d089.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "import{KINDS as D089_CURRENT_KINDS}from'../../src/content/kinds.ts';",
+          "after": "import{KINDS as D090_CURRENT_KINDS}from'../../src/content/kinds.ts';\nimport{checkedD090PredecessorTable}from'../../tools/d090-native-support.mjs';\nconst D089_CURRENT_KINDS=checkedD090PredecessorTable(D090_CURRENT_KINDS);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(facilitySummary(0).total,76);assert.equal(facilitySummary(0).available,75);",
+          "after": "assert.equal(facilitySummary(0).total,86);assert.equal(facilitySummary(0).available,85);",
+          "count": 1
+        },
+        {
+          "before": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,76",
+          "after": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,86",
+          "count": 1
+        },
+        {
+          "before": "FACILITY_TOOLS.length,76",
+          "after": "FACILITY_TOOLS.length,86",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d088/native-integration-d089.test.mjs",
+      "target": "proposals/d088/native-integration-d090.test.mjs",
+      "sourceSha256": "3a734a8c182cfda2f179f4308dad37088018333c28b88b770dfdd8604e69c7be",
+      "targetSha256": "f6952f553626c1c2e60a602ba093d1946c0eb59c855fed6010f32be658fd418f",
+      "header": "// D090 finite current contract. Original proposals/d088/native-integration-d089.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "import{KINDS as D089_CURRENT_KINDS}from'../../src/content/kinds.ts';",
+          "after": "import{KINDS as D090_CURRENT_KINDS}from'../../src/content/kinds.ts';\nimport{checkedD090PredecessorTable}from'../../tools/d090-native-support.mjs';\nconst D089_CURRENT_KINDS=checkedD090PredecessorTable(D090_CURRENT_KINDS);",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(facilitySummary(0).total,76);assert.equal(facilitySummary(0).available,75);",
+          "after": "assert.equal(facilitySummary(0).total,86);assert.equal(facilitySummary(0).available,85);",
+          "count": 1
+        },
+        {
+          "before": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,76",
+          "after": "new Set(FACILITY_TOOLS.map(m=>m.id)).size,86",
+          "count": 1
+        },
+        {
+          "before": "FACILITY_TOOLS.length,76",
+          "after": "FACILITY_TOOLS.length,86",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d088/native-ui-actions-d089.test.mjs",
+      "target": "proposals/d088/native-ui-actions-d090.test.mjs",
+      "sourceSha256": "451296f121a85fd063c57ca099f4c6abedf235220a0e2c0506851e117ca75a4f",
+      "targetSha256": "2da78a16ed9811eff3a54fd9239bc87ea301ee7c2232e847c1e7280ddc64dd7f",
+      "header": "// D090 finite current contract. Original proposals/d088/native-ui-actions-d089.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "tools/unit-d053-d089.mjs",
+          "after": "tools/unit-d053-d090.mjs",
+          "count": 1
+        },
+        {
+          "before": "['...WORKING_RURAL_TOOLS, ...PUBLIC_SERVICE_TOOLS, ...MARKET_ESTATE_TOOLS].some','...WORKING_RURAL_TOOLS, ...MARKET_ESTATE_TOOLS].some']",
+          "after": "['...WORKING_RURAL_TOOLS, ...PUBLIC_SERVICE_TOOLS, ...MARKET_ESTATE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some','...WORKING_RURAL_TOOLS, ...MARKET_ESTATE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some']",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d089-native-catalogue.test.mjs",
+      "target": "tools/d089-native-catalogue-d090.test.mjs",
+      "sourceSha256": "84621cf9cb2cf331359de98321574fe67561b9d83ee578f2c063f276263bc3bf",
+      "targetSha256": "631102c0340ac5d043edef0a13b6f2dd1e8e208c2dc1e40e41c222cd5b4b9dce",
+      "header": "// D090 finite current contract. Original tools/d089-native-catalogue.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "import {KINDS} from '../src/content/kinds.ts';",
+          "after": "import {KINDS as CURRENT_D090_KINDS} from '../src/content/kinds.ts';\nimport {checkedD090PredecessorTable} from './d090-native-support.mjs';\nconst KINDS=checkedD090PredecessorTable(CURRENT_D090_KINDS);",
+          "count": 1
+        },
+        {
+          "before": "assertMarketEstateMetadata();",
+          "after": "assertMarketEstateMetadata(KINDS);",
+          "count": 1
+        },
+        {
+          "before": "import {catalogueWithD089,D089_TOOL_IDS} from './d089-catalogue-compat.mjs';",
+          "after": "import {D089_TOOL_IDS} from './d089-catalogue-compat.mjs';\nimport {catalogueWithD090 as catalogueWithD089} from './d090-catalogue-compat.mjs';",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(facilitySummary(0).total,76);assert.equal(facilitySummary(0).available,75);",
+          "after": "assert.equal(facilitySummary(0).total,86);assert.equal(facilitySummary(0).available,85);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d089-native-ui-actions.test.mjs",
+      "target": "tools/d089-native-ui-actions-d090.test.mjs",
+      "sourceSha256": "62ba27bfe95622f968e9621a8f5fb209e3bbcd7cdd49f252f616e88593e02d3c",
+      "targetSha256": "bd57639d40e87af73911e042fc4e19307d5a82f6d9de4054137eb4bb693795d8",
+      "header": "// D090 finite current contract. Original tools/d089-native-ui-actions.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "const harnessSource=section(read('tools/unit-d053-d088.mjs'),'function selectionHarness(','function selectionAndCommit(').replace('PUBLIC_SERVICE_TOOLS=d.PUBLIC_SERVICE_TOOLS;','PUBLIC_SERVICE_TOOLS=d.PUBLIC_SERVICE_TOOLS,MARKET_ESTATE_TOOLS=d.MARKET_ESTATE_TOOLS;').replace('WORKING_RURAL_TOOLS,PUBLIC_SERVICE_TOOLS})','WORKING_RURAL_TOOLS,PUBLIC_SERVICE_TOOLS,MARKET_ESTATE_TOOLS})');",
+          "after": "const harnessSource=section(read('tools/unit-d053-d090.mjs'),'function selectionHarness(','function selectionAndCommit(');",
+          "count": 1
+        },
+        {
+          "before": "['...PUBLIC_SERVICE_TOOLS, ...MARKET_ESTATE_TOOLS].some','...PUBLIC_SERVICE_TOOLS].some']",
+          "after": "['...PUBLIC_SERVICE_TOOLS, ...MARKET_ESTATE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some','...PUBLIC_SERVICE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some']",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d089-native-scene-dispatch.test.mjs",
+      "target": "tools/d089-native-scene-dispatch-d090.test.mjs",
+      "sourceSha256": "ecc07a7b8981ccf552ebeca1f45fca633509fe8b738ec4a0267939cc1296b3e1",
+      "targetSha256": "d536743f1764a68ef35bd3ea05216b8d62a9db051ed19091e9272f923f56f918",
+      "header": "// D090 finite current contract. Original tools/d089-native-scene-dispatch.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.\n",
+      "changes": [
+        {
+          "before": "'marketEstateSlot(b.k,b.v)) ? villageKind'",
+          "after": "'marketEstateSlot(b.k,b.v)) && !(shape?.p?.nativeUtilityHeritage === true && utilityHeritageSlot(b.k,b.v)) ? villageKind'",
+          "count": 2
+        },
+        {
+          "before": "'true) ? villageKind'",
+          "after": "'true) && !(shape?.p?.nativeUtilityHeritage === true && utilityHeritageSlot(b.k,b.v)) ? villageKind'",
+          "count": 1
+        },
+        {
+          "before": "'marketEstateSlot(b.k,0)) ? villageKind'",
+          "after": "'marketEstateSlot(b.k,0)) && !(shape?.p?.nativeUtilityHeritage === true && utilityHeritageSlot(b.k,b.v)) ? villageKind'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "schema": 1,
+  "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "qualification": "Exactly six original assertions retained byte-for-byte and mandatory on actual6c. Current copies preserve all other assertions; source/plan bindings are pending, never placeholder green.",
+  "copies": [
+    {
+      "source": "proposals/d090/geometry-card-invariants.test.mjs",
+      "target": "proposals/d090/geometry-card-invariants-foundation-v2.test.mjs",
+      "sourceSha256": "c297ae52b2d427cafb6e066f9a23fc8783b7dc78539071611d076afe85abb184",
+      "targetSha256": "63ff3d1ed68553b641da981e8e7f70931165c10e6d1863f152912d0a0d4c40a8",
+      "header": "",
+      "changes": [
+        {
+          "before": "near(area(ground(body)),.54*.54);",
+          "after": "near(area(ground(body)),.60*.60);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/geometry-finite-repair.test.mjs",
+      "target": "proposals/d090/geometry-finite-repair-foundation-v2.test.mjs",
+      "sourceSha256": "d9be27321f4662025fae0baa7c1ac9d439561e3574f709b69aec17119f5c54fa",
+      "targetSha256": "a46fbfe71e0263919aa9355a821a0d0aceb1bba11eba596b40674d8ac54929e8",
+      "header": "",
+      "changes": [
+        {
+          "before": "import{assertGroundAccess}from'./geometry-access.mjs';",
+          "after": "import{assertGroundAccess}from'./geometry-access.mjs';\nimport{assertFoundationPart}from'./foundation-shape-contract.mjs';",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(b.parts[i].faces,a.parts[i].faces);",
+          "after": "if(i===0)assertFoundationPart(a.parts[i],b.parts[i]);else assert.deepEqual(b.parts[i].faces,a.parts[i].faces);",
+          "count": 1
+        },
+        {
+          "before": "castle preserves every original solid face and all eighteen non-door finishes; one genuinely grounded entrance addition",
+          "after": "castle retains every other original solid face and all eighteen non-door finishes; bounded full foundation width plus prior grounded entrance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/geometry-plan.test.mjs",
+      "target": "proposals/d090/geometry-plan-foundation-v2.test.mjs",
+      "sourceSha256": "d8aafe6c1ad95cf4f8852d20dc1d49f736de18f4c9c28493d2b98e6015f64714",
+      "targetSha256": "19276ea2f0ab29cc00e35e5228e5c4ed4e855bbce3107973f6e822896703ea2a",
+      "header": "// Exact6c original remains on its actual historical source; only observed current source/plan pins are versioned.\nimport{assertFoundationBindings}from'./foundation-bindings.mjs';\nconst FOUNDATION=assertFoundationBindings();\n",
+      "changes": [
+        {
+          "before": "'cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0'",
+          "after": "FOUNDATION.planSha256",
+          "count": 1
+        },
+        {
+          "before": "'8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd'",
+          "after": "FOUNDATION.geometrySha256",
+          "count": 1
+        },
+        {
+          "before": "56055",
+          "after": "FOUNDATION.requiredAllWidths",
+          "count": 1
+        },
+        {
+          "before": "18685",
+          "after": "FOUNDATION.requiredPerWidth",
+          "count": 2
+        },
+        {
+          "before": ",41);",
+          "after": ",FOUNDATION.viewsPerWidth);",
+          "count": 1
+        },
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 2
+        },
+        {
+          "before": "geometry-native-evidence.json",
+          "after": "geometry-native-evidence-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/browser-adaptation.test.mjs",
+      "target": "proposals/d090/browser-adaptation-foundation-v2.test.mjs",
+      "sourceSha256": "74f0a6694a5c4260c6901fb02073909d6acada428bc891c0f96d903fd1ecc0e4",
+      "targetSha256": "e500ea0ba0ba43bd7c847c5f268df211e000a8669320349aa691604872054ff1",
+      "header": "// Exact6c original remains on its actual historical source; only observed current source/plan pins are versioned.\nimport{assertFoundationBindings}from'./foundation-bindings.mjs';\nconst FOUNDATION=assertFoundationBindings();\n",
+      "changes": [
+        {
+          "before": "'d423717eb3b7bcc0546506a5d4fe04e8364b62518e56bde1006b58d4d75a4864'",
+          "after": "FOUNDATION.adaptationManifestSha256",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/browser-adaptation.json'",
+          "after": "'proposals/d090/browser-adaptation-foundation-v2.json'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/browser-surface-qualification.test.mjs",
+      "target": "proposals/d090/browser-surface-qualification-foundation-v2.test.mjs",
+      "sourceSha256": "28e5e07cd2aa7b884e6fd34ebba54ff324be6e87da2e9113ce18e5fdec07060b",
+      "targetSha256": "c2662ff85f1e5e248804d7e01ecddb94f07a7b44a450012b4d24cb74f91efdba",
+      "header": "",
+      "changes": [
+        {
+          "before": "./native-camera-plan.json",
+          "after": "./native-camera-plan-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/precompiled-cache-qualification.test.mjs",
+      "target": "proposals/d090/precompiled-cache-qualification-foundation-v2.test.mjs",
+      "sourceSha256": "6c72821192700907a993a31319939e14f768f3ad1fe9922b039d3c9ebeb1f74c",
+      "targetSha256": "d77b67731aa6c25f73436f019c2e6738e4a338aaf570f3b56b4202e7c8cbecf0",
+      "header": "",
+      "changes": [
+        {
+          "before": "./evidence/geometry-authority-freeze.json",
+          "after": "./evidence/geometry-authority-freeze-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

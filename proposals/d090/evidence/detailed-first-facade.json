@@ -1,0 +1,182 @@
+[
+  {
+    "id": "castellated-tank-water-tower",
+    "intents": 21,
+    "samples": 63,
+    "paintedFaces": 4,
+    "paintTriangles": 268,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "tapered-circular-reservoir-tower",
+    "intents": 15,
+    "samples": 35,
+    "paintedFaces": 7,
+    "paintTriangles": 96,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "romanesque-sewage-engine-house",
+    "intents": 31,
+    "samples": 97,
+    "paintedFaces": 8,
+    "paintTriangles": 374,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "circular-filterworks-and-valve-hall",
+    "intents": 24,
+    "samples": 40,
+    "paintedFaces": 4,
+    "paintTriangles": 182,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "trefoil-apsed-mortuary-cemetery-chapel",
+    "intents": 25,
+    "samples": 93,
+    "paintedFaces": 9,
+    "paintTriangles": 339,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "lectern-estate-doocot",
+    "intents": 24,
+    "samples": 20,
+    "paintedFaces": 3,
+    "paintTriangles": 174,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "canted-t-plan-turnpike-lodge",
+    "intents": 27,
+    "samples": 45,
+    "paintedFaces": 7,
+    "paintTriangles": 196,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "cruciform-village-forge",
+    "intents": 29,
+    "samples": 60,
+    "paintedFaces": 13,
+    "paintTriangles": 226,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "segmental-roof-rural-firehouse",
+    "intents": 32,
+    "samples": 60,
+    "paintedFaces": 10,
+    "paintTriangles": 264,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  },
+  {
+    "id": "paired-hexagonal-saddle-roof-reading-library",
+    "intents": 37,
+    "samples": 65,
+    "paintedFaces": 9,
+    "paintTriangles": 262,
+    "negatives": [
+      "original: move complete panel outward .05",
+      "original: reverse facade direction",
+      "original: missing structural backing",
+      "remove intent",
+      "change opening corner",
+      "lie about intent color",
+      "lie about gap",
+      "erase actual glazing",
+      "missing painted triangle"
+    ]
+  }
+]

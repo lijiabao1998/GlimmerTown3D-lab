@@ -1,0 +1,4 @@
+{
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    blocks: 0,\n+   owners: 16\n-   owners: 13\n  }\n\n    at qualifySceneBudgets (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scene-budget-check.mjs:15:607)\n    at async file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/scene-budget-check.mjs:24:384"
+}

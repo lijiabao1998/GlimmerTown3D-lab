@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "qualification": "Exactly six original assertions retained byte-for-byte and mandatory on actual6c. Current copies preserve all other assertions; source/plan bindings are pending, never placeholder green.",
+  "copies": [
+    {
+      "source": "proposals/d090/geometry-card-invariants.test.mjs",
+      "target": "proposals/d090/geometry-card-invariants-foundation-v2.test.mjs",
+      "sourceSha256": "c297ae52b2d427cafb6e066f9a23fc8783b7dc78539071611d076afe85abb184",
+      "targetSha256": "63ff3d1ed68553b641da981e8e7f70931165c10e6d1863f152912d0a0d4c40a8",
+      "header": "",
+      "changes": [
+        {
+          "before": "near(area(ground(body)),.54*.54);",
+          "after": "near(area(ground(body)),.60*.60);",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/geometry-finite-repair.test.mjs",
+      "target": "proposals/d090/geometry-finite-repair-foundation-v2.test.mjs",
+      "sourceSha256": "d9be27321f4662025fae0baa7c1ac9d439561e3574f709b69aec17119f5c54fa",
+      "targetSha256": "a46fbfe71e0263919aa9355a821a0d0aceb1bba11eba596b40674d8ac54929e8",
+      "header": "",
+      "changes": [
+        {
+          "before": "import{assertGroundAccess}from'./geometry-access.mjs';",
+          "after": "import{assertGroundAccess}from'./geometry-access.mjs';\nimport{assertFoundationPart}from'./foundation-shape-contract.mjs';",
+          "count": 1
+        },
+        {
+          "before": "assert.deepEqual(b.parts[i].faces,a.parts[i].faces);",
+          "after": "if(i===0)assertFoundationPart(a.parts[i],b.parts[i]);else assert.deepEqual(b.parts[i].faces,a.parts[i].faces);",
+          "count": 1
+        },
+        {
+          "before": "castle preserves every original solid face and all eighteen non-door finishes; one genuinely grounded entrance addition",
+          "after": "castle retains every other original solid face and all eighteen non-door finishes; bounded full foundation width plus prior grounded entrance",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/geometry-plan.test.mjs",
+      "target": "proposals/d090/geometry-plan-foundation-v2.test.mjs",
+      "sourceSha256": "d8aafe6c1ad95cf4f8852d20dc1d49f736de18f4c9c28493d2b98e6015f64714",
+      "targetSha256": "19276ea2f0ab29cc00e35e5228e5c4ed4e855bbce3107973f6e822896703ea2a",
+      "header": "// Exact6c original remains on its actual historical source; only observed current source/plan pins are versioned.\nimport{assertFoundationBindings}from'./foundation-bindings.mjs';\nconst FOUNDATION=assertFoundationBindings();\n",
+      "changes": [
+        {
+          "before": "'cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0'",
+          "after": "FOUNDATION.planSha256",
+          "count": 1
+        },
+        {
+          "before": "'8b28b341a171f1b1914b27b1974710c0c017c072fa0305e0644aad93b49ff7dd'",
+          "after": "FOUNDATION.geometrySha256",
+          "count": 1
+        },
+        {
+          "before": "56055",
+          "after": "FOUNDATION.requiredAllWidths",
+          "count": 1
+        },
+        {
+          "before": "18685",
+          "after": "FOUNDATION.requiredPerWidth",
+          "count": 2
+        },
+        {
+          "before": ",41);",
+          "after": ",FOUNDATION.viewsPerWidth);",
+          "count": 1
+        },
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 2
+        },
+        {
+          "before": "geometry-native-evidence.json",
+          "after": "geometry-native-evidence-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/browser-adaptation.test.mjs",
+      "target": "proposals/d090/browser-adaptation-foundation-v2.test.mjs",
+      "sourceSha256": "74f0a6694a5c4260c6901fb02073909d6acada428bc891c0f96d903fd1ecc0e4",
+      "targetSha256": "e500ea0ba0ba43bd7c847c5f268df211e000a8669320349aa691604872054ff1",
+      "header": "// Exact6c original remains on its actual historical source; only observed current source/plan pins are versioned.\nimport{assertFoundationBindings}from'./foundation-bindings.mjs';\nconst FOUNDATION=assertFoundationBindings();\n",
+      "changes": [
+        {
+          "before": "'d423717eb3b7bcc0546506a5d4fe04e8364b62518e56bde1006b58d4d75a4864'",
+          "after": "FOUNDATION.adaptationManifestSha256",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/browser-adaptation.json'",
+          "after": "'proposals/d090/browser-adaptation-foundation-v2.json'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/browser-surface-qualification.test.mjs",
+      "target": "proposals/d090/browser-surface-qualification-foundation-v2.test.mjs",
+      "sourceSha256": "28e5e07cd2aa7b884e6fd34ebba54ff324be6e87da2e9113ce18e5fdec07060b",
+      "targetSha256": "c2662ff85f1e5e248804d7e01ecddb94f07a7b44a450012b4d24cb74f91efdba",
+      "header": "",
+      "changes": [
+        {
+          "before": "./native-camera-plan.json",
+          "after": "./native-camera-plan-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/precompiled-cache-qualification.test.mjs",
+      "target": "proposals/d090/precompiled-cache-qualification-foundation-v2.test.mjs",
+      "sourceSha256": "6c72821192700907a993a31319939e14f768f3ad1fe9922b039d3c9ebeb1f74c",
+      "targetSha256": "d77b67731aa6c25f73436f019c2e6738e4a338aaf570f3b56b4202e7c8cbecf0",
+      "header": "",
+      "changes": [
+        {
+          "before": "./evidence/geometry-authority-freeze.json",
+          "after": "./evidence/geometry-authority-freeze-foundation-v2.json",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/native-smoke-versions.test.mjs",
+      "target": "proposals/d090/native-smoke-versions-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "ff5fc5e8278017caf21b2681f79784a49175eeeff207112cb59078d01e8f3034",
+      "targetSha256": "0968ae2243d5342a8aba6a4dc6127b53c6874184b77994d791f5c62bd9237e36",
+      "header": "// D090 pipe-selector current version. The complete e4c predecessor and its real failing Chrome evidence remain immutable.\n",
+      "changes": [
+        {
+          "before": "'./native-smoke-versions.mjs'",
+          "after": "'./native-smoke-versions-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "tools/smoke-d053-d090.mjs",
+          "after": "tools/smoke-d053-d090-pipes-v2.mjs",
+          "count": 4
+        },
+        {
+          "before": "tools/d053-capture-d090.mjs",
+          "after": "tools/d053-capture-d090-pipes-v2.mjs",
+          "count": 5
+        },
+        {
+          "before": "proposals/d090/native-smoke-versions.json",
+          "after": "proposals/d090/native-smoke-versions-pipes-v2.json",
+          "count": 2
+        },
+        {
+          "before": "{copies:2,rootRoute:",
+          "after": "{copies:4,rootRoute:",
+          "count": 1
+        },
+        {
+          "before": "['show',baseline+':'+r.source]",
+          "after": "['show',(r.sourceCommit??baseline)+':'+r.source]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d090-validation.test.mjs",
+      "target": "tools/d090-validation-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "95674e1827b8d62ae848ab135fd5aaffb726ff7d8c2d1e5727f7bf19a8b56371",
+      "targetSha256": "3ff9d3d8616b5657193be21b5645609480662a4d7c081ceebee6e6d222a092e0",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'./d090-validation.mjs'",
+          "after": "'./d090-validation-pipes-v2.mjs'",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/foundation-routing.test.mjs",
+      "target": "proposals/d090/foundation-routing-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "c09f36d420494ff690c2c94a38bf7904445462293e08a64d7c43457fc9a3ce52",
+      "targetSha256": "512317523b457762e100674e34e8da7c0af393b1cacf6923517e905791ba09b6",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "'./foundation-routing-contract.mjs'",
+          "after": "'./foundation-routing-contract-pipes-v2.mjs'",
+          "count": 1
+        },
+        {
+          "before": "'proposals/d090/foundation-routing.json'",
+          "after": "'proposals/d090/foundation-routing-pipes-v2.json'",
+          "count": 1
+        },
+        {
+          "before": "FOUNDATION_BASELINE+':'+f",
+          "after": "(m.originalTestSources[f]??FOUNDATION_BASELINE)+':'+f",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(m.historical.length,6)",
+          "after": "assert.equal(m.historical.length,10)",
+          "count": 1
+        },
+        {
+          "before": "closed current and six actual6c domains",
+          "after": "closed current, eight actual6c and two actuale4c test files",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d090/foundation-runner.test.mjs",
+      "target": "proposals/d090/foundation-runner-pipes-v2.test.mjs",
+      "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+      "sourceSha256": "0597c7e5a1ceac7c9898a7c6a86163c84dddaf2516e9f00915ee8b4fdf5ccb9e",
+      "targetSha256": "f7e61db775d15148bf7f9c92b91ef8b5a699ff81d1e1b5a5f3c5f05e1db37ae2",
+      "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
+      "changes": [
+        {
+          "before": "m={historical:['old.test.mjs'],current:['current.test.mjs']}",
+          "after": "m={historical:['old.test.mjs','old-runner.test.mjs'],historicalDomains:[{name:'actual-immutable-6c',source:base,files:['old.test.mjs']},{name:'actual-immutable-e4c',source:'e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc',files:['old-runner.test.mjs']}],current:['current.test.mjs']}",
+          "count": 1
+        },
+        {
+          "before": "options.wrongHead?'bad':base",
+          "after": "options.wrongHead?'bad':cwd===hist?base:'e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc'",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(r.calls.length,2)",
+          "after": "assert.equal(r.calls.length,3)",
+          "count": 2
+        },
+        {
+          "before": "assert.deepEqual(Array.from(r.calls[1].args),['--test','current.test.mjs']);",
+          "after": "assert.deepEqual(Array.from(r.calls[1].args),['--test','old-runner.test.mjs']);assert.deepEqual(Array.from(r.calls[2].args),['--test','current.test.mjs']);assert.equal(new Set(r.calls.map(c=>c.cwd)).size,3);",
+          "count": 1
+        },
+        {
+          "before": "for(const index of[0,1])",
+          "after": "for(const index of[0,1,2])",
+          "count": 1
+        },
+        {
+          "before": "endsWith('.txt')).length,2)",
+          "after": "endsWith('.txt')).length,3)",
+          "count": 1
+        },
+        {
+          "before": "assert.equal(r.calls.length,1)",
+          "after": "assert.equal(r.calls.length,2)",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

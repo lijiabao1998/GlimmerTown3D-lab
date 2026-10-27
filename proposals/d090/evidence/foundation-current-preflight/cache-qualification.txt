@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "candidateSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "models": 10
+}

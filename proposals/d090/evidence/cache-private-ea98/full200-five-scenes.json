@@ -1,0 +1,1040 @@
+{
+  "sourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "candidateSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+  "qualification": "Isolated copied-source prototype. Complete actual Float64 and BufferGeometry Float32 words including signed zero; Node only, no acceptance.",
+  "models": [
+    {
+      "slot": "65:0",
+      "words": 2118,
+      "sha256": "c7ec6a7cdbb643425cc8bcb8b3ab143f454f6391ebf84cc119199ee0413d7392"
+    },
+    {
+      "slot": "65:1",
+      "words": 2016,
+      "sha256": "1e288f7045b9646ac6c392861c24c8f2868e43868e184a87f23af4879db00d12"
+    },
+    {
+      "slot": "65:2",
+      "words": 2124,
+      "sha256": "38f7db251a2b2f20db3404171101070a3a4208f6a1203f4d8298a842fb06b8f8"
+    },
+    {
+      "slot": "86:0",
+      "words": 5670,
+      "sha256": "6a5c21228553502292410cc32ecbf0cf5fb8169ea5e1651f80ef4546c6c10865"
+    },
+    {
+      "slot": "86:1",
+      "words": 4266,
+      "sha256": "edc380ab65650b50ea697fbfa2d29bcf87b48a98bd727e20fb41f4c207b084d4"
+    },
+    {
+      "slot": "86:2",
+      "words": 5115,
+      "sha256": "9779459cbe17762df8a1e9ca6b0a3aa1e0c7c15f47e4f3d9b5ddd9e7dc62e56b"
+    },
+    {
+      "slot": "91:0",
+      "words": 3498,
+      "sha256": "127be7a62892fd7e0be55a7e8520eedad516a80d2380d0978c462d047f480bb0"
+    },
+    {
+      "slot": "91:1",
+      "words": 3024,
+      "sha256": "241fcc9abb1323560b925bca7746c431310c3e9fa133e1e5125d20483fd62eab"
+    },
+    {
+      "slot": "91:2",
+      "words": 2406,
+      "sha256": "2afadbb38e43b015ec80e326cbb1e25be0342a5a61e1121c5fc5a3bd10f5a9fa"
+    },
+    {
+      "slot": "98:0",
+      "words": 1626,
+      "sha256": "972081fafdfd38c9a2676ea43c8cce891eb29cfc9a30040e91f6470b95034465"
+    },
+    {
+      "slot": "98:1",
+      "words": 2010,
+      "sha256": "2a6e7a84f448ce1be6bb05f6340bee9dd07a3f5b551f7116f054470de5fd01d5"
+    },
+    {
+      "slot": "98:2",
+      "words": 1812,
+      "sha256": "1ea175d84f057f2fb205b1cc5c926f95c7fe7826d9a5b5110e40d3c84b87b87a"
+    },
+    {
+      "slot": "99:0",
+      "words": 2370,
+      "sha256": "4956ec0bb0530f9189c42ad5eb85ee011f43365d82b4efffcb08d79d0401dd43"
+    },
+    {
+      "slot": "99:1",
+      "words": 2364,
+      "sha256": "036dbcbc7f66030e9831890976094923e984357a244cf5f4defdf5c9d2f4b6bf"
+    },
+    {
+      "slot": "99:2",
+      "words": 2472,
+      "sha256": "f3eda66afb1def8674255e08a0ed8d1a41b6aa7c2c87613f797ee58eec36b4fc"
+    },
+    {
+      "slot": "57:0",
+      "words": 6696,
+      "sha256": "f8647095edf177c7c6fd3d652377cfe8143cc203a942c0ef6c0d99a0ba62a744"
+    },
+    {
+      "slot": "57:1",
+      "words": 5388,
+      "sha256": "386fe2e4c22ad045fd93d19ee1b57737df880904e476f47d676eca34fccadf66"
+    },
+    {
+      "slot": "57:2",
+      "words": 4902,
+      "sha256": "bd9270f23f88cf5de6c2fae2a58d623e4c5d4cd9a9e39009970b810b55ab4593"
+    },
+    {
+      "slot": "64:0",
+      "words": 4548,
+      "sha256": "d906134e0ed7729317c2046eeb61e41e065ab19552ce8e92882b8384ce3314c6"
+    },
+    {
+      "slot": "64:1",
+      "words": 4032,
+      "sha256": "0702cf9cddff32e81894ed1c07d6b66cd3050dc30c7f9a9d20e5340a4f4ceb20"
+    },
+    {
+      "slot": "64:2",
+      "words": 4188,
+      "sha256": "557931d3f35e17e3b81946b65b0e20d49e8c9a1e560f0c2b77b2e3733e503d5f"
+    },
+    {
+      "slot": "110:0",
+      "words": 1968,
+      "sha256": "b90054db7862d4ebeb98e632c157e0bd0a0a93d94cca74961135864b9ec835f3"
+    },
+    {
+      "slot": "110:1",
+      "words": 1848,
+      "sha256": "f5af4e3450dd6df82cab4e162a6f2c515b272c82f20d9a8e2872130746ebc330"
+    },
+    {
+      "slot": "110:2",
+      "words": 1824,
+      "sha256": "8b4541bf23628d8f5c0eec09f0c1961ba26153519d70448096fbfc20e1cf82b7"
+    },
+    {
+      "slot": "167:0",
+      "words": 1800,
+      "sha256": "3facc4335ffc8fdb59641b0064419a8f2bed0b2e7f447b59f33ac216dc2a38a8"
+    },
+    {
+      "slot": "167:1",
+      "words": 1800,
+      "sha256": "22aa758f6ad1750b44cfa51ff9399679cca7a14acdda5a5541cc37cc3c71a084"
+    },
+    {
+      "slot": "167:2",
+      "words": 1653,
+      "sha256": "a409ff881fe788bb7c2d63e39f9c60103a6bcad2a0e187f3e3c4b5430610ee43"
+    },
+    {
+      "slot": "168:0",
+      "words": 1980,
+      "sha256": "e1a2ffa9794cecc87c856876e9b0947444b0b1aa78346dc60e75eec69edf3b8f"
+    },
+    {
+      "slot": "168:1",
+      "words": 2130,
+      "sha256": "24b4fe47a95af8ba372e845f7d785695dff8a2aa074a229f9610c18d8140231b"
+    },
+    {
+      "slot": "168:2",
+      "words": 1518,
+      "sha256": "85978d19b0c6563f4b10732e62256d3555f0b4c97c67b0b126824ae3b67772aa"
+    },
+    {
+      "slot": "32:0",
+      "words": 2334,
+      "sha256": "1970d9149c16edb1ec0c878f0a0a0f1169678f3bda3388895696810ff3fe5aec"
+    },
+    {
+      "slot": "32:1",
+      "words": 2622,
+      "sha256": "602d5e866e3e14904a56f0e7dcd89ae6da90160af806a4cded49a4cad1240a17"
+    },
+    {
+      "slot": "32:2",
+      "words": 2463,
+      "sha256": "10b2480b5f9e7166302b3567c946b837cb107f54f280ab67af85450aab040ce2"
+    },
+    {
+      "slot": "45:0",
+      "words": 780,
+      "sha256": "29acea3b6c3e41fd2f377521fd70e330dae8b7b7acad86a8a70e3f7791210720"
+    },
+    {
+      "slot": "45:1",
+      "words": 714,
+      "sha256": "dcc3268481e5b61dfdea4b3c0d51ade669bdf14d1759d127b7fa80d9be92f42e"
+    },
+    {
+      "slot": "45:2",
+      "words": 684,
+      "sha256": "7b8ec448218fdcf5e1873d652a62f00524f67d9be59937aad0b3592d2483d1a9"
+    },
+    {
+      "slot": "108:0",
+      "words": 2658,
+      "sha256": "88caa7902c1d419ff852c2a29f63690383514500ceefc6ea59fd9d9646928a76"
+    },
+    {
+      "slot": "108:1",
+      "words": 2868,
+      "sha256": "49ca2019448e1af153378361b8360647872e552d7a567970e20d2a3194a6ae59"
+    },
+    {
+      "slot": "108:2",
+      "words": 2622,
+      "sha256": "74a64481b1379bce86f6f8af6f2c40252132c115fa3c240d3f4d89b224aca4aa"
+    },
+    {
+      "slot": "109:0",
+      "words": 1578,
+      "sha256": "9b7c213374e03cfccad50ea5b42f1962e336f610ab3a844a6c6c51ba9ded1614"
+    },
+    {
+      "slot": "109:1",
+      "words": 1422,
+      "sha256": "fefc2f4f24be338c6688ffaf9cdd29d53ca9afd943a48e91a7607205c6d4b132"
+    },
+    {
+      "slot": "109:2",
+      "words": 1548,
+      "sha256": "ae1f0a864f893efcfe2ac795869ec883a661871d0b2df3c46a0d6c2146f7abea"
+    },
+    {
+      "slot": "48:0",
+      "words": 2460,
+      "sha256": "a5076336a3a3a67f9c682bc452e5d0d08e73a7ff5182bc8670390787ffb1a1bb"
+    },
+    {
+      "slot": "48:1",
+      "words": 2394,
+      "sha256": "9e86ae9cec6ad7a67e01b854b1d48cc142f69a9632e2c0d64eb21f8719521cbe"
+    },
+    {
+      "slot": "48:2",
+      "words": 2526,
+      "sha256": "81c7986bd20782bfdda0f478b1a8717fc9aab9b1f4e095b64842327716bed5a0"
+    },
+    {
+      "slot": "115:0",
+      "words": 6264,
+      "sha256": "bebf140e0e5553b4073cb6648a0df85dabe69c9d8968b6eb523acdca63531f6b"
+    },
+    {
+      "slot": "115:1",
+      "words": 7188,
+      "sha256": "20da8c3ef710ed894f9c5e9a2ebae479d0e0921e5623267fff1fe22658385487"
+    },
+    {
+      "slot": "115:2",
+      "words": 5514,
+      "sha256": "dd60a0c16b6d6e2daf4831da3c34655a7c08b8a54157f4e0a6fad78e938c7bd1"
+    },
+    {
+      "slot": "31:0",
+      "words": 7254,
+      "sha256": "196b463bcdf5a0f8c2ee87494038f87522584b014c742af9eedfe47b76c5403f"
+    },
+    {
+      "slot": "31:1",
+      "words": 9672,
+      "sha256": "4bb39a4ce3ea29748f481cd15512632a7db70ad858dde94b85ab7bc3f363607e"
+    },
+    {
+      "slot": "31:2",
+      "words": 6738,
+      "sha256": "2786a03465f2aa78aa2c4346e1e6a1d96c01813f80890999d6ba3eff0d3da906"
+    },
+    {
+      "slot": "61:0",
+      "words": 2406,
+      "sha256": "c6cfc430c88f2a2e9f4584b6f36994459ff3d0ebf2a5fd5c4b63b6d563ddb723"
+    },
+    {
+      "slot": "61:1",
+      "words": 2592,
+      "sha256": "4c2be0087f81145b76d35e12ac58c156bd1cf224aa112548c8294734a3c4374f"
+    },
+    {
+      "slot": "61:2",
+      "words": 2526,
+      "sha256": "85c0a4503427387b50460a94d113b7112013575f8260b217ee15e54965a8da06"
+    },
+    {
+      "slot": "82:0",
+      "words": 840,
+      "sha256": "47392bf2c11cead21d9341f3d4f0297f86b87f503a1b27454ac55dc0f11ec1f5"
+    },
+    {
+      "slot": "82:1",
+      "words": 804,
+      "sha256": "d7543913f0c7e24e61cf55c4cf424dfb3ce717ce7a6e168ba27d8f3197fca241"
+    },
+    {
+      "slot": "82:2",
+      "words": 840,
+      "sha256": "87f026711968550cb52b6a310d4d5910609e2ef00decc42cdc15efbb5360eadc"
+    },
+    {
+      "slot": "83:0",
+      "words": 1416,
+      "sha256": "7d0ad0d400e22f2f55d3132d27cf254397fbbf049de3d76fbf0df1e3800ac81e"
+    },
+    {
+      "slot": "83:1",
+      "words": 1419,
+      "sha256": "47da624bc4f00e1eb6871e98dfb27a60571eb3a7b22f8f1c4e75cda401cdfc86"
+    },
+    {
+      "slot": "83:2",
+      "words": 1440,
+      "sha256": "05cbdcfa18fb0e973a54c9de997d3d022866ae4ed8945f2dcd48d8c1a81074fa"
+    },
+    {
+      "slot": "23:0",
+      "words": 6798,
+      "sha256": "bfc5cac3d9e14b28a0ad91d05e7642a634cb0c508facffa3d0ea3accdf785031"
+    },
+    {
+      "slot": "23:1",
+      "words": 6468,
+      "sha256": "33859abc17331243b5b380b9b5a678cf8976b5508cdb76e7821321374aad35ca"
+    },
+    {
+      "slot": "23:2",
+      "words": 6258,
+      "sha256": "15f424ce0b93b8dece6af23bfda7b9c43f83df712a7956bd6c85db32d89f5b4e"
+    },
+    {
+      "slot": "23:3",
+      "words": 6798,
+      "sha256": "434489e9c812c2a9cd2c39052f69f9458998eb4c79e8fe10fbefbe7ab70dcc7c"
+    },
+    {
+      "slot": "23:4",
+      "words": 6312,
+      "sha256": "346f8c8246f18a519d897bbdfab7beb45a225684da6d9b81d7c2bda1ef029c2d"
+    },
+    {
+      "slot": "54:0",
+      "words": 2682,
+      "sha256": "aae8e0263d108f2d6629cea6392a1b3d3954a17d467c34fe2002f51e613b1184"
+    },
+    {
+      "slot": "54:1",
+      "words": 2694,
+      "sha256": "4bd9018c207e3c7240cc6e6710c5e7b2f82d9c8b615ca90dcdfe3b8bab726838"
+    },
+    {
+      "slot": "54:2",
+      "words": 2748,
+      "sha256": "7b151bb710ff602ff6c4307095ecd6ce794db74fb13713efa0c763d0bfd1de77"
+    },
+    {
+      "slot": "47:0",
+      "words": 3648,
+      "sha256": "7c1e511305dd250f9c5fc364b1abd124e29ae47428b1ed0a1f48b9d66b95e78f"
+    },
+    {
+      "slot": "47:1",
+      "words": 3000,
+      "sha256": "57e6d81537fa2eafd676b944194bdeb7cb199a4b6547f4f82839216c28e87851"
+    },
+    {
+      "slot": "131:0",
+      "words": 1626,
+      "sha256": "f2463c89b4e75993a579c4ddc38e165ac1648485de7539d27342db3d5396ce67"
+    },
+    {
+      "slot": "131:1",
+      "words": 1758,
+      "sha256": "1ff4bf569892ff0f0346596b254dae8cd5c44aa5455986cc91cc8e643c389eed"
+    },
+    {
+      "slot": "131:2",
+      "words": 1758,
+      "sha256": "e6d4190e135cd5f6a26f2dce1161fee53a385dd73363bed989bf5e09633430fe"
+    },
+    {
+      "slot": "107:0",
+      "words": 1440,
+      "sha256": "2cffd6f76234ba1845f104e2c276e4c4c5ba60e207d7841772ff54c53a382fa2"
+    },
+    {
+      "slot": "107:1",
+      "words": 1692,
+      "sha256": "acb7f74cbf1b5b180b6ae6eecac39de95d518a14d67604e72d607dc16abac516"
+    },
+    {
+      "slot": "107:2",
+      "words": 2019,
+      "sha256": "a3885274614ffac4b33944871c5e4f9a23bffc8533832c12ca6b086287eeb651"
+    },
+    {
+      "slot": "149:0",
+      "words": 1164,
+      "sha256": "ad99e51941c0181c7cf1ca529f6b226290a681ddef3f23bb53c78a237f879064"
+    },
+    {
+      "slot": "149:1",
+      "words": 1296,
+      "sha256": "90a01b6da3f066ee5441aa0d1e78bc4801ec1bd8e080d1a1c19bec91427cc5a1"
+    },
+    {
+      "slot": "149:2",
+      "words": 1356,
+      "sha256": "e4d919c795f884f601b47124cb1da439bc460a40a85825d406a4efa1d4b7a3b9"
+    },
+    {
+      "slot": "149:3",
+      "words": 1230,
+      "sha256": "6b4024265c50551bf60d1b8d014f7369be2214d2d82b71c91a6c79beef7b862f"
+    },
+    {
+      "slot": "164:0",
+      "words": 1164,
+      "sha256": "7bbe8691c9201cf90617546c62fc7039998b68697938cc6835559cf9a550c5a7"
+    },
+    {
+      "slot": "164:1",
+      "words": 1104,
+      "sha256": "ee8b6a6b93b427f11b8871bab475830104bec9738f69563b41834511d6f4383c"
+    },
+    {
+      "slot": "164:2",
+      "words": 1164,
+      "sha256": "79563d0477b1c07eecf0024bb639957637fe9a4c4aa7e7d38db7626727232f56"
+    },
+    {
+      "slot": "119:0",
+      "words": 1296,
+      "sha256": "56f099a271e813868e3a863598ca4fb1e397432ca5ff5d4db9077084a451e963"
+    },
+    {
+      "slot": "119:1",
+      "words": 1362,
+      "sha256": "2bbee2a2978964e70cc2cd081a5fd7040ba0516a2edb267579169b8247f4559e"
+    },
+    {
+      "slot": "119:2",
+      "words": 1362,
+      "sha256": "50d64c1a5231e9e37bf2cb846fca172d515ddb1396920ddf7a061fefba51b9e4"
+    },
+    {
+      "slot": "116:0",
+      "words": 1290,
+      "sha256": "0dcad0d288ae398d59e5df81730308bfd5ba155917033ff2336e892f7a2ead69"
+    },
+    {
+      "slot": "149:4",
+      "words": 1197,
+      "sha256": "269d7403e765b13038a1bf34e51493f7fc5136ab917e46442300f9cabf0fdb30"
+    },
+    {
+      "slot": "81:0",
+      "words": 582,
+      "sha256": "73c4f140ea0d8ad5e18c54d695926b3d30aa201a38135a40d5944c623e068be5"
+    },
+    {
+      "slot": "81:1",
+      "words": 582,
+      "sha256": "88330441d09e77b2ad34123174c5c6a4621e9f2cebda73637e8ace69f3565bcb"
+    },
+    {
+      "slot": "81:2",
+      "words": 582,
+      "sha256": "e978f4d5e8630f86458b25bc2d8c42a221a33b2272021a9477b01a975276b74b"
+    },
+    {
+      "slot": "84:0",
+      "words": 744,
+      "sha256": "405adf49b887e8b3c8a2784553ae44959e3560e33a07c6095704adbee67ba567"
+    },
+    {
+      "slot": "84:1",
+      "words": 711,
+      "sha256": "dff131831834b7de1a4a9c6e5a35d2a9352cb338be6fd2069045ba99a311e2d2"
+    },
+    {
+      "slot": "84:2",
+      "words": 708,
+      "sha256": "cb92f4fc8ecd8d48b5aeaa4f03ef341d04214a372a3706a7d39c675d958c9b0b"
+    },
+    {
+      "slot": "85:0",
+      "words": 453,
+      "sha256": "95a4b57984cd441420c7e3950b6c5a4acb2c6e694647dc63d64dafed514e6e86"
+    },
+    {
+      "slot": "85:1",
+      "words": 645,
+      "sha256": "278785c131b2f00353f542e4ec4140d2f58dcd0c949a6ecd1cd3a7006c67f7d9"
+    },
+    {
+      "slot": "85:2",
+      "words": 615,
+      "sha256": "81b1ae8c17ac065f19ae7dc26aca05d3f491053bf9b96142602628c5aadaab2b"
+    },
+    {
+      "slot": "130:0",
+      "words": 1614,
+      "sha256": "b4e180029cba1def05e1f8aede975ba4cc0e18d8b65eeaf9621d332eb7016eda"
+    },
+    {
+      "slot": "130:1",
+      "words": 2418,
+      "sha256": "f4e7c9c0c4731ef7e85094b0ab4ddc800028f901e2b61910195ff43547dc1cbb"
+    },
+    {
+      "slot": "130:2",
+      "words": 2262,
+      "sha256": "b2599ea792ab6d95ef6d154a653a5ec7991f4d7c1a98297a6bb1ac98d69cfcb6"
+    },
+    {
+      "slot": "21:0",
+      "words": 1518,
+      "sha256": "847ff5d3b7a81b9e434161a897015a3bcee3bc685ccc6bc1a0d4c54c5dc3371c"
+    },
+    {
+      "slot": "21:1",
+      "words": 1065,
+      "sha256": "f6697a5f32ee943211883aa18d975cdb1d4459ae9ef85f2cbc71d40b4ff39022"
+    },
+    {
+      "slot": "21:2",
+      "words": 1326,
+      "sha256": "0995afdf5d552cfd4c2ab1fb1a1d536528828679bd9853207bbc008c7491a9be"
+    },
+    {
+      "slot": "29:0",
+      "words": 1068,
+      "sha256": "b6c87a515f8380fa2ff2dda09d248ea10048ab1306f2f0abb17286152a04013e"
+    },
+    {
+      "slot": "29:1",
+      "words": 1194,
+      "sha256": "e8819fe106e9493add55858ca2cad367a1bfad3ad2fd23a57e9ed871a1ef8c89"
+    },
+    {
+      "slot": "29:2",
+      "words": 972,
+      "sha256": "98c0e6dead1796ea0c6d46aac964ab79907cfcd7ccee83eb06334f87118de5b6"
+    },
+    {
+      "slot": "29:3",
+      "words": 1035,
+      "sha256": "a89717c3fa7d7f708b403d066adebda8302cc73a3d02dad207b0e037e5130437"
+    },
+    {
+      "slot": "37:0",
+      "words": 1230,
+      "sha256": "b83ceed6ffb7cdc3c60143babee3e8ad7871aef4974ebc08b12e3215a7661119"
+    },
+    {
+      "slot": "37:1",
+      "words": 1035,
+      "sha256": "125abc0dc03f4dbedf3370192534c68425e034be3bbf77eb1989f641ea57e0f7"
+    },
+    {
+      "slot": "37:2",
+      "words": 1290,
+      "sha256": "56998789253cc7930d427850f786515a733f74b8a0f095f145efbec1f7f30efb"
+    },
+    {
+      "slot": "21:3",
+      "words": 1098,
+      "sha256": "6d99b94f2200b5ff33ac2ffcb96f8fd2d696e507899821019c396070cf894c1e"
+    },
+    {
+      "slot": "21:4",
+      "words": 1293,
+      "sha256": "953912d599b3e6b189f4ca99855dd8a8e3f693b4e2dec0f2be821547e75f849a"
+    },
+    {
+      "slot": "29:4",
+      "words": 1227,
+      "sha256": "aa8b8941c3aabb08507b3354a805972e87607ea5de23675b96eb6b6eaa9f0db5"
+    },
+    {
+      "slot": "127:0",
+      "words": 450,
+      "sha256": "74218d16e263661ba9d81a1816890a94673b0ee45a4639ebd4748cb44ba78c59"
+    },
+    {
+      "slot": "127:1",
+      "words": 450,
+      "sha256": "4779c4d528252bd105f33352d39c4e03c2d95bf1a623e89e9ef0a3df6949b9fe"
+    },
+    {
+      "slot": "127:2",
+      "words": 450,
+      "sha256": "b946625dc778a85281c5a43489d26cfc31136a2d972bcec14dc048d6b1dbb3be"
+    },
+    {
+      "slot": "120:0",
+      "words": 711,
+      "sha256": "8f26665eb16cd9329d5af91872f9017f8f48bc6f626a0b007fd79dc983c219d6"
+    },
+    {
+      "slot": "120:1",
+      "words": 774,
+      "sha256": "0d7e606980c83ce07a2f7e06895a50ccd1aeb6c89d3e144b3e6a2db65078f3e6"
+    },
+    {
+      "slot": "120:2",
+      "words": 711,
+      "sha256": "55cb2365511ac342f61241aa53aecf5f38ed516a5d57070cb31e97b2c58a7441"
+    },
+    {
+      "slot": "72:0",
+      "words": 774,
+      "sha256": "210375e717869387219f521b1821567658128da67dd919f8bf97192f29ffbd10"
+    },
+    {
+      "slot": "160:0",
+      "words": 1326,
+      "sha256": "f822df3a8a55a915f7a4b5c078ae6d74ecf27efc29b7962f397fd7b55c9272aa"
+    },
+    {
+      "slot": "160:1",
+      "words": 1614,
+      "sha256": "a371d9e7f5d79d1680186c33200e03e6464597347435425b8a018fbbdea6eff6"
+    },
+    {
+      "slot": "160:2",
+      "words": 1452,
+      "sha256": "ba2da130126605deae0977acdd0b4bfc1e70aed637ba5c6971b3efd649e43b8a"
+    },
+    {
+      "slot": "160:3",
+      "words": 1776,
+      "sha256": "f2a0dc09ed1787f8647d1184fd85ebf31a8db25ae54797e3bd3c728d059f204c"
+    },
+    {
+      "slot": "160:4",
+      "words": 2001,
+      "sha256": "b6c660cc4cf42ea198b2753cc520c499851c0bfb5676159c2a884258759e9d56"
+    },
+    {
+      "slot": "182:0",
+      "words": 1290,
+      "sha256": "ebe60ff92d974cef38d0bd5f986959027bc9f7479c9b5c239fdc43f84f9197d3"
+    },
+    {
+      "slot": "182:1",
+      "words": 1035,
+      "sha256": "d5a6889be6af7319dad58d70c269d419a1f57c4ec943e0eeef7375850308317a"
+    },
+    {
+      "slot": "182:2",
+      "words": 1230,
+      "sha256": "30259bc0a7892bb9a07b90a963ca52e909f2e5f9481376998d86e4f1aa9f33ec"
+    },
+    {
+      "slot": "72:1",
+      "words": 711,
+      "sha256": "89bf23a8693479f93a5cd069d424b0ee1a9d6c2361b244ac05c28318f054696f"
+    },
+    {
+      "slot": "72:2",
+      "words": 711,
+      "sha256": "a22de0b63d3f8169d40540816e018392e0901a8e4ca4c71c6ade4ef7d50655c1"
+    },
+    {
+      "slot": "179:0",
+      "words": 3150,
+      "sha256": "3ab41f524c3df682884c71f6d0ee6cfec35c36bdd9229f336aca05fce83da21c"
+    },
+    {
+      "slot": "179:1",
+      "words": 3624,
+      "sha256": "1689e637e3b2159ed221fea4dbb381630054fd4b2ef1514f5ea18dd105a819b2"
+    },
+    {
+      "slot": "179:2",
+      "words": 3855,
+      "sha256": "452b322032a16e3414dac7962e6dc730eb9fefa54f20c866641254a1a5ab183e"
+    },
+    {
+      "slot": "185:0",
+      "words": 2550,
+      "sha256": "d609751df577ac7aa798eacffc73bc830aaff62f508460793a4bd8581880d87b"
+    },
+    {
+      "slot": "185:1",
+      "words": 2340,
+      "sha256": "b09fd42a181f3fb1409312dd3adb148f7deca6d90bfacc6b4a1e20d0ca34befb"
+    },
+    {
+      "slot": "185:2",
+      "words": 2223,
+      "sha256": "459b8f3fce4491e02dbd96e06af74c801b81dc06a0c4c4e3eaff21db59a66306"
+    },
+    {
+      "slot": "154:0",
+      "words": 6603,
+      "sha256": "ca2f312c63088a0febc59b13d91b0f9997055807d6e39883c970fa5957fef3a3"
+    },
+    {
+      "slot": "154:1",
+      "words": 6624,
+      "sha256": "59cd877d059aa15429cdd8e49a81f0d5fb60b5f3deaac014d4c8a85b3e7ef420"
+    },
+    {
+      "slot": "154:2",
+      "words": 6528,
+      "sha256": "4706f5df8845486b0e8ed0b704bd8dbc4f67a4831a35533bc11b72b65181bdaf"
+    },
+    {
+      "slot": "187:0",
+      "words": 33792,
+      "sha256": "435639af362fd3c474b685cc9b903061e7fbdaee3ab1161c43f8e018f9f1d6aa"
+    },
+    {
+      "slot": "188:0",
+      "words": 35310,
+      "sha256": "64758d973099bee65eeeef31ac8316f2641116b1010a08cda46275a8da008779"
+    },
+    {
+      "slot": "189:0",
+      "words": 23430,
+      "sha256": "6d92ab0e210ad8a195ef002e1281bb197a3475f4d8576e9448089b3f647f2dde"
+    },
+    {
+      "slot": "190:0",
+      "words": 16830,
+      "sha256": "b236b842baad1cef7838cfc93d97b3110c0e2667ab209430e6eb82aa3de79070"
+    },
+    {
+      "slot": "191:0",
+      "words": 50226,
+      "sha256": "2a58a5c5eaf537c032b7ad825825d89a5bdd7657c745486111c1758447048e8a"
+    },
+    {
+      "slot": "192:0",
+      "words": 21384,
+      "sha256": "e61c95ecac471b4b372ba864a20d1bad893588745aa000523faa92e1ce4f3780"
+    },
+    {
+      "slot": "193:0",
+      "words": 20526,
+      "sha256": "423047fc2d2872859d1b064d9e1730405dc1ffc9319ececbcd624cc1af721918"
+    },
+    {
+      "slot": "194:0",
+      "words": 28182,
+      "sha256": "f29caa254dd7de78868af9c59d9dee552b0c29165f914b5c58d93420c9b64382"
+    },
+    {
+      "slot": "87:3",
+      "words": 25872,
+      "sha256": "3bcbdad956d3889d5a864cee253de25cadccd7a4d7af67333f113eaf11d2b951"
+    },
+    {
+      "slot": "87:4",
+      "words": 26532,
+      "sha256": "76e3625b4bbb3646ef46a83bf0a3d4085f3bcd58a937ea62c4b74a788041e7da"
+    },
+    {
+      "slot": "87:5",
+      "words": 29568,
+      "sha256": "6ec7389fa6a06446af43739e82e7d76e3fd5114b64eae6dfece1ecb703d9a2fe"
+    },
+    {
+      "slot": "91:3",
+      "words": 14652,
+      "sha256": "62920ea2436b9c2a40e7dd7bdda0f30083c08e9d7395434825da734666da00e1"
+    },
+    {
+      "slot": "91:4",
+      "words": 28116,
+      "sha256": "f4079fdb8ccf4dbaee39aa003d189c55b89afbc3da58a68867b33762b0cb7143"
+    },
+    {
+      "slot": "14:5",
+      "words": 14718,
+      "sha256": "4a89f3c454ad7e1c1d873e729fecba691b6cb3ec28d5dd477b5ac9d3b83155d6"
+    },
+    {
+      "slot": "15:5",
+      "words": 18348,
+      "sha256": "cb765b17975e25771277a2a6c958a6d5cb64621af88af0b782f56bd3125145d5"
+    },
+    {
+      "slot": "7:5",
+      "words": 19536,
+      "sha256": "42255ea655d6a0dbc1dbf468670d8bb078df57991905a8e008527cc0195e60e0"
+    },
+    {
+      "slot": "6:5",
+      "words": 19800,
+      "sha256": "7acd1e7229fa1cc415d61fd8fe05c83ab97f65a9f2d81e88eff0835e3218697a"
+    },
+    {
+      "slot": "13:5",
+      "words": 9108,
+      "sha256": "d5a61a86fa948e119b320a27c979a028c57c49cb0521c1fa92023860e417ad13"
+    },
+    {
+      "slot": "22:16",
+      "words": 10230,
+      "sha256": "031826c0b73721b68e24c1f42ba6351bed0ba1bef5fe3685d617a7c2bbc040a0"
+    },
+    {
+      "slot": "23:5",
+      "words": 7326,
+      "sha256": "643e702e442c8e480a539c9e8712de2c81db63634cf4b446610cf47f50e4f721"
+    },
+    {
+      "slot": "23:6",
+      "words": 6336,
+      "sha256": "6778355b77d28b91d499d9627dc17a21f3e83b4f230dc5d8164ad9a570baa39e"
+    },
+    {
+      "slot": "23:7",
+      "words": 9966,
+      "sha256": "58844b2d0f67bb190ae48f1faad66d045607844b48c58bc0fba2e6700d47bc09"
+    },
+    {
+      "slot": "53:3",
+      "words": 16302,
+      "sha256": "bfccc581e50bdf62d273d8097c3a2036ecbb3c29dfefbb200ca0e33de029fe1c"
+    },
+    {
+      "slot": "63:3",
+      "words": 14784,
+      "sha256": "225676e1bde1fecd114206c23d43b524bf5e9d5d0da5993a00526b44b63cd201"
+    },
+    {
+      "slot": "63:4",
+      "words": 16632,
+      "sha256": "bb1c7bf06ba8fd474522115c0d6644e16f9c7d9768474fec06c84c0dd5af88c6"
+    },
+    {
+      "slot": "63:5",
+      "words": 22242,
+      "sha256": "43998556568ddfe2f53f5f2c70999709c1a0b2763f579a42afb0d83f83dfa315"
+    },
+    {
+      "slot": "57:3",
+      "words": 14190,
+      "sha256": "4f93c182e0c23044721bcd057bfd9609934164a167a3c760acd7cb86bbd42cd2"
+    },
+    {
+      "slot": "57:4",
+      "words": 15312,
+      "sha256": "89d743e0cf3c20959a12a34c42e2dda275060a72bf07eb25ccaee843e875d7fd"
+    },
+    {
+      "slot": "57:5",
+      "words": 24816,
+      "sha256": "3cc966161ab06aec784e182c2184a5b3ae3f977eb5d91f869b513afe63bec16e"
+    },
+    {
+      "slot": "11:5",
+      "words": 15048,
+      "sha256": "206247b65f25f6266399a1c1839eb697b51057573b891c3016f8c808992353b1"
+    },
+    {
+      "slot": "11:6",
+      "words": 11748,
+      "sha256": "6ba1fbb2cb6e4e940a191609d639efbaeb213165e4f14c842d3b45c3995ceef4"
+    },
+    {
+      "slot": "52:1",
+      "words": 10560,
+      "sha256": "6832e7d626ee633eb6df17fbd3189f401f6a9a8b0403884550c81a7d366fbb10"
+    },
+    {
+      "slot": "12:5",
+      "words": 12408,
+      "sha256": "888eccd80167bc6b7af1dd73ce28dd4b9e95a042fa18ae842da0165e8c7ee1f3"
+    },
+    {
+      "slot": "12:6",
+      "words": 14916,
+      "sha256": "8bf25612b9a38484064aa9a7ad4c72f1334e2c3e64a3c87c1079eae64b12b78a"
+    },
+    {
+      "slot": "13:6",
+      "words": 11352,
+      "sha256": "dda49d1d12ee7a75068fe13950f37af2f90cc8bab8b4da3362f16085f1315187"
+    },
+    {
+      "slot": "13:7",
+      "words": 9900,
+      "sha256": "ed080fd457390b6ccd3861a444c02c868be63bc56f2256011ad0f1625aac4c7f"
+    },
+    {
+      "slot": "7:6",
+      "words": 15774,
+      "sha256": "5d363c08c9f88aa37bb80a2f2beded2b55d607c0319e972361de42c4f7ab0a36"
+    },
+    {
+      "slot": "7:7",
+      "words": 14784,
+      "sha256": "9ceffcdddbdce1b5ac15be8c6d29357cd903b4565a29989165f8f589b49fcb14"
+    },
+    {
+      "slot": "14:6",
+      "words": 17160,
+      "sha256": "0e031de4dcabd33a8415937d0bc100d480e9fea15834d236d7043a1f1f3faf57"
+    },
+    {
+      "slot": "15:6",
+      "words": 12012,
+      "sha256": "7b1b017de198ae63a31b92f38481303af8e46c3ea5595078eb854eaa1c1aff52"
+    },
+    {
+      "slot": "87:6",
+      "words": 14784,
+      "sha256": "f5a942682fa8e977842fd3679b2a1701e23ad03016cb8d784eae5c40b1156df7"
+    },
+    {
+      "slot": "87:7",
+      "words": 16566,
+      "sha256": "e248c688afb2e14fe28aa2e812d88c52748ff5b482881edb7f49b6ee2b2a4624"
+    },
+    {
+      "slot": "87:8",
+      "words": 12804,
+      "sha256": "1a9b8e8d0a91eb586d3c8839c1ad695d3880c0cd87060250affa8f94043fa309"
+    },
+    {
+      "slot": "91:5",
+      "words": 22704,
+      "sha256": "b561c777d62c293ff37400142b1d8318abd5a0188868c81d3e3c6bdc28ed0949"
+    },
+    {
+      "slot": "91:6",
+      "words": 12936,
+      "sha256": "7de9043d602617d08c2eea92aae7480b5d53f9c508f83052f92c2749bf9ae383"
+    },
+    {
+      "slot": "57:6",
+      "words": 18084,
+      "sha256": "f3885c2872b874e3f48278ade0ccb73b13a5fe252e288e9e353d28b736d10925"
+    },
+    {
+      "slot": "57:7",
+      "words": 10758,
+      "sha256": "190c248ce36749e1116b18449a491b021d7eff6a248cee088414be3827a75884"
+    },
+    {
+      "slot": "57:8",
+      "words": 10032,
+      "sha256": "8bd6a1f66e35427d86b770bbad39dba958f7db869a4fd7321018c04e9a2b0db8"
+    },
+    {
+      "slot": "22:17",
+      "words": 8976,
+      "sha256": "769872d1344649d6256b62189ac6127a618a18d372e88c2e8c025f41eafef3dc"
+    },
+    {
+      "slot": "53:4",
+      "words": 17160,
+      "sha256": "5c5443be416fa60b4bff054d4fa1ff60c0865d83c5ddf9bd6b42d1dc2be1d513"
+    },
+    {
+      "slot": "63:6",
+      "words": 17688,
+      "sha256": "60fbb393e3ee0cbdc06eef3581f3515b7878b3afe63d1fa696fd1ec74dc6c10a"
+    },
+    {
+      "slot": "10:5",
+      "words": 16236,
+      "sha256": "a0ec5ba195d895c51243a4dfb0380ba745e60418492c03ee77dd8d463078829b"
+    },
+    {
+      "slot": "10:6",
+      "words": 7590,
+      "sha256": "cb4550b820529321088e43252cdb107a28c4f38c8165abb2d1e4ac3cc02b9267"
+    },
+    {
+      "slot": "27:3",
+      "words": 15840,
+      "sha256": "767d207da69b7644d124d4cac2b7d24d3d09fec2a36a0148c7c5a8943c2608bb"
+    },
+    {
+      "slot": "27:4",
+      "words": 10824,
+      "sha256": "5e12d7f45c2c8a229fa418b99cd8b3d7216e1d9397ab4f082cf652a92c322715"
+    },
+    {
+      "slot": "16:5",
+      "words": 15378,
+      "sha256": "8f51504bb3f92ca65d0cd043436c6b5bc704ce78d730dfa5b8c40dac3be69cfa"
+    },
+    {
+      "slot": "188:1",
+      "words": 9636,
+      "sha256": "7dcd23bd4919138984ee331b6b1c19c30a9c215eb7c25d363fe0501eedb65cb8"
+    },
+    {
+      "slot": "190:1",
+      "words": 8580,
+      "sha256": "6d4ae87cc459f24664372ec0af85082e67ae03de13b0293097194700d9a0fbec"
+    },
+    {
+      "slot": "192:1",
+      "words": 10164,
+      "sha256": "a643477ff65a542679dad1e3239825ed359d8670114c5a9df32bf29dd0604427"
+    },
+    {
+      "slot": "6:6",
+      "words": 11484,
+      "sha256": "ff094aa72f455b864837ab324f5991e2c3034e84a49329fd1a53d12cdad3e3fd"
+    },
+    {
+      "slot": "14:7",
+      "words": 9900,
+      "sha256": "dec53fe8cbeb7174d8db73eb78b7741f2655e413282fc95a1cf5a85d61be5648"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "gallery",
+      "words": 1542873,
+      "digestSha256": "97432736bf11d71664a158802a493897dde0442e5f1f51799e47369d244aa946",
+      "ownerBytesSha256": "e2b58ed10d1801451e3677f14f5f7ced6d29da63a13b75cca6ebbea604d6323d"
+    },
+    {
+      "id": "seed516",
+      "words": 3188871,
+      "digestSha256": "83dcd6adfd9f684f354b5a893ae9a4f1569e2b189cfb681042e6ac158693e73b",
+      "ownerBytesSha256": "07c8d62d2780b81114833f18c7aa0686e4e8cf0898a140121504c3a4c3ee23f9"
+    },
+    {
+      "id": "ai120",
+      "words": 2111022,
+      "digestSha256": "4e3282bf68a6ed42a8faf8ad701d4d9ac7840bc19220733f873b67e15668c877",
+      "ownerBytesSha256": "4e3a26be484ac5d8e57da341e6e5f8524f46bb3e1461c4e2c1a73628ec7afdb8"
+    },
+    {
+      "id": "native10",
+      "words": 422748,
+      "digestSha256": "6917340231c84b6c413d80cf5bf4376c4d326790e289680af0f8de9850475e76",
+      "ownerBytesSha256": "9e25db0f202c8e9f653f7fd5fd9937063fac2fbbe3a53a74f2cdee9a1e2fb99d"
+    },
+    {
+      "id": "native40",
+      "words": 974628,
+      "digestSha256": "1bda48b35645493f3cdf2075f5c3e1a27af96f3b0cb12cb8cbe09e499a7cd9c2",
+      "ownerBytesSha256": "a39a44a5e6f2d9845a10c58c6db0223bb37f3e732ff203f3cb12cbc4c352f87b"
+    }
+  ],
+  "passed": true
+}

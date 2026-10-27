@@ -1,0 +1,17 @@
+{
+  "exitCode": 137,
+  "completedCases": 0,
+  "planWritten": false,
+  "sourceWritten": false,
+  "scriptSha256": "05e173d1706e419d1ebac7799180a4933a4a78488af14aadb9b7c3de3638a4cf",
+  "correction": "The full raw-object comparison has a separately proven signed-zero versus JSON-zero domain mismatch. Compare both complete canonical JSON serializations instead, matching original D081 contract digest semantics. No field projection, point/normal change, geometry normalization, tolerance or domain change.",
+  "correctedScriptSha256": "23ea8bfcb959573baf6249d7518e4f4d55d066dfe44118e59143a68d6d914f00",
+  "exit137Cause": "Not established; no process stack/profile proves the cause of the OS kill. Do not attribute it to the comparison mismatch as a proven causal finding.",
+  "diagnosisFile": "contract-canonical-domain-diagnosis.json",
+  "firstObjectIsDifference": {
+    "path": "contract.probes.0.normal.0",
+    "currentNegativeZero": true,
+    "savedNegativeZero": false,
+    "sameNumericValue": true
+  }
+}

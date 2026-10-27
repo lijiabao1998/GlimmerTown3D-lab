@@ -1,0 +1,395 @@
+{
+  "qualification": "Author geometry handoff only; source cached by parent. No browser/art/release acceptance. Parent/native/browser/lease helpers are deliberately excluded from owned files.",
+  "proceduralSourceSha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "cachedSourceSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+  "files": [
+    {
+      "path": "proposals/d090/evidence/bare-first-coplanar.json",
+      "bytes": 203234,
+      "sha256": "65c125269e6300c4213f70e69f6a58818a54970c88be2f46b20e93bf592a0385"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-first-ray-report.json",
+      "bytes": 3331,
+      "sha256": "b172337679df0b48d3df2b82787a549bb0f6c58f73a50e82e49b02f2dab0f928"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-first-ray.txt",
+      "bytes": 2261,
+      "sha256": "f984fdf50752337a4ae3f1bdc1ead9b9f3a2f051f644c60988997551792b0923"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-first-source.mjs",
+      "bytes": 33252,
+      "sha256": "31a4cce72864ccca2d00d6d4044f3e64d65b189476eecd046942978731009584"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-coplanar.json",
+      "bytes": 164607,
+      "sha256": "330ca23148b0fbc7200e6afb4017ef79d73369b11b7e5063f75c98d191e4b173"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-ray-report.json",
+      "bytes": 9503,
+      "sha256": "cd567678abaf08d15b26c906455bf82f80e1acc2493802ea2549ddbd8ae51d3e"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-ray.txt",
+      "bytes": 6793,
+      "sha256": "1e3929e8d84a5589f4d5fb9661ea13cc8b6aba3f6086a9f15eab0742adb65ff4"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-source.mjs",
+      "bytes": 33252,
+      "sha256": "1053fef0aa4032951a6ff884c6543a4bf6d6cb22cd0a77c38d6c5b4e8de66452"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-structure-plan.mjs",
+      "bytes": 9311,
+      "sha256": "94d18facea094998cd44dba997a5fb4d8d5f865859793b0c71cd0c6363e61a30"
+    },
+    {
+      "path": "proposals/d090/evidence/bare-joints-second-structure.json",
+      "bytes": 1207,
+      "sha256": "f89994a2c50ec73161f31cdda577021f3bf9b6e749d303b5ffdbb75d78a67cb9"
+    },
+    {
+      "path": "proposals/d090/evidence/coplanar-tests.txt",
+      "bytes": 1620,
+      "sha256": "70d9e06b2d943b888c93b2f55149461c2bc429ef0f4b1600a1a93b78a1c9d493"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-access-repair-coplanar.json",
+      "bytes": 298610,
+      "sha256": "b58069ed2362ea8ddf1bad71d0f5bd819bbc8690b4a4c064881e9fea82352d73"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-access-repair-counts.json",
+      "bytes": 1472,
+      "sha256": "83f7b76d76ee5fc9e04f45a35609d277a2d19bee3a0a349e2ee98f043fb22da2"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-access-repair-source.mjs",
+      "bytes": 39450,
+      "sha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-access-repair-tests.txt",
+      "bytes": 8433,
+      "sha256": "5e0479dcfa4043db5271bbd7bdc538ab3c1c5fa907b7367d8c0852afd6232529"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-access-structure.json",
+      "bytes": 27036,
+      "sha256": "2da949ca93a1ed2206936d266685324f078c9dc9c8862d52340869f770b484cc"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-card-access.txt",
+      "bytes": 4899,
+      "sha256": "9729e526d11aefa20af0886991dbe8ab493c38cdd08469c9c3005fe5a0dfc796"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-castle-paint.json",
+      "bytes": 75097,
+      "sha256": "ef695d89e338de586ecd8a265efe44b1b7a7807ed32b5275a8a97f23cb8fd75b"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-counts.json",
+      "bytes": 1481,
+      "sha256": "dd254462aca16e7886b9197297b764b17e6dfefbfa6950fa3b197929760b6efc"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-facade.json",
+      "bytes": 4802,
+      "sha256": "bfc07223435758ec7fee5aba4e874162de66be892a474f25e1ea62715dc1cef3"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-focused.txt",
+      "bytes": 5377,
+      "sha256": "829bc2eacb6672b07554c7bd487c2896ffe6dbaa8f54302dce085d3c9f679bd3"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-geometry-access.mjs",
+      "bytes": 3531,
+      "sha256": "a5765dd3819dbf57a60a9d741394760be27b3505da249c9529b35552958af197"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-missing-lease.txt",
+      "bytes": 1092,
+      "sha256": "974cb9f89c74f67e9561f571e1364aa614ced3f8048122ff644f9e47cbd6207c"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-native-exit.json",
+      "bytes": 385,
+      "sha256": "d172d21c69aa183363b3e994296d92a886e6bd06db40928a2e229014d0ffe66f"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-native-incomplete.txt",
+      "bytes": 7481,
+      "sha256": "8ad855df6df39d4584c651f40387cd31a5d8985003c1b75a0dbd74b926127d5f"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-paint.txt",
+      "bytes": 2076,
+      "sha256": "8a7b96e1c3a7511da47b440558d4e724013cd0f47d93435f4407e257062a9ff8"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-source.mjs",
+      "bytes": 39369,
+      "sha256": "3d81bd835931aededbd5b508ee0389cf6fa81a325e83d09d04c5a1071e67fc00"
+    },
+    {
+      "path": "proposals/d090/evidence/detailed-first-structure-plan.mjs",
+      "bytes": 9334,
+      "sha256": "6243e24c8c04a9ae747ef472cf430f1bee82043909266d66b38fa02964462b43"
+    },
+    {
+      "path": "proposals/d090/evidence/facade-contract-authoring.mjs",
+      "bytes": 1659,
+      "sha256": "1129c281dd772bee396f3685997a323fb8597868de4ceffc58d7d96c003b17a1"
+    },
+    {
+      "path": "proposals/d090/evidence/final-cached-geometry-tests.txt",
+      "bytes": 11561,
+      "sha256": "99ca8a102f04df3ffbe5b14fbb4fb194bb8cae06e298aadd61877439c74ed159"
+    },
+    {
+      "path": "proposals/d090/evidence/final-plan-tests.txt",
+      "bytes": 350,
+      "sha256": "8debb51db53b374677857f48bffeab68d8a359c81d543570808f15a0ecbce92e"
+    },
+    {
+      "path": "proposals/d090/evidence/finite-repair-tests.txt",
+      "bytes": 460,
+      "sha256": "d79ba4d2fc4b83b44e8eefb0b34856d2c0a311443a2a30e18da51a3cf4f06fd7"
+    },
+    {
+      "path": "proposals/d090/evidence/first-red-manifest.json",
+      "bytes": 3811,
+      "sha256": "f8b667f6914eac54011383b76c620036731acc768c492158342f4eaebc87cf73"
+    },
+    {
+      "path": "proposals/d090/evidence/first-red-replay-tests.txt",
+      "bytes": 654,
+      "sha256": "b1538727e680d6c7da76a8c4c6c080bd9db2698e0bc9d01f3cb946eab5923f21"
+    },
+    {
+      "path": "proposals/d090/evidence/first-single-process-native-preflight.mjs",
+      "bytes": 2556,
+      "sha256": "8fba6ebbe67de2398f706fa95ad4f36627b034dd28390e050a593b8833f8e1e3"
+    },
+    {
+      "path": "proposals/d090/evidence/geometry-authority-freeze-v1.json",
+      "bytes": 1519,
+      "sha256": "362aa942ee11f4edb9c5aa60d96953105f34329c05cdad7964aa285c416bb9ae"
+    },
+    {
+      "path": "proposals/d090/evidence/geometry-authority-freeze.json",
+      "bytes": 1575,
+      "sha256": "7938d778202ce211890d3090a2fc5e69f41765ea5f74b86f84b9129517b3bd27"
+    },
+    {
+      "path": "proposals/d090/evidence/geometry-evidence-first-test-red.txt",
+      "bytes": 6428,
+      "sha256": "104a3939ca609ddf690113b47fb848087f2a062b52027d3a6c936cf09e7ed9ed"
+    },
+    {
+      "path": "proposals/d090/evidence/geometry-evidence-first-test.mjs",
+      "bytes": 4162,
+      "sha256": "3d093344324031b78e9a67faf056f60cd6a590cb168f8e962369a32c82f1952c"
+    },
+    {
+      "path": "proposals/d090/evidence/geometry-evidence-test-correction.json",
+      "bytes": 790,
+      "sha256": "f0b0239c867662171045161cc84ae14ce20b1c875512f447bdff993d72d76164"
+    },
+    {
+      "path": "proposals/d090/evidence/native-cached-final-paint-report.json",
+      "bytes": 4571,
+      "sha256": "2e5222acb5544152066d8c52fc108cb545244f71795fa0b6fbb5fa0667826d85"
+    },
+    {
+      "path": "proposals/d090/evidence/native-cached-final-report.json",
+      "bytes": 76909,
+      "sha256": "3439b11648917f034df9e1dcb3d6ab5d0c8ad2ae59de3bb3010850ace4837366"
+    },
+    {
+      "path": "proposals/d090/evidence/native-cached-final.txt",
+      "bytes": 2429,
+      "sha256": "e80ff499f508472c4c8b8ada974ccffcdcd87bebbc29f614b6ba6742d3e65d33"
+    },
+    {
+      "path": "proposals/d090/evidence/native-procedural-repaired-paint-report.json",
+      "bytes": 4571,
+      "sha256": "95c6e580c21fe8087f780421e1a218a4f8de69fc0dff968e757fd8e451b76db9"
+    },
+    {
+      "path": "proposals/d090/evidence/native-procedural-repaired-report.json",
+      "bytes": 76909,
+      "sha256": "4441d76c71c9108acd4b675bde0a0cc4b667a32e9db69b8b8bd422504e4c2758"
+    },
+    {
+      "path": "proposals/d090/evidence/native-procedural-repaired.txt",
+      "bytes": 2429,
+      "sha256": "e80ff499f508472c4c8b8ada974ccffcdcd87bebbc29f614b6ba6742d3e65d33"
+    },
+    {
+      "path": "proposals/d090/evidence/original-camera-restoration-first.txt",
+      "bytes": 849,
+      "sha256": "96aaca38a238a967ac9c442c02d1a72129af0c15573f99b70dc8a704e679f5d6"
+    },
+    {
+      "path": "proposals/d090/facade-contract.mjs",
+      "bytes": 1258,
+      "sha256": "1f990cf72a9291e412a992f90153075dfbd1b6400e421d9e7576b0a980e1ef2e"
+    },
+    {
+      "path": "proposals/d090/facade-exterior-area.mjs",
+      "bytes": 4525,
+      "sha256": "a3b63a84e00b6f55b95d3f4196f99e0de9790f99a4a4149ed41dea18ffaa8d70"
+    },
+    {
+      "path": "proposals/d090/facade-isolated-check.mjs",
+      "bytes": 1281,
+      "sha256": "89374e907a12f6689ade88e1a17e85860b580ac186ec43e38c42c6f170788c79"
+    },
+    {
+      "path": "proposals/d090/facade-native-paint-check.mjs",
+      "bytes": 1949,
+      "sha256": "e31c6b1466369dc09cf9e854f9eb325f9baf951ef603ec347d085f54d9b2bc9b"
+    },
+    {
+      "path": "proposals/d090/geometry-access.mjs",
+      "bytes": 3531,
+      "sha256": "a5765dd3819dbf57a60a9d741394760be27b3505da249c9529b35552958af197"
+    },
+    {
+      "path": "proposals/d090/geometry-access.test.mjs",
+      "bytes": 2021,
+      "sha256": "b6639c88f84d58d5933d527e5f0cd69df83c37d714002b683b3190e33962298e"
+    },
+    {
+      "path": "proposals/d090/geometry-card-invariants.test.mjs",
+      "bytes": 6841,
+      "sha256": "c297ae52b2d427cafb6e066f9a23fc8783b7dc78539071611d076afe85abb184"
+    },
+    {
+      "path": "proposals/d090/geometry-coplanar.mjs",
+      "bytes": 3468,
+      "sha256": "360ed6807b8acd5dcfcbe8045a712a4a5f56edad3c44739fdb9a19e269d38b95"
+    },
+    {
+      "path": "proposals/d090/geometry-coplanar.test.mjs",
+      "bytes": 1393,
+      "sha256": "a8e585b9a6623ba458a129f06d77d2b0dbebc43bbbc34e756d0d1f92a193b25f"
+    },
+    {
+      "path": "proposals/d090/geometry-evidence.test.mjs",
+      "bytes": 4293,
+      "sha256": "e04103836968e38e7a9b61c2e03d5aad131d9713c75cfd9733738eae55848210"
+    },
+    {
+      "path": "proposals/d090/geometry-finite-repair.test.mjs",
+      "bytes": 2226,
+      "sha256": "d9be27321f4662025fae0baa7c1ac9d439561e3574f709b69aec17119f5c54fa"
+    },
+    {
+      "path": "proposals/d090/geometry-focused.test.mjs",
+      "bytes": 3003,
+      "sha256": "1f0328038f8e4445779703beca81ea3d5ea0472053c666feea053fb47aa19690"
+    },
+    {
+      "path": "proposals/d090/geometry-freeze-camera-plan.mjs",
+      "bytes": 4651,
+      "sha256": "ef951f96933aa141f88e76ab0ead924791ee7a68d15cb97b48771f6b27330841"
+    },
+    {
+      "path": "proposals/d090/geometry-implementation-notes.md",
+      "bytes": 9843,
+      "sha256": "d9f7f4885ff6ca1c89975b0a53f743a05d155d9b3c5a2e4e6b858bd5ef9f30ba"
+    },
+    {
+      "path": "proposals/d090/geometry-native-evidence.json",
+      "bytes": 12516,
+      "sha256": "793f06cd75fc82759a53e580849fb0545d8ee252a2f62786aa41c5274bb400dd"
+    },
+    {
+      "path": "proposals/d090/geometry-native-preflight.mjs",
+      "bytes": 7460,
+      "sha256": "50590344115c324292e4c4ee39566b5c39690c99644be117df7d2e7c1fc80fd0"
+    },
+    {
+      "path": "proposals/d090/geometry-plan.test.mjs",
+      "bytes": 3435,
+      "sha256": "d8aafe6c1ad95cf4f8852d20dc1d49f736de18f4c9c28493d2b98e6015f64714"
+    },
+    {
+      "path": "proposals/d090/geometry-surface-preflight.mjs",
+      "bytes": 3711,
+      "sha256": "3dff9e531a62b4f9bdf6f9a342a031f89c4080e7dc0fd80e79a790c193ef1a51"
+    },
+    {
+      "path": "proposals/d090/mesh-contract.mjs",
+      "bytes": 1654,
+      "sha256": "e7f02a800fdc263e3b1145c27fd58615411eaf0f21f34c661e1686b988d614ed"
+    },
+    {
+      "path": "proposals/d090/native-camera-plan.json",
+      "bytes": 77556,
+      "sha256": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0"
+    },
+    {
+      "path": "proposals/d090/original-camera-restoration.test.mjs",
+      "bytes": 5571,
+      "sha256": "da17d79440239b55a0e9d8b65abecc1b10d166980533c7380ab781bb796c4445"
+    },
+    {
+      "path": "proposals/d090/procedural-authority.mjs",
+      "bytes": 39450,
+      "sha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37"
+    },
+    {
+      "path": "proposals/d090/structure-plan.mjs",
+      "bytes": 9396,
+      "sha256": "4d4286158a98da1bbc6ec5c8a0961d3cee656a98d68ace8f205bc051d1fb1dc9"
+    },
+    {
+      "path": "src/render/britishUtilityHeritageModels.d.mts",
+      "bytes": 1510,
+      "sha256": "c548979b30f7c43d133bf4e4cef55e71974e7bc0396cbf8b071f7536e51bdeca"
+    },
+    {
+      "path": "src/render/britishUtilityHeritageModels.mjs",
+      "bytes": 419799,
+      "sha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319"
+    }
+  ],
+  "fileCount": 72,
+  "bytes": 1834829,
+  "tests": {
+    "cachedGeometry": 95,
+    "canonicalPlan": 2,
+    "failed": 0
+  },
+  "native": {
+    "cases": 30,
+    "required": 56055,
+    "paint": 795,
+    "missing": 0,
+    "hiddenPaint": 0,
+    "selectedViewsPerWidth": 41,
+    "extraViews": 0,
+    "browserJoined": false
+  },
+  "localFullReceipts": {
+    "native": "/workspace/shared/d090-native-cached-final",
+    "paint": "/workspace/shared/d090-native-cached-final-paint"
+  },
+  "externalDependencies": [
+    "Current source lease tools/d090-source.mjs + fixtures/d090/source.json (parent/lease worker)",
+    "precompiled-cache-qualification.mjs, compiled-cache.json and cache implementation (parent)",
+    "scene-budget-support.mjs and native-scene-fixture.mjs (parent/native worker)",
+    "scope.json (pre-code frozen parent)",
+    "Original unchanged D081/D086/D088 structural/surface/facade dependencies retained by repository"
+  ]
+}

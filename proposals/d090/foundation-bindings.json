@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "ready": true,
+  "qualification": "Exact independently reviewed foundation authority/cache/source lease and complete original-player plan. Node/browser/art/release gates remain separately mandatory; no acceptance claim.",
+  "authoritySha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "cachedSourceSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "cacheManifestSha256": "8cc8ab8259c9792279e626caedc5f08f674edc8b3b8b1a43db1e2782d3fbcb54",
+  "sourceLeaseSha256": "e30677d68cff47dfead05eac5ac9cde406a1958ebf10942c5f5d0fae8a26f7d0",
+  "sourceLeaseVersion": "source-lease-foundation-cache-v4",
+  "planSha256": "65ae2bc0280530821f0be7b164d8e903a7563da5838e1aee331ae3e16a582565",
+  "geometrySha256": "2daff1b0c18da9febc51e018356111f1fc581727ae060675489c0e2a3b830008",
+  "requiredPerWidth": 18679,
+  "requiredAllWidths": 56037,
+  "viewsPerWidth": 42,
+  "paintIntents": 265,
+  "paintCases": 795,
+  "adaptationManifestSha256": "8d1cc611f52e24b9f238ddc1659ef50f4c77cc5532dfffd2d5779863d7f86bb5"
+}

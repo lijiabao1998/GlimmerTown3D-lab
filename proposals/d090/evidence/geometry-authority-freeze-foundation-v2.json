@@ -1,0 +1,34 @@
+{
+  "qualification": "New retained authoritative source version after actual Chrome crease failure and independently reviewed whole-foundation repair; not successor browser/art/release acceptance.",
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "repairPrecode": "6dcadbe7934a96426368b4e00a1187cb782107f6",
+  "previousCandidate": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "productFile": "src/render/britishUtilityHeritageModels.mjs",
+  "authorityFile": "proposals/d090/procedural-authority.mjs",
+  "authoringSourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "proceduralSourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "cachedSourceSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "productBytes": 419723,
+  "authorityBytes": 39450,
+  "exactRemovedAuthoringShim": "",
+  "sourceRelation": "One exact whole-foundation ground ring .23-.77 to .20-.80 in full authority; cache recovers every authoritative byte via the original two finite seams.",
+  "sourceLeaseSha256": "e30677d68cff47dfead05eac5ac9cde406a1958ebf10942c5f5d0fae8a26f7d0",
+  "completed": {
+    "models": 10,
+    "closedSolids": 44,
+    "facadeIntents": 265,
+    "doors": 20,
+    "actualExteriorCofaces": 0,
+    "proceduralNativeCases": 30,
+    "required": 56037,
+    "paint": 795,
+    "cacheParityModels": 200,
+    "cacheParityScenes": 5
+  },
+  "pending": [
+    "complete actual cached30 and versioned current plan/source tests",
+    "new exact-head official Chrome/raw PNG/performance and actual art",
+    "full CI/normal release/main CI/Pages/public"
+  ],
+  "accepted": false
+}

@@ -1,0 +1,580 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "qualification": "Exact finite successor derivation from original5b, retaining every original6c delta then only documented foundation authority/PLAN reference. Six version-specific tests run immutable6c plus exact current-v2 copies under mandatory routing; no acceptance claim.",
+  "copies": [
+    {
+      "source": "proposals/d089/browser-cache-observation.mjs",
+      "target": "proposals/d090/browser-cache-observation.mjs",
+      "sourceSha256": "d4948bafe5b8695afe70423f7103a14fa638758914e0463338664da6f964c4a8",
+      "targetSha256": "ef9cc2043208333b009cb720b0b098a30fd37002dea2449557eef5f19295f446",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 1
+        },
+        {
+          "before": "1a2f8dc36f3639efea753a8e33bd186352241f760f36a0bdf40686eb422bfbbf",
+          "after": "0000000000000000000000000000000000000000000000000000000000000000",
+          "count": 1
+        },
+        {
+          "before": "0000000000000000000000000000000000000000000000000000000000000000",
+          "after": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "count": 1
+        },
+        {
+          "before": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+          "after": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-cache-observation.test.mjs",
+      "target": "proposals/d090/browser-cache-observation.test.mjs",
+      "sourceSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "targetSha256": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",
+      "changes": []
+    },
+    {
+      "source": "proposals/d089/browser-first-use-performance.mjs",
+      "target": "proposals/d090/browser-first-use-performance.mjs",
+      "sourceSha256": "346758ec92d351d691776e63efc71cf561f777992455436628a4c74375fc3e5a",
+      "targetSha256": "96e904d8f18723838e93ba37479a51fb2397ec06e5d260f0cb65fa6be3f9278e",
+      "changes": [
+        {
+          "before": "models.length===11",
+          "after": "models.length===10",
+          "count": 1
+        },
+        {
+          "before": "explicit complete eleven-model scope",
+          "after": "explicit complete ten-model scope",
+          "count": 1
+        },
+        {
+          "before": ")).size,11",
+          "after": ")).size,10",
+          "count": 3
+        },
+        {
+          "before": "[2,3,5].includes(m.size)",
+          "after": "[1,2].includes(m.size)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-first-use-performance.test.mjs",
+      "target": "proposals/d090/browser-first-use-performance.test.mjs",
+      "sourceSha256": "716e6b97d8f3623d5d967ef42f3cb54a020db87e51232ea65b3e63cf903d872d",
+      "targetSha256": "f4c848d6de5ba590d7a2f9a3a9c9f0f329459c048e9821715b3e5ac0313f8f10",
+      "changes": [
+        {
+          "before": "length:11",
+          "after": "length:10",
+          "count": 1
+        },
+        {
+          "before": "size:[2,3,5][i%3]",
+          "after": "size:[1,2][i%2]",
+          "count": 1
+        },
+        {
+          "before": "for(const[name,change]of [['missing sample',r=>r.pop()],['duplicate operation',r=>r[2].operation=1],['different model',r=>r[2].model.id='other'],['different navigation',r=>r[2].timeOrigin=456],['slow median',r=>r[0].commitMs=402],['stale thirdsample',r=>r[2].commitFresh=false]])test('median rejects '+name,()=>{const r=series();change(r);assert.throws(()=>assertD086ThreeCommitMedian(r));});",
+          "after": "for(const[name,change]of [['missing sample',r=>r.pop()],['duplicate operation',r=>r[2].operation=1],['different model',r=>r[2].model.id='other'],['different navigation',r=>r[2].timeOrigin=456],['slow median',r=>r[0].commitMs=402],['stale thirdsample',r=>r[2].commitFresh=false]])test('median rejects '+name,()=>{const r=series();change(r);assert.throws(()=>assertD086ThreeCommitMedian(r));});\n\n// Exact final-wave scope changes only: ten models, seven1x1 and three2x2.\ntest('both final-wave parcel sizes produce real held-preview area and normalized building-list size',async()=>{for(const model of models){const m=mock();m.setModel(model);const session=await m.start(),r=await m.run(session);assert.equal(r.passed,true);assert.equal(r.preview.stroke.preview.cells,model.size*model.size);assert.equal(r.after.buildings.at(-1)[4],model.size);assert.equal(r.cpuRestored,true);}});\nfor(const[name,mutate]of[['missing tenth',a=>a.pop()],['extra eleventh',a=>a.push({...a[0],id:'extra',tool:'extra',k:999})],['duplicate id',a=>a[1].id=a[0].id],['duplicate slot',a=>{a[1].k=a[0].k;a[1].v=a[0].v;}],['duplicate tool',a=>a[1].tool=a[0].tool],['stale3x3 parcel',a=>a[0].size=3],['stale5x5 parcel',a=>a[0].size=5],['fractional parcel',a=>a[0].size=1.5]])test('final-wave first-use session refuses '+name,async()=>{const m=mock(),bad=structuredClone(models);mutate(bad);await assert.rejects(beginD086FirstUseSession(m.page,{models:bad}));assert.equal(m.rates.length,0);});\n",
+          "count": 1
+        },
+        {
+          "before": "size:[1,2][i%2]",
+          "after": "size:[1,1,1,1,1,2,2,2,1,1][i]",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-frame-qualification.mjs",
+      "target": "proposals/d090/browser-frame-qualification.mjs",
+      "sourceSha256": "c5bbd8fea97f1e28700fd4c242a6836d8fe1785746a8eb27946e3d1c896f7da8",
+      "targetSha256": "b9f421866cf9a8cf2cb4ae53fa967250f3c70eb96fc360553361e92ff4ba24a9",
+      "changes": [
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "m.placements?.length,11",
+          "after": "m.placements?.length,10",
+          "count": 1
+        },
+        {
+          "before": "exact native eleven actual placements",
+          "after": "exact native ten actual placements",
+          "count": 1
+        },
+        {
+          "before": "eleven-context",
+          "after": "ten-context",
+          "count": 1
+        },
+        {
+          "before": "all27 original plus22 additive",
+          "after": "all25 original plus20 additive",
+          "count": 1
+        },
+        {
+          "before": "newOwnersRetained,11",
+          "after": "newOwnersRetained,10",
+          "count": 1
+        },
+        {
+          "before": "expectedOwners.length,11",
+          "after": "expectedOwners.length,10",
+          "count": 1
+        },
+        {
+          "before": "report.completeFrames.length,46",
+          "after": "report.completeFrames.length,42",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-frame-qualification.test.mjs",
+      "target": "proposals/d090/browser-frame-qualification.test.mjs",
+      "sourceSha256": "63e19b6d24913b3dee599f0c770407a9887af26016c29195f0abe94a110d5440",
+      "targetSha256": "fae3f701b22544f29f84d35c8c8f1109abe7463a28aa112636bce30125bf07ae",
+      "changes": [
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "eleven-context",
+          "after": "ten-context",
+          "count": 1
+        },
+        {
+          "before": "newOwnersRetained:11",
+          "after": "newOwnersRetained:10",
+          "count": 1
+        },
+        {
+          "before": "fixture()).length,49",
+          "after": "fixture()).length,45",
+          "count": 1
+        },
+        {
+          "before": "m.shots.splice(27,1)",
+          "after": "m.shots.splice(25,1)",
+          "count": 1
+        },
+        {
+          "before": "m.shots[28]",
+          "after": "m.shots[26]",
+          "count": 5
+        },
+        {
+          "before": "for(const[name,change]of [['missing detail pair',m=>m.shots.splice(25,1)],['cropped detail framing',m=>m.shots[26].detailFraming.mode='cropped'],['detail zoom outside gameplay',m=>m.shots[26].detailFraming.zoom=9],['detail clipping altered',m=>m.shots[26].detailFraming.near=1],['detail belowground camera',m=>m.shots[26].detailFraming.legalElevation=-.1],['detail camera mismatches recordedzoom',m=>m.shots[26].camera.zoom=4]])test('reject '+name,()=>{const m=fixture();change(m);assert.throws(()=>assertD086EvidenceInventory(m));});",
+          "after": "for(const[name,change]of [['missing detail pair',m=>m.shots.splice(25,1)],['cropped detail framing',m=>m.shots[26].detailFraming.mode='cropped'],['detail zoom outside gameplay',m=>m.shots[26].detailFraming.zoom=9],['detail clipping altered',m=>m.shots[26].detailFraming.near=1],['detail belowground camera',m=>m.shots[26].detailFraming.legalElevation=-.1],['detail camera mismatches recordedzoom',m=>m.shots[26].camera.zoom=4]])test('reject '+name,()=>{const m=fixture();change(m);assert.throws(()=>assertD086EvidenceInventory(m));});\n\nfor(const[name,change]of[['stale eleventh placement',m=>m.placements.push(m.placements[0])],['reordered native slots',m=>[m.placements[0],m.placements[1]]=[m.placements[1],m.placements[0]]],['wrong native tool',m=>m.placements[0].tool='water'],['only nine retained owners',m=>m.actualBrowserSaveReload.newOwnersRetained=9],['stale eleven retained owners',m=>m.actualBrowserSaveReload.newOwnersRetained=11],['extra old context identity',m=>m.shots.push({...m.shots[3],id:'eleven-context'})]])test('final-wave raw inventory rejects '+name,()=>{const m=fixture();change(m);assert.throws(()=>assertD086EvidenceInventory(m));});\n",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-provenance.mjs",
+      "target": "proposals/d090/browser-provenance.mjs",
+      "sourceSha256": "ce57b7f8ddcfaf0e8f25b710b23d91c132cc94ea1c8e5a41f36ec58e6914cfec",
+      "targetSha256": "b739ebc91afccb629fd21c3738dbe247e36d53fca5b6dc345a5b7aa80d7d906a",
+      "changes": [
+        {
+          "before": "models.length,11",
+          "after": "models.length,10",
+          "count": 1
+        },
+        {
+          "before": ")).size,11",
+          "after": ")).size,10",
+          "count": 1
+        },
+        {
+          "before": "exact current eleven descriptors",
+          "after": "exact current ten descriptors",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-provenance.test.mjs",
+      "target": "proposals/d090/browser-provenance.test.mjs",
+      "sourceSha256": "48df3471165d99b074d2b32fc272a1df69b98f26a5b45212c73c685a2e679730",
+      "targetSha256": "0357d82c628e70a555e3ca4bfed4189f66b8e145939182ad3874143dc6d9da4f",
+      "changes": [
+        {
+          "before": "length:11",
+          "after": "length:10",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-startup-cache-contract.mjs",
+      "target": "proposals/d090/browser-startup-cache-contract.mjs",
+      "sourceSha256": "76ad215466488e7871ea44e39289e0748a106e27e15675b633b21617ac18190a",
+      "targetSha256": "2e7fa796d841725d5c2570ad8dd63620e3c99c145089bcaff2cd58b9dd5bb17c",
+      "changes": [
+        {
+          "before": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+          "after": "5b41bac165ba2b29146e6835490357bebc3cd549",
+          "count": 1
+        },
+        {
+          "before": "c33a89f92202e7df28285a830616722c32078e411510d58a587f18ebcf7f9aa1",
+          "after": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-startup-cache-contract.test.mjs",
+      "target": "proposals/d090/browser-startup-cache-contract.test.mjs",
+      "sourceSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "targetSha256": "58ccbd2a7fd92868c4265aed900d6f7c6f5f986dfcb9bcc7e7ab896ca4415f9c",
+      "changes": []
+    },
+    {
+      "source": "proposals/d089/browser-surface-qualification.mjs",
+      "target": "proposals/d090/browser-surface-qualification.mjs",
+      "sourceSha256": "dbfe4bbdffebfeb2f616bf952e7551fcc17cc7e8eff04f8e606d4de16a9ff02a",
+      "targetSha256": "9151d3e3bcf45f1391275dadddc31b7c7f7b231bf4306f58589ee7d265ae5144",
+      "changes": [
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1
+        },
+        {
+          "before": "createMarketEstateDesign",
+          "after": "buildBritishUtilityHeritage",
+          "count": 2
+        },
+        {
+          "before": "ALL actual live Float32 words and Int32 owners equal current complete native scene; no normalization",
+          "after": "ALL exported other-mesh Float32 words and Int32 owners equal the complete current other mesh; no normalization",
+          "count": 1
+        },
+        {
+          "before": "Actual raw PNG ordinary-player-only full native source/cache/live-word/frame/surface join.",
+          "after": "Actual raw PNG ordinary-player-only full native source/cache/other-mesh live-word/all-mesh digest/frame/surface join.",
+          "count": 1
+        },
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/browser-surface-qualification.test.mjs",
+      "target": "proposals/d090/browser-surface-qualification.test.mjs",
+      "sourceSha256": "0f6dbd498d121e6d4568e471420f9da14c9c052644926fe7355b1b7aa6cc50b2",
+      "targetSha256": "28e5e07cd2aa7b884e6fd34ebba54ff324be6e87da2e9113ce18e5fdec07060b",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 1
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "assertSurfaceShotInventory(inventory()).length,11",
+          "after": "assertSurfaceShotInventory(inventory()).length,10",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-browser-build.mjs",
+      "target": "proposals/d090/native-browser-build.mjs",
+      "sourceSha256": "be11df4bef5b930ffa4d91f7059fffb52d95af2502436f9b9a6af01990f0fc4a",
+      "targetSha256": "cb2baa54635d192b4e04d625a37584004969c5de08ef8f8a7ffa5444cac6a7cc",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 1
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1
+        },
+        {
+          "before": "createMarketEstateDesign",
+          "after": "buildBritishUtilityHeritage",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-browser-check.mjs",
+      "target": "proposals/d090/native-browser-check.mjs",
+      "sourceSha256": "1e221f12516d5c5c65d45edd4dd92f96aa42e86a6ba87fe471d7029f0d8e0cbc",
+      "targetSha256": "49037690ccc648d141b4120a886b64afe30c1f5ca89102920f7ece22c3b1de15",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 4
+        },
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 1
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1
+        },
+        {
+          "before": "length'),51)",
+          "after": "length'),61)",
+          "count": 1
+        },
+        {
+          "before": "length'),11,'new native variants have a separate eleven-entry dock'",
+          "after": "length'),10,'new native variants have a separate ten-entry dock'",
+          "count": 1
+        },
+        {
+          "before": "__gt.buildingCount()'),17",
+          "after": "__gt.buildingCount()'),16",
+          "count": 2
+        },
+        {
+          "before": "current.length,11",
+          "after": "current.length,10",
+          "count": 1
+        },
+        {
+          "before": "eleven-context",
+          "after": "ten-context",
+          "count": 1
+        },
+        {
+          "before": "all twenty-two original front/back views",
+          "after": "all twenty original front/back views",
+          "count": 1
+        },
+        {
+          "before": "buildings:17,newOwnersRetained:11",
+          "after": "buildings:16,newOwnersRetained:10",
+          "count": 1
+        },
+        {
+          "before": "eleven actual UI placements",
+          "after": "ten actual UI placements",
+          "count": 1
+        },
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-first-use-cache-check.mjs",
+      "target": "proposals/d090/native-first-use-cache-check.mjs",
+      "sourceSha256": "cc1dc875a82ac52deae437d3cb0836b882823f385e5984d3ebbc76435fa95ee2",
+      "targetSha256": "d8dd671f07787c4d2ac9284da277d9276f4cd216280cd8f9e721fe9421d44116",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 3
+        },
+        {
+          "before": "D089",
+          "after": "D090",
+          "count": 1
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1
+        },
+        {
+          "before": "import{observeD086Cache,assertCacheTransition}from'./browser-cache-observation.mjs';",
+          "after": "import{observeD086Cache,assertCacheTransition}from'./browser-cache-observation.mjs';\nimport{firstUseRaw,firstUseSite}from'./native-scene-fixture.mjs';",
+          "count": 1
+        },
+        {
+          "before": "const raw={v:1,n:40,seed:20261089,day:0,money:80000,nm:'D090 first native input timing',df:1,ter:'2'.repeat(1600),tre:'0'.repeat(1600),bl:[[2*40+36,65,1,0,40],[8*40+36,87,1,0,40],[14*40+36,169,1,0,40],[20*40+36,179,1,1,40],[26*40+36,185,1,1,40],[32*40+36,23,1,0,40]]},L=loadCode",
+          "after": "const raw=firstUseRaw(),L=loadCode",
+          "count": 1
+        },
+        {
+          "before": "const x=2+(i%6)*6,z=2+Math.floor(i/6)*6+repetition*12;",
+          "after": "const [x,z]=firstUseSite(i,repetition);",
+          "count": 1
+        },
+        {
+          "before": "report.records.length,33",
+          "after": "report.records.length,30",
+          "count": 1
+        },
+        {
+          "before": "firstNativeAttempt).length,11",
+          "after": "firstNativeAttempt).length,10",
+          "count": 1
+        },
+        {
+          "before": "report.medians.length,11",
+          "after": "report.medians.length,10",
+          "count": 1
+        },
+        {
+          "before": "__gt.buildingCount()'),39",
+          "after": "__gt.buildingCount()'),36",
+          "count": 1
+        },
+        {
+          "before": "report.cacheObservations.length===33",
+          "after": "report.cacheObservations.length===30",
+          "count": 1
+        },
+        {
+          "before": "No physical Android claim or replacement",
+          "after": "Inherited generic editor warmup is unchanged and disclosed; no target-model prewarm. No physical Android claim or replacement",
+          "count": 1
+        },
+        {
+          "before": "// unchanged; no synthetic preview/model warmup is inserted before first use.",
+          "after": "// unchanged; no target-model prewarm is inserted. Existing generic warmEdit\n// startup work is measured and disclosed, never relabeled target-cold work.",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-startup-cache-check.mjs",
+      "target": "proposals/d090/native-startup-cache-check.mjs",
+      "sourceSha256": "dd9b45a5ec2398dcb1ba99c5f167f9370a0583c6beaf3290996d267955e3299c",
+      "targetSha256": "016604986b1099207618642009804c888f9cfdc63c89a03da049090b3286a9b0",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 5
+        },
+        {
+          "before": "MARKET_ESTATE_BUILDINGS",
+          "after": "UTILITY_HERITAGE_BUILDINGS",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstates.ts",
+          "after": "britishUtilityHeritage.ts",
+          "count": 1
+        },
+        {
+          "before": "No hidden prewarm.",
+          "after": "Inherited generic editor warmup remains part of fresh startup and is disclosed; no target-model prewarm.",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-surface-plan.mjs",
+      "target": "proposals/d090/native-surface-plan.mjs",
+      "sourceSha256": "c4b9cb18e1e3e42b83d1f01fb79d550bbc232a9f45477cc89fdbb47b4166062a",
+      "targetSha256": "da8fa032ad2f73b6941393d138f04acaa9fa4f8ceb82b12a5ba2f0cbb5c8454d",
+      "changes": [
+        {
+          "before": "d089",
+          "after": "d090",
+          "count": 1
+        },
+        {
+          "before": "britishMarketEstateModels",
+          "after": "britishUtilityHeritageModels",
+          "count": 1
+        },
+        {
+          "before": "native-camera-plan.json",
+          "after": "native-camera-plan-foundation-v2.json",
+          "count": 1,
+          "meaning": "Exact reviewed foundation source identity or explicit v2 plan file only; original assertion/threshold body retained"
+        }
+      ]
+    }
+  ]
+}

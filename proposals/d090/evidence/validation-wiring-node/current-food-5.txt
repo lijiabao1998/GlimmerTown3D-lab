@@ -1,0 +1,5 @@
+OK D055 native catalogue: seven food tools, 18 unchanged civic tools, 25 original facilities plus exact D083 eight and original sizes/prices 
+OK D055 preview and rejection: complete footprint, one charged root, no history/money changes, blocked last square and clipped map edge 
+OK D055 all seven native builds: one event, complete occupancy and tree/zone clearing, replay, full undo, reference demolition 
+OK D055 save/load/save/load: all seven root sizes/reference tiles and append-only history survive 
+OK D055 seasonal parity: 24 days per season, player-built seven facilities vs identical initially imported facilities season 0: 744 food / 24 days; season 1: 736 food / 24 days; season 2: 960 food / 24 days; season 3: 394 food / 24 days

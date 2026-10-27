@@ -1,0 +1,204 @@
+{
+  "qualification": "Focused native D083 functionality, immutable accepted art and the explicit12-triangle containment correction. Not historical-source, whole-frame budget, old D082 coverage, full CI or release acceptance.",
+  "complete": true,
+  "checks": [
+    {
+      "name": "append-only catalogue, eight tools, old rows and gallery coordinates retained",
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: required old kind 188\n    at appendD090Metadata (file:///tmp/GlimmerTown3D-lab-d090-own/tools/d090-kind-metadata-contract.mjs:8:10)\n    at checkedD090Predecessor (file:///tmp/GlimmerTown3D-lab-d090-own/tools/d090-kind-metadata-contract.mjs:15:26)\n    at assertD090PreD086KindMetadata (file:///tmp/GlimmerTown3D-lab-d090-own/tools/d090-kind-metadata-contract.mjs:27:276)\n    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d083/native-integration-check-d090.mjs:53:2\n    at check (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d083/native-integration-check-d090.mjs:51:41)\n    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d083/native-integration-check-d090.mjs:52:7"
+    },
+    {
+      "name": "immutable accepted source, finite12-triangle containment correction and exact native affine emission",
+      "passed": true
+    },
+    {
+      "name": "all130 previously accepted model byte pins retained",
+      "passed": true
+    },
+    {
+      "name": "every tile blocks roads, water, ruins, craters, buildings and foreign layers without partial writes",
+      "passed": true
+    },
+    {
+      "name": "insufficient funds, sandbox, tree surcharge, tech and transaction controls",
+      "passed": true
+    },
+    {
+      "name": "real commitOp places eight four-tile owned buildings; exact save/load/history replay",
+      "passed": true
+    },
+    {
+      "name": "native child-tile demolition and undo/refund restore complete footprints",
+      "passed": true
+    },
+    {
+      "name": "nine native days complete construction; regular scene owner attributes and raycast picking",
+      "passed": true
+    }
+  ],
+  "negativeControls": 113,
+  "blockedFootprintCases": 704,
+  "affineCases": 24,
+  "pickedOwners": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "oldAcceptedModelCases": 130,
+  "releasePrerequisite": "D082 remains blocked; old gates are unchanged.",
+  "nativeArtCorrection": {
+    "acceptedSourceSha256": "9f0e20ad062b2638e2f4f0b0de365664383a2e05f88f61f3421ba44b4bd8b7d8",
+    "nativeSourceSha256": "7f368677d4b3725493f8a3ea9633e31e40ab811ad25b88143eeeb9ae468493d3",
+    "changedGranaryTriangleIndices": [
+      788,
+      789,
+      790,
+      791,
+      792,
+      793,
+      794,
+      795,
+      796,
+      797,
+      798,
+      799
+    ],
+    "allOtherGranaryTrianglesExact": 1012,
+    "otherSevenModelsExact": true,
+    "noTriangleRemoved": true,
+    "noMaterialChanged": true,
+    "finiteArtConfirmation": "Sentinel_2b0f80763e308191aaf466520dc9a728"
+  },
+  "buildings": [
+    {
+      "id": 1,
+      "k": 187,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 3,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 2,
+      "k": 188,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 9,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 3,
+      "k": 189,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 15,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 4,
+      "k": 190,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 21,
+      "z": 4,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 5,
+      "k": 191,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 3,
+      "z": 12,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 6,
+      "k": 192,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 9,
+      "z": 12,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 7,
+      "k": 193,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 15,
+      "z": 12,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    },
+    {
+      "id": 8,
+      "k": 194,
+      "lv": 1,
+      "v": 0,
+      "age": 0,
+      "x": 21,
+      "z": 12,
+      "size": 2,
+      "abandoned": false,
+      "builtDay": 0
+    }
+  ],
+  "placeEvents": 8,
+  "nativeSceneMeshStats": [
+    {
+      "name": "ground",
+      "tris": 2048,
+      "shadow": false
+    },
+    {
+      "name": "cliff",
+      "tris": 256,
+      "shadow": false
+    },
+    {
+      "name": "walls",
+      "tris": 0,
+      "shadow": true
+    },
+    {
+      "name": "other",
+      "tris": 6960,
+      "shadow": true
+    }
+  ],
+  "construction": {
+    "normalOwnedAttributes": true,
+    "noClip": 0,
+    "completedAfterNativeDays": 9
+  },
+  "passed": false
+}

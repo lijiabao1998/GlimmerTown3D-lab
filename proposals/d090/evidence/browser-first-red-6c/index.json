@@ -1,0 +1,121 @@
+{
+  "qualification": "Immutable actual first-red, not accepted. Broader foundation prototype observations do not turn original images into successor evidence.",
+  "head": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "tree": "94fcfd2c09a34bd2451351f23c3cb136e550fe5d",
+  "ciCheckout": "3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+  "run": 40344412536,
+  "runUrl": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40344412536",
+  "files": [
+    {
+      "file": "native-game412-first-red.txt",
+      "bytes": 51466,
+      "sha256": "50801790c5286d09229327bb29da67c50a21389344e1457bad488046feae4e31"
+    },
+    {
+      "file": "native-game1440-first-red.txt",
+      "bytes": 51632,
+      "sha256": "01f4b586c442890bd4773bea96fc92a02f974a934ef84e7f2ea0ebf8961cae57"
+    },
+    {
+      "file": "first-red-observation.json",
+      "bytes": 3506,
+      "sha256": "6125ddd5def8fabb5ef18c461c7bbbdea20859dcf2a0b9b0b5a9f0b2a9a2a5a6"
+    },
+    {
+      "file": "castle-696.json",
+      "bytes": 987228,
+      "sha256": "712c934b9e76f020da9258d9fe9e9b9c1dbb925c73fe9a7a7631529de80abe64"
+    },
+    {
+      "file": "foundation-contract-delta.json",
+      "bytes": 547566,
+      "sha256": "4497161b1d83524233a12038b8c8f5d93b9b9275dbf3b605f5394c73e10217a4"
+    },
+    {
+      "file": "foundation-form-delta.json",
+      "bytes": 1395,
+      "sha256": "b64530e24cdf22d13ca7a77cce00db5170124b6cb9b7bd8b86a27bebf0fbb5e4"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12662515136,
+      "name": "d090-native-first-use-360-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 61076,
+      "digest": "sha256:5fb40848a22617d1e843260d831b0579418d80544c79ef98b9329d57b7817db4"
+    },
+    {
+      "id": 12661990626,
+      "name": "d090-native-first-use-412-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 61304,
+      "digest": "sha256:e56eaa1d9d79c56a4563f2985824d2df0615f464871e50be0ea72399613aac97"
+    },
+    {
+      "id": 12661780419,
+      "name": "d090-native-startup-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 3687,
+      "digest": "sha256:532765c0eb370ccda04b0ca4ea8e728e64d417ee7bc5b260e29a0d5c11e0071d"
+    },
+    {
+      "id": 12661780237,
+      "name": "d090-native-startup-412-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 3645,
+      "digest": "sha256:2beca33e4001db92396a22799c0dd61d4cad1066ae0a425a81c1b98ee7afed28"
+    },
+    {
+      "id": 12661512504,
+      "name": "d090-native-game-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 14122992,
+      "digest": "sha256:22d8817c58a8aa5873f337c175173ed54fde4232165294c48bfe24fc9f3a5bc2"
+    },
+    {
+      "id": 12660812821,
+      "name": "d090-native-node-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 2086570,
+      "digest": "sha256:2520ead74f531973b45cdaa85e99e36522c497e16b8de2cabc920a5ed1c2a5af"
+    },
+    {
+      "id": 12660603978,
+      "name": "d090-native-first-use-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 60938,
+      "digest": "sha256:00996265ec961c96904995795b07ccfc3e1db9c96755e718a2036c00857df41f"
+    },
+    {
+      "id": 12660528548,
+      "name": "d090-native-surfaces-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 14312893,
+      "digest": "sha256:a0c67a4bd12cffb54c27c9a77f0a9325b0a0ce045d35f63e30867c8dbd07743c"
+    },
+    {
+      "id": 12660454061,
+      "name": "d090-native-game-360-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 12846327,
+      "digest": "sha256:b1d24e559a7bb4bfb8ac8c8744d40a6076b578ecee9352ad5a96cc783deb5992"
+    },
+    {
+      "id": 12660398922,
+      "name": "d090-native-startup-360-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 3636,
+      "digest": "sha256:9ef68ad66ed190a8ebc7c32d0297c874c633348c16cc54f4532eddd5d6fdec9f"
+    },
+    {
+      "id": 12660184623,
+      "name": "d090-native-game-412-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 9859525,
+      "digest": "sha256:4e5bc399a5d80443c5ea8c38c2f3fc05c895af4bd27a8a5f2fdba63dc6f32d05"
+    },
+    {
+      "id": 12659763894,
+      "name": "d090-native-build-3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+      "bytes": 2003521,
+      "digest": "sha256:d10a28701793ecb7bda6c4bd1f700dd468106e1caa67a79fb9cdbfc860197e52"
+    }
+  ],
+  "originalSources": {
+    "authority": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+    "cached": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+    "sourceLease": "206865ab94b09267fc5365b155861c631971901da24d7088b37c6bc06861a5db",
+    "cameraPlan": "cb97797b8b60fa1b67a4bf48ca09670b661389f5fc36dc3d22e78c057dd478c0"
+  },
+  "retention": "All original ZIP/PNG/manifest/full-array/contracts and review receipts retained locally and in the original CI artifact. Original source/test/workflow tree remains immutable at6c; no assertion or evidence overwritten."
+}

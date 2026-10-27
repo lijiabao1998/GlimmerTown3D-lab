@@ -1,0 +1,14 @@
+OK D053 native click origin and cleanup safety real origin guard: old canvas release rejected, native UI/keyboard/canvas click retained, two pointers, cancel, lifetime cleanup, reused-ID race; 3 mutations rejected
+OK D053 25-tool metadata (18 original civic), base cost and all rank/mode locks 18 unchanged civic + 7 food tools × 26 levels × 2 modes; original names, IDs, costs, groups, units and selection locks
+OK D053 rank presentation versus untouched authoritative ladder all 26 original rank records unchanged; unavailable Lv.6/8/12/17 qualified; Lv.22 actual; Lv.26 honor verbatim
+OK D053 actual promotion notification truth actual simDay promotion toast loop qualifies four unavailable milestones, actual Lv.22 and unchanged Lv.26
+OK D053 deep read-only helper queries 16 rank/mode states: full model, exact save bytes, RNG calls and all imported definitions unchanged
+OK D053 placement and cost claims match real preview rules all 18 original civic tools checked against actual preview: base/tree/tech/spec/sandbox price; land/road/building/ruin/crater; pipe reuse; oil/ore; sewage 0/1/2 water; 3×3 footprint
+OK D053 uninterrupted model/report/save/RNG control trajectories 36 uninterrupted paired days across buildable, active-research high-rank and sandbox cities; exact reports/model/save/RNG
+OK D053 actual catalog module state and held control lifecycle actual catalog: 86 rows (original25 plus exact D083 eight, D086ten, D087eleven, D088eleven, D089eleven and D090ten), group counts, rank lock, identity/focus/scroll, latest held-day presentation, single release, cancel/reset and callbacks
+OK D053 actual growth panel and visible refresh integration actual rank/open/catalog/syncUi: 8 retained-rank states; 0/50/100% clamps; live visible-only refresh; held presentation; close/pagehide; no pause/save/history/RNG
+OK D053 actual city selection, placement and undo integration 25 shipped pickCivic→setTool→commitStroke paired against original commitOp/undo; 8 rank/mode locks; tap drag cancellation
+OK D053 behavior mutation sensitivity 24 valid helper/catalog/action/growth/toast mutations rejected by behavioral assertions
+11 behavioral checks pass; originalScope remains unqualified locally after separate137 kill and mandatory in official full partition.
+(node:5) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

@@ -1,3 +1,6 @@
+// D090-BEGIN utility-heritage-import
+import { drawBritishUtilityHeritage } from './britishUtilityHeritageArt.ts';
+// D090-END utility-heritage-import
 // D089-BEGIN market-estate-import
 import { drawBritishMarketEstate } from './britishMarketEstateArt.ts';
 // D089-END market-estate-import
@@ -811,6 +814,9 @@ const LANDMARKS: Record<string, (p: Pen) => void> = {
 export function drawKind(a: KindCtx, shape: Shape | null): Set<string> {
   const b = shape ? BUILDERS[shape.type] : null;
   USED = new Set();
+  // D090-BEGIN utility-heritage-dispatch
+  if (shape?.p?.nativeUtilityHeritage === true && drawBritishUtilityHeritage(new Pen(a))) { const result=USED; USED=null; return result; }
+  // D090-END utility-heritage-dispatch
   // D089-BEGIN market-estate-dispatch
   if (shape?.p?.nativeMarketEstates === true && drawBritishMarketEstate(new Pen(a))) { const result=USED; USED=null; return result; }
   // D089-END market-estate-dispatch

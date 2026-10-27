@@ -1,0 +1,3003 @@
+{
+  "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "accepted": false,
+  "models": [
+    {
+      "id": "castellated-tank-water-tower",
+      "triangles": 492,
+      "weighted": 984,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "battered-enclosed-reservoir-shaft",
+            "volume": 0.18061666666666665,
+            "edges": 30
+          },
+          {
+            "name": "grounded-corner-buttress-0.25-0.25",
+            "volume": 0.01107708333333334,
+            "edges": 18
+          },
+          {
+            "name": "grounded-corner-buttress-0.75-0.25",
+            "volume": 0.01107708333333334,
+            "edges": 18
+          },
+          {
+            "name": "grounded-corner-buttress-0.25-0.75",
+            "volume": 0.011077083333333355,
+            "edges": 18
+          },
+          {
+            "name": "grounded-corner-buttress-0.75-0.75",
+            "volume": 0.011077083333333333,
+            "edges": 18
+          },
+          {
+            "name": "north-integral-crenellated-wall",
+            "volume": 0.017204999999999977,
+            "edges": 192
+          },
+          {
+            "name": "south-integral-crenellated-wall",
+            "volume": 0.01720499999999994,
+            "edges": 192
+          },
+          {
+            "name": "west-integral-crenellated-wall",
+            "volume": 0.014879999999999984,
+            "edges": 102
+          },
+          {
+            "name": "east-integral-crenellated-wall",
+            "volume": 0.014879999999999996,
+            "edges": 102
+          },
+          {
+            "name": "grounded-front-valve-vestibule",
+            "volume": 0.007472666666666672,
+            "edges": 48
+          }
+        ],
+        "negativeControls": 30
+      },
+      "structure": {
+        "id": "castellated-tank-water-tower",
+        "solids": 10,
+        "triangles": 492,
+        "negativeControls": 1014
+      },
+      "access": {
+        "model": "castellated-tank-water-tower",
+        "doors": 1,
+        "records": [
+          {
+            "index": 0,
+            "host": "grounded-front-valve-vestibule",
+            "width": 0.14999999999999997,
+            "height": 0.28,
+            "center": [
+              0.5,
+              0.84
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.5,
+                0.84
+              ],
+              [
+                0.5,
+                0.9199999999999999
+              ],
+              [
+                0.5,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.42500000000000004,
+                  0.84
+                ],
+                [
+                  0.42500000000000004,
+                  0.9199999999999999
+                ],
+                [
+                  0.575,
+                  0.9199999999999999
+                ],
+                [
+                  0.575,
+                  0.84
+                ]
+              ],
+              [
+                [
+                  0.42500000000000004,
+                  0.9199999999999999
+                ],
+                [
+                  0.42500000000000004,
+                  1
+                ],
+                [
+                  0.575,
+                  1
+                ],
+                [
+                  0.575,
+                  0.9199999999999999
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "castellated-tank-water-tower",
+        "intents": 21,
+        "samples": 63,
+        "paintedFaces": 5,
+        "paintTriangles": 270
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 78,
+        "exposed": []
+      }
+    },
+    {
+      "id": "tapered-circular-reservoir-tower",
+      "triangles": 230,
+      "weighted": 460,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "continuous-shaft-bearing-cone-and-reservoir",
+            "volume": 0.11811081427742424,
+            "edges": 237
+          },
+          {
+            "name": "grounded-valve-room",
+            "volume": 0.008321490196078436,
+            "edges": 108
+          }
+        ],
+        "negativeControls": 6
+      },
+      "structure": {
+        "id": "tapered-circular-reservoir-tower",
+        "solids": 2,
+        "triangles": 230,
+        "negativeControls": 466
+      },
+      "access": {
+        "model": "tapered-circular-reservoir-tower",
+        "doors": 1,
+        "records": [
+          {
+            "index": 0,
+            "host": "grounded-valve-room",
+            "width": 0.14,
+            "height": 0.17,
+            "center": [
+              0.46,
+              0.8
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.46,
+                0.8
+              ],
+              [
+                0.46,
+                0.88
+              ],
+              [
+                0.46,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.39,
+                  0.8
+                ],
+                [
+                  0.39,
+                  0.88
+                ],
+                [
+                  0.53,
+                  0.88
+                ],
+                [
+                  0.53,
+                  0.8
+                ]
+              ],
+              [
+                [
+                  0.39,
+                  0.88
+                ],
+                [
+                  0.39,
+                  1
+                ],
+                [
+                  0.53,
+                  1
+                ],
+                [
+                  0.53,
+                  0.88
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "tapered-circular-reservoir-tower",
+        "intents": 15,
+        "samples": 35,
+        "paintedFaces": 7,
+        "paintTriangles": 96
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 41,
+        "exposed": []
+      }
+    },
+    {
+      "id": "romanesque-sewage-engine-house",
+      "triangles": 480,
+      "weighted": 960,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "tall-transverse-engine-hall",
+            "volume": 0.142241403233721,
+            "edges": 474
+          },
+          {
+            "name": "long-low-rear-boiler-range",
+            "volume": 0.025847619047619046,
+            "edges": 126
+          },
+          {
+            "name": "grounded-round-boiler-flue",
+            "volume": 0.005550003150529126,
+            "edges": 90
+          },
+          {
+            "name": "separate-settling-rectangle",
+            "volume": 0.002485714285714286,
+            "edges": 30
+          }
+        ],
+        "negativeControls": 12
+      },
+      "structure": {
+        "id": "romanesque-sewage-engine-house",
+        "solids": 4,
+        "triangles": 480,
+        "negativeControls": 972
+      },
+      "access": {
+        "model": "romanesque-sewage-engine-house",
+        "doors": 2,
+        "records": [
+          {
+            "index": 0,
+            "host": "tall-transverse-engine-hall",
+            "width": 0.21999999999999997,
+            "height": 0.28,
+            "center": [
+              0.36,
+              0.8
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.36,
+                0.8
+              ],
+              [
+                0.36,
+                0.88
+              ],
+              [
+                0.36,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.25,
+                  0.8
+                ],
+                [
+                  0.25,
+                  0.88
+                ],
+                [
+                  0.47,
+                  0.88
+                ],
+                [
+                  0.47,
+                  0.8
+                ]
+              ],
+              [
+                [
+                  0.25,
+                  0.88
+                ],
+                [
+                  0.25,
+                  1
+                ],
+                [
+                  0.47,
+                  1
+                ],
+                [
+                  0.47,
+                  0.88
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "long-low-rear-boiler-range",
+            "width": 0.14,
+            "height": 0.2,
+            "center": [
+              0.76,
+              0.33
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "points": [
+              [
+                0.76,
+                0.33
+              ],
+              [
+                0.84,
+                0.33
+              ],
+              [
+                1,
+                0.33
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.76,
+                  0.4
+                ],
+                [
+                  0.84,
+                  0.4
+                ],
+                [
+                  0.84,
+                  0.26
+                ],
+                [
+                  0.76,
+                  0.26
+                ]
+              ],
+              [
+                [
+                  0.84,
+                  0.4
+                ],
+                [
+                  1,
+                  0.4
+                ],
+                [
+                  1,
+                  0.26
+                ],
+                [
+                  0.84,
+                  0.26
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "romanesque-sewage-engine-house",
+        "intents": 31,
+        "samples": 97,
+        "paintedFaces": 8,
+        "paintTriangles": 374
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 34,
+        "exposed": []
+      }
+    },
+    {
+      "id": "circular-filterworks-and-valve-hall",
+      "triangles": 328,
+      "weighted": 656,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "occupied-trapezoidal-valve-hall",
+            "volume": 0.13685746835443036,
+            "edges": 270
+          },
+          {
+            "name": "connected-low-testing-room",
+            "volume": 0.00863076923076923,
+            "edges": 42
+          },
+          {
+            "name": "west-shallow-filter-bed",
+            "volume": 0.004768824311011119,
+            "edges": 90
+          },
+          {
+            "name": "east-shallow-filter-bed",
+            "volume": 0.00991915456690312,
+            "edges": 90
+          }
+        ],
+        "negativeControls": 12
+      },
+      "structure": {
+        "id": "circular-filterworks-and-valve-hall",
+        "solids": 4,
+        "triangles": 328,
+        "negativeControls": 668
+      },
+      "access": {
+        "model": "circular-filterworks-and-valve-hall",
+        "doors": 2,
+        "records": [
+          {
+            "index": 0,
+            "host": "occupied-trapezoidal-valve-hall",
+            "width": 0.1400000000000001,
+            "height": 0.21999999999999997,
+            "center": [
+              0.8,
+              0.7000000000000001
+            ],
+            "direction": [
+              0.853281833651959,
+              -0.5214500094539749
+            ],
+            "points": [
+              [
+                0.8,
+                0.7000000000000001
+              ],
+              [
+                0.8682625466921567,
+                0.6582839992436821
+              ],
+              [
+                1,
+                0.5777777777777778
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.8365015006617783,
+                  0.7597297283556372
+                ],
+                [
+                  0.904764047353935,
+                  0.7180137275993193
+                ],
+                [
+                  0.8317610460303785,
+                  0.5985542708880449
+                ],
+                [
+                  0.7634984993382218,
+                  0.6402702716443629
+                ]
+              ],
+              [
+                [
+                  0.904764047353935,
+                  0.7180137275993193
+                ],
+                [
+                  1.0365015006617784,
+                  0.637507506133415
+                ],
+                [
+                  0.9634984993382217,
+                  0.5180480494221407
+                ],
+                [
+                  0.8317610460303785,
+                  0.5985542708880449
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "connected-low-testing-room",
+            "width": 0.1399999999999999,
+            "height": 0.18,
+            "center": [
+              0.04,
+              0.735
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "points": [
+              [
+                0.04,
+                0.735
+              ],
+              [
+                0,
+                0.735
+              ],
+              [
+                0,
+                0.735
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.04,
+                  0.665
+                ],
+                [
+                  0,
+                  0.665
+                ],
+                [
+                  0,
+                  0.8049999999999999
+                ],
+                [
+                  0.04,
+                  0.8049999999999999
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "circular-filterworks-and-valve-hall",
+        "intents": 24,
+        "samples": 40,
+        "paintedFaces": 4,
+        "paintTriangles": 182
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 6,
+        "exposed": []
+      }
+    },
+    {
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "triangles": 466,
+      "weighted": 932,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "axial-nave",
+            "volume": 0.06423333333333342,
+            "edges": 258
+          },
+          {
+            "name": "north-chancel-conch",
+            "volume": 0.021432009715809452,
+            "edges": 123
+          },
+          {
+            "name": "west-chancel-conch",
+            "volume": 0.017866728653068233,
+            "edges": 123
+          },
+          {
+            "name": "east-chancel-conch",
+            "volume": 0.018090062761231596,
+            "edges": 123
+          },
+          {
+            "name": "grounded-grave-0.1-0.62",
+            "volume": 0.00015555555555555575,
+            "edges": 18
+          },
+          {
+            "name": "grounded-grave-0.1-0.79",
+            "volume": 0.00015555555555555564,
+            "edges": 18
+          },
+          {
+            "name": "grounded-grave-0.86-0.62",
+            "volume": 0.0001555555555555556,
+            "edges": 18
+          },
+          {
+            "name": "grounded-grave-0.86-0.79",
+            "volume": 0.00015555555555555548,
+            "edges": 18
+          }
+        ],
+        "negativeControls": 24
+      },
+      "structure": {
+        "id": "trefoil-apsed-mortuary-cemetery-chapel",
+        "solids": 8,
+        "triangles": 466,
+        "negativeControls": 956
+      },
+      "access": {
+        "model": "trefoil-apsed-mortuary-cemetery-chapel",
+        "doors": 1,
+        "records": [
+          {
+            "index": 0,
+            "host": "axial-nave",
+            "width": 0.14999999999999997,
+            "height": 0.22999999999999998,
+            "center": [
+              0.5,
+              0.79
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.5,
+                0.79
+              ],
+              [
+                0.5,
+                0.87
+              ],
+              [
+                0.5,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.42500000000000004,
+                  0.79
+                ],
+                [
+                  0.42500000000000004,
+                  0.87
+                ],
+                [
+                  0.575,
+                  0.87
+                ],
+                [
+                  0.575,
+                  0.79
+                ]
+              ],
+              [
+                [
+                  0.42500000000000004,
+                  0.87
+                ],
+                [
+                  0.42500000000000004,
+                  1
+                ],
+                [
+                  0.575,
+                  1
+                ],
+                [
+                  0.575,
+                  0.87
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "trefoil-apsed-mortuary-cemetery-chapel",
+        "intents": 25,
+        "samples": 93,
+        "paintedFaces": 9,
+        "paintTriangles": 339
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 63,
+        "exposed": []
+      }
+    },
+    {
+      "id": "lectern-estate-doocot",
+      "triangles": 292,
+      "weighted": 584,
+      "cap": 1800,
+      "closure": {
+        "solids": [
+          {
+            "name": "two-chamber-lectern-body",
+            "volume": 0.18875999999999998,
+            "edges": 282
+          },
+          {
+            "name": "west-grounded-crowstep-wall",
+            "volume": 0.0136512,
+            "edges": 78
+          },
+          {
+            "name": "east-grounded-crowstep-wall",
+            "volume": 0.013651199999999988,
+            "edges": 78
+          }
+        ],
+        "negativeControls": 9
+      },
+      "structure": {
+        "id": "lectern-estate-doocot",
+        "solids": 3,
+        "triangles": 292,
+        "negativeControls": 593
+      },
+      "access": {
+        "model": "lectern-estate-doocot",
+        "doors": 2,
+        "records": [
+          {
+            "index": 0,
+            "host": "two-chamber-lectern-body",
+            "width": 0.15000000000000002,
+            "height": 0.27,
+            "center": [
+              0.33,
+              0.74
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.33,
+                0.74
+              ],
+              [
+                0.33,
+                0.82
+              ],
+              [
+                0.33,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.255,
+                  0.74
+                ],
+                [
+                  0.255,
+                  0.82
+                ],
+                [
+                  0.405,
+                  0.82
+                ],
+                [
+                  0.405,
+                  0.74
+                ]
+              ],
+              [
+                [
+                  0.255,
+                  0.82
+                ],
+                [
+                  0.255,
+                  1
+                ],
+                [
+                  0.405,
+                  1
+                ],
+                [
+                  0.405,
+                  0.82
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "two-chamber-lectern-body",
+            "width": 0.1499999999999999,
+            "height": 0.27,
+            "center": [
+              0.67,
+              0.74
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.67,
+                0.74
+              ],
+              [
+                0.67,
+                0.82
+              ],
+              [
+                0.67,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.5950000000000001,
+                  0.74
+                ],
+                [
+                  0.5950000000000001,
+                  0.82
+                ],
+                [
+                  0.745,
+                  0.82
+                ],
+                [
+                  0.745,
+                  0.74
+                ]
+              ],
+              [
+                [
+                  0.5950000000000001,
+                  0.82
+                ],
+                [
+                  0.5950000000000001,
+                  1
+                ],
+                [
+                  0.745,
+                  1
+                ],
+                [
+                  0.745,
+                  0.82
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "lectern-estate-doocot",
+        "intents": 24,
+        "samples": 20,
+        "paintedFaces": 3,
+        "paintTriangles": 174
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 24,
+        "exposed": []
+      }
+    },
+    {
+      "id": "canted-t-plan-turnpike-lodge",
+      "triangles": 260,
+      "weighted": 520,
+      "cap": 1800,
+      "closure": {
+        "solids": [
+          {
+            "name": "crosswise-hipped-main-range",
+            "volume": 0.10349004444444448,
+            "edges": 228
+          },
+          {
+            "name": "occupied-canted-observation-arm",
+            "volume": 0.05198814814814813,
+            "edges": 120
+          },
+          {
+            "name": "grounded-rear-chimney-breast",
+            "volume": 0.021182222222222224,
+            "edges": 42
+          }
+        ],
+        "negativeControls": 9
+      },
+      "structure": {
+        "id": "canted-t-plan-turnpike-lodge",
+        "solids": 3,
+        "triangles": 260,
+        "negativeControls": 529
+      },
+      "access": {
+        "model": "canted-t-plan-turnpike-lodge",
+        "doors": 2,
+        "records": [
+          {
+            "index": 0,
+            "host": "occupied-canted-observation-arm",
+            "width": 0.13999999999999999,
+            "height": 0.22,
+            "center": [
+              0.615,
+              0.76
+            ],
+            "direction": [
+              0.8715755371245487,
+              0.4902612396325597
+            ],
+            "points": [
+              [
+                0.615,
+                0.76
+              ],
+              [
+                0.7195890644549459,
+                0.8188313487559071
+              ],
+              [
+                0.76,
+                0.92
+              ],
+              [
+                0.76,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.5806817132257208,
+                  0.8210102875987184
+                ],
+                [
+                  0.6852707776806667,
+                  0.8798416363546255
+                ],
+                [
+                  0.753907351229225,
+                  0.7578210611571887
+                ],
+                [
+                  0.6493182867742792,
+                  0.6989897124012816
+                ]
+              ],
+              [
+                [
+                  0.6545831794657143,
+                  0.8447973826611226
+                ],
+                [
+                  0.6949941150107685,
+                  0.9459660339052155
+                ],
+                [
+                  0.8250058849892316,
+                  0.8940339660947846
+                ],
+                [
+                  0.7845949494441774,
+                  0.7928653148506917
+                ]
+              ],
+              [
+                [
+                  0.6495890644549459,
+                  0.7488313487559072
+                ],
+                [
+                  0.7895890644549458,
+                  0.7488313487559072
+                ],
+                [
+                  0.7895890644549458,
+                  0.8888313487559071
+                ],
+                [
+                  0.6495890644549459,
+                  0.8888313487559071
+                ]
+              ],
+              [
+                [
+                  0.6900000000000001,
+                  0.92
+                ],
+                [
+                  0.6900000000000001,
+                  1
+                ],
+                [
+                  0.83,
+                  1
+                ],
+                [
+                  0.83,
+                  0.92
+                ]
+              ],
+              [
+                [
+                  0.6900000000000001,
+                  0.8500000000000001
+                ],
+                [
+                  0.83,
+                  0.8500000000000001
+                ],
+                [
+                  0.83,
+                  0.99
+                ],
+                [
+                  0.6900000000000001,
+                  0.99
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "crosswise-hipped-main-range",
+            "width": 0.14,
+            "height": 0.24,
+            "center": [
+              0.12,
+              0.34
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "points": [
+              [
+                0.12,
+                0.34
+              ],
+              [
+                0.039999999999999994,
+                0.34
+              ],
+              [
+                0,
+                0.34
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.12,
+                  0.27
+                ],
+                [
+                  0.039999999999999994,
+                  0.27
+                ],
+                [
+                  0.039999999999999994,
+                  0.41000000000000003
+                ],
+                [
+                  0.12,
+                  0.41000000000000003
+                ]
+              ],
+              [
+                [
+                  0.039999999999999994,
+                  0.27
+                ],
+                [
+                  0,
+                  0.27
+                ],
+                [
+                  0,
+                  0.41000000000000003
+                ],
+                [
+                  0.039999999999999994,
+                  0.41000000000000003
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "canted-t-plan-turnpike-lodge",
+        "intents": 27,
+        "samples": 45,
+        "paintedFaces": 7,
+        "paintTriangles": 196
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 12,
+        "exposed": []
+      }
+    },
+    {
+      "id": "cruciform-village-forge",
+      "triangles": 308,
+      "weighted": 616,
+      "cap": 1800,
+      "closure": {
+        "solids": [
+          {
+            "name": "dominant-hearth-and-flue-core",
+            "volume": 0.04976,
+            "edges": 54
+          },
+          {
+            "name": "front-working-arm",
+            "volume": 0.02747249999999999,
+            "edges": 96
+          },
+          {
+            "name": "west-working-arm",
+            "volume": 0.016799999999999995,
+            "edges": 108
+          },
+          {
+            "name": "east-working-arm",
+            "volume": 0.012454166666666667,
+            "edges": 108
+          },
+          {
+            "name": "short-rear-working-arm",
+            "volume": 0.016426666666666666,
+            "edges": 96
+          }
+        ],
+        "negativeControls": 15
+      },
+      "structure": {
+        "id": "cruciform-village-forge",
+        "solids": 5,
+        "triangles": 308,
+        "negativeControls": 631
+      },
+      "access": {
+        "model": "cruciform-village-forge",
+        "doors": 4,
+        "records": [
+          {
+            "index": 0,
+            "host": "front-working-arm",
+            "width": 0.14000000000000007,
+            "height": 0.22,
+            "center": [
+              0.5,
+              0.91
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.5,
+                0.91
+              ],
+              [
+                0.5,
+                0.99
+              ],
+              [
+                0.5,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.42999999999999994,
+                  0.91
+                ],
+                [
+                  0.42999999999999994,
+                  0.99
+                ],
+                [
+                  0.5700000000000001,
+                  0.99
+                ],
+                [
+                  0.5700000000000001,
+                  0.91
+                ]
+              ],
+              [
+                [
+                  0.42999999999999994,
+                  0.99
+                ],
+                [
+                  0.42999999999999994,
+                  1
+                ],
+                [
+                  0.5700000000000001,
+                  1
+                ],
+                [
+                  0.5700000000000001,
+                  0.99
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "west-working-arm",
+            "width": 0.10000000000000003,
+            "height": 0.2,
+            "center": [
+              0.09,
+              0.47
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "points": [
+              [
+                0.09,
+                0.47
+              ],
+              [
+                0.009999999999999995,
+                0.47
+              ],
+              [
+                0,
+                0.47
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.09,
+                  0.41999999999999993
+                ],
+                [
+                  0.009999999999999995,
+                  0.41999999999999993
+                ],
+                [
+                  0.009999999999999995,
+                  0.52
+                ],
+                [
+                  0.09,
+                  0.52
+                ]
+              ],
+              [
+                [
+                  0.009999999999999995,
+                  0.41999999999999993
+                ],
+                [
+                  0,
+                  0.41999999999999993
+                ],
+                [
+                  0,
+                  0.52
+                ],
+                [
+                  0.009999999999999995,
+                  0.52
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 2,
+            "host": "east-working-arm",
+            "width": 0.09000000000000002,
+            "height": 0.18,
+            "center": [
+              0.91,
+              0.47
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "points": [
+              [
+                0.91,
+                0.47
+              ],
+              [
+                0.99,
+                0.47
+              ],
+              [
+                1,
+                0.47
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.91,
+                  0.515
+                ],
+                [
+                  0.99,
+                  0.515
+                ],
+                [
+                  0.99,
+                  0.42499999999999993
+                ],
+                [
+                  0.91,
+                  0.42499999999999993
+                ]
+              ],
+              [
+                [
+                  0.99,
+                  0.515
+                ],
+                [
+                  1,
+                  0.515
+                ],
+                [
+                  1,
+                  0.42499999999999993
+                ],
+                [
+                  0.99,
+                  0.42499999999999993
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 3,
+            "host": "short-rear-working-arm",
+            "width": 0.10000000000000003,
+            "height": 0.23,
+            "center": [
+              0.5,
+              0.12
+            ],
+            "direction": [
+              0,
+              -1
+            ],
+            "points": [
+              [
+                0.5,
+                0.12
+              ],
+              [
+                0.5,
+                0.039999999999999994
+              ],
+              [
+                0.5,
+                0
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.55,
+                  0.12
+                ],
+                [
+                  0.55,
+                  0.039999999999999994
+                ],
+                [
+                  0.44999999999999996,
+                  0.039999999999999994
+                ],
+                [
+                  0.44999999999999996,
+                  0.12
+                ]
+              ],
+              [
+                [
+                  0.55,
+                  0.039999999999999994
+                ],
+                [
+                  0.55,
+                  0
+                ],
+                [
+                  0.44999999999999996,
+                  0
+                ],
+                [
+                  0.44999999999999996,
+                  0.039999999999999994
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "cruciform-village-forge",
+        "intents": 29,
+        "samples": 60,
+        "paintedFaces": 13,
+        "paintTriangles": 226
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 60,
+        "exposed": []
+      }
+    },
+    {
+      "id": "segmental-roof-rural-firehouse",
+      "triangles": 348,
+      "weighted": 696,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "broad-single-appliance-hall",
+            "volume": 0.15207057952235997,
+            "edges": 276
+          },
+          {
+            "name": "occupied-inward-stepped-hose-stair-block",
+            "volume": 0.038556521739130475,
+            "edges": 174
+          },
+          {
+            "name": "low-front-watch-room",
+            "volume": 0.014369634782608698,
+            "edges": 72
+          }
+        ],
+        "negativeControls": 9
+      },
+      "structure": {
+        "id": "segmental-roof-rural-firehouse",
+        "solids": 3,
+        "triangles": 348,
+        "negativeControls": 705
+      },
+      "access": {
+        "model": "segmental-roof-rural-firehouse",
+        "doors": 3,
+        "records": [
+          {
+            "index": 0,
+            "host": "broad-single-appliance-hall",
+            "width": 0.4000000000000001,
+            "height": 0.27,
+            "center": [
+              0.38,
+              0.88
+            ],
+            "direction": [
+              0,
+              1
+            ],
+            "points": [
+              [
+                0.38,
+                0.88
+              ],
+              [
+                0.38,
+                0.96
+              ],
+              [
+                0.38,
+                1
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.17999999999999997,
+                  0.88
+                ],
+                [
+                  0.17999999999999997,
+                  0.96
+                ],
+                [
+                  0.5800000000000001,
+                  0.96
+                ],
+                [
+                  0.5800000000000001,
+                  0.88
+                ]
+              ],
+              [
+                [
+                  0.17999999999999997,
+                  0.96
+                ],
+                [
+                  0.17999999999999997,
+                  1
+                ],
+                [
+                  0.5800000000000001,
+                  1
+                ],
+                [
+                  0.5800000000000001,
+                  0.96
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "low-front-watch-room",
+            "width": 0.14000000000000012,
+            "height": 0.17000000000000004,
+            "center": [
+              0.91,
+              0.73
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "points": [
+              [
+                0.91,
+                0.73
+              ],
+              [
+                0.99,
+                0.73
+              ],
+              [
+                1,
+                0.73
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.91,
+                  0.8
+                ],
+                [
+                  0.99,
+                  0.8
+                ],
+                [
+                  0.99,
+                  0.6599999999999999
+                ],
+                [
+                  0.91,
+                  0.6599999999999999
+                ]
+              ],
+              [
+                [
+                  0.99,
+                  0.8
+                ],
+                [
+                  1,
+                  0.8
+                ],
+                [
+                  1,
+                  0.6599999999999999
+                ],
+                [
+                  0.99,
+                  0.6599999999999999
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 2,
+            "host": "occupied-inward-stepped-hose-stair-block",
+            "width": 0.14000000000000012,
+            "height": 0.27,
+            "center": [
+              0.76,
+              0.12
+            ],
+            "direction": [
+              0,
+              -1
+            ],
+            "points": [
+              [
+                0.76,
+                0.12
+              ],
+              [
+                0.76,
+                0.039999999999999994
+              ],
+              [
+                0.76,
+                0
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.8300000000000001,
+                  0.12
+                ],
+                [
+                  0.8300000000000001,
+                  0.039999999999999994
+                ],
+                [
+                  0.69,
+                  0.039999999999999994
+                ],
+                [
+                  0.69,
+                  0.12
+                ]
+              ],
+              [
+                [
+                  0.8300000000000001,
+                  0.039999999999999994
+                ],
+                [
+                  0.8300000000000001,
+                  0
+                ],
+                [
+                  0.69,
+                  0
+                ],
+                [
+                  0.69,
+                  0.039999999999999994
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "segmental-roof-rural-firehouse",
+        "intents": 32,
+        "samples": 60,
+        "paintedFaces": 10,
+        "paintTriangles": 264
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 10,
+        "exposed": []
+      }
+    },
+    {
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "triangles": 300,
+      "weighted": 600,
+      "cap": 1200,
+      "closure": {
+        "solids": [
+          {
+            "name": "large-hexagonal-saddle-reading-room",
+            "volume": 0.161199624,
+            "edges": 237
+          },
+          {
+            "name": "smaller-opposed-saddle-reading-room",
+            "volume": 0.07678975822222224,
+            "edges": 213
+          }
+        ],
+        "negativeControls": 6
+      },
+      "structure": {
+        "id": "paired-hexagonal-saddle-roof-reading-library",
+        "solids": 2,
+        "triangles": 300,
+        "negativeControls": 606
+      },
+      "access": {
+        "model": "paired-hexagonal-saddle-roof-reading-library",
+        "doors": 2,
+        "records": [
+          {
+            "index": 0,
+            "host": "large-hexagonal-saddle-reading-room",
+            "width": 0.16000000000000003,
+            "height": 0.24,
+            "center": [
+              0.08,
+              0.465
+            ],
+            "direction": [
+              -1,
+              0
+            ],
+            "points": [
+              [
+                0.08,
+                0.465
+              ],
+              [
+                0,
+                0.465
+              ],
+              [
+                0,
+                0.465
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.08,
+                  0.385
+                ],
+                [
+                  0,
+                  0.385
+                ],
+                [
+                  0,
+                  0.545
+                ],
+                [
+                  0.08,
+                  0.545
+                ]
+              ]
+            ],
+            "collisions": []
+          },
+          {
+            "index": 1,
+            "host": "smaller-opposed-saddle-reading-room",
+            "width": 0.1499999999999999,
+            "height": 0.2,
+            "center": [
+              0.92,
+              0.665
+            ],
+            "direction": [
+              1,
+              0
+            ],
+            "points": [
+              [
+                0.92,
+                0.665
+              ],
+              [
+                1,
+                0.665
+              ],
+              [
+                1,
+                0.665
+              ]
+            ],
+            "polygons": [
+              [
+                [
+                  0.92,
+                  0.74
+                ],
+                [
+                  1,
+                  0.74
+                ],
+                [
+                  1,
+                  0.5900000000000001
+                ],
+                [
+                  0.92,
+                  0.5900000000000001
+                ]
+              ]
+            ],
+            "collisions": []
+          }
+        ]
+      },
+      "facade": {
+        "id": "paired-hexagonal-saddle-roof-reading-library",
+        "intents": 37,
+        "samples": 65,
+        "paintedFaces": 9,
+        "paintTriangles": 262
+      },
+      "facadeNegatives": 9,
+      "coplanar": {
+        "overlaps": 6,
+        "exposed": []
+      }
+    }
+  ],
+  "passed": true,
+  "newNumericPlan": [
+    {
+      "name": "battered-enclosed-reservoir-shaft",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.2,
+              0,
+              0.2
+            ],
+            [
+              0.8,
+              0,
+              0.2
+            ],
+            [
+              0.8,
+              0,
+              0.8
+            ],
+            [
+              0.2,
+              0,
+              0.8
+            ]
+          ],
+          [
+            [
+              0.28,
+              0.35,
+              0.28
+            ],
+            [
+              0.72,
+              0.35,
+              0.28
+            ],
+            [
+              0.72,
+              0.35,
+              0.72
+            ],
+            [
+              0.28,
+              0.35,
+              0.72
+            ]
+          ],
+          [
+            [
+              0.28,
+              1.35,
+              0.28
+            ],
+            [
+              0.72,
+              1.35,
+              0.28
+            ],
+            [
+              0.72,
+              1.35,
+              0.72
+            ],
+            [
+              0.28,
+              1.35,
+              0.72
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.25-0.25",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.175,
+              0,
+              0.175
+            ],
+            [
+              0.325,
+              0,
+              0.175
+            ],
+            [
+              0.325,
+              0,
+              0.325
+            ],
+            [
+              0.175,
+              0,
+              0.325
+            ]
+          ],
+          [
+            [
+              0.21,
+              1.3,
+              0.21
+            ],
+            [
+              0.29,
+              1.3,
+              0.21
+            ],
+            [
+              0.29,
+              1.3,
+              0.29
+            ],
+            [
+              0.21,
+              1.3,
+              0.29
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.75-0.25",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.675,
+              0,
+              0.175
+            ],
+            [
+              0.825,
+              0,
+              0.175
+            ],
+            [
+              0.825,
+              0,
+              0.325
+            ],
+            [
+              0.675,
+              0,
+              0.325
+            ]
+          ],
+          [
+            [
+              0.71,
+              1.3,
+              0.21
+            ],
+            [
+              0.79,
+              1.3,
+              0.21
+            ],
+            [
+              0.79,
+              1.3,
+              0.29
+            ],
+            [
+              0.71,
+              1.3,
+              0.29
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.25-0.75",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.175,
+              0,
+              0.675
+            ],
+            [
+              0.325,
+              0,
+              0.675
+            ],
+            [
+              0.325,
+              0,
+              0.825
+            ],
+            [
+              0.175,
+              0,
+              0.825
+            ]
+          ],
+          [
+            [
+              0.21,
+              1.3,
+              0.71
+            ],
+            [
+              0.29,
+              1.3,
+              0.71
+            ],
+            [
+              0.29,
+              1.3,
+              0.79
+            ],
+            [
+              0.21,
+              1.3,
+              0.79
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.75-0.75",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.675,
+              0,
+              0.675
+            ],
+            [
+              0.825,
+              0,
+              0.675
+            ],
+            [
+              0.825,
+              0,
+              0.825
+            ],
+            [
+              0.675,
+              0,
+              0.825
+            ]
+          ],
+          [
+            [
+              0.71,
+              1.3,
+              0.71
+            ],
+            [
+              0.79,
+              1.3,
+              0.71
+            ],
+            [
+              0.79,
+              1.3,
+              0.79
+            ],
+            [
+              0.71,
+              1.3,
+              0.79
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "north-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.26,
+            0
+          ],
+          [
+            0.74,
+            0
+          ],
+          [
+            0.74,
+            1.46
+          ],
+          [
+            0.64,
+            1.46
+          ],
+          [
+            0.64,
+            1.39
+          ],
+          [
+            0.55,
+            1.39
+          ],
+          [
+            0.55,
+            1.46
+          ],
+          [
+            0.45,
+            1.46
+          ],
+          [
+            0.45,
+            1.39
+          ],
+          [
+            0.36,
+            1.39
+          ],
+          [
+            0.36,
+            1.46
+          ],
+          [
+            0.26,
+            1.46
+          ]
+        ],
+        0.26,
+        0.3
+      ]
+    },
+    {
+      "name": "south-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.26,
+            0
+          ],
+          [
+            0.74,
+            0
+          ],
+          [
+            0.74,
+            1.46
+          ],
+          [
+            0.64,
+            1.46
+          ],
+          [
+            0.64,
+            1.39
+          ],
+          [
+            0.55,
+            1.39
+          ],
+          [
+            0.55,
+            1.46
+          ],
+          [
+            0.45,
+            1.46
+          ],
+          [
+            0.45,
+            1.39
+          ],
+          [
+            0.36,
+            1.39
+          ],
+          [
+            0.36,
+            1.46
+          ],
+          [
+            0.26,
+            1.46
+          ]
+        ],
+        0.7,
+        0.74
+      ]
+    },
+    {
+      "name": "west-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.29,
+            0
+          ],
+          [
+            0.71,
+            0
+          ],
+          [
+            0.71,
+            1.44
+          ],
+          [
+            0.63,
+            1.44
+          ],
+          [
+            0.63,
+            1.38
+          ],
+          [
+            0.55,
+            1.38
+          ],
+          [
+            0.55,
+            1.44
+          ],
+          [
+            0.45,
+            1.44
+          ],
+          [
+            0.45,
+            1.38
+          ],
+          [
+            0.37,
+            1.38
+          ],
+          [
+            0.37,
+            1.44
+          ],
+          [
+            0.29,
+            1.44
+          ]
+        ],
+        -0.31,
+        -0.27
+      ],
+      "basis": [
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "east-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.29,
+            0
+          ],
+          [
+            0.71,
+            0
+          ],
+          [
+            0.71,
+            1.44
+          ],
+          [
+            0.63,
+            1.44
+          ],
+          [
+            0.63,
+            1.38
+          ],
+          [
+            0.55,
+            1.38
+          ],
+          [
+            0.55,
+            1.44
+          ],
+          [
+            0.45,
+            1.44
+          ],
+          [
+            0.45,
+            1.38
+          ],
+          [
+            0.37,
+            1.38
+          ],
+          [
+            0.37,
+            1.44
+          ],
+          [
+            0.29,
+            1.44
+          ]
+        ],
+        -0.73,
+        -0.69
+      ],
+      "basis": [
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "grounded-front-valve-vestibule",
+      "type": "hip",
+      "a": [
+        0.39,
+        0.61,
+        0.68,
+        0.84,
+        0,
+        0.32,
+        0.37
+      ]
+    }
+  ],
+  "priorNumericPlan": [
+    {
+      "name": "battered-enclosed-reservoir-shaft",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.23,
+              0,
+              0.23
+            ],
+            [
+              0.77,
+              0,
+              0.23
+            ],
+            [
+              0.77,
+              0,
+              0.77
+            ],
+            [
+              0.23,
+              0,
+              0.77
+            ]
+          ],
+          [
+            [
+              0.28,
+              0.35,
+              0.28
+            ],
+            [
+              0.72,
+              0.35,
+              0.28
+            ],
+            [
+              0.72,
+              0.35,
+              0.72
+            ],
+            [
+              0.28,
+              0.35,
+              0.72
+            ]
+          ],
+          [
+            [
+              0.28,
+              1.35,
+              0.28
+            ],
+            [
+              0.72,
+              1.35,
+              0.28
+            ],
+            [
+              0.72,
+              1.35,
+              0.72
+            ],
+            [
+              0.28,
+              1.35,
+              0.72
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.25-0.25",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.175,
+              0,
+              0.175
+            ],
+            [
+              0.325,
+              0,
+              0.175
+            ],
+            [
+              0.325,
+              0,
+              0.325
+            ],
+            [
+              0.175,
+              0,
+              0.325
+            ]
+          ],
+          [
+            [
+              0.21,
+              1.3,
+              0.21
+            ],
+            [
+              0.29,
+              1.3,
+              0.21
+            ],
+            [
+              0.29,
+              1.3,
+              0.29
+            ],
+            [
+              0.21,
+              1.3,
+              0.29
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.75-0.25",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.675,
+              0,
+              0.175
+            ],
+            [
+              0.825,
+              0,
+              0.175
+            ],
+            [
+              0.825,
+              0,
+              0.325
+            ],
+            [
+              0.675,
+              0,
+              0.325
+            ]
+          ],
+          [
+            [
+              0.71,
+              1.3,
+              0.21
+            ],
+            [
+              0.79,
+              1.3,
+              0.21
+            ],
+            [
+              0.79,
+              1.3,
+              0.29
+            ],
+            [
+              0.71,
+              1.3,
+              0.29
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.25-0.75",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.175,
+              0,
+              0.675
+            ],
+            [
+              0.325,
+              0,
+              0.675
+            ],
+            [
+              0.325,
+              0,
+              0.825
+            ],
+            [
+              0.175,
+              0,
+              0.825
+            ]
+          ],
+          [
+            [
+              0.21,
+              1.3,
+              0.71
+            ],
+            [
+              0.29,
+              1.3,
+              0.71
+            ],
+            [
+              0.29,
+              1.3,
+              0.79
+            ],
+            [
+              0.21,
+              1.3,
+              0.79
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "grounded-corner-buttress-0.75-0.75",
+      "type": "loft",
+      "a": [
+        [
+          [
+            [
+              0.675,
+              0,
+              0.675
+            ],
+            [
+              0.825,
+              0,
+              0.675
+            ],
+            [
+              0.825,
+              0,
+              0.825
+            ],
+            [
+              0.675,
+              0,
+              0.825
+            ]
+          ],
+          [
+            [
+              0.71,
+              1.3,
+              0.71
+            ],
+            [
+              0.79,
+              1.3,
+              0.71
+            ],
+            [
+              0.79,
+              1.3,
+              0.79
+            ],
+            [
+              0.71,
+              1.3,
+              0.79
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "north-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.26,
+            0
+          ],
+          [
+            0.74,
+            0
+          ],
+          [
+            0.74,
+            1.46
+          ],
+          [
+            0.64,
+            1.46
+          ],
+          [
+            0.64,
+            1.39
+          ],
+          [
+            0.55,
+            1.39
+          ],
+          [
+            0.55,
+            1.46
+          ],
+          [
+            0.45,
+            1.46
+          ],
+          [
+            0.45,
+            1.39
+          ],
+          [
+            0.36,
+            1.39
+          ],
+          [
+            0.36,
+            1.46
+          ],
+          [
+            0.26,
+            1.46
+          ]
+        ],
+        0.26,
+        0.3
+      ]
+    },
+    {
+      "name": "south-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.26,
+            0
+          ],
+          [
+            0.74,
+            0
+          ],
+          [
+            0.74,
+            1.46
+          ],
+          [
+            0.64,
+            1.46
+          ],
+          [
+            0.64,
+            1.39
+          ],
+          [
+            0.55,
+            1.39
+          ],
+          [
+            0.55,
+            1.46
+          ],
+          [
+            0.45,
+            1.46
+          ],
+          [
+            0.45,
+            1.39
+          ],
+          [
+            0.36,
+            1.39
+          ],
+          [
+            0.36,
+            1.46
+          ],
+          [
+            0.26,
+            1.46
+          ]
+        ],
+        0.7,
+        0.74
+      ]
+    },
+    {
+      "name": "west-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.29,
+            0
+          ],
+          [
+            0.71,
+            0
+          ],
+          [
+            0.71,
+            1.44
+          ],
+          [
+            0.63,
+            1.44
+          ],
+          [
+            0.63,
+            1.38
+          ],
+          [
+            0.55,
+            1.38
+          ],
+          [
+            0.55,
+            1.44
+          ],
+          [
+            0.45,
+            1.44
+          ],
+          [
+            0.45,
+            1.38
+          ],
+          [
+            0.37,
+            1.38
+          ],
+          [
+            0.37,
+            1.44
+          ],
+          [
+            0.29,
+            1.44
+          ]
+        ],
+        -0.31,
+        -0.27
+      ],
+      "basis": [
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "east-integral-crenellated-wall",
+      "type": "profile",
+      "a": [
+        [
+          [
+            0.29,
+            0
+          ],
+          [
+            0.71,
+            0
+          ],
+          [
+            0.71,
+            1.44
+          ],
+          [
+            0.63,
+            1.44
+          ],
+          [
+            0.63,
+            1.38
+          ],
+          [
+            0.55,
+            1.38
+          ],
+          [
+            0.55,
+            1.44
+          ],
+          [
+            0.45,
+            1.44
+          ],
+          [
+            0.45,
+            1.38
+          ],
+          [
+            0.37,
+            1.38
+          ],
+          [
+            0.37,
+            1.44
+          ],
+          [
+            0.29,
+            1.44
+          ]
+        ],
+        -0.73,
+        -0.69
+      ],
+      "basis": [
+        0,
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "name": "grounded-front-valve-vestibule",
+      "type": "hip",
+      "a": [
+        0.39,
+        0.61,
+        0.68,
+        0.84,
+        0,
+        0.32,
+        0.37
+      ]
+    }
+  ]
+}

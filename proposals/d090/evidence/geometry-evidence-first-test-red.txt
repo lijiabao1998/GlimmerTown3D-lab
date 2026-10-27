@@ -1,0 +1,67 @@
+✔ all first-red source/polygon/log evidence is immutable exact bytes (2.3579ms)
+✖ bare first16 co-facing polygons reproduce exactly despite original required-sample pass (61.908483ms)
+✖ original castle route remains physically blocked; no later route tolerance can waive it (0.349228ms)
+✔ original castle entry/leaf paint remains hidden on actual original48 rays and every old paint receipt reproduces (2405.741856ms)
+✔ first source-bound native process137 is retained as incomplete24/30, never batch acceptance (0.541869ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3116.463151
+
+✖ failing tests:
+
+test at proposals/d090/geometry-evidence.test.mjs:7:1
+✖ bare first16 co-facing polygons reproduce exactly despite original required-sample pass (61.908483ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      {
+        area: 0.022015376111403695,
+        colors: [
+          '#d5c7a7',
+  ...
+          0,
+  +       -0,
+  -       0,
+          -1
+        ],
+        occluders: [],
+        partNames: [
+          'battered-enclosed-reservoir-shaft',
+  ...
+          0,
+  +       -0,
+  -       0,
+          -1
+        ],
+        occluders: [],
+        partNames: [
+          'battered-enclosed-reservoir-shaft',
+  
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/geometry-evidence.test.mjs:7:528)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.022015376111403695, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.0008083416114099684, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.00021438360809833412, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.012804145128046507, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.016173101936284517, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.016173101936284517, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.012804145128046507, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.022015376111403695, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.00021438360809833412, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.0008083416114099684, points: [Array], ground: false, occluders: [] } ],
+    expected: [ { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.022015376111403695, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.0008083416114099684, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.00021438360809833412, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.012804145128046507, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: -4.28000020980835, area: 0.016173101936284517, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.016173101936284517, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.012804145128046507, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.022015376111403695, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.00021438360809833412, points: [Array], ground: false, occluders: [] }, { triangles: [Array], parts: [Array], partNames: [Array], colors: [Array], normal: [Array], plane: 4.71999979019165, area: 0.0008083416114099684, points: [Array], ground: false, occluders: [] } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at proposals/d090/geometry-evidence.test.mjs:8:1
+✖ original castle route remains physically blocked; no later route tolerance can waive it (0.349228ms)
+  ReferenceError: Cannot access 'original' before initialization
+      at TestContext.<anonymous> (file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/geometry-evidence.test.mjs:8:116)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)

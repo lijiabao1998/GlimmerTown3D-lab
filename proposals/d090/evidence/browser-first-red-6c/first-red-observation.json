@@ -1,0 +1,123 @@
+{
+  "observedAt": "2026-10-26T15:18:45Z",
+  "head": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "tree": "94fcfd2c09a34bd2451351f23c3cb136e550fe5d",
+  "ciCheckout": "3acc928c5f3edbc273787da5e367b8b95d4cbcfe",
+  "run": 40344412536,
+  "published": 190,
+  "acceptedCandidate": false,
+  "jobs": [
+    {
+      "id": 121647386798,
+      "name": "surface-qualification",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121647387282,
+      "name": "native-and-build",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522622,
+      "name": "native-game (412)",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        "Every required surface joins actual legal-player raw PNG and full native Uint32 arrays"
+      ]
+    },
+    {
+      "id": 121649522665,
+      "name": "native-startup-cache (412)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522715,
+      "name": "native-input-performance (1440)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522737,
+      "name": "native-game (360)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522739,
+      "name": "native-startup-cache (360)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522758,
+      "name": "native-game (1440)",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        "Every required surface joins actual legal-player raw PNG and full native Uint32 arrays"
+      ]
+    },
+    {
+      "id": 121649522887,
+      "name": "native-input-performance (360)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649522906,
+      "name": "native-startup-cache (1440)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    },
+    {
+      "id": 121649523125,
+      "name": "native-input-performance (412)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": []
+    }
+  ],
+  "failure": {
+    "assertion": "actual raw original-player full-surface coverage every fixed exterior point is visible in an actual declared view",
+    "model": "castellated-tank-water-tower",
+    "widths": {
+      "412": [
+        "mesh-1-triangle-696-barycentric-3"
+      ],
+      "1440": [
+        "mesh-1-triangle-696-barycentric-2",
+        "mesh-1-triangle-696-barycentric-3"
+      ]
+    },
+    "rootCause": "Under independent actual-camera / triangle / first-hit investigation; no classification, threshold, camera, probe, product or test changes adopted.",
+    "logs": {
+      "412": {
+        "path": "native-game412-first-red.exact.log",
+        "sha256": "50801790c5286d09229327bb29da67c50a21389344e1457bad488046feae4e31"
+      },
+      "1440": {
+        "path": "native-game1440-first-red.exact.log",
+        "sha256": "01f4b586c442890bd4773bea96fc92a02f974a934ef84e7f2ea0ebf8961cae57"
+      }
+    },
+    "note": "First *.log text copies retained but contain one appended newline; *.exact.log preserves connector result text bytes."
+  },
+  "limits": [
+    "Dedicated job success is not independent full sample acceptance.",
+    "Full CI remains active.",
+    "360 success does not waive 412/1440 failures.",
+    "No CI rerun requested."
+  ]
+}

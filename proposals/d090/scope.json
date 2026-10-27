@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "baselineTree": "f2fd2ef0f103c428097ba5506a816ba14cc2bdab",
+  "batch": "D090",
+  "wave": 20,
+  "goal": 200,
+  "acceptedPublished": 190,
+  "remaining": 10,
+  "qualification": "Frozen pre-code final ten-model utility and heritage scope. No candidate is accepted or published by this file.",
+  "models": [
+    {
+      "k": 10,
+      "v": 5,
+      "id": "castellated-tank-water-tower",
+      "name": "城垛蓄水塔",
+      "short": "垛水",
+      "baseTool": "water",
+      "tool": "britishCastellatedTank",
+      "size": 1,
+      "H": 1.6,
+      "cap": 1200
+    },
+    {
+      "k": 10,
+      "v": 6,
+      "id": "tapered-circular-reservoir-tower",
+      "name": "錐承圓形蓄水塔",
+      "short": "圓水",
+      "baseTool": "water",
+      "tool": "britishCircularReservoir",
+      "size": 1,
+      "H": 1.7,
+      "cap": 1200
+    },
+    {
+      "k": 27,
+      "v": 3,
+      "id": "romanesque-sewage-engine-house",
+      "name": "羅曼式污水機房",
+      "short": "拱污",
+      "baseTool": "sewage",
+      "tool": "britishSewageEngine",
+      "size": 1,
+      "H": 1.05,
+      "cap": 1200
+    },
+    {
+      "k": 27,
+      "v": 4,
+      "id": "circular-filterworks-and-valve-hall",
+      "name": "圓池濾場與閥門廳",
+      "short": "圓濾",
+      "baseTool": "sewage",
+      "tool": "britishFilterworks",
+      "size": 1,
+      "H": 0.65,
+      "cap": 1200
+    },
+    {
+      "k": 16,
+      "v": 5,
+      "id": "trefoil-apsed-mortuary-cemetery-chapel",
+      "name": "三葉後殿墓園禮拜堂",
+      "short": "三葉",
+      "baseTool": "cemetery",
+      "tool": "britishTrefoilCemetery",
+      "size": 1,
+      "H": 0.9,
+      "cap": 1200
+    },
+    {
+      "k": 188,
+      "v": 1,
+      "id": "lectern-estate-doocot",
+      "name": "斜頂雙室莊園鴿舍",
+      "short": "斜鴿",
+      "baseTool": "heritageDovecote",
+      "tool": "britishLecternDoocot",
+      "size": 2,
+      "H": 1.25,
+      "cap": 1800
+    },
+    {
+      "k": 190,
+      "v": 1,
+      "id": "canted-t-plan-turnpike-lodge",
+      "name": "斜角丁字收費舊舍",
+      "short": "丁舍",
+      "baseTool": "heritageTollhouse",
+      "tool": "britishTurnpikeLodge",
+      "size": 2,
+      "H": 0.9,
+      "cap": 1800
+    },
+    {
+      "k": 192,
+      "v": 1,
+      "id": "cruciform-village-forge",
+      "name": "十字工坊村鐵鋪",
+      "short": "十鍛",
+      "baseTool": "heritageSmithy",
+      "tool": "britishCruciformForge",
+      "size": 2,
+      "H": 1.2,
+      "cap": 1800
+    },
+    {
+      "k": 6,
+      "v": 6,
+      "id": "segmental-roof-rural-firehouse",
+      "name": "弧頂鄉間消防站",
+      "short": "弧消",
+      "baseTool": "fire",
+      "tool": "britishSegmentalFirehouse",
+      "size": 1,
+      "H": 1.15,
+      "cap": 1200
+    },
+    {
+      "k": 14,
+      "v": 7,
+      "id": "paired-hexagonal-saddle-roof-reading-library",
+      "name": "雙六角鞍頂閱覽館",
+      "short": "雙鞍",
+      "baseTool": "library",
+      "tool": "britishSaddleLibrary",
+      "size": 1,
+      "H": 0.75,
+      "cap": 1200
+    }
+  ]
+}

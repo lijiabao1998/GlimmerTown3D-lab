@@ -1,0 +1,21 @@
+{
+  "qualification": "Early actual dirty-tree local build. Not authoritative exact-head Chrome, timing, art or release acceptance.",
+  "baseline": {
+    "bytes": 3840360,
+    "sha256": "da59f38307996668e7e1c950147393d442f5de1df27f779efaa2c50ee872dbde",
+    "gzipBytes": 835636
+  },
+  "candidate": {
+    "bytes": 4244839,
+    "sha256": "925c49b19a91a1cd4cb0fb728f1749a009e842e0dc6b370bace11bb4abda1a7b",
+    "gzipBytes": 907410
+  },
+  "rawDelta": 404479,
+  "gzipDelta": 71774,
+  "proceduralAuthoritySha256": "11bfc55e035278bc9391fc649301efd026b8b050056d416a0691c1a90bb5ce37",
+  "productCacheSha256": "ea98d9bd696028a47c933b0424d7ca25ce4b9127e6dbb7daecd60f48658c4319",
+  "runtimeLazyPayloadBytes": 364514,
+  "triangles": 3504,
+  "models": 10,
+  "performanceRequired": "Fresh official90 per-record CPU6 first-use and24 startup profiles, no shifted-cost or exclusive-heap claim."
+}

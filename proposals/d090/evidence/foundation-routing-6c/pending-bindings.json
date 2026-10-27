@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
+  "ready": false,
+  "qualification": "Explicit unqualified staging: new reviewed physical source, deterministic cache and complete current plan must be supplied. No old evidence relabelled.",
+  "authoritySha256": null,
+  "cachedSourceSha256": null,
+  "cacheManifestSha256": null,
+  "sourceLeaseSha256": null,
+  "sourceLeaseVersion": null,
+  "planSha256": null,
+  "geometrySha256": null,
+  "requiredPerWidth": null,
+  "requiredAllWidths": null,
+  "viewsPerWidth": null,
+  "paintIntents": 265,
+  "paintCases": 795,
+  "adaptationManifestSha256": null
+}

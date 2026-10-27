@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "qualification": "Exactly one current heritage catalogue51→61 change in each original D083/D086/D087/D088/D089 browser contract. All targets, inputs, docks, scenes, camera plans, geometry words, raw frames and performance/surface thresholds remain unchanged.",
+  "copies": [
+    {
+      "source": "proposals/d083/native-browser-check-d089.mjs",
+      "target": "proposals/d083/native-browser-check-d090.mjs",
+      "sourceSha256": "4def20942dc95df8891b7ad67f775e3d2a30586df4a68004e4616a2f6825fd7d",
+      "targetSha256": "ad15b2587b04e7c84350ee08473a14aca5a22feee66e9885c2a595ed49a2fa80",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),61)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d086/native-browser-v6-check-d089.mjs",
+      "target": "proposals/d086/native-browser-v6-check-d090.mjs",
+      "sourceSha256": "41b6ebb86a11b55d0271ef774a466741e82599c9fa14c521d4d95285cbbcca57",
+      "targetSha256": "483d17db95db3181e691343ee505dc903b329971d1c9685906a853cbbb520f04",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),61)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d087/native-browser-check-d089.mjs",
+      "target": "proposals/d087/native-browser-check-d090.mjs",
+      "sourceSha256": "b4721d7fe9fcbf8d66556bec403644114130c555e099f9c181d874d78fb160e1",
+      "targetSha256": "d033cae6b7a57b7f5299188a07f2d828347c1fca6a26bf0316df847f60efb765",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),61)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d088/native-browser-check-d089.mjs",
+      "target": "proposals/d088/native-browser-check-d090.mjs",
+      "sourceSha256": "49e9cbf828daccc0065889403fcd244f543d8ebbe93a1d89469347e54ba2ce8b",
+      "targetSha256": "a5cd1c3e68d93284b64183f6353f245fc9db4ef0a7bdef6a7662a463dc3858e3",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),61)",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "proposals/d089/native-browser-check.mjs",
+      "target": "proposals/d089/native-browser-check-d090.mjs",
+      "sourceSha256": "1e221f12516d5c5c65d45edd4dd92f96aa42e86a6ba87fe471d7029f0d8e0cbc",
+      "targetSha256": "eacc789ea2e7800a64bc8fe90d857e4f09b2896650760e6f6aca9b6216c12693",
+      "changes": [
+        {
+          "before": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),51)",
+          "after": "document.querySelectorAll(\"#catalog li[data-kind=facility]\").length'),61)",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

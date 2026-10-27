@@ -1,0 +1,132 @@
+{
+  "qualification": "Reproducible code-generated native cache from authoritative procedural geometry; no Chrome or release acceptance claim.",
+  "proceduralSourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "candidateSourceSha256": "54b809e292f43abab21a0a99732788620736160db5acd2cd3026e4a7f698eeda",
+  "sourceBytes": 39450,
+  "candidateBytes": 419723,
+  "sourceGzipBytes": 13011,
+  "candidateGzipBytes": 74900,
+  "codec": "v1: exact Float64 round-trip decimal vectors, literal JSON -0, no reviver or rounding, indexed triangles, full native metadata; per-payload integrity and SHA256 reproducible CI proof",
+  "models": [
+    {
+      "meta": {
+        "id": "castellated-tank-water-tower",
+        "length": 41404,
+        "checksum": "1645adc7"
+      },
+      "sha256": "d6212e98793aa081a237153ab2f4cd2481c79bdc3f10725ad925e9574e0ba928",
+      "points": 266,
+      "normals": 61,
+      "triangleCount": 492,
+      "originalBytes": 112633
+    },
+    {
+      "meta": {
+        "id": "tapered-circular-reservoir-tower",
+        "length": 38970,
+        "checksum": "6ca2c96c"
+      },
+      "sha256": "e217dd2c5e4c2b685688677c78605381c36a91105b28e958c91dbbd315f3fb12",
+      "points": 119,
+      "normals": 151,
+      "triangleCount": 230,
+      "originalBytes": 82388
+    },
+    {
+      "meta": {
+        "id": "romanesque-sewage-engine-house",
+        "length": 42296,
+        "checksum": "a4cdac4b"
+      },
+      "sha256": "31fd3bf34b7ff87692bb89416bd04c415e070e68b3b014132412e85c8bb83adf",
+      "points": 248,
+      "normals": 52,
+      "triangleCount": 480,
+      "originalBytes": 124499
+    },
+    {
+      "meta": {
+        "id": "circular-filterworks-and-valve-hall",
+        "length": 39423,
+        "checksum": "a390a37a"
+      },
+      "sha256": "98aac53464d2c25c31db606897130392ba745e671a6cbd82a57cf8d594db4262",
+      "points": 172,
+      "normals": 132,
+      "triangleCount": 328,
+      "originalBytes": 98430
+    },
+    {
+      "meta": {
+        "id": "trefoil-apsed-mortuary-cemetery-chapel",
+        "length": 57771,
+        "checksum": "53befd99"
+      },
+      "sha256": "5ff9b6d6bc2f63e78ad37c571b22bce6713dd482244c7bbf224d15aaeab60099",
+      "points": 249,
+      "normals": 242,
+      "triangleCount": 466,
+      "originalBytes": 134849
+    },
+    {
+      "meta": {
+        "id": "lectern-estate-doocot",
+        "length": 23836,
+        "checksum": "9dd5d4c2"
+      },
+      "sha256": "5955a5b9aa39e9b7d22e8193bac57a1f4eb3372d0cbcc549982bcb267a0aad0c",
+      "points": 152,
+      "normals": 40,
+      "triangleCount": 292,
+      "originalBytes": 65660
+    },
+    {
+      "meta": {
+        "id": "canted-t-plan-turnpike-lodge",
+        "length": 26557,
+        "checksum": "99c1b9ad"
+      },
+      "sha256": "558dd9a4eb2ca07add30069ba2944d8fc6850c00388913c21796aca2f7f54f67",
+      "points": 136,
+      "normals": 79,
+      "triangleCount": 260,
+      "originalBytes": 68063
+    },
+    {
+      "meta": {
+        "id": "cruciform-village-forge",
+        "length": 25734,
+        "checksum": "6690a2c8"
+      },
+      "sha256": "ff05dfe986a5b5a9e6506ea9759cc5d8184b8a91d4cc44d5389c1912638fed7f",
+      "points": 164,
+      "normals": 48,
+      "triangleCount": 308,
+      "originalBytes": 66640
+    },
+    {
+      "meta": {
+        "id": "segmental-roof-rural-firehouse",
+        "length": 32122,
+        "checksum": "4d3bb468"
+      },
+      "sha256": "4502dc530332f7182e05ed812355895ffb6669f60e76c7816afd1c846d94a539",
+      "points": 180,
+      "normals": 63,
+      "triangleCount": 348,
+      "originalBytes": 88343
+    },
+    {
+      "meta": {
+        "id": "paired-hexagonal-saddle-roof-reading-library",
+        "length": 36325,
+        "checksum": "4129aa38"
+      },
+      "sha256": "1bd4c4d8ee08d70044c2194423ea75a6315cc75d1348a64ff3dac0781d1b0f03",
+      "points": 154,
+      "normals": 157,
+      "triangleCount": 300,
+      "originalBytes": 90838
+    }
+  ]
+}

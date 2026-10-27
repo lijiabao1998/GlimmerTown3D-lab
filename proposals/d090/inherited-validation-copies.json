@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "baseline": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "copies": [
+    {
+      "source": ".github/scripts/ci-integrity-d089.test.mjs",
+      "target": ".github/scripts/ci-integrity-d090.test.mjs",
+      "sourceSha256": "4b7f6fcb7a3dee71bc80b6f8586dfade5372d097493db38aa9f1c0b58f701c41",
+      "targetSha256": "9a1c3c713156340cae0c8539ba4405bee560bc038866912763d136cbeaf5c94a",
+      "changes": [
+        {
+          "before": "'d089-native-release', 'd083-native-release'",
+          "after": "'d089-native-release', 'd090-native-release', 'd083-native-release'",
+          "count": 1
+        },
+        {
+          "before": "ci-integrity-d089\\.test",
+          "after": "ci-integrity-d090\\.test",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d083-release-trigger-d089.test.mjs",
+      "target": "tools/d083-release-trigger-d090.test.mjs",
+      "sourceSha256": "29484dc104cd7164770511d15bbc9f34d600a7c03243e7c17bfc8f3b639389c2",
+      "targetSha256": "9947a0a364d3278a7ac5c70be4e74299cea0b289c77e495dba78ca245ea3d440",
+      "changes": [
+        {
+          "before": "native-browser-check-d089.mjs",
+          "after": "native-browser-check-d090.mjs",
+          "count": 2
+        },
+        {
+          "before": "native-integration-check-d089.mjs",
+          "after": "native-integration-check-d090.mjs",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "source": "tools/d085-source-d089.test.mjs",
+      "target": "tools/d085-source-d090.test.mjs",
+      "sourceSha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
+      "targetSha256": "501a180cbe743b1cdaf22b2e422bb8fc4fc73f54cd8249eb0f5259c8c3edb307",
+      "changes": [
+        {
+          "before": "'./d089-source.mjs'",
+          "after": "'./d090-source.mjs'",
+          "count": 1
+        }
+      ]
+    }
+  ]
+}

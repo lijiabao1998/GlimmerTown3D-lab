@@ -1,0 +1,8 @@
+{
+  "sourceSha256": "3d81bd835931aededbd5b508ee0389cf6fa81a325e83d09d04c5a1071e67fc00",
+  "exitCode": 137,
+  "completedCases": 24,
+  "requiredResult": "24 completed cases zero missing; final six not completed",
+  "qualification": "OS kill of concurrent bounded local Node process, not an assertion failure or browser/performance result",
+  "output": "/tmp/d090-native-detailed-first"
+}

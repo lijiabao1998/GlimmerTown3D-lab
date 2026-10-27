@@ -1,0 +1,17 @@
+✔ whole original player camera/render bytes restored by finite native-only additions (31.75786ms)
+✔ D081 original classifier, legal cameras and all tolerances remain exact verified190 bytes (24.683354ms)
+✔ complete camera source rejects camera epsilon (11.232917ms)
+✔ complete camera source rejects widen legal zoom (9.617488ms)
+✔ complete camera source rejects remove old native flag (13.696514ms)
+✔ complete camera source rejects drop old wave flag (10.959334ms)
+✔ complete camera source rejects hide cache side effect (9.172795ms)
+✔ new exact cemetery path cannot bypass any older wave or village/default slot (140.225461ms)
+✔ exact inherited pipe visibility cannot broaden to unrelated civic tools (67.167432ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 438.545844

@@ -1,0 +1,205 @@
+{
+  "passed": true,
+  "scope": "Independent exact e4c diagnosis only, not acceptance of a proposed repair or fresh Chrome after repair.",
+  "head": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
+  "productSource": {
+    "file": "src/cityView.ts",
+    "sha256": "7eb449d81ec4af9265d8db613e705b97e0fe8e0c9dadefcd7430fbfb34e27729"
+  },
+  "actualFunctionSha256": "85fe88cd1dfb71f9aebabf1e1b3a34a675bab7082918ccd9dc7dfce8985881f7",
+  "historicalFunctionSha256": "ebc37b9e0ed7398064ceee73520ee611dbf7e0133fb0675b78801aca60314406",
+  "explicitNewTen": [
+    {
+      "tool": "britishCastellatedTank",
+      "baseTool": "water",
+      "pipes": true
+    },
+    {
+      "tool": "britishCircularReservoir",
+      "baseTool": "water",
+      "pipes": true
+    },
+    {
+      "tool": "britishSewageEngine",
+      "baseTool": "sewage",
+      "pipes": true
+    },
+    {
+      "tool": "britishFilterworks",
+      "baseTool": "sewage",
+      "pipes": true
+    },
+    {
+      "tool": "britishTrefoilCemetery",
+      "baseTool": "cemetery",
+      "pipes": false
+    },
+    {
+      "tool": "britishLecternDoocot",
+      "baseTool": "heritageDovecote",
+      "pipes": false
+    },
+    {
+      "tool": "britishTurnpikeLodge",
+      "baseTool": "heritageTollhouse",
+      "pipes": false
+    },
+    {
+      "tool": "britishCruciformForge",
+      "baseTool": "heritageSmithy",
+      "pipes": false
+    },
+    {
+      "tool": "britishSegmentalFirehouse",
+      "baseTool": "fire",
+      "pipes": false
+    },
+    {
+      "tool": "britishSaddleLibrary",
+      "baseTool": "library",
+      "pipes": false
+    }
+  ],
+  "completeActualCases": 2610,
+  "old76ActualFunctionComparisons": 2280,
+  "currentPipeTools": [
+    "water",
+    "wpipe",
+    "sewage",
+    "britishCastellatedTank",
+    "britishCircularReservoir",
+    "britishSewageEngine",
+    "britishFilterworks"
+  ],
+  "negativeControls": [
+    {
+      "from": " || utilityBase === 'water'",
+      "to": "",
+      "witness": {
+        "id": "britishCastellatedTank",
+        "mode": "civic",
+        "previous": false,
+        "hasPipe": false,
+        "actual": {
+          "shown": true,
+          "calls": 0
+        }
+      },
+      "mutated": {
+        "shown": false,
+        "calls": 0
+      }
+    },
+    {
+      "from": " || utilityBase === 'sewage'",
+      "to": "",
+      "witness": {
+        "id": "britishSewageEngine",
+        "mode": "civic",
+        "previous": false,
+        "hasPipe": false,
+        "actual": {
+          "shown": true,
+          "calls": 0
+        }
+      },
+      "mutated": {
+        "shown": false,
+        "calls": 0
+      }
+    },
+    {
+      "from": "utilityBase === 'water'",
+      "to": "utilityBase !== undefined",
+      "witness": {
+        "id": "britishTrefoilCemetery",
+        "mode": "civic",
+        "previous": false,
+        "hasPipe": false,
+        "actual": {
+          "shown": false,
+          "calls": 0
+        }
+      },
+      "mutated": {
+        "shown": true,
+        "calls": 0
+      }
+    },
+    {
+      "from": "tool === 'civic' && ",
+      "to": "",
+      "witness": {
+        "id": "water",
+        "mode": "food",
+        "previous": false,
+        "hasPipe": false,
+        "actual": {
+          "shown": false,
+          "calls": 0
+        }
+      },
+      "mutated": {
+        "shown": true,
+        "calls": 0
+      }
+    },
+    {
+      "from": "civicTool === 'water' || ",
+      "to": "",
+      "witness": {
+        "id": "water",
+        "mode": "civic",
+        "previous": false,
+        "hasPipe": false,
+        "actual": {
+          "shown": true,
+          "calls": 0
+        }
+      },
+      "mutated": {
+        "shown": false,
+        "calls": 0
+      }
+    }
+  ],
+  "firstRed": {
+    "evidence": {
+      "file": "/workspace/shared/d090-full-ci-d053-first-red/evidence.json",
+      "sha256": "f2cba06c8f3e39017bb7c5855d0c5ce974b36bc778b4596aa6f54dd737126141"
+    },
+    "state": {
+      "file": "/workspace/shared/d090-full-ci-d053-first-red/state.json",
+      "sha256": "df5c5739d335d2ba434d74e4ba5745f5bf6f1bc087f5f7127549cff27a026f57"
+    },
+    "failedSession": {
+      "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category",
+      "selectedCount": 76,
+      "selectedExactOld76": true,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:165:14\n    at async file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:123:56\n    at async withBrowser (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/cdp.mjs:130:12)\n    at async run (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:120:11)\n    at async d053Smoke (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:155:3)\n    at async file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke.mjs:75:67"
+    },
+    "actualUi": {
+      "tool": "civic",
+      "roadTool": "road",
+      "civicTool": "britishCastellatedTank",
+      "coach": "② 選「住」，在路邊拖出一塊住宅區",
+      "dock": "build",
+      "saved": true,
+      "autosaves": true,
+      "saveError": "",
+      "pointers": 0
+    },
+    "oldExpectation": false,
+    "currentActual": true,
+    "allChecks": 56,
+    "failedChecks": [
+      {
+        "ok": false,
+        "name": "all 25 selectors, unchanged 18 civic tools and exact seven-food category",
+        "detail": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:165:14\n    at async file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:123:56\n    at async withBrowser (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/cdp.mjs:130:12)\n    at async run (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:120:11)\n    at async d053Smoke (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke-d053-d090.mjs:155:3)\n    at async file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/smoke.mjs:75:67"
+      }
+    ]
+  },
+  "conclusion": "The observed false expectation is stale copied-smoke semantics, not a defect in the authorized new water/sewage product mapping. Four exact new utility tools must show pipes; six other D090 tools must not. All old76 actual function behavior is unchanged across modes/state/no-pipe/no-city cases. New final-source complete browser smoke remains mandatory.",
+  "rowsSha256": "476e1ecc1ccf80f3fad71d7c13a763cc2cfe11cff383f55a5c6fe3e0e5887bb9"
+}

@@ -1,0 +1,17 @@
+✔ current complete authority differs by only reviewed lower-ring source seam; actual cache restores that entire authority (2.973691ms)
+✔ current actual full ten models retain nine complete originals and every castle feature except bounded physical foundation (643.805663ms)
+✖ proposals/d090/foundation-shape-contract.test.mjs (1974.163168ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1986.369163
+
+✖ failing tests:
+
+test at proposals/d090/foundation-shape-contract.test.mjs:1:1
+✖ proposals/d090/foundation-shape-contract.test.mjs (1974.163168ms)
+  'test failed'

@@ -1,0 +1,636 @@
+﻿2026-10-26T15:06:43.3612994Z Current runner version: '2.338.0'
+2026-10-26T15:06:43.3630905Z ##[group]Runner Image Provisioner
+2026-10-26T15:06:43.3631624Z Hosted Compute Agent
+2026-10-26T15:06:43.3632191Z Version: 20261021.618
+2026-10-26T15:06:43.3632741Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-10-26T15:06:43.3633361Z Build Date: 2026-10-21T00:45:21Z
+2026-10-26T15:06:43.3634061Z Worker ID: {de782bbb-cada-4d16-923e-b5963729c27a}
+2026-10-26T15:06:43.3634670Z Region: centralus
+2026-10-26T15:06:43.3635167Z Cloud: Azure
+2026-10-26T15:06:43.3635565Z ##[endgroup]
+2026-10-26T15:06:43.3636706Z ##[group]Operating System
+2026-10-26T15:06:43.3637128Z Ubuntu
+2026-10-26T15:06:43.3637623Z 24.04.5
+2026-10-26T15:06:43.3637926Z LTS
+2026-10-26T15:06:43.3638284Z ##[endgroup]
+2026-10-26T15:06:43.3638620Z ##[group]Runner Image
+2026-10-26T15:06:43.3639085Z Image: ubuntu-24.04
+2026-10-26T15:06:43.3639433Z Version: 20261012.334.1
+2026-10-26T15:06:43.3640231Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+2026-10-26T15:06:43.3641113Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+2026-10-26T15:06:43.3641741Z ##[endgroup]
+2026-10-26T15:06:43.3642425Z ##[group]GITHUB_TOKEN Permissions
+2026-10-26T15:06:43.3643730Z Actions: read
+2026-10-26T15:06:43.3644082Z Contents: read
+2026-10-26T15:06:43.3644453Z Metadata: read
+2026-10-26T15:06:43.3644838Z ##[endgroup]
+2026-10-26T15:06:43.3646119Z Secret source: Actions
+2026-10-26T15:06:43.3646735Z Cache mode: write
+2026-10-26T15:06:43.3647189Z Prepare workflow directory
+2026-10-26T15:06:43.4059153Z Prepare all required actions
+2026-10-26T15:06:43.4104641Z Getting action download info
+2026-10-26T15:06:43.7348729Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-10-26T15:06:44.1045381Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+2026-10-26T15:06:44.3110996Z Download action repository 'actions/download-artifact@v4' (SHA:d3f86a106a0bac45b974a628896c90dbdf5c8093)
+2026-10-26T15:06:45.4345050Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-10-26T15:06:46.2104354Z Complete job name: native-game (1440)
+2026-10-26T15:06:46.2697071Z ##[group]Run actions/checkout@v4
+2026-10-26T15:06:46.2697339Z with:
+2026-10-26T15:06:46.2697611Z   persist-credentials: false
+2026-10-26T15:06:46.2697775Z   repository: lijiabao1998/GlimmerTown3D-lab
+2026-10-26T15:06:46.2699434Z   token: ***
+2026-10-26T15:06:46.2699548Z   ssh-strict: true
+2026-10-26T15:06:46.2699677Z   ssh-user: git
+2026-10-26T15:06:46.2699795Z   clean: true
+2026-10-26T15:06:46.2699927Z   sparse-checkout-cone-mode: true
+2026-10-26T15:06:46.2700079Z   fetch-depth: 1
+2026-10-26T15:06:46.2700205Z   fetch-tags: false
+2026-10-26T15:06:46.2700325Z   show-progress: true
+2026-10-26T15:06:46.2700445Z   lfs: false
+2026-10-26T15:06:46.2700553Z   submodules: false
+2026-10-26T15:06:46.2700675Z   set-safe-directory: true
+2026-10-26T15:06:46.2700831Z   allow-unsafe-pr-checkout: false
+2026-10-26T15:06:46.2701050Z ##[endgroup]
+2026-10-26T15:06:46.3400524Z Syncing repository: lijiabao1998/GlimmerTown3D-lab
+2026-10-26T15:06:46.3401633Z ##[group]Getting Git version info
+2026-10-26T15:06:46.3402086Z Working directory is '/home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab'
+2026-10-26T15:06:46.3402710Z [command]/usr/bin/git version
+2026-10-26T15:06:46.3477222Z git version 2.55.0
+2026-10-26T15:06:46.3492399Z ##[endgroup]
+2026-10-26T15:06:46.3510017Z Temporarily overriding HOME='/home/runner/work/_temp/85d6e8bd-845d-4009-a915-50c821d0e0c6' before making global git config changes
+2026-10-26T15:06:46.3510897Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-26T15:06:46.3516107Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab
+2026-10-26T15:06:46.3744863Z Deleting the contents of '/home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab'
+2026-10-26T15:06:46.3753428Z ##[group]Initializing the repository
+2026-10-26T15:06:46.3754286Z [command]/usr/bin/git init /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab
+2026-10-26T15:06:46.3952968Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-26T15:06:46.3953344Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-10-26T15:06:46.3953626Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-10-26T15:06:46.4018118Z hint: call:
+2026-10-26T15:06:46.4018315Z hint:
+2026-10-26T15:06:46.4019395Z hint: 	git config --global init.defaultBranch <name>
+2026-10-26T15:06:46.4019688Z hint:
+2026-10-26T15:06:46.4019960Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-26T15:06:46.4020413Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-26T15:06:46.4020754Z hint:
+2026-10-26T15:06:46.4020892Z hint: 	git branch -m <name>
+2026-10-26T15:06:46.4021045Z hint:
+2026-10-26T15:06:46.4021228Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-10-26T15:06:46.4021604Z Initialized empty Git repository in /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/.git/
+2026-10-26T15:06:46.4022399Z [command]/usr/bin/git remote add origin https://github.com/lijiabao1998/GlimmerTown3D-lab
+2026-10-26T15:06:46.4234182Z ##[endgroup]
+2026-10-26T15:06:46.4234562Z ##[group]Disabling automatic garbage collection
+2026-10-26T15:06:46.4237731Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-26T15:06:46.4350849Z ##[endgroup]
+2026-10-26T15:06:46.4351229Z ##[group]Setting up auth
+2026-10-26T15:06:46.4351610Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-26T15:06:46.4386086Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-26T15:06:46.4694781Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-26T15:06:46.4726267Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-26T15:06:46.4932083Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-26T15:06:46.4963348Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-26T15:06:46.5154355Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-10-26T15:06:46.5423695Z ##[endgroup]
+2026-10-26T15:06:46.5424005Z ##[group]Fetching the repository
+2026-10-26T15:06:46.5431293Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3acc928c5f3edbc273787da5e367b8b95d4cbcfe:refs/remotes/pull/46/merge
+2026-10-26T15:06:50.7231079Z From https://github.com/lijiabao1998/GlimmerTown3D-lab
+2026-10-26T15:06:50.7231615Z  * [new ref]         3acc928c5f3edbc273787da5e367b8b95d4cbcfe -> pull/46/merge
+2026-10-26T15:06:50.7233978Z ##[endgroup]
+2026-10-26T15:06:50.7234365Z ##[group]Determining the checkout info
+2026-10-26T15:06:50.7236274Z ##[endgroup]
+2026-10-26T15:06:50.7242212Z [command]/usr/bin/git sparse-checkout disable
+2026-10-26T15:06:50.7289643Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-26T15:06:50.7320111Z ##[group]Checking out the ref
+2026-10-26T15:06:50.7320408Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/46/merge
+2026-10-26T15:06:51.3833234Z Note: switching to 'refs/remotes/pull/46/merge'.
+2026-10-26T15:06:51.3833559Z 
+2026-10-26T15:06:51.3833752Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-26T15:06:51.3834237Z changes and commit them, and you can discard any commits you make in this
+2026-10-26T15:06:51.3834968Z state without impacting any branches by switching back to a branch.
+2026-10-26T15:06:51.3835242Z 
+2026-10-26T15:06:51.3835453Z If you want to create a new branch to retain commits you create, you may
+2026-10-26T15:06:51.3835887Z do so (now or later) by using -c with the switch command. Example:
+2026-10-26T15:06:51.3836125Z 
+2026-10-26T15:06:51.3836227Z   git switch -c <new-branch-name>
+2026-10-26T15:06:51.3836392Z 
+2026-10-26T15:06:51.3836488Z Or undo this operation with:
+2026-10-26T15:06:51.3836629Z 
+2026-10-26T15:06:51.3836708Z   git switch -
+2026-10-26T15:06:51.3836856Z 
+2026-10-26T15:06:51.3837046Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-10-26T15:06:51.3837307Z 
+2026-10-26T15:06:51.3837798Z HEAD is now at 3acc928 Merge 6c118a6a56fb22cce9b7a7533f2dc1248b824d87 into 5b41bac165ba2b29146e6835490357bebc3cd549
+2026-10-26T15:06:51.3877882Z ##[endgroup]
+2026-10-26T15:06:51.3926381Z [command]/usr/bin/git log -1 --format=%H
+2026-10-26T15:06:51.3949574Z 3acc928c5f3edbc273787da5e367b8b95d4cbcfe
+2026-10-26T15:06:51.3959308Z ##[group]Removing auth
+2026-10-26T15:06:51.3959680Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-26T15:06:51.3987134Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-26T15:06:51.4170439Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-26T15:06:51.4194557Z http.https://github.com/.extraheader
+2026-10-26T15:06:51.4200195Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-10-26T15:06:51.4228512Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-26T15:06:51.4405916Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-26T15:06:51.4433825Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-26T15:06:51.4609458Z ##[endgroup]
+2026-10-26T15:06:51.4793736Z ##[group]Run actions/setup-node@v4
+2026-10-26T15:06:51.4793903Z with:
+2026-10-26T15:06:51.4794020Z   node-version: 24
+2026-10-26T15:06:51.4794143Z   cache: npm
+2026-10-26T15:06:51.4794262Z   always-auth: false
+2026-10-26T15:06:51.4794391Z   check-latest: false
+2026-10-26T15:06:51.4796046Z   token: ***
+2026-10-26T15:06:51.4796161Z ##[endgroup]
+2026-10-26T15:06:51.5685511Z Found in cache @ /opt/hostedtoolcache/node/24.21.0/x64
+2026-10-26T15:06:51.5687976Z (node:2144) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-26T15:06:51.5688544Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-26T15:06:51.5689747Z ##[group]Environment details
+2026-10-26T15:06:51.8586429Z node: v24.21.0
+2026-10-26T15:06:51.8586612Z npm: 11.19.0
+2026-10-26T15:06:51.8586730Z yarn: 1.22.22
+2026-10-26T15:06:51.8587353Z ##[endgroup]
+2026-10-26T15:06:51.8599465Z [command]/opt/hostedtoolcache/node/24.21.0/x64/bin/npm config get cache
+2026-10-26T15:06:51.9348670Z /home/runner/.npm
+2026-10-26T15:06:52.0828633Z Cache hit for: node-cache-Linux-x64-npm-e6bd7aa0f39acf9fa770371b756c5ef789f60a3e197a81f153edc0cb97e6b920
+2026-10-26T15:06:52.0898201Z (node:2144) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-26T15:06:52.9090774Z Received 30595941 of 30595941 (100.0%), 43.5 MBs/sec
+2026-10-26T15:06:52.9091059Z Cache Size: ~29 MB (30595941 B)
+2026-10-26T15:06:52.9108040Z [command]/usr/bin/tar -xf /home/runner/work/_temp/77662286-561a-4637-9e20-33a76b8baa39/cache.tzst -P -C /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab --use-compress-program unzstd
+2026-10-26T15:06:52.9473784Z Cache restored successfully
+2026-10-26T15:06:52.9489732Z Cache restored from key: node-cache-Linux-x64-npm-e6bd7aa0f39acf9fa770371b756c5ef789f60a3e197a81f153edc0cb97e6b920
+2026-10-26T15:06:52.9638920Z ##[group]Run npm ci
+2026-10-26T15:06:52.9639118Z [36;1mnpm ci[0m
+2026-10-26T15:06:52.9948910Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:06:52.9949076Z ##[endgroup]
+2026-10-26T15:06:54.4001489Z 
+2026-10-26T15:06:54.4008020Z added 32 packages, and audited 33 packages in 1s
+2026-10-26T15:06:54.4008225Z 
+2026-10-26T15:06:54.4008346Z 9 packages are looking for funding
+2026-10-26T15:06:54.4008533Z   run `npm fund` for details
+2026-10-26T15:06:54.4054086Z 
+2026-10-26T15:06:54.4054421Z 2 high severity vulnerabilities
+2026-10-26T15:06:54.4054638Z 
+2026-10-26T15:06:54.4054806Z To address all issues, run:
+2026-10-26T15:06:54.4055066Z   npm audit fix
+2026-10-26T15:06:54.4055189Z 
+2026-10-26T15:06:54.4055302Z Run `npm audit` for details.
+2026-10-26T15:06:54.4502454Z ##[group]Run sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei
+2026-10-26T15:06:54.4502910Z [36;1msudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends fonts-wqy-zenhei[0m
+2026-10-26T15:06:54.4558428Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:06:54.4558582Z ##[endgroup]
+2026-10-26T15:07:01.6208204Z Selecting previously unselected package fonts-wqy-zenhei.
+2026-10-26T15:07:01.6452175Z (Reading database ... 
+2026-10-26T15:07:01.6452731Z (Reading database ... 5%
+2026-10-26T15:07:01.6453019Z (Reading database ... 10%
+2026-10-26T15:07:01.6453269Z (Reading database ... 15%
+2026-10-26T15:07:01.6453513Z (Reading database ... 20%
+2026-10-26T15:07:01.6453740Z (Reading database ... 25%
+2026-10-26T15:07:01.6453972Z (Reading database ... 30%
+2026-10-26T15:07:01.6454188Z (Reading database ... 35%
+2026-10-26T15:07:01.6454406Z (Reading database ... 40%
+2026-10-26T15:07:01.6454628Z (Reading database ... 45%
+2026-10-26T15:07:01.6454938Z (Reading database ... 50%
+2026-10-26T15:07:01.6503761Z (Reading database ... 55%
+2026-10-26T15:07:01.7330676Z (Reading database ... 60%
+2026-10-26T15:07:01.9336917Z (Reading database ... 65%
+2026-10-26T15:07:02.0954391Z (Reading database ... 70%
+2026-10-26T15:07:02.2833695Z (Reading database ... 75%
+2026-10-26T15:07:02.4836029Z (Reading database ... 80%
+2026-10-26T15:07:02.6507926Z (Reading database ... 85%
+2026-10-26T15:07:02.8074154Z (Reading database ... 90%
+2026-10-26T15:07:02.9996609Z (Reading database ... 95%
+2026-10-26T15:07:02.9996809Z (Reading database ... 100%
+2026-10-26T15:07:02.9997071Z (Reading database ... 203540 files and directories currently installed.)
+2026-10-26T15:07:03.0033367Z Preparing to unpack .../fonts-wqy-zenhei_0.9.45-8_all.deb ...
+2026-10-26T15:07:03.0225622Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-26T15:07:03.4406202Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+2026-10-26T15:07:03.4503584Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+2026-10-26T15:07:03.9265907Z 
+2026-10-26T15:07:03.9266527Z Running kernel seems to be up-to-date.
+2026-10-26T15:07:03.9266777Z 
+2026-10-26T15:07:03.9266922Z No services need to be restarted.
+2026-10-26T15:07:03.9267081Z 
+2026-10-26T15:07:03.9267385Z No containers need to be restarted.
+2026-10-26T15:07:03.9269426Z 
+2026-10-26T15:07:03.9269601Z No user sessions are running outdated binaries.
+2026-10-26T15:07:03.9269799Z 
+2026-10-26T15:07:03.9270055Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+2026-10-26T15:07:04.5933075Z ##[group]Run actions/download-artifact@v4
+2026-10-26T15:07:04.5933250Z with:
+2026-10-26T15:07:04.5933374Z   artifact-ids: 12659763894
+2026-10-26T15:07:04.5933535Z   path: scratch/d090-native-build/attempt-1/
+2026-10-26T15:07:04.5933702Z   merge-multiple: true
+2026-10-26T15:07:04.5933841Z   repository: lijiabao1998/GlimmerTown3D-lab
+2026-10-26T15:07:04.5933999Z   run-id: 40344412536
+2026-10-26T15:07:04.5934121Z ##[endgroup]
+2026-10-26T15:07:04.6893055Z Downloading artifacts by ID
+2026-10-26T15:07:04.6986789Z (node:2666) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-26T15:07:04.6987344Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-26T15:07:04.8791466Z Found 8 artifact(s)
+2026-10-26T15:07:04.8791994Z Preparing to download the following artifacts:
+2026-10-26T15:07:04.8793009Z - d090-native-build-3acc928c5f3edbc273787da5e367b8b95d4cbcfe (ID: 12659763894, Size: 2003521, Expected Digest: sha256:d10a28701793ecb7bda6c4bd1f700dd468106e1caa67a79fb9cdbfc860197e52)
+2026-10-26T15:07:05.0589572Z Redirecting to blob download url: https://productionresultssa12.blob.core.windows.net/actions-results/deec6742-5049-86f9-8799-1ee58ed4a74e/workflow-job-run-b5e88af0-5cd6-5562-a308-c711fcb979e8/artifacts/893b163db8a023cf0f2d0d327bea56fffc5bac2ca004a7cf19c992954454f860.zip
+2026-10-26T15:07:05.0591336Z Starting download of artifact to: /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/scratch/d090-native-build/attempt-1
+2026-10-26T15:07:05.2260700Z (node:2666) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+2026-10-26T15:07:05.4649269Z SHA256 digest of downloaded artifact is d10a28701793ecb7bda6c4bd1f700dd468106e1caa67a79fb9cdbfc860197e52
+2026-10-26T15:07:05.4649649Z Artifact download completed successfully.
+2026-10-26T15:07:05.4649951Z Total of 1 artifact(s) downloaded
+2026-10-26T15:07:05.4654464Z Download artifact has finished successfully
+2026-10-26T15:07:05.4784914Z ##[group]Run test "$(cat scratch/d090-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"
+2026-10-26T15:07:05.4785547Z [36;1mtest "$(cat scratch/d090-native-build/attempt-1/source-commit.txt)" = "$GITHUB_SHA"[0m
+2026-10-26T15:07:05.4786092Z [36;1m(cd scratch/d090-native-build/attempt-1 && sha256sum --check index.sha256)[0m
+2026-10-26T15:07:05.4840031Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:07:05.4840210Z ##[endgroup]
+2026-10-26T15:07:05.4960661Z index.html: OK
+2026-10-26T15:07:05.4975000Z provenance.json: OK
+2026-10-26T15:07:05.4996498Z baseline/index.html: OK
+2026-10-26T15:07:05.5016430Z baseline/provenance.json: OK
+2026-10-26T15:07:05.5059580Z ##[group]Run node proposals/d090/native-browser-check.mjs --width=1440 --attempt=1
+2026-10-26T15:07:05.5059926Z [36;1mnode proposals/d090/native-browser-check.mjs --width=1440 --attempt=1[0m
+2026-10-26T15:07:05.5106846Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:07:05.5106996Z ##[endgroup]
+2026-10-26T15:07:10.8158791Z ACTUAL NATIVE PNG D090-native-catalogue-1440.png
+2026-10-26T15:07:12.3736258Z ACTUAL UI PLACE 10 5 7
+2026-10-26T15:07:13.7354524Z ACTUAL UI PLACE 10 6 8
+2026-10-26T15:07:15.0834242Z ACTUAL UI PLACE 27 3 9
+2026-10-26T15:07:16.4751690Z ACTUAL UI PLACE 27 4 10
+2026-10-26T15:07:17.7760342Z ACTUAL UI PLACE 16 5 11
+2026-10-26T15:07:19.1999460Z ACTUAL UI PLACE 188 1 12
+2026-10-26T15:07:20.5583783Z ACTUAL UI PLACE 190 1 13
+2026-10-26T15:07:21.8248727Z ACTUAL UI PLACE 192 1 14
+2026-10-26T15:07:23.0083331Z ACTUAL UI PLACE 6 6 15
+2026-10-26T15:07:24.1749464Z ACTUAL UI PLACE 14 7 16
+2026-10-26T15:07:26.6055416Z ACTUAL NATIVE PNG D090-native-construction-day0-1440.png
+2026-10-26T15:07:27.6533934Z ACTUAL NATIVE PNG D090-native-construction-day4-1440.png
+2026-10-26T15:07:29.2738323Z ACTUAL NATIVE PNG D090-native-ten-context-1440.png
+2026-10-26T15:07:30.3972254Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-front-1440.png
+2026-10-26T15:07:33.0808085Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-back-1440.png
+2026-10-26T15:07:34.1959017Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-front-1440.png
+2026-10-26T15:07:36.8643862Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-back-1440.png
+2026-10-26T15:07:38.0132501Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-front-1440.png
+2026-10-26T15:07:40.7969407Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-back-1440.png
+2026-10-26T15:07:41.9129660Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-front-1440.png
+2026-10-26T15:07:44.6973282Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-back-1440.png
+2026-10-26T15:07:45.8284998Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-front-1440.png
+2026-10-26T15:07:48.5291963Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-back-1440.png
+2026-10-26T15:07:49.6477604Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-front-1440.png
+2026-10-26T15:07:52.3480540Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-back-1440.png
+2026-10-26T15:07:53.4758985Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-front-1440.png
+2026-10-26T15:07:56.2357630Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-back-1440.png
+2026-10-26T15:07:57.3816163Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-front-1440.png
+2026-10-26T15:08:00.1511685Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-back-1440.png
+2026-10-26T15:08:01.3142292Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-front-1440.png
+2026-10-26T15:08:04.0482822Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-back-1440.png
+2026-10-26T15:08:05.1793621Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-front-1440.png
+2026-10-26T15:08:07.9969506Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-back-1440.png
+2026-10-26T15:08:09.5636132Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-detail-front-1440.png
+2026-10-26T15:08:14.1392900Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-detail-back-1440.png
+2026-10-26T15:08:15.7886467Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-detail-front-1440.png
+2026-10-26T15:08:20.3964759Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-detail-back-1440.png
+2026-10-26T15:08:21.9471448Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-detail-front-1440.png
+2026-10-26T15:08:26.4821127Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-detail-back-1440.png
+2026-10-26T15:08:27.9951499Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-detail-front-1440.png
+2026-10-26T15:08:32.5787963Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-detail-back-1440.png
+2026-10-26T15:08:34.0949623Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-detail-front-1440.png
+2026-10-26T15:08:38.5443860Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-detail-back-1440.png
+2026-10-26T15:08:40.0625565Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-detail-front-1440.png
+2026-10-26T15:08:44.5111117Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-detail-back-1440.png
+2026-10-26T15:08:46.0273307Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-detail-front-1440.png
+2026-10-26T15:08:50.4931098Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-detail-back-1440.png
+2026-10-26T15:08:52.0115510Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-detail-front-1440.png
+2026-10-26T15:08:56.4109796Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-detail-back-1440.png
+2026-10-26T15:08:57.9290233Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-detail-front-1440.png
+2026-10-26T15:09:02.4594477Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-detail-back-1440.png
+2026-10-26T15:09:03.9772135Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-detail-front-1440.png
+2026-10-26T15:09:08.4108250Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-detail-back-1440.png
+2026-10-26T15:09:10.7453207Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-surface-original-1440.png
+2026-10-26T15:09:13.0767808Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-surface-surface-e2-y8-1440.png
+2026-10-26T15:09:15.4267661Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-surface-surface-e2-y13-1440.png
+2026-10-26T15:09:17.7597085Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-surface-surface-e1-y5-1440.png
+2026-10-26T15:09:20.0924698Z ACTUAL NATIVE PNG D090-native-castellated-tank-water-tower-surface-surface-e2-y15-1440.png
+2026-10-26T15:09:22.4099379Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-surface-original-1440.png
+2026-10-26T15:09:24.7423715Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-surface-surface-e0-y8-1440.png
+2026-10-26T15:09:27.0800100Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-surface-surface-e0-y0-1440.png
+2026-10-26T15:09:29.4270254Z ACTUAL NATIVE PNG D090-native-tapered-circular-reservoir-tower-surface-surface-e0-y4-1440.png
+2026-10-26T15:09:31.7938625Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-surface-original-1440.png
+2026-10-26T15:09:34.1261453Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-surface-surface-e0-y8-1440.png
+2026-10-26T15:09:36.4423851Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-surface-surface-e2-y11-1440.png
+2026-10-26T15:09:38.7580984Z ACTUAL NATIVE PNG D090-native-romanesque-sewage-engine-house-surface-surface-e2-y5-1440.png
+2026-10-26T15:09:41.0757879Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-surface-original-1440.png
+2026-10-26T15:09:43.3911795Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-surface-surface-e0-y8-1440.png
+2026-10-26T15:09:45.7080230Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-surface-surface-e2-y0-1440.png
+2026-10-26T15:09:48.0255951Z ACTUAL NATIVE PNG D090-native-circular-filterworks-and-valve-hall-surface-surface-e2-y12-1440.png
+2026-10-26T15:09:50.3415389Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-surface-original-1440.png
+2026-10-26T15:09:52.6580876Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-surface-surface-e2-y8-1440.png
+2026-10-26T15:09:54.9747143Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-surface-surface-e2-y11-1440.png
+2026-10-26T15:09:57.2879887Z ACTUAL NATIVE PNG D090-native-trefoil-apsed-mortuary-cemetery-chapel-surface-surface-e2-y6-1440.png
+2026-10-26T15:09:59.6082368Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-surface-original-1440.png
+2026-10-26T15:10:01.9411623Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-surface-surface-e1-y7-1440.png
+2026-10-26T15:10:04.2552701Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-surface-surface-e0-y11-1440.png
+2026-10-26T15:10:06.5732827Z ACTUAL NATIVE PNG D090-native-lectern-estate-doocot-surface-surface-e2-y5-1440.png
+2026-10-26T15:10:08.8901446Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-surface-original-1440.png
+2026-10-26T15:10:11.2730962Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-surface-surface-e2-y8-1440.png
+2026-10-26T15:10:13.5885183Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-surface-surface-e2-y11-1440.png
+2026-10-26T15:10:15.9061369Z ACTUAL NATIVE PNG D090-native-canted-t-plan-turnpike-lodge-surface-surface-e2-y5-1440.png
+2026-10-26T15:10:18.2232530Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-surface-original-1440.png
+2026-10-26T15:10:20.5393113Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-surface-surface-e2-y7-1440.png
+2026-10-26T15:10:22.8725331Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-surface-surface-e2-y11-1440.png
+2026-10-26T15:10:25.1888417Z ACTUAL NATIVE PNG D090-native-cruciform-village-forge-surface-surface-e2-y3-1440.png
+2026-10-26T15:10:27.5238366Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-surface-original-1440.png
+2026-10-26T15:10:29.8398549Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-surface-surface-e2-y8-1440.png
+2026-10-26T15:10:32.1559605Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-surface-surface-e2-y3-1440.png
+2026-10-26T15:10:34.4700907Z ACTUAL NATIVE PNG D090-native-segmental-roof-rural-firehouse-surface-surface-e2-y2-1440.png
+2026-10-26T15:10:36.7900734Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-surface-original-1440.png
+2026-10-26T15:10:39.1069506Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-surface-surface-e0-y7-1440.png
+2026-10-26T15:10:41.4221243Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-surface-surface-e0-y4-1440.png
+2026-10-26T15:10:43.7390990Z ACTUAL NATIVE PNG D090-native-paired-hexagonal-saddle-roof-reading-library-surface-surface-e0-y11-1440.png
+2026-10-26T15:10:46.9497653Z ACTUAL NATIVE PNG D090-native-saved-reloaded-1440.png
+2026-10-26T15:10:47.2780847Z COMPLETE NATIVE 1440 45 PNGs including additive legal-zoom detail pairs; ten actual UI placements/picks/save reload
+2026-10-26T15:10:48.1915014Z ##[group]Run node proposals/d090/browser-frame-qualification.mjs --manifest=scratch/d090-native-evidence/browser-1440-attempt-1/manifest.json
+2026-10-26T15:10:48.1915599Z [36;1mnode proposals/d090/browser-frame-qualification.mjs --manifest=scratch/d090-native-evidence/browser-1440-attempt-1/manifest.json[0m
+2026-10-26T15:10:48.1968618Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:10:48.1968772Z ##[endgroup]
+2026-10-26T15:10:50.1851343Z {"out":"scratch/d090-native-evidence/browser-1440-attempt-1/frame-qualification.json","passed":true,"completeFrames":42}
+2026-10-26T15:10:50.2100880Z ##[group]Run node proposals/d090/browser-surface-qualification.mjs --manifest=scratch/d090-native-evidence/browser-1440-attempt-1/manifest.json --build=scratch/d090-native-build/attempt-1 --cache-manifest=fixtures/d090/compiled-cache.json
+2026-10-26T15:10:50.2101843Z [36;1mnode proposals/d090/browser-surface-qualification.mjs --manifest=scratch/d090-native-evidence/browser-1440-attempt-1/manifest.json --build=scratch/d090-native-build/attempt-1 --cache-manifest=fixtures/d090/compiled-cache.json[0m
+2026-10-26T15:10:50.2154177Z shell: /usr/bin/bash -e {0}
+2026-10-26T15:10:50.2154333Z ##[endgroup]
+2026-10-26T15:10:54.3294178Z node:internal/modules/run_main:107
+2026-10-26T15:10:54.3294591Z     triggerUncaughtException(
+2026-10-26T15:10:54.3294831Z     ^
+2026-10-26T15:10:54.3294915Z 
+2026-10-26T15:10:54.3295279Z AssertionError [ERR_ASSERTION]: actual raw original-player full-surface coverage every fixed exterior point is visible in an actual declared view
+2026-10-26T15:10:54.3295708Z + actual - expected
+2026-10-26T15:10:54.3295845Z ... Skipped lines
+2026-10-26T15:10:54.3295921Z 
+2026-10-26T15:10:54.3295968Z   [
+2026-10-26T15:10:54.3296119Z     'mesh-1-triangle-1000-barycentric-0',
+2026-10-26T15:10:54.3296325Z     'mesh-1-triangle-1000-barycentric-1',
+2026-10-26T15:10:54.3296577Z     'mesh-1-triangle-1000-barycentric-2',
+2026-10-26T15:10:54.3296884Z     'mesh-1-triangle-1000-barycentric-3',
+2026-10-26T15:10:54.3297132Z ...
+2026-10-26T15:10:54.3297267Z     'mesh-1-triangle-696-barycentric-1',
+2026-10-26T15:10:54.3297653Z -   'mesh-1-triangle-696-barycentric-2',
+2026-10-26T15:10:54.3297864Z -   'mesh-1-triangle-696-barycentric-3',
+2026-10-26T15:10:54.3298039Z     'mesh-1-triangle-697-barycentric-0',
+2026-10-26T15:10:54.3298217Z     'mesh-1-triangle-697-barycentric-1',
+2026-10-26T15:10:54.3298394Z     'mesh-1-triangle-697-barycentric-2',
+2026-10-26T15:10:54.3298566Z     'mesh-1-triangle-697-barycentric-3',
+2026-10-26T15:10:54.3298743Z     'mesh-1-triangle-708-barycentric-0',
+2026-10-26T15:10:54.3298851Z 
+2026-10-26T15:10:54.3299111Z     at assertD081SurfaceCoverage (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/tools/d081-frame.mjs:352:68)
+2026-10-26T15:10:54.3299679Z     at qualifyBrowserSurfacesV7 (file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/proposals/d090/browser-surface-qualification.mjs:24:17)
+2026-10-26T15:10:54.3300332Z     at async file:///home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab/proposals/d090/browser-surface-qualification.mjs:26:505 {
+2026-10-26T15:10:54.3300898Z   generatedMessage: false,
+2026-10-26T15:10:54.3301162Z   code: 'ERR_ASSERTION',
+2026-10-26T15:10:54.3301393Z   actual: [
+2026-10-26T15:10:54.3301603Z     'mesh-1-triangle-1000-barycentric-0',
+2026-10-26T15:10:54.3302146Z     'mesh-1-triangle-1000-barycentric-1',
+2026-10-26T15:10:54.3302427Z     'mesh-1-triangle-1000-barycentric-2',
+2026-10-26T15:10:54.3302706Z     'mesh-1-triangle-1000-barycentric-3',
+2026-10-26T15:10:54.3302978Z     'mesh-1-triangle-1001-barycentric-0',
+2026-10-26T15:10:54.3303258Z     'mesh-1-triangle-1001-barycentric-1',
+2026-10-26T15:10:54.3303532Z     'mesh-1-triangle-1001-barycentric-2',
+2026-10-26T15:10:54.3303813Z     'mesh-1-triangle-1001-barycentric-3',
+2026-10-26T15:10:54.3304091Z     'mesh-1-triangle-1002-barycentric-0',
+2026-10-26T15:10:54.3304365Z     'mesh-1-triangle-1002-barycentric-1',
+2026-10-26T15:10:54.3304645Z     'mesh-1-triangle-1002-barycentric-2',
+2026-10-26T15:10:54.3304921Z     'mesh-1-triangle-1002-barycentric-3',
+2026-10-26T15:10:54.3305198Z     'mesh-1-triangle-1003-barycentric-0',
+2026-10-26T15:10:54.3305472Z     'mesh-1-triangle-1003-barycentric-1',
+2026-10-26T15:10:54.3305755Z     'mesh-1-triangle-1003-barycentric-2',
+2026-10-26T15:10:54.3306029Z     'mesh-1-triangle-1003-barycentric-3',
+2026-10-26T15:10:54.3306310Z     'mesh-1-triangle-1004-barycentric-0',
+2026-10-26T15:10:54.3306587Z     'mesh-1-triangle-1004-barycentric-1',
+2026-10-26T15:10:54.3306863Z     'mesh-1-triangle-1004-barycentric-2',
+2026-10-26T15:10:54.3307327Z     'mesh-1-triangle-1004-barycentric-3',
+2026-10-26T15:10:54.3307723Z     'mesh-1-triangle-1005-barycentric-0',
+2026-10-26T15:10:54.3307997Z     'mesh-1-triangle-1005-barycentric-1',
+2026-10-26T15:10:54.3308273Z     'mesh-1-triangle-1005-barycentric-2',
+2026-10-26T15:10:54.3308555Z     'mesh-1-triangle-1005-barycentric-3',
+2026-10-26T15:10:54.3308825Z     'mesh-1-triangle-1006-barycentric-0',
+2026-10-26T15:10:54.3309105Z     'mesh-1-triangle-1006-barycentric-1',
+2026-10-26T15:10:54.3309380Z     'mesh-1-triangle-1006-barycentric-2',
+2026-10-26T15:10:54.3309656Z     'mesh-1-triangle-1006-barycentric-3',
+2026-10-26T15:10:54.3309932Z     'mesh-1-triangle-1007-barycentric-0',
+2026-10-26T15:10:54.3310208Z     'mesh-1-triangle-1007-barycentric-1',
+2026-10-26T15:10:54.3310486Z     'mesh-1-triangle-1007-barycentric-2',
+2026-10-26T15:10:54.3310763Z     'mesh-1-triangle-1007-barycentric-3',
+2026-10-26T15:10:54.3311032Z     'mesh-1-triangle-1012-barycentric-0',
+2026-10-26T15:10:54.3311305Z     'mesh-1-triangle-1012-barycentric-1',
+2026-10-26T15:10:54.3311589Z     'mesh-1-triangle-1012-barycentric-2',
+2026-10-26T15:10:54.3311866Z     'mesh-1-triangle-1012-barycentric-3',
+2026-10-26T15:10:54.3312147Z     'mesh-1-triangle-1013-barycentric-0',
+2026-10-26T15:10:54.3312424Z     'mesh-1-triangle-1013-barycentric-1',
+2026-10-26T15:10:54.3312705Z     'mesh-1-triangle-1013-barycentric-2',
+2026-10-26T15:10:54.3313056Z     'mesh-1-triangle-1013-barycentric-3',
+2026-10-26T15:10:54.3313369Z     'mesh-1-triangle-1015-barycentric-0',
+2026-10-26T15:10:54.3313653Z     'mesh-1-triangle-1015-barycentric-1',
+2026-10-26T15:10:54.3313940Z     'mesh-1-triangle-1015-barycentric-2',
+2026-10-26T15:10:54.3314220Z     'mesh-1-triangle-1015-barycentric-3',
+2026-10-26T15:10:54.3314498Z     'mesh-1-triangle-1020-barycentric-0',
+2026-10-26T15:10:54.3314779Z     'mesh-1-triangle-1020-barycentric-1',
+2026-10-26T15:10:54.3315051Z     'mesh-1-triangle-1020-barycentric-2',
+2026-10-26T15:10:54.3315353Z     'mesh-1-triangle-1020-barycentric-3',
+2026-10-26T15:10:54.3315653Z     'mesh-1-triangle-1021-barycentric-0',
+2026-10-26T15:10:54.3315928Z     'mesh-1-triangle-1021-barycentric-1',
+2026-10-26T15:10:54.3316207Z     'mesh-1-triangle-1021-barycentric-2',
+2026-10-26T15:10:54.3316486Z     'mesh-1-triangle-1021-barycentric-3',
+2026-10-26T15:10:54.3316765Z     'mesh-1-triangle-1022-barycentric-0',
+2026-10-26T15:10:54.3317037Z     'mesh-1-triangle-1022-barycentric-1',
+2026-10-26T15:10:54.3317390Z     'mesh-1-triangle-1022-barycentric-2',
+2026-10-26T15:10:54.3317774Z     'mesh-1-triangle-1023-barycentric-0',
+2026-10-26T15:10:54.3318050Z     'mesh-1-triangle-1023-barycentric-1',
+2026-10-26T15:10:54.3318329Z     'mesh-1-triangle-1023-barycentric-2',
+2026-10-26T15:10:54.3318601Z     'mesh-1-triangle-1023-barycentric-3',
+2026-10-26T15:10:54.3319006Z     'mesh-1-triangle-1024-barycentric-0',
+2026-10-26T15:10:54.3319280Z     'mesh-1-triangle-1024-barycentric-1',
+2026-10-26T15:10:54.3319548Z     'mesh-1-triangle-1024-barycentric-2',
+2026-10-26T15:10:54.3319824Z     'mesh-1-triangle-1024-barycentric-3',
+2026-10-26T15:10:54.3320105Z     'mesh-1-triangle-1025-barycentric-1',
+2026-10-26T15:10:54.3320372Z     'mesh-1-triangle-1026-barycentric-0',
+2026-10-26T15:10:54.3320641Z     'mesh-1-triangle-1026-barycentric-1',
+2026-10-26T15:10:54.3320917Z     'mesh-1-triangle-1026-barycentric-2',
+2026-10-26T15:10:54.3321189Z     'mesh-1-triangle-1026-barycentric-3',
+2026-10-26T15:10:54.3321470Z     'mesh-1-triangle-1027-barycentric-0',
+2026-10-26T15:10:54.3321750Z     'mesh-1-triangle-1027-barycentric-1',
+2026-10-26T15:10:54.3322029Z     'mesh-1-triangle-1027-barycentric-2',
+2026-10-26T15:10:54.3322303Z     'mesh-1-triangle-1027-barycentric-3',
+2026-10-26T15:10:54.3322580Z     'mesh-1-triangle-1028-barycentric-0',
+2026-10-26T15:10:54.3322860Z     'mesh-1-triangle-1028-barycentric-2',
+2026-10-26T15:10:54.3323139Z     'mesh-1-triangle-1028-barycentric-3',
+2026-10-26T15:10:54.3323416Z     'mesh-1-triangle-1029-barycentric-0',
+2026-10-26T15:10:54.3323689Z     'mesh-1-triangle-1029-barycentric-1',
+2026-10-26T15:10:54.3324448Z     'mesh-1-triangle-1029-barycentric-2',
+2026-10-26T15:10:54.3324722Z     'mesh-1-triangle-1029-barycentric-3',
+2026-10-26T15:10:54.3324999Z     'mesh-1-triangle-1030-barycentric-0',
+2026-10-26T15:10:54.3325278Z     'mesh-1-triangle-1030-barycentric-1',
+2026-10-26T15:10:54.3325557Z     'mesh-1-triangle-1030-barycentric-2',
+2026-10-26T15:10:54.3325832Z     'mesh-1-triangle-1030-barycentric-3',
+2026-10-26T15:10:54.3326112Z     'mesh-1-triangle-1031-barycentric-0',
+2026-10-26T15:10:54.3326390Z     'mesh-1-triangle-1031-barycentric-1',
+2026-10-26T15:10:54.3326671Z     'mesh-1-triangle-1031-barycentric-2',
+2026-10-26T15:10:54.3326950Z     'mesh-1-triangle-1031-barycentric-3',
+2026-10-26T15:10:54.3327228Z     'mesh-1-triangle-1032-barycentric-0',
+2026-10-26T15:10:54.3327609Z     'mesh-1-triangle-1032-barycentric-1',
+2026-10-26T15:10:54.3327889Z     'mesh-1-triangle-1032-barycentric-2',
+2026-10-26T15:10:54.3328206Z     'mesh-1-triangle-1032-barycentric-3',
+2026-10-26T15:10:54.3328475Z     'mesh-1-triangle-1033-barycentric-0',
+2026-10-26T15:10:54.3328749Z     'mesh-1-triangle-1033-barycentric-1',
+2026-10-26T15:10:54.3329048Z     'mesh-1-triangle-1033-barycentric-2',
+2026-10-26T15:10:54.3329324Z     'mesh-1-triangle-1033-barycentric-3',
+2026-10-26T15:10:54.3329603Z     'mesh-1-triangle-1034-barycentric-0',
+2026-10-26T15:10:54.3329881Z     'mesh-1-triangle-1034-barycentric-1',
+2026-10-26T15:10:54.3330157Z     'mesh-1-triangle-1034-barycentric-2',
+2026-10-26T15:10:54.3330433Z     'mesh-1-triangle-1034-barycentric-3',
+2026-10-26T15:10:54.3330708Z     'mesh-1-triangle-1035-barycentric-0',
+2026-10-26T15:10:54.3330959Z     ... 2281 more items
+2026-10-26T15:10:54.3331155Z   ],
+2026-10-26T15:10:54.3331333Z   expected: [
+2026-10-26T15:10:54.3331559Z     'mesh-1-triangle-1000-barycentric-0',
+2026-10-26T15:10:54.3331840Z     'mesh-1-triangle-1000-barycentric-1',
+2026-10-26T15:10:54.3332119Z     'mesh-1-triangle-1000-barycentric-2',
+2026-10-26T15:10:54.3332393Z     'mesh-1-triangle-1000-barycentric-3',
+2026-10-26T15:10:54.3332674Z     'mesh-1-triangle-1001-barycentric-0',
+2026-10-26T15:10:54.3332942Z     'mesh-1-triangle-1001-barycentric-1',
+2026-10-26T15:10:54.3333222Z     'mesh-1-triangle-1001-barycentric-2',
+2026-10-26T15:10:54.3333503Z     'mesh-1-triangle-1001-barycentric-3',
+2026-10-26T15:10:54.3333787Z     'mesh-1-triangle-1002-barycentric-0',
+2026-10-26T15:10:54.3334064Z     'mesh-1-triangle-1002-barycentric-1',
+2026-10-26T15:10:54.3334337Z     'mesh-1-triangle-1002-barycentric-2',
+2026-10-26T15:10:54.3334614Z     'mesh-1-triangle-1002-barycentric-3',
+2026-10-26T15:10:54.3334894Z     'mesh-1-triangle-1003-barycentric-0',
+2026-10-26T15:10:54.3335167Z     'mesh-1-triangle-1003-barycentric-1',
+2026-10-26T15:10:54.3335441Z     'mesh-1-triangle-1003-barycentric-2',
+2026-10-26T15:10:54.3335838Z     'mesh-1-triangle-1003-barycentric-3',
+2026-10-26T15:10:54.3336157Z     'mesh-1-triangle-1004-barycentric-0',
+2026-10-26T15:10:54.3336449Z     'mesh-1-triangle-1004-barycentric-1',
+2026-10-26T15:10:54.3336740Z     'mesh-1-triangle-1004-barycentric-2',
+2026-10-26T15:10:54.3337031Z     'mesh-1-triangle-1004-barycentric-3',
+2026-10-26T15:10:54.3337316Z     'mesh-1-triangle-1005-barycentric-0',
+2026-10-26T15:10:54.3337724Z     'mesh-1-triangle-1005-barycentric-1',
+2026-10-26T15:10:54.3338007Z     'mesh-1-triangle-1005-barycentric-2',
+2026-10-26T15:10:54.3338286Z     'mesh-1-triangle-1005-barycentric-3',
+2026-10-26T15:10:54.3338563Z     'mesh-1-triangle-1006-barycentric-0',
+2026-10-26T15:10:54.3338843Z     'mesh-1-triangle-1006-barycentric-1',
+2026-10-26T15:10:54.3339120Z     'mesh-1-triangle-1006-barycentric-2',
+2026-10-26T15:10:54.3339398Z     'mesh-1-triangle-1006-barycentric-3',
+2026-10-26T15:10:54.3339674Z     'mesh-1-triangle-1007-barycentric-0',
+2026-10-26T15:10:54.3339957Z     'mesh-1-triangle-1007-barycentric-1',
+2026-10-26T15:10:54.3340234Z     'mesh-1-triangle-1007-barycentric-2',
+2026-10-26T15:10:54.3340505Z     'mesh-1-triangle-1007-barycentric-3',
+2026-10-26T15:10:54.3340777Z     'mesh-1-triangle-1012-barycentric-0',
+2026-10-26T15:10:54.3341222Z     'mesh-1-triangle-1012-barycentric-1',
+2026-10-26T15:10:54.3341491Z     'mesh-1-triangle-1012-barycentric-2',
+2026-10-26T15:10:54.3341755Z     'mesh-1-triangle-1012-barycentric-3',
+2026-10-26T15:10:54.3342022Z     'mesh-1-triangle-1013-barycentric-0',
+2026-10-26T15:10:54.3342287Z     'mesh-1-triangle-1013-barycentric-1',
+2026-10-26T15:10:54.3342553Z     'mesh-1-triangle-1013-barycentric-2',
+2026-10-26T15:10:54.3342817Z     'mesh-1-triangle-1013-barycentric-3',
+2026-10-26T15:10:54.3343081Z     'mesh-1-triangle-1015-barycentric-0',
+2026-10-26T15:10:54.3343348Z     'mesh-1-triangle-1015-barycentric-1',
+2026-10-26T15:10:54.3343611Z     'mesh-1-triangle-1015-barycentric-2',
+2026-10-26T15:10:54.3343878Z     'mesh-1-triangle-1015-barycentric-3',
+2026-10-26T15:10:54.3344146Z     'mesh-1-triangle-1020-barycentric-0',
+2026-10-26T15:10:54.3344418Z     'mesh-1-triangle-1020-barycentric-1',
+2026-10-26T15:10:54.3344687Z     'mesh-1-triangle-1020-barycentric-2',
+2026-10-26T15:10:54.3344961Z     'mesh-1-triangle-1020-barycentric-3',
+2026-10-26T15:10:54.3345230Z     'mesh-1-triangle-1021-barycentric-0',
+2026-10-26T15:10:54.3345503Z     'mesh-1-triangle-1021-barycentric-1',
+2026-10-26T15:10:54.3345775Z     'mesh-1-triangle-1021-barycentric-2',
+2026-10-26T15:10:54.3346052Z     'mesh-1-triangle-1021-barycentric-3',
+2026-10-26T15:10:54.3346324Z     'mesh-1-triangle-1022-barycentric-0',
+2026-10-26T15:10:54.3346596Z     'mesh-1-triangle-1022-barycentric-1',
+2026-10-26T15:10:54.3346872Z     'mesh-1-triangle-1022-barycentric-2',
+2026-10-26T15:10:54.3347145Z     'mesh-1-triangle-1023-barycentric-0',
+2026-10-26T15:10:54.3347422Z     'mesh-1-triangle-1023-barycentric-1',
+2026-10-26T15:10:54.3347820Z     'mesh-1-triangle-1023-barycentric-2',
+2026-10-26T15:10:54.3348091Z     'mesh-1-triangle-1023-barycentric-3',
+2026-10-26T15:10:54.3348357Z     'mesh-1-triangle-1024-barycentric-0',
+2026-10-26T15:10:54.3348623Z     'mesh-1-triangle-1024-barycentric-1',
+2026-10-26T15:10:54.3348891Z     'mesh-1-triangle-1024-barycentric-2',
+2026-10-26T15:10:54.3349161Z     'mesh-1-triangle-1024-barycentric-3',
+2026-10-26T15:10:54.3349427Z     'mesh-1-triangle-1025-barycentric-1',
+2026-10-26T15:10:54.3349704Z     'mesh-1-triangle-1026-barycentric-0',
+2026-10-26T15:10:54.3349972Z     'mesh-1-triangle-1026-barycentric-1',
+2026-10-26T15:10:54.3350236Z     'mesh-1-triangle-1026-barycentric-2',
+2026-10-26T15:10:54.3350500Z     'mesh-1-triangle-1026-barycentric-3',
+2026-10-26T15:10:54.3350766Z     'mesh-1-triangle-1027-barycentric-0',
+2026-10-26T15:10:54.3351031Z     'mesh-1-triangle-1027-barycentric-1',
+2026-10-26T15:10:54.3351298Z     'mesh-1-triangle-1027-barycentric-2',
+2026-10-26T15:10:54.3351562Z     'mesh-1-triangle-1027-barycentric-3',
+2026-10-26T15:10:54.3352121Z     'mesh-1-triangle-1028-barycentric-0',
+2026-10-26T15:10:54.3352385Z     'mesh-1-triangle-1028-barycentric-2',
+2026-10-26T15:10:54.3352652Z     'mesh-1-triangle-1028-barycentric-3',
+2026-10-26T15:10:54.3352917Z     'mesh-1-triangle-1029-barycentric-0',
+2026-10-26T15:10:54.3353188Z     'mesh-1-triangle-1029-barycentric-1',
+2026-10-26T15:10:54.3353452Z     'mesh-1-triangle-1029-barycentric-2',
+2026-10-26T15:10:54.3353715Z     'mesh-1-triangle-1029-barycentric-3',
+2026-10-26T15:10:54.3353980Z     'mesh-1-triangle-1030-barycentric-0',
+2026-10-26T15:10:54.3354244Z     'mesh-1-triangle-1030-barycentric-1',
+2026-10-26T15:10:54.3354513Z     'mesh-1-triangle-1030-barycentric-2',
+2026-10-26T15:10:54.3354777Z     'mesh-1-triangle-1030-barycentric-3',
+2026-10-26T15:10:54.3355043Z     'mesh-1-triangle-1031-barycentric-0',
+2026-10-26T15:10:54.3355310Z     'mesh-1-triangle-1031-barycentric-1',
+2026-10-26T15:10:54.3355577Z     'mesh-1-triangle-1031-barycentric-2',
+2026-10-26T15:10:54.3355868Z     'mesh-1-triangle-1031-barycentric-3',
+2026-10-26T15:10:54.3356165Z     'mesh-1-triangle-1032-barycentric-0',
+2026-10-26T15:10:54.3356445Z     'mesh-1-triangle-1032-barycentric-1',
+2026-10-26T15:10:54.3356729Z     'mesh-1-triangle-1032-barycentric-2',
+2026-10-26T15:10:54.3357207Z     'mesh-1-triangle-1032-barycentric-3',
+2026-10-26T15:10:54.3357607Z     'mesh-1-triangle-1033-barycentric-0',
+2026-10-26T15:10:54.3357911Z     'mesh-1-triangle-1033-barycentric-1',
+2026-10-26T15:10:54.3358192Z     'mesh-1-triangle-1033-barycentric-2',
+2026-10-26T15:10:54.3358475Z     'mesh-1-triangle-1033-barycentric-3',
+2026-10-26T15:10:54.3358756Z     'mesh-1-triangle-1034-barycentric-0',
+2026-10-26T15:10:54.3359048Z     'mesh-1-triangle-1034-barycentric-1',
+2026-10-26T15:10:54.3359361Z     'mesh-1-triangle-1034-barycentric-2',
+2026-10-26T15:10:54.3359674Z     'mesh-1-triangle-1034-barycentric-3',
+2026-10-26T15:10:54.3359966Z     'mesh-1-triangle-1035-barycentric-0',
+2026-10-26T15:10:54.3360214Z     ... 2283 more items
+2026-10-26T15:10:54.3360405Z   ],
+2026-10-26T15:10:54.3360612Z   operator: 'deepStrictEqual',
+2026-10-26T15:10:54.3360841Z   diff: 'simple'
+2026-10-26T15:10:54.3361044Z }
+2026-10-26T15:10:54.3361149Z 
+2026-10-26T15:10:54.3361242Z Node.js v24.21.0
+2026-10-26T15:10:54.3525114Z ##[error]Process completed with exit code 1.
+2026-10-26T15:10:54.3573946Z ##[group]Run actions/upload-artifact@v4
+2026-10-26T15:10:54.3574119Z with:
+2026-10-26T15:10:54.3574306Z   name: d090-native-game-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe
+2026-10-26T15:10:54.3574537Z   path: scratch/d090-native-evidence/
+2026-10-26T15:10:54.3574699Z   if-no-files-found: error
+2026-10-26T15:10:54.3574836Z   retention-days: 30
+2026-10-26T15:10:54.3574964Z   compression-level: 6
+2026-10-26T15:10:54.3575096Z   overwrite: false
+2026-10-26T15:10:54.3575223Z   include-hidden-files: false
+2026-10-26T15:10:54.3575369Z ##[endgroup]
+2026-10-26T15:10:54.4609248Z (node:3328) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-10-26T15:10:54.4610044Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-10-26T15:10:54.4811253Z With the provided path, there will be 178 files uploaded
+2026-10-26T15:10:54.4815824Z Artifact name is valid!
+2026-10-26T15:10:54.4816157Z Root directory input is valid!
+2026-10-26T15:10:54.7883968Z Beginning upload of artifact content to blob storage
+2026-10-26T15:10:55.0072549Z (node:3328) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-10-26T15:10:55.4598374Z Uploaded bytes 8388608
+2026-10-26T15:10:55.6810970Z Uploaded bytes 14122992
+2026-10-26T15:10:55.7221398Z Finished uploading artifact content to blob storage!
+2026-10-26T15:10:55.7222041Z SHA256 digest of uploaded artifact zip is 22d8817c58a8aa5873f337c175173ed54fde4232165294c48bfe24fc9f3a5bc2
+2026-10-26T15:10:55.7223401Z Finalizing artifact upload
+2026-10-26T15:10:56.1763104Z Artifact d090-native-game-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe.zip successfully finalized. Artifact ID 12661512504
+2026-10-26T15:10:56.1764344Z Artifact d090-native-game-1440-3acc928c5f3edbc273787da5e367b8b95d4cbcfe has been successfully uploaded! Final size is 14122992 bytes. Artifact ID is 12661512504
+2026-10-26T15:10:56.1767415Z Artifact download URL: https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40344412536/artifacts/12661512504
+2026-10-26T15:10:56.1949444Z Post job cleanup.
+2026-10-26T15:10:56.2472114Z [command]/usr/bin/git version
+2026-10-26T15:10:56.2502547Z git version 2.55.0
+2026-10-26T15:10:56.2525647Z Temporarily overriding HOME='/home/runner/work/_temp/f460edd6-1efc-4297-b28a-83c540c1b5a7' before making global git config changes
+2026-10-26T15:10:56.2526660Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-26T15:10:56.2529474Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/GlimmerTown3D-lab/GlimmerTown3D-lab
+2026-10-26T15:10:56.2558980Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-26T15:10:56.2585270Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-10-26T15:10:56.2788116Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-10-26T15:10:56.2816994Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-10-26T15:10:56.3020139Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-10-26T15:10:56.3051501Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-10-26T15:10:56.3341507Z Cleaning up orphan processes
+2026-10-26T15:10:56.3565904Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/download-artifact@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

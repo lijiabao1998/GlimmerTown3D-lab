@@ -1,0 +1,81 @@
+OK D052 original main action controls retain their independently verified c1ac6154 SHA256 fingerprints 
+OK D052 paused paid/free/repeat/failure research, real successful/quota/journal-fallback saves and exact original action effects 
+OK D052 ecoReg capacity and coach refresh together; original cooldown, allocation, raw roads and state retained 
+OK D052 four budgets at both clamps and adjacent steps; real recoverCov, schoolLunch load quirk, history and saves retained 
+OK D052 actual fee/label/accessibility text: paid, resume, sandbox, active, completed and prerequisite lock 
+OK D052 population 49/50/51 and Lv.3 exact eligibility; sandbox, active legacy drop and offer ordering preserved 
+OK D052 real advance/simDay updates open panel progress, completion, unlocks, funds/date and single commission payout 
+OK D052 pending load rate/ETA and recent settlement estimates; facilities, C6 and paused specialization preserve original speed 
+OK D052 complete raw model/save/storage/journal/RNG read-only checks and 20 uninterrupted paired daily trajectories 
+OK D052 stable unchanged button identities, focus and scroll with current one-shot actions at DOM boundary 
+OK D052 actual reconciliation helper retains keyed identities, current handlers/attributes/styles/text and removes obsolete rows 
+OK D052 legacy keyed moves restore focus and scroll while honestly losing unavailable atomic pointer capture 
+OK D052 one original daily promotion reorders actual offers, retaining moved control focus/capture and its new acceptance index 
+OK D052 actual press gate handles click ordering, latest render, no-click/cancel, two pointers, new-press timer race and lifecycle 
+OK D052 held panels freeze all presentation while model/HUD/save remain immediate; real promoted offer accepts by current ID 
+OK D052 actual close/backdrop/city cleanup discards queued render and reopening accepts exactly once 
+OK D052 valid behavior mutations are rejected by independent assertions 35 valid actual-source/helper mutations rejected by behavioral assertions
+OK D052 actual press gate and renderer wiring mutations are rejected 8 additional actual gate/wiring mutations rejected
+OK D054 UI actual site panel content and retained-control lifecycle actual sitePanel accessible shell, captured/current distinction, held updates/latest flush, row/button/focus/scroll/capture retention, second pointer, cancel, blur/pagehide, close/backdrop
+OK D054 UI actual on-map diagnostic wording actual cost text preserves counts/mixed reasons/exact money/gesture funding rule/negative sandbox/resource/gas/network qualifications
+FAIL D054 UI actual commit and undo integration parity ReferenceError: utilityHeritageTool is not defined
+    at syncPipes (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:86:25)
+    at setTool (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:95:5)
+    at Object.choose (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:174:163)
+    at integration (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:134:7)
+    at Module.d054UiGuards (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:253:106)
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-current-inherited-ui-guards.mjs:10:217
+FAIL D054 UI actual warmup refresh interruption and pipe-layer integration ReferenceError: utilityHeritageTool is not defined
+    at syncPipes (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:86:25)
+    at setTool (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:95:5)
+    at Object.choose (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:174:163)
+    at refreshAndWarmup (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:165:5)
+    at Module.d054UiGuards (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:253:106)
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-current-inherited-ui-guards.mjs:10:217
+FAIL D054 UI actual idle product preparation purity ReferenceError: utilityHeritageTool is not defined
+    at syncPipes (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:86:25)
+    at setTool (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:95:5)
+    at Object.choose (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:174:90)
+    at idleWarmup (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:184:14)
+    at Module.d054UiGuards (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:253:106)
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-current-inherited-ui-guards.mjs:10:217
+FAIL D054 UI actual UI mutation sensitivity ReferenceError: utilityHeritageTool is not defined
+    at syncPipes (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:86:25)
+    at setTool (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:95:5)
+    at Object.choose (eval at cityHarness (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:119:15), <anonymous>:174:163)
+    at integration (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:134:7)
+    at mutations (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:215:36)
+    at Module.d054UiGuards (file:///tmp/GlimmerTown3D-lab-d090-own/tools/unit-d054-ui-d090.mjs:253:106)
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-current-inherited-ui-guards.mjs:10:217
+OK D081 touch lease actual renderer next-task freshness and delayed acceptance seed1 reversefalse 
+OK D081 touch lease actual renderer next-task freshness and delayed acceptance seed1 reversetrue 
+OK D081 touch lease actual renderer next-task freshness and delayed acceptance seed5 reversefalse 
+OK D081 touch lease actual renderer next-task freshness and delayed acceptance seed5 reversetrue 
+OK D081 touch lease unaltered PR33 source fails new structural protection control 
+OK D081 touch lease unrelated click cannot resolve released offer; later days remain fresh 
+OK D081 touch lease late cancellation after fallback releases pending structural reconciliation 
+OK D081 touch lease two contacts retain independent activation and reject second acceptance 
+OK D081 touch lease close/reopen discards stale lease and queued presentation 
+OK D081 touch lease reused pointer ID cannot silently discard an older unresolved target 
+OK D081 touch lease reused pointer ID on #cmX cannot cancel an older offer lease 
+OK D081 touch lease reused pointer ID on #tc cannot cancel an older offer lease 
+OK D081 touch lease resource saturation conservatively preserves slots until explicit close 
+OK D081 touch lease constructed actual-source early-release and dropped-freshness mutations are rejected 
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+  assert.ok(report.passed)
+
+    at file:///tmp/GlimmerTown3D-lab-d090-own/proposals/d090/native-current-inherited-ui-guards.mjs:11:351 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.19.0

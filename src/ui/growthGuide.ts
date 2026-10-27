@@ -6,6 +6,7 @@ import { CIVIC_MARKET_BUILDINGS } from '../content/britishCivicMarkets.ts';
 import { WORKING_RURAL_BUILDINGS } from '../content/britishWorkingRural.ts';
 import { PUBLIC_SERVICE_BUILDINGS } from '../content/britishPublicServices.ts';
 import { MARKET_ESTATE_BUILDINGS } from '../content/britishMarketEstates.ts';
+import { UTILITY_HERITAGE_BUILDINGS } from '../content/britishUtilityHeritage.ts';
 import { RANKS } from '../sim/rules/rank.ts';
 
 export const FACILITY_GROUPS = [
@@ -19,7 +20,9 @@ const NATIVE_ART_USE:Readonly<Record<string,string>>={market:'農貿收入與市
 const WORKING_RURAL_USE:Readonly<Record<string,string>>={farm:'農業糧食生產',ranch:'牧業糧食生產',bigFarm:'大型糧食生產基地',greenhouse:'溫室農業生產',foodPlant:'將糧食盈餘加工為收入，不增加新的原料種類'};
 const PUBLIC_SERVICE_USE:Readonly<Record<string,string>>={police:'提供警察服務覆蓋',policeBox:'提供派出所警力覆蓋',hospital:'提供醫院醫療覆蓋',clinic:'提供診所醫療覆蓋',school:'提供學校教育覆蓋',library:'提供圖書館服務覆蓋',post:'提供郵政服務覆蓋'};
 const MARKET_ESTATE_USE:Readonly<Record<string,string>>={market:'農貿收入與市場覆蓋',tradepost:'產生外貿收入，支援外貿委託',foodPlant:'沿用糧食加工收入，不新增乳品、蘋果酒或原料機制',farm:'歷史人畜混合長屋外形改作耕作農舍與儲藏；沿用糧食生產，不新增牲畜機制',bigFarm:'大型糧食生產基地',greenhouse:'溫室農業生產，不新增研究機制'};
+const UTILITY_HERITAGE_USE:Readonly<Record<string,string>>={water:'沿用水塔供水容量與配水管網',sewage:'沿用污水廠接管服務，不新增過濾機制',cemetery:'沿用墓園覆蓋，不新增火化或婚禮機制',heritageDovecote:'歷史鴿舍街景，不新增鳥類或糧食生產',heritageTollhouse:'歷史收費亭街景，不新增通行費或運輸規則',heritageSmithy:'歷史鐵匠鋪街景，不新增金屬資源或工業生產',fire:'提供原消防服務覆蓋',library:'提供原圖書館服務覆蓋'};
 export const FACILITY_NOTES: Readonly<Record<string, FacilityNote>> = {
+  ...Object.fromEntries(UTILITY_HERITAGE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:UTILITY_HERITAGE_USE[m.baseTool]+'；原費用與施工規則不變',placement:m.size===2?'連續2×2空陸地；整塊交通、管線與其他阻擋均依原歷史建築規則。':m.baseTool==='sewage'?'1×1陸地，周圍3×3內至少2格水域；交通線與電力走廊依原污水廠規則，以預覽為準。':'1×1陸地；原設施地形、道路與占地規則均保留，以落點預覽為準。'}])),
   ...Object.fromEntries(MARKET_ESTATE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:MARKET_ESTATE_USE[m.baseTool]+'；原設施生產、服務、費用與施工規則不變',placement:`連續${m.size}×${m.size}${['farm','bigFarm','greenhouse'].includes(m.baseTool)?'草地':'陸地'}；整塊占地、交通線、電力走廊與其他阻擋均依原設施規則，以落點預覽為準。`}])),
   ...Object.fromEntries(PUBLIC_SERVICE_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:PUBLIC_SERVICE_USE[m.baseTool]+'；原設施服務、費用與施工規則不變',placement:'1×1陸地；原設施的地形、占地與阻擋規則均保留，以落點預覽為準。'}])),
   ...Object.fromEntries(WORKING_RURAL_BUILDINGS.map(m=>[m.tool,{group:'heritage' as const,use:WORKING_RURAL_USE[m.baseTool]+'；原設施生產、供電與費用規則不變',placement:`連續${m.size}×${m.size}${m.baseTool==='foodPlant'?'陸地':'草地'}；整塊占地、交通線、電力走廊與其他阻擋均依原設施規則，以落點預覽為準。`}])),

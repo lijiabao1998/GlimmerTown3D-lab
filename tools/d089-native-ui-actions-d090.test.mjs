@@ -1,0 +1,20 @@
+// D090 finite current contract. Original tools/d089-native-ui-actions.test.mjs remains byte-exact at 5b41bac165ba2b29146e6835490357bebc3cd549.
+// Actual shipped selection/commit functions through the established D053 Node
+// boundary. This does not substitute for required real mouse/touch Chrome tests.
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import{stripTypeScriptTypes}from'node:module';
+import * as Edit from '../src/sim/edit.ts';
+import{MARKET_ESTATE_BUILDINGS as MODELS}from'../src/content/britishMarketEstates.ts';
+import{loaded,op,snapshot}from'./d089-native-support.mjs';
+const read=f=>fs.readFileSync(new URL('../'+f,import.meta.url),'utf8'),citySource=read('src/cityView.ts');
+const strip=source=>stripTypeScriptTypes(source).replace(/^import .*?;\s*$/gm,'').replace(/\bexport (?=(?:function|const)\b)/g,'');
+const section=(source,start,end)=>{assert.equal(source.split(start).length,2);const a=source.indexOf(start),b=source.indexOf(end,a);assert.ok(b>a);return source.slice(a,b);};
+const harnessSource=section(read('tools/unit-d053-d090.mjs'),'function selectionHarness(','function selectionAndCommit(');
+const deps={...Edit,citySource,section,strip};
+const selectionHarness=Function(...Object.keys(deps),harnessSource+';return selectionHarness;')(...Object.values(deps));
+function exercise(m,source=citySource){const a=loaded(),b=loaded(),h=selectionHarness(a,source),before=snapshot(a.sim),ca=[],cb=[];for(const[s,c]of[[a.sim,ca],[b.sim,cb]])for(const k of['R','ri']){const fn=s.rng[k];s.rng[k]=(...args)=>{const v=fn(...args);c.push([k,...args,v]);return v;};}
+ h.selectCatalogTool(m.tool);assert.equal(h.read().tool,'civic');assert.equal(h.read().civicTool,m.tool);assert.equal(h.read().stroke,null);assert.equal(h.read().lastPreview,null);assert.equal(h.read().controls.touches.ONE,null);assert.equal(h.read().controls.mouseButtons.LEFT,null);assert.deepEqual(snapshot(a.sim),before);assert.deepEqual(ca,[]);assert.ok(!h.calls.includes('save')&&!h.calls.includes('journal'));assert.deepEqual(h.calls.filter(c=>Array.isArray(c)),[['closeGrowth',false],['focus',{preventScroll:true}]]);
+ const stroke={pid:1,a:[3,4],b:[3,4],moved:false};assert.deepEqual(h.commitStroke(stroke),Edit.commitOp(b.sim,op(m.tool),0));assert.equal(a.sim.city.buildings[0].v,m.v);assert.deepEqual(snapshot(a.sim),snapshot(b.sim));assert.deepEqual(ca,cb);assert.equal(h.read().civicTool,m.tool);assert.equal(h.read().tool,'civic');const repeat={...stroke,a:[10,4],b:[10,4]};assert.deepEqual(h.commitStroke(repeat),Edit.commitOp(b.sim,op(m.tool,10,4),0));assert.equal(a.sim.city.buildings.length,2);assert.ok(a.sim.city.buildings.every(b=>b.v===m.v));assert.equal(h.read().civicTool,m.tool);assert.deepEqual(snapshot(a.sim),snapshot(b.sim));assert.deepEqual(ca,cb);assert.deepEqual(Edit.undoOp(a.sim),Edit.undoOp(b.sim));assert.deepEqual(Edit.undoOp(a.sim),Edit.undoOp(b.sim));assert.deepEqual(snapshot(a.sim),snapshot(b.sim));const cancel=snapshot(a.sim),calls=[...ca];assert.equal(h.commitStroke({...stroke,moved:true}),null);assert.deepEqual(snapshot(a.sim),cancel);assert.deepEqual(ca,calls);
+ return h;
+}
+for(const m of MODELS)test(m.id+': actual catalogue selection, native commit/undo and dragged tap cancellation',()=>exercise(m));
+test('actual action-source wrong reset, ignored selection, fiscal/RNG/save writes and drag bypass mutants fail behavior',()=>{const cases=[['...PUBLIC_SERVICE_TOOLS, ...MARKET_ESTATE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some','...PUBLIC_SERVICE_TOOLS, ...UTILITY_HERITAGE_TOOLS].some'],['civicTool = id; return true;','civicTool = "police"; return true;'],['civicTool = id; return true;','sim.money--; civicTool = id; return true;'],['civicTool = id; return true;','sim.rng.R(); civicTool = id; return true;'],['civicTool = id; return true;','saveNow(); civicTool = id; return true;'],["if (op.k === 'tap' && s.moved) { invalidate(); return null; }",'if (false) { invalidate(); return null; }']];for(const[from,to]of cases){assert.equal(citySource.split(from).length,2);assert.throws(()=>exercise(MODELS[0],citySource.replace(from,to)),e=>e.code==='ERR_ASSERTION');}});

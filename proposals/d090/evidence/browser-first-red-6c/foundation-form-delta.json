@@ -1,0 +1,88 @@
+{
+  "accepted": false,
+  "sourceSha256": "a3f5d4376ea1d57d80efa9f3b54410af4ae6b3a9345c49b41ef30692f1bafc58",
+  "changedLocalTriangles": [
+    0,
+    1,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "addedVertices": [
+    [
+      0.8,
+      0,
+      0.8
+    ],
+    [
+      0.2,
+      0,
+      0.8
+    ],
+    [
+      0.2,
+      0,
+      0.2
+    ],
+    [
+      0.8,
+      0,
+      0.2
+    ]
+  ],
+  "removedVertices": [
+    [
+      0.77,
+      0,
+      0.7699999999999999
+    ],
+    [
+      0.23,
+      0,
+      0.77
+    ],
+    [
+      0.23,
+      0,
+      0.23
+    ],
+    [
+      0.77,
+      0,
+      0.23
+    ]
+  ],
+  "unchangedGroundButtressHull": [
+    [
+      0.175,
+      0,
+      0.175
+    ],
+    [
+      0.825,
+      0,
+      0.175
+    ],
+    [
+      0.825,
+      0,
+      0.825
+    ],
+    [
+      0.175,
+      0,
+      0.825
+    ]
+  ],
+  "convexHullArgument": "Only four ground vertices change. Each old/new ground vertex lies strictly inside the convex hull of four retained ground buttress corners; all other vertices remain exact. Thus complete owner convex hull/full-owner orthographic framing is unchanged as a geometric set. Fresh browser camera/raw evidence remains mandatory.",
+  "oldFootprintArea": 0.2916,
+  "newFootprintArea": 0.36,
+  "oldLowerFrustumVolume": 0.08432666666666666,
+  "newLowerFrustumVolume": 0.09538666666666666,
+  "allPaintIntentsExact": true
+}
