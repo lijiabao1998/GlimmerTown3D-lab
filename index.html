@@ -88,7 +88,7 @@
     }
 
     /* D091: code-only welcome/loading, isolated from the existing city visuals. */
-    #startup { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; overflow: auto; overscroll-behavior: contain; box-sizing: border-box; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); background: #101c25; color: #f4eee0; }
+    #startup { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; overflow: auto; overscroll-behavior: contain; scroll-padding: 24px; box-sizing: border-box; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); background: #101c25; color: #f4eee0; }
     #startup[hidden] { display: none; }
     .startup-card { width: min(980px, 100%); display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #d5b67a40; border-radius: 24px; overflow: hidden; background: #192932; box-shadow: 0 24px 80px #0005; }
     .startup-scene { position: relative; min-height: 440px; background: linear-gradient(155deg, #294654, #142c35); overflow: hidden; }
@@ -105,7 +105,8 @@
     #startup-status { min-height: 3em; color: #e1dccf; line-height: 1.7; margin: 0 0 16px; }
     #startup button { min-height: 48px; width: 100%; border-radius: 10px; background: #d8ba7e; border-color: #d8ba7e; color: #19252c; padding: 12px 18px; font-weight: 700; text-align: left; }
     #startup button span { float: right; } #startup :focus-visible { outline: 3px solid #f7e1ad; outline-offset: 4px; }
-    .startup-actions > p, .startup-wait { color: #aebbbd; font-size: 12px; line-height: 1.7; }
+    .startup-actions > p, .startup-wait { color: #bdc9ca; font-size: 12px; line-height: 1.7; }
+    #startup-storage, #startup-notice { color: #f1ce92; font-size: 13px; line-height: 1.7; }
     #startup details { margin-top: 22px; color: #cad2cf; font-size: 13px; } #startup summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; } #startup details p { line-height: 1.8; }
     .startup-loader { height: 3px; border-radius: 3px; background: #d8ba7e20; overflow: hidden; margin: 24px 0 18px; }
     .startup-loader i { display: block; width: 40%; height: 100%; background: #d8ba7e; transform: translateX(-110%); will-change: transform; animation: startup-drift 1.8s linear infinite; }
@@ -115,24 +116,160 @@
       #startup { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
       .startup-card { max-width: 420px; grid-template-columns: 1fr; border-radius: 18px; }.startup-scene { min-height: 150px; }.startup-moon { width: 42px; height: 42px; top: 20px; right: 35px; }.startup-houses { inset: 65px -12px 18px; transform: scale(.75); transform-origin: bottom; }.startup-houses i { min-width: 50px; }.startup-scene > span { bottom: 12px; left: 20px; font-size: 8px; }.startup-copy { padding: 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 30px; margin-bottom: 18px; }.startup-desktop { display: none; }.startup-mobile { display: block; }#startup details { margin-top: 12px; }
     }
-    @media (max-height: 500px) { #startup { place-items: start center; }.startup-scene { min-height: 120px; }.startup-copy { padding: 24px; } }
+    @media (pointer: coarse) { .startup-desktop { display: none; }.startup-mobile { display: block; } }
+    @media (max-height: 500px) { #startup { place-items: start center; }.startup-scene { min-height: 120px; }.startup-copy { padding: 20px 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 28px; margin-bottom: 12px; }#startup h1 span { margin-top: 8px; }#startup-status { min-height: 0; margin-bottom: 12px; }#startup details { margin-top: 8px; }.startup-actions > p { margin: 8px 0; } }
     @media (prefers-reduced-motion: reduce) { .startup-loader i { animation: none; transform: none; width: 100%; opacity: .65; } }
   </style>
 </head>
 <body>
-  <section id="startup" role="dialog" aria-modal="true" aria-labelledby="startup-title" aria-describedby="startup-status" data-phase="preparing">
+  <section id="startup" role="dialog" aria-modal="true" aria-busy="true" aria-labelledby="startup-title" aria-describedby="startup-status" data-phase="loading" tabindex="-1">
     <div class="startup-card">
       <div class="startup-scene" aria-hidden="true"><div class="startup-moon"></div><div class="startup-houses"><i></i><i></i><i></i><i></i><i></i></div><span>GLIMMER TOWN · 3D</span></div>
       <div class="startup-copy"><p class="startup-eyebrow">微光之中，自成一城</p><h1 id="startup-title">微光小鎮<span>你的故事，從這裡開始。</span></h1>
-        <p id="startup-status" role="status" aria-live="polite" aria-atomic="true">正在準備小鎮介面…</p>
+        <p id="startup-status" role="status" aria-live="polite" aria-atomic="true">正在準備你的城市…</p>
+        <p id="startup-storage" role="status" hidden></p>
+        <p id="startup-notice" role="status" hidden></p>
         <div class="startup-loader" aria-hidden="true"><i></i></div>
-        <div class="startup-actions"><button id="startup-enter" type="button" disabled>進入小鎮 <span aria-hidden="true">→</span></button><p>有存檔會接續原城；沒有存檔則開啟新城。</p>
-        <details><summary>第一次來？看看操作方式</summary><p class="startup-desktop">滑鼠拖曳移動視角，滾輪縮放；建設工具在畫面下方。</p><p class="startup-mobile">手指拖曳移動視角，雙指縮放；建設工具在畫面下方。</p></details></div>
+        <div class="startup-actions"><button id="startup-enter" type="button" disabled>進入小鎮 <span aria-hidden="true">→</span></button><p>城市已準備好，進入即可開始探索。</p></div>
         <button id="startup-retry" type="button" hidden>重新載入</button><p class="startup-wait">載入時間依城市大小與裝置而異，請稍候。</p>
+        <details><summary>第一次來？看看操作方式</summary><p class="startup-desktop">滑鼠拖曳移動視角，滾輪縮放；建設工具在畫面下方。</p><p class="startup-mobile">手指拖曳移動視角，雙指縮放；建設工具在畫面下方。</p></details>
         <noscript><p>請啟用 JavaScript 才能進入小鎮。存檔不會被清除。</p></noscript>
       </div>
     </div>
   </section>
+  <script id="startup-presentation">
+    // Plan A: observe the existing automatic boot. This shell owns no city state.
+    (() => {
+      const root = document.querySelector('#startup');
+      const status = document.querySelector('#startup-status');
+      const storage = document.querySelector('#startup-storage');
+      const notice = document.querySelector('#startup-notice');
+      const enter = document.querySelector('#startup-enter');
+      const retry = document.querySelector('#startup-retry');
+      const direct = location.search.replace(/^\?/, '').length > 0;
+      const previousFocus = document.activeElement;
+      const inertBefore = new Map();
+      const noticeTexts = new Set();
+      const events = ['keydown', 'keypress', 'keyup', 'pointerdown', 'pointermove', 'pointerup', 'pointercancel', 'click', 'dblclick', 'wheel', 'touchstart', 'touchmove', 'touchend', 'contextmenu'];
+      let dismissed = false, frame = 0, paintFrame = 0, delayed;
+
+      const shield = () => {
+        for (const node of document.body.children) {
+          if (node === root || /^(SCRIPT|STYLE)$/.test(node.tagName) || inertBefore.has(node)) continue;
+          inertBefore.set(node, node.inert);
+          node.inert = true;
+        }
+      };
+      const observeNotices = () => {
+        // Retain the engine's existing boot warnings while its toasts expire
+        // behind the welcome. Text only; save policy stays entirely in the engine.
+        for (const toast of document.querySelectorAll('.gtu #toasts .toast.bad')) {
+          const text = toast.textContent;
+          if (!text || noticeTexts.has(text)) continue;
+          noticeTexts.add(text); notice.textContent = [...noticeTexts].join('\n');
+          notice.hidden = false;
+        }
+      };
+      const observer = new MutationObserver(() => { shield(); observeNotices(); });
+      observer.observe(document.body, { childList: true, subtree: true });
+      shield();
+      const controls = () => Array.from(root.querySelectorAll('button:not([disabled]):not([hidden]), summary')).filter(node => node.getClientRects().length > 0);
+      const block = event => {
+        if (dismissed) return;
+        // Keep the engine's window-capture pointer ledger untouched by shell
+        // contacts. Native button/summary defaults still produce their click.
+        if (root.contains(event.target) && event.type.startsWith('pointer')) {
+          event.stopImmediatePropagation(); return;
+        }
+        if (!root.contains(event.target)) {
+          event.preventDefault(); event.stopImmediatePropagation();
+        }
+        if (event.type === 'keydown' && event.key === 'Tab') {
+          const items = controls(), first = items[0], last = items.at(-1);
+          if (!items.includes(document.activeElement) || (event.shiftKey && document.activeElement === first) || (!event.shiftKey && document.activeElement === last)) {
+            event.preventDefault();
+            (event.shiftKey ? last : first)?.focus();
+          }
+        }
+      };
+      const contain = event => event.stopPropagation();
+      for (const type of events) {
+        window.addEventListener(type, block, { capture: true, passive: false });
+        root.addEventListener(type, contain);
+      }
+      const containFocus = event => {
+        if (!dismissed && !root.contains(event.target)) (controls()[0] || root).focus();
+      };
+      window.addEventListener('focusin', containFocus, true);
+      root.focus({ preventScroll: true });
+
+      function dismiss() {
+        if (dismissed || root.dataset.phase === 'error' || !window.__gt?.ready) return;
+        dismissed = true;
+        clearTimeout(delayed); cancelAnimationFrame(frame); cancelAnimationFrame(paintFrame);
+        observer.disconnect();
+        for (const [node, before] of inertBefore) node.inert = before;
+        for (const type of events) {
+          window.removeEventListener(type, block, true);
+          root.removeEventListener(type, contain);
+        }
+        window.removeEventListener('focusin', containFocus, true);
+        window.removeEventListener('error', failed, true);
+        window.removeEventListener('unhandledrejection', failed);
+        if (root.contains(document.activeElement)) document.activeElement.blur();
+        root.hidden = true;
+        if (previousFocus !== document.body && previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
+      }
+      function failed(event) {
+        if (dismissed || window.__gt?.ready || root.dataset.phase === 'error') return;
+        // Resource/module errors and uncaught startup errors are observable failures.
+        if (event.type === 'error' && event.target !== window && event.target?.tagName !== 'SCRIPT') return;
+        cancelAnimationFrame(frame); cancelAnimationFrame(paintFrame); clearTimeout(delayed);
+        root.dataset.phase = 'error'; root.setAttribute('aria-busy', 'false');
+        status.textContent = '小鎮暫時未能開啟。請重新載入再試。';
+        retry.hidden = false; retry.focus({ preventScroll: true });
+      }
+      window.addEventListener('error', failed, true);
+      window.addEventListener('unhandledrejection', failed);
+      enter.addEventListener('click', () => {
+        if (root.dataset.phase === 'welcome') dismiss();
+      });
+      retry.addEventListener('click', () => {
+        retry.disabled = true;
+        location.reload();
+      });
+      delayed = setTimeout(() => {
+        if (root.dataset.phase !== 'loading') return;
+        status.textContent = '城市仍在準備中。你可以繼續等候，或重新載入再試。';
+        retry.hidden = false;
+      }, 45000);
+      function observeReady() {
+        if (dismissed || root.dataset.phase === 'error') return;
+        if (!window.__gt?.ready) { frame = requestAnimationFrame(observeReady); return; }
+        clearTimeout(delayed);
+        status.textContent = '城市已就緒，正在等待畫面更新…';
+        // These are actual paint opportunities, not a renderer completion promise.
+        paintFrame = requestAnimationFrame(() => {
+          paintFrame = requestAnimationFrame(() => {
+            if (dismissed || root.dataset.phase === 'error') return;
+            if (typeof window.__gt.journal === 'function') {
+              const journal = window.__gt.journal();
+              if (!journal.kind || journal.why) {
+                storage.textContent = '世界歷史日誌暫不可用或讀取不完整。' + (journal.why ? '原因：' + journal.why : '');
+                storage.hidden = false;
+              }
+            }
+            if (direct) { dismiss(); return; }
+            root.dataset.phase = 'welcome'; root.setAttribute('aria-busy', 'false');
+            status.textContent = '小鎮已準備好，開始你的下一段故事。';
+            retry.hidden = true; enter.disabled = false;
+            enter.focus({ preventScroll: true });
+          });
+        });
+      }
+      frame = requestAnimationFrame(observeReady);
+    })();
+  </script>
   <script type="module" src="/src/main.ts"></script>
 </body>
 </html>

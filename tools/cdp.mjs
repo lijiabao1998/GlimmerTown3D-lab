@@ -130,7 +130,8 @@ export async function withBrowser(opt, fn) {
           const enter = await page.evaluate(`(() => { const b = document.querySelector('#startup[data-phase="welcome"] #startup-enter:not([disabled])'); if (!b) return null; const r = b.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()`).catch(() => null);
           if (enter) { await page.send('Input.dispatchMouseEvent', {type:'mousePressed', button:'left', clickCount:1, ...enter}); await page.send('Input.dispatchMouseEvent', {type:'mouseReleased', button:'left', clickCount:1, ...enter}); }
         }
-        if (await page.evaluate(ready).catch(() => false)) break; }
+        const shellReady = opt.keepWelcome || await page.evaluate("!document.querySelector('#startup') || document.querySelector('#startup').hidden").catch(() => false);
+        if (shellReady && await page.evaluate(ready).catch(() => false)) break; }
       await sleep(opt.settle ?? 900);   // 讓第一幀以上畫完（陰影貼圖、後製）
     };
     return await fn({ open, page });

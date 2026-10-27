@@ -666,7 +666,6 @@ if (d045SkipNote()) console.log(d045SkipNote());
 if (d048SkipNote()) console.log(d048SkipNote());
 
 if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await import('./d058-capture.mjs');
-if (!process.env.D011_SMOKE_ONLY && !process.env.D015_SMOKE_ONLY) await (await import('./d091-startup-browser.mjs')).startupBrowser();
 const sec = ((Date.now() - t0) / 1000).toFixed(1);
 if (fails.length) { console.log(`\nNG 紅燈（${sec}s）：${fails.join('、')}`); process.exit(1); }
 console.log(`\nOK 綠燈（${sec}s）`);
