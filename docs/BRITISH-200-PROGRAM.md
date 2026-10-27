@@ -1,3 +1,52 @@
+# British building program — final verified publication ledger
+
+**20 waves / 200 accepted, merged, Pages-published and publicly byte-verified buildings; zero remain.**
+
+Verified product main `8428e6c93282d4fd44562374dde78a3e6742b3be`; PR46 accepted and merged. Latest mainCI40430676946 attempt2 has126/126 successful jobs and no skips. Pages completed2026-10-27T03:11:21Z. Fresh03:12 root/frontage responses bothHTTP200 and4,244,759bytes/SHA256 `4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229`, exactly qualified main HTML.
+
+Current authoritative ledger: [ledger-200-published.json](evidence/D090-release/ledger-200-published.json). [Release receipt](evidence/D090-release/verified-publication.json) binds owner approval, commit/tree, CI attempts, public responses and independent reviews. Historical candidate190 fixtures/assertions remain unchanged; their frozen prepublication count is not current publication status.
+
+## Twenty completed waves
+
+| Wave | Card | Added | Cumulative | Release / immutable publication evidence |
+|---|---|---:|---:|---|
+| 1 | D068 | 10 | 10 | `ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883` |
+| 2 | D069 | 10 | 20 | `bece722ed2480a3728a274c90bd0170eb52cf389` |
+| 3 | D070 | 10 | 30 | `1c40e13a219adb90827acd3b60fb6b7623600b63` |
+| 4 | D071 | 10 | 40 | Subsequent immutable baseline `f689c35d8d061498779321149ccce4443f0ce6de` |
+| 5 | D072 | 10 | 50 | Subsequent immutable baseline `a69397ed0900b1f0a27bdc3be8e1616d2973fc43` |
+| 6 | D073 | 10 | 60 | Subsequent immutable baseline `a5674d9bdbfbf439319b50e26c3f864864ab5363` |
+| 7 | D074 | 10 | 70 | Subsequent immutable baseline `94024b6e2195f4d545de1f1af770dfbe98c1777a` |
+| 8 | D076 | 10 | 80 | Subsequent immutable baseline `7d4df8a907368a25f1ff92958b8b70ae85b8ad1c` |
+| 9 | D077 | 10 | 90 | Subsequent immutable baseline `22da5314145f96aaa83cfb739c382b86e1d5b0f3` |
+| 10 | D078 | 10 | 100 | Subsequent immutable baseline `46771cdc00f33759e0a3c45ddf05c3387d4bb4fc` |
+| 11 | D079 | 10 | 110 | Subsequent immutable baseline `23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e` |
+| 12 | D080 | 10 | 120 | Subsequent immutable baseline `7ec70a96b01437ab4576b0962905be16b1591e79` |
+| 13 | D081 | 10 | 130 | Subsequent immutable baseline `2cd43c424dcc909dcfa6ac55275406d2bc527ce0` |
+| 14 | D082 | 9 | 139 | `e0508afacaf660bc5864d0cc136c22bcedb7f5bb` |
+| 15 | D083 | 8 | 147 | `e0508afacaf660bc5864d0cc136c22bcedb7f5bb` |
+| 16 | D086 | 10 | 157 | `b4275bda73e72a9fb48343376fccaab52bbc8e84` |
+| 17 | D087 | 11 | 168 | `cdd541da74973dba2ca73b782936c012d315add9` |
+| 18 | D088 | 11 | 179 | `c023a2da0e4999d43e3d4216e800c4c96d06a3c1` |
+| 19 | D089 | 11 | 190 | `5b41bac165ba2b29146e6835490357bebc3cd549` |
+| 20 | D090 | 10 | 200 | `8428e6c93282d4fd44562374dde78a3e6742b3be` |
+
+D075 abandoned and excluded; D082 accepts9, not abandoned10. D084/D085 are function cards and add0 buildings. All200 slots/full/architectural signatures unique; first190 records exact.
+
+## Final D090 evidence and remaining limitations
+
+Ten distinct native utilities/heritage buildings;263 source files join approved candidate and main.30 actual-camera cases,56,037 required-surface observations,795 paint-intent observations,522 original/repeat PNGs,252 complete-frame reconstructions plus9 construction ceilings.518PNG bytes equal candidate; two changed pairs independently re-reviewed:412lodge72grass pixels;1440doocot2688pixels include225wall/foundation and9shadow-edge pixels, not all grass-only. No newly missing architecture.
+
+All90 CPU6 placements,24startup profiles,9rebuild observations pass unchanged policies; worst individualcommit178.9ms. Three rebuild medians92.8/101.1/117.6ms stay≤400ms, no sample dropped. MainD053 proof18sessions56checks86selectors1327trusted nativeevents is source-pinned; no fabricated raw pipeboolean table.
+
+First main attempt115success/1cancelled/4skipped is preserved, not retrospectively green. D08620minute prerequisite cancellation recovered with one unchanged normal job/dependent retry; latest126/126 includes carried-forward exact successful checks and fresh retried checks, not126 newly rerun jobs.
+
+HTTP identity is not public WebGL replay or hardware Android/GPU. Full OTHER mesh signed-word export and other mesh digest/frame joins are distinct. Existing coarse shadow fringes, development/build HIGH dependency findings and recorded CDP/malformedURI issues remain; no new security audit claimed. All original failed candidates and first-reds remain.
+
+## Historical190 publication snapshot (superseded, preserved verbatim)
+
+The following snapshot described the pre-D090 publication state; its “current” wording was current then, not now.
+
 # British building program — one current publication ledger
 
 Verified published baseline: `5b41bac165ba2b29146e6835490357bebc3cd549`.

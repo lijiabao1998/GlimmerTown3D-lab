@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "verifiedAt": "2026-10-27T03:14:28.313Z",
+  "program": "British20-wave/200-building program",
+  "wave": 20,
+  "card": "D090",
+  "pullRequest": 46,
+  "pullRequestUrl": "https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/46",
+  "state": "ACCEPTED_MERGED_PAGES_PUBLISHED_PUBLIC_BYTE_VERIFIED",
+  "base": "5b41bac165ba2b29146e6835490357bebc3cd549",
+  "candidate": "d6aa033443f51d7e2b9c57bf5c8b9c2c2d9b6de9",
+  "main": "8428e6c93282d4fd44562374dde78a3e6742b3be",
+  "gitTree": "d0af5108dfd4f1ffca515108ed069651da1cfe53",
+  "ownerApproval": {
+    "at": "2026-10-27T01:05:51.899923Z",
+    "reply": "兩項允許",
+    "request": "Sentinel_4936ecb2319c81919809750dfed215b8",
+    "response": "Sentinel_1cf62d43ccfc8191ba6319bdca7ad792",
+    "scope": "Accept final ten delivered images/report, Ready and normal merge PR46, postmerge CI/raw continuity, Pages/root/frontage verification and release-ledger/20-wave closeout; no other buildings/refactor."
+  },
+  "mainCI": {
+    "run": 40430676946,
+    "url": "https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40430676946",
+    "attempt": 2,
+    "totalJobs": 126,
+    "success": 126,
+    "skipped": 0,
+    "pagesJob": 121986641848,
+    "pagesCompletedAt": "2026-10-27T03:11:21Z",
+    "completeApi": {
+      "path": "/workspace/shared/d090-main-8428e6c9/final-main-api.json",
+      "bytes": 401861,
+      "sha256": "82c1e45e7047c38cb09752e7e8abafca5298a28caf152ff7eeeb08f991bfe3db"
+    },
+    "retry": {
+      "firstAttemptState": "cancelled",
+      "firstAttemptCounts": {
+        "success": 115,
+        "cancelled": 1,
+        "skipped": 4
+      },
+      "cancelledJob": 121947281219,
+      "retriedJob": 121977800777,
+      "reason": "20-minute D086 prerequisite wall-time cancellation; no assertion failure in retained log; one normal job/dependent rerun succeeded unchanged.",
+      "firstAttempt": {
+        "path": "/workspace/shared/d090-main-8428e6c9/attempt1-terminal-api.json",
+        "bytes": 374737,
+        "sha256": "bf881b3cee5e012e191144ceeefa6b1de01c2c78e2c2d688600f32d30839d283"
+      },
+      "firstRawZip": {
+        "path": "/workspace/shared/d090-main-8428e6c9/d086-first-cancelled.zip",
+        "bytes": 241909,
+        "sha256": "a7ed567c1fccc6bdff99b1344d035290bbd77475f80f11790e14a83ae2b37785"
+      },
+      "retryRawZip": {
+        "path": "/workspace/shared/d090-main-8428e6c9/d086-retry-node.zip",
+        "bytes": 243791,
+        "sha256": "561811a193641c0c5a2d46660596c20dee73ac8991d4a7ae12539fbeb35a68ad"
+      },
+      "sourceWorkflowBudgetsUnchanged": true
+    }
+  },
+  "publication": {
+    "results": [
+      {
+        "at": "2026-10-27T03:12:20.325Z",
+        "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/",
+        "status": 200,
+        "bytes": 4244759,
+        "sha256": "4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229",
+        "exactQualifiedHtml": true,
+        "headers": "HTTP/1.1 200 OK\r\ndate: Tue, 27 Oct 2026 03:12:20 GMT\r\n\r\nHTTP/2 200 \r\nserver: envoy\r\ncontent-type: text/html; charset=utf-8\r\nlast-modified: Tue, 27 Oct 2026 03:11:14 GMT\r\naccess-control-allow-origin: *\r\nstrict-transport-security: max-age=31556952\r\netag: \"6ae01652-40c517\"\r\nexpires: Tue, 27 Oct 2026 03:21:51 GMT\r\ncache-control: max-age=600\r\nx-proxy-cache: MISS\r\nx-github-request-id: D016:16757A:5A2AB8:65723B:6AE01676\r\nx-github-edge-region: iad\r\naccept-ranges: bytes\r\ndate: Tue, 27 Oct 2026 03:12:20 GMT\r\nvia: 1.1 varnish\r\nage: 29\r\nx-served-by: cache-chi-klot8100083-CHI\r\nx-cache: HIT\r\nx-cache-hits: 1\r\nx-timer: S1793070740.179398,VS0,VE19\r\nvary: Accept-Encoding\r\nx-fastly-request-id: 5cc08fc3751912858190f66fc73925c34c42fd1b\r\ncontent-length: 4244759\r\nx-envoy-upstream-service-time: 26\r\n\r\n"
+      },
+      {
+        "at": "2026-10-27T03:12:23.580Z",
+        "url": "https://lijiabao1998.github.io/GlimmerTown3D-lab/?streetFrontageControl=1",
+        "status": 200,
+        "bytes": 4244759,
+        "sha256": "4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229",
+        "exactQualifiedHtml": true,
+        "headers": "HTTP/1.1 200 OK\r\ndate: Tue, 27 Oct 2026 03:12:23 GMT\r\n\r\nHTTP/2 200 \r\nserver: envoy\r\ncontent-type: text/html; charset=utf-8\r\nlast-modified: Tue, 27 Oct 2026 03:11:14 GMT\r\naccess-control-allow-origin: *\r\nstrict-transport-security: max-age=31556952\r\netag: \"6ae01652-40c517\"\r\nexpires: Tue, 27 Oct 2026 03:21:51 GMT\r\ncache-control: max-age=600\r\nx-proxy-cache: MISS\r\nx-github-request-id: D016:16757A:5A2AB8:65723B:6AE01676\r\nx-github-edge-region: iad\r\naccept-ranges: bytes\r\ndate: Tue, 27 Oct 2026 03:12:23 GMT\r\nvia: 1.1 varnish\r\nage: 32\r\nx-served-by: cache-chi-klot8100083-CHI\r\nx-cache: HIT\r\nx-cache-hits: 2\r\nx-timer: S1793070743.451652,VS0,VE3\r\nvary: Accept-Encoding\r\nx-fastly-request-id: 0063f1b725959dfd0d1a2f5e127052c5afde4f48\r\ncontent-length: 4244759\r\nx-envoy-upstream-service-time: 11\r\n\r\n"
+      }
+    ],
+    "qualification": "Fresh HTTPS root and frontage responses match qualified main artifact bytes. Not live-public WebGL replay or physical Android test."
+  },
+  "counts": {
+    "before": 190,
+    "added": 10,
+    "published": 200,
+    "waves": 20,
+    "remaining": 0
+  },
+  "mainEvidence": {
+    "sourceFiles": 263,
+    "buildBytes": 4244759,
+    "buildSha256": "4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229",
+    "distinctSlots": 200,
+    "distinctFullGeometry": 200,
+    "distinctArchitecture": 200,
+    "old190Exact": true,
+    "rawPNGs": 522,
+    "pausedPairs": 261,
+    "byteIdenticalToCandidatePNGs": 518,
+    "actualCameraCases": 30,
+    "requiredSurfaceObservations": 56037,
+    "paintIntentObservations": 795,
+    "completeFrameReconstructions": 252,
+    "constructionCeilings": 9,
+    "fullOtherMeshTriangles": 4190,
+    "performance": {
+      "passed": true,
+      "scope": "Independent merged-main D090 8428e6c9 raw performance, startup, source-policy and artifact identity audit only; no deployment/art acceptance.",
+      "sourceCommit": "8428e6c93282d4fd44562374dde78a3e6742b3be",
+      "workflowRun": 40430676946,
+      "placements": 90,
+      "startupProfiles": 24,
+      "rebuildObservations": 9,
+      "worstIndividualCommitMs": 178.89999999999418,
+      "rebuildMediansMs": [
+        {
+          "width": 360,
+          "medianMs": 92.79999999998836
+        },
+        {
+          "width": 412,
+          "medianMs": 101.09999999997672
+        },
+        {
+          "width": 1440,
+          "medianMs": 117.60000000003492
+        }
+      ],
+      "noDroppedObservations": true,
+      "originalPoliciesUnchanged": true,
+      "artifactCount": 10,
+      "independentApiJoined": true,
+      "freshOriginsNotReusedFromCandidate": true,
+      "qualifications": [
+        "CPU6 Chrome/SwiftShader proxy, not physical Android/GPU",
+        "Whole-app CDP heap is not exclusive retained cache memory",
+        "Rebuild worldUnchanged is collector assertion; no retained raw world pair independently replayed",
+        "No new browser launch, rebuild, CI dispatch, product/source change or release count promotion"
+      ],
+      "evidence": {
+        "review-all90-startup24.json": "3c1f8bdf182c878ac71f40508878b3ba23aff955731222cac57e01a9c902dd7f",
+        "native-rebuild.json": "2e2e8b1a4d853a1b7a8a1be680b64a5195f3cd2942abe9631caed6b2b613e3cb",
+        "artifact-join.json": "b2ada9b4249e5ebcc1b14a9742a337922f4c999afd3735cfaf6a999460d28cac",
+        "policy-source-binding.json": "95b73c17c3454ac81a2435098b3b16f3fa5af7964411609c8a0a8c869710aec7",
+        "artifact-api-independent.json": "b00807c37546db642fe8a26c7177124a5c386cb45822e9f60ea5f8ef6784038e"
+      }
+    },
+    "technical": {
+      "path": "/workspace/shared/d090-independent-main-review-20261027T0121Z/main-technical-qualified-prepublication.json",
+      "bytes": 4627,
+      "sha256": "91fb05b0e35154e1f7a6eb0f2e603b8b1a5befb16402609d4515567a312c716c"
+    },
+    "smoke": {
+      "path": "/workspace/shared/d090-independent-main-smoke-20261027T0243Z/smoke-closure-review.json",
+      "bytes": 144271,
+      "sha256": "8fa4c12f0b856d3ee7e25bc7344d79c62e521f20e5750e619fdf67eb7f6fe85a"
+    },
+    "images": {
+      "path": "/workspace/shared/d090-independent-main-review-20261027T0121Z/changed-images-independent-review.json",
+      "bytes": 2648,
+      "sha256": "b9d9f6c8133e293b04e83099c04a1afda974abb19b0a9b59febedc0db05247fb"
+    },
+    "probeContinuity": {
+      "path": "/workspace/shared/d090-independent-main-review-20261027T0121Z/probe-and-image-continuity.json",
+      "bytes": 295243,
+      "sha256": "349f848e52827d0ea22107f33f48f14cd5fcb3331503f038b13612b098e36733"
+    },
+    "buildJoin": {
+      "path": "/workspace/shared/d090-main-8428e6c9/ci-build-join.json",
+      "bytes": 1577,
+      "sha256": "dac1e36afc6da3307e8b87b5655c14dba301e25bbc5c96726373716fdb0b8e4c"
+    }
+  },
+  "candidateQualification": {
+    "path": "/workspace/shared/d090-official-d6aa0334/candidate-qualified-premerge.json",
+    "bytes": 18006,
+    "sha256": "51b470de1bb373f811f17c1358ef954e57104eaf5a485e14a5522b7442a26b0e"
+  },
+  "limits": [
+    "Public HTTP identity is not a separate live-public WebGL replay or physical Android/GPU test. CPU6 is a Chrome/SwiftShader proxy.",
+    "Raw signed-word export verifies entire OTHER mesh; walls/dressing retain all-mesh digest/frame joins, not a claimed raw-word export.",
+    "Two changed original image pairs: lodge41272grass pixels; doocot14402688pixels including225wall/foundation+9shadow-edge pixels, rest grass. Actual tiny camera drift remains, no normalization.",
+    "Original6c/e4c full-CI selector failures, foundation first-reds and main attempt1 timeout remain retained.",
+    "Original candidate190 ledgers/assertions stay immutable historical qualification snapshots; this appended release receipt and final ledger are current publication state.",
+    "Inherited coarse shadow-map fringes, two HIGH development/build dependency findings and earlier loopbackCDP/malformedURI limits remain disclosed; no new unconditional security claim.",
+    "Pipe evidence is execution of source-pinned assertions, not a separately retained per-selector raw boolean table."
+  ]
+}
