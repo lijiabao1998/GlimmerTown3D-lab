@@ -34,3 +34,23 @@ Validation for this candidate uses the actual inline presentation script, origin
 Local Plan A qualification: typecheck/build, exact263 source/smoke identity, 13 existing source/control tests, 262 existing CI-integrity tests, and 15 D091 Chromium scenarios passed. The browser run produced 19 original PNGs, including all five required viewport sizes, loading/error/journal controls, persistent original corrupt-save warning and actual baseline/default parity. Native touch on the instructions and CTA retains zero engine pointers; the first city touch places one legal road on both 360px and 844×390. Exact persisted save bytes survive the actual retry and ordinary reload. Independent review caught and prompted these pointer, phone-landscape instruction and warning-visibility fixes. First local failures remain in the evidence bundle; none was retried unchanged for luck. Physical phones and hardware compositor smoothness remain unmeasured.
 
 The unchanged full D090 foundation runner also passed all three actual-source domains: immutable6c 417/417, immutablee4c 79/79, and current 1292/1292. This is Node qualification only, not a substitute for complete official CI. Independent code/pixel review approved the worktree after checking all 19 raw PNG hashes and the actual baseline/default images.
+
+## 減少動態載入指示修補 — 2026-10-28
+
+**缺陷。** 在 `prefers-reduced-motion: reduce` 下，d0a22a2 的規則 `.startup-loader i { animation: none; transform: none; width: 100%; opacity: .65; }` 讓整段載入都顯示一條靜止、滿格的實心條。2026-10-27 獨立核驗在真實載入期間量到：390 寬軌道 310px、填色 310px，填色從軌道起點開始。看起來就像「已經載完」，違反本卡「未知時長用不定指示，絕不假造進度或完成」。原有 19 張原圖沒有一張拍到這個狀態（`D091-390-welcome` 是歡迎狀態，載入條已隱藏）。
+
+**業主決定（2026-10-28）。** 業主選「先修再給你看圖」：Claude 在 PR #47 分支上做最小 CSS 修補，減少動態時只顯示靜態、沒有完成暗示的指示；10 個工作流重跑、重拍畫面給業主看過，才談合併。範圍只有這一項。
+
+**先寫測試，保留第一個紅燈。** 2ee1562 只加測試，`index.html` 不動，既有情境與斷言一行不改：
+- `tools/d091-startup-browser.mjs` 在所有既有情境之後追加一個情境：390×844、`prefers-reduced-motion: reduce`，沿用 `D091-390-loading-delayed-journal-control` 同一個明示標籤的 1500 ms IndexedDB 延遲對照。先斷言 phase 是 `loading`、引擎尚未 ready、`animationName` 是 `none`、指示看得到；接著拍 `D091-390-reduced-motion-loading-control.png`，收進同一份 receipt，拍完再讀一次 phase，仍是 `loading` 才算數；最後斷言指示寬度不超過軌道四分之一、在軌道中置中（不是從起點長出來的進度）、是漸層圖樣且底色透明（不是實心填色）。用 10-27 量到的 310／310 套進去，d0a22a2 會在「四分之一」這條斷言失敗。
+- `tools/d091-startup-tests.mjs` 追加原始碼守衛 `reducedMotionGuards()`。它放在 `startupGuards()` 之外，因為瀏覽器工具一開始就跑 `startupGuards()`，放進去的話瀏覽器情境自己的紅燈就看不到了。第一個紅燈原樣保留：`node tools/d091-startup-tests.mjs` 先印出既有的 Plan A PASS，接著 `AssertionError: reduced motion must not draw a full-width bar that reads as completed`，actual 是 `' animation: none; transform: none; width: 100%; opacity: .65; '`，exit 1。
+
+**修補。** 只改 `index.html` 減少動態的那條規則，外加上方一行註解：保留 `animation: none; transform: none`，把 `width: 100%; opacity: .65` 換成 `width: 36px; margin: 0 auto; background: repeating-linear-gradient(90deg, #d8ba7e 0 8px, transparent 8px 14px)`。畫面上是軌道正中一個靜止的三短劃記號（每劃 8px、間隔 6px）：不動、沒有百分比、不從起點填、不會滿格。「正在準備你的城市…」和等候說明照舊。一般動態版（40% 段落漂移）、44px 觸控目標、安全區、溢出規則、JS 都沒動；`src/` 263 檔、200 個模型、`tools/smoke.mjs`、`.github/` 都沒動。建置後的 CSS 保留這條規則，而且排在基本規則之後，層疊上蓋過基本規則。
+
+**本輪跑過的檢查。** `npm ci`；`npm run typecheck` 綠；`npm run build` 綠；`node tools/d091-startup-tests.mjs` 修補前紅（上面那個第一個紅燈），修補後兩段都 PASS。
+
+**沒做成的事。**
+- 本輪沒開瀏覽器：煙霧測試 `tools/smoke.mjs`（無頭 Chrome）沒跑；新情境在 2ee1562 的瀏覽器紅燈、修補後的綠燈、重拍的 `D091-390-reduced-motion-loading-control.png` 都還沒有，留給下一步。
+- 10 個官方工作流還沒在新 head 重跑；業主還沒看圖；PR #47 仍是 Draft，沒有合併、沒有發布。
+- 實機（手機、硬體合成）一樣沒量。
+- 這一輪只修減少動態這一項，其餘小意見一律照舊開著，例如：沒有 JavaScript 時殼層仍寫「正在準備你的城市…」並顯示載入條，跟 noscript 提示互相矛盾（no-JS 文案）；歡迎畫面由程式把焦點移到「進入小鎮」時看不到焦點框（10-27 量到 `:focus-visible` 為 false、outline 為 none）。

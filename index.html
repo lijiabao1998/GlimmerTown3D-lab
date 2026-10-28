@@ -118,7 +118,8 @@
     }
     @media (pointer: coarse) { .startup-desktop { display: none; }.startup-mobile { display: block; } }
     @media (max-height: 500px) { #startup { place-items: start center; }.startup-scene { min-height: 120px; }.startup-copy { padding: 20px 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 28px; margin-bottom: 12px; }#startup h1 span { margin-top: 8px; }#startup-status { min-height: 0; margin-bottom: 12px; }#startup details { margin-top: 8px; }.startup-actions > p { margin: 8px 0; } }
-    @media (prefers-reduced-motion: reduce) { .startup-loader i { animation: none; transform: none; width: 100%; opacity: .65; } }
+    /* D091 reduced motion (owner 2026-10-28): a static centred three-dash mark, not a fill level and never full-width, so an unknown wait never looks complete. */
+    @media (prefers-reduced-motion: reduce) { .startup-loader i { animation: none; transform: none; width: 36px; margin: 0 auto; background: repeating-linear-gradient(90deg, #d8ba7e 0 8px, transparent 8px 14px); } }
   </style>
 </head>
 <body>
