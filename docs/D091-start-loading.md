@@ -314,7 +314,7 @@ The unchanged full D090 foundation runner also passed all three actual-source do
   - 沒抓到的 C2 是 `@container (min-width: 0px)` 規則。頁面上沒有任何容器，這條規則從不生效，核驗員量到每個畫面都是 0 像素不同；Node 守衛抓得到它。
   - 兩層合起來，35 個全部抓到。
 - 各組在哪裡紅：
-  - A1–A6、B1、B3、C1、C3–C5、D1–D3、E1–E5、F1、F2，共 22 個，先紅在「減少動態下載入中的場景等於 10707fc」。手法包括換選擇器、`!important`、`@supports`、放寬媒體查詢、style 屬性、跳脫字元、第二個 `<STYLE>`、`<link>`。
+  - A1–A4、A5b、A6、B1、B3、C1、C3–C5、D1–D3、E1–E5、F1、F2，共 22 個，先紅在「減少動態下載入中的場景等於 10707fc」。手法包括換選擇器、`!important`、`@supports`、放寬媒體查詢、style 屬性、跳脫字元、第二個 `<STYLE>`、`<link>`。
   - F3（`::after` 沒 content）、F11（房子被拿掉）、G1（手機月暈規則放寬）紅在動畫組成。
   - F4（visibility hidden）、F5（inset 2px）紅在窗燈圖層。
   - F6（box-shadow 填滿軌道）紅在光點。A5、B2 的選擇器 `[aria-hidden] i` 連光點也一起染色，所以也紅在光點。
@@ -322,13 +322,14 @@ The unchanged full D090 foundation runner also passed all three actual-source do
   - F8（暗到 0）紅在 .15。
   - F9 紅在房子背景。
   - F10（第二條窗帶）紅在載入中與歡迎畫面的比對。
-- **更正上一節的數字。** 上一節兩處寫「13 個兩層都活下來」，跟核驗員自己的結果檔（`mut-node.json`、`mut-browser.json`）對不上。結果檔是：
-  - Node 活下 27 個；
-  - 瀏覽器重放抓到其中 7 個；
-  - A5b、G1 沒跑瀏覽器；
-  - 兩層都活下來的是 18 個（另有 2 個沒跑）。
+- **更正上一節的數字。** 上一節寫「27 個突變活過 Node 守衛……其中 13 個兩層都活下來」。這組數字對不回任何一份核驗結果檔。兩份結果檔分別是：
 
-  以結果檔為準。
+  | 核驗 | 突變（不含對照組） | Node 活下 | 兩層都活下 |
+  |---|---|---|---|
+  | 第二次（4666198） | 54 | 26 | 12；另有 5 個只跑了瀏覽器：X2b、X7 沒被抓，X8–X10 被抓 |
+  | 最終（b195e87） | 35 | 27 | 18；另有 A5b、G1 兩個沒跑瀏覽器 |
+
+  上一節第二次核驗那段寫的「27 個、28 份 exit 0」，其實是最終核驗結果檔的數字。以結果檔為準。本節的重跑用的是最終核驗那 36 個（35 個加對照組）。
 
 **綠燈（63f676c）。** `D091 Plan A browser PASS: 32 scenario receipts, 26 original PNGs`。
 - receipt：
