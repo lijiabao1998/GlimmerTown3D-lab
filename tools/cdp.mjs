@@ -124,7 +124,14 @@ export async function withBrowser(opt, fn) {
     if (opt.preload) await page.send('Page.addScriptToEvaluateOnNewDocument', { source: opt.preload });
     const open = async query => {
       await page.send('Page.navigate', { url: `http://127.0.0.1:${port}/${entry}?${query}` });
-      for (let i = 0, t0 = Date.now(); Date.now() - t0 < readyMs; i++) { await sleep(150); if (await page.evaluate(ready).catch(() => false)) break; }
+      for (let i = 0, t0 = Date.now(); Date.now() - t0 < readyMs; i++) { await sleep(150);
+        // D091: follow the same visible root welcome action as a player. No overlay hiding.
+        if (!opt.keepWelcome) {
+          const enter = await page.evaluate(`(() => { const b = document.querySelector('#startup[data-phase="welcome"] #startup-enter:not([disabled])'); if (!b) return null; const r = b.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2}; })()`).catch(() => null);
+          if (enter) { await page.send('Input.dispatchMouseEvent', {type:'mousePressed', button:'left', clickCount:1, ...enter}); await page.send('Input.dispatchMouseEvent', {type:'mouseReleased', button:'left', clickCount:1, ...enter}); }
+        }
+        const shellReady = opt.keepWelcome || await page.evaluate("!document.querySelector('#startup') || document.querySelector('#startup').hidden").catch(() => false);
+        if (shellReady && await page.evaluate(ready).catch(() => false)) break; }
       await sleep(opt.settle ?? 900);   // 讓第一幀以上畫完（陰影貼圖、後製）
     };
     return await fn({ open, page });
