@@ -64,3 +64,94 @@ The unchanged full D090 foundation runner also passed all three actual-source do
 
 **仍然沒做成的事（更新）。** 煙霧測試 `tools/smoke.mjs` 本機沒跑（10-27 本機整套跑了 66 分鐘），交給官方 CI；官方工作流都不跑 D091 工具，所以減少動態畫面只有本機 receipt 可證。業主還沒看圖；PR #47 仍是 Draft，沒有合併、沒有發布。forced-colors 高對比加上減少動態時，修補前後的指示都看不見（Chromium 把漸層算成 none），屬既有問題，照範圍列為開著。no-JS 文案矛盾、焦點框看不到也照舊開著。實機沒量。
 
+
+## 載入動畫精修（參考 Lab #boot453）— 2026-10-28
+
+**業主要求（原話）。** 「對照圖 的動畫 還可以 精修一下 參考 town lab 其它的沒問題」。範圍只有載入動畫；版面、文案、流程照舊。
+
+**出處（串台標注）。** 參考 2D 實驗線 `lijiabao1998/GlimmerTown-lab` main `dde12ad` 的 `index.html` `#boot453`，只取動畫語言，全部用 CSS 重寫，沒有外部素材：
+- L695 `.boot453B:after` 加 L698 `boot453Windows`：窗燈 2.1s 一次 `steps(2,end)` 明滅，透明度 .18↔.78，所有窗同步。
+- L697 `#boot453Glow` 加 L699 `boot453Glow`：地面光 2.4s 一次呼吸，透明度 .45↔1，`scaleX` .88↔1。
+- L701–703 `#boot453Track`／`#boot453Bar`：11px 軌道、漸層條。
+
+刻意沒搬的：
+- `#boot453Pct` 百分比和 `#boot453Steps` 四格階段。本卡禁止假造百分比。Plan A 的殼層只觀察 `__gt.ready` 和之後兩次 rAF，沒有能誠實對上的階段。
+- Lab 的藍綠金配色。本線用黃銅色和奶油色。
+
+**三檔對照（同一畫面、同一時間點）。**
+- **A：只精修載入條。**
+  - 3px 細線改成 8px 軌道，內描一圈黃銅邊。
+  - 實心段改成漸層光點：奶油色光頭，尾巴漸淡。
+  - 光點以 2.2s 緩入緩出，從軌道左外側滑進、右外側滑出。
+  - 場景不動。
+- **B：A 加場景呼吸（選定）。**
+  - 窗燈移到房子各自的 `::after` 層，底下改成未亮的玻璃。
+  - 每棟房子在 9.6s 週期裡各自暗下約 1 秒，彼此錯開。
+  - 月暈和房後的街燈光以 4.8s 輪流呼吸。
+  - 軌道與 A 相同。
+- **C：照 Lab 原節奏。**
+  - 所有窗同步，每 2.1s 以 steps 明滅一次。
+  - 地面光 2.4s 呼吸，軌道 11px 粗。
+  - 三色漸層換成青綠到金。
+
+**為什麼選 B。**
+- A 修好了載入條，但等待可能很長，整個場景卻完全不動。
+- C 把 Lab 的節奏照搬過來：所有窗同時一明一暗，每兩秒一次。放在這張安靜的英式小鎮上，顯得機械又忙。青綠色和 11px 粗條也不在本線的黃銅色系裡，比卡片文字還搶眼。
+- B 保留本線克制的調子：一次只暗一棟房子，光暈慢慢呼吸。
+- 業主看了不喜歡，可以改成 A 或 C。三檔只差 CSS。
+
+**減少動態下的記號。** 原本的三短劃記號 3px 高。放進 8px 軌道後會變成 8px 高，還繼承軌道的圓角：左右兩段成了半圓，中間一段是方的。我比較了「8×8 方點」和「8×4 短槓」兩種，選 8×4 短槓，延續業主上一輪看過的樣式：65bb6a6 改成 4px 高、直角、垂直置中，寬度、置中、分段、透明底色都不變。
+
+**先寫測試，保留第一個紅燈。** 913f559 只改測試，`index.html` 和 10707fc 相同。
+- `tools/d091-startup-tests.mjs` 追加 `loadingMotionGuards()`，同樣放在 `startupGuards()` 之外。它檢查五件事：
+  - startup 的 keyframes 只動 transform 和 opacity；
+  - 場景動畫只放在 `prefers-reduced-motion: no-preference` 之內；
+  - 要有窗燈（Lab boot453Windows）和呼吸光（Lab boot453Glow）；
+  - 原始碼裡寫明 Lab 出處；
+  - 載入條沒有百分比，也沒有 progressbar 的值。
+
+  第一個紅燈原樣保留：前兩段 PASS，接著 `AssertionError: startup ambience keyframes besides the rail light`。
+- `tools/d091-startup-browser.mjs` 在所有既有情境之後追加情境。它用明示標籤的 3000 ms IndexedDB 延遲對照，低於引擎 `src/idbJournal.ts` 的 `OPEN_MS = 4000`。
+  - 1440 和 390 一般動態：軌道光要在走；至少 3 個窗燈在動；要有一個光在呼吸；每個動畫只動 transform 和 opacity；軌道至少 6px 高；光點是漸層。接著用 Web Animations 的 `currentTime` 把動畫定格在 550、1100、1650 ms，拍原圖。拍完再讀一次 phase，仍是 loading 才算數。
+  - 390 減少動態：載入中和歡迎畫面都必須是 0 個動畫。
+
+  瀏覽器紅燈：原有 16 個情境全過，第一個失敗是 `Lab boot453Windows: window lights animate during loading (rail)`，也就是只有軌道光在動。receipt 為 FAIL，head 913f559，dirty 為 false。
+
+**實作。** 只改 `index.html` 的 CSS。呈現腳本、標記、引擎、既有規則都沒動。
+- 9c56f79：
+  - 軌道和光點；
+  - `.startup-houses i::after` 亮窗層。靜止時不透明度是 1，看起來跟原本完全一樣；
+  - `.startup-moon::after` 月暈；
+  - `.startup-scene::before` 房後街燈光，畫在月亮和房子後面；
+  - 三組 keyframes（`startup-drift`、`startup-windows`、`startup-breathe`）。場景動畫全部在 `no-preference` 裡。
+- 65bb6a6：減少動態下的 4px 短槓。
+
+**綠燈（65bb6a6）。** `D091 Plan A browser PASS: 19 scenario receipts, 26 original PNGs`。
+- receipt：head 65bb6a6，dirty 為 false，indexSha256 `8323c327…`，buildSha256 `27bcd196…`，testSha256 `cdb9ee6e…`，瀏覽器 Chrome for Testing 153.0.8010.12。26 張 PNG 的 sha256 和大小全部重算吻合。
+- 1440 和 390 一般動態：共 8 個動畫，軌道光 1、窗燈 5、月暈 1、街燈光 1，keyframes 只有 transform 和 opacity。軌道 8px 高，1440 寬 410px、390 寬 310px。
+- 390 減少動態：載入中和歡迎畫面都是 0 個動畫。靜止記號 36×8，在 310×8 的軌道正中，左右各 137px，底色透明。
+- 6 張定格原圖 `D091-{1440,390}-loading-motion-t{550,1100,1650}.png` 在 9c56f79 和 65bb6a6 兩次跑出來逐位元組相同，定格可以重現。
+- 進入遊戲後的 7 張圖（5 張 entered、baseline、parity）跟 10707fc 逐位元組相同，遊戲畫面沒受影響。
+- 歡迎、操作說明、錯誤、日誌、存檔警告這幾張，現在每次跑都會不同，因為拍的時候場景燈光在動。原本的載入條漂移也一樣。
+- `npm run typecheck`、`npm run build` 綠；`node tools/d091-startup-tests.mjs` 三段 PASS。
+- Node 和瀏覽器紅燈、綠燈的 log 和 receipt 另行交付。
+
+**對照圖（另行交付，不進 repo）。** 下面三張是衍生預覽，不是原圖。
+- 原型頁的做法：實際 `index.html` 的樣式和 `#startup` 區塊，加上各檔的 CSS。B 頁直接用 9c56f79 的 `index.html`。
+- 拍法：Playwright 1.63.0 的 headless shell，用 `currentTime` 每 0.1s 定格一次，共 96 幀（9.6s），再合成 GIF。
+- 預覽 B 和正式建置同一時間點的幀相比，差異只在邊緣反鋸齒和光暈漸層：多數 1–3 階，最大 68 階，在邊緣。
+
+| 檔案 | sha256 |
+|---|---|
+| `D091-loading-motion-ABC-1440.gif`（四檔 2×2，1440 卡片縮 50%） | `f1ca3b8d…` |
+| `D091-loading-motion-ABC-390.gif`（四檔並排，390） | `52084f78…` |
+| `D091-loading-rail-ABC-390-dpr3.gif`（載入條特寫，DPR 3） | `9d74b0ba…` |
+
+**仍然沒做成的事。**
+- 實機沒量：手機、硬體合成都沒有。8 個合成層在中階 Android 上的流暢度和耗電沒有數字。
+- 官方工作流不跑 D091 工具，動畫和減少動態的瀏覽器證據只有本機 receipt。
+- 煙霧測試 `tools/smoke.mjs` 本機沒跑，交給官方 CI。
+- 高對比 forced-colors：修改前後的載入條都看不到。Chromium 用系統色蓋掉軌道和光點，四種組合的截圖都只有一種顏色。這是既有問題，照舊開著。
+- no-JS 文案矛盾、焦點框看不到，照舊開著。
+- 手機寬度下，月亮本來就被房子擋住，所以月暈在手機上幾乎看不到。構圖沒改。
+- 業主還沒看新圖。PR #47 仍是 Draft，沒有合併、沒有發布。
