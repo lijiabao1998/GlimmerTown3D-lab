@@ -92,11 +92,14 @@
     #startup[hidden] { display: none; }
     .startup-card { width: min(980px, 100%); display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #d5b67a40; border-radius: 24px; overflow: hidden; background: #192932; box-shadow: 0 24px 80px #0005; }
     .startup-scene { position: relative; min-height: 440px; background: linear-gradient(155deg, #294654, #142c35); overflow: hidden; }
+    .startup-scene::before { content: ''; position: absolute; left: -20%; right: -20%; bottom: 28px; height: 200px; background: radial-gradient(ellipse 50% 46% at 50% 74%, #e5c37d30, #e5c37d10 55%, transparent 76%); transform-origin: 50% 100%; opacity: .75; }
     .startup-scene > span { position: absolute; bottom: 32px; left: 32px; font-size: 10px; letter-spacing: .3em; color: #d4b981; }
     .startup-moon { position: absolute; top: 60px; right: 58px; width: 70px; height: 70px; border-radius: 50%; background: #e0ca91; box-shadow: 0 0 70px #e0ca9120; }
+    .startup-moon::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 52px 20px #e0ca9126; opacity: .75; }
     .startup-houses { position: absolute; inset: 150px -12px 65px; display: flex; align-items: end; gap: 9px; transform: rotate(-3deg); }
-    .startup-houses i { position: relative; flex: 1; height: 130px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat, #46616a; border-top: 18px solid #24353c; box-shadow: 0 24px 0 #0f232c; }
+    .startup-houses i { position: relative; flex: 1; height: 130px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d3d 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat, #46616a; border-top: 18px solid #24353c; box-shadow: 0 24px 0 #0f232c; }
     .startup-houses i::before { content: ''; position: absolute; top: -48px; left: 0; right: 0; height: 30px; background: #24353c; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+    .startup-houses i::after { content: ''; position: absolute; left: 0; right: 0; top: 35px; height: 13px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d 20px 30px, transparent 30px 45px); }
     .startup-houses i:nth-child(2) { height: 170px; background-color: #667471; }.startup-houses i:nth-child(3) { height: 210px; background-color: #3b545c; }.startup-houses i:nth-child(4) { height: 155px; background-color: #6a665b; }
     .startup-copy { padding: 52px 40px; align-self: center; min-width: 0; }
     .startup-eyebrow { color: #d4b981; font-size: 12px; letter-spacing: .16em; margin: 0 0 20px; }
@@ -108,9 +111,19 @@
     .startup-actions > p, .startup-wait { color: #bdc9ca; font-size: 12px; line-height: 1.7; }
     #startup-storage, #startup-notice { color: #f1ce92; font-size: 13px; line-height: 1.7; }
     #startup details { margin-top: 22px; color: #cad2cf; font-size: 13px; } #startup summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; } #startup details p { line-height: 1.8; }
-    .startup-loader { height: 3px; border-radius: 3px; background: #d8ba7e20; overflow: hidden; margin: 24px 0 18px; }
-    .startup-loader i { display: block; width: 40%; height: 100%; background: #d8ba7e; transform: translateX(-110%); will-change: transform; animation: startup-drift 1.8s linear infinite; }
-    @keyframes startup-drift { to { transform: translateX(360%); } }
+    /* D091 loading motion (owner 2026-10-28「參考 town lab」; Lab main dde12ad index.html #boot453 L701-703 track and gradient bar): an 8px rail carrying a travelling light instead of a 3px hairline. Still indeterminate: no fill level, no percentage. */
+    .startup-loader { height: 8px; border-radius: 8px; background: #0e1b21; box-shadow: inset 0 0 0 1px #d5b67a33, inset 0 1px 2px #00000059; overflow: hidden; margin: 22px 0 15px; }
+    .startup-loader i { display: block; width: 38%; height: 100%; border-radius: 8px; background: linear-gradient(90deg, #d8ba7e00, #d8ba7e8a 45%, #edd49b 85%, #fff4d6); transform: translateX(-100%); will-change: transform; animation: startup-drift 2.2s cubic-bezier(.42, 0, .58, 1) infinite; }
+    @keyframes startup-drift { from { transform: translateX(-100%); } to { transform: translateX(263%); } }
+    /* Ambience after Lab main dde12ad index.html #boot453 L695 and L697-699 (boot453Windows lit windows, boot453Glow ground glow), slowed for this scene: one house dims at a time; the moon halo and the street glow breathe in turn. Transform/opacity only, and none of it runs with a reduced-motion preference. */
+    @media (prefers-reduced-motion: no-preference) {
+      .startup-houses i::after { animation: startup-windows 9.6s ease-in-out infinite; }
+      .startup-houses i:nth-child(2)::after { animation-delay: -3.8s; }.startup-houses i:nth-child(3)::after { animation-delay: -7.7s; }.startup-houses i:nth-child(4)::after { animation-delay: -1.9s; }.startup-houses i:nth-child(5)::after { animation-delay: -5.8s; }
+      .startup-moon::after { animation: startup-breathe 4.8s ease-in-out infinite; }
+      .startup-scene::before { animation: startup-breathe 4.8s ease-in-out -2.4s infinite; }
+    }
+    @keyframes startup-windows { 0%, 72% { opacity: 1; } 76%, 86% { opacity: .2; } 90%, 100% { opacity: 1; } }
+    @keyframes startup-breathe { 0%, 100% { opacity: .5; transform: scale(.94); } 50% { opacity: 1; transform: scale(1); } }
     #startup[data-phase="welcome"] .startup-loader, #startup[data-phase="welcome"] .startup-wait, #startup:not([data-phase="welcome"]) .startup-actions, #startup[data-phase="error"] .startup-loader, #startup[data-phase="error"] .startup-wait, .startup-mobile { display: none; }
     @media (max-width: 640px) {
       #startup { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
