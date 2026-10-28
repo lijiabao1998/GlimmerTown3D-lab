@@ -46,6 +46,19 @@ async function navigate(page, query = '') {
   await page.send('Page.navigate', { url: `http://127.0.0.1:${port}/${query ? '?' + query : ''}` });
 }
 
+// D091 B: computed-style fingerprint of the startup scene (scene, label, moon, houses and each house, each with ::before
+// and ::after). Elements report Typed OM computed values, so no font metrics or scrollbar width enter it; pseudo-elements
+// report getComputedStyle without the used-value geometry (offsets, width, height, transform-origin). A pseudo-element
+// without content is 'absent'. Outside loading the B scene must equal 10707fc: these pins were measured on the 10707fc
+// build and on the B head with Chrome for Testing 153 (card D091), one per viewport, the same for welcome, error and
+// reduced motion.
+export const sceneFingerprint = `(() => {const root=document.querySelector('#startup'),props=['display','visibility','opacity','position','top','right','bottom','left','width','height','min-width','min-height','transform','transform-origin','filter','mix-blend-mode','background-color','background-image','background-position','background-size','background-repeat','box-shadow','border-top-width','border-top-style','border-top-color','border-top-left-radius','clip-path','content','animation-name','color','font-size','letter-spacing','z-index','overflow-x','overflow-y'],used=['top','right','bottom','left','width','height','transform-origin'],houses=[...root.querySelectorAll('.startup-houses i')],els=[['scene',root.querySelector('.startup-scene')],['label',root.querySelector('.startup-scene > span')],['moon',root.querySelector('.startup-moon')],['houses',root.querySelector('.startup-houses')],...houses.map((n,i)=>['house'+i,n])],out={houseCount:houses.length};for(const [k,n] of els){if(!n){out[k]='missing';continue;}const m=n.computedStyleMap();out[k]=Object.fromEntries(props.map(p=>[p,String(m.get(p))]));for(const pe of ['::before','::after']){const cs=getComputedStyle(n,pe);out[k+pe]=/^(none|normal)$/.test(cs.content)?'absent':Object.fromEntries(props.filter(p=>!used.includes(p)).map(p=>[p,cs.getPropertyValue(p)]));}}return out;})()`;
+export const SCENE_PINS_10707FC = {
+  '1440x900': '6e3f2fc0a78c19313d4cb70ce1839e893094490218e34a9d126bea0d81a3c1ef',
+  '390x844': '5523fe70ae8b2ac18dc839073169bf3f199e6fe0cb60595b2a71e45e61ec4e74',
+  '844x390': '898b22087852d08d1e3c934a4f58e547abc361193e720f48c2c2e830eacdc37f',
+};
+
 export async function startupBrowser() {
   await startupGuards(); fs.mkdirSync(out, { recursive: true });
   const receipts = [], images = [];
@@ -363,6 +376,97 @@ export async function startupBrowser() {
       assert.ok(page.errors.some(x => /WebGL|context/i.test(x)), 'the induced renderer failure is the observed error');
       receipts.push({ kind: 'error-phase-scope', width: 1440, height: 900, control: 'WebGL context creation fails on every attempt', errorAnimations: 0, expectedErrors: page.errors });
     });
+
+    // D091 B hardening (owner 2026-10-28 chose B 「載入條＋場景呼吸」; card: 「等業主定檔後，再補那一檔的測試」). The final
+    // review's mutants showed changes that slipped past every check above; these pin the chosen variant instead, at 1440,
+    // 390 and 844x390, with the same explicitly labelled 3000 ms delayed IndexedDB loading control and a WebGL failure:
+    // - welcome, error, and reduced motion even while loading: the scene fingerprint equals the 10707fc pin, whatever
+    //   selector, @media, extra <style>, <link> or style attribute would change it, and no startup animation runs;
+    // - loading with normal motion, counting the subjects first: rail 1, windows 5, street glow 1 and the halo only wider
+    //   than 640px, all running. Each house ::after is drawn, visible, inset 0 and paints the welcome's own window grid;
+    //   across one 9.6s cycle each house dims once to .15 for about a second, never two at once; the glow and the halo
+    //   breathe in antiphase; the light travels left to right, covers at most half the rail and casts no shadow;
+    // - apart from the loading-only layers and the house background, the loading scene is the welcome scene.
+    const ambience = `(() => {const root=document.querySelector('#startup'),rail=root.querySelector('.startup-loader'),light=rail.querySelector('i'),r=rail.getBoundingClientRect(),l=light.getBoundingClientRect(),lc=getComputedStyle(light),layer=cs=>({content:cs.content,display:cs.display,visibility:cs.visibility,pos:cs.position,inset:[cs.top,cs.right,cs.bottom,cs.left].join(' '),image:cs.backgroundImage,bgPosition:cs.backgroundPosition,bgSize:cs.backgroundSize,bgRepeat:cs.backgroundRepeat,shadow:cs.boxShadow,name:cs.animationName});return{phase:root.dataset.phase,houses:[...root.querySelectorAll('.startup-houses i')].map(h=>{const cs=getComputedStyle(h);return{image:cs.backgroundImage,bgPosition:cs.backgroundPosition,bgSize:cs.backgroundSize,bgRepeat:cs.backgroundRepeat,after:layer(getComputedStyle(h,'::after'))};}),moon:layer(getComputedStyle(root.querySelector('.startup-moon'),'::after')),glow:layer(getComputedStyle(root.querySelector('.startup-scene'),'::before')),rail:{left:r.left,right:r.right,width:r.width,overflow:getComputedStyle(rail).overflow},light:{left:l.left,right:l.right,shadow:lc.boxShadow,color:lc.backgroundColor}};})()`;
+    const cycle = `(() => {const root=document.querySelector('#startup'),anims=document.getAnimations().filter(a=>a.effect?.target&&root.contains(a.effect.target)),houses=[...root.querySelectorAll('.startup-houses i')],moon=root.querySelector('.startup-moon'),scene=root.querySelector('.startup-scene'),out=[];for(let t=0;t<9600;t+=100){for(const a of anims){a.pause();a.currentTime=t;}out.push({t,windows:houses.map(h=>+getComputedStyle(h,'::after').opacity),moon:+getComputedStyle(moon,'::after').opacity,glow:+getComputedStyle(scene,'::before').opacity});}return out;})()`;
+    const motionPreference = value => ({ features: [{ name: 'prefers-reduced-motion', value }] });
+    const pinned = async (page, size, what, preferences) => {
+      for (const value of preferences) {
+        await page.send('Emulation.setEmulatedMedia', motionPreference(value));
+        const fp = await page.evaluate(sceneFingerprint);
+        assert.equal(fp.houseCount, 5, `${what} ${size} ${value}: five houses`);
+        assert.equal(sha(JSON.stringify(fp)), SCENE_PINS_10707FC[size], `${what} ${size} ${value}: the scene is the 10707fc scene`);
+        assert.deepEqual((await page.evaluate(motion)).anims, [], `${what} ${size} ${value}: no startup animation`);
+      }
+      await page.send('Emulation.setEmulatedMedia', motionPreference('no-preference'));
+    };
+    for (const [width, height] of [[1440, 900], [390, 844], [844, 390]]) {
+      const size = `${width}x${height}`, wide = width > 640;
+      await withBrowser({ width, height, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+        await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading, B hardening');
+        const m = await page.evaluate(motion);
+        assert.equal(m.phase, 'loading'); assert.equal(m.reduced, false);
+        const count = part => m.anims.filter(a => a.part === part).length;
+        assert.deepEqual([count('rail'), count('window::after'), count('scene::before'), count('moon::after'), m.anims.length], [1, 5, 1, wide ? 1 : 0, wide ? 8 : 7], `${size}: rail, five windows, glow, and the halo only wider than 640px: ${m.anims.map(a => a.part)}`);
+        assert.ok(m.anims.every(a => a.state === 'running'), `${size}: every startup animation runs`);
+        const lights = [];
+        for (const ms of [550, 1100, 1650]) {
+          await page.evaluate(freeze(ms)); lights.push(await page.evaluate(ambience));
+        }
+        const a = lights[1];
+        assert.equal(a.houses.length, 5, `${size}: five houses`);
+        for (const [k, h] of a.houses.entries()) {
+          assert.equal(h.image, 'none', `${size} house ${k}: the house background draws no windows while loading`);
+          assert.deepEqual([h.after.content, h.after.display, h.after.visibility, h.after.pos, h.after.inset, h.after.name], ['""', 'block', 'visible', 'absolute', '0px 0px 0px 0px', 'startup-windows'], `${size} house ${k}: the lit-window layer is drawn, visible and covers the house`);
+        }
+        assert.deepEqual([a.glow.content, a.glow.display, a.glow.visibility, a.glow.name], ['""', 'block', 'visible', 'startup-breathe'], `${size}: the street glow is drawn and breathes`);
+        assert.match(a.glow.image, /rgba\(0, 0, 0, 0\)\)$/, `${size}: the street glow fades to transparent at its edge`);
+        if (wide) assert.deepEqual([a.moon.content, a.moon.display, a.moon.visibility, a.moon.name], ['""', 'block', 'visible', 'startup-breathe'], `${size}: the moon halo is drawn and breathes`);
+        else assert.equal(a.moon.display, 'none', `${size}: no moon halo at 640px and narrower`);
+        assert.deepEqual([a.rail.overflow, a.light.shadow, a.light.color], ['hidden', 'none', 'rgba(0, 0, 0, 0)'], `${size}: the light is clipped to the rail, casts no shadow and has no solid fill`);
+        const shares = lights.map(f => (Math.min(f.light.right, f.rail.right) - Math.max(f.light.left, f.rail.left)) / f.rail.width);
+        assert.ok(shares.every(s => s > 0 && s <= 0.5), `${size}: the light is on the rail and covers at most half of it: ${shares}`);
+        assert.ok(lights[0].light.left < lights[1].light.left && lights[1].light.left < lights[2].light.left, `${size}: the light travels left to right: ${lights.map(f => f.light.left)}`);
+        const loadingFp = await page.evaluate(sceneFingerprint);
+        const samples = await page.evaluate(cycle);
+        assert.ok(samples.length === 96 && samples.every(s => s.windows.length === 5 && s.windows.filter(o => o < 0.5).length <= 1), `${size}: never two houses dim at once`);
+        const dims = [];
+        for (let k = 0; k < 5; k++) {
+          const o = samples.map(s => s.windows[k]), low = o.map(x => x < 0.5), starts = low.flatMap((d, i) => d && !low.at(i - 1) ? [samples[i].t] : []), seconds = low.filter(Boolean).length / 10;
+          assert.ok(Math.abs(Math.min(...o) - 0.15) < 0.005 && Math.max(...o) === 1, `${size} house ${k}: lit at 1, dimmed to .15: ${Math.min(...o)}..${Math.max(...o)}`);
+          assert.ok(starts.length === 1 && seconds >= 1 && seconds <= 1.6, `${size} house ${k}: dims once a cycle for about a second: starts ${starts}, ${seconds}s`);
+          dims.push({ house: k, fromMs: starts[0], seconds });
+        }
+        const at = t => samples.find(s => s.t === t);
+        assert.deepEqual([at(0).glow, at(2400).glow], [1, 0.5], `${size}: the street glow breathes`);
+        if (wide) assert.deepEqual([at(0).moon, at(2400).moon], [0.5, 1], `${size}: the halo breathes in antiphase with the street glow`);
+        assert.ok(samples.every(s => s.glow >= 0.5 && s.glow <= 1 && (!wide || (s.moon >= 0.5 && s.moon <= 1))), `${size}: breathing stays between .5 and 1`);
+        assert.equal(await page.evaluate("document.querySelector('#startup').dataset.phase"), 'loading', `${size}: measured while loading`);
+        await pinned(page, size, 'loading under reduced motion', ['reduce']);
+        await waitFor(page, welcome, 'delayed journal resolves, B hardening');
+        await pinned(page, size, 'welcome', ['no-preference', 'reduce']);
+        const welcomeFp = await page.evaluate(sceneFingerprint), w = await page.evaluate(ambience);
+        for (const [k, h] of w.houses.entries()) {
+          const lit = a.houses[k].after;
+          assert.deepEqual([h.image, h.bgPosition, h.bgSize, h.bgRepeat], [lit.image + ', none', lit.bgPosition + ', 0% 0%', lit.bgSize + ', auto', lit.bgRepeat + ', repeat'], `${size} house ${k}: while loading the ::after paints the welcome's own windows`);
+        }
+        for (const key of Object.keys(welcomeFp)) {
+          if (/^(house\d::after|moon::after|scene::before)$/.test(key)) continue;
+          // While loading the house background is one 'none' layer, so its position/size/repeat lists keep the first layer.
+          const first = s => String(s).split(', ')[0];
+          const strip = v => /^house\d$/.test(key) && typeof v === 'object' ? { ...v, 'background-image': 'differs while loading', 'background-position': first(v['background-position']), 'background-size': first(v['background-size']), 'background-repeat': first(v['background-repeat']) } : v;
+          assert.deepEqual(strip(loadingFp[key]), strip(welcomeFp[key]), `${size} ${key}: apart from the loading-only layers, the loading scene is the welcome scene`);
+        }
+        assert.deepEqual(page.errors, []);
+        receipts.push({ kind: 'b-hardening-loading-welcome', width, height, delayMs: 3000, control: 'actual IndexedDB success callback delayed; animations sampled through Web Animations currentTime; not device smoothness evidence', pin: SCENE_PINS_10707FC[size], loadingAnimations: m.anims.length, lightShares: shares, dims, welcomePinned: ['no-preference', 'reduce'], loadingReducedPinned: true });
+      });
+      await withBrowser({ width, height, port, keepWelcome: true, preload: failWebgl, settle: 0 }, async ({ page }) => {
+        await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='error'", 'actual renderer failure, B hardening');
+        await pinned(page, size, 'error', ['no-preference', 'reduce']);
+        assert.ok(page.errors.some(x => /WebGL|context/i.test(x)), 'the induced renderer failure is the observed error');
+        receipts.push({ kind: 'b-hardening-error', width, height, control: 'WebGL context creation fails on every attempt', pin: SCENE_PINS_10707FC[size], errorAnimations: 0, expectedErrors: page.errors });
+      });
+    }
     provenance.result = 'PASS';
     console.log('D091 Plan A browser PASS: ' + receipts.length + ' scenario receipts, ' + images.length + ' original PNGs at ' + out);
   } catch (error) {
