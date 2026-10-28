@@ -92,14 +92,11 @@
     #startup[hidden] { display: none; }
     .startup-card { width: min(980px, 100%); display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #d5b67a40; border-radius: 24px; overflow: hidden; background: #192932; box-shadow: 0 24px 80px #0005; }
     .startup-scene { position: relative; min-height: 440px; background: linear-gradient(155deg, #294654, #142c35); overflow: hidden; }
-    .startup-scene::before { content: ''; position: absolute; left: -20%; right: -20%; bottom: 28px; height: 200px; background: radial-gradient(ellipse 50% 46% at 50% 74%, #e5c37d30, #e5c37d10 55%, transparent 76%); transform-origin: 50% 100%; opacity: .75; }
     .startup-scene > span { position: absolute; bottom: 32px; left: 32px; font-size: 10px; letter-spacing: .3em; color: #d4b981; }
     .startup-moon { position: absolute; top: 60px; right: 58px; width: 70px; height: 70px; border-radius: 50%; background: #e0ca91; box-shadow: 0 0 70px #e0ca9120; }
-    .startup-moon::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 52px 20px #e0ca9126; opacity: .75; }
     .startup-houses { position: absolute; inset: 150px -12px 65px; display: flex; align-items: end; gap: 9px; transform: rotate(-3deg); }
-    .startup-houses i { position: relative; flex: 1; height: 130px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d3d 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat, #46616a; border-top: 18px solid #24353c; box-shadow: 0 24px 0 #0f232c; }
+    .startup-houses i { position: relative; flex: 1; height: 130px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat, #46616a; border-top: 18px solid #24353c; box-shadow: 0 24px 0 #0f232c; }
     .startup-houses i::before { content: ''; position: absolute; top: -48px; left: 0; right: 0; height: 30px; background: #24353c; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
-    .startup-houses i::after { content: ''; position: absolute; left: 0; right: 0; top: 35px; height: 13px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d 20px 30px, transparent 30px 45px); }
     .startup-houses i:nth-child(2) { height: 170px; background-color: #667471; }.startup-houses i:nth-child(3) { height: 210px; background-color: #3b545c; }.startup-houses i:nth-child(4) { height: 155px; background-color: #6a665b; }
     .startup-copy { padding: 52px 40px; align-self: center; min-width: 0; }
     .startup-eyebrow { color: #d4b981; font-size: 12px; letter-spacing: .16em; margin: 0 0 20px; }
@@ -115,14 +112,14 @@
     .startup-loader { height: 8px; border-radius: 8px; background: #0e1b21; box-shadow: inset 0 0 0 1px #d5b67a33, inset 0 1px 2px #00000059; overflow: hidden; margin: 22px 0 15px; }
     .startup-loader i { display: block; width: 38%; height: 100%; border-radius: 8px; background: linear-gradient(90deg, #d8ba7e00, #d8ba7e8a 45%, #edd49b 85%, #fff4d6); transform: translateX(-100%); will-change: transform; animation: startup-drift 2.2s cubic-bezier(.42, 0, .58, 1) infinite; }
     @keyframes startup-drift { from { transform: translateX(-100%); } to { transform: translateX(263%); } }
-    /* Ambience after Lab main dde12ad index.html #boot453 L695 and L697-699 (boot453Windows lit windows, boot453Glow ground glow), slowed for this scene: one house dims at a time; the moon halo and the street glow breathe in turn. Transform/opacity only, and none of it runs with a reduced-motion preference. */
+    /* Ambience after Lab main dde12ad index.html #boot453 L695 and L697-699 (boot453Windows lit windows, boot453Glow ground glow), slowed for this scene and generated only while loading. One house's windows go dark at a time: a dark-glass layer drawn with the house's own window geometry fades in over the unchanged lit windows. The street glow breathes behind the houses, and so does the moon halo where the moon is visible. Outside loading, and under a reduced-motion preference, none of these layers exist, so the scene is exactly the 10707fc scene. Transform/opacity only. */
     @media (prefers-reduced-motion: no-preference) {
-      .startup-houses i::after { animation: startup-windows 9.6s ease-in-out infinite; }
-      .startup-houses i:nth-child(2)::after { animation-delay: -3.8s; }.startup-houses i:nth-child(3)::after { animation-delay: -7.7s; }.startup-houses i:nth-child(4)::after { animation-delay: -1.9s; }.startup-houses i:nth-child(5)::after { animation-delay: -5.8s; }
-      .startup-moon::after { animation: startup-breathe 4.8s ease-in-out infinite; }
-      .startup-scene::before { animation: startup-breathe 4.8s ease-in-out -2.4s infinite; }
+      #startup[data-phase="loading"] .startup-houses i::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent 0 20px, #1d2c32 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat; opacity: 0; animation: startup-windows 9.6s ease-in-out infinite; }
+      #startup[data-phase="loading"] .startup-houses i:nth-child(2)::after { animation-delay: -3.8s; }#startup[data-phase="loading"] .startup-houses i:nth-child(3)::after { animation-delay: -7.7s; }#startup[data-phase="loading"] .startup-houses i:nth-child(4)::after { animation-delay: -1.9s; }#startup[data-phase="loading"] .startup-houses i:nth-child(5)::after { animation-delay: -5.8s; }
+      #startup[data-phase="loading"] .startup-moon::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 52px 20px #e0ca9126; animation: startup-breathe 4.8s ease-in-out infinite; }
+      #startup[data-phase="loading"] .startup-scene::before { content: ''; position: absolute; left: -20%; right: -20%; bottom: 28px; height: 200px; background: radial-gradient(ellipse 48% 40% at 50% 58%, #e5c37d30, #e5c37d10 55%, transparent); transform-origin: 50% 100%; animation: startup-breathe 4.8s ease-in-out -2.4s infinite; }
     }
-    @keyframes startup-windows { 0%, 72% { opacity: 1; } 76%, 86% { opacity: .2; } 90%, 100% { opacity: 1; } }
+    @keyframes startup-windows { 0%, 72% { opacity: 0; } 76%, 86% { opacity: .8; } 90%, 100% { opacity: 0; } }
     @keyframes startup-breathe { 0%, 100% { opacity: .5; transform: scale(.94); } 50% { opacity: 1; transform: scale(1); } }
     #startup[data-phase="welcome"] .startup-loader, #startup[data-phase="welcome"] .startup-wait, #startup:not([data-phase="welcome"]) .startup-actions, #startup[data-phase="error"] .startup-loader, #startup[data-phase="error"] .startup-wait, .startup-mobile { display: none; }
     @media (max-width: 640px) {
@@ -130,6 +127,7 @@
       .startup-card { max-width: 420px; grid-template-columns: 1fr; border-radius: 18px; }.startup-scene { min-height: 150px; }.startup-moon { width: 42px; height: 42px; top: 20px; right: 35px; }.startup-houses { inset: 65px -12px 18px; transform: scale(.75); transform-origin: bottom; }.startup-houses i { min-width: 50px; }.startup-scene > span { bottom: 12px; left: 20px; font-size: 8px; }.startup-copy { padding: 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 30px; margin-bottom: 18px; }.startup-desktop { display: none; }.startup-mobile { display: block; }#startup details { margin-top: 12px; }
     }
     @media (pointer: coarse) { .startup-desktop { display: none; }.startup-mobile { display: block; } }
+    @media (max-width: 640px) { #startup .startup-moon::after { display: none; } }
     @media (max-height: 500px) { #startup { place-items: start center; }.startup-scene { min-height: 120px; }.startup-copy { padding: 20px 24px; }.startup-eyebrow { margin-bottom: 12px; }#startup h1 { font-size: 28px; margin-bottom: 12px; }#startup h1 span { margin-top: 8px; }#startup-status { min-height: 0; margin-bottom: 12px; }#startup details { margin-top: 8px; }.startup-actions > p { margin: 8px 0; } }
     /* D091 reduced motion (owner 2026-10-28): a static centred three-dash mark, not a fill level and never full-width, so an unknown wait never looks complete. In the 8px rail the dashes stay 4px tall and square-ended, as before. */
     @media (prefers-reduced-motion: reduce) { .startup-loader i { animation: none; transform: none; width: 36px; margin: 0 auto; border-radius: 0; background: repeating-linear-gradient(90deg, #d8ba7e 0 8px, transparent 8px 14px) center / 100% 4px no-repeat; } }
