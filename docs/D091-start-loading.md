@@ -361,3 +361,26 @@ The unchanged full D090 foundation runner also passed all three actual-source do
 - B 檔補測試的獨立核驗只做完兩組：事實組找出本節的記錄錯誤（已在本節改正），合併安全組沒找到阻擋合併的程式問題。測試組（找會空過的斷言、寫新突變、換 DPR／降速／字型看會不會誤紅）中途被打斷，沒有結果。
 - 官方 D086 工作流的 `native-and-build` 在 83de0f6 上兩次都被自己的 20 分鐘上限切斷，停在第 20 步。本 PR 沒改 `src/`、套件檔和工作流（都跟 main 相同）。看起來是執行器變慢：同一份 D090 內容 10-26 在 PR 上跑 13.2 分鐘，10-27 合進 main 後第一次也被切斷，重跑才過；本 PR 的 10707fc 一次 17.5 分鐘過、一次被切斷。這個上限在 d086 的五支驗證測試和 d088–d090 的四支驗證檔裡都釘成 20，要改得另開 CI 卡，交業主決定。
 - 本節前三個 commit 已推上 PR #47（83de0f6），這次更正又產生新 head。官方 10 個工作流要在新 head 全綠才合併（業主選的選項寫明這個條件），合併和上線的核對另記。
+
+## 合併與上線核對 — 2026-10-28
+
+**合併。** 業主選了「先合併，上線仍等 D086 (Recommended)」：其餘 9 個工作流在 7d6decb 全綠就合併；Pages 只在 main 自己那一輪的 D086 通過後才從 main 部署，被切斷就重跑。
+- PR #47 以合併提交 `4fd1dda` 合進 main，合併釘在已驗的 head `7d6decb`（expectedHeadSha）。
+- 合併後我取消了對 PR #47 的追蹤；上線狀態改由 main 那一輪確認。
+
+**main 那一輪：ci run 40715129229**（push，`4fd1dda`，attempt 1，沒有重跑）。
+- 126 個 job 全部 success，15:21:34 到 17:20:30。
+- `d086-native-release / native-and-build` 15:27:34 到 15:44:59（17 分 25 秒），在 20 分鐘上限內；PR 上的 83de0f6 曾兩次被這個上限切斷。
+- build（job 122910618543）：`dist/index.html` 4,259,705 bytes，sha256 `d27572923cf25476b8b050cc379deaa29421dae28e1e2bd4636233221de5d8f4`，manifest SHA-256 `509587e9…7953`，成品 `ci-build-4fd1dda…-1`（artifact 12827647864）。這個 build 雜湊跟 PR 上 44f00f8、63f676c 的 buildSha256 `d2757292…` 相同。
+- smoke（job 122979777170）17:19:46 到 17:20:16：逐項確認各段成功，打包前再驗一次 build。
+- pages（job 122980097295）17:20:20 到 17:20:29：`deploy-pages` success。
+
+**線上核對（約 17:29 UTC）。** `https://game.lijiabao.uk/GlimmerTown3D-lab/` 回 HTTP 200：
+- 4,259,705 bytes，sha256 `d27572923cf25476…de5d8f4`，跟上面的 build 逐位元組相同；
+- `last-modified: Wed, 28 Oct 2026 17:20:24 GMT`，就是這一輪部署的時間。
+
+**仍然沒做成的事。**
+- 上線只用雜湊核對，沒有在手機上看實際畫面。
+- 官方工作流還是不跑 D091 工具；定格三幀情境的時序依賴、forced-colors、no-JS 文案、焦點框照舊開著。
+- 實機沒量：手機、硬體合成、耗電都沒有數字。
+- D086 的 20 分鐘上限被歷史驗證檔釘住；這次在上限內跑完，要不要改仍交業主決定（另開 CI 卡）。
