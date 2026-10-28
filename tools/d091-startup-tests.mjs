@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import vm from 'node:vm';
 import { assertFrozenCurrentSource } from '../proposals/d090/foundation-routing-contract-pipes-v2.mjs';
 
@@ -173,3 +174,33 @@ export function loadingScopeGuards() {
   console.log('D091 loading-scope PASS: ambience only in the loading phase; 10707fc scene outside it; no longhand or foreign keyframes; short light; 4px square dashes');
 }
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) loadingScopeGuards();
+
+// D091 scene invariant and single window drawing (second independent review 2026-10-28). Outside the loading gate the
+// scene rules must be exactly the 10707fc scene rules (pinned fingerprint of the normalized rules), so a static halo or
+// glow under any spelling, an override or a colour change cannot slip in; the only extra scene rule is the phone rule
+// that keeps the halo ungenerated. While loading, the house background draws no windows and the lit windows are drawn
+// once, by the ::after layer whose opacity dims them (Lab #boot453 boot453Windows), so no second window drawing can
+// misalign with it under the houses' rotation and leave a lit sliver.
+const SCENE_10707FC = { count: 15, sha256: '465eaebca462216d7b1a8ea2ad2bf7b735311a1960c4357d00c2ad3fdd6ebcef' };
+const PHONE_HALO_RULE = '#startup .startup-moon::after {display: none;}';
+export function sceneInvariantGuards() {
+  assert.equal((html.match(/<style\b/g) || []).length, 1, 'one style block, so every startup rule is under these guards');
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const startupCss = css.slice(css.indexOf('#startup {'));
+  const gate = startupCss.match(/@media \(prefers-reduced-motion: no-preference\) \{((?:[^{}]*\{[^{}]*\})*)\s*\}/)[1];
+  const outside = startupCss.replace(gate, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  const rules = [...outside.matchAll(/([^{}]*)\{([^{}]*)\}/g)].map(m => m[1].trim().split('{').pop().trim() + ' {' + m[2].replace(/\s+/g, ' ').trim() + '}')
+    .filter(r => /startup-(scene|moon|houses)/i.test(r.split('{')[0]));
+  const extra = rules.filter(r => r === PHONE_HALO_RULE);
+  const scene = rules.filter(r => r !== PHONE_HALO_RULE);
+  assert.equal(extra.length, 1, 'the phone rule keeps the moon halo ungenerated at max-width 640px');
+  assert.equal(scene.length, SCENE_10707FC.count, `scene rules outside the gate: ${scene.join(' | ')}`);
+  assert.equal(createHash('sha256').update(scene.join('\n')).digest('hex'), SCENE_10707FC.sha256, `scene outside the loading gate equals 10707fc: ${scene.join(' | ')}`);
+  assert.match(gate, /#startup\[data-phase="loading"\] \.startup-houses i \{ background-image: none; \}/, 'while loading, the house background draws no windows');
+  const windows = gate.match(/#startup\[data-phase="loading"\] \.startup-houses i::after \{([^}]*)\}/)?.[1] || '';
+  assert.match(windows, /#e5c37d 20px 30px/, 'the ::after layer draws the lit windows themselves');
+  assert.match(windows, /center 35px \/ 100% 13px no-repeat/, 'with the house window geometry');
+  assert.match(windows, /animation: startup-windows/, 'and dims them by its own opacity');
+  console.log('D091 scene-invariant PASS: one style block; scene outside loading = 10707fc fingerprint; windows drawn once while loading');
+}
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) sceneInvariantGuards();

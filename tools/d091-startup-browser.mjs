@@ -334,6 +334,35 @@ export async function startupBrowser() {
       assert.deepEqual(page.errors, []);
       receipts.push({ kind: 'reduced-motion-dash-geometry', width: 390, height: 844, ...dash });
     });
+
+    // D091 single window drawing, light width and halo generation (second independent review 2026-10-28). While loading
+    // with normal motion the house background draws no windows, so the lit windows exist once, in the ::after layer that
+    // dims them; the travelling light is at most half the rail in a frozen frame (an override to a fill fails); the halo
+    // is not generated at 640px and narrower; and the error screen runs no startup animation at 1440 as well as at 390.
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      await withBrowser({ width, height, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+        await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading, windows and light');
+        await page.evaluate(freeze(1100));
+        const w = await page.evaluate(`(() => {const root=document.querySelector('#startup'),houses=[...root.querySelectorAll('.startup-houses i')],rail=root.querySelector('.startup-loader').getBoundingClientRect(),light=root.querySelector('.startup-loader i').getBoundingClientRect(),moon=getComputedStyle(root.querySelector('.startup-moon'),'::after');return{phase:root.dataset.phase,houseImages:houses.map(h=>getComputedStyle(h).backgroundImage),windowLayers:houses.map(h=>getComputedStyle(h,'::after').backgroundImage),lightShare:light.width/rail.width,haloDisplay:moon.display,haloContent:moon.content};})()`);
+        assert.equal(w.phase, 'loading');
+        assert.ok(w.houseImages.every(x => x === 'none'), `while loading the house background draws no windows: ${w.houseImages[0]}`);
+        assert.ok(w.windowLayers.every(x => /rgb\(229, 195, 125\)/.test(x)), `the ::after layer draws the lit windows: ${w.windowLayers[0]}`);
+        assert.ok(w.lightShare > 0 && w.lightShare <= 0.5, `travelling light is at most half the rail: ${w.lightShare}`);
+        if (width <= 640) assert.equal(w.haloDisplay, 'none', 'halo not generated on phones'); else assert.notEqual(w.haloContent, 'none', 'halo generated on wide screens');
+        await page.evaluate(resume);
+        await waitFor(page, welcome, 'delayed journal resolves, windows and light');
+        assert.ok((await page.evaluate("[...document.querySelectorAll('#startup .startup-houses i')].map(h=>getComputedStyle(h).backgroundImage)")).every(x => /rgb\(229, 195, 125\)/.test(x)), 'the welcome keeps the 10707fc lit windows in the house background');
+        assert.deepEqual(page.errors, []);
+        receipts.push({ kind: 'loading-windows-light-halo', width, height, lightShare: w.lightShare, haloDisplay: w.haloDisplay, houseImagesWhileLoading: 'none', windowLayer: 'lit #e5c37d' });
+      });
+    }
+    await withBrowser({ width: 1440, height: 900, port, keepWelcome: true, preload: failWebgl, settle: 0 }, async ({ page }) => {
+      await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='error'", 'actual renderer failure, scope 1440');
+      const failed = await page.evaluate(motion);
+      assert.equal(failed.phase, 'error'); assert.deepEqual(failed.anims, [], 'normal motion: no startup animation on the 1440 error screen');
+      assert.ok(page.errors.some(x => /WebGL|context/i.test(x)), 'the induced renderer failure is the observed error');
+      receipts.push({ kind: 'error-phase-scope', width: 1440, height: 900, control: 'WebGL context creation fails on every attempt', errorAnimations: 0, expectedErrors: page.errors });
+    });
     provenance.result = 'PASS';
     console.log('D091 Plan A browser PASS: ' + receipts.length + ' scenario receipts, ' + images.length + ' original PNGs at ' + out);
   } catch (error) {
