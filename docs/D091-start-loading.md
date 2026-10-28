@@ -155,3 +155,85 @@ The unchanged full D090 foundation runner also passed all three actual-source do
 - no-JS 文案矛盾、焦點框看不到，照舊開著。
 - 手機寬度下，月亮本來就被房子擋住，所以月暈在手機上幾乎看不到。構圖沒改。
 - 業主還沒看新圖。PR #47 仍是 Draft，沒有合併、沒有發布。
+
+## 獨立核驗後修正：場景動畫只在載入中 — 2026-10-28
+
+**核驗結論（d8167ef）。** approve-with-issues，沒有 blocker，6 項 minor，前兩項是我這輪自己造成的缺陷：
+1. **靜止時窗燈不是逐像素相同。** 獨立的 `::after` 窗條跟房子背景圖案對齊方式不同，部分窗旁露出 1px 暗玻璃細條。1440 有 214 px 不同，最大差 159 階。卡面和 9c56f79 的 commit 訊息寫「完全一樣」，說過頭了。
+2. **街燈光底部有一條水平硬邊。** 漸層到盒子底邊時還沒降到 transparent。
+3. **範圍比業主說的大。** 一般動態下，歡迎和錯誤畫面也各跑 7 個動畫，10707fc 是 0 個；靜止外觀也多了月暈和光暈。原本跨兩次跑逐位元組相同的 8 張圖，因此每次跑都不同。
+4. **「8 個合成層」不準。** 實際畫內容的合成層 1440@1x 從 4 層變 15 層，390@DPR3 從 7 層變 17 層。
+5. **測試有漏洞。** 這幾種情況沒有斷言：longhand `animation-name`、非 `startup-*` 命名的 keyframes、全寬光點、4px 短槓。frame 情境的 `resume` 也沒有限定在 `#startup`。
+6. **用字不精確。** 「靜止記號 36×8」：盒子是 36×8，看得到的短槓是 36×4。
+
+**修法（fa11b0a，只改 `index.html` 的 CSS）。**
+- **只在載入中生成。** 月暈、街燈光、窗燈層只在 `@media (prefers-reduced-motion: no-preference)` 之內、而且只對 `#startup[data-phase="loading"]` 生成。其他時候場景跟 10707fc 逐字相同：房子規則還原，亮窗 `#e5c37d`，沒有任何額外圖層。
+- **窗燈改成「暗下」。** 原本的亮窗完全不動，只在暗下時淡入一層暗玻璃（`#1d2c32`，不透明度 0→.8）。這層用房子自己的窗格幾何畫（`inset: 0; center 35px / 100% 13px`），所以不會有對齊誤差。
+- **街燈光改漸層。** 改成 `ellipse 48% 40% at 50% 58%`，在橢圓邊緣就降到 transparent，碰不到盒子邊，所以沒有硬邊。
+- **手機不生成月暈。** 寬度 ≤640px 時，月亮本來就被房子擋住，月暈只會白跑。
+- 軌道、光點、減少動態短槓都不變。
+
+**先寫測試，保留第一個紅燈。** 86c8b19 只改測試，`index.html` 跟 d8167ef 相同。
+- `tools/d091-startup-tests.mjs` 追加 `loadingScopeGuards()`，檢查以下幾件事：
+  - 守衛內每條規則都限定 `#startup[data-phase="loading"]`；
+  - 守衛外沒有生成任何月暈、光暈或窗燈層；
+  - 房子規則跟 10707fc 逐字相同；
+  - 守衛外沒有 longhand `animation-name`；
+  - 任何名字的 keyframes 都只動 transform 和 opacity；
+  - 光點寬度小於 50%；
+  - 減少動態短槓是直角、4px 高。
+
+  首紅：`ambience is scoped to the loading phase: .startup-houses i::after`。
+- `tools/d091-startup-browser.mjs` 追加範圍情境，用明示標籤的 3000 ms IndexedDB 延遲對照，加上 WebGL 每次都失敗的控制組：
+  - 1440 和 390 一般動態下，月暈只在寬度大於 640px 時動，之後的歡迎畫面要是 0 個動畫；
+  - 390 錯誤畫面要是 0 個動畫；
+  - 390 減少動態下，短槓 `background-size` 是 `100% 4px`，圓角是 `0px`。
+
+  frame 情境的 `resume` 改成只恢復 `#startup` 的動畫，跟 freeze 一致。
+
+  瀏覽器紅燈：原有 19 個情境全過，首紅 `normal motion: no startup animation on the welcome`，實際值列出 `scene::before` 等仍在跑的動畫。receipt 為 FAIL，head 86c8b19，dirty 為 false。
+
+**綠燈（fa11b0a）。** `D091 Plan A browser PASS: 23 scenario receipts, 26 original PNGs`。
+- receipt：head fa11b0a，dirty 為 false，indexSha256 `468b9df5…`，buildSha256 `5bf23081…`，testSha256 `c4f28d30…`。26 張 PNG 的 sha256 和大小全部重算吻合。
+- 載入中、一般動態：1440 有 8 個動畫（軌道光 1、窗 5、月暈 1、街燈光 1）；390 有 7 個，沒有月暈。keyframes 只有 transform 和 opacity。
+- 一般動態下，歡迎畫面（1440、390）和錯誤畫面（390）都是 0 個動畫。減少動態下，載入中和歡迎畫面也都是 0 個。
+- 減少動態記號：盒子 36×8，在 310×8 軌道正中；看得到的是三條 8×4 直角短槓，`background-size` 是 `100% 4px`，圓角 `0px`。
+- 跟 10707fc 的 20 張原圖比，16 張逐位元組相同，包括：
+  - 5 個尺寸的歡迎畫面；
+  - 日誌不可用、存檔警告、錯誤畫面三個控制組；
+  - 5 張進入遊戲；
+  - 基準和 parity。
+
+  不同的 4 張：
+  - 三張是本卡改的載入畫面：一般動態載入控制 1440 和 390、減少動態載入控制 390。
+  - 360 操作說明。差異只在「第一次來？看看操作方式」那一列（x 40–320、y 575–619），最大 17 階，是觸碰後的高亮漂移。10707fc 之前的跑次就有這種漂移。
+- `npm run typecheck`、`npm run build` 綠，`node tools/d091-startup-tests.mjs` 四段 PASS。
+
+**合成與主執行緒。**
+- 量測條件：只有殼層的頁面，載入中，無頭 Chromium 153，軟體光柵，不是手機實測。
+- 合成層用 LayerTree 量；面積是把 CSS px² 換算成 RGBA 位元組的估計，不是實測 GPU 記憶體。
+
+| 版本 | 1440@1x 畫內容的層數／面積 | 390@3x 畫內容的層數／面積 |
+|---|---|---|
+| 10707fc | 4／9.9 MB | 7／47.2 MB |
+| 65bb6a6 | 15／11.5 MB | 17／57.1 MB |
+| fa11b0a | 15／11.7 MB | 14／43.6 MB |
+
+- 減少動態下，fa11b0a 是 4／9.9 MB（1440）和 5／33.9 MB（390@3x）。
+- Chrome trace：fa11b0a 的 8 個動畫都是 running，沒有任何退回主執行緒的紀錄。穩定期最後 2.5 秒裡，UpdateLayoutTree、PrePaint、Layerize 都是 0 次。同樣的量法，10707fc（只有原本的漂移條）和 65bb6a6 各是 150 次，也就是每幀都要主執行緒。為什麼舊版每幀都要主執行緒，我沒有查明，只記錄量到的數字。
+
+**對照圖重拍。** B 檔改用 fa11b0a 的 `index.html` 重拍：9.6 秒、每 0.1 秒定格一次、共 96 幀。A、C 和現行三檔不變。
+
+| 檔案 | sha256 |
+|---|---|
+| `D091-loading-motion-ABC-1440.gif` | `4ef7ed28…` |
+| `D091-loading-motion-ABC-390.gif` | `308dcee7…` |
+| `D091-loading-rail-ABC-390-dpr3.gif`（軌道沒變，位元組跟上一版相同） | `9d74b0ba…` |
+
+**仍然沒做成的事。**
+- 實機沒量：手機、硬體合成、耗電都沒有數字。
+- 官方工作流不跑 D091 工具，動畫、範圍和減少動態的瀏覽器證據只有本機 receipt。
+- 煙霧測試 `tools/smoke.mjs` 本機沒跑，交給官方 CI。
+- 高對比 forced-colors：修改前後的載入條都看不到。這是既有問題，照舊開著。
+- no-JS 文案矛盾、焦點框看不到，照舊開著。
+- 業主還沒看這一版的圖。PR #47 仍是 Draft，沒有合併、沒有發布。
