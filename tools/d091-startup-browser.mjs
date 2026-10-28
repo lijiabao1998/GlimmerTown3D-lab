@@ -261,7 +261,7 @@ export async function startupBrowser() {
     const slowJournal3000 = slowJournal.replace('1500', '3000');
     const motion = `(() => {const root=document.querySelector('#startup'),rail=root.querySelector('.startup-loader'),r=rail.getBoundingClientRect(),light=getComputedStyle(rail.querySelector('i'));const part=n=>n.closest('.startup-loader')?'rail':n.closest('.startup-houses')?'window':n.classList.contains('startup-moon')?'moon':n.classList.contains('startup-scene')?'scene':n.tagName.toLowerCase();return{phase:root.dataset.phase,ready:!!window.__gt?.ready,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,rail:{width:r.width,height:r.height},lightImage:light.backgroundImage,text:root.querySelector('#startup-status').textContent+rail.textContent,anims:document.getAnimations().filter(a=>a.effect?.target&&root.contains(a.effect.target)).map(a=>({name:a.animationName,part:part(a.effect.target)+(a.effect.pseudoElement||''),state:a.playState,props:[...new Set(a.effect.getKeyframes().flatMap(k=>Object.keys(k)))].filter(p=>!['offset','computedOffset','easing','composite'].includes(p)).sort()}))};})()`;
     const freeze = ms => `(() => {const root=document.querySelector('#startup');for(const a of document.getAnimations())if(a.effect?.target&&root.contains(a.effect.target)){a.pause();a.currentTime=${ms};}})()`;
-    const resume = "(() => {for(const a of document.getAnimations())if(a.playState==='paused')a.play();})()";
+    const resume = "(() => {const root=document.querySelector('#startup');for(const a of document.getAnimations())if(a.effect?.target&&root.contains(a.effect.target)&&a.playState==='paused')a.play();})()";
     for (const [width, height] of [[1440, 900], [390, 844]]) {
       await withBrowser({ width, height, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
         await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading with motion');
@@ -297,6 +297,42 @@ export async function startupBrowser() {
       assert.deepEqual((await page.evaluate(motion)).anims, [], 'reduced motion: no startup animation on the welcome');
       assert.deepEqual(page.errors, []);
       receipts.push({ kind: 'reduced-motion-no-ambience', width: 390, height: 844, delayMs: 3000, loadingAnimations: 0, welcomeAnimations: 0 });
+    });
+
+    // D091 loading-motion scope (independent review 2026-10-28; owner 「其它的沒問題」): the ambience runs only while
+    // loading. With normal motion the welcome and an observed startup failure run no startup animation and keep the
+    // 10707fc scene; the moon halo, hidden behind the houses on phones, is not generated there. Same explicitly labelled
+    // 3000 ms delayed IndexedDB loading control; the failure control fails WebGL context creation on every attempt.
+    const failWebgl = "(() => {const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return String(type).includes('webgl')?null:original.call(this,type,...args);};})();";
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      await withBrowser({ width, height, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+        await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading, scope');
+        const loading = await page.evaluate(motion);
+        assert.equal(loading.phase, 'loading');
+        const parts = loading.anims.map(a => a.part);
+        assert.equal(parts.includes('moon::after'), width > 640, `moon halo only where the moon is visible (${width}px): ${parts}`);
+        await waitFor(page, welcome, 'delayed journal resolves, scope');
+        const after = await page.evaluate(motion);
+        assert.equal(after.phase, 'welcome'); assert.deepEqual(after.anims, [], 'normal motion: no startup animation on the welcome');
+        assert.deepEqual(page.errors, []);
+        receipts.push({ kind: 'loading-motion-scope', width, height, delayMs: 3000, loadingParts: parts, welcomeAnimations: 0 });
+      });
+    }
+    await withBrowser({ width: 390, height: 844, port, keepWelcome: true, preload: failWebgl, settle: 0 }, async ({ page }) => {
+      await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='error'", 'actual renderer failure, scope');
+      const failed = await page.evaluate(motion);
+      assert.equal(failed.phase, 'error'); assert.deepEqual(failed.anims, [], 'normal motion: no startup animation on the error screen');
+      assert.ok(page.errors.some(x => /WebGL|context/i.test(x)), 'the induced renderer failure is the observed error');
+      receipts.push({ kind: 'error-phase-scope', width: 390, height: 844, control: 'WebGL context creation fails on every attempt', errorAnimations: 0, expectedErrors: page.errors });
+    });
+    await withBrowser({ width: 390, height: 844, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+      await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+      await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'reduced-motion loading, dash geometry');
+      const dash = await page.evaluate("(() => {const cs=getComputedStyle(document.querySelector('#startup .startup-loader i'));return{size:cs.backgroundSize,radius:cs.borderTopLeftRadius,phase:document.querySelector('#startup').dataset.phase};})()");
+      assert.equal(dash.phase, 'loading'); assert.equal(dash.size, '100% 4px', 'reduced-motion dashes are 4px tall'); assert.equal(dash.radius, '0px', 'reduced-motion dashes are square-ended');
+      await waitFor(page, welcome, 'delayed journal resolves, dash geometry');
+      assert.deepEqual(page.errors, []);
+      receipts.push({ kind: 'reduced-motion-dash-geometry', width: 390, height: 844, ...dash });
     });
     provenance.result = 'PASS';
     console.log('D091 Plan A browser PASS: ' + receipts.length + ' scenario receipts, ' + images.length + ' original PNGs at ' + out);

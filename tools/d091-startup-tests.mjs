@@ -143,3 +143,33 @@ export function loadingMotionGuards() {
   console.log('D091 loading-motion PASS: Lab #boot453 source named; startup keyframes transform/opacity only; ambience gated by no-preference; no progress value');
 }
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) loadingMotionGuards();
+
+// D091 loading-motion scope (independent review 2026-10-28; owner 「其它的沒問題」): the Lab-referenced ambience belongs to
+// the loading phase only. Outside the no-preference gate the scene is byte-for-byte the 10707fc scene (the original lit
+// windows stay in the house background; no halo, glow or window layer is generated), so reduced motion, the welcome and
+// the error screen look exactly as before. Also closes gaps the review found: longhand animation-name outside the gate,
+// keyframes under any name, a full-width rail light, and the 4px square reduced-motion dashes.
+export function loadingScopeGuards() {
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const startupCss = css.slice(css.indexOf('#startup {'));
+  const gate = startupCss.match(/@media \(prefers-reduced-motion: no-preference\) \{((?:[^{}]*\{[^{}]*\})*)\s*\}/)?.[1];
+  assert.ok(gate, 'ambience gate present');
+  for (const [, selectors] of gate.matchAll(/([^{}]+)\{[^{}]*\}/g))
+    for (const s of selectors.split(',').map(x => x.trim()))
+      assert.ok(s.startsWith('#startup[data-phase="loading"] '), `ambience is scoped to the loading phase: ${s}`);
+  const outside = startupCss.replace(gate, '');
+  assert.doesNotMatch(outside, /(?:\.startup-moon::after|\.startup-scene::before|\.startup-houses i::after)[^{]*\{[^}]*content:/, 'no halo, glow or window layer outside the loading gate');
+  assert.ok(startupCss.includes('.startup-houses i { position: relative; flex: 1; height: 130px; background: repeating-linear-gradient(90deg, transparent 0 20px, #e5c37d 20px 30px, transparent 30px 45px) center 35px / 100% 13px no-repeat, #46616a; border-top: 18px solid #24353c; box-shadow: 0 24px 0 #0f232c; }'), 'house windows exactly as 10707fc');
+  assert.doesNotMatch(outside, /animation-name:(?!\s*none\b)/, 'no longhand animation-name outside the gate');
+  for (const [, name, body] of startupCss.matchAll(/@keyframes ([\w-]+) \{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)) {
+    const props = [...body.matchAll(/([\w-]+)\s*:/g)].map(m => m[1]);
+    assert.ok(props.length && props.every(p => p === 'transform' || p === 'opacity'), `${name} animates only transform/opacity: ${props}`);
+  }
+  const light = startupCss.match(/\.startup-loader i \{([^}]*)\}/)[1];
+  assert.ok(+light.match(/width:\s*(\d+)%/)?.[1] < 50, 'the travelling light is a short segment, never a fill');
+  const rm = html.match(/@media \(prefers-reduced-motion: reduce\) \{\s*\.startup-loader i \{([^}]*)\}\s*\}/)[1];
+  assert.match(rm, /border-radius: 0/, 'reduced-motion dashes are square-ended');
+  assert.match(rm, /center \/ 100% 4px no-repeat/, 'reduced-motion dashes are 4px tall inside the 8px rail');
+  console.log('D091 loading-scope PASS: ambience only in the loading phase; 10707fc scene outside it; no longhand or foreign keyframes; short light; 4px square dashes');
+}
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) loadingScopeGuards();
