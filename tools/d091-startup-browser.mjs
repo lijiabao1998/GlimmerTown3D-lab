@@ -250,6 +250,54 @@ export async function startupBrowser() {
       assert.deepEqual(page.errors, []);
       receipts.push({ kind: 'reduced-motion-loading-control', width: 390, height: 844, delayMs: 1500, control: 'actual IndexedDB success callback delayed, prefers-reduced-motion: reduce emulated; not device performance evidence', measured: m, readyEventually: true });
     });
+
+    // D091 loading-motion refinement (owner 2026-10-28 「對照圖的動畫還可以精修一下，參考 town lab」; Lab main dde12ad
+    // index.html #boot453): during an explicitly labelled 3000 ms delayed IndexedDB loading control (below the engine's
+    // 4000 ms journal timeout) the shell shows the Lab-referenced ambience: a travelling rail light, window lights
+    // (boot453Windows) and a breathing glow (boot453Glow). Every startup animation touches only transform/opacity and
+    // nothing reads as progress. Frames are frozen at exact times through the Web Animations API, so each PNG is an
+    // original, reproducible capture rather than an edit; phase is re-read after the last shot. Under
+    // prefers-reduced-motion: reduce the shell runs no animation at all, in loading or on the welcome.
+    const slowJournal3000 = slowJournal.replace('1500', '3000');
+    const motion = `(() => {const root=document.querySelector('#startup'),rail=root.querySelector('.startup-loader'),r=rail.getBoundingClientRect(),light=getComputedStyle(rail.querySelector('i'));const part=n=>n.closest('.startup-loader')?'rail':n.closest('.startup-houses')?'window':n.classList.contains('startup-moon')?'moon':n.classList.contains('startup-scene')?'scene':n.tagName.toLowerCase();return{phase:root.dataset.phase,ready:!!window.__gt?.ready,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,rail:{width:r.width,height:r.height},lightImage:light.backgroundImage,text:root.querySelector('#startup-status').textContent+rail.textContent,anims:document.getAnimations().filter(a=>a.effect?.target&&root.contains(a.effect.target)).map(a=>({name:a.animationName,part:part(a.effect.target)+(a.effect.pseudoElement||''),state:a.playState,props:[...new Set(a.effect.getKeyframes().flatMap(k=>Object.keys(k)))].filter(p=>!['offset','computedOffset','easing','composite'].includes(p)).sort()}))};})()`;
+    const freeze = ms => `(() => {const root=document.querySelector('#startup');for(const a of document.getAnimations())if(a.effect?.target&&root.contains(a.effect.target)){a.pause();a.currentTime=${ms};}})()`;
+    const resume = "(() => {for(const a of document.getAnimations())if(a.playState==='paused')a.play();})()";
+    for (const [width, height] of [[1440, 900], [390, 844]]) {
+      await withBrowser({ width, height, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+        await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading with motion');
+        const m = await page.evaluate(motion);
+        assert.equal(m.phase, 'loading'); assert.equal(m.ready, false); assert.equal(m.reduced, false);
+        const parts = m.anims.map(a => a.part);
+        assert.ok(parts.includes('rail'), 'the rail light travels');
+        assert.ok(parts.filter(p => p === 'window::after').length >= 3, `Lab boot453Windows: window lights animate during loading (${parts})`);
+        assert.ok(parts.some(p => p === 'scene::before' || p === 'moon::after'), `Lab boot453Glow: a glow breathes during loading (${parts})`);
+        for (const a of m.anims) assert.ok(a.props.length && a.props.every(p => p === 'transform' || p === 'opacity'), `${a.name} on ${a.part} animates only transform/opacity: ${a.props}`);
+        assert.ok(m.rail.height >= 6, `rail tall enough to carry the light at ${width}px: ${m.rail.height}px`);
+        assert.match(m.lightImage, /gradient/, 'travelling light is a gradient, not a solid fill segment');
+        assert.doesNotMatch(m.text, /\d+\s*%/);
+        const frames = [];
+        for (const ms of [550, 1100, 1650]) {
+          await page.evaluate(freeze(ms)); await sleep(60);
+          await shot(page, `D091-${width}-loading-motion-t${ms}.png`, images); frames.push(images.at(-1).file);
+        }
+        assert.equal(await page.evaluate("document.querySelector('#startup').dataset.phase"), 'loading', 'frozen frames are the loading state');
+        await page.evaluate(resume);
+        await waitFor(page, welcome, 'delayed journal resolves after motion frames');
+        assert.deepEqual(page.errors, []);
+        receipts.push({ kind: 'loading-motion-frames', width, height, delayMs: 3000, control: 'actual IndexedDB success callback delayed; frames frozen by Web Animations currentTime; not device smoothness evidence', source: 'Lab main dde12ad index.html #boot453', animations: m.anims, rail: m.rail, frames });
+      });
+    }
+    await withBrowser({ width: 390, height: 844, port, keepWelcome: true, preload: slowJournal3000, settle: 0 }, async ({ page }) => {
+      await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+      await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading, reduced motion, ambience');
+      const loading = await page.evaluate(motion);
+      assert.equal(loading.phase, 'loading'); assert.equal(loading.reduced, true);
+      assert.deepEqual(loading.anims, [], 'reduced motion: no startup animation while loading');
+      await waitFor(page, welcome, 'delayed journal resolves under reduced motion, ambience');
+      assert.deepEqual((await page.evaluate(motion)).anims, [], 'reduced motion: no startup animation on the welcome');
+      assert.deepEqual(page.errors, []);
+      receipts.push({ kind: 'reduced-motion-no-ambience', width: 390, height: 844, delayMs: 3000, loadingAnimations: 0, welcomeAnimations: 0 });
+    });
     provenance.result = 'PASS';
     console.log('D091 Plan A browser PASS: ' + receipts.length + ' scenario receipts, ' + images.length + ' original PNGs at ' + out);
   } catch (error) {

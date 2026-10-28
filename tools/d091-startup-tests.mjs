@@ -117,3 +117,29 @@ export function reducedMotionGuards() {
   console.log('D091 reduced-motion PASS: static loader rule has no animation and no full-width completion cue; centred segmented indicator');
 }
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) reducedMotionGuards();
+
+// D091 loading-motion refinement (owner 2026-10-28 「對照圖的動畫還可以精修一下，參考 town lab」): source complement to
+// the Chromium scenario D091-loading-motion-frames. The scene ambience is ported from Lab main dde12ad index.html #boot453
+// (boot453Windows lit windows, boot453Glow ground glow) and must name that source; every startup keyframe may only touch
+// transform/opacity (compositor-eligible); ambience runs only without a reduced-motion preference; nothing reads as progress.
+export function loadingMotionGuards() {
+  const css = html.match(/<style>([\s\S]*?)<\/style>/)[1];
+  const startupCss = css.slice(css.indexOf('#startup {'));
+  const keyframes = [...startupCss.matchAll(/@keyframes (startup-[\w-]+) \{((?:[^{}]*\{[^{}]*\})*)\s*\}/g)];
+  assert.ok(keyframes.length >= 2, 'startup ambience keyframes besides the rail light');
+  for (const [, name, body] of keyframes) {
+    const props = [...body.matchAll(/([\w-]+)\s*:/g)].map(m => m[1]);
+    assert.ok(props.length && props.every(p => p === 'transform' || p === 'opacity'), `${name} animates only transform/opacity: ${props}`);
+  }
+  const gate = startupCss.match(/@media \(prefers-reduced-motion: no-preference\) \{((?:[^{}]*\{[^{}]*\})*)\s*\}/)?.[1];
+  assert.ok(gate, 'scene ambience is gated behind prefers-reduced-motion: no-preference');
+  assert.match(gate, /\.startup-houses i::after \{[^}]*animation: startup-/, 'window lights animate (Lab boot453Windows)');
+  assert.match(gate, /animation: startup-breathe/, 'glow breathes (Lab boot453Glow)');
+  const outside = startupCss.replace(gate, '').match(/animation:(?!\s*none\b)[^;]*;/g) || [];
+  assert.deepEqual(outside.map(s => s.trim()), [outside.find(s => /startup-drift/.test(s))].filter(Boolean), 'only the rail light animates outside the no-preference gate (it keeps its own reduced-motion override)');
+  assert.match(startupCss, /Lab main dde12ad index\.html #boot453/, 'ported ambience names its Lab source commit and element');
+  const loader = html.match(/<div class="startup-loader"[^>]*>[\s\S]*?<\/div>/)[0];
+  assert.doesNotMatch(loader, /%|role="progressbar"|aria-value/, 'indeterminate: no percentage or progress value');
+  console.log('D091 loading-motion PASS: Lab #boot453 source named; startup keyframes transform/opacity only; ambience gated by no-preference; no progress value');
+}
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) loadingMotionGuards();
