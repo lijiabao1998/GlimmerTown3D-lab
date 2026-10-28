@@ -223,6 +223,33 @@ export async function startupBrowser() {
       });
       receipts.push({ kind: 'approved-baseline-default-parity', baseline: 'be875201f9992ede9301df423ee57f9bcd9aa383', engineStateEqual: true, expected });
     } else receipts.push({ kind: 'approved-baseline-default-parity', result: 'NOT RUN: set D091_BASELINE_DIST' });
+
+    // D091 reduced-motion repair (owner 2026-10-28 「先修再給你看圖」): the same explicitly labelled
+    // 1500 ms delayed IndexedDB loading control as D091-390-loading-delayed-journal-control, now with
+    // prefers-reduced-motion: reduce. Unknown duration must not read as a completed bar: the static
+    // indicator stays visible, is clearly shorter than its track, is centred (not a fill level from the
+    // track start) and is a segmented pattern rather than a solid fill. The PNG is taken before the
+    // geometry assertions so a failing run keeps the defective frame; phase is re-read after the shot
+    // (loading -> welcome/error is one-way), proving the frame is the loading state.
+    const reducedLoading = `(() => {const track=document.querySelector('#startup .startup-loader'),fill=track.querySelector('i'),cs=getComputedStyle(fill),t=track.getBoundingClientRect(),f=fill.getBoundingClientRect();return{phase:document.querySelector('#startup').dataset.phase,ready:!!window.__gt?.ready,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches,animationName:cs.animationName,transform:cs.transform,opacity:cs.opacity,backgroundColor:cs.backgroundColor,backgroundImage:cs.backgroundImage,track:{left:t.left,width:t.width,height:t.height},fill:{left:f.left,width:f.width,height:f.height},status:document.querySelector('#startup-status').textContent,waitVisible:document.querySelector('.startup-wait').getClientRects().length>0,overflow:document.documentElement.scrollWidth>innerWidth};})()`;
+    await withBrowser({ width: 390, height: 844, port, keepWelcome: true, preload: slowJournal, settle: 0 }, async ({ page }) => {
+      await page.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] });
+      await navigate(page); await waitFor(page, "document.querySelector('#startup')?.dataset.phase==='loading' && !!document.querySelector('#startup .startup-loader i')", 'actual journal-wait loading under reduced motion');
+      const m = await page.evaluate(reducedLoading);
+      assert.equal(m.phase, 'loading'); assert.equal(m.ready, false); assert.equal(m.reduced, true);
+      assert.equal(m.animationName, 'none');
+      assert.ok(m.track.width > 0 && m.fill.width > 0 && m.fill.height > 0, 'a static indicator stays visible');
+      await shot(page, 'D091-390-reduced-motion-loading-control.png', images);
+      assert.equal(await page.evaluate("document.querySelector('#startup').dataset.phase"), 'loading', 'captured frame is still the loading state');
+      const leftGap = m.fill.left - m.track.left, rightGap = m.track.left + m.track.width - (m.fill.left + m.fill.width);
+      assert.ok(m.fill.width <= m.track.width / 4, `reduced-motion loading must not read as a completed bar: fill ${m.fill.width}px of ${m.track.width}px track`);
+      assert.ok(leftGap > 0 && Math.abs(leftGap - rightGap) <= 1, `static segment centred, not a fill level from the track start: gaps ${leftGap}/${rightGap}px`);
+      assert.match(m.backgroundImage, /gradient/, 'segmented pattern, not a solid fill'); assert.equal(m.backgroundColor, 'rgba(0, 0, 0, 0)', 'no solid fill colour');
+      assert.doesNotMatch(m.status, /\d+\s*%/); assert.match(m.status, /正在準備/); assert.equal(m.waitVisible, true); assert.equal(m.overflow, false);
+      await waitFor(page, welcome, 'delayed journal resolves under reduced motion');
+      assert.deepEqual(page.errors, []);
+      receipts.push({ kind: 'reduced-motion-loading-control', width: 390, height: 844, delayMs: 1500, control: 'actual IndexedDB success callback delayed, prefers-reduced-motion: reduce emulated; not device performance evidence', measured: m, readyEventually: true });
+    });
     provenance.result = 'PASS';
     console.log('D091 Plan A browser PASS: ' + receipts.length + ' scenario receipts, ' + images.length + ' original PNGs at ' + out);
   } catch (error) {

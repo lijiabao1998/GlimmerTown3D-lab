@@ -102,3 +102,18 @@ export async function startupGuards() {
   console.log('D091 Plan A PASS: exact263 source; observer-only shell; two paint opportunities; single dismiss; input/focus shielding and cleanup; direct parameters; truthful journal, error and slow retry states');
 }
 if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) await startupGuards();
+
+// D091 reduced-motion repair (owner 2026-10-28 「先修再給你看圖」): source complement to the Chromium
+// computed-geometry scenario D091-390-reduced-motion-loading-control. Kept outside startupGuards(),
+// which the browser tool runs first, so that tool still reaches the scenario and records its own red.
+export function reducedMotionGuards() {
+  const rule = html.match(/@media \(prefers-reduced-motion: reduce\) \{\s*\.startup-loader i \{([^}]*)\}\s*\}/)?.[1];
+  assert.ok(rule, 'reduced-motion rule for the startup loader indicator');
+  assert.match(rule, /animation: none/, 'no motion');
+  assert.doesNotMatch(rule, /width:\s*100%/, 'reduced motion must not draw a full-width bar that reads as completed');
+  assert.doesNotMatch(rule, /display:\s*none|visibility:\s*hidden/, 'the static indicator stays visible');
+  assert.match(rule, /margin:\s*0 auto/, 'short segment centred in the track, not a fill level from the track start');
+  assert.match(rule, /background:\s*repeating-linear-gradient\(/, 'segmented pattern, not a solid fill');
+  console.log('D091 reduced-motion PASS: static loader rule has no animation and no full-width completion cue; centred segmented indicator');
+}
+if (process.argv[1] && import.meta.url === new URL(`file://${process.argv[1]}`).href) reducedMotionGuards();
