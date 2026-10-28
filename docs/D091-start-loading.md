@@ -54,3 +54,13 @@ The unchanged full D090 foundation runner also passed all three actual-source do
 - 10 個官方工作流還沒在新 head 重跑；業主還沒看圖；PR #47 仍是 Draft，沒有合併、沒有發布。
 - 實機（手機、硬體合成）一樣沒量。
 - 這一輪只修減少動態這一項，其餘小意見一律照舊開著，例如：沒有 JavaScript 時殼層仍寫「正在準備你的城市…」並顯示載入條，跟 noscript 提示互相矛盾（no-JS 文案）；歡迎畫面由程式把焦點移到「進入小鎮」時看不到焦點框（10-27 量到 `:focus-visible` 為 false、outline 為 none）。
+
+**瀏覽器驗收（2026-10-28，接續上一輪）。** 用 repo 自己的 `tools/d091-startup-browser.mjs`，Chrome for Testing 153.0.8010.12，`D091_BASELINE_DIST` 指向核准 main be87520 的建置：
+- 紅燈（2ee1562，只改測試）：原有 15 個情境全過，唯一失敗是新斷言 `reduced-motion loading must not read as a completed bar: fill 310px of 310px track`，exit 1。缺陷那一格（sha256 27028158…）跟 10-27 補充探針拍到的逐位元組相同。
+- 綠燈（76f86b3，修補）：`D091 Plan A browser PASS: 16 scenario receipts, 20 original PNGs`。receipt head 76f86b3、dirty false、indexSha256 d6c02e31…、buildSha256 1d07dccb…、testSha256 e4a7b344…；20 張 PNG 的 sha256、大小、寬高全部重算吻合。新圖 `D091-390-reduced-motion-loading-control.png`（cec8fb12…）實測：phase loading、ready false、animationName none；軌道 310px，指示 36×3px 置中（左右各 137px），底色透明、漸層圖樣。
+- 跟 10-27 那 19 張比：16 張逐位元組相同；不同的 3 張（1440、390 一般動態載入，360 操作說明）是每次跑都會有的漂移相位或觸碰框亮度，同一份頁面跑兩次也會不同，跟本修補無關。修補前後的減少動態畫面，只差那條 3px 高的載入列。
+- 獨立核驗另用自寫探針，把 IndexedDB 延後 3000 ms（低於引擎 4000 ms 逾時），在 390、360、1440、844×390 與 DPR3 都拍到真的載入中：同一個靜止置中記號，0 錯誤；一般動態的四個時間點，新舊建置逐位元組相同。
+- 這個 commit 只改卡面與 LOG.md；`index.html`、tools、dist 都跟 76f86b3 相同。推送前會在這個 head 重跑同一支工具，最終 receipt 以 PR 上的紀錄為準。
+
+**仍然沒做成的事（更新）。** 煙霧測試 `tools/smoke.mjs` 本機沒跑（10-27 本機整套跑了 66 分鐘），交給官方 CI；官方工作流都不跑 D091 工具，所以減少動態畫面只有本機 receipt 可證。業主還沒看圖；PR #47 仍是 Draft，沒有合併、沒有發布。forced-colors 高對比加上減少動態時，修補前後的指示都看不見（Chromium 把漸層算成 none），屬既有問題，照範圍列為開著。no-JS 文案矛盾、焦點框看不到也照舊開著。實機沒量。
+
