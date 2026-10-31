@@ -39,6 +39,8 @@ jobs:
         run: node --test tools/d082-release-source-v2.test.mjs tools/d082-historical-release.test.mjs tools/d082-release-conflicts-v2.test.mjs
       - name: D097 track graph guards
         run: node tools/unit-d097-graph.mjs
+      - name: D097 movement guards
+        run: node tools/unit-d097-movement.mjs
       - run: npm run build
       - name: Record build source and file hashes
         id: identity

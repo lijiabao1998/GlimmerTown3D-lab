@@ -10,6 +10,8 @@
 
 ---
 
+| D097 movement checkpoint | [work record](docs/D097-resumption-20261031.md) | Add isolated integer-minute movement and severance recovery | Focused movement guard and typecheck pass; official CI pending | This checkpoint | No transport originals | No fleet, dispatch, native play, persistence or 120-day acceptance |
+
 | D097 resumption / graph checkpoint | [work record](docs/D097-resumption-20261031.md) | Merge main into PR branch; add independent in-memory track preview and path graph | Graph guard, typecheck and CI integrity/partition controls pass locally; full suite and official CI pending | This checkpoint; merge 68d19cede08033dd4a7078b0482978937e619dfa | No transport originals | Not integrated into game or storage; format collision, full transport, migration, 120-day and owner approval remain open |
 
 - 2026-10-26 15:56 UTC — D090 — actual Chrome first-red retained: PR46 head6c passed90 CPU6 placements/24 startups but failed the castle's exact plinth/wall crease at412/1440. Frozen bounded repair note local6dc precedes adoption of physically wider foundation authoritya3f5/cache54b; original1968 fixed IDs retained, no tolerance/camera/probe exception. Fresh cached30/56037 required/795 paint, current200 identities/old190 preservation,330 frame cases,typecheck and independent finite geometry/cache review pass. Old41 views retained plus one already-legal view per width. Six original source-version tests execute unchanged on actual6c (154/154); additive current-v2 checks remain mandatory. Not done: successor exact-head official Chrome/522 raw PNGs/90+24 performance, actual art/fullCI/normal release; published count stays190. Historical first6c images/timings are not successor evidence.
