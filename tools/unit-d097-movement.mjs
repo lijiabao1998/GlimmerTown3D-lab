@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { advanceMovement } from '../src/sim/transitMovement.ts';
+import { advanceMovement } from '../proposals/d097/sim/transitMovement.ts';
 const p = x => ({ x, z: 0, height: 0 });
 const graph = { revision: 1, edges: [0,1,2].map(x => ({ mode: 'rail', a: p(x), b: p(x+1) })) };
 const initial = { mode: 'rail', path: [p(0), p(1), p(2), p(3)], segment: 0, elapsed: 0, minutesPerEdge: 3 };

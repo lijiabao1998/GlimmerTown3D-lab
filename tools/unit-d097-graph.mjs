@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { previewTrack, buildTrack, trackPath } from '../src/sim/transitGraph.ts';
+import { previewTrack, buildTrack, trackPath } from '../proposals/d097/sim/transitGraph.ts';
 const p = (x, z, height = 0) => ({ x, z, height });
 const cells = new Map([['1,1', { elevation: 0, occupied: true, water: false }], ['2,1', { elevation: 1, occupied: false, water: true }]]);
 const terrain = { size: 4, cell(x, z) { return cells.get(`${x},${z}`) ?? { elevation: 0, occupied: false, water: false }; } };
