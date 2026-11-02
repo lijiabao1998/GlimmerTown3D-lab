@@ -21,6 +21,16 @@ Owner request reference: `Sentinel_7b0485f519488191b0a072bbd4620b0e`. Scope summ
 Each card is a separate draft PR when implementation reaches it. No automatic merge/deploy.
 
 ## D093 proposal requiring owner approval (not implemented by D092)
+
+> **2026-11-02 number ruling — supersedes the literal `25` in this section.** The next
+> append-only event slot is allocated to **`transit` (event 25, D097 Rail & Transit 1.0)**,
+> which is the owner's current 3D priority (owner 2026-10-30 instruction). This candidate
+> must take **event 26** for `resident` when D093 starts; `CITY_FORMAT 11` may carry the
+> independent optional envelopes `d3.rt` (transit) and `d3.lc` (resident), and codes 0–24
+> plus formats 1–10 remain byte-identical. The same ruling is recorded on
+> `docs/D097-rail-transit.md` (branch `gpt/d097-rail-transit`). Nothing is migrated or
+> rewritten by this ruling: no event code and no save format exists on main yet.
+
 - Keep base Lab `v:1`, building numbers, all existing fields and compact event codes unchanged.
 - Add `d3.lc` versioned optional extension: `{v:1, tick, ticksPerDay:1440, nextResidentId, residents, journal:{id,n,h}, sourceCityHash}`. Resident rows: `[id,homeBuildingId,workBuildingId|null,status,tile,nextTile,edgeProgress,assignedDay]`. IDs are monotonically allocated and never reused. Simulation uses integer minute ticks; no real-clock RNG. Exact final encoding is frozen in D093 before code.
 - Raise `CITY_FORMAT` to **11 only for saves containing Living City events**; append event code **25** (`resident`, operation `adopt|leave|assign|depart|arrive|blocked`, resident ID, integer within-day minute, home/work/source/destination IDs, location and reason). Existing codes 0–24 and formats 1–10 remain byte-identical. Do not fabricate pre-import life histories: adoption begins at migration tick and states its origin.
