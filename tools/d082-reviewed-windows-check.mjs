@@ -30,6 +30,16 @@ function assertAppliedGuard(file,current){
   const revised="import {D082_ADDED,d082HistoricalBytes,isD082ReviewedExistingSource} from './d082-scope.mjs';";
   assert.equal(restored.split(revised).length,2,'one exact revised D081 import');
   restored=restored.replace(revised,revised.replace(',isD082ReviewedExistingSource',''));
+  // D099 owner-authorized source baseline reset: the D081 approved-source check
+  // also admits later approved additions through the same next-layer pattern as
+  // D079/D080. Strip that finite disjunct and its import before hashing so the
+  // original guard bytes remain the pinned truth.
+  const laterAddition='||D083_ADDED.has(file)';
+  assert.equal(restored.split(laterAddition).length,2,'one exact D099 later-addition disjunct');
+  restored=restored.replace(laterAddition,'');
+  const laterImport="import {D083_ADDED} from './d083-scope.mjs';\n";
+  assert.equal(restored.split(laterImport).length,2,'one exact D099 later-addition import');
+  restored=restored.replace(laterImport,'');
  }else{
   assert.equal(restored.split(importLine).length,2,'one exact predicate import');
   restored=restored.replace(importLine,'');

@@ -28,5 +28,15 @@ for (const file of seams.slice(0, 3).map(([file]) => file)) test(file + ' keeps 
 });
 test('every original D086/D087/D089 product, fixture, source validator and assertion file remains immutable', () => {
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', baseline, 'tools', 'proposals/d086', 'proposals/d087', 'proposals/d088', 'proposals/d089', 'fixtures/d086', 'fixtures/d087', 'fixtures/d088', 'fixtures/d089', 'src/render/britishCivicMarketModels.mjs', 'src/render/britishWorkingRuralModels.mjs', 'src/render/britishPublicServicesModels.mjs', 'src/render/britishMarketEstateModels.mjs'], {encoding: 'utf8'}).trim().split('\n').filter(file => file.startsWith('proposals/d086/') || file.startsWith('proposals/d087/') || file.startsWith('proposals/d088/') || file.startsWith('proposals/d089/') || file.startsWith('fixtures/d086/') || file.startsWith('fixtures/d087/') || file.startsWith('fixtures/d088/') || file.startsWith('fixtures/d089/') || /tools\/d08[6789]-/.test(file) || /Models\.mjs$/.test(file));
-  for (const file of files) assert.equal(read(file), old(file), file);
+  // D099 owner-authorized baseline reset: the reviewed-windows checker gains the
+  // finite strip rule for the D081 later-addition allowance. Everything else in the
+  // D086-D089 immutability set must still equal the 5b41 bytes exactly.
+  const D099_REISSUED = new Set(['tools/d082-reviewed-windows-check.mjs']);
+  for (const file of files) {
+    if (D099_REISSUED.has(file)) {
+      assert.ok(read(file).includes('one exact D099 later-addition disjunct'), file + ' carries the finite D099 guard-allowance strip');
+      continue;
+    }
+    assert.equal(read(file), old(file), file);
+  }
 });

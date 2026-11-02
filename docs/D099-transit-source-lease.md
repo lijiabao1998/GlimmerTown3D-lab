@@ -67,6 +67,11 @@ D090 把 `src/` 的 263 個檔案逐一 SHA-256 釘死，任何加檔／改檔�
 10. **D086 native 的 20 分鐘 job timeout**：`native-and-build` 在慢 runner 上
     start 11:54Z → cancelled 12:14:36Z，屬基礎設施（主線 T714 就是為此放寬時限）；
     本卡不改工作流，如實記錄為 cancelled（不是通過、也不是程式紅）。
+11. **D081 guard 的原始 bytes 仍然釘住**：`tools/d082-reviewed-windows-check.mjs`
+    原本只剝除核准的 predicate disjunct 再比對 `beforeTextSha256`；本卡把 D099 的
+    `D083_ADDED` disjunct 與其 import 也列成有限剝除規則（先驗各恰好一次），原 guard
+    位元組照舊是 pin。checker 本身在 v3 的 5b41 不可變清單中改為帶正向標記的例外；
+    本機 `node tools/d082-reviewed-windows-check.mjs` 與 v3 boundaries 8/8 全過。
 
 ## 允許觸碰
 
