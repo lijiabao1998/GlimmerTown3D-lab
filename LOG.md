@@ -10,7 +10,7 @@
 
 ---
 
-- 2026-11-02 — D097 — 來源租約回綠＋前置版 successor：[工作紀錄](docs/D097-resumption-20261102.md)。兩個原型 `git mv` 出 `src/sim/`（位元組不變），`src/` 回到已發布 exact263，D079→D090 的 `exact263` 守衛恢復綠；新增 `proposals/d097/source-successor/`（manifest 釘 baseline `1aed2c7` 的 263 個來源＋2 個新增，SHA-256 `acbb340f…`；contract 收 265 回 263；4/4 正反控制、`verify-preview` 263 pins、兩個原型守衛、產品與 proposals typecheck 全通過）。編號裁定：event 25＝`transit`，D092/D093 `resident` 改用 26。**沒做成的事**：successor 未啟用（要改 D090 證據位元組、需業主審查）；官方 CI 尚未在新 head 跑；原生瀏覽器、存檔／遷移、120 天、完整運輸系統都沒做。
+- 2026-11-02 — D097 — 來源租約回綠＋前置版 successor：[工作紀錄](docs/D097-resumption-20261102.md)。兩個原型 `git mv` 出 `src/sim/`（位元組不變），`src/` 回到已發布 exact263，D079→D090 的 `exact263` 守衛恢復綠；新增 `proposals/d097/source-successor/`（manifest 釘 baseline `1aed2c7` 的 263 個來源＋2 個新增，SHA-256 `acbb340f…`；contract 收 265 回 263；4/4 正反控制、`verify-preview` 263 pins、兩個原型守衛、產品與 proposals typecheck 全通過）。編號裁定：event 25＝`transit`，D092/D093 `resident` 改用 26。**官方 CI（head `45fe374`，run 41385503767）：success，72/72 job 完成、0 失敗**——build／browser／node／smoke 全綠，D086–D090 `native-and-build` 在 `ci.yml` 還原後也綠；PR #49 唯一的 CANCELLED 是被取代的舊 head `4726586`。**沒做成的事**：successor 未啟用（要改 D090 證據位元組、需業主審查）；D097 守衛與 successor 測試仍是 standalone、沒接進 CI（`ci.yml` 被 D090 工作流 manifest 釘死）；原生瀏覽器、存檔／遷移、120 天、完整運輸系統都沒做。
 
 | D097 movement checkpoint | [work record](docs/D097-resumption-20261031.md) | Add isolated integer-minute movement and severance recovery | Focused movement guard and typecheck pass; official CI pending | This checkpoint | No transport originals | No fleet, dispatch, native play, persistence or 120-day acceptance |
 

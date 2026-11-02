@@ -93,6 +93,15 @@ jobs failed on this head with `every undeclared job/permission/timeout/command r
 to run in CI that does not: official CI on this head validates typecheck, build, the Node
 historical partitions and the native release gates only.
 
+**Official CI result for the code head `45fe374`: success.** Run
+[41385503767](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41385503767),
+attempt 1: 72/72 jobs completed, 0 failed — `build` success, `browser` success, `node`
+success, `smoke` success, and the D086–D090 `native-and-build` jobs green after the
+`ci.yml` revert. PR #49 rollup is 115 success / 10 skipped / 0 failed; its single
+`CANCELLED` belongs to the superseded head `4726586`. This is CI for the branch code, not a
+release approval: merge, owner image acceptance and publication remain separate gates.
+
+
 **Number ruling (allocation of the next append-only slot).** Event codes end at 24 and
 `CITY_FORMAT` is 10 on main. Both candidates proposed the same slot for different
 meanings: D092 `resident` and D097 `transit`, each claiming `CITY_FORMAT 11` /
