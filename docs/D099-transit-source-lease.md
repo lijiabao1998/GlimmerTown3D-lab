@@ -27,9 +27,21 @@ D090 把 `src/` 的 263 個檔案逐一 SHA-256 釘死，任何加檔／改檔�
    - `proposals/d090/foundation-test-runner.mjs`：`snapshot()` 由
      `git ls-tree FOUNDATION_BASELINE` 改成 `git ls-tree HEAD`（並保留 ≥263 與
      「工作樹等於 HEAD」），讓 263 的歷史 worktree 與 265 的候選樹各自自洽。
-   - 這兩個檔**不是**被 hash 釘住的測試檔；所有 `originalTests`、lineage、
-     `source-boundaries.test.mjs`、routing JSON 與 `FOUNDATION_ROUTING_SHA` 都沒動。
-5. 收編 D097 凍結卡與 resumption 紀錄；PR #49 內容由本卡接手後關閉。
+   - 這兩個檔**不是**被 hash 釘住的測試檔；所有 `originalTests`、lineage 與
+     歷史 domain 都沒動。
+5. **v3 現行套件**（解決被釘死卻斷言舊狀態的兩個測試）：
+   - `tools/d090-source.test.mjs` 與 `proposals/d090/source-boundaries.test.mjs` 原封
+     保留（bytes 不變、`originalTests` pin 不動），但在 routing manifest 新增
+     `superseded` 清單把它們移出「現行」；contract 加驗 superseded 必須真實、不在
+     歷史／ledger，並把 `current` 的推導改為扣掉 superseded（新的
+     `FOUNDATION_ROUTING_SHA`＝`95eb26…`）。
+   - 新增兩個現行副本：`tools/d090-source-v3.test.mjs`（265 逐 byte＋歷史投影＋負控制）
+     與 `proposals/d090/source-boundaries-v3.test.mjs`（d089→d099 有限 chain＋單元
+     guard 不變＋D086–D089 檔不可變）。
+   - `proposals/d090/inherited-test-domains-pipes-v2.json` 的 `currentAdditions` 與
+     `currentReplacements`／`currentCoverage` 把兩個舊檔換成 v3 副本（仍是 23 條，
+     集合不變大小），`DOMAIN_MANIFEST_SHA` 更新為 `a0052e…`。
+6. 收編 D097 凍結卡與 resumption 紀錄；PR #49 內容由本卡接手後關閉。
 
 ## 允許觸碰
 
@@ -75,15 +87,9 @@ native 工作流、200 棟模型與其他歷史收據、`.github/workflows` 的�
 
 施工後補；不美化。
 
-- **真正的路障**：`tools/d090-source.test.mjs` 被 `originalTests` 逐 byte 釘住
-  （且 `originalTestSources` 指向歷史提交），內容卻斷言現行 `src` 等於
-  `D090_CURRENT_PATHS`（263）。加兩個檔就必然紅，而這個檔不能直接改——改了
-  `originalTests` 的 pin 與 `git show` 會對不上。`proposals/d090/source-boundaries.test.mjs`
-  同樣被釘死，它斷言三個 seam 檔的 bytes 只允許 d089→d090 一跳；本卡的 seam 改動
-  （d090→d099）因此也會讓它紅。
-- 要讓 CI 全綠，必須照 D090 自己的節奏做「current copy + 新 manifest」的 v3 現行套件：
-  新的 source test、新的 seam test、新的 routing manifest 與 runner 指向新副本，
-  舊檔原封保留、不再列入 current。這件事比本卡原估的大，是目前唯一未完成的部分。
-- 因此本分支現在是 **WIP 紅**：本機可驗的 `unit-d079`、`d099-source.test`、
-  typecheck、build 都綠，但官方 `ci` 與 D086–D090 native 尚未綠。沒有要合併的意思。
+- v3 現行套件（routing `superseded`、兩個 v3 副本、inherited domains 換牌）已完成並在
+  本機驗過結構與副本測試；**官方 `ci`、D086–D090 native 與 `foundation-test-runner`
+  尚未在 Linux 上跑過**，所以本分支目前仍是 WIP，沒有任何合併請求。
+- 就算 CI 綠，這也只是「開鎖」：傳輸玩法（車輛、班距、旅客、貨運、財務、UI、存檔）
+  全部還沒寫；D100 之後才開始。
 

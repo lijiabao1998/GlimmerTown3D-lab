@@ -94,6 +94,7 @@
     "proposals/d090/precompiled-cache-qualification.test.mjs",
     "proposals/d090/scene-budget.test.mjs",
     "proposals/d090/scene-owner-transition.test.mjs",
+    "proposals/d090/source-boundaries-v3.test.mjs",
     "proposals/d090/source-boundaries.test.mjs",
     "proposals/d090/source-lease-history.test.mjs",
     "tools/d090-native-catalogue.test.mjs",
@@ -102,6 +103,7 @@
     "tools/d090-native-scene-dispatch.test.mjs",
     "tools/d090-native-ui-actions.test.mjs",
     "tools/d090-native-workflow.test.mjs",
+    "tools/d090-source-v3.test.mjs",
     "tools/d090-source.test.mjs",
     "tools/d090-validation-pipes-v2.test.mjs",
     "tools/d090-validation.test.mjs"
@@ -152,7 +154,7 @@
     "proposals/d090/precompiled-cache-qualification-foundation-v2.test.mjs",
     "proposals/d090/scene-budget.test.mjs",
     "proposals/d090/scene-owner-transition.test.mjs",
-    "proposals/d090/source-boundaries.test.mjs",
+    "proposals/d090/source-boundaries-v3.test.mjs",
     "proposals/d090/source-lease-history.test.mjs",
     "tools/d090-native-catalogue.test.mjs",
     "tools/d090-native-lifecycle.test.mjs",
@@ -160,7 +162,7 @@
     "tools/d090-native-scene-dispatch.test.mjs",
     "tools/d090-native-ui-actions.test.mjs",
     "tools/d090-native-workflow.test.mjs",
-    "tools/d090-source.test.mjs",
+    "tools/d090-source-v3.test.mjs",
     "tools/d090-validation-pipes-v2.test.mjs",
     "proposals/british-program/ledger-check.test.mjs",
     "proposals/british-program/ledger-current.test.mjs",
@@ -280,5 +282,9 @@
     "proposals/d090/geometry-finite-repair-foundation-v2.test.mjs": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
     "proposals/d090/geometry-plan-foundation-v2.test.mjs": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
     "proposals/d090/precompiled-cache-qualification-foundation-v2.test.mjs": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc"
-  }
+  },
+  "superseded": [
+    "proposals/d090/source-boundaries.test.mjs",
+    "tools/d090-source.test.mjs"
+  ]
 }
