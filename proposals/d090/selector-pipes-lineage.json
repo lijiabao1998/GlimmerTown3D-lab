@@ -133,7 +133,7 @@
       "target": "proposals/d090/inherited-test-contract-pipes-v2.mjs",
       "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
       "sourceSha256": "06e640ab6a277186f7e3d398f73c4c93fe13669df2866d5cdb18f22f5bfc6012",
-      "targetSha256": "d871d53694986b9d60f81251b8163e6da59a680efe3583038add3c45c720e5b9",
+      "targetSha256": "faf242664415cc7215b3319e09e57f2737cd6f458f6a6862e102e5818ba9588e",
       "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
       "changes": [
         {
@@ -153,7 +153,7 @@
         },
         {
           "before": "'95558e65313600691ba0e2721d9a9b98c39b06dbe7dd029136c2d47a2b0ad5d2'",
-          "after": "\"606038482323ee3785d2c655e51bc47d6315e88f62fe36b969c31d27b2ace2c7\"",
+          "after": "\"7170e8efcb5d7648453c82ef24c0bd5df0a2ac230cf2060e558b09e80a92f662\"",
           "count": 1
         }
       ],
@@ -409,7 +409,7 @@
   "inheritedDomain": {
     "before": "proposals/d090/inherited-test-domains.json",
     "after": "proposals/d090/inherited-test-domains-pipes-v2.json",
-    "afterSha256": "606038482323ee3785d2c655e51bc47d6315e88f62fe36b969c31d27b2ace2c7",
+    "afterSha256": "7170e8efcb5d7648453c82ef24c0bd5df0a2ac230cf2060e558b09e80a92f662",
     "old": "proposals/d090/native-smoke-versions.test.mjs",
     "current": "proposals/d090/native-smoke-versions-pipes-v2.test.mjs"
   },

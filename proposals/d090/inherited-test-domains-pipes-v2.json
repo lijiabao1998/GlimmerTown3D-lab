@@ -366,7 +366,7 @@
     "tools/d090-source-v3.test.mjs",
     "tools/d090-validation-pipes-v2.test.mjs",
     "tools/d090-native-workflow.test.mjs",
-    "proposals/d090/inherited-test-contract.test.mjs",
+    "proposals/d090/inherited-test-contract-pipes-v2.test.mjs",
     "proposals/d090/native-version-contracts.test.mjs",
     "tools/d090-native-lifecycle.test.mjs",
     "tools/d090-native-catalogue.test.mjs",
