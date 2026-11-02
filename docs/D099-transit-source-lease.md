@@ -41,6 +41,18 @@ D090 把 `src/` 的 263 個檔案逐一 SHA-256 釘死，任何加檔／改檔�
    - `proposals/d090/inherited-test-domains-pipes-v2.json` 的 `currentAdditions` 與
      `currentReplacements`／`currentCoverage` 把兩個舊檔換成 v3 副本（仍是 23 條，
      集合不變大小），`DOMAIN_MANIFEST_SHA` 更新為 `a0052e…`。
+6. **業主 2026-11-02 明確授權 B：現行 baseline 重設。** 意思與界線：
+   - 可以重發（re-issue）「現行層」的 pin：`selector-pipes-lineage.json` 內兩份現行
+     拷貝（`foundation-routing-contract-pipes-v2.mjs`、`foundation-test-runner.mjs`）
+     改成整檔重發並記 `reissued.previousSha256`；`inherited-test-contract-pipes-v2.mjs`
+     用有限替換更新 `DOMAIN_MANIFEST_SHA`；domains manifest 依新的 23 條現行清單重新
+     產生；`inheritedDomain.afterSha256`、`newPinnedManifests`、`PIPE_LINEAGE_SHA`
+     （`2382…`）同步。
+   - `inheritedDomain` 的證明由「從舊檔逐項推導到 byte 相等」改成「直接驗新檔：sha、
+     schema、30 個 D089 originals、23 條 currentAdditions、舊檔已不在現行、v3 兩檔
+     各一條」。這是重設的取捨，已在此記錄。
+   - **不動**：所有歷史 domain（b427/cdd/c023/5b41/e4c/6c）、D086–D090 的收據、
+     `fixtures/d090/*`、`originalTests` 的 byte pin、舊測試檔案本體。
 6. 收編 D097 凍結卡與 resumption 紀錄；PR #49 內容由本卡接手後關閉。
 
 ## 允許觸碰
