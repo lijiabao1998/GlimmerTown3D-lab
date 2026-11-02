@@ -61,6 +61,12 @@ D090 把 `src/` 的 263 個檔案逐一 SHA-256 釘死，任何加檔／改檔�
    `src/sim/transit/`）與 `npx tsc --noEmit`。**沒有改 `ci.yml`**，也沒改 D083／D086–D090
    的 release 工作流。
 8. 關閉 PR #49（其卡面與原型已由本卡收編；分支保留）。
+9. **D081 的 approved-source allowlist 補後期新增**：`tools/unit-d081.mjs` 的
+   changed/untracked 檢查原本只認 `D082_ADDED`，漏掉 D083 之後的新增；補上
+   `D083_ADDED.has(file)`（與 D079／D080 同一慣例，該檔未被 pin）。
+10. **D086 native 的 20 分鐘 job timeout**：`native-and-build` 在慢 runner 上
+    start 11:54Z → cancelled 12:14:36Z，屬基礎設施（主線 T714 就是為此放寬時限）；
+    本卡不改工作流，如實記錄為 cancelled（不是通過、也不是程式紅）。
 
 ## 允許觸碰
 
