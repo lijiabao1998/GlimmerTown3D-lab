@@ -142,7 +142,6 @@
     "proposals/d090/geometry-plan-foundation-v2.test.mjs",
     "proposals/d090/inherited-browser-copies.test.mjs",
     "proposals/d090/inherited-test-contract-pipes-v2.test.mjs",
-    "proposals/d090/inherited-test-contract.test.mjs",
     "proposals/d090/native-farm-precedence-copy.test.mjs",
     "proposals/d090/native-first-use-fixture.test.mjs",
     "proposals/d090/native-fixture-provenance.test.mjs",
@@ -285,6 +284,7 @@
   },
   "superseded": [
     "proposals/d090/source-boundaries.test.mjs",
-    "tools/d090-source.test.mjs"
+    "tools/d090-source.test.mjs",
+    "proposals/d090/inherited-test-contract.test.mjs"
   ]
 }
