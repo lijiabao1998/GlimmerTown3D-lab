@@ -133,7 +133,7 @@
       "target": "proposals/d090/inherited-test-contract-pipes-v2.mjs",
       "sourceCommit": "e4c71531ddf2b73a1ed4fd5c6cef4abef9f2fabc",
       "sourceSha256": "06e640ab6a277186f7e3d398f73c4c93fe13669df2866d5cdb18f22f5bfc6012",
-      "targetSha256": "8ca803480aa611d10fd47fffd3b688610032369a55072654edd3de1c4c9201f0",
+      "targetSha256": "2f40f0d11ae538f2064cad7c233a0fc1c2dc24179e15e6605bf1ebccc080cea4",
       "header": "// D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.\n",
       "changes": [
         {
@@ -153,7 +153,7 @@
         },
         {
           "before": "'95558e65313600691ba0e2721d9a9b98c39b06dbe7dd029136c2d47a2b0ad5d2'",
-          "after": "\"c5beffc89693b39a03f589db3082d630640cf92085da2c56c45bd6fcfbf0bb75\"",
+          "after": "\"a0052e690ac7f78f489ea1614318ea6a2961f441cc5d166c56ee879de174deba\"",
           "count": 1
         }
       ],
