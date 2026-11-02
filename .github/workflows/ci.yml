@@ -41,6 +41,11 @@ jobs:
         run: node tools/unit-d097-graph.mjs
       - name: D097 movement guards
         run: node tools/unit-d097-movement.mjs
+      - name: D097 successor source allowance (preview, not active)
+        run: |
+          node --test proposals/d097/source-successor/contract.test.mjs
+          node proposals/d097/source-successor/verify-preview.mjs
+          npx tsc -p proposals/d097 --noEmit
       - run: npm run build
       - name: Record build source and file hashes
         id: identity
