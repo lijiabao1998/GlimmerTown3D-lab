@@ -8,6 +8,7 @@ import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
 import {D090_CURRENT_PATHS} from './d090-source.mjs';
 import {D099_ADDED, D099_BASELINE, D099_CURRENT_PATHS, D099_MANIFEST_SHA, createD099Lease} from './d099-source.mjs';
+import {D099_SUCCESSOR_ADDED} from '../proposals/d090/foundation-routing-contract-pipes-v2.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sha = value => createHash('sha256').update(value).digest('hex');
@@ -48,6 +49,12 @@ test('missing, duplicate, unknown and every changed byte fail closed', () => {
   }
   assert.throws(() => lease.d099PriorSource(D099_ADDED[0], ''), /exact allowed source/);
   assert.throws(() => lease.d099PriorSource('src/unknown.ts', 'x'), /exact allowed source/);
+});
+
+test('D090 current-source successor pins exactly the D099 lease additions', () => {
+  const manifest = JSON.parse(manifestBytes);
+  assert.deepEqual({...D099_SUCCESSOR_ADDED}, manifest.added, 'one source of truth: lease additions equal the D090 successor pins');
+  assert.deepEqual(Object.keys(D099_SUCCESSOR_ADDED), D099_ADDED);
 });
 
 test('manifest bytes, baseline and declared sets are finite and exact', () => {
