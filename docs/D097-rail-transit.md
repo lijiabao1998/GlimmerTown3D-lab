@@ -45,3 +45,56 @@ Read-only 2D Lab reference is freshly fetched `a20713a509270f8ce6e37859c1fafe330
 Main's simulation advances in daily batches, existing transport layers are largely preserved/imported rather than operational, and the full D090 source lease forbids arbitrary runtime changes without an explicit successor. Spatial logistics must not duplicate the mature aggregate economy. Imported Lab transport records cannot be claimed as new-format resumed fleets. Dispatch deadlocks, invalidated caches, terminal deletion with cargo, queue starvation, long histories and unsupported old-reader behavior need negative controls.
 
 At freeze there is no transport implementation or new save fixture. Local native Chromium was previously blocked at `socket() failed: Operation not permitted` / crashpad startup; connected browser Target.setDiscoverTargets also closed. These observations remain failures, not browser passes. Do not retry through changed flags/executors to evade a platform restriction. Authorized official candidate CI is the normal release-validation route; exact current browser evidence is still required. No transport images, mobile operation, physical-device frame rate or full-loop completion is claimed.
+
+## 2026-11-02 candidate round: placement, successor allowance and number ruling
+
+**Trigger.** The first two checkpoints had been committed under `src/sim/`, so the four
+frozen guards listed below failed on the D097 head with
+`AssertionError: exact263 current source inventory`: D079, D080, D081, D082 release scope
+and the D090 source accounting, all reached through `tools/d083-scope.mjs` →
+`d084PriorInventory`. The official `ci` workflow failed only on `node`; `smoke` failed
+because it requires every split stage, so it failed derivatively.
+
+**Placement decision (this card).** The two prototypes were relocated, unchanged in bytes,
+to `proposals/d097/sim/transitGraph.ts` and `proposals/d097/sim/transitMovement.ts`
+(`git mv`, so history follows). `src/` is again exactly the released 263 files, which is
+the only state in which the historical guards can stay byte-frozen. The prototypes remain
+the same isolated rules and are still executed by `tools/unit-d097-graph.mjs` and
+`tools/unit-d097-movement.mjs`; only their import specifiers changed.
+
+**Reviewed-candidate source lease.** `proposals/d097/source-successor/` now carries the
+finite successor required by the acceptance clause above: a manifest pinning all 263
+released `src/` files at baseline `1aed2c7b7d6ed819e91e381ceb2c68d1e1033632` plus exactly
+the two prototype additions, a contract (`d097PriorInventory` accepts exactly 265 and
+returns the released 263), a generator, a verifier that derives the 263 pins from
+`fixtures/d090/source.json` alone, and negative controls (unknown, missing, duplicate,
+tampered, stale baseline, extra addition, wrong prototype bytes).
+
+- Manifest SHA-256: `acbb340f814bfcb92802a362b730e7a04b02d3ee3071acf6cf4fb44fe2a0fead`
+  (263 baseline pins + 2 additions).
+- Local runs on this head: `node --test proposals/d097/source-successor/contract.test.mjs`
+  4/4 pass; `node proposals/d097/source-successor/verify-preview.mjs` reports 263 working
+  `src` files equal to the released pins and 265 declared inventory; both D097 prototype
+  guards pass; `node tools/unit-d079.mjs` (which walks the whole d079→d090 chain) passes;
+  `npm run typecheck` and `npx tsc -p proposals/d097 --noEmit` pass.
+- **The allowance is not active.** Activation changes D090 evidence bytes (the finite seam
+  test and its digest manifest), so it is left as a reviewed step with the exact order in
+  `proposals/d097/source-successor/README.md`. This card claims no activation, no save
+  format, no product import and no runtime change.
+
+**Number ruling (allocation of the next append-only slot).** Event codes end at 24 and
+`CITY_FORMAT` is 10 on main. Both candidates proposed the same slot for different
+meanings: D092 `resident` and D097 `transit`, each claiming `CITY_FORMAT 11` /
+event `25`. Decision for this line: **event 25 is allocated to `transit` (D097)** because
+Rail & Transit 1.0 is the owner's current 3D priority (owner 2026-10-30 instruction) and
+D092 is a preserved planning candidate. `CITY_FORMAT 11` may carry optional
+extension envelopes `d3.rt` and later `d3.lc`; existing codes 0–24 and the old byte
+contract stay unchanged. D092/D093 must take **event 26** for `resident` and must not
+allocate 25; this ruling is recorded on the D092 candidate card as well. No persistence
+code was added in this round.
+
+**Still open.** Rail & Transit 1.0's native construction, services, demand, freight,
+economy wiring, persistence, migration/rollback, 120-day determinism, native browser
+evidence and full CI acceptance are untouched by this round. The two prototypes remain
+in-memory prototypes, not construction or vehicles.
+
