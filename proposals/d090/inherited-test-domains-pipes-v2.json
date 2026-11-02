@@ -115,7 +115,7 @@
       "sha256": "6df3bf4023389b377b98fdc3859f0229658301e8c41bdf2225148da99fa1438d",
       "domain": "actual-immutable-5b41",
       "currentCoverage": [
-        "proposals/d090/inherited-test-contract.test.mjs"
+        "proposals/d090/inherited-test-contract-pipes-v2.test.mjs"
       ]
     },
     {
@@ -336,7 +336,7 @@
       "tools/d090-native-scene-dispatch.test.mjs"
     ],
     "proposals/d089/inherited-test-contract.test.mjs": [
-      "proposals/d090/inherited-test-contract.test.mjs"
+      "proposals/d090/inherited-test-contract-pipes-v2.test.mjs"
     ],
     "proposals/d089/native-farm-precedence-copy.test.mjs": [
       "proposals/d090/native-farm-precedence-copy.test.mjs"
