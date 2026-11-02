@@ -54,10 +54,18 @@ D090 把 `src/` 的 263 個檔案逐一 SHA-256 釘死，任何加檔／改檔�
    - **不動**：所有歷史 domain（b427/cdd/c023/5b41/e4c/6c）、D086–D090 的收據、
      `fixtures/d090/*`、`originalTests` 的 byte pin、舊測試檔案本體。
 6. 收編 D097 凍結卡與 resumption 紀錄；PR #49 內容由本卡接手後關閉。
+7. **Transit 專用 CI 入口**：新增 `.github/workflows/transit.yml`（`pull_request: branches:[main]`
+   與 `workflow_dispatch`、`fetch-depth: 0`），跑 `tools/d099-source.test.mjs`、
+   `tools/d090-source-v3.test.mjs`、`proposals/d090/source-boundaries-v3.test.mjs`、
+   兩支原型守衛（`tools/unit-d097-graph.mjs`、`unit-d097-movement.mjs`，改指向
+   `src/sim/transit/`）與 `npx tsc --noEmit`。**沒有改 `ci.yml`**，也沒改 D083／D086–D090
+   的 release 工作流。
+8. 關閉 PR #49（其卡面與原型已由本卡收編；分支保留）。
 
 ## 允許觸碰
 
-`src/sim/transit/*`（新增）、`tools/d099-*`、`fixtures/d099/*`、上述三個 seam 檔、
+`src/sim/transit/*`（新增）、`tools/d099-*`、`tools/unit-d097-*`、`fixtures/d099/*`、
+上述三個 seam 檔、`.github/workflows/transit.yml`（新增）、
 `proposals/d090/foundation-routing-contract-pipes-v2.mjs`、
 `proposals/d090/foundation-test-runner.mjs`、`docs/D097-*.md`、`docs/D099-*.md`、
 `LOG.md`。
