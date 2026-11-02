@@ -82,6 +82,17 @@ tampered, stale baseline, extra addition, wrong prototype bytes).
   `proposals/d097/source-successor/README.md`. This card claims no activation, no save
   format, no product import and no runtime change.
 
+**CI wiring is frozen as well (reverted).** `tools/d090-validation-pipes-v2.mjs`
+(`assertInheritedWorkflowSet`) pins the exact bytes of `ci.yml` plus eight workflow files
+through `proposals/d090/inherited-workflow-deltas.json`. Adding the two D097 guard steps
+to `ci.yml` is therefore an undeclared workflow change: the D086–D090 `native-and-build`
+jobs failed on this head with `every undeclared job/permission/timeout/command retained
+.github/workflows/ci.yml`. Those two steps were reverted, so `ci.yml` is byte-identical to
+`main` again; the D097 guards and the successor contract/tests run as standalone commands
+(see the successor README) until a reviewed workflow successor exists. No check is claimed
+to run in CI that does not: official CI on this head validates typecheck, build, the Node
+historical partitions and the native release gates only.
+
 **Number ruling (allocation of the next append-only slot).** Event codes end at 24 and
 `CITY_FORMAT` is 10 on main. Both candidates proposed the same slot for different
 meanings: D092 `resident` and D097 `transit`, each claiming `CITY_FORMAT 11` /

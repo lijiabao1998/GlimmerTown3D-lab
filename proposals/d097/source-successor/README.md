@@ -68,3 +68,8 @@ Activation changes bytes of D090 evidence, so it needs explicit owner review. Ex
   implemented.
 - If `main` gains source files before activation, this preview is stale: regenerate it and
   review the delta; never hand-edit the pins.
+- These commands are standalone. `ci.yml` is itself byte-frozen by
+  `proposals/d090/inherited-workflow-deltas.json` (`assertInheritedWorkflowSet`), so this
+  contract test and verifier are not wired into CI yet; that wiring belongs to the same
+  reviewed successor step.
+

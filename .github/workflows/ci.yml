@@ -37,15 +37,6 @@ jobs:
         run: node --test .github/scripts/ci-integrity-d090.test.mjs tools/unit-partitions-release-v2.test.mjs
       - name: Versioned source missing/stale negatives and fresh historical receipt regression
         run: node --test tools/d082-release-source-v2.test.mjs tools/d082-historical-release.test.mjs tools/d082-release-conflicts-v2.test.mjs
-      - name: D097 track graph guards
-        run: node tools/unit-d097-graph.mjs
-      - name: D097 movement guards
-        run: node tools/unit-d097-movement.mjs
-      - name: D097 successor source allowance (preview, not active)
-        run: |
-          node --test proposals/d097/source-successor/contract.test.mjs
-          node proposals/d097/source-successor/verify-preview.mjs
-          npx tsc -p proposals/d097 --noEmit
       - run: npm run build
       - name: Record build source and file hashes
         id: identity
