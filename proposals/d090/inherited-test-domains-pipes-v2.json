@@ -115,7 +115,7 @@
       "sha256": "6df3bf4023389b377b98fdc3859f0229658301e8c41bdf2225148da99fa1438d",
       "domain": "actual-immutable-5b41",
       "currentCoverage": [
-        "proposals/d090/inherited-test-contract.test.mjs"
+        "proposals/d090/inherited-test-contract-pipes-v2.test.mjs"
       ]
     },
     {
@@ -180,7 +180,7 @@
       "sha256": "baf166096ea2335c4b7c2691c848f318d6dd2310fcbb6754e27037a29ed7de27",
       "domain": "actual-immutable-5b41",
       "currentCoverage": [
-        "proposals/d090/source-boundaries.test.mjs"
+        "proposals/d090/source-boundaries-v3.test.mjs"
       ]
     },
     {
@@ -240,7 +240,7 @@
       "sha256": "84105213786bb11403a300b50635925bb1291dff02f201a94938cfa3033cd53a",
       "domain": "actual-immutable-5b41",
       "currentCoverage": [
-        "tools/d090-source.test.mjs"
+        "tools/d090-source-v3.test.mjs"
       ]
     },
     {
@@ -300,7 +300,7 @@
       "tools/d085-source-d090.test.mjs"
     ],
     "tools/d089-source.test.mjs": [
-      "tools/d090-source.test.mjs"
+      "tools/d090-source-v3.test.mjs"
     ],
     "tools/d089-validation.test.mjs": [
       "tools/d090-validation-pipes-v2.test.mjs"
@@ -336,7 +336,7 @@
       "tools/d090-native-scene-dispatch.test.mjs"
     ],
     "proposals/d089/inherited-test-contract.test.mjs": [
-      "proposals/d090/inherited-test-contract.test.mjs"
+      "proposals/d090/inherited-test-contract-pipes-v2.test.mjs"
     ],
     "proposals/d089/native-farm-precedence-copy.test.mjs": [
       "proposals/d090/native-farm-precedence-copy.test.mjs"
@@ -352,7 +352,7 @@
       "proposals/d090/original-camera-restoration.test.mjs"
     ],
     "proposals/d089/source-boundaries.test.mjs": [
-      "proposals/d090/source-boundaries.test.mjs"
+      "proposals/d090/source-boundaries-v3.test.mjs"
     ],
     "tools/d089-native-lifecycle.test.mjs": [
       "tools/d089-native-lifecycle-d090.test.mjs",
@@ -363,10 +363,10 @@
     ".github/scripts/ci-integrity-d090.test.mjs",
     "tools/d083-release-trigger-d090.test.mjs",
     "tools/d085-source-d090.test.mjs",
-    "tools/d090-source.test.mjs",
+    "tools/d090-source-v3.test.mjs",
     "tools/d090-validation-pipes-v2.test.mjs",
     "tools/d090-native-workflow.test.mjs",
-    "proposals/d090/inherited-test-contract.test.mjs",
+    "proposals/d090/inherited-test-contract-pipes-v2.test.mjs",
     "proposals/d090/native-version-contracts.test.mjs",
     "tools/d090-native-lifecycle.test.mjs",
     "tools/d090-native-catalogue.test.mjs",
@@ -374,7 +374,7 @@
     "tools/d090-native-ui-actions.test.mjs",
     "tools/d090-native-scene-dispatch.test.mjs",
     "proposals/d090/native-smoke-versions-pipes-v2.test.mjs",
-    "proposals/d090/source-boundaries.test.mjs",
+    "proposals/d090/source-boundaries-v3.test.mjs",
     "proposals/d090/original-camera-restoration.test.mjs",
     "proposals/british-program/ledger-current-v5.test.mjs",
     "proposals/d090/native-farm-precedence-copy.test.mjs",
@@ -431,11 +431,16 @@
       "source": "tools/d085-source-d089.test.mjs",
       "target": "tools/d085-source-d090.test.mjs",
       "sourceSha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
-      "targetSha256": "501a180cbe743b1cdaf22b2e422bb8fc4fc73f54cd8249eb0f5259c8c3edb307",
+      "targetSha256": "322024708fb8b4d999db039ad4fcce147554b84e05f5051208d9e9b47e327a98",
       "changes": [
         {
           "before": "'./d089-source.mjs'",
           "after": "'./d090-source.mjs'",
+          "count": 1
+        },
+        {
+          "before": "import{D085_CHANGED,d085PriorSource,d084PriorInventory,d084PriorSource}from'./d090-source.mjs';",
+          "after": "import{D085_CHANGED,d085PriorSource,d084PriorSource}from'./d090-source.mjs';\nimport{d084PriorInventory}from'./d099-source.mjs';",
           "count": 1
         }
       ]
