@@ -39,4 +39,6 @@ jobs:
           node tools/unit-d097-movement.mjs
       - name: D100 network construction guards
         run: node tools/unit-d100-network.mjs
+      - name: D100 transit save envelope guards
+        run: node tools/unit-d100-format.mjs
       - run: npx tsc --noEmit
