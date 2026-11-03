@@ -92,3 +92,27 @@
 - 車站／車廠佔地與既有建築佔位衝突的判定要沿用 `edit.ts` 的既有規則，不另立一套。
 - 橋的連續水面判定、地下層與地形的互動，若與既有 `nativeArt`／`lotPlan` 有衝突，記錄並交業主，不自行放寬。
 - 效能（載入時間）只記錄、不宣稱，正式門檻在 D105。
+
+## 施工進度（2026-11-03，未完成）
+
+已完成且在分支 `d100/transit-network` 上：
+
+- 卡面（本檔）先推。
+- `src/sim/transit/network.ts`＋`tools/unit-d100-network.mjs`：建造／拆除／原子失敗／id／決定性；
+  本機 `node tools/unit-d100-network.mjs` 綠。
+- `src/sim/transit/format.ts`＋`tools/unit-d100-format.mjs`：d3.rt v1 嚴格封套、byte 穩定、fail closed；
+  本機綠。
+- 外層 267 lease：`tools/d100-source-contract.mjs`、`tools/d100-freeze-source.mjs`、
+  `tools/d100-source.mjs`（產生檔）、`fixtures/d100/source.json`（manifest SHA-256
+  `b2ab45562218139478105e6c3957e1561fb3918e3dd44f576937343084350463`，baseline
+  `18a718c7d2b8d261183d98b74ca6d466df1c60f7`，265 released＋2 新增）。
+- 三個 seam 改指 `d100`；D090 現行契約加 `D100_SUCCESSOR_ADDED` 並認 267；selector lineage
+  重發（lineage SHA `d299c92d…`、契約 target `c3660926…`）。
+- v3 現行來源／seam 測試改成 267／d100；`transit.yml` 改跑 `tools/d100-source.test.mjs`。
+
+本機證據：`d100-source.test.mjs` 4/4、`d090-source-v3.test.mjs`、`source-boundaries-v3.test.mjs`
+8/8、`node tools/unit-d079.mjs` 全鏈、`tsc` 綠；WSL Linux Node 下三個現行契約
+（domains／routing／lineage 14 副本）全過。
+
+**還沒做**：`City`／事件 25／`save.ts` 接線、惰性遷移＋備份、最小繪製、D100 的 PR 與 CI。
+在這些完成前不得開 PR（否則 native 的存檔／來源 gate 會紅）。
