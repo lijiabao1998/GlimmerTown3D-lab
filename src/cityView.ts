@@ -1602,8 +1602,6 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       }
       case 'depleted': return [d, `資源耗盡，停產（已開採 240／240）`];   // D040
       case 'act': return [d, e.what === 'fire' ? `現場滅火${e.cost ? `（$${e.cost}）` : ''}` : e.what === 'crime' ? '處理了犯罪' : `治療${e.cost ? `（$${e.cost}）` : ''}`];
-      // D100：運輸施工（城市格式 11）
-      case 'transit': return [d, `${e.op === 'edge' ? '鋪了軌道' : e.op === 'station' ? '蓋了車站' : e.op === 'depot' ? '蓋了車廠' : e.op === 'del-edge' ? '拆掉軌道' : e.op === 'del-station' ? '拆掉車站' : '拆掉車廠'}${e.cost ? `（$${e.cost}）` : ''}${tail}`];
     }
   }
   // D020：建築卡的「清運」一列。清運網當場照模擬的規則算一次（實驗線 sanitationAt452 38094 也是髒了就重算）；

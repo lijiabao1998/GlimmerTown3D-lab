@@ -4,7 +4,6 @@
 // 世界歷史（規則 4）：匯入記成第一筆事件；2D 存檔沒有歷史，只有每棟的 age（每個模擬日 +1，施工用鋼材會加速，實驗線 55632／55671），
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
-import type { TransitNetwork } from './transit/network.ts';
 import { fnv1a } from './rng.ts';
 import { CITY_FORMAT } from './eventRegistry.ts';
 export { CITY_FORMAT, eventFormat } from './eventRegistry.ts';
@@ -99,10 +98,7 @@ export interface DepletedEvent { day: number; t: 'depleted'; x: number; z: numbe
 // 市長委託（D045，城市格式 10）：ev＝接受／放棄／完成／過期，id＝委託的 id（碼表 CMS_CODES，同 rules/commission.ts 的表）；bonus 只有完成才有（這一次入帳的獎金）。
 // 接受、放棄是玩家按的，完成、過期是每天結算的結果；沒有座標
 export interface CmsEvent { day: number; t: 'cms'; ev: 'accept' | 'drop' | 'done' | 'expire'; id: string; bonus?: number }
-// D100：運輸施工（城市格式 11）。op 決定其餘欄位怎麼讀；拆除事件只讀 id。
-// 只記實際發生的操作：失敗的建造不寫事件。x2/z2/h2 只有 edge 會用。
-export interface TransitEvent { day: number; t: 'transit'; op: 'edge' | 'station' | 'depot' | 'del-edge' | 'del-station' | 'del-depot'; id: number; mode: 'rail' | 'tram' | 'metro'; x: number; z: number; h: number; x2: number; z2: number; h2: number; cost: number; g: number }
-export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent | DecisionEvent | DepletedEvent | CmsEvent | TransitEvent;
+export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | HazardEvent | MergeEvent | DecisionEvent | DepletedEvent | CmsEvent;
 
 export interface City {
   format: number;
@@ -121,8 +117,6 @@ export interface City {
   buildings: CityBuilding[];
   issues: { overlap: number; outOfMap: number; unknownKinds: number[] };
   history: CityEvent[];
-  // D100：運輸網路。只有出現過 transit 事件才有；舊檔沒有這個欄位。
-  transit?: TransitNetwork;
 }
 
 const layer = (s: string | undefined, nn: number, dec: (c: number) => number) => {
