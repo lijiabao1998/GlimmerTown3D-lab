@@ -22,10 +22,8 @@ import { computeWaterLegacy449 } from './rules/water.ts';
 import { season } from './rules/weather.ts';
 import { cmsDrop, type CmsDef } from './rules/commission.ts';
 import { acceptPlayableCms, playableCmsOffers } from './rules/commissionAvailability.ts';
-import { roadCode, type CityBuilding, type EditEvent, type TransitEvent } from './city.ts';
+import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
 import type { Sim } from './day.ts';
-import { buildDepot, buildStation, buildTrack, createNetwork, removeDepot, removeEdge, removeStation, type TransitNetwork } from './transit/network.ts';
-import type { TransitMode } from './transit/graph.ts';
 import type { Tile } from './rules/lab.ts';
 
 // 路的五級：名稱照實驗線工具列（TOOLS 37547–37552），造價 ROAD_COST（37428）
@@ -205,15 +203,8 @@ export const canUndo = (s: Sim) => s.txns.length > 0;
 
 // 復原今天最後一筆（T460 undo 66594：整格還原、全額退錢、重算覆蓋；亂數不倒回）。歷史只增不改：記一筆 undo 事件
 export function undoOp(s: Sim): { ok: boolean; refund: number } {
-  const dt = s.txns.pop() as (DayTxn & { transit?: { before: TransitNetwork | undefined; spent: number } }) | undefined;
+  const dt = s.txns.pop() as DayTxn | undefined;
   if (!dt) return { ok: false, refund: 0 };
-  if (dt.transit) {
-    // D100：運輸施工的復原——整張網路換回施工前、退回全額；歷史只增不改。
-    s.city.transit = dt.transit.before;
-    s.money += dt.transit.spent;
-    s.city.history.push({ day: s.day, t: 'undo', g: dt.g, refund: dt.transit.spent });
-    return { ok: true, refund: dt.transit.spent };
-  }
   const st = stateOf(s), m0 = s.money;
   undoTxn(st, dt.txn, s.edu);
   writeBack(s, st);
@@ -306,61 +297,4 @@ export function powerStatus(s: Sim) {
   let powered = 0, unpowered = 0;
   for (const cb of s.root.values()) if (cb.k <= 3) { const b = s.w.tiles[cb.z * s.w.N + cb.x].bld; if (b?.pw) powered++; else unpowered++; }
   return { cap, powered, unpowered };
-}
-
-// ---- D100：運輸施工（城市格式 11）----
-// 純邏輯：地形、佔位、資金都走 D097 的 previewTrack 與 D100 的 network 規則；這裡只負責接到 Sim 的錢、
-// 世界歷史與同日復原。失敗不寫事件、不動網路、不動錢（原子）。
-export type TransitTool = 'rail' | 'tram' | 'metro' | 'station' | 'depot';
-export interface TransitGesture { tool: TransitTool; mode?: TransitMode; x0: number; z0: number; x1?: number; z1?: number }
-export interface TransitResult { ok: boolean; spent: number; events: TransitEvent[]; reason?: string }
-export const TRANSIT_TOOLS: readonly TransitTool[] = ['rail', 'tram', 'metro', 'station', 'depot'];
-const modeOf = (gesture: TransitGesture): TransitMode => gesture.mode ?? (gesture.tool === 'rail' ? 'rail' : gesture.tool === 'tram' ? 'tram' : gesture.tool === 'metro' ? 'metro' : 'rail');
-const terrainOf = (s: Sim) => ({ size: s.city.n, cell: (x: number, z: number) => { const i = z * s.city.n + x; return { elevation: s.city.el[i], water: s.city.ter[i] === 0, occupied: s.city.occ[i] !== 0 }; } });
-function pushTransitTxn(s: Sim, before: TransitNetwork | undefined, spent: number): number {
-  const g = s.stroke++;
-  s.txns.push({ g, transit: { before, spent } });
-  return g;
-}
-function transitEvent(s: Sim, op: TransitEvent['op'], id: number, mode: TransitMode, g: number, cost: number, a = [0, 0, 0], b = [0, 0, 0]): TransitEvent {
-  return { day: s.day, t: 'transit', op, id, mode, x: a[0], z: a[1], h: a[2], x2: b[0], z2: b[1], h2: b[2], cost, g };
-}
-export function commitTransit(s: Sim, gesture: TransitGesture): TransitResult {
-  const before = s.city.transit, net = before ?? createNetwork(), terrain = terrainOf(s), m0 = s.money;
-  const mode = modeOf(gesture);
-  if (gesture.tool === 'rail' || gesture.tool === 'tram' || gesture.tool === 'metro') {
-    if (!Number.isInteger(gesture.x1) || !Number.isInteger(gesture.z1)) return { ok: false, spent: 0, events: [], reason: '請選擇終點格' };
-    const h = gesture.tool === 'metro' ? -1 : terrain.cell(gesture.x0, gesture.z0).elevation;
-    const h2 = gesture.tool === 'metro' ? -1 : terrain.cell(gesture.x1!, gesture.z1!).elevation;
-    const r = buildTrack(net, terrain, mode, { x: gesture.x0, z: gesture.z0, height: h }, { x: gesture.x1!, z: gesture.z1!, height: h2 }, s.money);
-    if (!r.ok) return { ok: false, spent: 0, events: [], reason: r.reason };
-    const edge = r.network.edges[r.network.edges.length - 1], spent = m0 - r.money;
-    s.city.transit = r.network; s.money = r.money;
-    const g = pushTransitTxn(s, before, spent);
-    const event = transitEvent(s, 'edge', edge.id, mode, g, spent, [edge.a.x, edge.a.z, edge.a.height], [edge.b.x, edge.b.z, edge.b.height]);
-    s.city.history.push(event);
-    return { ok: true, spent, events: [event] };
-  }
-  const h = mode === 'metro' ? -1 : terrain.cell(gesture.x0, gesture.z0).elevation;
-  const r = gesture.tool === 'station' ? buildStation(net, terrain, mode, gesture.x0, gesture.z0, h, s.money) : buildDepot(net, terrain, mode, gesture.x0, gesture.z0, h, s.money);
-  if (!r.ok) return { ok: false, spent: 0, events: [], reason: r.reason };
-  const list = gesture.tool === 'station' ? r.network.stations : r.network.depots;
-  const item = list[list.length - 1], spent = m0 - r.money;
-  s.city.transit = r.network; s.money = r.money;
-  const g = pushTransitTxn(s, before, spent);
-  const event = transitEvent(s, gesture.tool, item.id, mode, g, spent, [item.x, item.z, item.height]);
-  s.city.history.push(event);
-  return { ok: true, spent, events: [event] };
-}
-export function removeTransit(s: Sim, kind: 'edge' | 'station' | 'depot', id: number): TransitResult {
-  const before = s.city.transit;
-  if (!before) return { ok: false, spent: 0, events: [], reason: '沒有運輸網路' };
-  const m0 = s.money;
-  const r = kind === 'edge' ? removeEdge(before, id, m0) : kind === 'station' ? removeStation(before, id, m0) : removeDepot(before, id, m0);
-  if (!r.ok) return { ok: false, spent: 0, events: [], reason: r.reason };
-  s.city.transit = r.network;
-  const g = pushTransitTxn(s, before, 0);
-  const event = transitEvent(s, kind === 'edge' ? 'del-edge' : kind === 'station' ? 'del-station' : 'del-depot', id, 'rail', g, 0);
-  s.city.history.push(event);
-  return { ok: true, spent: 0, events: [event] };
 }
