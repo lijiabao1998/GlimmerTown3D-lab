@@ -34,6 +34,7 @@ export const EVENT_REGISTRY = Object.freeze({
   techdone: spec(22, 8, ['id']),
   depleted: spec(23, 9, ['x', 'z', 'k']),
   cms: spec(24, 10, ['ev', 'id', 'bonus']),
+  transit: spec(25, 11, ['op', 'id', 'mode', 'x', 'z', 'h', 'x2', 'z2', 'h2', 'cost', 'g']),
 } satisfies Record<CityEvent['t'], EventSpec>);
 
 export const EVENT_BY_CODE: Readonly<Partial<Record<number, CityEvent['t']>>> = Object.freeze(Object.fromEntries(

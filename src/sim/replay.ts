@@ -10,6 +10,7 @@
 // 未知的事件種類直接丟例外（不猜）。純邏輯。
 import { decodeLabCode } from '../io/labcode.ts';
 import { cityFromLab, roadCode, DECISION_EVENTS, MERGE_SIZE, type City, type CityBuilding, type CityEvent, type KindTable } from './city.ts';
+import { STATION_W, STATION_H, DEPOT_W, DEPOT_H, type TransitNetwork } from './transit/network.ts';
 import { fnv1a } from './rng.ts';
 
 interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
@@ -157,6 +158,21 @@ export function replayCity(code: string, events: readonly CityEvent[], kinds: Ki
         const b = c.buildings[e.id - 1];
         if (!b || b.goneDay !== undefined || b.x !== e.x || b.z !== e.z) throw new Error(`重播：第 ${e.day} 天 (${e.x},${e.z}) 沒有可廢棄的建築 #${e.id}（歷史第 ${k + 1} 筆）`);
         b.abandoned = true;
+        break;
+      }
+      // D100（城市格式 11）：運輸施工——重播只套用已經合法落地的操作，地形與資金在施工時已驗證；
+      // 拆除指向不存在的 id 代表歷史壞了，要講出來。
+      case 'transit': {
+        const base: TransitNetwork = c.transit ?? {edges: [], stations: [], depots: [], nextId: 1, revision: 0};
+        let edges = base.edges, stations = base.stations, depots = base.depots;
+        if (e.op === 'edge') edges = [...edges, {id: e.id, mode: e.mode, a: {x: e.x, z: e.z, height: e.h}, b: {x: e.x2, z: e.z2, height: e.h2}}];
+        else if (e.op === 'station') stations = [...stations, {id: e.id, mode: e.mode, x: e.x, z: e.z, height: e.h, w: STATION_W, h: STATION_H}];
+        else if (e.op === 'depot') depots = [...depots, {id: e.id, mode: e.mode, x: e.x, z: e.z, height: e.h, w: DEPOT_W, h: DEPOT_H}];
+        else if (e.op === 'del-edge') { if (!edges.some(edge => edge.id === e.id)) throw new Error(`重播：第 ${e.day} 天沒有軌道 #${e.id} 可拆（歷史第 ${k + 1} 筆）`); edges = edges.filter(edge => edge.id !== e.id); }
+        else if (e.op === 'del-station') { if (!stations.some(station => station.id === e.id)) throw new Error(`重播：第 ${e.day} 天沒有車站 #${e.id} 可拆（歷史第 ${k + 1} 筆）`); stations = stations.filter(station => station.id !== e.id); }
+        else if (e.op === 'del-depot') { if (!depots.some(depot => depot.id === e.id)) throw new Error(`重播：第 ${e.day} 天沒有車廠 #${e.id} 可拆（歷史第 ${k + 1} 筆）`); depots = depots.filter(depot => depot.id !== e.id); }
+        else throw new Error('重播：不認得的運輸操作 ' + JSON.stringify(e));
+        c.transit = {edges, stations, depots, nextId: Math.max(base.nextId, e.id + 1), revision: base.revision + 1};
         break;
       }
       default: throw new Error('重播：不認得的事件 ' + JSON.stringify(e));
