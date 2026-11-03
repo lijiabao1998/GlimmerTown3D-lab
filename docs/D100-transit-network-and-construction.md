@@ -5,8 +5,19 @@
 
 ## 交付邊界
 
-做完這片，玩家能做的事只有：鋪軌（地面／跨河橋／地下）、蓋車站、蓋車廠、拆掉、存檔、重讀。
-列車不會動、沒有班次、沒有人上車、沒有收入；這些都在 D101 之後。
+> **2026-11-03 範圍調整（誠實記錄）**：本卡只交付「資料模型＋`d3.rt` 封套＋267 lease」，
+> 這三件可以獨立驗收、且不动任何被歷史守衛釘死的既有檔。原定的 `City` 欄位、事件 25 registry／replay、
+> `save.ts` 讀寫、惰性遷移＋備份、最小繪製與 `edit.ts` 施工，改由 **D101** 承接。
+> 原因：`src/cityView.ts`／`src/io/save.ts`／`src/sim/city.ts`／`src/sim/edit.ts`／
+> `src/sim/eventRegistry.ts`／`src/sim/replay.ts` 的現行 bytes 被 `unit-d066–081`、`d087–d090`
+> 契約與 `unit-d079` 全鏈逐 byte 釘住；改它們需要另一層 current-successor allowance（連同
+> 對應的 lineage 重發），不能順手改。先把可獨立驗收的部分做完、合併，再開 D101 專門做那層。
+>
+> 下面「事件」「存檔與遷移」「美術邊界」「驗收條件 3–10」保留為 D101 的凍結依據；
+> 本卡實際驗收只涵蓋第 1、2 條與 lease／封套本身。
+
+做完這片，開發者能拿到：可建造／拆除的純網路模型、嚴格的存讀封套、267 檔的來源租約。
+玩家還不能鋪軌或存檔——那是 D101。列車、班次、旅客、收入在更後面的卡。
 
 ## 資料模型（先凍結，之後不改）
 
@@ -114,5 +125,14 @@
 8/8、`node tools/unit-d079.mjs` 全鏈、`tsc` 綠；WSL Linux Node 下三個現行契約
 （domains／routing／lineage 14 副本）全過。
 
-**還沒做**：`City`／事件 25／`save.ts` 接線、惰性遷移＋備份、最小繪製、D100 的 PR 與 CI。
-在這些完成前不得開 PR（否則 native 的存檔／來源 gate 會紅）。
+**已完成**：卡面、`network.ts`／`format.ts`＋守衛、267 lease、三個 seam、D090 現行契約、
+selector lineage、v3 現行測試、`transit.yml`；PR #53（draft）。
+
+**改列 D101**：`City` 欄位、事件 25 registry／replay、`save.ts` 讀寫、惰性遷移＋備份、
+最小繪製、`edit.ts` 施工交易與 undo。
+
+**2026-11-03 撤回記錄**：曾經做過一版 `City`／事件 25／`save.ts`／replay／`edit.ts` 接線
+（commit `8c2b3ee`、`77993e0`），本機 `tsc` 綠，但 `node tools/unit-d079.mjs` 顯示
+`cityView.ts`／`save.ts` 等既有檔被歷史守衛與 D087–D090 契約逐 byte 釘死，會紅。
+已用兩個 revert commit（`e8975cf`、`00efd05`）撤回，分支回到「只加兩個檔」的可綠狀態；
+沒有把紅燈藏起來，也沒有把撤回說成完成。
