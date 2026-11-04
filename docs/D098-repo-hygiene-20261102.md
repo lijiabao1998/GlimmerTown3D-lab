@@ -84,7 +84,7 @@ git push origin --tags
 ## 驗收（可重跑）
 
 1. 本 PR 只動文件：`git diff --stat origin/main...HEAD -- src tools fixtures proposals .github package.json package-lock.json index.html` 為空。
-2. 沒有守衛釘這些文件：本機完整 Node 套件（`npm run unit -- --partition=historical`）在本分支綠燈（數字記在 LOG）。第一次跑（十八張卡都加補記）時，D077–D082 的守衛因卡面 SHA-256 被釘而紅，所以這六張已還原成 main 的原樣。
+2. 沒有守衛釘這些文件：本機完整 Node 套件（`npm run unit -- --partition=historical`）在本分支綠燈——Node 24.22.2，第 0–112 支 1095 項 OK／0 NG（撞到背景作業 2 小時上限、停在第 113 支），第 113–124 支補跑 182 項 OK／0 NG。第一次跑（十八張卡都加補記）時，D077–D082 的守衛因卡面 SHA-256 被釘而紅，所以這六張已還原成 main 的原樣。
 3. `LOG.md` 沒有控制字元：`python3 -c "import sys;s=open('LOG.md',encoding='utf8').read();sys.exit(any(ord(c)<32 and c!='\n' for c in s))"` 退出碼 0。
 4. 補記裡的每個 SHA、run 與 deployment 都在 `docs/evidence/D098/main-merges-20261104.json`，且與 `gh api` 一致。
 5. 工作流狀態：`gh api repos/lijiabao1998/GlimmerTown3D-lab/actions/workflows` → active 8、disabled_manually 36。
