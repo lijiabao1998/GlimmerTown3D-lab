@@ -106,7 +106,7 @@
 
 ## 施工進度（2026-11-03，未完成）
 
-已完成且在分支 `d100/transit-network` 上：
+已完成（2026-11-04 起在分支 `transit/d100-network` 上；舊分支 `d100/transit-network`／PR #53 只存檔，見文末）：
 
 - 卡面（本檔）先推。
 - `src/sim/transit/network.ts`＋`tools/unit-d100-network.mjs`：建造／拆除／原子失敗／id／決定性；
@@ -126,13 +126,20 @@
 （domains／routing／lineage 14 副本）全過。
 
 **已完成**：卡面、`network.ts`／`format.ts`＋守衛、267 lease、三個 seam、D090 現行契約、
-selector lineage、v3 現行測試、`transit.yml`；PR #53（draft）。
+selector lineage、v3 現行測試、`transit.yml`；舊 PR #53（draft，2026-11-04 關閉存檔），由新 PR 取代。
 
 **改列 D101**：`City` 欄位、事件 25 registry／replay、`save.ts` 讀寫、惰性遷移＋備份、
 最小繪製、`edit.ts` 施工交易與 undo。
 
-**2026-11-03 撤回記錄**：曾經做過一版 `City`／事件 25／`save.ts`／replay／`edit.ts` 接線
-（commit `8c2b3ee`、`77993e0`），本機 `tsc` 綠，但 `node tools/unit-d079.mjs` 顯示
-`cityView.ts`／`save.ts` 等既有檔被歷史守衛與 D087–D090 契約逐 byte 釘死，會紅。
-已用兩個 revert commit（`e8975cf`、`00efd05`）撤回，分支回到「只加兩個檔」的可綠狀態；
-沒有把紅燈藏起來，也沒有把撤回說成完成。
+**2026-11-03 撤回記錄**：曾經做過一版 `City`／事件 25／`save.ts`／replay／`edit.ts` 接線（舊分支上的 `8c2b3ee`、`77993e0`），本機 `tsc` 綠，但 `node tools/unit-d079.mjs` 顯示 `cityView.ts`／`save.ts` 等既有檔被歷史守衛與 D087–D090 契約逐 byte 釘死，會紅；當時在舊分支上用兩個 revert（`e8975cf`、`00efd05`）撤回。沒有把紅燈藏起來，也沒有把撤回說成完成。這幾個提交現在只在存檔的舊分支 `d100/transit-network`（head `288e39a`），不在本分支的歷史裡（見下節）。
+
+## 2026-11-04 乾淨重排與合併前要業主定的事
+
+- **業主 2026-11-04**：「你全部推完 吧 deepseek 推的不幹淨我感覺，你推乾净之後，從你的基綫為開始，這麽做也好處理」；選了「基線＝現在的 main」「推到可合併，先給你看圖」。舊分支上那兩個 revert 是第二個帳號 `lixiaming01027592891-crypto` 推的，前三個提交的 committer 也是它。
+- **做法**：從 main `18a718c` 開新分支 `transit/d100-network`，用 `git cherry-pick -x` 依序取 Claude 自己的六個提交（`42278bf`、`e63e736`、`57b0d4e`、`b949415`、`e200948`、`288e39a`），**跳過**被撤回的兩個接線提交和兩個 revert（一來一回相互抵銷）。結果的檔案樹與舊 head `288e39a` **逐位元組相同**（`git diff 288e39a HEAD` 為空），每個提交訊息都帶 `cherry picked from commit …` 出處。
+- **CI（舊 head，同一棵樹）**：`ci` 41605830263 success、`transit` 41605829971 success、D083／D087–D090 native success；D086 native 41605829970 兩次都在 `native-and-build` 撞 20 分鐘上限被取消（不是紅，是逾時）。新 PR 的 CI 結果記在 LOG 與 PR。
+- **合併前要業主定的事**：
+  1. **編號（規則 9）**：事件 25 給 `transit`、事件 26 給居民、`CITY_FORMAT 11` 帶選用的 `d3.rt`／`d3.lc`。本卡寫「業主 2026-11-02 裁定」，但我在倉庫裡找不到業主原文；D097 卡（第 108 行）把它寫成「Decision for this line」。本片還沒寫任何事件或存檔，所以現在確認不會動到任何玩家存檔。
+  2. **事件 25 的負載三張卡寫法不同**：D097 是 `tick`、`seq`、`kind`、`data`（第 17 行）；本卡是 `{kind, mode, target, cells, cost, day, seq}`；D101 卡是 `[op,id,mode,x,z,h,x2,z2,h2,cost,g]`（第 31–32 行）。D101 動手寫存檔之前要統一成一種，並在 D101 卡面凍結。
+  3. **D086 native-and-build 的 20 分鐘上限**：被歷史驗證檔釘住，慢 runner 上會被切；改不改由業主定。
+  4. **合併本身**：本片沒有玩家看得到的變化（網路模型與封套還沒有接進遊戲），所以沒有圖可看；合併仍是業主的關卡。
