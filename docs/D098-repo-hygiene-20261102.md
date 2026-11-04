@@ -36,7 +36,7 @@
 |---|---|
 | README 的「目前」還寫 D090（`4152a415…`），沒有 D091；線上網址還寫 github.io | 新增「目前正式版：D091」一節；線上網址改成 `game.lijiabao.uk`（github.io 會 301 轉過去）。D090 那節改名「英式建築計畫（D068–D090）」，內容不動 |
 | README 的 D082／D083 節還說「D084 僅為獨立候選」 | 原句保留，後面加補記：D084、D085 都已在 2026-10-25 上線 |
-| 十八張卡的狀態段落停在施工當時（例如 D066 標題「候選，未核准／未發布」、D099「沒有任何合併請求」） | 每張卡標題下加一行「2026-11-04 發布補記」：合併 SHA、main CI、Pages deployment 與時間；**原文不改**。卡：D066、D067、D070–D074、D074-ci-parallel、D076–D082、D084、D085、D099 |
+| 十八張卡的狀態段落停在施工當時（例如 D066 標題「候選，未核准／未發布」、D099「沒有任何合併請求」） | 十二張卡標題下加一行「2026-11-04 發布補記」：合併 SHA、main CI、Pages deployment 與時間；**原文不改**。卡：D066、D067、D070–D074、D074-ci-parallel、D076、D084、D085、D099。**D077–D082 六張卡不加**：它們的守衛把卡面整檔的 SHA-256 釘死（例如 `tools/unit-d077.mjs:33`「immutable pre-code acceptance card」），一改就紅；這六波的發布事實只記在本卡與下面的證據檔 |
 | LOG 沒有 D066、D080、D081、D084、D085 的發布列；D067 列與 D099 列仍寫未合併 | 依 LOG 規則（歷史列保留當時狀態），**不改舊列**，在最上面加一列補記，附出處 |
 | LOG 第 13 行有兩個被跳脫吃掉的字：TAB（原本是 `tools/…` 的 `t`）、BS（原本是 `beforeTextSha256` 的 `b`） | 換回 `t` 與 `b`；全檔不再有控制字元 |
 | art-backlog 標頭還寫「19 波／190 棟，D090 尚未接受或發布」 | 標頭下加補記：20 波／200 棟已發布、本檔盤點是 D065 時期的數字，要重量才算數 |
@@ -84,7 +84,7 @@ git push origin --tags
 ## 驗收（可重跑）
 
 1. 本 PR 只動文件：`git diff --stat origin/main...HEAD -- src tools fixtures proposals .github package.json package-lock.json index.html` 為空。
-2. 沒有守衛釘這些文件：本機完整 Node 套件（`npm run unit`）在本分支綠燈（數字記在 LOG）。
+2. 沒有守衛釘這些文件：本機完整 Node 套件（`npm run unit -- --partition=historical`）在本分支綠燈（數字記在 LOG）。第一次跑（十八張卡都加補記）時，D077–D082 的守衛因卡面 SHA-256 被釘而紅，所以這六張已還原成 main 的原樣。
 3. `LOG.md` 沒有控制字元：`python3 -c "import sys;s=open('LOG.md',encoding='utf8').read();sys.exit(any(ord(c)<32 and c!='\n' for c in s))"` 退出碼 0。
 4. 補記裡的每個 SHA、run 與 deployment 都在 `docs/evidence/D098/main-merges-20261104.json`，且與 `gh api` 一致。
 5. 工作流狀態：`gh api repos/lijiabao1998/GlimmerTown3D-lab/actions/workflows` → active 8、disabled_manually 36。

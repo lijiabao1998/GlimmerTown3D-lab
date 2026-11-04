@@ -1,7 +1,5 @@
 # D080 — British community buildings (wave 12/20)
 
-> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `7ec70a9`、[main CI 39336233543](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39336233543)（success）、Pages deployment `7187864328`（2026-10-19 23:55:53 UTC）。第 12 波；LOG 原本沒有這一波的發布列。下面的狀態文字保留當時原文，沒有改。
-
 Pre-code card, 2026-10-19 12:34 UTC. Immutable published baseline: `23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e`. Eleven waves /110 buildings are byte-verified published. This batch counts only after complete publication verification.
 
 ## Independent design before implementation

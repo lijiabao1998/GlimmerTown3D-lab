@@ -1,7 +1,5 @@
 # D078 — British neighbourhood pavilions (wave 10/20)
 
-> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `46771cd`、[main CI 39209502705](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39209502705)（success）、Pages deployment `7168175512`（2026-10-19 07:33:15 UTC）。第 10 波。下面的狀態文字保留當時原文，沒有改。
-
 Pre-code card, 2026-10-19 00:46 UTC. Immutable published baseline: `22da5314145f96aaa83cfb739c382b86e1d5b0f3`. Nine waves / ninety distinct buildings are published and byte-verified. This batch adds ten models only after its own complete release verification.
 
 ## Ten exact slots and designs
