@@ -14,7 +14,7 @@
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type CityEvent, type CmsEvent, type KindTable } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type HistoryEvent, type CmsEvent, type KindTable } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { fnv1a } from '../sim/rng.ts';
 import { EVENT_BY_CODE, EVENT_REGISTRY, LEGACY_UNVERSIONED_FORMAT, minimumEventFormat } from '../sim/eventRegistry.ts';
@@ -30,7 +30,7 @@ export const HISTORY_VER = 2;
 export const JOURNAL_VER = 3;   // D013：歷史在日誌裡
 // 存檔的長度上限＝分享碼的上限（實驗線 importShareCode 64904 與本線 decodeLabCode 都是 2,000,000 字元）：超過就讀不回來，也貼不進實驗線
 export const SAVE_LIMIT = MAX_CODE;
-export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: CityEvent[]; j?: { id: string; n: number; h: number }; t?: unknown[][] }
+export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: HistoryEvent[]; j?: { id: string; n: number; h: number }; t?: unknown[][] }
 
 // ---- 歷史的緊湊列（hv 2）----
 // 種類碼照事件出現的先後編；拆除的圖層碼 0 建築、1 路、2 分區、3 樹。
@@ -42,13 +42,14 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // D034（城市格式 7）：merge [17,dDay,x,z,k,v,…被吸收的建築編號]（邊長由 k 推：33、34 是 2，105、106 是 3；尾巴有幾個編號就是吸收了幾棟，1–9 個）。
 // D045（城市格式 10）：cms [24,dDay,事件碼,委託碼] 或完成時 [24,dDay,2,委託碼,獎金]（事件碼 0 接受、1 放棄、2 完成、3 過期；委託碼在 city.ts 的碼表）。
 // D040（城市格式 9）：depleted [23,dDay,x,z,k]（k 是 49 油井或 50 礦場）。
+// D102（城市格式 11）：hasten [25,dDay,…被煉鋼廠加速施工的建築編號]（由小到大、不重複、至少一個；一天一筆，在生長、升級之後、合併之前）。
 // D039（城市格式 8）：policy [18,dDay,政策碼,改之前的值,改之後的值]、budget [19,dDay,類別碼,改之前的值,改之後的值]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]（碼表在 city.ts，只往後加）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
 // 這份歷史要寫的城市格式（D019，見 city.ts eventFormat）：歷史只增不改，記住掃到哪一筆，每次存檔只看新的事件（D013：存檔不跟歷史長度成正比）
-const fmtSeen = new WeakMap<readonly CityEvent[], { n: number; f: number }>();
-export function historyFormat(h: readonly CityEvent[]): number {
+const fmtSeen = new WeakMap<readonly HistoryEvent[], { n: number; f: number }>();
+export function historyFormat(h: readonly HistoryEvent[]): number {
   let m = fmtSeen.get(h);
   if (!m || m.n > h.length) { m = { n: 0, f: 4 }; fmtSeen.set(h, m); }
   for (; m.n < h.length; m.n++) m.f = Math.max(m.f, eventFormat(h[m.n]));
@@ -56,13 +57,13 @@ export function historyFormat(h: readonly CityEvent[]): number {
 }
 
 // 整份編一次（hv 2 的 d3.r、匯出的分享碼）。D013 起編法只寫一份：src/io/journal.ts packMore（日誌接續編碼用同一支，接起來逐列相同）
-export function packHistory(h: readonly CityEvent[]): unknown[][] { return packMore(h, PACK0).rows; }
+export function packHistory(h: readonly HistoryEvent[]): unknown[][] { return packMore(h, PACK0).rows; }
 
 // ---- 驗型別（兩種存法共用）：欄位一個一個驗，組回跟模擬產生的事件同一個欄位順序（重播、再存檔逐位元組相同）----
 const isInt = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v);
 const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 const isStr = (v: unknown): v is string => typeof v === 'string' && v.length <= 256;
-function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number, k: number): CityEvent {
+function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number, k: number): HistoryEvent {
   const bad = (what: string) => new Error(`歷史第 ${k + 1} 筆的${what}不對`);
   if (!isInt(day) || day < 0) throw bad('日子');
   const xz = () => { const x = f('x'), z = f('z'); if (!isInt(x) || !isInt(z) || x < 0 || z < 0 || x >= n || z >= n) throw bad('座標'); return [x, z]; };
@@ -125,18 +126,25 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
       if (f('bonus') !== undefined) throw bad('獎金（只有完成才有）');
       return { day, t, ev: e, id };
     }
+    case 'hasten': {   // D102：煉鋼廠加速施工。編號嚴格遞增（不重複、有排序），一天最多 n² 棟（還在的根格不會比格子多）
+      const ids = f('ids');
+      if (!Array.isArray(ids) || ids.length < 1 || ids.length > n * n) throw bad('加速施工清單（空的或比格子還多）');
+      if (!ids.every(q => isInt(q) && q >= 1 && q <= 2 ** 31)) throw bad('加速施工的建築編號');
+      if (!ids.every((q, j) => j === 0 || q > (ids[j - 1] as number))) throw bad('加速施工的編號順序（要由小到大、不重複）');
+      return { day, t, ids: [...ids] as number[] };
+    }
     default: throw bad('種類');
   }
 }
-export function unpackHistory(rows: unknown, n: number): CityEvent[] {
+export function unpackHistory(rows: unknown, n: number): HistoryEvent[] {
   if (!Array.isArray(rows)) throw new Error('歷史不是陣列');
-  const out: CityEvent[] = [];
+  const out: HistoryEvent[] = [];
   let d0 = 0, g0 = 0;
   rows.forEach((row, k) => {
     if (!Array.isArray(row) || !isInt(row[0]) || !isNum(row[1])) throw new Error(`歷史第 ${k + 1} 筆不是一列`);
     const t = EVENT_BY_CODE[row[0]], names = t ? EVENT_REGISTRY[t].fields : [];
     if (!t) throw new Error(`歷史第 ${k + 1} 筆的種類不對`);
-    if (t !== 'merge' && row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
+    if (t !== 'merge' && t !== 'hasten' && row.length > 2 + names.length) throw new Error(`歷史第 ${k + 1} 筆的欄位太多（${row.length - 2} 欄，${t} 最多 ${names.length} 欄）`);   // D012 審查：之前跟種類不對講成同一句
     const at = (name: string) => {
       const v = row[2 + names.indexOf(name)];
       if (name === 'g') return isInt(v) ? g0 + v : v;
@@ -151,6 +159,7 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
       if (name === 'id' && t === 'cms') return isInt(v) ? CMS_CODES[v] : undefined;
       if (name === 'from' && t === 'merge') return row.slice(2 + names.length);   // D034：合併的尾巴（D039：政策與預算的 from 是「改之前的值」，不能撞名）
       if (name === 'size') return undefined;                      // D034：邊長由 k 推（列裡不存）
+      if (name === 'ids' && t === 'hasten') return row.slice(2);   // D102：加速施工的尾巴就是整列（dDay 之後）
       return v;
     };
     const e = eventOf(t, d0 + row[1], at, n, k);
@@ -161,7 +170,7 @@ export function unpackHistory(rows: unknown, n: number): CityEvent[] {
   return out;
 }
 // hv 1：事件物件（D011 第一版）
-export function checkHistory(h: unknown, n: number): CityEvent[] {
+export function checkHistory(h: unknown, n: number): HistoryEvent[] {
   if (!Array.isArray(h)) throw new Error('歷史不是陣列');
   return h.map((e, k) => {
     if (!e || typeof e !== 'object' || Array.isArray(e)) throw new Error(`歷史第 ${k + 1} 筆不是事件`);
@@ -284,7 +293,7 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
     let start = code;
     if (Object.hasOwn(save.raw, 'd3')) {
       // D046：只有確定退回快照時才截掉舊 d3，否則每次失配都把上一份完整歷史再包進起始碼，大小呈指數增加。
-      // 不改失配判定、不補造歷史：例如鋼材加速施工的額外屋齡仍未記事件，遇到它仍如實回報只用存檔。
+      // 不改失配判定、不補造歷史：例如 D102 之前的舊存檔沒有記鋼材加速施工的額外屋齡（D102 起記成 hasten），遇到它仍如實回報只用存檔。
       // raw 的圖層已解開 RLE，先拿掉舊 z 再編；其餘未知欄位、委託與 cms3d 精度完整保留。
       const snapshot = { ...save.raw }; delete snapshot.d3; delete snapshot.z;
       start = encodeLabCode(snapshot, { deflate: true });
@@ -300,7 +309,7 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   // 城市格式（D012 起才檢查）：比這一版新＝可能有這一版不認得的事件，不猜；不是 1..這一版的整數＝不認得（審查：之前只擋整數，"5"、4.5 照讀）。沒有 f 的照舊當舊檔
   if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);
   if (d3.f !== undefined && !(isInt(d3.f) && d3.f >= 1)) return only(`不認得的城市格式 f=${JSON.stringify(d3.f)}：只用存檔`);
-  let events: CityEvent[], c: City, jr: { id: string; n: number; h: number } | null = null, rows = d3.r;
+  let events: HistoryEvent[], c: City, jr: { id: string; n: number; h: number } | null = null, rows = d3.r;
   if (d3.hv === JOURNAL_VER) {   // D013：歷史在日誌裡——前 n 列從日誌來（雜湊要對）、尾巴從 d3.t 來
     const j = d3.j;
     if (!j || typeof j !== 'object' || typeof j.id !== 'string' || j.id.length > 64 || !isInt(j.n) || j.n < 0 || !isInt(j.h)) return only('日誌的指標不對：只用存檔');
