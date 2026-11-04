@@ -1,5 +1,7 @@
 # D071 — British education and research buildings (wave 4/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `f689c35`、[main CI 38998397658](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38998397658)（success）、Pages deployment `7134895815`（2026-10-17 04:42:29 UTC）。第 4 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card 2026-10-16 17:44 UTC. Published baseline 1c40e13a219adb90827acd3b60fb6b7623600b63; worktree clean and remote main equal. No open competing PRs.
 
 ## Scope and acceptance before implementation

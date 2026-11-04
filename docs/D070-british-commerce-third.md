@@ -1,5 +1,7 @@
 # D070 — British commerce third structures (wave 3/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `1c40e13`、[main CI 38929565338](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38929565338)（success）、Pages deployment `7125605889`（2026-10-16 17:41:00 UTC）。發布收尾只記在 LOG 與 `docs/BRITISH-200-PROGRAM.md`（第 3 波）。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card 2026-10-16 14:29 UTC. Baseline bece722ed2480a3728a274c90bd0170eb52cf389 is published:21 release jobs green, exact live HTML SHA553de5ae65c89dc22dca01af444cabb372b1960c7e7e9efb3009a0b8dff16b73.
 
 ## Scope and acceptance before code

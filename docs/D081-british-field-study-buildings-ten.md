@@ -1,5 +1,7 @@
 # D081 — British field-study and camp buildings (wave 13/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `2cd43c4`、[main CI 39499972950](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39499972950)（success）、Pages deployment `7213013537`（2026-10-20 22:53:16 UTC）。第 13 波，與委託觸碰修復（PR #34）一起合併；LOG 原本沒有這一波的發布列。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card, frozen before product implementation on 2026-10-20. Immutable published baseline: `7ec70a96b01437ab4576b0962905be16b1591e79`. Twelve waves / 120 buildings are byte-verified published. This batch counts only after complete publication verification.
 
 ## Independent design

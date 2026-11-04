@@ -1,5 +1,7 @@
 # D082 — Ten British village and waterside buildings (wave 14/20 candidate)
 
+> **2026-11-04 發布補記（D098）**：本卡的第一版十棟被業主退回，**沒有出貨**；正式發布的是重做後接受的 9 棟（179v0–2、185v0–2、154v0–2；126v0–2 維持舊畫法），與 D083 一起由 PR #39 合併 `e0508af`，[main CI 40122805423](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40122805423) success，Pages deployment `7303915721`（2026-10-24 20:15:03 UTC）。收據見 `D082-D083-main-release-receipt.md`。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card, 2026-10-21. Immutable starting release: `2cd43c424dcc909dcfa6ac55275406d2bc527ce0`. Published progress remains **13/20, 130 buildings**. This branch does not authorize merge or deployment.
 
 ## Initial implementation scope

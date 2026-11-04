@@ -1,5 +1,7 @@
 # D074 — British farmsteads and memorial gardens (wave7/20)
 
+> **2026-11-04 發布補記（D098）**：第一次合併 `beca506`（PR #25）的 [main CI 39075552114](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39075552114) **失敗、沒有部署**；修復 PR #26 合併 `94024b6` 後 [main CI 39098621210](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39098621210) 成功，Pages deployment `7150909223`（2026-10-18 06:26:22 UTC）。原失敗的根因仍未證明（見 `D074-touch-release-repair.md`）。第 7 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card2026-10-17 16:06UTC. Baseline a5674d9bdbfbf439319b50e26c3f864864ab5363, all33 release jobs green and live HTML byte-verified dc954f31f813324f35a4fe9df1786f9ece3d5ec608e0b7e0ead32a59954ad5b7. Remote main equals clean local HEAD; no openPR.
 
 ## Ten distinct structures

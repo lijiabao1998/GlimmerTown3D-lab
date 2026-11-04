@@ -1,5 +1,7 @@
 # D077 — British service buildings and guesthouses (wave 9/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `22da531`、[main CI 39175006873](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39175006873)（success）、Pages deployment `7162861661`（2026-10-19 00:18:18 UTC）。第 9 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card, 2026-10-18 15:33 UTC. Immutable published baseline: 7d4df8a907368a25f1ff92958b8b70ae85b8ad1c. Eight waves / eighty distinct buildings are published and byte-verified. This card counts one further batch of ten only after full release verification.
 
 ## Ten exact slots and structural designs

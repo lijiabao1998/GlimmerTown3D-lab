@@ -1,5 +1,7 @@
 # D099 — 傳輸地基：來源租約 successor v2（D097 原型進 src）
 
+> **2026-11-04 發布補記（D098）**：PR #52 於 2026-11-03 02:54:21 UTC 合併為 `18a718c`（合併者是 `lijiabao1998` 帳號）；[main CI 41568961014](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41568961014) 126／126 success；Pages deployment `7511322126`（05:37:03 UTC）。**出貨位元組沒變**：線上 HTML 與從 `18a718c` 重建的 `dist/index.html` 都是 4,259,705 bytes、SHA-256 `d27572923cf25476…de5d8f4`，與 D091 的建置相同（2026-11-04 重建、逐位元組核對）。「沒做成的事」寫的「沒有任何合併請求」與「ci 尚未在 Linux 上跑過」是當時狀態。下面的狀態文字保留當時原文，沒有改。
+
 2026-11-02。承接 D097 卡與業主原話「明確允許，同一產品綫，你來做吧」；D097 的凍結卡
 `docs/D097-rail-transit.md` 一併收編進 main。
 

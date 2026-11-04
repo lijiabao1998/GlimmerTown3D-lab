@@ -1,5 +1,7 @@
 # D079 — British transit and utility pavilions (wave 11/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `23eac8f`、[main CI 39239090242](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39239090242)（success）、Pages deployment `7173202938`（2026-10-19 12:03:08 UTC）。第 11 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card, 2026-10-19 07:59 UTC. Immutable published baseline: `46771cdc00f33759e0a3c45ddf05c3387d4bb4fc`. Ten waves /100 buildings are byte-verified published. This batch counts only after complete publication verification.
 
 ## Independent design, before implementation
