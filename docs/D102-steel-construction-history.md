@@ -87,20 +87,21 @@
 
 ### 改了什麼
 
-- **原始碼 7 檔，+70／−30 行**：`src/sim/day.ts`、`replay.ts`、`city.ts`、`eventRegistry.ts`、`decisions.ts`、`src/io/save.ts`、`journal.ts`。
+- **原始碼 7 檔，+75／−32 行**：`src/sim/day.ts`、`replay.ts`、`city.ts`、`eventRegistry.ts`、`decisions.ts`、`src/io/save.ts`、`journal.ts`。
   `src/sim/rules/economy.ts` 一個字都沒改；`day.ts` 呼叫 `steelConstruction` 的那一行（實驗線對拍的錨點，原本第 418 行，前面多了一行之後在第 419 行）一個字都沒改。
   - `day.ts`：升級與加速之間抄下 `tickBld` 的屋齡（只在有煉鋼廠時），加速之後屋齡變了的格就是被加速的；交給 `syncCity`，在登記新房、升級之後、合併之前推一筆 `hasten`。
     `syncCity` 的新參數放在 `ups` **前面**：D034 有一個突變用 `ups, mgs);` 當錨點（`tools/unit-d034-live.mjs:155`），第一版把它放在最後，弄壞了那個錨點。
   - `replay.ts`：`hasten` 讓清單上每棟的起算屋齡 +1；沒有由小到大、編號不存在、已經拆掉、那一刻屋齡 ≥ 9，各丟一種講得出原因的例外。
   - `save.ts`：驗型別（清單空的或太長、編號不是正整數、沒有由小到大或重複，三種各自講）與尾巴解碼；`journal.ts`：列編碼；`eventRegistry.ts`：`hasten: spec(25, 11, ['ids'])`。
   - `city.ts`：新增 `HastenEvent` 與 `HistoryEvent = CityEvent | HastenEvent`，`City.history` 改成 `HistoryEvent[]`；`decisions.ts` 只改三個參數的型別。
+    `City` 物件上的 `format` 改用 `CITY_MODEL_FORMAT = 10`（城市模型的版本；D102 沒改城市模型），見下面「PR #59 第一次 CI」。
   - **與上面「修法」第 5 點不同**：原本打算在 `cityView.ts` 的 `LotEvent` 排除 `hasten`（一行型別）。對抗式審查查出 `proposals/d090/original-camera-restoration.test.mjs`
     要求 `cityView.ts` 等於 `5b41bac` 加上 6 條有限差異，多一行就讓 D086–D090 native 工作流第一步紅。D101 反正要大改 `cityView.ts`、要做那支測試的後繼副本，
     所以 D102 改成**完全不碰 `cityView.ts`**：`hasten` 是重播屋齡用的記帳、不是城裡看得見的事，放在 `CityEvent` 之外，地塊歷史與大事記照舊只看 `CityEvent`。
-- **lease**：`fixtures/d102/source.json`（manifest `238e51ba…`，267 檔，`modified` 7 檔，`before`＝D100 head `b328a07` 的位元組）、
+- **lease**：`fixtures/d102/source.json`（manifest `6a1941b4…`，267 檔，`modified` 7 檔，`before`＝D100 head `b328a07` 的位元組）、
   `tools/d102-source-contract.mjs`、產生器 `tools/d102-freeze-source.mjs`（不覆寫）、產出的 `tools/d102-source.mjs`、`tools/d102-source.test.mjs`（6 項）。
   三個 seam 改指 `d102-source.mjs`；`tools/d085-source-d090.test.mjs` 的清單 import 改指 D102，domain manifest 多一條有限替換（`DOMAIN_MANIFEST_SHA` `0be5b4f4…`）；
-  D090 現行契約加 `D102_MODIFIED_AFTER`，selector lineage 整檔重發（`PIPE_LINEAGE_SHA` `ac28d393…`）；兩支 v3 現行測試改用 D102；
+  D090 現行契約加 `D102_MODIFIED_AFTER`，selector lineage 整檔重發（`PIPE_LINEAGE_SHA` `e5405665…`）；兩支 v3 現行測試改用 D102；
   `transit.yml` 換跑 `d102-source.test.mjs`，另跑 `tools/unit-d102-history.mjs`。
 - **守衛**：新增 `tools/unit-d102-history.mjs`，7 項（D100 `day.ts` 核對，加上驗收 1、驗收 2＋3、驗收 4、5、6、7）；原地改 5 支歷史守衛（都沒有被位元組釘住，D040／D045 先例）：
   - `unit-d010-sim.mjs:80`、`unit-d019.mjs:260`、`unit-d046-history.mjs`：現行格式 11、登記 26 種（碼 0–24 照舊逐項核對）。
@@ -155,7 +156,7 @@
 | 10 | 見下 | 本機結果見下；PR 上的 CI 結果記在 LOG |
 | 11 | 過 | W2 100 天後最大 13,540 字元、W4 14,052 字元（`SAVE_LIMIT` 2,000,000） |
 
-### 本機驗證（Node 24.22.2；「本提交」＝`fc13fc8`，樹與 `bcaa998` 逐位元組相同）
+### 本機驗證（Node 24.22.2；「本提交」＝`fc13fc8`，樹與 `bcaa998` 逐位元組相同。之後的修正 `1a03c15` 只動 `city.ts` 的 `format` 欄位與 lease 雜湊，重跑的部分見下一節）
 
 | 範圍 | 在哪棵樹上跑 | 結果 |
 |---|---|---|
@@ -171,6 +172,18 @@
 **那 1 個 NG**：`unit-d011-edit` 的「推進一天 ≤ 5 ms」在 4 個程序搶 4 核時量到 6.13 ms。安靜時 D100、D102 兩棵樹交錯各量 3 輪都過
 （D100 平均 2.79／4.61／2.93 ms，D102 2.80／3.39／3.14 ms）；那座劇本城沒有煉鋼廠，D102 的新程式在那裡只做一次判斷就跳過。
 同一種情形更早還有一次：`unit-d035` 的 5 ms 絕對值在滿載時 5.59 ms（相對值有過），安靜時兩棵樹各量 3 輪都過，L5 也沒有煉鋼廠。
+
+### PR #59 第一次 CI（`40bd5c2`）紅了，原因與修正
+
+- **紅的**：`ci` 的 d082（360／412／1440）「accepted-nine 前身 vs 修補後產品 seam QA」、D086–D090 native 的 `native-and-build`；**綠的**：`transit`、D083 native。
+- **原因（同一個）**：這些不可改的檢查把「新程式從舊存檔建出來的城」跟舊版程式建的**整個城市物件**比（「old save city unchanged」「identical real saved gallery」），
+  差在 `cityFromLab` 寫的 `format: CITY_FORMAT`——D102 把它變成 11，舊版是 10。`city.format` 在 `src` 裡沒有任何地方讀。
+- **我漏掉的**：推之前我只跑了 native 工作流的第一個 Node 步驟（inherited／foundation runner），沒跑後面的 `scene-budget-check`、`model-audit` 等步驟，也沒跑 ci 的 d082 瀏覽器比對。
+- **修正 `1a03c15`**：`City` 物件上的 `format` 改成「城市模型的版本」`CITY_MODEL_FORMAT = 10`。D102 沒有改城市模型（建築、圖層、欄位），只在世界歷史加了 `hasten`；
+  讀檔的格式門檻與存檔寫的 `f` 照舊看 `CITY_FORMAT`／`historyFormat`（存檔照樣寫 `f=11`）。lease 重凍（manifest `6a1941b4…`）。
+- **這次推之前的重放**（每個工作流一個全新的 worktree、`GITHUB_ACTIONS=true`、照 YAML 的步驟順序原樣跑）：D083 兩個 job、D086（17 步）、D087–D090（各 8 步）的
+  `native-and-build`，**共 56 步全部 exit 0**；ci 的 d082 寬 360 的 capture（154 張）、coverage、`d082-join-product-capture` 全過（本機要設 `CHROME_PATH` 指向預裝的 Chromium）。
+  `unit-d102-history` 7/7、lease 與 D090 現行契約全過、`tsc` 綠。瀏覽器 matrix job（native-game 等）本機沒跑，交給 CI。
 
 ### 舊存檔（實測，[腳本](evidence/D102/legacy-save-once.mjs)、[結果](evidence/D102/legacy-save-once.json)）
 
