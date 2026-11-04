@@ -5,8 +5,11 @@
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
 import { fnv1a } from './rng.ts';
-import { CITY_FORMAT } from './eventRegistry.ts';
 export { CITY_FORMAT, eventFormat } from './eventRegistry.ts';
+// D102：City 物件上的 format 是「城市模型」的版本（建築、圖層、欄位長什麼樣），不是存檔的城市格式。D102 只在世界歷史加了 hasten
+// （存檔的城市格式升到 11），城市模型沒變，所以這裡留在 10：舊存檔讀出來的城跟 D102 之前逐欄相同（D086–D090 native 的
+// 「舊存檔的城不變」與 d082 的 accepted-nine 比對都比整個城市物件）。讀檔的格式門檻與存檔寫的 f 照舊看 CITY_FORMAT／historyFormat（src/io/save.ts）
+export const CITY_MODEL_FORMAT = 10;
 
 // 格式 2（D010）：世界歷史多了逐日模擬的「生長」「升級」事件。格式 1 只有匯入那一筆，照讀（src/sim/replay.ts）
 // 格式 3（D011）：多了玩家施工的事件——鋪路、劃區、放建築、拆除、復原（每一格一筆；g＝同一筆手勢）。格式 1、2 照讀
@@ -136,7 +139,7 @@ const code48 = (c: number) => Math.max(0, c - 48);   // 實驗線 tre／rcl 用�
 export function cityFromLab(save: LabSave, kinds: KindTable, code: string): City {
   const n = save.n, nn = n * n, L = save.layers;
   const c: City = {
-    format: CITY_FORMAT, n, name: save.nm || '（沒有名字的城市）', day: save.day, seed: save.seed, gameVer: save.gameVer,
+    format: CITY_MODEL_FORMAT, n, name: save.nm || '（沒有名字的城市）', day: save.day, seed: save.seed, gameVer: save.gameVer,
     ter: layer(L.ter, nn, digit), tree: layer(L.tre, nn, code48), road: layer(L.rd, nn, digit), rclass: layer(L.rcl, nn, code48),
     zone: layer(L.zn, nn, digit), el: layer(L.el, nn, digit), rail: layer(L.rl, nn, digit), railBridge: layer(L.rb, nn, digit),
     tram: layer(L.tr, nn, digit), dock: layer(L.dk, nn, digit), fly: layer(L.fly475, nn, digit), wp: layer(L.wp, nn, digit), ruin: layer(L.rn, nn, digit),
