@@ -30,6 +30,14 @@ Each card is a separate draft PR when implementation reaches it. No automatic me
 > plus formats 1–10 remain byte-identical. The same ruling is recorded on
 > `docs/D097-rail-transit.md` (branch `gpt/d097-rail-transit`). Nothing is migrated or
 > rewritten by this ruling: no event code and no save format exists on main yet.
+>
+> **2026-11-04 renumbering (owner decision, supersedes the event 26 above).** The owner
+> gave event 25 / `CITY_FORMAT 11` to **D102** (steel-mill construction acceleration recorded
+> as history, the root fix for saves falling back to the snapshot), because D102 ships before
+> transit and a reader rejects any format newer than its own. Transit moves to **event 26 /
+> `CITY_FORMAT 12`**; this candidate's `resident` moves to **event 27 / `CITY_FORMAT 13`**.
+> Owner's choice, verbatim: 「D102 拿 25，交通、市民各順延一號」. Recorded on
+> `docs/D102-steel-construction-history.md` and `docs/D101-transit-save-and-ui.md` as well.
 
 - Keep base Lab `v:1`, building numbers, all existing fields and compact event codes unchanged.
 - Add `d3.lc` versioned optional extension: `{v:1, tick, ticksPerDay:1440, nextResidentId, residents, journal:{id,n,h}, sourceCityHash}`. Resident rows: `[id,homeBuildingId,workBuildingId|null,status,tile,nextTile,edgeProgress,assignedDay]`. IDs are monotonically allocated and never reused. Simulation uses integer minute ticks; no real-clock RNG. Exact final encoding is frozen in D093 before code.
