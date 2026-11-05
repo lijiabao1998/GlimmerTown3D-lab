@@ -1,5 +1,7 @@
 # D072 — British technology, hospital and civic campuses (wave 5/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `a69397e`、[main CI 39020523867](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39020523867)（success）、Pages deployment `7138239134`（2026-10-17 10:28:00 UTC）。第 5 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card 2026-10-17 05:36 UTC. Published baseline f689c35d8d061498779321149ccce4443f0ce6de: all27 release jobs passed, live HTML byte-verified SHA1516a143fc236fb2ccbd5b796c6fe17a5b66e13ff869fa9fcf7d33f5ee7b0257. Fetched main equals clean local HEAD.
 
 ## Scope before implementation

@@ -1,0 +1,30 @@
+{
+  "baseline": "c8e5ef14689403a1935185935b9d442323d14f11",
+  "candidateEqualsWorkingTree": 8,
+  "workflowsChecked": 36,
+  "changed": 25,
+  "evidence": [
+    "docs/evidence/D103/construction-check.json",
+    "docs/evidence/D103/d086-native-and-build-durations.tsv",
+    "docs/evidence/D103/first-red-probe.txt",
+    "docs/evidence/D103/freeze-output.json",
+    "docs/evidence/D103/guard-future-d086-seam.txt",
+    "docs/evidence/D103/guard-mutations.txt",
+    "docs/evidence/D103/native-replay-b310869.txt",
+    "docs/evidence/D103/reader-tests-after.txt",
+    "docs/evidence/D103/runners-final-0fb097e.txt",
+    "docs/evidence/D103/runners.txt",
+    "docs/evidence/D103/transit-local.txt",
+    "docs/evidence/D103/unit-d103-timeout.txt"
+  ],
+  "after": {
+    "workflow": "d242ed2e707c71c215279df09f3ae7018398669ba6a6cc744b922734210b1b7e",
+    "deltas": "f96cd61b639e1cfed3d347bb41ac98d98ecee67df4239eaca26e05699415cb8c",
+    "routing": "3a2615fcb0593d7d85d4efeece4282f99a42f4bab8d41e57590189903d893619",
+    "runner": "b7625c6bea2239ddb2183b97a68aa04e590865b24923424449bfd5e092e9d9c9",
+    "validator": "cc5d49563589d2cf5f3eb37b5abce5db0c17957171678475c7ce290b624a0a15",
+    "contract": "8875cccbaa70bf77ec4f67321cc15e743db1db4123acc0265e40634e07196f81",
+    "lineage": "c037ae2746bc3ae07bbd0f45ec5ee76678e1d717c41a204d40989c5b1e8e936a",
+    "lineageModule": "5c2e76114a0b2e933e2bf98bc34a117cfc1762b030e0badff24d5a34205d4568"
+  }
+}

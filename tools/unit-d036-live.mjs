@@ -26,6 +26,16 @@ import { d036Runs, d036Seeds, W_DAYS, W_LONG } from './d036-cities.mjs';
 const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const J = JSON.stringify;
 const PINNED = 'd23c18d8e24ecb1f7b9223907484729eebe9b3a0';
+// D102：煉鋼廠加速施工記成歷史事件（碼 25、城市格式 11）之後，有加速的 W 城存出來的碼多了 d3 的 hasten 列；實驗線不讀 d3（D011）。
+// 樣本錄的是 D102 之前存的碼：雜湊對不上的 rt，用「只把交給 syncCity 的 hastened 換成空清單」的 day.ts 重存一次，
+// 那份碼的雜湊要等於樣本，而且現在的碼除了 d3 以外逐位元組相同——不重錄實驗線，也不放過任何 d3 以外的改變。
+const labFields = code => { const o = JSON.parse(J(decodeLabCode(code).save.raw)); delete o.d3; delete o.z; return J(o); };
+async function preD102Rt(c, KT, vrank) {
+  const m = /^(W\d)@(\d+)$/.exec(c.id); if (!m) return null;
+  const V = await dayVariant([['hastened, ups, mgs);', '[], ups, mgs);']]), L = loadCode(d036Runs().find(r => r.id === m[1]).code, KT, vrank);
+  for (let d = 0; d < +m[2]; d++) V.stepDay(L.sim);
+  return saveCode(L.sim, L.template, L.start);
+}
 
 export const LIVE = {};   // 除錯用：守衛跑完之後留下樣本與城
 export async function d036LiveGuards(log) {
@@ -53,9 +63,15 @@ async function guards(log) {
     if (J(lab.rtOrder) !== J(rts.map(r => r.id))) bad.push('樣本的 rt 清單 ≠ d036Rt() 現在的（重跑 tools/d036-lab.mjs --part=rt）');
     for (const c of runs) { const L = lab.runs[c.id]; if (!L) bad.push(`${c.id}：沒有記錄`); else if (L.codeHash !== fnv1a(c.code) || L.rows.length !== c.days) bad.push(`${c.id}：本線產生的碼跟錄樣本時不同或天數不對（重跑 tools/d036-lab.mjs --part=runs）`); }
     for (const c of seeds) { const L = lab.seeds[c.id]; if (!L) bad.push(`${c.id}：沒有記錄`); else if (L.codeHash !== fnv1a(c.code)) bad.push(`${c.id}：本線產生的碼跟錄樣本時不同（重跑 tools/d036-lab.mjs --part=seeds）`); }
-    for (const c of rts) { const L = lab.rt?.[c.id]; if (!L) bad.push(`rt ${c.id}：沒有記錄`); else if (L.codeHash !== fnv1a(c.code) || L.rows.length !== c.days) bad.push(`rt ${c.id}：本線存出來的碼跟錄樣本時不同或天數不對（重跑 tools/d036-lab.mjs --part=rt）`); }
+    const d102 = [];
+    for (const c of rts) {
+      const L = lab.rt?.[c.id]; if (!L) { bad.push(`rt ${c.id}：沒有記錄`); continue; }
+      let ok = L.codeHash === fnv1a(c.code) && L.rows.length === c.days;
+      if (!ok && L.rows.length === c.days) { const old = await preD102Rt(c, KT, vrank); ok = !!old && L.codeHash === fnv1a(old) && labFields(old) === labFields(c.code) && old !== c.code; if (ok) d102.push(c.id); }
+      if (!ok) bad.push(`rt ${c.id}：本線存出來的碼跟錄樣本時不同或天數不對（重跑 tools/d036-lab.mjs --part=rt）`);
+    }
     log(!bad.length, `D036 實跑樣本：實驗線 ${PINNED.slice(0, 7)}（${lab.source?.version}）回退設定；W 城 ${runs.length} 座（連推 ${W_DAYS} 天、W4 連推 ${W_LONG} 天）、種子城 ${seeds.length} 個（只讀資源圖）、rt ${rts.length} 筆（本線存的碼給實驗線讀、再推 ${RT_DAYS} 天）；探針原文與碼雜湊＝本線現在的`,
-      bad.slice(0, 4).join('；') || `runs ${Object.keys(lab.runs).length}、seeds ${Object.keys(lab.seeds).length}、rt ${Object.keys(lab.rt ?? {}).length}，錄了 ${lab.seconds} 秒`);
+      bad.slice(0, 4).join('；') || `runs ${Object.keys(lab.runs).length}、seeds ${Object.keys(lab.seeds).length}、rt ${Object.keys(lab.rt ?? {}).length}，錄了 ${lab.seconds} 秒` + (d102.length ? `；${d102.join('、')} 是 D102 之前存的碼（重存核過雜湊，現在的碼只多 d3）` : ''));
     if (bad.length) return;
   }
 

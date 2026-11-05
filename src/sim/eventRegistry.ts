@@ -2,8 +2,9 @@
 // 既有 code 0–24 只往後加，不改號、不重排；新增欄位或事件先提高城市格式，不能借用舊碼。
 // D039：格式 8／碼 18–22＝policy、budget、research、spec、techdone。
 // D040：格式 9／碼 23＝depleted。D045：格式 10／碼 24＝cms（完成才有 bonus）。
+// D102：格式 11／碼 25＝hasten（煉鋼廠加速施工；尾巴是建築編號，同 merge 的尾巴）。業主 2026-11-04 定號：交通順延到 26／格式 12，居民 27／格式 13。
 // 這只是把既有格式集中，D046 沒有新增事件、碼或歷史存法；委託小數另放附加欄位。
-import type { CityEvent } from './city.ts';
+import type { HistoryEvent } from './city.ts';
 
 interface EventSpec { readonly code: number; readonly format: number; readonly fields: readonly string[] }
 const spec = (code: number, format: number, fields: string[]): EventSpec => Object.freeze({ code, format, fields: Object.freeze(fields) });
@@ -34,15 +35,16 @@ export const EVENT_REGISTRY = Object.freeze({
   techdone: spec(22, 8, ['id']),
   depleted: spec(23, 9, ['x', 'z', 'k']),
   cms: spec(24, 10, ['ev', 'id', 'bonus']),
-} satisfies Record<CityEvent['t'], EventSpec>);
+  hasten: spec(25, 11, ['ids']), // 後接 1 個以上被加速的建築編號（由小到大）
+} satisfies Record<HistoryEvent['t'], EventSpec>);
 
-export const EVENT_BY_CODE: Readonly<Partial<Record<number, CityEvent['t']>>> = Object.freeze(Object.fromEntries(
-  Object.entries(EVENT_REGISTRY).map(([t, e]) => [e.code, t as CityEvent['t']] as const),
+export const EVENT_BY_CODE: Readonly<Partial<Record<number, HistoryEvent['t']>>> = Object.freeze(Object.fromEntries(
+  Object.entries(EVENT_REGISTRY).map(([t, e]) => [e.code, t as HistoryEvent['t']] as const),
 ));
 export const CITY_FORMAT = Math.max(...Object.values(EVENT_REGISTRY).map(e => e.format));
 // D012 以前沒標 f 的檔仍接受格式 1–4 的事件；不能拿掉 f 來偷帶格式 5–10。
 export const LEGACY_UNVERSIONED_FORMAT = 4;
-export function minimumEventFormat(e: CityEvent): number {
+export function minimumEventFormat(e: HistoryEvent): number {
   // Preserve the existing save/export error contract before touching registry fields.
   if (!Object.hasOwn(EVENT_REGISTRY, e.t)) throw new Error(`存檔：不認得的事件 ${e.t}`);
   if (e.t === 'doze' && e.layer === 'ruin') return 6;
@@ -50,4 +52,4 @@ export function minimumEventFormat(e: CityEvent): number {
   return EVENT_REGISTRY[e.t].format;
 }
 // 寫檔的下限維持 D012 的 4，避免沒有新事件的城無故換格式或改變分享碼位元組。
-export const eventFormat = (e: CityEvent): number => Math.max(LEGACY_UNVERSIONED_FORMAT, minimumEventFormat(e));
+export const eventFormat = (e: HistoryEvent): number => Math.max(LEGACY_UNVERSIONED_FORMAT, minimumEventFormat(e));

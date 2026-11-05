@@ -1,0 +1,2 @@
+# D103 transit.yml steps, local (Node 24.22.2)
+d102-source 6/0, d090-source-v3 2/0, source-boundaries-v3 8/0, unit-d097-graph, unit-d097-movement, unit-d100-network, unit-d100-format, unit-d102-history, unit-d103-timeout, tsc: all rc=0

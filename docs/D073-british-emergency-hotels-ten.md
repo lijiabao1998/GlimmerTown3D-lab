@@ -1,5 +1,7 @@
 # D073 — British emergency and hotel buildings (wave 6/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `a5674d9`、[main CI 39040723685](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39040723685)（success）、Pages deployment `7142154551`（2026-10-17 16:05:20 UTC）。第 6 波。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code card 2026-10-17 10:31UTC. Baseline a69397ed0900b1f0a27bdc3be8e1616d2973fc43, all30 release checks passed, live HTML byte-verified SHA17a72aabb0ee7ccb4b8b5a4256b4a2ee8466e3dfe85da58d7b0bd1d59f16e3b3. Remote main equals clean local HEAD, no open PR.
 
 ## Scope before implementation

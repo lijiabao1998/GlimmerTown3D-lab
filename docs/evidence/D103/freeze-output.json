@@ -1,0 +1,23 @@
+{
+  "baseline": "c8e5ef14689403a1935185935b9d442323d14f11",
+  "before": {
+    ".github/workflows/d086-native.yml": "c1a12caec58ba8d7d241195e391e3ea1851e4da46c37a116b3a64cb93a1072a4",
+    "proposals/d090/inherited-workflow-deltas.json": "d858db4a91071d2a4823bc6a7265a76c9c757741df1482b18d851f664a6410ef",
+    "proposals/d090/inherited-test-runner.mjs": "eae1ecaab58f967d2b2d48c56cea3a3c52d5677f4fa855a1edbdcb8d4a9c0080",
+    "tools/d090-validation-pipes-v2.mjs": "b44ce5b8c634028ef35529596b0a295b50f18c79874ede5bf81434fbf584aeeb",
+    "proposals/d090/foundation-routing-pipes-v2.json": "cf82ca1226850e407024f5d0886355f80bc1b2b07ea4ba270ca890405cfea0c1",
+    "proposals/d090/foundation-routing-contract-pipes-v2.mjs": "2ea625248bcaf677b7cdd52f66d43c20708cc13b7a24b0e2246a36c533739a5f",
+    "proposals/d090/selector-pipes-lineage.json": "e540566547019cfd4f2fb5c0d64b356453ccef22f8a07413b261b23e3bc60e89",
+    "proposals/d090/selector-pipes-lineage.mjs": "e3a345780797ba1b6c337f40a2fadb11d83188da0f6314ebb7ce7c5161420497"
+  },
+  "after": {
+    "workflow": "d242ed2e707c71c215279df09f3ae7018398669ba6a6cc744b922734210b1b7e",
+    "deltas": "f96cd61b639e1cfed3d347bb41ac98d98ecee67df4239eaca26e05699415cb8c",
+    "routing": "3a2615fcb0593d7d85d4efeece4282f99a42f4bab8d41e57590189903d893619",
+    "runner": "b7625c6bea2239ddb2183b97a68aa04e590865b24923424449bfd5e092e9d9c9",
+    "validator": "cc5d49563589d2cf5f3eb37b5abce5db0c17957171678475c7ce290b624a0a15",
+    "contract": "8875cccbaa70bf77ec4f67321cc15e743db1db4123acc0265e40634e07196f81",
+    "lineage": "c037ae2746bc3ae07bbd0f45ec5ee76678e1d717c41a204d40989c5b1e8e936a",
+    "lineageModule": "5c2e76114a0b2e933e2bf98bc34a117cfc1762b030e0badff24d5a34205d4568"
+  }
+}

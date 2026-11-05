@@ -1,5 +1,7 @@
 # D097 — Rail & Transit 1.0 (candidate, not accepted)
 
+> **2026-11-04 改號補記（D102）**：業主 2026-11-04 定號「D102 拿 25，交通、市民各順延一號」——事件 25／`CITY_FORMAT 11` 給 D102（煉鋼廠加速施工，[卡面](D102-steel-construction-history.md)），**交通改成事件 26／`CITY_FORMAT 12`**，居民改成事件 27／`CITY_FORMAT 13`。理由：讀檔規則是「格式比我新就不讀」，先上線的要拿小的號，而 D102 比交通先上線。下面寫「event 25 = transit」「CITY_FORMAT 11」的地方保留當時原文，沒有改。
+
 Pre-code freeze: 2026-10-30 22:07 UTC. Owner instruction: `Sentinel_65f451f7154c8191956a4cd924fb2112`, read in full (22:00:48 UTC). Fresh main is `6c28221859f337f72953a76ab3e24e50d76bca93`; isolated branch `gpt/d097-rail-transit`. Living City D092–D096 / Draft PR48 are paused and preserved, not renamed, closed, overwritten or included here. No merge or publication is authorized. The standing 200-building art acceptance and every historical golden assertion remain in force.
 
 ## Product and scope

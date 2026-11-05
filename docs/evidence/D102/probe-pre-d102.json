@@ -1,0 +1,102 @@
+{
+ "node": "v22.22.0",
+ "seconds": 83,
+ "out": {
+  "W1": {
+   "real": {
+    "falls": 0,
+    "first": null,
+    "notes": {},
+    "allAgeBlindReplay": true,
+    "allSnapshotOlder": true,
+    "diffBuildings": null,
+    "gap": null,
+    "nonBlind": []
+   },
+   "ageBlindFalls": 0,
+   "ageBlindNotes": {},
+   "steelOffFalls": 0,
+   "steelOffNotes": {}
+  },
+  "W2": {
+   "real": {
+    "falls": 47,
+    "first": 5,
+    "notes": {
+     "歷史跟存檔對不上，只用存檔：對帳數字不同": 47
+    },
+    "allAgeBlindReplay": true,
+    "allSnapshotOlder": true,
+    "diffBuildings": [
+     1,
+     2
+    ],
+    "gap": [
+     1,
+     1
+    ],
+    "nonBlind": []
+   },
+   "ageBlindFalls": 0,
+   "ageBlindNotes": {},
+   "steelOffFalls": 0,
+   "steelOffNotes": {}
+  },
+  "W3": {
+   "real": {
+    "falls": 0,
+    "first": null,
+    "notes": {},
+    "allAgeBlindReplay": true,
+    "allSnapshotOlder": true,
+    "diffBuildings": null,
+    "gap": null,
+    "nonBlind": []
+   },
+   "ageBlindFalls": 0,
+   "ageBlindNotes": {},
+   "steelOffFalls": 0,
+   "steelOffNotes": {}
+  },
+  "W4": {
+   "real": {
+    "falls": 48,
+    "first": 2,
+    "notes": {
+     "歷史跟存檔對不上，只用存檔：對帳數字不同": 48
+    },
+    "allAgeBlindReplay": true,
+    "allSnapshotOlder": true,
+    "diffBuildings": [
+     1,
+     2
+    ],
+    "gap": [
+     1,
+     1
+    ],
+    "nonBlind": []
+   },
+   "ageBlindFalls": 0,
+   "ageBlindNotes": {},
+   "steelOffFalls": 0,
+   "steelOffNotes": {}
+  },
+  "W5": {
+   "real": {
+    "falls": 0,
+    "first": null,
+    "notes": {},
+    "allAgeBlindReplay": true,
+    "allSnapshotOlder": true,
+    "diffBuildings": null,
+    "gap": null,
+    "nonBlind": []
+   },
+   "ageBlindFalls": 0,
+   "ageBlindNotes": {},
+   "steelOffFalls": 0,
+   "steelOffNotes": {}
+  }
+ }
+}
