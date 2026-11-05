@@ -2,7 +2,7 @@
 // D086 current-version contract. Original tools/d085-source-v1.test.mjs remains unchanged and tested on77b8616.
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import{execFileSync}from'node:child_process';
 import{D085_CHANGED,d085PriorSource,d084PriorSource}from'./d090-source.mjs';
-import{d084PriorInventory}from'./d099-source.mjs';
+import{d084PriorInventory}from'./d100-source.mjs';
 import{assertD083Scope}from'./d083-scope.mjs';
 const read=f=>fs.readFileSync(f,'utf8');
 test('exact new source returns only independently fetched published preimages; no extra edit can pass',()=>{
