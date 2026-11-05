@@ -10,6 +10,26 @@
 
 ---
 
+- 2026-11-05 — D102／D103 — 合併後補記：main ci 全綠、公開站上線、兩張卡面的 CI 紀錄（[D102 卡面](docs/D102-steel-construction-history.md)、[D103 卡面](docs/D103-d086-native-timeout.md)）。
+  - 合併：業主經 bot 照合併指令，用合併提交依序合了：
+    - #55 `a180776`、#59 `9ee81d4`、#60 `ceff055`，每一步的 tree 都等於 CI 測過的 head；
+    - 之後 #58 `76e074f`，只動文件，不觸發 ci。
+  - main ci [41979267981](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41979267981)（`ceff055`）：**126／126 success**。前兩次合併的 run 被 cancel-in-progress 取消，這是預期的。
+    - `d086-native-release / native-and-build` 跑了 20 分 57 秒，第 5 步 224 秒（慢 runner）。20 分鐘上限下會在第 20 步被取消、pages 不會部署，**靠 D103 的 30 分鐘才過**（[原始數據](docs/evidence/D103/main-ci-ceff055.txt)）。
+    - `browser` 75 分鐘，前兩次 main 是 56／67 分，上限 120 分。
+  - Pages deployment `7568711595`（08:21:35 UTC）。08:23 下載線上首頁：HTTP 200，4,261,160 bytes，SHA-256 `00dacf37…e713`，跟同一輪的 `github-pages` artifact 逐位元組相同。README「目前正式版」已改成 D102。
+  - 本次文件 PR 寫進去的：
+    - D102 卡面：PR #59 第二次 CI 的紀錄。這是原本沒推的 `ae6fb7b`，`LOG.md` 衝突兩邊都保留。另加「合併後」一節，並改了「沒做成的事」。
+    - D103 卡面：驗收 11（CI）由「待」改「過」，另加 CI 一節、改了「沒做成的事」。
+  - 煙霧測試：本機 Node 24 跑 `unit-d103-timeout`、`unit-d102-history`，全過。四份改過的 Markdown 共 311 個相對連結，0 個失效；`git diff --check` 乾淨。這個 PR 只動文件，`ci` 會被 paths-ignore 跳過；`transit` 與 native 會以「PR 進 main」的身分自動跑。
+  - commit：本列的文件提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - D102、D103 的 `transit` 與 native 在合併前從沒以「PR 進 main」的身分跑過：bot 改完 base 就直接合併，改 base 不觸發 `pull_request`。本 PR 是合併後第一次。
+    - main 上 push 時沒有工作流跑 `unit-d102-history`、`unit-d103-timeout`。
+    - 公開站只核了 HTTP 位元組，沒有做公網 WebGL 重播，也沒上 Android 實機。
+    - D086 首用計時門檻 400 ms 餘量薄（四次觀察最高 453.8 ms）。
+    - D101（#56）、D092（#57）還疊在舊分支上，要改疊 main 重做。
+    - D098 的 43 個舊分支處置還在等業主。
 - 2026-11-05 — D103 — 施工（D086 native `native-and-build` 逾時 20→30 分，宣告進 D090 現行層）：[卡面](docs/D103-d086-native-timeout.md)。
   - 改了什麼：
     - YAML 一行；
@@ -45,6 +65,18 @@
   - 施工前探針（[輸出](docs/evidence/D103/first-red-probe.txt)）：只改一行，D090 現行層多紅 7 個子測試。inherited runner（D086–D089 native 第一步）紅在凍結的原版驗證器，foundation runner（D090 native 第一步）紅在 routing contract。
   - 最小合規改法：宣告改動、pipes-v2 驗證器、runner 匯入、routing、lineage。驗收 12 條凍結在卡面。
   - 本分支疊在 D102（#59）上。**沒做成的事**：程式、pin、守衛都還沒動；D102、D100 還沒合併。
+- 2026-11-04 — D102 — PR #59 第二次 CI（`c8e5ef1`，程式樹＝`1a03c15`）全綠，轉成可審：[卡面](docs/D102-steel-construction-history.md)。
+  - `ci` 41916592458：65 success、7 skipped（只在 main 跑的 release 與 pages）
+  - `transit` 41916597528：1/1
+  - D083 native 41916601312：5/5
+  - D087／D088／D089／D090 native：41916609095／41916613412／41916617087／41916620712，各 11/11
+  - D086 native 第一次 41916605168：`native-and-build` 撞 20 分鐘 job 上限被取消，第 5–19 步全 success。
+    同工作流第 1–19 步，本 PR 1,198 秒；不含 D102 程式的 D092 分支 1,191 秒；單獨跑的 D100 716 秒。
+    PR 上留言說明之後，等 ci 跑完才重跑一次：41931826409，11/11，`native-and-build` 12.2 分。
+    原因我起先說成「同時派送太多工作流」，是錯的。#58 的 D086 在沒有其他工作流時重跑，還是慢 1.6 倍、被取消。真正的原因是 runner 本身有快有慢。
+    10/27 以後跑滿全程的 D086，24／34 次（70.6%）在 20 分鐘被取消。
+  - 煙霧測試：上面這些就是；這一輪沒有改程式。commit：本列的文件提交。樣張：沒有畫面變化。
+  - **沒做成的事**：transit／native 都是在分支上手動觸發，還沒以「PR 進 main」的身分跑過（#55 合併、改疊 main 後會自動跑）；D086 的 20 分鐘上限沒改（`d086-native.yml` 被 D090 現行層四個 pin 釘住，放寬要業主授權重發）；合併進 main 之後沒有工作流跑 `unit-d102-history`；其餘同下一列。
 - 2026-11-04 — D102 — PR #59 第一次 CI 紅了、已修：[卡面](docs/D102-steel-construction-history.md)。`40bd5c2` 上 `transit`、D083 native 綠；`ci` 的 d082（三個寬度）與 D086–D090 native 紅，原因同一個：這些不可改的檢查把「新程式從舊存檔建出來的城」跟舊版建的整個城市物件比，差在 `City.format`（`CITY_FORMAT` 從 10 變 11）。我推之前只跑了 native 的第一個 Node 步驟，漏了後面的 `scene-budget-check` 與 d082 瀏覽器比對。修正 `1a03c15`：`City.format` 改成城市模型版本 `CITY_MODEL_FORMAT = 10`（D102 沒改城市模型；存檔照樣寫 f=11），lease 重凍 `6a1941b4…`。煙霧測試：本機用全新 worktree 照 YAML 重放 D083／D086–D090 的 native-and-build 共 56 步全部 exit 0，ci 的 d082 寬 360 capture／coverage／seam QA 全過，unit-d102-history 7/7、lease 與現行契約全過。commit：`1a03c15`＋本列的文件提交。樣張：沒有畫面變化。**沒做成的事**：新 head 的 CI 還沒跑完；瀏覽器 matrix job 本機沒跑；其餘同上一列。
 - 2026-11-04 — D102 — 施工（煉鋼廠加速施工記成歷史事件 25 hasten、城市格式 11）：[卡面](docs/D102-steel-construction-history.md)。原始碼 7 檔 +70／−30（`day.ts` 記錄、`replay.ts` 每棟 +1、`save.ts`／`journal.ts`／`eventRegistry.ts` 存讀、`city.ts` 分出 `HistoryEvent`、`decisions.ts` 只改型別）；`economy.ts` 與呼叫 `steelConstruction` 那一行一個字都沒改；`cityView.ts` 不動。lease `fixtures/d102/source.json`（manifest `238e51ba…`，267 檔、modified 7 檔、before＝D100 `b328a07`）＋三個 seam＋D090 現行契約＋selector lineage 重發。新守衛 `tools/unit-d102-history.mjs` 7 項；原地改 unit-d010-sim、unit-d019、unit-d046-history、unit-d046-fallback（原斷言改跑在 D102 之前的 day.ts）、unit-d036-live。兩輪對抗式審查（共 15 個代理）抓到 1 個 blocker（`cityView.ts` 一行型別會讓 D086–D090 native 紅）與數個覆蓋缺口，都已修。結果：W2／W4 各 100 次存讀 0 退回（修之前 47／48 次）；造城同日加速＋合併吸收 4 棟、同日加速＋燒毀 1 棟、G13 生長當天被加速 17 棟次，全部 0 退回；舊存檔實測退回一次、之後 0 次。煙霧測試：本機沒跑瀏覽器，交給 CI；本機 Node 24：lease／契約全過、native 的 Node 段全部 exit 0、frame 175／0、相關歷史守衛 250／0，完整 historical 分區在前一棵樹上 1206 OK／1 NG（D011 計時滿載 6.13 ms，安靜時兩棵樹各 3 輪都過）。commit：`fc13fc8`（程式）＋本列的文件提交。樣張：沒有畫面變化。改號：D101 卡 `a57dddb`、D092 卡 `3e272fc`、D097 兩份與 D100 卡在本分支補記。**沒做成的事**：PR 的 CI 還沒跑（transit／native 要手動觸發）；合併後沒有工作流再跑 D102 守衛；`d085-control` 停用；快取舊版讀 f=11 會蓋掉歷史；實驗線沒重跑、d036 樣本沒重錄；地塊歷史不顯示加速施工；D100 還沒合併。
 - 2026-11-04 — D098（重做）— 倉庫整理＋main 文件對帳：[卡面](docs/D098-repo-hygiene-20261102.md)。業主 2026-11-04：「你全部推完 吧 deepseek 推的不幹淨我感覺，你推乾净之後，從你的基綫為開始，這麽做也好處理」；選了基線＝現在的 main `18a718c`、推到可合併先看圖、範圍＝交通 D100＋D101、生活城市 D092、D098、main 文件落差。**補記漏掉的發布**（舊列不改，出處逐筆在 `docs/evidence/D098/main-merges-20261104.json`）：D066 `91e499b`（main CI 38805146556、Pages 7105770013）、D067 `3527859`（38836012344、7109830698）、D080 `7ec70a9`（39336233543、7187864328）、D081 `2cd43c4`（39499972950、7213013537）、D084 `1e7b43e`（40154399936、7308304034）、D085 `77b8616`（40173968607、7311109865；業主核准紀錄沒找到）、D099 `18a718c`（41568961014 126／126、7511322126；出貨位元組沒變，重建核對 `d2757292…`）。D074 第一次合併 `beca506` 的 main CI 39075552114 失敗、沒有部署，`94024b6` 才部署。README 現行版改為 D091，線上網址改為 `game.lijiabao.uk`（10/27 的部署還在 github.io，10/28 起換網域；倉庫裡沒有換網域的紀錄）。十二張卡標題下加發布補記，原文不改；D077–D082 六張卡的整檔 SHA-256 被各自的守衛釘死（第一次本機跑套件時因此紅了 7 支），已還原成 main 的原樣，它們的發布事實只記在 D098 卡與證據檔。第 13 行兩個被跳脫吃掉的字換回（TAB→t、BS→b）。舊草稿 PR #48／#51／#53／#54 依業主決定關閉、分支保留。煙霧測試：純文件 PR（CI 依 paths-ignore 不跑）；本機完整 Node 套件（historical 分區，與 CI 的 node 工作相同）在 Node 24.22.2 綠：第 0–112 支 1095 項 OK／0 NG（這一輪撞到背景作業的 2 小時上限，停在第 113 支 D077 frame），第 113–124 支補跑 182 項 OK／0 NG（D078–D082 的 frame 照 historical 分區另排、沒跑）。另外核對：第一次在 Node 22 跑時 D069–D076 有 7 支幾何位元組 NG，同一棵樹在 Node 24（CI 用的版本）全過，是 Node 版本的浮點差，不是這個 PR 造成的。沒做成的事：存檔標籤打不上（本 session 推標籤 403、REST git/tags 403），所以 46 條未併分支一條都沒動、也不能刪；D086 native-and-build 的 20 分鐘上限仍待業主；檔尾 D086–D091 的發布列沒搬位置；公網 WebGL 與 Android 實機照舊沒驗。

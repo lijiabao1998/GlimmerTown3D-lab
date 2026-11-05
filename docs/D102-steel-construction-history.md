@@ -185,6 +185,47 @@
   `native-and-build`，**共 56 步全部 exit 0**；ci 的 d082 寬 360 的 capture（154 張）、coverage、`d082-join-product-capture` 全過（本機要設 `CHROME_PATH` 指向預裝的 Chromium）。
   `unit-d102-history` 7/7、lease 與 D090 現行契約全過、`tsc` 綠。瀏覽器 matrix job（native-game 等）本機沒跑，交給 CI。
 
+### PR #59 第二次 CI（`c8e5ef1`，程式樹＝`1a03c15`）全綠
+
+| 工作流 | run | 結果 |
+|---|---|---|
+| `ci`（PR 自動） | [41916592458](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916592458) | 65 個 job success；7 個 skipped（6 個 native-release＋pages，只在 main 跑） |
+| `transit` | [41916597528](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916597528) | 1/1 |
+| D083 native | [41916601312](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916601312) | 5/5 |
+| D086 native（第一次） | [41916605168](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916605168) | **cancelled**：`native-and-build` 撞 20 分鐘 job 上限（第 5–19 步全 success） |
+| D086 native（重跑一次） | [41931826409](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41931826409) | 11/11，`native-and-build` 12.2 分 |
+| D087／D088／D089／D090 native | [41916609095](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916609095)／[41916613412](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916613412)／[41916617087](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916617087)／[41916620712](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41916620712) | 各 11/11 |
+
+- `transit` 與 native 只在「PR 進 main」時自動跑；本 PR 疊在 D100 上，全部由我用 `workflow_dispatch` 在分支上觸發。
+- **D086 的取消不是 D102 造成的**：同一份工作流第 1–19 步合計，單獨跑的 D100（`b328a07`）716 秒；本 PR 1,198 秒；不含 D102 程式的 D092 分支（`3e272fc`）1,191 秒。
+  本 PR 跟 D092 分支一樣慢，都是 1.6–1.7 倍，連 checkout、setup-node 也一樣慢。
+  處理：在 PR 上留言說明（[issuecomment-6643325737](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/59#issuecomment-6643325737)），等 ci 跑完才重跑，只重跑一次；沒有改 `d086-native.yml`。
+- **原因我起先說錯了**：我原以為是好幾個工作流同時派送、帳號並行上限 20 個 job 造成的。
+  但 #58 的 D086 重跑時，沒有任何其他工作流在跑，還是一樣慢 1.6 倍、在 20 分鐘被取消（run 41833392686 attempt 2）。
+  真正的原因是 GitHub 分到的 runner 本身有快有慢。
+- **統計**（10/25 起本工作流全部 60 個 run、含重跑）：
+  - 第 5 步的耗時分成兩群：快的 134–155 秒（整個 job 12–13 分），慢的 217–253 秒（超過 20 分、被取消）。
+  - 10/27 以後跑滿全程的，成功 10 次，在 20 分鐘被取消 24 次（70.6%）。
+  - main 最近兩次 push 的 `d086-native-release` 是 17.0／17.4 分。
+  - 前例：LOG 的 D099「首次 Linux 驗證」列。
+- **要放寬 20 分鐘上限，得重發 D090 現行層的 pin**：`d086-native.yml` 的雜湊（`c1a12cae…`）被 `proposals/d090/` 的 `foundation-routing.json`、`foundation-routing-pipes-v2.json`、`inherited-workflow-deltas.json`、`selector-pipes-lineage.json` 釘住。
+  D099 重發同類 pin 時有業主授權，所以這要業主定，見 [#58 的留言](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/58#issuecomment-6645783831)。
+- PR #59 在 2026-11-04 23:34Z 轉成可審，mergeable_state＝clean。
+
+### 合併後（2026-11-05 補記）
+
+- 業主經 bot 照合併指令，用合併提交依序合了 #55（`a180776`）、#59（`9ee81d4`）、#60（D103，`ceff055`）。
+  - 每一步合出來的 tree 都等於該 PR CI 測過的 head tree。
+  - D100 lease 的 baseline `b328a07` 與本卡的 `c8e5ef1` 都在 main 的歷史裡。
+- 合併 bot 把本 PR 的 base 改成 `main` 之後就直接合併。改 base 不會觸發 `pull_request` 的預設事件，`c8e5ef1` 上之後沒有新 run（API 查過）。
+- main ci [41979267981](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41979267981)（`ceff055`，含 D100＋D102＋D103）：**126／126 success**，含六個 native-release 與 pages。
+  - 前兩次合併觸發的 ci 被 cancel-in-progress 取消，這是預期的。
+  - D086 的 `native-and-build` 在慢 runner 上跑了 20 分 57 秒，靠 D103 放寬的 30 分鐘才過，見 [D103 卡](D103-d086-native-timeout.md)。
+- Pages deployment `7568711595`（2026-11-05 08:21:35 UTC）。
+  - 08:23 UTC 下載 <https://game.lijiabao.uk/GlimmerTown3D-lab/>：HTTP 200，4,261,160 bytes，SHA-256 `00dacf37f026773fa5da5c90c2a2b6401493604584e565256b8dbe675bb1e713`。
+  - 跟同一輪的 `github-pages` artifact 逐位元組相同，也就是 PR #59／#60 CI 上的產品 `00dacf37…`。
+  - **煉鋼廠的加速施工記進世界歷史（`f=11` 存檔）從這次起在公開站上線。**
+
 ### 舊存檔（實測，[腳本](evidence/D102/legacy-save-once.mjs)、[結果](evidence/D102/legacy-save-once.json)）
 
 用 D100 的 `day.ts` 把 W2、W4 連續玩 13／30 天不重開，存成舊存檔（存檔裡有 4／8 次沒記到的加速）；用現行程式讀：
@@ -193,7 +234,8 @@
 
 ### 沒做成的事（不美化）
 
-- **PR 上的 CI 還沒跑**。`transit` 與 D083／D086–D090 native 只在「PR 進 main」時自動跑；本 PR 疊在 D100 上，我用 `workflow_dispatch` 在分支上手動觸發（run 號記在 PR 與 LOG）。
+- PR 上的 CI 在 `c8e5ef1` 全綠（見前面「第二次 CI」），但 `transit` 與 native 都是手動觸發在分支上跑的，**從沒以「PR 進 main」的身分跑過**（見「合併後」）。
+  合併後 main ci 的 native-release 在 `ceff055` 上全綠。D086 的 20 分鐘上限已由 D103（業主授權）放寬到 30 分。
   `ci` 的 historical 分區不含 D102 守衛；**合併進 main 之後沒有任何工作流會再跑 `unit-d102-history`**（D099 起「產品守衛放 transit.yml」的設計，要不要加 push 到 main 的觸發，交業主定）。
   `d085-control.yml` 被停用，所以改過的 `tools/d085-source-d090.test.mjs` 在 CI 上沒有訊號（本機 3/3）。
 - 舊存檔第一次讀會退回快照一次（見上，實測）；歷史只增不改，不能補造。
@@ -202,6 +244,7 @@
   實驗線讀得開 `f=11` 的存檔是推論（實驗線不讀 `d3`，D011:167）。`d032-lab.json` 的 gallery/play1@7 沒受影響（`unit-d032-live` 照舊過）。
 - 地塊歷史面板與大事記不顯示加速施工；考古、一生之後要用再加。
 - 原始碼裡幾處講格式範圍的舊註解（例如 `eventRegistry.ts` 標頭的「既有 code 0–24」、`save.ts` 標頭的列格式清單順序）沒有全部重寫，留給 D101 再 lease 時一起整理。
-- 合併順序：#55（D100）要用合併提交先合（lease 的 baseline `b328a07` 必須留在 main 的歷史裡）；之後本 PR 改 base 成 main，再跑一次 transit／native。
-  #56（D101）目前疊在 D100 上，之後要改疊在本分支上。#58（D098）與本 PR 都在 `LOG.md` 最上面加列，後合的要解衝突。
-- 沒有畫面變化，所以沒有對照圖；Android 實機與公網沒驗。
+- 合併已完成（見「合併後」）。但「改 base 成 main 後再跑一次 transit／native」**沒有發生**：bot 改完 base 就直接合併了。
+  #56（D101）還疊在舊的 D100 分支上，要改疊在 main 上重做（D101 任務）。#58（D098）的 `LOG.md` 衝突在合併前解掉了；本卡 `ae6fb7b` 的 LOG 衝突在合併後的文件 PR 解掉。
+- 公開站只核了 HTTP 位元組。公網 WebGL 重播、Android 實機都沒驗。
+- 沒有畫面變化，所以沒有對照圖。

@@ -14,7 +14,23 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前正式版：D091 開場與載入畫面
+## 目前正式版：D102 煉鋼廠加速施工記進世界歷史（2026-11-05）
+
+2026-11-05 業主經合併 bot，用合併提交依序合了三個 PR：
+- [D100](docs/D100-transit-network-and-construction.md)（PR #55，`a180776`）：交通資料模型，沒有介面。
+- [D102](docs/D102-steel-construction-history.md)（PR #59，`9ee81d4`）。
+- [D103](docs/D103-d086-native-timeout.md)（PR #60，`ceff055`）：CI 裡 D086 的逾時 20 → 30 分。
+
+之後 [D098](docs/D098-repo-hygiene-20261102.md)（PR #58，`76e074f`）只動文件。
+
+- **玩家看得到的變化只有 D102**：有煉鋼廠的城存讀檔不再退回快照，這類存檔會寫 `f=11`。
+  已知風險：快取裡的舊版（格式 10）讀到 `f=11` 的存檔，會改用快照開（見 D102 卡）。
+- [main CI 41979267981](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41979267981)：126／126 成功。
+  D086 發布 gate 在慢 runner 上跑了 20 分 57 秒，靠 D103 放寬才過。
+- Pages deployment `7568711595`（2026-11-05 08:21:35 UTC）。
+  08:23 UTC 線上首頁 HTTP 200，4,261,160 bytes，SHA-256 `00dacf37f026773f…675bb1e713`，跟同一輪的 `github-pages` artifact 逐位元組相同。
+
+### 上一版：D091 開場與載入畫面
 
 [D091](docs/D091-start-loading.md) 加上歡迎畫面（進城按鈕、觸控／桌機說明、英式小鎮剪影）與不假造進度的載入動畫（業主選「B 載入條＋場景呼吸」）；不改 `src/`。PR #47 於 2026-10-28 合併為 `4fd1dda`，[main CI 40715129229](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40715129229) 126／126 成功，Pages deployment `7392429621`（2026-10-28 17:20:30 UTC）。之後 [D099](docs/D099-transit-source-lease.md)（PR #52，`18a718c`，2026-11-03）只動交通地基，出貨位元組沒變：2026-11-04 從 `18a718c` 重建的 `dist/index.html` 與線上逐位元組相同（4,259,705 bytes，SHA-256 `d27572923cf25476…de5d8f4`）。
 
