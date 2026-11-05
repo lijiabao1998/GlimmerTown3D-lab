@@ -156,3 +156,137 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
   三個 seam 與 `tools/d085-source-d090.test.mjs` 的兩個 import 從 `d102-source.mjs` 換到本卡的 lease；清單 267＋2＝269。
 - 寫死格式的三支守衛，D102 已照 D040／D045 的先例原地改成 11／26；本卡要再改成 12／27。
 - 動工順序不變：D100 合併 → D102 合併 → 本卡 lease → 存檔／事件／重播／施工 → 最小繪製與工具列 → 前後對照圖給業主看 → 合併。
+
+## 2026-11-05 合併後重開：施工前研究、更正與追加驗收
+
+> 上面各節保留原文。D100（#55 `a180776`）、D102（#59 `9ee81d4`）、D103（#60 `ceff055`）、D098（#58 `76e074f`）已合併進 main。
+> 本分支在 `9f8a001` 重新併入 main，對 main 只差這張卡。
+> 動工前做了一輪唯讀研究：7 個面向各一讀一核，再彙整、找漏，共 16 個代理。重要的事實我另外親自重讀過，附在下面。
+> 跟上面原文衝突的地方，**以本節為準**。
+
+### 基準與順序
+
+- **`D101_BASELINE`＝`76e074ff66f01e5e0ced8c946b13584226f0d6b6`**。
+  - 它的 `src/` tree 是 `8037c821`，跟 `c8e5ef1`、`9ee81d4`、`ceff055` 相同。
+  - 本卡合併之前，main 的 `src/` 若再變動，lease 要整條重凍。
+- **本卡必須比 D092（居民，事件 27／`CITY_FORMAT 13`）先合併。**
+  - 原因：D092 先上線的話，它的版本會以為自己讀得懂 `f=12`，結果撞上碼 26，報「種類不對」後退回快照，下一次自動存檔就把路網刪掉。這正是 11-04 改號要避免的情況。
+  - D092 是我的卡，本卡合併前它維持草稿。這是依業主 11-04 的編號決定排的順序，不是新的業主題目。
+
+### 對上面原文的更正（原文寫 X；實際是 Y；證據）
+
+1. **改的既有檔是 7 個，不是 6 個**。原文 :154-155 說 before 都是「D102 的 after 位元組」。
+   - 實際上 D102 改的是 journal、save、city、day、decisions、eventRegistry、replay。
+   - `src/cityView.ts` 的 before 是 D090 的 after（`7eb449d8…`）。
+   - 原文漏了 `src/sim/edit.ts`（`819d9b74…`）：施工交易與 undo 都在這裡，原文 :45 也允許改它。
+   - 所以 modified＝cityView、journal、save、city、edit、eventRegistry、replay；added＝`src/sim/transit/history.ts`、`src/render/transitArt.ts`；清單 267＋2＝**269**。`day.ts`、`decisions.ts` 不動。
+2. **`tools/d085-source-d090.test.mjs` 兩行都要換**。原文 :156 說兩個 import 都從 `d102-source.mjs` 換。
+   - 實際上第 4 行是從 `./d090-source.mjs` import，只有第 5 行是 `d102-source.mjs`。
+   - cityView 一改，第 4 行就紅。
+   - 這支測試在 D086–D089 的 inherited runner 裡會跑。D102 卡說它「CI 上沒有訊號」，不對。
+3. **行號**：
+   - 原文 :142 的 `save.ts:301` 實際是 `:310`。
+   - 原文 :96、:157 的 `unit-d046-history.mjs:97-98` 實際是 `:98-99`，`:111` 的文字也要改。
+4. **漏列的守衛**：`tools/unit-d102-history.mjs`（transit 會跑）的 `:213`、`:226-228`、`:238`、`:240` 寫死 11／26，要原地改成 12／27。比照 D102 原地改 D040／D045 格式守衛的先例，補進允許觸碰清單。
+5. **「每日成長不會蓋到軌道」不成立**（原文第 7 點）。
+   - `src/sim/rules/merge.ts:67` 的 3×3 巨型合併會吸收「沒有建築、沒有路、沒有廢墟，且同分區或未分區草地（`t===2`）」的空格。`:78-79` 會把 9 格改成 zone 0 加上建築，`mergeDay` 在 `day.ts:432` 執行。
+   - 地面軌道旁邊有 5 棟以上同類 Lv2 建築時，軌道格會被蓋上建築。反向守衛只擋得住玩家施工與 `growth.ts:29`，擋不住這條路。
+   - 這是跟既有規則的衝突。照原文風險段「記錄、交業主」，見下面「要業主定的事」。
+6. **備份鍵**（原文第 6 點）：
+   - 新城樣本沒有 `d3`，「起始碼的 fnv1a」對每座新城都一樣。在「只寫一次、永不覆寫」之下，第二座城就沒有備份，或永遠不能蓋運輸。
+   - 每城一鍵又會在同一個網域的 localStorage 累積多份最大 2M 字元的備份（這個網域跟 2D 兩條線共用，`cityView.ts:141`）。
+   - 改法見下面「本卡自己定的」。
+7. **原文第 1 點的重點放錯了**。擴張 `D084_CHANGED` 是 no-op：7 檔早就在 D102 的 42 個裡面。
+   - 真正有作用的是 `D084_ADDED` 從 30 變 32，一路餵進 `D056_ADDED`（`unit-d053-d090.mjs:410-418`）。
+   - lease 匯出的 `d084PriorInventory` 必須回 237。
+8. **cityView 一改就有連鎖**，原文 :94 只寫了相機後繼。
+   - 要新增後繼測試 `proposals/d090/original-camera-restoration-d101.test.mjs`；原檔列入 superseded，位元組不動。
+   - routing JSON 三個欄位、`FOUNDATION_ROUTING_SHA`。
+   - domain JSON 三處 1:1 替換，加上 `currentCopies[2]` 兩個 change，以及 `DOMAIN_MANIFEST_SHA`。
+   - lineage 的 copy 5、copy 13、`inheritedDomain`、`newPinnedManifests`、`PIPE_LINEAGE_SHA`。
+9. **lineage 的寫法**（原文 :22「契約整檔重發＋reissued」）：D103 已經在 copy 13 追加一項。
+   - 本卡把 copy 13 摺成單一整檔 item，before 是 3377 bytes 的 preimage，`reissued.previousSha256`＝`8875cccb…`。
+   - copies 7、8 沒有整檔 item，本卡也不改 runner 與驗證器，所以不動。這跟 D103 卡「沒做成的事」那句「併 7/8/13」不同，以這裡為準。
+   - 更新了 item[0] 卻原樣保留 D103 的 item[1]，會讓 D103 守衛報 `0 !== 1`（研究實測）。
+10. **色票**（原文 :40「沿用既有色票」）：`GROUND.rail`（`0xa9a59a`）其實是道路 2 級的邊色（`ground.ts:195`）。
+    - 鐵路用的三個色是 `ground.ts:210` 的內嵌字面量，沒有匯出。
+    - 只能註明出處後抄過來，不 import、不改 `ground.ts`。
+11. **`nativeArt`／`lotPlan`**（原文 :72）：倉庫裡沒有 `src/render/nativeArt.ts`、`lotPlan.ts`。這句只是提醒，沒有對應的檔。
+12. **入口**（原文 :41「工具列接 rail…」）：
+    - 不能加 `.tool` 按鈕：`tools/smoke-d011.mjs:199-200` 要求剛好 7 個。
+    - `src/ui/buildUi.ts` 不在允許清單。
+    - 入口改成 ☰ 選單加一項，排在 `history` 之後；工具列由 cityView 自己管，預設隱藏。
+13. **掛載點**：`cityView.ts:552`、`:612`、`:628` 三行開頭一字不差，用它們當錨點插入會讓後繼測試 `split(a).length===2` 失敗。
+    - 場景掛載改寫進 `attachRes()`（`:1385-1388`）。一個 delta 就同時涵蓋載入、換場景、重建、新視角四條路。
+14. **驗收 8 的基準**：原文寫「與 D100 合併前相同」。D102 已經改過 `day.ts`，基準改成 main `76e074f`。
+15. **驗收 1 的 f 範圍**：11-04 更正寫「4–10」，D102 之後是 4–11。
+16. **驗收 9 的範圍**：原文只寫「D090 native」，應為 `ci`、`transit`、D083、D086–D090 native 全綠。`d085-control`、`d081-touch-lease` 兩個工作流已停用。
+17. **2D 實驗線**：`docs/D011-build-mvp.md:209`、`:498` 已寫明，實驗線自己存檔時會重組存檔、丟掉 `d3`。
+    - 所以「3D → 實驗線存一次 → 3D」會連同歷史一起丟掉路網，回來只能看。這是既有限制，不另請業主選。
+    - 實驗線會不會拒絕 `f=12`：`f` 在 `d3` 裡，實驗線不讀 `d3`，頂層 `v:1` 不變；本機沒有實驗線的 repo，**只能記成推論**，跟 D102 對 `f=11` 的紀錄一樣。
+18. **只能看的城不畫軌道**：`save.ts:282-287` 的 `viewCode` 不讀 `d3`。記進「沒做成的事」。
+
+### 本卡自己定的（Claude 決定，記在卡上）
+
+- **lease**：`fixtures/d101/source.json`。
+  - modified 每筆記 `{before, beforeSha256, afterSha256}`，before＝`76e074f` 的位元組。
+  - 來源與清單兩條投影路都把 before 往下傳，不用 D099／D100 的 `f=>read(f)` 捷徑。研究實測用捷徑的話，`src/cityView.ts exact allowed source…` 會紅。
+  - lease 模組不讀 git，因為 ci 的 build job 是淺 checkout。
+- **三個 seam**（`tools/d083-scope.mjs`、`tools/d082-release-source-v2.mjs`、`tools/d082-release-mesh-v2.mjs`）各改第 1 行。`tools/d090-source-v3.test.mjs`、`proposals/d090/source-boundaries-v3.test.mjs` 原地改（D100／D102 先例）。
+- **`transit.yml`**：第一步的 `tools/d102-source.test.mjs` 換成 `tools/d101-source.test.mjs`。
+  - 舊的那支留在樹上不再跑：它在 D101 的樹上必紅。先例是 `tools/d100-source.test.mjs`，它在 main 上已經不跑。
+  - D103 那一步逐字保留。D101 的守衛接在它後面。
+  - transit-gate 目前每輪約 9–10 分（上限 25 分）。本機先量時間，需要時調高上限並記在這裡：`transit.yml` 不在 D103 釘住的 35 個工作流裡。
+- **判斷是不是運輸存檔**：只看「`d3` 有 `rt` 鍵」或「歷史有運輸事件」，**絕不看 `f>=12`**。
+  - 現有測試會用 `f=CITY_FORMAT+1` 驗快照退回：`d011-edit-cases:219-220`、`unit-d026-live:319`、`unit-d039:259-261`、`unit-d046-history:157`。
+  - `save.ts:310` 的訊息逐字不改。
+- **何時寫 `rt`**：只在 `city.transit !== undefined` 時寫，這是 O(1) 判斷。
+  - 不在每次存檔時掃歷史：`unit-d013.mjs:132-134` 有存檔時間比值的上限。
+  - 沒有運輸的城市絕不出現 `rt`，也不出現 `transit` 鍵：`unit-d027-live:363` 等有 `d3` 鍵的白名單，`cityFromLab` 兩種 deepEqual 都比整個物件。
+- **沙盒**：費用記 0、資金不動（跟 `build.ts:206` 一致）。
+- **佔用**：交給 `network.ts` 的 `occupied` 一律是布林。
+  - 給數字的話，`graph.ts:37` 會把每一條軌道都判成「地形無效」（研究實測）。
+  - 佔用包含建築、道路、分區、廢墟、樹，以及實驗線模板層的 rail、railBridge、tram、dock、fly；地圖外的格子算佔用。
+  - 地鐵不擋地面施工。
+- **反向守衛**：只在城裡有運輸時生效。非拆除的施工落在地面軌道、車站、車廠上，整筆拒絕，理由「運輸設施擋住」。
+- **遷移備份**：只有一格，鍵是 `gt3d.v1.save.pre-d101`。
+  - 「還沒有運輸的城」第一次蓋運輸之前，把不依賴 IndexedDB 的完整 hv2 存檔碼寫進去，同一座城不會再寫第二次。
+  - 另一座城第一次蓋運輸時，會取代上一份。那時上一座城的主存檔早就被新城換掉了。
+  - 寫不進去（超過 `SAVE_LIMIT` 或 quota）就整筆取消，城市、資金、歷史都不動，並提示匯出。
+  - 後果照實寫：存檔碼超過 2M 字元的城不能蓋運輸。
+  - 清除存檔不刪備份。
+- **讀檔失敗**：有運輸的存檔讀不進來時，`loadSim` 回 `ok:false`，接上 cityView 既有的 `.bad` 路徑（`cityView.ts:1897-1906`）。
+  - 後果照實寫：開機若暫時讀不到 IndexedDB 日誌，有運輸的城會被存成 `.bad` 並開新城，主存檔被新城取代；`.bad` 只有一格，也沒有還原介面。
+  - 以前同樣情況只是退回快照、城還在。現在不會靜默刪掉路網，代價是要手動救。列進「沒做成的事」。
+- **超過上限的匯出**：`cityView.ts:1326-1327` 超過上限時改用不帶 `d3` 的匯出。
+  - 原句逐字不改（`unit-d048.mjs:58-59` 釘住）。有運輸時在後面追加一句「路網不會帶走」。
+- **vm 載入的限制**（`unit-d024.mjs:50-63`）：
+  - save、edit、replay、journal 四個檔裡，import 一律寫成單行具名、單引號、結尾分號，匯出只用 `export const|function`。
+  - 本體不用 `structuredClone`、`performance`、`TextEncoder`。
+  - 新檔與改過的檔只用可剝除的 TypeScript 語法。
+
+### 追加凍結的驗收（13–20；不改上面 1–12）
+
+13. **重播效能**（規則 5）：本機 Node 24 上，有 4000 條運輸事件的存檔 `loadSim` ≤ 1500 ms，且 t(4000)／t(1000) ≤ 6（排除 O(N²)：研究實測逐筆重播 4000 條要 8.24 s）；同一座城的 `saveCode` ≤ 100 ms。
+14. **沙盒**：沙盒施工後資金逐位元組不變，事件的 cost 是 0。
+15. **規則 9**：同一串操作分別「有蓋運輸」與「沒蓋運輸」，存檔裡實驗線看得到的欄位，除了 `money` 之外逐位元組相同；`rl`、`rb`、`tr` 三層不變。
+16. **沒有運輸的城市不變**：`City` 沒有 `transit` 鍵；場景不多 mesh、不多 draw call；`__gt` 的 stats、history、layers、save、buildingList 輸出不變；`saveCode` 跟 `76e074f` 逐位元組相同。
+17. **格式邊界**：`f=13` 被拒；沒有 `rt` 的 `f=CITY_FORMAT+1` 照舊退回快照，訊息不變；有 `rt` 時任何讀檔失敗都回 `ok:false`，不退回快照。
+18. **超過上限的匯出**：有運輸時多一句提示，原句仍在。
+19. **lineage 鏈**：`node tools/unit-d103-timeout.mjs` 照舊全過，D103 守衛一個字都不改。
+20. **完整驗證**：推送前在乾淨 worktree 以 `GITHUB_ACTIONS=true` 跑 foundation runner 與 `inherited-test-runner --suite=d086/d087/d088/d089`；照 YAML 重放 D083、D086–D090 的 `native-and-build`；跑 ci 的完整 historical 分區、frame 分區、d082 一個寬度與 smoke。D102 的 PR #59 第一輪紅，就是因為只跑了 runner。
+
+### 要業主定的事
+
+- **巨型合併蓋到地面軌道**（更正 5）。
+  - **(a) 本卡一起修（建議）**：lease 多宣告 `src/sim/rules/merge.ts`。城裡有運輸時，地面軌道、車站、車廠的格子不算「可吸收的空格」。沒有運輸的城市結果逐位元組不變，規則 8 的對拍不受影響。
+  - **(b) 本卡不修**：列進「沒做成的事」，另開卡。在那之前，軌道上可能長出巨型建築，畫面會重疊。
+  - 業主回覆之前，我照順序先做不受影響的 lease、存檔、重播、施工交易；蓋到 merge 那一步再看業主怎麼定。
+- **延續未決**：`transit.yml` 要不要加「push 到 main」的觸發，讓 D101／D102／D103 的守衛合併後繼續跑。D102、D103 卡都把這題留給業主，不影響本卡動工。
+
+### 縮小切片（預算爆掉時）
+
+照原文風險段，先停在「只做存檔、不做 UI」：
+- modified 改成 6 檔（不含 cityView），added 1 檔（`history.ts`），清單 **268**。
+- 相機後繼、routing、domain 的相機替換都不用做。
+- 繪製與工具列另開卡，「沒做成的事」照實寫。
