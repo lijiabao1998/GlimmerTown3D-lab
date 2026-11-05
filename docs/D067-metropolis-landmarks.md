@@ -1,5 +1,7 @@
 # D067 都會地標八組（施工卡，候選，未批准合併／發布）
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `3527859`、[main CI 38836012344](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38836012344)（success）、Pages deployment `7109830698`（2026-10-16 03:06:26 UTC）。業主看圖後說「直接合併」（見本卡 2026-10-16 段）。下面的狀態文字保留當時原文，沒有改。
+
 ## 授權、基線與隔離
 2026-10-15 業主批准上一波 3D 並要求繼續下一波。D067 只推獨立分支與草稿 PR，真實圖片確認前不合併、不部署。
 基線 main `91e499b6c0ed0ce0cffdf0c09a35a067a8156c71`，tree `2f5336f15528a3c92c0a355f83d9a0c3cb08b45e`；開工 HEAD 與讀取的 origin/main 相同、工作樹乾淨。GitHub 檢查無 open PR、無 D067 分支，Claude 主施工分支仍在 D065。使用獨立 `codex/d067-metropolis-landmarks`。來源只讀助手雲端副本，沒有使用業主電腦、沒有動 2D 倉庫。

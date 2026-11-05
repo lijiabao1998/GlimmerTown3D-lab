@@ -1,0 +1,504 @@
+{
+ "generatedAt": "2026-11-04",
+ "method": "git log --first-parent e3cf7c3..origin/main（18a718c）；gh api actions/runs?branch=main&event=push（name=ci）以 head_sha 對齊；gh api deployments 以 sha 對齊，再讀該 deployment 的 statuses 取第一個 success。docs-only 的推送沒有 ci run 與部署，是 paths-ignore 的正常結果。",
+ "notes": [
+  "beca506（D074 PR #25）的 main CI 39075552114 失敗、沒有部署；94024b6（PR #26 修復）之後才部署。",
+  "D082 卡面的第一版十棟沒有出貨；e0508af 出貨的是重做後接受的 9 棟與 D083 的 8 棟。",
+  "environment_url 在 7349325185（2026-10-27，D090）是 lijiabao1998.github.io，在 7392429621（2026-10-28，D091）起是 game.lijiabao.uk。"
+ ],
+ "merges": [
+  {
+   "mergeSha": "18a718c7d2b8d261183d98b74ca6d466df1c60f7",
+   "committedAt": "2026-11-03T10:54:20+08:00",
+   "subject": "Merge pull request #52 from lijiabao1998/claude/d099-transit-source-lease",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 41568961014,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7511322126,
+   "deploymentSuccessAt": "2026-11-03T05:37:03Z",
+   "environmentUrl": "https://game.lijiabao.uk/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "1aed2c7b7d6ed819e91e381ceb2c68d1e1033632",
+   "committedAt": "2026-10-31T21:48:27+08:00",
+   "subject": "Merge pull request #50 from lijiabao1998/owner/agent-branch-autonomy-20261031",
+   "cards": [],
+   "mainCi": [],
+   "pagesDeployment": null,
+   "deploymentSuccessAt": null,
+   "environmentUrl": null
+  },
+  {
+   "mergeSha": "6c28221859f337f72953a76ab3e24e50d76bca93",
+   "committedAt": "2026-10-28T17:24:32+00:00",
+   "subject": "docs(D091): record merge and verified publication",
+   "cards": [
+    "D091"
+   ],
+   "mainCi": [],
+   "pagesDeployment": null,
+   "deploymentSuccessAt": null,
+   "environmentUrl": null
+  },
+  {
+   "mergeSha": "4fd1ddafe3208453c990c29540ffdd76116e763e",
+   "committedAt": "2026-10-28T23:21:29+08:00",
+   "subject": "Merge pull request #47: D091 responsive welcome and Lab-referenced loading motion (owner c",
+   "cards": [
+    "D091"
+   ],
+   "mainCi": [
+    {
+     "runId": 40715129229,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7392429621,
+   "deploymentSuccessAt": "2026-10-28T17:20:30Z",
+   "environmentUrl": "https://game.lijiabao.uk/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "be875201f9992ede9301df423ee57f9bcd9aa383",
+   "committedAt": "2026-10-27T11:20:02+08:00",
+   "subject": "docs(D090): record verified 200-building publication and twenty-wave closeout",
+   "cards": [
+    "D090"
+   ],
+   "mainCi": [],
+   "pagesDeployment": null,
+   "deploymentSuccessAt": null,
+   "environmentUrl": null
+  },
+  {
+   "mergeSha": "8428e6c93282d4fd44562374dde78a3e6742b3be",
+   "committedAt": "2026-10-27T09:07:22+08:00",
+   "subject": "Merge pull request #46 from lijiabao1998/art/d090-british-utilities-heritage",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40430676946,
+     "conclusion": "success",
+     "attempt": 2
+    }
+   ],
+   "pagesDeployment": 7349325185,
+   "deploymentSuccessAt": "2026-10-27T03:11:22Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "5b41bac165ba2b29146e6835490357bebc3cd549",
+   "committedAt": "2026-10-26T19:33:35+08:00",
+   "subject": "Merge pull request #45 from lijiabao1998/art/d089-british-market-estates",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40315970068,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7332684836,
+   "deploymentSuccessAt": "2026-10-26T13:11:54Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "c023a2da0e4999d43e3d4216e800c4c96d06a3c1",
+   "committedAt": "2026-10-26T13:21:13+08:00",
+   "subject": "Merge pull request #44 from lijiabao1998/art/d088-british-public-services",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40273761442,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7325839339,
+   "deploymentSuccessAt": "2026-10-26T06:51:34Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "cdd541da74973dba2ca73b782936c012d315add9",
+   "committedAt": "2026-10-26T08:13:28+08:00",
+   "subject": "Merge D087: eleven qualified native British working-rural buildings",
+   "cards": [
+    "D087"
+   ],
+   "mainCi": [
+    {
+     "runId": 40248305031,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7322325469,
+   "deploymentSuccessAt": "2026-10-26T01:52:44Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "b4275bda73e72a9fb48343376fccaab52bbc8e84",
+   "committedAt": "2026-10-26T01:13:10+08:00",
+   "subject": "Merge pull request #42 from lijiabao1998/art/d086-british-civic-market",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40215399026,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7317494254,
+   "deploymentSuccessAt": "2026-10-25T18:43:19Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "77b8616382f6115711b2b8eb39735a769b859cde",
+   "committedAt": "2026-10-25T15:45:15+08:00",
+   "subject": "Merge pull request #41 from lijiabao1998/gpt/d085-native-frontage-control",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40173968607,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7311109865,
+   "deploymentSuccessAt": "2026-10-25T09:20:06Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "1e7b43e96097969fac33b57c37fe02444cefb15c",
+   "committedAt": "2026-10-25T10:25:40+08:00",
+   "subject": "Merge pull request #40 from lijiabao1998/gpt/d084-native-street-cohesion",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 40154399936,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7308304034,
+   "deploymentSuccessAt": "2026-10-25T03:57:14Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "e0508afacaf660bc5864d0cc136c22bcedb7f5bb",
+   "committedAt": "2026-10-25T02:53:45+08:00",
+   "subject": "Merge qualified D082 accepted-nine and D083 native-eight release",
+   "cards": [
+    "D082",
+    "D083"
+   ],
+   "mainCi": [
+    {
+     "runId": 40122805423,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7303915721,
+   "deploymentSuccessAt": "2026-10-24T20:15:03Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "2cd43c424dcc909dcfa6ac55275406d2bc527ce0",
+   "committedAt": "2026-10-21T05:23:31+08:00",
+   "subject": "Merge D081 ten British buildings and reviewed commission touch repair",
+   "cards": [
+    "D081"
+   ],
+   "mainCi": [
+    {
+     "runId": 39499972950,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7213013537,
+   "deploymentSuccessAt": "2026-10-20T22:53:16Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "7ec70a96b01437ab4576b0962905be16b1591e79",
+   "committedAt": "2026-10-20T06:37:12+08:00",
+   "subject": "D080: ten British community buildings, wave 12/20 (#32)",
+   "cards": [
+    "D080"
+   ],
+   "mainCi": [
+    {
+     "runId": 39336233543,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7187864328,
+   "deploymentSuccessAt": "2026-10-19T23:55:53Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "23eac8f12c6cb32c5f59fc052d5b24fe20f32a9e",
+   "committedAt": "2026-10-19T18:40:06+08:00",
+   "subject": "D079: ten British transit and utility pavilions + additive parallel validation (wave11) (#",
+   "cards": [
+    "D079"
+   ],
+   "mainCi": [
+    {
+     "runId": 39239090242,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7173202938,
+   "deploymentSuccessAt": "2026-10-19T12:03:08Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "46771cdc00f33759e0a3c45ddf05c3387d4bb4fc",
+   "committedAt": "2026-10-19T14:22:05+08:00",
+   "subject": "Merge pull request #30 from lijiabao1998/codex/d078-british-ten",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 39209502705,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7168175512,
+   "deploymentSuccessAt": "2026-10-19T07:33:15Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "22da5314145f96aaa83cfb739c382b86e1d5b0f3",
+   "committedAt": "2026-10-19T07:05:07+08:00",
+   "subject": "Merge pull request #29 from lijiabao1998/codex/d077-british-ten",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 39175006873,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7162861661,
+   "deploymentSuccessAt": "2026-10-19T00:18:18Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "7d4df8a907368a25f1ff92958b8b70ae85b8ad1c",
+   "committedAt": "2026-10-18T22:08:49+08:00",
+   "subject": "Merge pull request #28 from lijiabao1998/codex/d076-british-ten",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 39134674577,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7156526951,
+   "deploymentSuccessAt": "2026-10-18T15:19:30Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "80f5aa0498f3b3ba9fdfc9b6a2bc803d683084f9",
+   "committedAt": "2026-10-18T17:46:44+08:00",
+   "subject": "Merge PR #27: complete CI stages in parallel",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 39116680994,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7153469292,
+   "deploymentSuccessAt": "2026-10-18T10:49:09Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "94024b6e2195f4d545de1f1af770dfbe98c1777a",
+   "committedAt": "2026-10-18T12:52:47+08:00",
+   "subject": "Merge pull request #26 from lijiabao1998/codex/d074-native-activation-repair",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 39098621210,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7150909223,
+   "deploymentSuccessAt": "2026-10-18T06:26:22Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "beca506c224ad72f9a890ed20b5aa1fa7b2616f5",
+   "committedAt": "2026-10-18T06:33:20+08:00",
+   "subject": "Merge PR #25: D074 British farm and memorial structures",
+   "cards": [
+    "D074"
+   ],
+   "mainCi": [
+    {
+     "runId": 39075552114,
+     "conclusion": "failure",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": null,
+   "deploymentSuccessAt": null,
+   "environmentUrl": null
+  },
+  {
+   "mergeSha": "a5674d9bdbfbf439319b50e26c3f864864ab5363",
+   "committedAt": "2026-10-17T22:25:55+08:00",
+   "subject": "Merge PR #24: D073 British emergency and hotel structures",
+   "cards": [
+    "D073"
+   ],
+   "mainCi": [
+    {
+     "runId": 39040723685,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7142154551,
+   "deploymentSuccessAt": "2026-10-17T16:05:20Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "a69397ed0900b1f0a27bdc3be8e1616d2973fc43",
+   "committedAt": "2026-10-17T17:16:51+08:00",
+   "subject": "Merge D072: ten British campus structures (wave 5/20)",
+   "cards": [
+    "D072"
+   ],
+   "mainCi": [
+    {
+     "runId": 39020523867,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7138239134,
+   "deploymentSuccessAt": "2026-10-17T10:28:00Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "f689c35d8d061498779321149ccce4443f0ce6de",
+   "committedAt": "2026-10-17T11:20:23+08:00",
+   "subject": "Merge D071: ten British education structures (wave 4/20)",
+   "cards": [
+    "D071"
+   ],
+   "mainCi": [
+    {
+     "runId": 38998397658,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7134895815,
+   "deploymentSuccessAt": "2026-10-17T04:42:29Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "1c40e13a219adb90827acd3b60fb6b7623600b63",
+   "committedAt": "2026-10-17T00:08:23+08:00",
+   "subject": "Merge D070: ten British saved-v2 structures",
+   "cards": [
+    "D070"
+   ],
+   "mainCi": [
+    {
+     "runId": 38929565338,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7125605889,
+   "deploymentSuccessAt": "2026-10-16T17:41:00Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "bece722ed2480a3728a274c90bd0170eb52cf389",
+   "committedAt": "2026-10-16T21:06:07+08:00",
+   "subject": "Merge D069: ten British saved-v1 structures",
+   "cards": [
+    "D069"
+   ],
+   "mainCi": [
+    {
+     "runId": 38905296386,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7121468690,
+   "deploymentSuccessAt": "2026-10-16T14:26:57Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "ee07f108448c5a1068c0c7b1c0ca6ed7d4cad883",
+   "committedAt": "2026-10-16T16:10:08+08:00",
+   "subject": "Merge D068: ten British commerce and logistics models",
+   "cards": [
+    "D068"
+   ],
+   "mainCi": [
+    {
+     "runId": 38871901998,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7115823412,
+   "deploymentSuccessAt": "2026-10-16T09:40:13Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "3527859dfa4d802fda0eaa4a0d96aa05e1471a2d",
+   "committedAt": "2026-10-16T09:36:12+08:00",
+   "subject": "Merge pull request #18 from lijiabao1998/codex/d067-metropolis-landmarks",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 38836012344,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7109830698,
+   "deploymentSuccessAt": "2026-10-16T03:06:26Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  },
+  {
+   "mergeSha": "91e499b6c0ed0ce0cffdf0c09a35a067a8156c71",
+   "committedAt": "2026-10-16T04:50:10+08:00",
+   "subject": "Merge pull request #17 from lijiabao1998/codex/d066-metropolis-eight",
+   "cards": [],
+   "mainCi": [
+    {
+     "runId": 38805146556,
+     "conclusion": "success",
+     "attempt": 1
+    }
+   ],
+   "pagesDeployment": 7105770013,
+   "deploymentSuccessAt": "2026-10-15T22:20:08Z",
+   "environmentUrl": "https://lijiabao1998.github.io/GlimmerTown3D-lab/"
+  }
+ ]
+}

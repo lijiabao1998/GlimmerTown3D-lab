@@ -1,5 +1,7 @@
 # D066 大型都市設施八組（候選，未核准／未發布）
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `91e499b`、[main CI 38805146556](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/38805146556)（success）、Pages deployment `7105770013`（2026-10-15 22:20:08 UTC）。PR #17 說明寫「Draft only; no merge or deployment approval」；業主的認可記在 D067 卡面（「2026-10-15 業主批准上一波 3D 並要求繼續下一波」）。本卡沒有逐位元組的公網核對紀錄。下面的狀態文字保留當時原文，沒有改。
+
 ## 授權與基線
 2026-10-15 業主要求「3D我實測沒問題 你繼續加建築吧 就像Claude一樣，完善的大型都市」。本波只施工與交付真實預覽；這不是新一輪合併或部署的批准。
 基線 `e3cf7c3515602d5fe0dbeeaa91d8a27fc25f5e69`。開工重核 main 與 Claude 主分支相同，未見 D066；獨立 `codex/d066-metropolis-eight`，不推進 main。

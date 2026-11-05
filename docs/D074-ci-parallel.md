@@ -1,5 +1,7 @@
 # D074 CI follow-up: parallel verification without weaker gates
 
+> **2026-11-04 發布補記（D098）**：PR #27 合併 `80f5aa0`，[main CI 39116680994](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39116680994) success（含 Pages），deployment `7153469292`（2026-10-18 10:49:09 UTC）。本卡寫「待辦」的 main CI 與 Pages 兩項由此補上；那一次的公網位元組核對沒有紀錄。下面的狀態文字保留當時原文，沒有改。
+
 ## Authorization and scope (written before implementation)
 
 Owner request, 2026-10-18: "優化一下", responding to the proposal to remove duplicate Lab push/PR runs and evaluate parallel 3D Node/browser/screenshots while preserving all tests and release thresholds.

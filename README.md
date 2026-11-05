@@ -14,7 +14,13 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前英式建築計畫：200／200 已驗證發布
+## 目前正式版：D091 開場與載入畫面
+
+[D091](docs/D091-start-loading.md) 加上歡迎畫面（進城按鈕、觸控／桌機說明、英式小鎮剪影）與不假造進度的載入動畫（業主選「B 載入條＋場景呼吸」）；不改 `src/`。PR #47 於 2026-10-28 合併為 `4fd1dda`，[main CI 40715129229](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40715129229) 126／126 成功，Pages deployment `7392429621`（2026-10-28 17:20:30 UTC）。之後 [D099](docs/D099-transit-source-lease.md)（PR #52，`18a718c`，2026-11-03）只動交通地基，出貨位元組沒變：2026-11-04 從 `18a718c` 重建的 `dist/index.html` 與線上逐位元組相同（4,259,705 bytes，SHA-256 `d27572923cf25476…de5d8f4`）。
+
+**線上版**：<https://game.lijiabao.uk/GlimmerTown3D-lab/>。舊網址 `lijiabao1998.github.io/GlimmerTown3D-lab/` 會 301 轉過去；2026-10-27 的部署還在 github.io，2026-10-28 起換成這個網域，倉庫裡沒有換網域的紀錄。HTTP 位元組一致不等於公網 WebGL 重播或 Android 實機。
+
+## 英式建築計畫（D068–D090）：200／200 已驗證發布
 
 D090 最後十棟公用／遺產建築已由業主接受，PR46正常合併至 `8428e6c93282d4fd44562374dde78a3e6742b3be`。[main CI40430676946](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40430676946) 最新 attempt2 **126／126工作成功**，含 Pages（2026-10-27 03:11:21 UTC）。03:12 UTC公開首頁與街景參數頁HTTP200，均逐位元等於正式建置：4,244,759 bytes，SHA-256 `4152a4154c37dba33f9efd8520c719ee0da43ab03099606832271f03863d9229`。
 
@@ -28,7 +34,7 @@ D090 最後十棟公用／遺產建築已由業主接受，PR46正常合併至 `
 
 [main CI 40122805423](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40122805423) 的 71 項工作成功，含原有完整回歸、D083 原生建造、1440／412／360 Chromium 與 Pages。2026-10-24 21:39 UTC 重新下載[公開遊戲](https://lijiabao1998.github.io/GlimmerTown3D-lab/)的 HTML，SHA-256 為 `020540dda8a196eaa75f297b26914a1187d2dd976afdc97a6013fe9d131927b1`，與同一 main 的正式建置相同。
 
-[發布收據](docs/D082-D083-main-release-receipt.md) 區分 CI 真瀏覽器驗證、公網位元組一致性與尚未完成的公網 WebGL 互動驗證。D084 僅為獨立候選，不代表新美術已核准或發布。建造為目前主線，一生與考古暫緩。
+[發布收據](docs/D082-D083-main-release-receipt.md) 區分 CI 真瀏覽器驗證、公網位元組一致性與尚未完成的公網 WebGL 互動驗證。D084 僅為獨立候選，不代表新美術已核准或發布。（2026-11-04 補記：D084 已於 2026-10-25 由 PR #40 合併上線，D085 同日由 PR #41 上線，見 LOG。）建造為目前主線，一生與考古暫緩。
 
 ## 歷史正式版：D065 英式獨棟屋
 
@@ -62,7 +68,7 @@ D090 最後十棟公用／遺產建築已由業主接受，PR46正常合併至 `
 
 業主 2026-09-25 定案：只參考 2D 實驗線、全力做建造、原始碼零外部素材、本倉庫定位是 Pre（看 [`docs/D003-lab-city-import.md`](docs/D003-lab-city-import.md)）。
 
-**線上版**：<https://lijiabao1998.github.io/GlimmerTown3D-lab/>。手機可以直接開。
+**線上版**：<https://game.lijiabao.uk/GlimmerTown3D-lab/>（舊的 github.io 網址會轉過去）。手機可以直接開。
 
 - [D055](docs/D055-food-trade-reconstruction.md) 恢復七種農業／外貿設施的原生建造：農場、牧場、大農場、溫室、食品加工廠、農貿市場、外貿商行。
 - [D056](docs/D056-british-civic-eight.md) 加入八棟原生可建英式建築及三棟額外存檔造型；[D057](docs/D057-real-british-heritage.md) 以八棟真實英國建築研究簡化外觀，原生可建範圍見 D056。

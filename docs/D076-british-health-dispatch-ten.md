@@ -1,5 +1,7 @@
 # D076 — British health and dispatch buildings (replacement wave 8/20)
 
+> **2026-11-04 發布補記（D098）**：本卡已合併並部署——合併 `7d4df8a`、[main CI 39134674577](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/39134674577)（success）、Pages deployment `7156526951`（2026-10-18 15:19:30 UTC）。第 8 波（取代作廢的 D075）。下面的狀態文字保留當時原文，沒有改。
+
 Pre-code replacement card, 2026-10-18 07:09 UTC. Published baseline remains 94024b6e2195f4d545de1f1af770dfbe98c1777a. Seven waves / seventy buildings are published. This replaces the unmerged D075 candidate, not an additional completed wave. The original D075 card, inspection commit a1dc2f955daf0659390e6112bf385c3220b24a56, screenshots and failed acceptance evidence remain preserved unchanged.
 
 ## Why a replacement
