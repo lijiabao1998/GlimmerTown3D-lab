@@ -1,0 +1,48 @@
+# D103 the 22 reader tests after construction vs c8e5ef1 (rc, pass and fail counts and failing subtest names all identical)
+## BASE
+TEST rc=1 .github/scripts/ci-integrity-d086.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d087.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d088.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d089.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=0 .github/scripts/ci-integrity-d090.test.mjs ℹ pass 163 ℹ fail 0 
+TEST rc=1 proposals/d086/facade-clean-workspace.test.mjs ℹ pass 0 ℹ fail 1 
+TEST rc=1 proposals/d086/v6-workflow-copy.test.mjs ℹ pass 0 ℹ fail 6 
+TEST rc=0 proposals/d090/foundation-routing-pipes-v2.test.mjs ℹ pass 77 ℹ fail 0 
+TEST rc=1 proposals/d090/foundation-routing.test.mjs ℹ pass 61 ℹ fail 1 
+TEST rc=0 proposals/d090/native-selector-pipes-v2.test.mjs ℹ pass 12 ℹ fail 0 
+TEST rc=1 tools/d086-validation-v3.test.mjs ℹ pass 48 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v4.test.mjs ℹ pass 56 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v5.test.mjs ℹ pass 64 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v6.test.mjs ℹ pass 69 ℹ fail 3 
+TEST rc=1 tools/d086-validation.test.mjs ℹ pass 38 ℹ fail 2 
+TEST rc=1 tools/d087-validation.test.mjs ℹ pass 85 ℹ fail 1 
+TEST rc=1 tools/d088-validation.test.mjs ℹ pass 169 ℹ fail 11 
+TEST rc=1 tools/d089-validation.test.mjs ℹ pass 203 ℹ fail 14 
+TEST rc=0 tools/d090-validation-pipes-v2.test.mjs ℹ pass 254 ℹ fail 0 
+TEST rc=1 tools/d090-validation.test.mjs ℹ pass 253 ℹ fail 1 
+TEST rc=1 tools/d099-source.test.mjs ℹ pass 3 ℹ fail 2 
+TEST rc=0 tools/d102-source.test.mjs ℹ pass 6 ℹ fail 0 
+## D103
+TEST rc=1 .github/scripts/ci-integrity-d086.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d087.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d088.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d089.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=0 .github/scripts/ci-integrity-d090.test.mjs ℹ pass 163 ℹ fail 0 
+TEST rc=1 proposals/d086/facade-clean-workspace.test.mjs ℹ pass 0 ℹ fail 1 
+TEST rc=1 proposals/d086/v6-workflow-copy.test.mjs ℹ pass 0 ℹ fail 6 
+TEST rc=0 proposals/d090/foundation-routing-pipes-v2.test.mjs ℹ pass 77 ℹ fail 0 
+TEST rc=1 proposals/d090/foundation-routing.test.mjs ℹ pass 61 ℹ fail 1 
+TEST rc=0 proposals/d090/native-selector-pipes-v2.test.mjs ℹ pass 12 ℹ fail 0 
+TEST rc=1 tools/d086-validation-v3.test.mjs ℹ pass 48 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v4.test.mjs ℹ pass 56 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v5.test.mjs ℹ pass 64 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v6.test.mjs ℹ pass 69 ℹ fail 3 
+TEST rc=1 tools/d086-validation.test.mjs ℹ pass 38 ℹ fail 2 
+TEST rc=1 tools/d087-validation.test.mjs ℹ pass 85 ℹ fail 1 
+TEST rc=1 tools/d088-validation.test.mjs ℹ pass 169 ℹ fail 11 
+TEST rc=1 tools/d089-validation.test.mjs ℹ pass 203 ℹ fail 14 
+TEST rc=0 tools/d090-validation-pipes-v2.test.mjs ℹ pass 254 ℹ fail 0 
+TEST rc=1 tools/d090-validation.test.mjs ℹ pass 253 ℹ fail 1 
+TEST rc=1 tools/d099-source.test.mjs ℹ pass 3 ℹ fail 2 
+TEST rc=0 tools/d102-source.test.mjs ℹ pass 6 ℹ fail 0 
+## failing-subtest name diff: (empty)

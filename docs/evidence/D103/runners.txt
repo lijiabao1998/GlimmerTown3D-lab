@@ -1,0 +1,16 @@
+# D103 local runners on the construction tree (Node 24.22.2, not GITHUB_ACTIONS)
+RUNNER foundation rc=0 89s
+RUNNER inherited-d086 rc=0 334s
+RUNNER inherited-d087 rc=0 400s
+RUNNER inherited-d088 rc=0 440s
+RUNNER inherited-d089 rc=0 439s
+RUNNERS_DONE
+d086 passed=true actual-immutable-b427:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2092 ℹ pass 2092 ℹ fail 0 
+d087 passed=true actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2055 ℹ pass 2055 ℹ fail 0 
+d088 passed=true actual-immutable-b427:0 actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2430 ℹ pass 2430 ℹ fail 0 
+d089 passed=true actual-immutable-b427:0 actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2430 ℹ pass 2430 ℹ fail 0 
+foundation passed=true actual-immutable-6c:0 actual-immutable-e4c:0 actual-current:0
