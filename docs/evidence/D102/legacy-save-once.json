@@ -1,0 +1,27 @@
+{
+ "node": "v24.22.2",
+ "out": {
+  "W2": {
+   "legacyDays": 13,
+   "unrecordedAccelerationsInLegacySave": 4,
+   "legacyFormat": 7,
+   "firstLoad": {
+    "replayed": false,
+    "note": "歷史跟存檔對不上，只用存檔：對帳數字不同"
+   },
+   "laterFallbacksIn30Days": 0,
+   "hastenDaysRecordedAfter": 13
+  },
+  "W4": {
+   "legacyDays": 30,
+   "unrecordedAccelerationsInLegacySave": 8,
+   "legacyFormat": 7,
+   "firstLoad": {
+    "replayed": false,
+    "note": "歷史跟存檔對不上，只用存檔：對帳數字不同"
+   },
+   "laterFallbacksIn30Days": 0,
+   "hastenDaysRecordedAfter": 16
+  }
+ }
+}

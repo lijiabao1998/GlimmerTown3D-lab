@@ -415,7 +415,9 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   };
   const { spawned } = spawnStep(ctx);                                     // 55597–55627（F5）
   const ups = upgradeStep(ctx);                                           // 55628–55652（F6）
+  const age418 = (cnt.steelMillN ?? 0) > 0 ? tickBld.map(i => w.tiles[i].bld?.age) : null;   // D102：加速施工前的屋齡（只讀），下一行之後對照，找出今天被鋼材加速的那幾格
   const cons = steelConstruction(s.econ, cnt.steelMillN ?? 0, w, tickBld, s.day);   // 55655–55672 煉鋼廠加速施工（D025）：用鋼庫存讓施工中的房屋多長一天
+  const hastened = cons > 0 && age418 ? tickBld.filter((i, q) => w.tiles[i].bld?.age !== age418[q]) : [];   // D102：每格最多走一次、每次 +1，屋齡變了的就是被加速的；記成 hasten 事件（城市格式 11）
   if (s.day % 30 === 0) {                                                 // 55676–55686：每 30 天住宅財富往判定值移一級（F9 judgeWealth）
     for (const i of tickBld) {
       const b = w.tiles[i].bld;
@@ -466,7 +468,7 @@ export function stepDay(s: Sim, opts: { fullLand?: boolean; class2?: Class2In; h
   // 完成才一次性加獎金進資金（不進當天的收入）。本線沒有公共運量（公車與票務 D037 沒搬），運量給 0
   const cmsOut = cmsDaily(s.cms, { diff: s.diff, day: s.day, steelUsed: ec.steelUsed, tradeGold: late.tradeGold, transitRidership: 0, cityHappy, steel: s.econ.steel, fuel: s.econ.fuel, tech: s.edu.tech });
   if (cmsOut) { if (cmsOut.t === 'done') s.money += cmsOut.bonus; s.city.history.push(cmsOut.t === 'done' ? { day: s.day, t: 'cms', ev: 'done', id: cmsOut.id, bonus: cmsOut.bonus } : { day: s.day, t: 'cms', ev: 'expire', id: cmsOut.id }); }
-  syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), ups, mgs);
+  syncCity(s, spawned.map(p => ({ i: p.y * N + p.x, b: p.b })), hastened, ups, mgs);
   syncHazards(s, hz);                                                     // 燒毀＝墓碑與焦土、廢棄＝abandoned、災禍事件記進歷史（在生長、升級的事件之後，同 tick 順序）
   s.txns.length = 0;                                                      // 過了一天：之前的施工不能再復原（D011 卡第 4 節）
   return {
@@ -559,7 +561,7 @@ function settleToday(s: Sim, tickBld: number[], cnt: Record<string, number>, gar
 }
 
 // 城市模型跟著格子走：新建築、升級記成事件（只增不改），所有建築的屋齡同步
-function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: number; v: number }[], merges: MergeRec[] = []) {
+function syncCity(s: Sim, grown: { i: number; b: Bld }[], hastened: readonly number[], ups: { i: number; lv: number; v: number }[], merges: MergeRec[] = []) {
   const c = s.city, n = c.n;
   for (const { i, b } of grown) {
     const x = i % n, z = (i / n) | 0, size = s.kinds.size(b.k);
@@ -573,6 +575,11 @@ function syncCity(s: Sim, grown: { i: number; b: Bld }[], ups: { i: number; lv: 
     const cb = s.root.get(u.i)!;
     cb.lv = u.lv; cb.v = u.v;
     c.history.push({ day: s.day, t: 'upgrade', x: cb.x, z: cb.z, k: cb.k, lv: u.lv, v: u.v });
+  }
+  // D102（城市格式 11）：煉鋼廠加速施工（在生長、升級之後、合併之前，同 tick 順序）：一天一筆，建築編號由小到大。重播把這幾棟的起算屋齡 +1
+  if (hastened.length) {
+    const ids = hastened.map(i => { const cb = s.root.get(i); if (!cb) throw new Error(`加速施工：(${i % n},${(i / n) | 0}) 沒有建築`); return cb.id; }).sort((a, b) => a - b);
+    c.history.push({ day: s.day, t: 'hasten', ids });
   }
   // D034：合併（在生長、升級的事件之後、災禍之前，同 tick 順序）：吸收的建築成了墓碑（屋齡停在合併那一天、占的格清空）、新建築蓋上去（編號＝清單長度 + 1，屋齡 0）、巨廈清九格分區
   for (const m of merges) {
