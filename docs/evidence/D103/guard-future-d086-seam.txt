@@ -1,0 +1,2 @@
+# D103 review-round future-card simulation: a later declared d086 seam (extra upload path) appended after D103's seam; guard item 1 must stay green.
+PASS 驗收 1：d086-native.yml 跟 c8e5ef1 只差 native-and-build 那一行（D103 宣告的那一筆）：D103 之後又宣告了 1 筆；拿掉 D103 那一筆仍只差第 16 行 20 → 30

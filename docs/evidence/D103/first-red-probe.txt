@@ -1,0 +1,64 @@
+# D103 first-red probe (2026-11-05, Node 24.22.2). Same 22 test files that read the pinned workflow artifacts, run directly with node --test.
+# BASE = unmodified c8e5ef1; ONE-LINE = c8e5ef1 with only d086-native.yml:16 20->30.
+## BASE
+TEST rc=1 .github/scripts/ci-integrity-d086.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d087.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d088.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d089.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=0 .github/scripts/ci-integrity-d090.test.mjs ℹ pass 163 ℹ fail 0 
+TEST rc=1 proposals/d086/facade-clean-workspace.test.mjs ℹ pass 0 ℹ fail 1 
+TEST rc=1 proposals/d086/v6-workflow-copy.test.mjs ℹ pass 0 ℹ fail 6 
+TEST rc=0 proposals/d090/foundation-routing-pipes-v2.test.mjs ℹ pass 77 ℹ fail 0 
+TEST rc=1 proposals/d090/foundation-routing.test.mjs ℹ pass 61 ℹ fail 1 
+TEST rc=0 proposals/d090/native-selector-pipes-v2.test.mjs ℹ pass 12 ℹ fail 0 
+TEST rc=1 tools/d086-validation-v3.test.mjs ℹ pass 48 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v4.test.mjs ℹ pass 56 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v5.test.mjs ℹ pass 64 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v6.test.mjs ℹ pass 69 ℹ fail 3 
+TEST rc=1 tools/d086-validation.test.mjs ℹ pass 38 ℹ fail 2 
+TEST rc=1 tools/d087-validation.test.mjs ℹ pass 85 ℹ fail 1 
+TEST rc=1 tools/d088-validation.test.mjs ℹ pass 169 ℹ fail 11 
+TEST rc=1 tools/d089-validation.test.mjs ℹ pass 203 ℹ fail 14 
+TEST rc=0 tools/d090-validation-pipes-v2.test.mjs ℹ pass 254 ℹ fail 0 
+TEST rc=1 tools/d090-validation.test.mjs ℹ pass 253 ℹ fail 1 
+TEST rc=1 tools/d099-source.test.mjs ℹ pass 3 ℹ fail 2 
+TEST rc=0 tools/d102-source.test.mjs ℹ pass 6 ℹ fail 0 
+## ONE-LINE
+TEST rc=1 .github/scripts/ci-integrity-d086.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d087.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d088.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=1 .github/scripts/ci-integrity-d089.test.mjs ℹ pass 162 ℹ fail 1 
+TEST rc=0 .github/scripts/ci-integrity-d090.test.mjs ℹ pass 163 ℹ fail 0 
+TEST rc=1 proposals/d086/facade-clean-workspace.test.mjs ℹ pass 0 ℹ fail 1 
+TEST rc=1 proposals/d086/v6-workflow-copy.test.mjs ℹ pass 0 ℹ fail 6 
+TEST rc=1 proposals/d090/foundation-routing-pipes-v2.test.mjs ℹ pass 76 ℹ fail 1 
+TEST rc=1 proposals/d090/foundation-routing.test.mjs ℹ pass 61 ℹ fail 1 
+TEST rc=1 proposals/d090/native-selector-pipes-v2.test.mjs ℹ pass 10 ℹ fail 2 
+TEST rc=1 tools/d086-validation-v3.test.mjs ℹ pass 48 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v4.test.mjs ℹ pass 56 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v5.test.mjs ℹ pass 64 ℹ fail 3 
+TEST rc=1 tools/d086-validation-v6.test.mjs ℹ pass 69 ℹ fail 3 
+TEST rc=1 tools/d086-validation.test.mjs ℹ pass 38 ℹ fail 2 
+TEST rc=1 tools/d087-validation.test.mjs ℹ pass 85 ℹ fail 1 
+TEST rc=1 tools/d088-validation.test.mjs ℹ pass 169 ℹ fail 11 
+TEST rc=1 tools/d089-validation.test.mjs ℹ pass 203 ℹ fail 14 
+TEST rc=1 tools/d090-validation-pipes-v2.test.mjs ℹ pass 252 ℹ fail 2 
+TEST rc=1 tools/d090-validation.test.mjs ℹ pass 252 ℹ fail 2 
+TEST rc=1 tools/d099-source.test.mjs ℹ pass 3 ℹ fail 2 
+TEST rc=0 tools/d102-source.test.mjs ℹ pass 6 ℹ fail 0 
+## New failing subtests (ONE-LINE minus BASE, by name)
+proposals/d090/foundation-routing-pipes-v2.test.mjs: ✖ closed current, eight actual6c and two actuale4c test files retain every original source assertion and ledger
+proposals/d090/native-selector-pipes-v2.test.mjs: ✖ all new current copies and only three existing entrypoint changes reproduce from actual immutable e4c
+proposals/d090/native-selector-pipes-v2.test.mjs: ✖ every inherited suite uses the full current smoke successor, while original bytes and actual historical runner domains remain mandatory
+tools/d090-validation-pipes-v2.test.mjs: ✖ all123 original D086/D087/D088/D089 test files retain actual source domains and eight bounded inherited workflows
+tools/d090-validation-pipes-v2.test.mjs: ✖ exact actual5b workflow preimage and finite reconstruction .github/workflows/d086-native.yml
+tools/d090-validation.test.mjs: ✖ exact actual5b workflow preimage and finite reconstruction .github/workflows/d086-native.yml
+## Runner probe on ONE-LINE (Node 24.22.2, local, not GITHUB_ACTIONS)
+node proposals/d090/inherited-test-runner.mjs --suite=d086 -> rc=1 after 110 s:
+AssertionError [ERR_ASSERTION]: every undeclared job/permission/timeout/command retained .github/workflows/d086-native.yml
+    at assertInheritedWorkflowSet (tools/d090-validation.mjs:12:295)
+    at proposals/d090/inherited-test-runner.mjs:17:56
+node proposals/d090/foundation-test-runner.mjs --out=<scratch> -> rc=1 at start:
+AssertionError [ERR_ASSERTION]: all eight inherited workflows unchanged
+    at assertFoundationRouting (proposals/d090/foundation-routing-contract-pipes-v2.mjs:20:832)
+    at proposals/d090/foundation-test-runner.mjs:6:142

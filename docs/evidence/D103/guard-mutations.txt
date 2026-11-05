@@ -1,0 +1,15 @@
+# D103 guard self-mutation (each file restored after; Node 24.22.2). 14 mutations, including the review's escapes.
+CAUGHT d086 native-and-build 回到 20（只改 YAML） → 驗收 1：d086 | 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT d087 native-and-build 改成 30 → 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT d086 surface-qualification 改成 30 → 驗收 1：d086 | 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT ci.yml smoke 15 改成 16 → 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT 原版驗證器多一個位元組 → 驗收 3、5、6： | 驗收 4（凍結檔） | 驗收 9：負控（每
+CAUGHT transit.yml 拿掉 D103 那一步 → 驗收 2：35 個
+CAUGHT runner 改回原版匯入 → 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT 驗證器的 d086 確切值改成寬鬆 \d+ → 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT ci.yml d064 90 改成 900（行尾有註解那一行） → 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT d058 complete-regression 改成帶引號的 '90' → 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT d086 native-and-build 寫成 030 → 驗收 1：d086 | 驗收 2：35 個 | 驗收 3、5、6： | 驗收 9：負控（每
+CAUGHT transit 那一步加 if: false → 驗收 2：35 個
+CAUGHT transit 那一步加 continue-on-error → 驗收 2：35 個
+CAUGHT lineage qualification 拿掉 D103 那句 → 驗收 3、5、6： | 驗收 9：負控（每

@@ -1,0 +1,6 @@
+PASS 驗收 1：d086-native.yml 跟 c8e5ef1 只差 native-and-build 那一行（D103 宣告的那一筆）：基準 c1a12caec58b… → 現行 d242ed2e707c…；只差第 16 行 20 → 30
+PASS 驗收 2：35 個被釘住的工作流，每一個 timeout-minutes 都跟 c8e5ef1 相同（只有 d086 native-and-build = 30）：35 檔、95 個 timeout 全對；transit-gate 有本守衛那一步、不能被跳過
+PASS 驗收 3、5、6：宣告改動與整條 D090 現行鏈都接受：manifest f96cd61b639e…、lineage c037ae2746bc…；八個工作流、23 個現行附加、5 個 domain
+PASS 驗收 4（凍結檔）：e4c／6c 原版驗證器、原版測試與 v1 routing 三檔逐位元組不變：5 檔
+PASS 驗收 9：負控（每一種都被預期的那一關擋下）：20 種全被擋下（對照組通過）：d086 native-and-build 改回 20；d086 native-and-build 改成 31；d086 surface-qualification 改成 30；d086 native-game 改成 30；d087 native-and-build 改成 30（未宣告）；d088 native-and-build 改成 30（未宣告）；d089 native-and-build 改成 30（未宣告）；manifest 多一個位元組；routing：d086 工作流多一個位元組；routing 用舊 pin（擋在 FOUNDATION_ROUTING_SHA）；runner 改回原版匯入；runner 兩個匯入並存；lineage：proposals/d090/inherited-test-runner.mjs 多一個位元組；lineage：tools/d090-validation-pipes-v2.mjs 多一個位元組；lineage：proposals/d090/foundation-routing-contract-pipes-v2.mjs 多一個位元組；lineage：d086 工作流多一個位元組（擋在 workflows 的 d086 pin）；偽造 pin＋自洽宣告 d087 native-and-build = 30；偽造 pin＋自洽宣告 d088 native-and-build = 30；偽造 pin＋自洽宣告 d086 native-and-build = 31；偽造 pin＋自洽宣告 d089 native-and-build = 200
+D103 timeout: all passed

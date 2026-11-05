@@ -1,0 +1,17 @@
+# D103 final commit 0fb097e: five runners + guard in a fresh clean worktree, GITHUB_ACTIONS=true, Node 24.22.2
+FINAL foundation rc=0 95s
+FINAL inherited-d086 rc=0 335s
+FINAL inherited-d087 rc=0 400s
+FINAL inherited-d088 rc=0 453s
+FINAL inherited-d089 rc=0 452s
+FINAL guard rc=0
+FINAL_DONE
+d086 passed=true candidate=0fb097e workingTreeDirty=false actual-immutable-b427:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2092 ℹ pass 2092 ℹ fail 0 
+d087 passed=true candidate=0fb097e workingTreeDirty=false actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2055 ℹ pass 2055 ℹ fail 0 
+d088 passed=true candidate=0fb097e workingTreeDirty=false actual-immutable-b427:0 actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2430 ℹ pass 2430 ℹ fail 0 
+d089 passed=true candidate=0fb097e workingTreeDirty=false actual-immutable-b427:0 actual-immutable-cdd:0 actual-immutable-c023:0 actual-immutable-5b41:0 actual-current:0
+ℹ tests 2430 ℹ pass 2430 ℹ fail 0 
+foundation passed=true actual-immutable-6c:0 actual-immutable-e4c:0 actual-current:0

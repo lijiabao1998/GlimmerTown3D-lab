@@ -10,6 +10,41 @@
 
 ---
 
+- 2026-11-05 — D103 — 施工（D086 native `native-and-build` 逾時 20→30 分，宣告進 D090 現行層）：[卡面](docs/D103-d086-native-timeout.md)。
+  - 改了什麼：
+    - YAML 一行；
+    - `inherited-workflow-deltas.json` 加一筆以 job 開頭定位的改動；
+    - pipes-v2 驗證器：新 manifest 雜湊、依工作流指定確切值（d086 30、d087–d089 20，比原本嚴）、runner 反推多還原一處匯入、檔頭照實寫出例外；
+    - inherited runner 改匯入 pipes-v2 驗證器（原版寫死 20，又被 lineage 凍結）；
+    - routing pin 與 `FOUNDATION_ROUTING_SHA`；
+    - lineage：三份 copy 只追加 change 項、`qualification` 照實寫出例外，以及 `PIPE_LINEAGE_SHA`。
+    - 全部由 `tools/d103-freeze-workflow.mjs` 從 `c8e5ef1` 產生（輸入不符就拒跑；`--check` 核產物與封閉清單）。
+    - 新守衛 `tools/unit-d103-timeout.mjs`（transit 跑）。
+    - 原版驗證器、v1 routing、證據、fixtures、`src/`、所有測試檔都沒動。
+  - 對抗式審查（4 面向 7 代理）抓到 2 個 blocker，都已修：
+    - 卡面把探針的新紅數錯寫成 7，實際 6，卡面已補更正；
+    - 守衛漏讀 `ci.yml:693` 帶行內註解的 d064 timeout，35 檔實際 95 個，已改嚴格解析。
+    - 另補了 transit 那一步不能被跳過、`--check` 的改名與非 ASCII 漏洞、兩個負控的精確比對、說明字串不實等。
+  - 煙霧測試（本機 Node 24）：
+    - D090 現行測試全綠；
+    - 22 個直接跑的讀者測試跟 `c8e5ef1` 逐條相同；
+    - transit 十步綠；
+    - 守衛自我突變 14/14；
+    - 照 YAML 全量重放 D083 兩個 job、D086 17 步、D087–D090 各 8 步，共 56 步 exit 0（在修審查前的 `b310869` 上；之後只改了 lineage 說明字串、守衛與凍結工具）；
+    - 最終提交 `0fb097e` 上，五個 runner 以 `GITHUB_ACTIONS=true` 在乾淨 worktree 重跑：全部 exit 0，每個 domain 都是 0，現行 2092／2055／2430／2430 全過；守衛也全過。
+  - commit：施工提交與本列的文件提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - CI 還沒跑（transit、native 只在 PR 進 main 時自動跑，本 PR 疊在 D102 上，要手動觸發）；
+    - 30 分鐘夠不夠要看慢 runner 的實跑；
+    - D087–D090 仍是 20 分；
+    - 合併順序 #55 → #59 → D103，D102 的文件提交 ae6fb7b 推上去後 `LOG.md` 會衝突一處；
+    - D101 重發 lineage 時要把 D103 追加的改動項併進去。
+- 2026-11-05 — D103 — 卡面先推（D086 native `native-and-build` 逾時 20→30 分）：[卡面](docs/D103-d086-native-timeout.md)。
+  - 業主回「放寬到例如 30 分鐘」「放寬吧」。
+  - 數據（[耗時](docs/evidence/D103/d086-native-and-build-durations.tsv)）：10/27 以後跑滿全程的 D086 `native-and-build` 24／34 次在 20 分鐘被取消。慢 runner 第 5 步 217–253 秒，快的 134–155 秒；D083、D087–D090 最久 8.2 分，不動。
+  - 施工前探針（[輸出](docs/evidence/D103/first-red-probe.txt)）：只改一行，D090 現行層多紅 7 個子測試。inherited runner（D086–D089 native 第一步）紅在凍結的原版驗證器，foundation runner（D090 native 第一步）紅在 routing contract。
+  - 最小合規改法：宣告改動、pipes-v2 驗證器、runner 匯入、routing、lineage。驗收 12 條凍結在卡面。
+  - 本分支疊在 D102（#59）上。**沒做成的事**：程式、pin、守衛都還沒動；D102、D100 還沒合併。
 - 2026-11-04 — D102 — PR #59 第一次 CI 紅了、已修：[卡面](docs/D102-steel-construction-history.md)。`40bd5c2` 上 `transit`、D083 native 綠；`ci` 的 d082（三個寬度）與 D086–D090 native 紅，原因同一個：這些不可改的檢查把「新程式從舊存檔建出來的城」跟舊版建的整個城市物件比，差在 `City.format`（`CITY_FORMAT` 從 10 變 11）。我推之前只跑了 native 的第一個 Node 步驟，漏了後面的 `scene-budget-check` 與 d082 瀏覽器比對。修正 `1a03c15`：`City.format` 改成城市模型版本 `CITY_MODEL_FORMAT = 10`（D102 沒改城市模型；存檔照樣寫 f=11），lease 重凍 `6a1941b4…`。煙霧測試：本機用全新 worktree 照 YAML 重放 D083／D086–D090 的 native-and-build 共 56 步全部 exit 0，ci 的 d082 寬 360 capture／coverage／seam QA 全過，unit-d102-history 7/7、lease 與現行契約全過。commit：`1a03c15`＋本列的文件提交。樣張：沒有畫面變化。**沒做成的事**：新 head 的 CI 還沒跑完；瀏覽器 matrix job 本機沒跑；其餘同上一列。
 - 2026-11-04 — D102 — 施工（煉鋼廠加速施工記成歷史事件 25 hasten、城市格式 11）：[卡面](docs/D102-steel-construction-history.md)。原始碼 7 檔 +70／−30（`day.ts` 記錄、`replay.ts` 每棟 +1、`save.ts`／`journal.ts`／`eventRegistry.ts` 存讀、`city.ts` 分出 `HistoryEvent`、`decisions.ts` 只改型別）；`economy.ts` 與呼叫 `steelConstruction` 那一行一個字都沒改；`cityView.ts` 不動。lease `fixtures/d102/source.json`（manifest `238e51ba…`，267 檔、modified 7 檔、before＝D100 `b328a07`）＋三個 seam＋D090 現行契約＋selector lineage 重發。新守衛 `tools/unit-d102-history.mjs` 7 項；原地改 unit-d010-sim、unit-d019、unit-d046-history、unit-d046-fallback（原斷言改跑在 D102 之前的 day.ts）、unit-d036-live。兩輪對抗式審查（共 15 個代理）抓到 1 個 blocker（`cityView.ts` 一行型別會讓 D086–D090 native 紅）與數個覆蓋缺口，都已修。結果：W2／W4 各 100 次存讀 0 退回（修之前 47／48 次）；造城同日加速＋合併吸收 4 棟、同日加速＋燒毀 1 棟、G13 生長當天被加速 17 棟次，全部 0 退回；舊存檔實測退回一次、之後 0 次。煙霧測試：本機沒跑瀏覽器，交給 CI；本機 Node 24：lease／契約全過、native 的 Node 段全部 exit 0、frame 175／0、相關歷史守衛 250／0，完整 historical 分區在前一棵樹上 1206 OK／1 NG（D011 計時滿載 6.13 ms，安靜時兩棵樹各 3 輪都過）。commit：`fc13fc8`（程式）＋本列的文件提交。樣張：沒有畫面變化。改號：D101 卡 `a57dddb`、D092 卡 `3e272fc`、D097 兩份與 D100 卡在本分支補記。**沒做成的事**：PR 的 CI 還沒跑（transit／native 要手動觸發）；合併後沒有工作流再跑 D102 守衛；`d085-control` 停用；快取舊版讀 f=11 會蓋掉歷史；實驗線沒重跑、d036 樣本沒重錄；地塊歷史不顯示加速施工；D100 還沒合併。
 - 2026-11-04 — D102 — 卡面先推（煉鋼廠加速施工記進世界歷史，修讀檔退回快照的根因）：[卡面](docs/D102-steel-construction-history.md)。業主選了「先修根因，再明確失敗」與「D102 拿 25，交通、市民各順延一號」（事件 25／`CITY_FORMAT 11`＝本卡；交通 26／12；居民 27／13）。施工前探針（[腳本](docs/evidence/D102/probe-pre-d102.mjs)、[結果](docs/evidence/D102/probe-pre-d102.json)）：d036 五座城各 100 次「過一天＋存讀」，W2 退回 47 次、W4 48 次、W1／W3／W5 0 次；95 次全是「對帳數字不同」、每次 1–2 棟、快照剛好老 1 天，讀檔時不比屋齡就 0 次，關掉鋼鐵加速也 0 次——鋼鐵加速是這五座城唯一的自然觸發源。驗收 11 條凍結在卡面。**沒做成的事**：程式、lease、守衛都還沒動；D100（#55）還沒合併，本分支疊在它上面；D101、D092、D097 卡面的編號還沒跟著改。
