@@ -1,14 +1,18 @@
 {
   "baseline": "c8e5ef14689403a1935185935b9d442323d14f11",
   "candidateEqualsWorkingTree": 8,
-  "changed": 22,
+  "workflowsChecked": 36,
+  "changed": 25,
   "evidence": [
     "docs/evidence/D103/construction-check.json",
     "docs/evidence/D103/d086-native-and-build-durations.tsv",
     "docs/evidence/D103/first-red-probe.txt",
     "docs/evidence/D103/freeze-output.json",
+    "docs/evidence/D103/guard-future-d086-seam.txt",
     "docs/evidence/D103/guard-mutations.txt",
+    "docs/evidence/D103/native-replay-b310869.txt",
     "docs/evidence/D103/reader-tests-after.txt",
+    "docs/evidence/D103/runners-final-0fb097e.txt",
     "docs/evidence/D103/runners.txt",
     "docs/evidence/D103/transit-local.txt",
     "docs/evidence/D103/unit-d103-timeout.txt"
@@ -20,7 +24,7 @@
     "runner": "b7625c6bea2239ddb2183b97a68aa04e590865b24923424449bfd5e092e9d9c9",
     "validator": "cc5d49563589d2cf5f3eb37b5abce5db0c17957171678475c7ce290b624a0a15",
     "contract": "8875cccbaa70bf77ec4f67321cc15e743db1db4123acc0265e40634e07196f81",
-    "lineage": "9fe944455ea773e69567364b8e97f267a649ff847467b22a3280a398a59b0b98",
-    "lineageModule": "de815ad0a17a4c962a0cbe5a501c8cd881d9a007da4cdf4b94a5849970bcc2e8"
+    "lineage": "c037ae2746bc3ae07bbd0f45ec5ee76678e1d717c41a204d40989c5b1e8e936a",
+    "lineageModule": "5c2e76114a0b2e933e2bf98bc34a117cfc1762b030e0badff24d5a34205d4568"
   }
 }

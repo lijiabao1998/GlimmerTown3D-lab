@@ -1,0 +1,66 @@
+# D103 YAML-faithful native replay on b310869 (the implementation tree before the review fixes; the fixes changed only the lineage provenance strings + PIPE_LINEAGE_SHA, the guard and the generator).
+# Each workflow in its own fresh worktree, GITHUB_ACTIONS=true, Node 24.22.2, node_modules symlinked instead of npm ci, every run: step in YAML order under bash -eo pipefail; two lanes on 4 CPUs.
+STEP d083/native-and-build 1 rc=0 0s node --test tools/d083-release-trigger-d090.test.mjs
+STEP d083/native-and-build 2 rc=0 5s npm run typecheck
+STEP d083/native-and-build 3 rc=0 4s Native ownership, placement, save replay, picking and original130 byte pins
+STEP d083/native-and-build 4 rc=0 10s Unchanged original food/build parity and mutation controls
+STEP d083/native-and-build 5 rc=0 3s npm run build
+STEP d083/native-and-build 6 rc=0 0s Exact source commit and built HTML
+DONE d083/native-and-build steps=6 failed=0
+STEP d083/inherited-geometry-envelope 1 rc=0 0s node --experimental-strip-types proposals/d083/native-envelope-check.mjs
+DONE d083/inherited-geometry-envelope steps=1 failed=0
+STEP d090/native-and-build 1 rc=0 108s Exact current source, inherited assertions, all native and browser negative controls
+STEP d090/native-and-build 2 rc=0 6s npm run typecheck
+STEP d090/native-and-build 3 rc=0 1s Actual immutable published190 baseline
+STEP d090/native-and-build 4 rc=0 29s Original190 byte identities and ten distinct complete native buildings
+STEP d090/native-and-build 5 rc=0 5s Every current old scene and ten/forty native owners retain budgets
+STEP d090/native-and-build 6 rc=0 8s Reproduce exact signed-zero-safe procedural mesh cache
+STEP d090/native-and-build 7 rc=0 200s Current old D083 eight, D086 ten, D087 eleven and D088 eleven and D089 eleven native regressions
+STEP d090/native-and-build 8 rc=0 5s Exact current native product and immutable published baseline builds
+DONE d090/native-and-build steps=8 failed=0
+STEP d086/native-and-build 1 rc=0 400s Source leases, finite current versions and mandatory release graph negatives
+STEP d086/native-and-build 2 rc=0 5s npm run typecheck
+STEP d086/native-and-build 3 rc=0 242s Immutable immediate baseline and original affected historical contracts
+STEP d086/native-and-build 4 rc=0 9s Immutable unaccepted first-candidate source, facade and structural assertions
+STEP d087/native-and-build 1 rc=0 427s Exact current source, inherited assertions, all native and browser negative controls
+STEP d087/native-and-build 2 rc=0 4s npm run typecheck
+STEP d087/native-and-build 3 rc=0 1s Actual immutable published157 baseline
+STEP d087/native-and-build 4 rc=0 17s Original157 byte identities and eleven distinct complete native buildings
+STEP d087/native-and-build 5 rc=0 5s Every current old scene and eleven/forty-four native owners retain budgets
+STEP d086/native-and-build 5 rc=0 185s Immutable immediate geometry V2 source, facade, structural and workflow assertions
+STEP d087/native-and-build 6 rc=0 8s Reproduce exact signed-zero-safe procedural mesh cache
+STEP d087/native-and-build 7 rc=0 153s Current old D083 eight and D086 ten native regressions
+STEP d087/native-and-build 8 rc=0 4s Exact current native product and immutable published baseline builds
+DONE d087/native-and-build steps=8 failed=0
+STEP d086/native-and-build 6 rc=0 214s Actual immutable V3 source and historical assertion groups
+STEP d088/native-and-build 1 rc=0 480s Exact current source, inherited assertions, all native and browser negative controls
+STEP d088/native-and-build 2 rc=0 4s npm run typecheck
+STEP d088/native-and-build 3 rc=0 1s Actual immutable published168 baseline
+STEP d088/native-and-build 4 rc=0 18s Original168 byte identities and eleven distinct complete native buildings
+STEP d088/native-and-build 5 rc=0 4s Every current old scene and eleven/forty-four native owners retain budgets
+STEP d088/native-and-build 6 rc=0 7s Reproduce exact signed-zero-safe procedural mesh cache
+STEP d086/native-and-build 7 rc=0 597s Actual immutable V4 cache and original inherited coastal integration
+STEP d088/native-and-build 7 rc=0 182s Current old D083 eight, D086 ten and D087 eleven native regressions
+STEP d088/native-and-build 8 rc=0 8s Exact current native product and immutable published baseline builds
+DONE d088/native-and-build steps=8 failed=0
+STEP d086/native-and-build 8 rc=0 301s Actual immutable V5 source, full cache and ordinary-player surface contracts
+STEP d086/native-and-build 9 rc=0 1s Reproducible exact procedural cache including all signed-zero payload bytes
+STEP d086/native-and-build 10 rc=0 9s Exact production geometry parity and optimized compile negative controls
+STEP d086/native-and-build 11 rc=0 17s Actual prior147 binary and all157 canonical architectural identities
+STEP d086/native-and-build 12 rc=0 5s Current and immutable old production scenes, exact owner ledger and unchanged frame ceilings
+STEP d086/native-and-build 13 rc=0 4s Current closed meshes, architectural facade backing and negative controls
+STEP d086/native-and-build 14 rc=0 43s Current native fiscal, services, RNG, history, save, construction and undo
+STEP d086/native-and-build 15 rc=0 182s Current catalogue86 retains all original76 interactions and negative controls
+STEP d089/native-and-build 1 rc=0 521s Exact current source, inherited assertions, all native and browser negative controls
+STEP d089/native-and-build 2 rc=0 4s npm run typecheck
+STEP d089/native-and-build 3 rc=0 1s Actual immutable published179 baseline
+STEP d089/native-and-build 4 rc=0 20s Original179 byte identities and eleven distinct complete native buildings
+STEP d089/native-and-build 5 rc=0 4s Every current old scene and eleven/forty-four native owners retain budgets
+STEP d089/native-and-build 6 rc=0 8s Reproduce exact signed-zero-safe procedural mesh cache
+STEP d086/native-and-build 16 rc=0 105s Current inherited research, construction UI and touch lease negative controls
+STEP d086/native-and-build 17 rc=0 5s Actual native product build with exact source identity
+DONE d086/native-and-build steps=17 failed=0
+STEP d089/native-and-build 7 rc=0 170s Current old D083 eight, D086 ten, D087 eleven and D088 eleven native regressions
+STEP d089/native-and-build 8 rc=0 5s Exact current native product and immutable published baseline builds
+DONE d089/native-and-build steps=8 failed=0
+TOTAL: 56/56 steps exit 0

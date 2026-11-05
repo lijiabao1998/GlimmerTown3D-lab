@@ -10,6 +10,35 @@
 
 ---
 
+- 2026-11-05 — D103 — 施工（D086 native `native-and-build` 逾時 20→30 分，宣告進 D090 現行層）：[卡面](docs/D103-d086-native-timeout.md)。
+  - 改了什麼：
+    - YAML 一行；
+    - `inherited-workflow-deltas.json` 加一筆以 job 開頭定位的改動；
+    - pipes-v2 驗證器：新 manifest 雜湊、依工作流指定確切值（d086 30、d087–d089 20，比原本嚴）、runner 反推多還原一處匯入、檔頭照實寫出例外；
+    - inherited runner 改匯入 pipes-v2 驗證器（原版寫死 20，又被 lineage 凍結）；
+    - routing pin 與 `FOUNDATION_ROUTING_SHA`；
+    - lineage：三份 copy 只追加 change 項、`qualification` 照實寫出例外，以及 `PIPE_LINEAGE_SHA`。
+    - 全部由 `tools/d103-freeze-workflow.mjs` 從 `c8e5ef1` 產生（輸入不符就拒跑；`--check` 核產物與封閉清單）。
+    - 新守衛 `tools/unit-d103-timeout.mjs`（transit 跑）。
+    - 原版驗證器、v1 routing、證據、fixtures、`src/`、所有測試檔都沒動。
+  - 對抗式審查（4 面向 7 代理）抓到 2 個 blocker，都已修：
+    - 卡面把探針的新紅數錯寫成 7，實際 6，卡面已補更正；
+    - 守衛漏讀 `ci.yml:693` 帶行內註解的 d064 timeout，35 檔實際 95 個，已改嚴格解析。
+    - 另補了 transit 那一步不能被跳過、`--check` 的改名與非 ASCII 漏洞、兩個負控的精確比對、說明字串不實等。
+  - 煙霧測試（本機 Node 24）：
+    - D090 現行測試全綠；
+    - 22 個直接跑的讀者測試跟 `c8e5ef1` 逐條相同；
+    - transit 十步綠；
+    - 守衛自我突變 14/14；
+    - 照 YAML 全量重放 D083 兩個 job、D086 17 步、D087–D090 各 8 步，共 56 步 exit 0（在修審查前的 `b310869` 上；之後只改了 lineage 說明字串、守衛與凍結工具）；
+    - 最終提交 `0fb097e` 上，五個 runner 以 `GITHUB_ACTIONS=true` 在乾淨 worktree 重跑：全部 exit 0，每個 domain 都是 0，現行 2092／2055／2430／2430 全過；守衛也全過。
+  - commit：施工提交與本列的文件提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - CI 還沒跑（transit、native 只在 PR 進 main 時自動跑，本 PR 疊在 D102 上，要手動觸發）；
+    - 30 分鐘夠不夠要看慢 runner 的實跑；
+    - D087–D090 仍是 20 分；
+    - 合併順序 #55 → #59 → D103，D102 的文件提交 ae6fb7b 推上去後 `LOG.md` 會衝突一處；
+    - D101 重發 lineage 時要把 D103 追加的改動項併進去。
 - 2026-11-05 — D103 — 卡面先推（D086 native `native-and-build` 逾時 20→30 分）：[卡面](docs/D103-d086-native-timeout.md)。
   - 業主回「放寬到例如 30 分鐘」「放寬吧」。
   - 數據（[耗時](docs/evidence/D103/d086-native-and-build-durations.tsv)）：10/27 以後跑滿全程的 D086 `native-and-build` 24／34 次在 20 分鐘被取消。慢 runner 第 5 步 217–253 秒，快的 134–155 秒；D083、D087–D090 最久 8.2 分，不動。
