@@ -1,5 +1,7 @@
 // D046：只修既有歷史失配退回快照後的起始碼套娃，不修鋼材加速施工未記事件的舊限制。
 // 正常歷史仍只增不改；真正不相符仍拒絕重播。可獨立執行，也由 unit.mjs 呼叫。
+// D102：鋼材加速施工記成歷史事件 hasten（碼 25、城市格式 11）之後，自然失配不會再發生。第 1、2 項原本的斷言一條不刪，
+// 改用「拿掉這筆記錄的 day.ts」（D102 之前的行為）跑，讓起點套娃修補仍有真實的觸發源；第 1 項另驗現行 day.ts 100 次 0 退回。
 import assert from 'node:assert/strict';
 import { pathToFileURL } from 'node:url';
 import { loadCode, saveCode, SAVE_LIMIT } from '../src/io/save.ts';
@@ -9,6 +11,7 @@ import { fnv1a } from '../src/sim/rng.ts';
 import { d036Runs } from './d036-cities.mjs';
 import { d045Load } from './d045-cities.mjs';
 import { loadMod } from './unit-d024.mjs';
+import { dayVariant } from './unit-d021.mjs';
 
 const copy = o => JSON.parse(JSON.stringify(o));
 const rawOf = code => { const r = decodeLabCode(code); assert.ok(r.ok, r.error); return r.save.raw; };
@@ -31,12 +34,17 @@ function checkFallback(L, raw) {
   assert.ok(L.sim.city.history.slice(1).every(e => e.t === 'restyle'), '退回後沒有補造舊事件');
 }
 
+// D102 之前的 day.ts：只把交給 syncCity 的 hastened 換成空清單（不記 hasten），模擬本身逐位元組相同
+const legacyDay = () => dayVariant([['hastened, ups, mgs);', '[], ups, mgs);']]);
+
 export async function d046FallbackGuards(log) {
   const run = async (name, fn) => {
     try { log(true, 'D046 快照回退：' + name, await fn()); }
     catch (e) { log(false, 'D046 快照回退：' + name, `${e.name}: ${e.message}`); }
   };
+  const { stepDay: legacyStep } = await legacyDay();
   await run('自然鋼材日結＋100 次存讀始終可讀，委託小數及當前城市不丟失', () => {
+    const stepDay = legacyStep;   // D102：原斷言照舊，跑在 D102 之前的 day.ts 上
     const ctx = wellStart(); let L = mustLoad(ctx.code, ctx), falls = 0, max = 0, smallMax = 0;
     assert.equal(L.start, ctx.code, '沒有舊歷史時不重寫起始碼');
     for (let i = 0; i < 100; i++) {
@@ -52,9 +60,23 @@ export async function d046FallbackGuards(log) {
       if (i >= 5) { smallMax = Math.max(smallMax, code.length); assert.ok(code.length < 30_000, `第 ${i + 1} 次仍有起點套娃`); }
     }
     assert.ok(falls > 1, '要真的走到既有鋼材屋齡失配'); assert.ok(L.sim.cms.done.includes('steel80'));
-    return `100 次全可讀；${falls} 次如實退回快照；最大 ${max} 字元，首次回退後最大 ${smallMax}；委託正常完成`;
+    return `D102 之前的 day.ts：100 次全可讀；${falls} 次如實退回快照；最大 ${max} 字元，首次回退後最大 ${smallMax}；委託正常完成`;
+  });
+  await run('D102：現行 day.ts 同一座 W2 自然鋼材日結＋100 次存讀 0 次退回，起點不換、委託完成', () => {
+    const ctx = wellStart(); let L = mustLoad(ctx.code, ctx), max = 0, hasten = 0;
+    for (let i = 0; i < 100; i++) {
+      stepDay(L.sim); const cms = copy(L.sim.cms), code = saveCode(L.sim, L.template, L.start);
+      max = Math.max(max, code.length); assert.ok(code.length < SAVE_LIMIT, `第 ${i + 1} 次超過分享碼上限`);
+      L = mustLoad(code, ctx);
+      assert.ok(L.replayed, `第 ${i + 1} 次退回快照：${L.note}`); assert.equal(L.start, ctx.code, '沒有失配就不換起點（沒有套娃）');
+      assert.deepEqual(L.sim.cms, cms, `第 ${i + 1} 次委託狀態改變`);
+    }
+    hasten = L.sim.city.history.filter(e => e.t === 'hasten').reduce((n, e) => n + e.ids.length, 0);
+    assert.ok(hasten > 0, '要真的有鋼材加速施工'); assert.ok(L.sim.cms.done.includes('steel80'));
+    return `100 次全部重播；歷史裡加速施工 ${hasten} 棟次；最大 ${max} 字元；委託正常完成`;
   });
   await run('有效舊歷史及起始碼逐位不變，第一次真失配才更換起點；復原舊做法會重現超限', async () => {
+    const stepDay = legacyStep;   // D102：真失配來自 D102 之前的 day.ts（沒記加速施工）
     const old = await loadMod('src/io/save.ts', [["if (Object.hasOwn(save.raw, 'd3')) {", 'if (false) {']]);
     const ctx = wellStart(); let L = mustLoad(ctx.code, ctx), prior = mustLoad(ctx.code, ctx, old), first = 0, exceeded = 0;
     for (let i = 0; i < 12; i++) {

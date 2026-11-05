@@ -4,7 +4,7 @@
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
 import { EVENT_REGISTRY } from '../sim/eventRegistry.ts';
-import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, type CityEvent } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, type HistoryEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
 export const PACK0: PackState = Object.freeze({ n: 0, d0: 0, g0: 0, h: 0x811c9dc5 }) as PackState;
@@ -19,7 +19,7 @@ export const hashRows = (rows: readonly unknown[][], h0 = PACK0.h) => rows.reduc
 
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 // 從 st 那一列接著把 hist[st.n..] 編成緊湊列（種類碼與欄位統一登記在 eventRegistry.ts）
-export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unknown[][]; st: PackState } {
+export function packMore(hist: readonly HistoryEvent[], st: PackState): { rows: unknown[][]; st: PackState } {
   const rows: unknown[][] = [];
   let { d0, g0, h } = st;
   for (let k = st.n; k < hist.length; k++) {
@@ -56,6 +56,7 @@ export function packMore(hist: readonly CityEvent[], st: PackState): { rows: unk
       case 'techdone': row = [code, dd, TECH_CODES.indexOf(e.id)]; break;
       case 'depleted': row = [code, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
       case 'cms': row = e.ev === 'done' ? [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id), e.bonus ?? 0] : [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id)]; break;   // D045（城市格式 10）：完成才帶獎金
+      case 'hasten': row = [code, dd, ...e.ids]; break;   // D102（城市格式 11）：尾巴是當天被煉鋼廠加速施工的建築編號
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

@@ -94,8 +94,9 @@ export async function d046HistoryGuards(log) {
     return 'bogus 與原型鍵皆保留「存檔：不認得的事件 …」，移除後存檔逐位恢復';
   });
   await run('唯一登記、0–24 既有碼不動、格式 8／9／10 分組與舊版界線', () => {
-    assert.equal(CITY_FORMAT, 10); assert.equal(HISTORY_VER, 2); assert.equal(JOURNAL_VER, 3);
-    assert.equal(Object.keys(EVENT_REGISTRY).length, 25);
+    // D102 起現行格式是 11、登記 26 種（碼 25＝hasten，煉鋼廠加速施工；格式 11 與碼 25 的契約在 tools/unit-d102-history.mjs）。0–24 下面照舊逐項核對、不動
+    assert.equal(CITY_FORMAT, 11); assert.equal(HISTORY_VER, 2); assert.equal(JOURNAL_VER, 3);
+    assert.equal(Object.keys(EVENT_REGISTRY).length, 26);
     assert.ok(Object.isFrozen(EVENT_REGISTRY)); assert.ok(Object.isFrozen(EVENT_BY_CODE));
     CONTRACT.forEach(([f, e, row]) => {
       const reg = EVENT_REGISTRY[e.t];
@@ -107,7 +108,7 @@ export async function d046HistoryGuards(log) {
     assert.deepEqual(CONTRACT.filter(([f]) => f >= 8).map(([f, e, row]) => [row[0], f, e.t]), [
       [18, 8, 'policy'], [19, 8, 'budget'], [20, 8, 'research'], [21, 8, 'spec'], [22, 8, 'techdone'], [23, 9, 'depleted'], [24, 10, 'cms'],
     ]);
-    return '25 種事件固定碼；不新增 CITY_FORMAT／hv；拆水管、焦土的版本另驗';
+    return '0–24 的 25 種事件固定碼不動；hv 不變；D102 另加碼 25（格式 11）；拆水管、焦土的版本另驗';
   });
   await run('固定黃金列、每個切點的 packMore、物件與緊湊列來回、前綴不變', () => {
     const h = CONTRACT.map(([, e]) => e), want = CONTRACT.map(([, , r]) => r);

@@ -431,7 +431,7 @@
       "source": "tools/d085-source-d089.test.mjs",
       "target": "tools/d085-source-d090.test.mjs",
       "sourceSha256": "117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c",
-      "targetSha256": "322024708fb8b4d999db039ad4fcce147554b84e05f5051208d9e9b47e327a98",
+      "targetSha256": "e9fda2ef00f95cb6ab61fa977e60de7fc8314d35d214468c45a3a57d45084238",
       "changes": [
         {
           "before": "'./d089-source.mjs'",
@@ -441,6 +441,16 @@
         {
           "before": "import{D085_CHANGED,d085PriorSource,d084PriorInventory,d084PriorSource}from'./d090-source.mjs';",
           "after": "import{D085_CHANGED,d085PriorSource,d084PriorSource}from'./d090-source.mjs';\nimport{d084PriorInventory}from'./d099-source.mjs';",
+          "count": 1
+        },
+        {
+          "before": "import{d084PriorInventory}from'./d099-source.mjs';",
+          "after": "import{d084PriorInventory}from'./d100-source.mjs';",
+          "count": 1
+        },
+        {
+          "before": "import{d084PriorInventory}from'./d100-source.mjs';",
+          "after": "import{d084PriorInventory}from'./d102-source.mjs';",
           "count": 1
         }
       ]

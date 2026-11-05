@@ -8,7 +8,7 @@ import{assertD090NativeCheckCopies}from'../../tools/d090-native-check-versions.m
 import{assertNativeFarmPrecedenceCopy}from'./native-farm-precedence-copy.mjs';
 export const INHERITED_BASELINE='5b41bac165ba2b29146e6835490357bebc3cd549';
 export const DOMAIN_MANIFEST='proposals/d090/inherited-test-domains-pipes-v2.json';
-export const DOMAIN_MANIFEST_SHA="53fc0356e03d3092741e8a417664eb52cbfd35972b5bb7f1931fe8048ec1b475";
+export const DOMAIN_MANIFEST_SHA="0be5b4f47c84e6fbace7bac93ecd3868b622298e2812b6b416373c6a70a7087f";
 export const sha=x=>createHash('sha256').update(x).digest('hex');
 const read=f=>fs.readFileSync(f,'utf8');
 export function assertInheritedDomains(bytes=read(DOMAIN_MANIFEST),source=read){
