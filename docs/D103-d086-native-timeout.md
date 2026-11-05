@@ -217,6 +217,36 @@ D090 現行層用三種方式釘住八個繼承工作流的位元組：
 3. **驗收 2**：寫「`.github/workflows/*.yml` 裡每一個 timeout」。持續守衛盤的是 35 個被 lineage 釘住的檔；`transit.yml` 會被產品卡持續擴充，不釘值，改由施工當下的 `--check` 逐位元組核（基準加上恰好那一步）。
 4. **「要改的檔」第 6 項**：寫 copies 7/8/13「`reissued` 記下改之前的 target 雜湊」。copy 13 原有的 D102 紀錄是被取代，不是保留（見上）。
 
+### CI（驗收 11；2026-11-05 補記）
+
+PR #60 head `f0a652b`。`ci` 是 PR 自動跑的；`transit` 與 native 由我用 `workflow_dispatch` 在分支上觸發，用的是分支上的 YAML，所以 D086 吃得到 30 分鐘。
+
+| 工作流 | run | 結果 |
+|---|---|---|
+| `ci`（PR 自動） | [41961181062](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961181062) | 綠（重跑一次後）。第一次 `d076 (412)` 紅在裝字型的 `apt-get update`：`packages.microsoft.com` 回 403，還沒跑到任何測試；重跑（attempt 2）綠 |
+| `transit` | [41961188962](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961188962) | 1/1，含本卡守衛那一步 |
+| D083 native | [41961195432](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961195432) | 5/5 |
+| D086 native | [41961201466](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961201466) | 綠（重跑一次後）。`native-and-build` 一次就過：16.9 分，第 5 步 181 秒（中速 runner）。`native-input-performance (1440)` 第一次紅，重跑（attempt 2）綠，見下 |
+| D087／D088／D089／D090 native | [41961208020](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961208020)／[41961214140](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961214140)／[41961220417](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961220417)／[41961226584](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41961226584) | 各 11/11 |
+
+- 133 個檢查最後是 126 success、7 skipped，0 失敗。skipped 是只在 main 跑的 6 個 native-release 和 pages。
+- D086 那次紅在凍結門檻「新開頁面後的第一次提交 ≤ 400 ms」：`borough-iron-market` 第 0 次花了 453.8 ms。
+  - 這次產品的 `index.html` 跟 D102 全綠那次逐位元組相同（`00dacf37…`），所以不是本 PR 的改動造成的。
+  - 兩個失敗的分析都在 [PR 留言](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/60#issuecomment-6648927131)，各只重跑一次。
+- PR 上的 D086 跑在中速 runner，20 分本來也過得了，所以 **30 分鐘在 PR 上沒被慢 runner 考驗到**。
+- 合併 bot 把 base 改成 `main` 之後直接合併。改 base 不會觸發 `pull_request` 的預設事件，`f0a652b` 上之後沒有新 run（API 查過），所以 `transit` 和 native 從沒以「PR 進 main」的身分跑過。
+
+**合併後 main 的實測**（[原始數據](evidence/D103/main-ci-ceff055.txt)）：main ci [41979267981](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/41979267981)，head `ceff055`。
+
+- `d086-native-release / native-and-build` 跑了 **20 分 57 秒**（06:27:06–06:48:03 UTC）。
+  - 第 5 步 224 秒，落在慢 runner 那一群（217–253 秒）。
+  - 20 分鐘上限的話，06:47:06 會停在第 20 步被取消，pages 也不會部署。
+  - **這是 30 分鐘第一次在 CI 上實際派上用場。**
+- 同一輪 D083、D087–D090 的 `native-and-build`：0.5／4.7／7.7／4.8／2.3 分，照舊是 20 分鐘上限。
+- 首用計時：`d086-native-release / native-input-performance (1440)` 的第一次提交是 226 ms。
+  - 同一項四次觀察：169.8、453.8、329.9、226 ms，凍結門檻 400 ms，餘量很薄。
+  - 以前 `native-and-build` 常逾時，下游的這類瀏覽器計時 job 常被跳過；放寬後會更常跑到。
+
 ### 驗收對照
 
 | # | 驗收 | 結果 | 證據 |
@@ -231,18 +261,21 @@ D090 現行層用三種方式釘住八個繼承工作流的位元組：
 | 8 | runner | 過：本機與最終提交（乾淨 worktree、`GITHUB_ACTIONS=true`）兩次都 exit 0 | [runners](evidence/D103/runners.txt)、[runners-final](evidence/D103/runners-final-0fb097e.txt) |
 | 9 | 負控 | 過：20 種都被預期的那一關擋下；守衛自身突變 14/14 | [unit-d103-timeout](evidence/D103/unit-d103-timeout.txt)、[guard-mutations](evidence/D103/guard-mutations.txt) |
 | 10 | 全量重放 | 過：56/56 步 exit 0（在審查修正前的 `b310869` 上；修正只動 lineage 說明字串、守衛與凍結工具，讀 lineage 的 runner 已在最終提交上重跑） | [native-replay](evidence/D103/native-replay-b310869.txt) |
-| 11 | CI | 待：推送後觸發 | — |
+| 11 | CI | 過：PR #60 `ci`、`transit`、D083、D086–D090 native 全綠；`ci` 的 d076 與 D086 的首用計時各重跑一次。D086 `native-and-build` 16.9 分、第 5 步 181 秒（中速）；合併後 main 上 20 分 57 秒、第 5 步 224 秒（慢） | 上面「CI」一節；[main-ci-ceff055](evidence/D103/main-ci-ceff055.txt) |
 | 12 | LOG | 有 | `LOG.md` |
 
 ### 沒做成的事（不美化）
 
-- **CI 還沒跑**。
-  - `transit` 與 native 只在「PR 進 main」時自動跑。本 PR 疊在 D102 上，要用 `workflow_dispatch` 在分支上觸發；手動觸發用的就是分支上的 YAML，所以 D086 吃得到 30 分鐘的上限。
-  - 30 分鐘夠不夠，要看在慢 runner 上實跑一次。本機重放的耗時（兩路並行搶 4 核）不能代表 CI。
-- D083、D087–D090 仍是 20 分（最久 8.2 分）。
-- 合併順序 #55 → #59 → 本卡，請都用合併提交。
-  - squash 合併時，`--check` 與 D102 的 lease 測試需要的 `c8e5ef1`、`b328a07` 會不在歷史裡；守衛本身不讀 git，不受影響。
-  - D102 的文件提交 `ae6fb7b` 推上去之後，本分支併它時 `LOG.md` 會衝突一處，兩邊都保留即可。
+- CI 全綠（見「CI」一節），但有兩處要照實說：
+  - `transit` 與 native 是手動觸發在分支上跑的，**從沒以「PR 進 main」的身分跑過**。
+  - 兩個失敗各靠重跑一次才綠：一個是 apt 403，一個是首用計時 453.8 ms。
+- 30 分鐘在 main 上已經被慢 runner 用到一次（20 分 57 秒），比實測多約 43%。還是從數據推的，不是保證。
+- D083、D087–D090 仍是 20 分（最久 8.2 分；main 這輪最久 7.7 分）。
+- 首用計時門檻 400 ms 的餘量很薄（四次觀察最高 453.8 ms）。凍結的門檻不改；再紅就照樣分析、只重跑一次。
+- 合併：2026-11-05 業主經 bot 照順序都用合併提交合了：#55 `a180776`、#59 `9ee81d4`、#60 `ceff055`。
+  - `ceff055` 的 tree 等於 CI 測過的 `f0a652b`。
+  - `c8e5ef1`、`b328a07` 都在 main 的歷史裡。
+  - D102 的文件提交 `ae6fb7b` 照預期在 `LOG.md` 衝突一處，已在合併後的文件 PR 兩邊都保留。
 - D101 重發 lineage 時，要把 D103 在 copies 7/8/13 追加的改動項併進整檔那一項，再重算雜湊（已記在 D101 的任務）。
 - 守衛刻意卡住「未宣告的工作流改動」：之後要改 35 個被釘工作流的 timeout 或 d086 的 `native-and-build`，要同時改本守衛。
 - `--check` 只在本卡疊在 `c8e5ef1` 上時成立；本分支併進別的提交（例如 D102 的文件提交）之後，它會照設計變紅。
