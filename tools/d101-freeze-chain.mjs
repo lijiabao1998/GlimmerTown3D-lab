@@ -86,7 +86,7 @@ export const D101_CHAIN_BEFORE = Object.freeze({
   [ORIGINAL_CAMERA]: 'da17d79440239b55a0e9d8b65abecc1b10d166980533c7380ab781bb796c4445',
   [D085_SOURCE]: '117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c',
 });
-export const D101_REASON = 'D101 current-source successor (269 files, d101 lease): the D090 current validator admits the seven D101 transit save/UI modifications and the two added transit sources, and the routing current list runs the camera restoration successor; FOUNDATION_ROUTING_SHA follows. The D103 append-only item is folded into this single whole-body change from the immutable e4c preimage.';
+export const D101_REASON = 'D101 current-source successor (269 files, d101 lease): the D090 current validator admits the eight D101 transit save/UI modifications and the two added transit sources, and the routing current list runs the camera restoration successor; FOUNDATION_ROUTING_SHA follows. The D103 append-only item is folded into this single whole-body change from the immutable e4c preimage.';
 const D085_EDITS = Object.freeze([
   ["import{D085_CHANGED,d085PriorSource,d084PriorSource}from'./d090-source.mjs';", "import{D085_CHANGED,d085PriorSource,d084PriorSource}from'./d101-source.mjs';"],
   ["import{d084PriorInventory}from'./d102-source.mjs';", "import{d084PriorInventory}from'./d101-source.mjs';"],
@@ -305,7 +305,7 @@ export function d101ChainCandidate(manifest, cityView) {
   const contractBase = base(F.contract);
   const d102Line = contractBase.split('\n').filter(l => l.startsWith('export const D102_MODIFIED_AFTER=Object.freeze({'));
   assert.equal(d102Line.length, 1);
-  const d101Block = `// D101 finite successor: exactly the seven declared transit save/UI files carry new
+  const d101Block = `// D101 finite successor: exactly the eight declared transit save/UI files carry new
 // bytes and exactly two transit sources join, pinned by the D101 outer lease
 // (fixtures/d101/source.json). Spread after D102, so the D101 after hashes win.
 export const D101_MODIFIED_AFTER=Object.freeze(${literal(after)});

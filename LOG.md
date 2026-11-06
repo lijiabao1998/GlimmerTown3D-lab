@@ -10,6 +10,26 @@
 
 ---
 
+- 2026-11-06 — D101 — 施工第三步：運輸施工交易、復原、反向守衛、巨型合併遮罩（只動模擬）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - `edit.ts`：`TRANSIT_TOOLS` 另成一組；`previewTransit`／`commitTransit`／`removeTransit`；運輸復原跟建築共用堆疊；反向守衛「運輸設施擋住」。
+  - `merge.ts`：城裡有運輸時，巨型合併不吸收地面軌道與站廠的格子（業主 11-06 選 a）。遮罩在讀檔與施工時登記；沒有運輸的城每天的 sim hash、亂數次數、存檔碼都等於 `76e074f`。
+  - lease modified 7→8 檔、`D084_CHANGED` 42→43，鏈已重凍。新守衛 `tools/d101-construction.mjs` 12 項、19 種突變，掛進 `transit.yml`。
+  - 核對代理找到 4 個 major，都處理了：
+    - 反向守衛可以用線、框的多格建築繞過，把建築蓋到軌道上（sim API 碰得到，一般觸控碰不到）。已修，隨機 30,000 筆施工 0 違規。
+    - 守衛沒測到多格占地，已補，並加 2 種突變。
+    - 凍結驗收 15b 的原文不成立：8 個種子只有 2 個成立，只看 hash 是 5 個。卡面寫了更正，守衛改斷言兩條取代的條件，**要請業主知道**。
+  - 另外修了 6 個 minor：兩處註解、15a 前提改嚴、`d011-edit` 列入計時類依序跑、補記本來就紅的三支 ui-actions、補卡面紀錄。
+  - 煙霧測試（本機 Node 24，修正後依序重跑）：
+    - 鏈 `--check`、`tsc` 綠；`transit.yml` 全部步驟綠，其中 `d101-save` 19／19、`d101-construction` 12／12。
+    - loadMod 歷史守衛 27 支 257 項 0 紅。
+    - 瀏覽器 smoke 沒跑，交給 CI。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 介面、繪製、地塊卡都還沒做（第 4 步）：`cityView.ts`、`transitArt.ts` 還是 stub，玩家還不能蓋運輸。
+    - 15b 的更正還沒經過業主。
+    - 第 2 輪核對（輪數上限 2）找到 1 major、3 minor，這一個提交沒修。major 是遮罩守衛只測了地面軌道：車站、車廠、地鐵、遮罩寬度 4 個突變整支守衛都過（產品程式目前是對的）。下一個提交處理。
+    - 修正後 frame 守衛、歷史分區全量、foundation 與 inherited runner、native 重放、瀏覽器 smoke 都沒跑，交給 CI。
+    - 中階 Android 效能沒量。
 - 2026-11-06 — D101 — 第二步核對結果與修正：[卡面](docs/D101-transit-save-and-ui.md)。
   - 第 1 輪三個獨立核對代理：沒有 blocker，10 個小問題。
   - 歷史分區（5502 秒）、foundation 與 d086–d089 runner、d078–d081 frame 都 exit 0。唯一的紅是 `d101-save` 在 4 核被 5 個重工作搶滿時，計時比值 7.38。

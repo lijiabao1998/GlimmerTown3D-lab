@@ -1,5 +1,5 @@
 // D101 current-source successor for the D090 foundation suite: the D102 267 with
-// exactly the seven D101 transit save/UI files modified plus exactly two added
+// exactly the eight D101 transit save/UI files modified plus exactly two added
 // transit sources (269), projected back through the D102, D100, D099 and D090
 // chains (D101 hands the main bytes down, D102 then hands the D100 bytes down).
 // Supersedes the D102 copy as the current test.

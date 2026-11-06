@@ -1,5 +1,5 @@
 // D101 outer source lease generator. Pins all267 D102 current files at the
-// declared baseline (main 76e074f); exactly the seven D101 transit save/UI files
+// declared baseline (main 76e074f); exactly the eight D101 transit save/UI files
 // carry their D102 `before` bytes and the new `afterSha256`; the two new transit
 // sources are pinned in `added`. Writes fixtures/d101/source.json and the
 // generated entry tools/d101-source.mjs. Never overwrites either output.
@@ -18,7 +18,7 @@ const sha = value => createHash('sha256').update(value).digest('hex');
 const git = (...args) => execFileSync('git', args, {cwd: ROOT, maxBuffer: 32e6});
 export const D101_FIXTURE = 'fixtures/d101/source.json';
 export const D101_ENTRY = 'tools/d101-source.mjs';
-export const D101_QUALIFICATION = 'D101 outer lease: all267 D102 current source files byte-exact at the declared baseline (main 76e074f), of which exactly seven are modified to record, save, replay, build/undo and draw the transit network: cityView.ts, journal.ts, save.ts, city.ts, edit.ts, eventRegistry.ts, replay.ts; exactly two sources are added: src/render/transitArt.ts and src/sim/transit/history.ts (267 + 2 = 269). Every downward projection hands the D102 bytes to the D102, D100, D099 and D090 chains; the added files project to an empty string. day.ts, decisions.ts and the D099/D100 transit model sources are unchanged.';
+export const D101_QUALIFICATION = 'D101 outer lease: all267 D102 current source files byte-exact at the declared baseline (main 76e074f), of which exactly eight are modified to record, save, replay, build/undo and draw the transit network and to keep mega merges off surface transit cells: cityView.ts, journal.ts, save.ts, city.ts, edit.ts, eventRegistry.ts, replay.ts, rules/merge.ts; exactly two sources are added: src/render/transitArt.ts and src/sim/transit/history.ts (267 + 2 = 269). Every downward projection hands the D102 bytes to the D102, D100, D099 and D090 chains; the added files project to an empty string. day.ts, decisions.ts and the D099/D100 transit model sources are unchanged.';
 const inventory = () => fs.readdirSync(path.join(ROOT, 'src'), {recursive: true, withFileTypes: true})
   .filter(entry => entry.isFile())
   .map(entry => path.relative(ROOT, path.join(entry.parentPath, entry.name)).replaceAll('\\', '/'))

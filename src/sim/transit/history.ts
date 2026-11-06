@@ -4,6 +4,7 @@
 //     （graph.ts 用 typeof 檢查，給數字會把每一條軌道都判成「地形無效」）。地圖外的格子算佔用。
 //   transitEventOf：施工成功後要記的那一筆事件（鍵序＝讀檔 eventOf 組回來的順序，再存檔逐位元組相同）；transitShapeError 是讀檔的形狀檢查，兩邊共用同一份規則。
 //   restoreTransit：復原（edit 的 undo）——三個陣列回到施工前、nextId 不倒退、revision +1、鍵序同 createNetwork。
+//   surfaceTransitCells／transitSurface：地面上的運輸格（反向守衛、巨型合併的遮罩；地鐵在地下，不算）。
 //   transitReplay／applyTransitEvent／undoTransitStroke／replayedNetwork：重播。
 //     逐筆呼叫 network.ts 會每一筆重驗、重抄整張網（4000 條約 8 秒，O(N²)，牴觸規則 5）。這裡每一筆照樣交給 network.ts 的同一支函式判斷，
 //     但只給它「這一筆判斷時看得到的那幾件」：同一條軌道（重複）、壓在同一格的站廠（重疊）、端點落在站廠裡的軌道（拆站廠前要先拆）；
@@ -81,6 +82,21 @@ export function surfaceTransitCells(net: TransitNetwork | undefined, n: number):
     for (let dz = 0; dz < s.h; dz++) for (let dx = 0; dx < s.w; dx++) if (s.x + dx < n && s.z + dz < n) out.add((s.z + dz) * n + s.x + dx);
   }
   return out;
+}
+
+// 巨型合併的地面遮罩來源（交給 merge.ts 的 setMergeSurface；merge.ts 每天取一次）：讀城市「當下」的路網，所以施工、拆除、復原之後不必重新登記。
+// 回傳 Uint8Array（格索引 z*n+x，1＝地面軌道端點或地面站廠；地鐵不算）；城裡沒有路網回 null（合併的判斷式跟原文一樣）。
+// 路網物件不可變（network.ts 每一筆都回新物件），同一個物件只算一次。純邏輯：只讀 cityOf() 的 transit 與 n
+export function transitSurface(cityOf: () => City): () => Uint8Array | null {
+  let seen: TransitNetwork | undefined, n = 0, mask: Uint8Array | null = null;
+  return () => {
+    const c = cityOf(), net = c.transit;
+    if (net !== seen || c.n !== n) {
+      seen = net; n = c.n; mask = null;
+      if (net) { mask = new Uint8Array(n * n); for (const i of surfaceTransitCells(net, n)) mask[i] = 1; }
+    }
+    return mask;
+  };
 }
 
 // ---- 重播 ----

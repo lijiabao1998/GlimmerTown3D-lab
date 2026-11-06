@@ -1,5 +1,5 @@
 // D101 outer source lease guards: exact269 current inventory (267 + 2 added), the
-// seven declared modifications hand their main-76e074f bytes down every projection,
+// eight declared modifications hand their main-76e074f bytes down every projection,
 // the two-level projection D101 -> D102 still reaches the D100 bytes (and three
 // levels reach 5b41bac), and fail-closed controls. Every chain output on disk (the
 // lease, the camera successor, the domain/routing/lineage manifests and their
@@ -53,7 +53,7 @@ test('current src is exactly the 269 and every projection keeps its historical s
   assert.equal(lease.d084PriorInventory(files, read).length, 237);
 });
 
-test('exactly the seven declared files changed (before = main 76e074f bytes) and exactly two were added', () => {
+test('exactly the eight declared files changed (before = main 76e074f bytes) and exactly two were added', () => {
   assert.equal(manifest.baseline, D101_BASELINE);
   assert.deepEqual(lsTree(D101_BASELINE), [...D102_CURRENT_PATHS], 'the baseline src tree is the D102 current 267');
   assert.deepEqual(Object.keys(manifest.modified), D101_MODIFIED);
@@ -117,7 +117,7 @@ test('the D090 current contract carries the same hashes (one source of truth)', 
 
 test('D084_CHANGED/D084_ADDED widen by exactly the declared files; D085_CHANGED is the D090 one', () => {
   assert.deepEqual(D084_CHANGED, [...new Set([...D102_D084_CHANGED, ...D101_MODIFIED])]);
-  assert.equal(D084_CHANGED.length, 42, 'the seven were already among the D102 42 (no-op widening)');
+  assert.equal(D084_CHANGED.length, 43, 'merge.ts widens 42 -> 43 (the other seven were already among the D102 42)');
   assert.deepEqual(D084_ADDED, [...new Set([...D102_D084_ADDED, ...D101_ADDED])]);
   assert.equal(D084_ADDED.length, 32);
   for (const file of D101_ADDED) assert.ok(!D084_CHANGED.includes(file), file + ' joins ADDED only (D099/D100 precedent)');

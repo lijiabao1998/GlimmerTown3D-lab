@@ -15,6 +15,7 @@
 // D101（城市格式 12）：運輸路網另存 d3.rt（src/sim/transit/format.ts 的 serializeNetwork，{v:1, rules:1, state}）：城裡有路網（city.transit）才寫，沒有運輸的城存檔逐位元組不變。
 //   讀檔時「有 rt」或「歷史有運輸事件」就是運輸存檔：rt 要解得開、兩者要同時有、重播出來的路網序列化要跟 rt 逐位元組相同；
 //   任何一步讀不進來都回 ok:false（不退回快照：退回快照的下一次自動存檔會把整個路網刪掉）。判斷絕不看 f。
+//   讀回有路網的城，順手登記巨型合併的地面遮罩（src/sim/rules/merge.ts 的 setMergeSurface；施工時由 edit.ts 登記）。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
 import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, TRANSIT_MODES, TRANSIT_OPS, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type HistoryEvent, type CmsEvent, type KindTable, type TransitOp } from '../sim/city.ts';
@@ -29,7 +30,8 @@ import { techSave } from '../sim/rules/tech.ts';
 import { cmsSave3d } from '../sim/rules/commissionSave.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
 import { parseNetwork, serializeNetwork, type TransitSaveV1 } from '../sim/transit/format.ts';
-import { transitShapeError } from '../sim/transit/history.ts';
+import { transitShapeError, transitSurface } from '../sim/transit/history.ts';
+import { setMergeSurface } from '../sim/rules/merge.ts';
 
 export const HISTORY_VER = 2;
 export const JOURNAL_VER = 3;   // D013：歷史在日誌裡
@@ -372,6 +374,7 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   // 對得上：城市換成重播出來的（編號、蓋起日、墓碑、歷史都在），根格對照表照新的編號重建
   c.name = sim.city.name;
   sim.city = c;
+  if (c.transit) setMergeSurface(sim.w, transitSurface(() => sim.city));   // D101：巨型合併不吸收地面軌道、站廠的格子（讀當下的路網；沒有運輸的城不登記，合併跟原文一樣）
   sim.root.clear();
   for (const b of c.buildings) if (b.goneDay === undefined) sim.root.set(b.z * c.n + b.x, b);
   for (const [i, b] of sim.root) { const t = sim.w.tiles[i].bld; if (t) { b.age = t.age; b.lv = t.lv; b.v = t.v; } }

@@ -1,5 +1,5 @@
 // D101 第二步守衛：運輸施工的世界歷史、存檔與重播（卡 docs/D101-transit-save-and-ui.md；transit.yml 會跑）。
-// 涵蓋凍結的驗收 1、2、3、7、13、15、16（模擬部分）、17，加上碼 26 的黃金列、每個切點的 packMore、hv1／hv2／hv3 的續寫、
+// 涵蓋凍結的驗收 1、2、3、7、13、15a（驗收 15 的更正；15b 在 tools/d101-construction.mjs）、16（模擬部分）、17，加上碼 26 的黃金列、每個切點的 packMore、hv1／hv2／hv3 的續寫、
 // 重播與逐筆呼叫 network.ts 的隨機差分（含軌道上限 8192 的邊界），以及突變控制（突變都載入 /dev/shm 底下改過的 src 副本，不動倉庫的檔）。
 // 施工（edit.ts）是第三步，這裡的運輸事件全部由真的 network.ts 呼叫產生（tx() 照第三步的規格：資金取整、沙盒費用 0、拆除 0、
 // 先 g＝stroke++ 再記恰好一筆事件；復原＝restoreTransit＋退費＋一列 undo），再交給 history.ts／journal.ts／save.ts。
@@ -28,12 +28,12 @@ const mulberry = seed => () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let 
 // ---- 模組組：同一個根目錄底下的 src（現行、突變副本）一起載入，彼此接在一起 ----
 async function api(root) {
   const im = rel => import(pathToFileURL(path.join(root, rel)).href);
-  const [save, labcode, journal, replay, city, registry, day, edit, network, format, history, kt] = await Promise.all([
+  const [save, labcode, journal, replay, city, registry, day, edit, network, format, history, merge, kt] = await Promise.all([
     'src/io/save.ts', 'src/io/labcode.ts', 'src/io/journal.ts', 'src/sim/replay.ts', 'src/sim/city.ts', 'src/sim/eventRegistry.ts', 'src/sim/day.ts',
-    'src/sim/edit.ts', 'src/sim/transit/network.ts', 'src/sim/transit/format.ts', 'src/sim/transit/history.ts', 'src/content/kindTable.ts'].map(im));
+    'src/sim/edit.ts', 'src/sim/transit/network.ts', 'src/sim/transit/format.ts', 'src/sim/transit/history.ts', 'src/sim/rules/merge.ts', 'src/content/kindTable.ts'].map(im));
   const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
   const KT = kt.kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
-  return { root, save, labcode, journal, replay, city, registry, day, edit, network, format, history, KT, vrank, sample: name => read(`src/content/samples/${name}.code.txt`).trim() };
+  return { root, save, labcode, journal, replay, city, registry, day, edit, network, format, history, merge, KT, vrank, sample: name => read(`src/content/samples/${name}.code.txt`).trim() };
 }
 const loadOk = (A, code, j) => { const L = A.save.loadCode(code, A.KT, A.vrank, j); if (!L.ok) throw new Error('讀檔失敗：' + L.error); return L; };
 const rawOf = (A, code) => { const r = A.labcode.decodeLabCode(code); assert.ok(r.ok, r.error); return r.save.raw; };
@@ -65,6 +65,11 @@ function txUndo(A, s, t) {
   s.money += t.cost;
   s.city.history.push({ day: s.day, t: 'undo', g: t.g, refund: t.cost });
   s.city.transit = A.history.restoreTransit(s.city.transit, t.before);
+}
+// 第三步的真施工（edit.ts：巨型合併的遮罩登記、反向守衛都在）；第一個成功的候選（失敗的嘗試什麼都不動）
+function firstEdit(A, s, op, cands) {
+  for (const a of cands) { const r = A.edit.commitTransit(s, { op, ...a }); if (r.ok) return r; }
+  throw new Error(`找不到可以施工的 ${op}`);
 }
 // 第一個成功的施工（候選照格索引順序，決定性）
 function first(A, s, op, cands, opts) {
@@ -665,27 +670,38 @@ async function main() {
     return detail;
   });
 
-  await step('驗收 15（規則 9）：同一串操作（施工、過日子）分別有蓋、沒蓋運輸，存檔裡實驗線看得到的欄位除了 money 逐位元組相同；rl、rb、tr 三層跟範本相同', () => {
+  await step('驗收 15a（規則 9；驗收 15 的更正）：不觸發巨型合併的局面裡（前提照實斷言：每天兩邊的幸福都 ≤ 0.6），同一串操作（施工、過日子）分別有蓋、沒蓋運輸（真的 edit.ts 施工：遮罩登記、反向守衛都在；格子的施工兩邊結果相同），存檔裡實驗線看得到的欄位除了 money 逐位元組相同；rl、rb、tr 三層跟範本相同', () => {
+    const H = A.merge.HAPPY_MEGA;
     const run = withTransit => {
       const L = loadOk(A, A.sample('newcity')), s = L.sim; s.money = 1e6; let t = 0;
+      const days = [], ops = [];
       for (let d = 1; d <= 12; d++) {
-        if (d % 4 === 1) { t += 5000; A.edit.commitOp(s, { k: 'line', tool: 'road', x0: 8, z0: 8 + d, x1: 16, z1: 8 + d }, t); t += 5000; A.edit.commitOp(s, { k: 'rect', tool: 'zr', x0: 8, z0: 9 + d, x1: 14, z1: 9 + d }, t); }
+        if (d % 4 === 1) { t += 5000; ops.push(A.edit.commitOp(s, { k: 'line', tool: 'road', x0: 8, z0: 8 + d, x1: 16, z1: 8 + d }, t)); t += 5000; ops.push(A.edit.commitOp(s, { k: 'rect', tool: 'zr', x0: 8, z0: 9 + d, x1: 14, z1: 9 + d }, t)); }
         if (withTransit && d % 3 === 0) {
           const c = s.city;
-          first(A, s, 'edge', edgeCands(A, c, (p, q) => !p.occupied && !q.occupied && !p.water && !q.water && p.elevation === q.elevation).slice(100 * d).map(a => ({ ...a, mode: d % 2 ? 'rail' : 'tram' })));
-          first(A, s, 'station', boxCands(A, c, 2, 1).slice(50 * d).map(a => ({ ...a, mode: 'rail' })));
-          first(A, s, 'edge', [{ x: d, z: 66, h: -1, x2: d + 1, z2: 66, h2: -1, mode: 'metro' }]);
+          firstEdit(A, s, 'edge', edgeCands(A, c, (p, q) => !p.occupied && !q.occupied && !p.water && !q.water && p.elevation === q.elevation).slice(100 * d).map(a => ({ ...a, mode: d % 2 ? 'rail' : 'tram' })));
+          firstEdit(A, s, 'station', boxCands(A, c, 2, 1).slice(50 * d).map(a => ({ ...a, mode: 'rail' })));
+          firstEdit(A, s, 'edge', [{ x: d, z: 66, h: -1, x2: d + 1, z2: 66, h2: -1, mode: 'metro' }]);
         }
-        A.day.stepDay(s);
+        const rep = A.day.stepDay(s);
+        days.push({ happy: rep.cityHappy, megas: rep.merges.filter(m => m.size === 3).length });
       }
-      return { raw: rawOf(A, A.save.saveCode(s, L.template, L.start)), template: L.template, money: s.money };
+      return { raw: rawOf(A, A.save.saveCode(s, L.template, L.start)), template: L.template, money: s.money, days, ops: ops.map(r => [r.ok, r.placed, r.spent, r.reason ?? null]) };
     };
     const a = run(true), b = run(false), lab = r => { const o = copy(r); delete o.d3; delete o.z; delete o.money; return o; };
+    // 15a 的前提：這段期間沒有任何巨型合併的機會——每天兩邊的幸福都 ≤ 0.6（merge.ts 的門檻是「> 0.6」才跑巨型合併那一段，連窗都不看、骰都不擲）。
+    // 只斷言這一條：「兩邊都沒有巨型合併」不夠，合格的含軌道格窗被擋下、骰沒擲中時也是 0 筆合併，亂數卻已經偏了
+    const pre = a.days.map((q, i) => q.happy <= H && b.days[i].happy <= H);
+    assert.ok(pre.every(Boolean), `前提不成立的日子：${J(a.days.map((q, i) => [i + 1, q.happy, b.days[i].happy, q.megas, b.days[i].megas]).filter((_, i) => !pre[i]))}`);
+    assert.equal(a.days.reduce((x, q) => x + q.megas, 0) + b.days.reduce((x, q) => x + q.megas, 0), 0, '幸福 ≤ 0.6 的日子不會有巨型合併');
+    assert.equal(J(a.ops), J(b.ops), '格子的施工兩邊結果相同（沒有被運輸擋下的）');
     assert.ok(a.raw.d3.rt && !('rt' in b.raw.d3), '一邊有 rt、一邊沒有');
     assert.ok(a.money < b.money, '蓋運輸要花錢');
     assert.equal(J(lab(a.raw)), J(lab(b.raw)), '實驗線看得到的欄位（money 以外）');
     for (const k of ['rl', 'rb', 'tr']) { assert.equal(a.raw[k], a.template[k], k); assert.equal(b.raw[k], b.template[k], k); }
-    return `實驗線欄位 ${Object.keys(lab(a.raw)).length} 個逐位元組相同；money ${a.raw.money} vs ${b.raw.money}；rl／rb／tr ${['rl', 'rb', 'tr'].map(k => typeof a.raw[k]).join('／')}，跟範本相同；運輸只在 d3（f ${a.raw.d3.f} vs ${b.raw.d3.f}）`;
+    const maxHappy = Math.max(...a.days.map(q => q.happy), ...b.days.map(q => q.happy)), megas = [a, b].map(r => r.days.reduce((x, q) => x + q.megas, 0));
+    const atGate = [...a.days, ...b.days].filter(q => q.happy === H).length;
+    return `前提：12 天幸福最高 ${maxHappy}（${maxHappy <= H ? '≤' : '>'} ${H}；兩邊共 24 天裡剛好等於門檻 ${atGate} 天，門檻是「> ${H}」才跑），巨型合併 ${megas.join('／')} 次；格子施工 ${a.ops.length} 筆兩邊相同；實驗線欄位 ${Object.keys(lab(a.raw)).length} 個逐位元組相同；money ${a.raw.money} vs ${b.raw.money}；rl／rb／tr ${['rl', 'rb', 'tr'].map(k => typeof a.raw[k]).join('／')}，跟範本相同；運輸只在 d3（f ${a.raw.d3.f} vs ${b.raw.d3.f}）`;
   });
 
   await step(`突變控制（${MUTANTS.length} 種，副本放在 ${SCRATCH}）：每一種都讓守衛轉紅，而且紅在預期的那一項`, async () => {
