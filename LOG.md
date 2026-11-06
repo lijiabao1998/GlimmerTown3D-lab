@@ -10,6 +10,12 @@
 
 ---
 
+- 2026-11-06 — D101 — 本機第四步介面、繪製與遷移：[卡面](docs/D101-transit-save-and-ui.md)〈本機第四步〉。
+  - 獨立六工具／相鄰軌道、站廠、選件拆除與復原；地塊卡排除運輸事件；地面合批、地下示意；完整 hv2 單槽備份與失敗原子取消；示範城不覆蓋我的城備份。
+  - 驗證：typecheck／build／diff check 過；Linux 重凍與 check 過（lease 0d7a0c15…）；migration 6／6＋9 突變、art 7／7＋6 突變；無運輸四樣本 32 項與 main 逐值相同。瀏覽器 10＋6 項操作／資料檢查及9組相機記錄過，無runtime錯誤；連續CDP跨導航觸控限制已記卡面，改獨立會話驗存讀。
+  - commit：本列的提交。樣張：[三檔三寬對照](docs/img/d101-transit/)，本輪選 B。
+  - **沒做成的事**：乾淨 worktree 全套、完整 smoke／CI、Android 真機測量待跑；本機提交作乾淨驗證候選，尚未推送／未改 PR ready／未合併。
+
 - 2026-11-06 — D101 — 本機接手補完 R3-1–R3-3：[卡面](docs/D101-transit-save-and-ui.md)〈本機第三步補完結果〉。
   - 遮罩改為各件幾何獨立期望；拆除／復原探舊格；補電車車站、地鐵／軌道旁存讀；突變 25→28 種。
   - 驗證：typecheck 過；Linux Node 24.15.0 隔離副本鏈 check 過，construction 17／17、28 突變符合預期；d011-edit 36、d046-save 9、d046-history 8、d019 6，0 紅。

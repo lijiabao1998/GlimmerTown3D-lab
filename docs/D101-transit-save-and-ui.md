@@ -808,3 +808,30 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
 - renderer 僅讀城市：集中在 attachRes 掛載；空路網不建立或掛入網格。運輸美術 A／B／C 只變道床、軌道與月台細節，暫選 B（手機辨識與既有比例）；實際 1440／412／360 圖完成後再記錄選擇依據。地下件只在相關工具使用時畫地表示意，與地面實體區分。
 - 遷移 helper 在 save.ts：有效預覽之後、首次提交之前寫完整 hv2 到唯一 pre-d101 鍵；超限／quota 取消整筆，備份成功同城不重寫；獨立 migration 守衛接 transit.yml，既有觸發條件不變。
 - 驗收 16／18 要核無運輸場景與五個既有輸出不變、超限原句保留；容量與裝置測量按真實裝置記錄。已接線的手機由 USB 描述辨識為 Xiaomi 14 Ultra，尚未授權成功，也不能冒稱中階 Android。
+
+### 本機第四步：運輸介面、繪製與遷移
+
+- 玩家入口為 ☰ → 運輸建造，使用獨立 TRANSIT_TOOLS，不改 CIVIC／FOOD／FACILITY 與既有模型。軌道每筆連相鄰兩格，點放或拖曳選方向；車站 2×1、車廠 3×2；拆除先選模式與確切件號，再提交。運輸只走 previewTransit／commitTransit／removeTransit；同日復原沿用既有堆疊。
+- 單指預覽、雙指／取消／外部放開／失焦／切工具的取消路徑獨立接線；D047／D052／D053 的舊抽取片段保留。地塊卡明確排除 transit 事件。介面審查抓到道路按鈕殘留選中，已在新工具接線內同步 dock；運輸開啟時隱藏舊道路教學提示。
+- 保存中的城市首次有效運輸施工之前，由 save.ts 寫獨立完整 hv2 至唯一 pre-d101 鍵；成功後才標記同城已備份，超限／quota 不提交並提供匯出。**不自動存檔的起步示範城／預覽不寫持久化遷移備份**：它們沒有取代主存檔，否則會破壞前文「另一城已取代主存檔」的備份前提。這是接線時釐清的範圍，示範操作不覆蓋我的城恢復點。清除主存檔保留備份。
+- TransitArt 只讀城市，地面件合為一張網格；地下件只在地鐵工具顯示時增加一張虛線示意。無路網不建網格、不掛場景。三檔使用既有色票、格頂與 Geo，沒有外部素材；網址 transitArt=a／b／c。
+- tools/d101-migration.mjs 接進原 transit 工作流：**6／6、9 種突變**通過，包含真 hv3 還原後的完整 hv2、單一槽同城一次／另一城取代、quota 與真實超限原子取消及重試、已有／清空路網不重備份，並執行真正 onMenu 匯出分支，保留原句、僅運輸超限追加「路網不會帶走」。後者為隔離 UI 分支測試，不冒稱實際瀏覽器巨大存檔操作。
+- tools/d101-art.mjs：**7／7、6 種突變**通過，含三種模式、站廠、地形高度、地下顯示、零網格、只讀、快取與資源釋放。兩支新增守衛皆無磁碟來源突變。
+- 無運輸實際瀏覽器對照 main 76e074f：412×900、newcity／starter／seed516／ai120 共 **32 項逐值相同**；stats、history、layers、save、buildingList 及 renderInfo／renderInfoAll／glInfo 都相同，兩邊無 console error。完整畫面 calls 分別 12／15／15／17，triangles 34308／38318／112758／119405。收據 no-transit-parity.json；不是手機效能結果。
+- src 最後改動後，在相同 269 檔的 Linux 隔離副本執行 --refreeze 與 --check 均 exit 0；核對來源 SHA256 全相同後才回填生成檔。lease **0d7a0c15f7d6cbcb248da47ce36bb95d2b65a5f958b91024674f70d8d8946973**；modified 仍 8、D084_CHANGED 仍 43，沒有擴大 lease。
+- 本輪收據放 C:\RUST\evidence\d101-local-20261106。Windows typecheck、build 與 diff --check 通過；瀏覽器完整手勢收據、三檔圖、乾淨 worktree 全套與真機測量以下續記，未完成前不算本卡驗收全過。
+
+#### 瀏覽器與三檔圖（第四步接線完成）
+
+- Windows Chrome／專用暫存 profile，用倉庫既有零依賴 CDP runner（本環境沒有 Browser plugin）。phase1 **10／10**；phase2 **6 項操作／資料檢查＋9 組相機記錄**均通過，console／runtime error 與外部素材請求均為空。實際操作包含選單開工具、quota 下 API 與真 CDP touch 原子取消、首次完整 hv2、軌道點放／電車拖曳、地鐵站／鐵路廠、雙指／取消／工具切換、重疊件精準拆除與復原、讀回後地塊卡、示範城保護主檔及備份、clearSave 保留備份、412／360 窄屏觸控與最小 44px 按鈕。blur 是注入 DOM 事件，不是 OS 失焦實測。
+- 最初連續 CDP 會話在跨導航後完全沒有送出 pointerdown/up，地塊卡檢查因此失敗；有保存事件空列與失敗收據，沒有當成產品通過。另開獨立 Chrome session，載入第一階段真實施工產生的完整碼，觸控有 pointer 事件、地塊卡打開且路網相同。這是分段驗證，未證明同一長 CDP 會話的跨導航觸控已恢復。
+- 同場景的 10 筆合法施工（鐵路／電車各三段、一站、一廠）拍 A／B／C；每個寬度三檔的城市及相機完全相同，target=(39.5,0,39.5)。1440×900 zoom=5；412×900、360×900 zoom=2.5，以容納全部站廠。另保留三寬皆 zoom=2.5 的完整對照於本機收據。圖已收入本倉庫，非僅本機路徑。
+- **本輪選 B**：A 的無枕木道床與無黃線月台辨識較弱；C 的密枕與地坪白邊在窄屏更擁擠。B 保留鐵路／電車的結構差異與月台安全線，同時沿用既有比例和色票。依常駐美術授權先採 B，業主看圖不喜歡可調回；這不是重定整條線畫風。
+
+| 寬度 | A | B（本輪採用） | C |
+|---|---|---|---|
+| 1440 | [A](img/d101-transit/transit-a-1440.png) | [B](img/d101-transit/transit-b-1440.png) | [C](img/d101-transit/transit-c-1440.png) |
+| 412 | [A](img/d101-transit/transit-a-412.png) | [B](img/d101-transit/transit-b-412.png) | [C](img/d101-transit/transit-c-412.png) |
+| 360 | [A](img/d101-transit/transit-a-360.png) | [B](img/d101-transit/transit-b-360.png) | [C](img/d101-transit/transit-c-360.png) |
+
+- 收據：B-browser-QA-receipt.md、browser-phase1.json、browser-phase2.json、browser-art-fit.json（均在本輪 evidence 目錄）。**尚未完成**：交接 C 的乾淨 worktree 全套、完整 smoke／CI、Android 真機容量與操作餘裕。已連線的 Xiaomi 14 Ultra 是高階機；手機正由另一聊天使用，本輪排隊，不把桌面試跑或此型號冒稱中階手機。

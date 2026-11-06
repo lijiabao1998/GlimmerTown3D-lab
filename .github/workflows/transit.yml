@@ -49,4 +49,8 @@ jobs:
         run: node tools/d101-save.mjs
       - name: D101 transit construction guards
         run: node tools/d101-construction.mjs
+      - name: D101 migration backup guards
+        run: node tools/d101-migration.mjs
+      - name: D101 transit rendering guards
+        run: node tools/d101-art.mjs
       - run: npx tsc --noEmit

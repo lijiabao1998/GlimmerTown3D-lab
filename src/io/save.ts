@@ -278,6 +278,24 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
   return encodeLabCode(o, { deflate: true });
 }
 
+// D101：第一次合法運輸施工之前的獨立備份；完整 hv2，不依賴 IndexedDB。
+// 呼叫端先 preview，再呼叫本函式，只有 ok 才 commit。write 必須是原子的儲存操作（localStorage.setItem）。
+// 同一個城市物件只寫一次；讀回已有路網的城也不再寫。另一座城第一次施工可取代唯一備份格。
+export const PRE_D101_KEY = 'gt3d.v1.save.pre-d101';
+const transitBackedUp = new WeakSet<City>();
+export function backupBeforeTransit(s: Sim, template: Record<string, unknown>, start: string, write: (key: string, code: string) => void): { ok: boolean; error?: string } {
+  if (s.city.transit !== undefined || transitBackedUp.has(s.city)) return { ok: true };
+  try {
+    const code = saveCode(s, template, start);
+    if (code.length > SAVE_LIMIT) return { ok: false, error: '城市完整備份超過分享碼上限，尚未施工；請先匯出分享碼。' };
+    write(PRE_D101_KEY, code);
+    transitBackedUp.add(s.city);
+    return { ok: true };
+  } catch {
+    return { ok: false, error: '無法儲存城市完整備份，尚未施工；請先匯出分享碼並確認儲存空間。' };
+  }
+}
+
 // restyled＝讀檔最後一步照實驗線重挑外觀換了幾棟（D012，每一棟也記成一筆 restyle 事件）
 // journal（D013，hv 3 才有）：接上的日誌編號與「前 n 列」的編碼狀態（呼叫端從這裡接著寫）
 export type LoadResult =

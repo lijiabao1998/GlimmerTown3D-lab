@@ -46,14 +46,16 @@ import { VARIANT_KINDS } from './content/britishCommerceVariants.ts';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { decodeLabCode } from './io/labcode.ts';
-import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type CmsEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type UndoEvent } from './sim/city.ts';
+import { cityStats, buildingAt, liveBuildings, DECISION_EVENTS, type ActKind, type City, type CityEvent, type CmsEvent, type DecisionEvent, type ImportEvent, type RestyleEvent, type TransitEvent, type UndoEvent } from './sim/city.ts';
 import { stepDay, simHash, simCounts, type Sim, type DayReport } from './sim/day.ts';
 import { CITY_EVENTS } from './sim/rules/events.ts';
 import { RANKS } from './sim/rules/rank.ts';
-import { loadCode, saveCode, viewCode, journalRef, SAVE_LIMIT, type JournalIn } from './io/save.ts';
+import { loadCode, saveCode, viewCode, journalRef, backupBeforeTransit, SAVE_LIMIT, type JournalIn } from './io/save.ts';
 import { packMore, PACK0, type JournalStore, type PackState } from './io/journal.ts';
 import { openJournal } from './idbJournal.ts';
 import { previewOp, commitOp, undoOp, canUndo, powerStatus, setPolicy, setBudget, startResearch, chooseSpec, gestureOf, labToolOf, toolLock, acceptCommission, dropCommission, commissionOffers, commissionState, ROAD_TOOLS, CIVIC_TOOLS, FOOD_TOOLS, FACILITY_TOOLS, TOOL_PRICE, type EditOp } from './sim/edit.ts';
+import { TRANSIT_TOOLS, previewTransit, commitTransit, removeTransit, type TransitBuild, type TransitRemove, type TransitResult } from './sim/edit.ts';
+import type { TransitMode } from './sim/transit/graph.ts';
 import { chronicleOf, depletedToastText } from './sim/decisions.ts';
 import { CMS_BY_ID385, NO_RIDERSHIP, cmsToast, type CmsDef } from './sim/rules/commission.ts';
 import { TECH343, TECH343_BY_ID, SPEC386, SPEC_IDS386, SPEC_MIN_RANK, techWhy, techFee } from './sim/rules/tech.ts';
@@ -83,6 +85,7 @@ import { createSitePanel, siteCostText } from './ui/sitePanel.ts';
 import siteDiagnosticsCss from './ui/siteDiagnostics.css?raw';
 import { Preview } from './render/preview.ts';
 import { ResourceHints } from './render/resource.ts';
+import { TransitArt } from './render/transitArt.ts';
 import { HazardMarks, type Mark, type MarkKind } from './render/hazard.ts';
 import { buildCityScene, tileTop, TONES, sortKeys, type BuiltCity, type BlockRender, type CivicRender, type Tone } from './render/cityScene.ts';
 import { overLevel } from './render/ground.ts';
@@ -348,6 +351,12 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   const dropJournal = (id: string) => { if (!id) return; dropped.add(id); if (mineRows?.id === id) mineRows = null; jstore?.drop(id).catch(() => { /* 刪不掉就留著，不影響新城 */ }); };
   const preview = new Preview(4096, q.get('streetFrontage') === '1');
   const resHints = new ResourceHints();                                     // D040：資源圖（油田黃、礦藏藍）；選了油井、礦場工具或 ☰「顯示資源圖」才畫
+  const transitArt = new TransitArt();
+  const transitVariant: 'a' | 'b' | 'c' = q.get('transitArt') === 'a' ? 'a' : q.get('transitArt') === 'c' ? 'c' : 'b';
+  let transitToolId: string | null = null, transitMode: TransitMode = 'rail';
+  let transitStroke: { pid: number; a: [number, number]; b: [number, number]; x: number; y: number; moved: boolean } | null = null;
+  type TransitPick = { request: TransitRemove; label: string; cells: [number, number][] };
+  let transitPicks: TransitPick[] = [], transitMessage = '';
   let showRes = false;
   const haz = new HazardMarks();                                            // D026：災禍標記（一個 InstancedMesh，空的不畫）
   const timing: Record<string, number> = {};
@@ -534,6 +543,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     closeGrowth(false);
     siteEstimate = null; siteResult = null; siteNotice = '';
     playing = false; lastT = 0; simAcc = 0;                               // 舊城的場景馬上要丟掉，不必先重建
+    closeTransit(false);
     setTool(null, true);
     // D010：模擬的城市就是畫面的城市（同一個物件，逐日同步）
     sim = L ? L.sim : null; template = L ? L.template : {}; startCode = L ? L.start : ''; loadNote = L ? L.note : ''; lastRep = null;
@@ -771,15 +781,44 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     <div id="pl" hidden><div class="card"><div class="head"><h2>🎚️ 政策與預算</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="plX">關閉</button></div></div></div>
     <div id="tc" hidden><div class="card"><div class="head"><h2>🔬 科技與專精</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="tcX">關閉</button></div></div></div>
     <div id="cm" hidden><div class="card"><div class="head"><h2>📋 市長委託</h2><p class="sub"></p><p class="tip"></p></div><div class="body"></div><div class="row foot"><button id="cmX">關閉</button></div></div></div>
-    <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>`;
+    <div id="ch" hidden><div class="card"><h2>📜 大事記</h2><p class="sub"></p><ol></ol><p class="tip"></p><div class="row"><button id="chX">關閉</button></div></div></div>
+    <section id="transitBar" role="region" aria-labelledby="transitTitle" hidden>
+      <div class="transit-head"><strong id="transitTitle">運輸建造</strong><button id="transitClose" type="button" aria-label="關閉運輸工具">✕</button></div>
+      <div class="transit-tools" role="group" aria-label="運輸工具"></div>
+      <label class="transit-mode">設施模式<select id="transitMode" aria-label="運輸設施模式"><option value="rail">鐵路</option><option value="tram">路面電車</option><option value="metro">地鐵</option></select></label>
+      <p id="transitHint"></p><p id="transitStatus" role="status" aria-live="polite"></p>
+      <div id="transitTargets" hidden><label>要拆的設施<select id="transitTarget" aria-label="選擇要拆的運輸設施"></select></label><button id="transitRemove" type="button">拆除選中</button></div>
+      <button id="transitExport" type="button" hidden>匯出分享碼</button>
+    </section>`;
   const bui = createBuildUi({
-    tool: t => setTool(t), roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
+    tool: t => { closeTransit(false); setTool(t); }, roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
     play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
-    menu: id => onMenu(id), menuOpen: () => { interruptBuild(); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
+    menu: id => onMenu(id), menuOpen: () => { interruptBuild(); closeTransit(false); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
   bui.style.textContent += growthGuideCss + siteDiagnosticsCss;
+  bui.style.textContent += `
+    #transitBar{position:fixed;left:50%;bottom:calc(132px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(420px,calc(100vw - 24px));box-sizing:border-box;padding:10px 12px;border:1px solid #627071;border-radius:16px;background:#17232af5;color:#f5f0df;box-shadow:0 8px 28px #0006;z-index:12;pointer-events:auto;font:14px/1.4 system-ui,sans-serif}
+    #transitBar[hidden],#transitBar [hidden]{display:none!important}#transitBar button,#transitBar select{font:inherit;color:inherit;min-height:44px;border:1px solid #647675;border-radius:9px;background:#263b42;touch-action:manipulation}#transitBar button{cursor:pointer}#transitBar button:focus-visible,#transitBar select:focus-visible{outline:3px solid #ffe1a0;outline-offset:2px}
+    #transitBar .transit-head{display:flex;align-items:center;justify-content:space-between;gap:8px}#transitClose{min-width:44px}.transit-tools{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:6px 0 8px}.transit-tool{padding:4px 1px}.transit-tool span{display:block;font-size:11px}.transit-tool[aria-pressed="true"]{background:#d8ba80!important;color:#17232a!important;border-color:#f1dba9!important}.transit-mode{display:flex;align-items:center;gap:12px}.transit-mode select{flex:1;min-width:0;padding:4px 9px}#transitHint{font-size:12px;color:#d2dfd7;margin:7px 0 0}#transitStatus{margin:5px 0 0;font-size:12px}#transitStatus:empty{display:none}#transitTargets{display:flex;gap:8px;align-items:end;margin-top:8px}#transitTargets label{flex:1;min-width:0;font-size:12px}#transitTarget{display:block;width:100%;padding:4px}#transitRemove{padding:5px 8px;flex-shrink:0}#transitExport{margin-top:7px;width:100%}
+    body:has(#transitBar:not([hidden])) #coach{display:none}
+    @media(max-height:600px){#transitBar{bottom:calc(112px + env(safe-area-inset-bottom));max-height:calc(100dvh - 185px);overflow-y:auto}}
+  `;
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
+  const transitBar = $<HTMLElement>('#transitBar'), transitStatus = $<HTMLElement>('#transitStatus'), transitHint = $<HTMLElement>('#transitHint');
+  const transitModeSelect = $<HTMLSelectElement>('#transitMode'), transitTargetSelect = $<HTMLSelectElement>('#transitTarget'), transitTargets = $<HTMLElement>('#transitTargets'), transitExport = $<HTMLButtonElement>('#transitExport');
+  for (const entry of TRANSIT_TOOLS) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'transit-tool'; button.dataset.transit = entry.id;
+    button.setAttribute('aria-label', entry.name); button.setAttribute('aria-pressed', 'false');
+    const name = document.createElement('span'); name.textContent = entry.op === 'edge' ? entry.mode === 'tram' ? '電車' : entry.name : entry.op === 'del' ? '拆除' : entry.name;
+    button.append(entry.short, name); button.onclick = () => selectTransitTool(entry.id);
+    $<HTMLElement>('.transit-tools').appendChild(button);
+  }
+  $<HTMLButtonElement>('#transitClose').onclick = () => closeTransit();
+  transitModeSelect.onchange = () => selectTransitTool(transitToolId, transitModeSelect.value as TransitMode);
+  transitTargetSelect.onchange = () => { const pick = transitPicks[Number(transitTargetSelect.value)]; if (pick) paintTransit(pick.request); };
+  $<HTMLButtonElement>('#transitRemove').onclick = () => { const pick = transitPicks[Number(transitTargetSelect.value)]; if (pick) runTransit(pick.request); };
+  transitExport.onclick = () => onMenu('export');
   const bio = $<HTMLElement>('#bio'), dlg = $<HTMLElement>('#dlg'), ta = $<HTMLTextAreaElement>('#dlg textarea'), err = $('#dlg .err'), dlgOk = $<HTMLButtonElement>('#dlgOk');
   let dlgMode: 'paste' | 'export' = 'paste', lastCode = '', dlgFromStatus = false;
   const importFeedback = createImportFeedback(ta, err as HTMLElement);
@@ -1309,11 +1348,13 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
         ...(sim ? [{ id: 'tech', label: '科技與專精', note: '四條路線 36 個科技、城市方向（D038）', icon: 'flask' as const }] : []),
         ...(q.get('streetFrontageControl') === '1' ? [{ id: 'frontage', label: preview.frontageEnabled ? '關閉道路共邊提示' : '開啟道路共邊提示', note: '只標道路共邊，不代表入口或道路連通', icon: 'layers' as const }] : []),
         { id: 'history', label: '300 年示範', note: '同一座城、300 年（D002）', icon: 'hourglass' as const },
+        ...(sim ? [{ id: 'transit', label: '運輸建造', note: '鐵路、電車、地鐵與站廠', icon: 'build' as const }] : []),
       ] },
     ];
   }
   function onMenu(id: string) {
     interruptBuild();   // A panel can open while the canvas still owns pointer capture.
+    cancelTransitStroke(); if (id !== 'transit') closeTransit(false);
     if (id !== 'rank' && id !== 'catalog') closeGrowth(false);
     if (id.startsWith('city:')) menuCity(id.slice(5));
     else if (id === 'save-status') openSaveStatus();
@@ -1324,7 +1365,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       try {
         if (sim) full = saveCode(sim, template, startCode);
         if (!sim || full.length <= SAVE_LIMIT) openDlg('export', full);
-        else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。`);
+        else openDlg('export', saveCode(sim, template, startCode, { history: false }), `這座城的歷史太長，整張碼有 ${full.length.toLocaleString()} 字元、超過分享碼上限：這張只有實驗線讀得到的部分（城都在，本線的歷史沒有帶，貼回本線只能看）。` + (sim.city.transit !== undefined ? '路網不會帶走。' : ''));
       } catch (e) {
         const message = '⚠️ 匯出失敗：' + ((e as Error)?.message ?? String(e));
         if (!saveStatus.root.hidden) saveStatus.setError(message);  // 留在面板中可讀，不只靠短暫通知
@@ -1350,6 +1391,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     else if (id === 'resview') { showRes = !showRes; syncRes(); invalidate(); bui.toast(showRes ? '資源圖：油田（黃）、礦藏（藍）' : '資源圖已隱藏'); }   // D040
     else if (id.startsWith('blocks:') && own(BLOCK_MODES, id.slice(7))) setBlocks(id.slice(7) as BlockMode);   // 選單只送 a／b／c；測試出口 __gt.menu 可能送別的（D012 審查）
     else if (id === 'history') location.search = '?mode=history';
+    else if (id === 'transit') selectTransitTool('transit-rail');
   }
   function menuCity(id: string) {
     if (id === 'newcity' && readSave() && !confirm('開新城會蓋掉目前的「我的城」，要繼續嗎？')) return;
@@ -1357,6 +1399,124 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     const r = openSample(id);
     if (r.ok && oldJ && oldJ !== jid) dropJournal(oldJ);                  // D013：舊的我的城被新城蓋掉，它的日誌一起刪
     if (!r.ok) bui.toast(r.error, 'bad');
+  }
+
+  // D101：運輸工具自己管理，不交給原有的 ToolId、commitOp 或歷史 UI 抽取片段。
+  const transitModeName = (mode: TransitMode) => mode === 'rail' ? '鐵路' : mode === 'tram' ? '路面電車' : '地鐵';
+  function cancelTransitStroke() {
+    if (!transitStroke) return;
+    transitStroke = null; preview.clear(); bui.hideCost(); invalidate();
+  }
+  function clearTransitPicks() { transitPicks = []; transitTargetSelect.replaceChildren(); transitTargets.hidden = true; }
+  function closeTransit(focus = true) {
+    if (!transitToolId && !transitStroke && transitBar.hidden) return;
+    cancelTransitStroke(); transitToolId = null; clearTransitPicks(); transitMessage = ''; transitBar.hidden = true; transitExport.hidden = true;
+    preview.clear(); bui.hideCost();
+    (controls.touches as { ONE: THREE.TOUCH | null }).ONE = tool ? null : THREE.TOUCH.ROTATE;
+    (controls.mouseButtons as { LEFT: THREE.MOUSE | null }).LEFT = tool ? null : THREE.MOUSE.ROTATE;
+    attachRes(); invalidate();
+    if (focus) bui.root.querySelector<HTMLButtonElement>('#menuBtn')?.focus();
+  }
+  function syncTransitBar() {
+    const entry = TRANSIT_TOOLS.find(t => t.id === transitToolId);
+    transitBar.hidden = !entry || !sim; transitModeSelect.value = transitMode;
+    for (const button of transitBar.querySelectorAll<HTMLButtonElement>('[data-transit]')) button.setAttribute('aria-pressed', String(button.dataset.transit === transitToolId));
+    transitHint.textContent = !entry ? '' : entry.op === 'edge' ? '點放延伸一格；按住拖曳決定方向。每筆連接相鄰兩格，兩指可移動鏡頭。'
+      : entry.op === 'del' ? `點選${transitModeName(transitMode)}設施，再選要拆的那一件。拆除不退費。`
+      : `${transitModeName(transitMode)}${entry.name}占地 ${entry.op === 'station' ? '2×1' : '3×2'}，點一下放置；拖曳會取消。`;
+    transitStatus.textContent = transitMessage;
+    if (!transitBar.hidden) {
+      const dockTop = bui.root.querySelector<HTMLElement>('#dock')?.getBoundingClientRect().top ?? innerHeight - 124;
+      const hudBottom = bui.root.querySelector<HTMLElement>('#hud')?.getBoundingClientRect().bottom ?? 64;
+      const bottom = Math.max(12, innerHeight - dockTop + 8);
+      transitBar.style.bottom = `${bottom}px`; transitBar.style.maxHeight = `${Math.max(120, innerHeight - bottom - hudBottom - 12)}px`; transitBar.style.overflowY = 'auto';
+    }
+  }
+  function selectTransitTool(id: string | null, mode?: TransitMode): boolean {
+    if (id === null) { closeTransit(false); return true; }
+    const entry = TRANSIT_TOOLS.find(t => t.id === id);
+    if (!sim || !entry || mode && !['rail', 'tram', 'metro'].includes(mode)) return false;
+    interruptBuild(); cancelTransitStroke(); clearTransitPicks(); closeCard();
+    setTool(null, true); syncDock(); transitMode = mode ?? entry.mode ?? transitMode;
+    transitToolId = entry.op === 'edge' ? TRANSIT_TOOLS.find(t => t.op === 'edge' && t.mode === transitMode)!.id : entry.id;
+    transitMessage = ''; transitExport.hidden = true; bui.menuOpen(false);
+    (controls.touches as { ONE: THREE.TOUCH | null }).ONE = null;
+    (controls.mouseButtons as { LEFT: THREE.MOUSE | null }).LEFT = null;
+    syncTransitBar(); attachRes(); invalidate(); return true;
+  }
+  function transitAt(x: number, z: number): TransitPick[] {
+    const net = city?.transit; if (!net) return [];
+    const picks: TransitPick[] = [];
+    for (const edge of net.edges) if (edge.mode === transitMode && [edge.a, edge.b].some(p => p.x === x && p.z === z))
+      picks.push({ request: { op: 'del-edge', id: edge.id }, label: `${transitModeName(edge.mode)}軌道 #${edge.id}（${edge.a.x},${edge.a.z} → ${edge.b.x},${edge.b.z}）`, cells: [[edge.a.x, edge.a.z], [edge.b.x, edge.b.z]] });
+    for (const [items, op, name] of [[net.stations, 'del-station', '車站'], [net.depots, 'del-depot', '車廠']] as const)
+      for (const item of items) if (item.mode === transitMode && x >= item.x && x < item.x + item.w && z >= item.z && z < item.z + item.h) {
+        const cells: [number, number][] = []; for (let dz = 0; dz < item.h; dz++) for (let dx = 0; dx < item.w; dx++) cells.push([item.x + dx, item.z + dz]);
+        picks.push({ request: { op, id: item.id }, label: `${transitModeName(item.mode)}${name} #${item.id}`, cells });
+      }
+    return picks;
+  }
+  function transitRequest(s: NonNullable<typeof transitStroke>): TransitBuild | null {
+    const entry = TRANSIT_TOOLS.find(t => t.id === transitToolId); if (!entry || !city || entry.op === 'del') return null;
+    const [x, z] = s.a, height = (px: number, pz: number) => transitMode === 'metro' ? -1 : city!.el[pz * city!.n + px] ? 1 : 0;
+    if (entry.op !== 'edge') return { op: entry.op, mode: transitMode, x, z, h: height(x, z) };
+    const dx = s.b[0] - x, dz = s.b[1] - z, horizontal = Math.abs(dx) >= Math.abs(dz), x2 = x + (horizontal ? Math.sign(dx) || 1 : 0), z2 = z + (horizontal ? 0 : Math.sign(dz));
+    return { op: 'edge', mode: transitMode, x, z, h: height(x, z), x2, z2, h2: height(x2, z2) };
+  }
+  function transitCells(request: TransitBuild | TransitRemove): [number, number][] {
+    if (request.op === 'edge') return [[request.x, request.z], [request.x2, request.z2]];
+    if (request.op === 'station' || request.op === 'depot') {
+      const cells: [number, number][] = [], width = request.op === 'station' ? 2 : 3, depth = request.op === 'station' ? 1 : 2;
+      for (let dz = 0; dz < depth; dz++) for (let dx = 0; dx < width; dx++) cells.push([request.x + dx, request.z + dz]);
+      return cells;
+    }
+    const pick = transitPicks.find(p => p.request.op === request.op && p.request.id === request.id); return pick?.cells ?? [];
+  }
+  function paintTransit(request: TransitBuild | TransitRemove) {
+    if (!sim || !city) return null;
+    const pv = previewTransit(sim, request), n = city.n, cells = transitCells(request).filter(([x, z]) => x >= 0 && z >= 0 && x < n && z < n);
+    preview.set(cells.map(([x, z]) => ({ x, z, y: Math.max(0, tileTop(city!, z * n + x)), ok: pv.ok })), transitMode === 'metro' ? '#b4c5e5' : '#f0d39a');
+    if (preview.frontageEnabled) preview.setFrontage(n, city.road, []);
+    transitMessage = pv.ok ? request.op.startsWith('del-') ? '拆除不退費；可用「復原」撤回當天最後一筆。' : `${sim.diff === 3 ? '沙盒免費' : '$' + pv.cost.toLocaleString()}・${transitModeName(transitMode)}` : pv.reason ?? '這裡不能施工';
+    syncTransitBar(); invalidate(); return pv;
+  }
+  function previewTransitStroke() {
+    if (!transitStroke) return;
+    const entry = TRANSIT_TOOLS.find(t => t.id === transitToolId); if (!entry) return;
+    if (entry.op !== 'edge' && transitStroke.moved) { preview.clear(); transitMessage = '已取消拖曳；點一下放置或選取設施。'; syncTransitBar(); invalidate(); return; }
+    if (entry.op === 'del') {
+      transitPicks = transitAt(...transitStroke.a);
+      if (transitPicks[0]) paintTransit(transitPicks[0].request);
+      else { preview.clear(); transitMessage = `這一格沒有${transitModeName(transitMode)}設施。`; syncTransitBar(); invalidate(); }
+    } else { const request = transitRequest(transitStroke); if (request) paintTransit(request); }
+  }
+  function runTransit(request: TransitBuild | TransitRemove): TransitResult {
+    cancelTransitStroke();
+    if (!sim) return { ok: false, spent: 0, reason: '這座城只能看' };
+    const pv = previewTransit(sim, request);
+    if (!pv.ok) { transitMessage = pv.reason ?? '這裡不能施工'; syncTransitBar(); bui.toast(transitMessage, 'bad'); return { ok: false, spent: 0, reason: transitMessage }; }
+    const backup = autosaves() ? backupBeforeTransit(sim, template, startCode, (key, code) => localStorage.setItem(key, code)) : { ok: true };
+    if (!backup.ok) {
+      transitMessage = backup.error ?? '遷移前備份無法儲存，施工已取消。請先匯出分享碼。'; transitExport.hidden = false;
+      syncTransitBar(); bui.toast(transitMessage, 'bad'); return { ok: false, spent: 0, reason: transitMessage };
+    }
+    const result = 'id' in request ? removeTransit(sim, request) : commitTransit(sim, request);
+    if (result.ok) {
+      clearTransitPicks(); preview.clear(); transitExport.hidden = true;
+      transitMessage = request.op.startsWith('del-') ? '運輸設施已拆除；沒有退費。' : `已建造${transitModeName((request as TransitBuild).mode)}${request.op === 'edge' ? '軌道' : request.op === 'station' ? '車站' : '車廠'}${result.spent ? `，−$${result.spent.toLocaleString()}` : ''}。`;
+      attachRes(); saveNow(); syncUi(); needsRender = true; draw();
+    } else transitMessage = result.reason ?? '施工未完成';
+    syncTransitBar(); return result;
+  }
+  function finishTransitStroke(s: NonNullable<typeof transitStroke>) {
+    const entry = TRANSIT_TOOLS.find(t => t.id === transitToolId); if (!entry || entry.op !== 'edge' && s.moved) return;
+    if (entry.op === 'del') {
+      transitPicks = transitAt(...s.a); transitTargetSelect.replaceChildren();
+      transitPicks.forEach((pick, i) => { const option = document.createElement('option'); option.value = String(i); option.textContent = pick.label; transitTargetSelect.appendChild(option); });
+      transitTargets.hidden = transitPicks.length === 0;
+      if (transitPicks[0]) paintTransit(transitPicks[0].request);
+      else { transitMessage = `這一格沒有${transitModeName(transitMode)}設施。`; syncTransitBar(); }
+    } else { const request = transitRequest(s); if (request) runTransit(request); }
   }
 
   function syncUi() {
@@ -1385,6 +1545,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function attachRes() {
     if (!built) return;
     if (resHints.shown) { if (resHints.mesh.parent !== built.scene) built.scene.add(resHints.mesh); } else resHints.mesh.removeFromParent();
+    if (city) transitArt.sync(city, transitVariant, !!transitToolId && transitMode === 'metro');
+    if (city?.transit && transitArt.shown) { if (transitArt.group.parent !== built.scene) built.scene.add(transitArt.group); } else transitArt.group.removeFromParent();
   }
   function syncRes() {
     if (!sim || !city) { resHints.clear(); attachRes(); return; }
@@ -1521,6 +1683,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function doUndo() {
     interruptBuild();
+    cancelTransitStroke(); clearTransitPicks();
     if (!sim) return null;
     const r = undoOp(sim);
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
@@ -1572,9 +1735,9 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   function closeCard() { bio.hidden = true; cardAt = null; marker.removeFromParent(); invalidate(); }
   // D011：這一格（根格）上發生過的事，照歷史的順序；當天復原掉的那筆手勢照樣列、標明復原（歷史只增不改）。
   // D012：讀檔時照實驗線重挑外觀（restyle）不列——那是讀檔的視覺遷移，不是城裡發生的事；歷史照記
-  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent | CmsEvent>;   // D039：決策與科技完成沒有座標、不屬於哪一格（☰「大事記」列它們）
+  type LotEvent = Exclude<CityEvent, ImportEvent | UndoEvent | RestyleEvent | DecisionEvent | CmsEvent | TransitEvent>;   // 決策在大事記；運輸事件有自己的幾何，不是地塊建築事件。
   function lotEvents(c: City, x: number, z: number) {
-    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.t !== 'cms' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
+    return c.history.filter((e): e is LotEvent => e.t !== 'import' && e.t !== 'undo' && e.t !== 'restyle' && e.t !== 'cms' && e.t !== 'transit' && !DECISION_EVENTS.includes(e.t) && (e as LotEvent).x === x && (e as LotEvent).z === z);
   }
   // 卡片一列＝[粗體的日子或標題, 其餘]。一律用 textContent 寫（審查：事件欄位、實驗線版本字串都來自分享碼，別人能改，不能當 HTML）
   type Row = [string, string];
@@ -1830,6 +1993,47 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     }
     return null;
   }
+  // D101 指標接線在 D047 的既有抽取範圍外；原有建造監聽器逐字保留。
+  // 保留事件傳遞給 OrbitControls；運輸放開時清掉 down，後面的既有處理不會誤開地塊卡。
+  const transitCanvas = renderer.domElement;
+  addEventListener('pointerdown', e => {
+    if (!transitToolId) return;
+    if (e.target !== transitCanvas || ptrs.size + (ptrs.has(e.pointerId) ? 0 : 1) > 1) cancelTransitStroke();
+  }, true);
+  transitCanvas.addEventListener('pointerdown', e => {
+    if (!transitToolId || tool || !sim) return;
+    if (ptrs.size > 1 || !mapPoint(e.clientX, e.clientY) || e.pointerType === 'mouse' && e.button !== 0) { cancelTransitStroke(); return; }
+    const at = tileAt(e.clientX, e.clientY); if (!at) return;
+    clearTransitPicks(); transitExport.hidden = true;
+    transitStroke = { pid: e.pointerId, a: at, b: at, x: e.clientX, y: e.clientY, moved: false };
+    previewTransitStroke();
+  });
+  transitCanvas.addEventListener('pointermove', e => {
+    if (!transitStroke || e.pointerId !== transitStroke.pid) return;
+    if (ptrs.size > 1) { cancelTransitStroke(); return; }
+    if (Math.hypot(e.clientX - transitStroke.x, e.clientY - transitStroke.y) > 8) transitStroke.moved = true;
+    const at = tileAt(e.clientX, e.clientY); if (at && transitStroke.moved) transitStroke.b = at;
+    previewTransitStroke();
+  });
+  transitCanvas.addEventListener('pointerup', e => {
+    if (!transitToolId || tool) return;
+    const pending = transitStroke, valid = pending?.pid === e.pointerId && ptrs.size === 1 && mapPoint(e.clientX, e.clientY);
+    cancelTransitStroke(); down = null;
+    if (valid && pending) finishTransitStroke(pending);
+  });
+  transitCanvas.addEventListener('pointercancel', () => { cancelTransitStroke(); down = null; });
+  transitCanvas.addEventListener('lostpointercapture', e => { if (transitStroke?.pid === e.pointerId) cancelTransitStroke(); });
+  for (const event of ['pointerup', 'pointercancel'] as const) addEventListener(event, e => { if (e.target !== transitCanvas && transitStroke?.pid === e.pointerId) cancelTransitStroke(); });
+  for (const event of ['blur', 'pagehide', 'resize'] as const) addEventListener(event, () => { cancelTransitStroke(); if (event === 'resize' && transitToolId) syncTransitBar(); });
+  addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') cancelTransitStroke(); });
+  addEventListener('click', e => { if (transitToolId && (e.target as Element | null)?.closest('.tool')) closeTransit(false); }, true);
+  addEventListener('keydown', e => {
+    if (!transitToolId) return;
+    cancelTransitStroke();
+    if (e.key === 'Escape') { closeTransit(); e.preventDefault(); e.stopImmediatePropagation(); return; }
+    if ((e.target as Element | null)?.closest('#transitBar')) { e.stopImmediatePropagation(); return; }
+    if (/^[1-7]$/.test(e.key)) closeTransit(false);
+  }, true);
   let down: { x: number; y: number; t: number } | null = null;
   const canvas = renderer.domElement;
   // 畫面上按著的指標（實驗線 pointers，62783–62799）：畫布上的每根都抓住（放開一定回到畫布）；第二根一落下就取消施工、交給鏡頭縮放平移，
@@ -2126,6 +2330,12 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     tileWa: (x: number, z: number) => sim ? !!sim.w.tiles[z * sim.w.N + x]?.bld?.wa : null,   // D019：那一格的建築（根格）有沒有水
     edit: (op: EditOp) => sim ? runOp(op) : null,                          // 跟手勢同一條路：規則、事件、重建、存檔
     preview: (op: EditOp) => sim ? previewOp(sim, op) : null,
+    transitTool: (id: string | null, mode?: TransitMode) => selectTransitTool(id, mode),
+    transitPreview: (request: TransitBuild | TransitRemove) => sim ? previewTransit(sim, request) : null,
+    transitBuild: (request: TransitBuild) => runTransit(request),
+    transitRemove: (request: TransitRemove) => runTransit(request),
+    transitRead: () => ({ network: city?.transit ? JSON.parse(JSON.stringify(city.transit)) : null, tool: transitToolId, mode: transitMode, variant: transitVariant, shown: transitArt.shown,
+      stroke: transitStroke ? { a: [...transitStroke.a], b: [...transitStroke.b], moved: transitStroke.moved } : null, choices: transitPicks.map(p => ({ ...p.request, label: p.label })), message: transitMessage }),
     undo: () => doUndo(),
     // 對拍劇本的「資金設定」（兩邊設成同一個數，把建造規則跟每日結算分開；實驗線那邊是注入的 setMoney）：只給守衛與拍照用，介面沒有這個鈕
     simMoney: (v: number) => { if (!sim) return null; sim.money = v; syncUi(); return sim.money; },
@@ -2420,4 +2630,3 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     nearCounts: () => built!.nearCounts(),
   };
 }
-// D101 lease probe
