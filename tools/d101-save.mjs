@@ -286,7 +286,7 @@ function coreChecks(A) {
     return `${cases.length} 種竄改都回 ok:false`;
   });
 
-  check('驗收 3：有事件沒 rt、有 rt 沒事件、rt 與重播不一致，三種都明確報錯', () => {
+  check('驗收 3：有事件沒 rt、有 rt 沒事件、rt 與重播不一致，三種都明確報錯；沒有 rt 的運輸檔走到 f／hv／起始碼的早退也不退回快照', () => {
     const e1 = bad(r => { delete r.d3.rt; }, '有事件沒 rt'); assert.match(e1, /歷史有運輸事件，存檔卻沒有路網/);
     const plain = loadOk(A, A.sample('newcity')), praw = rawOf(A, S.saveCode(plain.sim, plain.template, plain.start));
     praw.d3.rt = copy(raw.d3.rt);
@@ -296,7 +296,13 @@ function coreChecks(A) {
     const e4 = bad(r => { r.d3.rt.state.nextId += 5; }, 'nextId 不同'); assert.match(e4, /路網跟存檔的 d3\.rt 不同/);
     const e5 = bad(r => { const s1 = r.d3.rt.state; s1.edges = [...s1.edges.slice(1), s1.edges[0]]; }, '軌道順序不同'); assert.match(e5, /路網跟存檔的 d3\.rt 不同/);
     const e6 = bad(r => { const s1 = r.d3.rt.state; s1.edges.pop(); }, '少一條軌道'); assert.match(e6, /路網跟存檔的 d3\.rt 不同/);
-    return [e1, B.error, e3].map(q => q.replace(/^有運輸的存檔讀不進來（[^）]*）：/, '')).join('｜');
+    // 核對（第二步第 1 輪）：運輸列的掃描原本排在 f／hv／起始碼檢查之後，沒有 rt 的運輸檔會在這幾個早退悄悄退回快照
+    const early = [
+      ['沒 rt＋f＝13', r => { delete r.d3.rt; r.d3.f = 13; }, /城市格式 13 比這一版（12）新/], ['沒 rt＋f 是字串', r => { delete r.d3.rt; r.d3.f = '12'; }, /不認得的城市格式/],
+      ['沒 rt＋hv＝9', r => { delete r.d3.rt; r.d3.hv = 9; }, /不認得的歷史存法/], ['沒 rt＋沒有起始碼', r => { delete r.d3.rt; delete r.d3.s; }, /缺起始碼/],
+    ];
+    for (const [name, mut, re] of early) assert.match(bad(mut, name), re, name);
+    return [e1, B.error, e3].map(q => q.replace(/^有運輸的存檔讀不進來（[^）]*）：/, '')).join('｜') + `；沒有 rt 的早退 ${early.length} 種都 ok:false`;
   });
 
   check('驗收 17：沒有 rt 的 f＝13（CITY_FORMAT＋1）照舊退回只用存檔、訊息逐字不變；有 rt 時 f＝13、hv、起始碼、f 型別、冒用舊格式、重播、對帳失敗全部 ok:false', () => {
@@ -450,6 +456,10 @@ const MUTANTS = [
   { name: '運輸列的 x、z 兩欄對調', file: 'src/io/journal.ts', from: 'TRANSIT_MODES.indexOf(e.mode), e.x, e.z, e.h,', to: 'TRANSIT_MODES.indexOf(e.mode), e.z, e.x, e.h,', expect: ['碼 26 的黃金列'] },
   { name: '有 rt 也退回快照（only 不回 ok:false）', file: 'src/io/save.ts', from: /^    if \(rtSave\) return \{ ok: false as const[^\n]*\n/m, to: '', expect: ['驗收 17：', '驗收 2：rt'] },
   { name: '用 f ≥ 12 判斷運輸存檔', file: 'src/io/save.ts', from: "  rtSave = Object.hasOwn(d3, 'rt');", to: "  rtSave = Object.hasOwn(d3, 'rt') || (isInt(d3.f) && d3.f >= 12);", expect: ['驗收 17：'] },
+  // 第二步第 1 輪核對補的三種（原本各只被一項抓到，這裡讓守衛自己證明）
+  { name: '拿掉「有事件沒 rt」', file: 'src/io/save.ts', from: /^    if \(hasT && !Object\.hasOwn\(d3, 'rt'\)\)[^\n]*\n/m, to: '', expect: ['驗收 3：'] },
+  { name: '拿掉「有 rt 沒事件」', file: 'src/io/save.ts', from: /^    if \(!hasT && Object\.hasOwn\(d3, 'rt'\)\)[^\n]*\n/m, to: '', expect: ['驗收 3：'] },
+  { name: '拿掉早退之前的運輸列掃描', file: 'src/io/save.ts', from: /^  if \(!rtSave\) rtSave = transitRows\(d3\.r\)[^\n]*\n/m, to: '', expect: ['驗收 3：'] },
 ];
 async function mutantRun(m) {
   const dir = scratchDir('mut');
@@ -631,16 +641,27 @@ async function main() {
   await step('驗收 13（規則 5）：4000 筆運輸事件的存檔 loadCode ≤ 1500 ms、t(4000)／t(1000) ≤ 6；同一座城 saveCode（hv2、hv3）≤ 100 ms（各取最快一次）', () => {
     const P1 = perfCity(A, 1000), P4 = perfCity(A, 4000);
     const c1 = A.save.saveCode(P1.s, P1.L.template, P1.L.start), c4 = A.save.saveCode(P4.s, P4.L.template, P4.L.start);
-    loadOk(A, c1); loadOk(A, c4);   // 暖機
-    const t1 = timeIt(() => loadOk(A, c1), 5), t4 = timeIt(() => loadOk(A, c4), 5);
-    assert.ok(t4.r.replayed, t4.r.note); assert.equal(netJ(A, t4.r.sim.city.transit), netJ(A, P4.p.net));
     const store = new A.journal.MemoryJournal(), half = A.journal.packMore(P4.s.city.history, A.journal.PACK0); store.append('perf', 0, half.rows);
-    const s2 = timeIt(() => A.save.saveCode(P4.s, P4.L.template, P4.L.start), 7), s3 = timeIt(() => A.save.saveCode(P4.s, P4.L.template, P4.L.start, { journal: { id: 'perf', st: half.st } }), 7);
-    const ratio = t4.ms / t1.ms, ev4 = P4.p.ev.length, net4 = P4.p.net;
-    const f = q => `${q.ms.toFixed(1)} ms（中位 ${q.med.toFixed(1)}）`;
-    const detail = `loadCode 最快：1000 筆 ${f(t1)}、4000 筆 ${f(t4)}，${ratio.toFixed(2)} 倍；saveCode 最快 hv2 ${f(s2)}、hv3 ${f(s3)}；存檔 ${c4.length} 字元；路網 ${net4.edges.length} 條軌道、${net4.stations.length} 站（${ev4} 筆事件）`;
+    const save2 = () => A.save.saveCode(P4.s, P4.L.template, P4.L.start), save3 = () => A.save.saveCode(P4.s, P4.L.template, P4.L.start, { journal: { id: 'perf', st: half.st } });
+    for (let i = 0; i < 2; i++) { loadOk(A, c1); loadOk(A, c4); save2(); save3(); }   // 暖機：兩種大小、兩種存法都先跑過
+    const r4 = loadOk(A, c4);
+    assert.ok(r4.replayed, r4.note); assert.equal(netJ(A, r4.sim.city.transit), netJ(A, P4.p.net));
+    // 量法（第二步第 1 輪核對：機器很忙時比值曾到 7.38）：上限不放寬，量得更穩——1000 筆與 4000 筆交錯量、各取最快；
+    // 整組最多量 3 次，三項都過就停，斷言最後一組（同 unit-d012「取三次最快」的先例）。每一組都印出來
+    const f = q => `${q.ms.toFixed(1)} ms（中位 ${q.med.toFixed(1)}）`, blocks = [];
+    let m;
+    for (let k = 1; k <= 3; k++) {
+      const a1 = [], a4 = [];
+      for (let i = 0; i < 7; i++) { let t0 = performance.now(); loadOk(A, c1); a1.push(performance.now() - t0); t0 = performance.now(); loadOk(A, c4); a4.push(performance.now() - t0); }
+      const t1 = { ms: Math.min(...a1), med: median(a1) }, t4 = { ms: Math.min(...a4), med: median(a4) }, s2 = timeIt(save2, 7), s3 = timeIt(save3, 7);
+      m = { k, t1, t4, s2, s3, ratio: t4.ms / t1.ms };
+      blocks.push(`第 ${k} 組 ${m.ratio.toFixed(2)} 倍`);
+      if (t4.ms <= 1500 && m.ratio <= 6 && s2.ms <= 100 && s3.ms <= 100) break;
+    }
+    const ev4 = P4.p.ev.length, net4 = P4.p.net;
+    const detail = `loadCode 最快：1000 筆 ${f(m.t1)}、4000 筆 ${f(m.t4)}，${m.ratio.toFixed(2)} 倍；saveCode 最快 hv2 ${f(m.s2)}、hv3 ${f(m.s3)}；量了 ${m.k} 組（${blocks.join('、')}）；存檔 ${c4.length} 字元；路網 ${net4.edges.length} 條軌道、${net4.stations.length} 站（${ev4} 筆事件）`;
     console.log('  perf ' + detail);
-    assert.ok(t4.ms <= 1500, detail); assert.ok(ratio <= 6, detail); assert.ok(s2.ms <= 100 && s3.ms <= 100, detail);
+    assert.ok(m.t4.ms <= 1500, detail); assert.ok(m.ratio <= 6, detail); assert.ok(m.s2.ms <= 100 && m.s3.ms <= 100, detail);
     return detail;
   });
 

@@ -309,6 +309,12 @@ export function viewCode(code: string, kinds: KindTable, vrank: Record<string, n
   return { ok: true, city: sim.city, restyled };
 }
 
+// D101：原始的歷史列裡有沒有運輸事件（hv2／hv3 是 [碼, …]，hv1 是 {t} 物件）。解到一半壞掉的列也算
+function transitRows(raw: unknown): boolean {
+  const code26 = EVENT_REGISTRY.transit.code;
+  return Array.isArray(raw) && raw.some(q => Array.isArray(q) ? q[0] === code26 : !!q && typeof q === 'object' && (q as { t?: unknown }).t === 'transit');
+}
+
 function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, journal?: JournalIn) {
   const sim = simFromSave(save, code, kinds, vrank);
   const d3 = save.raw.d3 as Partial<D3Ext> | undefined;
@@ -330,12 +336,13 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   };
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
   rtSave = Object.hasOwn(d3, 'rt');
+  if (!rtSave) rtSave = transitRows(d3.r) || transitRows(d3.h) || transitRows(d3.t);   // D101：存檔裡看得到的運輸列，要在第一個 f／hv／s 早退之前就算（不然沒有 rt 的運輸檔會悄悄退回快照）
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
   if (d3.hv !== undefined && d3.hv !== HISTORY_VER && d3.hv !== JOURNAL_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
   // 城市格式（D012 起才檢查）：比這一版新＝可能有這一版不認得的事件，不猜；不是 1..這一版的整數＝不認得（審查：之前只擋整數，"5"、4.5 照讀）。沒有 f 的照舊當舊檔
   if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);
   if (d3.f !== undefined && !(isInt(d3.f) && d3.f >= 1)) return only(`不認得的城市格式 f=${JSON.stringify(d3.f)}：只用存檔`);
-  if (rtSave) { const p = parseNetwork(d3.rt); if (!p.ok) return only('路網（d3.rt）解不開：' + p.reason); }   // D101：格式、編號、佔地重疊在這裡擋；地圖邊界與地形靠重播
+  if (Object.hasOwn(d3, 'rt')) { const p = parseNetwork(d3.rt); if (!p.ok) return only('路網（d3.rt）解不開：' + p.reason); }   // D101：格式、編號、佔地重疊在這裡擋；地圖邊界與地形靠重播
   let events: HistoryEvent[], c: City, jr: { id: string; n: number; h: number } | null = null, rows = d3.r;
   if (d3.hv === JOURNAL_VER) {   // D013：歷史在日誌裡——前 n 列從日誌來（雜湊要對）、尾巴從 d3.t 來
     const j = d3.j;
@@ -348,10 +355,7 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
     rows = [...head, ...d3.t];                                    // 不改讀進來的存檔物件（template 會原樣留著）
     jr = j;
   }
-  if (!rtSave) {   // D101：歷史裡有運輸事件也算運輸存檔（先看原始的列，解到一半壞掉也算）
-    const code26 = EVENT_REGISTRY.transit.code, raw = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? rows : d3.h;
-    if (Array.isArray(raw)) rtSave = raw.some(q => Array.isArray(q) ? q[0] === code26 : !!q && typeof q === 'object' && (q as { t?: unknown }).t === 'transit');
-  }
+  if (!rtSave) rtSave = transitRows(d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? rows : d3.h);   // D101：hv3 從日誌接回來的前段也要看
   try {
     events = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? unpackHistory(rows, save.n) : checkHistory(d3.h, save.n);
     const hasT = events.some(e => e.t === 'transit');   // D101：有事件沒 rt、有 rt 沒事件都不收
