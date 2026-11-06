@@ -3,6 +3,7 @@
 // D039：格式 8／碼 18–22＝policy、budget、research、spec、techdone。
 // D040：格式 9／碼 23＝depleted。D045：格式 10／碼 24＝cms（完成才有 bonus）。
 // D102：格式 11／碼 25＝hasten（煉鋼廠加速施工；尾巴是建築編號，同 merge 的尾巴）。業主 2026-11-04 定號：交通順延到 26／格式 12，居民 27／格式 13。
+// D101：格式 12／碼 26＝transit（運輸施工；op、mode 存碼表 city.ts TRANSIT_OPS／TRANSIT_MODES 的位置，g 存差值；路網另存 d3.rt）。居民仍是 27／格式 13，這裡不先佔。
 // 這只是把既有格式集中，D046 沒有新增事件、碼或歷史存法；委託小數另放附加欄位。
 import type { HistoryEvent } from './city.ts';
 
@@ -36,6 +37,7 @@ export const EVENT_REGISTRY = Object.freeze({
   depleted: spec(23, 9, ['x', 'z', 'k']),
   cms: spec(24, 10, ['ev', 'id', 'bonus']),
   hasten: spec(25, 11, ['ids']), // 後接 1 個以上被加速的建築編號（由小到大）
+  transit: spec(26, 12, ['op', 'id', 'mode', 'x', 'z', 'h', 'x2', 'z2', 'h2', 'cost', 'g']), // D101：固定 11 欄（軌道兩端／站廠起點與對角）
 } satisfies Record<HistoryEvent['t'], EventSpec>);
 
 export const EVENT_BY_CODE: Readonly<Partial<Record<number, HistoryEvent['t']>>> = Object.freeze(Object.fromEntries(
@@ -53,4 +55,3 @@ export function minimumEventFormat(e: HistoryEvent): number {
 }
 // 寫檔的下限維持 D012 的 4，避免沒有新事件的城無故換格式或改變分享碼位元組。
 export const eventFormat = (e: HistoryEvent): number => Math.max(LEGACY_UNVERSIONED_FORMAT, minimumEventFormat(e));
-// D101 lease probe

@@ -45,4 +45,6 @@ jobs:
         run: node tools/unit-d102-history.mjs
       - name: D103 declared D086 native timeout guards
         run: node tools/unit-d103-timeout.mjs
+      - name: D101 transit save guards
+        run: node tools/d101-save.mjs
       - run: npx tsc --noEmit

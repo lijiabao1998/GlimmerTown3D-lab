@@ -4,6 +4,8 @@
 // 世界歷史（規則 4）：匯入記成第一筆事件；2D 存檔沒有歷史，只有每棟的 age（每個模擬日 +1，施工用鋼材會加速，實驗線 55632／55671），
 // 所以「約建於第幾天」＝匯入時的 day − age，只是估計。
 import type { LabSave } from '../io/labcode.ts';
+import type { TransitMode } from './transit/graph.ts';
+import type { TransitNetwork } from './transit/network.ts';
 import { fnv1a } from './rng.ts';
 export { CITY_FORMAT, eventFormat } from './eventRegistry.ts';
 // D102：City 物件上的 format 是「城市模型」的版本（建築、圖層、欄位長什麼樣），不是存檔的城市格式。D102 只在世界歷史加了 hasten
@@ -21,6 +23,7 @@ export const CITY_MODEL_FORMAT = 10;
 // 格式 9（D040）：多了資源耗盡事件 depleted——油井、礦場的耗損累積到 240（一口井只記一次）。格式 1–8 照讀
 // 格式 10（D045）：多了市長委託事件 cms——接受 accept、放棄 drop、完成 done（帶獎金）、過期 expire；沒有座標，是整座城的事（碼 24，委託碼表在下面，只往後加）。格式 1–9 照讀
 // 格式 11（D102）：多了煉鋼廠加速施工事件 hasten——那一天被鋼材多長一天的施工中建築編號（碼 25，一天一筆，編號由小到大）。之前這個 age+1 沒有記，重播的屋齡會比存檔小、讀檔退回快照。格式 1–10 照讀
+// 格式 12（D101）：多了運輸施工事件 transit——鋪軌道、蓋車站、蓋車廠與拆掉它們（碼 26，一筆一個操作，碼表在下面，只往後加）。路網本身另存在 d3.rt（src/io/save.ts）。格式 1–11 照讀
 // 存檔寫的格式看歷史裡有什麼（D019、D026）：有災禍事件、拆焦土才寫 6；有鋪水管、拆水管的事件寫 5；都沒有就寫 4——比這一版舊的程式（認到 4 或 5）照樣讀得回來，
 // 沒有水管、沒有災禍的城存出來的碼跟 D018 以前逐位元組相同（實驗線讀回的黃金樣本照樣適用）。讀檔照舊認 1..CITY_FORMAT
 // D046：事件碼、列欄位與最早格式統一登記在 eventRegistry.ts；這裡保留既有匯出介面。
@@ -107,7 +110,16 @@ export type CityEvent = ImportEvent | GrowEvent | EditEvent | RestyleEvent | Haz
 // 在生長、升級之後、合併之前（同 tick 順序）。沒有座標：一天一筆，跟合併的尾巴一樣列編號。
 // 它是重播屋齡用的記帳，不是城裡看得見的事，所以不放進 CityEvent（地塊歷史、大事記照舊只看 CityEvent）；世界歷史的每一筆是 HistoryEvent
 export interface HastenEvent { day: number; t: 'hasten'; ids: number[] }
-export type HistoryEvent = CityEvent | HastenEvent;
+// 運輸施工（D101，城市格式 12；業主 2026-11-04 定的碼 26 與列格式）：一筆一個實際落地的操作（src/sim/transit/network.ts 的規則與費用）。
+// op 的碼表 0 軌道、1 車站、2 車廠、3 拆軌道、4 拆車站、5 拆車廠；mode 的碼表 0 rail、1 tram、2 metro（兩張都只往後加，既有的號不改）。
+// id＝那一件設施的編號（蓋的時候＝路網的 nextId）。軌道記兩端 (x,z,h)、(x2,z2,h2)，依 z 再 x 排序、兩端相鄰；車站、車廠記起點與對角（2×1、3×2，不旋轉），h＝h2＝高度（地鐵 −1）。
+// 欄位撞名：這裡的 h 是高度，路網裡車站物件的 h 是深度（network.ts）。cost＝這一次扣的錢（沙盒 0，拆除 0、不退費）；g＝這一筆手勢的編號（復原用）。
+// 它跟 hasten 一樣不放進 CityEvent（地塊歷史、大事記照舊只看 CityEvent）
+export type TransitOp = 'edge' | 'station' | 'depot' | 'del-edge' | 'del-station' | 'del-depot';
+export const TRANSIT_OPS: readonly TransitOp[] = ['edge', 'station', 'depot', 'del-edge', 'del-station', 'del-depot'];
+export const TRANSIT_MODES: readonly TransitMode[] = ['rail', 'tram', 'metro'];
+export interface TransitEvent { day: number; t: 'transit'; op: TransitOp; id: number; mode: TransitMode; x: number; z: number; h: number; x2: number; z2: number; h2: number; cost: number; g: number }
+export type HistoryEvent = CityEvent | HastenEvent | TransitEvent;
 
 export interface City {
   format: number;
@@ -126,6 +138,9 @@ export interface City {
   buildings: CityBuilding[];
   issues: { overlap: number; outOfMap: number; unknownKinds: number[] };
   history: HistoryEvent[];   // D102：世界歷史的每一筆（CityEvent 加上重播用的 hasten）
+  // D101：運輸路網（src/sim/transit/network.ts）。沒蓋過運輸的城沒有這個鍵（cityFromLab 不寫，連 undefined 都不寫）；
+  // 歷史有 transit 事件 ⇔ 有這個鍵（施工與重播維持），存檔只看這個鍵決定寫不寫 d3.rt
+  transit?: TransitNetwork;
 }
 
 const layer = (s: string | undefined, nn: number, dec: (c: number) => number) => {
@@ -200,4 +215,3 @@ export const liveBuildings = (c: City) => c.buildings.filter(b => b.goneDay === 
 
 // 路圖層的編碼（實驗線 save 66717）：0 無、1 路、2 橋、3 高速、4 高速橋
 export const roadCode = (road: unknown, hw: unknown, bridge: unknown) => road ? (hw ? (bridge ? 4 : 3) : (bridge ? 2 : 1)) : 0;
-// D101 lease probe

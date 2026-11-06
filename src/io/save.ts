@@ -12,9 +12,12 @@
 // 讀檔照實驗線 load 的語意（亂數 seed^day 重設、天氣重設：src/sim/day.ts simFromSave）；城市（編號、蓋起日、墓碑、歷史）由 d3 重播，
 // 再跟存檔裡的格子、建築逐項核對，對不上就退回只用存檔（歷史從這張碼重新起算），並回報原因。
 // d3 是別人也能改的輸入（分享碼）：每一筆事件的每個欄位都先驗型別與範圍，驗過的才進城市（審查：事件欄位會被畫進建築卡）。
+// D101（城市格式 12）：運輸路網另存 d3.rt（src/sim/transit/format.ts 的 serializeNetwork，{v:1, rules:1, state}）：城裡有路網（city.transit）才寫，沒有運輸的城存檔逐位元組不變。
+//   讀檔時「有 rt」或「歷史有運輸事件」就是運輸存檔：rt 要解得開、兩者要同時有、重播出來的路網序列化要跟 rt 逐位元組相同；
+//   任何一步讀不進來都回 ok:false（不退回快照：退回快照的下一次自動存檔會把整個路網刪掉）。判斷絕不看 f。
 // 純邏輯：不碰 DOM、localStorage（那是介面的事）。
 import { decodeLabCode, encodeLabCode, MAX_CODE, type LabSave } from './labcode.ts';
-import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type HistoryEvent, type CmsEvent, type KindTable } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CITY_FORMAT, CMS_CODES, CMS_EVENTS, MERGE_SIZE, POLICY_CODES, SPEC_CODES, TECH_CODES, TRANSIT_MODES, TRANSIT_OPS, cityStats, eventFormat, roadCode, type ActKind, type City, type CityBuilding, type HistoryEvent, type CmsEvent, type KindTable, type TransitOp } from '../sim/city.ts';
 import { replayCity } from '../sim/replay.ts';
 import { fnv1a } from '../sim/rng.ts';
 import { EVENT_BY_CODE, EVENT_REGISTRY, LEGACY_UNVERSIONED_FORMAT, minimumEventFormat } from '../sim/eventRegistry.ts';
@@ -25,12 +28,14 @@ import { rdepOfSave, rdepPairs } from '../sim/rules/resource.ts';
 import { techSave } from '../sim/rules/tech.ts';
 import { cmsSave3d } from '../sim/rules/commissionSave.ts';
 import { packMore, hashRows, PACK0, type PackState } from './journal.ts';
+import { parseNetwork, serializeNetwork, type TransitSaveV1 } from '../sim/transit/format.ts';
+import { transitShapeError } from '../sim/transit/history.ts';
 
 export const HISTORY_VER = 2;
 export const JOURNAL_VER = 3;   // D013：歷史在日誌裡
 // 存檔的長度上限＝分享碼的上限（實驗線 importShareCode 64904 與本線 decodeLabCode 都是 2,000,000 字元）：超過就讀不回來，也貼不進實驗線
 export const SAVE_LIMIT = MAX_CODE;
-export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: HistoryEvent[]; j?: { id: string; n: number; h: number }; t?: unknown[][] }
+export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unknown[][]; h?: HistoryEvent[]; j?: { id: string; n: number; h: number }; t?: unknown[][]; rt?: TransitSaveV1 }
 
 // ---- 歷史的緊湊列（hv 2）----
 // 種類碼照事件出現的先後編；拆除的圖層碼 0 建築、1 路、2 分區、3 樹。
@@ -44,6 +49,7 @@ export interface D3Ext { f: number; s: string; g: number; hv?: number; r?: unkno
 // D040（城市格式 9）：depleted [23,dDay,x,z,k]（k 是 49 油井或 50 礦場）。
 // D102（城市格式 11）：hasten [25,dDay,…被煉鋼廠加速施工的建築編號]（由小到大、不重複、至少一個；一天一筆，在生長、升級之後、合併之前）。
 // D039（城市格式 8）：policy [18,dDay,政策碼,改之前的值,改之後的值]、budget [19,dDay,類別碼,改之前的值,改之後的值]、research [20,dDay,節點碼,費用]、spec [21,dDay,方向碼]、techdone [22,dDay,節點碼]（碼表在 city.ts，只往後加）。
+// D101（城市格式 12）：transit [26,dDay,操作碼,編號,模式碼,x,z,h,x2,z2,h2,cost,dG]（操作碼 0 軌道、1 車站、2 車廠、3 拆軌道、4 拆車站、5 拆車廠；模式碼 0 rail、1 tram、2 metro；碼表在 city.ts，只往後加）。
 // dDay＝這一筆的 day 減上一筆的 day（第一筆減 0）；dG＝這一筆的 g 減上一筆有 g 的事件的 g（第一筆減 0）。
 const LAYERS = ['bld', 'road', 'zone', 'tree', 'wp', 'ruin'] as const;
 
@@ -133,6 +139,18 @@ function eventOf(t: unknown, day: unknown, f: (k: string) => unknown, n: number,
       if (!ids.every((q, j) => j === 0 || q > (ids[j - 1] as number))) throw bad('加速施工的編號順序（要由小到大、不重複）');
       return { day, t, ids: [...ids] as number[] };
     }
+    case 'transit': {   // D101：運輸施工。操作與模式在碼表內、編號 1..2^31−1、座標在地圖內、高度 −1..255、費用是非負整數（拆除 0）、形狀照 history.ts
+      const op = f('op'), mode = f('mode');
+      if (!isStr(op) || !TRANSIT_OPS.includes(op as TransitOp)) throw bad('運輸操作');
+      if (!isStr(mode) || !TRANSIT_MODES.includes(mode as typeof TRANSIT_MODES[number])) throw bad('運輸模式');
+      const o = op as TransitOp, m = mode as typeof TRANSIT_MODES[number];
+      const id = int('id', 1, 2 ** 31 - 1), x = int('x', 0, n - 1), z = int('z', 0, n - 1), h = int('h', -1, 255), x2 = int('x2', 0, n - 1), z2 = int('z2', 0, n - 1), h2 = int('h2', -1, 255);
+      const cost = int('cost', 0, 1e9);
+      if (o.startsWith('del-') && cost !== 0) throw bad('拆除的費用（要是 0）');
+      const shape = transitShapeError(o, m, x, z, h, x2, z2, h2);
+      if (shape) throw bad('運輸施工的形狀（' + shape + '）');
+      return { day, t, op: o, id, mode: m, x, z, h, x2, z2, h2, cost, g: int('g', 0, 2 ** 31) };
+    }
     default: throw bad('種類');
   }
 }
@@ -160,6 +178,8 @@ export function unpackHistory(rows: unknown, n: number): HistoryEvent[] {
       if (name === 'from' && t === 'merge') return row.slice(2 + names.length);   // D034：合併的尾巴（D039：政策與預算的 from 是「改之前的值」，不能撞名）
       if (name === 'size') return undefined;                      // D034：邊長由 k 推（列裡不存）
       if (name === 'ids' && t === 'hasten') return row.slice(2);   // D102：加速施工的尾巴就是整列（dDay 之後）
+      if (name === 'op' && t === 'transit') return isInt(v) ? TRANSIT_OPS[v] : undefined;   // D101：運輸的操作碼與模式碼
+      if (name === 'mode' && t === 'transit') return isInt(v) ? TRANSIT_MODES[v] : undefined;
       return v;
     };
     const e = eventOf(t, d0 + row[1], at, n, k);
@@ -251,6 +271,8 @@ export function saveCode(s: Sim, template: Record<string, unknown>, start: strin
     const { id, st } = opts.journal;
     o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: JOURNAL_VER, j: { id, n: st.n, h: st.h }, t: packMore(s.city.history, st).rows } satisfies D3Ext;
   } else if (opts.history !== false) o.d3 = { f: historyFormat(s.city.history), s: start, g: s.stroke, hv: HISTORY_VER, r: packHistory(s.city.history) } satisfies D3Ext;
+  // D101：有路網才寫 rt（排在 d3 最後；O(1) 判斷，不掃歷史）。施工與重播維持「歷史有運輸事件 ⇔ city.transit 有值」
+  if (opts.history !== false && s.city.transit !== undefined) (o.d3 as D3Ext).rt = serializeNetwork(s.city.transit);
   return encodeLabCode(o, { deflate: true });
 }
 
@@ -274,6 +296,7 @@ export function loadCode(code: string, kinds: KindTable, vrank: Record<string, n
   const r = decodeLabCode(code);
   if (!r.ok) return r;
   const res = loadSim(r.save, code, kinds, vrank, journal);
+  if (!res.ok) return res;   // D101：有運輸的存檔讀不進來（不退回快照）
   return { ...res, restyled: restyle531(res.sim) };
 }
 
@@ -289,7 +312,9 @@ export function viewCode(code: string, kinds: KindTable, vrank: Record<string, n
 function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<string, number[]>, journal?: JournalIn) {
   const sim = simFromSave(save, code, kinds, vrank);
   const d3 = save.raw.d3 as Partial<D3Ext> | undefined;
+  let rtSave = false;   // D101：是不是運輸存檔（d3 有 rt，或歷史有運輸事件）。要宣告在 only() 第一次被呼叫之前
   const only = (why: string) => {
+    if (rtSave) return { ok: false as const, error: '有運輸的存檔讀不進來（不退回快照，免得下一次存檔把路網刪掉）：' + why.replace(/[，：]只用存檔(，歷史從這張碼重新起算)?/g, '') };
     let start = code;
     if (Object.hasOwn(save.raw, 'd3')) {
       // D046：只有確定退回快照時才截掉舊 d3，否則每次失配都把上一份完整歷史再包進起始碼，大小呈指數增加。
@@ -304,11 +329,13 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
     return { ok: true as const, sim, start, template: save.raw, replayed: false, note: why };
   };
   if (!d3 || typeof d3 !== 'object' || Array.isArray(d3)) return only('沒有本線的歷史：從這張碼開始記');
+  rtSave = Object.hasOwn(d3, 'rt');
   if (typeof d3.s !== 'string') return only('本線的歷史缺起始碼：只用存檔，歷史從這張碼重新起算');
   if (d3.hv !== undefined && d3.hv !== HISTORY_VER && d3.hv !== JOURNAL_VER) return only(`不認得的歷史存法 hv=${JSON.stringify(d3.hv)}：只用存檔`);   // 比這一版新的存法：不猜
   // 城市格式（D012 起才檢查）：比這一版新＝可能有這一版不認得的事件，不猜；不是 1..這一版的整數＝不認得（審查：之前只擋整數，"5"、4.5 照讀）。沒有 f 的照舊當舊檔
   if (isInt(d3.f) && d3.f > CITY_FORMAT) return only(`城市格式 ${d3.f} 比這一版（${CITY_FORMAT}）新：只用存檔`);
   if (d3.f !== undefined && !(isInt(d3.f) && d3.f >= 1)) return only(`不認得的城市格式 f=${JSON.stringify(d3.f)}：只用存檔`);
+  if (rtSave) { const p = parseNetwork(d3.rt); if (!p.ok) return only('路網（d3.rt）解不開：' + p.reason); }   // D101：格式、編號、佔地重疊在這裡擋；地圖邊界與地形靠重播
   let events: HistoryEvent[], c: City, jr: { id: string; n: number; h: number } | null = null, rows = d3.r;
   if (d3.hv === JOURNAL_VER) {   // D013：歷史在日誌裡——前 n 列從日誌來（雜湊要對）、尾巴從 d3.t 來
     const j = d3.j;
@@ -321,8 +348,15 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
     rows = [...head, ...d3.t];                                    // 不改讀進來的存檔物件（template 會原樣留著）
     jr = j;
   }
+  if (!rtSave) {   // D101：歷史裡有運輸事件也算運輸存檔（先看原始的列，解到一半壞掉也算）
+    const code26 = EVENT_REGISTRY.transit.code, raw = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? rows : d3.h;
+    if (Array.isArray(raw)) rtSave = raw.some(q => Array.isArray(q) ? q[0] === code26 : !!q && typeof q === 'object' && (q as { t?: unknown }).t === 'transit');
+  }
   try {
     events = d3.hv === HISTORY_VER || d3.hv === JOURNAL_VER ? unpackHistory(rows, save.n) : checkHistory(d3.h, save.n);
+    const hasT = events.some(e => e.t === 'transit');   // D101：有事件沒 rt、有 rt 沒事件都不收
+    if (hasT && !Object.hasOwn(d3, 'rt')) return only('歷史有運輸事件，存檔卻沒有路網（d3.rt）');
+    if (!hasT && Object.hasOwn(d3, 'rt')) return only('存檔有路網（d3.rt），歷史卻沒有運輸事件');
     // D046：宣稱舊格式卻塞入新事件不能重播。分開「最早格式」與寫檔下限 4，讓真正的格式 1–3 仍能讀。
     const declared = d3.f ?? LEGACY_UNVERSIONED_FORMAT, newer = events.find(e => minimumEventFormat(e) > declared);
     if (newer) return only(`歷史事件 ${newer.t} 需要城市格式 ${minimumEventFormat(newer)}，存檔卻標 ${declared}：只用存檔`);
@@ -330,6 +364,7 @@ function loadSim(save: LabSave, code: string, kinds: KindTable, vrank: Record<st
   } catch (e) { return only('歷史重播失敗，只用存檔：' + (e as Error).message); }
   const bad = mismatch(c, sim.city);
   if (bad) return only('歷史跟存檔對不上，只用存檔：' + bad);
+  if (rtSave && (!c.transit || JSON.stringify(serializeNetwork(c.transit)) !== JSON.stringify(d3.rt))) return only('重播出來的路網跟存檔的 d3.rt 不同');   // D101：逐位元組
   // 對得上：城市換成重播出來的（編號、蓋起日、墓碑、歷史都在），根格對照表照新的編號重建
   c.name = sim.city.name;
   sim.city = c;
@@ -357,4 +392,3 @@ function mismatch(a: City, b: City): string | null {
   const la = a.buildings.filter(q => q.goneDay === undefined).map(key).sort().join(';'), lb = b.buildings.filter(q => q.goneDay === undefined).map(key).sort().join(';');
   return la === lb ? null : '建築（種類、等級、變體、屋齡）不同';
 }
-// D101 lease probe

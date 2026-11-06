@@ -10,6 +10,17 @@
 
 ---
 
+- 2026-11-06 — D101 — 施工第二步：存檔、事件 26、格式 12、線性重播（核對未完先推）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - 事件 26 列 `[26, dDay, op, id, mode, x, z, h, x2, z2, h2, cost, dG]`；`CITY_FORMAT` 12；只有 `city.transit` 存在才寫 `d3.rt`。
+  - 判斷有運輸的存檔看 `rt` 或事件 26，不看 `f`；讀不進來回 `ok:false`，不退回快照。
+  - 重播是線性時間，每一筆仍由 `network.ts` 原本的函式判定；新純函式檔 `src/sim/transit/history.ts`。
+  - 守衛原地改 4 支（格式 11→12、登記 26 種）；新守衛 `tools/d101-save.mjs` 19 項，掛進 `transit.yml`；鏈已重凍。
+  - 煙霧測試（本機 Node 24）：`tsc`、鏈 `--check`、`d101-source.test` 8／8、`d101-save` 19／19、`unit-d103-timeout`、`unit-d102-history` 全綠；讀檔 4000 筆 53.8 ms（比值 3.05）。瀏覽器煙霧測試交給 CI。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 本機瀏覽器 smoke 沒跑；歷史分區守衛的本機結果推送時還沒出來。
+    - 核對找到的兩個小問題還沒修：計時斷言在忙碌機器可能誤紅；驗收 15 的守衛沒斷言 15a 的前提。
+    - 施工、撤銷、介面、巨型合併修正（驗收 21）還沒動。
 - 2026-11-06 — D101 — 施工第一步：lease 與整條雜湊鏈（stub 位元組，還沒寫產品程式）：[卡面](docs/D101-transit-save-and-ui.md)。
   - 7 個要改的 src 檔檔尾加一行 `// D101 lease probe`，2 個新檔是 `export {};`。
   - lease `fixtures/d101/source.json`（`c33c8bf8…`）：269 檔，modified 7、added 2，兩條投影路都往下傳 `76e074f` 的位元組。
