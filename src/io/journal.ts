@@ -87,3 +87,4 @@ export class MemoryJournal implements JournalStore {
   async count(id: string) { return (this.data.get(id) ?? []).length; }
   async drop(id: string) { this.data.delete(id); }
 }
+// D101 lease probe

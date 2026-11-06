@@ -357,3 +357,4 @@ function mismatch(a: City, b: City): string | null {
   const la = a.buildings.filter(q => q.goneDay === undefined).map(key).sort().join(';'), lb = b.buildings.filter(q => q.goneDay === undefined).map(key).sort().join(';');
   return la === lb ? null : '建築（種類、等級、變體、屋齡）不同';
 }
+// D101 lease probe

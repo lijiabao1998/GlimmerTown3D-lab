@@ -298,3 +298,4 @@ export function powerStatus(s: Sim) {
   for (const cb of s.root.values()) if (cb.k <= 3) { const b = s.w.tiles[cb.z * s.w.N + cb.x].bld; if (b?.pw) powered++; else unpowered++; }
   return { cap, powered, unpowered };
 }
+// D101 lease probe

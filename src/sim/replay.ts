@@ -182,3 +182,4 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
   c.day = E;
   return c;
 }
+// D101 lease probe

@@ -53,3 +53,4 @@ export function minimumEventFormat(e: HistoryEvent): number {
 }
 // 寫檔的下限維持 D012 的 4，避免沒有新事件的城無故換格式或改變分享碼位元組。
 export const eventFormat = (e: HistoryEvent): number => Math.max(LEGACY_UNVERSIONED_FORMAT, minimumEventFormat(e));
+// D101 lease probe

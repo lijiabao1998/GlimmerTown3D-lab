@@ -10,6 +10,25 @@
 
 ---
 
+- 2026-11-06 — D101 — 施工第一步：lease 與整條雜湊鏈（stub 位元組，還沒寫產品程式）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - 7 個要改的 src 檔檔尾加一行 `// D101 lease probe`，2 個新檔是 `export {};`。
+  - lease `fixtures/d101/source.json`（`c33c8bf8…`）：269 檔，modified 7、added 2，兩條投影路都往下傳 `76e074f` 的位元組。
+  - 整條鏈由 `tools/d101-freeze-chain.mjs` 產生：先在記憶體算完並核對，再寫檔；遇到被手改的檔案一律拒絕。
+    - 鏈上檔案：d085 測試、domain JSON 與 `DOMAIN_MANIFEST_SHA`、相機後繼、routing JSON 與契約、lineage 與 `PIPE_LINEAGE_SHA`。
+    - lineage 的 copy 13 摺成單一整檔 item，copies 7、8 不動。
+  - 原地改：三個 seam、`d090-source-v3`（兩層投影，原有 16 條斷言都保留）、`source-boundaries-v3`；`transit.yml` 第一步換成 `d101-source.test`。
+  - 新守衛 `tools/d101-source.test.mjs` 8 項，其中一項要求鏈上每個產物都等於工具重算的結果。
+  - 煙霧測試（本機 Node 24）：
+    - 第一步的證明清單 472／472；`unit-d103-timeout` 全過（20 種負控）、一個字沒改；`unit-d082-scope`、`unit-d066`–`d081`、14 支 frame 守衛、`unit-d102-history`、`tsc` 全綠。
+    - 乾淨 worktree 以 `GITHUB_ACTIONS=true` 跑 runner 全部 exit 0：foundation 1203／1203；inherited d086 2094、d087 2057、d088 2432、d089 2432，全過。
+    - 3 個代理獨立核對，找到 4 個小缺口都已補，再核一次沒有 blocker。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 產品程式（存檔、事件、重播、施工、繪製、工具列）都還沒寫。
+    - 瀏覽器、smoke、d082 join 沒跑。
+    - 凍結工具寫到一半中斷時修不回來，要先用 git 還原。
+    - 幾支歷史守衛在 main 上本來就紅，輸出逐字相同，已列在卡面。
+    - 巨型合併蓋到軌道還在等業主定。
 - 2026-11-05 — D101 — 合併後重開卡面：施工前研究、更正與追加驗收（[卡面](docs/D101-transit-save-and-ui.md)）。
   - 背景：D100、D102、D103、D098 都已合併。本分支在 `9f8a001` 重新併入 main，對 main 只差卡面；PR #56 已改疊 main。
   - 研究：唯讀，7 個面向各一讀一核，再彙整、找漏，共 16 個代理。重要事實親自重讀過，包括：

@@ -290,3 +290,85 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
 - modified 改成 6 檔（不含 cityView），added 1 檔（`history.ts`），清單 **268**。
 - 相機後繼、routing、domain 的相機替換都不用做。
 - 繪製與工具列另開卡，「沒做成的事」照實寫。
+
+## 施工紀錄：第一步（lease 與整條雜湊鏈；2026-11-06）
+
+這一步只用 stub 位元組把整條鏈做綠，**還沒寫產品程式**：
+- 7 個要改的既有檔，各在檔尾加一行 `// D101 lease probe`；
+- 兩個新檔的內容都是 `export {};`。
+
+產品程式定稿後，用一個指令重凍，見下面 `d101-freeze-chain`。
+
+### 改了什麼
+
+- **lease**：
+  - `fixtures/d101/source.json`：`c33c8bf8…`，358,363 bytes。
+  - 由 `tools/d101-freeze-source.mjs` 從 `76e074f` 產生，入口 `tools/d101-source.mjs` 也是它產生的。
+  - 規則寫在 `tools/d101-source-contract.mjs`：269 檔，modified 7、added 2。兩條投影路都把 `76e074f` 的位元組往下傳；`D084_CHANGED` 維持 42，`D084_ADDED` 30 → 32，`d084PriorInventory` 回 237。
+  - lease 模組不讀 git。
+- **鏈**：全部由 `tools/d101-freeze-chain.mjs` 產生，不手改。
+  - 它先在記憶體裡算出整份候選，包括 lease 與 8 個鏈上檔案。用 verifier 同款的 `split` 計數加 `replaceAll` 重播 14 份 lineage copy，數量都核對過，才開始寫檔。
+  - 鏈上檔案只接受三種狀態：`76e074f` 的原樣、目前 lease 對應的候選、新的候選。被手改過的檔案一律拒絕，加 `--refreeze` 也一樣；lease 不同時，要加 `--refreeze` 才會換。
+  - `--check` 只讀不寫。
+  - 8 個鏈上檔案：
+    - `tools/d085-source-d090.test.mjs`，第 4、5 行；
+    - `proposals/d090/inherited-test-domains-pipes-v2.json`，三處 1:1 換成後繼、`currentCopies[2]` 加 2 個 change；
+    - `inherited-test-contract-pipes-v2.mjs`，`DOMAIN_MANIFEST_SHA`；
+    - 相機後繼 `proposals/d090/original-camera-restoration-d101.test.mjs`；
+    - `foundation-routing-pipes-v2.json`：actualInventory 55 → 56、superseded 3 → 4、current 仍 47；
+    - `foundation-routing-contract-pipes-v2.mjs`：內嵌 `D101_MODIFIED_AFTER`、`D101_SUCCESSOR_ADDED`，排在 D102 之後，清單 269；
+    - `selector-pipes-lineage.json`：copy 5 換新的 domain 雜湊；copy 13 摺成單一整檔 item，`reissued.previousSha256`＝`8875cccb…`；copies 7、8 與 qualification 不動；
+    - `selector-pipes-lineage.mjs`，`PIPE_LINEAGE_SHA`。
+- **相機後繼的 delta 是算出來的**：
+  - 拿 `76e074f` 與現在的 `src/cityView.ts` 做行差異。每一塊往外加上下文，直到 before 在文本中恰好出現一次。
+  - 上下文重疊或相接的塊合成一個 delta。
+  - 產生時斷言每個 after 在最終的 cityView 裡恰好出現一次。
+  - 測試要求每一個 D101 delta 單獨改回去都會被抓到（reverted＝delta 數）。
+  - 其餘照抄原檔：原有 6 個 delta、D081 測試、5 種相機突變、墓地與管線測試、禁字正則、`controls.maxZoom = 8`。原檔 `da17d794` 不動。
+- **原地改**：
+  - 三個 seam 的第 1 行。
+  - `tools/d090-source-v3.test.mjs`：改用 D101 lease、269 檔。跟 git `5b41bac` 比的是 D101 → D102 → D100 兩層投影（研究實測，用一層的話 `journal.ts` 會紅）。原有的 16 條斷言都保留，其中「D102 不新增路徑」是審查發現漏掉後補回的。
+  - `proposals/d090/source-boundaries-v3.test.mjs`。
+  - `.github/workflows/transit.yml` 第一步，`d102-source.test` 換成 `d101-source.test`；D103 那一步逐字不動。
+- **新守衛 `tools/d101-source.test.mjs`**（transit 跑），8 項：
+  - 269 檔，各層投影 267／267／265／263／258／237；
+  - before 等於 git `76e074f`；
+  - D102、D100 兩層投影等於 git；
+  - 負控：缺檔、多檔、重複、未知路徑、舊位元組、after＝before、新增檔給空字串、讀檔例外原樣傳出；
+  - **鏈上每個產物都要等於工具重算的結果**，鏈上任一檔多一個位元組都會被抓到。
+
+### 驗證（本機 Node 24，`TMPDIR=/dev/shm`）
+
+- 第一步的證明清單（11 個 `node --test` 檔）：472／472。
+- `unit-d103-timeout`：全過，20 種負控都被預期的那一關擋下；D103 守衛一個字沒改。
+- `unit-d082-scope`：exit 0，其中 D083 範圍守衛 236 檔。
+- `unit-d066`–`unit-d081` 與 `unit-d074-touch-repair`：全過。14 支 frame 守衛：全過。
+- `unit-d053-d090`、`unit-d054`、`unit-d054-ui-d090`、`unit-d081-touch-lease-d090`、`unit-d102-history`、`unit-d100-*`、`unit-d097-*`：全過。`tsc`：綠。
+- 在乾淨 worktree 以 `GITHUB_ACTIONS=true` 跑 runner，全部 exit 0：
+  - foundation：現行 47 檔，1203／1203。
+  - inherited：
+    - d086 2094／2094（比 D103 記錄的 2092 多 2 項，就是新的相機後繼測試）；
+    - d087 2057／2057；
+    - d088 2432／2432；
+    - d089 2432／2432。
+- 獨立核對：
+  - 三個代理各自重算整條鏈的雜湊、重播 14 份 copy、找放寬過的斷言，沒有 blocker。
+  - 找到的 4 個小缺口都已補：漏掉的斷言、凍結工具先寫後驗、相機 delta 沒合併、後繼測試沒被 CI 綁住。
+  - 修補後再核一次，沒有 blocker。
+
+### 本來就紅、跟本卡無關的（照實記）
+
+下面這些在 main `76e074f` 上就紅，D101 的樹上輸出逐字相同。`unit.mjs` 只導到各自的 `-d090` 版，那些版本都過：
+- `unit-d053`、`unit-d053-d089`；
+- `unit-d054-ui` 與 d086–d089 四份；
+- `unit-d081-touch-lease` 與 d086–d089 四份（`UTILITY_HERITAGE_TOOLS is not defined`）；
+- `tools/unit-d077-compatibility.test.mjs`（5 項 3 過 2 紅）。
+
+`tools/d102-source.test.mjs` 在 D101 的樹上照設計會紅（4／6），已經不在任何工作流裡。先例是 `d100-source.test`。
+
+### 這一步沒做成的事
+
+- 產品程式還沒寫：存檔、事件、重播、施工、繪製、工具列都還沒動。
+- 第一步的瀏覽器檢查、smoke、d082 join 都沒跑；這一步沒有畫面變化。
+- 凍結工具寫到一半中斷（例如磁碟滿）時，可能留下「lease 已換、鏈還舊」的狀態，加 `--refreeze` 也修不回來，要先用 git 把鏈上檔案還原再重跑。這個限制記在這裡，沒有修。
+- 新的 `d101-source.test` 第 8 項會跑約 270 次 `git show`（約 5 秒），需要 transit 的 fetch-depth 0。

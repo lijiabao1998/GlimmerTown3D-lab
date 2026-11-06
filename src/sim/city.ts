@@ -200,3 +200,4 @@ export const liveBuildings = (c: City) => c.buildings.filter(b => b.goneDay === 
 
 // 路圖層的編碼（實驗線 save 66717）：0 無、1 路、2 橋、3 高速、4 高速橋
 export const roadCode = (road: unknown, hw: unknown, bridge: unknown) => road ? (hw ? (bridge ? 4 : 3) : (bridge ? 2 : 1)) : 0;
+// D101 lease probe

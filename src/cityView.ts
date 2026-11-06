@@ -2420,3 +2420,4 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     nearCounts: () => built!.nearCounts(),
   };
 }
+// D101 lease probe
