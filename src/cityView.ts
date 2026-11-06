@@ -792,7 +792,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     </section>`;
   const bui = createBuildUi({
     tool: t => { closeTransit(false); setTool(t); }, roadTool: id => { roadTool = id; syncDock(); updatePreview(); }, civicTool: id => { if (!pickCivic(id)) return; syncPipes(); syncDock(); updatePreview(); },
-    play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => doUndo(),
+    play: () => setPlaying(!playing), speed: k => { speed = k; syncDock(); }, undo: () => undoWithTransit(),
     menu: id => onMenu(id), menuOpen: () => { interruptBuild(); closeTransit(false); bui.setMenu(menuSections()); }, startBuild: () => menuCity('newcity'),
   });
   bui.style.textContent += growthGuideCss + siteDiagnosticsCss;
@@ -1408,6 +1408,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     transitStroke = null; preview.clear(); bui.hideCost(); invalidate();
   }
   function clearTransitPicks() { transitPicks = []; transitTargetSelect.replaceChildren(); transitTargets.hidden = true; }
+  function undoWithTransit() { cancelTransitStroke(); clearTransitPicks(); return doUndo(); }
   function closeTransit(focus = true) {
     if (!transitToolId && !transitStroke && transitBar.hidden) return;
     cancelTransitStroke(); transitToolId = null; clearTransitPicks(); transitMessage = ''; transitBar.hidden = true; transitExport.hidden = true;
@@ -1683,7 +1684,6 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   }
   function doUndo() {
     interruptBuild();
-    cancelTransitStroke(); clearTransitPicks();
     if (!sim) return null;
     const r = undoOp(sim);
     if (!r.ok) { bui.toast('沒有可以復原的：只能復原今天的施工'); return r; }
@@ -2030,6 +2030,8 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   addEventListener('keydown', e => {
     if (!transitToolId) return;
     cancelTransitStroke();
+    // 先清運輸選件，再交回原鍵盤分支檢查面板及執行復原；D054 抽取範圍不引入運輸相依。
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { clearTransitPicks(); return; }
     if (e.key === 'Escape') { closeTransit(); e.preventDefault(); e.stopImmediatePropagation(); return; }
     if ((e.target as Element | null)?.closest('#transitBar')) { e.stopImmediatePropagation(); return; }
     if (/^[1-7]$/.test(e.key)) closeTransit(false);
@@ -2336,7 +2338,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
     transitRemove: (request: TransitRemove) => runTransit(request),
     transitRead: () => ({ network: city?.transit ? JSON.parse(JSON.stringify(city.transit)) : null, tool: transitToolId, mode: transitMode, variant: transitVariant, shown: transitArt.shown,
       stroke: transitStroke ? { a: [...transitStroke.a], b: [...transitStroke.b], moved: transitStroke.moved } : null, choices: transitPicks.map(p => ({ ...p.request, label: p.label })), message: transitMessage }),
-    undo: () => doUndo(),
+    undo: () => undoWithTransit(),
     // 對拍劇本的「資金設定」（兩邊設成同一個數，把建造規則跟每日結算分開；實驗線那邊是注入的 setMoney）：只給守衛與拍照用，介面沒有這個鈕
     simMoney: (v: number) => { if (!sim) return null; sim.money = v; syncUi(); return sim.money; },
     // D044：城市等級（工具列的鎖）——只給守衛與拍照用；等級本來只升不降，所以這裡只准往上調

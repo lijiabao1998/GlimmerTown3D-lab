@@ -10,6 +10,11 @@
 
 ---
 
+- 2026-11-06 — D101 — 完整驗證抓到復原接線與 D054 抽取契約不相容，將運輸清理移回獨立 UI 入口，保留原 `doUndo` 與鍵盤片段，沒有修改歷史守衛；業主明確免做 Android 實機測量。
+  - 驗證：Linux 重凍／check、269 來源一致、current UI 38／38；typecheck／build；復原五入口 5／5；B phase1 10／10、phase2 6＋9、art-fit 9 圖、無運輸 parity 32／32 通過，無 runtime error。
+  - commit：本列的修正候選提交。樣張沿用[三檔三寬對照](docs/img/d101-transit/)，本輪選 B。
+  - **沒做成的事**：第一輪完整 C 在 D086 第 17 步失敗，已保留原始證據；修正後完整 C 尚待乾淨提交重跑，CI／push／PR ready 尚未執行。桌面結果不代表 Android 效能；合併仍由業主執行。
+
 - 2026-11-06 — D101 — 本機第四步介面、繪製與遷移：[卡面](docs/D101-transit-save-and-ui.md)〈本機第四步〉。
   - 獨立六工具／相鄰軌道、站廠、選件拆除與復原；地塊卡排除運輸事件；地面合批、地下示意；完整 hv2 單槽備份與失敗原子取消；示範城不覆蓋我的城備份。
   - 驗證：typecheck／build／diff check 過；Linux 重凍與 check 過（lease 0d7a0c15…）；migration 6／6＋9 突變、art 7／7＋6 突變；無運輸四樣本 32 項與 main 逐值相同。瀏覽器 10＋6 項操作／資料檢查及9組相機記錄過，無runtime錯誤；連續CDP跨導航觸控限制已記卡面，改獨立會話驗存讀。

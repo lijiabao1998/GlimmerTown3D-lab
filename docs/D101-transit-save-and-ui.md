@@ -835,3 +835,19 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
 | 360 | [A](img/d101-transit/transit-a-360.png) | [B](img/d101-transit/transit-b-360.png) | [C](img/d101-transit/transit-c-360.png) |
 
 - 收據：B-browser-QA-receipt.md、browser-phase1.json、browser-phase2.json、browser-art-fit.json（均在本輪 evidence 目錄）。**尚未完成**：交接 C 的乾淨 worktree 全套、完整 smoke／CI、Android 真機容量與操作餘裕。已連線的 Xiaomi 14 Ultra 是高階機；手機正由另一聊天使用，本輪排隊，不把桌面試跑或此型號冒稱中階手機。
+
+### 業主調整驗證範圍（2026-11-06，本機恢復施工）
+
+- 業主先要求暫停，後以「做完吧 3d 乾净」恢復本輪；已完成的兩筆本機提交與原始收據保留，沒有推送或合併。完整驗證的暫停時段另存收據，不能把人工暫停時間算成產品效能。
+- 業主隨後明確指示「手機測試不做了，你在電腦做就等於手機了」。本輪據此**免做 Android 真機容量及操作餘裕測量，不再以它阻擋收尾**；完成電腦端功能、窄屏觸控、完整歷史／frame／native／smoke 與 CI 驗證。這是驗證範圍調整，不是效能等價結論：桌面結果不證明 Android 的幀率、容量或操作延遲。
+- 實機測量尚無結果。期間換接 Sony Xperia 10 VI／Android 16，曾成功讀到型號，但後續 USB 傳輸在序號讀取階段失敗；停止重複排查。手機測試服務及準備工作已停止，不保留對業主的手機操作要求。
+- 之前的桌面容量試跑只作格式與邊界證據：同一合法交替增刪樣本，40,000 筆 hv2 為 1,848,156 字元，60,000 筆為 2,781,492 字元並被真正讀檔器拒絕；這不推翻較早混合事件樣本在 40,000 筆超限的結果，也不是所有城市的固定上限。60,000 筆 hv3 的小主碼另依賴完整 journal，不能當成完整匯出碼的容量。
+
+### 第五步第一輪發現與復原接線修正
+
+- 以乾淨候選 `eeb8f2f4f1e6d0cf42d2218e8380b75aa012ab8f` 跑完整 C：15 項前置守衛、foundation、四組 inherited、D083 native 均通過。D086 native 的第 17 步失敗：D054 UI 守衛單獨抽取 `opOf` 至鍵盤註解前的原始碼，`doUndo` 新增的 `cancelTransitStroke`／`clearTransitPicks` 在抽取環境中未定義，導致整合及突變敏感性兩項 ReferenceError。後續 14 組未跑；這輪不能列為完整通過。
+- 第一輪失敗現場、每步日誌及原始退出碼保留在 `c-final-attempt-1`；D086 封存經 gzip／fsync 驗證後回收 RAM worktree，沒有清理待辦。業主要求的暫停共 142.673 秒，另存收據；失敗發生在恢復後的第 17 步，沒有用扣時把失敗改判通過。
+- 修正僅限 `cityView.ts` 接線：`doUndo` 恢復原抽取片段；D101 區新增 `undoWithTransit`，按鈕及既有 `__gt.undo` 入口先清運輸手勢／選件再呼叫原復原。Ctrl／⌘Z 在 D101 capture listener 先清理，再交原鍵盤分支處理面板限制及復原；既有鍵盤片段逐字保留。沒有修改或放寬歷史守衛。
+- 修正後 Linux `--refreeze`／`--check` 通過，269 個來源與本機逐檔 SHA256 相同才回填生成檔；lease `cf1a55bf885c7531c72674ba6848eb98982e9bfd567bfd96247bbcdcb4a74963`，範圍仍為 8 modified／43 D084_CHANGED。第一次修正驗證因暫存路徑不符合依賴還原器的隔離要求停止；改用既定 `linux-ram` 後，原 D052／D054／D081 current UI **38／38** 通過。
+- Windows typecheck／build 通過。新增桌面 CDP 復原回歸 **5／5**：API、按鈕、Ctrl-Z、面板焦點 Ctrl-Z／Meta-Z 都會清手勢及選件、復原資金，放開原先按住的指標不會再施工。舊 B 證據原樣保存在 `b-original-eeb8f2f`；修正候選的 B 全套及完整 C 重跑結果續記，尚未通過的項目不列完成。
+- 修正後 B 重驗完成：phase1 **10／10**、phase2 **6 項操作／資料＋9 組相機**、art-fit **9 張圖**，console／runtime 錯誤為空；無運輸四城 **32／32** 與同一 main 基準逐值相同。`B-browser-QA-receipt.md` 已綁定修正後來源與 build SHA；完整 C 將在下一個乾淨提交重跑，第一輪失敗收據不覆蓋。
