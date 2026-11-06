@@ -6,7 +6,7 @@
 // 21（地面軌道格四周 8 棟 lv3 住宅：有運輸 0 格被巨型合併吸收、路網與存檔不變；同一局面沒運輸照舊吸收；存讀之後照樣擋）、
 // 15b（照卡面「對驗收 15b 的更正」的兩條：會觸發的局面裡，拿掉遮罩的運輸城跟沒蓋運輸的城每天逐位元組相同；有遮罩與沒運輸兩邊第一個不同的地方，是沒被擋的那一邊擲了一個含軌道格的 3×3 窗。
 // 原文「第一個不同的日子有一筆碰到軌道格的巨型合併」不成立——被擋的窗骰沒擲中也少抽一次 R()，反過來被擋的窗不設 mgDone，本來被跳過的重疊窗會多抽——所以原文只印出成立的種子數，不斷言）。
-// 第 2 輪核對 R2-1 補的（業主 11-06 規則的另外三部分在合併這條路上也要跑到）：驗收 21 的車站、車廠、地鐵、軌道旁四種變體；守衛建的每一張路網都核 transitSurface＝surfaceTransitCells；
+// 第 2 輪核對 R2-1 補的（業主 11-06 規則的另外三部分在合併這條路上也要跑到）：驗收 21 的車站、車廠、地鐵、軌道旁四種變體；R3-1 改用各件幾何與模式獨立推導期望地面格，核 transitSurface 與 surfaceTransitCells；
 // 世界在施工後、讀檔後真的登記了遮罩（merge.ts 沒有讀取的介面，用假格子逐格探 mergeDay 的行為）。R2-2：build.ts 不認得的工具在地面運輸格上照舊丟「未搬」。
 // 突變控制都載入 /dev/shm 底下改過的 src 副本（錨點恰好一處），不動倉庫的檔；每一種都要紅在預期的那一項。
 // 用法：node tools/d101-construction.mjs
@@ -38,17 +38,33 @@ async function api(root) {
     'src/sim/transit/network.ts', 'src/sim/transit/format.ts', 'src/sim/transit/history.ts', 'src/sim/rules/merge.ts', 'src/content/kindTable.ts'].map(im));
   const read = rel => fs.readFileSync(path.join(root, rel), 'utf8');
   const KT = kt.kindTableFrom(JSON.parse(read('src/content/lab-kinds.json'))), vrank = JSON.parse(read('src/content/samples/d009-live.json')).vrank;
-  // 第 2 輪核對 R2-1(5)：守衛建的每一張路網都核 transitSurface（交給 merge.ts 的遮罩來源）跟 surfaceTransitCells（反向守衛的地面格）逐格相同。
+  // R3-1：每張路網用各件幾何獨立推導地面格，再核 transitSurface 與 surfaceTransitCells，避免兩個產品函式一起錯卻互相比出綠燈。
   // 包住施工、拆除、復原：每一次呼叫之後（不論成敗）核一次；讀檔在 loadOk 裡核。不同的記下來，由「遮罩＝地面格」那一項與最後一項斷言（各項自己的斷言不受影響）
   const surfaceLog = { n: 0, bad: [] };
   const surfaceSame = (s, tag) => { surfaceLog.n++; const d = surfaceDiff(history, s.city); if (d) surfaceLog.bad.push(`${tag}：${d}`); };
-  const edit = { ...editMod };
-  for (const k of ['commitTransit', 'removeTransit', 'undoOp']) edit[k] = (s, ...a) => { const r = editMod[k](s, ...a); surfaceSame(s, k); return r; };
-  return { root, save, labcode, journal, replay, day, edit, network, format, history, merge, KT, vrank, surfaceLog, surfaceSame, sample: name => read(`src/content/samples/${name}.code.txt`).trim() };
+  const edit = { ...editMod }, previousTransit = new WeakMap();
+  for (const k of ['commitTransit', 'removeTransit', 'undoOp']) edit[k] = (s, ...a) => { previousTransit.set(s.w, s.city.transit); const r = editMod[k](s, ...a); surfaceSame(s, k); return r; };
+  return { root, save, labcode, journal, replay, day, edit, network, format, history, merge, KT, vrank, surfaceLog, surfaceSame, previousTransit, sample: name => read(`src/content/samples/${name}.code.txt`).trim() };
 }
-// transitSurface 跟 surfaceTransitCells 逐格比（城裡沒有路網：遮罩要是 null）；相同回 null，不同回第一個不同的地方
+// 守衛自己的期望集合：只讀實際蓋成的每一件位置與模式，不呼叫產品的地面格、遮罩或占地函式。
+// surfaceOnly=false 也含地鐵，供探針檢查「不該擋」及拆除／復原前的舊格。
+function geometryCells(net, n, surfaceOnly = true) {
+  const cells = new Set();
+  if (!net) return cells;
+  for (const edge of net.edges) {
+    if (surfaceOnly && edge.mode === 'metro') continue;
+    for (const point of [edge.a, edge.b]) cells.add(point.x + point.z * n);
+  }
+  for (const item of [...net.stations, ...net.depots]) {
+    if (surfaceOnly && item.mode === 'metro') continue;
+    for (let z = item.z; z < item.z + item.h; z++) for (let x = item.x; x < item.x + item.w; x++) cells.add(x + z * n);
+  }
+  return cells;
+}
+// 兩個產品結果分別跟獨立集合比（城裡沒有路網：遮罩要是 null）；相同回 null，不同回第一個不同的地方。
 function surfaceDiff(H, c) {
-  const n = c.n, m = H.transitSurface(() => c)(), want = H.surfaceTransitCells(c.transit, n);
+  const n = c.n, m = H.transitSurface(() => c)(), want = geometryCells(c.transit, n), actual = H.surfaceTransitCells(c.transit, n);
+  for (const i of new Set([...want, ...actual])) if (actual.has(i) !== want.has(i)) return `格 (${i % n},${(i / n) | 0})：surfaceTransitCells ${actual.has(i) ? 1 : 0}、各件幾何期望 ${want.has(i) ? 1 : 0}`;
   if (!c.transit) return m === null ? null : '沒有路網卻有遮罩';
   if (!(m instanceof Uint8Array) || m.length !== n * n) return `遮罩的形狀不對（${m?.constructor?.name}、${m?.length}）`;
   for (let i = 0; i < n * n; i++) if (m[i] !== (want.has(i) ? 1 : 0)) return `格 (${i % n},${(i / n) | 0})：遮罩 ${m[i]}、地面格 ${want.has(i) ? 1 : 0}`;
@@ -56,14 +72,11 @@ function surfaceDiff(H, c) {
 }
 // 世界真的登記了遮罩嗎（merge.ts 沒有讀取的介面，只能看行為）：把這個 World 的格子暫時換成「只有一個 3×3 窗合格」的假格子——窗裡 8 棟通電有水的 lv2 住宅、
 // 被探的那一格是沒分區的草地、窗外全是水（不可吸收）——用同一個 World 物件叫一次 mergeDay（需求只開巨廈那一段；亂數一律回 1，合格也擲不中，什麼都不改）。
-// 擲了一次＝那一格沒被擋，沒擲＝被擋。期望：被擋 ⇔ 那一格在 surfaceTransitCells 裡（地面軌道端點、地面站廠）。探的格：地面格、地鐵件的格、這兩種格的四鄰，
+// 擲了一次＝那一格沒被擋，沒擲＝被擋。期望：被擋 ⇔ 那一格在獨立推導的幾何集合裡（非地鐵軌道端點、非地鐵站廠）。探現在與上一次操作前路網所有件的格及四鄰，
 // sample > 0 時另外每 sample 格探一格。格子用完原樣放回（同一個陣列物件）
 function maskMatch(A, s, sample = 0) {
-  const w = s.w, N = w.N, c = s.city, t = c.transit, want = A.history.surfaceTransitCells(t, N), probe = new Set(want);
-  if (t) {
-    for (const e of t.edges) { probe.add(e.a.z * N + e.a.x); probe.add(e.b.z * N + e.b.x); }
-    for (const q of [...t.stations, ...t.depots]) for (let dz = 0; dz < q.h; dz++) for (let dx = 0; dx < q.w; dx++) probe.add((q.z + dz) * N + q.x + dx);
-  }
+  const w = s.w, N = w.N, t = s.city.transit, want = geometryCells(t, N);
+  const previous = geometryCells(A.previousTransit.get(w), N, false), current = geometryCells(t, N, false), probe = new Set([...current, ...previous]);
   for (const i of [...probe]) { const x = i % N, z = (i / N) | 0; for (const [dx, dz] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) if (x + dx >= 0 && z + dz >= 0 && x + dx < N && z + dz < N) probe.add((z + dz) * N + x + dx); }
   if (sample > 0) for (let i = 0; i < N * N; i += sample) probe.add(i);
   const keep = w.tiles, fake = Array.from({ length: N * N }, () => ({ t: 0 })), bad = [];
@@ -81,7 +94,7 @@ function maskMatch(A, s, sample = 0) {
       if ((rolls === 0) !== want.has(i)) bad.push(`(${x},${z}) ${rolls === 0 ? '被擋' : '沒擋'}，但${want.has(i) ? '是' : '不是'}地面格`);
     }
   } finally { w.tiles = keep; }
-  return { probed: probe.size, blocked, surface: want.size, bad };
+  return { probed: probe.size, blocked, surface: want.size, previousOnly: [...previous].filter(i => !current.has(i)).length, bad };
 }
 // 登記的遮罩逐格對：沒有一格不對；有地面格時每一格都擋到
 const regOk = (reg, tag) => { assert.deepEqual(reg.bad, [], `${tag}：世界登記的遮罩跟地面格不同`); assert.equal(reg.blocked, reg.surface, `${tag}：擋到 ${reg.blocked} 格、地面格 ${reg.surface} 格`); };
@@ -588,32 +601,41 @@ function coreChecks(A, only = null) {
     surfaceVariant('station', 'track'));
   check('驗收 21（車廠變體）：車廠版型（六個窗每 5 格一個，左欄上兩格是空地），每窗左邊蓋一座鐵路車廠（3×2，(x0−2,31)–(x0,32)，右欄兩格在窗裡）——有運輸：直接跑、存讀後再跑，車廠格都不被吸收；施工後、讀檔後登記的遮罩逐格就是地面格；同一版型沒有運輸（資金照樣扣 1800）每個種子都吸收得到', () =>
     surfaceVariant('depot', 'depot'));
-  check('驗收 21（地鐵變體）：同一個 M2 局面，六段地鐵在窗底下（(x0−1,32)–(x0,32)，h＝−1）——地鐵不擋：每個種子 60 天的 sim hash、亂數呼叫次數、合併清單都跟沒有運輸（資金照樣扣 180）逐一相同；登記的遮罩一格都不擋；沒有運輸時那 12 格每個種子都被吸收（相同＝地鐵格照樣被吸收）', () => {
+  check('驗收 21（地鐵變體）：同一個 M2 局面，六段地鐵在窗底下（(x0−1,32)–(x0,32)，h＝−1）——地鐵不擋：直接跑、存讀後再跑，每個種子 60 天的 sim hash、亂數呼叫次數、合併清單都跟沒有運輸（資金照樣扣 180）逐一相同；施工後、讀檔後登記的遮罩一格都不擋；沒有運輸時那 12 格每個種子都被吸收（相同＝地鐵格照樣被吸收）', () => {
     const cells = cellsOf21('metro'), rows = [];
     for (const seed of SEEDS21) {
-      const M = run21(A, seed, 'transit', false, 'metro'), B = run21(A, seed, 'none', false, 'metro');
+      const M = run21(A, seed, 'transit', false, 'metro'), R = run21(A, seed, 'reload', false, 'metro'), B = run21(A, seed, 'none', false, 'metro');
       regOk(M.reg, `種子 ${seed}：施工後`); assert.equal(M.reg.surface, 0); assert.ok(M.reg.probed >= cells.size, '地鐵格都要探到');
+      regOk(R.regLoaded, `種子 ${seed}：讀檔後`); assert.equal(R.regLoaded.surface, 0); assert.ok(R.regLoaded.probed >= cells.size, '讀檔後地鐵格都要探到');
       assert.equal(J(M.merges), J(B.merges), `種子 ${seed}：合併清單跟沒有運輸不同`);
       assert.equal(J(M.fp), J(B.fp), `種子 ${seed}：每天的 hash／亂數次數跟沒有運輸不同`);
+      assert.equal(J(R.merges), J(B.merges), `種子 ${seed}：存讀後合併清單跟沒有運輸不同`);
+      assert.equal(J(R.fp), J(B.fp), `種子 ${seed}：存讀後每天的 hash／亂數次數跟沒有運輸不同`);
       assert.equal(hitOf(M, cells), hitOf(B, cells));
+      assert.equal(hitOf(R, cells), hitOf(B, cells));
       assert.ok(hitOf(B, cells) > 0, `種子 ${seed}：沒有運輸時地鐵那幾格沒被吸收——這一項是空測`);
       rows.push(`${seed % 100}:${hitOf(M, cells)}`);
     }
-    return `${SEEDS21.length} 個種子 × ${DAYS21} 天逐一相同；地鐵格被吸收的次數（兩邊相同）${rows.join(' ')}`;
+    return `直接跑、存讀後再跑，各 ${SEEDS21.length} 個種子 × ${DAYS21} 天逐一相同；地鐵格被吸收的次數（三邊相同）${rows.join(' ')}`;
   });
-  check('驗收 21（軌道旁變體）：同一個 M2 局面，軌道蓋在窗外那一欄 (x0−1,31)–(x0−1,32)——軌道格一次都不被吸收；緊鄰的窗內空地 (x0,32) 不擋（施工後登記的遮罩逐格就是地面格，四鄰不在裡面），每個種子都照樣被巨型合併吸收，跟沒有運輸（驗收 21 的對照，資金同樣扣 60）一樣吸收得到', () => {
+  check('驗收 21（軌道旁變體）：同一個 M2 局面，軌道蓋在窗外那一欄 (x0−1,31)–(x0−1,32)——直接跑、存讀後再跑，軌道格一次都不被吸收；緊鄰的窗內空地 (x0,32) 不擋（施工後、讀檔後登記的遮罩逐格就是地面格，四鄰不在裡面），每個種子都照樣被巨型合併吸收，跟沒有運輸（驗收 21 的對照，資金同樣扣 60）一樣吸收得到', () => {
     const next = cellsOf21('beside'), track = cellsOf21('beside', 'block'), rows = [];
     for (const seed of SEEDS21) {
-      const T = run21(A, seed, 'transit', false, 'beside'), B = run21(A, seed, 'none');
+      const T = run21(A, seed, 'transit', false, 'beside'), R = run21(A, seed, 'reload', false, 'beside'), B = run21(A, seed, 'none');
       regOk(T.reg, `種子 ${seed}：施工後`);   // (x0,32) 是軌道格 (x0−1,32) 的四鄰，探過了：沒擋
+      regOk(R.regLoaded, `種子 ${seed}：讀檔後`);
       const surf = A.history.surfaceTransitCells(JSON.parse(T.netBuilt), N21);
       assert.equal(J([...surf].sort((p, q) => p - q)), J([...track].sort((p, q) => p - q)), '地面格就是那 12 格軌道格'); assert.ok(![...next].some(i => surf.has(i)));
       assert.equal(hitOf(T, track), 0, `種子 ${seed}：軌道格被吸收了 ${hitOf(T, track)} 次`); assert.equal(bldOf(T, track), 0, `種子 ${seed}：軌道格上有建築`);
+      assert.equal(hitOf(R, track), 0, `種子 ${seed}：存讀後軌道格被吸收了 ${hitOf(R, track)} 次`); assert.equal(bldOf(R, track), 0, `種子 ${seed}：存讀後軌道格上有建築`);
       assert.ok(hitOf(T, next) > 0, `種子 ${seed}：有運輸時軌道旁的 (x0,32) 一次都沒被吸收（遮罩太寬？）`);
+      assert.ok(hitOf(R, next) > 0, `種子 ${seed}：存讀後軌道旁的 (x0,32) 一次都沒被吸收（遮罩太寬？）`);
+      assert.equal(J(R.fp), J(T.fp), `種子 ${seed}：存讀後每天的 hash／亂數次數跟直接跑不同`);
+      assert.equal(J(R.merges), J(T.merges), `種子 ${seed}：存讀後合併清單跟直接跑不同`);
       assert.ok(hitOf(B, next) > 0, `種子 ${seed}：沒有運輸時 (x0,32) 沒被吸收——這一項是空測`);
       rows.push(`${seed % 100}:${hitOf(T, next)}/${hitOf(B, next)}`);
     }
-    return `軌道格 ${SEEDS21.length} 個種子都 0 次；軌道旁 (x0,32) 被吸收的次數（有運輸／沒有運輸）${rows.join(' ')}`;
+    return `直接跑、存讀後再跑，軌道格各 ${SEEDS21.length} 個種子都 0 次，逐日 hash／亂數與合併相同；軌道旁 (x0,32) 被吸收的次數（有運輸／沒有運輸）${rows.join(' ')}`;
   });
 
   check('驗收 15b（更正後第一條）：會觸發的局面裡，蓋了運輸但拿掉遮罩的城，跟沒蓋運輸（資金照樣扣）的城每天的 sim hash、亂數呼叫次數逐一相同，存檔裡實驗線看得到的欄位逐位元組相同——運輸只經由巨型合併的遮罩影響模擬', () => {
@@ -628,27 +650,29 @@ function coreChecks(A, only = null) {
     return `${rows.length} 個種子 × ${DAYS21} 天逐一相同（含沒遮罩時被吸收的軌道格）`;
   });
 
-  check('遮罩＝地面格（第 2 輪核對 R2-1）：一座城依序蓋鐵路車站（第一筆就是車站）、電車車廠、地鐵車站、地鐵車廠、地鐵軌道、鐵路與電車軌道，再拆站、復原拆站、存讀——每一步 transitSurface 跟 surfaceTransitCells 逐格相同，世界登記的遮罩逐格探（地面格、地鐵件的格、兩種格的四鄰、每 97 格一格）：被擋 ⇔ 地面格；沒有運輸的城一格都不擋；第一筆是車廠也登記；第一次蓋又復原（空路網）一格都不擋；守衛到這裡建過的每一張路網都核過', () => {
+  check('遮罩＝地面格（R3-1、R3-2）：一座城依序蓋鐵路車站（第一筆就是車站）、電車車站、電車車廠、地鐵車站、地鐵車廠、地鐵軌道、鐵路與電車軌道，再拆站、復原拆站、存讀——每一步以各件幾何與模式獨立推導期望集合，surfaceTransitCells、transitSurface 與世界探針都剛好等於它；探現在及操作前路網件的格、四鄰、每 97 格一格；沒有運輸的城一格都不擋；第一筆是車廠也登記；第一次蓋又復原（空路網）連舊格也不擋；守衛到這裡建過的每一張路網都核過', () => {
     const L = newcity(A, 1e6), s = L.sim, c = s.city, n = c.n, rows = [];
-    const look = (q, tag) => { assert.equal(surfaceDiff(H, q.city), null, `${tag}：transitSurface ≠ surfaceTransitCells`); const m = maskMatch(A, q, 97); regOk(m, tag); rows.push(`${tag} ${m.blocked}/${m.probed}`); return m; };
+    const look = (q, tag) => { assert.equal(surfaceDiff(H, q.city), null, `${tag}：地面格或遮罩不等於各件幾何期望`); const m = maskMatch(A, q, 97); regOk(m, tag); rows.push(`${tag} ${m.blocked}/${m.probed}（舊格 ${m.previousOnly}）`); return m; };
     look(s, '沒有運輸');
     const inner = a => a.x >= 3 && a.z >= 3 && (a.x2 ?? a.x) + 5 <= n && (a.z2 ?? a.z) + 5 <= n;
     build(A, s, 'station', 'rail', freeBoxes(A, c, 2, 1).filter(inner), 25); look(s, '第一筆＝鐵路車站');
+    build(A, s, 'station', 'tram', freeBoxes(A, c, 2, 1).filter(inner), 100); look(s, '電車車站');
     build(A, s, 'depot', 'tram', freeBoxes(A, c, 3, 2).filter(inner), 12); look(s, '電車車廠');
     build(A, s, 'station', 'metro', freeBoxes(A, c, 2, 1).filter(inner).slice(60).map(a => ({ ...a, h: -1 }))); look(s, '地鐵車站');
     build(A, s, 'depot', 'metro', freeBoxes(A, c, 3, 2).filter(inner).slice(40).map(a => ({ ...a, h: -1 }))); look(s, '地鐵車廠');
     build(A, s, 'edge', 'metro', freeEdges(A, c, flatOf(A, c)).filter(inner).slice(200).map(a => ({ ...a, h: -1, h2: -1 }))); look(s, '地鐵軌道');
-    build(A, s, 'edge', 'rail', freeEdges(A, c, flatOf(A, c)).filter(inner), 30); build(A, s, 'edge', 'tram', freeEdges(A, c, flatOf(A, c)).filter(inner), 300); look(s, '鐵路、電車軌道');
+    build(A, s, 'edge', 'rail', freeEdges(A, c, flatOf(A, c)).filter(inner), 30); look(s, '鐵路軌道');
+    build(A, s, 'edge', 'tram', freeEdges(A, c, flatOf(A, c)).filter(inner), 300); look(s, '電車軌道');
     const t = c.transit;
-    assert.equal(J([t.edges.map(e => e.mode), t.stations.map(q => q.mode), t.depots.map(q => q.mode)]), J([['metro', 'rail', 'tram'], ['rail', 'metro'], ['tram', 'metro']]));
-    assert.ok(E.removeTransit(s, { op: 'del-station', id: t.stations[0].id }).ok); look(s, '拆掉鐵路車站');
+    assert.equal(J([t.edges.map(e => e.mode), t.stations.map(q => q.mode), t.depots.map(q => q.mode)]), J([['metro', 'rail', 'tram'], ['rail', 'tram', 'metro'], ['tram', 'metro']]));
+    assert.ok(E.removeTransit(s, { op: 'del-station', id: t.stations[0].id }).ok); assert.equal(look(s, '拆掉鐵路車站').previousOnly, 2, '拆站後兩個舊格都要探，不能只探現在的路網');
     assert.ok(E.undoOp(s).ok); look(s, '復原拆站');
     const back = loadOk(A, A.save.saveCode(s, L.template, L.start)); assert.ok(back.replayed, back.note); assert.equal(J(back.sim.city.transit), J(c.transit)); look(back.sim, '讀檔後');
     const P = newcity(A, 1e6).sim;
     build(A, P, 'depot', 'rail', freeBoxes(A, P.city, 3, 2), 9); look(P, '另一座城第一筆＝車廠');
-    assert.ok(E.undoOp(P).ok); assert.equal(look(P, '第一次蓋又復原（空路網）').surface, 0);
-    assert.deepEqual(A.surfaceLog.bad, [], '守衛建過的路網裡有 transitSurface ≠ surfaceTransitCells');
-    return `${rows.join('；')}（擋到的格／探的格）；守衛到這裡核過 ${A.surfaceLog.n} 次 transitSurface＝surfaceTransitCells（每一次施工、拆除、復原之後與每一次讀檔之後），0 次不同`;
+    assert.ok(E.undoOp(P).ok); const empty = look(P, '第一次蓋又復原（空路網）'); assert.equal(empty.surface, 0); assert.equal(empty.previousOnly, 6, '復原車廠後六個舊格都要探');
+    assert.deepEqual(A.surfaceLog.bad, [], '守衛建過的路網裡有地面格或遮罩不等於各件幾何期望');
+    return `${rows.join('；')}（擋到的格／探的格）；守衛到這裡核過 ${A.surfaceLog.n} 次 surfaceTransitCells、transitSurface＝各件幾何期望（每一次施工、拆除、復原之後與每一次讀檔之後），0 次不同`;
   });
   return out;
 }
@@ -719,6 +743,10 @@ const MUTANTS = [
   // 第 2 輪核對 R2-2：反向守衛把 build.ts 不認得的工具也說成「運輸設施擋住」（改回修正前）；以及「認得」不照 previewOp 換算英式建築（英式建築會從反向守衛漏過去）
   { name: 'R2-2 改回：反向守衛擋下 build.ts 不認得的工具', file: 'src/sim/edit.ts', from: 'return buildKnows(s, op.tool);', to: 'return true;', expect: ['工具群：'] },
   { name: 'R2-2：認得的工具不換算英式建築', file: 'src/sim/edit.ts', from: 'const nativeTool = utilityHeritage?.baseTool ?? marketEstateTool(tool)?.baseTool ?? publicServiceTool(tool)?.baseTool ?? workingRuralTool(tool)?.baseTool ?? civicMarketTool(tool)?.baseTool ?? tool;', to: 'const nativeTool = tool;', expect: ['工具群：'] },
+  // R3-1：反向守衛與遮罩同時依賴的地面格算錯，兩者仍彼此相同；獨立幾何期望必須抓到。
+  { name: 'R3-1：surfaceTransitCells 跳過電車軌道', file: 'src/sim/transit/history.ts', from: "{ out.add(e.a.z * n + e.a.x); out.add(e.b.z * n + e.b.x); }", to: "{ if (e.mode === 'tram') continue; out.add(e.a.z * n + e.a.x); out.add(e.b.z * n + e.b.x); }", expect: ['遮罩＝地面格'] },
+  { name: 'R3-1：電車車站不算地面', file: 'src/sim/transit/history.ts', from: "for (const s of [...net.stations, ...net.depots]) if (s.mode !== 'metro') {", to: "for (const s of [...net.stations.filter(q => q.mode !== 'tram'), ...net.depots]) if (s.mode !== 'metro') {", expect: ['遮罩＝地面格'] },
+  { name: 'R3-1：地鐵車廠也算地面', file: 'src/sim/transit/history.ts', from: "for (const s of [...net.stations, ...net.depots]) if (s.mode !== 'metro') {", to: "for (const s of [...net.stations, ...net.depots]) if (s.mode !== 'metro' || net.depots.includes(s)) {", expect: ['遮罩＝地面格'] },
 ];
 async function mutantRun(m) {
   const dir = scratchDir('mut');
@@ -813,7 +841,7 @@ async function main() {
         if (dHash >= 0 && b.literal[dHash - 1].length) literalHash++;
         rows.push(`${seed % 100}:第${dRoll + 1}天窗(${kb[k]})${dFp >= 0 ? `→hash／亂數次數第${dFp}天不同` : ''}`);
       }
-      assert.deepEqual(P.surfaceLog.bad, [], '記錄擲骰的副本建的路網裡 transitSurface ≠ surfaceTransitCells');
+      assert.deepEqual(P.surfaceLog.bad, [], '記錄擲骰的副本建的路網裡地面格或遮罩不等於各件幾何期望');
       return `${rows.join(' ')}；卡面 15b 原文（第一個不同的日子，沒被擋那邊有一筆碰到軌道格的巨型合併）只印不斷言：以 hash＋亂數次數算 ${literal}／${SEEDS21.length} 個種子成立、只看 hash ${literalHash}／${SEEDS21.length}（其餘那一天沒有合併碰到軌道格：沒被擋那邊合格的含軌道格窗骰沒擲中，有遮罩那邊被 mgDone 放出來的重疊窗多擲，亂數照樣偏）`;
     } finally { fs.rmSync(dir, { recursive: true, force: true }); delete globalThis.__d101Rolls; }
   });
