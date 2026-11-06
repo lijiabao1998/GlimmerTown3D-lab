@@ -786,7 +786,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
       <div class="transit-head"><strong id="transitTitle">運輸建造</strong><button id="transitClose" type="button" aria-label="關閉運輸工具">✕</button></div>
       <div class="transit-tools" role="group" aria-label="運輸工具"></div>
       <label class="transit-mode">設施模式<select id="transitMode" aria-label="運輸設施模式"><option value="rail">鐵路</option><option value="tram">路面電車</option><option value="metro">地鐵</option></select></label>
-      <p id="transitHint"></p><p id="transitStatus" role="status" aria-live="polite"></p>
+      <p id="transitHint"></p><p id="transitStatus" role="status"></p>
       <div id="transitTargets" hidden><label>要拆的設施<select id="transitTarget" aria-label="選擇要拆的運輸設施"></select></label><button id="transitRemove" type="button">拆除選中</button></div>
       <button id="transitExport" type="button" hidden>匯出分享碼</button>
     </section>`;
@@ -806,6 +806,7 @@ export function startCity(boot: BootJournal = { store: null, why: '沒有開日�
   if (!clean) { document.head.appendChild(bui.style); document.body.appendChild(bui.root); document.body.appendChild(ui); }
   const $ = <T extends Element>(s: string) => ui.querySelector(s) as T;
   const transitBar = $<HTMLElement>('#transitBar'), transitStatus = $<HTMLElement>('#transitStatus'), transitHint = $<HTMLElement>('#transitHint');
+  transitStatus.setAttribute('aria-live', 'polite');
   const transitModeSelect = $<HTMLSelectElement>('#transitMode'), transitTargetSelect = $<HTMLSelectElement>('#transitTarget'), transitTargets = $<HTMLElement>('#transitTargets'), transitExport = $<HTMLButtonElement>('#transitExport');
   for (const entry of TRANSIT_TOOLS) {
     const button = document.createElement('button'); button.type = 'button'; button.className = 'transit-tool'; button.dataset.transit = entry.id;

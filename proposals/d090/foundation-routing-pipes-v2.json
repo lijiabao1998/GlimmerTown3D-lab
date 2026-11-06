@@ -201,7 +201,7 @@
     "after": "        run: node proposals/d090/foundation-test-runner.mjs"
   },
   "inheritedWorkflows": {
-    ".github/workflows/ci.yml": "be419e18a1362d00ec8a69082d02ae7cab34df88784abbf7a75b75dbd3509600",
+    ".github/workflows/ci.yml": "6242995eab3af7c818595e9f6628ee7f0483f11cbba52451820f2ea9151b0912",
     ".github/workflows/d056-art.yml": "241fcfa3bc7b9999e9edb2be50501d5ad7c0e47ccc526efc33128a9fe1514888",
     ".github/workflows/d083-native.yml": "3d6e56e793489eb90cd1623b0d79a0a6d8457191cfa92b3f20b227817a888964",
     ".github/workflows/d085-control.yml": "2bd085e49ed1f36f2baac49bdfc26cbdbf86eb41930cd1fef706512e02bf285f",

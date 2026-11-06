@@ -1,5 +1,6 @@
 // CI scheduling only: never change guard assertions or samples here.
 import assert from 'node:assert/strict';
+import {consumeHistoricalShard, writeHistoricalShardReceipt} from './d104-historical-shards.mjs';
 
 export const PARTITIONS = Object.freeze(['all', 'historical', 'd078-frame', 'd079-frame', 'd080-frame', 'd081-frame', 'd082-frame']);
 export const D082_FRAME = Object.freeze(['./unit-d082-release-frame-v2.mjs', 'd082FrameGuards']);
@@ -164,14 +165,20 @@ export function partitionInventory(partition) {
 // Only historical skips executing the separately scheduled D078, D079, D080 and D081 frame exports.
 export function createGuardSelection(partition) {
   assert.ok(['all', 'historical'].includes(partition), 'unsupported inline runner partition: ' + partition);
-  const selected = new Set(partitionInventory(partition));
+  const inventory = partitionInventory(partition), shard = consumeHistoricalShard(partition, inventory);
+  const selected = new Set(shard ? shard.selected : inventory), visited = [], chosen = [];
   let next = 0;
   return {
     shouldRun(file, fn) {
       assert.deepEqual([file, fn], UNIT_GUARDS[next], 'missing, duplicate, extra, or reordered guard registration at ' + next);
       next++;
-      return selected.has(key([file, fn]));
+      const id = key([file, fn]), run = selected.has(id);
+      if (shard) { visited.push(id); if (run) chosen.push(id); }
+      return run;
     },
-    finish() { assert.equal(next, UNIT_GUARDS.length, 'unit guard inventory was not fully visited'); },
+    finish() {
+      assert.equal(next, UNIT_GUARDS.length, 'unit guard inventory was not fully visited');
+      if (shard) writeHistoricalShardReceipt(shard, UNIT_GUARDS, visited, chosen);
+    },
   };
 }

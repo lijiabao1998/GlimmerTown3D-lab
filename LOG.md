@@ -10,6 +10,11 @@
 
 ---
 
+- 2026-11-06 — D101／D104 — 修正新增提示與 D049 唯一錨點衝突；依業主新授權把 historical／browser 各拆八片，保留原斷言與退出碼，新增完整同來源／build 收據聚合；11 個有限 workflow 差異納入 D101 雜湊鏈。
+  - 驗證：Linux refreeze／check、269 src 一致；來源／有限鏈 21／21，D103 五組含20負控、D049 8／8、current UI 38／38，CI／partition／分片合計347／347；Windows typecheck／build與真觸控phase1 10／10通過。詳見[收據](docs/D101-validation.md)及[D104卡](docs/D104-ci-parallel-validation.md)。
+  - commit：本列提交；lease 07b52fbe…；美術仍為[三檔三寬](docs/img/d101-transit/)的 B。完整 CI 與代表片結果綁同 final HEAD 寫在[PR56驗證區](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/56#d101-final-validation)，不為結果文字再觸發一輪 CI。
+  - **沒做成的事**：C1 failed、C2 interrupted（12 passed、historical 已紅、8 not_run）原始收據保留，未宣稱本機21／21；提交時代表片與完整遠端矩陣待跑，成功後才ready。Android真機已免測，桌面不代表手機效能；未合併或發布。
+
 - 2026-11-06 — D101 — 完整驗證抓到復原接線與 D054 抽取契約不相容，將運輸清理移回獨立 UI 入口，保留原 `doUndo` 與鍵盤片段，沒有修改歷史守衛；業主明確免做 Android 實機測量。
   - 驗證：Linux 重凍／check、269 來源一致、current UI 38／38；typecheck／build；復原五入口 5／5；B phase1 10／10、phase2 6＋9、art-fit 9 圖、無運輸 parity 32／32 通過，無 runtime error。
   - commit：本列的修正候選提交。樣張沿用[三檔三寬對照](docs/img/d101-transit/)，本輪選 B。

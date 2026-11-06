@@ -35,6 +35,8 @@ jobs:
       - run: npm ci
       - name: CI provenance and fail-closed gate negative controls
         run: node --test .github/scripts/ci-integrity-d090.test.mjs tools/unit-partitions-release-v2.test.mjs
+      - name: D104 exhaustive shard scheduling and evidence negative controls
+        run: node --test tools/d104-historical-shards.test.mjs tools/d104-smoke-contract.test.mjs tools/d104-workflow.test.mjs
       - name: Versioned source missing/stale negatives and fresh historical receipt regression
         run: node --test tools/d082-release-source-v2.test.mjs tools/d082-historical-release.test.mjs tools/d082-release-conflicts-v2.test.mjs
       - run: npm run build
@@ -55,6 +57,10 @@ jobs:
   node:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     steps:
       - uses: actions/checkout@v4
       - name: Fetch immutable D066 through D081 source-scope baselines
@@ -112,11 +118,14 @@ jobs:
       - run: npm run typecheck
       - name: Node 端守衛（D003：解碼對帳、RLE、壞碼、模擬層純度、零外部素材；D004：切分與量體對拍、注入錯誤）
         run: npm run unit -- --partition=historical
+        env:
+          D104_HISTORICAL_SHARD: ${{ matrix.shard }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: d082-versioned-node-${{ github.sha }}-${{ github.run_attempt }}
+          name: d104-node-${{ github.sha }}-${{ github.run_attempt }}-${{ matrix.shard }}
           path: |
+            scratch/d104-historical-shards/
             scratch/d082-release-mesh-v2/
             scratch/d082-remaining-geometry/*.json
             scratch/d082-remaining-geometry/windows-*.log
@@ -382,6 +391,10 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     outputs:
       artifact-id: ${{ steps.evidence.outputs.artifact-id }}
     steps:
@@ -404,20 +417,26 @@ jobs:
       - name: 煙霧測試
         run: node tools/smoke.mjs 2>&1 | tee smoke-run.txt; exit ${PIPESTATUS[0]}
         shell: bash
+        env:
+          D104_SMOKE_SHARD: ${{ matrix.shard }}
+          NODE_OPTIONS: --import ./tools/d104-smoke-entry.mjs
+          CI_BUILD_DIGEST: ${{ needs.build.outputs.digest }}
+          D104_BUILD_ARTIFACT_ID: ${{ needs.build.outputs.artifact-id }}
       - name: D081 approved touch lease real-layout regression
-        if: always()
+        if: always() && matrix.shard == 0
         run: node tools/d081-touch-lease-browser.mjs 2>&1 | tee d081-touch-lease-browser.txt; exit ${PIPESTATUS[0]}
         shell: bash
       - name: D081 actual compiled commission layout regression
-        if: always()
+        if: always() && matrix.shard == 0
         run: node tools/d081-touch-lease-app-browser.mjs 2>&1 | tee d081-touch-lease-app.txt; exit ${PIPESTATUS[0]}
         shell: bash
       - uses: actions/upload-artifact@v4
         id: evidence
         if: always()
         with:
-          name: smoke-browser-${{ github.sha }}-${{ github.run_attempt }}
+          name: d104-browser-${{ github.sha }}-${{ github.run_attempt }}-${{ matrix.shard }}
           path: |
+            scratch/d104-smoke/
             smoke-run.txt
             d081-touch-lease-browser.txt
             d081-touch-lease-app.txt
@@ -436,7 +455,7 @@ jobs:
             scratch/shots/D054-*.code.txt
             scratch/shots/D054-*.html
             scratch/shots/D056-*.json
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
 
   screenshots:
@@ -489,6 +508,34 @@ jobs:
         run: node .github/scripts/ci-integrity.mjs gate
         env:
           CI_NEEDS: ${{ toJSON(needs) }}
+      - name: Restore every historical shard receipt
+        uses: actions/download-artifact@v4
+        with:
+          pattern: d104-node-${{ github.sha }}-*
+          path: scratch/d104-node-artifacts
+          merge-multiple: false
+      - name: Require all eight historical shard receipts and exact coverage
+        run: node tools/d104-historical-shards.mjs verify scratch/d104-node-artifacts
+      - name: Restore every browser shard receipt and its evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: d104-browser-${{ github.sha }}-*
+          path: scratch/d104-browser-artifacts
+          merge-multiple: false
+      - name: Restore the same build for browser receipt verification
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact-id }}
+          merge-multiple: true
+      - name: Verify the build used by all browser shards
+        run: node .github/scripts/ci-integrity.mjs verify
+        env:
+          CI_BUILD_DIGEST: ${{ needs.build.outputs.digest }}
+      - name: Require all eight browser shards and exact smoke coverage
+        run: node tools/d104-smoke-verify.mjs --artifacts scratch/d104-browser-artifacts
+        env:
+          CI_BUILD_DIGEST: ${{ needs.build.outputs.digest }}
+          D104_BUILD_ARTIFACT_ID: ${{ needs.build.outputs.artifact-id }}
       - name: Restore browser evidence (including failed-run diagnostics)
         if: always() && needs.browser.outputs.artifact-id != ''
         uses: actions/download-artifact@v4
@@ -505,8 +552,11 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: smoke-${{ github.sha }}
+          name: smoke-${{ github.sha }}-${{ github.run_attempt }}
           path: |
+            scratch/d104-node-artifacts/
+            scratch/d104-browser-artifacts/
+            scratch/d104-smoke-aggregate/
             smoke-run.txt
             d081-touch-lease-browser.txt
             d081-touch-lease-app.txt

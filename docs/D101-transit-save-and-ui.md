@@ -851,3 +851,13 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
 - 修正後 Linux `--refreeze`／`--check` 通過，269 個來源與本機逐檔 SHA256 相同才回填生成檔；lease `cf1a55bf885c7531c72674ba6848eb98982e9bfd567bfd96247bbcdcb4a74963`，範圍仍為 8 modified／43 D084_CHANGED。第一次修正驗證因暫存路徑不符合依賴還原器的隔離要求停止；改用既定 `linux-ram` 後，原 D052／D054／D081 current UI **38／38** 通過。
 - Windows typecheck／build 通過。新增桌面 CDP 復原回歸 **5／5**：API、按鈕、Ctrl-Z、面板焦點 Ctrl-Z／Meta-Z 都會清手勢及選件、復原資金，放開原先按住的指標不會再施工。舊 B 證據原樣保存在 `b-original-eeb8f2f`；修正候選的 B 全套及完整 C 重跑結果續記，尚未通過的項目不列完成。
 - 修正後 B 重驗完成：phase1 **10／10**、phase2 **6 項操作／資料＋9 組相機**、art-fit **9 張圖**，console／runtime 錯誤為空；無運輸四城 **32／32** 與同一 main 基準逐值相同。`B-browser-QA-receipt.md` 已綁定修正後來源與 build SHA；完整 C 將在下一個乾淨提交重跑，第一輪失敗收據不覆蓋。
+
+
+### 第五步第二輪與 D104 排程接手（2026-11-06）
+
+- C2 在乾淨 `145b2a0` 已通過 foundation、四組 inherited、D083／D086–D090 native 與 ci-build，共 12 組；historical 發現 D049 的唯一 `aria-live="polite"` 錨點與新增運輸提示重複。業主隨後授權激進縮短 CI，本輪在 D077 frame 期間主動中止，ledger 維持 interrupted、exit 130，8 組未跑。原失敗與中止收據完整保留，沒有宣稱本機 21／21 通過。
+- D049 修正只把 transitStatus 的 aria-live 移到 DOM 初始化，保留原 copyStatus 唯一字面及原守衛；兩個真 DOM 提示均為 role=status、aria-live=polite。新來源 typecheck／build、phase1 10／10 通過，其他 B 實作與三檔美術不變。
+- 依業主追加授權另開 [D104](D104-ci-parallel-validation.md)，覆蓋前文「CI 結構等業主決定」與驗收 20 的本機全套推送前條件：本機完成修正、來源及分片正負控，代表片可與遠端完整矩陣在不同機器並行；最後必須是同一 final HEAD 的必要 CI 全部成功才 ready。這不是放寬原產品、圖像或性能斷言。
+- D104 讓 historical／browser 各八片；原 unit／smoke 主程式保持不變。舊 CI 雜湊以固定前像、11 個有限差異與固定後像納入 D101 同次生成，全部 lineage 仍重播；來源範圍仍是 8 modified／2 added、269 檔。獨立唯讀審查未發現阻擋。
+- [推送前驗證收據](D101-validation.md) 分列來源與實跑；[PR #56 最終驗證區](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/56#d101-final-validation) 記錄 final HEAD、代表片、完整 CI run／attempt／jobs 與耗時，避免純結果文字再產生提交重跑。未跑項目不提前記成功。
+- **這輪沒做成的事與限制**：本機全套 C 未完整成功，最終覆蓋交由同 HEAD CI；Android 真機仍未測但業主已免除。圖像採 B、舊 CDP 跨導航限制與產品既定未完成項目仍照前文；本輪不合併、不發布、不改其他 PR。
