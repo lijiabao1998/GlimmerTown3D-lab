@@ -34,7 +34,9 @@ export interface MergeCtx {
 export interface MergeRec { x: number; z: number; k: number; size: number; v: number; from: number[]; ages: number[]; clearedZone: boolean }   // ages＝被吸收的建築在合併那一刻的屋齡（跟 from 同順序；城市模型的墓碑用）
 // D101（本線自己的規則，業主 2026-11-06；實驗線沒有）：城裡有運輸時，巨廈不吸收地面軌道、車站、車廠佔的空格（地鐵在地下，不擋）。
 // 世界登記一個「被擋的格子」來源（運輸的 history.ts 依 city.transit 算；回 null＝沒有運輸）。沒有登記或回 null 的世界——沒有運輸的城、對拍的隨機小圖——
-// 判斷式跟原文逐項相同，亂數一次也不多抽、不少抽。登記了遮罩的世界不同：擋的判斷在九格的接受條件裡、擲骰之前，被擋下的合格窗就少擲一次 R()，之後整條亂數流跟著偏（卡面驗收 15a／15b 的由來）。純邏輯（規則 2、3）。
+// 判斷式跟原文逐項相同，亂數一次也不多抽、不少抽。登記了遮罩的世界不同：擋的判斷在九格的接受條件裡、擲骰之前，被擋下的窗不擲 R()，也不在九格上設 mgDone；
+// 所以實驗線本來會被 mgDone 跳過、跟它重疊的後面的窗，在這裡可能變成合格、多擲 R()，甚至合併（那個窗裡沒有地面運輸格）。少擲、多擲兩個方向都會讓之後整條亂數流跟著偏
+// （卡面驗收 15a／15b 的由來，〈對驗收 15b 的更正〉有實測）。純邏輯（規則 2、3）。
 const SURFACE = new WeakMap<World, () => ArrayLike<number> | null>();
 export function setMergeSurface(w: World, cells: (() => ArrayLike<number> | null) | null): void { if (cells) SURFACE.set(w, cells); else SURFACE.delete(w); }
 

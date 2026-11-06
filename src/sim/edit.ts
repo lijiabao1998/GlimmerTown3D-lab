@@ -114,6 +114,7 @@ const hiBld = (t: Tile) => !!(t.bld && !t.bld.ref && t.bld.k <= 3 && t.bld.lv >=
 // D101 反向守衛：城裡有運輸時，非拆除的施工只要碰到地面軌道的端點格或地面站廠的格子就整筆拒絕——
 // 路網只在 city.transit，格子不知道它，不擋的話路、分區、建築會蓋到軌道上。地鐵在地下，不擋；拆除照常（軌道格本來就是空地）。沒有運輸的城一律不擋（行為跟以前逐位元組相同）。
 // 多格建築不分手勢都算整塊占地：點、線、框的每一格都會交給 doPlace，doPlace 寫的是整塊 sz×sz（build.ts）；所以線與框的每一格也要往右下展開 toolSize 格
+// build.ts 不認得的工具（運輸工具的 id、打錯的名字）不擋：照舊在 canPlace 丟「未搬」，跟沒有運輸的城逐字相同（第 2 輪核對 R2-2）
 export const TRANSIT_BLOCKED = '運輸設施擋住';
 const SURFACE_CELLS = new WeakMap<TransitNetwork, Set<number>>();   // 路網物件不可變：同一個物件只算一次（預覽會隨手勢一直叫）
 function transitBlocks(s: Sim, op: EditOp): boolean {
@@ -124,9 +125,17 @@ function transitBlocks(s: Sim, op: EditOp): boolean {
   if (!cells.size) return false;
   const span = toolSize(op.tool), n = s.w.N;
   for (const [x, z] of cellsOf(op)) for (let dz = 0; dz < span; dz++) for (let dx = 0; dx < span; dx++) {
-    if (inMap(s, x + dx, z + dz) && cells.has((z + dz) * n + x + dx)) return true;
+    if (inMap(s, x + dx, z + dz) && cells.has((z + dz) * n + x + dx)) return buildKnows(s, op.tool);
   }
   return false;
+}
+// build.ts 認不認得這個工具：先照 previewOp 同一套換算（英式建築換成底層工具；鄉村遺產走 canPlaceHeritage，不經 need()），再交給 canPlace 自己判斷——
+// canPlace 第一步就是 need()（不認得就丟「未搬：…」）；認得的話，地圖外的格子下一步就回「超出地圖」，什麼都不讀、不改。只有「未搬」當成不認得，別的例外照丟
+function buildKnows(s: Sim, tool: string): boolean {
+  const utilityHeritage = utilityHeritageTool(tool);
+  if (ruralHeritageTool(utilityHeritage?.baseTool ?? tool)) return true;
+  const nativeTool = utilityHeritage?.baseTool ?? marketEstateTool(tool)?.baseTool ?? publicServiceTool(tool)?.baseTool ?? workingRuralTool(tool)?.baseTool ?? civicMarketTool(tool)?.baseTool ?? tool;
+  try { canPlace(stateOf(s), nativeTool, -1, -1); return true; } catch (e) { if ((e as Error)?.message?.startsWith('未搬：')) return false; throw e; }
 }
 
 // 預覽：不改任何狀態，只問規則「這一格能不能蓋、要多少錢」
@@ -335,7 +344,7 @@ export function powerStatus(s: Sim) {
 //   成功才動：手勢編號 g＝stroke++、恰好一筆 transit 事件（history.ts 的 transitEventOf：重播逐位元組收得下）、路網換新、復原堆疊推一筆（跟建築共用 s.txns，
 //     同一天後進先出、上限 40、過一天清空）、登記巨型合併的地面遮罩。失敗什麼都不碰（路網鍵、資金、歷史、手勢編號、復原堆疊）。拆除費用 0、不退費。
 //   上限：編號與 revision 要讀得回來（format.ts 上限 2^31−1；network.ts 的軌道本身沒有上限）。蓋要 nextId < 2^31−1；revision 要留給今天每一筆還能復原的運輸手勢各 +1。
-// 運輸工具另成一組：不進 CIVIC／FOOD／FACILITY（數量被守衛釘住），也絕不交給 commitOp（build.ts 不認得，會丟「未搬」）。
+// 運輸工具另成一組：不進 CIVIC／FOOD／FACILITY（數量被守衛釘住），也絕不交給 commitOp（build.ts 不認得，會丟「未搬」；城裡有運輸、落在地面運輸格上也一樣，反向守衛不攔）。
 export interface TransitTool { id: string; name: string; short: string; op: 'edge' | 'station' | 'depot' | 'del'; mode?: TransitMode }   // op＝這顆按鈕做哪一種施工；站廠的模式由介面另選
 export const TRANSIT_TOOLS: readonly TransitTool[] = [
   { id: 'transit-rail', name: '鐵路', short: '鐵', op: 'edge', mode: 'rail' },
