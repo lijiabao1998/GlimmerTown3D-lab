@@ -1,6 +1,7 @@
 // 施工（D011）：把介面的手勢（點、拉線、框選）接到實驗線的放置規則（src/sim/rules/build.ts，逐項對拍），
 // 施工完同步城市模型、記世界歷史（每一格一筆，規則 4），同一天之內可以一筆一筆復原（T460，實驗線可以隔天，本線不照搬）。
 // 純邏輯：不碰 three、DOM、Math.random、現實時間（規則 2、3）；拆除確認的「3 秒內再按一次」用呼叫端給的 now。
+// D101：運輸施工（鋪軌道、蓋與拆車站車廠）在檔尾，跟建築共用同一個復原堆疊；城裡有運輸時，非拆除的施工碰到地面軌道、站廠就整筆拒絕（反向守衛）。
 import { canPlace, placeCost, roadDraftTiles, roadToolToRc, commitLine, commitRect, tap, undoTxn, pushTxn, ROAD_COST, COST, type BuildState, type Txn } from './rules/build.ts';
 import { RURAL_HERITAGE_BUILDINGS, ruralHeritageTool } from '../content/britishRuralHeritage.ts';
 import { canPlaceHeritage, heritagePlaceCost, tapHeritage } from './heritageBuild.ts';
@@ -25,6 +26,13 @@ import { acceptPlayableCms, playableCmsOffers } from './rules/commissionAvailabi
 import { roadCode, type CityBuilding, type EditEvent } from './city.ts';
 import type { Sim } from './day.ts';
 import type { Tile } from './rules/lab.ts';
+import { buildDepot, buildStation, buildTrack, createNetwork, removeDepot, removeEdge, removeStation } from './transit/network.ts';
+import type { NetworkEdge, NetworkResult, TransitDepot, TransitNetwork, TransitStation } from './transit/network.ts';
+import type { TransitMode } from './transit/graph.ts';
+import { restoreTransit, surfaceTransitCells, transitEventOf, transitSurface, transitTerrain } from './transit/history.ts';
+import { setMergeSurface } from './rules/merge.ts';
+import { TRANSIT_MODES } from './city.ts';
+import type { TransitEvent } from './city.ts';
 
 // 路的五級：名稱照實驗線工具列（TOOLS 37547–37552），造價 ROAD_COST（37428）
 export const ROAD_TOOLS = [
@@ -103,11 +111,39 @@ function cellsOf(op: EditOp): [number, number][] {
 const inMap = (s: Sim, x: number, z: number) => x >= 0 && z >= 0 && x < s.w.N && z < s.w.N;
 const hiBld = (t: Tile) => !!(t.bld && !t.bld.ref && t.bld.k <= 3 && t.bld.lv >= 2);   // 二級以上的住商工（框選拆除略過、單格要確認，62983）
 
+// D101 反向守衛：城裡有運輸時，非拆除的施工只要碰到地面軌道的端點格或地面站廠的格子就整筆拒絕——
+// 路網只在 city.transit，格子不知道它，不擋的話路、分區、建築會蓋到軌道上。地鐵在地下，不擋；拆除照常（軌道格本來就是空地）。沒有運輸的城一律不擋（行為跟以前逐位元組相同）。
+// 多格建築不分手勢都算整塊占地：點、線、框的每一格都會交給 doPlace，doPlace 寫的是整塊 sz×sz（build.ts）；所以線與框的每一格也要往右下展開 toolSize 格
+// build.ts 不認得的工具（運輸工具的 id、打錯的名字）不擋：照舊在 canPlace 丟「未搬」，跟沒有運輸的城逐字相同（第 2 輪核對 R2-2）
+export const TRANSIT_BLOCKED = '運輸設施擋住';
+const SURFACE_CELLS = new WeakMap<TransitNetwork, Set<number>>();   // 路網物件不可變：同一個物件只算一次（預覽會隨手勢一直叫）
+function transitBlocks(s: Sim, op: EditOp): boolean {
+  const net = s.city.transit;
+  if (!net || op.tool === 'doze') return false;
+  let cells = SURFACE_CELLS.get(net);
+  if (!cells) { cells = surfaceTransitCells(net, s.w.N); SURFACE_CELLS.set(net, cells); }
+  if (!cells.size) return false;
+  const span = toolSize(op.tool), n = s.w.N;
+  for (const [x, z] of cellsOf(op)) for (let dz = 0; dz < span; dz++) for (let dx = 0; dx < span; dx++) {
+    if (inMap(s, x + dx, z + dz) && cells.has((z + dz) * n + x + dx)) return buildKnows(s, op.tool);
+  }
+  return false;
+}
+// build.ts 認不認得這個工具：先照 previewOp 同一套換算（英式建築換成底層工具；鄉村遺產走 canPlaceHeritage，不經 need()），再交給 canPlace 自己判斷——
+// canPlace 第一步就是 need()（不認得就丟「未搬：…」）；認得的話，地圖外的格子下一步就回「超出地圖」，什麼都不讀、不改。只有「未搬」當成不認得，別的例外照丟
+function buildKnows(s: Sim, tool: string): boolean {
+  const utilityHeritage = utilityHeritageTool(tool);
+  if (ruralHeritageTool(utilityHeritage?.baseTool ?? tool)) return true;
+  const nativeTool = utilityHeritage?.baseTool ?? marketEstateTool(tool)?.baseTool ?? publicServiceTool(tool)?.baseTool ?? workingRuralTool(tool)?.baseTool ?? civicMarketTool(tool)?.baseTool ?? tool;
+  try { canPlace(stateOf(s), nativeTool, -1, -1); return true; } catch (e) { if ((e as Error)?.message?.startsWith('未搬：')) return false; throw e; }
+}
+
 // 預覽：不改任何狀態，只問規則「這一格能不能蓋、要多少錢」
 export function previewOp(s: Sim, op: EditOp): OpPreview {
   const utilityHeritage=utilityHeritageTool(op.tool), heritage=!!ruralHeritageTool(utilityHeritage?.baseTool??op.tool), nativeArt=civicMarketTool(op.tool), workingRural=workingRuralTool(op.tool), publicService=publicServiceTool(op.tool), marketEstate=marketEstateTool(op.tool), nativeTool=utilityHeritage?.baseTool??marketEstate?.baseTool??publicService?.baseTool??workingRural?.baseTool??nativeArt?.baseTool??op.tool;
   if((heritage||nativeArt||workingRural||publicService||marketEstate||utilityHeritage)&&op.k!=='tap')return{cells:[],count:0,total:0,affordable:true,reason:'英式建築請點放'};
   if((nativeArt||workingRural||publicService||marketEstate||utilityHeritage)&&(!Number.isInteger(op.x0)||!Number.isInteger(op.z0)))return{cells:[],count:0,total:0,affordable:true,reason:'請選擇地圖格子'};
+  if (transitBlocks(s, op)) return { cells: [], count: 0, total: 0, affordable: true, reason: TRANSIT_BLOCKED };   // D101 反向守衛（只在城裡有運輸時）
   const st = stateOf(s), cells: OpPreview['cells'] = [], multi = op.k === 'rect' && (op.x0 !== op.x1 || op.z0 !== op.z1);
   let total = 0, count = 0, reason: string | undefined;
   for (const [x, z] of cellsOf(op)) {
@@ -129,6 +165,7 @@ export function previewOp(s: Sim, op: EditOp): OpPreview {
 export function commitOp(s: Sim, op: EditOp, now: number): EditResult {
   const heritage=!!ruralHeritageTool(op.tool), nativeArt=civicMarketTool(op.tool), workingRural=workingRuralTool(op.tool), publicService=publicServiceTool(op.tool), marketEstate=marketEstateTool(op.tool), utilityHeritage=utilityHeritageTool(op.tool);
   if((heritage||nativeArt||workingRural||publicService||marketEstate||utilityHeritage)&&op.k!=='tap')return{ok:false,placed:0,spent:0,events:[],reason:'英式建築請點放'};
+  if (transitBlocks(s, op)) return { ok: false, placed: 0, spent: 0, events: [], reason: TRANSIT_BLOCKED };   // D101 反向守衛：什麼都不蓋、不扣錢、不記事件
   const pv = previewOp(s, op), st = stateOf(s), m0 = s.money, costs = new Map<number, number>();
   for (const c of pv.cells) if (c.ok && !c.foot) costs.set(c.z * s.w.N + c.x, c.cost);   // 每格的造價只看那一格（施工前先記；插入順序＝施工順序）
   let placed = 0, refused: string | undefined, txn: Txn | null = null, arm: { k: number; lv: number } | undefined, skipped = 0;
@@ -203,8 +240,9 @@ export const canUndo = (s: Sim) => s.txns.length > 0;
 
 // 復原今天最後一筆（T460 undo 66594：整格還原、全額退錢、重算覆蓋；亂數不倒回）。歷史只增不改：記一筆 undo 事件
 export function undoOp(s: Sim): { ok: boolean; refund: number } {
-  const dt = s.txns.pop() as DayTxn | undefined;
+  const dt = s.txns.pop() as DayTxn | TransitTxn | undefined;
   if (!dt) return { ok: false, refund: 0 };
+  if ('transit' in dt) return undoTransit(s, dt);                      // D101：運輸的手勢——路網回到施工前、退費、記一列 undo（不動格子、覆蓋與地價標記）
   const st = stateOf(s), m0 = s.money;
   undoTxn(st, dt.txn, s.edu);
   writeBack(s, st);
@@ -297,4 +335,84 @@ export function powerStatus(s: Sim) {
   let powered = 0, unpowered = 0;
   for (const cb of s.root.values()) if (cb.k <= 3) { const b = s.w.tiles[cb.z * s.w.N + cb.x].bld; if (b?.pw) powered++; else unpowered++; }
   return { cap, powered, unpowered };
+}
+
+// ---- 運輸施工（D101，卡 docs/D101-transit-save-and-ui.md 第三步）：鋪軌道、蓋車站與車廠、拆掉它們 ----
+// 規則、費用、佔地全在 src/sim/transit/network.ts（D100，釘住不改）；這裡只做交易：
+//   資金：network.ts 要安全整數，給 floor(資金)（最多最大安全整數）；沙盒給最大安全整數、費用記 0（同 build.ts 沙盒不扣錢）。
+//     費用＝給的資金 − network.ts 找回的資金，用 s.money −= 費用 扣（不直接拿 network.ts 的數字蓋掉，小數才不會丟）；能蓋＝資金 ≥ 費用，所以 |資金| ≤ 2^53 時復原退費後逐位元組回到原值（更大的資金是浮點捨入，跟建築的復原 undoTxn 一樣，不保證逐位元組）。
+//   成功才動：手勢編號 g＝stroke++、恰好一筆 transit 事件（history.ts 的 transitEventOf：重播逐位元組收得下）、路網換新、復原堆疊推一筆（跟建築共用 s.txns，
+//     同一天後進先出、上限 40、過一天清空）、登記巨型合併的地面遮罩。失敗什麼都不碰（路網鍵、資金、歷史、手勢編號、復原堆疊）。拆除費用 0、不退費。
+//   上限：編號與 revision 要讀得回來（format.ts 上限 2^31−1；network.ts 的軌道本身沒有上限）。蓋要 nextId < 2^31−1；revision 要留給今天每一筆還能復原的運輸手勢各 +1。
+// 運輸工具另成一組：不進 CIVIC／FOOD／FACILITY（數量被守衛釘住），也絕不交給 commitOp（build.ts 不認得，會丟「未搬」；城裡有運輸、落在地面運輸格上也一樣，反向守衛不攔）。
+export interface TransitTool { id: string; name: string; short: string; op: 'edge' | 'station' | 'depot' | 'del'; mode?: TransitMode }   // op＝這顆按鈕做哪一種施工；站廠的模式由介面另選
+export const TRANSIT_TOOLS: readonly TransitTool[] = [
+  { id: 'transit-rail', name: '鐵路', short: '鐵', op: 'edge', mode: 'rail' },
+  { id: 'transit-tram', name: '路面電車', short: '電', op: 'edge', mode: 'tram' },
+  { id: 'transit-metro', name: '地鐵', short: '地', op: 'edge', mode: 'metro' },
+  { id: 'transit-station', name: '車站', short: '站', op: 'station' },
+  { id: 'transit-depot', name: '車廠', short: '廠', op: 'depot' },
+  { id: 'transit-del', name: '拆除運輸', short: '拆', op: 'del' },
+];
+// 一筆運輸施工：軌道記兩端 (x,z,h)→(x2,z2,h2)（相鄰；地鐵 h＝−1，地面＝那一格的高度）；車站 2×1、車廠 3×2 記左上角與高度；拆除記編號
+export type TransitBuild = { op: 'edge'; mode: TransitMode; x: number; z: number; h: number; x2: number; z2: number; h2: number } | { op: 'station' | 'depot'; mode: TransitMode; x: number; z: number; h: number };
+export interface TransitRemove { op: 'del-edge' | 'del-station' | 'del-depot'; id: number }
+export interface TransitPreview { ok: boolean; cost: number; reason?: string }
+export interface TransitResult { ok: boolean; spent: number; reason?: string; id?: number; g?: number; event?: TransitEvent }
+interface TransitTxn { g: number; transit: true; before: TransitNetwork | undefined; refund: number }   // before＝施工前的路網（這座城第一次蓋＝undefined）
+type TransitItem = NetworkEdge | TransitStation | TransitDepot;
+type TransitTry = { ok: true; network: TransitNetwork; item: TransitItem; cost: number } | { ok: false; reason: string };
+const TRANSIT_ID_CAP = 2147483647;   // format.ts MAX_ID：存檔讀得回來的最大編號、nextId、revision
+
+// 只問 network.ts、不改任何狀態
+function tryTransit(s: Sim, q: TransitBuild | TransitRemove, build: boolean): TransitTry {
+  if (!q || typeof q !== 'object') return { ok: false, reason: '不認得的運輸施工' };
+  const isBuild = q.op === 'edge' || q.op === 'station' || q.op === 'depot', isDel = q.op === 'del-edge' || q.op === 'del-station' || q.op === 'del-depot';
+  if (build ? !isBuild : !isDel) return { ok: false, reason: '不認得的運輸施工' };
+  const net = s.city.transit ?? createNetwork(), sandbox = s.diff === 3;
+  let pending = 0;
+  for (const t of s.txns) if ((t as TransitTxn).transit === true) pending++;
+  if (net.revision >= TRANSIT_ID_CAP - 1 - pending) return { ok: false, reason: '路網的修改次數已滿' };   // 這一筆 +1、之後今天每一筆運輸的復原各 +1，都要讀得回來
+  const funds = sandbox ? Number.MAX_SAFE_INTEGER : Math.min(Math.floor(s.money), Number.MAX_SAFE_INTEGER);
+  let r: NetworkResult;
+  if (q.op === 'edge' || q.op === 'station' || q.op === 'depot') {
+    if (!TRANSIT_MODES.includes(q.mode)) return { ok: false, reason: '模式無效' };   // place() 收任何非地鐵字串；歷史只收碼表裡的模式
+    if (net.nextId >= TRANSIT_ID_CAP) return { ok: false, reason: '識別碼已滿' };
+    const terrain = transitTerrain(s.city, true);
+    if (q.op === 'edge') r = buildTrack(net, terrain, q.mode, { x: q.x, z: q.z, height: q.h }, { x: q.x2, z: q.z2, height: q.h2 }, funds);   // 新的點物件：graph.ts 會把多的屬性抄進路網
+    else r = (q.op === 'station' ? buildStation : buildDepot)(net, terrain, q.mode, q.x, q.z, q.h, funds);
+    if (!r.ok) return { ok: false, reason: r.reason };
+    const list: readonly TransitItem[] = q.op === 'edge' ? r.network.edges : q.op === 'station' ? r.network.stations : r.network.depots;
+    return { ok: true, network: r.network, item: list[list.length - 1], cost: sandbox ? 0 : funds - r.money };
+  }
+  const d = q as TransitRemove, list: readonly TransitItem[] = d.op === 'del-edge' ? net.edges : d.op === 'del-station' ? net.stations : net.depots;
+  r = (d.op === 'del-edge' ? removeEdge : d.op === 'del-station' ? removeStation : removeDepot)(net, d.id, funds);
+  if (!r.ok) return { ok: false, reason: r.reason };
+  const item = list.find(e => e.id === d.id);
+  return item ? { ok: true, network: r.network, item, cost: 0 } : { ok: false, reason: '找不到要拆的設施' };
+}
+function applyTransit(s: Sim, q: TransitBuild | TransitRemove, build: boolean): TransitResult {
+  const r = tryTransit(s, q, build);
+  if (!r.ok) return { ok: false, spent: 0, reason: r.reason };
+  const before = s.city.transit, g = s.stroke++, event = transitEventOf(s.day, q.op, r.item, r.cost, g);
+  s.money -= r.cost;
+  s.city.history.push(event);
+  s.city.transit = r.network;
+  pushTxn(s.txns as TransitTxn[], { g, transit: true, before, refund: r.cost });
+  setMergeSurface(s.w, transitSurface(() => s.city));                 // 讀當下的路網：之後的拆、復原不必再登記
+  return { ok: true, spent: r.cost, id: r.item.id, g, event };
+}
+// 預覽：能不能蓋（拆）、要多少錢（沙盒 0、拆除 0）；不改任何狀態
+export function previewTransit(s: Sim, q: TransitBuild | TransitRemove): TransitPreview {
+  const r = tryTransit(s, q, q?.op === 'edge' || q?.op === 'station' || q?.op === 'depot');
+  return r.ok ? { ok: true, cost: r.cost } : { ok: false, cost: 0, reason: r.reason };
+}
+export const commitTransit = (s: Sim, q: TransitBuild): TransitResult => applyTransit(s, q, true);
+export const removeTransit = (s: Sim, q: TransitRemove): TransitResult => applyTransit(s, q, false);
+// 復原一筆運輸手勢（undoOp 從共用的堆疊拿到它）：路網回到施工前（nextId 不倒退、revision +1）、退這一筆扣的錢、記一列 undo
+function undoTransit(s: Sim, t: TransitTxn): { ok: boolean; refund: number } {
+  s.city.transit = restoreTransit(s.city.transit as TransitNetwork, t.before);
+  s.money += t.refund;
+  s.city.history.push({ day: s.day, t: 'undo', g: t.g, refund: t.refund });
+  return { ok: true, refund: t.refund };
 }

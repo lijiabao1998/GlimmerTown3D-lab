@@ -32,6 +32,13 @@ export interface MergeCtx {
 }
 // 一筆合併：x、z＝根格（左上角）；k＝新建築種類（33、34、105、106）；size＝2 或 3；v＝變體；from＝被吸收的建築的根格索引（含公園；每一棟都是 1×1，順序＝九格或四格的掃描順序）
 export interface MergeRec { x: number; z: number; k: number; size: number; v: number; from: number[]; ages: number[]; clearedZone: boolean }   // ages＝被吸收的建築在合併那一刻的屋齡（跟 from 同順序；城市模型的墓碑用）
+// D101（本線自己的規則，業主 2026-11-06；實驗線沒有）：城裡有運輸時，巨廈不吸收地面軌道、車站、車廠佔的空格（地鐵在地下，不擋）。
+// 世界登記一個「被擋的格子」來源（運輸的 history.ts 依 city.transit 算；回 null＝沒有運輸）。沒有登記或回 null 的世界——沒有運輸的城、對拍的隨機小圖——
+// 判斷式跟原文逐項相同，亂數一次也不多抽、不少抽。登記了遮罩的世界不同：擋的判斷在九格的接受條件裡、擲骰之前，被擋下的窗不擲 R()，也不在九格上設 mgDone；
+// 所以實驗線本來會被 mgDone 跳過、跟它重疊的後面的窗，在這裡可能變成合格、多擲 R()，甚至合併（那個窗裡沒有地面運輸格）。少擲、多擲兩個方向都會讓之後整條亂數流跟著偏
+// （卡面驗收 15a／15b 的由來，〈對驗收 15b 的更正〉有實測）。純邏輯（規則 2、3）。
+const SURFACE = new WeakMap<World, () => ArrayLike<number> | null>();
+export function setMergeSurface(w: World, cells: (() => ArrayLike<number> | null) | null): void { if (cells) SURFACE.set(w, cells); else SURFACE.delete(w); }
 
 export function mergeDay(w: World, c: MergeCtx): MergeRec[] {
   const out: MergeRec[] = [];
@@ -40,7 +47,7 @@ export function mergeDay(w: World, c: MergeCtx): MergeRec[] {
   // 加速（結果同逐格掃）：k 只會是 1 或 2，兩邊的需求都 ≤ 門檻就整段不會有合格的窗；窗內沒有「非 ref、k 1 或 2、lv ≥ 2」的建築就定不了類（kk＝0）。
   // 先掃一遍標出這種建築、做成累加表，每個窗用四次查表判斷有沒有；沒有的窗跟原文一樣直接略過（原文那一步沒有任何副作用）。
   if (c.cityHappy > HAPPY_MEGA && (c.dem[1] > DEM_MEGA || c.dem[2] > DEM_MEGA)) {
-    const W = N + 1, acc = new Int32Array(W * W);
+    const W = N + 1, acc = new Int32Array(W * W), blocked = SURFACE.get(w)?.() ?? null;   // D101：每天取一次
     for (let y = 0; y < N; y++) {
       let row = 0;
       for (let x = 0; x < N; x++) { const b = tiles[y * N + x].bld; if (b && !b.ref && (b.k === 1 || b.k === 2) && b.lv >= 2) row++; acc[(y + 1) * W + x + 1] = acc[y * W + x + 1] + row; }
@@ -64,7 +71,7 @@ export function mergeDay(w: World, c: MergeCtx): MergeRec[] {
         if (qb && !qb.ref && qb.k === kk && qb.lv >= 2 && qb.pw && qb.wa && (!c.sewNeed || c.sewOk[qi]) && !qb.fire) { subst++; from.push(qi); continue; }
         if (qb && !qb.ref && qb.k === kk && qb.lv === 1 && !qb.fire) { from.push(qi); continue; }
         if (qb && !qb.ref && qb.k === 4) { parks.push([x + dx, y + dy]); from.push(qi); continue; }
-        if (!qb && !qt.road && !qt.ruin && (qt.zone === kk || (!qt.zone && qt.t === 2))) continue;
+        if (!qb && !qt.road && !qt.ruin && !(blocked && blocked[qi]) && (qt.zone === kk || (!qt.zone && qt.t === 2))) continue;
         ok2 = false; break;
       }
       if (!ok2 || subst < MEGA_SUBST_MIN) continue;

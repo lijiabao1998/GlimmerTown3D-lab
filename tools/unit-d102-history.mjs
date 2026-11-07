@@ -194,7 +194,7 @@ export async function d102HistoryGuards(log) {
     return `8 種屋齡情境＋4 種重播例外；G13 劃區 40 天：加速 ${live.total} 棟次，其中 ${live.sameGrow} 棟次是生長當天；造城 20 天：同日加速＋合併吸收 ${mg.merge} 棟、同日加速＋燒毀 ${bn.burn} 棟；全部 0 次退回、墓碑屋齡讀回與模擬相同`;
   });
 
-  await run('驗收 5：竄改照舊攔住，原因講得出是哪一種——不存在、已拆、重複、沒排序、空、非整數、屋齡 ≥ 9、冒用格式 10、格式 12；退回後下一次正常重播', () => {
+  await run('驗收 5：竄改照舊攔住，原因講得出是哪一種——不存在、已拆、重複、沒排序、空、非整數、屋齡 ≥ 9、冒用格式 10、格式 13；退回後下一次正常重播', () => {
     let L = load(startOf('W4'));
     for (let i = 0; i < 40; i++) { stepDay(L.sim); L = load(saveCode(L.sim, L.template, L.start)); assert.ok(L.replayed); }
     const pristine = rawOf(saveCode(L.sim, L.template, L.start)), rows = pristine.d3.r, k = rows.findIndex(r => r[0] === 25);
@@ -210,7 +210,7 @@ export async function d102HistoryGuards(log) {
       ['非整數', r => { r.d3.r[k] = [25, r.d3.r[k][1], 1.5]; }, /加速施工的建築編號/],
       ['屋齡 ≥ 9（換成老房子）', r => { r.d3.r[k] = [25, r.d3.r[k][1], old.id]; }, /屋齡已滿 9 天/],
       ['冒用格式 10', r => { r.d3.f = 10; }, /需要城市格式 11/],
-      ['格式 12（比這一版新）', r => { r.d3.f = 12; }, /城市格式 12 比這一版（11）新/],
+      ['格式 13（比這一版新）', r => { r.d3.f = 13; }, /城市格式 13 比這一版（12）新/],
       ['已拆的建築', r => { r.d3.r.push([25, 0, gone.id]); }, new RegExp(`#${gone.id} 已經拆掉`)],
     ];
     for (const [name, edit, re] of cases) {
@@ -223,9 +223,9 @@ export async function d102HistoryGuards(log) {
     return `${cases.length} 種竄改全部退回快照、原因字串各自對得上；退回後下一次照常重播`;
   });
 
-  await run('驗收 6：格式 11、登記 26 種、碼 25 的黃金列、每個切點的 packMore、hv1 物件、壞列被擋、第一個沒用過的碼 26 照舊不認得', () => {
-    assert.equal(CITY_FORMAT, 11); assert.equal(Object.keys(EVENT_REGISTRY).length, 26);
-    assert.deepEqual([EVENT_REGISTRY.hasten.code, EVENT_REGISTRY.hasten.format, [...EVENT_REGISTRY.hasten.fields], EVENT_BY_CODE[25], EVENT_BY_CODE[26]], [25, 11, ['ids'], 'hasten', undefined]);
+  await run('驗收 6：格式 12（D101 起）、登記 27 種、碼 25 的黃金列、每個切點的 packMore、hv1 物件、壞列被擋、碼 26 是 D101 的 transit、第一個沒用過的碼 27 照舊不認得', () => {
+    assert.equal(CITY_FORMAT, 12); assert.equal(Object.keys(EVENT_REGISTRY).length, 27);
+    assert.deepEqual([EVENT_REGISTRY.hasten.code, EVENT_REGISTRY.hasten.format, [...EVENT_REGISTRY.hasten.fields], EVENT_BY_CODE[25], EVENT_BY_CODE[26], EVENT_BY_CODE[27]], [25, 11, ['ids'], 'hasten', 'transit', undefined]);
     const e = { day: 7, t: 'hasten', ids: [2, 5, 9] };
     assert.equal(minimumEventFormat(e), 11); assert.equal(eventFormat(e), 11);
     const h = [{ day: 7, t: 'cms', ev: 'accept', id: 'steel40' }, e, { day: 9, t: 'hasten', ids: [3] }];
@@ -235,9 +235,9 @@ export async function d102HistoryGuards(log) {
     const cache = []; assert.equal(historyFormat(cache), 4); cache.push(h[0]); assert.equal(historyFormat(cache), 10); cache.push(e); assert.equal(historyFormat(cache), 11);
     const bad = [[25, 0], [25, 0, 0], [25, 0, 3, 3], [25, 0, 5, 2], [25, 0, 1.5], [25, 0, '1'], [25, 0, -1], [25, .5, 1], [25, 0, 2 ** 31 + 1], [25, 0, ...Array.from({ length: 5 }, (_, i) => i + 1)]];
     for (const row of bad) assert.throws(() => unpackHistory([row], 2), Error, JSON.stringify(row));
-    assert.throws(() => unpackHistory([[26, 0]], 2), /種類不對/, '碼 26 還沒登記');
+    assert.throws(() => unpackHistory([[27, 0]], 2), /種類不對/, '碼 27 還沒登記');
     assert.deepEqual(unpackHistory([[25, 0, 1, 2, 3, 4]], 2), [{ day: 0, t: 'hasten', ids: [1, 2, 3, 4] }], 'n²＝4 棟是上限');
-    return '26 種、碼 25／格式 11、黃金列、4 個切點、hv1、10 種壞列、碼 26 不認得';
+    return '27 種（D101 起）、碼 25／格式 11、黃金列、4 個切點、hv1、10 種壞列、碼 27 不認得';
   });
 
   await run('驗收 7：突變控制——拿掉記錄、重播不加歲、記少一棟、排到合併之後、對編號早於登記新房，每一種都抓得到', async () => {

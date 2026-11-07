@@ -1,4 +1,4 @@
-import {d084PriorSource} from './d102-source.mjs';
+import {d084PriorSource} from './d101-source.mjs';
 // Exact finite source accounting for technical accepted-nine geometry revisions.
 // Only historical source readers use preimages; all runtime imports use actual product files.
 import fs from 'node:fs';

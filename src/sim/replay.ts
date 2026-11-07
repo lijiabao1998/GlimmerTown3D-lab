@@ -8,10 +8,12 @@
 //   第 d 天玩家蓋的（在第 d 天的 tick 之後）：結束日 − d（doPlace 給 age 0，51672）；拆掉的：屋齡停在拆的那一天。
 //   格式 7（D034）再套用 merge：吸收的建築埋掉、蓋 2×2 塔或 3×3 巨廈（巨廈清九格分區）。
 //   格式 11（D102）再套用 hasten：煉鋼廠用鋼材讓施工中的建築多長一天（55655–55672）——清單上每棟的起算屋齡 +1（之前沒記，重播的屋齡比存檔小）。
+//   格式 12（D101）再套用 transit：運輸施工（src/sim/transit/history.ts，規則照 network.ts）；復原先查運輸的手勢，再查格子的手勢。有運輸事件才帶 c.transit。
 // 未知的事件種類直接丟例外（不猜）。純邏輯。
 import { decodeLabCode } from '../io/labcode.ts';
 import { cityFromLab, roadCode, DECISION_EVENTS, MERGE_SIZE, type City, type CityBuilding, type HistoryEvent, type KindTable } from './city.ts';
 import { fnv1a } from './rng.ts';
+import { applyTransitEvent, replayedNetwork, transitReplay, undoTransitStroke } from './transit/history.ts';
 
 interface Stroke { tiles: Map<number, [number, number, number, number, number, number, number]>; created: number[]; removed: number[] }   // 路、路等級、分區、樹、佔用、水管、焦土（D026）
 
@@ -26,7 +28,8 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
   const base = new Map<number, { age: number; from: number }>();   // 還在的建築 id → 屋齡從哪一天、從多少起算
   for (const b of c.buildings) base.set(b.id, { age: b.age, from: D0 });
   const strokes = new Map<number, Stroke>();
-  const strokeOf = (g: number) => { let s = strokes.get(g); if (!s) { s = { tiles: new Map(), created: [], removed: [] }; strokes.set(g, s); } return s; };
+  const transit = transitReplay();   // D101：運輸的路網與它自己的手勢（一筆手勢不會同時是格子與運輸）
+  const strokeOf = (g: number) => { let s = strokes.get(g); if (!s) { if (transit.strokes.has(g)) throw new Error(`重播：第 ${g} 筆手勢已經是運輸施工，不能再改格子`); s = { tiles: new Map(), created: [], removed: [] }; strokes.set(g, s); } return s; };
   const touch = (s: Stroke, i: number) => { if (!s.tiles.has(i)) s.tiles.set(i, [c.road[i], c.rclass[i], c.zone[i], c.tree[i], c.occ[i], c.wp[i], c.ruin[i]]); };
   const footprint = (b: CityBuilding, f: (j: number) => void) => { for (let dz = 0; dz < b.size; dz++) for (let dx = 0; dx < b.size; dx++) if (b.x + dx < n && b.z + dz < n) f((b.z + dz) * n + b.x + dx); };
   const bury = (b: CityBuilding, day: number) => {   // 拆掉：墓碑、occ 清空、屋齡停在這一天
@@ -35,7 +38,7 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
     footprint(b, j => { if (c.occ[j] === b.id) c.occ[j] = 0; });
   };
   for (let k = 1; k < events.length; k++) {
-    const e = events[k], i = e.t === 'undo' || e.t === 'import' || e.t === 'cms' || e.t === 'hasten' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
+    const e = events[k], i = e.t === 'undo' || e.t === 'import' || e.t === 'cms' || e.t === 'hasten' || e.t === 'transit' || DECISION_EVENTS.includes(e.t) ? -1 : (e as { z: number; x: number }).z * n + (e as { z: number; x: number }).x;
     switch (e.t) {
       case 'import': throw new Error('重播：匯入事件只能是第一筆');
       case 'grow': {
@@ -101,6 +104,7 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
         break;
       }
       case 'undo': {   // 同一天：碰過的格子整格還原；這一筆放的建築變墓碑、拆掉的回來
+        if (undoTransitStroke(transit, e.g, e.day, k)) break;   // D101：運輸的手勢先查（路網回到施工前）
         const s = strokes.get(e.g);
         if (!s) throw new Error(`重播：第 ${e.day} 天要復原的第 ${e.g} 筆手勢不存在`);
         for (const id of s.created) { const b = c.buildings[id - 1]; if (b.goneDay === undefined) bury(b, e.day); }
@@ -162,6 +166,12 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
       case 'policy': case 'budget': case 'research': case 'spec': case 'techdone': break;
       // D045（城市格式 10）：市長委託——整座城的事，不改城市的樣子（委託的狀態在模擬的 cms385 裡）
       case 'cms': break;
+      // D101（城市格式 12）：運輸施工——路網在 c.transit（格子、建築都不動）；規則、費用、幾何不對就丟例外
+      case 'transit': {
+        if (strokes.has(e.g)) throw new Error(`重播：第 ${e.day} 天運輸施工的手勢 ${e.g} 已經改過格子（歷史第 ${k + 1} 筆）`);
+        applyTransitEvent(transit, c, e, k);
+        break;
+      }
       // D040（城市格式 9）：資源耗盡——不改城市的樣子，只確認那一格有那一種井（歷史壞了要講出來）
       case 'depleted': {
         const b = c.buildings[c.occ[i] - 1];
@@ -180,5 +190,7 @@ export function replayCity(code: string, events: readonly HistoryEvent[], kinds:
   }
   for (const b of c.buildings) { const s = base.get(b.id); if (s) b.age = s.age + (E - s.from); }
   c.day = E;
+  const net = replayedNetwork(transit);
+  if (net) c.transit = net;   // D101：沒有運輸事件的城不帶這個鍵（跟 cityFromLab 一樣）
   return c;
 }

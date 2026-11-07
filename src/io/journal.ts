@@ -4,7 +4,7 @@
 //     接起來的列跟整份一次編（packHistory）逐列相同（tools/unit-d013.mjs 驗）。
 //   滾動雜湊：每一列接著上一個雜湊算（FNV-1a，JSON 字串），存檔記「前 n 列的雜湊」；讀檔照同樣算法核前 n 列。
 import { EVENT_REGISTRY } from '../sim/eventRegistry.ts';
-import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, type HistoryEvent } from '../sim/city.ts';
+import { ACT_CODES, BUDGET_CODES, CMS_CODES, CMS_EVENTS, POLICY_CODES, SPEC_CODES, TECH_CODES, TRANSIT_MODES, TRANSIT_OPS, type HistoryEvent } from '../sim/city.ts';
 
 export interface PackState { n: number; d0: number; g0: number; h: number }
 export const PACK0: PackState = Object.freeze({ n: 0, d0: 0, g0: 0, h: 0x811c9dc5 }) as PackState;
@@ -57,6 +57,8 @@ export function packMore(hist: readonly HistoryEvent[], st: PackState): { rows: 
       case 'depleted': row = [code, dd, e.x, e.z, e.k]; break;   // D040（城市格式 9）
       case 'cms': row = e.ev === 'done' ? [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id), e.bonus ?? 0] : [code, dd, CMS_EVENTS.indexOf(e.ev), CMS_CODES.indexOf(e.id)]; break;   // D045（城市格式 10）：完成才帶獎金
       case 'hasten': row = [code, dd, ...e.ids]; break;   // D102（城市格式 11）：尾巴是當天被煉鋼廠加速施工的建築編號
+      // D101（城市格式 12）：transit [26,dDay,操作碼,編號,模式碼,x,z,h,x2,z2,h2,cost,dG]（固定 13 欄；碼表在 city.ts，只往後加）
+      case 'transit': row = [code, dd, TRANSIT_OPS.indexOf(e.op), e.id, TRANSIT_MODES.indexOf(e.mode), e.x, e.z, e.h, e.x2, e.z2, e.h2, e.cost, e.g - g0]; g0 = e.g; break;
       default: throw new Error('存檔：不認得的事件 ' + (e as { t?: unknown }).t);
     }
     rows.push(row); h = hashRow(h, row);

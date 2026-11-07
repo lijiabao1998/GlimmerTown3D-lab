@@ -10,6 +10,131 @@
 
 ---
 
+- 2026-11-06 — D101／D104 — 修正新增提示與 D049 唯一錨點衝突；依業主新授權把 historical／browser 各拆八片，保留原斷言與退出碼，新增完整同來源／build 收據聚合；11 個有限 workflow 差異納入 D101 雜湊鏈。
+  - 驗證：Linux refreeze／check、269 src 一致；來源／有限鏈 21／21，D103 五組含20負控、D049 8／8、current UI 38／38，CI／partition／分片合計347／347；Windows typecheck／build與真觸控phase1 10／10通過。詳見[收據](docs/D101-validation.md)及[D104卡](docs/D104-ci-parallel-validation.md)。
+  - commit：本列提交；lease 07b52fbe…；美術仍為[三檔三寬](docs/img/d101-transit/)的 B。完整 CI 與代表片結果綁同 final HEAD 寫在[PR56驗證區](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/56#d101-final-validation)，不為結果文字再觸發一輪 CI。
+  - **沒做成的事**：C1 failed、C2 interrupted（12 passed、historical 已紅、8 not_run）原始收據保留，未宣稱本機21／21；提交時代表片與完整遠端矩陣待跑，成功後才ready。Android真機已免測，桌面不代表手機效能；未合併或發布。
+
+- 2026-11-06 — D101 — 完整驗證抓到復原接線與 D054 抽取契約不相容，將運輸清理移回獨立 UI 入口，保留原 `doUndo` 與鍵盤片段，沒有修改歷史守衛；業主明確免做 Android 實機測量。
+  - 驗證：Linux 重凍／check、269 來源一致、current UI 38／38；typecheck／build；復原五入口 5／5；B phase1 10／10、phase2 6＋9、art-fit 9 圖、無運輸 parity 32／32 通過，無 runtime error。
+  - commit：本列的修正候選提交。樣張沿用[三檔三寬對照](docs/img/d101-transit/)，本輪選 B。
+  - **沒做成的事**：第一輪完整 C 在 D086 第 17 步失敗，已保留原始證據；修正後完整 C 尚待乾淨提交重跑，CI／push／PR ready 尚未執行。桌面結果不代表 Android 效能；合併仍由業主執行。
+
+- 2026-11-06 — D101 — 本機第四步介面、繪製與遷移：[卡面](docs/D101-transit-save-and-ui.md)〈本機第四步〉。
+  - 獨立六工具／相鄰軌道、站廠、選件拆除與復原；地塊卡排除運輸事件；地面合批、地下示意；完整 hv2 單槽備份與失敗原子取消；示範城不覆蓋我的城備份。
+  - 驗證：typecheck／build／diff check 過；Linux 重凍與 check 過（lease 0d7a0c15…）；migration 6／6＋9 突變、art 7／7＋6 突變；無運輸四樣本 32 項與 main 逐值相同。瀏覽器 10＋6 項操作／資料檢查及9組相機記錄過，無runtime錯誤；連續CDP跨導航觸控限制已記卡面，改獨立會話驗存讀。
+  - commit：本列的提交。樣張：[三檔三寬對照](docs/img/d101-transit/)，本輪選 B。
+  - **沒做成的事**：乾淨 worktree 全套、完整 smoke／CI、Android 真機測量待跑；本機提交作乾淨驗證候選，尚未推送／未改 PR ready／未合併。
+
+- 2026-11-06 — D101 — 本機接手補完 R3-1–R3-3：[卡面](docs/D101-transit-save-and-ui.md)〈本機第三步補完結果〉。
+  - 遮罩改為各件幾何獨立期望；拆除／復原探舊格；補電車車站、地鐵／軌道旁存讀；突變 25→28 種。
+  - 驗證：typecheck 過；Linux Node 24.15.0 隔離副本鏈 check 過，construction 17／17、28 突變符合預期；d011-edit 36、d046-save 9、d046-history 8、d019 6，0 紅。
+  - 平台失敗照實保留：Windows 路徑不相容；WSL 直接讀寫 C 磁碟的未完成程序停止後改隔離記憶體副本，沒有改守衛或算成綠燈。
+  - 業主已接受 15b 的兩條勘誤。commit：本列的提交；樣張：沒有畫面變化。
+  - **沒做成的事**：第四步介面／繪製／遷移、完整歷史／frame／native／runner、瀏覽器 smoke、CI 與 Android 量測未完成；本輪不單獨推送，完成交接要求後一起推。
+
+- 2026-11-06 — D101 — 第三步第 2 輪核對的修正（R2-1–R2-3）：[卡面](docs/D101-transit-save-and-ui.md)〈第 2 輪核對的修正（下一個提交）〉。
+  - R2-1（守衛缺口；產品碼本來就對，沒改）：`d101-construction` 12→17 項、突變 19→25 種。
+    - 驗收 21 加車站、車廠、地鐵、軌道旁四種變體。有運輸時站廠格 8 個種子 0 次吸收（直接跑、存讀後都是）；沒有運輸時車站格 5–11 次、車廠格 2–10 次。地鐵跟沒有運輸 60 天逐一相同。軌道旁的 (x0,32) 照樣被吸收 2–5 次。
+    - 每一次施工、拆除、復原、讀檔之後都核 `transitSurface`＝`surfaceTransitCells`（920 次，0 次不同）；用假格子探 `mergeDay`，證明世界在施工後、讀檔後真的登記了遮罩。
+    - 核對代理的突變 (a)–(d) 都紅在新的那幾項；只看 60 天的行為也抓得到。
+  - R2-2：`transitBlocks` 只擋 build.ts 認得的工具（照 `previewOp` 換算英式建築，再問 `canPlace`）。有運輸的城、地面格上，運輸工具的 id 與 `polic` 預覽、提交 84 次都丟跟沒有運輸時逐字相同的「未搬」；認得的 96 筆（95 種）照擋。突變 2 種。
+  - R2-3：先重量（8 個種子第 1 天：有遮罩擲 14 次、沒遮罩 21 次，多出來的窗 (29,31) 沒有軌道）才改 `merge.ts` 註解成兩個方向；15b 更正加日期補記，原文不動。鏈重凍，`--check` exit 0。
+  - 煙霧測試（本機 Node 24，依序跑）：
+    - `tsc` 綠；鏈 `--check` exit 0；`d101-construction` 17／17（52.6 秒）；`d101-save` 19／19；`d101-source.test`＋`d090-source-v3` 10／10。
+    - `run-hist`：d011-edit 36（單獨跑）、d046-save 9、d046-history 8、d019 6，另加 d024、d034、d034-live、d042、d011-build、d011-parity 共 45 項，0 紅；ui-actions 與 native-lifecycle 的 `-d090` 99／99。
+    - 瀏覽器 smoke 沒跑。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - **修正之後的核對（2 個代理）找到 1 major、3 minor，業主要求暫停交本機，沒修**（卡面 R3-1–R3-4）：major 是「遮罩＝地面格」只跟 `surfaceTransitCells` 比、是循環的，`surfaceTransitCells` 跳過電車軌道的突變兩支守衛都全過。
+    - CI 還沒跑這一版；frame 守衛、歷史分區全量、foundation 與 inherited runner、native 重放、瀏覽器 smoke、d082 join 都沒跑。
+    - 15b 的更正與兩方向補記還沒經過業主。
+    - 車廠變體的正面對照最少只有 2 次（種子 5164205），餘裕小；軌道旁變體只斷言「> 0」，不是「跟沒有運輸次數相等」（亂數流本來就會偏）。
+    - 遮罩有沒有登記只能從行為間接看，沒有讀取介面。
+    - 介面、繪製、地塊卡（第 4 步）還沒做；中階 Android 效能沒量。
+- 2026-11-06 — D101 — 施工第三步：運輸施工交易、復原、反向守衛、巨型合併遮罩（只動模擬）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - `edit.ts`：`TRANSIT_TOOLS` 另成一組；`previewTransit`／`commitTransit`／`removeTransit`；運輸復原跟建築共用堆疊；反向守衛「運輸設施擋住」。
+  - `merge.ts`：城裡有運輸時，巨型合併不吸收地面軌道與站廠的格子（業主 11-06 選 a）。遮罩在讀檔與施工時登記；沒有運輸的城每天的 sim hash、亂數次數、存檔碼都等於 `76e074f`。
+  - lease modified 7→8 檔、`D084_CHANGED` 42→43，鏈已重凍。新守衛 `tools/d101-construction.mjs` 12 項、19 種突變，掛進 `transit.yml`。
+  - 核對代理找到 4 個 major，都處理了：
+    - 反向守衛可以用線、框的多格建築繞過，把建築蓋到軌道上（sim API 碰得到，一般觸控碰不到）。已修，隨機 30,000 筆施工 0 違規。
+    - 守衛沒測到多格占地，已補，並加 2 種突變。
+    - 凍結驗收 15b 的原文不成立：8 個種子只有 2 個成立，只看 hash 是 5 個。卡面寫了更正，守衛改斷言兩條取代的條件，**要請業主知道**。
+  - 另外修了 6 個 minor：兩處註解、15a 前提改嚴、`d011-edit` 列入計時類依序跑、補記本來就紅的三支 ui-actions、補卡面紀錄。
+  - 煙霧測試（本機 Node 24，修正後依序重跑）：
+    - 鏈 `--check`、`tsc` 綠；`transit.yml` 全部步驟綠，其中 `d101-save` 19／19、`d101-construction` 12／12。
+    - loadMod 歷史守衛 27 支 257 項 0 紅。
+    - 瀏覽器 smoke 沒跑，交給 CI。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 介面、繪製、地塊卡都還沒做（第 4 步）：`cityView.ts`、`transitArt.ts` 還是 stub，玩家還不能蓋運輸。
+    - 15b 的更正還沒經過業主。
+    - 第 2 輪核對（輪數上限 2）找到 1 major、3 minor，這一個提交沒修。major 是遮罩守衛只測了地面軌道：車站、車廠、地鐵、遮罩寬度 4 個突變整支守衛都過（產品程式目前是對的）。下一個提交處理。
+    - 修正後 frame 守衛、歷史分區全量、foundation 與 inherited runner、native 重放、瀏覽器 smoke 都沒跑，交給 CI。
+    - 中階 Android 效能沒量。
+- 2026-11-06 — D101 — 第二步核對結果與修正：[卡面](docs/D101-transit-save-and-ui.md)。
+  - 第 1 輪三個獨立核對代理：沒有 blocker，10 個小問題。
+  - 歷史分區（5502 秒）、foundation 與 d086–d089 runner、d078–d081 frame 都 exit 0。唯一的紅是 `d101-save` 在 4 核被 5 個重工作搶滿時，計時比值 7.38。
+  - 修正：
+    - `save.ts` 的運輸列掃描提前到第一個 f／hv／起始碼早退之前，沒有 `rt` 的運輸檔不再悄悄退回快照。
+    - 驗收 3 加 4 種早退案例；突變 5→8 種。
+    - 驗收 13 上限不動，量法改成暖機、交錯量、整組最多 3 次。加壓 3 次全過，比值 2.12–2.85。
+  - 煙霧測試（本機）：`tsc`、鏈 `--check`、`d101-save` 19／19、第一步證明清單、`unit-d103-timeout`、`unit-d102-history`、`unit-d082-scope` 全過；19 支 loadMod 歷史守衛經 `run-hist` 207 項全過。瀏覽器煙霧測試交給 CI。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - `cityView` 地塊卡碰到運輸事件會丟例外，第 4 步修。
+    - 驗收 15a／15b 與驗收 21 的突變在第 3 步做。
+    - 每次自動存檔都整份重寫 `d3.rt`：拆蓋 4 萬筆事件的城 hv2 存檔 242 萬字元，超過 `SAVE_LIMIT`；中階 Android 沒量。
+    - 本機瀏覽器 smoke 沒跑。
+- 2026-11-06 — D101 — 施工第二步：存檔、事件 26、格式 12、線性重播（核對未完先推）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - 事件 26 列 `[26, dDay, op, id, mode, x, z, h, x2, z2, h2, cost, dG]`；`CITY_FORMAT` 12；只有 `city.transit` 存在才寫 `d3.rt`。
+  - 判斷有運輸的存檔看 `rt` 或事件 26，不看 `f`；讀不進來回 `ok:false`，不退回快照。
+  - 重播是線性時間，每一筆仍由 `network.ts` 原本的函式判定；新純函式檔 `src/sim/transit/history.ts`。
+  - 守衛原地改 4 支（格式 11→12、登記 26 種）；新守衛 `tools/d101-save.mjs` 19 項，掛進 `transit.yml`；鏈已重凍。
+  - 煙霧測試（本機 Node 24）：`tsc`、鏈 `--check`、`d101-source.test` 8／8、`d101-save` 19／19、`unit-d103-timeout`、`unit-d102-history` 全綠；讀檔 4000 筆 53.8 ms（比值 3.05）。瀏覽器煙霧測試交給 CI。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 本機瀏覽器 smoke 沒跑；歷史分區守衛的本機結果推送時還沒出來。
+    - 核對找到的兩個小問題還沒修：計時斷言在忙碌機器可能誤紅；驗收 15 的守衛沒斷言 15a 的前提。
+    - 施工、撤銷、介面、巨型合併修正（驗收 21）還沒動。
+- 2026-11-06 — D101 — 施工第一步：lease 與整條雜湊鏈（stub 位元組，還沒寫產品程式）：[卡面](docs/D101-transit-save-and-ui.md)。
+  - 7 個要改的 src 檔檔尾加一行 `// D101 lease probe`，2 個新檔是 `export {};`。
+  - lease `fixtures/d101/source.json`（`c33c8bf8…`）：269 檔，modified 7、added 2，兩條投影路都往下傳 `76e074f` 的位元組。
+  - 整條鏈由 `tools/d101-freeze-chain.mjs` 產生：先在記憶體算完並核對，再寫檔；遇到被手改的檔案一律拒絕。
+    - 鏈上檔案：d085 測試、domain JSON 與 `DOMAIN_MANIFEST_SHA`、相機後繼、routing JSON 與契約、lineage 與 `PIPE_LINEAGE_SHA`。
+    - lineage 的 copy 13 摺成單一整檔 item，copies 7、8 不動。
+  - 原地改：三個 seam、`d090-source-v3`（兩層投影，原有 16 條斷言都保留）、`source-boundaries-v3`；`transit.yml` 第一步換成 `d101-source.test`。
+  - 新守衛 `tools/d101-source.test.mjs` 8 項，其中一項要求鏈上每個產物都等於工具重算的結果。
+  - 煙霧測試（本機 Node 24）：
+    - 第一步的證明清單 472／472；`unit-d103-timeout` 全過（20 種負控）、一個字沒改；`unit-d082-scope`、`unit-d066`–`d081`、14 支 frame 守衛、`unit-d102-history`、`tsc` 全綠。
+    - 乾淨 worktree 以 `GITHUB_ACTIONS=true` 跑 runner 全部 exit 0：foundation 1203／1203；inherited d086 2094、d087 2057、d088 2432、d089 2432，全過。
+    - 3 個代理獨立核對，找到 4 個小缺口都已補，再核一次沒有 blocker。
+  - commit：本列的提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 產品程式（存檔、事件、重播、施工、繪製、工具列）都還沒寫。
+    - 瀏覽器、smoke、d082 join 沒跑。
+    - 凍結工具寫到一半中斷時修不回來，要先用 git 還原。
+    - 幾支歷史守衛在 main 上本來就紅，輸出逐字相同，已列在卡面。
+    - 巨型合併蓋到軌道還在等業主定。
+- 2026-11-05 — D101 — 合併後重開卡面：施工前研究、更正與追加驗收（[卡面](docs/D101-transit-save-and-ui.md)）。
+  - 背景：D100、D102、D103、D098 都已合併。本分支在 `9f8a001` 重新併入 main，對 main 只差卡面；PR #56 已改疊 main。
+  - 研究：唯讀，7 個面向各一讀一核，再彙整、找漏，共 16 個代理。重要事實親自重讀過，包括：
+    - `merge.ts:67` 的巨型合併會吸收空草地；
+    - D011:209、:498 寫明實驗線存檔會丟 `d3`；
+    - `cityView.ts:552/612/628` 三行一字不差；
+    - 沙盒造價是 0（`build.ts:206`）。
+  - 卡面新增：
+    - `D101_BASELINE`＝`76e074f`；本卡要比 D092 先合併。
+    - 18 條更正：改的既有檔是 7 個（含 `edit.ts`），清單 269；d085 測試兩行都換；`unit-d102-history` 要原地改；lineage 只摺 copy 13；入口改成 ☰ 選單；掛載寫進 `attachRes()`；備份鍵改成單一格等。
+    - 本卡自己定的做法。
+    - 追加凍結驗收 13–20：重播效能、沙盒、規則 9、沒有運輸的城市不變、格式邊界、超限匯出、D103 守衛不改、完整驗證。
+    - 縮小切片。
+  - 煙霧測試：只改卡面與 LOG，`git diff --check` 乾淨；推上去後 PR #56 的 `transit` 與 native 會照常跑。commit：本列的文件提交。樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 程式、lease、守衛都還沒動。
+    - 巨型合併蓋到地面軌道要業主定：(a) 本卡一起修，或 (b) 另開卡。
+    - `transit.yml` 要不要加 push 到 main 的觸發，延續未決。
+    - 研究的完整紀錄只存在本 session，沒有提交進倉庫。
 - 2026-11-05 — D103 — 施工（D086 native `native-and-build` 逾時 20→30 分，宣告進 D090 現行層）：[卡面](docs/D103-d086-native-timeout.md)。
   - 改了什麼：
     - YAML 一行；
