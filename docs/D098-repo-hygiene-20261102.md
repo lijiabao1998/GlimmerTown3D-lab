@@ -97,3 +97,56 @@ git push origin --tags
 - LOG 檔尾（約第 195 行起）的 D086–D091 發布列維持在當時追加的位置，沒搬到「最新在上」的位置，避免改動歷史列的排列。
 - 公網 WebGL 重播與 Android 實機照舊沒驗；本卡只做文件與倉庫狀態。
 - 第二個帳號推的 D082／D083 提交已經出貨、業主已接受，本卡不重做、不改寫。
+
+## 2026-11-18 執行紀錄
+
+上面第三節「存檔標籤沒打成」、第四節「待業主決定」和「沒做成的事」第一條，原文不改，以這一節為準。
+
+### 業主的話
+
+- 2026-11-18 原話：「3D 先處理紅，必要時放寬標準Claude，性能和美術你來決定，我來 決定大方向就好   全部收尾完」。範圍另答「只做3d lab」「先做3d」。
+- 我把「全部收尾完」讀成同意第四節的建議：先打標籤、核對、再刪。業主沒有逐條點名這 46 條，處置也只照第四節寫好的步驟，沒有多做。
+
+### 做了什麼（時間是 UTC，取自標籤時間與本機紀錄檔的修改時間）
+
+1. **15:45:34–15:45:49 打了 51 個附註標籤，推上遠端**：
+   - 46 個 `archive/<分支名>`：第四節表上的 46 條未併分支，一條一個。
+   - 第三節的 5 個具名標籤：`archive/pr53-d100-transit-network` `288e39a`、`archive/pr54-d101-transit-save-ui` `07a1c0b`、`archive/pr48-d092-living-city` `c8e9ad8`、`archive/pr51-d098-repo-hygiene` `e7ea825`、`archive/d100-transit-data-model` `354bd19`。
+     它們指向的提交，跟對應分支的 `archive/<分支名>` 相同；同一個提交有兩個名字。
+   - 標籤說明寫明分支名、刪除前的 head 與業主原話，例如「D098 收尾（2026-11-18）：遠端分支 … 刪除前的 head …」。
+2. **15:47:04 核對**：`git ls-remote origin 'refs/tags/archive/*'`，51 個標籤剝開（`^{}`）都等於分支當時的 head，51／51。
+3. **15:47:30 刪了 52 條遠端分支**（`git push --force-with-lease`，推送紀錄 52 條 `[deleted]`）：
+   - 上面打過標籤的 46 條；
+   - 6 條已併入 main 的，照第一節的規則：`ci/d103-d086-timeout`、`claude/d099-transit-source-lease`、`docs/main-records-20261104`、`fix/d102-steel-history`、`transit/d100-network`、`transit/d101-save-ui`。
+4. 完整清單：[`evidence/D098/branch-archive-20261118.txt`](evidence/D098/branch-archive-20261118.txt)（每個標籤的標籤物件、提交、刪掉的分支；6 條已併分支的 head；剩下的分支）。
+
+### 怎麼核的（2026-11-19 寫這一節時重跑）
+
+- `git ls-remote origin 'refs/tags/archive/*'`：102 行＝51 個標籤 × 2（標籤物件＋`^{}`）。
+  - 0 個輕量標籤；每個 `^{}` 都等於分類時記下的分支 head，51／51。
+  - 跟 15:47:04 存下的輸出排序後逐行相同。本機的 51 個標籤物件跟遠端也逐一相同。
+- 46 條未併分支的 head：`git merge-base --is-ancestor <head> 13ff23c` 全部「不是祖先」。遠端已經沒有分支指向它們，靠標籤留著（有 PR 的另有 GitHub 的 `refs/pull/<號>/head`，沒核）。
+- 6 條已併分支的 head：全部是 main `13ff23c` 的祖先。
+- `git ls-remote --heads origin`：只剩 4 條（下表）。
+
+### 剩下的
+
+| 分支 | head | 狀態 |
+|---|---|---|
+| `main` | `13ff23c` | — |
+| `claude/d106-first-use-ceiling` | `91e1c1f` | 已併（#62），暫留 |
+| `living/d092-living-city` | `3e272fc` | #57 D092 草稿，未併；沒打標籤、沒刪 |
+| `claude/3d-claude-reading-o11uvs` | `0b27c28` | #61，未併；內容在 `docs/wrapup-20261118` 用 `cherry-pick -x` 搬過來 |
+
+- 第一節停用的 36 支舊工作流沒動。
+- 「沒做成的事」第二條的 D086 20 分鐘上限，已由 [D103](D103-d086-native-timeout.md)（#60，`ceff055`，業主授權）放寬到 30 分。
+
+### 這一輪沒做成的事（不美化）
+
+- 「全部收尾完」是我的讀法；業主沒有逐條看過這 46 條的清單。
+- 推送紀錄只印結果，沒印每條帶的 lease 值。每條是不是都帶了分類時的 head，倉庫裡沒有存證。
+- 只核了每條分支的 head。較早的提交靠 head 的祖先關係留著，沒有逐一列出。
+- 第三節關掉的四個 PR（#48、#51、#53、#54）頁面上，分支會顯示已刪；提交靠標籤留著，PR 頁面本身沒核。
+- 要找回某條分支，從標籤推回同名分支即可；這個做法沒有演練過。
+- `claude/d106-first-use-ceiling` 已併、還沒刪。`claude/3d-claude-reading-o11uvs`（#61）要等本次收尾合併後才能關；`living/d092-living-city`（#57）等 D092。
+- LOG 檔尾 D086–D091 的發布列照舊沒搬位置。
