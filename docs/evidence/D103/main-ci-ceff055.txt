@@ -1,0 +1,72 @@
+# D103 合併後 main ci 41979267981（head ceff0550c82b799ac739206f3e9479a2b548b1f7，attempt 1）
+# 來源：GitHub Actions REST API（/actions/runs/41979267981/attempts/1/jobs、/actions/jobs/{id}、/actions/jobs/{id}/logs），2026-11-05 取得
+
+## 六個 native-release 的 native-and-build（name / conclusion / started / completed）
+d083-native-release / native-and-build	success	2026-11-05T06:17:42Z	2026-11-05T06:18:14Z
+d086-native-release / native-and-build	success	2026-11-05T06:27:06Z	2026-11-05T06:48:03Z
+d087-native-release / native-and-build	success	2026-11-05T06:17:42Z	2026-11-05T06:22:22Z
+d088-native-release / native-and-build	success	2026-11-05T06:18:16Z	2026-11-05T06:25:56Z
+d089-native-release / native-and-build	success	2026-11-05T06:21:19Z	2026-11-05T06:26:09Z
+d090-native-release / native-and-build	success	2026-11-05T06:28:28Z	2026-11-05T06:30:45Z
+
+## d086-native-release / native-and-build（job 127085897256）逐步
+runner=GitHub Actions 1000029329
+1	success	2026-11-05T06:27:06Z	2026-11-05T06:27:07Z	Set up job
+2	success	2026-11-05T06:27:07Z	2026-11-05T06:27:12Z	Run actions/checkout@v4
+3	success	2026-11-05T06:27:12Z	2026-11-05T06:27:13Z	Run actions/setup-node@v4
+4	success	2026-11-05T06:27:13Z	2026-11-05T06:27:15Z	Run npm ci
+5	success	2026-11-05T06:27:15Z	2026-11-05T06:30:59Z	Source leases, finite current versions and mandatory release graph negatives
+6	success	2026-11-05T06:30:59Z	2026-11-05T06:31:01Z	Run npm run typecheck
+7	success	2026-11-05T06:31:01Z	2026-11-05T06:33:22Z	Immutable immediate baseline and original affected historical contracts
+8	success	2026-11-05T06:33:22Z	2026-11-05T06:33:28Z	Immutable unaccepted first-candidate source, facade and structural assertions
+9	success	2026-11-05T06:33:28Z	2026-11-05T06:35:17Z	Immutable immediate geometry V2 source, facade, structural and workflow assertions
+10	success	2026-11-05T06:35:17Z	2026-11-05T06:37:21Z	Actual immutable V3 source and historical assertion groups
+11	success	2026-11-05T06:37:21Z	2026-11-05T06:42:06Z	Actual immutable V4 cache and original inherited coastal integration
+12	success	2026-11-05T06:42:06Z	2026-11-05T06:44:37Z	Actual immutable V5 source, full cache and ordinary-player surface contracts
+13	success	2026-11-05T06:44:37Z	2026-11-05T06:44:37Z	Reproducible exact procedural cache including all signed-zero payload bytes
+14	success	2026-11-05T06:44:37Z	2026-11-05T06:44:42Z	Exact production geometry parity and optimized compile negative controls
+15	success	2026-11-05T06:44:42Z	2026-11-05T06:44:53Z	Actual prior147 binary and all157 canonical architectural identities
+16	success	2026-11-05T06:44:53Z	2026-11-05T06:44:56Z	Current and immutable old production scenes, exact owner ledger and unchanged frame ceilings
+17	success	2026-11-05T06:44:56Z	2026-11-05T06:44:59Z	Current closed meshes, architectural facade backing and negative controls
+18	success	2026-11-05T06:44:59Z	2026-11-05T06:45:29Z	Current native fiscal, services, RNG, history, save, construction and undo
+19	success	2026-11-05T06:45:29Z	2026-11-05T06:46:47Z	Current catalogue86 retains all original76 interactions and negative controls
+20	success	2026-11-05T06:46:47Z	2026-11-05T06:47:56Z	Current inherited research, construction UI and touch lease negative controls
+21	success	2026-11-05T06:47:56Z	2026-11-05T06:47:59Z	Actual native product build with exact source identity
+22	success	2026-11-05T06:47:59Z	2026-11-05T06:48:00Z	Run actions/upload-artifact@v4
+23	success	2026-11-05T06:48:00Z	2026-11-05T06:48:01Z	Run actions/upload-artifact@v4
+45	success	2026-11-05T06:48:01Z	2026-11-05T06:48:01Z	Post Run actions/setup-node@v4
+46	success	2026-11-05T06:48:01Z	2026-11-05T06:48:02Z	Post Run actions/checkout@v4
+47	success	2026-11-05T06:48:02Z	2026-11-05T06:48:02Z	Complete job
+
+## d086-native-release / native-input-performance (1440)（job 127096699774）首用計時原始行
+# 欄位（proposals/d086/native-first-use-cache-check-v6.mjs 第 26 行）：id repetition previewMs commitMs passed；凍結門檻 commitMs 400
+ACTUAL FIRST USE borough-iron-market 0 1.5 226 true
+ACTUAL FIRST USE borough-iron-market 1 1 49.59999999999127 true
+ACTUAL FIRST USE borough-iron-market 2 0.19999999999708962 45.30000000000291 true
+ACTUAL FIRST USE raised-guild-market 0 1.3999999999941792 34.19999999999709 true
+ACTUAL FIRST USE raised-guild-market 1 0.9000000000087311 62 true
+ACTUAL FIRST USE raised-guild-market 2 1.7999999999883585 31.90000000000873 true
+ACTUAL FIRST USE butter-market-colonnade 0 1.5999999999912689 52.09999999999127 true
+ACTUAL FIRST USE butter-market-colonnade 1 0.9000000000087311 85.90000000000873 true
+ACTUAL FIRST USE butter-market-colonnade 2 1.3000000000029104 66.19999999999709 true
+ACTUAL FIRST USE gothic-wool-exchange 0 1 86.80000000000291 true
+ACTUAL FIRST USE gothic-wool-exchange 1 1.6999999999970896 31 true
+ACTUAL FIRST USE gothic-wool-exchange 2 0.9000000000087311 50.69999999999709 true
+ACTUAL FIRST USE georgian-customs-house 0 1.1999999999970896 97.30000000000291 true
+ACTUAL FIRST USE georgian-customs-house 1 0.10000000000582077 91.30000000000291 true
+ACTUAL FIRST USE georgian-customs-house 2 1.2999999999883585 100 true
+ACTUAL FIRST USE fan-plan-free-library 0 0.40000000000873115 48.80000000000291 true
+ACTUAL FIRST USE fan-plan-free-library 1 0.40000000000873115 51.70000000001164 true
+ACTUAL FIRST USE fan-plan-free-library 2 1.1999999999970896 61.60000000000582 true
+ACTUAL FIRST USE dutch-gabled-post-office 0 0.6999999999825377 68.5 true
+ACTUAL FIRST USE dutch-gabled-post-office 1 1 55.80000000001746 true
+ACTUAL FIRST USE dutch-gabled-post-office 2 1 53 true
+ACTUAL FIRST USE edwardian-board-school 0 0.7000000000116415 125.39999999999418 true
+ACTUAL FIRST USE edwardian-board-school 1 0.7999999999883585 54.5 true
+ACTUAL FIRST USE edwardian-board-school 2 0.10000000000582077 52.5 true
+ACTUAL FIRST USE interwar-fire-station 0 0.1999999999825377 68.79999999998836 true
+ACTUAL FIRST USE interwar-fire-station 1 1.6000000000058208 52.29999999998836 true
+ACTUAL FIRST USE interwar-fire-station 2 0.10000000000582077 54.79999999998836 true
+ACTUAL FIRST USE garden-cottage-clinic 0 0.09999999997671694 53.20000000001164 true
+ACTUAL FIRST USE garden-cottage-clinic 1 0.5 59.30000000001746 true
+ACTUAL FIRST USE garden-cottage-clinic 2 1.1000000000058208 49.5 true
