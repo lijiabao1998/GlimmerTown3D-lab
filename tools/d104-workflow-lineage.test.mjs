@@ -1,5 +1,9 @@
 // Finite lineage tests; no historical/product/browser guard is executed here.
 // The transit entry has fetch-depth:0, needed for the immutable 76e inputs.
+// D106 (docs/D106-ci-first-use-ceiling.md): the composed chain now also carries the D106
+// first-use layer, so the forged-validator controls run against the actual current validator
+// and deltas, the composed chain has thirteen files, and the exact D104 chain (main 23d42c9)
+// is a third prior state that only --refreeze accepts.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -14,6 +18,7 @@ import {D101_BASELINE, createD101Lease} from './d101-source-contract.mjs';
 import {D101_FIXTURE, D101_ENTRY, d101LeaseEntry} from './d101-freeze-source.mjs';
 import {D101_CHAIN_FILES, D101ChainRefusal, d101ChainCandidate,
   d101CityViewFromSuccessor, d101WritePlan, d101AssertOnDisk} from './d101-freeze-chain.mjs';
+import {D106_WORKFLOWS} from './d106-first-use-lineage.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => fs.readFileSync(path.join(ROOT, file), 'utf8');
@@ -29,16 +34,19 @@ const layer = d104WorkflowLayer(base), F = D101_CHAIN_FILES;
 const manifest = JSON.parse(read(D101_FIXTURE));
 const leasedView = d101CityViewFromSuccessor(read(F.camera));
 assert.equal(sha(leasedView), manifest.modified['src/cityView.ts'].afterSha256);
-function candidateFor(m, view, legacyWorkflow = false) {
+function candidateFor(m, view, legacyWorkflow = false, firstUse = true) {
   const bytes = json(m), digest = sha(bytes), entry = d101LeaseEntry(digest);
   createD101Lease(bytes, digest);
-  const {out, log} = d101ChainCandidate(m, view, {legacyWorkflow});
+  const {out, log} = d101ChainCandidate(m, view, {legacyWorkflow, firstUse});
   return {out, log, fresh:{bytes, digest, entry, manifest:m}, files:{[D101_FIXTURE]:bytes, [D101_ENTRY]:entry, ...out}};
 }
-// These are pure candidates for the same valid leased UI; neither is written.
+// These are pure candidates for the same valid leased UI; none is written.
 const legacy = candidateFor(manifest, leasedView, true), combined = candidateFor(manifest, leasedView);
-const legacyDisk = snapshot({...legacy.files, [D104_DELTAS]:base(D104_DELTAS), [D104_VALIDATOR]:base(D104_VALIDATOR)});
+const d104Only = candidateFor(manifest, leasedView, false, false);
+const legacyDisk = snapshot({...legacy.files, [D104_DELTAS]:base(D104_DELTAS), [D104_VALIDATOR]:base(D104_VALIDATOR), [F.nativeWorkflow]:base(F.nativeWorkflow)});
+const d104Disk = snapshot({...d104Only.files, [F.nativeWorkflow]:base(F.nativeWorkflow)});
 const combinedDisk = snapshot(combined.files);
+const currentDeltas = combined.out[F.workflowDeltas], currentValidator = combined.out[F.workflowValidator];
 
 test('D104 appends eleven finite CI seams while preserving all original preimages and other seven rows', () => {
   assert.equal(D104_WORKFLOW_SEAMS.length, 11);
@@ -112,16 +120,17 @@ test('validator changes are finite and reversible; every old assertion and D103 
 });
 
 async function validatorFor(bytes) {
-  let source = layer.validator.replace("WORKFLOW_DELTA_SHA='" + layer.hashes.deltas + "'", "WORKFLOW_DELTA_SHA='" + sha(bytes) + "'");
+  assert.equal(currentValidator.split("WORKFLOW_DELTA_SHA='" + sha(currentDeltas) + "'").length, 2);
+  let source = currentValidator.replace("WORKFLOW_DELTA_SHA='" + sha(currentDeltas) + "'", "WORKFLOW_DELTA_SHA='" + sha(bytes) + "'");
   source = source.replace(/from'([^']+)'/g, (whole, name) => name.startsWith('.')
     ? "from'" + pathToFileURL(path.resolve(ROOT, 'tools', name)).href + "'" : whole);
   return import('data:text/javascript;base64,' + Buffer.from(source).toString('base64'));
 }
 
 test('forged manifest pin cannot admit a self-consistent undeclared CI schedule', async () => {
-  const current = await validatorFor(layer.deltas);
-  assert.equal(current.assertInheritedWorkflowSet(layer.deltas, snapshot({[D104_WORKFLOW]:layer.workflow})).workflows.length, 8);
-  const forged = JSON.parse(layer.deltas), row = forged.workflows[0];
+  const current = await validatorFor(currentDeltas);
+  assert.equal(current.assertInheritedWorkflowSet(currentDeltas, snapshot({[D104_WORKFLOW]:layer.workflow})).workflows.length, 8);
+  const forged = JSON.parse(currentDeltas), row = forged.workflows[0];
   row.changes.pop();
   let workflow = row.before;
   for (const seam of row.changes) workflow = workflow.split(seam.before).join(seam.after);
@@ -135,17 +144,20 @@ test('forged manifest pin still cannot widen D087 timeout through the preserved 
   const file = '.github/workflows/d087-native.yml', before = '  native-and-build:\n    runs-on: ubuntu-24.04\n    timeout-minutes: 20\n';
   const after = before.replace('20', '30'), original = read(file);
   assert.equal(original.split(before).length - 1, 1);
-  const workflow = original.replace(before, after), forged = JSON.parse(layer.deltas), row = forged.workflows.find(r => r.file === file);
+  const workflow = original.replace(before, after), forged = JSON.parse(currentDeltas), row = forged.workflows.find(r => r.file === file);
   row.changes.push({before, after, count:1}); row.afterSha256 = sha(workflow);
   const bytes = json(forged), validator = await validatorFor(bytes);
   assert.throws(() => validator.assertInheritedWorkflowSet(bytes, snapshot({[file]:workflow})),
     error => error.code === 'ERR_ASSERTION' && error.expected instanceof RegExp && String(error.expected) === '/\\n    timeout-minutes: 20\\n/');
 });
 
-test('combined candidate has twelve outputs and preserves D101 inventories, source hashes and original lineage replay', () => {
+test('combined candidate has thirteen files (eleven outputs) and preserves D101 inventories, source hashes and original lineage replay', () => {
   assert.equal(Object.keys(legacy.out).length, 8);
-  assert.equal(Object.keys(combined.files).length, 12);
+  assert.equal(Object.keys(d104Only.out).length, 10);
+  assert.ok(!Object.hasOwn(d104Only.out, F.nativeWorkflow));
+  assert.equal(Object.keys(combined.files).length, 13);
   assert.deepEqual(Object.keys(combined.out).sort(), Object.values(F).sort());
+  for (const file of [F.d085, F.domain, F.inherited, F.camera]) assert.equal(combined.out[file], d104Only.out[file], file + ' is not touched by D106');
   assert.equal(combined.files[D101_FIXTURE], legacy.files[D101_FIXTURE]);
   const routing = JSON.parse(combined.out[F.routing]), lineage = JSON.parse(combined.out[F.lineage]);
   assert.equal(routing.current.length, 47); assert.equal(routing.actualInventory.length, 56); assert.equal(routing.superseded.length, 4);
@@ -157,20 +169,22 @@ test('combined candidate has twelve outputs and preserves D101 inventories, sour
   d101AssertOnDisk(combined.files, combinedDisk);
 });
 
-test('only explicit refreeze accepts the exact old D101 chain, even when the lease is already fresh', () => {
-  assert.throws(() => d101WritePlan(combined, {readFile:legacyDisk}), D101ChainRefusal);
-  const plan = d101WritePlan(combined, {refreeze:true, readFile:legacyDisk});
-  assert.equal(plan.lease, 'unchanged'); assert.equal(plan.leaseWrite, false);
-  assert.deepEqual([...plan.writes].sort(), [F.routing, F.contract, F.lineage, F.lineageModule, F.workflowDeltas, F.workflowValidator].sort());
+test('only explicit refreeze accepts the exact old D101 chain or the exact D104 chain, even when the lease is already fresh', () => {
+  for (const readFile of [legacyDisk, d104Disk]) {
+    assert.throws(() => d101WritePlan(combined, {readFile}), D101ChainRefusal);
+    const plan = d101WritePlan(combined, {refreeze:true, readFile});
+    assert.equal(plan.lease, 'unchanged'); assert.equal(plan.leaseWrite, false);
+    assert.deepEqual([...plan.writes].sort(), [F.routing, F.contract, F.lineage, F.lineageModule, F.workflowDeltas, F.workflowValidator, F.nativeWorkflow].sort());
+  }
   assert.deepEqual(d101WritePlan(combined, {readFile:combinedDisk}).writes, []);
   assert.deepEqual(d101WritePlan(combined, {refreeze:true, readFile:combinedDisk}).writes, []);
 });
 
-test('a later UI lease can refreeze from either exact legacy or exact composed chain without dropping D104', () => {
+test('a later UI lease can refreeze from an exact legacy, D104 or composed chain without dropping D104 or D106', () => {
   const nextView = leasedView + '\n// D104 isolated candidate fixture only\n', next = structuredClone(manifest);
   next.modified['src/cityView.ts'].afterSha256 = sha(nextView);
   const candidate = candidateFor(next, nextView);
-  for (const readFile of [legacyDisk, combinedDisk]) {
+  for (const readFile of [legacyDisk, d104Disk, combinedDisk]) {
     assert.throws(() => d101WritePlan(candidate, {readFile}), /Pass --refreeze/);
     const plan = d101WritePlan(candidate, {refreeze:true, readFile});
     assert.equal(plan.lease, 'refrozen'); assert.equal(plan.leaseWrite, true);
@@ -178,22 +192,32 @@ test('a later UI lease can refreeze from either exact legacy or exact composed c
   }
   assert.equal(JSON.parse(candidate.out[F.routing]).inheritedWorkflows[D104_WORKFLOW], D104_WORKFLOW_SHA);
   assert.equal(JSON.parse(candidate.out[F.lineage]).workflows[D104_WORKFLOW], D104_WORKFLOW_SHA);
+  for (const file of D106_WORKFLOWS) assert.equal(JSON.parse(candidate.out[F.lineage]).workflows[file], sha(read(file)), file + ' keeps its D106 pin');
+  assert.equal(candidate.out[F.nativeWorkflow], combined.out[F.nativeWorkflow]);
   assert.ok(candidate.out[F.contract].includes(sha(nextView)));
 });
 
 test('every hand-edited generated chain file is refused, even with refreeze', () => {
-  for (const readFile of [legacyDisk, combinedDisk]) for (const file of Object.values(F)) {
+  for (const readFile of [legacyDisk, d104Disk, combinedDisk]) for (const file of Object.values(F)) {
     const changed = f => readFile(f) + (f === file ? ' ' : '');
     assert.throws(() => d101WritePlan(combined, {refreeze:true, readFile:changed}), D101ChainRefusal, file);
   }
   assert.throws(() => d101WritePlan(combined, {refreeze:true, readFile:f => combinedDisk(f) + (f === D104_WORKFLOW ? '\n' : '')}), /exact authorised D104 CI schedule/);
+  for (const file of D106_WORKFLOWS) {
+    assert.throws(() => d101WritePlan(combined, {refreeze:true, readFile:f => combinedDisk(f) + (f === file ? '\n' : '')}), /exact authorised D106 first-use step/, file);
+  }
 });
 
-test('legacy projection never masks an undeclared workflow or immutable predecessor edit', () => {
-  for (const file of ['.github/workflows/d087-native.yml', 'proposals/d090/original-camera-restoration.test.mjs']) {
+test('legacy and D104-only projections never mask an undeclared workflow or immutable predecessor edit', () => {
+  for (const file of ['.github/workflows/d087-native.yml', '.github/workflows/d090-native.yml', 'proposals/d090/original-camera-restoration.test.mjs']) {
     const source = f => read(f) + (f === file ? ' ' : '');
-    for (const legacyWorkflow of [false, true]) {
-      assert.throws(() => d101ChainCandidate(manifest, leasedView, {legacyWorkflow, source}), error => error.code === 'ERR_ASSERTION');
+    for (const [legacyWorkflow, firstUse] of [[false, true], [false, false], [true, true]]) {
+      assert.throws(() => d101ChainCandidate(manifest, leasedView, {legacyWorkflow, firstUse, source}), error => error.code === 'ERR_ASSERTION');
     }
+  }
+  // The exact pre-D106 YAML is not the sealed D106 input, so the composed and D104-only candidates refuse it too.
+  for (const file of D106_WORKFLOWS) {
+    const source = f => f === file ? base(f) : read(f);
+    assert.throws(() => d101ChainCandidate(manifest, leasedView, {source}), /exact authorised D106 first-use step/, file);
   }
 });

@@ -4,7 +4,7 @@
   "source": ".github/workflows/d089-native.yml",
   "target": ".github/workflows/d090-native.yml",
   "beforeSha256": "c2cc05ae0969fcb765fc5d52eacda1d38cc0d2ab62ad1277b386e11a98e40e69",
-  "afterSha256": "d4fbcd8dcc129d3ae2267d3d92369c6bcf94697fbccd92ca26db7077f6755153",
+  "afterSha256": "eb149f4b7fb4bf2c8cb1056dc9d565e464294cb4dba670ea3eda70057c51de73",
   "replacements": [
     [
       "D089 native British markets and estates eleven",
@@ -94,6 +94,11 @@
     [
       "        run: node --test tools/d090-*.test.mjs proposals/d090/*.test.mjs proposals/british-program/ledger-check.test.mjs proposals/british-program/ledger-current.test.mjs proposals/british-program/ledger-current-v3.test.mjs proposals/british-program/ledger-current-v4.test.mjs proposals/british-program/ledger-current-v5.test.mjs",
       "        run: node proposals/d090/foundation-test-runner.mjs",
+      1
+    ],
+    [
+      "        run: node proposals/d090/native-first-use-cache-check.mjs --width=${{ matrix.width }} --attempt=1\n",
+      "        run: node proposals/d090/native-first-use-cache-check.mjs --width=${{ matrix.width }} --attempt=1\n        # D106 (owner 2026-11-18): CI-only page-first commit ceiling 1000 ms (was 400); every other first-use ceiling unchanged; docs/D106-ci-first-use-ceiling.md\n        env:\n          NODE_OPTIONS: --import ./proposals/d106/first-use-ceiling-hook.mjs\n",
       1
     ]
   ]

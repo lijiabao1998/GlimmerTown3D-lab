@@ -45,6 +45,10 @@ jobs:
         run: node tools/unit-d102-history.mjs
       - name: D103 declared D086 native timeout guards
         run: node tools/unit-d103-timeout.mjs
+      - name: D106 CI page-first commit ceiling guards
+        run: |
+          node tools/unit-d106-first-use.mjs
+          node --test proposals/d106/first-use-ceiling.test.mjs proposals/d106/first-use-ceiling-hook.test.mjs
       - name: D101 transit save guards
         run: node tools/d101-save.mjs
       - name: D101 transit construction guards

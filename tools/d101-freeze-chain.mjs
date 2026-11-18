@@ -27,6 +27,12 @@
 // D104: the exact declared CI scheduling layer joins this same in-memory
 // candidate before lineage replay. YAML is a sealed read-only input, never an
 // output. The original D101/src baseline and every unrelated pin stay fixed.
+// D106 (docs/D106-ci-first-use-ceiling.md): the exact declared first-use ceiling layer
+// (tools/d106-first-use-lineage.mjs) is composed after D104, before lineage replay. The five
+// native workflows are sealed read-only inputs; proposals/d090/native-workflow.json becomes the
+// eleventh chain output. --refreeze additionally accepts exactly the D104 candidate (main 23d42c9)
+// as a prior state; the legacy and D104-only candidates read the exact sealed D106 YAML and the
+// exact D106 native-workflow.json as their base bytes, and any other byte still fails their pins.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,6 +44,8 @@ import {D101_BASELINE, D101_MODIFIED, D101_ADDED, D101_CURRENT_PATHS, createD101
 import {D101_ENTRY, D101_FIXTURE, d101FreezeSource, d101LeaseEntry} from './d101-freeze-source.mjs';
 import {D104_WORKFLOW, D104_DELTAS, D104_VALIDATOR, D104_BEFORE, D104_REASON,
   assertD104Workflow, d104WorkflowLayer, d104WorkflowRouting, d104WorkflowLineage} from './d104-workflow-lineage.mjs';
+import {D106_NATIVE_WORKFLOW, D106_BEFORE, D106_REASON, assertD106Workflows, d106PriorSource,
+  d106FirstUseLayer, d106FirstUseRouting, d106Contract, d106FirstUseLineage} from './d106-first-use-lineage.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sha = value => createHash('sha256').update(value).digest('hex');
@@ -75,6 +83,7 @@ export const D101_CHAIN_FILES = Object.freeze({
   lineageModule: 'proposals/d090/selector-pipes-lineage.mjs',
   workflowDeltas: D104_DELTAS,
   workflowValidator: D104_VALIDATOR,
+  nativeWorkflow: D106_NATIVE_WORKFLOW,
 });
 export const D101_LEASE_FILES = Object.freeze([D101_FIXTURE, D101_ENTRY]);
 const ORIGINAL_CAMERA = 'proposals/d090/original-camera-restoration.test.mjs';
@@ -94,6 +103,7 @@ export const D101_CHAIN_BEFORE = Object.freeze({
   [D085_SOURCE]: '117cde09c51a032a655ad86f853952e1064987c342c9bf244751892095f3f91c',
   [D104_DELTAS]: D104_BEFORE[D104_DELTAS],
   [D104_VALIDATOR]: D104_BEFORE[D104_VALIDATOR],
+  [D106_NATIVE_WORKFLOW]: D106_BEFORE[D106_NATIVE_WORKFLOW],
 });
 export const D101_REASON = 'D101 current-source successor (269 files, d101 lease): the D090 current validator admits the eight D101 transit save/UI modifications and the two added transit sources, and the routing current list runs the camera restoration successor; FOUNDATION_ROUTING_SHA follows. The D103 append-only item is folded into this single whole-body change from the immutable e4c preimage.';
 const D085_EDITS = Object.freeze([
@@ -238,12 +248,15 @@ function replayLineage(lineage, view) {
   assert.equal(sha(view(lineage.inheritedDomain.after)), lineage.inheritedDomain.afterSha256);
 }
 
-// Ten composed chain outputs for a lease manifest. `cityView` is the leased
+// Eleven composed chain outputs for a lease manifest. `cityView` is the leased
 // text; null leaves the camera successor out. legacyWorkflow is used only to
 // recompute the exact pre-D104 candidate for the finite --refreeze migration.
 // It projects only D104's three declared workflow-layer inputs to main 76e;
 // it still replays every other actual source, copy, manifest and workflow pin.
-export function d101ChainCandidate(manifest, cityView, {legacyWorkflow = false, source = read} = {}) {
+// firstUse:false recomputes the exact D104 candidate (main 23d42c9) for the same
+// migration; legacyWorkflow implies it. Both read the exact sealed D106 YAML and
+// native-workflow.json as their base bytes (d106PriorSource), nothing else.
+export function d101ChainCandidate(manifest, cityView, {legacyWorkflow = false, firstUse = true, source = read} = {}) {
   const base = file => show(D101_BASELINE, file);
   for (const [file, hash] of Object.entries(D101_CHAIN_BEFORE)) assert.equal(sha(base(file)), hash, file + ' is exactly the D101 baseline input');
   assert.equal(source(ORIGINAL_CAMERA), base(ORIGINAL_CAMERA), 'the original camera test stays byte-exact (da17d794)');
@@ -252,11 +265,17 @@ export function d101ChainCandidate(manifest, cityView, {legacyWorkflow = false, 
   const out = {}, log = {};
   const F = D101_CHAIN_FILES;
   const workflowLayer = legacyWorkflow ? null : d104WorkflowLayer(base);
+  const firstUseLayer = workflowLayer && firstUse ? d106FirstUseLayer(base, workflowLayer) : null;
   if (workflowLayer) {
     assertD104Workflow(source(D104_WORKFLOW));
-    out[F.workflowDeltas] = workflowLayer.deltas;
-    out[F.workflowValidator] = workflowLayer.validator;
-    Object.assign(log, {workflow:workflowLayer.hashes.workflow, workflowDeltas:workflowLayer.hashes.deltas, workflowValidator:workflowLayer.hashes.validator});
+    out[F.workflowDeltas] = firstUseLayer ? firstUseLayer.deltas : workflowLayer.deltas;
+    out[F.workflowValidator] = firstUseLayer ? firstUseLayer.validator : workflowLayer.validator;
+    Object.assign(log, {workflow:workflowLayer.hashes.workflow, workflowDeltas:sha(out[F.workflowDeltas]), workflowValidator:sha(out[F.workflowValidator])});
+  }
+  if (firstUseLayer) {
+    assertD106Workflows(source);
+    out[F.nativeWorkflow] = firstUseLayer.nativeWorkflow;
+    Object.assign(log, {firstUseWorkflows:firstUseLayer.hashes.workflows, nativeWorkflow:firstUseLayer.hashes.nativeWorkflow});
   }
 
   // 2. d085 current test: both lease imports.
@@ -303,6 +322,7 @@ export function d101ChainCandidate(manifest, cityView, {legacyWorkflow = false, 
   // 5. Routing manifest and contract.
   let routing = canonical(F.routing, base(F.routing));
   if (workflowLayer) routing = d104WorkflowRouting(routing);
+  if (firstUseLayer) routing = d106FirstUseRouting(routing);
   assert.equal(routing.actualInventory.length, 55);
   assert.ok(!routing.actualInventory.includes(F.camera));
   const inventory = [...routing.actualInventory, F.camera].sort();
@@ -336,11 +356,13 @@ export const D101_SUCCESSOR_ADDED=Object.freeze(${literal(manifest.added)});
     [d102Line[0] + '\n', d102Line[0] + '\n' + d101Block],
     ["...D102_MODIFIED_AFTER};assert.equal(Object.keys(current).length,267,'actual current267 source inventory');", "...D102_MODIFIED_AFTER,...D101_MODIFIED_AFTER,...D101_SUCCESSOR_ADDED};assert.equal(Object.keys(current).length,269,'actual current269 source inventory');"],
   ].reduce((text, [a, b]) => once(text, a, b, F.contract), contractBase);
+  if (firstUseLayer) out[F.contract] = d106Contract(out[F.contract], F.contract);
   const H_CONTRACT = log.contract = sha(out[F.contract]);
 
   // 6. Selector lineage.
   let lineage = canonical(F.lineage, base(F.lineage));
   if (workflowLayer) lineage = d104WorkflowLineage(lineage, workflowLayer);
+  if (firstUseLayer) lineage = d106FirstUseLineage(lineage, firstUseLayer);
   assert.equal(lineage.copies.length, 14);
   const copyOf = target => { const r = lineage.copies.filter(c => c.target === target); assert.equal(r.length, 1, target + ' has exactly one lineage copy'); return r[0]; };
   const c5 = copyOf(F.inherited);
@@ -360,14 +382,15 @@ export const D101_SUCCESSOR_ADDED=Object.freeze(${literal(manifest.added)});
   assert.ok(out[F.contract].startsWith(c13.header));
   c13.changes = [{before: preimage, after: out[F.contract].slice(c13.header.length), count: 1}];
   c13.targetSha256 = H_CONTRACT;
-  c13.reissued = {previousSha256: D101_CHAIN_BEFORE[F.contract], reason: D101_REASON + (workflowLayer ? ' ' + D104_REASON : '')};
+  c13.reissued = {previousSha256: D101_CHAIN_BEFORE[F.contract], reason: D101_REASON + (workflowLayer ? ' ' + D104_REASON : '') + (firstUseLayer ? ' ' + D106_REASON : '')};
   for (const c of [c5.changes[3], ...c13.changes]) assert.ok(!REPLACEMENT_PATTERN.test(c.after), 'no String.replaceAll replacement sequence in a new lineage change');
   assert.equal(lineage.inheritedDomain.after, F.domain);
   assert.equal(lineage.inheritedDomain.afterSha256, D101_CHAIN_BEFORE[F.domain]);
   lineage.inheritedDomain.afterSha256 = H_DOMAIN;
   assert.equal(lineage.newPinnedManifests[F.routing], D101_CHAIN_BEFORE[F.routing]);
   lineage.newPinnedManifests[F.routing] = H_ROUTING;
-  replayLineage(lineage, file => out[file] ?? (legacyWorkflow && Object.hasOwn(D104_BEFORE, file) ? base(file) : source(file)));
+  const prior = firstUseLayer ? source : d106PriorSource(source, base);
+  replayLineage(lineage, file => out[file] ?? (legacyWorkflow && Object.hasOwn(D104_BEFORE, file) ? base(file) : prior(file)));
   out[F.lineage] = json(lineage);
   const H_LINEAGE = log.lineage = sha(out[F.lineage]);
   out[F.lineageModule] = once(base(F.lineageModule), "PIPE_LINEAGE_SHA='" + D101_CHAIN_BEFORE[F.lineage] + "'", "PIPE_LINEAGE_SHA='" + H_LINEAGE + "'", F.lineageModule);
@@ -443,19 +466,20 @@ function diskLease(readFile = readMaybe) {
 // What the tool would have produced from the on-disk lease. The camera successor is the only
 // output that depends on cityView text rather than hashes; its cityView is recovered from the
 // on-disk successor itself and must hash to the on-disk lease's cityView afterSha256.
-function diskLeaseCandidate(manifest, {legacyWorkflow = false, readFile = readMaybe} = {}) {
+function diskLeaseCandidate(manifest, {legacyWorkflow = false, firstUse = true, readFile = readMaybe} = {}) {
   let cityView = null;
   const successor = readFile(D101_CHAIN_FILES.camera);
   if (successor !== null) {
     try { cityView = d101CityViewFromSuccessor(successor); } catch { cityView = null; }
     if (cityView !== null && sha(cityView) !== manifest.modified[CITY_VIEW].afterSha256) cityView = null;
   }
-  return d101ChainCandidate(manifest, cityView, {legacyWorkflow, source:readFile}).out;
+  return d101ChainCandidate(manifest, cityView, {legacyWorkflow, firstUse, source:readFile}).out;
 }
 
 // Decide, from the disk state alone, what may be written. Throws D101ChainRefusal on any hand edit.
 export function d101WritePlan(candidate, {refreeze = false, readFile = readMaybe} = {}) {
   assertD104Workflow(readFile(D104_WORKFLOW));
+  assertD106Workflows(readFile);
   const disk = diskLease(readFile);
   const leaseFresh = disk.state === 'valid' && disk.bytes === candidate.files[D101_FIXTURE] && disk.entry === candidate.files[D101_ENTRY];
   if (disk.state !== 'absent' && !leaseFresh && !refreeze) {
@@ -465,11 +489,13 @@ export function d101WritePlan(candidate, {refreeze = false, readFile = readMaybe
   // Only an explicit refreeze may migrate the exact recomputed old D101 chain.
   // No existing bytes, hashes or hand edits are treated as a new trust root.
   const legacy = refreeze && disk.state === 'valid' ? diskLeaseCandidate(disk.manifest, {legacyWorkflow:true, readFile}) : {};
+  // D106: the exact recomputed D104 chain (main 23d42c9) is the other legal prior state.
+  const d104 = refreeze && disk.state === 'valid' ? diskLeaseCandidate(disk.manifest, {firstUse:false, readFile}) : {};
   const writes = [];
   for (const [file, bytes] of Object.entries(candidate.out)) {
     const have = readFile(file);
     if (have === bytes) continue;
-    if (have === baselineBytes(file) || (prior[file] !== undefined && have === prior[file]) || (legacy[file] !== undefined && have === legacy[file])) { writes.push(file); continue; }
+    if (have === baselineBytes(file) || (prior[file] !== undefined && have === prior[file]) || (legacy[file] !== undefined && have === legacy[file]) || (d104[file] !== undefined && have === d104[file])) { writes.push(file); continue; }
     refuse(`${file} is neither its main 76e074f bytes${file === D101_CHAIN_FILES.camera ? ' (absent)' : ''} nor exactly the chain candidate of the on-disk lease${disk.state === 'valid' ? '' : ' (there is no valid on-disk lease)'}: a hand edit (on disk sha256 ${have === null ? 'missing' : sha(have)}). It is never overwritten${refreeze ? ', not even with --refreeze' : ''}; restore it to ${file === D101_CHAIN_FILES.camera ? 'absent (delete it)' : 'its 76e074f bytes (git show 76e074f:' + file + ')'} and rerun. Nothing was written.`);
   }
   return {lease: disk.state === 'absent' ? 'frozen' : leaseFresh ? 'unchanged' : 'refrozen', leaseWrite: !leaseFresh, writes};

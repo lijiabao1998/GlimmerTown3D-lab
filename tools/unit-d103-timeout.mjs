@@ -5,6 +5,7 @@
 // 刻意的：之後任何卡要改這 35 個被釘工作流的 timeout、d086 的 native-and-build 或本守衛那一步，都要同時改本守衛（宣告過才算數）。
 // 只在施工當下由 --check 核、這裡不重核的（之後的卡重發 lineage 時本來就會變）：deltas 其他七列逐欄相同、lineage 既有 change 項只追加、
 // reissued.previousSha256 等於改之前的 target。這裡核的是不變量：確切的逾時、D103 那一筆在、整條鏈自洽、凍結檔、負控。
+// D106（2026-11-18，docs/D106-ci-first-use-ceiling.md）：d086 列在 D103 那一筆之後多了 D106 的一筆，驗收 9 的偽造改成依內容找 D103 那一筆；其他斷言一字不改。
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -210,7 +211,8 @@ export async function d103TimeoutGuards(report) {
       const c = await forge(`偽造 pin＋自洽宣告 ${id} native-and-build = 30`, m => m.workflows.find(r => r.file === f).changes.push({...s}), {[f]: read(f).replace(s.before, s.after)});
       done.push(throwsMatching(c.check, TIMEOUT_GATE, c.label));
     }
-    const c31 = await forge('偽造 pin＋自洽宣告 d086 native-and-build = 31', m => { const r = m.workflows[1]; r.changes[r.changes.length - 1] = seam(20, 31); }, {[Y]: wf.replace(D103_SEAM.after, seam(20, 31).after)});
+    // D106 起 d086 列在 D103 那一筆之後還有宣告的改動，所以依內容找 D103 那一筆，不靠它是最後一筆。
+    const c31 = await forge('偽造 pin＋自洽宣告 d086 native-and-build = 31', m => { const r = m.workflows[1], at = r.changes.map((c, i) => JSON.stringify(c) === JSON.stringify(D103_SEAM) ? i : -1).filter(i => i >= 0); assert.equal(at.length, 1, 'd086 列裡恰好有一筆 D103 宣告的改動'); r.changes[at[0]] = seam(20, 31); }, {[Y]: wf.replace(D103_SEAM.after, seam(20, 31).after)});
     done.push(throwsMatching(c31.check, TIMEOUT_GATE, c31.label));
     const c200 = await forge('偽造 pin＋自洽宣告 d089 native-and-build = 200', m => m.workflows.find(r => r.file === '.github/workflows/d089-native.yml').changes.push(seam(20, 200)), {'.github/workflows/d089-native.yml': read('.github/workflows/d089-native.yml').replace(seam(20, 200).before, seam(20, 200).after)});
     done.push(throwsMatching(c200.check, TIMEOUT_GATE, c200.label));
