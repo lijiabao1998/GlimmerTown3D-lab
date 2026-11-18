@@ -1,6 +1,6 @@
 // D090 finite pipe-selector validation successor; exact e4c original is retained and tested on its actual source.
 import fs from'node:fs';import assert from'node:assert/strict';import{createHash}from'node:crypto';
-export const FOUNDATION_BASELINE='6c118a6a56fb22cce9b7a7533f2dc1248b824d87',FOUNDATION_ROUTING_SHA="570983089ccb1960d7399a42da18fb92e3b671c49f711ab6f7d0b085eea7df73";
+export const FOUNDATION_BASELINE='6c118a6a56fb22cce9b7a7533f2dc1248b824d87',FOUNDATION_ROUTING_SHA="9003dcda2ae30c0b6a604cab3a266f7ce9e57b55f0587b8e133208deca3549c8";
 // D099 finite successor: exactly the two declared transit sources, pinned by the
 // D099 outer lease (fixtures/d099/source.json). Nothing else joins the inventory.
 export const D099_SUCCESSOR_ADDED=Object.freeze({'src/sim/transit/graph.ts':'fedc044d0bdf69b143a9f74cb2f8a881f8fa1fb7587a74f2469750657e310a28','src/sim/transit/movement.ts':'ba871241c74d78097513506d36685926c12fb5697e0cb165e90621f04264d150'});

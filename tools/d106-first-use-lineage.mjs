@@ -6,6 +6,10 @@
 // plus exactly one declared seam (a YAML comment and an env block with NODE_OPTIONS on the
 // native-input-performance first-use step; the run: line stays byte-identical). D101 composes these
 // outputs after D104 and before replaying every lineage pin.
+// Review fix (2026-11-18): the pipes-v2 validator gate also ends at the step's last line and pins
+// the sha256 of the six D106 runtime files (hook, resolve, declarations, three copies), so the
+// validator that runs in d086-d089 native-and-build on every PR and main push refuses any edit to
+// the code the hook loads; the routing manifest's "No thresholds ... relaxed" gets an appended note.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {D104_DELTAS, D104_VALIDATOR, D104_REASON, D104_QUALIFICATION_NOTE} from './d104-workflow-lineage.mjs';
@@ -55,11 +59,35 @@ export const D106_VALIDATOR_NOTE = '// D106 (owner 2026-11-18) relaxes one thres
   '// ' + D106_HOOK + ' and the page\'s first placement (operation 1) may commit in <=1000 ms\n' +
   '// instead of 400. Every other first-use ceiling and every original module and test stay exact.';
 const TIMEOUT_GATE = "assert.match(block(w,'native-and-build'),id==='d086'?/\\n    timeout-minutes: 30\\n/:/\\n    timeout-minutes: 20\\n/);";
+// The line that follows the D106 env block in all five workflows (the next step), so the gate also
+// pins where the first-use step ends: no extra env var or key can follow NODE_OPTIONS.
+export const D106_STEP_NEXT = '      - uses: actions/upload-artifact@v4\n';
+// sha256 of every file the hook loads (its whole module closure besides node: builtins). The copies
+// are also re-derived from the originals by tools/unit-d106-first-use.mjs; these pins make the
+// validator itself refuse any edit to the relaxation code on every PR and main push.
+export const D106_CODE_SHA256 = Object.freeze({
+  'proposals/d106/first-use-ceiling-hook.mjs': '997de173dcfbecc860c122a0f5d04585d1d637396599cf5f9ea4d452b9ad147a',
+  'proposals/d106/first-use-ceiling-resolve.mjs': '54f8a09bd93688d08bbde20e9961287c499fb1f444403c3bde27edaad74d3268',
+  'proposals/d106/first-use-ceiling.mjs': '34a7ed3243fa8c588309fdb4b4d8d0e1058894a96411ef58a5b0df6104129bfe',
+  'proposals/d106/browser-first-use-performance-d086.mjs': 'd7ee8613188f4a6dc667e2632e9b4f070feb07b5bf82fdcf86df1b25a4e20c06',
+  'proposals/d106/browser-first-use-performance-d087.mjs': 'a0cc7d4f1b07692727876831d08b8ca3dec96acbb9ad4124c41e5b8ad4bdef55',
+  'proposals/d106/browser-first-use-performance-d088.mjs': '05858e369db98c1f5b6e197e12d8fafbb3698217be7999066e05e67528504515',
+});
 // Exact D106 gate for d086-d089 (D103 precedent "依工作流指定確切值"): NODE_OPTIONS occurs once per
-// workflow, exactly on the first-use step of native-input-performance. A forged manifest pin cannot
-// move, duplicate, redirect or drop it.
+// workflow, exactly on the first-use step of native-input-performance, and that step ends right after
+// it; the six runtime files are byte-exact. A forged manifest pin cannot move, duplicate, redirect,
+// extend or drop it, nor change the code it loads.
 export const D106_VALIDATOR_GATE = "assert.equal(w.split('NODE_OPTIONS').length,2,'D106 NODE_OPTIONS only on the declared first-use step '+id);" +
-  "assert.ok(block(w,'native-input-performance').includes(" + JSON.stringify(' --attempt=1\n' + D106_STEP_COMMENT + D106_STEP_ENV) + "),'D106 exact first-use ceiling hook '+id);";
+  "assert.ok(block(w,'native-input-performance').includes(" + JSON.stringify(' --attempt=1\n' + D106_STEP_COMMENT + D106_STEP_ENV + D106_STEP_NEXT) + "),'D106 exact first-use ceiling hook '+id);" +
+  "for(const[f,h]of Object.entries(" + JSON.stringify(D106_CODE_SHA256) + "))assert.equal(sha(source(f)),h,'D106 exact first-use ceiling code '+f);";
+// The sealed runtime files on disk (or through `source`) are exactly the pinned bytes.
+export function assertD106Code(source) {
+  for (const [file, hash] of Object.entries(D106_CODE_SHA256)) assert.equal(sha(source(file)), hash, 'D106 exact first-use ceiling code ' + file);
+}
+// foundation-routing-pipes-v2.json says "No thresholds/cameras/probes relaxed."; D106 re-issues that
+// manifest, so it appends (never rewrites) the exception.
+export const D106_ROUTING_OLD_CLAIM = 'No thresholds/cameras/probes relaxed.';
+export const D106_ROUTING_NOTE = ' Exception (D106, owner 2026-11-18, docs/D106-ci-first-use-ceiling.md): one threshold is relaxed in CI only, so "No thresholds ... relaxed" no longer holds for it: the native-input-performance first-use step of d086-d090 native loads proposals/d106/first-use-ceiling-hook.mjs through NODE_OPTIONS and the page first placement (operation 1) may commit in <=1000 ms instead of 400; every other threshold, camera and probe is unchanged and every original module and test stays byte-exact.';
 export const D106_CONTRACT_SEAM_NAME = 'D106_D090_FIRST_USE_SEAM';
 const REPLACEMENT_PATTERN = /\$[$&`']/;
 
@@ -154,6 +182,9 @@ export function d106FirstUseRouting(routing) {
   }
   assert.equal(out.workflow.afterSha256, D106_BEFORE[D090], 'exact previous routing d090 workflow pin');
   out.workflow.afterSha256 = D106_AFTER[D090];
+  assert.equal(out.qualification.split(D106_ROUTING_OLD_CLAIM).length, 2, 'the routing claim D106 qualifies is there once');
+  assert.ok(!out.qualification.includes(D106_ROUTING_NOTE), 'apply the D106 routing note once');
+  out.qualification += D106_ROUTING_NOTE;
   return out;
 }
 

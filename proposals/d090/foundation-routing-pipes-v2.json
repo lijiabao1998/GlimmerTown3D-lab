@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "baseline": "6c118a6a56fb22cce9b7a7533f2dc1248b824d87",
-  "qualification": "Every original6c assertion retained; exactly six model/source-version tests execute actual6c and six explicit current versions execute new source. All other current tests and five immutable ledgers mandatory. No thresholds/cameras/probes relaxed. Explicit selector-validation successor: eight actual6c original tests, two actuale4c routing tests, exact current replacements; original e4c Chrome red never reclassified.",
+  "qualification": "Every original6c assertion retained; exactly six model/source-version tests execute actual6c and six explicit current versions execute new source. All other current tests and five immutable ledgers mandatory. No thresholds/cameras/probes relaxed. Explicit selector-validation successor: eight actual6c original tests, two actuale4c routing tests, exact current replacements; original e4c Chrome red never reclassified. Exception (D106, owner 2026-11-18, docs/D106-ci-first-use-ceiling.md): one threshold is relaxed in CI only, so \"No thresholds ... relaxed\" no longer holds for it: the native-input-performance first-use step of d086-d090 native loads proposals/d106/first-use-ceiling-hook.mjs through NODE_OPTIONS and the page first placement (operation 1) may commit in <=1000 ms instead of 400; every other threshold, camera and probe is unchanged and every original module and test stays byte-exact.",
   "originalTests": {
     "proposals/d090/browser-adaptation.test.mjs": "74f0a6694a5c4260c6901fb02073909d6acada428bc891c0f96d903fd1ecc0e4",
     "proposals/d090/browser-cache-observation.test.mjs": "e330c711df86254b7629c90cff389636b431261e05fbaa57dc58bd8cf839f258",

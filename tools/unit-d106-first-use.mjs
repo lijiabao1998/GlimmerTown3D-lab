@@ -4,13 +4,16 @@
 // 跟 23d42c9 逐位元組比對、改動清單封閉、鏈由產生器重算，是施工當下的檢查：node tools/d101-freeze-chain.mjs --check 與
 // node --test proposals/d106/first-use-ceiling.test.mjs proposals/d106/first-use-ceiling-hook.test.mjs（讀 git）。
 // 刻意的：之後任何卡要改 D106 的副本、hook、五個工作流的那一步或本守衛那一步，都要同時改本守衛（宣告過才算數）。
+// 評審後補（2026-11-18）：hook、resolve、宣告檔與三份副本另有本守衛自己寫死的 sha256 表（D106_CODE_SEALED），
+// 跟 D106 層寫進驗證器的那張表要一致；改這六個檔任何一個位元組，本守衛和驗證器都擋。
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {D106_WORKFLOWS, D106_DELTA_ROWS, D106_WORKFLOW_SEAMS, D106_BEFORE, D106_AFTER, D106_STEP_COMMENT, D106_STEP_ENV,
-  D106_NATIVE_WORKFLOW, D106_REASON, D106_QUALIFICATION_NOTE, D106_VALIDATOR_NOTE, D106_VALIDATOR_GATE, assertD106Workflows} from './d106-first-use-lineage.mjs';
+  D106_NATIVE_WORKFLOW, D106_REASON, D106_QUALIFICATION_NOTE, D106_VALIDATOR_NOTE, D106_VALIDATOR_GATE, assertD106Workflows,
+  D106_STEP_NEXT, D106_CODE_SHA256, D106_ROUTING_OLD_CLAIM, D106_ROUTING_NOTE, assertD106Code} from './d106-first-use-lineage.mjs';
 import {D104_WORKFLOW, D104_WORKFLOW_SHA, D104_REASON, D104_QUALIFICATION_NOTE} from './d104-workflow-lineage.mjs';
 import {D103_SEAM, D103_TRANSIT_STEP, D103_QUALIFICATION_NOTE} from './d103-freeze-workflow.mjs';
 import {timeoutsOf, expectedTimeouts} from './unit-d103-timeout.mjs';
@@ -52,6 +55,20 @@ const EXPECTED_REDIRECTS = Object.freeze({
   'proposals/d090/browser-first-use-performance.mjs': 'proposals/d106/browser-first-use-performance-d086.mjs',
 });
 const fileUrl = file => pathToFileURL(path.join(ROOT, file)).href;
+// hook 實際載入的六個檔（除了 node: 內建之外的全部模組）：本守衛自己寫死，不從 D106 層讀。
+export const D106_CODE_SEALED = Object.freeze({
+  'proposals/d106/first-use-ceiling-hook.mjs': '997de173dcfbecc860c122a0f5d04585d1d637396599cf5f9ea4d452b9ad147a',
+  'proposals/d106/first-use-ceiling-resolve.mjs': '54f8a09bd93688d08bbde20e9961287c499fb1f444403c3bde27edaad74d3268',
+  'proposals/d106/first-use-ceiling.mjs': '34a7ed3243fa8c588309fdb4b4d8d0e1058894a96411ef58a5b0df6104129bfe',
+  'proposals/d106/browser-first-use-performance-d086.mjs': 'd7ee8613188f4a6dc667e2632e9b4f070feb07b5bf82fdcf86df1b25a4e20c06',
+  'proposals/d106/browser-first-use-performance-d087.mjs': 'a0cc7d4f1b07692727876831d08b8ca3dec96acbb9ad4124c41e5b8ad4bdef55',
+  'proposals/d106/browser-first-use-performance-d088.mjs': '05858e369db98c1f5b6e197e12d8fafbb3698217be7999066e05e67528504515',
+});
+// 23d42c9 上 foundation-routing-pipes-v2.json 的 qualification（D106 只在後面追加）。
+const ROUTING_QUALIFICATION_BEFORE_SHA = 'e5ef600a2863355350b3c73edcc7ea28ff1f8f02e2791fbcafe8b912f77ea82f';
+export function assertSealedCode(source, files = Object.keys(D106_CODE_SEALED)) {
+  for (const file of files) assert.equal(sha(source(file)), D106_CODE_SEALED[file], 'D106 守衛封存的程式：' + file);
+}
 
 const throwsMatching = (fn, re, label) => { let error = null; try { fn(); } catch (e) { error = e; } assert.ok(error !== null, label + '：應該被擋下卻通過'); const message = String(error?.message ?? error); assert.equal(error?.code, 'ERR_ASSERTION', label + '：不是斷言擋下的（' + message.slice(0, 160) + '）'); if (typeof re === 'function') assert.ok(re(error), label + '：被錯的一關擋下（' + message.slice(0, 160) + '）'); else assert.match(message, re, label + '：被錯的一關擋下（' + message.slice(0, 160) + '）'); return label; };
 const importText = text => import('data:text/javascript;base64,' + Buffer.from(text).toString('base64'));
@@ -114,7 +131,8 @@ export async function d106FirstUseGuards(report) {
 
   await run('驗收 2：三份副本＝原檔＋宣告的四個 seam', () => {
     for (const copy of Object.keys(D106_GROUPS)) assertCopy(copy, read(copy));
-    return Object.keys(D106_GROUPS).join('、');
+    assertSealedCode(read, Object.keys(D106_GROUPS));
+    return Object.keys(D106_GROUPS).join('、') + '（位元組另核守衛封存的 sha256）';
   });
 
   await run('驗收 3：hook 恰好改指五個原檔，其他一律原樣通過', async () => {
@@ -125,7 +143,11 @@ export async function d106FirstUseGuards(report) {
     const through = [...new Set(Object.values(EXPECTED_REDIRECTS))].map(fileUrl).concat(Object.keys(D106_FROZEN).filter(f => !Object.hasOwn(EXPECTED_REDIRECTS, f)).map(fileUrl),
       fileUrl('proposals/d088/browser-cache-observation.mjs'), fileUrl('proposals/d088/browser-first-use-performance.mjs') + '?x', 'node:assert/strict', 'data:text/javascript,1');
     for (const u of through) { const r = {url:u}; assert.equal(await resolve(u, {}, async () => r), r, u); }
-    return `5 個改指、${through.length} 個原樣通過`;
+    // hook 的整個模組閉包（hook、resolve、宣告檔、三份副本）逐位元組是封存的那一份；驗證器裡那張表跟本守衛的一致。
+    assertSealedCode(read);
+    assert.deepEqual({...D106_CODE_SHA256}, {...D106_CODE_SEALED}, 'D106 層寫進驗證器的 sha256 表＝本守衛封存的表');
+    assertD106Code(read);
+    return `5 個改指、${through.length} 個原樣通過；${Object.keys(D106_CODE_SEALED).length} 個程式檔逐位元組封存`;
   });
 
   await run('驗收 4：門檻行為（三份副本）', async () => {
@@ -180,6 +202,10 @@ export async function d106FirstUseGuards(report) {
     const routing = JSON.parse(read(ROUTING));
     for (const file of D106_DELTA_ROWS) assert.equal(routing.inheritedWorkflows[file], D106_AFTER[file]);
     assert.equal(routing.workflow.afterSha256, D106_AFTER[D090]);
+    assert.ok(routing.qualification.endsWith(D106_ROUTING_NOTE), 'routing qualification 以 D106 例外結尾');
+    assert.equal(sha(routing.qualification.slice(0, -D106_ROUTING_NOTE.length)), ROUTING_QUALIFICATION_BEFORE_SHA, 'routing 原本的 qualification 一字不改、在前面');
+    assert.equal(count(routing.qualification, D106_ROUTING_OLD_CLAIM), 1); assert.equal(count(routing.qualification, D106_ROUTING_NOTE), 1);
+    assert.ok(D106_VALIDATOR_GATE.includes(JSON.stringify(D106_STEP_ENV + D106_STEP_NEXT).slice(1, -1)), '驗證器的 D106 確切檢查連那一步的結尾一起核');
     return `deltas ${WORKFLOW_DELTA_SHA.slice(0, 12)}…、routing ${FOUNDATION_ROUTING_SHA.slice(0, 12)}…、lineage ${PIPE_LINEAGE_SHA.slice(0, 12)}…`;
   });
 
@@ -217,6 +243,8 @@ export async function d106FirstUseGuards(report) {
       ['d089', '多一個 NODE_OPTIONS 在 native-game', (f, text) => [{...D106_WORKFLOW_SEAMS[f]}, {before:runLine(text, 'native-game'), after:runLine(text, 'native-game') + step, count:1}], 'D106 NODE_OPTIONS only on the declared first-use step d089'],
       ['d086', 'hook 指到別的模組', f => [{...D106_WORKFLOW_SEAMS[f], after:D106_WORKFLOW_SEAMS[f].after.replace(D106_HOOK, 'proposals/d106/other-hook.mjs')}], 'D106 exact first-use ceiling hook d086'],
       ['d089', '拿掉 D106 那一筆（回到 400）', () => [], 'D106 NODE_OPTIONS only on the declared first-use step d089'],
+      // 評審（chain M6）：NODE_OPTIONS 後面同一步再多一個環境變數；驗證器的確切檢查現在核到那一步的結尾。
+      ['d087', 'NODE_OPTIONS 後面多一個環境變數', f => [{...D106_WORKFLOW_SEAMS[f], after:D106_WORKFLOW_SEAMS[f].after + '          CHROME_PATH: /tmp/other-chrome\n'}], 'D106 exact first-use ceiling hook d087'],
     ];
     for (const [id, what, extra, message] of cases) {
       const file = `.github/workflows/${id}-native.yml`;
@@ -249,6 +277,20 @@ export async function d106FirstUseGuards(report) {
       assert.notEqual(bad, t088, label);
       const mod = await importText(bad);
       done.push(throwsMatching(() => gateBehaviour(mod), /應該擋下卻通過/, label));
+    }
+    // 評審（gate／rules 的 major）：hook 的程式本身被改。守衛封存的表擋、驗證器（d086–d089 native-and-build，每次 PR 與 main push）也擋。
+    const RESOLVE = 'proposals/d106/first-use-ceiling-resolve.mjs', DECL = 'proposals/d106/first-use-ceiling.mjs';
+    const hookText = read(D106_HOOK), resolveText = read(RESOLVE), declText = read(DECL), CODE = /D106 exact first-use ceiling code/;
+    const codeMutations = [
+      ['hook 多一行：結束時一律 exit 0', {[D106_HOOK]:hookText + "process.on('uncaughtException',()=>{});process.on('exit',()=>{process.exitCode=0});\n"}],
+      ['hook 多一行：assert.ok 變成空函式', {[D106_HOOK]:hookText + "import assert from 'node:assert/strict'; assert.ok = () => {};\n"}],
+      ['resolve 多改指一個沒列的 URL', {[RESOLVE]:resolveText.replace('return D106_URL_REDIRECTS.get(url) ?? url;', "return D106_URL_REDIRECTS.get(url) ?? (url.endsWith('/proposals/d088/browser-provenance.mjs') ? url.replace('/d088/', '/d106/') : url);")}],
+      ['宣告檔與 d088 副本自洽地改成 operation<=2', {[DECL]:declText.replaceAll('r.operation===1?', 'r.operation<=2?'), [c088]:t088.replaceAll('r.operation===1?', 'r.operation<=2?')}],
+    ];
+    for (const [label, files] of codeMutations) {
+      for (const [f, text] of Object.entries(files)) assert.notEqual(text, read(f), label + '：' + f);
+      done.push(throwsMatching(() => assertSealedCode(withFiles(files)), /D106 守衛封存的程式/, label + '（守衛封存的表）'));
+      done.push(throwsMatching(() => assertInheritedWorkflowSet(manifest, withFiles(files)), CODE, label + '（驗證器）'));
     }
     // lineage 與 routing。
     for (const file of [VALIDATOR, CONTRACT]) done.push(throwsMatching(() => assertPipesValidationLineage(undefined, withFiles({[file]:read(file) + ' '})), /complete exact finite inverse/, 'lineage：' + file + ' 多一個位元組'));
