@@ -250,3 +250,18 @@
     「合併後的文件 PR」是 #61（`0b27c28`），一直沒合併，後來跟 main 的 `LOG.md` 衝突；2026-11-18 由 `docs/wrapup-20261118` 用 `cherry-pick -x` 搬過來，本卡這一節就是那次搬進 main 的。
 - 公開站只核了 HTTP 位元組。公網 WebGL 重播、Android 實機都沒驗。
 - 沒有畫面變化，所以沒有對照圖。
+
+### 2026-11-18 補記：push 到 main 不加觸發（Claude 的決定）
+
+- 前面「沒做成的事」第一條把「要不要加 push 到 main 的觸發」交業主定；[D101 卡](D101-transit-save-and-ui.md)「要業主定的事」的「延續未決」是同一題。
+- **決定：不加。** `transit.yml` 照舊只在 PR 進 main 與手動時跑；`unit-d102-history`、`unit-d103-timeout` 都不加 push 觸發。
+  - 這是 Claude 依業主 2026-11-18「性能和美術你來決定，我來 決定大方向就好」「全部收尾完」與 D104「其它的能過就好」做的決定，不是業主原話。
+- 理由：
+  - main 只經 PR 合併才變。2026-10-31（`1aed2c7`）以後，main 的 first-parent 提交全是 PR 合併提交（`git log --first-parent`）。
+  - 合併前，PR 上的 `transit` 會跑這兩支。例：#62 的 transit [44339205251](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44339205251)（`pull_request`，head `91e1c1f`），D102、D103 兩步都 success。
+  - push 時不是什麼都不核：main push 會跑 D083／D086–D090 的 native-release。D090 那支的 `foundation-test-runner.mjs` 先跑 `assertFrozenCurrentSource`（`proposals/d090/foundation-routing-contract-pipes-v2.mjs`），逐檔核 `src/` 269 個檔的 sha256，本卡改的程式都在裡面。
+- 這個決定留下的缺口：
+  - push 時只核位元組，不跑本卡守衛的 7 項行為檢查。
+  - 有人直接推 main 時（CLAUDE.md「版本一致」一節允許快進推送），這支守衛不會跑。
+  - PR 上跑的是當下的合併結果；PR 跑完之後 main 又前進，最後的合併提交不會再跑 `transit`。
+  - 要改，就在 `transit.yml` 的 `on:` 加 push 觸發，另開卡；先查哪些守衛讀 `transit.yml` 的位元組（D106 的守衛核它多出的那一步）。

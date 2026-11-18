@@ -139,6 +139,7 @@
     - 程式、lease、守衛都還沒動。
     - 巨型合併蓋到地面軌道要業主定：(a) 本卡一起修，或 (b) 另開卡。
     - `transit.yml` 要不要加 push 到 main 的觸發，延續未決。
+      - 2026-11-18 補記：Claude 依業主「性能和美術你來決定」決定不加；理由與缺口在 [D102 卡](docs/D102-steel-construction-history.md)、[D103 卡](docs/D103-d086-native-timeout.md)同日的補記。
     - 研究的完整紀錄只存在本 session，沒有提交進倉庫。
 - 2026-11-05 — D102／D103 — 合併後補記：main ci 全綠、公開站上線、兩張卡面的 CI 紀錄（[D102 卡面](docs/D102-steel-construction-history.md)、[D103 卡面](docs/D103-d086-native-timeout.md)）。
   - 合併：業主經 bot 照合併指令，用合併提交依序合了：
@@ -154,10 +155,11 @@
     - D103 卡面：驗收 11（CI）由「待」改「過」，另加 CI 一節、改了「沒做成的事」。
   - 煙霧測試：本機 Node 24 跑 `unit-d103-timeout`、`unit-d102-history`，全過。四份改過的 Markdown 共 311 個相對連結，0 個失效；`git diff --check` 乾淨。這個 PR 只動文件，`ci` 會被 paths-ignore 跳過；`transit` 與 native 會以「PR 進 main」的身分自動跑。
   - commit：本列的文件提交。樣張：沒有畫面變化。
-    - 2026-11-18 補記：這個文件 PR 是 #61（`0b27c28`），一直沒合併，後來跟 main 的 `LOG.md` 衝突。2026-11-18 在 `docs/wrapup-20261118` 用 `cherry-pick -x` 搬過來：LOG 兩邊都保留、本列照日期放在 11-05 D101 那一列下面，README 的改動拿掉，兩張卡面與證據檔照原樣。
+    - 2026-11-18 補記：這個文件 PR 是 #61（`0b27c28`），一直沒合併，後來跟 main 的 `LOG.md` 衝突。2026-11-18 在 `docs/wrapup-20261118` 用 `cherry-pick -x` 搬過來：LOG 兩邊都保留、本列照日期放在 11-05 D101 那一列下面，README 的改動拿掉，兩張卡面與證據檔照原樣搬（卡面另加 2026-11-18 補記）。
   - **沒做成的事**：
     - D102、D103 的 `transit` 與 native 在合併前從沒以「PR 進 main」的身分跑過：bot 改完 base 就直接合併，改 base 不觸發 `pull_request`。本 PR 是合併後第一次。
     - main 上 push 時沒有工作流跑 `unit-d102-history`、`unit-d103-timeout`。
+      - 2026-11-18 補記：到現在還是這樣。Claude 決定不加 push 觸發（PR 上的 `transit` 會跑；push 時 native-release 照樣核來源與工作流的位元組），缺口照實寫在兩張卡面同日的補記。
     - 公開站只核了 HTTP 位元組，沒有做公網 WebGL 重播，也沒上 Android 實機。
     - D086 首用計時門檻 400 ms 餘量薄（四次觀察最高 453.8 ms）。
       - 2026-11-18 補記：後來真的紅了。D101 合併後的 main ci 42344770708（`23d42c9`）只紅一個 job：D088 的頁面第一次放置 512.3 ms。依業主 2026-11-18「必要時放寬標準」，[D106](docs/D106-ci-first-use-ceiling.md) 把 CI 上頁面第一次放置的上限 400 → 1000 ms，其他上限不動；#62 於 2026-11-18 合併為 `13ff23c`。

@@ -284,3 +284,15 @@ PR #60 head `f0a652b`。`ci` 是 PR 自動跑的；`transit` 與 native 由我�
 - `--check` 只在本卡疊在 `c8e5ef1` 上時成立；本分支併進別的提交（例如 D102 的文件提交）之後，它會照設計變紅。
 - 合併進 main 之後，跟 D102 一樣，沒有工作流在 push 時跑 `unit-d103-timeout`。
 - 沒有畫面變化，沒有對照圖。
+
+### 2026-11-18 補記：push 到 main 不加觸發（Claude 的決定）
+
+- 「已知不會修好的」最後一條與上面「沒做成的事」都寫了：push 時沒有工作流跑 `unit-d103-timeout`。要不要加觸發，D102 卡交業主定，[D101 卡](D101-transit-save-and-ui.md)寫「延續未決」。
+- **決定：不加。** `transit.yml` 照舊只在 PR 進 main 與手動時跑。
+  - 這是 Claude 依業主 2026-11-18「性能和美術你來決定，我來 決定大方向就好」「全部收尾完」與 D104「其它的能過就好」做的決定，不是業主原話。
+- 理由：
+  - main 只經 PR 合併才變（2026-10-31 `1aed2c7` 以後，main 的 first-parent 全是 PR 合併提交），合併前 PR 上的 `transit` 會跑本卡守衛。例：#62 的 transit [44339205251](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44339205251)，「D103 declared D086 native timeout guards」success。
+  - 本卡的改動在 YAML，被 D090 現行層的 pin 釘住；main push 時 native-release 的驗證器照樣重核這些位元組（[D106 卡](D106-ci-first-use-ceiling.md)評審第 2 點）。
+- 這個決定留下的缺口：
+  - push 時不跑本卡守衛的負控（20 種）與 timeout 盤點，只核位元組。
+  - 直接推 main、或 PR 跑完後 main 又前進時，最後的提交不會再跑 `transit`。詳見 [D102 卡](D102-steel-construction-history.md)同日的補記。
