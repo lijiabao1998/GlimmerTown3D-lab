@@ -198,6 +198,9 @@ jobs:
           (cd scratch/d086-native-build/attempt-1 && sha256sum --check index.sha256)
       - name: Separate fresh native page first-use CPU6 and thirty actual commits
         run: node proposals/d086/native-first-use-cache-check-v6.mjs --width=${{ matrix.width }} --attempt=1
+        # D106 (owner 2026-11-18): CI-only page-first commit ceiling 1000 ms (was 400); every other first-use ceiling unchanged; docs/D106-ci-first-use-ceiling.md
+        env:
+          NODE_OPTIONS: --import ./proposals/d106/first-use-ceiling-hook.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

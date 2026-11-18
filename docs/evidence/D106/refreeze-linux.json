@@ -1,0 +1,72 @@
+{
+  "baseline": "76e074ff66f01e5e0ced8c946b13584226f0d6b6",
+  "lease": {
+    "action": "unchanged",
+    "manifestSha256": "07b52fbe4902788cc5f37a4e725f2838a0b8ded20d78551b6d85473ae7929da3"
+  },
+  "written": [
+    "proposals/d090/inherited-workflow-deltas.json",
+    "tools/d090-validation-pipes-v2.mjs",
+    "proposals/d090/native-workflow.json",
+    "proposals/d090/foundation-routing-pipes-v2.json",
+    "proposals/d090/foundation-routing-contract-pipes-v2.mjs",
+    "proposals/d090/selector-pipes-lineage.json",
+    "proposals/d090/selector-pipes-lineage.mjs"
+  ],
+  "before": {
+    "fixtures/d101/source.json": "07b52fbe4902788cc5f37a4e725f2838a0b8ded20d78551b6d85473ae7929da3",
+    "tools/d101-source.mjs": "eaf1a8f9f60a2741397b7e6d746adb8872ae007566cc9318604f03a4beda6802",
+    "proposals/d090/inherited-workflow-deltas.json": "59d3eee3a5321ab3b6dd9bd505671adfe4aad36eee7fc74786e88c7c3c41147d",
+    "tools/d090-validation-pipes-v2.mjs": "dbbe933ddcbec3a1da908784c12516fdfa33059a02347258b0e55c0742df2c5b",
+    "proposals/d090/native-workflow.json": "acb1329e3cffffffcac32fe79bc5d84fbb221542dc71c5d62602f076c66169e5",
+    "tools/d085-source-d090.test.mjs": "9ff8c274c6f0fd852e538293eef31b9382d21d29fee5b60b292d29dbe44f66d2",
+    "proposals/d090/inherited-test-domains-pipes-v2.json": "9712a87145b9e3f2810e9863f70ab5871c4682cf00ae7573d0d46eeff0265185",
+    "proposals/d090/inherited-test-contract-pipes-v2.mjs": "1b09dd145aba84c85980793fbaf9a84039f6cdc55d9f39891572f00afce64ee7",
+    "proposals/d090/original-camera-restoration-d101.test.mjs": "24bf959ba4d2f63c720ea0e1f4896594fde63bafeee9bed5abc2cdebc28d5301",
+    "proposals/d090/foundation-routing-pipes-v2.json": "9125382f9049d3fe77123a6813ca82d7fb9699d62158a1f0b0ced43f5cf4f651",
+    "proposals/d090/foundation-routing-contract-pipes-v2.mjs": "e310d7884857c0c040107f15394a59907830c7d69b6718035dde86a26ccc7924",
+    "proposals/d090/selector-pipes-lineage.json": "553aae9eb5b1e917a5fb4110cc67aa5e1e92f2d919bcf42a846c023d375e204b",
+    "proposals/d090/selector-pipes-lineage.mjs": "69a5e7dc3808aea893f7a137bc958c2d5e770b31034a4abd134a76ec7864ad87"
+  },
+  "after": {
+    "workflow": "6242995eab3af7c818595e9f6628ee7f0483f11cbba52451820f2ea9151b0912",
+    "workflowDeltas": "4a8816757fde97c451889ebafa27e6fe802fd75931ca358306047604d1fedc9c",
+    "workflowValidator": "83330142b730ce0c19bd5d0eccebe7f826278040eab1813649b94f88d925ab58",
+    "firstUseWorkflows": {
+      ".github/workflows/d086-native.yml": "1c898bae02fb66c140588cb8e35e70f37d9e0ba4cbd3e99605a01bb5488d8404",
+      ".github/workflows/d087-native.yml": "9ddce1845c3a817c33a8ec71baad784910b4631755e5edfd6099e84f2259c591",
+      ".github/workflows/d088-native.yml": "09a0d7a49c98372c61a7454c3d3e1516e1f632060d5c3e80e92a5b0dd8a4fac4",
+      ".github/workflows/d089-native.yml": "42833554961d99c1a5d897f5b5c6b0e30368fac8db461a7f377982136eddd0dd",
+      ".github/workflows/d090-native.yml": "eb149f4b7fb4bf2c8cb1056dc9d565e464294cb4dba670ea3eda70057c51de73"
+    },
+    "nativeWorkflow": "c2f69018c97ae1f3698b3fb7a06fd412ddc8f2306043f1a20d977cde1cb8657b",
+    "domain": "9712a87145b9e3f2810e9863f70ab5871c4682cf00ae7573d0d46eeff0265185",
+    "routing": "570983089ccb1960d7399a42da18fb92e3b671c49f711ab6f7d0b085eea7df73",
+    "contract": "87edb400a6cd6ec83f8ab64cf46f1cf186cded826463bc3df89cd986dacdae3b",
+    "lineage": "b7d28c73aaa2cfe788c150ba3c8a4b81e7ec83ffd5282ce28622daf3229715e6",
+    "d085": "9ff8c274c6f0fd852e538293eef31b9382d21d29fee5b60b292d29dbe44f66d2",
+    "inherited": "1b09dd145aba84c85980793fbaf9a84039f6cdc55d9f39891572f00afce64ee7",
+    "camera": "24bf959ba4d2f63c720ea0e1f4896594fde63bafeee9bed5abc2cdebc28d5301",
+    "lineageModule": "97b33504cecdac7de8ff1d72b82ec51092d73ab86122e51aabcbfc32be2a86ea"
+  },
+  "counts": {
+    "lineageCopies": 14,
+    "routingCurrent": 47,
+    "routingInventory": 56,
+    "routingSuperseded": 4,
+    "domainAdditions": 23,
+    "frozenCurrent": 269,
+    "d101Prior": 267,
+    "d084Prior": 237
+  },
+  "verified": {
+    "lineageCopies": 14,
+    "routingCurrent": 47,
+    "domainAdditions": 23,
+    "inheritedWorkflows": 8,
+    "frozenCurrent": 269,
+    "d101Prior": 267,
+    "d084Prior": 237,
+    "D101_MANIFEST_SHA": "07b52fbe4902788cc5f37a4e725f2838a0b8ded20d78551b6d85473ae7929da3"
+  }
+}
