@@ -1,7 +1,7 @@
 # D098 收尾（2026-11-18）：存檔標籤與刪除的遠端分支
-# 業主 2026-11-18「全部收尾完」。計畫見 docs/D098-repo-hygiene-20261102.md 第三、四節；執行紀錄見同卡「2026-11-18 執行紀錄」。
+# 業主 2026-11-18「全部收尾完」（Claude 讀成同意第四節的建議，見卡面）。計畫見 docs/D098-repo-hygiene-20261102.md 第三、四節；執行紀錄見同卡「2026-11-18 執行紀錄」。
 # 來源：執行時的分類表與推送紀錄（本機 C:\RUST\lab-perf\3d-red\，不進倉庫）；
-#       2026-11-19 撰寫時重核：git ls-remote origin 'refs/tags/archive/*'、git ls-remote --heads origin、git merge-base --is-ancestor <head> 13ff23c。
+#       2026-11-18 約 17:55 UTC（本機已是 11-19）撰寫時重核，18:13 UTC 再核一次，結果相同：git ls-remote origin 'refs/tags/archive/*'、git ls-remote --heads origin、git merge-base --is-ancestor <head> 13ff23c。
 # 標籤全是附註標籤（annotated）：ls-remote 每個都有 ^{} 那一行，標籤物件與指向的提交不同。
 
 ## 一、51 個存檔標籤（46 個 archive/<分支名>＋第三節的 5 個具名標籤）
@@ -67,7 +67,7 @@ fix/d102-steel-history	c8e5ef14689403a1935185935b9d442323d14f11
 transit/d100-network	b328a07866ead482489c3c382bea867d7fa91c19
 transit/d101-save-ui	a875acf41872ef30da40fc9ec33d98a3bfe4ada6
 
-## 三、刪除後剩下的遠端分支（git ls-remote --heads origin，2026-11-19 重核）
+## 三、刪除後剩下的遠端分支（git ls-remote --heads origin，2026-11-18 約 17:55 UTC 與 18:13 UTC 重核）
 # 欄位：branch<TAB>head<TAB>狀態
 claude/3d-claude-reading-o11uvs	0b27c28170986f8b4b40e54a470146192f9ef929	未併：#61，內容 2026-11-18 在 docs/wrapup-20261118 用 cherry-pick -x 搬過來（那個分支合併前還不在 main），沒打標籤、沒刪
 claude/d106-first-use-ceiling	91e1c1f3adb4475820e9c22a92195cb292c20007	已併（#62，13ff23c），暫留

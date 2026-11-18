@@ -871,7 +871,8 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
   - 紅的是頁面第一次放置：`quadrangular-county-constabulary` 第 0 次，commitMs **512.3** > 400。這是首用計時的凍結門檻，不是運輸的斷言；歷來的數據見 D106 卡。
   - `pages` 因此 skipped，**D101 這次沒有上線**。
 - **處理**：依業主 2026-11-18「必要時放寬標準」，[D106](D106-ci-first-use-ceiling.md) 只在 CI 上把頁面第一次放置的上限 400 → 1000 ms，其他上限與原始模組都不動。
-  - #62 於 2026-11-18 17:49 UTC 合併為 `13ff23c`。PR 上 9 個工作流 run：219 success、14 skipped、0 failed。
+  - #62 於 2026-11-18 17:49 UTC 合併為 `13ff23c`。head `91e1c1f` 上 9 個 run（8 個 pull_request、1 個分支 push 的 ci）：219 success、14 skipped、0 failed。
+    - ci 的 79 個 job 在兩個 run 各算一次；只算 8 個 pull_request run 是 140 success、7 skipped。
 - **部署還沒確認**：`13ff23c` 的 main ci 44362897990 寫這段時還沒跑完。D101、D106 有沒有上線，等那一輪的收據另外補記；這裡不寫已上線。
 - **美術維持 B（Claude 的決定）**：第四步寫的是「依常駐美術授權先採 B，業主看圖不喜歡可調回」；倉庫裡沒有業主確認 B 的紀錄。
   - 業主 2026-11-18：「性能和美術你來決定，我來 決定大方向就好」。依這句，Claude 決定維持 B，不再等確認。這是 Claude 的決定，不是業主原話。
@@ -882,3 +883,6 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
   - 美術 B 沒經業主看圖確認。
   - 公網 WebGL 重播沒做；Android 實機業主已免，桌面結果不代表手機。
   - D106 之後，CI 抓不到頁面第一次放置在 400–1000 ms 之間的退步（D106 卡「沒做成的事」）。
+  - 不加 push 觸發，本卡的五支守衛（`tools/d101-source.test.mjs`、`d101-save`、`d101-construction`、`d101-migration`、`d101-art`）同樣只在 PR 的 `transit` 跑；D097、D100 的守衛也是。
+    - push 到 main 時，`ci` 的 historical 分區與 native-release 照舊跑（後者核 `src/` 269 檔的位元組），但都不是這五支的行為檢查。
+    - PR 改 base 成 main 後立刻合併、或直接推 main 時，連 PR 進 main 的那一輪也沒有（見 D102 卡同日的補記）。
