@@ -10,6 +10,11 @@
 
 ---
 
+- 2026-11-18 — D106 — 依業主「必要時放寬標準」「明確是雲端機器給的cpu 太少 和門檻太高」，CI 上頁面第一次放置（operation 1）的 commitMs 上限 400 → 1000 ms；其他上限（preview 16、其他 commit／rebuild／rebuildAll 400、三次中位數 400）、五份原始模組、原始測試與 `run:` 行都不動。做法：三份宣告過的副本＋只改指五個原檔 URL 的 resolve hook，只在 D086–D090 native-input-performance 的 first-use 那一步用 `NODE_OPTIONS` 載入；D106 層疊在 D101 鏈的 D104 之後重凍。
+  - 驗證（Linux Node 24.15.0，乾淨 clone，跟 23d42c9 同一套指令比）：`--refreeze` 逐位元組重現、`--check`；12 個現行測試 785／0；unit-d103、unit-d106（33 負控）、proposals/d106 15／0；transit 16 條、tsc 全 exit 0；77 個讀者測試逐條同基準；foundation 與 inherited d086–d089 runner 全 exit 0、通過數同基準；本機帶 hook 實跑 d088 1440 三次都過，不帶 hook 一次紅在 402.4 ms。詳見[卡面](docs/D106-ci-first-use-ceiling.md)與[證據](docs/evidence/D106/)。
+  - commit：卡面 `a2f8243`、施工 `d5b79eb`、紀錄為本列提交；無畫面變化。
+  - **沒做成的事**：PR 與 CI 還沒跑，帶 hook 的 native-input-performance 還沒在 GitHub runner 上量過；D101 要合併後 main 的 push 才會部署；沒量手機，1000 ms 不是保證；本機帶 hook 的三次頁面第一次放置都沒超過 400，「超過 400 仍通過」只有單元測試證明；合併後 push 不跑 unit-d106；沒對守衛本身做突變測試。
+
 - 2026-11-06 — D101／D104 — 修正新增提示與 D049 唯一錨點衝突；依業主新授權把 historical／browser 各拆八片，保留原斷言與退出碼，新增完整同來源／build 收據聚合；11 個有限 workflow 差異納入 D101 雜湊鏈。
   - 驗證：Linux refreeze／check、269 src 一致；來源／有限鏈 21／21，D103 五組含20負控、D049 8／8、current UI 38／38，CI／partition／分片合計347／347；Windows typecheck／build與真觸控phase1 10／10通過。詳見[收據](docs/D101-validation.md)及[D104卡](docs/D104-ci-parallel-validation.md)。
   - commit：本列提交；lease 07b52fbe…；美術仍為[三檔三寬](docs/img/d101-transit/)的 B。完整 CI 與代表片結果綁同 final HEAD 寫在[PR56驗證區](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/56#d101-final-validation)，不為結果文字再觸發一輪 CI。

@@ -1,0 +1,43 @@
+node_modules archive verified 87f9ebf6eb523b81005179cff5fb3e9cd102d16ee9d2fe019a56a3671fefaf23
+=== base 2026-11-18T10:31:58Z HEAD 23d42c933eadcbdcf36e2289f5e453802380d1f7 node v24.15.0 steps: chain tests d103 d106 transit readers runners
+chain-check rc=0 secs=10
+twelve-tests rc=0 secs=35 # pass 785 # fail 0 # cancelled 0 # skipped 0
+unit-d103 rc=0 secs=1
+unit-d106 absent
+proposals/d106 tests absent
+transit-01 rc=0 secs=32
+    (node --test tools/d101-source.test.mjs)
+transit-02 rc=0 secs=46
+    (node --test tools/d090-source-v3.test.mjs)
+transit-03 rc=0 secs=5
+    (node --test proposals/d090/source-boundaries-v3.test.mjs)
+transit-04 rc=0 secs=0
+    (node tools/unit-d097-graph.mjs)
+transit-05 rc=0 secs=1
+    (node tools/unit-d097-movement.mjs)
+transit-06 rc=0 secs=0
+    (node tools/unit-d100-network.mjs)
+transit-07 rc=0 secs=1
+    (node tools/unit-d100-format.mjs)
+transit-08 rc=0 secs=14
+    (node tools/unit-d102-history.mjs)
+transit-09 rc=0 secs=2
+    (node tools/unit-d103-timeout.mjs)
+transit-10 rc=0 secs=15
+    (node tools/d101-save.mjs)
+transit-11 rc=0 secs=65
+    (node tools/d101-construction.mjs)
+transit-12 rc=0 secs=2
+    (node tools/d101-migration.mjs)
+transit-13 rc=0 secs=1
+    (node tools/d101-art.mjs)
+transit-14 rc=0 secs=61
+    (npx tsc --noEmit)
+readers rc=0 secs=65
+tracked dirty before runners: []
+runner-foundation rc=0 secs=127
+runner-inherited-d086 rc=0 secs=436
+runner-inherited-d087 rc=0 secs=402
+runner-inherited-d088 rc=0 secs=421
+runner-inherited-d089 rc=0 secs=462
+=== base done 2026-11-18T11:08:47Z

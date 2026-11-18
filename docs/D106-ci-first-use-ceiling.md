@@ -151,3 +151,94 @@
 - 合併進 main 之後，跟 D103 一樣，沒有工作流在 push 時跑 `unit-d106-first-use`（transit 只在 PR 進 main 時跑）。
 - 合併要業主同意；合併後 main 的 push 會重跑五個 native release，那時才知道 Pages 能不能部署 D101。
 - **路徑衝突**：本倉庫 `CLAUDE.md` 寫本地在 `C:\dev\GlimmerTown3D-lab`；這台機器的規則是只能在 `C:\RUST` 施工，所以在 `C:\RUST\wt-3d-d106` 做。
+
+## 施工紀錄（2026-11-18）
+
+### 提交
+
+- `a2f8243` 卡面（施工前凍結；本節以上沒有再改）。
+- `d5b79eb` 施工：26 個檔，正好是封閉清單第 2–5、7–10 項（`git diff --name-status --no-renames 23d42c9`）。
+- 本提交：施工紀錄、`docs/evidence/D106/`、`LOG.md`。
+
+### 改了什麼（被釘住的檔，sha256 前 8 碼）
+
+| 檔 | 23d42c9 | d5b79eb |
+|---|---|---|
+| `.github/workflows/d086-native.yml` | `d242ed2e…` | `1c898bae…` |
+| `.github/workflows/d087-native.yml` | `94060b1e…` | `9ddce184…` |
+| `.github/workflows/d088-native.yml` | `9cd54172…` | `09a0d7a4…` |
+| `.github/workflows/d089-native.yml` | `a469e54a…` | `42833554…` |
+| `.github/workflows/d090-native.yml` | `d4fbcd8d…` | `eb149f4b…` |
+| `.github/workflows/transit.yml`（不被釘） | `3e324b75…` | `cbfaf466…` |
+| `proposals/d090/inherited-workflow-deltas.json` | `59d3eee3…` | `4a881675…` |
+| `tools/d090-validation-pipes-v2.mjs` | `dbbe933d…` | `83330142…` |
+| `proposals/d090/native-workflow.json` | `acb1329e…` | `c2f69018…` |
+| `proposals/d090/foundation-routing-pipes-v2.json` | `9125382f…` | `57098308…` |
+| `proposals/d090/foundation-routing-contract-pipes-v2.mjs` | `e310d788…` | `87edb400…` |
+| `proposals/d090/selector-pipes-lineage.json` | `553aae9e…` | `b7d28c73…` |
+| `proposals/d090/selector-pipes-lineage.mjs` | `69a5e7dc…` | `97b33504…` |
+
+- 五個 YAML 各多三行（註解、`env:`、`NODE_OPTIONS`），`run:` 行不動；`ci.yml` 仍是 `6242995e…`。
+- 鏈的七個輸出全由 `node tools/d101-freeze-chain.mjs --refreeze` 產生。第一次是在 Windows 上跑的：七檔寫完之後，最後那一步自我驗證（`verifyWritten`）因為 Windows 的路徑分隔符號丟錯（`assertFrozenCurrentSource` 在 Windows 本來就紅）。所以在 Linux 上重做了一次：乾淨 clone、把七檔還原成 `23d42c9` 的位元組、`--refreeze`，結果跟提交的逐位元組相同（`git diff --exit-code` 為 0）。不帶旗標時拒絕（[輸出](evidence/D106/refreeze-plain-refused.txt)），第二次 `--refreeze` 寫 0 檔（[輸出](evidence/D106/refreeze-linux.json)）。
+
+### 跟上層設計不一樣的地方（照實寫）
+
+1. **驗證器多了一個確切檢查**：設計只說 `WORKFLOW_DELTA_SHA` 與檔頭說明。我另外在 d086–d089 的迴圈裡加了「`NODE_OPTIONS` 只出現一次、而且是 `native-input-performance` first-use 那一步確切那幾行」。理由：沒有它，偽造 `WORKFLOW_DELTA_SHA` 的自洽 deltas 可以把 hook 搬走、換掉或拿掉，驗證器擋不下（D103 的「依工作流指定確切值」是同一個道理）。守衛裡 5 種偽造 pin 的負控都擋在這一關。
+2. **副本多了第四個 seam**：每筆紀錄的 `qualification` 開頭寫 D106 的上限。設計只要求 policy 欄位與訊息；加這個是為了讓上傳的證據自己說清楚用哪個上限判的。卡面「設計」第 1 點已寫，施工前就宣告了。
+3. **`proposals/d090/inherited-test-runner.mjs` 第 2 行沒加例外**：上層把它列為「會變成不實」的說法。我判斷它說的是 runner 自己（不攔讀檔、不改舊斷言、不吞紅），D106 不碰 runner、hook 也不在 runner 那一步，這句仍然成立；改它要重發 `INHERITED_RUNNER_SHA`。卡面「設計」第 5 點已寫。
+4. 訊息用 `D106 CI page-first commitMs ceiling 1000ms`（上層舉例是 `commit`）。
+
+### 驗證（Linux Node 24.15.0，WSL Ubuntu，tmpfs 上的乾淨 clone；基準 `23d42c9` 用同一支腳本、同一台機器先跑）
+
+原始輸出：[基準](evidence/D106/base-23d42c9-summary.txt)、[施工後](evidence/D106/final-d5b79eb-summary.txt)。驗證腳本在本機 `C:\RUST\lab-perf\3d-red\d106\`（`run.sh`／`run2.sh`、`compare.mjs`、`transit-steps.mjs`、`firstuse.sh`），不進倉庫。
+
+| 指令 | 23d42c9 | d5b79eb |
+|---|---|---|
+| `node tools/d101-freeze-chain.mjs --check` | exit 0 | exit 0 |
+| `node --test` 那 12 個檔 | exit 0，785／0 | exit 0，785／0 |
+| `node tools/unit-d103-timeout.mjs` | exit 0（5 組，20 負控） | exit 0（同；驗收 1 印「D103 之後又宣告了 1 筆」） |
+| `node tools/unit-d106-first-use.mjs` | 沒有這支 | exit 0：7 組全過、54 個門檻判定、33 種負控 |
+| `node --test proposals/d106/*.test.mjs` | 沒有 | exit 0，15／0 |
+| `transit.yml` 每一步（`npm ci` 用驗過雜湊的 Linux `node_modules` 代替） | 14 條指令全 exit 0 | 16 條全 exit 0（多 D106 兩條） |
+| `npx tsc --noEmit` | exit 0 | exit 0 |
+| 讀者測試 77 個（施工前探針 75 個＋2） | 45 綠、32 紅（歷史測試，CI 在舊 worktree 跑） | 77 個逐條相同：exit code、通過數、失敗子測試名稱全同（[對照](evidence/D106/readers-compare.txt)） |
+| `foundation-test-runner.mjs`（`GITHUB_ACTIONS=true`） | exit 0，127 秒 | exit 0，108 秒；三段 417／79／1203 全過，跟基準相同 |
+| `inherited-test-runner.mjs --suite=d086` | exit 0，436 秒 | exit 0，263 秒；各段通過數跟基準相同 |
+| `--suite=d087` | exit 0，402 秒 | exit 0，294 秒；同上 |
+| `--suite=d088` | exit 0，421 秒 | exit 0，384 秒；同上 |
+| `--suite=d089` | exit 0，462 秒 | exit 0，360 秒；同上 |
+
+**本機實跑 d088 的 first-use 檢查**（可選項；Linux headless Chrome 157，軟體繪圖；1440 寬；[摘要](evidence/D106/first-use-local-d088-1440.txt)）：
+
+- 照 YAML 帶 `NODE_OPTIONS` 跑 3 次：3 次都 exit 0、33 筆全過；log 第一行是 D106 那一行；每筆紀錄的 `qualification` 以 D106 開頭。頁面第一次放置 342.1／353.1／355.3 ms，其他每一筆最多 209.1 ms。
+- 同一個 build 不帶 hook 跑 1 次：exit 1，紅在頁面第一次放置 402.4 ms（`unchanged commitMs ceiling 400ms`），跟 CI 的紅法一樣。
+- 3 次帶 hook 的頁面第一次放置都沒超過 400，所以「超過 400、不到 1000 而通過」這條路只有單元測試證明過，沒有在真的頁面上走過。這台筆電在 WSL 下的時間不代表 CI runner，也不代表手機。
+
+### 驗收對照
+
+| # | 驗收 | 結果 | 證據 |
+|---|---|---|---|
+| 1 | 原檔不動、改動清單封閉 | 過：15 個凍結檔雜湊不變；`git diff --name-status --no-renames 23d42c9` 正好是封閉清單 | 守衛驗收 1；本節「提交」 |
+| 2 | 副本 | 過：三份副本＝`git show 23d42c9` 原檔＋四個 seam；只差原檔第 4、16、22 行加五行檔頭 | `first-use-ceiling.test.mjs`；守衛驗收 2 |
+| 3 | hook | 過：5 個改指、17 種 URL 原樣通過；用 YAML 的 `NODE_OPTIONS` 起 node 載到副本，不帶就是原檔 | `first-use-ceiling-hook.test.mjs`；守衛驗收 3 |
+| 4 | 門檻行為 | 過：三份副本各 18 個判定 | 測試與守衛驗收 4 |
+| 5 | YAML | 過：拿掉 D106 那一筆就是 23d42c9；`NODE_OPTIONS` 各一次；35 個工作流 95 個 timeout 照 D103 的表 | 守衛驗收 5；`unit-d103` 驗收 2 |
+| 6 | 鏈 | 過：Linux 重凍逐位元組相同、第二次寫 0 檔、不帶旗標拒絕；只追加；手改一律拒絕 | 上面；`d104-workflow-lineage.test.mjs` |
+| 7 | 現行測試 | 過 | 上表 |
+| 8 | 讀者測試不多紅 | 過：77 個逐條相同 | [對照](evidence/D106/readers-compare.txt) |
+| 9 | runner | 過：五個都 exit 0，通過數跟基準相同 | 上表 |
+| 10 | 負控 | 過：33 種都被預期的那一關擋下（含 5 種偽造 pin、4 種 hook、4 種副本位元組、4 種放寬到別的紀錄） | [守衛輸出](evidence/D106/unit-d106-first-use.txt) |
+| 11 | CI | 待：本 PR 開了才跑 | — |
+| 12 | LOG | 有 | `LOG.md` |
+
+### 沒做成的事（不美化）
+
+- **CI 還沒跑**。PR 還沒開；帶 hook 的 native-input-performance 還沒在 GitHub runner 上跑過，15 個 job 會不會全綠、頁面第一次放置量到多少，要看 PR 的 run。
+- **D101 還沒部署**。要業主同意合併、main 的 push 重跑五個 native release 之後，Pages 才會動。
+- **沒有量手機**；1000 ms 是從 CI 數據推的，不是保證。
+- 本機帶 hook 的 3 次都沒超過 400，「超過 400 仍通過」只在單元測試裡證明過。
+- 不帶 hook 在本機跑檢查腳本照舊是 400（刻意的），所以本機重跑可能跟 CI 判法不同。
+- 合併進 main 之後，跟 D103 一樣，沒有工作流在 push 時跑 `unit-d106-first-use`（transit 只在 PR 時跑）。
+- 守衛刻意卡住：之後要改 D106 的副本、hook、五個工作流的那一步或 transit 那一步，都要同時改守衛。
+- 沒有像 D103 那樣另外對守衛本身做突變測試；守衛裡的 33 種負控是唯一的證據。
+- 沒有畫面變化，沒有對照圖。

@@ -1,0 +1,52 @@
+node_modules archive verified 87f9ebf6eb523b81005179cff5fb3e9cd102d16ee9d2fe019a56a3671fefaf23
+=== final 2026-11-18T11:13:20Z HEAD d5b79ebd915fea2876537943487f493fa4ebfa9e node v24.15.0 steps: refreeze chain tests d103 d106 transit readers runners
+refreeze-plain rc=1 secs=7
+refreeze rc=0 secs=12
+refreeze-diff rc=0 secs=0
+refreeze-again rc=0 secs=10
+tracked dirty after refreeze: []
+chain-check rc=0 secs=10
+twelve-tests rc=0 secs=54 # pass 785 # fail 0 # cancelled 0 # skipped 0
+unit-d103 rc=0 secs=2
+unit-d106 rc=0 secs=2
+d106-tests rc=0 secs=3 # pass 15 # fail 0 # cancelled 0 # skipped 0
+transit-01 rc=0 secs=49 ℹ pass 19 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+    (node --test tools/d101-source.test.mjs)
+transit-02 rc=0 secs=54 ℹ pass 2 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+    (node --test tools/d090-source-v3.test.mjs)
+transit-03 rc=0 secs=9 ℹ pass 8 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+    (node --test proposals/d090/source-boundaries-v3.test.mjs)
+transit-04 rc=0 secs=1
+    (node tools/unit-d097-graph.mjs)
+transit-05 rc=0 secs=1
+    (node tools/unit-d097-movement.mjs)
+transit-06 rc=0 secs=2
+    (node tools/unit-d100-network.mjs)
+transit-07 rc=0 secs=0
+    (node tools/unit-d100-format.mjs)
+transit-08 rc=0 secs=19
+    (node tools/unit-d102-history.mjs)
+transit-09 rc=0 secs=4
+    (node tools/unit-d103-timeout.mjs)
+transit-10 rc=0 secs=2
+    (node tools/unit-d106-first-use.mjs)
+transit-11 rc=0 secs=2 ℹ pass 15 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+    (node --test proposals/d106/first-use-ceiling.test.mjs proposals/d106/first-use-ceiling-hook.test.mjs)
+transit-12 rc=0 secs=20
+    (node tools/d101-save.mjs)
+transit-13 rc=0 secs=76
+    (node tools/d101-construction.mjs)
+transit-14 rc=0 secs=2
+    (node tools/d101-migration.mjs)
+transit-15 rc=0 secs=1
+    (node tools/d101-art.mjs)
+transit-16 rc=0 secs=78
+    (npx tsc --noEmit)
+readers rc=0 secs=62
+tracked dirty before runners: []
+runner-foundation rc=0 secs=108 ℹ pass 417 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 79 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 1203 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+runner-inherited-d086 rc=0 secs=263 ℹ pass 275 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 555 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 780 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 2094 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+runner-inherited-d087 rc=0 secs=294 ℹ pass 412 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 555 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 780 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 2057 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+runner-inherited-d088 rc=0 secs=384 ℹ pass 275 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 412 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 555 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 780 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 2432 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+runner-inherited-d089 rc=0 secs=360 ℹ pass 275 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 412 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 555 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 780 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0 ℹ pass 2432 ℹ fail 0 ℹ cancelled 0 ℹ skipped 0
+=== final done 2026-11-18T11:44:55Z
