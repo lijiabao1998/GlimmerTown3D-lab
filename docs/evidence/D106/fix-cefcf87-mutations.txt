@@ -1,0 +1,24 @@
+# D106 review fix cefcf87 — replay of the reviewers' mutations (C:\RUST\lab-perf\3d-red\d106\fix-mutate.sh; mutations from review-rules/mutate.mjs plus review-gate mutation A)
+# rc per check: 0 = the check accepted the mutated tree, non-zero = refused. control = unmutated tree.
+=== mutate cefcf87763328eb3d02d0b9d381b0b1758668d54 node v24.15.0
+ci.yml build-job tests rc=0 # pass 94 # fail 0 
+control unit-d106=0 d106-tests=0 chain-check=0 validator+routing=0  
+copy-op-le-2 unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/browser-first-use-performance-d088.mjs
+copy-median-401 unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/browser-first-use-performance-d087.mjs
+copy-preview-17 unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/browser-first-use-performance-d086.mjs
+copy-op1-1200 unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/browser-first-use-performance-d088.mjs
+selfconsistent-op-le-2 unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling.mjs
+hook-extra-redirect unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling-resolve.mjs
+hook-noop unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling-hook.mjs
+yaml-d089-drop-env unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  
+yaml-d087-other-module unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  
+yaml-d088-move-to-startup unit-d106=1 d106-tests=0 chain-check=1 validator+routing=1  
+yaml-d090-extra-option unit-d106=1 d106-tests=1 chain-check=1 validator+routing=1  
+resolve-unlisted-redirect unit-d106=1 d106-tests=0 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling-resolve.mjs
+hook-force-exit0 unit-d106=1 d106-tests=0 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling-hook.mjs
+yaml-d086-comment-byte unit-d106=1 d106-tests=0 chain-check=1 validator+routing=1  
+gate-A-hook-assert-noop unit-d106=1 d106-tests=0 chain-check=1 validator+routing=1  first validator message: D106 exact first-use ceiling code proposals/d106/first-use-ceiling-hook.mjs
+dirty after: []
+hook plain rc=0 warning lines: 0
+hook --pending-deprecation rc=0 warning lines: 0 
+=== mutate done

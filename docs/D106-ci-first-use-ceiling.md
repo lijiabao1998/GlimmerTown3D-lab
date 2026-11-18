@@ -158,7 +158,9 @@
 
 - `a2f8243` 卡面（施工前凍結；本節以上沒有再改）。
 - `d5b79eb` 施工：26 個檔，正好是封閉清單第 2–5、7–10 項（`git diff --name-status --no-renames 23d42c9`）。
-- 本提交：施工紀錄、`docs/evidence/D106/`、`LOG.md`。
+- `38a8d56`：施工紀錄、`docs/evidence/D106/`、`LOG.md`。
+- `cefcf87` 評審後的修正：7 個檔，都在封閉清單第 5、9 項裡（見「評審後的修正」）。
+- 再下一個提交：本節的評審紀錄、`docs/evidence/D106/` 裡帶 `cefcf87` 的檔、`LOG.md` 那一列。
 
 ### 改了什麼（被釘住的檔，sha256 前 8 碼）
 
@@ -227,9 +229,95 @@
 | 7 | 現行測試 | 過 | 上表 |
 | 8 | 讀者測試不多紅 | 過：77 個逐條相同 | [對照](evidence/D106/readers-compare.txt) |
 | 9 | runner | 過：五個都 exit 0，通過數跟基準相同 | 上表 |
-| 10 | 負控 | 過：33 種都被預期的那一關擋下（含 5 種偽造 pin、4 種 hook、4 種副本位元組、4 種放寬到別的紀錄） | [守衛輸出](evidence/D106/unit-d106-first-use.txt) |
+| 10 | 負控 | 過：`d5b79eb` 33 種都被預期的那一關擋下（含 5 種偽造 pin、4 種 hook、4 種副本位元組、4 種放寬到別的紀錄）；`cefcf87` 起 42 種（多 1 種偽造 pin、4 種程式突變各擋兩關），見「評審後的修正」 | [d5b79eb](evidence/D106/unit-d106-first-use.txt)、[cefcf87](evidence/D106/unit-d106-first-use-cefcf87.txt) |
 | 11 | CI | 待：本 PR 開了才跑 | — |
 | 12 | LOG | 有 | `LOG.md` |
+
+### 評審後的修正（2026-11-18，`cefcf87`）
+
+三位獨立評審（chain、gate、rules）看過 `38a8d56`，都沒找到會讓 CI 變紅的問題。下面每一條都自己重核過（`first-use.csv`、守衛原始碼、重放評審的突變），再決定怎麼處理。
+
+| # | 誰、多嚴重 | 說了什麼 | 自己核的結果 | 怎麼處理 |
+|---|---|---|---|---|
+| 1 | gate、rules，major | hook 的程式本身沒被釘。hook 多一行把 `assert.ok` 換成空函式、結束時一律 exit 0，或 resolve 多改指一個沒列的 URL，守衛、`proposals/d106` 測試、`--check`、驗證器全都照樣綠 | 屬實。守衛只數 `register(` 有幾個，改指表只拿假的 map 測；驗證器根本不讀這幾個檔 | 驗證器的 D106 確切檢查加上 hook 載入的六個檔（hook、resolve、宣告檔、三份副本）的 sha256。守衛另有一張自己寫死的同樣的表，兩張要相同。負控多 8 種：4 種程式突變，每種都要被守衛的表和驗證器各擋一次 |
+| 2 | rules，minor | 卡面說「跟 D103 一樣」push 時不跑守衛，低估了缺口：D103 的放寬在 YAML，push 時驗證器會重核；D106 的放寬在程式，push 時沒有任何檢查核它 | 屬實 | 第 1 點的 pin 寫在驗證器裡。驗證器在 d086–d089 的 `native-and-build` 跑（每次 PR、每次 main push），`--check` 最後一步也跑它。push 時仍然不跑門檻行為的檢查（守衛驗收 4），只核位元組 |
+| 3 | chain，minor | 驗證器的 D106 檢查沒有核到那一步的結尾。在偽造 `WORKFLOW_DELTA_SHA` 的前提下，`NODE_OPTIONS` 後面還能多接一個環境變數，例如 `tools/cdp.mjs` 會讀的 `CHROME_PATH` | 屬實（d090 那邊合約第 25 行本來就擋） | 確切檢查連下一行 `      - uses: actions/upload-artifact@v4` 一起核，五個工作流的下一行都是它。守衛多一種偽造 pin 的負控：d087 在 `NODE_OPTIONS` 後面多一行 `CHROME_PATH` |
+| 4 | rules，minor | `foundation-routing-pipes-v2.json` 的 qualification 還寫著「No thresholds/cameras/probes relaxed.」，D106 重發了這份 manifest 卻沒追加例外 | 屬實。沒有測試讀這段文字 | D106 層在 qualification 後面追加一句例外，原文一字不改。守衛核兩件事：原文的雜湊（`23d42c9` 的那一段），和結尾正好是 D106 那一句 |
+| 5 | gate，minor | 卡面的數據把 10 次紅都寫成只有頁面第一次放置；「紅只出在 1440 寬」又跟前兩行矛盾 | 屬實（`first-use.csv` 逐筆核過） | 更正寫在下面。卡面「施工紀錄」以上是凍結的，不改 |
+| 6 | gate，minor | 業主第 3 點的問句是轉述，卻放在「原文」底下、加了引號 | 屬實 | 更正寫在下面 |
+| 7 | gate，minor | 「沒做成的事」沒寫這次放寬最大的代價：CI 從此抓不到頁面第一次放置在 400–1000 ms 之間的退步 | 屬實 | 補進下面的「沒做成的事」和 LOG |
+| — | chain，備註 | `module.register()` 在 Node v24.15.0 的文件上已經棄用（DEP0205），只是文件上的 | 屬實，不是缺陷。本機 Node 24.15.0 帶 hook 跑，不管有沒有 `--pending-deprecation` 都沒有警告（下面「重放突變」那段） | 不改。改用 `module.registerHooks()` 要重驗整條路，寫進「沒做成的事」 |
+| — | rules，備註 | hook 沒有把 `NODE_OPTIONS` 從子程序的環境拿掉。從別的目錄起的 Node 子程序會找不到 hook | 屬實。今天沒影響，五支檢查腳本只起 git 和 Chrome | 不改，寫進「沒做成的事」 |
+
+**更正（卡面上半凍結，更正寫在這裡）**
+
+- **數據**：10 次紅裡，有 3 個 job 另外還有 5 筆**非**頁面第一次放置超過 400 ms：
+  - run 40183702035，job 121141263771（1440）：401.6、447.7；
+  - run 40185060727，job 121145118819（412）：405.9；
+  - run 40185060727，job 121145118835（1440）：519.8、422.2。
+  - 這 3 個 job 都在 2026-10-25 的 `art/d086-british-civic-market` 分支上。D106 照樣會擋這幾筆，所以 D106 只會讓其餘 7 次不再因為 commit 上限紅。
+  - 「10 次全是『這個 job 第一個模型第一次放置』的 commitMs > 400」要讀成：10 次裡，頁面第一次放置都超過 400。
+  - 「紅只出在 1440 寬」只對 2026-10-26 以後成立。之前 412 紅過 2 次、360 紅過 1 次，也都在 10-25 那個分支上。
+  - 不受影響的數字：抽樣子集裡「其他每一筆最大 248.2」。那 3 個 job 是專挑紅的，本來就不在子集裡。
+- **業主第 3 點**：問句「收尾包不包括主線／lab」是轉述，不是原文。原文只有答句「只做3d lab」「先做3d」。
+- **「已知不會修好的」裡「跟 D103 一樣」那一條**：push 時仍然不跑 `unit-d106-first-use`。不過修正後，驗證器在每次 push 都核 hook 載入的六個程式檔的位元組，見上表第 2 點。
+- **回退**：施工現在有兩個提交，`d5b79eb` 和 `cefcf87`。回退時先 revert `cefcf87`，再 revert `d5b79eb`，其他照「回退」那一節。
+
+**這次改了什麼**（鏈的輸出照樣由 Linux 上的 `--refreeze` 產生，sha256 前 8 碼）：
+
+| 檔 | `38a8d56` | `cefcf87` |
+|---|---|---|
+| `tools/d090-validation-pipes-v2.mjs` | `83330142…` | `a1580312…` |
+| `proposals/d090/foundation-routing-pipes-v2.json` | `57098308…` | `9003dcda…` |
+| `proposals/d090/foundation-routing-contract-pipes-v2.mjs`（`FOUNDATION_ROUTING_SHA`） | `87edb400…` | `f704863c…` |
+| `proposals/d090/selector-pipes-lineage.json` | `b7d28c73…` | `bf29710a…` |
+| `proposals/d090/selector-pipes-lineage.mjs`（`PIPE_LINEAGE_SHA`） | `97b33504…` | `ba115d34…` |
+| `proposals/d090/inherited-workflow-deltas.json`、`native-workflow.json`、五個 YAML | 不變 | 不變 |
+| `tools/d106-first-use-lineage.mjs`、`tools/unit-d106-first-use.mjs` | 手改 | 手改 |
+
+- lineage 裡重新產生的只有兩處：
+  - copy 8（驗證器）的第 14 項，也就是 D106 加的那一項 change，項數不變（14）；
+  - copy 13（routing 合約）照 D101 的做法整檔一項重產。
+  - D103、D104 的 change 項和說明都原樣。
+- 改過的檔都在封閉清單第 5、9 項裡，沒有新增要改的檔。
+- 重凍的步驟：乾淨 clone `38a8d56`，換上改過的 D106 層和守衛。
+  - 在 `38a8d56` 的舊輸出上跑 `--check` 會失敗（rc 1，驗證器不是新的候選）。
+  - 七個輸出還原成 `23d42c9` 的位元組之後：不帶旗標跑被拒絕（rc 1）；`--refreeze` rc 0、寫了 7 檔（[輸出](evidence/D106/refreeze-linux-cefcf87.json)）；第二次 `--refreeze` 寫 0 檔；`--check` rc 0。重凍的結果就是 `cefcf87` 提交的位元組（從 tmpfs 複製回工作樹）。
+  - 從 `38a8d56` 的舊 D106 輸出直接 `--refreeze` 會被當成手改而拒絕，要先還原成 `23d42c9`。這只影響本分支，main 上沒有那個狀態。
+
+**`cefcf87` 的驗證**（Linux Node 24.15.0，tmpfs 上的乾淨 clone，同一支 `run.sh`；基準沿用上面 `23d42c9` 那一輪；[摘要](evidence/D106/fix-cefcf87-summary.txt)）：
+
+| 指令 | `23d42c9`（基準） | `cefcf87` |
+|---|---|---|
+| `node tools/d101-freeze-chain.mjs --check` | exit 0 | exit 0 |
+| `node --test` 那 12 個檔 | exit 0，785／0 | exit 0，785／0 |
+| `node tools/unit-d103-timeout.mjs` | exit 0（20 負控） | exit 0（20 負控） |
+| `node tools/unit-d106-first-use.mjs` | 沒有這支 | exit 0：7 組全過、54 個門檻判定、42 種負控（[輸出](evidence/D106/unit-d106-first-use-cefcf87.txt)） |
+| `node --test proposals/d106/*.test.mjs` | 沒有 | exit 0，15／0 |
+| `transit.yml` 每一步（`npm ci` 用驗過雜湊的 Linux `node_modules` 代替），含 `npx tsc --noEmit` | 14 條全 exit 0 | 16 條全 exit 0 |
+| `ci.yml` build job 的三條 `node --test`（d104-historical-shards、d104-smoke-contract、d104-workflow、三個 d082；ci-integrity 與 unit-partitions 在 12 個檔裡） | 未在基準單獨跑（評審在 `38a8d56` 跑過 94 過） | exit 0，94／0 |
+| 讀者測試 77 個 | 45 綠、32 紅（歷史測試） | 77 個逐條相同（exit code、通過數、失敗子測試名稱） |
+| `foundation-test-runner.mjs`（`GITHUB_ACTIONS=true`） | exit 0，417／79／1203 | exit 0，417／79／1203 |
+| `inherited-test-runner.mjs --suite=d086`／`d087`／`d088`／`d089` | 各 exit 0 | 各 exit 0；各段 `pass`／`fail` 數列跟基準逐項相同（合計 3704、3804、4454、4454 過，0 敗） |
+
+- 這台筆電當時比較忙，runner 跑得比基準慢（d088 961 秒、d089 1173 秒，基準 421、462 秒）；只比通過數，不比時間。
+
+**重放評審的突變**（`C:\RUST\lab-perf\3d-red\d106\fix-mutate.sh`，套用 rules 評審的 `mutate.mjs` 的 14 種，再加 gate 評審的 hook 突變；同一個 tmpfs clone，每一種之前都 `git checkout -- .` 還原；[摘要](evidence/D106/fix-cefcf87-mutations.txt)）：
+
+| 突變 | 守衛 | `proposals/d106` 測試 | `--check` | 驗證器＋routing 合約 | `38a8d56` 時（評審的結果） |
+|---|---|---|---|---|---|
+| 對照（不改） | 過 | 過 | 過 | 過 | 過 |
+| 副本 4 種（`copy-op-le-2`、`copy-median-401`、`copy-preview-17`、`copy-op1-1200`） | 擋 | 擋 | 擋 | 擋（副本的 sha256） | 守衛、測試擋；`--check`、驗證器沒擋 |
+| 宣告檔與三份副本自洽地改成 `operation<=2` | 擋 | 擋 | 擋 | 擋（宣告檔的 sha256） | 同上 |
+| hook 改指 d088 的 cache-observation、hook 變成不註冊（`hook-extra-redirect`、`hook-noop`） | 擋 | 擋 | 擋 | 擋（resolve／hook 的 sha256） | 同上 |
+| resolve 多改指一個沒列的 URL（`resolve-unlisted-redirect`） | 擋 | 過 | 擋 | 擋（resolve 的 sha256） | **四關全過** |
+| hook 吞掉例外、結束時一律 exit 0（`hook-force-exit0`） | 擋 | 過 | 擋 | 擋（hook 的 sha256） | **四關全過** |
+| hook 把 `assert.ok` 換成空函式（gate 評審的突變 A） | 擋 | 過 | 擋 | 擋（hook 的 sha256） | 守衛、測試、`--check` 都沒擋（驗證器當時不讀 hook） |
+| YAML 5 種（拿掉 d089 的 env、d087 指到別的模組、d088 搬到 startup、d090 多一個選項、d086 註解多一個空白） | 擋 | 3 種擋、2 種過 | 擋 | 擋 | 守衛、`--check`、驗證器本來就擋 |
+
+- 15 種突變，守衛、`--check`、驗證器＋routing 合約全部擋下；`proposals/d106` 的兩個測試本來就不核程式和 YAML 的位元組，有 5 種沒擋（3 種程式、2 種 YAML），這是預期的。
+- 每一種跑完都還原，最後工作樹乾淨。同一個 clone 上 `ci.yml` build job 的三條 `node --test` 94／0。
+- `module.register()`：帶 hook 跑 `node -e 1`，不加旗標和加 `--pending-deprecation` 都是 exit 0、stderr 沒有 Warning。
 
 ### 沒做成的事（不美化）
 
@@ -238,7 +326,11 @@
 - **沒有量手機**；1000 ms 是從 CI 數據推的，不是保證。
 - 本機帶 hook 的 3 次都沒超過 400，「超過 400 仍通過」只在單元測試裡證明過。
 - 不帶 hook 在本機跑檢查腳本照舊是 400（刻意的），所以本機重跑可能跟 CI 判法不同。
-- 合併進 main 之後，跟 D103 一樣，沒有工作流在 push 時跑 `unit-d106-first-use`（transit 只在 PR 時跑）。
-- 守衛刻意卡住：之後要改 D106 的副本、hook、五個工作流的那一步或 transit 那一步，都要同時改守衛。
-- 沒有像 D103 那樣另外對守衛本身做突變測試；守衛裡的 33 種負控是唯一的證據。
+- **CI 從此抓不到頁面第一次放置在 400–1000 ms 之間的退步**（最多慢 2.5 倍），15 個 first-use job 都一樣。只能看 log 和證據裡的數字；要收緊得另開卡。這是這次放寬最大的代價。
+- 合併進 main 之後，push 時沒有工作流跑 `unit-d106-first-use`（transit 只在 PR 時跑），所以門檻行為的檢查（守衛驗收 4）push 時不跑。push 時只核位元組：驗證器（d086–d089 的 `native-and-build`）核 hook 載入的六個程式檔和 d086–d089 的那一步，routing 合約（d090 的 `native-and-build` 跑 `foundation-test-runner.mjs`）核 d090 的那一步。
+- 守衛刻意卡住：之後要改 D106 的副本、hook、resolve、宣告檔、五個工作流的那一步或 transit 那一步，守衛（它自己寫死的 sha256 表）和 D106 層（寫進驗證器的表）都要同時改。
+- 評審做了三份突變測試，找到三個漏洞（hook 的程式沒釘、驗證器不核程式、步驟結尾沒核），都已補上。補過之後只重放了評審的突變，沒有再找人做一輪新的獨立突變測試。
+- `module.register()` 在 Node 24 的文件上已經棄用（DEP0205）。今天不會警告；Node 哪天在執行時警告，`first-use-ceiling-hook.test.mjs` 的「stderr 沒有 Warning」那一條會紅。沒有改成 `module.registerHooks()`。
+- hook 沒有把 `NODE_OPTIONS` 從子程序的環境拿掉。哪天檢查腳本從別的目錄起 Node 子程序，子程序會找不到 hook 而失敗；今天只起 git 和 Chrome。
+- 業主第 3 點的問句是轉述（見「評審後的修正」），卡面上半照凍結規則沒改。
 - 沒有畫面變化，沒有對照圖。

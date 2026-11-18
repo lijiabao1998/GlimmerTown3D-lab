@@ -10,10 +10,10 @@
 
 ---
 
-- 2026-11-18 — D106 — 依業主「必要時放寬標準」「明確是雲端機器給的cpu 太少 和門檻太高」，CI 上頁面第一次放置（operation 1）的 commitMs 上限 400 → 1000 ms；其他上限（preview 16、其他 commit／rebuild／rebuildAll 400、三次中位數 400）、五份原始模組、原始測試與 `run:` 行都不動。做法：三份宣告過的副本＋只改指五個原檔 URL 的 resolve hook，只在 D086–D090 native-input-performance 的 first-use 那一步用 `NODE_OPTIONS` 載入；D106 層疊在 D101 鏈的 D104 之後重凍。
-  - 驗證（Linux Node 24.15.0，乾淨 clone，跟 23d42c9 同一套指令比）：`--refreeze` 逐位元組重現、`--check`；12 個現行測試 785／0；unit-d103、unit-d106（33 負控）、proposals/d106 15／0；transit 16 條、tsc 全 exit 0；77 個讀者測試逐條同基準；foundation 與 inherited d086–d089 runner 全 exit 0、通過數同基準；本機帶 hook 實跑 d088 1440 三次都過，不帶 hook 一次紅在 402.4 ms。詳見[卡面](docs/D106-ci-first-use-ceiling.md)與[證據](docs/evidence/D106/)。
-  - commit：卡面 `a2f8243`、施工 `d5b79eb`、紀錄為本列提交；無畫面變化。
-  - **沒做成的事**：PR 與 CI 還沒跑，帶 hook 的 native-input-performance 還沒在 GitHub runner 上量過；D101 要合併後 main 的 push 才會部署；沒量手機，1000 ms 不是保證；本機帶 hook 的三次頁面第一次放置都沒超過 400，「超過 400 仍通過」只有單元測試證明；合併後 push 不跑 unit-d106；沒對守衛本身做突變測試。
+- 2026-11-18 — D106 — 依業主「必要時放寬標準」「明確是雲端機器給的cpu 太少 和門檻太高」，CI 上頁面第一次放置（operation 1）的 commitMs 上限 400 → 1000 ms；其他上限（preview 16、其他 commit／rebuild／rebuildAll 400、三次中位數 400）、五份原始模組、原始測試與 `run:` 行都不動。做法：三份宣告過的副本＋只改指五個原檔 URL 的 resolve hook，只在 D086–D090 native-input-performance 的 first-use 那一步用 `NODE_OPTIONS` 載入；D106 層疊在 D101 鏈的 D104 之後重凍。評審後補（`cefcf87`）：驗證器另釘 hook 載入的六個程式檔（hook、resolve、宣告檔、三份副本）的 sha256，D106 確切檢查核到那一步的結尾，routing 的「No thresholds … relaxed」追加例外；卡面數據與業主第 3 點的引號另寫更正。
+  - 驗證（Linux Node 24.15.0，乾淨 clone，跟 23d42c9 同一套指令比）：`--refreeze` 逐位元組重現、`--check`；12 個現行測試 785／0；unit-d103、unit-d106（33 負控，`cefcf87` 起 42）、proposals/d106 15／0；transit 16 條、tsc 全 exit 0；77 個讀者測試逐條同基準；foundation 與 inherited d086–d089 runner 全 exit 0、通過數同基準；本機帶 hook 實跑 d088 1440 三次都過，不帶 hook 一次紅在 402.4 ms。`cefcf87` 照同一套重跑：`--refreeze` 從 23d42c9 狀態逐位元組重現、`--check`、12 檔 785／0、unit-d103、unit-d106（42 負控）、proposals/d106 15／0、transit 16 條（含 tsc）、ci.yml build job 94／0、77 個讀者測試與五個 runner 都同基準；重放評審的 15 種突變，守衛、`--check`、驗證器全擋。詳見[卡面](docs/D106-ci-first-use-ceiling.md)與[證據](docs/evidence/D106/)。
+  - commit：卡面 `a2f8243`、施工 `d5b79eb`、紀錄 `38a8d56`、評審修正 `cefcf87`、評審紀錄為本列最後一次提交；無畫面變化。
+  - **沒做成的事**：PR 與 CI 還沒跑，帶 hook 的 native-input-performance 還沒在 GitHub runner 上量過；D101 要合併後 main 的 push 才會部署；沒量手機，1000 ms 不是保證；本機帶 hook 的三次頁面第一次放置都沒超過 400，「超過 400 仍通過」只有單元測試證明；**CI 從此抓不到頁面第一次放置 400–1000 ms 之間的退步（最多 2.5 倍）**，只能看 log 與證據，要收緊得另開卡；合併後 push 不跑 unit-d106 的門檻行為檢查，只由驗證器核程式位元組；補過的守衛只重放了評審的突變，沒有新一輪獨立突變測試；hook 仍用文件上已棄用的 `module.register()`。
 
 - 2026-11-06 — D101／D104 — 修正新增提示與 D049 唯一錨點衝突；依業主新授權把 historical／browser 各拆八片，保留原斷言與退出碼，新增完整同來源／build 收據聚合；11 個有限 workflow 差異納入 D101 雜湊鏈。
   - 驗證：Linux refreeze／check、269 src 一致；來源／有限鏈 21／21，D103 五組含20負控、D049 8／8、current UI 38／38，CI／partition／分片合計347／347；Windows typecheck／build與真觸控phase1 10／10通過。詳見[收據](docs/D101-validation.md)及[D104卡](docs/D104-ci-parallel-validation.md)。

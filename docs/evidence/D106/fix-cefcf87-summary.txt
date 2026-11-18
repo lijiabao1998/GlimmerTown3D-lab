@@ -1,0 +1,79 @@
+# D106 review fix cefcf87 — Linux Node 24.15.0, WSL Ubuntu, tmpfs clone (scripts: C:\RUST\lab-perf\3d-red\d106\fix-refreeze.sh, run.sh, fix-mutate.sh)
+
+## Refreeze (clone 38a8d56 + edited D106 layer and guard; 7 chain outputs restored to 23d42c9 first)
+node_modules archive verified 87f9ebf6eb523b81005179cff5fb3e9cd102d16ee9d2fe019a56a3671fefaf23
+== old D106 state (38a8d56 outputs) with the new layer: --check must fail
+check-old rc=1
+== restored to 23d42c9: exact
+plain rc=1 (must be 1)
+refreeze1 rc=0
+refreeze2 rc=0
+check rc=0
+ .../d090/foundation-routing-contract-pipes-v2.mjs  |  2 +-
+ proposals/d090/foundation-routing-pipes-v2.json    |  2 +-
+ proposals/d090/selector-pipes-lineage.json         | 10 ++---
+ proposals/d090/selector-pipes-lineage.mjs          |  2 +-
+ tools/d090-validation-pipes-v2.mjs                 |  2 +-
+ tools/d106-first-use-lineage.mjs                   | 37 +++++++++++++++--
+ tools/unit-d106-first-use.mjs                      | 48 ++++++++++++++++++++--
+ 7 files changed, 88 insertions(+), 15 deletions(-)
+
+## run.sh fix fix.bundle cefcf87 chain tests d103 d106 transit readers runners
+node_modules archive verified 87f9ebf6eb523b81005179cff5fb3e9cd102d16ee9d2fe019a56a3671fefaf23
+=== fix 2026-11-18T13:30:58Z HEAD cefcf87763328eb3d02d0b9d381b0b1758668d54 node v24.15.0 steps: chain tests d103 d106 transit readers runners
+chain-check rc=0 secs=14 
+twelve-tests rc=0 secs=73 # pass 785 # fail 0 # cancelled 0 # skipped 0 
+unit-d103 rc=0 secs=3 
+unit-d106 rc=0 secs=3 
+d106-tests rc=0 secs=1 # pass 15 # fail 0 # cancelled 0 # skipped 0 
+transit-01 rc=0 secs=66 
+    (node --test tools/d101-source.test.mjs)
+transit-02 rc=0 secs=52 
+    (node --test tools/d090-source-v3.test.mjs)
+transit-03 rc=0 secs=10 
+    (node --test proposals/d090/source-boundaries-v3.test.mjs)
+transit-04 rc=0 secs=5 
+    (node tools/unit-d097-graph.mjs)
+transit-05 rc=0 secs=0 
+    (node tools/unit-d097-movement.mjs)
+transit-06 rc=0 secs=3 
+    (node tools/unit-d100-network.mjs)
+transit-07 rc=0 secs=3 
+    (node tools/unit-d100-format.mjs)
+transit-08 rc=0 secs=19 
+    (node tools/unit-d102-history.mjs)
+transit-09 rc=0 secs=4 
+    (node tools/unit-d103-timeout.mjs)
+transit-10 rc=0 secs=2 
+    (node tools/unit-d106-first-use.mjs)
+transit-11 rc=0 secs=1 
+    (node --test proposals/d106/first-use-ceiling.test.mjs proposals/d106/first-use-ceiling-hook.test.mjs)
+transit-12 rc=0 secs=17 
+    (node tools/d101-save.mjs)
+transit-13 rc=0 secs=75 
+    (node tools/d101-construction.mjs)
+transit-14 rc=0 secs=5 
+    (node tools/d101-migration.mjs)
+transit-15 rc=0 secs=4 
+    (node tools/d101-art.mjs)
+transit-16 rc=0 secs=97 
+    (npx tsc --noEmit)
+readers rc=0 secs=87 
+tracked dirty before runners: []
+runner-foundation rc=0 secs=431 
+runner-inherited-d086 rc=0 secs=398 
+runner-inherited-d087 rc=0 secs=334 
+runner-inherited-d088 rc=0 secs=961 
+runner-inherited-d089 rc=0 secs=1173 
+=== fix done 2026-11-18T14:35:11Z
+
+## Readers vs base (compare.mjs out-base/readers.json out-fix/readers.json)
+77 files; 77 identical; files with a new failure: 0
+(all 77 lines are 'same')
+
+## Runner pass/fail sequences vs base (ℹ pass / ℹ fail lines, in order)
+same  foundation: ℹ tests 417 ℹ pass 417 ℹ fail 0 ℹ tests 79 ℹ pass 79 ℹ fail 0 ℹ tests 1203 ℹ pass 1203 ℹ fail 0 
+same  inherited-d086: ℹ tests 275 ℹ pass 275 ℹ fail 0 ℹ tests 555 ℹ pass 555 ℹ fail 0 ℹ tests 780 ℹ pass 780 ℹ fail 0 ℹ tests 2094 ℹ pass 2094 ℹ fail 0 
+same  inherited-d087: ℹ tests 412 ℹ pass 412 ℹ fail 0 ℹ tests 555 ℹ pass 555 ℹ fail 0 ℹ tests 780 ℹ pass 780 ℹ fail 0 ℹ tests 2057 ℹ pass 2057 ℹ fail 0 
+same  inherited-d088: ℹ tests 275 ℹ pass 275 ℹ fail 0 ℹ tests 412 ℹ pass 412 ℹ fail 0 ℹ tests 555 ℹ pass 555 ℹ fail 0 ℹ tests 780 ℹ pass 780 ℹ fail 0 ℹ tests 2432 ℹ pass 2432 ℹ fail 0 
+same  inherited-d089: ℹ tests 275 ℹ pass 275 ℹ fail 0 ℹ tests 412 ℹ pass 412 ℹ fail 0 ℹ tests 555 ℹ pass 555 ℹ fail 0 ℹ tests 780 ℹ pass 780 ℹ fail 0 ℹ tests 2432 ℹ pass 2432 ℹ fail 0 
