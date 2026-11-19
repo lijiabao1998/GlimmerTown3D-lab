@@ -861,3 +861,34 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
 - D104 讓 historical／browser 各八片；原 unit／smoke 主程式保持不變。舊 CI 雜湊以固定前像、11 個有限差異與固定後像納入 D101 同次生成，全部 lineage 仍重播；來源範圍仍是 8 modified／2 added、269 檔。獨立唯讀審查未發現阻擋。
 - [推送前驗證收據](D101-validation.md) 分列來源與實跑；[PR #56 最終驗證區](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/56#d101-final-validation) 記錄 final HEAD、代表片、完整 CI run／attempt／jobs 與耗時，避免純結果文字再產生提交重跑。未跑項目不提前記成功。
 - **這輪沒做成的事與限制**：本機全套 C 未完整成功，最終覆蓋交由同 HEAD CI；Android 真機仍未測但業主已免除。圖像採 B、舊 CDP 跨導航限制與產品既定未完成項目仍照前文；本輪不合併、不發布、不改其他 PR。
+
+## 合併之後（2026-11-18 補記）
+
+前文照舊，不改；以下是之後的事。
+
+- **合併**：#56 於 2026-11-07 05:55 UTC 合併為 `23d42c9`。
+- **main CI 紅一個 job，沒有部署**：main ci [42344770708](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/42344770708)（`23d42c9`）只紅 `d088-native-release / native-input-performance (1440)`。
+  - 紅的是頁面第一次放置：`quadrangular-county-constabulary` 第 0 次，commitMs **512.3** > 400。這是首用計時的凍結門檻，不是運輸的斷言；歷來的數據見 D106 卡。
+  - `pages` 因此 skipped，**D101 這次沒有上線**。
+- **處理**：依業主 2026-11-18「必要時放寬標準」，[D106](D106-ci-first-use-ceiling.md) 只在 CI 上把頁面第一次放置的上限 400 → 1000 ms，其他上限與原始模組都不動。
+  - #62 於 2026-11-18 17:49 UTC 合併為 `13ff23c`。head `91e1c1f` 上 9 個 run（8 個 pull_request、1 個分支 push 的 ci）：219 success、14 skipped、0 failed。
+    - ci 的 79 個 job 在兩個 run 各算一次；只算 8 個 pull_request run 是 140 success、7 skipped。
+- **部署還沒確認**：`13ff23c` 的 main ci 44362897990 寫這段時還沒跑完。D101、D106 有沒有上線，等那一輪的收據另外補記；這裡不寫已上線。
+  - **2026-11-19 補記：已上線。**
+    - main ci [44362897990](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44362897990)（`13ff23c`）140／140 success，含五個 native release 與 `pages`。
+    - Pages deployment `7893265572`（2026-11-18 19:02 UTC）。
+    - 2026-11-19 00:45 UTC 下載 <https://lijiabao.uk/lab/glimmertown-3d/play/>：HTTP 200，4,298,280 bytes，SHA-256 `9b08a5fd8141c843…0df2a974`，跟同一輪 `github-pages` artifact 的 `index.html` 逐位元組相同。
+    - 同一時間用業主筆電真顯示卡的無頭 Chrome 開：WebGL2 為真，運輸建造的鐵路、電車、地鐵三顆按鈕都在；console 只有 `favicon.ico` 404 一筆。沒有進城實際施工，也沒上 Android 實機。
+    - 從 11-07 合併到 11-18 這段時間，線上一直是 11-05 的 `ceff055`。
+- **美術維持 B（Claude 的決定）**：第四步寫的是「依常駐美術授權先採 B，業主看圖不喜歡可調回」；倉庫裡沒有業主確認 B 的紀錄。
+  - 業主 2026-11-18：「性能和美術你來決定，我來 決定大方向就好」。依這句，Claude 決定維持 B，不再等確認。這是 Claude 的決定，不是業主原話。
+  - 業主看圖不喜歡，照常駐規則 1 改回；三檔三寬的圖在上面「瀏覽器與三檔圖」。
+- **`transit.yml` 要不要加 push 到 main 的觸發**（前面「要業主定的事」的「延續未決」）：Claude 2026-11-18 決定不加。理由與缺口寫在 [D102 卡](D102-steel-construction-history.md)、[D103 卡](D103-d086-native-timeout.md) 同日的補記。
+- **還沒做成的事**：
+  - 部署收據沒有（上面）；公開站上有沒有運輸工具，現在不能說。
+  - 美術 B 沒經業主看圖確認。
+  - 公網 WebGL 重播沒做；Android 實機業主已免，桌面結果不代表手機。
+  - D106 之後，CI 抓不到頁面第一次放置在 400–1000 ms 之間的退步（D106 卡「沒做成的事」）。
+  - 不加 push 觸發，本卡的五支守衛（`tools/d101-source.test.mjs`、`d101-save`、`d101-construction`、`d101-migration`、`d101-art`）同樣只在 PR 的 `transit` 跑；D097、D100 的守衛也是。
+    - push 到 main 時，`ci` 的 historical 分區與 native-release 照舊跑（後者核 `src/` 269 檔的位元組），但都不是這五支的行為檢查。
+    - PR 改 base 成 main 後立刻合併、或直接推 main 時，連 PR 進 main 的那一輪也沒有（見 D102 卡同日的補記）。

@@ -14,11 +14,27 @@
 - 給 Claude 的常駐規則：[`CLAUDE.md`](CLAUDE.md)
 - 每一輪做了什麼、沒做成什麼：[`LOG.md`](LOG.md)
 
-## 目前正式版：D091 開場與載入畫面
+## 目前正式版：D101 運輸建造與運輸存檔（2026-11-18 上線）
+
+- [D101](docs/D101-transit-save-and-ui.md)（PR #56，2026-11-07 合併為 `23d42c9`）：
+  - 運輸存檔（事件 26、`CITY_FORMAT 12`），第一次遷移前完整備份；
+  - ☰ 運輸建造：鐵路、電車、地鐵、站廠、拆除、復原；
+  - 軌道美術用 B 檔（三檔對照在 [`docs/img/d101-transit/`](docs/img/d101-transit/)；Claude 依業主 2026-11-18「性能和美術你來決定」定案）。
+  - 還沒有車、乘客、貨運和交通收入。
+- D101 合併後 main CI 只紅在 D088 的「頁面第一次放置」效能門檻（512.3 ms，上限 400），所以 11-07～11-18 沒部署。
+  - [D106](docs/D106-ci-first-use-ceiling.md)（PR #62，2026-11-18 合併為 `13ff23c`）只把 CI 上頁面第一次放置的上限放到 1000 ms，其他門檻不動。業主：「明確是雲端機器給的cpu 太少 和門檻太高 實際玩起來不卡」。
+- [main CI 44362897990](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44362897990)：140／140 成功。Pages deployment `7893265572`（2026-11-18 19:02 UTC）。
+  - 2026-11-19 00:45 UTC 線上首頁 HTTP 200，4,298,280 bytes，SHA-256 `9b08a5fd8141c843…0df2a974`，跟同一輪 `github-pages` artifact 逐位元組相同。
+  - 真顯示卡無頭 Chrome 開過：WebGL2、運輸按鈕都在，console 只有 favicon 404。不等於 Android 實機。
+- 這期間也合了：D100 交通資料模型、D102 煉鋼廠施工記進世界歷史、D103 CI 逾時 20→30 分（都在 2026-11-05，`ceff055` 上線），D098、D104（只動文件與 CI）。
+
+**線上版**：<https://lijiabao.uk/lab/glimmertown-3d/play/>。`game.lijiabao.uk/GlimmerTown3D-lab/` 會 301 轉過來；`lijiabao1998.github.io/GlimmerTown3D-lab/` 不轉址、直接回 200（2026-11-18 只查了 HEAD）。倉庫裡沒有換網域的紀錄。
+
+### 上一版：D091 開場與載入畫面
 
 [D091](docs/D091-start-loading.md) 加上歡迎畫面（進城按鈕、觸控／桌機說明、英式小鎮剪影）與不假造進度的載入動畫（業主選「B 載入條＋場景呼吸」）；不改 `src/`。PR #47 於 2026-10-28 合併為 `4fd1dda`，[main CI 40715129229](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/40715129229) 126／126 成功，Pages deployment `7392429621`（2026-10-28 17:20:30 UTC）。之後 [D099](docs/D099-transit-source-lease.md)（PR #52，`18a718c`，2026-11-03）只動交通地基，出貨位元組沒變：2026-11-04 從 `18a718c` 重建的 `dist/index.html` 與線上逐位元組相同（4,259,705 bytes，SHA-256 `d27572923cf25476…de5d8f4`）。
 
-**線上版**：<https://game.lijiabao.uk/GlimmerTown3D-lab/>。舊網址 `lijiabao1998.github.io/GlimmerTown3D-lab/` 會 301 轉過去；2026-10-27 的部署還在 github.io，2026-10-28 起換成這個網域，倉庫裡沒有換網域的紀錄。HTTP 位元組一致不等於公網 WebGL 重播或 Android 實機。
+D091 當時的線上網址是 <https://game.lijiabao.uk/GlimmerTown3D-lab/>，舊網址 `lijiabao1998.github.io/GlimmerTown3D-lab/` 會 301 轉過去；2026-10-27 的部署還在 github.io，2026-10-28 起換成那個網域。（2026-11-18：網址已再換，見上。）HTTP 位元組一致不等於公網 WebGL 重播或 Android 實機。
 
 ## 英式建築計畫（D068–D090）：200／200 已驗證發布
 

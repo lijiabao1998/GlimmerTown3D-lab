@@ -1,0 +1,75 @@
+# D098 收尾（2026-11-18）：存檔標籤與刪除的遠端分支
+# 業主 2026-11-18「全部收尾完」（Claude 讀成同意第四節的建議，見卡面）。計畫見 docs/D098-repo-hygiene-20261102.md 第三、四節；執行紀錄見同卡「2026-11-18 執行紀錄」。
+# 來源：執行時的分類表與推送紀錄（本機 C:\RUST\lab-perf\3d-red\，不進倉庫）；
+#       2026-11-18 約 17:55 UTC（本機已是 11-19）撰寫時重核，18:13 UTC 再核一次，結果相同：git ls-remote origin 'refs/tags/archive/*'、git ls-remote --heads origin、git merge-base --is-ancestor <head> 13ff23c。
+# 標籤全是附註標籤（annotated）：ls-remote 每個都有 ^{} 那一行，標籤物件與指向的提交不同。
+
+## 一、51 個存檔標籤（46 個 archive/<分支名>＋第三節的 5 個具名標籤）
+# 欄位：tag<TAB>tag_object<TAB>commit（標籤剝開後指向的提交）<TAB>刪除的分支（刪除前的 head＝commit）<TAB>備註
+archive/chore/d098-repo-hygiene-20261102	743e8c5c16dfac4f3e8cea10bd34a031450ffde8	e7ea8255b56fe05084d91ec93597c6f61c74f20c	chore/d098-repo-hygiene-20261102	第四節未併分支
+archive/claude/d046-live-verification	3a8fb16ff41503bbaff5ca41469534faa522f37b	d37f6363a63ab227f7adff4ff73e16918bf54c7b	claude/d046-live-verification	第四節未併分支
+archive/claude/d047-live-verification	4a83e65abf3ddd8de99cf2564db1785d07d71e22	02a1bc91b7b31a46c489d984c23247708e440080	claude/d047-live-verification	第四節未併分支
+archive/claude/d048-baseline-capture	84800c23dc27a5ad8240c68df21a6e1d4de82b3f	95cdb7a60b2efacbc377154498327231ce6ade0a	claude/d048-baseline-capture	第四節未併分支
+archive/claude/d048-focused-verification	48ca415831c5b9ffc10e22d8e442401f85d3c232	069dd9c78552e86cd531f264c6fed426d8d60944	claude/d048-focused-verification	第四節未併分支
+archive/claude/d048-live-verification	e0d7765f0b1d1dd944ff37f3b88b9a1ded5f0e91	5246cedbf1257a6ee8be9a48d75b682b21b577a7	claude/d048-live-verification	第四節未併分支
+archive/claude/d049-baseline-capture	b918543224dc013c30fe13837f5373073bab871a	5b13e99ab57d57f2a3ec9caea70fe9393fc9121f	claude/d049-baseline-capture	第四節未併分支
+archive/claude/d049-live-verification	6171d2b4d0873bbafbd7c2acd9a19aa322fc369c	af693ed740d3c20b72e235f0c8a773d5d123cb1d	claude/d049-live-verification	第四節未併分支
+archive/claude/d050-baseline-capture	14fd872d3998eff638aa840f6f3426d39dd6ed6e	4649b69df44103cd0dd09a711f79757f6cdb3e46	claude/d050-baseline-capture	第四節未併分支
+archive/claude/d050-live-verification	d400200cb97a65d975cdcb6ff949817568e963f8	33e3ccfacb13f605238afb3a384c5483e4755ee3	claude/d050-live-verification	第四節未併分支
+archive/claude/d051-baseline-capture	77e87879f5dccb4159670f7aab8a3a60be703e2a	5261c33f08d0e4a34d4e6c4a78125b0eef1ee9d5	claude/d051-baseline-capture	第四節未併分支
+archive/claude/d051-live-verification	af20aa19471c21d18dbf68677eb3576c5d87b676	8854cb23a0d72202a459e3db5fc820757a3f300b	claude/d051-live-verification	第四節未併分支
+archive/claude/d052-baseline-capture	4e31455b91ce36701249aa483dd4a74e95be0657	4c4cc63149d7dedd3434fcb8aa91ccab8df8b7bc	claude/d052-baseline-capture	第四節未併分支
+archive/claude/d052-live-verification	0b1de67e3c1096a7fa16322df0e68e6aae6215fe	b019a078bca6db6d2eeb029e910c8286ba13ad17	claude/d052-live-verification	第四節未併分支
+archive/claude/d052-touch-verification	9043617f6bc44e67465def36ed3d243bb4a414ce	d3f4847b4b270e3b19b0033dca97ccbc8e5869e3	claude/d052-touch-verification	第四節未併分支
+archive/claude/d053-live-verification	3a66d9bf427c8d7b1528b5b486ce9ca5179ad68a	3c39fee324e99f90de1bf186fe9e2cf61bed8c4a	claude/d053-live-verification	第四節未併分支
+archive/claude/d054-live-verification	72cb8d41d4269a57b416f3fbf0d4a4581666766a	c698a61d0b6ce560f214dd99f812a65363e9642d	claude/d054-live-verification	第四節未併分支
+archive/claude/d055-baseline	5ed51b4d0e5cbdd059d1280ee297494b930d0f40	3e5fc80811c9b58a24405eae2a55b4b1734fabc8	claude/d055-baseline	第四節未併分支
+archive/claude/d100-transit-data-model	6e7af9eb539216e92ca9304587a1abd7cf9f0272	354bd19c82a4db7a1fb201001cc58f456fb9d606	claude/d100-transit-data-model	第四節未併分支
+archive/claude/qa-d054-before	6a0daeae1e719b6fa513fe45b2081bbb31a770d0	a534d5855dcdf84b83ffdda5d524a7664ebc3af0	claude/qa-d054-before	第四節未併分支
+archive/claude/qa-d054-preflight	3d58cec809bd88ef2024f88d519893440f835f20	e7a90bfadf23860a3dd7116f7b998a8f4a571552	claude/qa-d054-preflight	第四節未併分支
+archive/claude/qa-d054-recovery-diagnose	03d4ddb2640bd14cde8315d0bf75472dcab141fb	a099f5cadfc9120592c69eafcb313f869f0b44fd	claude/qa-d054-recovery-diagnose	第四節未併分支
+archive/claude/qa-d054-recovery-fixed	dc9e1796552d1df52b84a33f280dec935e4eb091	2a2760ae17ca5eea556fa502eaf61f917b38fbd9	claude/qa-d054-recovery-fixed	第四節未併分支
+archive/codex/d058-public-verification	3182b085d858bea28e20cc027ad3cb9588d3672d	eeadaccdb527e1e8c0f598f964632cc87ef3a5f1	codex/d058-public-verification	第四節未併分支
+archive/codex/d075-inspection	13dbcc8b20b4294e4e0b8278a3de0392bf36732d	a1dc2f955daf0659390e6112bf385c3220b24a56	codex/d075-inspection	第四節未併分支
+archive/codex/d076-inspection	c4a709ac5322a4dbb2bfe8fec363bac734d6ee78	47339e56dbcde96752ad67410c4c45a1f74307b3	codex/d076-inspection	第四節未併分支
+archive/codex/d077-inspection	f590cc398af4bb8da23464931882966382ff3953	e5d36bea76e93949c5b42246125f339ec51d93d3	codex/d077-inspection	第四節未併分支
+archive/codex/d078-inspection	f1a9ad25b3959073921aa9e40dd437e0c2d92a47	0d9fb7da6c84600819932b49580297c64d97da7f	codex/d078-inspection	第四節未併分支
+archive/codex/d079-british-ten	89d2e6b6ecd483be2f684658c5b1334e33ab50c9	69f03c4eb6a484f583f3236f359e1015c0699867	codex/d079-british-ten	第四節未併分支
+archive/codex/d079-inspection	cf5961df775ad48c54d6e43b5960ac68c12a8aee	19323d56a047f00ff23af96c8d7f41f71f19ff44	codex/d079-inspection	第四節未併分支
+archive/codex/d080-british-ten	99c52d67659b49e18d4ec14825caef983047f410	5a0b5f576f02b43790c45fdd525e53721eef5027	codex/d080-british-ten	第四節未併分支
+archive/codex/d080-inspection	46408eb4385123f65b7fb6f85d0fa430d88b87f5	414c75f586fa8d6b041b44a15c514c4c45f8c1f7	codex/d080-inspection	第四節未併分支
+archive/codex/d081-inspection	1bb34d83af6e0c0ffcac12e8fa52150f3c127b46	5662b7ca9a4d4300e267f59b494b354a9a99a8d3	codex/d081-inspection	第四節未併分支
+archive/codex/d081-touch-controlled	b2679c36ad396fa0e6f25d35efc77c54606c245c	d173123813c778bd1b10e1ce3ddfd23f3f116f2e	codex/d081-touch-controlled	第四節未併分支
+archive/codex/d081-touch-diagnostic	7f5372f296c7cca028aa1b0f10d9592c684bd263	d57f46c47882487df9ef74680b53f633e723c05d	codex/d081-touch-diagnostic	第四節未併分支
+archive/codex/d082-179v1-geometry-preview	6fc33ba7a9edd36a107562f5f799367ef543b7a9	258dccd4faef954e52ba9e2771a03db3141e60db	codex/d082-179v1-geometry-preview	第四節未併分支
+archive/codex/d082-cloud-repair	fa7e9de18c8d1629398910b8c43ae19cadacda61	08ee4ab62a40032c12fa4edf42e8baf269a068a4	codex/d082-cloud-repair	第四節未併分支
+archive/codex/d082-remaining-diagnostics-preview	2b545e632e173aac953b9a0322f1c42a997c74b0	0b583d1deecc8a72af19c6c470cacd73153bfe83	codex/d082-remaining-diagnostics-preview	第四節未併分支
+archive/codex/d083-cloud-stage	c899431ebb03a5123345c2ebc07e27a59e749adf	e322ae9286a546cb6787e21a67c17463ace4d726	codex/d083-cloud-stage	第四節未併分支
+archive/d100/transit-network	dd527b43a2e4b9a5769d9c6fd2334d21022c94cb	288e39a9da578cff1151c3ffd25626c14fe64a75	d100/transit-network	第四節未併分支
+archive/d101/transit-save-ui	495d6cb10b3ab64aba9d6c97b2a47543f19c9453	07a1c0b7d73d2e9ed17e75823247207ff095ecae	d101/transit-save-ui	第四節未併分支
+archive/gpt/d092-living-city	9fd61741be3b942530a9cccb7e52c39273e25e3e	c8e9ad86ce9a4cac7a72ae4d9f2b7d6962036440	gpt/d092-living-city	第四節未併分支
+archive/gpt/d097-rail-transit	1f3af60de2e9d6a9e231a29c5816fbc29b50f4cd	1fd0e8c3061ac268db0d3d7ae68cafd2dc41084c	gpt/d097-rail-transit	第四節未併分支
+archive/qa/d053-baseline-capture	ee50aa38fac5e36318d299cd67e911e834f5f9ff	c2f1f602c4ea0dd7a53c9cdf1e44f24e7ba2c0ab	qa/d053-baseline-capture	第四節未併分支
+archive/qa/d055-live-0e849a6f	98cb3c059c45915921128f6bcf14c09d8737a518	b5c6e3f40419be8c918f9e5102202b2dbd390680	qa/d055-live-0e849a6f	第四節未併分支
+archive/qa/d056-live-422647c	28af95b5b85037f28ad537cc8c5029e1732e0917	df83fb3921bdba6a07d765093c97dcbd1e628e9d	qa/d056-live-422647c	第四節未併分支
+archive/pr53-d100-transit-network	2d5b8f30d2ad6ad1abd6bba69ee9639641b16091	288e39a9da578cff1151c3ffd25626c14fe64a75	d100/transit-network	第三節具名標籤：PR #53 D100 head
+archive/pr54-d101-transit-save-ui	816eca58c8b56e196c1fe6f5a57bf663b9a8077b	07a1c0b7d73d2e9ed17e75823247207ff095ecae	d101/transit-save-ui	第三節具名標籤：PR #54 D101 head
+archive/pr48-d092-living-city	71c4144692e9ce8b7e35b08d54089efb7eba26e1	c8e9ad86ce9a4cac7a72ae4d9f2b7d6962036440	gpt/d092-living-city	第三節具名標籤：PR #48 D092 head
+archive/pr51-d098-repo-hygiene	0b82659d8d0062f97f7980da6c81c71cc5594fed	e7ea8255b56fe05084d91ec93597c6f61c74f20c	chore/d098-repo-hygiene-20261102	第三節具名標籤：PR #51 D098 head
+archive/d100-transit-data-model	8e9edf7a34b1fda8b4e02d4b3a577cfda376d737	354bd19c82a4db7a1fb201001cc58f456fb9d606	claude/d100-transit-data-model	第三節具名標籤
+
+## 二、6 條已併入 main 的分支（刪除，不打標籤；head 都是 main 13ff23c 的祖先）
+# 欄位：branch<TAB>刪除前的 head
+ci/d103-d086-timeout	f0a652b1e017100f4f327b6614cba68f0fb68e0f
+claude/d099-transit-source-lease	412c069213862070061d8976f86dc40ca84334e1
+docs/main-records-20261104	6cbe381b9919513397e4f7563bf6891d80509d4c
+fix/d102-steel-history	c8e5ef14689403a1935185935b9d442323d14f11
+transit/d100-network	b328a07866ead482489c3c382bea867d7fa91c19
+transit/d101-save-ui	a875acf41872ef30da40fc9ec33d98a3bfe4ada6
+
+## 三、刪除後剩下的遠端分支（git ls-remote --heads origin，2026-11-18 約 17:55 UTC 與 18:13 UTC 重核）
+# 欄位：branch<TAB>head<TAB>狀態
+claude/3d-claude-reading-o11uvs	0b27c28170986f8b4b40e54a470146192f9ef929	未併：#61，內容 2026-11-18 在 docs/wrapup-20261118 用 cherry-pick -x 搬過來（那個分支合併前還不在 main），沒打標籤、沒刪
+claude/d106-first-use-ceiling	91e1c1f3adb4475820e9c22a92195cb292c20007	已併（#62，13ff23c），暫留
+living/d092-living-city	3e272fca92c3fd8e57019dc05e6695817ed315a4	未併：#57 D092 草稿，沒打標籤、沒刪
+main	13ff23c73ac82d309ff8fbfb9fba3441dd71b141	main
