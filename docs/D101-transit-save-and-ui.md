@@ -874,6 +874,12 @@ D102 的修法要在歷史裡加一種事件，而 D102 比本卡先上線。讀
   - #62 於 2026-11-18 17:49 UTC 合併為 `13ff23c`。head `91e1c1f` 上 9 個 run（8 個 pull_request、1 個分支 push 的 ci）：219 success、14 skipped、0 failed。
     - ci 的 79 個 job 在兩個 run 各算一次；只算 8 個 pull_request run 是 140 success、7 skipped。
 - **部署還沒確認**：`13ff23c` 的 main ci 44362897990 寫這段時還沒跑完。D101、D106 有沒有上線，等那一輪的收據另外補記；這裡不寫已上線。
+  - **2026-11-19 補記：已上線。**
+    - main ci [44362897990](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44362897990)（`13ff23c`）140／140 success，含五個 native release 與 `pages`。
+    - Pages deployment `7893265572`（2026-11-18 19:02 UTC）。
+    - 2026-11-19 00:45 UTC 下載 <https://lijiabao.uk/lab/glimmertown-3d/play/>：HTTP 200，4,298,280 bytes，SHA-256 `9b08a5fd8141c843…0df2a974`，跟同一輪 `github-pages` artifact 的 `index.html` 逐位元組相同。
+    - 同一時間用業主筆電真顯示卡的無頭 Chrome 開：WebGL2 為真，運輸建造的鐵路、電車、地鐵三顆按鈕都在；console 只有 `favicon.ico` 404 一筆。沒有進城實際施工，也沒上 Android 實機。
+    - 從 11-07 合併到 11-18 這段時間，線上一直是 11-05 的 `ceff055`。
 - **美術維持 B（Claude 的決定）**：第四步寫的是「依常駐美術授權先採 B，業主看圖不喜歡可調回」；倉庫裡沒有業主確認 B 的紀錄。
   - 業主 2026-11-18：「性能和美術你來決定，我來 決定大方向就好」。依這句，Claude 決定維持 B，不再等確認。這是 Claude 的決定，不是業主原話。
   - 業主看圖不喜歡，照常駐規則 1 改回；三檔三寬的圖在上面「瀏覽器與三檔圖」。

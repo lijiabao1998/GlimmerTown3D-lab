@@ -10,6 +10,23 @@
 
 ---
 
+- 2026-11-18／19 — D106 合併上線、D101 上線、D098 分支整理、#61 補記移植 — 業主 2026-11-18「3D 先處理紅，必要時放寬標準Claude，性能和美術你來決定，我來 決定大方向就好   全部收尾完」，收尾範圍業主答「只做3d lab」。
+  - **D106 → D101 上線**：PR #62 九個 run 全 success 後，用合併提交合成 `13ff23c`（17:49 UTC）。main ci [44362897990](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44362897990) 140／140，Pages deployment `7893265572`（19:02 UTC）。
+    - 15 個 native-input-performance job 477 筆全過，頁面第一次放置最慢 213.2 ms，這一輪沒用上放寬的上限。
+    - 線上 <https://lijiabao.uk/lab/glimmertown-3d/play/> 4,298,280 bytes、SHA-256 `9b08a5fd…0df2a974`，跟 artifact 逐位元組相同；真顯示卡無頭 Chrome 開過，WebGL2、運輸按鈕都在，console 只有 favicon 404。收據在 [D106 卡面](docs/D106-ci-first-use-ceiling.md)最後一節、[D101 卡面](docs/D101-transit-save-and-ui.md)補記。
+  - **D098 分支整理**：46 條沒併的分支先打 `archive/<分支名>` 註記標籤，另補第三節的 5 個 PR head 標籤，共 51 個；在遠端逐一核對都指向原 head 後，刪掉這 46 條和 6 條已併進 main 的分支，共 52 條。遠端剩 main、`claude/d106-first-use-ceiling`、`living/d092-living-city`（#57）、`claude/3d-claude-reading-o11uvs`（#61）。紀錄見 [D098 卡面](docs/D098-repo-hygiene-20261102.md)「2026-11-18 執行紀錄」與 [清單](docs/evidence/D098/branch-archive-20261118.txt)。
+  - **#61 補記移植**：#61（D102／D103 合併後的 main ci、Pages 與兩張卡的 CI 紀錄）跟 main 衝突，改在本分支照原文移植（README 那段不搬，改寫成上面的現況），舊文字後面加 2026-11-18 的後續說明。下面 11-05 那列與 11-04 D102 第二次 CI 那列是移植過來的。
+  - **Claude 依業主授權做的決定**：D101 軌道美術維持 B；D102／D103 守衛照舊只在 PR 的 transit 跑，不另加 push 觸發（理由與缺口寫在兩張卡）；#57 說明裡居民存檔的事件號改成 27／`CITY_FORMAT 13`。
+  - 煙霧測試：只動文件（`docs/`、`LOG.md`、`README.md`），`git diff --check` 乾淨，改過的 Markdown 相對連結全部有效；文件 PR 的 CI 結果寫在 PR。commit：本分支各提交；樣張：沒有畫面變化。
+  - **沒做成的事**：
+    - 沒上 Android 實機；線上只開到首頁，沒有進城施工。
+    - 「頁面第一次放置超過 400 照樣過」還沒在 GitHub runner 上真的發生過。
+    - CI 抓不到頁面第一次放置在 400–1000 ms 之間的退步（D106 的代價）。
+    - #57（D092 居民日常）、D093 居民存檔格式等業主定方向；D105 交通載入門檻、D097 的車隊／需求／貨運都沒開工。
+    - D102 卡記的「快取裡的舊版讀到新格式存檔會用快照開」沒處理。
+    - D083、D087–D090 native-and-build 仍是 20 分鐘上限。
+    - 本線 `CLAUDE.md` 還把本機路徑寫成 `C:\dev\GlimmerTown3D-lab`，跟業主「施工只能在 C:\RUST」衝突，已告訴業主，沒改 CLAUDE.md。
+
 - 2026-11-18 — D106 — 依業主「必要時放寬標準」「明確是雲端機器給的cpu 太少 和門檻太高」，CI 上頁面第一次放置（operation 1）的 commitMs 上限 400 → 1000 ms；其他上限（preview 16、其他 commit／rebuild／rebuildAll 400、三次中位數 400）、五份原始模組、原始測試與 `run:` 行都不動。做法：三份宣告過的副本＋只改指五個原檔 URL 的 resolve hook，只在 D086–D090 native-input-performance 的 first-use 那一步用 `NODE_OPTIONS` 載入；D106 層疊在 D101 鏈的 D104 之後重凍。評審後補（`cefcf87`）：驗證器另釘 hook 載入的六個程式檔（hook、resolve、宣告檔、三份副本）的 sha256，D106 確切檢查核到那一步的結尾，routing 的「No thresholds … relaxed」追加例外；卡面數據與業主第 3 點的引號另寫更正。
   - 驗證（Linux Node 24.15.0，乾淨 clone，跟 23d42c9 同一套指令比）：`--refreeze` 逐位元組重現、`--check`；12 個現行測試 785／0；unit-d103、unit-d106（33 負控，`cefcf87` 起 42）、proposals/d106 15／0；transit 16 條、tsc 全 exit 0；77 個讀者測試逐條同基準；foundation 與 inherited d086–d089 runner 全 exit 0、通過數同基準；本機帶 hook 實跑 d088 1440 三次都過，不帶 hook 一次紅在 402.4 ms。`cefcf87` 照同一套重跑：`--refreeze` 從 23d42c9 狀態逐位元組重現、`--check`、12 檔 785／0、unit-d103、unit-d106（42 負控）、proposals/d106 15／0、transit 16 條（含 tsc）、ci.yml build job 94／0、77 個讀者測試與五個 runner 都同基準；重放評審的 15 種突變，守衛、`--check`、驗證器全擋。詳見[卡面](docs/D106-ci-first-use-ceiling.md)與[證據](docs/evidence/D106/)。
   - commit：卡面 `a2f8243`、施工 `d5b79eb`、紀錄 `38a8d56`、評審修正 `cefcf87`、評審紀錄為本列最後一次提交；無畫面變化。

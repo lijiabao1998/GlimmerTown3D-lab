@@ -334,3 +334,20 @@
 - hook 沒有把 `NODE_OPTIONS` 從子程序的環境拿掉。哪天檢查腳本從別的目錄起 Node 子程序，子程序會找不到 hook 而失敗；今天只起 git 和 Chrome。
 - 業主第 3 點的問句是轉述（見「評審後的修正」），卡面上半照凍結規則沒改。
 - 沒有畫面變化，沒有對照圖。
+
+## 合併與上線收據（2026-11-18～19 UTC）
+
+上面「沒做成的事」裡「CI 還沒跑」「D101 還沒部署」兩條是合併前寫的，照留；結果如下。
+
+- **PR CI**：[PR #62](https://github.com/lijiabao1998/GlimmerTown3D-lab/pull/62) head `91e1c1f` 上 9 個 run 全部 success（ci 44339205308、transit 44339205251、D083 44339205427、D086 44339204707、D087 44339204820、D088 44339205230、D089 44339205256、D090 44339204995，另有分支 push 的 ci 44338951323）。
+  - 帶 hook 的 native-input-performance 15 個 job 第一次在 GitHub runner 上跑，三種寬度全綠。
+- **合併**：業主 2026-11-18「全部收尾完」之後，Claude 核對 `origin/main` 仍是 `23d42c9`、head 仍是 `91e1c1f`，用合併提交合成 `13ff23c`（2026-11-18 17:49 UTC，`--match-head-commit`）。
+  - 「全部收尾完」算合併許可，是 Claude 對業主這句話的理解。
+- **main CI**：[44362897990](https://github.com/lijiabao1998/GlimmerTown3D-lab/actions/runs/44362897990)（`13ff23c`）140／140 success，含 D083、D086–D090 native release 與 `pages`。
+  - 15 個 native-input-performance job、477 筆紀錄全過。頁面第一次放置最慢 213.2 ms（1440 寬），**這一輪沒有一筆超過 400**，放寬的上限沒用上。其他紀錄最慢 126.4 ms。原始數字在業主本機 `C:\RUST\lab-perf\3d-red\deploy\first-use-main.txt`（不進倉庫）。
+- **部署**：Pages deployment `7893265572`（2026-11-18 19:02 UTC）。
+- **線上**：2026-11-19 00:45 UTC 下載 <https://lijiabao.uk/lab/glimmertown-3d/play/>：
+  - HTTP 200，4,298,280 bytes，SHA-256 `9b08a5fd8141c843254c91adfc51b064d3bed50fccd8722d506b763f0df2a974`，跟同一輪 `github-pages` artifact 的 `index.html` 逐位元組相同；頁面裡有 D101 的「運輸建造」。
+  - 業主筆電真顯示卡的無頭 Chrome 開啟：WebGL2 為真，鐵路、電車、地鐵三顆運輸按鈕都在，console 只有 `favicon.ico` 404 一筆。
+  - `https://game.lijiabao.uk/GlimmerTown3D-lab/` 回 301 轉到上面那個網址。
+- **還是沒做的**：沒上 Android 實機；線上只開到首頁、沒有進城施工；「頁面第一次放置超過 400 照樣過」在 GitHub runner 上還沒真的發生過。
